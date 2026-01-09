@@ -3,6 +3,27 @@ import requests
 import json
 import os
 from openai import OpenAI
+from FlagEmbedding import BGEM3FlagModel
+from prompts import generation_instance_prompts_summarization
+
+def retrieval_recall(query, reference):
+    model = BGEM3FlagModel('BAAI/bge-m3', use_fp16=True)
+    sentence_pairs = [(query, ref) for ref in reference]
+    similarity_scores = model.compute_score(
+        sentence_pairs,
+        max_passage_length=2048,  # a smaller max length leads to a lower latency
+        weights_for_different_modes=[0.4, 0.2, 0.4],
+        batch_size=100
+    )['colbert+sparse+dense']
+    paired = list(zip(reference, similarity_scores))
+    paired_sorted = sorted(paired, key=lambda x: x[1], reverse=True)
+    sorted_references = [p for p, s in paired_sorted]
+    sorted_scores = [s for p, s in paired_sorted]
+    print(sorted_scores)
+    return sorted_references, sorted_scores
+    
+def retrieval_rerank(query, reference):
+    pass
 
 class Reviewer:
     def __init__(self, args):
@@ -21,7 +42,7 @@ class Reviewer:
             args=self.args
         )
 
-    def __call__(self, key_words):
+    def __call__(self, key_words, input):
         if os.path.exists("papers.json"):
             with open("papers.json", "r") as file:
                 papers = [json.loads(line.strip()) for line in file if line.strip()]
@@ -30,16 +51,43 @@ class Reviewer:
             with open("papers.json", "w") as file:
                 for paper in papers:
                     print(json.dumps(paper), file=file)
+        
+        reference = ""
+        paper_formatted = []
+        for idx, paper in enumerate(papers):
+            item = f'Title:{paper["title"]}. Abstract:{paper["abstract"]}'
+            paper_formatted.append(item)
+            reference += f'[{idx}] ' + item
+
+        paper_recalled, _ = retrieval_recall(input, paper_formatted)
+
+        # review = self._generate_review(reference, input)
+
+        # return review
     
-    def _generate_review(self, papers):
+    def _generate_review(self, reference, input):
         # rank papers
         
-        references = ""
-        for idx, paper in enumerate(papers[:self.args.top_n]):
-            references += f'[{idx}] Title:{paper["title"]} Abstract:{paper["abstract"]}\n'
-        
-        
+        input_query = generation_instance_prompts_summarization.format_map({"reference":reference, "abstract":input})
+        input_query = self._formate_llama3_prompt(input_query)
 
+        response = self.client_large.chat.completions.create(
+            model=self.args.large_model,
+            messages=[{"role":"user", "content":input_query}],
+            temperature=0.7,
+            max_tokens=self.args.max_tokens,
+            stream=False,
+            timeout=300
+        )
+        content = response.choices[0].message['content']
+
+        return content
+
+    def _formate_llama3_prompt(self, prompt):
+        formatted_text = "<|begin_of_text|>"
+        formatted_text += "<|start_header_id|>user<|end_header_id|>\n\n" + prompt + "<|eot_id|>"
+        formatted_text += "<|start_header_id|>assistant<|end_header_id|>\n\n"
+        return formatted_text
 
 class OpenScholar:
     def __init__(self, args):
@@ -59,7 +107,7 @@ class OpenScholar:
             formatted_papers.append({
                 "year":paper["year"],
                 "title":paper["title"],
-                "authors":paper["authors"],
+                "authors": (', ').join([author["name"] for author in paper["authors"]]),
                 "venue":paper["venue"],
                 "citationCount":paper["citationCount"],
                 "url":paper["url"],
@@ -76,7 +124,8 @@ class OpenScholar:
         query_params = {
             'query': query,
             'fields': "title,year,authors.name,abstract,venue,citationCount,url,externalIds",
-            "year": "2023-"
+            "year": "2023-",
+            "sort": "citationCount:desc"
         }
         headers = {"x-api-key":self.s2_api_key}
         response = requests.get(
@@ -95,11 +144,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='OpenScholar API Server')
     parser.add_argument('--s2_api_key', type=str, default='RdC229ErL37in7bNEmR7W5MFVrd3pzpv1SWWbrLt',
                         help='Semantic Scholar API key')
-    parser.add_argument('--large_model_model', type=str, default='OpenSciLM/Llama-3.1_OpenScholar-8B',
+    parser.add_argument('--large_model', type=str, default='OpenSciLM/Llama-3.1_OpenScholar-8B',
                         help='Large model name')
     parser.add_argument('--large_model_port', type=int, default=38011,
                         help='Port for large model server')
-    parser.add_argument('--small_model_model', type=str, default='Qwen/Qwen3-0.6B',
+    parser.add_argument('--small_model', type=str, default='Qwen/Qwen3-0.6B',
                         help='Small model name')
     parser.add_argument('--small_model_port', type=int, default=38014,
                         help='Port for small model server')
@@ -122,5 +171,7 @@ if __name__ == '__main__':
     # key_words = ["Human noroviruses", "GII.4", "Nanobody M4", "Neutralization", "Epochal evolution","Raised conformation"]
     key_words = ["generative ai"]
 
+    query = "Generative artificial intelligence (AI) has revolutionized AI by enabling high-fidelity content creation across text, images, audio, and structured data. This survey explores the core methodologies, advancements, applications, and ongoing challenges of generative AI, covering key models such as Variational Autoencoders (VAEs), Generative Adversarial Networks (GANs), Diffusion Models, and Transformer-based architectures. These innovations have driven breakthroughs in healthcare, scientific computing, Natural Language Processing (NLP), computer vision, and autonomous systems. Despite its progress, generative AI faces challenges in bias mitigation, interpretability, computational efficiency, and ethical governance, necessitating research into scalable architectures, explainability, and AI safety mechanisms. Integrating Reinforcement Learning (RL), multi-modal learning, and self-supervised techniques enhances controllability and adaptability in generative models. Additionally, as AI reshapes industrial automation, digital media, and scientific discovery, its societal and economic implications demand robust policy frameworks. This survey provides a comprehensive analysis of generative AI’s current state and future directions, highlighting innovations in efficient generative modelling, AI-driven scientific reasoning, adversarial robustness, and ethical deployment. By consolidating theoretical insights and real-world applications, it offers a structured foundation for researchers, industry professionals, and policymakers to navigate the evolving landscape of generative AI."
+
     server = Reviewer(args)
-    server(key_words)
+    server(key_words, query)
