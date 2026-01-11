@@ -2,9 +2,13 @@ import argparse
 import requests
 import json
 import os
+import graph_rag
+from pathlib import Path
 from openai import OpenAI
-from FlagEmbedding import BGEM3FlagModel
+from pypdf import PdfReader
+from FlagEmbedding import BGEM3FlagModel,FlagReranker
 from prompts import generation_instance_prompts_summarization
+from pdf_downloader import ACLPDFDownloader
 
 def retrieval_recall(query, reference):
     model = BGEM3FlagModel('BAAI/bge-m3', use_fp16=True)
@@ -19,17 +23,38 @@ def retrieval_recall(query, reference):
     paired_sorted = sorted(paired, key=lambda x: x[1], reverse=True)
     sorted_references = [p for p, s in paired_sorted]
     sorted_scores = [s for p, s in paired_sorted]
-    print(sorted_scores)
+    # print(sorted_scores)
     return sorted_references, sorted_scores
     
 def retrieval_rerank(query, reference):
-    pass
+    model = FlagReranker("OpenSciLM/OpenScholar_Reranker", use_fp16=True)
+    sentence_pairs = [(query, ref) for ref in reference]
+    rerank_scores = model.compute_score(
+        sentence_pairs,
+        batch_size=100
+    )
+    paired = list(zip(reference, rerank_scores))
+    paired_sorted = sorted(paired, key=lambda x: x[1], reverse=True)
+    sorted_references = [p for p, s in paired_sorted]
+    sorted_scores = [s for p, s in paired_sorted]
+
+    return sorted_references, sorted_scores
+
+def extract_text_with_pypdf(pdf_path):
+    reader = PdfReader(pdf_path)
+    text = ""
+    for page in reader.pages:
+        text += page.extract_text() + "\n"
+    return text
 
 class Reviewer:
     def __init__(self, args):
         self.args = args
         self.client_large = None
         self.open_scholar = None
+        self.pdf_downloader = ACLPDFDownloader(max_retries=2, retry_delay=3.0)
+        self.save_path = "./downloads"
+        Path(self.save_path).mkdir(exist_ok=True)
 
         self.initialize_models()
 
@@ -52,23 +77,72 @@ class Reviewer:
                 for paper in papers:
                     print(json.dumps(paper), file=file)
         
-        reference = ""
+        paper2Id, Id2paper = {}, {}
         paper_formatted = []
         for idx, paper in enumerate(papers):
             item = f'Title:{paper["title"]}. Abstract:{paper["abstract"]}'
             paper_formatted.append(item)
-            reference += f'[{idx}] ' + item
+            paper2Id[item] = paper["paperId"]
+            Id2paper[paper["paperId"]] = paper
 
         paper_recalled, _ = retrieval_recall(input, paper_formatted)
+        paper_recalled = paper_recalled[:round(len(paper_recalled)/10)]
+        paper_reranked, _ = retrieval_rerank(input, paper_recalled)
+        paper_reranked = paper_reranked[:round(len(paper_reranked)/10)]
 
-        # review = self._generate_review(reference, input)
-
+        paper_after_retrieval = [Id2paper[paper2Id[item]] for item in paper_reranked] 
+        # success_id, failed_id = self._paper_download(paper_after_retrieval)
+        success_id = ['5bea7828c7a5aeaac8fc86e2012d8fa43ba64242', 'ec1c43ca684732d06716a36271a4cb3066797153', '0b9d0bee85e4ef4261147f35be885010e62ad1fb']
+        reference_rag, reference_scholar = "", ""
+        for idx, item in enumerate(paper_after_retrieval):
+            if item["paperId"] in success_id:
+                reference_rag += extract_text_with_pypdf(os.path.join(self.save_path, f'{item["paperId"]}.pdf'))
+            else:
+                reference_rag += f'Title:{item["title"]}. Abstract:{item["abstract"]}\n'
+            reference_scholar += f'[{idx}]. Title:{item["title"]}. Abstract:{item["abstract"]}\n'
+        
+        # graph_rag.insert(reference_rag)
+        response = graph_rag.query(
+            query=f'What are the novel contributions of {input} compared to the foundational work?',
+            mode='global'
+        )
+        
+        review = self._generate_review(reference_scholar, input, response)
+        print(review)
         # return review
-    
-    def _generate_review(self, reference, input):
+
+    def _paper_download(self, paper_after_retrieval):
+        success_id = []
+        for paper in paper_after_retrieval:
+            if paper["isOpenAccess"]:
+                try:
+                    url = paper["url"]
+                    filename = f'{paper["paperId"]}.pdf'
+                    saved_file = self.pdf_downloader.download_acl_pdf(
+                        url,
+                        save_dir=self.save_path,
+                        filename=filename
+                    )
+                    if saved_file and os.path.exists(saved_file):
+                        file_size = os.path.getsize(saved_file)
+                        print(f"✓ 下载成功: {saved_file} ({file_size:,} bytes)")
+                        success_id.append(paper["paperId"])
+                    else:
+                        print("✗ 下载失败")
+                except Exception as e:
+                    print(f"✗ 下载失败: {e}")
+                    continue
+        failed_id = [paper["paperId"] for paper in paper_after_retrieval if paper["paperId"] not in success_id]
+        return success_id, failed_id
+
+    def _generate_review(self, reference, abstract, innovation):
         # rank papers
         
-        input_query = generation_instance_prompts_summarization.format_map({"reference":reference, "abstract":input})
+        input_query = generation_instance_prompts_summarization.format_map({
+            "reference":reference, 
+            "abstract":abstract,
+            "innovation":innovation
+        })
         input_query = self._formate_llama3_prompt(input_query)
 
         response = self.client_large.chat.completions.create(
@@ -95,7 +169,6 @@ class OpenScholar:
         self.and_search = args.and_search
         self.url = "http://api.semanticscholar.org/graph/v1/paper/search/bulk"
 
-
     def __call__(self,):
         pass
 
@@ -105,13 +178,15 @@ class OpenScholar:
         formatted_papers = []
         for paper in papers:
             formatted_papers.append({
+                "paperId":paper["paperId"],
                 "year":paper["year"],
                 "title":paper["title"],
                 "authors": (', ').join([author["name"] for author in paper["authors"]]),
                 "venue":paper["venue"],
                 "citationCount":paper["citationCount"],
-                "url":paper["url"],
-                "abstract":paper["abstract"]
+                "abstract":paper["abstract"],
+                "isOpenAccess":paper["isOpenAccess"],
+                "url":paper["openAccessPdf"]["url"]
             })
 
         return formatted_papers
@@ -123,7 +198,7 @@ class OpenScholar:
             query = ' | '.join([f'"{kw}"' for kw in query])
         query_params = {
             'query': query,
-            'fields': "title,year,authors.name,abstract,venue,citationCount,url,externalIds",
+            'fields': "paperId,title,year,authors.name,abstract,venue,citationCount,url,externalIds,isOpenAccess,openAccessPdf",
             "year": "2023-",
             "sort": "citationCount:desc"
         }

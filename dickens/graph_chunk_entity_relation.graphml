@@ -1,0 +1,206 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key id="d7" for="edge" attr.name="order" attr.type="long"/>
+<key id="d6" for="edge" attr.name="source_id" attr.type="string"/>
+<key id="d5" for="edge" attr.name="description" attr.type="string"/>
+<key id="d4" for="edge" attr.name="weight" attr.type="double"/>
+<key id="d3" for="node" attr.name="clusters" attr.type="string"/>
+<key id="d2" for="node" attr.name="source_id" attr.type="string"/>
+<key id="d1" for="node" attr.name="description" attr.type="string"/>
+<key id="d0" for="node" attr.name="entity_type" attr.type="string"/>
+<graph edgedefault="undirected"><node id="&quot;MED7&quot;">
+  <data key="d0">"ORGANIZATION"</data>
+  <data key="d1">"Med7 is an AI system designed to enhance healthcare data processing by transforming unstructured clinical language into structured data, improving interoperability, data integration, and clinical research capabilities."</data>
+  <data key="d2">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+  <data key="d3">[{"level": 0, "cluster": 0}]</data>
+</node>
+<node id="&quot;IEEE ACCESS&quot;">
+  <data key="d0">"ORGANIZATION"</data>
+  <data key="d1">"IEEE Access is a publication platform where the article discussing Med7's real-world applications and limitations has been accepted for publication."&lt;SEP&gt;"IEEE Access is a publication platform where the article was accepted for publication."</data>
+  <data key="d2">chunk-5fced8645fc46cd2e3ade569f46500b8&lt;SEP&gt;chunk-1eab202766b495f5c61fe7acfb0558a1</data>
+  <data key="d3">[{"level": 0, "cluster": 0}]</data>
+</node>
+<node id="&quot;US FOOD AND DRUG ADMINISTRATION&quot;">
+  <data key="d0">"ORGANIZATION"</data>
+  <data key="d1">"The US Food and Drug Administration (FDA) is a regulatory body mentioned in the context of pharmaceutical development costs and drug approval processes."</data>
+  <data key="d2">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+</node>
+<node id="&quot;BALAS ET AL.&quot;">
+  <data key="d0">"PERSON"</data>
+  <data key="d1">"Balas et al. are researchers who utilized generative AI technologies to visualize symptoms of Visual Snow Syndrome, as described in the text."</data>
+  <data key="d2">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+</node>
+<node id="&quot;VISUAL SNOW SYNDROME&quot;">
+  <data key="d0">"EVENT"</data>
+  <data key="d1">"Visual Snow Syndrome is a chronic neurological condition characterized by persistent visual disturbances, discussed as a real-world application of GAI in healthcare."</data>
+  <data key="d2">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+</node>
+<node id="&quot;MOLECULAR OPTIMIZATION&quot;">
+  <data key="d0">"EVENT"</data>
+  <data key="d1">"Molecular Optimization refers to the process of improving chemical compounds for drug development, highlighted as a use case of GAI in healthcare."</data>
+  <data key="d2">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+</node>
+<node id="&quot;GAI&quot;">
+  <data key="d0">"TECHNOLOGY"</data>
+  <data key="d1">"GAI (Generative Artificial Intelligence) is a technology discussed as a transformative tool in healthcare, enabling applications like Visual Snow Syndrome visualization and molecular optimization."</data>
+  <data key="d2">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+</node>
+<node id="&quot;DALL·E2&quot;">
+  <data key="d0">"TECHNOLOGY"</data>
+  <data key="d1">"DALL·E2 is a generative AI model used to create images of visual symptoms for Visual Snow Syndrome, as described in the text."</data>
+  <data key="d2">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+</node>
+<node id="&quot;MIDJOURNEY&quot;">
+  <data key="d0">"TECHNOLOGY"</data>
+  <data key="d1">"midjourney is a generative AI model utilized to visualize symptoms of Visual Snow Syndrome, contributing to the study by Balas et al."</data>
+  <data key="d2">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+</node>
+<node id="&quot;STABLE DIFFUSION&quot;">
+  <data key="d0">"TECHNOLOGY"</data>
+  <data key="d1">"Stable Diffusion is a generative AI model employed to generate images of visual disturbances associated with Visual Snow Syndrome, as demonstrated in Figure 6."</data>
+  <data key="d2">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+</node>
+<node id="&quot;REAL-WORLD PERFORMANCE ASSESSMENT&quot;">
+  <data key="d0">"EVENT"</data>
+  <data key="d1">"Real-World Performance Assessment refers to the evaluation of Generative AI (GAI) applications in healthcare, discussed as a critical analysis of its capabilities and limitations."</data>
+  <data key="d2">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+</node>
+<node id="&quot;PHARMACEUTICAL COMPANIES&quot;">
+  <data key="d0">"ORGANIZATION"</data>
+  <data key="d1">"Pharmaceutical Companies are entities referenced in the context of high development costs for new FDA-approved drugs, highlighting their role in drug discovery and innovation."</data>
+  <data key="d2">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+</node>
+<node id="&quot;ELECTRONIC HEALTH RECORD (EHR) SYSTEMS&quot;">
+  <data key="d0">"TECHNOLOGY"</data>
+  <data key="d1">"EHR Systems are digital platforms for managing patient health information, integrated with Med7 to enhance data interoperability and continuity of care."</data>
+  <data key="d2">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+</node>
+<node id="&quot;GENERATIVE AI MODELS&quot;">
+  <data key="d0">"TECHNOLOGY"</data>
+  <data key="d1">"Generative AI Models are a category of AI tools used in healthcare, including Med7, to automate tasks like molecular design and symptom visualization."</data>
+  <data key="d2">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+</node>
+<node id="&quot;OPENAI&quot;">
+  <data key="d0">"ORGANIZATION"</data>
+  <data key="d1">"OpenAI is a company that develops generative AI models like ChatGPT, used in medical education."</data>
+  <data key="d2">chunk-0a3258e179adf17163b1117b26cfe240</data>
+</node>
+<node id="&quot;HEALTHCARE ORGANIZATIONS&quot;">
+  <data key="d0">"ORGANIZATION"</data>
+  <data key="d1">"Healthcare organizations are entities that may be reluctant to employ GAI solutions due to attribution issues."&lt;SEP&gt;"Healthcare organizations are institutions that may be hesitant to adopt GAI solutions due to attribution and interpretability issues."</data>
+  <data key="d2">chunk-1eab202766b495f5c61fe7acfb0558a1</data>
+</node>
+<node id="&quot;HEALTHCARE PROVIDERS&quot;">
+  <data key="d0">"ORGANIZATION"</data>
+  <data key="d1">"Healthcare providers are entities (individuals or institutions) that need clear explanations from GAI models to ensure patient safety."&lt;SEP&gt;"Healthcare providers are professionals or institutions that may be hesitant to use GAI models without clear attribution mechanisms."</data>
+  <data key="d2">chunk-1eab202766b495f5c61fe7acfb0558a1</data>
+</node>
+<node id="&quot;HEALTHCARE PROFESSIONALS&quot;">
+  <data key="d0">"ORGANIZATION"</data>
+  <data key="d1">"Healthcare professionals are individuals or groups who rely on GAI models for decision-making but require transparency and accountability."</data>
+  <data key="d2">chunk-1eab202766b495f5c61fe7acfb0558a1</data>
+</node>
+<node id="&quot;ATTRIBUTION PROBLEM&quot;">
+  <data key="d0">"EVENT"</data>
+  <data key="d1">"The 'attribution problem' refers to the difficulty in understanding and explaining the decisions made by GAI models in healthcare, which is a key limitation discussed in the text."</data>
+  <data key="d2">chunk-1eab202766b495f5c61fe7acfb0558a1</data>
+</node>
+<node id="&quot;CONTEXTUALIZATION PROBLEM&quot;">
+  <data key="d0">"EVENT"</data>
+  <data key="d1">"The 'contextualization problem' highlights the challenges GAI models face in incorporating relevant contextual data when generating outputs, as discussed in the text."</data>
+  <data key="d2">chunk-1eab202766b495f5c61fe7acfb0558a1</data>
+</node>
+<node id="&quot;HEALTHCARE SYSTEMS&quot;">
+  <data key="d2">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+  <data key="d1">"Med7 enhances interoperability and data integration across healthcare systems by converting unstructured clinical data into structured formats, enabling seamless data sharing and analysis."</data>
+  <data key="d0">"UNKNOWN"</data>
+  <data key="d3">[{"level": 0, "cluster": 0}]</data>
+</node>
+<node id="&quot;CLINICAL RESEARCH&quot;">
+  <data key="d2">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+  <data key="d1">"Med7 supports cohort identification, patient stratification, and data analysis for medical research, facilitating large-scale data mining and evidence-based medicine."</data>
+  <data key="d0">"UNKNOWN"</data>
+  <data key="d3">[{"level": 0, "cluster": 0}]</data>
+</node>
+<node id="&quot;TRAINING DATA&quot;">
+  <data key="d2">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+  <data key="d1">"Med7's performance is heavily reliant on the quality, variety, and representativeness of its training data, which can influence its accuracy and generalizability."</data>
+  <data key="d0">"UNKNOWN"</data>
+  <data key="d3">[{"level": 0, "cluster": 0}]</data>
+</node>
+<node id="&quot;BLACK BOX PROBLEM&quot;">
+  <data key="d2">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+  <data key="d1">"Med7 operates as a 'black box,' limiting interpretability of its predictions, which poses challenges in healthcare applications requiring transparency."</data>
+  <data key="d0">"UNKNOWN"</data>
+  <data key="d3">[{"level": 0, "cluster": 0}]</data>
+</node>
+<node id="&quot;PHARMACEUTICAL DEVELOPMENT&quot;">
+  <data key="d2">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+  <data key="d1">"The US FDA is referenced in the context of pharmaceutical development costs and drug approval processes, highlighting its role in regulatory oversight."</data>
+  <data key="d0">"UNKNOWN"</data>
+</node>
+<node id="&quot;REAL WORLD PERFORMANCE ASSESSMENT&quot;">
+  <data key="d2">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+  <data key="d1">"The text discusses a real-world performance assessment of GAI in healthcare, emphasizing its applications and limitations across various domains."</data>
+  <data key="d0">"UNKNOWN"</data>
+</node>
+<edge source="&quot;MED7&quot;" target="&quot;HEALTHCARE SYSTEMS&quot;">
+  <data key="d4">9.0</data>
+  <data key="d5">"Med7 enhances interoperability and data integration across healthcare systems by converting unstructured clinical data into structured formats, enabling seamless data sharing and analysis."</data>
+  <data key="d6">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+  <data key="d7">1</data>
+</edge>
+<edge source="&quot;MED7&quot;" target="&quot;CLINICAL RESEARCH&quot;">
+  <data key="d4">8.0</data>
+  <data key="d5">"Med7 supports cohort identification, patient stratification, and data analysis for medical research, facilitating large-scale data mining and evidence-based medicine."</data>
+  <data key="d6">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+  <data key="d7">1</data>
+</edge>
+<edge source="&quot;MED7&quot;" target="&quot;IEEE ACCESS&quot;">
+  <data key="d4">7.0</data>
+  <data key="d5">"The article discussing Med7's capabilities and limitations has been accepted for publication in IEEE Access, establishing a connection between the technology and the publication platform."</data>
+  <data key="d6">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+  <data key="d7">1</data>
+</edge>
+<edge source="&quot;MED7&quot;" target="&quot;TRAINING DATA&quot;">
+  <data key="d4">9.0</data>
+  <data key="d5">"Med7's performance is heavily reliant on the quality, variety, and representativeness of its training data, which can influence its accuracy and generalizability."</data>
+  <data key="d6">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+  <data key="d7">1</data>
+</edge>
+<edge source="&quot;MED7&quot;" target="&quot;BLACK BOX PROBLEM&quot;">
+  <data key="d4">8.0</data>
+  <data key="d5">"Med7 operates as a 'black box,' limiting interpretability of its predictions, which poses challenges in healthcare applications requiring transparency."</data>
+  <data key="d6">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+  <data key="d7">1</data>
+</edge>
+<edge source="&quot;US FOOD AND DRUG ADMINISTRATION&quot;" target="&quot;PHARMACEUTICAL DEVELOPMENT&quot;">
+  <data key="d4">7.0</data>
+  <data key="d5">"The US FDA is referenced in the context of pharmaceutical development costs and drug approval processes, highlighting its role in regulatory oversight."</data>
+  <data key="d6">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+  <data key="d7">1</data>
+</edge>
+<edge source="&quot;BALAS ET AL.&quot;" target="&quot;GAI&quot;">
+  <data key="d4">8.0</data>
+  <data key="d5">"Balas et al. utilized generative AI models to visualize symptoms of Visual Snow Syndrome, demonstrating the application of GAI in clinical research and patient understanding."</data>
+  <data key="d6">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+  <data key="d7">1</data>
+</edge>
+<edge source="&quot;VISUAL SNOW SYNDROME&quot;" target="&quot;GAI&quot;">
+  <data key="d4">9.0</data>
+  <data key="d5">"Generative AI technologies were employed to create visualizations of Visual Snow Syndrome symptoms, aiding in the diagnosis and understanding of this condition."</data>
+  <data key="d6">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+  <data key="d7">1</data>
+</edge>
+<edge source="&quot;MOLECULAR OPTIMIZATION&quot;" target="&quot;GAI&quot;">
+  <data key="d4">8.0</data>
+  <data key="d5">"Generative AI tools are used to automate the design of bioactive molecules, streamlining the molecular optimization process in drug discovery."</data>
+  <data key="d6">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+  <data key="d7">1</data>
+</edge>
+<edge source="&quot;GAI&quot;" target="&quot;REAL WORLD PERFORMANCE ASSESSMENT&quot;">
+  <data key="d4">9.0</data>
+  <data key="d5">"The text discusses a real-world performance assessment of GAI in healthcare, emphasizing its applications and limitations across various domains."</data>
+  <data key="d6">chunk-5fced8645fc46cd2e3ade569f46500b8</data>
+  <data key="d7">1</data>
+</edge>
+</graph></graphml>

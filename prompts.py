@@ -15,7 +15,7 @@ Concurrent to this work, [2] proposed a task of generating and answering yes/no 
 Also concurrently, [0] propose conversational question answering (CoQA) from text but allow both students and questioners to see the evidence. 
 """
 
-promts_w_references_summarization = ("Given an abstract of an academic paper and a set of passsages from relevant papers, generate a related work section summarizing relevant related work."
+promts_w_references_summarization = ("Given an abstract of an academic paper, the innovation evaluation report of this paper, and a set of passsages from relevant papers, generate a related work section summarizing relevant related work."
                                     "Not all of the passages are relevant, so please carefully read the passages and only use passages that are related."  
                                     "All of citation-worthy statements need to be supported by one of the references we provide as 'References' and appropriate citation numbers should be added at the last of the sentences."
                        "References should be formatted as [0], [1], [2], ..., [n]."
@@ -23,6 +23,7 @@ promts_w_references_summarization = ("Given an abstract of an academic paper and
                        "Here's an example:\n##\n"
                        "References: \n{example_passages}"
                        "\nAbstract: {example_question}"
+                       "\nInnovation: {example_innovation}"
                        "\n[Response_Start]{example_answer}[Response_End]\nNow, please generate another related work given the following abstract.\n##\n")
-generation_demonstration_summarization = promts_w_references_summarization.format_map({"example_passages": example_passages_summarization, "example_question": example_question_summarization, "example_answer": example_answer_summarization})
-generation_instance_prompts_summarization = generation_demonstration_summarization + "References:\n {reference}\n Abstract: {abstract}\n"
+generation_demonstration_summarization = promts_w_references_summarization.format_map({"example_passages": example_passages_summarization, "example_innovation":"", "example_question": example_question_summarization, "example_answer": example_answer_summarization})
+generation_instance_prompts_summarization = generation_demonstration_summarization + "References:\n {reference}\n Abstract: {abstract}\n Innovation: {innovation}\n"
