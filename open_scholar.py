@@ -102,12 +102,12 @@ class Reviewer:
             reference_scholar += f'[{idx}]. Title:{item["title"]}. Abstract:{item["abstract"]}\n'
         
         # graph_rag.insert(reference_rag)
-        response = graph_rag.query(
-            query=f'What are the novel contributions of {input} compared to the foundational work?',
-            mode='global'
-        )
+        # response = graph_rag.query(
+        #     query=f'What are the novel contributions of {input} compared to the foundational work?',
+        #     mode='global'
+        # )
         
-        review = self._generate_review(reference_scholar, input, response)
+        review = self._generate_review(reference_scholar, input, "")
         print(review)
         # return review
 
@@ -145,17 +145,20 @@ class Reviewer:
         })
         input_query = self._formate_llama3_prompt(input_query)
 
-        response = self.client_large.chat.completions.create(
-            model=self.args.large_model,
-            messages=[{"role":"user", "content":input_query}],
-            temperature=0.7,
-            max_tokens=self.args.max_tokens,
-            stream=False,
-            timeout=300
-        )
-        content = response.choices[0].message['content']
+        with open("temp.json", "w") as file:
+            print(json.dumps(input_query), file=file)
 
-        return content
+        # response = self.client_large.chat.completions.create(
+        #     model=self.args.large_model,
+        #     messages=[{"role":"user", "content":input_query}],
+        #     temperature=0.7,
+        #     max_tokens=self.args.max_tokens,
+        #     stream=False,
+        #     timeout=300
+        # )
+        # content = response.choices[0].message['content']
+
+        # return content
 
     def _formate_llama3_prompt(self, prompt):
         formatted_text = "<|begin_of_text|>"

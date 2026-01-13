@@ -1,11 +1,23 @@
-from pypdf import PdfReader # 推荐使用新的 pypdf 库，它是 PyPDF2 的继任者
 
-def extract_text_with_pypdf(pdf_path):
-    reader = PdfReader(pdf_path)
-    text = ""
-    for page in reader.pages:
-        text += page.extract_text() + "\n"
-    return text
+from openai import OpenAI
 
-text = extract_text_with_pypdf("./downloads/0b9d0bee85e4ef4261147f35be885010e62ad1fb.pdf")
-print(len(text))
+if __name__ == '__main__':
+    client_large = OpenAI(
+            api_key="",
+            base_url=f'http://localhost:{38011}/v1',
+    )
+
+    with open("temp.json", "r") as file:
+        input_query = file.read()
+    # print(input_query)
+    response = client_large.chat.completions.create(
+        model='OpenSciLM/Llama-3.1_OpenScholar-8B',
+        messages=[{"role":"user", "content":input_query}],
+        temperature=0.7,
+        max_tokens=3000,
+        stream=False,
+        timeout=300
+    )
+    content = response.choices[0].message.content
+    print(content)
+
