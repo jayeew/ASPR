@@ -30,7 +30,7 @@ data = []
 for recon_file in recon_dir.glob("*.md"):
     file_id = recon_file.stem
     paper_file = paper_dir / f"{file_id[:-2]}.md"
-    print(paper_file)
+    # print(paper_file)
     if not paper_file.exists():
         continue
 
@@ -53,3 +53,22 @@ for recon_file in recon_dir.glob("*.md"):
 
 dataset = Dataset.from_list(data)
 dataset.save_to_disk("paper_reconstruction_sft")
+
+repo_id = "jayeew/paper-reconstruction-sft"  # 替换为您的用户名
+
+import os
+from huggingface_hub import HfApi, create_repo, login
+os.environ["HF_ENDPOINT"] = "https://huggingface.co"
+login()
+try:
+    # 如果仓库不存在，先创建
+    create_repo(repo_id, repo_type="dataset")
+except:
+    pass  # 仓库已存在
+
+# 使用 push_to_hub 方法上传
+dataset.push_to_hub(
+    repo_id,
+    token=""
+)
+
