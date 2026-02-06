@@ -35,8 +35,6 @@ from llm.new_prompt import (primary_prompt,
                             plan_prompt_v2,
                             reflection_prompt,)
 from util.search import web_search
-# llm = ChatOpenAI(model="gpt-4", openai_api_key="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") #enter open-Ai key here
-
 from langchain_openai import ChatOpenAI
 
 
