@@ -3,27 +3,27 @@ set -x
 
 read -r -d '' training_commands <<EOF
 openrlhf.cli.train_sft \
-    --max_len 2048 \
+    --max_len 4096 \
     --dataset WestlakeNLP/DeepReview-13K \
     --input_key inputs \
     --output_key outputs \
-    --train_batch_size 16 \
-    --micro_train_batch_size 2 \
-    --max_samples 10000 \
-    --pretrain Qwen/Qwen3-0.6B \
-    --save_path ./checkpoint/qwen-0.6b-review-lora \
+    --train_batch_size 8 \
+    --micro_train_batch_size 1 \
+    --max_samples 36000 \
+    --pretrain Qwen/Qwen3-8B \
+    --save_path ./checkpoint/qwen-8b-review-lora \
     --save_steps -1 \
     --logging_steps 1 \
     --eval_steps -1 \
     --zero_stage 2 \
-    --max_epochs 1 \
+    --max_epochs 5 \
     --bf16 \
+    --load_in_4bit \
     --attn_implementation flash_attention_2 \
     --learning_rate 5e-6 \
     --lora_rank 16 \
     --lora_alpha 32 \
     --packing_samples \
-    --load_in_4bit \
     --aux_loss_coef 0
 EOF
 

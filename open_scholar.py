@@ -1,14 +1,48 @@
 import argparse
+from langchain_openai import ChatOpenAI
 import requests
 import json
 import os
-import graph_rag
+# import graph_rag
 from pathlib import Path
 from openai import OpenAI
 from pypdf import PdfReader
 from FlagEmbedding import BGEM3FlagModel,FlagReranker
-from prompts import generation_instance_prompts_summarization
+from prompts import generation_instance_prompts_summarization, prompts_keywords_extraction
 from pdf_downloader import ACLPDFDownloader
+
+def keywords_extract(query):
+    from langchain_openai import ChatOpenAI
+    from langchain_core.prompts import PromptTemplate
+    from langchain_core.output_parsers import StrOutputParser
+    llm = ChatOpenAI(
+        model="qwen3-coder:30b",  
+        base_url="http://localhost:11434/v1",  
+        api_key="ollama",  
+        temperature=0.1,
+        max_tokens=2000,
+    )
+    keyword_agent = (
+        PromptTemplate.from_template(prompts_keywords_extraction) |
+        llm |
+        StrOutputParser()
+    )
+    keywords = keyword_agent.invoke({"abstract": query})
+    try:
+        keywords = keywords.strip()
+        if "Keywords:" in keywords or "keywords:" in keywords:
+            keywords = keywords.split(":", 1)[1].strip()
+        
+        keywords_list = [kw.strip() for kw in keywords.split(",")]
+        keywords_list = [kw.strip(".,;:\"'[]()") for kw in keywords_list if kw.strip()]
+        keywords_list = keywords_list[:5]
+        print(f"Extracted keywords: {keywords_list}")
+        return keywords_list
+        
+    except Exception as e:
+        print(f"Error parsing keywords: {e}")
+        print(f"Raw output: {keywords}")
+        return []
 
 def retrieval_recall(query, reference):
     model = BGEM3FlagModel('BAAI/bge-m3', use_fp16=True)
@@ -50,6 +84,7 @@ def extract_text_with_pypdf(pdf_path):
 class Reviewer:
     def __init__(self, args):
         self.args = args
+        self.clinet_small = None
         self.client_large = None
         self.open_scholar = None
         self.pdf_downloader = ACLPDFDownloader(max_retries=2, retry_delay=3.0)
@@ -57,6 +92,7 @@ class Reviewer:
         Path(self.save_path).mkdir(exist_ok=True)
 
         self.initialize_models()
+
 
     def initialize_models(self,):
         self.client_large = OpenAI(
@@ -77,20 +113,24 @@ class Reviewer:
                 for paper in papers:
                     print(json.dumps(paper), file=file)
         
-        paper2Id, Id2paper = {}, {}
+        item2Id, Id2paper = {}, {}
         paper_formatted = []
         for idx, paper in enumerate(papers):
             item = f'Title:{paper["title"]}. Abstract:{paper["abstract"]}'
             paper_formatted.append(item)
-            paper2Id[item] = paper["paperId"]
+            item2Id[item] = paper["paperId"]
             Id2paper[paper["paperId"]] = paper
 
+        print('Start retrieval recall...')
         paper_recalled, _ = retrieval_recall(input, paper_formatted)
-        paper_recalled = paper_recalled[:round(len(paper_recalled)/10)]
+        paper_recalled = paper_recalled[:round(len(paper_recalled)/5)]
+        print('Recalled papers:', len(paper_recalled))
+        print('Start retrieval rerank...')
         paper_reranked, _ = retrieval_rerank(input, paper_recalled)
-        paper_reranked = paper_reranked[:round(len(paper_reranked)/10)]
+        paper_reranked = paper_reranked[:round(len(paper_reranked)/5)]
+        print('Reranked papers:', len(paper_reranked))
 
-        paper_after_retrieval = [Id2paper[paper2Id[item]] for item in paper_reranked] 
+        paper_after_retrieval = [Id2paper[item2Id[item]] for item in paper_reranked] 
         # success_id, failed_id = self._paper_download(paper_after_retrieval)
         success_id = ['5bea7828c7a5aeaac8fc86e2012d8fa43ba64242', 'ec1c43ca684732d06716a36271a4cb3066797153', '0b9d0bee85e4ef4261147f35be885010e62ad1fb']
         reference_rag, reference_scholar = "", ""
@@ -101,15 +141,15 @@ class Reviewer:
                 reference_rag += f'Title:{item["title"]}. Abstract:{item["abstract"]}\n'
             reference_scholar += f'[{idx}]. Title:{item["title"]}. Abstract:{item["abstract"]}\n'
         
-        # graph_rag.insert(reference_rag)
-        # response = graph_rag.query(
-        #     query=f'What are the novel contributions of {input} compared to the foundational work?',
-        #     mode='global'
-        # )
+        graph_rag.insert(reference_rag)
+        response = graph_rag.query(
+            query=f'What are the novel contributions of {input} compared to the foundational work?',
+            mode='global'
+        )
         
         review = self._generate_review(reference_scholar, input, "")
         print(review)
-        # return review
+        return review
 
     def _paper_download(self, paper_after_retrieval):
         success_id = []
@@ -176,7 +216,12 @@ class OpenScholar:
         pass
 
     def search_semantic_scholar(self, key_words):
-        papers = self._search_paper_via_query(key_words)
+        papers = []
+        for kw in key_words:
+            print(f"Searching for papers with keyword: {kw}")
+            papers_kw = self._search_paper_via_query(kw)
+            print(f"Found {len(papers_kw)} papers for keyword: {kw}")
+            papers.extend(papers_kw)
         print(f"Retrieved {len(papers)} papers...")
         formatted_papers = []
         for paper in papers:
@@ -247,9 +292,13 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # key_words = ["Human noroviruses", "GII.4", "Nanobody M4", "Neutralization", "Epochal evolution","Raised conformation"]
-    key_words = ["generative ai"]
+    key_words = []
+    query = """
+        Polyglutamine binding protein 5 (PQBP5), also called nucleolar protein 10 (NOL10), binds to polyglutamine tract sequences and is expressed in the nucleolus. Using dynamic imaging of high-speed atomic force microscopy, we show that PQBP5/NOL10 is an intrinsically disordered protein. Superresolution microscopy and correlative light and electron microscopy method show that PQBP5/NOL10 makes up the skeletal structure of the nucleolus, constituting the granule meshwork in the granular component area, which is distinct from other nucleolar substructures, such as the fibrillar center and dense fibrillar component. In contrast to other nucleolar proteins, which disperse to the nucleoplasm under osmotic stress conditions, PQBP5/NOL10 remains in the nucleolus and functions as an anchor for reassembly of other nucleolar proteins. Droplet and thermal shift assays show that the biophysical features of PQBP5/NOL10 remain stable under stress conditions, explaining the spatial role of this protein. PQBP5/NOL10 can be functionally depleted by sequestration with polyglutamine disease proteins in vitro and in vivo, leading to the pathological deformity or disappearance of the nucleolus. Taken together, these findings indicate that PQBP5/NOL10 is an essential protein needed to maintain the structure of the nucleolus.
+    """
 
-    query = "Generative artificial intelligence (AI) has revolutionized AI by enabling high-fidelity content creation across text, images, audio, and structured data. This survey explores the core methodologies, advancements, applications, and ongoing challenges of generative AI, covering key models such as Variational Autoencoders (VAEs), Generative Adversarial Networks (GANs), Diffusion Models, and Transformer-based architectures. These innovations have driven breakthroughs in healthcare, scientific computing, Natural Language Processing (NLP), computer vision, and autonomous systems. Despite its progress, generative AI faces challenges in bias mitigation, interpretability, computational efficiency, and ethical governance, necessitating research into scalable architectures, explainability, and AI safety mechanisms. Integrating Reinforcement Learning (RL), multi-modal learning, and self-supervised techniques enhances controllability and adaptability in generative models. Additionally, as AI reshapes industrial automation, digital media, and scientific discovery, its societal and economic implications demand robust policy frameworks. This survey provides a comprehensive analysis of generative AI’s current state and future directions, highlighting innovations in efficient generative modelling, AI-driven scientific reasoning, adversarial robustness, and ethical deployment. By consolidating theoretical insights and real-world applications, it offers a structured foundation for researchers, industry professionals, and policymakers to navigate the evolving landscape of generative AI."
+    if not key_words:
+        key_words = keywords_extract(query)
 
     server = Reviewer(args)
     server(key_words, query)

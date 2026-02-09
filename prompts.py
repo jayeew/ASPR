@@ -1,3 +1,20 @@
+prompts_keywords_extraction = """
+Extract up to 5 most relevant and core keywords from the following academic abstract. 
+
+Instructions:
+- Identify the key concepts, methods, or topics that are central to the research
+- Prioritize domain-specific terminology and significant research themes
+- Select keywords that best represent the abstract's main focus
+- List between 1-5 keywords, depending on the abstract's content
+- Present keywords in order of relevance (most important first)
+- Use single words or short phrases (2-3 words maximum per keyword)
+- Avoid generic words like "challenges," "research," or "analysis"
+
+Abstract:{abstract}
+
+Output format:
+keyword1,keyword2,keyword3,keyword4,keyword5
+"""
 
 example_passages_summarization = """
 [0] Title: CoQA: A Conversational Question Answering Challenge Abstract: Humans gather information by engaging in conversations involving a series of interconnected questions and answers. For machines to assist in information gathering, it is therefore essential to enable them to answer conversational questions. We introduce CoQA, a novel dataset for building Conversational Question Answering systems. Our dataset contains 127k questions with answers, obtained from 8k conversations about text passages from seven diverse domains. The questions are conversational, and the answers are free-form text with their corresponding evidence highlighted in the passage. We analyze CoQA in depth and show that conversational questions have challenging phenomena not present in existing reading comprehension datasets, e.g., coreference and pragmatic reasoning. We evaluate strong conversational and reading comprehension models on CoQA. The best system obtains an F1 score of 65.4\%, which is 23.4 points behind human performance (88.8\%), indicating there is ample room for improvement. \n
