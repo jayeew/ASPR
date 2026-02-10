@@ -10,13 +10,14 @@ from pypdf import PdfReader
 from FlagEmbedding import BGEM3FlagModel,FlagReranker
 from prompts import generation_instance_prompts_summarization, prompts_keywords_extraction
 from pdf_downloader import ACLPDFDownloader
+from lats import evaluate_paper_innovation
 
 def keywords_extract(query):
     from langchain_openai import ChatOpenAI
     from langchain_core.prompts import PromptTemplate
     from langchain_core.output_parsers import StrOutputParser
     llm = ChatOpenAI(
-        model="qwen3-coder:30b",  
+        model="qwen3:8b",  
         base_url="http://localhost:11434/v1",  
         api_key="ollama",  
         temperature=0.1,
@@ -130,26 +131,41 @@ class Reviewer:
         paper_reranked = paper_reranked[:round(len(paper_reranked)/5)]
         print('Reranked papers:', len(paper_reranked))
 
-        paper_after_retrieval = [Id2paper[item2Id[item]] for item in paper_reranked] 
-        # success_id, failed_id = self._paper_download(paper_after_retrieval)
-        success_id = ['5bea7828c7a5aeaac8fc86e2012d8fa43ba64242', 'ec1c43ca684732d06716a36271a4cb3066797153', '0b9d0bee85e4ef4261147f35be885010e62ad1fb']
-        reference_rag, reference_scholar = "", ""
-        for idx, item in enumerate(paper_after_retrieval):
-            if item["paperId"] in success_id:
-                reference_rag += extract_text_with_pypdf(os.path.join(self.save_path, f'{item["paperId"]}.pdf'))
-            else:
-                reference_rag += f'Title:{item["title"]}. Abstract:{item["abstract"]}\n'
-            reference_scholar += f'[{idx}]. Title:{item["title"]}. Abstract:{item["abstract"]}\n'
+        # 去重
+        seen_ids = set()
+        paper_after_retrieval = []
+        for item in paper_reranked:
+            paper_id = item2Id[item]
+            if paper_id not in seen_ids:
+                seen_ids.add(paper_id)
+                paper_after_retrieval.append(Id2paper[paper_id])
+
         
-        graph_rag.insert(reference_rag)
-        response = graph_rag.query(
-            query=f'What are the novel contributions of {input} compared to the foundational work?',
-            mode='global'
+        reviews = evaluate_paper_innovation(
+            paper_title=,
+            paper_abstract=,
+            retrieved_papers=paper_after_retrieval
         )
+
+        # success_id, failed_id = self._paper_download(paper_after_retrieval)
+        # success_id = ['5bea7828c7a5aeaac8fc86e2012d8fa43ba64242', 'ec1c43ca684732d06716a36271a4cb3066797153', '0b9d0bee85e4ef4261147f35be885010e62ad1fb']
+        # reference_rag, reference_scholar = "", ""
+        # for idx, item in enumerate(paper_after_retrieval):
+        #     if item["paperId"] in success_id:
+        #         reference_rag += extract_text_with_pypdf(os.path.join(self.save_path, f'{item["paperId"]}.pdf'))
+        #     else:
+        #         reference_rag += f'Title:{item["title"]}. Abstract:{item["abstract"]}\n'
+        #     reference_scholar += f'[{idx}]. Title:{item["title"]}. Abstract:{item["abstract"]}\n'
         
-        review = self._generate_review(reference_scholar, input, "")
-        print(review)
-        return review
+        # graph_rag.insert(reference_rag)
+        # response = graph_rag.query(
+        #     query=f'What are the novel contributions of {input} compared to the foundational work?',
+        #     mode='global'
+        # )
+        
+        # review = self._generate_review(reference_scholar, input, "")
+        # print(review)
+        # return review
 
     def _paper_download(self, paper_after_retrieval):
         success_id = []
@@ -292,13 +308,14 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # key_words = ["Human noroviruses", "GII.4", "Nanobody M4", "Neutralization", "Epochal evolution","Raised conformation"]
+    title = ""
     key_words = []
-    query = """
+    abstract = """
         Polyglutamine binding protein 5 (PQBP5), also called nucleolar protein 10 (NOL10), binds to polyglutamine tract sequences and is expressed in the nucleolus. Using dynamic imaging of high-speed atomic force microscopy, we show that PQBP5/NOL10 is an intrinsically disordered protein. Superresolution microscopy and correlative light and electron microscopy method show that PQBP5/NOL10 makes up the skeletal structure of the nucleolus, constituting the granule meshwork in the granular component area, which is distinct from other nucleolar substructures, such as the fibrillar center and dense fibrillar component. In contrast to other nucleolar proteins, which disperse to the nucleoplasm under osmotic stress conditions, PQBP5/NOL10 remains in the nucleolus and functions as an anchor for reassembly of other nucleolar proteins. Droplet and thermal shift assays show that the biophysical features of PQBP5/NOL10 remain stable under stress conditions, explaining the spatial role of this protein. PQBP5/NOL10 can be functionally depleted by sequestration with polyglutamine disease proteins in vitro and in vivo, leading to the pathological deformity or disappearance of the nucleolus. Taken together, these findings indicate that PQBP5/NOL10 is an essential protein needed to maintain the structure of the nucleolus.
     """
 
     if not key_words:
-        key_words = keywords_extract(query)
+        key_words = keywords_extract(abstract)
 
     server = Reviewer(args)
-    server(key_words, query)
+    server(key_words, abstract)
