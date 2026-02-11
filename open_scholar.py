@@ -104,49 +104,65 @@ class Reviewer:
             args=self.args
         )
 
-    def __call__(self, key_words, input):
-        if os.path.exists("papers.json"):
-            with open("papers.json", "r") as file:
-                papers = [json.loads(line.strip()) for line in file if line.strip()]
+    def __call__(self, title, abstract, key_words):
+        # 检查 most_related_paper.json 是否存在
+        if os.path.exists("most_related_paper.json"):
+            print("Loading papers from most_related_paper.json...")
+            with open("most_related_paper.json", "r") as file:
+                paper_after_retrieval = json.load(file)
+            print(f"Loaded {len(paper_after_retrieval)} papers from cache.")
         else:
-            papers = self.open_scholar.search_semantic_scholar(key_words)
-            with open("papers.json", "w") as file:
-                for paper in papers:
-                    print(json.dumps(paper), file=file)
-        
-        item2Id, Id2paper = {}, {}
-        paper_formatted = []
-        for idx, paper in enumerate(papers):
-            item = f'Title:{paper["title"]}. Abstract:{paper["abstract"]}'
-            paper_formatted.append(item)
-            item2Id[item] = paper["paperId"]
-            Id2paper[paper["paperId"]] = paper
+            if not key_words:
+                key_words = keywords_extract(abstract)
+            if os.path.exists("total_related_papers.json"):
+                with open("total_related_papers.json", "r") as file:
+                    papers = [json.loads(line.strip()) for line in file if line.strip()]
+            else:
+                papers = self.open_scholar.search_semantic_scholar(key_words)
+                with open("total_related_papers.json", "w") as file:
+                    for paper in papers:
+                        print(json.dumps(paper), file=file)
+            
+            item2Id, Id2paper = {}, {}
+            paper_formatted = []
+            for idx, paper in enumerate(papers):
+                item = f'Title:{paper["title"]}. Abstract:{paper["abstract"]}'
+                paper_formatted.append(item)
+                item2Id[item] = paper["paperId"]
+                Id2paper[paper["paperId"]] = paper
 
-        print('Start retrieval recall...')
-        paper_recalled, _ = retrieval_recall(input, paper_formatted)
-        paper_recalled = paper_recalled[:round(len(paper_recalled)/5)]
-        print('Recalled papers:', len(paper_recalled))
-        print('Start retrieval rerank...')
-        paper_reranked, _ = retrieval_rerank(input, paper_recalled)
-        paper_reranked = paper_reranked[:round(len(paper_reranked)/5)]
-        print('Reranked papers:', len(paper_reranked))
+            print('Start retrieval recall...')
+            paper_recalled, _ = retrieval_recall(title+abstract, paper_formatted)
+            paper_recalled = paper_recalled[:round(len(paper_recalled)/10)]
+            print('Recalled papers:', len(paper_recalled))
+            print('Start retrieval rerank...')
+            paper_reranked, _ = retrieval_rerank(title+abstract, paper_recalled)
+            paper_reranked = paper_reranked[:round(len(paper_reranked)/10)]
+            print('Reranked papers:', len(paper_reranked))
 
-        # 去重
-        seen_ids = set()
-        paper_after_retrieval = []
-        for item in paper_reranked:
-            paper_id = item2Id[item]
-            if paper_id not in seen_ids:
-                seen_ids.add(paper_id)
-                paper_after_retrieval.append(Id2paper[paper_id])
+            # 去重
+            seen_ids = set()
+            paper_after_retrieval = []
+            for item in paper_reranked:
+                paper_id = item2Id[item]
+                if paper_id not in seen_ids:
+                    seen_ids.add(paper_id)
+                    paper_after_retrieval.append(Id2paper[paper_id])
+            
+            # 保存检索结果到 most_related_paper.json
+            with open("most_related_paper.json", "w") as file:
+                json.dump(paper_after_retrieval, file, indent=2)
+            print(f"Saved {len(paper_after_retrieval)} papers to most_related_paper.json")
 
         
         reviews = evaluate_paper_innovation(
-            paper_title=,
-            paper_abstract=,
+            paper_title=title,
+            paper_abstract=abstract,
             retrieved_papers=paper_after_retrieval
         )
 
+        print(reviews)
+        return reviews
         # success_id, failed_id = self._paper_download(paper_after_retrieval)
         # success_id = ['5bea7828c7a5aeaac8fc86e2012d8fa43ba64242', 'ec1c43ca684732d06716a36271a4cb3066797153', '0b9d0bee85e4ef4261147f35be885010e62ad1fb']
         # reference_rag, reference_scholar = "", ""
@@ -263,7 +279,7 @@ class OpenScholar:
         query_params = {
             'query': query,
             'fields': "paperId,title,year,authors.name,abstract,venue,citationCount,url,externalIds,isOpenAccess,openAccessPdf",
-            "year": "2023-",
+            "year": "2021-",
             "sort": "citationCount:desc"
         }
         headers = {"x-api-key":self.s2_api_key}
@@ -308,14 +324,11 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     # key_words = ["Human noroviruses", "GII.4", "Nanobody M4", "Neutralization", "Epochal evolution","Raised conformation"]
-    title = ""
+    title = "PQBP5/NOL10 maintains and anchors the nucleolus under physiological and osmotic stress conditions"
     key_words = []
     abstract = """
-        Polyglutamine binding protein 5 (PQBP5), also called nucleolar protein 10 (NOL10), binds to polyglutamine tract sequences and is expressed in the nucleolus. Using dynamic imaging of high-speed atomic force microscopy, we show that PQBP5/NOL10 is an intrinsically disordered protein. Superresolution microscopy and correlative light and electron microscopy method show that PQBP5/NOL10 makes up the skeletal structure of the nucleolus, constituting the granule meshwork in the granular component area, which is distinct from other nucleolar substructures, such as the fibrillar center and dense fibrillar component. In contrast to other nucleolar proteins, which disperse to the nucleoplasm under osmotic stress conditions, PQBP5/NOL10 remains in the nucleolus and functions as an anchor for reassembly of other nucleolar proteins. Droplet and thermal shift assays show that the biophysical features of PQBP5/NOL10 remain stable under stress conditions, explaining the spatial role of this protein. PQBP5/NOL10 can be functionally depleted by sequestration with polyglutamine disease proteins in vitro and in vivo, leading to the pathological deformity or disappearance of the nucleolus. Taken together, these findings indicate that PQBP5/NOL10 is an essential protein needed to maintain the structure of the nucleolus.
+Polyglutamine binding protein 5 (PQBP5), also called nucleolar protein 10 (NOL10), binds to polyglutamine tract sequences and is expressed in the nucleolus. Using dynamic imaging of high-speed atomic force microscopy, we show that PQBP5/NOL10 is an intrinsically disordered protein. Superresolution microscopy and correlative light and electron microscopy method show that PQBP5/NOL10 makes up the skeletal structure of the nucleolus, constituting the granule meshwork in the granular component area, which is distinct from other nucleolar substructures, such as the fibrillar center and dense fibrillar component. In contrast to other nucleolar proteins, which disperse to the nucleoplasm under osmotic stress conditions, PQBP5/NOL10 remains in the nucleolus and functions as an anchor for reassembly of other nucleolar proteins. Droplet and thermal shift assays show that the biophysical features of PQBP5/NOL10 remain stable under stress conditions, explaining the spatial role of this protein. PQBP5/NOL10 can be functionally depleted by sequestration with polyglutamine disease proteins in vitro and in vivo, leading to the pathological deformity or disappearance of the nucleolus. Taken together, these findings indicate that PQBP5/NOL10 is an essential protein needed to maintain the structure of the nucleolus.
     """
 
-    if not key_words:
-        key_words = keywords_extract(abstract)
-
     server = Reviewer(args)
-    server(key_words, abstract)
+    server(title, abstract, key_words)

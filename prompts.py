@@ -44,3 +44,139 @@ promts_w_references_summarization = ("Given an abstract of an academic paper, th
                        "\n[Response_Start]{example_answer}[Response_End]\nNow, please generate another related work given the following abstract.\n##\n")
 generation_demonstration_summarization = promts_w_references_summarization.format_map({"example_passages": example_passages_summarization, "example_innovation":"", "example_question": example_question_summarization, "example_answer": example_answer_summarization})
 generation_instance_prompts_summarization = generation_demonstration_summarization + "References:\n {reference}\n Abstract: {abstract}\n Innovation: {innovation}\n"
+
+# ============================================================================
+# LATS 提示词 - 学术创新性评价树搜索
+# ============================================================================
+
+# 创新性评价生成提示词
+INNOVATION_GENERATION_PROMPT = """你是一位专业的学术论文评审专家。你的任务是对给定的学术论文进行创新性评价。
+
+【待评价论文信息】
+标题: {paper_title}
+摘要: {paper_abstract}
+
+【相关研究工作】
+{related_papers}
+
+【评价要求】
+1. **创新性识别**：识别论文的主要创新点（新方法、新发现、新理论、新应用等）
+2. **对比分析**：将论文的创新点与相关研究工作进行详细对比
+   - 指出现有研究的局限性
+   - 说明本论文如何克服这些局限
+   - 评估改进的程度和意义
+3. **引用规范**：在评价中正确引用相关研究工作，使用 [序号] 格式
+4. **评价维度**：
+   - 理论创新性（是否提出新理论或新概念）
+   - 方法创新性（是否提出新方法或改进现有方法）
+   - 应用创新性（是否有新的应用场景或实际价值）
+   - 与现有工作的差异性（与最相关工作的区别）
+
+请生成一份详细的创新性评价报告，包含：
+1. 主要创新点总结（2-3条）
+2. 与相关研究的对比分析
+3. 相关文献引用
+
+评价应当客观、专业、有依据。"""
+
+# 反思提示词 - 针对创新性评价质量
+INNOVATION_REFLECTION_PROMPT = """你是一位严格的学术论文评审专家。请对以下创新性评价进行批判性反思。
+
+【待评价论文】
+标题: {paper_title}
+摘要: {paper_abstract}
+
+【相关研究文献】
+{related_papers}
+
+【当前创新性评价】
+{current_evaluation}
+
+【反思要求】
+请从以下维度评价当前创新性评价的质量：
+
+1. **创新性识别准确性**（0-10分）【权重最高】
+   - 识别的创新点是否真实存在？
+   - 是否有遗漏的重要创新？
+   - 是否存在夸大或错误的创新声明？
+
+2. **对比充分性**（0-10分）
+   - 是否充分对比了相关研究工作？
+   - 是否正确识别了与现有工作的差异？
+
+3. **引用规范性**（0-10分）
+   - 引用格式是否正确 [序号]？
+   - 引用是否与论述匹配？
+   - 是否有遗漏的重要引用？
+   - 是否存在不必要的引用？
+
+请输出以下格式的反思结果：
+<reflections>
+你的详细反思内容，指出评价的优点和不足，提出改进建议...
+</reflections>
+<score>综合得分(0-10的整数)</score>
+<found_solution>是否达到高质量创新性评价标准(true/false)</found_solution>
+
+注意：只有当创新性评价正确识别了创新点、充分对比了相关研究、引用规范完整时，found_solution 才为 true。综合得分 = (创新性识别准确性×0.5 + 对比充分性×0.3 + 引用规范性×0.2)"""
+
+# 优化改进提示词
+INNOVATION_IMPROVEMENT_PROMPT = """你是一位专业的学术论文评审专家。基于以下反思反馈，改进创新性评价。
+
+【待评价论文】
+标题: {paper_title}
+摘要: {paper_abstract}
+
+【相关研究工作】
+{related_papers}
+
+【当前评价】
+{current_evaluation}
+
+【反思反馈】
+{reflection_feedback}
+
+【改进要求】
+请根据反思反馈，生成改进后的创新性评价。改进应当：
+1. 补充遗漏的对比分析
+2. 修正不准确的创新声明
+3. 完善引用和论证
+4. 提升评价的全面性和深度
+5. 去除不必要的内容
+
+保持评价的专业性和客观性，确保引用格式正确 [序号]。"""
+
+# 最终评价生成提示词（带完整引用格式）
+FINAL_INNOVATION_REPORT_PROMPT = """你是一位资深的学术论文评审专家。请基于以下信息生成最终的创新性评价报告。
+
+【待评价论文】
+标题: {paper_title}
+摘要: {paper_abstract}
+
+【相关研究工作（带完整信息）】
+{related_papers_with_metadata}
+
+【初步创新性评价】
+{draft_evaluation}
+
+【最终报告要求】
+请生成一份完整、专业的创新性评价报告，包含以下部分：
+
+## 1. 创新点概述 (Innovation Summary)
+简明扼要地总结论文的主要创新贡献（2-4条）。
+
+## 2. 与现有研究的对比 (Comparison with Related Work)
+详细对比论文与相关研究工作的差异：
+- 现有方法/理论的局限性
+- 本论文的改进之处
+- 改进的意义和价值
+
+## 3. 参考文献 (References)
+使用标准学术引用格式列出所有引用的文献：
+[1] 作者. 标题. 期刊/会议名, 年份.
+[2] 作者. 标题. 期刊/会议名, 年份.
+...
+
+注意：
+- 引用格式必须规范完整
+- 只列出实际引用到的文献
+- 确保引用序号与正文中的 [序号] 对应"""
