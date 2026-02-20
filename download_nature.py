@@ -70,6 +70,9 @@ class PubMedNatureDownloader:
         self.timeout = 30
         self.max_retries = 3
         
+        # DOI缓存文件
+        self.dois_cache_file = "dois_cache.txt"
+        
         # 统计信息
         self.total_found = 0
         self.dois_fetched = 0
@@ -131,7 +134,7 @@ class PubMedNatureDownloader:
                 logger.error(f"响应内容: {response.text[:500]}")
             return []
     
-    def fetch_dois_from_pmids(self, pmid_list: List[str], batch_size: int = 100) -> List[str]:
+    def fetch_dois_from_pmids(self, pmid_list: List[str], batch_size: int = 200) -> List[str]:
         """
         通过PMID批量获取DOI
         
@@ -183,6 +186,7 @@ class PubMedNatureDownloader:
                 
                 # 解析XML，提取DOI
                 batch_dois = self._extract_dois_from_xml(response.text)
+                
                 all_dois.extend(batch_dois)
                 
                 logger.info(f"批次 {batch_idx+1} 获取到 {len(batch_dois)} 个DOI")
@@ -201,7 +205,7 @@ class PubMedNatureDownloader:
         return all_dois
     
     def _extract_dois_from_xml(self, xml_content: str) -> List[str]:
-        """从PubMed XML中提取DOI"""
+        """从PubMed XML中提取DOI，只保留Nature Communications 2025年文章"""
         dois = []
         
         try:
@@ -215,30 +219,58 @@ class PubMedNatureDownloader:
                     if doi:
                         # 清理DOI格式
                         doi = doi.strip()
-                        if not doi.startswith('10.'):
-                            # 有些DOI可能包含完整URL，只提取DOI部分
+                        
+                        # 移除可能的URL前缀
+                        if doi.startswith('http'):
+                            # 从URL中提取DOI部分
                             match = re.search(r'10\.\d+/[^\s]+', doi)
                             if match:
                                 doi = match.group(0)
-                        dois.append(doi)
+                        
+                        # 只提取包含"s41467-025"的DOI
+                        if 's41467-025' in doi:
+                            # 进一步清理，移除可能的后缀
+                            doi = re.sub(r'[.,;:]$', '', doi)  # 移除末尾的标点
+                            dois.append(doi)
+                
+            # 同时查找ELocationID元素
+            for elocation in root.findall('.//ELocationID'):
+                if elocation.get('EIdType', '').lower() == 'doi':
+                    doi = elocation.text
+                    if doi and 's41467-025' in doi:
+                        doi = re.sub(r'[.,;:]$', '', doi.strip())
+                        if doi not in dois:  # 避免重复
+                            dois.append(doi)
             
+            # 记录找到的DOI数量
+            if dois:
+                logger.info(f"从XML中提取到 {len(dois)} 个包含's41467-025'的DOI")
+                # 输出前几个DOI作为示例
+                for i, doi in enumerate(dois[:5]):
+                    logger.debug(f"DOI示例 {i+1}: {doi}")
+                if len(dois) > 5:
+                    logger.debug(f"... 还有 {len(dois)-5} 个DOI")
+            
+        except ET.ParseError as e:
+            logger.error(f"XML解析失败: {e}")
+            logger.error(f"XML内容前500字符: {xml_content[:500]}")
         except Exception as e:
-            logger.error(f"解析XML失败: {e}")
+            logger.error(f"提取DOI失败: {e}")
         
         return dois
     
-    def doi_to_nature_pdf_url(self, doi: str) -> Optional[str]:
+    def doi_to_nature_pdf_url(self, doi: str) -> Tuple[Optional[str], Optional[str]]:
         """
-        将DOI转换为Nature PDF下载链接
+        将DOI转换为Nature PDF下载链接和同行评审文件链接
         
         Args:
             doi: DOI号
             
         Returns:
-            Nature PDF链接或None
+            Tuple[文章PDF链接, 同行评审PDF链接] 或 (None, None)
         """
         if not doi:
-            return None
+            return None, None
         
         try:
             # 清理DOI
@@ -251,7 +283,7 @@ class PubMedNatureDownloader:
                 if match:
                     doi = match.group(0)
                 else:
-                    return None
+                    return None, None
             
             # Nature Communications的DOI格式通常是: 10.1038/s41467-xxx-xxxxx-x
             # 我们需要提取文章ID部分
@@ -259,20 +291,215 @@ class PubMedNatureDownloader:
                 article_id = doi.replace('10.1038/', '')
                 
                 # 确保article_id符合预期格式
-                if re.match(r'^s41467-\d{3}-\d{5}-\d{1,2}$', article_id):
+                if re.match(r'^s41467-025-\d{5}-[a-zA-Z0-9]{1,2}$', article_id):
+                    # 文章PDF链接
                     pdf_url = f"{self.NATURE_PDF_BASE}/{article_id}.pdf"
-                    return pdf_url
+                    
+                    # 获取同行评审文件链接
+                    review_url = self._get_peer_review_url(article_id)
+                    
+                    return pdf_url, review_url
                 else:
                     logger.debug(f"DOI格式不符合Nature Communications预期: {doi}")
-                    return None
+                    return None, None
             else:
                 logger.debug(f"非Nature Communications DOI: {doi}")
-                return None
-                
+                return None, None
+            
         except Exception as e:
             logger.error(f"转换DOI失败: {doi} - {e}")
+            return None, None
+
+    def get_peer_review_url(self, article_id: str) -> Optional[str]:
+        """
+        获取Nature文章的同行评审文件链接
+        
+        Args:
+            article_id: 文章ID (如 s41467-025-65288-9)
+            
+        Returns:
+            同行评审PDF链接或None
+        """
+        try:
+            # 构建文章页面URL
+            article_url = f"{self.NATURE_PDF_BASE}/{article_id}"
+            
+            logger.debug(f"正在获取文章页面: {article_url}")
+            
+            # 获取文章页面
+            time.sleep(self.delay)  # 添加延迟避免请求过快
+            response = self.session.get(article_url, timeout=self.timeout)
+            response.raise_for_status()
+            
+            html_content = response.text
+            
+            # 使用正则表达式查找同行评审文件链接
+            # 查找包含 "transparent peer review file" 的链接
+            # 模式匹配: <a ... href="...">Transparent Peer Review file</a>
+            peer_review_patterns = [
+                # 精确匹配用户提供的模式
+                r'<a[^>]*class="print-link"[^>]*data-track-label="transparent peer review file"[^>]*href="([^"]+)"[^>]*>Transparent Peer Review file</a>',
+                # 更通用的匹配模式
+                r'<a[^>]*href="([^"]+)"[^>]*>[^<]*[Tt]ransparent [Pp]eer [Rr]eview [Ff]ile[^<]*</a>',
+                # 匹配包含 "peer review" 的链接
+                r'<a[^>]*href="([^"]+\.pdf)"[^>]*>[^<]*[Pp]eer [Rr]eview[^<]*</a>',
+                # 匹配包含 "review" 的PDF链接
+                r'<a[^>]*href="([^"]+)"[^>]*>[^<]*[Rr]eview[^<]*\.pdf[^<]*</a>',
+            ]
+            
+            for pattern in peer_review_patterns:
+                match = re.search(pattern, html_content, re.IGNORECASE)
+                if match:
+                    review_url = match.group(1)
+                    
+                    # 确保URL是完整的（如果是相对路径，则转换为绝对路径）
+                    if review_url.startswith('/'):
+                        review_url = f"https://www.nature.com{review_url}"
+                    elif not review_url.startswith('http'):
+                        # 如果是相对路径但没有前导斜杠
+                        review_url = f"https://www.nature.com/{review_url}"
+                    
+                    logger.debug(f"找到同行评审文件链接: {review_url}")
+                    return review_url
+            
+            # 如果没有找到，尝试查找包含 "peer review file" 的文本，然后查找附近的链接
+            peer_review_text_pattern = r'[Pp]eer [Rr]eview [Ff]ile'
+            if re.search(peer_review_text_pattern, html_content):
+                # 查找附近的PDF链接
+                pdf_links = re.findall(r'href="([^"]+\.pdf)"', html_content)
+                for pdf_link in pdf_links:
+                    if 'peer' in pdf_link.lower() or 'review' in pdf_link.lower():
+                        # 确保URL是完整的
+                        if pdf_link.startswith('/'):
+                            pdf_link = f"https://www.nature.com{pdf_link}"
+                        elif not pdf_link.startswith('http'):
+                            pdf_link = f"https://www.nature.com/{pdf_link}"
+                        
+                        logger.debug(f"通过文本匹配找到可能的同行评审文件: {pdf_link}")
+                        return pdf_link
+            
+            logger.debug(f"未找到文章 {article_id} 的同行评审文件链接")
+            return None
+            
+        except requests.exceptions.RequestException as e:
+            logger.error(f"获取文章页面失败: {article_url} - {e}")
+            return None
+        except Exception as e:
+            logger.error(f"解析同行评审链接失败: {e}")
             return None
     
+    def _get_peer_review_url(self, article_id: str) -> Optional[str]:
+        """
+        获取Nature文章的同行评审文件链接（增强版）
+        
+        Args:
+            article_id: 文章ID (如 s41467-025-65288-9)
+            
+        Returns:
+            同行评审PDF链接或None
+        """
+        try:
+            # 构建文章页面URL
+            article_url = f"{self.NATURE_PDF_BASE}/{article_id}"
+            
+            logger.debug(f"正在获取文章页面: {article_url}")
+            
+            # 增强的请求头设置，模拟真实浏览器
+            enhanced_headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+                'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Connection': 'keep-alive',
+                'Upgrade-Insecure-Requests': '1',
+                'Sec-Fetch-Dest': 'document',
+                'Sec-Fetch-Mode': 'navigate',
+                'Sec-Fetch-Site': 'none',
+                'Sec-Fetch-User': '?1',
+                'Cache-Control': 'max-age=0',
+                'DNT': '1',  # Do Not Track
+            }
+            
+            # 更新session的headers
+            original_headers = self.session.headers.copy()
+            self.session.headers.update(enhanced_headers)
+            
+            try:
+                # 增加延迟避免请求过快（Nature限制严格）
+                time.sleep(2.0)  # 增加到2秒
+                
+                # 获取文章页面
+                response = self.session.get(article_url, timeout=self.timeout)
+                
+                # 检查响应状态
+                if response.status_code == 406:
+                    logger.warning(f"文章 {article_id} 触发406限制，尝试备用方法...")
+                    # 尝试使用更保守的请求头
+                    return self._get_peer_review_url_backup(article_id)
+                
+                response.raise_for_status()
+                
+                html_content = response.text
+                
+                # 使用正则表达式查找同行评审文件链接
+                # 查找包含 "transparent peer review file" 的链接
+                peer_review_patterns = [
+                    # 精确匹配用户提供的模式
+                    r'<a[^>]*class="print-link"[^>]*data-track-label="transparent peer review file"[^>]*href="([^"]+)"[^>]*>Transparent Peer Review file</a>',
+                    # 更通用的匹配模式
+                    r'<a[^>]*href="([^"]+)"[^>]*>[^<]*[Tt]ransparent [Pp]eer [Rr]eview [Ff]ile[^<]*</a>',
+                    # 匹配包含 "peer review" 的链接
+                    r'<a[^>]*href="([^"]+\.pdf)"[^>]*>[^<]*[Pp]eer [Rr]eview[^<]*</a>',
+                    # 匹配包含 "review" 的PDF链接
+                    r'<a[^>]*href="([^"]+)"[^>]*>[^<]*[Rr]eview[^<]*\.pdf[^<]*</a>',
+                ]
+                
+                for pattern in peer_review_patterns:
+                    match = re.search(pattern, html_content, re.IGNORECASE)
+                    if match:
+                        review_url = match.group(1)
+                        
+                        # 确保URL是完整的（如果是相对路径，则转换为绝对路径）
+                        if review_url.startswith('/'):
+                            review_url = f"https://www.nature.com{review_url}"
+                        elif not review_url.startswith('http'):
+                            # 如果是相对路径但没有前导斜杠
+                            review_url = f"https://www.nature.com/{review_url}"
+                        
+                        logger.debug(f"找到同行评审文件链接: {review_url}")
+                        return review_url
+                
+                # 如果没有找到，尝试查找包含 "peer review file" 的文本，然后查找附近的链接
+                peer_review_text_pattern = r'[Pp]eer [Rr]eview [Ff]ile'
+                if re.search(peer_review_text_pattern, html_content):
+                    # 查找附近的PDF链接
+                    pdf_links = re.findall(r'href="([^"]+\.pdf)"', html_content)
+                    for pdf_link in pdf_links:
+                        if 'peer' in pdf_link.lower() or 'review' in pdf_link.lower():
+                            # 确保URL是完整的
+                            if pdf_link.startswith('/'):
+                                pdf_link = f"https://www.nature.com{pdf_link}"
+                            elif not pdf_link.startswith('http'):
+                                pdf_link = f"https://www.nature.com/{pdf_link}"
+                            
+                            logger.debug(f"通过文本匹配找到可能的同行评审文件: {pdf_link}")
+                            return pdf_link
+                
+                logger.debug(f"未找到文章 {article_id} 的同行评审文件链接")
+                return None
+                
+            finally:
+                # 恢复原始headers
+                self.session.headers.clear()
+                self.session.headers.update(original_headers)
+            
+        except requests.exceptions.RequestException as e:
+            logger.error(f"获取文章页面失败: {article_url} - {e}")
+            return None
+        except Exception as e:
+            logger.error(f"解析同行评审链接失败: {e}")
+            return None
+
     def download_pdf(self, pdf_url: str, output_dir: str = "nature_pdfs_2025") -> bool:
         """
         下载PDF文件
@@ -405,7 +632,6 @@ class PubMedNatureDownloader:
         
         # 1. 搜索文章
         pmid_list = self.search_articles(year)
-        
         if not pmid_list:
             logger.error("未找到文章，程序退出")
             return
@@ -425,12 +651,14 @@ class PubMedNatureDownloader:
         # 3. 转换为PDF链接
         logger.info("\n正在生成PDF下载链接...")
         pdf_urls = []
+        review_urls = []
         valid_dois = []
         
         for doi in tqdm(dois, desc="生成PDF链接"):
-            pdf_url = self.doi_to_nature_pdf_url(doi)
-            if pdf_url:
+            pdf_url, review_url = self.doi_to_nature_pdf_url(doi)
+            if pdf_url and review_url:
                 pdf_urls.append(pdf_url)
+                review_urls.append(review_url)
                 valid_dois.append(doi)
                 logger.debug(f"DOI -> PDF: {doi} -> {os.path.basename(pdf_url)}")
         
@@ -445,6 +673,13 @@ class PubMedNatureDownloader:
                 if self.download_pdf(pdf_url, output_dir):
                     success_count += 1
                 logger.info(f"PDF下载完成: {success_count}/{len(pdf_urls)} 成功")
+
+            success_count = 0
+            for review_url in tqdm(review_urls, desc="下载同行评审文件"):
+                if self.download_pdf(review_url, output_dir):
+                    success_count += 1
+                logger.info(f"同行评审文件下载完成: {success_count}/{len(review_urls)} 成功")
+
         
         # 5. 保存结果
         self.save_results(valid_dois, pdf_urls)
@@ -464,10 +699,10 @@ def main():
     """主函数"""
     parser = argparse.ArgumentParser(description='下载Nature Communications 2025年文章')
     parser.add_argument('--year', type=int, default=2025, help='年份')
-    parser.add_argument('--email', type=str, required=True, default='fprb011320@gmail.com',help='您的邮箱（NCBI要求）')
+    parser.add_argument('--email', type=str, default='fprb011320@gmail.com',help='您的邮箱（NCBI要求）')
     parser.add_argument('--api-key', type=str, default='0915e974e24c921b176647f155bb4a264908',help='NCBI API密钥（可选）')
     parser.add_argument('--no-download', action='store_true', help='只生成链接，不下载PDF')
-    parser.add_argument('--test', action='store_true', help='测试模式（只处理前10篇）')
+    parser.add_argument('--test', action='store_true', default=True, help='测试模式（只处理前10篇）')
     parser.add_argument('--output-dir', type=str, default='nature_pdfs_2025', help='输出目录')
     
     args = parser.parse_args()
