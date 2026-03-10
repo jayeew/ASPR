@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-PubMed Nature Communications 2023文章下载器
-使用官方E-utilities API检索文章，通过DOI生成Nature PDF下载链接
+PubMed Nature 系列杂志文章下载器
+通过参数指定杂志名称、下载年份、杂志编号，使用 E-utilities API 检索并下载 PDF。
+示例：--journal-name "Nature communications" --year 2024 --journal-id 41467
 """
 
 import os
@@ -78,21 +79,23 @@ class PubMedNatureDownloader:
         self.dois_fetched = 0
         self.pdfs_downloaded = 0
         
-    def search_articles(self, year: int = 2023, retmax: int = 100000) -> List[str]:
+    def search_articles(self, year: int = 2023, journal_name: str = None, retmax: int = 100000) -> List[str]:
         """
-        搜索Nature Communications 2023年文章，返回PMID列表
+        搜索指定杂志指定年份文章，返回PMID列表
         
         Args:
             year: 年份
+            journal_name: 杂志名称（PubMed 期刊名），若为 None 则使用 run() 时设置的 _journal_name
             retmax: 最大返回结果数
             
         Returns:
             PMID列表
         """
-        logger.info(f"正在搜索 {year} 年 Nature Communications 文章...")
+        name = journal_name if journal_name is not None else getattr(self, '_journal_name', 'Nature Biomedical Engineering')
+        logger.info(f"正在搜索 {year} 年 {name} 文章...")
         
         # 构建PubMed搜索查询
-        search_term = f'("Nature communications"[Journal]) AND ("{year}/01/01"[Date - Publication] : "{year}/12/31"[Date - Publication])'
+        search_term = f'("{name}"[Journal]) AND ("{year}/01/01"[Date - Publication] : "{year}/12/31"[Date - Publication])'
         
         params = {
             'db': 'pubmed',
@@ -205,8 +208,13 @@ class PubMedNatureDownloader:
         return all_dois
     
     def _extract_dois_from_xml(self, xml_content: str) -> List[str]:
-        """从PubMed XML中提取DOI，只保留Nature Communications 2023年文章"""
+        """从PubMed XML中提取DOI，只保留当前杂志编号+年份的DOI（如 s41551-023）"""
         dois = []
+        journal_id = getattr(self, '_journal_id', '41551')
+        year = getattr(self, '_year', 2023)
+        # DOI 中年份为 3 位，如 2023 → 023
+        year_in_doi = (year % 100)
+        doi_prefix = f's{journal_id}-{year_in_doi:03d}'
         
         try:
             # 解析XML
@@ -227,8 +235,8 @@ class PubMedNatureDownloader:
                             if match:
                                 doi = match.group(0)
                         
-                        # 只提取包含"s41467-023"的DOI
-                        if 's41467-023' in doi:
+                        # 只提取包含当前杂志编号+年份的DOI（如 s41551-023）
+                        if doi_prefix in doi:
                             # 进一步清理，移除可能的后缀
                             doi = re.sub(r'[.,;:]$', '', doi)  # 移除末尾的标点
                             dois.append(doi)
@@ -237,14 +245,14 @@ class PubMedNatureDownloader:
             for elocation in root.findall('.//ELocationID'):
                 if elocation.get('EIdType', '').lower() == 'doi':
                     doi = elocation.text
-                    if doi and 's41467-023' in doi:
+                    if doi and doi_prefix in doi:
                         doi = re.sub(r'[.,;:]$', '', doi.strip())
                         if doi not in dois:  # 避免重复
                             dois.append(doi)
             
             # 记录找到的DOI数量
             if dois:
-                logger.info(f"从XML中提取到 {len(dois)} 个包含's41467-023'的DOI")
+                logger.info(f"从XML中提取到 {len(dois)} 个包含'{doi_prefix}'的DOI")
                 # 输出前几个DOI作为示例
                 for i, doi in enumerate(dois[:5]):
                     logger.debug(f"DOI示例 {i+1}: {doi}")
@@ -285,13 +293,16 @@ class PubMedNatureDownloader:
                 else:
                     return None, None
             
-            # Nature Communications的DOI格式通常是: 10.1038/s41467-xxx-xxxxx-x
-            # 我们需要提取文章ID部分
+            # Nature 系列 DOI 格式: 10.1038/s{杂志编号}-{年份3位如023}-xxxxx-x
+            journal_id = getattr(self, '_journal_id', '41551')
+            year = getattr(self, '_year', 2023)
+            year_in_doi = year % 100  # 2023→23，格式化为 023
+            pattern = rf'^s{re.escape(journal_id)}-{year_in_doi:03d}-\d{{5}}-[a-zA-Z0-9]{{1,2}}$'
             if '10.1038/' in doi:
                 article_id = doi.replace('10.1038/', '')
                 
-                # 确保article_id符合预期格式
-                if re.match(r'^s41467-023-\d{5}-[a-zA-Z0-9]{1,2}$', article_id):
+                # 确保 article_id 符合当前杂志编号+年份的格式
+                if re.match(pattern, article_id):
                     # 文章PDF链接
                     pdf_url = f"{self.NATURE_PDF_BASE}/{article_id}.pdf"
                     
@@ -300,10 +311,10 @@ class PubMedNatureDownloader:
                     
                     return pdf_url, review_url
                 else:
-                    logger.debug(f"DOI格式不符合Nature Communications预期: {doi}")
+                    logger.debug(f"DOI格式不符合预期 (杂志{journal_id} {year}年): {doi}")
                     return None, None
             else:
-                logger.debug(f"非Nature Communications DOI: {doi}")
+                logger.debug(f"非 Nature 10.1038 DOI: {doi}")
                 return None, None
             
         except Exception as e:
@@ -315,7 +326,7 @@ class PubMedNatureDownloader:
         获取Nature文章的同行评审文件链接
         
         Args:
-            article_id: 文章ID (如 s41467-023-65288-9)
+            article_id: 文章ID (如 s41551-023-65288-9)
             
         Returns:
             同行评审PDF链接或None
@@ -393,7 +404,7 @@ class PubMedNatureDownloader:
         获取Nature文章的同行评审文件链接（增强版）
         
         Args:
-            article_id: 文章ID (如 s41467-023-65288-9)
+            article_id: 文章ID (如 s41551-023-65288-9)
             
         Returns:
             同行评审PDF链接或None
@@ -591,17 +602,23 @@ class PubMedNatureDownloader:
         return False
     
     def save_results(self, dois: List[str], pdf_urls: List[str], 
-                    output_file: str = "nature_articles_2023.txt"):
+                    output_file: str = None):
         """
         保存结果到文件
         
         Args:
             dois: DOI列表
             pdf_urls: PDF链接列表
-            output_file: 输出文件名
+            output_file: 输出文件名，默认根据杂志编号和年份生成
         """
+        if output_file is None:
+            journal_id = getattr(self, '_journal_id', '41551')
+            year = getattr(self, '_year', 2023)
+            output_file = f"nature_articles_{journal_id}_{year}.txt"
+        journal_name = getattr(self, '_journal_name', 'Nature Biomedical Engineering')
+        year = getattr(self, '_year', 2023)
         with open(output_file, 'w', encoding='utf-8') as f:
-            f.write(f"# Nature Communications 2023 Articles\n")
+            f.write(f"# {journal_name} {year} 年 Articles\n")
             f.write(f"# Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
             f.write(f"# Total Found: {self.total_found}\n")
             f.write(f"# DOIs Fetched: {self.dois_fetched}\n")
@@ -615,23 +632,32 @@ class PubMedNatureDownloader:
         
         logger.info(f"结果已保存到: {output_file}")
     
-    def run(self, year: int = 2023, download_pdfs: bool = True, 
-            test_mode: bool = False, output_dir: str = "nature_pdfs_2023"):
+    def run(self, year: int = 2023, journal_name: str = "Nature Biomedical Engineering",
+            journal_id: str = "41551", download_pdfs: bool = True, 
+            test_mode: bool = False, output_dir: str = None):
         """
         主运行函数
         
         Args:
-            year: 年份
+            year: 下载年份
+            journal_name: 杂志名称（PubMed 期刊名）
+            journal_id: 杂志编号（如 41551，对应 DOI 中的 s41551）
             download_pdfs: 是否下载PDF
             test_mode: 测试模式（只处理前10篇）
-            output_dir: 输出目录
+            output_dir: 输出目录，默认根据杂志编号和年份生成
         """
+        self._journal_name = journal_name
+        self._journal_id = str(journal_id)
+        self._year = year
+        if output_dir is None:
+            output_dir = f"nature_pdfs_{self._journal_id}_{year}"
+        
         logger.info("=" * 60)
-        logger.info(f"Nature Communications {year} 文章下载器")
+        logger.info(f"{journal_name} ({journal_id}) {year} 年 文章下载器")
         logger.info("=" * 60)
         
         # 1. 搜索文章
-        pmid_list = self.search_articles(year)
+        pmid_list = self.search_articles(year=year)
         if not pmid_list:
             logger.error("未找到文章，程序退出")
             return
@@ -683,7 +709,8 @@ class PubMedNatureDownloader:
 
         
         # 5. 保存结果
-        self.save_results(valid_dois, pdf_urls)
+        output_file = f"nature_articles_{self._journal_id}_{year}.txt"
+        self.save_results(valid_dois, pdf_urls, output_file=output_file)
         
         # 6. 输出统计
         logger.info("=" * 60)
@@ -698,24 +725,31 @@ class PubMedNatureDownloader:
 
 def main():
     """主函数"""
-    parser = argparse.ArgumentParser(description='下载Nature Communications 2023年文章')
-    parser.add_argument('--year', type=int, default=2023, help='年份')
-    parser.add_argument('--email', type=str, default='fprb011320@gmail.com',help='您的邮箱（NCBI要求）')
-    parser.add_argument('--api-key', type=str, default='0915e974e24c921b176647f155bb4a264908',help='NCBI API密钥（可选）')
+    parser = argparse.ArgumentParser(description='下载 Nature 系列杂志文章（可指定杂志名称、年份、杂志编号）')
+    parser.add_argument('--journal-name', type=str, default='Nature Biomedical Engineering',
+                        help='杂志名称（PubMed 期刊名，如 "Nature Biomedical Engineering" 或 "Nature communications"）')
+    parser.add_argument('--year', type=int, default=2023, help='下载年份')
+    parser.add_argument('--journal-id', type=str, default='41551',
+                        help='杂志编号（如 41551 对应 Nature Biomedical Engineering，41467 对应 Nature Communications）')
+    parser.add_argument('--email', type=str, default='fprb011320@gmail.com', help='您的邮箱（NCBI要求）')
+    parser.add_argument('--api-key', type=str, default='0915e974e24c921b176647f155bb4a264908', help='NCBI API密钥（可选）')
     parser.add_argument('--no-download', action='store_true', help='只生成链接，不下载PDF')
     parser.add_argument('--test', action='store_true', default=False, help='测试模式（只处理前10篇）')
-    parser.add_argument('--output-dir', type=str, default='nature_pdfs_2023', help='输出目录')
+    parser.add_argument('--output-dir', type=str, default=None,
+                        help='输出目录（默认: nature_pdfs_{杂志编号}_{年份}）')
     
     args = parser.parse_args()
     
-    print("Nature Communications 文章下载器")
+    print("Nature 杂志文章下载器")
     print("=" * 50)
+    print(f"杂志名称: {args.journal_name}")
+    print(f"杂志编号: {args.journal_id}")
     print(f"年份: {args.year}")
     print(f"邮箱: {args.email}")
     print(f"API密钥: {'已提供' if args.api_key else '未提供'}")
     print(f"下载PDF: {'否' if args.no_download else '是'}")
     print(f"测试模式: {'是' if args.test else '否'}")
-    print(f"输出目录: {args.output_dir}")
+    print(f"输出目录: {f'nature_pdfs_{args.journal_id}_{args.year}'}")
     print()
     
     # 重要提示
@@ -736,6 +770,8 @@ def main():
         # 运行下载器
         downloader.run(
             year=args.year,
+            journal_name=args.journal_name,
+            journal_id=args.journal_id,
             download_pdfs=not args.no_download,
             test_mode=args.test,
             output_dir=args.output_dir
