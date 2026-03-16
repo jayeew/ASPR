@@ -11,8 +11,8 @@ kg_validator/
 ├── fetcher.py        # OpenAlex API 数据拉取
 ├── graph_builder.py  # NetworkX 图构建 & 时间切片
 ├── metrics.py        # 七维指标计算（核心算法）
-├── comparator.py     # 前后对比逻辑 + 可视化
-├── main.py           # 主入口（demo / full 两种模式）
+├── comparator.py     # 单篇指标对比 + 领域前后图谱三联图
+├── main.py           # 主入口（demo / full / field_contrast）
 └── README.md         # 本文档
 ```
 
@@ -28,6 +28,29 @@ python main.py --mode demo
 
 # 完整模式（从 OpenAlex 拉取真实数据）
 python main.py --mode full --email your@email.com
+
+# 领域图谱时间节点前后对比（三联图）
+python main.py --mode field_contrast \
+  --filter "concepts.id:C86803240,type:article" \
+  --event-year 2024 \
+  --event-label "Chemistry Nobel 2024" \
+  --email your@email.com
+
+# 目标论文发表前后对比（以论文发表年为分界点）
+python main.py --mode paper_contrast \
+  --filter "concepts.id:C86803240,type:article" \
+  --paper-dois "10.1038/s41586-021-03819-2" \
+  --event-label "AlphaFold release" \
+  --email your@email.com
+
+# 纯论文邻域模式（不指定领域范围）
+python main.py --mode paper_neighborhood_contrast \
+  --paper-dois "10.1038/s41586-021-03819-2" \
+  --event-label "AlphaFold neighborhood" \
+  --neighbor-max-refs 20 \
+  --neighbor-citers-per-target 120 \
+  --neighbor-citers-per-ref 30 \
+  --email your@email.com
 ```
 
 输出文件保存在 `output/` 目录下：
@@ -39,6 +62,284 @@ python main.py --mode full --email your@email.com
 | `ego_demo.png` | 获奖论文 ego 网络（奖前 vs 奖后） |
 | `modularity_timeline_demo.png` | 模块度 Q 时间演变曲线 |
 | `results_demo.csv` | 所有指标的数值结果 |
+| `field_contrast_demo.png` | 演示用领域前后图谱三联图 |
+| `community_shift_demo.csv` | 演示用社区变化明细 |
+| `field_before_demo.graphml` | 演示用事件前图谱快照 |
+| `field_after_demo.graphml` | 演示用事件后图谱快照 |
+
+---
+
+## 新增：领域时间节点前后知识图谱对比
+
+这个模式用于**在引出七个创新性指标之前**，先证明“创新性/重大突破确实会反映在论文引用关系知识图谱上”。
+
+程序会围绕一个给定时间节点（例如诺奖颁布、重大方法发布）构建两张图：
+
+- **Before 图**：`[event_year-before_years, event_year-1]`
+- **After 图**：`[event_year-before_years, event_year+after_years]`
+
+然后输出一张三联图：
+
+1. 左图：时间节点前的论文级引用图谱
+2. 中图：时间节点后的论文级引用图谱
+3. 右图：社区变化摘要（社区数、`ΔQ`、跨社区边比例、最大新社群、Top 3 新社群主导 field/topic）
+
+### 命令模板
+
+```bash
+python main.py --mode field_contrast \
+  --filter "concepts.id:C86803240,type:article" \
+  --event-year 2024 \
+  --event-label "Chemistry Nobel 2024" \
+  --before-years 10 \
+  --after-years 5 \
+  --max-plot-nodes 180 \
+  --min-community-size 8 \
+  --email your@email.com
+```
+
+### 参数说明
+
+| 参数 | 含义 |
+|------|------|
+| `--filter` | 原始 OpenAlex filter，直接定义“领域/方向”范围 |
+| `--event-year` | 时间节点年份 |
+| `--event-label` | 图标题中的事件名称 |
+| `--before-years` | 前窗口长度，默认 `10` |
+| `--after-years` | 后窗口长度，默认 `5` |
+| `--max-plot-nodes` | 论文级图谱最大绘图节点数，默认 `180` |
+| `--min-community-size` | 判定显著新社群的最小社区规模，默认 `8` |
+| `--max-records` | OpenAlex 最大拉取记录数，可选 |
+
+### 输出文件
+
+当 `event_label = "Chemistry Nobel 2024"` 时，默认会生成：
+
+| 文件 | 内容 |
+|------|------|
+| `field_contrast_chemistry_nobel_2024_2024.png` | 领域前后图谱三联图 |
+| `community_shift_chemistry_nobel_2024_2024.csv` | 社区变化明细 |
+| `field_before_chemistry_nobel_2024_2024.graphml` | 事件前快照 |
+| `field_after_chemistry_nobel_2024_2024.graphml` | 事件后快照 |
+
+### 如何解读三联图
+
+- 如果中图出现**新的致密簇/新社群**，且右侧摘要显示：
+  - 社区数上升，或
+  - `ΔQ` 明显变化，或
+  - 跨社区边比例提升，或
+  - 出现 `post_event_share` 很高的新社群，
+  那就说明这个领域的知识组织方式在事件前后发生了结构变化。
+- 如果程序没有识别到显著新社群，也不会强行制造差异；图中和 CSV 会明确写出：
+  `未检测到显著新社群 / Difference is weak.`
+
+### Demo 的意义
+
+`python main.py --mode demo` 现在除了原来的七维指标图，还会额外生成一张**保证能看出新社群**的三联图，方便你在论文、汇报或方法章节里先展示“图谱结构变化”这一事实，再自然引出七个评价维度。
+
+---
+
+## 新增：目标论文发表前后知识图谱对比
+
+如果你关心的不是某个抽象时间节点，而是**某一篇或某几篇论文发表后，领域图谱有没有发生显著结构变化**，请使用 `paper_contrast` 模式。
+
+这个模式与 `field_contrast` 的区别是：
+
+- `field_contrast`：时间点由你手工给定 `--event-year`
+- `paper_contrast`：时间点自动取自目标论文的 `publication_year`
+
+### 命令模板
+
+```bash
+python main.py --mode paper_contrast \
+  --filter "concepts.id:C86803240,type:article" \
+  --paper-dois "10.1038/s41586-021-03819-2" \
+  --before-years 10 \
+  --after-years 5 \
+  --max-plot-nodes 180 \
+  --min-community-size 8 \
+  --email your@email.com
+```
+
+也可以一次传多篇论文：
+
+```bash
+python main.py --mode paper_contrast \
+  --filter "concepts.id:C86803240,type:article" \
+  --paper-ids "W3177828909,W2038196424" \
+  --email your@email.com
+```
+
+### 参数说明
+
+| 参数 | 含义 |
+|------|------|
+| `--paper-dois` | 目标论文 DOI，多个用英文逗号分隔 |
+| `--paper-ids` | 目标论文 OpenAlex ID，多个用英文逗号分隔 |
+| `--filter` | 定义你要比较的领域/方向范围 |
+| `--event-label` | 图标题前缀；若不给，默认用论文标题 |
+
+### 逐参数解释（领域限定版）
+
+下面这条命令：
+
+```bash
+python kg_validator/main.py --mode paper_contrast \
+  --filter "primary_location.source.id:S137773608,type:article" \
+  --paper-dois "10.1038/s41586-021-03819-2" \
+  --before-years 10 \
+  --after-years 5 \
+  --output-dir output \
+  --email your@email.com
+```
+
+可以拆成下面几个部分理解：
+
+| 参数 | 作用 | 直观解释 |
+|------|------|----------|
+| `python kg_validator/main.py` | 运行主入口脚本 | 启动整个知识图谱分析流程 |
+| `--mode paper_contrast` | 选择“领域限定版的论文前后对比模式” | 在**你指定的领域范围内**，观察目标论文发表前后图谱有没有结构变化 |
+| `--filter "primary_location.source.id:S137773608,type:article"` | 限定背景知识图谱的取样范围 | 只抓满足该 OpenAlex filter 的论文；这里的意思是“只取某个 `source.id=S137773608` 下、类型为 `article` 的论文” |
+| `--paper-dois "10.1038/s41586-021-03819-2"` | 指定要分析的目标论文 | 程序会先去 OpenAlex 用 DOI 找到这篇论文，再读取它的发表年份作为时间分界点 |
+| `--before-years 10` | 事件前窗口长度 | 如果目标论文发表于 `Y` 年，则前图使用 `Y-10` 到 `Y-1` 的论文 |
+| `--after-years 5` | 事件后窗口长度 | 后图使用 `Y-10` 到 `Y+5` 的论文；这样可以比较论文发表后 5 年内图谱是否重组 |
+| `--output-dir output` | 指定结果保存目录 | 生成的 PNG、CSV、GraphML 都会落在 `output/` 下 |
+| `--email your@email.com` | 给 OpenAlex API 传入 `mailto` | 建议换成你自己的邮箱，便于 API 识别请求来源 |
+
+这条命令的真实含义是：
+
+- 先在 `source.id=S137773608` 且 `type=article` 的论文集合里建立一个领域图谱；
+- 再围绕 DOI `10.1038/s41586-021-03819-2` 对应论文的发表年份切出前后两张图；
+- 最后判断这篇论文发表后，这个**限定领域内部**是否出现了新社群、社区重组或跨社区连接变化。
+
+如果你**没有传 `--event-label`**，程序会自动把目标论文标题用作图标题。
+
+### `paper_contrast` 中最重要的几个参数怎么理解
+
+- `--filter`
+  - 它回答的是：**“你打算在哪个领域/方向里看这篇论文的影响？”**
+  - 这是最重要的边界条件；同一篇论文，在不同 `filter` 下得到的图谱差异可能完全不同。
+- `--before-years`
+  - 控制“比较的历史背景有多长”。
+  - 取值太小，前图可能太稀；取值太大，可能把不相关的旧结构也混进来。
+- `--after-years`
+  - 控制“给这篇论文多长时间去显现结构影响”。
+  - 太短可能看不到变化，太长则可能混入后续别的事件影响。
+
+### 输出特征
+
+- 每篇目标论文都会单独生成一组三联图和 CSV。
+- 三联图中，**目标论文会用星形高亮**显示在事件后图谱中。
+- 右侧摘要会额外列出目标论文所在社区及其状态（`new` / `expanded` / `inherited`）。
+
+---
+
+## 新增：纯论文邻域模式
+
+如果你不想先人为指定一个领域，而是想直接问：
+
+**“围绕这篇论文本身及其引用/被引邻域，发表前后图谱结构有没有显著变化？”**
+
+请使用 `paper_neighborhood_contrast`。
+
+### 与 `paper_contrast` 的区别
+
+- `paper_contrast`：需要 `--filter`，表示“在指定领域内观察目标论文发表前后”
+- `paper_neighborhood_contrast`：不需要 `--filter`，表示“只围绕目标论文邻域观察发表前后”
+
+### 邻域图如何构建
+
+纯论文邻域模式会自动收集：
+
+- 目标论文本身
+- 目标论文的参考文献（默认每篇最多 `20` 篇）
+- 引用目标论文的论文
+- 引用目标论文参考文献的论文
+
+然后把这些论文合并成一个局部知识图谱，再以目标论文发表年为分界点做前后对比。
+
+### 命令模板
+
+```bash
+python main.py --mode paper_neighborhood_contrast \
+  --paper-dois "10.1038/s41586-021-03819-2" \
+  --before-years 10 \
+  --after-years 5 \
+  --neighbor-max-refs 20 \
+  --neighbor-citers-per-target 120 \
+  --neighbor-citers-per-ref 30 \
+  --email your@email.com
+```
+
+### 邻域参数说明
+
+| 参数 | 含义 |
+|------|------|
+| `--neighbor-max-refs` | 每篇目标论文纳入的最大参考文献数 |
+| `--neighbor-citers-per-target` | 每篇目标论文最多拉取多少篇施引论文 |
+| `--neighbor-citers-per-ref` | 每篇参考文献最多拉取多少篇施引论文 |
+
+### 逐参数解释（纯邻域版）
+
+下面这条命令：
+
+```bash
+python kg_validator/main.py --mode paper_neighborhood_contrast \
+  --paper-dois "10.1038/s41586-021-03819-2" \
+  --before-years 10 \
+  --after-years 5 \
+  --neighbor-max-refs 20 \
+  --neighbor-citers-per-target 120 \
+  --neighbor-citers-per-ref 30 \
+  --output-dir output \
+  --email your@email.com
+```
+
+含义如下：
+
+| 参数 | 作用 | 直观解释 |
+|------|------|----------|
+| `--mode paper_neighborhood_contrast` | 选择“纯论文邻域模式” | 不先规定领域，而是直接围绕目标论文的局部引用生态看变化 |
+| `--paper-dois "10.1038/s41586-021-03819-2"` | 指定目标论文 | 这篇论文就是局部邻域图的中心 |
+| `--before-years 10` | 事件前窗口长度 | 以前 `10` 年作为“论文发表前”的背景图 |
+| `--after-years 5` | 事件后窗口长度 | 发表后 `5` 年作为“论文发表后”的观察图 |
+| `--neighbor-max-refs 20` | 邻域种子参考文献上限 | 最多从目标论文的参考文献列表中纳入 `20` 篇作为局部图谱的起点 |
+| `--neighbor-citers-per-target 120` | 目标论文施引样本上限 | 最多抓取 `120` 篇“引用了目标论文”的论文 |
+| `--neighbor-citers-per-ref 30` | 参考文献施引样本上限 | 对每篇参考文献，再最多抓取 `30` 篇“引用了该参考文献”的论文 |
+| `--output-dir output` | 指定结果保存目录 | 所有输出文件写到 `output/` |
+| `--email your@email.com` | 给 OpenAlex API 传入 `mailto` | 实际运行时建议替换成你的真实邮箱 |
+
+这条命令的真实含义是：
+
+- 不先说“这个论文属于哪个领域”；
+- 而是从目标论文本身出发，自动收集：
+  - 它的参考文献；
+  - 它的施引论文；
+  - 它的参考文献的施引论文；
+- 然后把这些论文拼成一个**局部知识图谱**；
+- 最后再按目标论文发表年切出前后两张图，看局部知识结构是否显著改变。
+
+### 这三个邻域参数的影响非常大
+
+- `--neighbor-max-refs`
+  - 越大，邻域图越能覆盖目标论文的知识来源；
+  - 但也越容易把邻域扩得太宽、混入更多噪声。
+- `--neighbor-citers-per-target`
+  - 越大，越能看清“目标论文自己带来的后续扩散”；
+  - 但请求量也会明显增加。
+- `--neighbor-citers-per-ref`
+  - 它控制的是“目标论文所站立的旧知识基础周围，有多少背景结构被纳入”；
+  - 这个值越高，越有利于比较“新结构”与“旧结构”的差异，但图会更复杂。
+
+### 一个简洁理解方式
+
+- `paper_contrast` 看的是：**这篇论文在某个既定领域里有没有改变结构**
+- `paper_neighborhood_contrast` 看的是：**围绕这篇论文自己长出来的局部知识生态有没有改变结构**
+
+### 什么时候用哪个模式
+
+- 如果你已经知道要在**哪个领域/方向**里证明结构变化，用 `paper_contrast`
+- 如果你想先从**目标论文自身扩散出来的局部知识结构**看变化，用 `paper_neighborhood_contrast`
 
 ---
 

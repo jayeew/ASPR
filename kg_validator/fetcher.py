@@ -75,6 +75,11 @@ def fetch_works_cursor(filter_str: str, email: str = "",
         page = data.get("results", [])
         if not page:
             break
+        if max_records is not None:
+            remaining = max_records - total
+            if remaining <= 0:
+                break
+            page = page[:remaining]
         results.extend(page)
         total += len(page)
         meta = data.get("meta", {})
