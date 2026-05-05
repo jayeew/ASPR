@@ -11,8 +11,8 @@ kg_validator/
 ├── fetcher.py        # OpenAlex API 数据拉取
 ├── graph_builder.py  # NetworkX 图构建 & 时间切片
 ├── metrics.py        # 七维指标计算（核心算法）
-├── comparator.py     # 单篇指标对比 + 领域前后图谱三联图
-├── main.py           # 主入口（demo / full / field_contrast）
+├── comparator.py     # 单篇指标对比 + 前后变化图 + 七维指标图
+├── main.py           # 主入口（demo / full / field_contrast / paper_contrast）
 └── README.md         # 本文档
 ```
 
@@ -29,11 +29,12 @@ python main.py --mode demo
 # 完整模式（从 OpenAlex 拉取真实数据）
 python main.py --mode full --email your@email.com
 
-# 领域图谱时间节点前后对比（三联图）
+# DOI 驱动的论文前后知识图谱对比（三联图）
 python main.py --mode field_contrast \
-  --filter "concepts.id:C86803240,type:article" \
-  --event-year 2024 \
-  --event-label "Chemistry Nobel 2024" \
+  --paper-dois "10.1038/s41586-021-03819-2" \
+  --event-label "AlphaFold neighborhood" \
+  --neighbor-citers-per-target 500 \
+  --neighbor-citers-per-ref 500 \
   --email your@email.com
 
 # 目标论文发表前后对比（以论文发表年为分界点）
@@ -48,8 +49,8 @@ python main.py --mode paper_neighborhood_contrast \
   --paper-dois "10.1038/s41586-021-03819-2" \
   --event-label "AlphaFold neighborhood" \
   --neighbor-max-refs 20 \
-  --neighbor-citers-per-target 120 \
-  --neighbor-citers-per-ref 30 \
+  --neighbor-citers-per-target 500 \
+  --neighbor-citers-per-ref 500 \
   --email your@email.com
 ```
 
@@ -69,58 +70,83 @@ python main.py --mode paper_neighborhood_contrast \
 
 ---
 
-## 新增：领域时间节点前后知识图谱对比
+## 新增：DOI 驱动的前后知识图谱对比
 
-这个模式用于**在引出七个创新性指标之前**，先证明“创新性/重大突破确实会反映在论文引用关系知识图谱上”。
+`field_contrast` 现在推荐直接传入一篇或多篇论文的 DOI。程序会自动查询目标论文的发表年份，并围绕这些论文构建局部引用邻域知识图谱，用于证明“创新性/重大突破确实会反映在论文引用关系知识图谱上”。
 
-程序会围绕一个给定时间节点（例如诺奖颁布、重大方法发布）构建两张图：
+邻域图会自动收集：
+
+- 目标论文本身
+- 目标论文的参考文献（默认每篇最多 `20` 篇）
+- 引用目标论文的论文（默认每篇目标论文最多 `500` 篇）
+- 引用目标论文参考文献的论文（默认每篇参考文献最多 `500` 篇）
+
+然后以目标论文的发表年份为时间节点构建两张图：
 
 - **Before 图**：`[event_year-before_years, event_year-1]`
 - **After 图**：`[event_year-before_years, event_year+after_years]`
 
-然后输出一张三联图：
+然后输出一张变化优先的三联图：
 
 1. 左图：时间节点前的论文级引用图谱
 2. 中图：时间节点后的论文级引用图谱
-3. 右图：社区变化摘要（社区数、`ΔQ`、跨社区边比例、最大新社群、Top 3 新社群主导 field/topic）
+3. 右图：Change Focus，只突出事件后新增/扩张节点，以及它们连接到的旧知识锚点
 
 ### 命令模板
 
 ```bash
 python main.py --mode field_contrast \
-  --filter "concepts.id:C86803240,type:article" \
-  --event-year 2024 \
-  --event-label "Chemistry Nobel 2024" \
+  --paper-dois "10.1038/s41586-021-03819-2" \
+  --event-label "AlphaFold neighborhood" \
   --before-years 10 \
   --after-years 5 \
+  --neighbor-max-refs 20 \
+  --neighbor-citers-per-target 500 \
+  --neighbor-citers-per-ref 500 \
   --max-plot-nodes 180 \
   --min-community-size 8 \
   --email your@email.com
 ```
 
+多篇论文可以用英文逗号分隔：
+
+```bash
+python main.py --mode field_contrast \
+  --paper-dois "10.1038/s41586-021-03819-2,10.1126/science.1225829" \
+  --email your@email.com
+```
+
+传入多篇论文时，程序会用这些论文共同构建邻域图，并按每篇论文的发表年份分别输出一组前后对比图、CSV 和 GraphML。
+
 ### 参数说明
 
 | 参数 | 含义 |
 |------|------|
-| `--filter` | 原始 OpenAlex filter，直接定义“领域/方向”范围 |
-| `--event-year` | 时间节点年份 |
-| `--event-label` | 图标题中的事件名称 |
+| `--paper-dois` | 目标论文 DOI，多个用英文逗号分隔 |
+| `--paper-ids` | 目标论文 OpenAlex ID，多个用英文逗号分隔 |
+| `--event-label` | 图标题中的事件名称；不传时默认使用论文标题 |
 | `--before-years` | 前窗口长度，默认 `10` |
 | `--after-years` | 后窗口长度，默认 `5` |
+| `--neighbor-max-refs` | 每篇目标论文纳入的参考文献上限，默认 `20` |
+| `--neighbor-citers-per-target` | 每篇目标论文最多拉取多少篇施引论文，默认 `500` |
+| `--neighbor-citers-per-ref` | 每篇参考文献最多拉取多少篇施引论文，默认 `500` |
 | `--max-plot-nodes` | 论文级图谱最大绘图节点数，默认 `180` |
 | `--min-community-size` | 判定显著新社群的最小社区规模，默认 `8` |
-| `--max-records` | OpenAlex 最大拉取记录数，可选 |
+
+> 兼容旧用法：如果不传 `--paper-dois` / `--paper-ids`，仍然可以用 `--filter` + `--event-year` 运行原来的领域时间节点对比。
 
 ### 输出文件
 
-当 `event_label = "Chemistry Nobel 2024"` 时，默认会生成：
+当目标论文 OpenAlex ID 为 `W3177828909`、发表年份为 `2021` 时，默认会生成：
 
 | 文件 | 内容 |
 |------|------|
-| `field_contrast_chemistry_nobel_2024_2024.png` | 领域前后图谱三联图 |
-| `community_shift_chemistry_nobel_2024_2024.csv` | 社区变化明细 |
-| `field_before_chemistry_nobel_2024_2024.graphml` | 事件前快照 |
-| `field_after_chemistry_nobel_2024_2024.graphml` | 事件后快照 |
+| `field_contrast_doi_field_w3177828909_2021.png` | 论文邻域前后图谱三联图 |
+| `community_shift_doi_field_w3177828909_2021.csv` | 社区变化明细 |
+| `metrics_contrast_doi_field_w3177828909_2021.png` | 七维指标对比图 |
+| `metrics_contrast_doi_field_w3177828909_2021.csv` | 七维指标对比数值 |
+| `field_before_doi_field_w3177828909_2021.graphml` | 事件前快照 |
+| `field_after_doi_field_w3177828909_2021.graphml` | 事件后快照 |
 
 ### 如何解读三联图
 
@@ -145,8 +171,8 @@ python main.py --mode field_contrast \
 
 这个模式与 `field_contrast` 的区别是：
 
-- `field_contrast`：时间点由你手工给定 `--event-year`
-- `paper_contrast`：时间点自动取自目标论文的 `publication_year`
+- `field_contrast`：推荐直接传 DOI，围绕目标论文邻域自动构图，不需要先指定领域
+- `paper_contrast`：需要额外传 `--filter`，在指定领域范围内观察目标论文发表前后的结构变化
 
 ### 命令模板
 
@@ -253,8 +279,8 @@ python kg_validator/main.py --mode paper_contrast \
 
 - 目标论文本身
 - 目标论文的参考文献（默认每篇最多 `20` 篇）
-- 引用目标论文的论文
-- 引用目标论文参考文献的论文
+- 引用目标论文的论文（默认每篇目标论文最多 `500` 篇）
+- 引用目标论文参考文献的论文（默认每篇参考文献最多 `500` 篇）
 
 然后把这些论文合并成一个局部知识图谱，再以目标论文发表年为分界点做前后对比。
 
@@ -266,8 +292,8 @@ python main.py --mode paper_neighborhood_contrast \
   --before-years 10 \
   --after-years 5 \
   --neighbor-max-refs 20 \
-  --neighbor-citers-per-target 120 \
-  --neighbor-citers-per-ref 30 \
+  --neighbor-citers-per-target 500 \
+  --neighbor-citers-per-ref 500 \
   --email your@email.com
 ```
 
@@ -276,8 +302,8 @@ python main.py --mode paper_neighborhood_contrast \
 | 参数 | 含义 |
 |------|------|
 | `--neighbor-max-refs` | 每篇目标论文纳入的最大参考文献数 |
-| `--neighbor-citers-per-target` | 每篇目标论文最多拉取多少篇施引论文 |
-| `--neighbor-citers-per-ref` | 每篇参考文献最多拉取多少篇施引论文 |
+| `--neighbor-citers-per-target` | 每篇目标论文最多拉取多少篇施引论文，默认 `500` |
+| `--neighbor-citers-per-ref` | 每篇参考文献最多拉取多少篇施引论文，默认 `500` |
 
 ### 逐参数解释（纯邻域版）
 
@@ -289,8 +315,8 @@ python kg_validator/main.py --mode paper_neighborhood_contrast \
   --before-years 10 \
   --after-years 5 \
   --neighbor-max-refs 20 \
-  --neighbor-citers-per-target 120 \
-  --neighbor-citers-per-ref 30 \
+  --neighbor-citers-per-target 500 \
+  --neighbor-citers-per-ref 500 \
   --output-dir output \
   --email your@email.com
 ```
@@ -304,8 +330,8 @@ python kg_validator/main.py --mode paper_neighborhood_contrast \
 | `--before-years 10` | 事件前窗口长度 | 以前 `10` 年作为“论文发表前”的背景图 |
 | `--after-years 5` | 事件后窗口长度 | 发表后 `5` 年作为“论文发表后”的观察图 |
 | `--neighbor-max-refs 20` | 邻域种子参考文献上限 | 最多从目标论文的参考文献列表中纳入 `20` 篇作为局部图谱的起点 |
-| `--neighbor-citers-per-target 120` | 目标论文施引样本上限 | 最多抓取 `120` 篇“引用了目标论文”的论文 |
-| `--neighbor-citers-per-ref 30` | 参考文献施引样本上限 | 对每篇参考文献，再最多抓取 `30` 篇“引用了该参考文献”的论文 |
+| `--neighbor-citers-per-target 500` | 目标论文施引样本上限 | 最多抓取 `500` 篇“引用了目标论文”的论文，可继续调高 |
+| `--neighbor-citers-per-ref 500` | 参考文献施引样本上限 | 对每篇参考文献，再最多抓取 `500` 篇“引用了该参考文献”的论文，可继续调高 |
 | `--output-dir output` | 指定结果保存目录 | 所有输出文件写到 `output/` |
 | `--email your@email.com` | 给 OpenAlex API 传入 `mailto` | 实际运行时建议替换成你的真实邮箱 |
 

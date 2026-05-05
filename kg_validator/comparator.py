@@ -5,6 +5,7 @@ comparator.py — 诺贝尔奖前后指标对比与领域知识图谱前后演�
 import logging
 import math
 import re
+import textwrap
 from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -13,6 +14,8 @@ from typing import Any, Optional
 import matplotlib
 matplotlib.use("Agg")
 from matplotlib import font_manager
+from matplotlib.lines import Line2D
+from matplotlib.patches import Patch, Rectangle
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
@@ -57,7 +60,7 @@ class ComparisonResult:
 
 @dataclass
 class FieldContrastSpec:
-    """领域图谱时间节点前后对比配置。"""
+    """知识图谱时间节点前后对比配置。"""
 
     filter_query: str
     event_year: int
@@ -73,7 +76,7 @@ class FieldContrastSpec:
 
 @dataclass
 class FieldContrastResult:
-    """领域图谱前后对比的完整结果。"""
+    """知识图谱前后对比的完整结果。"""
 
     spec: FieldContrastSpec
     before_graph: nx.DiGraph
@@ -123,6 +126,12 @@ _CJK_FONT_CANDIDATES = [
 _NEW_COMMUNITY_FILL = "#E76F51"
 _NEW_COMMUNITY_EDGE = "#111827"
 _FALLBACK_COMMUNITY_FILL = "#94A3B8"
+_COMMUNITY_PALETTE = [
+    "#2563EB", "#F97316", "#16A34A", "#DC2626", "#9333EA", "#0891B2",
+    "#DB2777", "#65A30D", "#4F46E5", "#D97706", "#0F766E", "#BE123C",
+    "#7C3AED", "#CA8A04", "#0284C7", "#B45309", "#A21CAF", "#15803D",
+    "#475569", "#EA580C", "#0369A1", "#B91C1C", "#6D28D9", "#047857",
+]
 
 
 def _configure_plot_fonts() -> bool:
@@ -295,7 +304,7 @@ def _community_brief(G: nx.DiGraph, node_ids: set[str]) -> tuple[str, str]:
         tuple[str, str]: 主导 field 与主导 topic。
     """
     field_labels = _top_labels(G, node_ids, "field", top_k=2)
-    topic_labels = _top_labels(G, node_ids, "topic_names", top_k=3)
+    topic_labels = _top_labels(G, node_ids, "topic_names", top_k=2)
 
     dominant_field = " / ".join(field_labels) if field_labels else "Unknown field"
     dominant_topic = " / ".join(topic_labels) if topic_labels else "Unknown topic"
@@ -529,9 +538,10 @@ def _select_plot_nodes(
     community_rows: list[dict],
     max_plot_nodes: int,
     min_community_nodes: int,
+    event_year: int,
 ) -> list[str]:
     """
-    选择用于三联图渲染的节点。
+    选择用于变化图渲染的节点。
 
     Args:
         G_after: 事件后图谱。
@@ -539,6 +549,7 @@ def _select_plot_nodes(
         community_rows: 社区变化记录。
         max_plot_nodes: 绘图节点上限。
         min_community_nodes: 每个社区至少保留的节点数。
+        event_year: 事件年份，用于优先保留事件后新增节点。
 
     Returns:
         list[str]: 选中的节点 ID。
@@ -577,15 +588,48 @@ def _select_plot_nodes(
 
     for row in chosen_rows:
         community_id = row["after_community_id"]
-        candidates = sorted(
-            after_members.get(community_id, set()),
-            key=lambda node_id: (
+        community_nodes = after_members.get(community_id, set())
+
+        def sort_key(node_id: str) -> tuple[int, int]:
+            return (
                 UG.degree(node_id),
                 G_after.nodes[node_id].get("cited_by_count", 0),
-            ),
+            )
+
+        post_event_candidates = sorted(
+            [
+                node_id for node_id in community_nodes
+                if (G_after.nodes[node_id].get("year") or 0) >= event_year
+            ],
+            key=sort_key,
             reverse=True,
         )
-        for node_id in candidates[: quotas.get(community_id, 0)]:
+        pre_event_candidates = sorted(
+            [
+                node_id for node_id in community_nodes
+                if (G_after.nodes[node_id].get("year") or 0) < event_year
+            ],
+            key=sort_key,
+            reverse=True,
+        )
+        quota = quotas.get(community_id, 0)
+        if row["status"] in {"new", "expanded"} and post_event_candidates:
+            post_quota = min(len(post_event_candidates), max(1, int(quota * 0.70)))
+            candidates = (
+                post_event_candidates[:post_quota]
+                + pre_event_candidates[: max(0, quota - post_quota)]
+            )
+            if len(candidates) < quota:
+                candidate_set = set(candidates)
+                candidates.extend(
+                    node_id
+                    for node_id in post_event_candidates[post_quota:] + pre_event_candidates
+                    if node_id not in candidate_set
+                )
+        else:
+            candidates = sorted(community_nodes, key=sort_key, reverse=True)
+
+        for node_id in candidates[:quota]:
             if node_id in selected_set:
                 continue
             selected_nodes.append(node_id)
@@ -593,6 +637,25 @@ def _select_plot_nodes(
 
     if len(selected_nodes) >= max_plot_nodes:
         return selected_nodes[:max_plot_nodes]
+
+    post_event_nodes = sorted(
+        [
+            node_id for node_id in G_after.nodes
+            if (G_after.nodes[node_id].get("year") or 0) >= event_year
+        ],
+        key=lambda node_id: (
+            UG.degree(node_id),
+            G_after.nodes[node_id].get("cited_by_count", 0),
+        ),
+        reverse=True,
+    )
+    for node_id in post_event_nodes:
+        if node_id in selected_set:
+            continue
+        selected_nodes.append(node_id)
+        selected_set.add(node_id)
+        if len(selected_nodes) >= max_plot_nodes:
+            return selected_nodes
 
     approx_k = min(120, max(20, int(math.sqrt(max(G_after.number_of_nodes(), 1)) * 6)))
     k_sample = None if G_after.number_of_nodes() <= approx_k else approx_k
@@ -633,33 +696,50 @@ def _build_color_maps(community_rows: list[dict], partition_before: dict) -> tup
     Returns:
         tuple[dict, dict]: before_color_map, after_color_map。
     """
-    before_communities = sorted(set(partition_before.values()))
-    palette = plt.cm.tab20(np.linspace(0, 1, max(len(before_communities), 1)))
-    before_color_map = {
-        int(community_id): palette[index % len(palette)]
-        for index, community_id in enumerate(before_communities)
+    sorted_rows = sorted(
+        community_rows,
+        key=lambda row: (row.get("after_community_id", 0), -row.get("after_size", 0)),
+    )
+    after_color_map: dict[int, Any] = {
+        row["after_community_id"]: _COMMUNITY_PALETTE[index % len(_COMMUNITY_PALETTE)]
+        for index, row in enumerate(sorted_rows)
     }
-    after_color_map: dict[int, Any] = {}
 
-    for row in community_rows:
-        after_community_id = row["after_community_id"]
-        before_community_id = row["matched_before_community_id"]
-        if row["is_new"]:
-            after_color_map[after_community_id] = _NEW_COMMUNITY_FILL
-        elif before_community_id is not None and before_community_id in before_color_map:
-            after_color_map[after_community_id] = before_color_map[before_community_id]
-        else:
-            after_color_map[after_community_id] = _FALLBACK_COMMUNITY_FILL
+    before_color_map: dict[int, Any] = {}
+    for row in sorted(community_rows, key=lambda item: item.get("after_size", 0), reverse=True):
+        before_community_id = row.get("matched_before_community_id")
+        after_community_id = row.get("after_community_id")
+        if before_community_id is None or after_community_id not in after_color_map:
+            continue
+        before_color_map.setdefault(before_community_id, after_color_map[after_community_id])
+
+    used_colors = set(before_color_map.values())
+    color_index = 0
+    for before_community_id in sorted(set(partition_before.values())):
+        if before_community_id in before_color_map:
+            continue
+        while _COMMUNITY_PALETTE[color_index % len(_COMMUNITY_PALETTE)] in used_colors:
+            color_index += 1
+        color = _COMMUNITY_PALETTE[color_index % len(_COMMUNITY_PALETTE)]
+        before_color_map[before_community_id] = color
+        used_colors.add(color)
+        color_index += 1
 
     return before_color_map, after_color_map
 
 
-def _build_shared_layout(G_after_plot: nx.DiGraph) -> dict[str, np.ndarray]:
+def _build_change_focused_layout(
+    G_after_plot: nx.DiGraph,
+    partition_after: dict,
+    community_rows: list[dict],
+) -> dict[str, np.ndarray]:
     """
-    为 after 子图生成共享布局。
+    为前后对比图生成按社区分岛的共享布局。
 
     Args:
         G_after_plot: 采样后的事件后图谱。
+        partition_after: 事件后社区划分。
+        community_rows: 社区变化记录。
 
     Returns:
         dict[str, np.ndarray]: 节点坐标。
@@ -670,13 +750,138 @@ def _build_shared_layout(G_after_plot: nx.DiGraph) -> dict[str, np.ndarray]:
         node_id = next(iter(G_after_plot.nodes))
         return {node_id: np.array([0.0, 0.0])}
 
-    spacing = 1.2 / math.sqrt(max(G_after_plot.number_of_nodes(), 2))
-    return nx.spring_layout(
-        G_after_plot.to_undirected(),
-        seed=42,
-        k=spacing,
-        iterations=150,
+    row_lookup = {
+        row["after_community_id"]: row
+        for row in community_rows
+    }
+    community_ids = {
+        partition_after.get(node_id)
+        for node_id in G_after_plot.nodes
+        if partition_after.get(node_id) is not None
+    }
+    if not community_ids:
+        spacing = 2.4 / math.sqrt(max(G_after_plot.number_of_nodes(), 2))
+        return nx.spring_layout(
+            G_after_plot.to_undirected(),
+            seed=42,
+            k=spacing,
+            iterations=180,
+        )
+
+    status_rank = {"new": 0, "expanded": 1, "inherited": 2}
+    ordered_communities = sorted(
+        community_ids,
+        key=lambda community_id: (
+            status_rank.get(row_lookup.get(community_id, {}).get("status"), 3),
+            -row_lookup.get(community_id, {}).get("after_size", 0),
+            community_id,
+        ),
     )
+    n_communities = len(ordered_communities)
+    positions: dict[str, np.ndarray] = {}
+    community_nodes = {
+        community_id: [
+            node_id for node_id in G_after_plot.nodes
+            if partition_after.get(node_id) == community_id
+        ]
+        for community_id in ordered_communities
+    }
+    community_radii = {
+        community_id: min(1.55, max(0.70, 0.16 * math.sqrt(len(nodes))))
+        for community_id, nodes in community_nodes.items()
+    }
+
+    if n_communities <= 12:
+        ring_sizes = [n_communities]
+    else:
+        ring_sizes = [10]
+        remaining = n_communities - ring_sizes[0]
+        next_ring_size = 16
+        while remaining > 0:
+            ring_size = min(remaining, next_ring_size)
+            ring_sizes.append(ring_size)
+            remaining -= ring_size
+            next_ring_size += 6
+
+    rings: list[list[int]] = []
+    cursor = 0
+    for ring_size in ring_sizes:
+        rings.append(ordered_communities[cursor: cursor + ring_size])
+        cursor += ring_size
+
+    margin = 1.15
+    previous_outer_radius = 0.0
+    community_centers: dict[int, np.ndarray] = {}
+
+    for ring_index, ring_communities in enumerate(rings):
+        n_ring = len(ring_communities)
+        max_radius = max(community_radii[community_id] for community_id in ring_communities)
+        if n_ring == 1 and n_communities == 1:
+            ring_radius = 0.0
+        else:
+            chord_radius = (
+                (2.0 * max_radius + margin) / (2.0 * math.sin(math.pi / n_ring))
+                if n_ring > 1 else 0.0
+            )
+            ring_radius = max(
+                chord_radius,
+                previous_outer_radius + max_radius + margin,
+                3.2 + ring_index * 2.4,
+            )
+        previous_outer_radius = max(previous_outer_radius, ring_radius + max_radius)
+
+        angle_offset = math.pi / 2.0 + (ring_index % 2) * (math.pi / max(n_ring, 1))
+        for index, community_id in enumerate(ring_communities):
+            if ring_radius == 0:
+                center = np.array([0.0, 0.0])
+            else:
+                angle = angle_offset + 2.0 * math.pi * index / n_ring
+                center = np.array([
+                    ring_radius * math.cos(angle),
+                    ring_radius * math.sin(angle),
+                ])
+            community_centers[community_id] = center
+
+    for index, community_id in enumerate(ordered_communities):
+        center = community_centers[community_id]
+        nodes = community_nodes[community_id]
+        if len(nodes) == 1:
+            positions[nodes[0]] = center
+            continue
+
+        subgraph = G_after_plot.subgraph(nodes).to_undirected()
+        local_scale = community_radii[community_id]
+        local_layout = nx.spring_layout(
+            subgraph,
+            seed=42 + int(index),
+            k=1.35 / math.sqrt(max(len(nodes), 2)),
+            iterations=140,
+            scale=local_scale,
+        )
+        for node_id, coords in local_layout.items():
+            positions[node_id] = center + coords
+
+    missing_nodes = [node_id for node_id in G_after_plot.nodes if node_id not in positions]
+    if missing_nodes:
+        fallback_radius = min(1.55, max(0.70, 0.16 * math.sqrt(len(missing_nodes))))
+        fallback_center = np.array([previous_outer_radius + fallback_radius + margin, 0.0])
+        fallback_graph = G_after_plot.subgraph(missing_nodes).to_undirected()
+        fallback_layout = nx.spring_layout(
+            fallback_graph,
+            seed=99,
+            k=1.2 / math.sqrt(max(len(missing_nodes), 2)),
+            iterations=100,
+            scale=fallback_radius,
+        )
+        for node_id, coords in fallback_layout.items():
+            positions[node_id] = fallback_center + coords
+
+    all_coords = np.array(list(positions.values()))
+    center_offset = all_coords.mean(axis=0)
+    return {
+        node_id: coords - center_offset
+        for node_id, coords in positions.items()
+    }
 
 
 def _node_sizes(G: nx.DiGraph, node_ids: list[str]) -> list[float]:
@@ -695,9 +900,36 @@ def _node_sizes(G: nx.DiGraph, node_ids: list[str]) -> list[float]:
     for node_id in node_ids:
         degree = UG.degree(node_id)
         cited = G.nodes[node_id].get("cited_by_count", 0) or 0
-        size = 70.0 + 18.0 * math.sqrt(max(degree, 1)) + 22.0 * math.log1p(max(cited, 0))
-        sizes.append(min(size, 380.0))
+        size = 34.0 + 8.0 * math.sqrt(max(degree, 1)) + 9.0 * math.log1p(max(cited, 0))
+        sizes.append(min(size, 175.0))
     return sizes
+
+
+def _apply_shared_axis_limits(
+    axes: list[plt.Axes],
+    positions: dict[str, np.ndarray],
+    padding: float = 1.4,
+) -> None:
+    """
+    给多张子图使用同一组坐标边界，保持圆形布局不被拉伸。
+
+    Args:
+        axes: 待设置的子图。
+        positions: 节点坐标。
+        padding: 坐标边界留白。
+    """
+    if not positions:
+        return
+    coords = np.array(list(positions.values()))
+    x_min, y_min = coords.min(axis=0)
+    x_max, y_max = coords.max(axis=0)
+    x_mid = (x_min + x_max) / 2.0
+    y_mid = (y_min + y_max) / 2.0
+    half_span = max(x_max - x_min, y_max - y_min) / 2.0 + padding
+    for ax in axes:
+        ax.set_xlim(x_mid - half_span, x_mid + half_span)
+        ax.set_ylim(y_mid - half_span, y_mid + half_span)
+        ax.set_aspect("equal", adjustable="box")
 
 
 def _draw_snapshot_panel(
@@ -738,26 +970,32 @@ def _draw_snapshot_panel(
     new_community_ids = {
         row["after_community_id"] for row in (community_rows or []) if row["is_new"]
     }
-    node_fill_colors = []
-    node_edge_colors = []
-    node_linewidths = []
+    pre_event_node_ids = []
+    post_event_node_ids = []
+    node_fill_by_id = {}
+    node_edge_by_id = {}
+    node_width_by_id = {}
 
     for node_id in node_ids:
         community_id = partition.get(node_id)
-        node_fill_colors.append(color_map.get(community_id, _FALLBACK_COMMUNITY_FILL))
+        node_fill_by_id[node_id] = color_map.get(community_id, _FALLBACK_COMMUNITY_FILL)
         node_year = G_plot.nodes[node_id].get("year") or 0
         is_post_event = node_year >= event_year
         is_new_community = highlight_new_community and community_id in new_community_ids
+        if is_post_event:
+            post_event_node_ids.append(node_id)
+        else:
+            pre_event_node_ids.append(node_id)
 
         if is_new_community:
-            node_edge_colors.append(_NEW_COMMUNITY_EDGE)
-            node_linewidths.append(1.8)
+            node_edge_by_id[node_id] = _NEW_COMMUNITY_EDGE
+            node_width_by_id[node_id] = 1.8
         elif is_post_event:
-            node_edge_colors.append(_NEW_COMMUNITY_EDGE)
-            node_linewidths.append(0.9)
+            node_edge_by_id[node_id] = _NEW_COMMUNITY_EDGE
+            node_width_by_id[node_id] = 0.9
         else:
-            node_edge_colors.append("#F8FAFC")
-            node_linewidths.append(0.4)
+            node_edge_by_id[node_id] = "#F8FAFC"
+            node_width_by_id[node_id] = 0.35
 
     nx.draw_networkx_edges(
         G_plot,
@@ -765,20 +1003,26 @@ def _draw_snapshot_panel(
         ax=ax,
         arrows=False,
         edge_color="#94A3B8",
-        alpha=0.20,
-        width=0.6,
+        alpha=0.12 if highlight_new_community else 0.18,
+        width=0.45,
     )
-    nx.draw_networkx_nodes(
-        G_plot,
-        pos=positions,
-        nodelist=node_ids,
-        node_size=_node_sizes(G_plot, node_ids),
-        node_color=node_fill_colors,
-        edgecolors=node_edge_colors,
-        linewidths=node_linewidths,
-        ax=ax,
-        alpha=0.94,
-    )
+    for draw_nodes, alpha in (
+        (pre_event_node_ids, 0.40 if highlight_new_community else 0.88),
+        (post_event_node_ids, 0.97),
+    ):
+        if not draw_nodes:
+            continue
+        nx.draw_networkx_nodes(
+            G_plot,
+            pos=positions,
+            nodelist=draw_nodes,
+            node_size=_node_sizes(G_plot, draw_nodes),
+            node_color=[node_fill_by_id[node_id] for node_id in draw_nodes],
+            edgecolors=[node_edge_by_id[node_id] for node_id in draw_nodes],
+            linewidths=[node_width_by_id[node_id] for node_id in draw_nodes],
+            ax=ax,
+            alpha=alpha,
+        )
 
     target_node_ids = [
         node_id for node_id in (target_nodes or [])
@@ -789,7 +1033,138 @@ def _draw_snapshot_panel(
             G_plot,
             pos=positions,
             nodelist=target_node_ids,
-            node_size=[min(size * 1.8, 520.0) for size in _node_sizes(G_plot, target_node_ids)],
+            node_size=[min(size * 2.1, 360.0) for size in _node_sizes(G_plot, target_node_ids)],
+            node_color="#FDE047",
+            edgecolors="#7C2D12",
+            linewidths=1.8,
+            node_shape="*",
+            ax=ax,
+            alpha=1.0,
+        )
+
+    ax.set_title(title, fontsize=12, fontweight="bold")
+    ax.axis("off")
+
+
+def _draw_change_panel(
+    ax: plt.Axes,
+    G_plot: nx.DiGraph,
+    positions: dict[str, np.ndarray],
+    node_ids: list[str],
+    color_map: dict,
+    partition: dict,
+    title: str,
+    event_year: int,
+    target_nodes: Optional[list[str]] = None,
+) -> None:
+    """
+    绘制只突出事件后变化的图谱面板。
+
+    Args:
+        ax: Matplotlib 轴。
+        G_plot: 事件后采样图。
+        positions: 共享坐标。
+        node_ids: 采样节点。
+        color_map: 社区颜色映射。
+        partition: 事件后社区划分。
+        title: 面板标题。
+        event_year: 事件年份。
+        target_nodes: 目标论文节点列表。
+    """
+    if G_plot.number_of_nodes() == 0 or not node_ids:
+        ax.text(0.5, 0.5, "Insufficient data", ha="center", va="center", transform=ax.transAxes)
+        ax.set_title(title, fontsize=12)
+        ax.axis("off")
+        return
+
+    selected = set(node_ids)
+    post_nodes = {
+        node_id for node_id in selected
+        if (G_plot.nodes[node_id].get("year") or 0) >= event_year
+    }
+    target_node_ids = {
+        node_id for node_id in (target_nodes or [])
+        if node_id in G_plot and node_id in positions
+    }
+    post_nodes.update(target_node_ids)
+
+    context_nodes: set[str] = set()
+    for node_id in post_nodes:
+        if node_id not in G_plot:
+            continue
+        for neighbor_id in set(G_plot.successors(node_id)) | set(G_plot.predecessors(node_id)):
+            if neighbor_id in selected and neighbor_id not in post_nodes:
+                context_nodes.add(neighbor_id)
+
+    if not post_nodes:
+        ax.text(0.5, 0.5, "No post-event nodes in sample", ha="center", va="center",
+                transform=ax.transAxes)
+        ax.set_title(title, fontsize=12)
+        ax.axis("off")
+        return
+
+    change_nodes = post_nodes | context_nodes
+    change_edges = [
+        (source, target)
+        for source, target in G_plot.edges
+        if source in change_nodes
+        and target in change_nodes
+        and (source in post_nodes or target in post_nodes)
+    ]
+    G_change = nx.DiGraph()
+    G_change.add_nodes_from((node_id, G_plot.nodes[node_id]) for node_id in change_nodes)
+    G_change.add_edges_from(change_edges)
+
+    if change_edges:
+        nx.draw_networkx_edges(
+            G_change,
+            pos=positions,
+            edgelist=change_edges,
+            ax=ax,
+            arrows=False,
+            edge_color="#F97316",
+            alpha=0.30,
+            width=0.75,
+        )
+
+    context_node_list = [node_id for node_id in node_ids if node_id in context_nodes]
+    if context_node_list:
+        nx.draw_networkx_nodes(
+            G_change,
+            pos=positions,
+            nodelist=context_node_list,
+            node_size=[size * 0.72 for size in _node_sizes(G_plot, context_node_list)],
+            node_color="#CBD5E1",
+            edgecolors="#FFFFFF",
+            linewidths=0.35,
+            ax=ax,
+            alpha=0.46,
+        )
+
+    post_node_list = [node_id for node_id in node_ids if node_id in post_nodes]
+    if post_node_list:
+        nx.draw_networkx_nodes(
+            G_change,
+            pos=positions,
+            nodelist=post_node_list,
+            node_size=_node_sizes(G_plot, post_node_list),
+            node_color=[
+                color_map.get(partition.get(node_id), _NEW_COMMUNITY_FILL)
+                for node_id in post_node_list
+            ],
+            edgecolors="#EA580C",
+            linewidths=1.2,
+            ax=ax,
+            alpha=0.98,
+        )
+
+    target_node_list = [node_id for node_id in target_node_ids if node_id in positions]
+    if target_node_list:
+        nx.draw_networkx_nodes(
+            G_change,
+            pos=positions,
+            nodelist=target_node_list,
+            node_size=[min(size * 2.2, 380.0) for size in _node_sizes(G_plot, target_node_list)],
             node_color="#FDE047",
             edgecolors="#7C2D12",
             linewidths=1.8,
@@ -867,6 +1242,258 @@ def _top_shift_rows(community_rows: list[dict], top_k: int = 6) -> list[dict]:
     )[:top_k]
 
 
+def _truncate_label(value: Any, max_chars: int = 44) -> str:
+    """
+    生成适合图例显示的短标签。
+
+    Args:
+        value: 原始标签。
+        max_chars: 最大字符数。
+
+    Returns:
+        str: 截断后的标签。
+    """
+    text = str(value or "").strip()
+    if not text:
+        return "unlabeled"
+    return text if len(text) <= max_chars else f"{text[:max_chars - 3]}..."
+
+
+def _legend_label(value: Any) -> str:
+    """
+    生成不省略的图例标签。
+
+    Args:
+        value: 原始标签。
+
+    Returns:
+        str: 清理后的标签。
+    """
+    text = str(value or "").strip()
+    return text or "unlabeled"
+
+
+def _limited_slash_labels(value: Any, max_items: int = 2) -> str:
+    """
+    只保留用斜杠拼接标签中的前几项。
+
+    Args:
+        value: 原始标签文本。
+        max_items: 最大保留项数。
+
+    Returns:
+        str: 限制后的标签文本。
+    """
+    labels = [
+        item.strip()
+        for item in _legend_label(value).split("/")
+        if item.strip()
+    ]
+    if not labels:
+        return "unlabeled"
+    return " / ".join(labels[:max_items])
+
+
+def _visible_community_rows(
+    community_rows: list[dict],
+    visible_community_ids: set[int],
+) -> list[dict]:
+    """
+    返回当前三联图中实际出现的社区行。
+
+    Args:
+        community_rows: 全部社区变化记录。
+        visible_community_ids: 图中可见的 after 社区编号。
+
+    Returns:
+        list[dict]: 排序后的社区记录。
+    """
+    row_lookup = {
+        row["after_community_id"]: row
+        for row in community_rows
+    }
+    status_rank = {"new": 0, "expanded": 1, "inherited": 2}
+    rows = [
+        row_lookup[community_id]
+        for community_id in visible_community_ids
+        if community_id in row_lookup
+    ]
+    return sorted(
+        rows,
+        key=lambda row: (
+            status_rank.get(row.get("status"), 3),
+            -row.get("after_size", 0),
+            row.get("after_community_id", 0),
+        ),
+    )
+
+
+def _community_legend_handles(
+    community_rows: list[dict],
+    visible_node_ids: list[str],
+    partition_after: dict,
+    after_color_map: dict,
+) -> list[Patch]:
+    """
+    构建三张图共享的社区颜色图例。
+
+    Args:
+        community_rows: 社区变化记录。
+        visible_node_ids: 图中出现的节点。
+        partition_after: after 社区划分。
+        after_color_map: after 社区颜色。
+
+    Returns:
+        list[Patch]: Matplotlib 图例句柄。
+    """
+    visible_community_ids = {
+        partition_after.get(node_id)
+        for node_id in visible_node_ids
+        if partition_after.get(node_id) is not None
+    }
+    handles = []
+    for row in _visible_community_rows(community_rows, visible_community_ids):
+        community_id = row["after_community_id"]
+        field_label = _legend_label(row.get("dominant_field"))
+        topic_label = _legend_label(row.get("dominant_topic"))
+        label = (
+            f"C{community_id} · {row.get('status', 'unknown')} · "
+            f"{field_label} · {topic_label}"
+        )
+        handles.append(
+            Patch(
+                facecolor=after_color_map.get(community_id, _FALLBACK_COMMUNITY_FILL),
+                edgecolor=_NEW_COMMUNITY_EDGE if row.get("is_new") else "#334155",
+                linewidth=1.0,
+                label=label,
+            )
+        )
+    return handles
+
+
+def _wrapped_legend_text(value: Any, width: int) -> str:
+    """
+    生成不截断但可换行的社区说明文本。
+
+    Args:
+        value: 原始文本。
+        width: 每行最大字符数。
+
+    Returns:
+        str: 换行后的文本。
+    """
+    return textwrap.fill(
+        _legend_label(value),
+        width=width,
+        break_long_words=False,
+        break_on_hyphens=False,
+    )
+
+
+def _draw_community_annotation_panel(
+    ax: plt.Axes,
+    community_rows: list[dict],
+    visible_node_ids: list[str],
+    partition_after: dict,
+    after_color_map: dict,
+) -> None:
+    """
+    在右侧面板绘制社区标注。
+
+    Args:
+        ax: Matplotlib 轴。
+        community_rows: 社区变化记录。
+        visible_node_ids: 图中出现的节点。
+        partition_after: after 社区划分。
+        after_color_map: after 社区颜色。
+    """
+    ax.axis("off")
+    ax.set_title("Knowledge Communities", fontsize=12, fontweight="bold", pad=10)
+
+    visible_community_ids = {
+        partition_after.get(node_id)
+        for node_id in visible_node_ids
+        if partition_after.get(node_id) is not None
+    }
+    rows = _visible_community_rows(community_rows, visible_community_ids)
+    if not rows:
+        ax.text(0.5, 0.5, "No community labels available", ha="center", va="center",
+                transform=ax.transAxes, fontsize=9, color="#64748B")
+        return
+
+    max_rows = 12
+    omitted_count = max(0, len(rows) - max_rows)
+    display_rows = rows[:max_rows]
+
+    ncols = 2 if len(display_rows) > 1 else 1
+    rows_per_col = math.ceil(len(display_rows) / ncols)
+    col_width = 1.0 / ncols
+    row_height = 0.82 / max(rows_per_col, 1)
+    font_size = max(5.3, min(7.8, 8.0 - 0.22 * max(0, rows_per_col - 5)))
+    wrap_width = 34 if ncols == 2 else 76
+
+    for index, row in enumerate(display_rows):
+        col_index = index // rows_per_col
+        row_index = index % rows_per_col
+        x0 = col_index * col_width + 0.015
+        y_top = 0.94 - row_index * row_height
+        community_id = row["after_community_id"]
+        color = after_color_map.get(community_id, _FALLBACK_COMMUNITY_FILL)
+        post_share = row.get("post_event_share")
+        post_text = _format_pct(post_share) if post_share is not None else "N/A"
+
+        ax.add_patch(
+            Rectangle(
+                (x0, y_top - 0.022),
+                0.018,
+                0.018,
+                transform=ax.transAxes,
+                facecolor=color,
+                edgecolor=_NEW_COMMUNITY_EDGE if row.get("is_new") else "#334155",
+                linewidth=0.8,
+                clip_on=False,
+            )
+        )
+        header = (
+            f"C{community_id} · {row.get('status', 'unknown')} · "
+            f"n={row.get('after_size', 0)} · post={post_text}"
+        )
+        field_text = _wrapped_legend_text(
+            f"Fields: {_limited_slash_labels(row.get('dominant_field'), max_items=2)}",
+            wrap_width,
+        )
+        topic_text = _wrapped_legend_text(
+            f"Topics: {_limited_slash_labels(row.get('dominant_topic'), max_items=2)}",
+            wrap_width,
+        )
+        label = f"{header}\n{field_text}\n{topic_text}"
+
+        ax.text(
+            x0 + 0.024,
+            y_top,
+            label,
+            ha="left",
+            va="top",
+            transform=ax.transAxes,
+            fontsize=font_size,
+            color="#0F172A",
+            linespacing=1.15,
+        )
+
+    if omitted_count:
+        ax.text(
+            0.02,
+            0.02,
+            f"+ {omitted_count} more communities in community_shift CSV",
+            ha="left",
+            va="bottom",
+            transform=ax.transAxes,
+            fontsize=7.2,
+            color="#64748B",
+            fontstyle="italic",
+        )
+
+
 def export_community_shift_to_csv(
     result: FieldContrastResult,
     save_path: str,
@@ -904,7 +1531,7 @@ def plot_field_contrast(
     save_path: str,
 ) -> None:
     """
-    绘制领域图谱时间节点前后对比三联图。
+    绘制知识图谱时间节点前后变化图。
 
     Args:
         result: 对比结果。
@@ -918,18 +1545,34 @@ def plot_field_contrast(
     )
 
     selected_after_nodes = [node_id for node_id in result.selected_nodes if node_id in result.after_graph]
+    visible_community_count = len({
+        partition_after.get(node_id)
+        for node_id in selected_after_nodes
+        if partition_after.get(node_id) is not None
+    })
+    log.info(
+        "开始生成 citation graph: plot_nodes=%s, visible_communities=%s",
+        len(selected_after_nodes),
+        visible_community_count,
+    )
     after_plot = result.after_graph.subgraph(selected_after_nodes).copy()
     before_plot_nodes = [node_id for node_id in selected_after_nodes if node_id in result.before_graph]
     before_plot = result.before_graph.subgraph(before_plot_nodes).copy()
-    positions = _build_shared_layout(after_plot)
+    log.info("  计算社区圆形布局...")
+    positions = _build_change_focused_layout(
+        after_plot,
+        partition_after=partition_after,
+        community_rows=result.community_rows,
+    )
+    log.info("  绘制 before/after 网络与社区标注...")
 
-    fig = plt.figure(figsize=(22, 7.5))
-    outer = fig.add_gridspec(1, 3, width_ratios=[1.2, 1.2, 1.05], wspace=0.10)
-    ax_before = fig.add_subplot(outer[0, 0])
-    ax_after = fig.add_subplot(outer[0, 1])
-    summary_grid = outer[0, 2].subgridspec(2, 1, height_ratios=[0.62, 0.38], hspace=0.15)
-    ax_bar = fig.add_subplot(summary_grid[0, 0])
-    ax_text = fig.add_subplot(summary_grid[1, 0])
+    fig, axes = plt.subplots(
+        1,
+        3,
+        figsize=(18.6, 6.4),
+        gridspec_kw={"width_ratios": [1.0, 1.0, 1.08], "wspace": 0.05},
+    )
+    ax_before, ax_after, ax_labels = axes
 
     before_start = result.spec.event_year - result.spec.before_years
     before_end = result.spec.event_year - 1
@@ -960,84 +1603,377 @@ def plot_field_contrast(
         highlight_new_community=True,
         community_rows=result.community_rows,
     )
-
-    top_rows = _top_shift_rows(result.community_rows)
-    y_positions = np.arange(len(top_rows))
-    if top_rows:
-        bar_colors = [
-            after_color_map.get(row["after_community_id"], _FALLBACK_COMMUNITY_FILL)
-            for row in top_rows
-        ]
-        after_sizes = [row["after_size"] for row in top_rows]
-        overlap_sizes = [row["overlap_with_before"] for row in top_rows]
-        labels = [
-            f"C{row['after_community_id']} · {row['status']}"
-            for row in top_rows
-        ]
-
-        ax_bar.barh(y_positions, after_sizes, color=bar_colors, alpha=0.9, height=0.62)
-        ax_bar.barh(y_positions, overlap_sizes, color="#CBD5E1", alpha=0.95, height=0.28)
-        ax_bar.set_yticks(y_positions)
-        ax_bar.set_yticklabels(labels, fontsize=9)
-        ax_bar.invert_yaxis()
-        ax_bar.grid(axis="x", alpha=0.25)
-        ax_bar.set_xlabel("Community size", fontsize=10)
-    else:
-        ax_bar.text(0.5, 0.5, "No community summary available", ha="center", va="center",
-                    transform=ax_bar.transAxes)
-
-    ax_bar.set_title("Community Shift Summary", fontsize=12, fontweight="bold")
-
-    largest_new_size = max(
-        (row["after_size"] for row in result.emergent_communities),
-        default=0,
-    )
-    summary_lines = [
-        f"Event: {result.spec.event_label} ({result.spec.event_year})",
-        f"Nodes: {result.graph_stats['before_nodes']} → {result.graph_stats['after_nodes']} ({_format_pct(result.graph_stats['node_growth_rate'])})",
-        f"Edges: {result.graph_stats['before_edges']} → {result.graph_stats['after_edges']} ({_format_pct(result.graph_stats['edge_growth_rate'])})",
-        f"Communities: {result.graph_stats['before_comm']} → {result.graph_stats['after_comm']}",
-        f"ΔQ: {result.delta_q_result.get('delta_Q', 0.0):+.4f}",
-        f"Cross-community edges: {_format_pct(result.graph_stats['before_cross_ratio'])} → {_format_pct(result.graph_stats['after_cross_ratio'])}",
-        f"Largest new community: {largest_new_size}",
-    ]
-
-    if result.emergent_communities:
-        summary_lines.append("")
-        summary_lines.append("Top emergent communities:")
-        for row in result.emergent_communities[:3]:
-            summary_lines.append(
-                f"- C{row['after_community_id']} ({row['after_size']}) "
-                f"{row['dominant_field']} | {row['dominant_topic']}"
-            )
-    else:
-        summary_lines.append("")
-        summary_lines.append(_weak_difference_message())
-
-    summary_lines.extend(_target_summary_lines(result))
-
-    ax_text.axis("off")
-    ax_text.text(
-        0.0,
-        1.0,
-        "\n".join(summary_lines),
-        ha="left",
-        va="top",
-        fontsize=10.2,
-        linespacing=1.4,
-        transform=ax_text.transAxes,
+    _apply_shared_axis_limits([ax_before, ax_after], positions)
+    _draw_community_annotation_panel(
+        ax=ax_labels,
+        community_rows=result.community_rows,
+        visible_node_ids=selected_after_nodes,
+        partition_after=partition_after,
+        after_color_map=after_color_map,
     )
 
     fig.suptitle(
-        f"Field Citation Graph Contrast Around {result.spec.event_label}",
+        f"Citation Graph Contrast Around {result.spec.event_label}",
         fontsize=14,
         y=0.98,
         fontweight="bold",
     )
-    fig.subplots_adjust(left=0.03, right=0.98, top=0.88, bottom=0.06, wspace=0.10)
-    plt.savefig(save_path, dpi=180, bbox_inches="tight")
+    fig.subplots_adjust(left=0.03, right=0.985, top=0.86, bottom=0.06, wspace=0.05)
+    log.info("  保存 citation graph PNG: %s", save_path)
+    plt.savefig(save_path, dpi=150)
     plt.close()
-    log.info(f"领域前后图谱对比图已保存: {save_path}")
+    log.info(f"前后知识图谱对比图已保存: {save_path}")
+
+
+def _sample_metric_nodes(
+    G: nx.DiGraph,
+    candidate_ids: list[str],
+    limit: int,
+) -> list[str]:
+    """
+    为指标聚合选择稳定的代表性论文节点。
+
+    Args:
+        G: 图谱。
+        candidate_ids: 候选节点。
+        limit: 最大样本数。
+
+    Returns:
+        list[str]: 采样后的节点 ID。
+    """
+    UG = G.to_undirected()
+    candidates = [
+        node_id for node_id in dict.fromkeys(candidate_ids)
+        if node_id in G and G.out_degree(node_id) > 0
+    ]
+    return sorted(
+        candidates,
+        key=lambda node_id: (
+            UG.degree(node_id),
+            G.nodes[node_id].get("cited_by_count", 0),
+        ),
+        reverse=True,
+    )[:limit]
+
+
+def _compute_metric_rows_for_nodes(
+    G: nx.DiGraph,
+    node_ids: list[str],
+    partition: dict,
+    q_value: Optional[float],
+) -> list[dict]:
+    """
+    对一组论文节点计算七维指标。
+
+    Args:
+        G: 图谱。
+        node_ids: 待计算节点。
+        partition: 社区划分。
+        q_value: 图级模块度 Q。
+
+    Returns:
+        list[dict]: 每个节点一行指标。
+    """
+    if not node_ids:
+        return []
+
+    bc_cache = compute_betweenness(G, target_ids=node_ids)
+    uzzi_baseline = _build_journal_copair_baseline(
+        G,
+        n_permutations=12,
+        sample_size=800,
+    )
+
+    rows = []
+    for node_id in node_ids:
+        metrics = compute_all_metrics_for_paper(
+            node_id,
+            G,
+            betweenness_cache=bc_cache,
+            uzzi_baseline=uzzi_baseline,
+            partition_cache=partition,
+        )
+        metrics["delta_q"] = q_value
+        rows.append(metrics)
+    return rows
+
+
+def _mean_metric_values(rows: list[dict]) -> dict[str, Optional[float]]:
+    """
+    聚合多篇论文的指标均值。
+
+    Args:
+        rows: 单篇论文指标行。
+
+    Returns:
+        dict[str, Optional[float]]: 指标均值。
+    """
+    summary: dict[str, Optional[float]] = {}
+    for _, _, key in METRIC_META:
+        values = []
+        for row in rows:
+            value = row.get(key)
+            if value is None:
+                continue
+            try:
+                numeric = float(value)
+            except (TypeError, ValueError):
+                continue
+            if math.isfinite(numeric):
+                values.append(numeric)
+        summary[key] = float(np.mean(values)) if values else None
+    return summary
+
+
+def plot_metrics_contrast(
+    result: FieldContrastResult,
+    save_path: str,
+    csv_path: Optional[str] = None,
+    sample_limit: int = 60,
+) -> None:
+    """
+    绘制七维指标对比图：事件前基线、事件后论文样本。
+
+    Args:
+        result: 前后知识图谱对比结果。
+        save_path: 图片输出路径。
+        csv_path: 可选 CSV 输出路径。
+        sample_limit: 每组最多计算多少篇论文。
+    """
+    before_partition = result.delta_q_result.get("partition_before", {})
+    after_partition = result.delta_q_result.get("partition_after", {})
+    before_q = result.delta_q_result.get("Q_before")
+    after_q = result.delta_q_result.get("Q_after")
+    event_year = result.spec.event_year
+
+    before_candidates = [
+        node_id for node_id in result.before_graph.nodes
+        if result.before_graph.out_degree(node_id) > 0
+    ]
+    after_candidates = [
+        node_id for node_id in result.after_graph.nodes
+        if result.after_graph.out_degree(node_id) > 0
+        and (result.after_graph.nodes[node_id].get("year") or 0) >= event_year
+    ]
+    if not after_candidates:
+        after_candidates = [
+            node_id for node_id in result.after_graph.nodes
+            if result.after_graph.out_degree(node_id) > 0
+        ]
+
+    before_ids = _sample_metric_nodes(result.before_graph, before_candidates, sample_limit)
+    after_ids = _sample_metric_nodes(result.after_graph, after_candidates, sample_limit)
+
+    log.info(
+        "计算七维指标对比: before_sample=%s, after_sample=%s",
+        len(before_ids),
+        len(after_ids),
+    )
+
+    before_rows = _compute_metric_rows_for_nodes(result.before_graph, before_ids, before_partition, before_q)
+    after_rows = _compute_metric_rows_for_nodes(
+        result.after_graph,
+        after_ids,
+        after_partition,
+        after_q,
+    )
+
+    before_summary = _mean_metric_values(before_rows)
+    after_summary = _mean_metric_values(after_rows)
+    before_summary["delta_q"] = before_q
+    after_summary["delta_q"] = after_q
+
+    csv_rows = [
+        {"group": "before_baseline", **before_summary},
+        {"group": "after_post_event", **after_summary},
+    ]
+    if csv_path:
+        pd.DataFrame(csv_rows).to_csv(csv_path, index=False, encoding="utf-8-sig")
+        log.info("七维指标对比 CSV 已保存: %s", csv_path)
+
+    plot_rows = []
+    for cn_label, _, key in METRIC_META:
+        before_value = before_summary.get(key)
+        after_value = after_summary.get(key)
+        label = _metric_plot_label(cn_label, key)
+        if before_value is None or after_value is None:
+            plot_rows.append({
+                "label": label,
+                "shift_pct": None,
+                "before": None,
+                "after": None,
+            })
+            continue
+
+        before_value = float(before_value)
+        after_value = float(after_value)
+        value_delta = after_value - before_value
+        denominator = max(abs(before_value) + abs(after_value), 1e-9)
+        shift_pct = 200.0 * value_delta / denominator
+        plot_rows.append({
+            "label": label,
+            "shift_pct": shift_pct,
+            "before": before_value,
+            "after": after_value,
+        })
+
+    finite_shifts = [
+        abs(row["shift_pct"])
+        for row in plot_rows
+        if row["shift_pct"] is not None and math.isfinite(row["shift_pct"])
+    ]
+    max_shift = max(finite_shifts, default=10.0)
+    x_limit = max(12.0, min(210.0, max_shift * 1.30))
+    label_space = x_limit * 0.28
+
+    fig, ax = plt.subplots(figsize=(12.8, 6.8))
+    y_positions = np.arange(len(plot_rows))[::-1]
+
+    ax.axvspan(0, x_limit + label_space, color="#DCFCE7", alpha=0.42, zorder=0)
+    ax.axvspan(-x_limit, 0, color="#FEE2E2", alpha=0.38, zorder=0)
+    ax.axvline(0, color="#334155", linewidth=1.3, alpha=0.90, zorder=1)
+    ax.grid(axis="x", color="#CBD5E1", alpha=0.45, linewidth=0.8)
+
+    for y_pos, row in zip(y_positions, plot_rows):
+        shift_pct = row["shift_pct"]
+        if shift_pct is None or not math.isfinite(shift_pct):
+            ax.text(
+                0,
+                y_pos,
+                "N/A",
+                ha="center",
+                va="center",
+                fontsize=9,
+                color="#64748B",
+            )
+            continue
+
+        if math.isclose(shift_pct, 0.0, abs_tol=1e-9):
+            line_color = "#94A3B8"
+        elif shift_pct > 0:
+            line_color = "#10B981"
+        else:
+            line_color = "#EF4444"
+
+        ax.plot(
+            [0, shift_pct],
+            [y_pos, y_pos],
+            color=line_color,
+            linewidth=8.0,
+            alpha=0.82,
+            solid_capstyle="round",
+            zorder=2,
+        )
+        ax.scatter(
+            [0],
+            [y_pos],
+            s=132,
+            color="#2563EB",
+            edgecolors="white",
+            linewidths=1.8,
+            zorder=3,
+        )
+        ax.scatter(
+            [shift_pct],
+            [y_pos],
+            s=168,
+            color=line_color,
+            edgecolors="white",
+            linewidths=1.9,
+            zorder=4,
+        )
+
+        label_offset = x_limit * 0.035
+        label_x = shift_pct + label_offset if shift_pct >= 0 else shift_pct - label_offset
+        label_x = max(-x_limit + 2.0, min(x_limit - 2.0, label_x))
+        ax.text(
+            label_x,
+            y_pos,
+            f"{shift_pct:+.1f}%",
+            ha="left" if shift_pct >= 0 else "right",
+            va="center",
+            fontsize=9,
+            fontweight="bold",
+            color=line_color,
+        )
+
+        raw_text = f"{row['before']:.3g} -> {row['after']:.3g}"
+        ax.text(
+            x_limit + label_space * 0.08,
+            y_pos,
+            raw_text,
+            ha="left",
+            va="center",
+            fontsize=8.2,
+            color="#475569",
+        )
+
+    ax.set_yticks(y_positions)
+    ax.set_yticklabels([row["label"] for row in plot_rows], fontsize=10)
+    ax.set_xlim(-x_limit, x_limit + label_space)
+    ax.set_ylim(-0.75, len(plot_rows) + 0.05)
+    ax.set_xlabel("Relative value change: After vs Before (%)", fontsize=10.5)
+    ax.set_title(
+        f"Seven Metrics Value Shift Around {result.spec.event_label}",
+        fontsize=14,
+        fontweight="bold",
+        pad=16,
+    )
+    ax.text(
+        -x_limit,
+        len(plot_rows) - 0.10,
+        "value decreased",
+        ha="left",
+        va="bottom",
+        fontsize=9,
+        color="#B91C1C",
+        fontweight="bold",
+    )
+    ax.text(
+        x_limit,
+        len(plot_rows) - 0.10,
+        "value increased",
+        ha="right",
+        va="bottom",
+        fontsize=9,
+        color="#047857",
+        fontweight="bold",
+    )
+    ax.text(
+        x_limit + label_space * 0.08,
+        len(plot_rows) - 0.10,
+        "raw values",
+        ha="left",
+        va="bottom",
+        fontsize=9,
+        color="#334155",
+        fontweight="bold",
+    )
+
+    legend_handles = [
+        Line2D([0], [0], marker="o", color="none", markerfacecolor="#2563EB",
+               markeredgecolor="white", markersize=8, label="Before"),
+        Line2D([0], [0], marker="o", color="none", markerfacecolor="#10B981",
+               markeredgecolor="white", markersize=8, label="After: value increased"),
+        Line2D([0], [0], marker="o", color="none", markerfacecolor="#EF4444",
+               markeredgecolor="white", markersize=8, label="After: value decreased"),
+    ]
+    ax.legend(
+        handles=legend_handles,
+        loc="lower right",
+        frameon=False,
+        fontsize=9,
+        ncol=3,
+        bbox_to_anchor=(1.0, -0.12),
+    )
+    for spine in ("top", "right", "left"):
+        ax.spines[spine].set_visible(False)
+    ax.spines["bottom"].set_color("#CBD5E1")
+    ax.tick_params(axis="y", length=0)
+    fig.tight_layout()
+    plt.savefig(save_path, dpi=160, bbox_inches="tight")
+    plt.close()
+    log.info("七维指标对比图已保存: %s", save_path)
 
 
 def run_field_contrast(
@@ -1046,7 +1982,7 @@ def run_field_contrast(
     output_dir: Optional[Path] = None,
 ) -> FieldContrastResult:
     """
-    运行领域图谱时间节点前后对比，并可选导出图与 CSV。
+    运行知识图谱时间节点前后对比，并可选导出图与 CSV。
 
     Args:
         spec: 对比配置。
@@ -1079,7 +2015,11 @@ def run_field_contrast(
         community_rows=community_rows,
         max_plot_nodes=spec.max_plot_nodes,
         min_community_nodes=spec.min_community_size,
+        event_year=spec.event_year,
     )
+    for target_id in spec.target_paper_ids:
+        if target_id in G_after and target_id not in selected_nodes:
+            selected_nodes.append(target_id)
 
     graph_stats = {
         "before_nodes": G_before.number_of_nodes(),
@@ -1118,11 +2058,28 @@ def run_field_contrast(
         after_graph_path = output_dir / f"field_after_{slug}.graphml"
         plot_path = output_dir / f"field_contrast_{slug}.png"
         csv_path = output_dir / f"community_shift_{slug}.csv"
+        metrics_plot_path = output_dir / f"metrics_contrast_{slug}.png"
+        metrics_csv_path = output_dir / f"metrics_contrast_{slug}.csv"
 
         write_graphml_safe(G_before, before_graph_path)
         write_graphml_safe(G_after, after_graph_path)
         export_community_shift_to_csv(result, str(csv_path))
+        log.info("开始生成 citation graph PNG...")
         plot_field_contrast(result, str(plot_path))
+        metrics_paths: dict[str, str] = {}
+        try:
+            log.info("开始生成七维 metrics 对比图...")
+            plot_metrics_contrast(
+                result,
+                save_path=str(metrics_plot_path),
+                csv_path=str(metrics_csv_path),
+            )
+            metrics_paths = {
+                "metrics_contrast_png": str(metrics_plot_path),
+                "metrics_contrast_csv": str(metrics_csv_path),
+            }
+        except Exception as exc:
+            log.warning("七维指标对比图生成失败: %s", exc)
 
         result.output_paths = {
             "before_graphml": str(before_graph_path),
@@ -1130,6 +2087,7 @@ def run_field_contrast(
             "field_contrast_png": str(plot_path),
             "community_shift_csv": str(csv_path),
         }
+        result.output_paths.update(metrics_paths)
 
     if result.emergent_communities:
         top_new = result.emergent_communities[0]

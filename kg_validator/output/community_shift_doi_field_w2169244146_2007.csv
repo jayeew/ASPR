@@ -1,0 +1,11 @@
+﻿after_community_id,status,is_new,matched_before_community_id,after_size,matched_before_size,overlap_with_before,jaccard_with_before,post_event_nodes,pre_event_nodes,post_event_share,dominant_field,dominant_topic,before_only_overlap_nodes
+0,expanded,False,1.0,632,184,179,0.28100470957613816,385,247,0.6091772151898734,"Environmental Science / Biochemistry, Genetics and Molecular Biology",Bacteriophages and microbial interactions / Genomics and Phylogenetic Studies,247
+1,new,True,0.0,523,189,125,0.21294718909710392,398,125,0.7609942638623327,"Biochemistry, Genetics and Molecular Biology / Medicine",CRISPR and Genetic Engineering / Bacteriophages and microbial interactions,125
+2,expanded,False,2.0,316,84,81,0.25391849529780564,231,85,0.7310126582278481,"Agricultural and Biological Sciences / Biochemistry, Genetics and Molecular Biology",Probiotics and Fermented Foods / Genomics and Phylogenetic Studies,85
+3,expanded,False,0.0,141,189,58,0.21323529411764705,74,67,0.524822695035461,"Biochemistry, Genetics and Molecular Biology / Environmental Science",Genomics and Phylogenetic Studies / Microbial Community Ecology and Physiology,67
+4,expanded,False,3.0,6,68,1,0.0136986301369863,3,3,0.5,"Biochemistry, Genetics and Molecular Biology / Medicine","Diphtheria, Corynebacterium, and Tetanus / Infective Endocarditis Diagnosis and Management",3
+5,expanded,False,,3,0,0,0.0,3,0,1.0,"Biochemistry, Genetics and Molecular Biology",RNA and protein synthesis mechanisms / Bacteriophages and microbial interactions,0
+6,inherited,False,2.0,3,84,1,0.011627906976744186,0,3,0.0,"Biochemistry, Genetics and Molecular Biology",Bacterial Identification and Susceptibility Testing / Genomics and Phylogenetic Studies,3
+7,expanded,False,,2,0,0,0.0,2,0,1.0,"Immunology and Microbiology / Biochemistry, Genetics and Molecular Biology",Invertebrate Immune Response Mechanisms / Insect Resistance and Genetics,0
+8,expanded,False,0.0,2,189,1,0.005263157894736842,1,1,0.5,"Biochemistry, Genetics and Molecular Biology",Machine Learning in Bioinformatics / Genomics and Phylogenetic Studies,1
+9,expanded,False,1.0,2,184,1,0.005405405405405406,1,1,0.5,"Biochemistry, Genetics and Molecular Biology",Genomics and Phylogenetic Studies / Microbial Community Ecology and Physiology,1

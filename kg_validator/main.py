@@ -8,7 +8,11 @@ main.py — 主程序入口
     # 完整模式（从 OpenAlex 拉取真实数据，需要网络）
     python main.py --mode full --email your@email.com
 
-    # 领域图谱时间节点前后对比
+    # DOI 驱动的论文前后知识图谱对比
+    python main.py --mode field_contrast \
+        --paper-dois "10.1038/s41586-021-03819-2"
+
+    # 兼容旧用法：领域图谱时间节点前后对比
     python main.py --mode field_contrast --filter "concepts.id:C123,type:article" \
         --event-year 2024 --event-label "Nobel Prize 2024"
 """
@@ -134,8 +138,8 @@ def build_paper_neighborhood_graph(
     before_years: int = 10,
     after_years: int = 5,
     max_refs: int = 20,
-    citers_per_target: int = 120,
-    citers_per_ref: int = 30,
+    citers_per_target: int = 500,
+    citers_per_ref: int = 500,
 ) -> nx.DiGraph:
     """
     构建纯论文邻域图：目标论文 + 参考文献 + 施引论文 + 参考文献的施引邻域。
@@ -167,6 +171,14 @@ def build_paper_neighborhood_graph(
     for work in target_works:
         reference_ids.extend(work.get("referenced_works", [])[:max_refs])
     reference_ids = list(dict.fromkeys([ref_id for ref_id in reference_ids if ref_id]))
+
+    log.info(
+        "构建 DOI 论文邻域图: targets=%s, refs=%s, target_citers_limit=%s, ref_citers_limit=%s",
+        len(target_ids),
+        len(reference_ids),
+        citers_per_target,
+        citers_per_ref,
+    )
 
     normalized_refs = _deduplicate_works_by_id(
         [normalize_work(item) for item in fetch_works_batch_ids(reference_ids, email=email)]
@@ -597,16 +609,29 @@ def run_full_mode(args: argparse.Namespace) -> None:
 
 
 # ──────────────────────────────────────────────────────────────────────────────
-# 领域图谱时间节点前后对比模式
+# 前后知识图谱对比模式
 # ──────────────────────────────────────────────────────────────────────────────
 
 def run_field_contrast_mode(args: argparse.Namespace) -> None:
     """
-    运行领域图谱时间节点前后对比模式。
+    运行前后知识图谱对比模式。
+
+    传入 --paper-dois / --paper-ids 时，以目标论文发表年为分界点，
+    自动构建论文引用邻域图并做前后对比；否则兼容旧的 --filter +
+    --event-year 领域时间节点对比模式。
 
     Args:
         args: 命令行参数。
     """
+    if args.paper_dois or args.paper_ids:
+        _run_target_neighborhood_contrasts(
+            args=args,
+            mode_label="DOI 驱动 field_contrast",
+            slug_prefix="doi_field",
+            filter_query="doi_field_contrast",
+        )
+        return
+
     from comparator import FieldContrastSpec, run_field_contrast
     from fetcher import fetch_works_cursor, normalize_work
     from graph_builder import build_graph
@@ -718,12 +743,20 @@ def run_paper_contrast_mode(args: argparse.Namespace) -> None:
         )
 
 
-def run_paper_neighborhood_contrast_mode(args: argparse.Namespace) -> None:
+def _run_target_neighborhood_contrasts(
+    args: argparse.Namespace,
+    mode_label: str,
+    slug_prefix: str,
+    filter_query: str,
+) -> None:
     """
-    运行纯论文邻域模式：不依赖领域过滤，只围绕目标论文构建邻域图谱。
+    运行目标论文邻域的前后知识图谱对比。
 
     Args:
         args: 命令行参数。
+        mode_label: 日志中的模式名称。
+        slug_prefix: 输出文件名 slug 前缀。
+        filter_query: 写入结果配置的图谱来源说明。
     """
     from comparator import FieldContrastSpec, run_field_contrast
 
@@ -741,10 +774,15 @@ def run_paper_neighborhood_contrast_mode(args: argparse.Namespace) -> None:
         citers_per_ref=args.neighbor_citers_per_ref,
     )
 
-    for work in sorted(target_works, key=lambda item: (item["year"], item["id"])):
+    for work in sorted(
+        target_works,
+        key=lambda item: (item.get("year") or 0, item.get("id", "")),
+    ):
         paper_id = work["id"]
-        paper_year = work["year"]
+        paper_year = work.get("year")
         paper_title = work.get("title") or paper_id
+        if paper_year is None:
+            raise RuntimeError(f"目标论文 {paper_id} 缺少 publication_year，无法做前后时间切片。")
 
         if args.event_label:
             if len(target_works) == 1:
@@ -755,7 +793,7 @@ def run_paper_neighborhood_contrast_mode(args: argparse.Namespace) -> None:
             event_label = paper_title
 
         contrast_spec = FieldContrastSpec(
-            filter_query="paper_neighborhood",
+            filter_query=filter_query,
             event_year=paper_year,
             event_label=event_label,
             target_paper_ids=[paper_id],
@@ -764,15 +802,31 @@ def run_paper_neighborhood_contrast_mode(args: argparse.Namespace) -> None:
             after_years=args.after_years,
             max_plot_nodes=args.max_plot_nodes,
             min_community_size=args.min_community_size,
-            slug=_slugify(f"neighborhood_{paper_id}_{paper_year}"),
+            slug=_slugify(f"{slug_prefix}_{paper_id}_{paper_year}"),
         )
         result = run_field_contrast(contrast_spec, G_full, output_dir=output_dir)
         log.info(
-            "完成纯论文邻域对比: %s (%s) -> ΔQ=%+.4f",
+            "完成%s: %s (%s) -> ΔQ=%+.4f",
+            mode_label,
             paper_title,
             paper_year,
             result.delta_q_result.get("delta_Q", 0.0),
         )
+
+
+def run_paper_neighborhood_contrast_mode(args: argparse.Namespace) -> None:
+    """
+    运行纯论文邻域模式：不依赖领域过滤，只围绕目标论文构建邻域图谱。
+
+    Args:
+        args: 命令行参数。
+    """
+    _run_target_neighborhood_contrasts(
+        args=args,
+        mode_label="纯论文邻域对比",
+        slug_prefix="neighborhood",
+        filter_query="paper_neighborhood",
+    )
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -804,16 +858,29 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--after-years", dest="after_years", type=int, default=5)
     parser.add_argument("--max-plot-nodes", dest="max_plot_nodes", type=int, default=180)
     parser.add_argument("--min-community-size", dest="min_community_size", type=int, default=8)
-    parser.add_argument("--neighbor-max-refs", dest="neighbor_max_refs", type=int, default=20)
-    parser.add_argument("--neighbor-citers-per-target", dest="neighbor_citers_per_target", type=int, default=120)
-    parser.add_argument("--neighbor-citers-per-ref", dest="neighbor_citers_per_ref", type=int, default=30)
+    parser.add_argument("--neighbor-max-refs", dest="neighbor_max_refs", type=int, default=100)
+    parser.add_argument(
+        "--neighbor-citers-per-target",
+        dest="neighbor_citers_per_target",
+        type=int,
+        default=500,
+    )
+    parser.add_argument(
+        "--neighbor-citers-per-ref",
+        dest="neighbor_citers_per_ref",
+        type=int,
+        default=500,
+    )
     args = parser.parse_args()
 
     if args.mode == "field_contrast":
-        if not args.filter_query:
-            parser.error("--mode field_contrast 需要提供 --filter")
-        if args.event_year is None:
-            parser.error("--mode field_contrast 需要提供 --event-year")
+        if not args.paper_ids and not args.paper_dois:
+            if not args.filter_query:
+                parser.error(
+                    "--mode field_contrast 需要提供 --paper-ids/--paper-dois，或兼容旧用法提供 --filter"
+                )
+            if args.event_year is None:
+                parser.error("--mode field_contrast 兼容旧用法需要提供 --event-year")
     elif args.mode == "paper_contrast":
         if not args.filter_query:
             parser.error("--mode paper_contrast 需要提供 --filter")

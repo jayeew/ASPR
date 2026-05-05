@@ -25,13 +25,23 @@ def _oa_id(full_id: str) -> str:
     return full_id.split("/")[-1] if full_id else ""
 
 
+def _doi_uri(raw_doi: str) -> str:
+    """将 DOI 或 DOI URL 统一成 OpenAlex filter 可识别的 DOI URL。"""
+    doi = raw_doi.strip()
+    for prefix in ("https://doi.org/", "http://doi.org/", "doi:"):
+        if doi.lower().startswith(prefix):
+            doi = doi[len(prefix):]
+            break
+    return f"https://doi.org/{doi}"
+
+
 def fetch_works_by_doi(dois: list[str], email: str = "") -> list[dict]:
     """批量用 DOI 查询论文（每批 50 个）"""
     results = []
     batch_size = 50
     for i in range(0, len(dois), batch_size):
         batch = dois[i: i + batch_size]
-        ids_str = "|".join(f"https://doi.org/{d.strip()}" for d in batch)
+        ids_str = "|".join(_doi_uri(doi) for doi in batch)
         params = {
             "filter": f"doi:{ids_str}",
             "select": WORK_FIELDS,
