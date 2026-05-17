@@ -1,0 +1,99 @@
+domain_name: "iPSC and cellular reprogramming"
+slug: "ipsc_reprogramming"
+search_query: '("induced pluripotent stem cell" OR "induced pluripotent stem cells" OR "iPSC" OR "iPS cells" OR "cellular reprogramming" OR "Yamanaka factors" OR "pluripotency" OR "pluripotent stem cell" OR "embryonic stem cell" OR "somatic cell nuclear transfer")'
+start_year: 2000
+end_year: 2024
+window_size: 5
+language: "en"
+include_abstract: false
+max_works_per_window: 1600
+fetch_anchor_citers: true
+max_anchor_citers: 800
+work_types: ["article", "preprint", "review"]
+anchors:
+  - label: "Takahashi/Yamanaka 2006"
+    doi: "10.1016/j.cell.2006.07.024"
+    year: 2006
+  - label: "Takahashi 2007"
+    doi: "10.1016/j.cell.2007.11.019"
+    year: 2007
+  - label: "Yu 2007"
+    doi: "10.1126/science.1151526"
+    year: 2007
+api:
+  sleep_seconds: 0.1
+  max_retries: 6
+  timeout_seconds: 60
+  per_page: 100
+graph:
+  max_papers_for_graph: 4500
+  max_edges: 150000
+  min_shared_references: 1
+  min_cocitations: 1
+  community_resolution: 2.2
+  random_seed: 42
+metrics:
+  curve_mode: "raw"
+  betweenness_sample: 250
+  semantic_sample: 600
+plot:
+  title: "Fig. 1 | Citation knowledge-graph perturbation after a landmark innovation"
+  subtitle: "Example domain: iPSC and cellular reprogramming. Real OpenAlex data; publication-style display uses data-derived topic snapshots."
+  fig_width_single: 22
+  fig_height_single: 10.2
+  dpi: 300
+  display_mode: "cluster_schematic"
+  display_max_topics: 8
+  display_min_topic_size: 8
+  display_max_backbone_edges: 15
+  display_extra_edges: 6
+  cluster_radius_min: 0.135
+  cluster_radius_max: 0.235
+  max_representative_papers: 6
+  min_papers_per_display_topic: 3
+  max_labels_per_panel: 8
+  node_size_min: 64
+  show_internal_cluster_edges: true
+  show_time_axis: true
+  show_panel_captions: true
+  metric_x_axis: "years"
+  metric_scale: "unit"
+  panel_captions:
+    - "Stem-cell and cloning priors"
+    - "Factor-based reprogramming"
+    - "Innovation shock: iPSC platform"
+    - "Disease-model reconfiguration"
+    - "Compression into regenerative hubs"
+  topic_layout_templates:
+    - name: "Embryonic\nstem cells"
+      x: -0.78
+      y: 0.42
+      keywords: ["embryonic", "embryonic stem", "stem cell", "stem cells", "pluripotent", "pluripotency", "blastocyst", "self-renewal"]
+    - name: "Cloning &\nnuclear transfer"
+      x: -0.70
+      y: -0.35
+      keywords: ["cloning", "nuclear transfer", "somatic cell nuclear transfer", "oocyte", "enucleated", "nt-es", "therapeutic cloning"]
+    - name: "Reprogramming\nfactors"
+      x: -0.12
+      y: 0.55
+      keywords: ["oct4", "sox2", "klf4", "c-myc", "myc", "nanog", "factor", "factors", "yamanaka"]
+    - name: "iPSC\ngeneration"
+      x: 0.05
+      y: -0.10
+      keywords: ["induced pluripotent", "ips", "ipsc", "ips cell", "ips cells", "reprogramming", "fibroblast", "retroviral"]
+    - name: "Human\niPS cells"
+      x: 0.48
+      y: 0.42
+      keywords: ["human", "patient-specific", "fibroblast", "somatic", "adult", "derivation", "line", "lines"]
+    - name: "Disease models\n& screening"
+      x: 0.78
+      y: 0.02
+      keywords: ["disease", "model", "models", "modeling", "modelling", "patient", "drug screening", "screening", "toxicity"]
+    - name: "Differentiation\n& organoids"
+      x: 0.33
+      y: -0.62
+      keywords: ["differentiation", "directed differentiation", "lineage", "neuron", "cardiomyocyte", "organoid", "organoids", "development"]
+    - name: "Regenerative\ntherapy"
+      x: 0.88
+      y: -0.46
+      keywords: ["regenerative", "regeneration", "therapy", "transplantation", "clinical", "cell therapy", "replacement", "in vivo"]

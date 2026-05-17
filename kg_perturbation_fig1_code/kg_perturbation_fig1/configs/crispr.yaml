@@ -1,0 +1,99 @@
+domain_name: "CRISPR-Cas genome editing"
+slug: "crispr"
+search_query: '("CRISPR" OR "Cas9" OR "Cas12" OR "Cas13" OR "RNA-guided nuclease" OR "guide RNA" OR "genome editing")'
+start_year: 2000
+end_year: 2024
+window_size: 5
+language: "en"
+include_abstract: false
+max_works_per_window: 1600
+fetch_anchor_citers: true
+max_anchor_citers: 800
+work_types: ["article", "preprint", "review"]
+anchors:
+  - label: "Jinek 2012"
+    doi: "10.1126/science.1225829"
+    year: 2012
+  - label: "Cong/Mali 2013"
+    doi: "10.1126/science.1231143"
+    year: 2013
+  - label: "Mali 2013"
+    doi: "10.1126/science.1232033"
+    year: 2013
+api:
+  sleep_seconds: 0.1
+  max_retries: 6
+  timeout_seconds: 60
+  per_page: 100
+graph:
+  max_papers_for_graph: 4500
+  max_edges: 150000
+  min_shared_references: 1
+  min_cocitations: 1
+  community_resolution: 2.2
+  random_seed: 42
+metrics:
+  curve_mode: "raw"
+  betweenness_sample: 250
+  semantic_sample: 600
+plot:
+  title: "Fig. 1 | Citation knowledge-graph perturbation after a landmark innovation"
+  subtitle: "Example domain: CRISPR-Cas genome editing. Real OpenAlex data; publication-style display uses data-derived topic snapshots."
+  fig_width_single: 22
+  fig_height_single: 10.2
+  dpi: 300
+  display_mode: "cluster_schematic"
+  display_max_topics: 8
+  display_min_topic_size: 8
+  display_max_backbone_edges: 15
+  display_extra_edges: 6
+  cluster_radius_min: 0.135
+  cluster_radius_max: 0.235
+  max_representative_papers: 6
+  min_papers_per_display_topic: 3
+  max_labels_per_panel: 8
+  node_size_min: 64
+  show_internal_cluster_edges: true
+  show_time_axis: true
+  show_panel_captions: true
+  metric_x_axis: "years"
+  metric_scale: "unit"
+  panel_captions:
+    - "Fragmented prior knowledge"
+    - "Mechanistic consolidation"
+    - "Innovation shock: programmable Cas9"
+    - "Field reconfiguration"
+    - "Compression into translational hubs"
+  topic_layout_templates:
+    - name: "Immune\ndefence"
+      x: -0.78
+      y: 0.42
+      keywords: ["immune", "immunity", "defense", "defence", "bacterial", "bacteria", "archaea", "phage", "viral", "prokaryotic"]
+    - name: "CRISPR\nloci"
+      x: -0.15
+      y: 0.55
+      keywords: ["loci", "locus", "spacer", "repeat", "clustered", "palindromic", "sequence", "genomic", "array"]
+    - name: "RNA\nbiology"
+      x: 0.55
+      y: 0.22
+      keywords: ["rna", "guide", "sgrna", "tracr", "crrna", "small rna", "trans-activating", "ribonucleoprotein"]
+    - name: "Cas\nproteins"
+      x: -0.35
+      y: -0.18
+      keywords: ["cas", "cas9", "cas12", "cas13", "nuclease", "cpf1", "protein", "endonuclease", "cleavage"]
+    - name: "Genome\nediting"
+      x: 0.34
+      y: -0.37
+      keywords: ["genome editing", "gene editing", "editing", "engineer", "targeted", "cleavage", "programmable"]
+    - name: "Base/prime\nediting"
+      x: 0.15
+      y: -0.76
+      keywords: ["base", "prime", "editor", "editing", "deaminase", "adenine", "cytosine", "pegRNA"]
+    - name: "Screens &\ndiagnostics"
+      x: -0.73
+      y: -0.42
+      keywords: ["screen", "screens", "screening", "diagnostic", "diagnostics", "detection", "library", "pooled", "crispr screen"]
+    - name: "Delivery &\ntherapy"
+      x: 0.82
+      y: 0.42
+      keywords: ["delivery", "therapy", "therapeutic", "clinical", "disease", "in vivo", "cancer", "treatment", "vector"]
