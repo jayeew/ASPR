@@ -1,0 +1,21 @@
+parameter,label,window_index,window,standardized_value
+RTD,RTD (reference target diversity),1,1995-1999,-1.5949633266515388
+RTD,RTD (reference target diversity),2,2000-2004,-0.6369673822792634
+RTD,RTD (reference target diversity),3,2005-2009,0.9333911529377014
+RTD,RTD (reference target diversity),4,2010-2014,1.0591740393352238
+RTD,RTD (reference target diversity),5,2015-2019,0.23936551665787797
+BurtIP,Burt IP (structural holes),1,1995-1999,-1.6747604539369394
+BurtIP,Burt IP (structural holes),2,2000-2004,-0.5760354949393185
+BurtIP,Burt IP (structural holes),3,2005-2009,0.8028615685571543
+BurtIP,Burt IP (structural holes),4,2010-2014,1.0159576415255704
+BurtIP,Burt IP (structural holes),5,2015-2019,0.43197673879353365
+B,$B$ (bridge centrality),1,1995-1999,-1.685263382178962
+B,$B$ (bridge centrality),2,2000-2004,-0.566421405165814
+B,$B$ (bridge centrality),3,2005-2009,0.7784913584821724
+B,$B$ (bridge centrality),4,2010-2014,1.0084936524457953
+B,$B$ (bridge centrality),5,2015-2019,0.46469977641680793
+DeltaQ,$\Delta Q$ directionality,1,1995-1999,0.0
+DeltaQ,$\Delta Q$ directionality,2,2000-2004,-2.355245755777486
+DeltaQ,$\Delta Q$ directionality,3,2005-2009,-0.5981087871674591
+DeltaQ,$\Delta Q$ directionality,4,2010-2014,-0.16982302777890426
+DeltaQ,$\Delta Q$ directionality,5,2015-2019,0.5907025005024251

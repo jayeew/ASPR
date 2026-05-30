@@ -86,6 +86,7 @@ import pandas as pd
 import requests
 import yaml
 from matplotlib.gridspec import GridSpec
+from matplotlib.offsetbox import AnnotationBbox, DrawingArea
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics import adjusted_rand_score
 from sklearn.metrics.pairwise import cosine_similarity
@@ -202,9 +203,32 @@ DEFAULT_CONFIG: Dict[str, Any] = {
             "Compression into translational hubs",
         ],
         "metric_x_axis": "years",
+        "metric_panel_title": "Dominant parameter trajectories explaining the graph transitions in panel a",
+        "metric_y_label": "Standardized\nparameter value",
+        "metric_landmark_label": "",
+        "dominant_parameter_ylim": [-1.5, 1.5],
+        "dominant_parameters": [
+            {"key": "B"},
+            {"key": "RTD"},
+            {"key": "Uzzi"},
+            {"key": "DeltaQ"},
+        ],
+        "parameter_callouts": [],
+        "parameter_interpretation_boxes": [],
+        "parameter_box_width": 0.18,
+        "parameter_box_height": 0.34,
+        "parameter_box_gap": 0.035,
+        "parameter_box_y": -0.56,
+        "parameter_box_title_size": 7.8,
+        "parameter_box_formula_size": 8.2,
+        "parameter_box_description_size": 7.0,
+        "parameter_box_show_icons": False,
+        "parameter_box_corner_radius": 5.0,
+        "parameter_box_linewidth": 0.75,
+        "show_metric_connectors": True,
         "title": "Landmark papers induce measurable perturbations in citation knowledge graphs",
         "subtitle": "Expansion, bridging, reconfiguration and compression across cumulative citation-knowledge snapshots",
-        "show_retrieval_date": True,
+        "show_retrieval_date": False,
     },
 }
 
@@ -214,6 +238,45 @@ METRIC_COLORS = {
     "Bridging": "#F97316",
     "Reconfiguration": "#10B981",
     "Compression": "#8B5CF6",
+}
+
+PARAMETER_SPECS: Dict[str, Dict[str, Any]] = {
+    "B": {
+        "label": r"$B$ (bridge centrality)",
+        "source": "B_proxy_raw",
+        "color": "#1D4ED8",
+    },
+    "RS": {
+        "label": "RS (reference span)",
+        "source": "RS_proxy_raw",
+        "color": "#0F766E",
+    },
+    "RTD": {
+        "label": "RTD (reference target diversity)",
+        "source": "RTD_proxy_raw",
+        "color": "#F97316",
+    },
+    "Uzzi": {
+        "label": "Uzzi novelty (-p10)",
+        "source": "Uzzi_proxy_raw",
+        "color": "#7C3AED",
+    },
+    "DeltaQ": {
+        "label": r"$\Delta Q$ directionality",
+        "source": "DeltaQ_directionality_raw",
+        "color": "#166534",
+        "center_zero": True,
+    },
+    "BurtIP": {
+        "label": "Burt IP (structural holes)",
+        "source": "BurtIP_proxy_raw",
+        "color": "#0891B2",
+    },
+    "PDE": {
+        "label": "PDE (diffusion potential)",
+        "source": "PDE_proxy_raw",
+        "color": "#B45309",
+    },
 }
 
 STOPWORDS_EXTRA = {
@@ -1611,7 +1674,8 @@ def compute_perturbation_metrics(
         else:
             edge_turnover = 1.0 - (len(prev_cum_edges & curr_edges) / len(union_edges)) if union_edges else 0.0
         curr_modularity = partition_modularity(Gcum, curr_partition) if curr_partition else 0.0
-        modularity_shift = abs(curr_modularity - prev_modularity) if i > 0 else 0.0
+        modularity_delta = (curr_modularity - prev_modularity) if i > 0 else 0.0
+        modularity_shift = abs(modularity_delta) if i > 0 else 0.0
         reconfiguration_raw = partition_change + 0.5 * edge_turnover + modularity_shift
 
         # Compression: shorter topic paths + hub concentration + lower semantic dispersion.
@@ -1658,6 +1722,7 @@ def compute_perturbation_metrics(
                 "partition_change": partition_change,
                 "edge_turnover": edge_turnover,
                 "modularity": curr_modularity,
+                "modularity_delta": modularity_delta,
                 "modularity_shift": modularity_shift,
                 "topic_avg_shortest_path": curr_path,
                 "hub_concentration": curr_hub,
@@ -1682,6 +1747,27 @@ def compute_perturbation_metrics(
         seen_topics |= curr_topics
 
     df = pd.DataFrame(rows)
+    if not df.empty:
+        df["B_proxy_raw"] = df["Bridging_raw"].astype(float)
+        df["RTD_proxy_raw"] = df["participation_mean"].astype(float)
+        df["RS_proxy_raw"] = (
+            0.55 * robust_minmax(df["semantic_dispersion"].values)
+            + 0.45 * robust_minmax(df["new_topics"].values)
+        )
+        df["Uzzi_proxy_raw"] = (
+            0.45 * robust_minmax(df["participation_mean"].values)
+            + 0.35 * robust_minmax(df["partition_change"].values)
+            + 0.20 * robust_minmax(df["edge_turnover"].values)
+        )
+        df["DeltaQ_directionality_raw"] = df["modularity_delta"].astype(float)
+        df["BurtIP_proxy_raw"] = (
+            0.60 * robust_minmax(df["participation_mean"].values)
+            + 0.40 * robust_minmax(df["intercommunity_edge_ratio"].values)
+        )
+        df["PDE_proxy_raw"] = (
+            0.55 * robust_minmax(df["Expansion_raw"].values)
+            + 0.45 * robust_minmax(df["new_edges"].values)
+        )
     curve_mode = str(cfg.get("metrics", {}).get("curve_mode", "cumulative_positive")).lower()
     for metric in METRIC_NAMES:
         raw = np.asarray(df[f"{metric}_raw"].values, dtype=float)
@@ -1723,6 +1809,407 @@ def scale_values(values: Sequence[float], vmin: float, vmax: float) -> List[floa
     return list(vmin + (arr - lo) / (hi - lo) * (vmax - vmin))
 
 
+def normalize_parameter_key(value: Any) -> str:
+    text = str(value or "").strip()
+    folded = re.sub(r"[^a-z0-9]+", "_", text.lower()).strip("_")
+    aliases = {
+        "b": "B",
+        "bridge": "B",
+        "bridge_centrality": "B",
+        "rs": "RS",
+        "reference_span": "RS",
+        "reference_spread": "RS",
+        "rtd": "RTD",
+        "reference_target_diversity": "RTD",
+        "uzzi": "Uzzi",
+        "uzzi_novelty": "Uzzi",
+        "delta_q": "DeltaQ",
+        "deltaq": "DeltaQ",
+        "dq": "DeltaQ",
+        "q_directionality": "DeltaQ",
+        "burt_ip": "BurtIP",
+        "burtip": "BurtIP",
+        "ip": "BurtIP",
+        "pde": "PDE",
+    }
+    return aliases.get(folded, text)
+
+
+def dominant_parameter_specs(cfg: Dict[str, Any]) -> List[Dict[str, Any]]:
+    pcfg = cfg.get("plot", {})
+    raw_items = pcfg.get("dominant_parameters") or DEFAULT_CONFIG["plot"]["dominant_parameters"]
+    max_params = int(pcfg.get("max_dominant_parameters", 4))
+    specs: List[Dict[str, Any]] = []
+    for item in raw_items:
+        entry = {"key": item} if isinstance(item, str) else dict(item or {})
+        key = normalize_parameter_key(entry.get("key") or entry.get("name") or entry.get("label"))
+        spec = dict(PARAMETER_SPECS.get(key, {}))
+        spec.update(entry)
+        spec["key"] = key
+        spec.setdefault("label", key)
+        spec.setdefault("source", entry.get("source") or entry.get("column") or key)
+        spec.setdefault("color", "#374151")
+        specs.append(spec)
+        if len(specs) >= max_params:
+            break
+    return specs
+
+
+def standardize_parameter_values(values: Sequence[float], spec: Mapping[str, Any], manual_values: bool) -> np.ndarray:
+    arr = np.asarray([np.nan if v is None else float(v) for v in values], dtype=float)
+    if len(arr) == 0:
+        return arr
+    if np.isnan(arr).all():
+        return np.zeros_like(arr)
+    fill = float(np.nanmedian(arr))
+    arr = np.where(np.isfinite(arr), arr, fill)
+    if bool(spec.get("invert", False)):
+        arr = -arr
+    if manual_values and not bool(spec.get("standardize_values", False)):
+        return arr
+
+    mode = str(spec.get("standardize_mode") or "").lower()
+    if mode == "none" or spec.get("standardize") is False:
+        return arr
+    if bool(spec.get("center_zero", False)):
+        scale = float(np.nanstd(arr))
+        return arr / scale if scale > 1e-12 else np.zeros_like(arr)
+    if mode == "robust":
+        center = float(np.nanmedian(arr))
+        q25, q75 = np.nanpercentile(arr, [25, 75])
+        scale = float(q75 - q25)
+        return (arr - center) / scale if scale > 1e-12 else np.zeros_like(arr)
+    center = float(np.nanmean(arr))
+    scale = float(np.nanstd(arr))
+    return (arr - center) / scale if scale > 1e-12 else np.zeros_like(arr)
+
+
+def dominant_parameter_trajectories(metrics: pd.DataFrame, cfg: Dict[str, Any]) -> List[Dict[str, Any]]:
+    trajectories: List[Dict[str, Any]] = []
+    n = len(metrics)
+    for spec in dominant_parameter_specs(cfg):
+        manual = "values" in spec and spec.get("values") is not None
+        if manual:
+            raw_values = list(spec.get("values") or [])
+            if len(raw_values) < n:
+                raw_values = raw_values + [np.nan] * (n - len(raw_values))
+            raw_values = raw_values[:n]
+        else:
+            source = str(spec.get("source") or "")
+            if source not in metrics.columns:
+                raw_values = [0.0] * n
+            else:
+                raw_values = metrics[source].values
+        y = standardize_parameter_values(raw_values, spec, manual_values=manual)
+        clip = spec.get("clip")
+        if isinstance(clip, (list, tuple)) and len(clip) == 2:
+            y = np.clip(y, float(clip[0]), float(clip[1]))
+        trajectories.append(
+            {
+                "key": spec["key"],
+                "label": str(spec.get("label") or spec["key"]),
+                "color": str(spec.get("color") or "#374151"),
+                "values": y,
+                "spec": spec,
+            }
+        )
+    return trajectories
+
+
+def landmark_window_index(metrics: pd.DataFrame, cfg: Dict[str, Any]) -> Optional[int]:
+    pcfg = cfg.get("plot", {})
+    focus_year = year_int(pcfg.get("landmark_focus_year"))
+    if focus_year is None:
+        anchor_years = [year_int(a.get("year")) for a in cfg.get("anchors") or []]
+        anchor_years = [y for y in anchor_years if y is not None]
+        focus_year = min(anchor_years) if anchor_years else None
+    if focus_year is None or metrics.empty:
+        return None
+    for i, row in enumerate(metrics.itertuples(index=False)):
+        if int(row.rolling_start) <= focus_year <= int(row.rolling_end):
+            return i
+    return None
+
+
+def resolve_metric_window_index(value: Any, metrics: pd.DataFrame, cfg: Dict[str, Any]) -> Optional[int]:
+    if value is None or str(value).lower() == "landmark":
+        return landmark_window_index(metrics, cfg)
+    if isinstance(value, int):
+        return value - 1 if 1 <= value <= len(metrics) else value if 0 <= value < len(metrics) else None
+    text = str(value).strip()
+    yr = year_int(text)
+    if yr is not None:
+        for i, row in enumerate(metrics.itertuples(index=False)):
+            if int(row.rolling_start) <= yr <= int(row.rolling_end):
+                return i
+    labels = [f"{int(a)}-{int(b)}" for a, b in zip(metrics["rolling_start"], metrics["rolling_end"])]
+    return labels.index(text) if text in labels else None
+
+
+def draw_parameter_callouts(
+    ax: plt.Axes,
+    x: np.ndarray,
+    trajectories: Sequence[Mapping[str, Any]],
+    metrics: pd.DataFrame,
+    cfg: Dict[str, Any],
+) -> None:
+    pcfg = cfg.get("plot", {})
+    by_key = {str(t["key"]): t for t in trajectories}
+    for callout in pcfg.get("parameter_callouts") or []:
+        key = normalize_parameter_key(callout.get("parameter") or callout.get("key"))
+        trajectory = by_key.get(key)
+        if trajectory is None:
+            continue
+        idx = resolve_metric_window_index(callout.get("window", "landmark"), metrics, cfg)
+        if idx is None or idx < 0 or idx >= len(x):
+            continue
+        y = np.asarray(trajectory["values"], dtype=float)
+        color = str(callout.get("color") or trajectory["color"])
+        dx = float(callout.get("dx", 0.0))
+        dy = float(callout.get("dy", 0.25))
+        text_x = float(x[idx]) + dx
+        text_y = float(y[idx]) + dy
+        if bool(callout.get("clip_to_ylim", True)):
+            ymin, ymax = ax.get_ylim()
+            span = ymax - ymin
+            text_y = min(max(text_y, ymin + 0.10 * span), ymax - 0.10 * span)
+        ax.annotate(
+            str(callout.get("text") or ""),
+            xy=(float(x[idx]), float(y[idx])),
+            xytext=(text_x, text_y),
+            textcoords="data",
+            ha=str(callout.get("ha", "center")),
+            va="center",
+            fontsize=float(callout.get("fontsize", 7.5)),
+            color=color,
+            fontstyle=str(callout.get("fontstyle", "normal")),
+            arrowprops=dict(arrowstyle="->", color=color, lw=0.8, shrinkA=2, shrinkB=2),
+            zorder=8,
+        )
+
+
+def draw_parameter_card_icon(ax: plt.Axes, icon: str, cx: float, cy: float, color: str, size: float = 34.0) -> None:
+    """Draw a compact vector icon in a fixed-size drawing area."""
+    da = DrawingArea(size, size, 0, 0, clip=False)
+    half = 0.5 * size
+    r = 0.44 * size
+    da.add_artist(
+        mpatches.Circle(
+            (half, half),
+            r,
+            facecolor="white",
+            edgecolor=color,
+            linewidth=1.1,
+            alpha=1.0,
+        )
+    )
+    icon = str(icon or "bridge").lower()
+    if icon == "novelty":
+        for k in range(8):
+            theta = 2 * math.pi * k / 8.0
+            x1 = half + 0.18 * r * math.cos(theta)
+            y1 = half + 0.18 * r * math.sin(theta)
+            x2 = half + 0.72 * r * math.cos(theta)
+            y2 = half + 0.72 * r * math.sin(theta)
+            da.add_artist(plt.Line2D([x1, x2], [y1, y2], color=color, lw=1.0))
+        da.add_artist(mpatches.Circle((half, half), 0.15 * r, facecolor=color, edgecolor=color))
+    elif icon == "boundary":
+        da.add_artist(
+            mpatches.Arc(
+                (half - 0.15 * r, half),
+                0.85 * r,
+                1.05 * r,
+                angle=28,
+                theta1=35,
+                theta2=325,
+                color=color,
+                lw=1.5,
+            )
+        )
+        da.add_artist(
+            mpatches.Arc(
+                (half + 0.15 * r, half),
+                0.85 * r,
+                1.05 * r,
+                angle=28,
+                theta1=215,
+                theta2=145,
+                color=color,
+                lw=1.5,
+            )
+        )
+        da.add_artist(plt.Line2D([half - 0.35 * r, half + 0.35 * r], [half - 0.35 * r, half + 0.35 * r], color=color, lw=1.1))
+    elif icon == "target":
+        for scale, lw in [(0.76, 1.0), (0.48, 1.0), (0.18, 1.2)]:
+            da.add_artist(mpatches.Circle((half, half), scale * r, facecolor="none", edgecolor=color, linewidth=lw))
+        da.add_artist(
+            FancyArrowPatch(
+                (half + 0.18 * r, half + 0.18 * r),
+                (half + 0.78 * r, half + 0.78 * r),
+                arrowstyle="-|>",
+                mutation_scale=8,
+                color=color,
+                lw=1.2,
+            )
+        )
+    else:
+        x_left = half - 0.55 * r
+        x_right = half + 0.55 * r
+        y_base = half - 0.38 * r
+        y_top = half + 0.42 * r
+        for x0 in [x_left, x_right]:
+            da.add_artist(plt.Line2D([x0, x0], [y_base, y_top], color=color, lw=1.3))
+            da.add_artist(mpatches.Arc((x0, y_top), 0.52 * r, 0.70 * r, theta1=180, theta2=360, color=color, lw=1.3))
+        da.add_artist(plt.Line2D([x_left - 0.25 * r, x_right + 0.25 * r], [y_base, y_base], color=color, lw=1.3))
+        da.add_artist(plt.Line2D([x_left + 0.17 * r, x_right - 0.17 * r], [half + 0.18 * r, half + 0.18 * r], color=color, lw=1.2))
+
+    ab = AnnotationBbox(
+        da,
+        (cx, cy),
+        xycoords=ax.transAxes,
+        frameon=False,
+        box_alignment=(0.5, 0.5),
+        pad=0.0,
+        annotation_clip=False,
+    )
+    ab.set_zorder(8)
+    ax.add_artist(ab)
+
+
+def draw_parameter_interpretation_boxes(ax: plt.Axes, cfg: Dict[str, Any]) -> None:
+    pcfg = cfg.get("plot", {})
+    boxes = list(pcfg.get("parameter_interpretation_boxes") or [])
+    if not boxes:
+        return
+    n = min(len(boxes), 4)
+    box_width = min(max(float(pcfg.get("parameter_box_width", 0.18)), 0.12), 0.30)
+    box_height = min(max(float(pcfg.get("parameter_box_height", 0.34)), 0.18), 0.46)
+    box_gap = min(max(float(pcfg.get("parameter_box_gap", 0.035)), 0.0), 0.08)
+    total_width = min(n * box_width + (n - 1) * box_gap, 0.98)
+    if total_width < n * box_width:
+        box_width = (total_width - (n - 1) * box_gap) / n
+    left = 0.5 - 0.5 * total_width
+    y = float(pcfg.get("parameter_box_y", -0.56))
+    title_size = float(pcfg.get("parameter_box_title_size", 7.8))
+    formula_size = float(pcfg.get("parameter_box_formula_size", 8.2))
+    description_size = float(pcfg.get("parameter_box_description_size", 7.0))
+    show_icons = bool(pcfg.get("parameter_box_show_icons", False))
+    corner_radius = float(pcfg.get("parameter_box_corner_radius", 5.0))
+    linewidth = float(pcfg.get("parameter_box_linewidth", 0.75))
+    axes_width_pt = ax.get_position().width * ax.figure.get_figwidth() * 72.0
+    axes_height_pt = ax.get_position().height * ax.figure.get_figheight() * 72.0
+    box_width_pt = box_width * axes_width_pt
+    box_height_pt = box_height * axes_height_pt
+    for i, box in enumerate(boxes[:n]):
+        color = str(box.get("color") or "#6B7280")
+        x0 = left + i * (box_width + box_gap)
+        y0 = y - 0.5 * box_height
+        card = DrawingArea(box_width_pt, box_height_pt, 0, 0, clip=False)
+        card.add_artist(
+            mpatches.FancyBboxPatch(
+                (0, 0),
+                box_width_pt,
+                box_height_pt,
+                boxstyle=f"round,pad=0,rounding_size={corner_radius}",
+                facecolor="white",
+                edgecolor=color,
+                linewidth=linewidth,
+                alpha=0.98,
+            )
+        )
+        card_box = AnnotationBbox(
+            card,
+            (x0 + 0.5 * box_width, y),
+            xycoords=ax.transAxes,
+            frameon=False,
+            box_alignment=(0.5, 0.5),
+            pad=0.0,
+            annotation_clip=False,
+        )
+        card_box.set_zorder(5)
+        ax.add_artist(card_box)
+
+        if show_icons:
+            icon_cx = x0 + 0.105 * box_width
+            icon_cy = y
+            draw_parameter_card_icon(
+                ax,
+                str(box.get("icon") or "bridge"),
+                icon_cx,
+                icon_cy,
+                color,
+                size=float(box.get("icon_size", pcfg.get("parameter_box_icon_size", 34))),
+            )
+            text_x = x0 + 0.205 * box_width
+        else:
+            text_x = x0 + 0.070 * box_width
+        title = str(box.get("title") or "")
+        formula = str(box.get("formula") or box.get("text") or "")
+        description = str(box.get("description") or "")
+        if not title and formula:
+            parts = formula.split("=", 1)
+            title = parts[0].strip()
+            formula = parts[1].strip() if len(parts) > 1 else formula
+        ax.text(
+            text_x,
+            y0 + 0.73 * box_height,
+            title,
+            transform=ax.transAxes,
+            ha="left",
+            va="center",
+            fontsize=float(box.get("title_size", title_size)),
+            color=color,
+            fontweight="bold",
+            clip_on=False,
+            zorder=6,
+        )
+        ax.text(
+            text_x,
+            y0 + 0.50 * box_height,
+            formula,
+            transform=ax.transAxes,
+            ha="left",
+            va="center",
+            fontsize=float(box.get("formula_size", formula_size)),
+            color=str(box.get("formula_color") or "#111827"),
+            fontweight="bold",
+            clip_on=False,
+            zorder=6,
+        )
+        ax.text(
+            text_x,
+            y0 + 0.25 * box_height,
+            description,
+            transform=ax.transAxes,
+            ha="left",
+            va="center",
+            fontsize=float(box.get("description_size", description_size)),
+            color="#374151",
+            linespacing=1.12,
+            clip_on=False,
+            zorder=6,
+            wrap=True,
+        )
+
+
+def dominant_parameter_table(metrics: pd.DataFrame, cfg: Dict[str, Any]) -> pd.DataFrame:
+    rows: List[Dict[str, Any]] = []
+    trajectories = dominant_parameter_trajectories(metrics, cfg)
+    labels = [f"{int(a)}-{int(b)}" for a, b in zip(metrics["rolling_start"], metrics["rolling_end"])]
+    for trajectory in trajectories:
+        for i, value in enumerate(np.asarray(trajectory["values"], dtype=float)):
+            rows.append(
+                {
+                    "parameter": trajectory["key"],
+                    "label": trajectory["label"],
+                    "window_index": i + 1,
+                    "window": labels[i],
+                    "standardized_value": value,
+                }
+            )
+    return pd.DataFrame(rows)
+
+
 def draw_snapshot(
     ax: plt.Axes,
     G: nx.Graph,
@@ -1745,7 +2232,8 @@ def draw_snapshot(
     if prev_end_year:
         TGprev = filter_topic_graph_for_display(TGprev, prev_end_year, cfg["plot"])
 
-    ax.set_title(panel_label.replace("1-", "0-"), fontsize=10.5, pad=8, fontweight="bold")
+    year_label = str(panel_label).splitlines()[-1]
+    ax.set_title(year_label, fontsize=10.5, pad=8, fontweight="bold")
     ax.set_xticks([])
     ax.set_yticks([])
     ax.set_facecolor("white")
@@ -1940,71 +2428,91 @@ def draw_metric_panel(ax: plt.Axes, metrics: pd.DataFrame, cfg: Dict[str, Any], 
     if pcfg.get("metric_x_axis", "years") == "years":
         x = 0.5 * (metrics["rolling_start"].values.astype(float) + metrics["rolling_end"].values.astype(float))
         labels = [f"{int(a)}-{int(b)}" for a, b in zip(metrics["rolling_start"], metrics["rolling_end"])]
-        ax.set_xlim(float(cfg["start_year"]), float(cfg["end_year"] + 1))
-        ax.set_xlabel("Publication year / rolling citation-graph window", fontsize=8.5 if not compact else 7)
+        ax.set_xlim(float(metrics["rolling_start"].min()) - 0.5, float(metrics["rolling_end"].max()) + 1.0)
+        ax.set_xlabel("Rolling 5-year publication window", fontsize=8.5 if not compact else 7, labelpad=8 if not compact else 4)
     else:
         x = np.arange(len(metrics))
         labels = [str(v).split("\n")[0] for v in metrics["label"].tolist()]
-        ax.set_xticks(x)
-        ax.set_xticklabels(labels, fontsize=8 if not compact else 7)
-        ax.set_xlabel("Cumulative window", fontsize=8.5 if not compact else 7)
+        ax.set_xlim(-0.5, len(metrics) - 0.5)
+        ax.set_xlabel("Cumulative window", fontsize=8.5 if not compact else 7, labelpad=8 if not compact else 4)
 
-    for metric in METRIC_NAMES:
-        y = metrics[f"{metric}_index"].values
-        # Use 0-1 axis in compact schematic style; keep 0-100 if requested.
-        if pcfg.get("metric_scale", "unit") == "unit":
-            y = y / 100.0
+    x = np.asarray(x, dtype=float)
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, fontsize=8 if not compact else 6.5)
+
+    landmark_idx = landmark_window_index(metrics, cfg)
+    if landmark_idx is not None and 0 <= landmark_idx < len(metrics):
+        if pcfg.get("metric_x_axis", "years") == "years":
+            row = metrics.iloc[landmark_idx]
+            ax.axvspan(float(row["rolling_start"]), float(row["rolling_end"]) + 1.0, color="#FEE2E2", alpha=0.55, lw=0, zorder=0)
+        else:
+            ax.axvspan(float(landmark_idx) - 0.5, float(landmark_idx) + 0.5, color="#FEE2E2", alpha=0.55, lw=0, zorder=0)
+
+    trajectories = dominant_parameter_trajectories(metrics, cfg)
+    for trajectory in trajectories:
+        y = np.asarray(trajectory["values"], dtype=float)
         ax.plot(
             x,
             y,
             marker="o",
             linewidth=1.9 if not compact else 1.3,
             markersize=4.2 if not compact else 3.2,
-            label={
-                "Expansion": "Expansion: new nodes / edges",
-                "Bridging": "Bridging: cross-community paths",
-                "Reconfiguration": "Reconfiguration: community turnover",
-                "Compression": "Compression: path shortening",
-            }.get(metric, metric) if not compact else metric,
-            color=METRIC_COLORS[metric],
+            label=str(trajectory["label"]),
+            color=str(trajectory["color"]),
+            zorder=4,
         )
+        if landmark_idx is not None and 0 <= landmark_idx < len(y):
+            ax.scatter(
+                [x[landmark_idx]],
+                [y[landmark_idx]],
+                marker="*",
+                s=120 if not compact else 60,
+                color=str(trajectory["color"]),
+                edgecolors="white",
+                linewidths=0.6,
+                zorder=7,
+            )
 
-    unit = pcfg.get("metric_scale", "unit") == "unit"
-    ax.set_ylim(-0.03 if unit else -5, 1.08 if unit else 105)
-    ax.set_ylabel("Normalized\nperturbation score" if unit else "Perturbation\nintensity", fontsize=8.5 if not compact else 7)
-    ax.grid(True, axis="y", alpha=0.22, linewidth=0.6)
+    ax.axhline(0.0, color="#4B5563", lw=0.8, alpha=0.75, zorder=1)
+    ylim = pcfg.get("dominant_parameter_ylim")
+    if isinstance(ylim, (list, tuple)) and len(ylim) == 2:
+        ax.set_ylim(float(ylim[0]), float(ylim[1]))
+    else:
+        vals = np.concatenate([np.asarray(t["values"], dtype=float) for t in trajectories]) if trajectories else np.array([0.0])
+        lo, hi = float(np.nanmin(vals)), float(np.nanmax(vals))
+        pad = max(0.25, 0.16 * (hi - lo + 1e-9))
+        ax.set_ylim(min(lo - pad, -0.2), max(hi + pad, 0.8))
+
+    ax.set_ylabel(str(pcfg.get("metric_y_label", "Standardized\nparameter value")), fontsize=8.5 if not compact else 7)
+    ax.grid(True, axis="y", alpha=0.36, linewidth=0.6, linestyle=(0, (4, 4)))
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
-    ax.set_title("b  Perturbation fingerprint across rolling 5-year intervals", fontsize=10.5 if not compact else 8, fontweight="bold", loc="left")
+    title = str(pcfg.get("metric_panel_title", "Dominant parameter trajectories"))
+    ax.set_title(f"b  {title}", fontsize=10.5 if not compact else 8, fontweight="bold", loc="left")
 
-    # Mark the landmark event interval.
-    anchor_years = [year_int(a.get("year")) for a in cfg.get("anchors") or []]
-    anchor_years = [y for y in anchor_years if y]
-    if anchor_years:
-        y0, y1 = min(anchor_years) - 0.6, max(anchor_years) + 0.9
-        ax.axvspan(y0, y1, color="#FEE2E2", alpha=0.55, lw=0)
-        ylim = ax.get_ylim()
-        ax.text((y0 + y1) / 2, ylim[1] * 0.96, "landmark\ninnovation", ha="center", va="top", fontsize=7.4, color="#DC2626", fontweight="bold")
+    if landmark_idx is not None and 0 <= landmark_idx < len(x):
+        label = str(pcfg.get("metric_landmark_label", "")).strip()
+        if label:
+            ylim_now = ax.get_ylim()
+            ax.text(
+                float(x[landmark_idx]),
+                ylim_now[1] - 0.05 * (ylim_now[1] - ylim_now[0]),
+                label,
+                ha="center",
+                va="top",
+                fontsize=7.4 if not compact else 6.2,
+                color="#DC2626",
+                fontweight="bold",
+                zorder=9,
+            )
 
     if not compact:
-        ax.legend(ncol=2, fontsize=8, loc="upper left", frameon=False, columnspacing=1.6)
-        ax.text(
-            0.985,
-            0.47,
-            "Operational readout for a real dataset:\n"
-            "Expansion = growth of field-specific nodes/edges\n"
-            "Bridging = increase in inter-module paths\n"
-            "Reconfiguration = modularity/community change\n"
-            "Compression = shorter semantic/citation paths",
-            transform=ax.transAxes,
-            ha="right",
-            va="center",
-            fontsize=7.2,
-            color="#4B5563",
-            bbox=dict(boxstyle="round,pad=0.25", facecolor="white", edgecolor="#D1D5DB", alpha=0.90),
-        )
+        ncol = min(4, max(1, len(trajectories)))
+        ax.legend(ncol=ncol, fontsize=8, loc="upper left", frameon=False, columnspacing=1.4, handlelength=2.0)
+        draw_parameter_callouts(ax, x, trajectories, metrics, cfg)
+        draw_parameter_interpretation_boxes(ax, cfg)
     else:
-        ax.legend(fontsize=6.5, loc="upper left", frameon=False)
+        ax.legend(fontsize=6.3, loc="upper left", frameon=False)
 
 
 def draw_top_time_axis(ax: plt.Axes, result: "DomainResult") -> None:
@@ -2060,12 +2568,12 @@ def draw_single_domain_figure(result: "DomainResult", out_dir: Path) -> None:
         draw_top_time_axis(axt, result)
     else:
         axt.axis("off")
-    fig.text(0.012, 0.765, "a", fontsize=12, fontweight="bold")
-    fig.text(0.03, 0.765, "Cumulative citation knowledge graph snapshots", fontsize=11, fontweight="bold")
 
+    snapshot_axes: List[plt.Axes] = []
     for i, (_, end) in enumerate(result.cumulative_windows):
         prev_end = result.cumulative_windows[i - 1][1] if i > 0 else None
         ax = fig.add_subplot(gs[1, i])
+        snapshot_axes.append(ax)
         draw_snapshot(
             ax,
             result.G,
@@ -2082,6 +2590,35 @@ def draw_single_domain_figure(result: "DomainResult", out_dir: Path) -> None:
 
     axm = fig.add_subplot(gs[2, :])
     draw_metric_panel(axm, result.metrics, cfg, compact=False)
+    heading_x = axm.get_position().x0
+    fig.text(
+        heading_x,
+        0.765,
+        "a  Cumulative citation knowledge graph snapshots",
+        fontsize=11,
+        fontweight="bold",
+        ha="left",
+        va="center",
+    )
+    if pcfg.get("show_metric_connectors", True):
+        metric_bbox = axm.get_position()
+        for ax in snapshot_axes:
+            bbox = ax.get_position()
+            x_mid = 0.5 * (bbox.x0 + bbox.x1)
+            y_top = bbox.y0 - 0.012
+            y_bottom = metric_bbox.y1 + 0.012
+            if y_top > y_bottom:
+                fig.add_artist(
+                    plt.Line2D(
+                        [x_mid, x_mid],
+                        [y_bottom, y_top],
+                        transform=fig.transFigure,
+                        color="#9CA3AF",
+                        lw=0.8,
+                        linestyle=(0, (2, 2)),
+                        alpha=0.65,
+                    )
+                )
 
     if pcfg.get("show_retrieval_date", True):
         fig.text(
@@ -2156,15 +2693,16 @@ def draw_multi_domain_figure(results: Sequence["DomainResult"], out_dir: Path) -
             fontweight="bold",
         )
 
-    fig.text(
-        0.995,
-        0.005,
-        f"Data source: OpenAlex; generated {dt.date.today().isoformat()}",
-        ha="right",
-        va="bottom",
-        fontsize=7,
-        color="#6B7280",
-    )
+    if pcfg.get("show_retrieval_date", False):
+        fig.text(
+            0.995,
+            0.005,
+            f"Data source: OpenAlex; generated {dt.date.today().isoformat()}",
+            ha="right",
+            va="bottom",
+            fontsize=7,
+            color="#6B7280",
+        )
 
     for ext in ["png", "svg", "pdf"]:
         path = out_dir / f"fig1_multi_domain_real.{ext}"
@@ -2267,6 +2805,7 @@ def export_tables(result: DomainResult, out_dir: Path) -> None:
     pd.DataFrame(topic_edge_rows).to_csv(domain_dir / "topic_edges.csv", index=False)
 
     result.metrics.to_csv(domain_dir / "perturbation_metrics.csv", index=False)
+    dominant_parameter_table(result.metrics, cfg).to_csv(domain_dir / "dominant_parameter_trajectories.csv", index=False)
 
 
 def run_domain(cfg: Dict[str, Any], client: OpenAlexClient, out_dir: Path, use_cache: bool = True) -> DomainResult:

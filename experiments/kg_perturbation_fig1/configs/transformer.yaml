@@ -1,8 +1,8 @@
 domain_name: "Transformer and foundation models"
 slug: "transformer_foundation_models"
 search_query: '("statistical machine translation" OR "phrase-based machine translation" OR "language model" OR "word embedding" OR "sequence-to-sequence" OR "attention mechanism" OR "neural machine translation" OR "self-attention" OR "transformer architecture" OR "attention is all you need" OR "pre-trained language model" OR "BERT" OR "large language model" OR "foundation model")'
-start_year: 2000
-end_year: 2024
+start_year: 2002
+end_year: 2026
 window_size: 5
 language: "en"
 include_abstract: false
@@ -40,7 +40,7 @@ plot:
   title: "Fig. 1 | Citation knowledge-graph perturbation after a landmark innovation"
   subtitle: "Example domain: Transformer and foundation models. Real OpenAlex data; publication-style display uses data-derived topic snapshots."
   fig_width_single: 22
-  fig_height_single: 10.2
+  fig_height_single: 11.0
   dpi: 300
   display_mode: "cluster_schematic"
   display_max_topics: 8
@@ -58,6 +58,67 @@ plot:
   show_panel_captions: true
   metric_x_axis: "years"
   metric_scale: "unit"
+  metric_panel_title: "Dominant parameter trajectories explaining the graph transitions in panel a"
+  metric_y_label: "Standardized\nparameter value"
+  metric_landmark_label: ""
+  landmark_focus_year: 2017
+  dominant_parameter_ylim: [-1.5, 1.5]
+  dominant_parameters:
+    - key: "B"
+      label: "$B$ (bridge centrality)"
+    - key: "RTD"
+      label: "RTD (reference target diversity)"
+    - key: "Uzzi"
+      label: "Uzzi novelty (-p10)"
+    - key: "DeltaQ"
+      label: "$\\Delta Q$ directionality"
+  parameter_callouts:
+    - parameter: "B"
+      window: "landmark"
+      text: "architecture-level\nbridging"
+      dx: -4.0
+      dy: 0.35
+      color: "#1D4ED8"
+    - parameter: "Uzzi"
+      window: "landmark"
+      text: "atypical model\nrecombination"
+      dx: 2.2
+      dy: 0.35
+      color: "#7C3AED"
+    - parameter: "RTD"
+      window: "2020-2024"
+      text: "standardization into\nfoundation-model hubs"
+      dx: -3.8
+      dy: 0.30
+      color: "#F97316"
+  parameter_interpretation_boxes:
+    - title: "Bridging"
+      formula: "B up + RTD up"
+      description: "Architecture-level communities connect"
+      icon: "bridge"
+      color: "#1D4ED8"
+    - title: "Novelty"
+      formula: "Uzzi up"
+      description: "Attention-only recombination is atypical"
+      icon: "novelty"
+      color: "#7C3AED"
+    - title: "Standardization"
+      formula: "Uzzi down; B high"
+      description: "Convergence into foundation-model hubs"
+      icon: "target"
+      color: "#F97316"
+  parameter_box_width: 0.18
+  parameter_box_height: 0.34
+  parameter_box_gap: 0.035
+  parameter_box_y: -0.56
+  parameter_box_title_size: 7.8
+  parameter_box_formula_size: 8.2
+  parameter_box_description_size: 7.0
+  parameter_box_show_icons: false
+  parameter_box_corner_radius: 5.0
+  parameter_box_linewidth: 0.75
+  parameter_box_icon_size: 34
+  show_retrieval_date: false
   panel_captions:
     - "Statistical NLP priors"
     - "Phrase-based MT and LMs"

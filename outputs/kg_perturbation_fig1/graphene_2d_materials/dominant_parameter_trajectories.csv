@@ -1,0 +1,21 @@
+parameter,label,window_index,window,standardized_value
+RS,RS (reference span),1,1990-1994,1.8140107566296708
+RS,RS (reference span),2,1995-1999,0.3477257804671931
+RS,RS (reference span),3,2000-2004,-0.5774925547477288
+RS,RS (reference span),4,2005-2009,-0.7965721505283496
+RS,RS (reference span),5,2010-2014,-0.7876718318207854
+PDE,PDE (diffusion potential),1,1990-1994,-1.0829892615882937
+PDE,PDE (diffusion potential),2,1995-1999,-0.6909679245732762
+PDE,PDE (diffusion potential),3,2000-2004,-0.46632568232205
+PDE,PDE (diffusion potential),4,2005-2009,0.5621072600680334
+PDE,PDE (diffusion potential),5,2010-2014,1.6781756084155868
+Uzzi,Uzzi novelty (-p10),1,1990-1994,-1.706149803584044
+Uzzi,Uzzi novelty (-p10),2,1995-1999,0.10941417175365932
+Uzzi,Uzzi novelty (-p10),3,2000-2004,-0.2682691433053301
+Uzzi,Uzzi novelty (-p10),4,2005-2009,1.2971883126186508
+Uzzi,Uzzi novelty (-p10),5,2010-2014,0.5678164625170636
+DeltaQ,$\Delta Q$ directionality,1,1990-1994,0.0
+DeltaQ,$\Delta Q$ directionality,2,1995-1999,0.5488609133621869
+DeltaQ,$\Delta Q$ directionality,3,2000-2004,0.014310002770614666
+DeltaQ,$\Delta Q$ directionality,4,2005-2009,-2.3352520842996882
+DeltaQ,$\Delta Q$ directionality,5,2010-2014,-0.6373542218533409

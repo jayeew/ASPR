@@ -1,0 +1,21 @@
+parameter,label,window_index,window,standardized_value
+B,$B$ (bridge centrality),1,2000-2004,0.2
+B,$B$ (bridge centrality),2,2005-2009,0.35
+B,$B$ (bridge centrality),3,2010-2014,1.35
+B,$B$ (bridge centrality),4,2015-2019,1.4
+B,$B$ (bridge centrality),5,2020-2024,1.2
+RTD,RTD (reference target diversity),1,2000-2004,-0.6
+RTD,RTD (reference target diversity),2,2005-2009,-0.2
+RTD,RTD (reference target diversity),3,2010-2014,0.85
+RTD,RTD (reference target diversity),4,2015-2019,0.75
+RTD,RTD (reference target diversity),5,2020-2024,0.45
+Uzzi,Uzzi novelty (-p10),1,2000-2004,0.05
+Uzzi,Uzzi novelty (-p10),2,2005-2009,0.2
+Uzzi,Uzzi novelty (-p10),3,2010-2014,1.1
+Uzzi,Uzzi novelty (-p10),4,2015-2019,1.0
+Uzzi,Uzzi novelty (-p10),5,2020-2024,0.4
+DeltaQ,$\Delta Q$ directionality,1,2000-2004,-0.05
+DeltaQ,$\Delta Q$ directionality,2,2005-2009,-0.1
+DeltaQ,$\Delta Q$ directionality,3,2010-2014,-0.95
+DeltaQ,$\Delta Q$ directionality,4,2015-2019,-0.3
+DeltaQ,$\Delta Q$ directionality,5,2020-2024,0.1

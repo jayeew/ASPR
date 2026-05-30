@@ -1,5 +1,0 @@
-﻿after_community_id,status,is_new,matched_before_community_id,after_size,matched_before_size,overlap_with_before,jaccard_with_before,post_event_nodes,pre_event_nodes,post_event_share,dominant_field,dominant_topic,before_only_overlap_nodes
-0,inherited,False,0,125,101,100,0.7936507936507936,25,100,0.2,Cell Biology / Molecular Biology,Gene Regulation / Protein Interaction / Cell Signaling,100
-1,inherited,False,1,123,100,99,0.7983870967741935,24,99,0.1951219512195122,Optics / Astrophysics,Wave Function / Detector Design / Optical Measurement,99
-2,inherited,False,2,118,100,100,0.847457627118644,18,100,0.15254237288135594,Biochemistry / Organic Chemistry,Catalysis / Reaction Design / Molecular Assembly,100
-3,new,True,1,85,100,1,0.005434782608695652,83,2,0.9764705882352941,AI for Structural Biology / Optics,Protein Folding / Deep Learning / Structure Prediction,2

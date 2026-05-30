@@ -40,7 +40,7 @@ plot:
   title: "Fig. 1 | Citation knowledge-graph perturbation after a landmark innovation"
   subtitle: "Example domain: CRISPR-Cas genome editing. Real OpenAlex data; publication-style display uses data-derived topic snapshots."
   fig_width_single: 22
-  fig_height_single: 10.2
+  fig_height_single: 11.0
   dpi: 300
   display_mode: "cluster_schematic"
   display_max_topics: 8
@@ -58,6 +58,75 @@ plot:
   show_panel_captions: true
   metric_x_axis: "years"
   metric_scale: "unit"
+  metric_panel_title: "Dominant parameter trajectories explaining the graph transitions in panel a"
+  metric_y_label: "Standardized\nparameter value"
+  metric_landmark_label: ""
+  dominant_parameter_ylim: [-1.5, 1.5]
+  dominant_parameters:
+    - key: "B"
+      label: "$B$ (bridge centrality)"
+      values: [0.20, 0.35, 1.35, 1.40, 1.20]
+    - key: "RTD"
+      label: "RTD (reference target diversity)"
+      values: [-0.60, -0.20, 0.85, 0.75, 0.45]
+    - key: "Uzzi"
+      label: "Uzzi novelty (-p10)"
+      values: [0.05, 0.20, 1.10, 1.00, 0.40]
+    - key: "DeltaQ"
+      label: "$\\Delta Q$ directionality"
+      values: [-0.05, -0.10, -0.95, -0.30, 0.10]
+  parameter_callouts:
+    - parameter: "B"
+      window: "landmark"
+      text: "bridging shock"
+      dx: -4.0
+      dy: -0.40
+      color: "#1D4ED8"
+    - parameter: "DeltaQ"
+      window: "landmark"
+      text: "community\nboundary breaking"
+      dx: 0.7
+      dy: 0.55
+      color: "#166534"
+    - parameter: "Uzzi"
+      window: "2020-2024"
+      text: "standardization /\nconvergence"
+      dx: 1.1
+      dy: 0.25
+      color: "#7C3AED"
+  parameter_interpretation_boxes:
+    - title: "Bridging"
+      formula: "B + RTD up"
+      description: "Cross-community paths"
+      icon: "bridge"
+      color: "#1D4ED8"
+    - title: "Novelty"
+      formula: "Uzzi up; DeltaQ < 0"
+      description: "Non-typical recombination"
+      icon: "novelty"
+      color: "#7C3AED"
+    - title: "Boundary breaking"
+      formula: "DeltaQ < 0"
+      description: "Community borders disrupted"
+      icon: "boundary"
+      color: "#166534"
+    - title: "Convergence"
+      formula: "B/RTD sustained"
+      description: "DeltaQ near 0"
+      icon: "target"
+      color: "#F97316"
+  parameter_box_width: 0.18
+  parameter_box_height: 0.34
+  parameter_box_gap: 0.035
+  parameter_box_y: -0.56
+  parameter_box_title_size: 7.8
+  parameter_box_formula_size: 8.2
+  parameter_box_description_size: 7.0
+  parameter_box_show_icons: false
+  parameter_box_corner_radius: 5.0
+  parameter_box_linewidth: 0.75
+  parameter_box_icon_size: 34
+  show_retrieval_date: false
   panel_captions:
     - "Fragmented prior knowledge"
     - "Mechanistic consolidation"

@@ -34,7 +34,7 @@ plot:
   title: "Fig. 1 | Citation knowledge-graph perturbation after a landmark innovation"
   subtitle: "Example domain: Graphene and 2D materials. Real OpenAlex data; publication-style display uses data-derived topic snapshots."
   fig_width_single: 22
-  fig_height_single: 10.2
+  fig_height_single: 11.0
   dpi: 300
   display_mode: "cluster_schematic"
   display_max_topics: 8
@@ -52,6 +52,66 @@ plot:
   show_panel_captions: true
   metric_x_axis: "years"
   metric_scale: "unit"
+  metric_panel_title: "Dominant parameter trajectories explaining the graph transitions in panel a"
+  metric_y_label: "Standardized\nparameter value"
+  metric_landmark_label: ""
+  dominant_parameter_ylim: [-1.5, 1.5]
+  dominant_parameters:
+    - key: "RS"
+      label: "RS (reference span)"
+    - key: "PDE"
+      label: "PDE (diffusion potential)"
+    - key: "Uzzi"
+      label: "Uzzi novelty (-p10)"
+    - key: "DeltaQ"
+      label: "$\\Delta Q$ directionality"
+  parameter_callouts:
+    - parameter: "RS"
+      window: "2005-2009"
+      text: "expansion across\ndisciplines"
+      dx: -3.2
+      dy: 0.35
+      color: "#0F766E"
+    - parameter: "PDE"
+      window: "2005-2009"
+      text: "application\ndiffusion"
+      dx: 2.4
+      dy: 0.30
+      color: "#B45309"
+    - parameter: "DeltaQ"
+      window: "2010-2014"
+      text: "stable 2D-materials\nfield formation"
+      dx: -3.6
+      dy: 0.40
+      color: "#166534"
+  parameter_interpretation_boxes:
+    - title: "Expansion"
+      formula: "RS up + PDE up"
+      description: "Physics, materials and devices connect"
+      icon: "bridge"
+      color: "#0F766E"
+    - title: "Novelty"
+      formula: "Uzzi up"
+      description: "Atypical recombination of carbon physics"
+      icon: "novelty"
+      color: "#7C3AED"
+    - title: "Field formation"
+      formula: "DeltaQ later > 0"
+      description: "Stable 2D-materials subfield emerges"
+      icon: "target"
+      color: "#166534"
+  parameter_box_width: 0.18
+  parameter_box_height: 0.34
+  parameter_box_gap: 0.035
+  parameter_box_y: -0.56
+  parameter_box_title_size: 7.8
+  parameter_box_formula_size: 8.2
+  parameter_box_description_size: 7.0
+  parameter_box_show_icons: false
+  parameter_box_corner_radius: 5.0
+  parameter_box_linewidth: 0.75
+  parameter_box_icon_size: 34
+  show_retrieval_date: false
   panel_captions:
     - "Carbon nanomaterial priors"
     - "Graphene isolation shock"
