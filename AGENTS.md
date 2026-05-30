@@ -8,24 +8,25 @@ ASPR (Academic Scientific Paper Review) - Python system for automated academic p
 
 ```bash
 # Run main modules
-python open_scholar.py --s2_api_key <key> --large_model_port 38011
-python lats.py
-python graph_rag.py
-python pdf_downloader.py
+python -m aspr.open_scholar --s2_api_key <key> --large_model_port 38011
+python -m aspr.lats
+python -m aspr.graph_rag insert "paper/reference text"
+python -m aspr.graph_rag query "What is novel?"
+python -m aspr.pdf_downloader
 
 # Inline tests
-python -c "from pdf_downloader import ACLPDFDownloader; d = ACLPDFDownloader(); d.test_acl_download()"
-python test.py
+python -c "from aspr.pdf_downloader import test_acl_download; test_acl_download()"
+python tests/test_openai_client.py
 
 # Model training
-bash train_sft_qwen.sh        # Full fine-tuning
-bash train_sft_lora_qwen.sh   # LoRA fine-tuning
+bash scripts/train_sft_qwen.sh        # Full fine-tuning
+bash scripts/train_sft_lora_qwen.sh   # LoRA fine-tuning
 
 # Linting
 pip install black ruff mypy
-black *.py
-ruff check *.py
-mypy *.py --ignore-missing-imports
+black aspr scripts tests experiments
+ruff check aspr scripts tests experiments
+mypy aspr scripts tests experiments --ignore-missing-imports
 ```
 
 ## Code Style Guidelines
@@ -42,7 +43,7 @@ import os
 import json
 from typing import Optional, List, Dict, Any
 from langchain_openai import ChatOpenAI
-from prompts import generation_instance_prompts
+from aspr.prompts import generation_instance_prompts
 ```
 
 ### Naming Conventions
@@ -82,14 +83,17 @@ Key packages: `openai`, `langchain`, `pydantic`, `requests`, `pypdf`, `FlagEmbed
 
 ```
 ASPR/
-├── open_scholar.py     # Main reviewer, Semantic Scholar search
-├── lats.py            # Tree search with reflection (LATS)
-├── graph_rag.py       # GraphRAG with Ollama
-├── pdf_downloader.py  # ACL Anthology PDF downloader
-├── prompts.py         # LLM prompt templates
-├── hfdata_builder.py  # HuggingFace dataset builder
-├── test.py           # OpenAI client test
-└── train_sft_*.sh    # Fine-tuning scripts
+├── aspr/
+│   ├── open_scholar.py     # Main reviewer, Semantic Scholar search
+│   ├── lats.py            # Tree search with reflection (LATS)
+│   ├── graph_rag.py       # GraphRAG with Ollama
+│   ├── pdf_downloader.py  # ACL Anthology PDF downloader
+│   └── prompts.py         # LLM prompt templates
+├── scripts/               # Download, dataset build, and training scripts
+├── tests/                 # Lightweight manual checks
+├── data/                  # Cached JSON and local datasets
+├── outputs/               # Generated artifacts
+└── experiments/           # KG validation and perturbation experiments
 ```
 
 ## Development Notes

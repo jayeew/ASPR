@@ -5,7 +5,9 @@ import json
 import io
 import math
 import re
+import sys
 from collections import deque
+from pathlib import Path
 from typing import Optional, Literal, List, Dict, Any
 import backoff
 from contextlib import redirect_stdout
@@ -20,12 +22,22 @@ from langchain_core.runnables import chain as as_runnable
 from langchain_core.prompt_values import ChatPromptValue
 from langchain_core.runnables import RunnableConfig
 from collections import defaultdict
-from prompts import (
-    INNOVATION_GENERATION_PROMPT,
-    INNOVATION_REFLECTION_PROMPT,
-    INNOVATION_IMPROVEMENT_PROMPT,
-    FINAL_INNOVATION_REPORT_PROMPT,
-)
+
+if __package__ in {None, ""}:
+    sys.path.append(str(Path(__file__).resolve().parents[1]))
+    from aspr.prompts import (
+        FINAL_INNOVATION_REPORT_PROMPT,
+        INNOVATION_GENERATION_PROMPT,
+        INNOVATION_IMPROVEMENT_PROMPT,
+        INNOVATION_REFLECTION_PROMPT,
+    )
+else:
+    from .prompts import (
+        FINAL_INNOVATION_REPORT_PROMPT,
+        INNOVATION_GENERATION_PROMPT,
+        INNOVATION_IMPROVEMENT_PROMPT,
+        INNOVATION_REFLECTION_PROMPT,
+    )
 
 
 # ============================================================================

@@ -7,6 +7,8 @@ from pathlib import Path
 from typing import Optional, Dict, Any
 import random
 
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
 class ACLPDFDownloader:
     """
     专门针对ACL Anthology网站的PDF下载器
@@ -301,8 +303,8 @@ def test_acl_download():
     print("=" * 60)
     
     # 创建测试目录
-    test_dir = "./downloads"
-    Path(test_dir).mkdir(exist_ok=True)
+    test_dir = str(PROJECT_ROOT / "outputs" / "downloads" / "acl_tests")
+    Path(test_dir).mkdir(parents=True, exist_ok=True)
     
     # 测试URLs
     test_urls = [

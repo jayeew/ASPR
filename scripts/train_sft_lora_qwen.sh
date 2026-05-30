@@ -1,5 +1,9 @@
-set fileformat=unix
+#!/bin/bash
 set -x
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$PROJECT_ROOT"
 
 read -r -d '' training_commands <<EOF
 openrlhf.cli.train_sft \
@@ -11,7 +15,7 @@ openrlhf.cli.train_sft \
     --micro_train_batch_size 1 \
     --max_samples 36000 \
     --pretrain Qwen/Qwen3-8B \
-    --save_path ./checkpoint/qwen-8b-review-lora \
+    --save_path outputs/checkpoints/qwen-8b-review-lora \
     --save_steps -1 \
     --logging_steps 1 \
     --eval_steps -1 \

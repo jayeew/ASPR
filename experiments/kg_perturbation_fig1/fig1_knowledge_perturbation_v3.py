@@ -19,30 +19,33 @@ Typical usage
 -------------
 
     export OPENALEX_API_KEY="YOUR_KEY"
-    python fig1_knowledge_perturbation.py --config configs/crispr.yaml --out-dir results
+    python experiments/kg_perturbation_fig1/fig1_knowledge_perturbation_v3.py \
+        --config experiments/kg_perturbation_fig1/configs/crispr.yaml
 
 For a four-domain Nature-style Fig. 1:
 
-    python fig1_knowledge_perturbation.py \
-        --config configs/crispr.yaml configs/graphene.yaml configs/ipsc.yaml configs/transformer.yaml \
-        --out-dir results_multi
+    python experiments/kg_perturbation_fig1/fig1_knowledge_perturbation_v3.py \
+        --config experiments/kg_perturbation_fig1/configs/crispr.yaml \
+                 experiments/kg_perturbation_fig1/configs/graphene.yaml \
+                 experiments/kg_perturbation_fig1/configs/ipsc.yaml \
+                 experiments/kg_perturbation_fig1/configs/transformer.yaml
 
 Outputs
 -------
 
 For each domain, the script writes:
 
-    results/<slug>/works_raw.jsonl
-    results/<slug>/works_selected.csv
-    results/<slug>/paper_edges.csv
-    results/<slug>/topic_nodes.csv
-    results/<slug>/topic_edges.csv
-    results/<slug>/perturbation_metrics.csv
-    results/<slug>/fig1_<slug>_real.png/.svg/.pdf
+    outputs/kg_perturbation_fig1/<slug>/works_raw.jsonl
+    outputs/kg_perturbation_fig1/<slug>/works_selected.csv
+    outputs/kg_perturbation_fig1/<slug>/paper_edges.csv
+    outputs/kg_perturbation_fig1/<slug>/topic_nodes.csv
+    outputs/kg_perturbation_fig1/<slug>/topic_edges.csv
+    outputs/kg_perturbation_fig1/<slug>/perturbation_metrics.csv
+    outputs/kg_perturbation_fig1/<slug>/fig1_<slug>_real.png/.svg/.pdf
 
 If multiple configs are supplied, it additionally writes:
 
-    results_multi/fig1_multi_domain_real.png/.svg/.pdf
+    outputs/kg_perturbation_fig1/fig1_multi_domain_real.png/.svg/.pdf
 
 Notes
 -----
@@ -92,6 +95,9 @@ from tqdm import tqdm
 # -----------------------------------------------------------------------------
 # Configuration defaults
 # -----------------------------------------------------------------------------
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "outputs" / "kg_perturbation_fig1"
 
 SELECT_FIELDS = ",".join(
     [
@@ -2320,7 +2326,7 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
         required=True,
         help="One or more YAML config files. One file gives a single-domain figure; multiple files also create a multi-domain figure.",
     )
-    parser.add_argument("--out-dir", default="results", help="Output directory.")
+    parser.add_argument("--out-dir", default=str(DEFAULT_OUTPUT_DIR), help="Output directory.")
     parser.add_argument("--openalex-api-key", default=os.getenv("OPENALEX_API_KEY"), help="OpenAlex API key.")
     parser.add_argument("--email", default=os.getenv("OPENALEX_EMAIL"), help="Optional contact email for API calls.")
     parser.add_argument("--no-cache", action="store_true", help="Ignore cached works_raw.jsonl and re-download data.")

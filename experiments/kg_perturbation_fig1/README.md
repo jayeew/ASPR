@@ -12,10 +12,10 @@ The default example is CRISPR-Cas genome editing. Other fields can be generated 
 ## 1. Install
 
 ```bash
-cd kg_perturbation_fig1
+cd ASPR
 python -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+pip install matplotlib networkx numpy pandas requests pyyaml scikit-learn tqdm
 ```
 
 ## 2. Get an OpenAlex API key
@@ -35,15 +35,13 @@ export OPENALEX_EMAIL="your.email@example.com"
 ## 3. Run CRISPR
 
 ```bash
-python fig1_knowledge_perturbation.py \
-  --config configs/crispr.yaml \
-  --out-dir results
+bash experiments/kg_perturbation_fig1/run_crispr_example.sh
 ```
 
 Outputs will be saved under:
 
 ```text
-results/crispr/
+outputs/kg_perturbation_fig1/crispr/
 ```
 
 The main figure files are:
@@ -57,17 +55,19 @@ fig1_crispr_real.pdf
 ## 4. Run four fields for the full Fig. 1 layout
 
 ```bash
-python fig1_knowledge_perturbation.py \
-  --config configs/crispr.yaml configs/graphene.yaml configs/ipsc.yaml configs/transformer.yaml \
-  --out-dir results_multi
+python experiments/kg_perturbation_fig1/fig1_knowledge_perturbation_v3.py \
+  --config experiments/kg_perturbation_fig1/configs/crispr.yaml \
+           experiments/kg_perturbation_fig1/configs/graphene.yaml \
+           experiments/kg_perturbation_fig1/configs/ipsc.yaml \
+           experiments/kg_perturbation_fig1/configs/transformer.yaml
 ```
 
 The combined figure files are:
 
 ```text
-results_multi/fig1_multi_domain_real.png
-results_multi/fig1_multi_domain_real.svg
-results_multi/fig1_multi_domain_real.pdf
+outputs/kg_perturbation_fig1/fig1_multi_domain_real.png
+outputs/kg_perturbation_fig1/fig1_multi_domain_real.svg
+outputs/kg_perturbation_fig1/fig1_multi_domain_real.pdf
 ```
 
 ## 5. Replace CRISPR with another field

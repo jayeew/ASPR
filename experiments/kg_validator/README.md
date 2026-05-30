@@ -7,7 +7,7 @@
 ## 项目结构
 
 ```
-kg_validator/
+experiments/kg_validator/
 ├── fetcher.py        # OpenAlex API 数据拉取
 ├── graph_builder.py  # NetworkX 图构建 & 时间切片
 ├── metrics.py        # 七维指标计算（核心算法）
@@ -24,13 +24,13 @@ kg_validator/
 pip install networkx pandas numpy scipy matplotlib seaborn requests
 
 # 演示模式（合成数据，无需网络，立即验证逻辑）
-python main.py --mode demo
+python -m experiments.kg_validator.main --mode demo
 
 # 完整模式（从 OpenAlex 拉取真实数据）
-python main.py --mode full --email your@email.com
+python -m experiments.kg_validator.main --mode full --email your@email.com
 
 # DOI 驱动的论文前后知识图谱对比（三联图）
-python main.py --mode field_contrast \
+python -m experiments.kg_validator.main --mode field_contrast \
   --paper-dois "10.1038/s41586-021-03819-2" \
   --event-label "AlphaFold neighborhood" \
   --neighbor-citers-per-target 500 \
@@ -38,14 +38,14 @@ python main.py --mode field_contrast \
   --email your@email.com
 
 # 目标论文发表前后对比（以论文发表年为分界点）
-python main.py --mode paper_contrast \
+python -m experiments.kg_validator.main --mode paper_contrast \
   --filter "concepts.id:C86803240,type:article" \
   --paper-dois "10.1038/s41586-021-03819-2" \
   --event-label "AlphaFold release" \
   --email your@email.com
 
 # 纯论文邻域模式（不指定领域范围）
-python main.py --mode paper_neighborhood_contrast \
+python -m experiments.kg_validator.main --mode paper_neighborhood_contrast \
   --paper-dois "10.1038/s41586-021-03819-2" \
   --event-label "AlphaFold neighborhood" \
   --neighbor-max-refs 20 \
@@ -54,7 +54,7 @@ python main.py --mode paper_neighborhood_contrast \
   --email your@email.com
 ```
 
-输出文件保存在 `output/` 目录下：
+输出文件默认保存在 `outputs/kg_validator/` 目录下：
 
 | 文件 | 内容 |
 |------|------|
@@ -95,7 +95,7 @@ python main.py --mode paper_neighborhood_contrast \
 ### 命令模板
 
 ```bash
-python main.py --mode field_contrast \
+python -m experiments.kg_validator.main --mode field_contrast \
   --paper-dois "10.1038/s41586-021-03819-2" \
   --event-label "AlphaFold neighborhood" \
   --before-years 10 \
@@ -111,7 +111,7 @@ python main.py --mode field_contrast \
 多篇论文可以用英文逗号分隔：
 
 ```bash
-python main.py --mode field_contrast \
+python -m experiments.kg_validator.main --mode field_contrast \
   --paper-dois "10.1038/s41586-021-03819-2,10.1126/science.1225829" \
   --email your@email.com
 ```
@@ -161,7 +161,7 @@ python main.py --mode field_contrast \
 
 ### Demo 的意义
 
-`python main.py --mode demo` 现在除了原来的七维指标图，还会额外生成一张**保证能看出新社群**的三联图，方便你在论文、汇报或方法章节里先展示“图谱结构变化”这一事实，再自然引出七个评价维度。
+`python -m experiments.kg_validator.main --mode demo` 现在除了原来的七维指标图，还会额外生成一张**保证能看出新社群**的三联图，方便你在论文、汇报或方法章节里先展示“图谱结构变化”这一事实，再自然引出七个评价维度。
 
 ---
 
@@ -177,7 +177,7 @@ python main.py --mode field_contrast \
 ### 命令模板
 
 ```bash
-python main.py --mode paper_contrast \
+python -m experiments.kg_validator.main --mode paper_contrast \
   --filter "concepts.id:C86803240,type:article" \
   --paper-dois "10.1038/s41586-021-03819-2" \
   --before-years 10 \
@@ -190,7 +190,7 @@ python main.py --mode paper_contrast \
 也可以一次传多篇论文：
 
 ```bash
-python main.py --mode paper_contrast \
+python -m experiments.kg_validator.main --mode paper_contrast \
   --filter "concepts.id:C86803240,type:article" \
   --paper-ids "W3177828909,W2038196424" \
   --email your@email.com
@@ -210,12 +210,12 @@ python main.py --mode paper_contrast \
 下面这条命令：
 
 ```bash
-python kg_validator/main.py --mode paper_contrast \
+python -m experiments.kg_validator.main --mode paper_contrast \
   --filter "primary_location.source.id:S137773608,type:article" \
   --paper-dois "10.1038/s41586-021-03819-2" \
   --before-years 10 \
   --after-years 5 \
-  --output-dir output \
+  --output-dir outputs/kg_validator \
   --email your@email.com
 ```
 
@@ -223,13 +223,13 @@ python kg_validator/main.py --mode paper_contrast \
 
 | 参数 | 作用 | 直观解释 |
 |------|------|----------|
-| `python kg_validator/main.py` | 运行主入口脚本 | 启动整个知识图谱分析流程 |
+| `python -m experiments.kg_validator.main` | 运行主入口模块 | 启动整个知识图谱分析流程 |
 | `--mode paper_contrast` | 选择“领域限定版的论文前后对比模式” | 在**你指定的领域范围内**，观察目标论文发表前后图谱有没有结构变化 |
 | `--filter "primary_location.source.id:S137773608,type:article"` | 限定背景知识图谱的取样范围 | 只抓满足该 OpenAlex filter 的论文；这里的意思是“只取某个 `source.id=S137773608` 下、类型为 `article` 的论文” |
 | `--paper-dois "10.1038/s41586-021-03819-2"` | 指定要分析的目标论文 | 程序会先去 OpenAlex 用 DOI 找到这篇论文，再读取它的发表年份作为时间分界点 |
 | `--before-years 10` | 事件前窗口长度 | 如果目标论文发表于 `Y` 年，则前图使用 `Y-10` 到 `Y-1` 的论文 |
 | `--after-years 5` | 事件后窗口长度 | 后图使用 `Y-10` 到 `Y+5` 的论文；这样可以比较论文发表后 5 年内图谱是否重组 |
-| `--output-dir output` | 指定结果保存目录 | 生成的 PNG、CSV、GraphML 都会落在 `output/` 下 |
+| `--output-dir outputs/kg_validator` | 指定结果保存目录 | 生成的 PNG、CSV、GraphML 都会落在 `outputs/kg_validator/` 下 |
 | `--email your@email.com` | 给 OpenAlex API 传入 `mailto` | 建议换成你自己的邮箱，便于 API 识别请求来源 |
 
 这条命令的真实含义是：
@@ -287,7 +287,7 @@ python kg_validator/main.py --mode paper_contrast \
 ### 命令模板
 
 ```bash
-python main.py --mode paper_neighborhood_contrast \
+python -m experiments.kg_validator.main --mode paper_neighborhood_contrast \
   --paper-dois "10.1038/s41586-021-03819-2" \
   --before-years 10 \
   --after-years 5 \
@@ -310,14 +310,14 @@ python main.py --mode paper_neighborhood_contrast \
 下面这条命令：
 
 ```bash
-python kg_validator/main.py --mode paper_neighborhood_contrast \
+python -m experiments.kg_validator.main --mode paper_neighborhood_contrast \
   --paper-dois "10.1038/s41586-021-03819-2" \
   --before-years 10 \
   --after-years 5 \
   --neighbor-max-refs 20 \
   --neighbor-citers-per-target 500 \
   --neighbor-citers-per-ref 500 \
-  --output-dir output \
+  --output-dir outputs/kg_validator \
   --email your@email.com
 ```
 
@@ -332,7 +332,7 @@ python kg_validator/main.py --mode paper_neighborhood_contrast \
 | `--neighbor-max-refs 20` | 邻域种子参考文献上限 | 最多从目标论文的参考文献列表中纳入 `20` 篇作为局部图谱的起点 |
 | `--neighbor-citers-per-target 500` | 目标论文施引样本上限 | 最多抓取 `500` 篇“引用了目标论文”的论文，可继续调高 |
 | `--neighbor-citers-per-ref 500` | 参考文献施引样本上限 | 对每篇参考文献，再最多抓取 `500` 篇“引用了该参考文献”的论文，可继续调高 |
-| `--output-dir output` | 指定结果保存目录 | 所有输出文件写到 `output/` |
+| `--output-dir outputs/kg_validator` | 指定结果保存目录 | 所有输出文件写到 `outputs/kg_validator/` |
 | `--email your@email.com` | 给 OpenAlex API 传入 `mailto` | 实际运行时建议替换成你的真实邮箱 |
 
 这条命令的真实含义是：
@@ -556,9 +556,9 @@ CIS(p) = w1·B̂ + w2·RS ̂ + w3·(−δQ̂) + w4·(−Uzzi_p10 ̂) + w5·RTD �
 
 ```python
 import networkx as nx
-from fetcher import fetch_works_by_doi, normalize_work
-from graph_builder import build_graph
-from metrics import compute_all_metrics_for_paper, _build_journal_copair_baseline
+from experiments.kg_validator.fetcher import fetch_works_by_doi, normalize_work
+from experiments.kg_validator.graph_builder import build_graph
+from experiments.kg_validator.metrics import compute_all_metrics_for_paper, _build_journal_copair_baseline
 
 # 1. 拉取新论文及其参考文献（只需参考文献列表，无需等待引用）
 works_raw = fetch_works_by_doi(["10.xxxx/your.new.paper"], email="you@email.com")

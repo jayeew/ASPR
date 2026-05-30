@@ -21,7 +21,7 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 
-from metrics import (
+from .metrics import (
     _build_journal_copair_baseline,
     compute_all_metrics_for_paper,
     compute_betweenness,
@@ -1992,7 +1992,7 @@ def run_field_contrast(
     Returns:
         FieldContrastResult: 完整对比结果。
     """
-    from graph_builder import slice_graph_by_year, write_graphml_safe
+    from .graph_builder import slice_graph_by_year, write_graphml_safe
 
     before_start = spec.event_year - spec.before_years
     before_end = spec.event_year - 1
@@ -2127,7 +2127,7 @@ def run_comparison(
     Returns:
         ComparisonResult: 指标对比结果。
     """
-    from graph_builder import slice_graph_by_year
+    from .graph_builder import slice_graph_by_year
 
     y = case.nobel_year
     log.info(f"\n{'=' * 60}")
@@ -2387,7 +2387,7 @@ def plot_modularity_timeline(
         G_full: 全量图谱。
         save_path: 输出路径。
     """
-    from graph_builder import slice_graph_by_year
+    from .graph_builder import slice_graph_by_year
 
     fig, ax = plt.subplots(figsize=(12, 5))
     colors = plt.cm.tab10(np.linspace(0, 1, len(results)))

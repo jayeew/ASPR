@@ -1,6 +1,8 @@
-import os
-import sys
+import argparse
 import logging
+import os
+from pathlib import Path
+
 import ollama
 import numpy as np
 from nano_graphrag import GraphRAG, QueryParam
@@ -10,7 +12,8 @@ from nano_graphrag._utils import compute_args_hash, wrap_embedding_func_with_att
 logging.basicConfig(level=logging.WARNING)
 logging.getLogger("nano-graphrag").setLevel(logging.INFO)
 
-WORKING_DIR = "./dickens"
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+WORKING_DIR = str(PROJECT_ROOT / "outputs" / "graphrag")
 # Assumed llm model settings
 MODEL = "qwen3:8b"
 
@@ -58,6 +61,7 @@ def remove_if_exist(file):
 
 
 def query(query:str, mode:str='global'):
+    Path(WORKING_DIR).mkdir(parents=True, exist_ok=True)
     rag = GraphRAG(
         working_dir=WORKING_DIR,
         best_model_func=ollama_model_if_cache,
@@ -80,6 +84,7 @@ def insert(message:str):
     # remove_if_exist(f"{WORKING_DIR}/kv_store_community_reports.json")
     # remove_if_exist(f"{WORKING_DIR}/graph_chunk_entity_relation.graphml")
 
+    Path(WORKING_DIR).mkdir(parents=True, exist_ok=True)
     rag = GraphRAG(
         working_dir=WORKING_DIR,
         enable_llm_cache=True,
@@ -109,5 +114,13 @@ async def ollama_embedding(texts: list[str]) -> np.ndarray:
 
 
 if __name__ == "__main__":
-    insert()
-    query()
+    parser = argparse.ArgumentParser(description="GraphRAG helper backed by Ollama.")
+    parser.add_argument("action", choices=["insert", "query"], help="Operation to run.")
+    parser.add_argument("text", help="Text to insert or query.")
+    parser.add_argument("--mode", default="global", help="GraphRAG query mode.")
+    args = parser.parse_args()
+
+    if args.action == "insert":
+        insert(args.text)
+    else:
+        print(query(args.text, mode=args.mode))

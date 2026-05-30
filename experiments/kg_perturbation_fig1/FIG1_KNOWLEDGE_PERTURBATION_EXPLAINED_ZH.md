@@ -7,7 +7,7 @@
 
 对应源码：
 
-- `kg_perturbation_fig1_code/kg_perturbation_fig1/fig1_knowledge_perturbation_v3.py`
+- `experiments/kg_perturbation_fig1/fig1_knowledge_perturbation_v3.py`
 
 ---
 
@@ -914,4 +914,3 @@ v3 导出的是 `TG_display` 的边，不是完整 `TG_full`。
    - `draw_metric_panel()`
 
 因为你这次特别关心“图中数据和标题来历”，这两个函数就是最核心的答案。
-

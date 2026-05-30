@@ -1,5 +1,10 @@
 
+from pathlib import Path
+
 from openai import OpenAI
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+TEMP_PROMPT_PATH = PROJECT_ROOT / "outputs" / "temp.json"
 
 if __name__ == '__main__':
     client_large = OpenAI(
@@ -7,7 +12,7 @@ if __name__ == '__main__':
             base_url=f'http://localhost:{38011}/v1',
     )
 
-    with open("temp.json", "r") as file:
+    with TEMP_PROMPT_PATH.open("r", encoding="utf-8") as file:
         input_query = file.read()
     # print(input_query)
     response = client_large.chat.completions.create(
@@ -20,4 +25,3 @@ if __name__ == '__main__':
     )
     content = response.choices[0].message.content
     print(content)
-

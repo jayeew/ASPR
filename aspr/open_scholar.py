@@ -1,16 +1,31 @@
 import argparse
-from langchain_openai import ChatOpenAI
-import requests
 import json
 import os
-# import graph_rag
+import sys
 from pathlib import Path
+
+import requests
+from FlagEmbedding import BGEM3FlagModel,FlagReranker
 from openai import OpenAI
 from pypdf import PdfReader
-from FlagEmbedding import BGEM3FlagModel,FlagReranker
-from prompts import generation_instance_prompts_summarization, prompts_keywords_extraction
-from pdf_downloader import ACLPDFDownloader
-from lats import evaluate_paper_innovation
+
+if __package__ in {None, ""}:
+    sys.path.append(str(Path(__file__).resolve().parents[1]))
+    from aspr.lats import evaluate_paper_innovation
+    from aspr.pdf_downloader import ACLPDFDownloader
+    from aspr.prompts import generation_instance_prompts_summarization, prompts_keywords_extraction
+else:
+    from .lats import evaluate_paper_innovation
+    from .pdf_downloader import ACLPDFDownloader
+    from .prompts import generation_instance_prompts_summarization, prompts_keywords_extraction
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+DATA_DIR = PROJECT_ROOT / "data"
+OUTPUTS_DIR = PROJECT_ROOT / "outputs"
+DOWNLOAD_DIR = OUTPUTS_DIR / "downloads"
+MOST_RELATED_PAPERS_PATH = DATA_DIR / "most_related_paper.json"
+TOTAL_RELATED_PAPERS_PATH = DATA_DIR / "total_related_papers.json"
+TEMP_PROMPT_PATH = OUTPUTS_DIR / "temp.json"
 
 def keywords_extract(query):
     from langchain_openai import ChatOpenAI
@@ -89,8 +104,8 @@ class Reviewer:
         self.client_large = None
         self.open_scholar = None
         self.pdf_downloader = ACLPDFDownloader(max_retries=2, retry_delay=3.0)
-        self.save_path = "./downloads"
-        Path(self.save_path).mkdir(exist_ok=True)
+        self.save_path = str(DOWNLOAD_DIR)
+        DOWNLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
         self.initialize_models()
 
@@ -105,21 +120,23 @@ class Reviewer:
         )
 
     def __call__(self, title, abstract, key_words):
+        DATA_DIR.mkdir(parents=True, exist_ok=True)
+
         # 检查 most_related_paper.json 是否存在
-        if os.path.exists("most_related_paper.json"):
-            print("Loading papers from most_related_paper.json...")
-            with open("most_related_paper.json", "r") as file:
+        if MOST_RELATED_PAPERS_PATH.exists():
+            print(f"Loading papers from {MOST_RELATED_PAPERS_PATH}...")
+            with MOST_RELATED_PAPERS_PATH.open("r", encoding="utf-8") as file:
                 paper_after_retrieval = json.load(file)
             print(f"Loaded {len(paper_after_retrieval)} papers from cache.")
         else:
             if not key_words:
                 key_words = keywords_extract(abstract)
-            if os.path.exists("total_related_papers.json"):
-                with open("total_related_papers.json", "r") as file:
+            if TOTAL_RELATED_PAPERS_PATH.exists():
+                with TOTAL_RELATED_PAPERS_PATH.open("r", encoding="utf-8") as file:
                     papers = [json.loads(line.strip()) for line in file if line.strip()]
             else:
                 papers = self.open_scholar.search_semantic_scholar(key_words)
-                with open("total_related_papers.json", "w") as file:
+                with TOTAL_RELATED_PAPERS_PATH.open("w", encoding="utf-8") as file:
                     for paper in papers:
                         print(json.dumps(paper), file=file)
             
@@ -150,9 +167,9 @@ class Reviewer:
                     paper_after_retrieval.append(Id2paper[paper_id])
             
             # 保存检索结果到 most_related_paper.json
-            with open("most_related_paper.json", "w") as file:
+            with MOST_RELATED_PAPERS_PATH.open("w", encoding="utf-8") as file:
                 json.dump(paper_after_retrieval, file, indent=2)
-            print(f"Saved {len(paper_after_retrieval)} papers to most_related_paper.json")
+            print(f"Saved {len(paper_after_retrieval)} papers to {MOST_RELATED_PAPERS_PATH}")
 
         
         reviews = evaluate_paper_innovation(
@@ -217,7 +234,8 @@ class Reviewer:
         })
         input_query = self._formate_llama3_prompt(input_query)
 
-        with open("temp.json", "w") as file:
+        OUTPUTS_DIR.mkdir(parents=True, exist_ok=True)
+        with TEMP_PROMPT_PATH.open("w", encoding="utf-8") as file:
             print(json.dumps(input_query), file=file)
 
         # response = self.client_large.chat.completions.create(
@@ -297,8 +315,8 @@ class OpenScholar:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='OpenScholar API Server')
-    parser.add_argument('--s2_api_key', type=str, default='RdC229ErL37in7bNEmR7W5MFVrd3pzpv1SWWbrLt',
-                        help='Semantic Scholar API key')
+    parser.add_argument('--s2_api_key', type=str, default=os.getenv("S2_API_KEY", ""),
+                        help='Semantic Scholar API key or S2_API_KEY environment variable')
     parser.add_argument('--large_model', type=str, default='OpenSciLM/Llama-3.1_OpenScholar-8B',
                         help='Large model name')
     parser.add_argument('--large_model_port', type=int, default=38011,

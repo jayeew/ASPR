@@ -3,17 +3,17 @@ main.py — 主程序入口
 
 使用方式:
     # 演示模式（合成数据，无需网络）
-    python main.py --mode demo
+    python -m experiments.kg_validator.main --mode demo
 
     # 完整模式（从 OpenAlex 拉取真实数据，需要网络）
-    python main.py --mode full --email your@email.com
+    python -m experiments.kg_validator.main --mode full --email your@email.com
 
     # DOI 驱动的论文前后知识图谱对比
-    python main.py --mode field_contrast \
+    python -m experiments.kg_validator.main --mode field_contrast \
         --paper-dois "10.1038/s41586-021-03819-2"
 
     # 兼容旧用法：领域图谱时间节点前后对比
-    python main.py --mode field_contrast --filter "concepts.id:C123,type:article" \
+    python -m experiments.kg_validator.main --mode field_contrast --filter "concepts.id:C123,type:article" \
         --event-year 2024 --event-label "Nobel Prize 2024"
 """
 
@@ -27,12 +27,17 @@ from pathlib import Path
 import networkx as nx
 import numpy as np
 
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "outputs" / "kg_validator"
+LOG_DIR = PROJECT_ROOT / "outputs" / "logs"
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler("kg_validator.log", encoding="utf-8"),
+        logging.FileHandler(LOG_DIR / "kg_validator.log", encoding="utf-8"),
     ],
 )
 log = logging.getLogger(__name__)
@@ -115,7 +120,7 @@ def _load_target_works(args: argparse.Namespace) -> list[dict]:
     Returns:
         list[dict]: 标准化后的目标论文列表。
     """
-    from fetcher import fetch_works_batch_ids, fetch_works_by_doi, normalize_work
+    from .fetcher import fetch_works_batch_ids, fetch_works_by_doi, normalize_work
 
     raw_target_works: list[dict] = []
     paper_dois = _split_cli_list(args.paper_dois)
@@ -156,8 +161,8 @@ def build_paper_neighborhood_graph(
     Returns:
         nx.DiGraph: 邻域知识图谱。
     """
-    from fetcher import fetch_citing_works, fetch_works_batch_ids, normalize_work
-    from graph_builder import build_graph, build_node_attributes
+    from .fetcher import fetch_citing_works, fetch_works_batch_ids, normalize_work
+    from .graph_builder import build_graph, build_node_attributes
 
     target_years = [work["year"] for work in target_works if work.get("year") is not None]
     if not target_years:
@@ -455,8 +460,8 @@ def run_demo_mode(output_dir: Path):
     Returns:
         tuple: ComparisonResult 与 FieldContrastResult。
     """
-    from graph_builder import slice_graph_by_year
-    from comparator import (
+    from .graph_builder import slice_graph_by_year
+    from .comparator import (
         ComparisonResult,
         FieldContrastResult,
         FieldContrastSpec,
@@ -558,15 +563,15 @@ def run_full_mode(args: argparse.Namespace) -> None:
     Args:
         args: 命令行参数。
     """
-    from comparator import (
+    from .comparator import (
         NobelCase,
         export_results_to_csv,
         plot_before_after_bars,
         plot_radar,
         run_comparison,
     )
-    from fetcher import fetch_works_batch_ids, fetch_works_cursor, normalize_work
-    from graph_builder import build_graph, build_node_attributes, write_graphml_safe
+    from .fetcher import fetch_works_batch_ids, fetch_works_cursor, normalize_work
+    from .graph_builder import build_graph, build_node_attributes, write_graphml_safe
 
     output_dir = Path(args.output_dir)
     output_dir.mkdir(exist_ok=True)
@@ -632,9 +637,9 @@ def run_field_contrast_mode(args: argparse.Namespace) -> None:
         )
         return
 
-    from comparator import FieldContrastSpec, run_field_contrast
-    from fetcher import fetch_works_cursor, normalize_work
-    from graph_builder import build_graph
+    from .comparator import FieldContrastSpec, run_field_contrast
+    from .fetcher import fetch_works_cursor, normalize_work
+    from .graph_builder import build_graph
 
     output_dir = Path(args.output_dir)
     output_dir.mkdir(exist_ok=True)
@@ -674,9 +679,9 @@ def run_paper_contrast_mode(args: argparse.Namespace) -> None:
     Args:
         args: 命令行参数。
     """
-    from comparator import FieldContrastSpec, run_field_contrast
-    from fetcher import fetch_works_cursor, normalize_work
-    from graph_builder import build_graph, build_node_attributes
+    from .comparator import FieldContrastSpec, run_field_contrast
+    from .fetcher import fetch_works_cursor, normalize_work
+    from .graph_builder import build_graph, build_node_attributes
 
     output_dir = Path(args.output_dir)
     output_dir.mkdir(exist_ok=True)
@@ -758,7 +763,7 @@ def _run_target_neighborhood_contrasts(
         slug_prefix: 输出文件名 slug 前缀。
         filter_query: 写入结果配置的图谱来源说明。
     """
-    from comparator import FieldContrastSpec, run_field_contrast
+    from .comparator import FieldContrastSpec, run_field_contrast
 
     output_dir = Path(args.output_dir)
     output_dir.mkdir(exist_ok=True)
@@ -847,7 +852,7 @@ def parse_args() -> argparse.Namespace:
         default="full",
     )
     parser.add_argument("--email", default="jayeew@qq.com")
-    parser.add_argument("--output_dir", "--output-dir", dest="output_dir", default="output")
+    parser.add_argument("--output_dir", "--output-dir", dest="output_dir", default=str(DEFAULT_OUTPUT_DIR))
     parser.add_argument("--max_records", "--max-records", dest="max_records", type=int, default=None)
     parser.add_argument("--filter", dest="filter_query", default="")
     parser.add_argument("--event-year", dest="event_year", type=int, default=None)

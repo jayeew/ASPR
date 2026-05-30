@@ -3,9 +3,10 @@
 # 使用方式: ./download_six_journals_2023_2025.sh  或  bash download_six_journals_2023_2025.sh
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$PROJECT_ROOT"
 
-PYTHON_SCRIPT="download_nature.py"
+PYTHON_SCRIPT="$SCRIPT_DIR/download_nature.py"
 YEARS=(2023 2024 2025)
 FAILED=()
 

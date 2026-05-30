@@ -13,6 +13,7 @@ import json
 import logging
 import argparse
 from datetime import datetime
+from pathlib import Path
 from typing import List, Dict, Tuple, Optional, Generator
 from urllib.parse import quote, urlencode
 from xml.etree import ElementTree as ET
@@ -20,12 +21,17 @@ from xml.etree import ElementTree as ET
 import requests
 from tqdm import tqdm
 
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+OUTPUTS_DIR = PROJECT_ROOT / "outputs"
+LOG_DIR = OUTPUTS_DIR / "logs"
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+
 # 配置日志
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(f'nature_download_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'),
+        logging.FileHandler(LOG_DIR / f'nature_download_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log'),
         logging.StreamHandler()
     ]
 )
@@ -650,7 +656,11 @@ class PubMedNatureDownloader:
         self._journal_id = str(journal_id)
         self._year = year
         if output_dir is None:
-            output_dir = f"nature_pdfs_{self._journal_id}_{year}"
+            output_dir_path = OUTPUTS_DIR / "downloads" / f"nature_pdfs_{self._journal_id}_{year}"
+        else:
+            output_dir_path = Path(output_dir)
+        output_dir_path.mkdir(parents=True, exist_ok=True)
+        output_dir = str(output_dir_path)
         
         logger.info("=" * 60)
         logger.info(f"{journal_name} ({journal_id}) {year} 年 文章下载器")
@@ -709,8 +719,8 @@ class PubMedNatureDownloader:
 
         
         # 5. 保存结果
-        output_file = f"nature_articles_{self._journal_id}_{year}.txt"
-        self.save_results(valid_dois, pdf_urls, output_file=output_file)
+        output_file = output_dir_path / f"nature_articles_{self._journal_id}_{year}.txt"
+        self.save_results(valid_dois, pdf_urls, output_file=str(output_file))
         
         # 6. 输出统计
         logger.info("=" * 60)
@@ -731,8 +741,8 @@ def main():
     parser.add_argument('--year', type=int, default=2023, help='下载年份')
     parser.add_argument('--journal-id', type=str, default='41551',
                         help='杂志编号（如 41551 对应 Nature Biomedical Engineering，41467 对应 Nature Communications）')
-    parser.add_argument('--email', type=str, default='fprb011320@gmail.com', help='您的邮箱（NCBI要求）')
-    parser.add_argument('--api-key', type=str, default='0915e974e24c921b176647f155bb4a264908', help='NCBI API密钥（可选）')
+    parser.add_argument('--email', type=str, default=os.getenv("NCBI_EMAIL", ""), help='您的邮箱（NCBI要求，也可设置 NCBI_EMAIL）')
+    parser.add_argument('--api-key', type=str, default=os.getenv("NCBI_API_KEY", ""), help='NCBI API密钥（可选，也可设置 NCBI_API_KEY）')
     parser.add_argument('--no-download', action='store_true', help='只生成链接，不下载PDF')
     parser.add_argument('--test', action='store_true', default=False, help='测试模式（只处理前10篇）')
     parser.add_argument('--output-dir', type=str, default=None,
@@ -749,7 +759,8 @@ def main():
     print(f"API密钥: {'已提供' if args.api_key else '未提供'}")
     print(f"下载PDF: {'否' if args.no_download else '是'}")
     print(f"测试模式: {'是' if args.test else '否'}")
-    print(f"输出目录: {f'nature_pdfs_{args.journal_id}_{args.year}'}")
+    default_output_dir = OUTPUTS_DIR / "downloads" / f"nature_pdfs_{args.journal_id}_{args.year}"
+    print(f"输出目录: {args.output_dir or default_output_dir}")
     print()
     
     # 重要提示
