@@ -1,0 +1,79 @@
+{
+  "selected_run": "crispr",
+  "selected_kind": "single_domain",
+  "selected_out_dir": "/home/jayee/workspace/ASPR/outputs/kg_perturbation_fig3/crispr",
+  "reason": "best stable single-domain OOF Spearman",
+  "summary": {
+    "overall_pass": false,
+    "status_label": "weak empirical association / diagnostic run",
+    "thresholds": {
+      "active_graph_deltas_min": 5,
+      "active_delta_z_cap_hit_rate_max": 0.05,
+      "oof_spearman_min": 0.3,
+      "learned_vs_equal_min": 0.03,
+      "score_iqr_min": 0.35
+    },
+    "checks": {
+      "active_graph_deltas": 1,
+      "active_delta_z_cap_hit_rate": 1,
+      "oof_spearman": 0,
+      "learned_vs_equal": 1,
+      "score_iqr": 1
+    },
+    "active_graph_deltas": [
+      "community_reach",
+      "field_entropy",
+      "cross_community_adoption",
+      "partition_change",
+      "boundary_mixing"
+    ],
+    "n_active_graph_deltas": 5,
+    "active_delta_z_cap_hit_rate_max": 0.03962575674188222,
+    "learned_oof_spearman": 0.21695150603486152,
+    "equal_weight_oof_spearman": 0.18586924187510728,
+    "learned_vs_equal_delta": 0.031082264159754236,
+    "score_oof_iqr": 0.5701864382375026
+  },
+  "all_runs": [
+    {
+      "name": "crispr",
+      "kind": "single_domain",
+      "out_dir": "/home/jayee/workspace/ASPR/outputs/kg_perturbation_fig3/crispr",
+      "overall_pass": false,
+      "learned_oof_spearman": 0.21695150603486152,
+      "status_label": "weak empirical association / diagnostic run"
+    },
+    {
+      "name": "graphene_2d_materials",
+      "kind": "single_domain",
+      "out_dir": "/home/jayee/workspace/ASPR/outputs/kg_perturbation_fig3/graphene_2d_materials",
+      "overall_pass": false,
+      "learned_oof_spearman": 0.21408860210349295,
+      "status_label": "weak empirical association / diagnostic run"
+    },
+    {
+      "name": "ipsc_reprogramming",
+      "kind": "single_domain",
+      "out_dir": "/home/jayee/workspace/ASPR/outputs/kg_perturbation_fig3/ipsc_reprogramming",
+      "overall_pass": false,
+      "learned_oof_spearman": 0.17183333671882453,
+      "status_label": "weak empirical association / diagnostic run"
+    },
+    {
+      "name": "transformer_foundation_models",
+      "kind": "single_domain",
+      "out_dir": "/home/jayee/workspace/ASPR/outputs/kg_perturbation_fig3/transformer_foundation_models",
+      "overall_pass": false,
+      "learned_oof_spearman": 0.3526772262480533,
+      "status_label": "weak empirical association / diagnostic run"
+    },
+    {
+      "name": "multi_domain",
+      "kind": "multi_domain",
+      "out_dir": "/home/jayee/workspace/ASPR/outputs/kg_perturbation_fig3/multi_domain",
+      "overall_pass": false,
+      "learned_oof_spearman": 0.2264587649856151,
+      "status_label": "weak empirical association / diagnostic run"
+    }
+  ]
+}
