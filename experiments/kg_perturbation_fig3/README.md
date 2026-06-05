@@ -73,7 +73,22 @@ learned weight beats equal weight by >= 0.03
 S_w_oof IQR > 0.35
 ```
 
+还必须满足数据充分性条件，否则即使 OOF 相关性看起来不错，也只能作为 diagnostic run：
+
+```text
+domains >= 4
+total papers >= 8,000
+papers per domain >= 2,000
+landmark or high-RGPM cases per domain >= 20
+median matched controls per domain >= 20
+relaxed control-tier rate per domain <= 25%
+```
+
+这意味着只在 CRISPR 单领域上学习出的权重默认不作为主图证据；它可以用来定位问题，但不能支撑稳定的跨领域 scoring claim。
+
 否则图仍然生成，但必须按 diagnostic run 解读。
+
+如果当前 Fig. 1 selected graph 样本太小，可以用 `--fig1-corpus-source raw` 从 `works_raw.jsonl` 构造更大的 Fig. 3 输入；该模式会按 `primary_topic` 生成较粗 community，适合做 multi-domain 审计和样本扩展测试。
 
 ## Panel a: Empirical Learning Framework
 
@@ -166,14 +181,14 @@ Panel e 的意义是判断权重结构是否稳定。如果 IQR 很宽、fold �
 
 Panel f 是最关键的验证 panel。
 
-左侧散点图使用：
+左侧 rank-decile calibration 使用：
 
 ```text
-x = S_w_oof
-y = RGPM_v2
+x = S_w_oof percentile decile
+y = mean / median RGPM-v3 percentile
 ```
 
-不是全样本 best-weight score。坐标只做 1%-99% 分位裁剪显示，标题中的 Spearman rho 使用完整数据计算。
+不是全样本 best-weight score。左图同时报告完整数据上的 OOF Spearman rho 和 top-decile lift。这个视图更贴近 rank validation，避免线性散点拟合被长尾 RGPM 和异方差主导。
 
 右侧不再使用 radar plot，而是 Low / Mid / High OOF score tertile 的七指标横向条形摘要：
 
@@ -181,7 +196,24 @@ y = RGPM_v2
 mean rank-normalized indicator +/- bootstrap SE
 ```
 
-Panel f 的意义是回答：严格 held-out 分数是否真的能预测未来 RGPM-v2。如果 rho 低或 summary fail，就只能说有弱关联或诊断价值。
+Panel f 的意义是回答：严格 held-out 分数是否真的能预测未来 RGPM-v3。如果 rho 低或 summary fail，就只能说有弱关联或诊断价值。
+
+默认每次运行都会导出核心审计表：
+
+```text
+fig3_diagnostics_summary.json
+fig3_oof_score_table.csv
+fig3_cv_summary.csv
+fig3_baseline_comparison.csv
+fig3_diagnostics_delta_stability.csv
+fig3_diagnostics_domain_adequacy.csv
+fig3_indicator_target_correlations.csv
+fig3_rgpm_component_correlations.csv
+fig3_control_tier_audit.csv
+fig3_nonlinear_upper_bound.csv
+```
+
+其中 `fig3_nonlinear_upper_bound.csv` 是 quadratic ridge 的 diagnostic-only OOF 上界。如果它明显高于线性 simplex，说明七指标中可能有非线性信号；如果它也低，优先排查数据覆盖、RGPM 构造和指标定义。
 
 ## 如何阅读整张图
 

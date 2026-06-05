@@ -88,7 +88,7 @@ outputs/kg_perturbation_fig3/
   fig3_run_selection.json
 ```
 
-`fig3_run_selection.json` 记录主图选择逻辑：优先选择通过阈值的 `multi_domain`；否则选择稳定性通过且 OOF Spearman 最高的 single domain；如果全部失败，则选择最好的 diagnostic run。
+`fig3_run_selection.json` 记录主图选择逻辑：只要 `multi_domain` 完成，就优先选择它作为证据基准；如果它未通过阈值，则仍标为 diagnostic。只有 multi-domain 不可用时，才回退到 single-domain diagnostic run。
 
 ## 主计算流程
 
@@ -264,9 +264,20 @@ sum_k w_k = 1
 2. 每个 fold 只用 train fold 选择最优权重。
 3. 用该 fold 的最优权重预测 held-out fold。
 4. 拼接得到 `S_w_oof`。
-5. Panel f 和 model diagnostics 只使用 `S_w_oof` vs `RGPM_v2`。
+5. Panel f 和 model diagnostics 只使用 `S_w_oof` vs mechanism-balanced `RGPM-v3`。
 
 全数据 best weight 仍会计算，但只用于解释性 panels，例如 Panel e 的 final best weight。
+
+每次运行都会导出核心审计表。`--audit-only` 只计算并导出这些诊断，不渲染图片。新增表包括：
+
+```text
+fig3_indicator_target_correlations.csv
+fig3_rgpm_component_correlations.csv
+fig3_control_tier_audit.csv
+fig3_nonlinear_upper_bound.csv
+```
+
+`fig3_nonlinear_upper_bound.csv` 使用 quadratic ridge 做 diagnostic-only OOF 上界，用于判断弱结果是否来自线性 simplex 表达力不足。
 
 固定 baselines：
 
@@ -335,8 +346,18 @@ python experiments/kg_perturbation_fig3/fig3_empirical_weight_learning.py \
 ```bash
 python experiments/kg_perturbation_fig3/fig3_empirical_weight_learning.py \
   --domains crispr graphene_2d_materials ipsc_reprogramming transformer_foundation_models \
-  --run-mode multi_domain --panel all --export-tables --diagnostics
+  --run-mode multi_domain --cv-mode domain --panel all --export-tables --diagnostics
 ```
+
+主图结论需要至少 4 个 domain、每个 domain 约数千篇论文、每个 domain 足够 landmark 或 high-RGPM cases，并且 matched controls 不能大量退化到宽松 tier。单 CRISPR 或小样本 run 会保留为 diagnostic，不再被提升为主图证据。
+
+如果要用 Fig. 1 的更大 raw corpus 而不是展示图的 `works_selected.csv`，可以加：
+
+```bash
+--fig1-corpus-source raw
+```
+
+该模式使用 `works_raw.jsonl` 中的全部可用论文，并按 `primary_topic` 构造较粗的 Fig. 3 community。它适合扩大训练/审计样本，但正式主图前仍应检查 `fig3_diagnostics_domain_adequacy.csv` 和 control-tier audit。
 
 调试 Panel d 时可降低 profile 规模：
 

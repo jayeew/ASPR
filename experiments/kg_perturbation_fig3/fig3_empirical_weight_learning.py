@@ -40,8 +40,13 @@ Optional input files:
       If absent, community edges are derived from paper-level citations.
 
 Examples:
-  python fig3_empirical_weight_learning.py --data-dir ./data --out-dir ./fig3_out --panel all --export-tables
-  python fig3_empirical_weight_learning.py --data-dir ./data --out-dir ./fig3_out --panel c
+  python fig3_empirical_weight_learning_v3.py --data-dir ./data --out-dir ./fig3_out --panel all --export-tables
+  python fig3_empirical_weight_learning_v3.py --data-dir ./data --out-dir ./fig3_out --panel c
+
+Main-figure claims require data adequacy checks in addition to association checks:
+at least four domains, thousands of papers per domain, enough landmark/high-RGPM
+cases per domain, and stable matched controls. Single-domain runs are kept as
+diagnostics because learned weights are otherwise easy to overfit to one field.
 """
 
 from __future__ import annotations
@@ -160,6 +165,19 @@ MAIN_FIGURE_THRESHOLDS = {
     "score_iqr_min": 0.35,
 }
 
+DATA_ADEQUACY_THRESHOLDS = {
+    "domains_min": 4,
+    "domains_target_max": 8,
+    "papers_per_domain_min": 2000,
+    "total_papers_min": 8000,
+    "landmark_or_high_cases_per_domain_min": 20,
+    "high_perturbation_quantile": 0.90,
+    "control_median_min": 20,
+    "relaxed_control_tier_rate_max": 0.25,
+}
+
+RELAXED_CONTROL_TIERS = {"field_all_years", "all_non_landmark"}
+
 PAIRWISE_LANDSCAPES = [
     ("B", "RTD"),
     ("DeltaQ0", "Uzzi"),
@@ -199,6 +217,11 @@ class ComputedData:
     feature_diagnostics: pd.DataFrame
     model_diagnostics: pd.DataFrame
     control_diagnostics: pd.DataFrame
+    domain_diagnostics: pd.DataFrame
+    indicator_target_correlations: pd.DataFrame
+    rgpm_component_correlations: pd.DataFrame
+    control_tier_audit: pd.DataFrame
+    nonlinear_diagnostics: pd.DataFrame
     diagnostics_summary: Dict[str, Any]
     fold_weights: pd.DataFrame
     baseline_comparison: pd.DataFrame
@@ -625,6 +648,55 @@ def standardize_fig1_works(works_selected: pd.DataFrame, domain_name: str) -> pd
     return works[base_cols + extra_cols].copy()
 
 
+def standardize_fig1_raw_works(fig1_dir: Path, domain_name: str) -> pd.DataFrame:
+    """Build a larger Fig. 3 corpus from Fig. 1 works_raw.jsonl records."""
+    refs_path = fig1_dir / "works_raw.jsonl"
+    if not refs_path.exists():
+        raise FileNotFoundError(f"Missing works_raw.jsonl for raw Fig. 3 corpus: {refs_path}")
+    rows: List[Dict[str, object]] = []
+    with refs_path.open("r", encoding="utf-8") as f:
+        for line in f:
+            if not line.strip():
+                continue
+            rec = json.loads(line)
+            paper_id = rec.get("id")
+            year = rec.get("year")
+            if not paper_id or year is None:
+                continue
+            topics = rec.get("topics") or []
+            primary_topic = rec.get("primary_topic") or (topics[0] if topics else "unknown_topic")
+            anchor_label = rec.get("anchor_label") or ""
+            rows.append(
+                {
+                    "id": str(paper_id),
+                    "year": int(year),
+                    "title": rec.get("title") or str(paper_id),
+                    "domain": domain_name,
+                    "primary_field": str(primary_topic),
+                    "primary_topic": str(primary_topic),
+                    "is_landmark": int(bool(str(anchor_label).strip())),
+                    "anchor_label": anchor_label,
+                    "cited_by_count": rec.get("cited_by_count", np.nan),
+                    "doi": rec.get("doi", ""),
+                    "short_id": rec.get("short_id", ""),
+                }
+            )
+    works = pd.DataFrame(rows).drop_duplicates(subset=["id"])
+    if works.empty:
+        raise ValueError(f"No usable raw works found in {refs_path}")
+    codes, uniques = pd.factorize(works["primary_field"].astype(str), sort=True)
+    works["display_community"] = codes.astype(int)
+    label_map = {int(i): str(label) for i, label in enumerate(uniques)}
+    works["community_label"] = works["display_community"].map(label_map)
+    return works[
+        [
+            "id", "year", "title", "domain", "primary_field", "display_community",
+            "is_landmark", "anchor_label", "short_id", "doi", "cited_by_count",
+            "primary_topic", "community_label",
+        ]
+    ].copy()
+
+
 def citations_from_fig1_raw_refs(fig1_dir: Path, selected_ids: Sequence[str]) -> Tuple[pd.DataFrame, Dict[str, Any]]:
     refs_path = fig1_dir / "works_raw.jsonl"
     if not refs_path.exists():
@@ -658,6 +730,18 @@ def citations_from_fig1_raw_refs(fig1_dir: Path, selected_ids: Sequence[str]) ->
     return citations, report
 
 
+def topics_from_works_and_citations(works: pd.DataFrame, citations: pd.DataFrame) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    topic_edges = derive_topic_edges(works, citations)
+    labels = (
+        works[["display_community", "primary_field"]]
+        .drop_duplicates(subset=["display_community"])
+        .rename(columns={"display_community": "community", "primary_field": "label"})
+        .sort_values("community")
+    )
+    topics = compute_topic_positions(topic_edges, labels)
+    return topics, topic_edges
+
+
 def citations_from_fig1_paper_edges(fig1_dir: Path, direct_only: bool) -> Tuple[pd.DataFrame, Dict[str, Any]]:
     edge_path = fig1_dir / "paper_edges.csv"
     edges = pd.read_csv(edge_path)
@@ -679,12 +763,16 @@ def prepare_fig3_input_from_fig1(
     prepared_dir: Path,
     direct_only: bool,
     analysis_end_year: Optional[int],
+    corpus_source: str,
     progress: bool,
 ) -> Path:
     domain_name = fig1_dir.name
-    progress_log(f"Preparing Fig. 3 input from Fig. 1 exports: {fig1_dir}", progress)
-    works_selected = pd.read_csv(fig1_dir / "works_selected.csv")
-    works = standardize_fig1_works(works_selected, domain_name)
+    progress_log(f"Preparing Fig. 3 input from Fig. 1 exports: {fig1_dir} (corpus_source={corpus_source})", progress)
+    if corpus_source == "raw":
+        works = standardize_fig1_raw_works(fig1_dir, domain_name)
+    else:
+        works_selected = pd.read_csv(fig1_dir / "works_selected.csv")
+        works = standardize_fig1_works(works_selected, domain_name)
     selected_ids = works["id"].astype(str).tolist()
 
     citations, citation_report = citations_from_fig1_raw_refs(fig1_dir, selected_ids)
@@ -694,8 +782,11 @@ def prepare_fig3_input_from_fig1(
         citations, citation_report = citations_from_fig1_paper_edges(fig1_dir, direct_only=direct_only)
         citation_source = "paper_edges.csv"
 
-    topics = pd.read_csv(fig1_dir / "topic_nodes.csv")
-    topic_edges = pd.read_csv(fig1_dir / "topic_edges.csv")
+    if corpus_source == "raw":
+        topics, topic_edges = topics_from_works_and_citations(works, citations)
+    else:
+        topics = pd.read_csv(fig1_dir / "topic_nodes.csv")
+        topic_edges = pd.read_csv(fig1_dir / "topic_edges.csv")
     end_year = int(analysis_end_year or pd.to_numeric(works["year"], errors="coerce").max())
     raw = RawData(works=works, citations=citations, topics=topics, topic_edges=topic_edges, analysis_end_year=end_year)
     write_raw_data(raw, prepared_dir)
@@ -704,6 +795,7 @@ def prepare_fig3_input_from_fig1(
         "source_kind": "fig1_exports",
         "source_dir": str(fig1_dir),
         "prepared_dir": str(prepared_dir),
+        "fig1_corpus_source": corpus_source,
         "citation_source": citation_source,
         "works_rows": len(works),
         "citation_rows": len(citations),
@@ -795,6 +887,7 @@ def prepare_fig3_input_data(
     direct_only: bool,
     analysis_end_year: Optional[int],
     fig1_config: Optional[Path],
+    fig1_corpus_source: str,
     run_fig1_if_missing: bool,
     use_fig1_cache: bool,
     openalex_api_key: Optional[str],
@@ -833,6 +926,7 @@ def prepare_fig3_input_data(
             prepared_dir,
             direct_only=direct_only,
             analysis_end_year=analysis_end_year,
+            corpus_source=fig1_corpus_source,
             progress=progress,
         )
 
@@ -2033,7 +2127,6 @@ def is_diagnostic_run(comp: ComputedData) -> bool:
 
 def draw_panel_a(ax: plt.Axes, comp: ComputedData, tau: int) -> None:
     panel_frame(ax, "a", "Empirical learning framework")
-    status = diagnostic_status_text(comp)
     box_specs = [
         (0.040, 0.230, 0.260, 0.610, "Publication-day indicators", "#E0F2FE", "#0284C7"),
         (0.370, 0.230, 0.250, 0.610, "Weight learning", "#F0FDF4", "#16A34A"),
@@ -2043,17 +2136,22 @@ def draw_panel_a(ax: plt.Axes, comp: ComputedData, tau: int) -> None:
         rounded_box(ax, x, y, w, h, face, edge, 0.90, 0.014)
         ax.text(x + w / 2, y + h - 0.070, title, ha="center", va="center", fontsize=8.0, fontweight="bold", color=edge)
 
-    mechanisms = [
-        ("Expansion", "RS  PDE  Uzzi", "#2E7D32"),
-        ("Bridging", "B  RTD  Burt IP", "#0B4FA3"),
-        ("Reconfiguration", "ΔQ0  Uzzi", "#F97316"),
+    indicator_rows = [
+        ("B", "Bridge position", METRIC_COLORS["B"]),
+        ("RS", "Knowledge breadth", METRIC_COLORS["RS"]),
+        ("ΔQ0", "Boundary shift", METRIC_COLORS["DeltaQ0"]),
+        ("Uzzi", "Atypical recombination", METRIC_COLORS["Uzzi"]),
+        ("RTD", "Reference diversity", METRIC_COLORS["RTD"]),
+        ("Burt IP", "Structural holes", METRIC_COLORS["BurtIP"]),
+        ("PDE", "Prospective entropy", METRIC_COLORS["PDE"]),
     ]
-    y = 0.660
-    for name, desc, color in mechanisms:
-        draw_pill(ax, 0.078, y, name, color, 0.100, height=0.052, fontsize=6.1)
-        ax.text(0.190, y + 0.026, desc, ha="center", va="center", fontsize=6.0, color=TEXT_MID)
-        y -= 0.130
-    ax.text(0.170, 0.310, "Rank-normalized within\nfield-year / field / global", ha="center", va="center", fontsize=6.1)
+    y = 0.675
+    for label, desc, color in indicator_rows:
+        ax.scatter([0.075], [y], s=22, color=color, edgecolors="white", linewidths=0.35, transform=ax.transAxes, zorder=5)
+        ax.text(0.096, y, label, ha="left", va="center", fontsize=6.4, fontweight="bold", color=color)
+        ax.text(0.158, y, desc, ha="left", va="center", fontsize=5.7, color=TEXT_MID)
+        y -= 0.055
+    ax.text(0.170, 0.272, "Rank-normalized within\nfield-year / field / global", ha="center", va="center", fontsize=6.1)
 
     ax.text(0.495, 0.625, r"$S_w(p)=\sum_k w_k z_k(p)$", ha="center", va="center", fontsize=11.0)
     ax.text(0.495, 0.505, r"$w_k\geq0,\quad \sum_k w_k=1$", ha="center", va="center", fontsize=8.2)
@@ -2068,7 +2166,7 @@ def draw_panel_a(ax: plt.Axes, comp: ComputedData, tau: int) -> None:
 
     summary = comp.diagnostics_summary
     ax.text(0.825, 0.660, rf"$G_0 \rightarrow G_{{+\tau}}$  ({tau} y)", ha="center", va="center", fontsize=8.5)
-    ax.text(0.825, 0.540, "Target: stabilized RGPM-v2\nfrom active graph deltas", ha="center", va="center", fontsize=6.6)
+    ax.text(0.825, 0.540, "Target: stabilized RGPM-v3\nfrom active graph deltas", ha="center", va="center", fontsize=6.6)
     ax.text(
         0.825,
         0.405,
@@ -2083,8 +2181,17 @@ def draw_panel_a(ax: plt.Axes, comp: ComputedData, tau: int) -> None:
 
     draw_arrow(ax, (0.302, 0.535), (0.366, 0.535), color="#3B6EA8", lw=1.3, mutation_scale=13)
     draw_arrow(ax, (0.622, 0.535), (0.686, 0.535), color="#3B6EA8", lw=1.3, mutation_scale=13)
-    rounded_box(ax, 0.235, 0.090, 0.530, 0.090, blend_with_white("#2563EB", 0.92), "#3B82F6", 0.75, 0.012)
-    ax.text(0.500, 0.136, status, ha="center", va="center", fontsize=7.0, fontweight="bold", color="#1D4ED8")
+    rounded_box(ax, 0.115, 0.185, 0.770, 0.040, blend_with_white("#0F766E", 0.93), "#0F766E", 0.75, 0.010)
+    ax.text(
+        0.500,
+        0.205,
+        r"Objective: choose $\hat{w}\in\Delta_+^7$ to maximize $\rho_S(S_w,RGPM_\tau)$ on training folds; apply $\hat{w}$ OOF.",
+        ha="center",
+        va="center",
+        fontsize=6.6,
+        color="#115E59",
+        fontweight="bold",
+    )
 
 
 
@@ -2188,8 +2295,31 @@ def draw_panel_c(ax: plt.Axes, comp: ComputedData) -> None:
         cx, cy = float(np.mean(x[top_mask])), float(np.mean(y[top_mask]))
         dist = np.sqrt((x[top_mask] - cx) ** 2 + (y[top_mask] - cy) ** 2)
         if float(np.mean(dist)) < 0.16:
-            ax_tri.scatter(x[top_mask], y[top_mask], s=5, facecolors="none", edgecolors="black", linewidths=0.35, alpha=0.75)
-            ax_tri.text(cx, cy + 0.035, "top 10%", ha="center", va="bottom", fontsize=5.5, color=TEXT_DARK)
+            pts = np.column_stack([x[top_mask], y[top_mask]])
+            if len(pts) >= 3:
+                cov = np.cov(pts, rowvar=False)
+                vals, vecs = np.linalg.eigh(cov)
+                vals = np.clip(vals, 1e-5, None)
+                order = np.argsort(vals)[::-1]
+                vals = vals[order]
+                vecs = vecs[:, order]
+                angle = math.degrees(math.atan2(vecs[1, 0], vecs[0, 0]))
+                width, height = 3.2 * np.sqrt(vals)
+                ellipse = mpatches.Ellipse(
+                    (cx, cy),
+                    width=float(width),
+                    height=float(height),
+                    angle=float(angle),
+                    facecolor="none",
+                    edgecolor="#111827",
+                    linewidth=0.8,
+                    linestyle="--",
+                    alpha=0.85,
+                    zorder=5,
+                )
+                ax_tri.add_patch(ellipse)
+            ax_tri.scatter([cx], [cy], s=18, facecolors="#111827", edgecolors="white", linewidths=0.45, zorder=6)
+            ax_tri.text(cx, cy + 0.035, "top 10% region", ha="center", va="bottom", fontsize=5.5, color=TEXT_DARK)
         else:
             ax_tri.text(0.50, 0.42, "no stable basin", ha="center", va="center", fontsize=7.0, color="#7F1D1D", fontweight="bold")
     best_df = pd.DataFrame([{("w_" + k): float(comp.best_weights[k]) for k in METRIC_KEYS}])
@@ -2226,6 +2356,12 @@ def pairwise_profile_grid(
     bins: int = 25,
     profile_n: int = 80,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Profile two indicators on a rectangular simplex-preserving grid.
+
+    x is the share of the selected pair assigned to xkey. y is the total
+    mass assigned to the pair. This keeps every cell valid under non-negative
+    simplex weights while showing a complete rectangle.
+    """
     centers = np.linspace(0.0, 1.0, bins)
     grid = np.full((bins, bins), np.nan, dtype=float)
     active = list(comp.active_metric_keys)
@@ -2245,11 +2381,11 @@ def pairwise_profile_grid(
     ix = active.index(xkey)
     iy = active.index(ykey)
     rem_idx = [active.index(k) for k in remaining_keys]
-    for i, wx in enumerate(centers):
-        for j, wy in enumerate(centers):
-            if wx + wy > 1.0 + 1e-12:
-                continue
-            leftover = max(0.0, 1.0 - wx - wy)
+    for i, pair_share_x in enumerate(centers):
+        for j, pair_mass in enumerate(centers):
+            wx = float(pair_mass * pair_share_x)
+            wy = float(pair_mass * (1.0 - pair_share_x))
+            leftover = max(0.0, 1.0 - float(pair_mass))
             if leftover <= 1e-12:
                 W = np.zeros((1, len(active)), dtype=float)
                 W[0, ix] = wx
@@ -2271,7 +2407,7 @@ def pairwise_profile_grid(
 
 
 def draw_panel_d(ax: plt.Axes, comp: ComputedData) -> None:
-    panel_frame(ax, "d", "Constrained two-weight profile landscapes")
+    panel_frame(ax, "d", "Rectangular pair-weight profile landscapes")
     delta_vals = comp.weight_samples["cv_spearman_delta_vs_equal"].to_numpy(dtype=float)
     lim = max(0.03, min(0.20, float(np.nanpercentile(np.abs(delta_vals[np.isfinite(delta_vals)]), 98)) if np.isfinite(delta_vals).any() else 0.05))
     positions = [(0.070, 0.210, 0.245, 0.610), (0.365, 0.210, 0.245, 0.610), (0.660, 0.210, 0.245, 0.610)]
@@ -2283,14 +2419,15 @@ def draw_panel_d(ax: plt.Axes, comp: ComputedData) -> None:
         xs, ys, grid = pairwise_profile_grid(comp, xkey, ykey, bins=comp.profile_grid_size, profile_n=comp.profile_n)
         masked = np.ma.masked_invalid(grid)
         last_im = iax.imshow(masked, origin="lower", extent=[0, 1, 0, 1], aspect="auto", cmap=cmap, vmin=-lim, vmax=lim)
-        iax.plot([0, 1], [1, 0], color="#6B7280", lw=0.8, ls="--")
-        iax.set_title(rf"$w_{{{METRIC_LABELS[xkey]}}}$ vs. $w_{{{METRIC_LABELS[ykey]}}}$", fontsize=7)
-        iax.set_xlabel(rf"$w_{{{METRIC_LABELS[xkey]}}}$", fontsize=6)
-        iax.set_ylabel(rf"$w_{{{METRIC_LABELS[ykey]}}}$", fontsize=6)
+        iax.set_title(rf"{METRIC_LABELS[xkey]} / {METRIC_LABELS[ykey]} profile", fontsize=7)
+        iax.set_xlabel(f"share to {METRIC_LABELS[xkey]}", fontsize=5.5)
+        iax.set_ylabel("pair weight mass", fontsize=5.5)
         iax.tick_params(labelsize=5, length=2)
         # mark best
         best = comp.best_weights
-        iax.scatter([float(best[xkey])], [float(best[ykey])], s=18, color="black", edgecolors="white", linewidths=0.5)
+        pair_mass = float(best[xkey] + best[ykey])
+        pair_share_x = float(best[xkey] / pair_mass) if pair_mass > 1e-12 else 0.5
+        iax.scatter([pair_share_x], [pair_mass], s=18, color="black", edgecolors="white", linewidths=0.5)
         try:
             thr = np.nanpercentile(grid, 90)
             iax.contour(xs, ys, grid, levels=[thr], colors="white", linewidths=0.9, linestyles="--")
@@ -2301,7 +2438,7 @@ def draw_panel_d(ax: plt.Axes, comp: ComputedData) -> None:
         cb = plt.colorbar(last_im, cax=cax)
         cb.ax.tick_params(labelsize=5)
         cb.set_label("Best Δρ vs equal", fontsize=5.5)
-    ax.text(0.505, 0.085, "Each valid cell fixes two weights under wi + wj ≤ 1 and profiles the remaining active indicators by resampling.", ha="center", va="center", fontsize=5.7)
+    ax.text(0.505, 0.085, "Each cell sets pair mass and within-pair share, then profiles the remaining active indicators by resampling.", ha="center", va="center", fontsize=5.7)
 
 
 def draw_panel_e(ax: plt.Axes, comp: ComputedData) -> None:
@@ -2507,7 +2644,7 @@ def compute_all(raw: RawData, args: argparse.Namespace) -> ComputedData:
         progress_interval=progress_interval,
     )
     progress_log(f"      eligible papers with metrics: {len(metrics):,}", progress)
-    progress_log("[2/5] Computing RGPM-v2 from stabilized matched-control graph-delta z-scores ...", progress)
+    progress_log("[2/5] Computing RGPM-v3 from stabilized matched-control graph-delta z-scores ...", progress)
     rgpm, delta_diag, control_diag, active_delta_keys, dropped_delta_table = compute_rgpm(
         metrics,
         deltas,
@@ -2536,12 +2673,39 @@ def compute_all(raw: RawData, args: argparse.Namespace) -> ComputedData:
     )
     progress_log("      best CV Spearman: " + f"{best_perf:.3f}", progress)
     progress_log("      best weights: " + ", ".join([f"{k}={best_weights[k]:.3f}" for k in METRIC_KEYS]), progress)
-    diagnostics_summary = build_diagnostics_summary(active_delta_keys, delta_diag, baseline_comparison, score_table)
+    indicator_target_corr = compute_indicator_target_correlations(score_table, rgpm, active_metric_keys)
+    rgpm_component_corr = compute_rgpm_component_correlations(rgpm)
+    control_tier_audit = compute_control_tier_audit(control_diag)
+    nonlinear_diag, _ = compute_nonlinear_upper_bound_diagnostics(
+        score_table,
+        active_metric_keys=active_metric_keys,
+        seed=args.seed,
+    )
+    if not nonlinear_diag.empty:
+        model_diag = pd.concat([model_diag, nonlinear_diag], ignore_index=True, sort=False)
+
+    diagnostics_summary = build_diagnostics_summary(
+        active_delta_keys,
+        delta_diag,
+        baseline_comparison,
+        score_table,
+        control_diag,
+        nonlinear_diag,
+    )
+    domain_diag = pd.DataFrame(diagnostics_summary.get("domain_adequacy", []))
     progress_log(
         f"      diagnostics: {diagnostics_summary['status_label']} "
         f"(OOF rho={diagnostics_summary['learned_oof_spearman']:.3f}, "
         f"Δequal={diagnostics_summary['learned_vs_equal_delta']:.3f}, "
         f"score IQR={diagnostics_summary['score_oof_iqr']:.3f}).",
+        progress,
+    )
+    data_profile = diagnostics_summary.get("data_profile", {})
+    progress_log(
+        f"      data adequacy: domains={data_profile.get('n_domains', 0)}, "
+        f"min papers/domain={data_profile.get('min_papers_per_domain', 0)}, "
+        f"min landmark/high cases/domain={data_profile.get('min_landmark_or_high_cases_per_domain', 0)}, "
+        f"max relaxed-control rate={data_profile.get('relaxed_control_tier_rate_max_by_domain', np.nan):.2f}.",
         progress,
     )
     dummy = ComputedData(
@@ -2560,6 +2724,11 @@ def compute_all(raw: RawData, args: argparse.Namespace) -> ComputedData:
         feature_diagnostics=feature_diag,
         model_diagnostics=model_diag,
         control_diagnostics=control_diag,
+        domain_diagnostics=domain_diag,
+        indicator_target_correlations=indicator_target_corr,
+        rgpm_component_correlations=rgpm_component_corr,
+        control_tier_audit=control_tier_audit,
+        nonlinear_diagnostics=nonlinear_diag,
         diagnostics_summary=diagnostics_summary,
         fold_weights=fold_weights,
         baseline_comparison=baseline_comparison,
@@ -2588,6 +2757,29 @@ def export_tables(comp: ComputedData, out_dir: Path) -> None:
     comp.feature_diagnostics.to_csv(out_dir / "fig3_diagnostics_features.csv", index=False)
     comp.model_diagnostics.to_csv(out_dir / "fig3_diagnostics_model.csv", index=False)
     comp.control_diagnostics.to_csv(out_dir / "fig3_diagnostics_controls.csv", index=False)
+    comp.domain_diagnostics.to_csv(out_dir / "fig3_diagnostics_domain_adequacy.csv", index=False)
+    comp.indicator_target_correlations.to_csv(out_dir / "fig3_indicator_target_correlations.csv", index=False)
+    comp.rgpm_component_correlations.to_csv(out_dir / "fig3_rgpm_component_correlations.csv", index=False)
+    comp.control_tier_audit.to_csv(out_dir / "fig3_control_tier_audit.csv", index=False)
+    comp.nonlinear_diagnostics.to_csv(out_dir / "fig3_nonlinear_upper_bound.csv", index=False)
+    (out_dir / "fig3_diagnostics_summary.json").write_text(
+        json.dumps(comp.diagnostics_summary, ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
+
+
+def export_core_diagnostics(comp: ComputedData, out_dir: Path) -> None:
+    """Always-exported diagnostics needed to interpret weak Fig. 3f results."""
+    out_dir.mkdir(parents=True, exist_ok=True)
+    comp.score_table.to_csv(out_dir / "fig3_oof_score_table.csv", index=False)
+    comp.cv_summary.to_csv(out_dir / "fig3_cv_summary.csv", index=False)
+    comp.baseline_comparison.to_csv(out_dir / "fig3_baseline_comparison.csv", index=False)
+    comp.delta_diagnostics.to_csv(out_dir / "fig3_diagnostics_delta_stability.csv", index=False)
+    comp.domain_diagnostics.to_csv(out_dir / "fig3_diagnostics_domain_adequacy.csv", index=False)
+    comp.indicator_target_correlations.to_csv(out_dir / "fig3_indicator_target_correlations.csv", index=False)
+    comp.rgpm_component_correlations.to_csv(out_dir / "fig3_rgpm_component_correlations.csv", index=False)
+    comp.control_tier_audit.to_csv(out_dir / "fig3_control_tier_audit.csv", index=False)
+    comp.nonlinear_diagnostics.to_csv(out_dir / "fig3_nonlinear_upper_bound.csv", index=False)
     (out_dir / "fig3_diagnostics_summary.json").write_text(
         json.dumps(comp.diagnostics_summary, ensure_ascii=False, indent=2),
         encoding="utf-8",
@@ -2700,6 +2892,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-papers", type=int, default=None, help="Optional limit for debugging; stops after N papers with computed metrics.")
     parser.add_argument("--progress-interval", type=int, default=100,
                         help="Print one compute-progress update every N scanned papers/rows. Default: 100.")
+    parser.add_argument("--audit-only", action="store_true",
+                        help="Run computation and export diagnostics, but skip figure rendering.")
     parser.add_argument("--export-tables", action="store_true", help="Export all computed intermediate tables.")
     parser.add_argument("--diagnostics", action="store_true", help="Export diagnostic tables and pass/fail summary. Enabled automatically with --export-tables.")
     parser.add_argument("--formats", nargs="+", default=["png", "svg"], choices=["png", "svg", "pdf"], help="Output figure formats.")
@@ -2707,6 +2901,8 @@ def parse_args() -> argparse.Namespace:
                         help="Read --data-dir directly instead of first preparing normalized Fig. 3 input in --out-dir.")
     parser.add_argument("--fig1-config", type=Path, default=None,
                         help="Optional Fig. 1 YAML config used with --run-fig1-if-missing.")
+    parser.add_argument("--fig1-corpus-source", choices=["selected", "raw"], default="selected",
+                        help="When preparing from Fig. 1 exports, use works_selected.csv or the larger works_raw.jsonl corpus. Default: selected.")
     parser.add_argument("--run-fig1-if-missing", action="store_true",
                         help="Run the Fig. 1 pipeline to materialize source data if --data-dir does not contain usable exports.")
     parser.add_argument("--no-fig1-cache", action="store_true",
@@ -2778,6 +2974,7 @@ def load_domain_raw(args: argparse.Namespace, domain: str, progress: bool) -> Tu
             direct_only=not args.include_hybrid_edges,
             analysis_end_year=args.analysis_end_year,
             fig1_config=args.fig1_config,
+            fig1_corpus_source=args.fig1_corpus_source,
             run_fig1_if_missing=args.run_fig1_if_missing,
             use_fig1_cache=not args.no_fig1_cache,
             openalex_api_key=args.openalex_api_key,
@@ -2821,10 +3018,15 @@ def run_analysis(raw: RawData, args: argparse.Namespace, run_name: str, run_out_
     run_out_dir.mkdir(parents=True, exist_ok=True)
     progress_log(f"[{run_name}] Running Fig. 3 computation in {run_out_dir}", progress)
     comp = compute_all(raw, args)
-    if args.export_tables or args.diagnostics:
+    progress_log(f"[{run_name}] Exporting core diagnostics to {run_out_dir}", progress)
+    export_core_diagnostics(comp, run_out_dir)
+    if args.export_tables:
         progress_log(f"[{run_name}] Exporting tables and diagnostics to {run_out_dir}", progress)
         export_tables(comp, run_out_dir)
-    draw_outputs(comp, args, run_out_dir, run_name)
+    if args.audit_only:
+        progress_log(f"[{run_name}] Audit-only mode: skipping figure rendering.", progress)
+    else:
+        draw_outputs(comp, args, run_out_dir, run_name)
     return comp
 
 
@@ -2832,9 +3034,12 @@ def select_primary_run(run_results: Sequence[Mapping[str, Any]]) -> Dict[str, An
     if not run_results:
         return {}
     multi = [r for r in run_results if r.get("name") == "multi_domain"]
-    if multi and bool(multi[0]["summary"].get("overall_pass", False)):
+    if multi:
         selected = multi[0]
-        reason = "multi_domain passed all main-figure thresholds"
+        if bool(selected["summary"].get("overall_pass", False)):
+            reason = "multi_domain passed all main-figure thresholds"
+        else:
+            reason = "multi_domain selected as the required evidence base; single-domain weights remain diagnostic"
     else:
         stable_singles = [
             r for r in run_results
@@ -2862,6 +3067,8 @@ def select_primary_run(run_results: Sequence[Mapping[str, Any]]) -> Dict[str, An
                 "overall_pass": bool(r["summary"].get("overall_pass", False)),
                 "learned_oof_spearman": r["summary"].get("learned_oof_spearman"),
                 "status_label": r["summary"].get("status_label"),
+                "n_domains": r["summary"].get("data_profile", {}).get("n_domains"),
+                "min_papers_per_domain": r["summary"].get("data_profile", {}).get("min_papers_per_domain"),
             }
             for r in run_results
         ],
@@ -2966,6 +3173,1212 @@ def main() -> None:
     )
     progress_log("Done.", progress)
 
+
+
+# =============================================================================
+# v3 patch: mechanism-balanced RGPM target + hybrid OOF weight learning
+# =============================================================================
+# This patch intentionally keeps the original data-loading and plotting
+# infrastructure but replaces the two weakest methodological components found in
+# diagnostic runs:
+#   (1) RGPM-v2 could become too narrow because it dropped unstable deltas.
+#       v3 keeps all observed deltas, assigns empirical reliability weights, and
+#       balances deltas by mechanism so reconfiguration cannot dominate only
+#       because it has more surviving deltas.
+#   (2) Pure Dirichlet search is noisy and can over-emphasize random candidate
+#       weights. v3 uses a hybrid candidate pool: Dirichlet exploration + equal
+#       weights + single indicators + non-negative ridge weights learned inside
+#       each training fold. OOF scores remain strictly out-of-fold.
+
+DELTA_MECHANISM_GROUPS_V3: Dict[str, List[str]] = {
+    "Expansion": ["community_reach", "field_entropy"],
+    "Bridging": ["cross_community_adoption", "path_shortening", "hub_formation"],
+    "Reconfiguration": ["modularity_shock", "partition_change", "boundary_mixing"],
+    "Consolidation": ["post_perturbation_concentration"],
+}
+
+RIDGE_LAMBDAS_V3 = (0.0, 0.01, 0.03, 0.1, 0.3, 1.0, 3.0, 10.0)
+
+
+def delta_reliability_v3(
+    nonzero_rate: float,
+    cap_hit_rate: float,
+    control_mad_zero_rate: float,
+    floor_use_rate: float,
+    global_mad: float,
+    is_primary: bool,
+) -> float:
+    """Empirical reliability weight in [0, 1] for one graph-delta outcome.
+
+    The weight is deliberately continuous instead of a hard keep/drop rule.
+    This prevents RGPM from collapsing to only 2-3 deltas while still reducing
+    the influence of sparse, capped, or nearly-zero-control-variance outcomes.
+    """
+    if (not np.isfinite(global_mad)) or global_mad < DELTA_GLOBAL_MAD_MIN:
+        return 0.0
+    nz = min(1.0, max(0.0, nonzero_rate / 0.15))
+    clip = 1.0 - min(1.0, max(0.0, cap_hit_rate / 0.35))
+    mad = 1.0 - min(1.0, max(0.0, control_mad_zero_rate / 0.85))
+    floor = 1.0 - 0.45 * min(1.0, max(0.0, floor_use_rate))
+    base = (0.10 + 0.90 * nz) * (0.20 + 0.80 * clip) * (0.20 + 0.80 * mad) * max(0.20, floor)
+    if not is_primary:
+        base *= 0.50
+    return float(np.clip(base, 0.0, 1.0))
+
+
+def compute_rgpm(
+    metrics: pd.DataFrame,
+    deltas: pd.DataFrame,
+    min_controls: int = 20,
+    z_cap: float = 4.0,
+    progress: bool = True,
+    progress_interval: int = 100,
+) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, List[str], pd.DataFrame]:
+    """Compute mechanism-balanced RGPM-v3 from matched-control graph deltas.
+
+    Compared with the original RGPM-v2, this function does not drop deltas just
+    because they are imperfect. It calculates reliability weights from empirical
+    diagnostics and then aggregates positive, matched-control z-scores within
+    mechanism groups first. The final target is an equal-mechanism RMS, so a
+    target dominated by partition-divergence/boundary-mixing cannot force all
+    learned weight onto DeltaQ0.
+    """
+    df = metrics[["paper_id", "title", "domain", "year", "primary_field", "display_community", "is_landmark", "reference_count"]].merge(
+        deltas[["paper_id"] + DELTA_KEYS], on="paper_id", how="inner"
+    )
+    df = add_reference_bins(df)
+    required_controls = max(10, int(min_controls))
+    progress_interval = max(1, int(progress_interval))
+    progress_log(
+        f"Computing mechanism-balanced RGPM-v3 for {len(df):,} papers with min_controls={required_controls}, z_cap={z_cap}.",
+        progress,
+    )
+    global_scale = {col: raw_mad(df[col].to_numpy(dtype=float)) for col in DELTA_KEYS}
+    z_rows: List[Dict[str, object]] = []
+    control_rows: List[Dict[str, object]] = []
+    skipped_controls = 0
+    control_sizes: List[int] = []
+
+    for row_idx, (_, row) in enumerate(df.iterrows(), start=1):
+        if row_idx == 1 or row_idx % progress_interval == 0 or row_idx == len(df):
+            progress_log(
+                f"  RGPM-v3 rows processed {row_idx:,}/{len(df):,}; kept={len(z_rows):,}; skipped_controls={skipped_controls:,}",
+                progress,
+            )
+        ctrl_idx, tier = matched_control_indices_with_tier(df, row, min_controls=required_controls)
+        if len(ctrl_idx) < required_controls:
+            skipped_controls += 1
+            continue
+        controls = df.loc[ctrl_idx]
+        control_sizes.append(int(len(ctrl_idx)))
+        out: Dict[str, object] = {
+            "paper_id": row["paper_id"],
+            "title": row["title"],
+            "domain": row["domain"],
+            "year": row["year"],
+            "primary_field": row["primary_field"],
+            "display_community": row["display_community"],
+            "is_landmark": row["is_landmark"],
+            "reference_count": row["reference_count"],
+            "n_controls": int(len(ctrl_idx)),
+            "control_tier": tier,
+        }
+        control_out: Dict[str, object] = {
+            "paper_id": row["paper_id"],
+            "domain": row["domain"],
+            "year": row["year"],
+            "primary_field": row["primary_field"],
+            "is_landmark": row["is_landmark"],
+            "n_controls": int(len(ctrl_idx)),
+            "control_tier": tier,
+        }
+        n_floor_used = 0
+        n_mad_zero = 0
+        n_clipped = 0
+        for col in DELTA_KEYS:
+            med = float(np.median(controls[col].to_numpy(dtype=float)))
+            local_mad = raw_mad(controls[col].to_numpy(dtype=float))
+            global_floor = 0.25 * float(global_scale.get(col, 0.0) if np.isfinite(global_scale.get(col, np.nan)) else 0.0)
+            delta_floor = float(DELTA_FLOORS.get(col, DEFAULT_DELTA_FLOOR))
+            scale = max(float(local_mad) if np.isfinite(local_mad) else 0.0, global_floor, delta_floor)
+            floor_used = (not np.isfinite(local_mad)) or local_mad < scale - 1e-12
+            mad_zero = (not np.isfinite(local_mad)) or local_mad < 1e-6
+            z_raw = float((float(row[col]) - med) / max(scale, 1e-12))
+            z_val = z_raw
+            if z_cap is not None and z_cap > 0:
+                z_val = float(np.clip(z_val, -z_cap, z_cap))
+            clipped = abs(z_val - z_raw) > 1e-9
+            out[col] = float(row[col])
+            out[col + "_z"] = z_val
+            out[col + "_z_raw"] = z_raw
+            out[col + "_z_clipped"] = int(clipped)
+            out[col + "_control_median"] = med
+            out[col + "_control_mad"] = float(local_mad) if np.isfinite(local_mad) else np.nan
+            out[col + "_scale_used"] = float(scale)
+            out[col + "_scale_floor_used"] = int(floor_used)
+            control_out[col + "_control_mad"] = float(local_mad) if np.isfinite(local_mad) else np.nan
+            control_out[col + "_scale_used"] = float(scale)
+            control_out[col + "_scale_floor_used"] = int(floor_used)
+            control_out[col + "_mad_zero"] = int(mad_zero)
+            control_out[col + "_z_clipped"] = int(clipped)
+            n_floor_used += int(floor_used)
+            n_mad_zero += int(mad_zero)
+            n_clipped += int(clipped)
+        control_out["n_delta_scale_floor_used"] = n_floor_used
+        control_out["n_delta_mad_zero"] = n_mad_zero
+        control_out["n_delta_z_clipped"] = n_clipped
+        z_rows.append(out)
+        control_rows.append(control_out)
+
+    zdf = pd.DataFrame(z_rows)
+    if zdf.empty:
+        raise ValueError("Could not compute matched-control z-scores. Check landmark/control coverage and min_controls.")
+    control_diag = pd.DataFrame(control_rows)
+
+    # Delta diagnostics + reliability weights.
+    primary_set = set(PRIMARY_RGPM_DELTA_KEYS)
+    delta_diag_rows: List[Dict[str, object]] = []
+    for col in DELTA_KEYS:
+        values = df[col].to_numpy(dtype=float)
+        nonzero_rate = float(np.mean(np.abs(values[np.isfinite(values)]) > 1e-12)) if np.isfinite(values).any() else 0.0
+        cap_hit_rate = float(np.nanmean(zdf[col + "_z_clipped"].to_numpy(dtype=float)))
+        control_mad_zero_rate = float(np.nanmean(control_diag[col + "_mad_zero"].to_numpy(dtype=float)))
+        floor_use_rate = float(np.nanmean(control_diag[col + "_scale_floor_used"].to_numpy(dtype=float)))
+        global_mad = float(global_scale.get(col, np.nan))
+        rel = delta_reliability_v3(
+            nonzero_rate=nonzero_rate,
+            cap_hit_rate=cap_hit_rate,
+            control_mad_zero_rate=control_mad_zero_rate,
+            floor_use_rate=floor_use_rate,
+            global_mad=global_mad,
+            is_primary=col in primary_set,
+        )
+        reasons: List[str] = []
+        if rel < 0.08:
+            reasons.append("low_reliability_weight")
+        if col not in primary_set:
+            reasons.append("diagnostic_or_consolidation_outcome")
+        delta_diag_rows.append(
+            {
+                "delta": col,
+                "label": DELTA_LABELS[col],
+                "primary_candidate": int(col in primary_set),
+                "active": int(rel >= 0.08),
+                "nonzero_rate": nonzero_rate,
+                "global_mad": global_mad,
+                "z_cap_hit_rate": cap_hit_rate,
+                "control_mad_zero_rate": control_mad_zero_rate,
+                "scale_floor_use_rate": floor_use_rate,
+                "reliability_weight": rel,
+                "drop_reasons": ";".join(reasons),
+            }
+        )
+    delta_diag = pd.DataFrame(delta_diag_rows)
+
+    # Ensure each main mechanism has at least its most reliable available delta active;
+    # this is a target-construction rule, not data imputation.
+    for mech, keys in DELTA_MECHANISM_GROUPS_V3.items():
+        if mech == "Consolidation":
+            continue
+        sub = delta_diag[delta_diag["delta"].isin(keys)]
+        if not sub.empty and not (sub["active"].astype(int) == 1).any():
+            idx = sub["reliability_weight"].astype(float).idxmax()
+            delta_diag.loc[idx, "active"] = 1
+            reason = str(delta_diag.loc[idx, "drop_reasons"] or "")
+            delta_diag.loc[idx, "drop_reasons"] = (reason + ";" if reason else "") + "best_available_for_mechanism_balance"
+
+    active_delta_keys = delta_diag.loc[delta_diag["active"].astype(int) == 1, "delta"].astype(str).tolist()
+    if not active_delta_keys:
+        fallback = delta_diag.sort_values("reliability_weight", ascending=False).head(3)["delta"].astype(str).tolist()
+        active_delta_keys = fallback
+        delta_diag.loc[delta_diag["delta"].isin(fallback), "active"] = 1
+        delta_diag.loc[delta_diag["delta"].isin(fallback), "drop_reasons"] = "fallback_active_for_diagnostic_run"
+
+    reliability = dict(zip(delta_diag["delta"].astype(str), delta_diag["reliability_weight"].astype(float)))
+    active_delta_set = set(active_delta_keys)
+    mechanism_scores: Dict[str, np.ndarray] = {}
+    mechanism_weight_sums: Dict[str, float] = {}
+    for mech, keys in DELTA_MECHANISM_GROUPS_V3.items():
+        valid_keys = [
+            k for k in keys
+            if k in DELTA_KEYS and (reliability.get(k, 0.0) > 0.0 or k in active_delta_set)
+        ]
+        if not valid_keys:
+            continue
+        Z = zdf[[k + "_z" for k in valid_keys]].replace([np.inf, -np.inf], np.nan).fillna(0.0).to_numpy(dtype=float)
+        Zpos = np.maximum(Z, 0.0)
+        w = np.asarray(
+            [
+                max(0.0, reliability.get(k, 0.0), 0.05 if k in active_delta_set else 0.0)
+                for k in valid_keys
+            ],
+            dtype=float,
+        )
+        if w.sum() <= 0:
+            continue
+        # Downweight consolidation unless it is strongly reliable; it is useful but
+        # should not redefine perturbation as only later concentration.
+        if mech == "Consolidation":
+            w = 0.50 * w
+        score = np.sqrt((np.square(Zpos) @ w) / max(w.sum(), 1e-12))
+        mechanism_scores[mech] = score
+        mechanism_weight_sums[mech] = float(w.sum())
+        zdf[f"RGPM_{mech.lower()}_component"] = score
+
+    main_mechs = [m for m in ["Expansion", "Bridging", "Reconfiguration"] if m in mechanism_scores]
+    if not main_mechs:
+        raise ValueError("No mechanism scores could be constructed for RGPM-v3.")
+    M = np.column_stack([mechanism_scores[m] for m in main_mechs])
+    rgpm_main = np.sqrt(np.square(M).mean(axis=1))
+    if "Consolidation" in mechanism_scores:
+        rgpm = np.sqrt(0.85 * np.square(rgpm_main) + 0.15 * np.square(mechanism_scores["Consolidation"]))
+    else:
+        rgpm = rgpm_main
+    zdf["RGPM_v3_balanced"] = rgpm
+    zdf["RGPM_v2"] = rgpm  # compatibility with existing panels/export names
+    zdf["RGPM"] = rgpm
+    zdf["RGPM_simple"] = rgpm
+
+    active_z_cols = [c + "_z" for c in active_delta_keys]
+    zmat = zdf[active_z_cols].replace([np.inf, -np.inf], np.nan).fillna(0.0).to_numpy(dtype=float)
+    cov = np.cov(zmat, rowvar=False)
+    if cov.ndim == 0:
+        cov = np.eye(len(active_z_cols))
+    lam = 0.25
+    diag = np.diag(np.diag(cov))
+    cov_shrink = (1.0 - lam) * cov + lam * diag + np.eye(len(active_z_cols)) * 1e-6
+    inv_cov = np.linalg.pinv(cov_shrink)
+    zdf["RGPM_mahalanobis_debug"] = np.sqrt(np.einsum("ij,jk,ik->i", zmat, inv_cov, zmat))
+    dropped_delta_table = delta_diag[delta_diag["active"].astype(int) == 0].copy()
+
+    if control_sizes:
+        progress_log(
+            f"Finished RGPM-v3: {len(zdf):,} papers kept; controls median={np.median(control_sizes):.0f}, "
+            f"min={np.min(control_sizes):.0f}, max={np.max(control_sizes):.0f}; active deltas="
+            f"{len(active_delta_keys)} ({', '.join(active_delta_keys)}).",
+            progress,
+        )
+    return zdf, delta_diag, control_diag, active_delta_keys, dropped_delta_table
+
+
+def simplex_normalize(beta: np.ndarray, fallback: Optional[np.ndarray] = None) -> np.ndarray:
+    beta = np.asarray(beta, dtype=float)
+    beta = np.where(np.isfinite(beta), beta, 0.0)
+    beta = np.maximum(beta, 0.0)
+    if beta.sum() <= 1e-12:
+        if fallback is not None and np.asarray(fallback).sum() > 0:
+            fb = np.maximum(np.asarray(fallback, dtype=float), 0.0)
+            return fb / fb.sum()
+        return np.ones(len(beta), dtype=float) / len(beta)
+    return beta / beta.sum()
+
+
+def positive_ridge_candidates(X: np.ndarray, y: np.ndarray, lambdas: Sequence[float] = RIDGE_LAMBDAS_V3) -> np.ndarray:
+    """Non-negative simplex ridge candidates fitted on the provided data only."""
+    X = np.asarray(X, dtype=float)
+    y = rank_normal_scores(y)
+    y = np.where(np.isfinite(y), y, 0.0)
+    p = X.shape[1]
+    if p == 0:
+        return np.empty((0, 0))
+    XtX = X.T @ X
+    Xty = X.T @ y
+    candidates: List[np.ndarray] = []
+    # single-indicator correlations as a fallback direction.
+    cors = np.asarray([max(0.0, safe_spearman(X[:, i], y)) for i in range(p)], dtype=float)
+    corr_fb = simplex_normalize(cors)
+    for lam in lambdas:
+        try:
+            beta = np.linalg.solve(XtX + float(lam) * np.eye(p), Xty)
+        except Exception:
+            beta = np.linalg.pinv(XtX + float(lam) * np.eye(p)) @ Xty
+        candidates.append(simplex_normalize(beta, fallback=corr_fb))
+    candidates.append(corr_fb)
+    candidates.append(np.ones(p, dtype=float) / p)
+    # Deduplicate approximately.
+    W = np.vstack(candidates)
+    W = np.round(W, 8)
+    _, idx = np.unique(W, axis=0, return_index=True)
+    return W[np.sort(idx)]
+
+
+def base_weight_candidates(n_samples: int, seed: int, n_metrics: int) -> np.ndarray:
+    W_rand = generate_dirichlet_weights(n_samples, seed=seed, alpha=1.0, n_metrics=n_metrics)
+    W_equal = np.ones((1, n_metrics), dtype=float) / n_metrics
+    W_single = np.eye(n_metrics, dtype=float)
+    # A small low-entropy and high-entropy set helps sample sparse and broad scores.
+    W_sparse = generate_dirichlet_weights(max(500, n_samples // 20), seed=seed + 17, alpha=0.25, n_metrics=n_metrics)
+    W_broad = generate_dirichlet_weights(max(500, n_samples // 20), seed=seed + 31, alpha=3.0, n_metrics=n_metrics)
+    W = np.vstack([W_rand, W_sparse, W_broad, W_equal, W_single])
+    W = np.round(W, 8)
+    _, idx = np.unique(W, axis=0, return_index=True)
+    return W[np.sort(idx)]
+
+
+def learn_weights(
+    metrics: pd.DataFrame,
+    rgpm: pd.DataFrame,
+    active_metric_keys: Sequence[str],
+    n_samples: int,
+    n_folds: int,
+    cv_mode: str,
+    seed: int,
+    progress: bool = True,
+) -> Tuple[pd.DataFrame, pd.Series, float, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Hybrid non-negative simplex weight learning with strict OOF scoring."""
+    active_metric_keys = [k for k in active_metric_keys if k in METRIC_KEYS]
+    if not active_metric_keys:
+        raise ValueError("No active publication-day indicators are available for weight learning.")
+    metric_z_cols = [k + "_z" for k in METRIC_KEYS]
+    active_z_cols = [k + "_z" for k in active_metric_keys]
+    meta_cols = [
+        "paper_id", "title", "domain", "year", "primary_field", "display_community",
+        "is_landmark", "reference_count", "cited_by_count",
+    ]
+    present_meta_cols = [c for c in meta_cols if c in metrics.columns]
+    rgpm_cols = ["paper_id", "RGPM", "RGPM_v2", "RGPM_simple", "RGPM_v3_balanced", "RGPM_mahalanobis_debug"]
+    present_rgpm_cols = [c for c in rgpm_cols if c in rgpm.columns]
+    df = metrics[present_meta_cols + metric_z_cols].merge(rgpm[present_rgpm_cols], on="paper_id", how="inner")
+    df = df.replace([np.inf, -np.inf], np.nan).dropna(subset=["RGPM"]).reset_index(drop=True)
+    df[active_z_cols] = df[active_z_cols].fillna(0.0)
+    if len(df) < max(20, n_folds * 5):
+        raise ValueError(f"Too few papers for weight learning after filtering: n={len(df)}")
+    progress_log(
+        f"Learning weights with hybrid simplex/ridge candidates from {len(df):,} papers; "
+        f"active_metrics={','.join(active_metric_keys)}, cv_mode={cv_mode}, folds={n_folds}, seed={seed}.",
+        progress,
+    )
+    X = df[active_z_cols].to_numpy(dtype=float)
+    y = df["RGPM"].to_numpy(dtype=float)
+    W_base = base_weight_candidates(n_samples, seed=seed, n_metrics=len(active_metric_keys))
+    folds = make_folds(df, n_folds=n_folds, mode=cv_mode, seed=seed)
+    progress_log("  folds: " + ", ".join([f"{i+1}:n={len(f):,}" for i, f in enumerate(folds)]), progress)
+
+    # Landscape/sample performance is evaluated for fixed, data-independent candidates.
+    perf = weight_performance_cv(X, y, W_base, folds, progress=progress)
+    equal_w = np.ones(len(active_metric_keys), dtype=float) / len(active_metric_keys)
+    equal_score = X @ equal_w
+    equal_rho = safe_spearman(equal_score, y)
+    W_full = expand_active_weights(W_base, active_metric_keys)
+    sample_df = pd.DataFrame(W_full, columns=["w_" + k for k in METRIC_KEYS])
+    sample_df["cv_spearman"] = perf
+    sample_df = sample_df.replace([np.inf, -np.inf], np.nan).dropna(subset=["cv_spearman"]).reset_index(drop=True)
+    sample_df["cv_spearman_delta_vs_equal"] = sample_df["cv_spearman"] - equal_rho
+
+    # Strict OOF: candidate selection happens within each training fold.
+    oof_score = np.full(len(df), np.nan, dtype=float)
+    fold_ids = np.full(len(df), -1, dtype=int)
+    fold_rows: List[Dict[str, object]] = []
+    for fold_no, test_idx in enumerate(folds, start=1):
+        train_mask = np.ones(len(df), dtype=bool)
+        train_mask[test_idx] = False
+        train_idx = np.where(train_mask)[0]
+        W_ridge = positive_ridge_candidates(X[train_idx], y[train_idx])
+        W_pool = np.vstack([W_base, W_ridge])
+        W_pool = np.round(W_pool, 8)
+        _, uidx = np.unique(W_pool, axis=0, return_index=True)
+        W_pool = W_pool[np.sort(uidx)]
+        train_perf = direct_weight_performance(X[train_idx], y[train_idx], W_pool)
+        fold_best_idx = int(np.nanargmax(train_perf)) if np.isfinite(train_perf).any() else 0
+        fold_w = W_pool[fold_best_idx]
+        oof_score[test_idx] = X[test_idx] @ fold_w
+        fold_ids[test_idx] = fold_no
+        fold_test_rho = safe_spearman(oof_score[test_idx], y[test_idx])
+        fold_row: Dict[str, object] = {
+            "fold": fold_no,
+            "n_train": int(len(train_idx)),
+            "n_test": int(len(test_idx)),
+            "train_spearman": float(np.nanmax(train_perf)) if np.isfinite(train_perf).any() else np.nan,
+            "test_spearman": fold_test_rho,
+            "selected_candidate_source": "hybrid_pool",
+        }
+        fold_full = expand_active_weights(fold_w.reshape(1, -1), active_metric_keys)[0]
+        for key, val in zip(METRIC_KEYS, fold_full):
+            fold_row["w_" + key] = float(val)
+        fold_rows.append(fold_row)
+        progress_log(
+            f"  outer fold {fold_no}/{len(folds)}: train={len(train_idx):,}, test={len(test_idx):,}, "
+            f"test rho={fold_test_rho:.3f}",
+            progress,
+        )
+
+    # Final all-data weight is for reporting, not for OOF performance.
+    W_final_pool = np.vstack([W_base, positive_ridge_candidates(X, y)])
+    W_final_pool = np.round(W_final_pool, 8)
+    _, fidx = np.unique(W_final_pool, axis=0, return_index=True)
+    W_final_pool = W_final_pool[np.sort(fidx)]
+    final_perf = direct_weight_performance(X, y, W_final_pool)
+    best_idx = int(np.nanargmax(final_perf)) if np.isfinite(final_perf).any() else 0
+    best_active = W_final_pool[best_idx]
+    best_full = expand_active_weights(best_active.reshape(1, -1), active_metric_keys)[0]
+    best_w = pd.Series(best_full, index=METRIC_KEYS, name="weight")
+    score = X @ best_active
+    best_perf = safe_spearman(oof_score, y)
+
+    score_table = df[[c for c in present_meta_cols if c in df.columns]].copy()
+    score_table["fold_id"] = fold_ids
+    score_table["S_w"] = score
+    score_table["S_w_oof"] = oof_score
+    score_table["S_equal"] = equal_score
+    score_table["RGPM"] = y
+    score_table["RGPM_v2"] = df["RGPM_v2"].to_numpy(dtype=float) if "RGPM_v2" in df.columns else y
+    score_table["RGPM_simple"] = df["RGPM_simple"].to_numpy(dtype=float) if "RGPM_simple" in df.columns else y
+    if "RGPM_v3_balanced" in df.columns:
+        score_table["RGPM_v3_balanced"] = df["RGPM_v3_balanced"].to_numpy(dtype=float)
+    if "RGPM_mahalanobis_debug" in df.columns:
+        score_table["RGPM_mahalanobis_debug"] = df["RGPM_mahalanobis_debug"].to_numpy(dtype=float)
+    for k in METRIC_KEYS:
+        score_table[k + "_z"] = df[k + "_z"].to_numpy(dtype=float)
+    cv_summary = pd.DataFrame(fold_rows)[["fold", "n_train", "n_test", "train_spearman", "test_spearman"]]
+    fold_weights = pd.DataFrame(fold_rows)
+
+    baseline_rows: List[Dict[str, object]] = []
+
+    def add_baseline(name: str, scores: Sequence[float], kind: str, metric: str = "") -> None:
+        rho = safe_spearman(scores, y)
+        lo, hi = bootstrap_spearman_ci(scores, y, seed=seed + len(baseline_rows) + 101)
+        baseline_rows.append(
+            {
+                "model": name,
+                "kind": kind,
+                "metric": metric,
+                "oof_spearman": rho,
+                "ci_low": lo,
+                "ci_high": hi,
+                "delta_vs_equal": rho - equal_rho if np.isfinite(rho) and np.isfinite(equal_rho) else np.nan,
+            }
+        )
+
+    add_baseline("equal_weights", equal_score, "fixed")
+    single_scores = []
+    for i, key in enumerate(active_metric_keys):
+        rho = safe_spearman(X[:, i], y)
+        single_scores.append((rho, key, X[:, i]))
+    single_scores = [item for item in single_scores if np.isfinite(item[0])]
+    if single_scores:
+        _, best_single_key, best_single_score = max(single_scores, key=lambda item: item[0])
+        add_baseline("best_single_indicator", best_single_score, "single_indicator", best_single_key)
+    if "reference_count" in df.columns:
+        add_baseline("reference_count", pd.to_numeric(df["reference_count"], errors="coerce"), "bibliometric")
+    if "cited_by_count" in df.columns and pd.to_numeric(df["cited_by_count"], errors="coerce").notna().any():
+        add_baseline("cited_by_count", pd.to_numeric(df["cited_by_count"], errors="coerce"), "bibliometric")
+    random_median_rho = float(np.nanmedian(perf))
+    baseline_rows.append(
+        {
+            "model": "random_dirichlet_median",
+            "kind": "sampled_weights",
+            "metric": "",
+            "oof_spearman": random_median_rho,
+            "ci_low": np.nan,
+            "ci_high": np.nan,
+            "delta_vs_equal": random_median_rho - equal_rho if np.isfinite(equal_rho) else np.nan,
+        }
+    )
+    add_baseline("learned_weight_oof", oof_score, "learned_hybrid")
+    baseline_comparison = pd.DataFrame(baseline_rows)
+    model_diagnostics = baseline_comparison.copy()
+    progress_log(
+        f"Finished hybrid OOF learning: fixed candidates={len(sample_df):,}, "
+        f"OOF Spearman={best_perf:.3f}; equal={equal_rho:.3f}.",
+        progress,
+    )
+    return sample_df, best_w, best_perf, score_table, cv_summary, fold_weights, baseline_comparison, model_diagnostics
+
+
+def scope_subsets(df: pd.DataFrame) -> List[Tuple[str, str, int, pd.DataFrame]]:
+    """Return all/domain/fold/domain-fold subsets for diagnostics."""
+    out: List[Tuple[str, str, int, pd.DataFrame]] = [("all", "all", -1, df)]
+    if "domain" in df.columns:
+        for domain, sub in df.groupby("domain", sort=True):
+            out.append(("domain", str(domain), -1, sub))
+    if "fold_id" in df.columns:
+        for fold_id, sub in df.groupby("fold_id", sort=True):
+            if int(fold_id) > 0:
+                out.append(("fold", "all", int(fold_id), sub))
+    if "domain" in df.columns and "fold_id" in df.columns:
+        for (domain, fold_id), sub in df.groupby(["domain", "fold_id"], sort=True):
+            if int(fold_id) > 0:
+                out.append(("domain_fold", str(domain), int(fold_id), sub))
+    return out
+
+
+def compute_indicator_target_correlations(
+    score_table: pd.DataFrame,
+    rgpm_table: pd.DataFrame,
+    active_metric_keys: Sequence[str],
+) -> pd.DataFrame:
+    """Correlate each publication-day indicator with RGPM and RGPM components."""
+    st = score_table.copy()
+    component_cols = [
+        c for c in rgpm_table.columns
+        if c.startswith("RGPM_") and c.endswith("_component")
+    ]
+    delta_z_cols = [c + "_z" for c in DELTA_KEYS if c + "_z" in rgpm_table.columns]
+    merge_cols = ["paper_id"] + [
+        c for c in ["RGPM_v3_balanced", "RGPM_mahalanobis_debug"] + component_cols + delta_z_cols
+        if c in rgpm_table.columns and c not in st.columns
+    ]
+    if len(merge_cols) > 1:
+        st = st.merge(rgpm_table[merge_cols], on="paper_id", how="left")
+
+    metric_cols = [k + "_z" for k in METRIC_KEYS if k + "_z" in st.columns]
+    target_cols = [
+        c for c in ["RGPM", "RGPM_v3_balanced", "RGPM_mahalanobis_debug"] + component_cols + delta_z_cols
+        if c in st.columns
+    ]
+    rows: List[Dict[str, object]] = []
+    for scope, domain, fold_id, sub in scope_subsets(st):
+        for metric_col in metric_cols:
+            metric = metric_col[:-2]
+            for target in target_cols:
+                rho = safe_spearman(sub[metric_col], sub[target])
+                n = int((pd.to_numeric(sub[metric_col], errors="coerce").notna() & pd.to_numeric(sub[target], errors="coerce").notna()).sum())
+                rows.append(
+                    {
+                        "scope": scope,
+                        "domain": domain,
+                        "fold_id": fold_id,
+                        "metric": metric,
+                        "metric_active": int(metric in active_metric_keys),
+                        "target": target,
+                        "n": n,
+                        "spearman": rho,
+                    }
+                )
+    return pd.DataFrame(rows)
+
+
+def compute_rgpm_component_correlations(rgpm_table: pd.DataFrame) -> pd.DataFrame:
+    """Audit whether RGPM is dominated by one component or graph delta."""
+    if rgpm_table.empty or "RGPM" not in rgpm_table.columns:
+        return pd.DataFrame()
+    rows: List[Dict[str, object]] = []
+    variables: List[Tuple[str, str]] = []
+    variables.extend(
+        (c, "mechanism_component")
+        for c in rgpm_table.columns
+        if c.startswith("RGPM_") and c.endswith("_component")
+    )
+    variables.extend((c + "_z", "delta_z") for c in DELTA_KEYS if c + "_z" in rgpm_table.columns)
+    variables.extend((c, "delta_raw") for c in DELTA_KEYS if c in rgpm_table.columns)
+    for col, kind in variables:
+        vals = pd.to_numeric(rgpm_table[col], errors="coerce").to_numpy(dtype=float)
+        finite = vals[np.isfinite(vals)]
+        rows.append(
+            {
+                "variable": col,
+                "kind": kind,
+                "n": int(len(finite)),
+                "spearman_with_rgpm": safe_spearman(rgpm_table[col], rgpm_table["RGPM"]),
+                "nonzero_rate": float(np.mean(np.abs(finite) > 1e-12)) if len(finite) else np.nan,
+                "median": float(np.median(finite)) if len(finite) else np.nan,
+                "iqr": float(np.percentile(finite, 75) - np.percentile(finite, 25)) if len(finite) else np.nan,
+                "cap_hit_rate": float(np.nanmean(pd.to_numeric(rgpm_table.get(col.replace("_z", "_z_clipped"), np.nan), errors="coerce"))) if kind == "delta_z" else np.nan,
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def compute_control_tier_audit(control_diagnostics: pd.DataFrame) -> pd.DataFrame:
+    """Summarize strict/relaxed matched-control usage."""
+    if control_diagnostics.empty:
+        return pd.DataFrame()
+    ctrl = control_diagnostics.copy()
+    if "domain" not in ctrl.columns:
+        ctrl["domain"] = "all"
+    if "control_tier" not in ctrl.columns:
+        ctrl["control_tier"] = ""
+    ctrl["is_relaxed_tier"] = ctrl["control_tier"].astype(str).isin(RELAXED_CONTROL_TIERS).astype(int)
+    rows: List[Dict[str, object]] = []
+    groups: List[Tuple[str, str, pd.DataFrame]] = [("all", "all", ctrl)]
+    groups.extend(("domain", str(domain), sub) for domain, sub in ctrl.groupby("domain", sort=True))
+    for scope, domain, sub in groups:
+        n_controls = pd.to_numeric(sub["n_controls"], errors="coerce").to_numpy(dtype=float) if "n_controls" in sub.columns else np.array([])
+        n_controls = n_controls[np.isfinite(n_controls)]
+        tier_counts = sub["control_tier"].astype(str).value_counts(normalize=False)
+        tier_rates = sub["control_tier"].astype(str).value_counts(normalize=True)
+        for tier in sorted(tier_counts.index):
+            rows.append(
+                {
+                    "scope": scope,
+                    "domain": domain,
+                    "control_tier": tier,
+                    "n_rows": int(len(sub)),
+                    "tier_count": int(tier_counts[tier]),
+                    "tier_rate": float(tier_rates[tier]),
+                    "relaxed_tier_rate": float(sub["is_relaxed_tier"].mean()),
+                    "n_controls_median": float(np.median(n_controls)) if len(n_controls) else np.nan,
+                    "n_controls_min": float(np.min(n_controls)) if len(n_controls) else np.nan,
+                    "n_controls_max": float(np.max(n_controls)) if len(n_controls) else np.nan,
+                }
+            )
+    return pd.DataFrame(rows)
+
+
+def quadratic_design_matrix(X: np.ndarray) -> np.ndarray:
+    """Linear + square + pairwise-interaction design matrix."""
+    X = np.asarray(X, dtype=float)
+    cols = [X]
+    cols.append(np.square(X))
+    pairs: List[np.ndarray] = []
+    for i in range(X.shape[1]):
+        for j in range(i + 1, X.shape[1]):
+            pairs.append((X[:, i] * X[:, j]).reshape(-1, 1))
+    if pairs:
+        cols.append(np.hstack(pairs))
+    return np.hstack(cols)
+
+
+def ridge_predict_oof(
+    X: np.ndarray,
+    y: np.ndarray,
+    folds: Sequence[np.ndarray],
+    lambdas: Sequence[float],
+) -> Tuple[np.ndarray, pd.DataFrame]:
+    """OOF quadratic ridge upper-bound diagnostic."""
+    Xq = quadratic_design_matrix(X)
+    y_rank = rank_normal_scores(y)
+    y_rank = np.where(np.isfinite(y_rank), y_rank, 0.0)
+    oof = np.full(len(y), np.nan, dtype=float)
+    rows: List[Dict[str, object]] = []
+    for fold_no, test_idx in enumerate(folds, start=1):
+        train_mask = np.ones(len(y), dtype=bool)
+        train_mask[test_idx] = False
+        train_idx = np.where(train_mask)[0]
+        x_train = Xq[train_idx]
+        x_test = Xq[test_idx]
+        mu = np.nanmean(x_train, axis=0)
+        sigma = np.nanstd(x_train, axis=0)
+        sigma = np.where(sigma < 1e-9, 1.0, sigma)
+        x_train = (x_train - mu) / sigma
+        x_test = (x_test - mu) / sigma
+        y_train = y_rank[train_idx]
+        y_train = y_train - float(np.mean(y_train))
+        best_lambda = float(lambdas[0])
+        best_train_rho = -np.inf
+        best_beta = np.zeros(x_train.shape[1], dtype=float)
+        xtx = x_train.T @ x_train
+        xty = x_train.T @ y_train
+        for lam in lambdas:
+            try:
+                beta = np.linalg.solve(xtx + float(lam) * np.eye(x_train.shape[1]), xty)
+            except Exception:
+                beta = np.linalg.pinv(xtx + float(lam) * np.eye(x_train.shape[1])) @ xty
+            train_pred = x_train @ beta
+            train_rho = safe_spearman(train_pred, y[train_idx])
+            if np.isfinite(train_rho) and train_rho > best_train_rho:
+                best_train_rho = float(train_rho)
+                best_lambda = float(lam)
+                best_beta = beta
+        oof[test_idx] = x_test @ best_beta
+        rows.append(
+            {
+                "fold": fold_no,
+                "n_train": int(len(train_idx)),
+                "n_test": int(len(test_idx)),
+                "selected_lambda": best_lambda,
+                "train_spearman": best_train_rho if np.isfinite(best_train_rho) else np.nan,
+                "test_spearman": safe_spearman(oof[test_idx], y[test_idx]),
+            }
+        )
+    return oof, pd.DataFrame(rows)
+
+
+def compute_nonlinear_upper_bound_diagnostics(
+    score_table: pd.DataFrame,
+    active_metric_keys: Sequence[str],
+    seed: int,
+) -> Tuple[pd.DataFrame, np.ndarray]:
+    """Diagnostic-only nonlinear upper bound using quadratic ridge OOF predictions."""
+    active = [k for k in active_metric_keys if k + "_z" in score_table.columns]
+    if not active or "RGPM" not in score_table.columns:
+        return pd.DataFrame(), np.array([])
+    st = score_table.replace([np.inf, -np.inf], np.nan).dropna(subset=[k + "_z" for k in active] + ["RGPM"]).reset_index(drop=True)
+    if len(st) < 20:
+        return pd.DataFrame(), np.array([])
+    X = st[[k + "_z" for k in active]].fillna(0.0).to_numpy(dtype=float)
+    y = st["RGPM"].to_numpy(dtype=float)
+    fold_ids = st["fold_id"].to_numpy(dtype=int) if "fold_id" in st.columns else np.full(len(st), -1, dtype=int)
+    folds = [np.where(fold_ids == f)[0] for f in sorted(set(fold_ids)) if f > 0 and np.sum(fold_ids == f) > 0]
+    if len(folds) < 2:
+        folds = make_folds(st, n_folds=3, mode="random", seed=seed)
+    lambdas = (0.01, 0.03, 0.1, 0.3, 1.0, 3.0, 10.0, 30.0, 100.0)
+    oof, fold_diag = ridge_predict_oof(X, y, folds, lambdas)
+    linear_rho = safe_spearman(st["S_w_oof"], y) if "S_w_oof" in st.columns else np.nan
+    equal_rho = safe_spearman(st["S_equal"], y) if "S_equal" in st.columns else np.nan
+    nonlinear_rho = safe_spearman(oof, y)
+    summary = pd.DataFrame(
+        [
+            {
+                "fold": 0,
+                "n_train": int(len(st)),
+                "n_test": int(len(st)),
+                "selected_lambda": np.nan,
+                "train_spearman": np.nan,
+                "test_spearman": nonlinear_rho,
+                "model": "quadratic_ridge_oof",
+                "linear_oof_spearman": linear_rho,
+                "equal_weight_spearman": equal_rho,
+                "delta_vs_linear": nonlinear_rho - linear_rho if np.isfinite(nonlinear_rho) and np.isfinite(linear_rho) else np.nan,
+                "delta_vs_equal": nonlinear_rho - equal_rho if np.isfinite(nonlinear_rho) and np.isfinite(equal_rho) else np.nan,
+            }
+        ]
+    )
+    fold_diag["model"] = "quadratic_ridge_oof_fold"
+    fold_diag["linear_oof_spearman"] = linear_rho
+    fold_diag["equal_weight_spearman"] = equal_rho
+    fold_diag["delta_vs_linear"] = np.nan
+    fold_diag["delta_vs_equal"] = np.nan
+    return pd.concat([summary, fold_diag], ignore_index=True), oof
+
+
+def build_panel_b_example(comp: ComputedData) -> pd.DataFrame:
+    """Use active deltas sorted by mechanism/reliability for the Panel b example."""
+    merged = comp.rgpm_table.copy()
+    if (merged["is_landmark"].astype(int) == 1).any():
+        row = merged[merged["is_landmark"].astype(int) == 1].sort_values("RGPM", ascending=False).iloc[0]
+    else:
+        row = merged.sort_values("RGPM", ascending=False).iloc[0]
+    active_set = set(comp.active_delta_keys)
+    diag = comp.delta_diagnostics.copy()
+    diag = diag[diag["delta"].isin(active_set)].copy()
+    mech_order = {k: i for i, k in enumerate(["Expansion", "Bridging", "Reconfiguration", "Consolidation"])}
+    delta_to_mech = {d: mech for mech, keys in DELTA_MECHANISM_GROUPS_V3.items() for d in keys}
+    diag["mechanism"] = diag["delta"].map(delta_to_mech).fillna("Other")
+    diag["mechanism_order"] = diag["mechanism"].map(mech_order).fillna(99)
+    diag = diag.sort_values(["mechanism_order", "reliability_weight"], ascending=[True, False])
+    out = []
+    for drow in diag.itertuples(index=False):
+        key = str(getattr(drow, "delta"))
+        out.append(
+            {
+                "key": key,
+                "label": f"{DELTA_LABELS.get(key, key)} ({next((d[2] for d in DELTA_SPECS if d[0] == key), '')})",
+                "z": float(row[key + "_z"]),
+                "z_raw": float(row.get(key + "_z_raw", row[key + "_z"])),
+                "clipped": int(row.get(key + "_z_clipped", 0)),
+                "reliability_weight": float(getattr(drow, "reliability_weight", np.nan)),
+                "mechanism": str(getattr(drow, "mechanism", "")),
+            }
+        )
+    return pd.DataFrame(out)
+
+
+def finite_min(values: Sequence[float]) -> float:
+    arr = np.asarray(values, dtype=float)
+    arr = arr[np.isfinite(arr)]
+    return float(arr.min()) if len(arr) else float("nan")
+
+
+def finite_max(values: Sequence[float]) -> float:
+    arr = np.asarray(values, dtype=float)
+    arr = arr[np.isfinite(arr)]
+    return float(arr.max()) if len(arr) else float("nan")
+
+
+def compute_domain_adequacy_diagnostics(
+    score_table: pd.DataFrame,
+    control_diagnostics: Optional[pd.DataFrame],
+) -> Tuple[pd.DataFrame, Dict[str, Any]]:
+    """Summarize whether the empirical run is large and diverse enough for a main-figure claim."""
+    thresholds = DATA_ADEQUACY_THRESHOLDS
+    if score_table.empty:
+        profile = {
+            "n_domains": 0,
+            "total_papers": 0,
+            "min_papers_per_domain": 0,
+            "min_landmark_or_high_cases_per_domain": 0,
+            "control_median_min_by_domain": float("nan"),
+            "relaxed_control_tier_rate_max_by_domain": float("nan"),
+            "domains": [],
+        }
+        return pd.DataFrame(), profile
+
+    st = score_table.copy()
+    if "domain" not in st.columns:
+        st["domain"] = "domain"
+    st["domain"] = st["domain"].fillna("unknown").astype(str)
+    if "RGPM" not in st.columns:
+        st["RGPM"] = np.nan
+    if "is_landmark" not in st.columns:
+        st["is_landmark"] = 0
+
+    ctrl = control_diagnostics.copy() if control_diagnostics is not None else pd.DataFrame()
+    if not ctrl.empty:
+        if "domain" not in ctrl.columns:
+            ctrl["domain"] = "domain"
+        ctrl["domain"] = ctrl["domain"].fillna("unknown").astype(str)
+        if "n_controls" not in ctrl.columns:
+            ctrl["n_controls"] = np.nan
+        if "control_tier" not in ctrl.columns:
+            ctrl["control_tier"] = ""
+
+    rows: List[Dict[str, object]] = []
+    high_q = float(thresholds["high_perturbation_quantile"])
+    for domain, sub in st.groupby("domain", sort=True):
+        rgpm = pd.to_numeric(sub["RGPM"], errors="coerce")
+        finite_rgpm = rgpm[np.isfinite(rgpm.to_numpy(dtype=float))]
+        if len(finite_rgpm):
+            high_threshold = float(np.nanquantile(finite_rgpm.to_numpy(dtype=float), high_q))
+            has_real_tail = float(np.nanstd(finite_rgpm.to_numpy(dtype=float))) > 1e-12 and high_threshold > 0.0
+            high_mask = (rgpm >= high_threshold) if has_real_tail else pd.Series(False, index=sub.index)
+        else:
+            high_threshold = float("nan")
+            high_mask = pd.Series(False, index=sub.index)
+        landmark_mask = pd.to_numeric(sub["is_landmark"], errors="coerce").fillna(0).astype(int) == 1
+        high_count = int(high_mask.fillna(False).sum())
+        landmark_count = int(landmark_mask.sum())
+        landmark_or_high_count = int((landmark_mask | high_mask.fillna(False)).sum())
+
+        ctrl_sub = ctrl[ctrl["domain"] == domain] if not ctrl.empty else pd.DataFrame()
+        if not ctrl_sub.empty:
+            n_controls = pd.to_numeric(ctrl_sub["n_controls"], errors="coerce").to_numpy(dtype=float)
+            n_controls = n_controls[np.isfinite(n_controls)]
+            control_median = float(np.median(n_controls)) if len(n_controls) else float("nan")
+            relaxed_rate = float(ctrl_sub["control_tier"].astype(str).isin(RELAXED_CONTROL_TIERS).mean())
+        else:
+            control_median = float("nan")
+            relaxed_rate = float("nan")
+
+        rows.append(
+            {
+                "domain": domain,
+                "n_papers": int(len(sub)),
+                "n_landmarks": landmark_count,
+                "n_high_perturbation_cases": high_count,
+                "n_landmark_or_high_cases": landmark_or_high_count,
+                "high_perturbation_quantile": high_q,
+                "high_perturbation_threshold": high_threshold,
+                "control_median": control_median,
+                "relaxed_control_tier_rate": relaxed_rate,
+                "pass_papers_per_domain_min": int(len(sub) >= int(thresholds["papers_per_domain_min"])),
+                "pass_landmark_or_high_cases_min": int(landmark_or_high_count >= int(thresholds["landmark_or_high_cases_per_domain_min"])),
+                "pass_control_median_min": int(np.isfinite(control_median) and control_median >= float(thresholds["control_median_min"])),
+                "pass_relaxed_control_tier_rate_max": int(np.isfinite(relaxed_rate) and relaxed_rate <= float(thresholds["relaxed_control_tier_rate_max"])),
+            }
+        )
+
+    domain_diag = pd.DataFrame(rows)
+    min_papers = int(domain_diag["n_papers"].min()) if not domain_diag.empty else 0
+    min_cases = int(domain_diag["n_landmark_or_high_cases"].min()) if not domain_diag.empty else 0
+    control_median_min = finite_min(domain_diag["control_median"].to_numpy(dtype=float)) if not domain_diag.empty else float("nan")
+    relaxed_rate_max = finite_max(domain_diag["relaxed_control_tier_rate"].to_numpy(dtype=float)) if not domain_diag.empty else float("nan")
+    profile = {
+        "n_domains": int(domain_diag["domain"].nunique()) if not domain_diag.empty else 0,
+        "total_papers": int(len(st)),
+        "min_papers_per_domain": min_papers,
+        "min_landmark_or_high_cases_per_domain": min_cases,
+        "control_median_min_by_domain": control_median_min,
+        "relaxed_control_tier_rate_max_by_domain": relaxed_rate_max,
+        "domains": domain_diag["domain"].astype(str).tolist() if not domain_diag.empty else [],
+        "domains_below_paper_min": domain_diag.loc[
+            domain_diag["pass_papers_per_domain_min"].astype(int) == 0, "domain"
+        ].astype(str).tolist() if not domain_diag.empty else [],
+        "domains_below_landmark_or_high_case_min": domain_diag.loc[
+            domain_diag["pass_landmark_or_high_cases_min"].astype(int) == 0, "domain"
+        ].astype(str).tolist() if not domain_diag.empty else [],
+        "domains_with_relaxed_controls": domain_diag.loc[
+            domain_diag["pass_relaxed_control_tier_rate_max"].astype(int) == 0, "domain"
+        ].astype(str).tolist() if not domain_diag.empty else [],
+    }
+    return domain_diag, profile
+
+
+def build_diagnostics_summary(
+    active_delta_keys: Sequence[str],
+    delta_diagnostics: pd.DataFrame,
+    baseline_comparison: pd.DataFrame,
+    score_table: pd.DataFrame,
+    control_diagnostics: Optional[pd.DataFrame] = None,
+    nonlinear_diagnostics: Optional[pd.DataFrame] = None,
+) -> Dict[str, Any]:
+    learned_rows = baseline_comparison[baseline_comparison["model"] == "learned_weight_oof"]
+    equal_rows = baseline_comparison[baseline_comparison["model"] == "equal_weights"]
+    learned_rho = float(learned_rows["oof_spearman"].iloc[0]) if not learned_rows.empty else float("nan")
+    equal_rho = float(equal_rows["oof_spearman"].iloc[0]) if not equal_rows.empty else float("nan")
+    improvement = learned_rho - equal_rho if np.isfinite(learned_rho) and np.isfinite(equal_rho) else float("nan")
+    active_diag = delta_diagnostics[delta_diagnostics["delta"].isin(active_delta_keys)]
+    active_cap_max = float(active_diag["z_cap_hit_rate"].max()) if not active_diag.empty else float("nan")
+    mean_rel = float(active_diag["reliability_weight"].mean()) if "reliability_weight" in active_diag and not active_diag.empty else float("nan")
+    score_vals = score_table["S_w_oof"].to_numpy(dtype=float) if "S_w_oof" in score_table.columns else np.array([])
+    score_vals = score_vals[np.isfinite(score_vals)]
+    score_iqr = float(np.percentile(score_vals, 75) - np.percentile(score_vals, 25)) if len(score_vals) else float("nan")
+    thresholds = MAIN_FIGURE_THRESHOLDS
+    data_thresholds = DATA_ADEQUACY_THRESHOLDS
+    domain_diag, data_profile = compute_domain_adequacy_diagnostics(score_table, control_diagnostics)
+    association_checks = {
+        "active_graph_deltas": int(len(active_delta_keys) >= thresholds["active_graph_deltas_min"]),
+        "active_delta_z_cap_hit_rate": int(np.isfinite(active_cap_max) and active_cap_max < 0.15),
+        "oof_spearman": int(np.isfinite(learned_rho) and learned_rho >= thresholds["oof_spearman_min"]),
+        "learned_vs_equal": int(np.isfinite(improvement) and improvement >= thresholds["learned_vs_equal_min"]),
+        "score_iqr": int(np.isfinite(score_iqr) and score_iqr > thresholds["score_iqr_min"]),
+        "mean_delta_reliability": int(np.isfinite(mean_rel) and mean_rel >= 0.25),
+    }
+    data_checks = {
+        "domain_count": int(data_profile["n_domains"] >= int(data_thresholds["domains_min"])),
+        "total_papers": int(data_profile["total_papers"] >= int(data_thresholds["total_papers_min"])),
+        "papers_per_domain": int(data_profile["min_papers_per_domain"] >= int(data_thresholds["papers_per_domain_min"])),
+        "landmark_or_high_cases_per_domain": int(
+            data_profile["min_landmark_or_high_cases_per_domain"] >= int(data_thresholds["landmark_or_high_cases_per_domain_min"])
+        ),
+        "matched_control_median": int(
+            np.isfinite(data_profile["control_median_min_by_domain"])
+            and data_profile["control_median_min_by_domain"] >= float(data_thresholds["control_median_min"])
+        ),
+        "matched_control_relaxation": int(
+            np.isfinite(data_profile["relaxed_control_tier_rate_max_by_domain"])
+            and data_profile["relaxed_control_tier_rate_max_by_domain"] <= float(data_thresholds["relaxed_control_tier_rate_max"])
+        ),
+    }
+    checks = {**association_checks, **data_checks}
+    data_pass = bool(all(data_checks.values()))
+    nonlinear_rho = float("nan")
+    nonlinear_delta = float("nan")
+    nonlinear_interpretation = "nonlinear_upper_bound_not_available"
+    if nonlinear_diagnostics is not None and not nonlinear_diagnostics.empty:
+        summary_rows = nonlinear_diagnostics[nonlinear_diagnostics["model"] == "quadratic_ridge_oof"]
+        if not summary_rows.empty:
+            nonlinear_rho = float(summary_rows["test_spearman"].iloc[0])
+            nonlinear_delta = nonlinear_rho - learned_rho if np.isfinite(nonlinear_rho) and np.isfinite(learned_rho) else float("nan")
+            if np.isfinite(nonlinear_delta) and nonlinear_delta >= 0.05:
+                nonlinear_interpretation = "nonlinear_signal_above_linear_simplex"
+            elif np.isfinite(nonlinear_rho) and nonlinear_rho < 0.20:
+                nonlinear_interpretation = "weak_signal_even_for_nonlinear_upper_bound"
+            else:
+                nonlinear_interpretation = "nonlinear_upper_bound_close_to_linear"
+    overall_pass = bool(all(checks.values()))
+    if overall_pass:
+        status_label = "validated empirical association"
+    elif not data_pass:
+        status_label = "underpowered multi-domain diagnostic run"
+    elif np.isfinite(learned_rho) and learned_rho >= 0.30:
+        status_label = "moderate empirical association / still diagnostic"
+    else:
+        status_label = "weak empirical association / diagnostic run"
+    return {
+        "overall_pass": overall_pass,
+        "status_label": status_label,
+        "target_version": "RGPM-v3 mechanism-balanced",
+        "thresholds": thresholds,
+        "data_requirements": data_thresholds,
+        "checks": checks,
+        "association_checks": association_checks,
+        "data_checks": data_checks,
+        "data_profile": data_profile,
+        "domain_adequacy": domain_diag.to_dict("records"),
+        "active_graph_deltas": list(active_delta_keys),
+        "n_active_graph_deltas": int(len(active_delta_keys)),
+        "active_delta_z_cap_hit_rate_max": active_cap_max,
+        "mean_delta_reliability": mean_rel,
+        "learned_oof_spearman": learned_rho,
+        "equal_weight_oof_spearman": equal_rho,
+        "learned_vs_equal_delta": improvement,
+        "nonlinear_upper_bound_oof_spearman": nonlinear_rho,
+        "nonlinear_vs_linear_delta": nonlinear_delta,
+        "nonlinear_diagnostic_interpretation": nonlinear_interpretation,
+        "score_oof_iqr": score_iqr,
+    }
+
+
+def draw_panel_b(ax: plt.Axes, comp: ComputedData) -> None:
+    panel_frame(ax, "b", "Mechanism-balanced RGPM-v3 target construction")
+    ex = comp.panel_b_example.copy()
+    if ex.empty:
+        raise ValueError("Panel b example data is empty.")
+    rounded_box(ax, 0.020, 0.115, 0.705, 0.775, "#FFFFFF", BORDER, 0.65, 0.012)
+    ax.text(0.372, 0.850, "Active graph-delta z-scores weighted by stability and mechanism", ha="center", va="center", fontsize=7.1, color="#0F3A75", fontweight="bold")
+    z_axis_x0 = 0.430
+    z_axis_w = 0.230
+    ax.text(z_axis_x0, 0.790, "-4", ha="center", va="center", fontsize=5.3, color=TEXT_LIGHT)
+    ax.text(z_axis_x0 + z_axis_w / 2, 0.790, "0", ha="center", va="center", fontsize=5.3, color=TEXT_LIGHT)
+    ax.text(z_axis_x0 + z_axis_w, 0.790, "+4", ha="center", va="center", fontsize=5.3, color=TEXT_LIGHT)
+    ax.plot([z_axis_x0, z_axis_x0 + z_axis_w], [0.765, 0.765], color="#CBD5E1", lw=0.8, transform=ax.transAxes)
+    ax.plot([z_axis_x0 + z_axis_w / 2, z_axis_x0 + z_axis_w / 2], [0.178, 0.778], color="#9CA3AF", lw=0.6, ls="--", transform=ax.transAxes)
+    y0 = 0.720
+    row_step = min(0.057, 0.565 / max(len(ex), 1))
+    mech_colors = {"Expansion": "#2E7D32", "Bridging": "#0B4FA3", "Reconfiguration": "#F97316", "Consolidation": "#6B7280"}
+    for i, row in enumerate(ex.itertuples(index=False)):
+        y = y0 - i * row_step
+        mech = str(getattr(row, "mechanism", ""))
+        ax.scatter([0.045], [y], s=18, color=mech_colors.get(mech, "#9CA3AF"), transform=ax.transAxes, zorder=4)
+        ax.text(0.065, y, getattr(row, "label"), ha="left", va="center", fontsize=5.2)
+        rel = float(getattr(row, "reliability_weight", np.nan))
+        ax.text(0.335, y, f"r={rel:.2f}" if np.isfinite(rel) else "", ha="right", va="center", fontsize=4.9, color=TEXT_LIGHT)
+        z = float(getattr(row, "z"))
+        x0 = z_axis_x0 + z_axis_w / 2
+        x1 = z_axis_x0 + z_axis_w * ((np.clip(z, -4.0, 4.0) + 4.0) / 8.0)
+        color = "#EF4444" if z >= 0 else "#3B82F6"
+        ax.add_patch(mpatches.Rectangle((min(x0, x1), y - 0.012), max(abs(x1 - x0), 0.004), 0.024, transform=ax.transAxes, facecolor=color, edgecolor="none", alpha=0.82))
+        if int(getattr(row, "clipped", 0)):
+            ax.scatter([x1], [y], marker="^" if z >= 0 else "v", s=18, color="#111827", transform=ax.transAxes, zorder=6)
+        ax.text(0.680, y, format_z_for_panel(z), ha="center", va="center", fontsize=5.2)
+    ax.text(0.372, 0.080, "Controls: field/year/ref-bin matching; deltas are reliability-weighted and balanced by mechanism", ha="center", va="center", fontsize=5.4)
+
+    rounded_box(ax, 0.755, 0.115, 0.225, 0.775, "#FFFFFF", BORDER, 0.65, 0.012)
+    ax.text(0.868, 0.850, "RGPM-v3", ha="center", va="center", fontsize=7.6, color="#0F3A75", fontweight="bold")
+    ax.text(0.868, 0.700, r"$z_j=\frac{\Delta_j-\tilde{\Delta}_{ctrl}}{scale_j}$", ha="center", va="center", fontsize=6.6)
+    ax.text(0.868, 0.595, r"$r_j=f(stability_j)$", ha="center", va="center", fontsize=7.0)
+    ax.text(0.868, 0.480, r"$M_g=\sqrt{\frac{\sum_{j\in g} r_j\max(z_j,0)^2}{\sum_{j\in g} r_j}}$", ha="center", va="center", fontsize=5.7)
+    ax.text(0.868, 0.375, r"$RGPM=\sqrt{mean_g(M_g^2)}$", ha="center", va="center", fontsize=7.0, color="#1D4ED8", fontweight="bold")
+    rounded_box(ax, 0.780, 0.205, 0.175, 0.110, "#F3F4F6", "#CBD5E1", 0.65, 0.010)
+    n_active = int(len(comp.active_delta_keys))
+    mean_rel = comp.diagnostics_summary.get("mean_delta_reliability", np.nan)
+    ax.text(0.868, 0.260, f"active deltas: {n_active}\nmean reliability: {mean_rel:.2f}" if np.isfinite(float(mean_rel)) else f"active deltas: {n_active}", ha="center", va="center", fontsize=5.7, color=TEXT_MID)
+
+
+def rank_decile_calibration_table(
+    score_table: pd.DataFrame,
+    seed: int,
+    n_boot: int = 300,
+) -> pd.DataFrame:
+    """Summarize RGPM percentile by OOF-score decile."""
+    st = score_table.replace([np.inf, -np.inf], np.nan).dropna(subset=["S_w_oof", "RGPM"]).copy()
+    if st.empty:
+        return pd.DataFrame()
+    st["score_percentile"] = st["S_w_oof"].rank(method="average", pct=True) * 100.0
+    st["rgpm_percentile"] = st["RGPM"].rank(method="average", pct=True) * 100.0
+    q = min(10, max(2, int(st["S_w_oof"].nunique())))
+    st["score_decile"] = pd.qcut(st["S_w_oof"].rank(method="first"), q=q, labels=False, duplicates="drop") + 1
+    rng = np.random.default_rng(seed)
+    rows: List[Dict[str, object]] = []
+    for decile, sub in st.groupby("score_decile", sort=True):
+        vals = sub["rgpm_percentile"].to_numpy(dtype=float)
+        boot_means = []
+        if len(vals) >= 2:
+            for _ in range(int(n_boot)):
+                idx = rng.integers(0, len(vals), size=len(vals))
+                boot_means.append(float(np.mean(vals[idx])))
+        if boot_means:
+            ci_low, ci_high = np.percentile(boot_means, [2.5, 97.5])
+        else:
+            ci_low = ci_high = float(np.mean(vals)) if len(vals) else np.nan
+        rows.append(
+            {
+                "score_decile": int(decile),
+                "n": int(len(sub)),
+                "score_percentile_mid": float(np.mean(sub["score_percentile"])),
+                "rgpm_percentile_mean": float(np.mean(vals)) if len(vals) else np.nan,
+                "rgpm_percentile_median": float(np.median(vals)) if len(vals) else np.nan,
+                "ci_low": float(ci_low),
+                "ci_high": float(ci_high),
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def draw_panel_f(ax: plt.Axes, comp: ComputedData) -> None:
+    panel_frame(ax, "f", "Out-of-fold score calibration against mechanism-balanced RGPM")
+    cal_ax = ax.inset_axes([0.065, 0.185, 0.425, 0.660])
+    st = comp.score_table.copy()
+    rho = safe_spearman(st["S_w_oof"], st["RGPM"])
+    cal = rank_decile_calibration_table(st, seed=comp.profile_n + 410)
+    if cal.empty:
+        cal_ax.text(0.5, 0.5, "No OOF calibration data", ha="center", va="center", fontsize=7)
+    else:
+        x = cal["score_percentile_mid"].to_numpy(dtype=float)
+        y = cal["rgpm_percentile_mean"].to_numpy(dtype=float)
+        lo = cal["ci_low"].to_numpy(dtype=float)
+        hi = cal["ci_high"].to_numpy(dtype=float)
+        cal_ax.fill_between(x, lo, hi, color="#93C5FD", alpha=0.28, linewidth=0)
+        cal_ax.plot(x, y, color="#1D4ED8", lw=1.6, marker="o", markersize=3.8, label="Mean RGPM percentile")
+        cal_ax.plot(x, cal["rgpm_percentile_median"].to_numpy(dtype=float), color="#111827", lw=1.0, marker="s", markersize=3.0, alpha=0.75, label="Median")
+        cal_ax.plot([0, 100], [50, 50], color="#9CA3AF", lw=0.7, ls=":")
+        cal_ax.plot([0, 100], [0, 100], color="#D1D5DB", lw=0.7, ls="--")
+        top = cal[cal["score_decile"] == cal["score_decile"].max()]
+        lift = float(top["rgpm_percentile_mean"].iloc[0] - 50.0) if not top.empty else np.nan
+        cal_ax.text(
+            0.050,
+            0.925,
+            f"OOF Spearman ρ = {rho:.2f}\nTop-decile lift = {lift:+.1f} pp" if np.isfinite(lift) else f"OOF Spearman ρ = {rho:.2f}",
+            transform=cal_ax.transAxes,
+            ha="left",
+            va="top",
+            fontsize=6.4,
+            color="#0F3A75",
+            fontweight="bold",
+        )
+        cal_ax.set_xlim(0, 100)
+        cal_ax.set_ylim(0, 100)
+        cal_ax.set_xlabel("$S_w$ OOF percentile decile", fontsize=6)
+        cal_ax.set_ylabel("Mean RGPM-v3 percentile", fontsize=6)
+        cal_ax.legend(frameon=True, fontsize=4.8, loc="lower right")
+    cal_ax.tick_params(labelsize=5)
+    cal_ax.set_title("Rank-decile calibration", fontsize=7, color="#0F3A75", fontweight="bold")
+    cal_ax.grid(True, color="#E5E7EB", lw=0.45)
+    for s in cal_ax.spines.values():
+        s.set_linewidth(0.5)
+
+    score_q = pd.qcut(st["S_w_oof"].rank(method="first"), q=3, labels=["Low", "Mid", "High"])
+
+    ax.text(0.720, 0.835, "Indicator profiles by OOF score tertile", ha="center", va="center", fontsize=7.2, color="#0F3A75", fontweight="bold")
+    bar_ax = ax.inset_axes([0.565, 0.170, 0.385, 0.625])
+    groups = ["Low", "Mid", "High"]
+    group_colors = {"Low": "#3B82F6", "Mid": "#F59E0B", "High": "#EF4444"}
+    y_pos = np.arange(len(METRIC_KEYS))
+    offsets = {"Low": -0.22, "Mid": 0.00, "High": 0.22}
+    for group in groups:
+        sub = st[score_q.astype(str) == group]
+        means = []
+        ses = []
+        for i, key in enumerate(METRIC_KEYS):
+            vals = sub[key + "_z"].to_numpy(dtype=float)
+            means.append(float(np.nanmean(vals)) if np.isfinite(vals).any() else np.nan)
+            ses.append(bootstrap_mean_se(vals, seed=comp.profile_n + i + len(group)))
+        bar_ax.barh(y_pos + offsets[group], means, height=0.18, color=group_colors[group], alpha=0.75, label=group)
+        bar_ax.errorbar(means, y_pos + offsets[group], xerr=ses, fmt="none", ecolor="#111827", elinewidth=0.5, capsize=1.2)
+    bar_ax.axvline(0, color="#6B7280", lw=0.7)
+    bar_ax.set_yticks(y_pos)
+    bar_ax.set_yticklabels([METRIC_LABELS[k] for k in METRIC_KEYS], fontsize=5.5)
+    bar_ax.set_xlabel("Mean rank-normalized indicator ± bootstrap SE", fontsize=5.5)
+    bar_ax.tick_params(labelsize=5, length=2)
+    bar_ax.grid(True, axis="x", color="#E5E7EB", lw=0.45)
+    bar_ax.legend(frameon=True, fontsize=5, loc="lower right")
+    for s in bar_ax.spines.values():
+        s.set_linewidth(0.5)
+    status_color = "#166534" if not is_diagnostic_run(comp) else "#7F1D1D"
+    ax.text(0.720, 0.082, diagnostic_status_text(comp), ha="center", va="center", fontsize=6.0, color=status_color, fontweight="bold")
+
+
+def draw_full_figure(comp: ComputedData, tau: int, out_path: Path) -> None:
+    setup_style()
+    fig = plt.figure(figsize=(20, 12.6), dpi=300)
+    status = diagnostic_status_text(comp)
+    if is_diagnostic_run(comp):
+        title = "Fig. 3 diagnostic run | Mechanism-balanced RGPM and hybrid weight learning"
+        subtitle = "Strict out-of-fold scores are reported; weak results should be interpreted as model diagnostics rather than a final scoring claim"
+    else:
+        title = "Fig. 3 | Data-driven weight learning for graph-perturbation scoring"
+        subtitle = "Weights are selected by their ability to recover mechanism-balanced realized structural changes of knowledge graphs"
+    fig.text(0.5, 0.985, title, ha="center", va="top", fontsize=18.0, fontweight="bold")
+    fig.text(0.5, 0.957, subtitle, ha="center", va="top", fontsize=10.8, color=TEXT_MID)
+
+    gs = GridSpec(3, 6, figure=fig, height_ratios=[1.0, 1.05, 1.0], hspace=0.085, wspace=0.035)
+    ax_a = fig.add_subplot(gs[0, 0:3])
+    ax_b = fig.add_subplot(gs[0, 3:6])
+    ax_c = fig.add_subplot(gs[1, 0:2])
+    ax_d = fig.add_subplot(gs[1, 2:6])
+    ax_e = fig.add_subplot(gs[2, 0:2])
+    ax_f = fig.add_subplot(gs[2, 2:6])
+    draw_panel_a(ax_a, comp, tau)
+    draw_panel_b(ax_b, comp)
+    draw_panel_c(ax_c, comp)
+    draw_panel_d(ax_d, comp)
+    draw_panel_e(ax_e, comp)
+    draw_panel_f(ax_f, comp)
+    fig.text(
+        0.012,
+        0.012,
+        "(1) Seven indicators are computed at publication day (G0).  "
+        "(2) RGPM-v3 balances reliability-weighted future graph-delta outcomes by mechanism.  "
+        "(3) Learned weights are evaluated strictly out-of-fold.  "
+        f"Status: {status}.",
+        ha="left",
+        va="bottom",
+        fontsize=5.5,
+        color=TEXT_DARK,
+    )
+    fig.savefig(out_path, dpi=300)
+    plt.close(fig)
 
 if __name__ == "__main__":
     with warnings.catch_warnings():
