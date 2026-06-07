@@ -1,0 +1,5 @@
+domain,reference_closure_mode,online_expand,raw_records,total_reference_mentions,internal_reference_mentions,external_reference_mentions,external_unique_references,closure_cap,closure_coverage_target,targeted_closure_unique_references,coverage_without_closure,coverage_if_targeted_materialized,materialized_closure_unique_references,coverage_materialized,status
+crispr,auto,0,7565,453952,133779,320173,180371,50000,0.8,50000,0.2946985584378965,0.7128088432257155,0,0.2946985584378965,closure_disabled_cached_raw_only
+graphene_2d_materials,auto,0,7642,245823,73025,172798,88214,50000,0.8,39050,0.2970633341876065,0.8000024407805616,0,0.2970633341876065,closure_disabled_cached_raw_only
+ipsc_reprogramming,auto,0,10488,617241,141690,475551,263697,50000,0.8,50000,0.2295537723514802,0.6233902154911939,0,0.2295537723514802,closure_disabled_cached_raw_only
+transformer_foundation_models,auto,0,8746,347540,50733,296807,163033,50000,0.8,50000,0.145977441445589,0.6747626172526904,0,0.145977441445589,closure_disabled_cached_raw_only

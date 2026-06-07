@@ -1,0 +1,18 @@
+{
+  "evidence_mode": "strong",
+  "domains": [
+    "crispr",
+    "graphene_2d_materials",
+    "ipsc_reprogramming",
+    "transformer_foundation_models"
+  ],
+  "fig1_corpus_source": "raw",
+  "future_tau": 10,
+  "min_refs": 5,
+  "min_controls": 50,
+  "reference_closure": "auto",
+  "reference_closure_cap": 50000,
+  "closure_coverage_target": 0.8,
+  "online_expand": false,
+  "max_papers": null
+}

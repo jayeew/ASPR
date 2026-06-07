@@ -1,0 +1,21 @@
+slug,display_name,topic_id,query,works_count,field_name,subfield_name
+autophagy_in_disease_and_therapy,Autophagy in Disease and Therapy,https://openalex.org/T10587,Autophagy in Disease and Therapy,65135,Medicine,Epidemiology
+economic_theory_and_institutions,Economic Theory and Institutions,https://openalex.org/T10785,Economic Theory and Institutions,130905,"Economics, Econometrics and Finance",Economics and Econometrics
+economic_theory_and_policy,Economic Theory and Policy,https://openalex.org/T11742,Economic Theory and Policy,196997,"Economics, Econometrics and Finance","General Economics, Econometrics and Finance"
+income_poverty_and_inequality,"Income, Poverty, and Inequality",https://openalex.org/T10446,"Income, Poverty, and Inequality",84069,Social Sciences,Sociology and Political Science
+financial_markets_and_investment_strategies,Financial Markets and Investment Strategies,https://openalex.org/T10047,Financial Markets and Investment Strategies,154174,"Economics, Econometrics and Finance",Finance
+spectroscopy_and_quantum_chemical_studies,Spectroscopy and Quantum Chemical Studies,https://openalex.org/T11177,Spectroscopy and Quantum Chemical Studies,138515,Physics and Astronomy,"Atomic and Molecular Physics, and Optics"
+monetary_policy_and_economic_impact,Monetary Policy and Economic Impact,https://openalex.org/T10007,Monetary Policy and Economic Impact,150275,"Economics, Econometrics and Finance","General Economics, Econometrics and Finance"
+economic_theories_and_models,Economic theories and models,https://openalex.org/T12137,Economic theories and models,147639,"Economics, Econometrics and Finance",Economics and Econometrics
+economic_growth_and_productivity,Economic Growth and Productivity,https://openalex.org/T10393,Economic Growth and Productivity,114834,"Economics, Econometrics and Finance",Economics and Econometrics
+banking_stability_regulation_efficiency,"Banking stability, regulation, efficiency",https://openalex.org/T10127,"Banking stability, regulation, efficiency",168689,"Economics, Econometrics and Finance",Finance
+genetics_aging_and_longevity_in_model_organisms,"Genetics, Aging, and Longevity in Model Organisms",https://openalex.org/T10676,"Genetics, Aging, and Longevity in Model Organisms",101294,"Biochemistry, Genetics and Molecular Biology",Aging
+advanced_mri_techniques_and_applications,Advanced MRI Techniques and Applications,https://openalex.org/T10378,Advanced MRI Techniques and Applications,147161,Medicine,"Radiology, Nuclear Medicine and Imaging"
+theoretical_and_computational_physics,Theoretical and Computational Physics,https://openalex.org/T10591,Theoretical and Computational Physics,489433,Physics and Astronomy,Condensed Matter Physics
+mass_spectrometry_techniques_and_applications,Mass Spectrometry Techniques and Applications,https://openalex.org/T10683,Mass Spectrometry Techniques and Applications,228761,Chemistry,Spectroscopy
+gamma_ray_bursts_and_supernovae,Gamma-ray bursts and supernovae,https://openalex.org/T11323,Gamma-ray bursts and supernovae,124016,Physics and Astronomy,Astronomy and Astrophysics
+magnetic_properties_of_thin_films,Magnetic properties of thin films,https://openalex.org/T10049,Magnetic properties of thin films,139001,Physics and Astronomy,"Atomic and Molecular Physics, and Optics"
+gender_labor_and_family_dynamics,"Gender, Labor, and Family Dynamics",https://openalex.org/T11544,"Gender, Labor, and Family Dynamics",112356,Social Sciences,Gender Studies
+ubiquitin_and_proteasome_pathways,Ubiquitin and proteasome pathways,https://openalex.org/T11041,Ubiquitin and proteasome pathways,78209,"Biochemistry, Genetics and Molecular Biology",Molecular Biology
+protein_structure_and_dynamics,Protein Structure and Dynamics,https://openalex.org/T10044,Protein Structure and Dynamics,139891,"Biochemistry, Genetics and Molecular Biology",Molecular Biology
+sustainable_development_and_environmental_policy,Sustainable Development and Environmental Policy,https://openalex.org/T12013,Sustainable Development and Environmental Policy,74881,Environmental Science,"Management, Monitoring, Policy and Law"

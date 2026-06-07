@@ -1,0 +1,5 @@
+domain,fig1_dir,raw_papers,closure_nodes,citation_edges,landmarks,year_min,year_max,reference_closure_coverage,reference_closure_status
+crispr,/home/jayee/workspace/ASPR/outputs/kg_perturbation_fig1/crispr,7565,0,133779,3,2000,2024,0.2946985584378965,audit_only_no_online_closure
+graphene_2d_materials,/home/jayee/workspace/ASPR/outputs/kg_perturbation_fig1/graphene_2d_materials,7642,0,73025,1,1990,2014,0.2970633341876065,audit_only_no_online_closure
+ipsc_reprogramming,/home/jayee/workspace/ASPR/outputs/kg_perturbation_fig1/ipsc_reprogramming,10488,0,141690,3,1995,2020,0.2295537723514802,audit_only_no_online_closure
+transformer_foundation_models,/home/jayee/workspace/ASPR/outputs/kg_perturbation_fig1/transformer_foundation_models,8746,0,50733,1,2000,2024,0.145977441445589,audit_only_no_online_closure

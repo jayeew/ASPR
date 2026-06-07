@@ -1,0 +1,172 @@
+{
+  "selected_run": "multi_domain",
+  "selected_kind": "multi_domain",
+  "selected_out_dir": "/home/jayee/workspace/ASPR/outputs/kg_perturbation_fig3/multi_domain",
+  "reason": "multi_domain selected as the required evidence base; single-domain weights remain diagnostic",
+  "summary": {
+    "overall_pass": false,
+    "status_label": "underpowered multi-domain diagnostic run",
+    "target_version": "RGPM-v3 mechanism-balanced",
+    "thresholds": {
+      "active_graph_deltas_min": 5,
+      "active_delta_z_cap_hit_rate_max": 0.05,
+      "oof_spearman_min": 0.3,
+      "learned_vs_equal_min": 0.03,
+      "score_iqr_min": 0.35
+    },
+    "data_requirements": {
+      "domains_min": 4,
+      "domains_target_max": 8,
+      "papers_per_domain_min": 2000,
+      "total_papers_min": 8000,
+      "landmark_or_high_cases_per_domain_min": 20,
+      "high_perturbation_quantile": 0.9,
+      "control_median_min": 20,
+      "relaxed_control_tier_rate_max": 0.25
+    },
+    "checks": {
+      "active_graph_deltas": 1,
+      "active_delta_z_cap_hit_rate": 1,
+      "oof_spearman": 0,
+      "learned_vs_equal": 0,
+      "score_iqr": 1,
+      "mean_delta_reliability": 1,
+      "domain_count": 1,
+      "total_papers": 0,
+      "papers_per_domain": 0,
+      "landmark_or_high_cases_per_domain": 1,
+      "matched_control_median": 1,
+      "matched_control_relaxation": 1
+    },
+    "association_checks": {
+      "active_graph_deltas": 1,
+      "active_delta_z_cap_hit_rate": 1,
+      "oof_spearman": 0,
+      "learned_vs_equal": 0,
+      "score_iqr": 1,
+      "mean_delta_reliability": 1
+    },
+    "data_checks": {
+      "domain_count": 1,
+      "total_papers": 0,
+      "papers_per_domain": 0,
+      "landmark_or_high_cases_per_domain": 1,
+      "matched_control_median": 1,
+      "matched_control_relaxation": 1
+    },
+    "data_profile": {
+      "n_domains": 4,
+      "total_papers": 5893,
+      "min_papers_per_domain": 998,
+      "min_landmark_or_high_cases_per_domain": 100,
+      "control_median_min_by_domain": 39.0,
+      "relaxed_control_tier_rate_max_by_domain": 0.11422845691382766,
+      "domains": [
+        "crispr",
+        "graphene_2d_materials",
+        "ipsc_reprogramming",
+        "transformer_foundation_models"
+      ],
+      "domains_below_paper_min": [
+        "crispr",
+        "graphene_2d_materials",
+        "ipsc_reprogramming",
+        "transformer_foundation_models"
+      ],
+      "domains_below_landmark_or_high_case_min": [],
+      "domains_with_relaxed_controls": []
+    },
+    "domain_adequacy": [
+      {
+        "domain": "crispr",
+        "n_papers": 1817,
+        "n_landmarks": 3,
+        "n_high_perturbation_cases": 182,
+        "n_landmark_or_high_cases": 182,
+        "high_perturbation_quantile": 0.9,
+        "high_perturbation_threshold": 1.6571647380512822,
+        "control_median": 41.0,
+        "relaxed_control_tier_rate": 0.03026967528893781,
+        "pass_papers_per_domain_min": 0,
+        "pass_landmark_or_high_cases_min": 1,
+        "pass_control_median_min": 1,
+        "pass_relaxed_control_tier_rate_max": 1
+      },
+      {
+        "domain": "graphene_2d_materials",
+        "n_papers": 998,
+        "n_landmarks": 0,
+        "n_high_perturbation_cases": 100,
+        "n_landmark_or_high_cases": 100,
+        "high_perturbation_quantile": 0.9,
+        "high_perturbation_threshold": 1.754217723971714,
+        "control_median": 39.0,
+        "relaxed_control_tier_rate": 0.11422845691382766,
+        "pass_papers_per_domain_min": 0,
+        "pass_landmark_or_high_cases_min": 1,
+        "pass_control_median_min": 1,
+        "pass_relaxed_control_tier_rate_max": 1
+      },
+      {
+        "domain": "ipsc_reprogramming",
+        "n_papers": 1972,
+        "n_landmarks": 3,
+        "n_high_perturbation_cases": 198,
+        "n_landmark_or_high_cases": 198,
+        "high_perturbation_quantile": 0.9,
+        "high_perturbation_threshold": 1.6410118722536824,
+        "control_median": 49.0,
+        "relaxed_control_tier_rate": 0.056795131845841784,
+        "pass_papers_per_domain_min": 0,
+        "pass_landmark_or_high_cases_min": 1,
+        "pass_control_median_min": 1,
+        "pass_relaxed_control_tier_rate_max": 1
+      },
+      {
+        "domain": "transformer_foundation_models",
+        "n_papers": 1106,
+        "n_landmarks": 0,
+        "n_high_perturbation_cases": 111,
+        "n_landmark_or_high_cases": 111,
+        "high_perturbation_quantile": 0.9,
+        "high_perturbation_threshold": 2.694630545369274,
+        "control_median": 44.0,
+        "relaxed_control_tier_rate": 0.09132007233273057,
+        "pass_papers_per_domain_min": 0,
+        "pass_landmark_or_high_cases_min": 1,
+        "pass_control_median_min": 1,
+        "pass_relaxed_control_tier_rate_max": 1
+      }
+    ],
+    "active_graph_deltas": [
+      "community_reach",
+      "field_entropy",
+      "cross_community_adoption",
+      "partition_change",
+      "boundary_mixing",
+      "post_perturbation_concentration"
+    ],
+    "n_active_graph_deltas": 6,
+    "active_delta_z_cap_hit_rate_max": 0.05362294247412184,
+    "mean_delta_reliability": 0.6224155501965046,
+    "learned_oof_spearman": 0.16198389073507438,
+    "equal_weight_oof_spearman": 0.1408328540320942,
+    "learned_vs_equal_delta": 0.021151036702980186,
+    "nonlinear_upper_bound_oof_spearman": 0.25255604179130936,
+    "nonlinear_vs_linear_delta": 0.09057215105623498,
+    "nonlinear_diagnostic_interpretation": "nonlinear_signal_above_linear_simplex",
+    "score_oof_iqr": 0.8483456967622526
+  },
+  "all_runs": [
+    {
+      "name": "multi_domain",
+      "kind": "multi_domain",
+      "out_dir": "/home/jayee/workspace/ASPR/outputs/kg_perturbation_fig3/multi_domain",
+      "overall_pass": false,
+      "learned_oof_spearman": 0.16198389073507438,
+      "status_label": "underpowered multi-domain diagnostic run",
+      "n_domains": 4,
+      "min_papers_per_domain": 998
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+key,label,z,z_raw,clipped,reliability_weight,mechanism
+community_reach,Community reach (D1),4.0,13000.0,1,0.0,Expansion
+cross_community_adoption,Cross-community adoption (D3),4.0,9.659090909090908,1,0.0,Bridging
+modularity_shock,Modularity shock −ΔQ (D5),0.0,0.0,0,0.0,Reconfiguration

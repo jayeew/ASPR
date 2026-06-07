@@ -1,243 +1,389 @@
-# Fig. 3 README
+# Fig. 3 汇报版 README
 
-Fig. 3 现在是一张带诊断保护的实证图：它尝试学习七个 publication-day graph-perturbation indicators 的非负权重，并用严格 out-of-fold 分数检验这个 learned score 是否能预测论文发表后真实发生的知识图谱扰动。
+## 一句话结论
 
-核心问题是：
+Fig. 3 的作用是：在 Fig. 2 的七个发表日指标基础上，学习一组非负权重，形成一个综合分数，并检验这个分数是否能预测未来真实知识图谱扰动。
 
-```text
-论文发表当天的结构扰动潜力，能否预测未来真实图谱扰动？
-```
-
-如果数据支持，Fig. 3 可以作为主图论证；如果阈值不达标，它会明确标成：
+可以向领导这样概括：
 
 ```text
-weak empirical association / diagnostic run
+Fig. 2 说明七个指标有机制含义；
+Fig. 3 进一步尝试把七个指标合成一个分数，
+并用严格 out-of-fold 验证它是否能预测未来图谱变化。
 ```
 
-这意味着当前数据和当前定义还不能强支撑“权重学习有效”的叙事。
-
-## 整体流程
-
-对每篇论文 `p`：
-
-1. 只使用发表当天可见的 `G-` 和 `G0` 计算七个 indicators。
-2. 在未来 `tau` 年观察 graph-delta outcomes。
-3. 用 matched controls 构造稳定化目标 `RGPM_v2`。
-4. 在训练 fold 内学习权重。
-5. 在 held-out fold 上得到 `S_w_oof`。
-6. 用 `S_w_oof` vs `RGPM_v2` 做最终校准。
-
-加权分数：
+这里的 `out-of-fold` 可以直接解释成：
 
 ```text
-S_w(p) = sum_k w_k z_k(p)
-w_k >= 0
-sum_k w_k = 1
+模型学习权重时没有见过测试论文。
+也就是用一部分论文学习，再用另一部分论文验证，
+避免在同一批数据上自我证明。
 ```
 
-## 七个 Publication-Day Indicators
+## 这张图想回答什么
 
-| 指标 | 含义 |
-|---|---|
-| B | bridge position，论文是否连接原本较远的引用结构 |
-| RS | knowledge breadth，引用知识来源是否跨 field 且距离较远 |
-| DeltaQ0 | boundary perturbation，发表当天是否扰动社区边界 |
-| Uzzi | atypical recombination，引用组合是否非典型 |
-| RTD | reference target diversity，引用目标 communities 是否分散 |
-| Burt IP | structural holes，论文是否占据结构洞位置 |
-| PDE | prospective diffusion entropy，引用 fields 的扩散潜力 |
-
-这些指标会做 rank-normalization，而不是简单填 0 或普通 z-score。
-
-## RGPM-v2 是什么
-
-`RGPM_v2` 是 Realized Graph Perturbation Magnitude 的稳定化版本。它由未来 graph deltas 相对 matched controls 的 z-score 构造：
+Fig. 3 回答的是：
 
 ```text
-z_j = (delta_j - median(control_j)) / max(local_MAD, 0.25 * global_MAD, delta_floor)
-z_j = clip(z_j, -4, 4)
-RGPM_v2 = sqrt(mean(max(z_j, 0)^2))
+我们能不能在论文发表当天，基于参考文献结构给论文一个“未来图谱扰动潜力”分数？
 ```
 
-它只使用通过稳定性筛选的 active deltas。旧 Mahalanobis RGPM 只保留为 debug 指标，不再作为主学习目标。
-
-## 主图阈值
-
-Fig. 3 只有同时满足以下条件时，才被视为支持性主图：
+这个分数写成：
 
 ```text
-active graph deltas >= 5
-active delta z-cap hit rate < 5%
-OOF Spearman >= 0.30
-learned weight beats equal weight by >= 0.03
-S_w_oof IQR > 0.35
+S_w(p) = w1 * B + w2 * RS + ... + w7 * PDE
 ```
 
-还必须满足数据充分性条件，否则即使 OOF 相关性看起来不错，也只能作为 diagnostic run：
+其中每个权重都非负，总和为 1。也就是说，模型不是黑盒深度模型，而是一个可解释的加权组合。
+
+## 使用了什么数据
+
+数据来自 Fig. 1 构建的本地知识图谱和 OpenAlex 缓存。
+
+当前 multi-domain 版本覆盖四个领域：
 
 ```text
-domains >= 4
-total papers >= 8,000
-papers per domain >= 2,000
-landmark or high-RGPM cases per domain >= 20
-median matched controls per domain >= 20
-relaxed control-tier rate per domain <= 25%
+CRISPR
+graphene / 2D materials
+iPSC reprogramming
+transformer / foundation models
 ```
 
-这意味着只在 CRISPR 单领域上学习出的权重默认不作为主图证据；它可以用来定位问题，但不能支撑稳定的跨领域 scoring claim。
+每篇论文使用两类信息：
 
-否则图仍然生成，但必须按 diagnostic run 解读。
+- 发表当天可见的信息：参考文献、发表前图谱、七个指标。
+- 未来窗口内的信息：未来引用者、社区扩散、领域扩散、边界变化等图谱扰动结果。
 
-如果当前 Fig. 1 selected graph 样本太小，可以用 `--fig1-corpus-source raw` 从 `works_raw.jsonl` 构造更大的 Fig. 3 输入；该模式会按 `primary_topic` 生成较粗 community，适合做 multi-domain 审计和样本扩展测试。
+“图谱扰动结果”也可以理解成 `graph deltas`，也就是未来知识图谱相对于发表前后发生了多少结构变化，例如扩散到了多少社区、边界是否更混合、领域覆盖是否更分散。
 
-## Panel a: Empirical Learning Framework
-
-Panel a 只讲整体框架：
+关键原则：
 
 ```text
-Publication-day indicators -> Weight learning -> OOF validation against RGPM-v2
+训练权重时不能让测试论文参与权重选择。
+最终验证使用 out-of-fold 分数。
 ```
 
-七指标被归入三个机制组：
+这保证 Fig. 3 不是简单的全样本拟合图。
 
-- Expansion: RS, PDE, Uzzi
-- Bridging: B, RTD, Burt IP
-- Reconfiguration: DeltaQ0, Uzzi
+这里的 `fold` 可以讲成“数据分组”。`held-out fold` 就是暂时拿出来不参与训练、专门用来测试的那一组论文。
 
-Panel a 的意义是说明：权重不是主观指定，而是在训练 fold 内通过未来真实图结构变化反推学习，并在 held-out fold 上验证。
+## 未来扰动目标是什么
 
-## Panel b: Stabilized RGPM-v2
+Fig. 3 需要一个“未来图谱扰动强度”的目标变量。当前版本使用 structural-residual RGPM。
 
-Panel b 只解释目标变量如何构造。
+`RGPM` 可以讲成“未来真实图谱扰动强度”。它不是引用量，而是综合衡量论文发表后是否真的改变了知识结构。
 
-左侧展示 active graph deltas 的 matched-control z-score，坐标固定在 `[-4, 4]`。如果某个 z-score 触发 clipping，会用三角标记。
-
-右侧展示 `RGPM_v2` 的计算公式，并列出被稳定性筛选排除的 deltas，例如：
-
-- 方差过小
-- z-cap hit rate 过高
-- control MAD-zero rate 过高
-- compression diagnostic 默认不进入主 RGPM
-
-Panel b 的意义是检查：目标变量是否稳定，是否被少数极端 delta 主导。
-
-## Panel c: Mechanism-Level Landscape
-
-Panel c 把七指标权重压缩成三个机制权重：
+汇报时不需要讲公式，可以这样解释：
 
 ```text
-Expansion / Bridging / Reconfiguration
+我们先观察论文发表后未来十年引发了哪些图谱变化，
+再和同领域、近年份、参考文献数量相近的普通论文比较，
+得到一个相对扰动强度。
+随后再尽量扣除引用热度、论文规模等影响，
+保留更接近“结构扰动”的部分。
 ```
 
-三角图颜色表示：
+这个目标不是普通引用量。它更关注论文是否改变知识图谱结构，例如：
+
+- 是否扩散到更多社区；
+- 是否带来更高 field entropy；
+- 是否促进跨社区采用；
+- 是否改变边界混合；
+- 是否造成社区结构重排。
+
+这里“和普通论文比较”的普通论文，就是 `matched controls`，也就是匹配对照组。它的作用是让比较更公平，避免年份、领域、参考文献数量不同带来的偏差。
+
+## 每个 Panel 怎么讲
+
+### Panel a: 整体学习框架
+
+这一 panel 讲 Fig. 3 的流程。
+
+汇报话术：
 
 ```text
-Delta Spearman rho vs equal-weight baseline
+左边是 Fig. 2 定义的七个发表日指标；
+中间是权重学习；
+右边是用未来图谱扰动目标做 out-of-fold 验证。
 ```
 
-它不再画噪声化的原始散点，而是 hexbin/grid-smoothed mean performance。黑色星号是最终 all-data best mechanism point。
+怎么看：
 
-如果 top 10% 权重区域不集中，图中会显示：
+- 七个指标先做标准化。
+- 模型学习每个指标的权重。
+- 只在训练 fold 里选择权重。
+- 在 held-out fold 上得到真正的验证分数。
+
+这个 panel 的核心信息是：Fig. 3 是一个可解释的权重学习框架。
+
+图中元素怎么解释：
+
+- 左侧大框是输入：Fig. 2 的七个发表日指标，每个指标旁边的颜色和 Fig. 2 保持一致。
+- 左侧指标列表下方的文字表示这些指标会先标准化，避免不同领域、年份的尺度不可比。
+- 中间大框是权重学习，公式 `S_w(p)` 表示把七个指标按权重加起来。
+- `w_k >= 0` 和 `sum w_k = 1` 表示权重非负且总和为 1，所以结果可解释。
+- 右侧大框是验证：用未来图谱扰动目标检验这个分数有没有排序能力。
+- 大框之间的箭头表示流程：指标输入 -> 学习权重 -> 验证未来扰动。
+- 右侧显示的 `OOF Spearman` 和 `Delta vs equal` 是当前运行的核心表现摘要。
+- 底部横条是方法原则：权重在训练 fold 内选择，再应用到没见过的 held-out fold。
+
+讲这一 panel 时重点强调：这是一个透明的加权模型，不是黑盒；同时验证是 out-of-fold 的，不是全样本自我拟合。
+
+这句话可以补充说明：
 
 ```text
-no stable basin
+out-of-fold 分数比全样本分数更可信，
+因为每篇论文的验证分数都是模型在没见过它时算出来的。
 ```
 
-Panel c 的意义是判断机制层面是否存在稳定高性能区域，而不是强行制造 landscape 叙事。
+### Panel b: 未来扰动目标如何构造
 
-## Panel d: Constrained Two-Weight Profiles
+这一 panel 讲目标变量不是随便定义的。
 
-Panel d 展示三组关键指标的局部权重地形：
+汇报话术：
 
 ```text
-B vs RTD
-DeltaQ0 vs Uzzi
-RS vs PDE
+我们不是直接用未来引用量作为目标，
+而是用多种未来图谱变化构造一个结构扰动目标。
+每种未来变化都要和 matched controls 比较，
+并根据稳定性决定它在目标中的权重。
 ```
 
-每个热图是真正的 simplex profile：
+怎么看：
 
-- 网格只显示 `w_i + w_j <= 1` 的有效区域。
-- 固定两个权重。
-- 对剩余指标重新采样。
-- cell value 是相对 equal-weight baseline 的 best CV-compatible performance。
-- 无效或缺样本区域置灰。
+- 左侧条形显示某篇示例论文在不同未来扰动维度上的表现。
+- 高于 matched controls 的扰动会推动目标分数升高。
+- 稳定性差的未来扰动不会被过度依赖。
+- 右侧展示这些扰动如何合成为 structural-residual RGPM。
 
-Panel d 的意义是检查关键权重之间是互补、替代，还是没有稳定结构。
+这个 panel 的核心信息是：验证目标尽量聚焦“结构变化”，而不是普通热度。
 
-## Panel e: Weight Stability
+图中元素怎么解释：
 
-Panel e 不再画大量 spaghetti lines，而是展示：
+- 左侧每一行是一种未来图谱变化，例如社区扩散、领域熵、边界混合等。
+- 中间横轴通常以 0 为中心：0 表示和匹配对照组差不多。
+- 向右的红色条表示该论文在这个未来变化上高于 matched controls。
+- 向左的蓝色条表示低于 matched controls。
+- 条形旁边的 `z` 值可以理解为“比对照组高或低多少”。
+- `r=` 是稳定性权重，越高表示这个未来变化在当前数据里越可靠。
+- 三角标记表示极端值被截断，提醒不要被少数异常值主导。
+- 右侧公式区展示这些未来变化如何合成为 RGPM。
+- 右下角的 active deltas / mean reliability 表示当前有多少未来扰动维度真正参与目标构造，以及整体稳定性如何。
 
-- top 1% weights 的 median
-- top 1% weights 的 IQR ribbon
-- final all-data best weight
-- fold-level best weights
-- 每个指标成为 top-weight 的频率
+讲这一 panel 时可以说：我们不是用单一未来引用量，而是用多个结构变化维度，并且会降低不稳定维度的影响。
 
-Panel e 的意义是判断权重结构是否稳定。如果 IQR 很宽、fold 点分散、top-weight frequency 不集中，就说明当前权重学习更像是在适配噪声，而不是找到稳定机制。
-
-## Panel f: OOF Score Calibration
-
-Panel f 是最关键的验证 panel。
-
-左侧 rank-decile calibration 使用：
+这里可以这样解释 `matched controls`：
 
 ```text
-x = S_w_oof percentile decile
-y = mean / median RGPM-v3 percentile
+每篇论文都有一组背景相似的普通论文作为对照。
+我们关心的是它是否比这些相似论文引发了更强的未来图谱变化。
 ```
 
-不是全样本 best-weight score。左图同时报告完整数据上的 OOF Spearman rho 和 top-decile lift。这个视图更贴近 rank validation，避免线性散点拟合被长尾 RGPM 和异方差主导。
+### Panel c: 机制层面的权重景观
 
-右侧不再使用 radar plot，而是 Low / Mid / High OOF score tertile 的七指标横向条形摘要：
+这一 panel 讲高分权重是否有机制结构。
+
+汇报话术：
 
 ```text
-mean rank-normalized indicator +/- bootstrap SE
+我们把七个指标归成三类机制：知识扩展、桥接、重构。
+这张三角图展示不同机制组合下，预测未来扰动的效果是否更好。
+如果高性能区域集中，说明模型学到的是稳定机制；
+如果很分散，则说明证据还不够稳。
 ```
 
-Panel f 的意义是回答：严格 held-out 分数是否真的能预测未来 RGPM-v3。如果 rho 低或 summary fail，就只能说有弱关联或诊断价值。
+怎么看：
 
-默认每次运行都会导出核心审计表：
+- 三角形三个角分别代表三类机制。
+- 颜色越偏红，说明比 equal-weight baseline 更好。
+- 黑色星号是最终全数据权重对应的位置。
+- 如果没有稳定高性能区域，就不能过度解释某一种机制占优。
+
+图中元素怎么解释：
+
+- 三角形三个顶点分别是 Expansion、Bridging、Reconfiguration。
+- 越靠近某个顶点，表示该机制在总权重中占比越高。
+- 三角图内部每个位置代表一种机制权重组合。
+- 颜色表示这种机制组合相对 equal-weight baseline 的提升。
+- 红色区域表示效果更好，蓝色区域表示效果更差。
+- 旁边色条解释颜色和 `Delta rho` 的对应关系。
+- 黑色星号是最终学到的权重投影到三类机制后的所在位置。
+- 如果图上有虚线圈或 top region，表示表现较好的权重区域相对集中。
+- 如果出现 no stable basin，表示高表现区域不集中，机制结论要谨慎。
+
+讲这一 panel 时重点说：我们不是只看某一组权重，而是看高表现权重是否形成稳定机制区域。
+
+### Panel d: 关键指标对之间的关系
+
+这一 panel 讲指标之间是互补还是替代。
+
+汇报话术：
 
 ```text
-fig3_diagnostics_summary.json
-fig3_oof_score_table.csv
-fig3_cv_summary.csv
-fig3_baseline_comparison.csv
-fig3_diagnostics_delta_stability.csv
-fig3_diagnostics_domain_adequacy.csv
-fig3_indicator_target_correlations.csv
-fig3_rgpm_component_correlations.csv
-fig3_control_tier_audit.csv
-fig3_nonlinear_upper_bound.csv
+我们进一步检查三组关键指标对：
+B 和 RTD，DeltaQ0 和 Uzzi，RS 和 PDE。
+这能看出某些指标是互补贡献，还是一个指标已经可以替代另一个。
 ```
 
-其中 `fig3_nonlinear_upper_bound.csv` 是 quadratic ridge 的 diagnostic-only OOF 上界。如果它明显高于线性 simplex，说明七指标中可能有非线性信号；如果它也低，优先排查数据覆盖、RGPM 构造和指标定义。
+怎么看：
 
-## 如何阅读整张图
+- 每个小热图是一组指标对。
+- 横轴表示这组权重内部如何分配。
+- 纵轴表示这组指标总共占多少权重。
+- 黑点是最终学到的权重位置。
 
-建议顺序：
+这个 panel 的核心信息是：权重学习是否有可解释的局部结构。
 
-1. 看全图标题：是否是 validated association，还是 diagnostic run。
-2. 看 Panel b：active deltas 是否足够，z-cap 是否稳定。
-3. 看 Panel f：OOF Spearman 是否足够，散点是否真的有排序关系。
-4. 看 Panel c/d：是否存在稳定权重 landscape。
-5. 看 Panel e：fold weights 和 top weights 是否稳定。
-6. 最后再把 Panel a 当作方法总览。
+图中元素怎么解释：
 
-## 与 Fig. 1 / Fig. 2 的关系
+- 三个小热图分别对应三组关键指标对：`B / RTD`、`DeltaQ0 / Uzzi`、`RS / PDE`。
+- 横轴是这一对指标内部的分配比例：越往右，越偏向横轴标出的第一个指标。
+- 纵轴是这一对指标合计占总权重的比例：越往上，这一组指标整体越重要。
+- 每个格子的颜色表示在这种局部权重设定下，相比 equal weight 的表现变化。
+- 红色表示更好，蓝色表示更差。
+- 黑点表示最终学到的权重在这张局部图里的位置。
+- 虚线等高线如果出现，表示表现较好的区域边界。
+- 右侧色条说明颜色对应的提升或下降幅度。
 
-Fig. 1 提供本地知识图谱和 OpenAlex/Fig.1 缓存数据。Fig. 3 默认复用 Fig. 1 的本地输出，但会优先从 `works_raw.jsonl` 重建方向性 citation rows。
+讲这一 panel 时可以说：这张图帮助我们判断某两个指标是互补、替代，还是只有某个权重范围内才有效。
 
-Fig. 2 定义七个 publication-day indicators。Fig. 3 的任务是检验这些 indicators 的加权组合是否能预测未来真实图谱扰动。
+### Panel e: 权重是否稳定
 
-## 重要解读原则
+这一 panel 讲模型有没有过拟合。
 
-如果 `fig3_diagnostics_summary.json` 中 `overall_pass=false`，不要把 Fig. 3 解读成“权重学习已经有效证明”。这时它的正确定位是：
+汇报话术：
 
 ```text
-诊断当前 RGPM、controls、graph deltas 和 feature 标准化哪里还不稳定。
+我们不只看最终一组权重，还检查高表现权重样本和不同 fold 里的最佳权重是否一致。
+如果它们比较集中，说明权重结构稳定；
+如果差异很大，说明当前数据还不足以支持稳定加权结论。
 ```
 
-这比把弱结果画成强结论更重要。
+怎么看：
+
+- 蓝线表示高表现权重样本的中位数。
+- 蓝色带表示这些权重的波动范围。
+- 黑点表示最终权重。
+- 橙色点表示不同 fold 中学到的权重。
+- 下方柱状图显示哪个指标最常成为最高权重。
+
+这个 panel 的核心信息是：不是只汇报一个好看的权重结果，而是检查权重可靠性。
+
+图中元素怎么解释：
+
+- 横轴是七个指标。
+- 纵轴是每个指标的权重大小。
+- 上半部分蓝色曲线表示高表现权重组合里，每个指标的典型权重。
+- 蓝色阴影带表示这些高表现权重的波动范围，越窄说明越稳定。
+- 黑点是最终全数据权重。
+- 橙色点是不同训练 fold 中各自选出的权重。
+- 如果黑点、橙色点和蓝色带大体一致，说明权重比较稳定。
+- 如果橙色点四处分散，说明不同数据切分下学到的权重不一致。
+- 下方柱状图表示一个指标成为“最高权重指标”的频率。
+
+讲这一 panel 时重点说：稳定性比单次最优权重更重要；如果权重不稳，就不能过度解释某个指标最重要。
+
+### Panel f: 最终 out-of-fold 校准
+
+这一 panel 是 Fig. 3 最重要的验证结果。
+
+汇报话术：
+
+```text
+最终我们看模型在 held-out papers 上的分数，
+是否能把未来图谱扰动强的论文排到更高位置。
+这是判断 Fig. 3 是否成立的关键 panel。
+```
+
+怎么看：
+
+- 左侧曲线把论文按 out-of-fold 分数分成若干档。
+- 如果分数越高，未来扰动 percentile 也越高，说明模型有排序能力。
+- 图中会报告 OOF Spearman 和 top-decile lift。
+- 右侧展示低分、中分、高分论文在七个指标上的平均画像。
+
+图中元素怎么解释：
+
+- 左侧小图的横轴是 out-of-fold 分数从低到高的分位档。
+- 左侧小图的纵轴是这些论文未来 RGPM 的平均百分位。
+- 蓝线表示每个分数档的平均未来扰动水平。
+- 黑线表示每个分数档的中位未来扰动水平。
+- 浅蓝色带表示重复抽样得到的不确定范围。
+- 灰色水平线 50 表示没有排序能力时大概会落在中间水平。
+- 斜虚线是理想的单调排序参考，不要求实际曲线完全贴合。
+- 图内的 `OOF Spearman` 表示整体排序相关性。
+- `Top-decile lift` 表示模型打分最高的前 10% 论文，未来扰动相对平均水平提高多少。
+- 右侧条形图把论文分成 Low、Mid、High 三组，展示每组在七个指标上的平均特征。
+- 右侧条形图里的误差线表示这个平均值的不确定性。
+- 竖直的 0 线表示平均水平；条形越偏右，说明该组在该指标上更高。
+
+这里几个词可以这样讲：
+
+- `OOF Spearman`：看模型排序和未来真实扰动排序是否一致。越高，说明越能把未来扰动强的论文排到前面。
+- `top-decile lift`：看模型打分最高的前 10% 论文，未来扰动是否明显高于平均水平。
+- `percentile`：百分位。比如 80 分位表示高于 80% 的对照或样本。
+
+这个 panel 的核心信息是：
+
+```text
+真正有效的不是训练集上的高分，而是 out-of-fold 分数能否预测未来扰动。
+```
+
+## 当前结果该怎么表述
+
+建议汇报表述：
+
+```text
+当前 Fig. 3 已经建立了完整的权重学习和 out-of-fold 验证框架。
+在 multi-domain 数据上，模型表现出一定排序信号，
+但还没有达到强证据阈值，因此现阶段应作为诊断性结果汇报。
+```
+
+“诊断性结果”的意思是：
+
+```text
+当前结果能帮助我们判断方法是否有信号、哪里还不稳，
+但还不能作为最终评分模型已经成立的强证据。
+```
+
+可以补充一句当前状态：
+
+```text
+当前 multi-domain 运行的 OOF Spearman 约为 0.16，
+learned weight 相比 equal weight 有小幅提升，
+但样本量和每领域覆盖仍不足，暂不能宣称最终评分模型已经被强验证。
+```
+
+## 领导最需要知道的风险
+
+当前主要风险不是方法链条缺失，而是实证强度还不够。
+
+主要限制：
+
+- 每个领域的 eligible papers 还偏少。
+- 部分领域 landmark 或强扰动样本数量有限。
+- 未来扰动目标依赖 reference closure 和 matched controls，数据覆盖不足会影响稳定性。
+- learned weights 目前只显示弱到中等信号，不能过度包装为强预测模型。
+
+这里的 `reference closure` 可以解释为“参考文献覆盖完整度”：如果论文引用了很多文献，但本地图谱只收录了一部分，那么我们对它知识来源和后续扰动的判断就会不完整。
+
+## 下一步建议
+
+为了把 Fig. 3 从 diagnostic result 提升为 strong evidence，建议优先做三件事：
+
+1. 扩大多领域样本量，尤其补足每个领域的 eligible papers。
+2. 提高 reference closure coverage，让未来图谱扰动目标更完整。
+3. 继续检查不同领域、不同时间切分下的权重稳定性。
+
+## 和 Fig. 2 的关系
+
+Fig. 2 是指标体系的合理性说明。
+
+Fig. 3 是指标体系的加权和验证。
+
+汇报时可以这样衔接：
+
+```text
+Fig. 2 说明“为什么这些指标有意义”；
+Fig. 3 说明“这些指标能否组合成一个可验证的早期扰动分数”。
+```

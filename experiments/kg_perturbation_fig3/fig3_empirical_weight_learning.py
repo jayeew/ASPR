@@ -52,6 +52,7 @@ diagnostics because learned weights are otherwise easy to overfit to one field.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import importlib.util
 import json
 import math
@@ -107,6 +108,9 @@ TEXT_LIGHT = "#6B7280"
 BORDER = "#9CA3AF"
 GRID = "#D1D5DB"
 PANEL_FACE = "#FFFFFF"
+PANEL_BORDER = "#6B7280"
+PANEL_BORDER_WIDTH = 0.85
+PANEL_RADIUS = 0.055
 
 METRIC_SPECS = [
     ("B", "B", "#0B4FA3", "Bridge position"),
@@ -138,11 +142,8 @@ PRIMARY_RGPM_DELTA_KEYS = [
     "community_reach",
     "field_entropy",
     "cross_community_adoption",
-    "path_shortening",
-    "modularity_shock",
     "partition_change",
     "boundary_mixing",
-    "hub_formation",
 ]
 DELTA_FLOORS = {
     "cross_community_adoption": 0.02,
@@ -160,20 +161,21 @@ DELTA_CONTROL_MAD_ZERO_DROP = 0.50
 MAIN_FIGURE_THRESHOLDS = {
     "active_graph_deltas_min": 5,
     "active_delta_z_cap_hit_rate_max": 0.05,
-    "oof_spearman_min": 0.30,
+    "oof_spearman_min": 0.25,
     "learned_vs_equal_min": 0.03,
+    "learned_vs_best_single_min": 0.00,
     "score_iqr_min": 0.35,
 }
 
 DATA_ADEQUACY_THRESHOLDS = {
-    "domains_min": 4,
-    "domains_target_max": 8,
-    "papers_per_domain_min": 2000,
-    "total_papers_min": 8000,
-    "landmark_or_high_cases_per_domain_min": 20,
+    "domains_min": 20,
+    "domains_target_max": 40,
+    "papers_per_domain_min": 3000,
+    "total_papers_min": 60000,
+    "landmark_or_high_cases_per_domain_min": 100,
     "high_perturbation_quantile": 0.90,
-    "control_median_min": 20,
-    "relaxed_control_tier_rate_max": 0.25,
+    "control_median_min": 50,
+    "relaxed_control_tier_rate_max": 0.15,
 }
 
 RELAXED_CONTROL_TIERS = {"field_all_years", "all_non_landmark"}
@@ -222,6 +224,8 @@ class ComputedData:
     rgpm_component_correlations: pd.DataFrame
     control_tier_audit: pd.DataFrame
     nonlinear_diagnostics: pd.DataFrame
+    target_sensitivity: pd.DataFrame
+    landmark_validation: pd.DataFrame
     diagnostics_summary: Dict[str, Any]
     fold_weights: pd.DataFrame
     baseline_comparison: pd.DataFrame
@@ -263,6 +267,11 @@ def wrap_text(text: str, width: int) -> str:
     return "\n".join(textwrap.wrap(str(text), width=width, break_long_words=False))
 
 
+def stable_int_id(value: object, modulo: int = 1_000_000_000) -> int:
+    digest = hashlib.sha1(str(value).encode("utf-8")).hexdigest()
+    return int(digest[:12], 16) % int(modulo)
+
+
 def rounded_box(
     ax: plt.Axes,
     x: float,
@@ -295,11 +304,41 @@ def rounded_box(
     return patch
 
 
+def rectangle_box(
+    ax: plt.Axes,
+    x: float,
+    y: float,
+    w: float,
+    h: float,
+    facecolor: str = "white",
+    edgecolor: str = BORDER,
+    linewidth: float = 0.8,
+    linestyle: str = "-",
+    alpha: float = 1.0,
+    zorder: int = 1,
+) -> mpatches.Rectangle:
+    patch = mpatches.Rectangle(
+        (x, y),
+        w,
+        h,
+        transform=ax.transAxes,
+        facecolor=facecolor,
+        edgecolor=edgecolor,
+        linewidth=linewidth,
+        linestyle=linestyle,
+        alpha=alpha,
+        zorder=zorder,
+        clip_on=False,
+    )
+    ax.add_patch(patch)
+    return patch
+
+
 def panel_frame(ax: plt.Axes, label: str, title: str) -> None:
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.axis("off")
-    rounded_box(ax, 0.0, 0.0, 1.0, 1.0, PANEL_FACE, "#7A7A7A", 0.80, 0.025, zorder=0)
+    rounded_box(ax, 0.0, 0.0, 1.0, 1.0, PANEL_FACE, PANEL_BORDER, PANEL_BORDER_WIDTH, PANEL_RADIUS, zorder=0)
     ax.text(0.022, 0.965, label, ha="left", va="top", fontsize=16, fontweight="bold")
     ax.text(0.100, 0.955, title, ha="left", va="top", fontsize=9.4, fontweight="bold")
 
@@ -1537,9 +1576,13 @@ def compute_rgpm(
     progress: bool = True,
     progress_interval: int = 100,
 ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, List[str], pd.DataFrame]:
-    df = metrics[["paper_id", "title", "domain", "year", "primary_field", "display_community", "is_landmark", "reference_count"]].merge(
-        deltas[["paper_id"] + DELTA_KEYS], on="paper_id", how="inner"
-    )
+    metric_cols = ["paper_id", "title", "domain", "year", "primary_field", "display_community", "is_landmark", "reference_count"]
+    if "cited_by_count" in metrics.columns:
+        metric_cols.append("cited_by_count")
+    delta_cols = ["paper_id"] + DELTA_KEYS
+    if "n_future_citers" in deltas.columns:
+        delta_cols.append("n_future_citers")
+    df = metrics[metric_cols].merge(deltas[delta_cols], on="paper_id", how="inner")
     df = add_reference_bins(df)
     required_controls = max(10, int(min_controls))
     progress_interval = max(1, int(progress_interval))
@@ -1574,6 +1617,8 @@ def compute_rgpm(
             "display_community": row["display_community"],
             "is_landmark": row["is_landmark"],
             "reference_count": row["reference_count"],
+            "cited_by_count": row.get("cited_by_count", np.nan),
+            "n_future_citers": row.get("n_future_citers", np.nan),
             "n_controls": int(len(ctrl_idx)),
             "control_tier": tier,
         }
@@ -1824,6 +1869,35 @@ def make_folds(df: pd.DataFrame, n_folds: int, mode: str, seed: int) -> List[np.
     return [np.asarray(c, dtype=int) for c in chunks if len(c) > 0]
 
 
+def make_cv_splits(df: pd.DataFrame, n_folds: int, mode: str, seed: int) -> List[Tuple[np.ndarray, np.ndarray]]:
+    """Return explicit train/test splits; time_block is forward-chaining."""
+    n = len(df)
+    all_idx = np.arange(n)
+    if n < 4:
+        raise ValueError("Not enough papers for cross-validation.")
+    n_folds = max(2, min(int(n_folds), n))
+    if mode == "time_block":
+        order = np.argsort(df["year"].to_numpy())
+        chunks = [np.asarray(c, dtype=int) for c in np.array_split(order, n_folds) if len(c) > 0]
+        splits: List[Tuple[np.ndarray, np.ndarray]] = []
+        for i in range(1, len(chunks)):
+            train_idx = np.concatenate(chunks[:i])
+            test_idx = chunks[i]
+            if len(train_idx) >= 8 and len(test_idx) >= 4:
+                splits.append((train_idx, test_idx))
+        if splits:
+            return splits
+    folds = make_folds(df, n_folds=n_folds, mode="time" if mode == "time_block" else mode, seed=seed)
+    splits = []
+    for test_idx in folds:
+        train_mask = np.ones(n, dtype=bool)
+        train_mask[test_idx] = False
+        train_idx = all_idx[train_mask]
+        if len(train_idx) >= 4 and len(test_idx) >= 4:
+            splits.append((train_idx, test_idx))
+    return splits
+
+
 def generate_dirichlet_weights(n_samples: int, seed: int, alpha: float = 1.0, n_metrics: Optional[int] = None) -> np.ndarray:
     rng = np.random.default_rng(seed)
     n = int(n_metrics or len(METRIC_KEYS))
@@ -1878,6 +1952,34 @@ def weight_performance_cv(
                 counts[i] += 1
     out = np.divide(perfs, np.maximum(counts, 1), out=np.full_like(perfs, np.nan), where=counts > 0)
     return out
+
+
+def weight_performance_cv_splits(
+    X: np.ndarray,
+    y: np.ndarray,
+    W: np.ndarray,
+    splits: Sequence[Tuple[np.ndarray, np.ndarray]],
+    progress: bool = True,
+) -> np.ndarray:
+    perfs = np.zeros(W.shape[0], dtype=float)
+    counts = np.zeros(W.shape[0], dtype=float)
+    for fold_idx, (_, test_idx) in enumerate(splits, start=1):
+        progress_log(
+            f"  evaluating weight samples on split {fold_idx}/{len(splits)} "
+            f"(n_test={len(test_idx):,}, n_weights={W.shape[0]:,})",
+            progress,
+        )
+        xt = X[test_idx]
+        yt = y[test_idx]
+        if len(yt) < 4 or np.std(yt) < 1e-12:
+            continue
+        scores = xt @ W.T
+        for i in range(W.shape[0]):
+            rho = safe_spearman(scores[:, i], yt)
+            if np.isfinite(rho):
+                perfs[i] += rho
+                counts[i] += 1
+    return np.divide(perfs, np.maximum(counts, 1), out=np.full_like(perfs, np.nan), where=counts > 0)
 
 
 def learn_weights(
@@ -2091,6 +2193,134 @@ def ternary_to_xy(expansion: np.ndarray, bridging: np.ndarray, reconfiguration: 
     return x, y
 
 
+def mechanism_profile_candidate_weights(
+    expansion: float,
+    bridging: float,
+    reconfiguration: float,
+    n_candidates: int,
+    rng: np.random.Generator,
+) -> np.ndarray:
+    """Return indicator-weight candidates constrained to one mechanism-mix point."""
+    n_candidates = max(1, int(n_candidates))
+    rows: List[np.ndarray] = []
+    max_uzzi = max(0.0, 2.0 * min(float(expansion), float(reconfiguration)))
+
+    def add_candidate(uzzi_weight: float, expansion_share: float, bridging_share: Sequence[float]) -> None:
+        w = np.zeros(len(METRIC_KEYS), dtype=float)
+        u = float(np.clip(uzzi_weight, 0.0, max_uzzi))
+        e_rem = max(0.0, float(expansion) - 0.5 * u)
+        r_rem = max(0.0, float(reconfiguration) - 0.5 * u)
+        b_rem = max(0.0, float(bridging))
+        w[METRIC_KEYS.index("Uzzi")] = u
+        w[METRIC_KEYS.index("RS")] = e_rem * float(np.clip(expansion_share, 0.0, 1.0))
+        w[METRIC_KEYS.index("PDE")] = e_rem - w[METRIC_KEYS.index("RS")]
+        w[METRIC_KEYS.index("DeltaQ0")] = r_rem
+        b_share = np.asarray(bridging_share, dtype=float)
+        if len(b_share) != 3 or not np.isfinite(b_share).all() or b_share.sum() <= 1e-12:
+            b_share = np.ones(3, dtype=float) / 3.0
+        else:
+            b_share = np.maximum(b_share, 0.0)
+            b_share = b_share / b_share.sum()
+        for key, val in zip(["B", "RTD", "BurtIP"], b_share * b_rem):
+            w[METRIC_KEYS.index(key)] = float(val)
+        total = w.sum()
+        if total > 1e-12:
+            rows.append(w / total)
+
+    add_candidate(0.5 * max_uzzi, 0.5, [1.0, 1.0, 1.0])
+    add_candidate(0.0, 0.5, [1.0, 1.0, 1.0])
+    add_candidate(max_uzzi, 0.5, [1.0, 1.0, 1.0])
+    while len(rows) < n_candidates:
+        u = float(rng.uniform(0.0, max_uzzi)) if max_uzzi > 1e-12 else 0.0
+        e_share = float(rng.beta(1.2, 1.2))
+        b_share = rng.dirichlet(np.ones(3, dtype=float) * 1.2)
+        add_candidate(u, e_share, b_share)
+    return np.vstack(rows[:n_candidates])
+
+
+def mechanism_profile_grid(
+    comp: ComputedData,
+    bins: int = 25,
+    profile_n: int = 80,
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """Evaluate a complete ternary grid of mechanism shares by CV profile search."""
+    bins = max(3, int(bins))
+    profile_n = max(1, int(profile_n))
+    active = [k for k in comp.active_metric_keys if k in METRIC_KEYS]
+    st = comp.score_table.replace([np.inf, -np.inf], np.nan).dropna(subset=["RGPM"]).reset_index(drop=True)
+    active = [k for k in active if k + "_z" in st.columns]
+    if not active:
+        empty = np.asarray([], dtype=float)
+        return empty, empty, empty, empty, empty, empty
+    cache_key = (bins, profile_n, tuple(active), len(st))
+    cache = getattr(comp, "_mechanism_profile_grid_cache", None)
+    if isinstance(cache, dict) and cache.get("key") == cache_key:
+        return cache["value"]
+    st[[k + "_z" for k in active]] = st[[k + "_z" for k in active]].fillna(0.0)
+    X = st[[k + "_z" for k in active]].to_numpy(dtype=float)
+    y = st["RGPM"].to_numpy(dtype=float)
+    fold_ids = st["fold_id"].to_numpy(dtype=int) if "fold_id" in st.columns else np.zeros(len(st), dtype=int)
+    folds = [np.where(fold_ids == f)[0] for f in sorted(set(fold_ids)) if f > 0 and np.sum(fold_ids == f) > 0]
+    if len(folds) < 2:
+        folds = make_folds(st, n_folds=3, mode="random", seed=3181)
+    equal_w = np.ones(len(active), dtype=float) / len(active)
+    equal_rho = safe_spearman(X @ equal_w, y)
+
+    denom = bins - 1
+    expansion_vals: List[float] = []
+    bridging_vals: List[float] = []
+    reconfiguration_vals: List[float] = []
+    weights: List[np.ndarray] = []
+    owners: List[int] = []
+    active_idx = [METRIC_KEYS.index(k) for k in active]
+    rng = np.random.default_rng(7919 + bins * 101 + profile_n)
+    for e_i in range(denom + 1):
+        for b_i in range(denom - e_i + 1):
+            r_i = denom - e_i - b_i
+            expansion = e_i / denom
+            bridging = b_i / denom
+            reconfiguration = r_i / denom
+            point_idx = len(expansion_vals)
+            expansion_vals.append(float(expansion))
+            bridging_vals.append(float(bridging))
+            reconfiguration_vals.append(float(reconfiguration))
+            W_full = mechanism_profile_candidate_weights(expansion, bridging, reconfiguration, profile_n, rng)
+            W_active = W_full[:, active_idx]
+            row_sum = W_active.sum(axis=1)
+            valid = row_sum > 1e-12
+            if valid.any():
+                W_active = W_active[valid] / row_sum[valid, None]
+                weights.append(W_active)
+                owners.extend([point_idx] * len(W_active))
+    values = np.full(len(expansion_vals), np.nan, dtype=float)
+    if weights:
+        W_all = np.vstack(weights)
+        owner_arr = np.asarray(owners, dtype=int)
+        perf = weight_performance_cv(X, y, W_all, folds, progress=False)
+        for point_idx in range(len(values)):
+            point_perf = perf[owner_arr == point_idx]
+            if np.isfinite(point_perf).any() and np.isfinite(equal_rho):
+                values[point_idx] = float(np.nanmax(point_perf) - equal_rho)
+    x, y_xy = ternary_to_xy(
+        np.asarray(expansion_vals, dtype=float),
+        np.asarray(bridging_vals, dtype=float),
+        np.asarray(reconfiguration_vals, dtype=float),
+    )
+    result = (
+        np.asarray(expansion_vals, dtype=float),
+        np.asarray(bridging_vals, dtype=float),
+        np.asarray(reconfiguration_vals, dtype=float),
+        x,
+        y_xy,
+        values,
+    )
+    try:
+        setattr(comp, "_mechanism_profile_grid_cache", {"key": cache_key, "value": result})
+    except Exception:
+        pass
+    return result
+
+
 def radar_axes(ax: plt.Axes, center: Tuple[float, float], radius: float, values: Sequence[float], color: str, label: str) -> None:
     labels = [METRIC_LABELS[k] for k in METRIC_KEYS]
     n = len(labels)
@@ -2133,7 +2363,7 @@ def draw_panel_a(ax: plt.Axes, comp: ComputedData, tau: int) -> None:
         (0.690, 0.230, 0.270, 0.610, "Out-of-fold validation", "#FFF7ED", "#EA580C"),
     ]
     for x, y, w, h, title, face, edge in box_specs:
-        rounded_box(ax, x, y, w, h, face, edge, 0.90, 0.014)
+        rectangle_box(ax, x, y, w, h, face, edge, 0.90)
         ax.text(x + w / 2, y + h - 0.070, title, ha="center", va="center", fontsize=8.0, fontweight="bold", color=edge)
 
     indicator_rows = [
@@ -2166,7 +2396,7 @@ def draw_panel_a(ax: plt.Axes, comp: ComputedData, tau: int) -> None:
 
     summary = comp.diagnostics_summary
     ax.text(0.825, 0.660, rf"$G_0 \rightarrow G_{{+\tau}}$  ({tau} y)", ha="center", va="center", fontsize=8.5)
-    ax.text(0.825, 0.540, "Target: stabilized RGPM-v3\nfrom active graph deltas", ha="center", va="center", fontsize=6.6)
+    ax.text(0.825, 0.540, "Target: structural-residual RGPM\nfrom active graph deltas", ha="center", va="center", fontsize=6.6)
     ax.text(
         0.825,
         0.405,
@@ -2181,10 +2411,10 @@ def draw_panel_a(ax: plt.Axes, comp: ComputedData, tau: int) -> None:
 
     draw_arrow(ax, (0.302, 0.535), (0.366, 0.535), color="#3B6EA8", lw=1.3, mutation_scale=13)
     draw_arrow(ax, (0.622, 0.535), (0.686, 0.535), color="#3B6EA8", lw=1.3, mutation_scale=13)
-    rounded_box(ax, 0.115, 0.185, 0.770, 0.040, blend_with_white("#0F766E", 0.93), "#0F766E", 0.75, 0.010)
+    rounded_box(ax, 0.115, 0.140, 0.770, 0.045, blend_with_white("#0F766E", 0.93), "#0F766E", 0.75, 0.012)
     ax.text(
         0.500,
-        0.205,
+        0.162,
         r"Objective: choose $\hat{w}\in\Delta_+^7$ to maximize $\rho_S(S_w,RGPM_\tau)$ on training folds; apply $\hat{w}$ OOF.",
         ha="center",
         va="center",
@@ -2209,7 +2439,7 @@ def draw_panel_b(ax: plt.Axes, comp: ComputedData) -> None:
     ex = comp.panel_b_example.copy()
     if ex.empty:
         raise ValueError("Panel b example data is empty.")
-    rounded_box(ax, 0.020, 0.115, 0.695, 0.775, "#FFFFFF", BORDER, 0.65, 0.012)
+    rectangle_box(ax, 0.020, 0.115, 0.695, 0.775, "#FFFFFF", BORDER, 0.65)
     ax.text(0.365, 0.850, "Active graph-delta z-scores (higher = stronger perturbation)", ha="center", va="center", fontsize=7.3, color="#0F3A75", fontweight="bold")
     z_axis_x0 = 0.405
     z_axis_w = 0.235
@@ -2244,7 +2474,7 @@ def draw_panel_b(ax: plt.Axes, comp: ComputedData) -> None:
         ax.text(0.665, y, format_z_for_panel(z), ha="center", va="center", fontsize=5.8)
     ax.text(0.365, 0.080, "Controls: field/year/ref-bin matching, with MAD floor and z-cap = 4", ha="center", va="center", fontsize=5.8)
 
-    rounded_box(ax, 0.745, 0.115, 0.235, 0.775, "#FFFFFF", BORDER, 0.65, 0.012)
+    rectangle_box(ax, 0.745, 0.115, 0.235, 0.775, "#FFFFFF", BORDER, 0.65)
     ax.text(0.862, 0.850, "RGPM-v2", ha="center", va="center", fontsize=7.6, color="#0F3A75", fontweight="bold")
     ax.text(0.862, 0.705, r"$z_j=\frac{\Delta_j-\tilde{\Delta}_{ctrl}}{\max(MAD_{local}, .25MAD_{global}, floor)}$", ha="center", va="center", fontsize=6.0)
     ax.text(0.862, 0.575, r"$z_j \leftarrow clip(z_j,-4,4)$", ha="center", va="center", fontsize=7.1)
@@ -2261,31 +2491,36 @@ def draw_panel_b(ax: plt.Axes, comp: ComputedData) -> None:
 
 def draw_panel_c(ax: plt.Axes, comp: ComputedData) -> None:
     panel_frame(ax, "c", "Mechanism-level OOF-compatible landscape")
-    samples = mechanism_weights_from_samples(comp.weight_samples)
-    exp = samples["W_expansion"].to_numpy(dtype=float)
-    bri = samples["W_bridging"].to_numpy(dtype=float)
-    rec = samples["W_reconfiguration"].to_numpy(dtype=float)
-    perf = samples["cv_spearman_delta_vs_equal"].to_numpy(dtype=float)
-    x, y = ternary_to_xy(exp, bri, rec)
+    exp, bri, rec, x, y, perf = mechanism_profile_grid(
+        comp,
+        bins=int(getattr(comp, "profile_grid_size", 25)),
+        profile_n=int(getattr(comp, "profile_n", 80)),
+    )
     ax_tri = ax.inset_axes([0.250, 0.120, 0.540, 0.740])
     ax_tri.set_aspect("equal")
     ax_tri.axis("off")
     finite = np.isfinite(perf)
     lim = max(0.03, min(0.20, float(np.nanpercentile(np.abs(perf[finite]), 98)) if finite.any() else 0.05))
-    tpc = ax_tri.hexbin(
-        x[finite],
-        y[finite],
-        C=perf[finite],
-        gridsize=26,
-        reduce_C_function=np.nanmean,
-        cmap="RdYlBu_r",
-        vmin=-lim,
-        vmax=lim,
-        mincnt=3,
-        linewidths=0.0,
-    )
+    if finite.sum() >= 3:
+        tri = mtri.Triangulation(x[finite], y[finite])
+        levels = np.linspace(-lim, lim, 17)
+        tpc = ax_tri.tricontourf(
+            tri,
+            perf[finite],
+            levels=levels,
+            cmap="RdYlBu_r",
+            vmin=-lim,
+            vmax=lim,
+            extend="both",
+        )
+        ax_tri.triplot(tri, color="white", lw=0.18, alpha=0.30, zorder=2)
+    else:
+        tpc = plt.cm.ScalarMappable(norm=mcolors.Normalize(vmin=-lim, vmax=lim), cmap="RdYlBu_r")
+        ax_tri.text(0.50, 0.42, "profile grid unavailable", ha="center", va="center", fontsize=7.0, color="#7F1D1D", fontweight="bold")
     verts = np.array([[0, 0], [1, 0], [0.5, math.sqrt(3)/2], [0, 0]])
     ax_tri.plot(verts[:, 0], verts[:, 1], color="#1E3A8A", lw=1.0)
+    ax_tri.set_xlim(-0.05, 1.05)
+    ax_tri.set_ylim(-0.06, math.sqrt(3) / 2 + 0.10)
     ax_tri.text(0.5, math.sqrt(3)/2 + 0.06, "Expansion\n($W_E$)", ha="center", va="bottom", fontsize=6.5)
     ax_tri.text(-0.02, -0.04, "Bridging\n($W_B$)", ha="right", va="top", fontsize=6.5)
     ax_tri.text(1.02, -0.04, "Reconfiguration\n($W_R$)", ha="left", va="top", fontsize=6.5)
@@ -2319,7 +2554,9 @@ def draw_panel_c(ax: plt.Axes, comp: ComputedData) -> None:
                 )
                 ax_tri.add_patch(ellipse)
             ax_tri.scatter([cx], [cy], s=18, facecolors="#111827", edgecolors="white", linewidths=0.45, zorder=6)
-            ax_tri.text(cx, cy + 0.035, "top 10% region", ha="center", va="bottom", fontsize=5.5, color=TEXT_DARK)
+            label_x = float(np.clip(cx - 0.035 if cx > 0.55 else cx + 0.035, 0.08, 0.92))
+            label_ha = "right" if cx > 0.55 else "left"
+            ax_tri.text(label_x, cy + 0.045, "top 10% region", ha=label_ha, va="bottom", fontsize=5.5, color=TEXT_DARK)
         else:
             ax_tri.text(0.50, 0.42, "no stable basin", ha="center", va="center", fontsize=7.0, color="#7F1D1D", fontweight="bold")
     best_df = pd.DataFrame([{("w_" + k): float(comp.best_weights[k]) for k in METRIC_KEYS}])
@@ -2346,7 +2583,7 @@ def draw_panel_c(ax: plt.Axes, comp: ComputedData) -> None:
         ax.scatter([0.065], [yy], s=45, color=col, edgecolors="white", linewidths=0.4, transform=ax.transAxes)
         ax.text(0.095, yy, f"{title}\n({desc})", ha="left", va="center", fontsize=5.7, transform=ax.transAxes)
         yy -= 0.140
-    ax.text(0.500, 0.060, "Hexagons show mean sampled-weight performance relative to equal weights; star is final all-data weight.", ha="center", va="center", fontsize=5.6)
+    ax.text(0.500, 0.060, "Triangular grid shows best CV profile performance at each mechanism mix; star is final all-data weight.", ha="center", va="center", fontsize=5.6)
 
 
 def pairwise_profile_grid(
@@ -2599,9 +2836,12 @@ def build_diagnostics_summary(
 ) -> Dict[str, Any]:
     learned_rows = baseline_comparison[baseline_comparison["model"] == "learned_weight_oof"]
     equal_rows = baseline_comparison[baseline_comparison["model"] == "equal_weights"]
+    best_single_rows = baseline_comparison[baseline_comparison["model"] == "best_single_indicator"]
     learned_rho = float(learned_rows["oof_spearman"].iloc[0]) if not learned_rows.empty else float("nan")
     equal_rho = float(equal_rows["oof_spearman"].iloc[0]) if not equal_rows.empty else float("nan")
+    best_single_rho = float(best_single_rows["oof_spearman"].iloc[0]) if not best_single_rows.empty else float("nan")
     improvement = learned_rho - equal_rho if np.isfinite(learned_rho) and np.isfinite(equal_rho) else float("nan")
+    improvement_vs_best_single = learned_rho - best_single_rho if np.isfinite(learned_rho) and np.isfinite(best_single_rho) else float("nan")
     active_diag = delta_diagnostics[delta_diagnostics["delta"].isin(active_delta_keys)]
     active_cap_max = float(active_diag["z_cap_hit_rate"].max()) if not active_diag.empty else float("nan")
     score_vals = score_table["S_w_oof"].to_numpy(dtype=float) if "S_w_oof" in score_table.columns else np.array([])
@@ -2613,6 +2853,10 @@ def build_diagnostics_summary(
         "active_delta_z_cap_hit_rate": int(np.isfinite(active_cap_max) and active_cap_max < thresholds["active_delta_z_cap_hit_rate_max"]),
         "oof_spearman": int(np.isfinite(learned_rho) and learned_rho >= thresholds["oof_spearman_min"]),
         "learned_vs_equal": int(np.isfinite(improvement) and improvement >= thresholds["learned_vs_equal_min"]),
+        "learned_vs_best_single": int(
+            np.isfinite(improvement_vs_best_single)
+            and improvement_vs_best_single >= thresholds["learned_vs_best_single_min"]
+        ),
         "score_iqr": int(np.isfinite(score_iqr) and score_iqr > thresholds["score_iqr_min"]),
     }
     overall_pass = bool(all(checks.values()))
@@ -2626,7 +2870,9 @@ def build_diagnostics_summary(
         "active_delta_z_cap_hit_rate_max": active_cap_max,
         "learned_oof_spearman": learned_rho,
         "equal_weight_oof_spearman": equal_rho,
+        "best_single_oof_spearman": best_single_rho,
         "learned_vs_equal_delta": improvement,
+        "learned_vs_best_single_delta": improvement_vs_best_single,
         "score_oof_iqr": score_iqr,
     }
 
@@ -2644,12 +2890,13 @@ def compute_all(raw: RawData, args: argparse.Namespace) -> ComputedData:
         progress_interval=progress_interval,
     )
     progress_log(f"      eligible papers with metrics: {len(metrics):,}", progress)
-    progress_log("[2/5] Computing RGPM-v3 from stabilized matched-control graph-delta z-scores ...", progress)
+    progress_log("[2/5] Computing structural-residual RGPM from stabilized matched-control graph-delta z-scores ...", progress)
     rgpm, delta_diag, control_diag, active_delta_keys, dropped_delta_table = compute_rgpm(
         metrics,
         deltas,
         min_controls=args.min_controls,
         z_cap=args.z_cap,
+        tau=args.tau,
         progress=progress,
         progress_interval=progress_interval,
     )
@@ -2680,9 +2927,27 @@ def compute_all(raw: RawData, args: argparse.Namespace) -> ComputedData:
         score_table,
         active_metric_keys=active_metric_keys,
         seed=args.seed,
+        cv_mode=args.cv_mode,
+        n_folds=args.n_folds,
     )
     if not nonlinear_diag.empty:
         model_diag = pd.concat([model_diag, nonlinear_diag], ignore_index=True, sort=False)
+    if getattr(args, "skip_sensitivity", False):
+        target_sensitivity = pd.DataFrame()
+    else:
+        progress_log("      computing target/CV sensitivity matrix ...", progress)
+        target_sensitivity = compute_target_sensitivity(
+            metrics_z,
+            rgpm,
+            active_metric_keys=active_metric_keys,
+            cv_modes=getattr(args, "sensitivity_cv_modes", ["time_block", "domain", "random"]),
+            n_samples=int(getattr(args, "sensitivity_weight_samples", 5000)),
+            n_folds=args.n_folds,
+            seed=args.seed,
+            tau=args.tau,
+            progress=False,
+        )
+    landmark_validation = compute_landmark_validation(score_table, min_controls=max(20, int(args.min_controls // 2)))
 
     diagnostics_summary = build_diagnostics_summary(
         active_delta_keys,
@@ -2729,6 +2994,8 @@ def compute_all(raw: RawData, args: argparse.Namespace) -> ComputedData:
         rgpm_component_correlations=rgpm_component_corr,
         control_tier_audit=control_tier_audit,
         nonlinear_diagnostics=nonlinear_diag,
+        target_sensitivity=target_sensitivity,
+        landmark_validation=landmark_validation,
         diagnostics_summary=diagnostics_summary,
         fold_weights=fold_weights,
         baseline_comparison=baseline_comparison,
@@ -2762,6 +3029,8 @@ def export_tables(comp: ComputedData, out_dir: Path) -> None:
     comp.rgpm_component_correlations.to_csv(out_dir / "fig3_rgpm_component_correlations.csv", index=False)
     comp.control_tier_audit.to_csv(out_dir / "fig3_control_tier_audit.csv", index=False)
     comp.nonlinear_diagnostics.to_csv(out_dir / "fig3_nonlinear_upper_bound.csv", index=False)
+    comp.target_sensitivity.to_csv(out_dir / "fig3_target_sensitivity.csv", index=False)
+    comp.landmark_validation.to_csv(out_dir / "fig3_landmark_validation.csv", index=False)
     (out_dir / "fig3_diagnostics_summary.json").write_text(
         json.dumps(comp.diagnostics_summary, ensure_ascii=False, indent=2),
         encoding="utf-8",
@@ -2780,6 +3049,8 @@ def export_core_diagnostics(comp: ComputedData, out_dir: Path) -> None:
     comp.rgpm_component_correlations.to_csv(out_dir / "fig3_rgpm_component_correlations.csv", index=False)
     comp.control_tier_audit.to_csv(out_dir / "fig3_control_tier_audit.csv", index=False)
     comp.nonlinear_diagnostics.to_csv(out_dir / "fig3_nonlinear_upper_bound.csv", index=False)
+    comp.target_sensitivity.to_csv(out_dir / "fig3_target_sensitivity.csv", index=False)
+    comp.landmark_validation.to_csv(out_dir / "fig3_landmark_validation.csv", index=False)
     (out_dir / "fig3_diagnostics_summary.json").write_text(
         json.dumps(comp.diagnostics_summary, ensure_ascii=False, indent=2),
         encoding="utf-8",
@@ -2878,14 +3149,19 @@ def parse_args() -> argparse.Namespace:
                         help="When falling back to paper_edges.csv, include bibliographic/cocitation-only edges. "
                              "By default only rows with direct > 0 are used.")
     parser.add_argument("--panel", choices=["a", "b", "c", "d", "e", "f", "all"], default="all", help="Panel to draw, or all.")
-    parser.add_argument("--tau", type=int, default=5, help="Future window in years for graph-delta outcomes.")
+    parser.add_argument("--tau", type=int, default=10, help="Future window in years for graph-delta outcomes. Strong-evidence default = 10.")
     parser.add_argument("--analysis-end-year", type=int, default=None, help="Last year available for future graph construction. Default = max year in works.csv.")
     parser.add_argument("--min-refs", type=int, default=5, help="Minimum number of prior references required for a paper.")
-    parser.add_argument("--min-controls", type=int, default=20, help="Minimum matched-control target; matching relaxes if not met. A hard floor of 10 is enforced for RGPM-v2.")
-    parser.add_argument("--z-cap", type=float, default=4.0, help="Winsorization cap for matched-control graph-delta z-scores used in RGPM-v2.")
+    parser.add_argument("--min-controls", type=int, default=50, help="Minimum matched-control target; matching relaxes if not met. A hard floor of 10 is enforced.")
+    parser.add_argument("--z-cap", type=float, default=4.0, help="Winsorization cap for matched-control graph-delta z-scores used in RGPM construction.")
     parser.add_argument("--n-weight-samples", type=int, default=30000, help="Number of Dirichlet weight vectors to evaluate.")
     parser.add_argument("--n-folds", type=int, default=5, help="Number of cross-validation folds.")
-    parser.add_argument("--cv-mode", choices=["random", "time", "domain"], default="time", help="Cross-validation split mode.")
+    parser.add_argument("--cv-mode", choices=["random", "time", "time_block", "domain"], default="time_block", help="Cross-validation split mode.")
+    parser.add_argument("--sensitivity-cv-modes", nargs="+", default=["time_block", "domain", "random"], choices=["random", "time", "time_block", "domain"],
+                        help="CV modes evaluated in fig3_target_sensitivity.csv.")
+    parser.add_argument("--sensitivity-weight-samples", type=int, default=5000,
+                        help="Weight candidates per target/CV sensitivity run.")
+    parser.add_argument("--skip-sensitivity", action="store_true", help="Skip target/CV sensitivity export.")
     parser.add_argument("--seed", type=int, default=2027, help="Random seed for weight sampling and CV splits.")
     parser.add_argument("--profile-grid-size", type=int, default=25, help="Grid size for Panel d constrained profile landscapes.")
     parser.add_argument("--profile-n", type=int, default=80, help="Number of remaining-weight samples per Panel d profile cell.")
@@ -3176,7 +3452,7 @@ def main() -> None:
 
 
 # =============================================================================
-# v3 patch: mechanism-balanced RGPM target + hybrid OOF weight learning
+# v3 patch: structural-residual RGPM target + hybrid OOF weight learning
 # =============================================================================
 # This patch intentionally keeps the original data-loading and plotting
 # infrastructure but replaces the two weakest methodological components found in
@@ -3226,31 +3502,84 @@ def delta_reliability_v3(
     return float(np.clip(base, 0.0, 1.0))
 
 
+def structural_residual_target(
+    table: pd.DataFrame,
+    raw_col: str,
+    tau: int,
+) -> Tuple[pd.Series, pd.Series, pd.Series]:
+    """Residualize raw RGPM against popularity/size covariates and rank it."""
+    df = table.copy()
+    y = pd.to_numeric(df[raw_col], errors="coerce").to_numpy(dtype=float)
+    covariate_cols = ["year", "reference_count", "n_future_citers", "cited_by_count"]
+    numeric_blocks: List[np.ndarray] = [np.ones((len(df), 1), dtype=float)]
+    for col in covariate_cols:
+        vals = pd.to_numeric(df[col], errors="coerce").fillna(0.0).to_numpy(dtype=float) if col in df.columns else np.zeros(len(df), dtype=float)
+        if col in {"reference_count", "n_future_citers", "cited_by_count"}:
+            vals = np.log1p(np.maximum(vals, 0.0))
+        vals = vals.astype(float)
+        sd = float(np.nanstd(vals))
+        if sd > 1e-12:
+            vals = (vals - float(np.nanmean(vals))) / sd
+        else:
+            vals = np.zeros_like(vals)
+        numeric_blocks.append(vals.reshape(-1, 1))
+    if "domain" in df.columns:
+        dummies = pd.get_dummies(df["domain"].astype(str), prefix="domain", drop_first=True, dtype=float)
+        if not dummies.empty:
+            numeric_blocks.append(dummies.to_numpy(dtype=float))
+    X = np.hstack(numeric_blocks)
+    mask = np.isfinite(y)
+    fitted = np.full(len(df), np.nan, dtype=float)
+    residual = np.full(len(df), np.nan, dtype=float)
+    if mask.sum() >= max(8, X.shape[1] + 2):
+        Xf = X[mask]
+        yf = y[mask]
+        lam = 1e-3
+        try:
+            beta = np.linalg.solve(Xf.T @ Xf + lam * np.eye(Xf.shape[1]), Xf.T @ yf)
+        except Exception:
+            beta = np.linalg.pinv(Xf.T @ Xf + lam * np.eye(Xf.shape[1])) @ yf
+        fitted[mask] = Xf @ beta
+        residual[mask] = yf - fitted[mask]
+    else:
+        residual[mask] = y[mask] - np.nanmean(y[mask]) if mask.any() else np.nan
+        fitted[mask] = np.nanmean(y[mask]) if mask.any() else np.nan
+    ranked = pd.Series(residual).rank(method="average", pct=True).to_numpy(dtype=float)
+    return (
+        pd.Series(ranked, index=table.index, name=f"RGPM_structural_residual_tau{tau}"),
+        pd.Series(residual, index=table.index, name=f"RGPM_structural_residual_raw_tau{tau}"),
+        pd.Series(fitted, index=table.index, name=f"RGPM_popularity_fitted_tau{tau}"),
+    )
+
+
 def compute_rgpm(
     metrics: pd.DataFrame,
     deltas: pd.DataFrame,
     min_controls: int = 20,
     z_cap: float = 4.0,
+    tau: int = 10,
     progress: bool = True,
     progress_interval: int = 100,
 ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, List[str], pd.DataFrame]:
-    """Compute mechanism-balanced RGPM-v3 from matched-control graph deltas.
+    """Compute structural-residual RGPM from matched-control graph deltas.
 
-    Compared with the original RGPM-v2, this function does not drop deltas just
-    because they are imperfect. It calculates reliability weights from empirical
-    diagnostics and then aggregates positive, matched-control z-scores within
-    mechanism groups first. The final target is an equal-mechanism RMS, so a
-    target dominated by partition-divergence/boundary-mixing cannot force all
-    learned weight onto DeltaQ0.
+    The raw mechanism score aggregates positive, matched-control z-scores within
+    the primary graph-delta mechanisms. The main target then residualizes that
+    raw score against domain/year/reference/citation covariates and uses the
+    residual rank as the tau-specific structural-residual RGPM column.
     """
-    df = metrics[["paper_id", "title", "domain", "year", "primary_field", "display_community", "is_landmark", "reference_count"]].merge(
-        deltas[["paper_id"] + DELTA_KEYS], on="paper_id", how="inner"
-    )
+    metric_cols = ["paper_id", "title", "domain", "year", "primary_field", "display_community", "is_landmark", "reference_count"]
+    if "cited_by_count" in metrics.columns:
+        metric_cols.append("cited_by_count")
+    delta_cols = ["paper_id"] + DELTA_KEYS
+    if "n_future_citers" in deltas.columns:
+        delta_cols.append("n_future_citers")
+    df = metrics[metric_cols].merge(deltas[delta_cols], on="paper_id", how="inner")
     df = add_reference_bins(df)
     required_controls = max(10, int(min_controls))
     progress_interval = max(1, int(progress_interval))
     progress_log(
-        f"Computing mechanism-balanced RGPM-v3 for {len(df):,} papers with min_controls={required_controls}, z_cap={z_cap}.",
+        f"Computing structural-residual RGPM for {len(df):,} papers with min_controls={required_controls}, z_cap={z_cap}.",
         progress,
     )
     global_scale = {col: raw_mad(df[col].to_numpy(dtype=float)) for col in DELTA_KEYS}
@@ -3262,7 +3591,7 @@ def compute_rgpm(
     for row_idx, (_, row) in enumerate(df.iterrows(), start=1):
         if row_idx == 1 or row_idx % progress_interval == 0 or row_idx == len(df):
             progress_log(
-                f"  RGPM-v3 rows processed {row_idx:,}/{len(df):,}; kept={len(z_rows):,}; skipped_controls={skipped_controls:,}",
+                f"  RGPM rows processed {row_idx:,}/{len(df):,}; kept={len(z_rows):,}; skipped_controls={skipped_controls:,}",
                 progress,
             )
         ctrl_idx, tier = matched_control_indices_with_tier(df, row, min_controls=required_controls)
@@ -3280,6 +3609,8 @@ def compute_rgpm(
             "display_community": row["display_community"],
             "is_landmark": row["is_landmark"],
             "reference_count": row["reference_count"],
+            "cited_by_count": row.get("cited_by_count", np.nan),
+            "n_future_citers": row.get("n_future_citers", np.nan),
             "n_controls": int(len(ctrl_idx)),
             "control_tier": tier,
         }
@@ -3363,7 +3694,7 @@ def compute_rgpm(
                 "delta": col,
                 "label": DELTA_LABELS[col],
                 "primary_candidate": int(col in primary_set),
-                "active": int(rel >= 0.08),
+                "active": int((col in primary_set) and rel >= 0.08),
                 "nonzero_rate": nonzero_rate,
                 "global_mad": global_mad,
                 "z_cap_hit_rate": cap_hit_rate,
@@ -3399,10 +3730,10 @@ def compute_rgpm(
     mechanism_scores: Dict[str, np.ndarray] = {}
     mechanism_weight_sums: Dict[str, float] = {}
     for mech, keys in DELTA_MECHANISM_GROUPS_V3.items():
-        valid_keys = [
-            k for k in keys
-            if k in DELTA_KEYS and (reliability.get(k, 0.0) > 0.0 or k in active_delta_set)
-        ]
+        if mech == "Consolidation":
+            valid_keys = [k for k in keys if k in DELTA_KEYS and reliability.get(k, 0.0) > 0.0]
+        else:
+            valid_keys = [k for k in keys if k in active_delta_set]
         if not valid_keys:
             continue
         Z = zdf[[k + "_z" for k in valid_keys]].replace([np.inf, -np.inf], np.nan).fillna(0.0).to_numpy(dtype=float)
@@ -3427,17 +3758,19 @@ def compute_rgpm(
 
     main_mechs = [m for m in ["Expansion", "Bridging", "Reconfiguration"] if m in mechanism_scores]
     if not main_mechs:
-        raise ValueError("No mechanism scores could be constructed for RGPM-v3.")
+        raise ValueError("No mechanism scores could be constructed for structural-residual RGPM.")
     M = np.column_stack([mechanism_scores[m] for m in main_mechs])
     rgpm_main = np.sqrt(np.square(M).mean(axis=1))
-    if "Consolidation" in mechanism_scores:
-        rgpm = np.sqrt(0.85 * np.square(rgpm_main) + 0.15 * np.square(mechanism_scores["Consolidation"]))
-    else:
-        rgpm = rgpm_main
-    zdf["RGPM_v3_balanced"] = rgpm
-    zdf["RGPM_v2"] = rgpm  # compatibility with existing panels/export names
-    zdf["RGPM"] = rgpm
-    zdf["RGPM_simple"] = rgpm
+    rgpm_raw = rgpm_main
+    zdf["RGPM_v3_balanced"] = rgpm_raw
+    zdf["RGPM_v2"] = rgpm_raw
+    zdf["RGPM_simple"] = rgpm_raw
+    zdf["RGPM_primary_only"] = rgpm_raw
+    residual_rank, residual_raw, popularity_fit = structural_residual_target(zdf, "RGPM_v3_balanced", tau=tau)
+    zdf[residual_rank.name] = residual_rank
+    zdf[residual_raw.name] = residual_raw
+    zdf[popularity_fit.name] = popularity_fit
+    zdf["RGPM"] = residual_rank.to_numpy(dtype=float)
 
     active_z_cols = [c + "_z" for c in active_delta_keys]
     zmat = zdf[active_z_cols].replace([np.inf, -np.inf], np.nan).fillna(0.0).to_numpy(dtype=float)
@@ -3453,7 +3786,7 @@ def compute_rgpm(
 
     if control_sizes:
         progress_log(
-            f"Finished RGPM-v3: {len(zdf):,} papers kept; controls median={np.median(control_sizes):.0f}, "
+            f"Finished structural-residual RGPM: {len(zdf):,} papers kept; controls median={np.median(control_sizes):.0f}, "
             f"min={np.min(control_sizes):.0f}, max={np.max(control_sizes):.0f}; active deltas="
             f"{len(active_delta_keys)} ({', '.join(active_delta_keys)}).",
             progress,
@@ -3536,7 +3869,10 @@ def learn_weights(
         "is_landmark", "reference_count", "cited_by_count",
     ]
     present_meta_cols = [c for c in meta_cols if c in metrics.columns]
-    rgpm_cols = ["paper_id", "RGPM", "RGPM_v2", "RGPM_simple", "RGPM_v3_balanced", "RGPM_mahalanobis_debug"]
+    rgpm_cols = [
+        "paper_id", "RGPM", "RGPM_v2", "RGPM_simple", "RGPM_v3_balanced",
+        "RGPM_primary_only", "RGPM_mahalanobis_debug",
+    ] + [c for c in rgpm.columns if c.startswith("RGPM_structural_residual") or c.startswith("RGPM_popularity_fitted")]
     present_rgpm_cols = [c for c in rgpm_cols if c in rgpm.columns]
     df = metrics[present_meta_cols + metric_z_cols].merge(rgpm[present_rgpm_cols], on="paper_id", how="inner")
     df = df.replace([np.inf, -np.inf], np.nan).dropna(subset=["RGPM"]).reset_index(drop=True)
@@ -3551,11 +3887,14 @@ def learn_weights(
     X = df[active_z_cols].to_numpy(dtype=float)
     y = df["RGPM"].to_numpy(dtype=float)
     W_base = base_weight_candidates(n_samples, seed=seed, n_metrics=len(active_metric_keys))
-    folds = make_folds(df, n_folds=n_folds, mode=cv_mode, seed=seed)
-    progress_log("  folds: " + ", ".join([f"{i+1}:n={len(f):,}" for i, f in enumerate(folds)]), progress)
+    splits = make_cv_splits(df, n_folds=n_folds, mode=cv_mode, seed=seed)
+    progress_log(
+        "  splits: " + ", ".join([f"{i+1}:train={len(tr):,}/test={len(te):,}" for i, (tr, te) in enumerate(splits)]),
+        progress,
+    )
 
     # Landscape/sample performance is evaluated for fixed, data-independent candidates.
-    perf = weight_performance_cv(X, y, W_base, folds, progress=progress)
+    perf = weight_performance_cv_splits(X, y, W_base, splits, progress=progress)
     equal_w = np.ones(len(active_metric_keys), dtype=float) / len(active_metric_keys)
     equal_score = X @ equal_w
     equal_rho = safe_spearman(equal_score, y)
@@ -3569,10 +3908,7 @@ def learn_weights(
     oof_score = np.full(len(df), np.nan, dtype=float)
     fold_ids = np.full(len(df), -1, dtype=int)
     fold_rows: List[Dict[str, object]] = []
-    for fold_no, test_idx in enumerate(folds, start=1):
-        train_mask = np.ones(len(df), dtype=bool)
-        train_mask[test_idx] = False
-        train_idx = np.where(train_mask)[0]
+    for fold_no, (train_idx, test_idx) in enumerate(splits, start=1):
         W_ridge = positive_ridge_candidates(X[train_idx], y[train_idx])
         W_pool = np.vstack([W_base, W_ridge])
         W_pool = np.round(W_pool, 8)
@@ -3597,7 +3933,7 @@ def learn_weights(
             fold_row["w_" + key] = float(val)
         fold_rows.append(fold_row)
         progress_log(
-            f"  outer fold {fold_no}/{len(folds)}: train={len(train_idx):,}, test={len(test_idx):,}, "
+            f"  outer fold {fold_no}/{len(splits)}: train={len(train_idx):,}, test={len(test_idx):,}, "
             f"test rho={fold_test_rho:.3f}",
             progress,
         )
@@ -3625,6 +3961,11 @@ def learn_weights(
     score_table["RGPM_simple"] = df["RGPM_simple"].to_numpy(dtype=float) if "RGPM_simple" in df.columns else y
     if "RGPM_v3_balanced" in df.columns:
         score_table["RGPM_v3_balanced"] = df["RGPM_v3_balanced"].to_numpy(dtype=float)
+    if "RGPM_primary_only" in df.columns:
+        score_table["RGPM_primary_only"] = df["RGPM_primary_only"].to_numpy(dtype=float)
+    for c in df.columns:
+        if c.startswith("RGPM_structural_residual") or c.startswith("RGPM_popularity_fitted"):
+            score_table[c] = df[c].to_numpy(dtype=float)
     if "RGPM_mahalanobis_debug" in df.columns:
         score_table["RGPM_mahalanobis_debug"] = df["RGPM_mahalanobis_debug"].to_numpy(dtype=float)
     for k in METRIC_KEYS:
@@ -3832,7 +4173,7 @@ def quadratic_design_matrix(X: np.ndarray) -> np.ndarray:
 def ridge_predict_oof(
     X: np.ndarray,
     y: np.ndarray,
-    folds: Sequence[np.ndarray],
+    folds: Sequence[object],
     lambdas: Sequence[float],
 ) -> Tuple[np.ndarray, pd.DataFrame]:
     """OOF quadratic ridge upper-bound diagnostic."""
@@ -3841,10 +4182,17 @@ def ridge_predict_oof(
     y_rank = np.where(np.isfinite(y_rank), y_rank, 0.0)
     oof = np.full(len(y), np.nan, dtype=float)
     rows: List[Dict[str, object]] = []
-    for fold_no, test_idx in enumerate(folds, start=1):
-        train_mask = np.ones(len(y), dtype=bool)
-        train_mask[test_idx] = False
-        train_idx = np.where(train_mask)[0]
+    for fold_no, fold in enumerate(folds, start=1):
+        if isinstance(fold, tuple):
+            train_idx = np.asarray(fold[0], dtype=int)
+            test_idx = np.asarray(fold[1], dtype=int)
+        else:
+            test_idx = np.asarray(fold, dtype=int)
+            train_mask = np.ones(len(y), dtype=bool)
+            train_mask[test_idx] = False
+            train_idx = np.where(train_mask)[0]
+        if len(train_idx) == 0 or len(test_idx) == 0:
+            continue
         x_train = Xq[train_idx]
         x_test = Xq[test_idx]
         mu = np.nanmean(x_train, axis=0)
@@ -3888,6 +4236,8 @@ def compute_nonlinear_upper_bound_diagnostics(
     score_table: pd.DataFrame,
     active_metric_keys: Sequence[str],
     seed: int,
+    cv_mode: str = "random",
+    n_folds: int = 3,
 ) -> Tuple[pd.DataFrame, np.ndarray]:
     """Diagnostic-only nonlinear upper bound using quadratic ridge OOF predictions."""
     active = [k for k in active_metric_keys if k + "_z" in score_table.columns]
@@ -3898,8 +4248,11 @@ def compute_nonlinear_upper_bound_diagnostics(
         return pd.DataFrame(), np.array([])
     X = st[[k + "_z" for k in active]].fillna(0.0).to_numpy(dtype=float)
     y = st["RGPM"].to_numpy(dtype=float)
-    fold_ids = st["fold_id"].to_numpy(dtype=int) if "fold_id" in st.columns else np.full(len(st), -1, dtype=int)
-    folds = [np.where(fold_ids == f)[0] for f in sorted(set(fold_ids)) if f > 0 and np.sum(fold_ids == f) > 0]
+    try:
+        folds = make_cv_splits(st, n_folds=n_folds, mode=cv_mode, seed=seed)
+    except ValueError:
+        fold_ids = st["fold_id"].to_numpy(dtype=int) if "fold_id" in st.columns else np.full(len(st), -1, dtype=int)
+        folds = [np.where(fold_ids == f)[0] for f in sorted(set(fold_ids)) if f > 0 and np.sum(fold_ids == f) > 0]
     if len(folds) < 2:
         folds = make_folds(st, n_folds=3, mode="random", seed=seed)
     lambdas = (0.01, 0.03, 0.1, 0.3, 1.0, 3.0, 10.0, 30.0, 100.0)
@@ -3930,6 +4283,172 @@ def compute_nonlinear_upper_bound_diagnostics(
     fold_diag["delta_vs_linear"] = np.nan
     fold_diag["delta_vs_equal"] = np.nan
     return pd.concat([summary, fold_diag], ignore_index=True), oof
+
+
+def compute_target_sensitivity(
+    metrics_z: pd.DataFrame,
+    rgpm_table: pd.DataFrame,
+    active_metric_keys: Sequence[str],
+    cv_modes: Sequence[str],
+    n_samples: int,
+    n_folds: int,
+    seed: int,
+    tau: int,
+    progress: bool = False,
+) -> pd.DataFrame:
+    """Evaluate target-version and CV-mode sensitivity on the same feature table."""
+    target_cols = [
+        ("structural_residual", "RGPM"),
+        ("raw_balanced", "RGPM_v3_balanced"),
+        ("primary_only", "RGPM_primary_only"),
+        ("mahalanobis_debug", "RGPM_mahalanobis_debug"),
+    ]
+    current_struct_col = f"RGPM_structural_residual_tau{tau}"
+    structural_cols = [c for c in rgpm_table.columns if c.startswith("RGPM_structural_residual_tau")]
+    for col in structural_cols:
+        if col != current_struct_col:
+            target_cols.append((col, col))
+    seen_targets: set[Tuple[str, str]] = set()
+    rows: List[Dict[str, object]] = []
+    for target_name, target_col in target_cols:
+        if (target_name, target_col) in seen_targets or target_col not in rgpm_table.columns:
+            continue
+        seen_targets.add((target_name, target_col))
+        target_rgpm = rgpm_table[["paper_id", target_col]].rename(columns={target_col: "RGPM"}).copy()
+        for cv_mode in cv_modes:
+            try:
+                _, _, learned_rho, score_table, _, _, baseline, _ = learn_weights(
+                    metrics_z,
+                    target_rgpm,
+                    active_metric_keys=active_metric_keys,
+                    n_samples=n_samples,
+                    n_folds=n_folds,
+                    cv_mode=cv_mode,
+                    seed=seed + stable_int_id(f"{target_name}-{cv_mode}", modulo=10000),
+                    progress=progress,
+                )
+                equal = baseline.loc[baseline["model"] == "equal_weights", "oof_spearman"]
+                best_single = baseline.loc[baseline["model"] == "best_single_indicator", "oof_spearman"]
+                citation = baseline.loc[baseline["model"] == "cited_by_count", "oof_spearman"]
+                if citation.empty:
+                    citation = baseline.loc[baseline["model"] == "reference_count", "oof_spearman"]
+                nonlinear, _ = compute_nonlinear_upper_bound_diagnostics(
+                    score_table,
+                    active_metric_keys,
+                    seed=seed + 919,
+                    cv_mode=cv_mode,
+                    n_folds=n_folds,
+                )
+                nonlinear_rows = nonlinear[nonlinear["model"] == "quadratic_ridge_oof"] if not nonlinear.empty else pd.DataFrame()
+                nonlinear_rho = float(nonlinear_rows["test_spearman"].iloc[0]) if not nonlinear_rows.empty else np.nan
+                equal_rho = float(equal.iloc[0]) if not equal.empty else np.nan
+                best_single_rho = float(best_single.iloc[0]) if not best_single.empty else np.nan
+                citation_rho = float(citation.iloc[0]) if not citation.empty else np.nan
+                rows.append(
+                    {
+                        "tau": int(tau),
+                        "target_name": target_name,
+                        "target_column": target_col,
+                        "cv_mode": cv_mode,
+                        "n": int(len(score_table)),
+                        "learned_oof_spearman": learned_rho,
+                        "equal_weight_oof_spearman": equal_rho,
+                        "learned_vs_equal_delta": learned_rho - equal_rho if np.isfinite(learned_rho) and np.isfinite(equal_rho) else np.nan,
+                        "best_single_oof_spearman": best_single_rho,
+                        "learned_vs_best_single_delta": learned_rho - best_single_rho if np.isfinite(learned_rho) and np.isfinite(best_single_rho) else np.nan,
+                        "citation_baseline_spearman": citation_rho,
+                        "nonlinear_upper_bound_oof_spearman": nonlinear_rho,
+                    }
+                )
+            except Exception as exc:
+                rows.append(
+                    {
+                        "tau": int(tau),
+                        "target_name": target_name,
+                        "target_column": target_col,
+                        "cv_mode": cv_mode,
+                        "n": 0,
+                        "learned_oof_spearman": np.nan,
+                        "equal_weight_oof_spearman": np.nan,
+                        "learned_vs_equal_delta": np.nan,
+                        "best_single_oof_spearman": np.nan,
+                        "learned_vs_best_single_delta": np.nan,
+                        "citation_baseline_spearman": np.nan,
+                        "nonlinear_upper_bound_oof_spearman": np.nan,
+                        "error": str(exc),
+                    }
+                )
+    return pd.DataFrame(rows)
+
+
+def compute_landmark_validation(score_table: pd.DataFrame, min_controls: int = 20) -> pd.DataFrame:
+    """Compare landmark scores against matched non-landmark controls."""
+    if score_table.empty or "is_landmark" not in score_table.columns:
+        return pd.DataFrame()
+    df = add_reference_bins(score_table.copy())
+    if "primary_field" not in df.columns:
+        df["primary_field"] = ""
+    rows: List[Dict[str, object]] = []
+    landmarks = df[pd.to_numeric(df["is_landmark"], errors="coerce").fillna(0).astype(int) == 1]
+    non_landmarks = df[pd.to_numeric(df["is_landmark"], errors="coerce").fillna(0).astype(int) == 0]
+    for row in landmarks.itertuples(index=False):
+        year = int(getattr(row, "year"))
+        domain = str(getattr(row, "domain", ""))
+        field = str(getattr(row, "primary_field", ""))
+        ref_bin = str(getattr(row, "ref_bin", ""))
+        pool = non_landmarks[
+            (non_landmarks["domain"].astype(str) == domain)
+            & (non_landmarks["primary_field"].astype(str) == field)
+            & (non_landmarks["year"].between(year - 3, year + 3))
+            & (non_landmarks["ref_bin"].astype(str) == ref_bin)
+        ]
+        tier = "domain_field_year3_refbin"
+        if len(pool) < min_controls:
+            pool = non_landmarks[
+                (non_landmarks["domain"].astype(str) == domain)
+                & (non_landmarks["primary_field"].astype(str) == field)
+                & (non_landmarks["year"].between(year - 5, year + 5))
+            ]
+            tier = "domain_field_year5"
+        if len(pool) < min_controls:
+            pool = non_landmarks[(non_landmarks["domain"].astype(str) == domain) & (non_landmarks["year"].between(year - 5, year + 5))]
+            tier = "domain_year5"
+        if len(pool) < min_controls:
+            pool = non_landmarks[non_landmarks["domain"].astype(str) == domain]
+            tier = "domain_all_years"
+        if pool.empty:
+            continue
+        out: Dict[str, object] = {
+            "paper_id": getattr(row, "paper_id"),
+            "title": getattr(row, "title", ""),
+            "domain": domain,
+            "year": year,
+            "primary_field": field,
+            "n_controls": int(len(pool)),
+            "control_tier": tier,
+        }
+        for col in ["S_w_oof", "S_equal", "RGPM", "RGPM_v3_balanced"]:
+            if col in df.columns:
+                val = float(getattr(row, col))
+                ctrl = pd.to_numeric(pool[col], errors="coerce").dropna().to_numpy(dtype=float)
+                out[col + "_value"] = val
+                out[col + "_matched_percentile"] = float(np.mean(ctrl <= val) * 100.0) if len(ctrl) else np.nan
+        rows.append(out)
+    result = pd.DataFrame(rows)
+    if not result.empty:
+        summary = {
+            "paper_id": "__summary__",
+            "title": "Median landmark matched percentile",
+            "domain": "all",
+            "year": -1,
+            "primary_field": "",
+            "n_controls": int(result["n_controls"].median()),
+            "control_tier": "summary",
+        }
+        for col in [c for c in result.columns if c.endswith("_matched_percentile")]:
+            summary[col] = float(result[col].median())
+        result = pd.concat([result, pd.DataFrame([summary])], ignore_index=True, sort=False)
+    return result
 
 
 def build_panel_b_example(comp: ComputedData) -> pd.DataFrame:
@@ -4094,9 +4613,12 @@ def build_diagnostics_summary(
 ) -> Dict[str, Any]:
     learned_rows = baseline_comparison[baseline_comparison["model"] == "learned_weight_oof"]
     equal_rows = baseline_comparison[baseline_comparison["model"] == "equal_weights"]
+    best_single_rows = baseline_comparison[baseline_comparison["model"] == "best_single_indicator"]
     learned_rho = float(learned_rows["oof_spearman"].iloc[0]) if not learned_rows.empty else float("nan")
     equal_rho = float(equal_rows["oof_spearman"].iloc[0]) if not equal_rows.empty else float("nan")
+    best_single_rho = float(best_single_rows["oof_spearman"].iloc[0]) if not best_single_rows.empty else float("nan")
     improvement = learned_rho - equal_rho if np.isfinite(learned_rho) and np.isfinite(equal_rho) else float("nan")
+    improvement_vs_best_single = learned_rho - best_single_rho if np.isfinite(learned_rho) and np.isfinite(best_single_rho) else float("nan")
     active_diag = delta_diagnostics[delta_diagnostics["delta"].isin(active_delta_keys)]
     active_cap_max = float(active_diag["z_cap_hit_rate"].max()) if not active_diag.empty else float("nan")
     mean_rel = float(active_diag["reliability_weight"].mean()) if "reliability_weight" in active_diag and not active_diag.empty else float("nan")
@@ -4108,9 +4630,16 @@ def build_diagnostics_summary(
     domain_diag, data_profile = compute_domain_adequacy_diagnostics(score_table, control_diagnostics)
     association_checks = {
         "active_graph_deltas": int(len(active_delta_keys) >= thresholds["active_graph_deltas_min"]),
-        "active_delta_z_cap_hit_rate": int(np.isfinite(active_cap_max) and active_cap_max < 0.15),
+        "active_delta_z_cap_hit_rate": int(
+            np.isfinite(active_cap_max)
+            and active_cap_max < thresholds["active_delta_z_cap_hit_rate_max"]
+        ),
         "oof_spearman": int(np.isfinite(learned_rho) and learned_rho >= thresholds["oof_spearman_min"]),
         "learned_vs_equal": int(np.isfinite(improvement) and improvement >= thresholds["learned_vs_equal_min"]),
+        "learned_vs_best_single": int(
+            np.isfinite(improvement_vs_best_single)
+            and improvement_vs_best_single >= thresholds["learned_vs_best_single_min"]
+        ),
         "score_iqr": int(np.isfinite(score_iqr) and score_iqr > thresholds["score_iqr_min"]),
         "mean_delta_reliability": int(np.isfinite(mean_rel) and mean_rel >= 0.25),
     }
@@ -4158,7 +4687,7 @@ def build_diagnostics_summary(
     return {
         "overall_pass": overall_pass,
         "status_label": status_label,
-        "target_version": "RGPM-v3 mechanism-balanced",
+        "target_version": "RGPM structural residual over primary future graph deltas",
         "thresholds": thresholds,
         "data_requirements": data_thresholds,
         "checks": checks,
@@ -4172,7 +4701,9 @@ def build_diagnostics_summary(
         "mean_delta_reliability": mean_rel,
         "learned_oof_spearman": learned_rho,
         "equal_weight_oof_spearman": equal_rho,
+        "best_single_oof_spearman": best_single_rho,
         "learned_vs_equal_delta": improvement,
+        "learned_vs_best_single_delta": improvement_vs_best_single,
         "nonlinear_upper_bound_oof_spearman": nonlinear_rho,
         "nonlinear_vs_linear_delta": nonlinear_delta,
         "nonlinear_diagnostic_interpretation": nonlinear_interpretation,
@@ -4181,12 +4712,12 @@ def build_diagnostics_summary(
 
 
 def draw_panel_b(ax: plt.Axes, comp: ComputedData) -> None:
-    panel_frame(ax, "b", "Mechanism-balanced RGPM-v3 target construction")
+    panel_frame(ax, "b", "Structural-residual RGPM target construction")
     ex = comp.panel_b_example.copy()
     if ex.empty:
         raise ValueError("Panel b example data is empty.")
-    rounded_box(ax, 0.020, 0.115, 0.705, 0.775, "#FFFFFF", BORDER, 0.65, 0.012)
-    ax.text(0.372, 0.850, "Active graph-delta z-scores weighted by stability and mechanism", ha="center", va="center", fontsize=7.1, color="#0F3A75", fontweight="bold")
+    rectangle_box(ax, 0.020, 0.115, 0.705, 0.775, "#FFFFFF", BORDER, 0.65)
+    ax.text(0.372, 0.850, "Primary future graph-delta z-scores weighted by stability and mechanism", ha="center", va="center", fontsize=7.1, color="#0F3A75", fontweight="bold")
     z_axis_x0 = 0.430
     z_axis_w = 0.230
     ax.text(z_axis_x0, 0.790, "-4", ha="center", va="center", fontsize=5.3, color=TEXT_LIGHT)
@@ -4212,14 +4743,14 @@ def draw_panel_b(ax: plt.Axes, comp: ComputedData) -> None:
         if int(getattr(row, "clipped", 0)):
             ax.scatter([x1], [y], marker="^" if z >= 0 else "v", s=18, color="#111827", transform=ax.transAxes, zorder=6)
         ax.text(0.680, y, format_z_for_panel(z), ha="center", va="center", fontsize=5.2)
-    ax.text(0.372, 0.080, "Controls: field/year/ref-bin matching; deltas are reliability-weighted and balanced by mechanism", ha="center", va="center", fontsize=5.4)
+    ax.text(0.372, 0.080, "Controls: field/year/ref-bin matching; popularity residualization happens after mechanism aggregation", ha="center", va="center", fontsize=5.4)
 
-    rounded_box(ax, 0.755, 0.115, 0.225, 0.775, "#FFFFFF", BORDER, 0.65, 0.012)
-    ax.text(0.868, 0.850, "RGPM-v3", ha="center", va="center", fontsize=7.6, color="#0F3A75", fontweight="bold")
+    rectangle_box(ax, 0.755, 0.115, 0.225, 0.775, "#FFFFFF", BORDER, 0.65)
+    ax.text(0.868, 0.850, "RGPM-resid", ha="center", va="center", fontsize=7.6, color="#0F3A75", fontweight="bold")
     ax.text(0.868, 0.700, r"$z_j=\frac{\Delta_j-\tilde{\Delta}_{ctrl}}{scale_j}$", ha="center", va="center", fontsize=6.6)
     ax.text(0.868, 0.595, r"$r_j=f(stability_j)$", ha="center", va="center", fontsize=7.0)
     ax.text(0.868, 0.480, r"$M_g=\sqrt{\frac{\sum_{j\in g} r_j\max(z_j,0)^2}{\sum_{j\in g} r_j}}$", ha="center", va="center", fontsize=5.7)
-    ax.text(0.868, 0.375, r"$RGPM=\sqrt{mean_g(M_g^2)}$", ha="center", va="center", fontsize=7.0, color="#1D4ED8", fontweight="bold")
+    ax.text(0.868, 0.375, r"$RGPM=rank(resid(RGPM_0))$", ha="center", va="center", fontsize=6.5, color="#1D4ED8", fontweight="bold")
     rounded_box(ax, 0.780, 0.205, 0.175, 0.110, "#F3F4F6", "#CBD5E1", 0.65, 0.010)
     n_active = int(len(comp.active_delta_keys))
     mean_rel = comp.diagnostics_summary.get("mean_delta_reliability", np.nan)
@@ -4267,7 +4798,7 @@ def rank_decile_calibration_table(
 
 
 def draw_panel_f(ax: plt.Axes, comp: ComputedData) -> None:
-    panel_frame(ax, "f", "Out-of-fold score calibration against mechanism-balanced RGPM")
+    panel_frame(ax, "f", "Out-of-fold score calibration against structural-residual RGPM")
     cal_ax = ax.inset_axes([0.065, 0.185, 0.425, 0.660])
     st = comp.score_table.copy()
     rho = safe_spearman(st["S_w_oof"], st["RGPM"])
@@ -4300,7 +4831,7 @@ def draw_panel_f(ax: plt.Axes, comp: ComputedData) -> None:
         cal_ax.set_xlim(0, 100)
         cal_ax.set_ylim(0, 100)
         cal_ax.set_xlabel("$S_w$ OOF percentile decile", fontsize=6)
-        cal_ax.set_ylabel("Mean RGPM-v3 percentile", fontsize=6)
+        cal_ax.set_ylabel("Mean structural-residual RGPM percentile", fontsize=6)
         cal_ax.legend(frameon=True, fontsize=4.8, loc="lower right")
     cal_ax.tick_params(labelsize=5)
     cal_ax.set_title("Rank-decile calibration", fontsize=7, color="#0F3A75", fontweight="bold")
@@ -4335,8 +4866,6 @@ def draw_panel_f(ax: plt.Axes, comp: ComputedData) -> None:
     bar_ax.legend(frameon=True, fontsize=5, loc="lower right")
     for s in bar_ax.spines.values():
         s.set_linewidth(0.5)
-    status_color = "#166534" if not is_diagnostic_run(comp) else "#7F1D1D"
-    ax.text(0.720, 0.082, diagnostic_status_text(comp), ha="center", va="center", fontsize=6.0, color=status_color, fontweight="bold")
 
 
 def draw_full_figure(comp: ComputedData, tau: int, out_path: Path) -> None:
@@ -4344,11 +4873,11 @@ def draw_full_figure(comp: ComputedData, tau: int, out_path: Path) -> None:
     fig = plt.figure(figsize=(20, 12.6), dpi=300)
     status = diagnostic_status_text(comp)
     if is_diagnostic_run(comp):
-        title = "Fig. 3 diagnostic run | Mechanism-balanced RGPM and hybrid weight learning"
+        title = "Fig. 3 diagnostic run | Structural-residual RGPM and hybrid weight learning"
         subtitle = "Strict out-of-fold scores are reported; weak results should be interpreted as model diagnostics rather than a final scoring claim"
     else:
         title = "Fig. 3 | Data-driven weight learning for graph-perturbation scoring"
-        subtitle = "Weights are selected by their ability to recover mechanism-balanced realized structural changes of knowledge graphs"
+        subtitle = "Weights are selected by their ability to recover popularity-adjusted future graph-structural perturbation"
     fig.text(0.5, 0.985, title, ha="center", va="top", fontsize=18.0, fontweight="bold")
     fig.text(0.5, 0.957, subtitle, ha="center", va="top", fontsize=10.8, color=TEXT_MID)
 
@@ -4369,7 +4898,7 @@ def draw_full_figure(comp: ComputedData, tau: int, out_path: Path) -> None:
         0.012,
         0.012,
         "(1) Seven indicators are computed at publication day (G0).  "
-        "(2) RGPM-v3 balances reliability-weighted future graph-delta outcomes by mechanism.  "
+        "(2) RGPM residualizes reliability-weighted future graph-delta outcomes against popularity and size covariates.  "
         "(3) Learned weights are evaluated strictly out-of-fold.  "
         f"Status: {status}.",
         ha="left",

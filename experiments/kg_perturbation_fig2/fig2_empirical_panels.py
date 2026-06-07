@@ -1,12 +1,17 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import os
+import sys
 import textwrap
-from dataclasses import dataclass
+import time
+from collections import Counter
+from dataclasses import dataclass, field
 from pathlib import Path
+from statistics import NormalDist
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 os.environ.setdefault('MPLCONFIGDIR', '/tmp/aspr_matplotlib_cache')
@@ -23,9 +28,18 @@ import numpy as np
 import pandas as pd
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 DEFAULT_FIG1_DATA_ROOT = PROJECT_ROOT / 'outputs' / 'kg_perturbation_fig1'
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / 'outputs' / 'kg_perturbation_fig2'
+DEFAULT_STRONG_OUTPUT_DIR = PROJECT_ROOT / 'outputs' / 'kg_perturbation_fig2_strong'
 DEFAULT_DOMAIN = 'crispr'
+DEFAULT_STRONG_DOMAINS = [
+    'crispr',
+    'graphene_2d_materials',
+    'ipsc_reprogramming',
+    'transformer_foundation_models',
+]
 
 try:
     from scipy.cluster.hierarchy import linkage, dendrogram, leaves_list
@@ -49,9 +63,9 @@ METRIC_SPECS = [
     ('B', 'B', '#0B4FA3', 'bridge position'),
     ('RS', 'RS', '#2E7D32', 'distance-weighted diversity'),
     ('DeltaQ0', 'ΔQ0', '#F97316', 'boundary perturbation'),
-    ('Uzzi', 'Uzzi', '#7C3AED', 'atypical recombination'),
+    ('Uzzi', 'Uzzi-style', '#7C3AED', 'field-pair atypical recombination'),
     ('RTD', 'RTD', '#0891B2', 'reference target diversity'),
-    ('BurtIP', 'Burt IP', '#2563EB', 'structural holes'),
+    ('BurtIP', 'Burt IP', '#1E3A8A', 'structural holes'),
     ('PDE', 'PDE', '#EF4444', 'prospective diffusion breadth'),
 ]
 
@@ -66,21 +80,23 @@ CANDIDATE_GROUPS = {
 }
 
 EVIDENCE_CHANNELS = [
-    ('Knowledge\nbreadth', '#2E7D32', 'Breadth of disciplinary / topical coverage'),
-    ('Structural\nbrokerage', '#0B4FA3', 'Potential shortcut creation across communities'),
-    ('Boundary\nperturbation', '#F97316', 'Potential to disturb module boundaries'),
-    ('Combinatorial\natypicality', '#7C3AED', 'Unusual but interpretable reference combinations'),
+    ('Breadth', '#2E7D32', 'Breadth of disciplinary / topical coverage'),
+    ('Brokerage', '#0B4FA3', 'Potential shortcut creation across communities'),
+    ('Boundary', '#F97316', 'Potential to disturb module boundaries'),
+    ('Atypicality', '#7C3AED', 'Unusual but interpretable reference combinations'),
 ]
 
 EVIDENCE_MAP = {
-    'B': {'Structural\nbrokerage': 'primary', 'Boundary\nperturbation': 'secondary'},
-    'RS': {'Knowledge\nbreadth': 'primary'},
-    'DeltaQ0': {'Boundary\nperturbation': 'primary'},
-    'Uzzi': {'Combinatorial\natypicality': 'primary', 'Boundary\nperturbation': 'secondary'},
-    'RTD': {'Structural\nbrokerage': 'primary', 'Knowledge\nbreadth': 'secondary'},
-    'BurtIP': {'Structural\nbrokerage': 'primary'},
-    'PDE': {'Knowledge\nbreadth': 'primary'},
+    'B': {'Brokerage': 'primary', 'Boundary': 'secondary'},
+    'RS': {'Breadth': 'primary'},
+    'DeltaQ0': {'Boundary': 'primary'},
+    'Uzzi': {'Atypicality': 'primary', 'Boundary': 'secondary'},
+    'RTD': {'Brokerage': 'primary', 'Breadth': 'secondary'},
+    'BurtIP': {'Brokerage': 'primary'},
+    'PDE': {'Breadth': 'primary'},
 }
+
+NORMAL_DIST = NormalDist()
 
 
 @dataclass
@@ -100,6 +116,17 @@ class ComputedData:
     indicator_delta_corr: pd.DataFrame
     percentile_long: pd.DataFrame
     landmark_summary: pd.DataFrame
+    metric_standardization_diagnostics: pd.DataFrame
+    graph_delta_diagnostics: pd.DataFrame
+    input_audit: pd.DataFrame = field(default_factory=pd.DataFrame)
+    domain_adequacy: pd.DataFrame = field(default_factory=pd.DataFrame)
+    reference_closure_report: pd.DataFrame = field(default_factory=pd.DataFrame)
+    matched_controls: pd.DataFrame = field(default_factory=pd.DataFrame)
+    indicator_future_corr_bootstrap: pd.DataFrame = field(default_factory=pd.DataFrame)
+    evidence_support: pd.DataFrame = field(default_factory=pd.DataFrame)
+    quality_gates: Dict[str, Any] = field(default_factory=dict)
+    evidence_mode: str = 'legacy'
+    future_tau: Optional[int] = None
 
 
 # --------------------------
@@ -287,12 +314,19 @@ def standardize_fig1_works(works_selected: pd.DataFrame, domain_name: str) -> pd
     works = works_selected.copy()
     works['domain'] = domain_name
     works['primary_field'] = works.apply(infer_primary_field, axis=1)
+
+    if 'analysis_community' not in works.columns:
+        if 'community' in works.columns:
+            works['analysis_community'] = pd.to_numeric(works['community'], errors='coerce')
+        elif 'display_community' in works.columns:
+            works['analysis_community'] = pd.to_numeric(works['display_community'], errors='coerce')
+        else:
+            works['analysis_community'] = -1
+    works['analysis_community'] = pd.to_numeric(works['analysis_community'], errors='coerce').fillna(-1).astype(int)
+
     if 'display_community' not in works.columns:
         works['display_community'] = pd.NA
-    community_fallback = works['community'] if 'community' in works.columns else pd.Series(-1, index=works.index)
     works['display_community'] = pd.to_numeric(works['display_community'], errors='coerce')
-    works['display_community'] = works['display_community'].fillna(pd.to_numeric(community_fallback, errors='coerce'))
-    works['display_community'] = works['display_community'].fillna(-1).astype(int)
     if 'anchor_label' not in works.columns:
         works['anchor_label'] = pd.NA
     anchor_label = works['anchor_label'].replace('', pd.NA)
@@ -301,7 +335,7 @@ def standardize_fig1_works(works_selected: pd.DataFrame, domain_name: str) -> pd
     if 'title' not in works.columns:
         works['title'] = works['id']
     base_cols = [
-        'id', 'year', 'title', 'domain', 'primary_field', 'display_community',
+        'id', 'year', 'title', 'domain', 'primary_field', 'analysis_community', 'display_community',
         'is_landmark', 'anchor_label',
     ]
     extra_cols = [
@@ -324,7 +358,7 @@ def citations_from_fig1_raw_refs(fig1_dir: Path, selected_ids: Sequence[str]) ->
     rows = []
     dropped_unselected_targets = 0
     missing_source_records = 0
-    for source in selected:
+    for source in [str(item) for item in selected_ids]:
         refs = refs_by_id.get(source)
         if refs is None:
             missing_source_records += 1
@@ -397,6 +431,8 @@ def prepare_fig2_input_from_fig1(
         'topic_rows': len(topics),
         'topic_edge_rows': len(topic_edges),
         'landmark_rows': int(works['is_landmark'].sum()),
+        'display_community_missing_rows': int(works['display_community'].isna().sum()),
+        'analysis_community_fallback_rows': int((works['analysis_community'] < 0).sum()),
         **citation_report,
     }
     save_prepare_report(report, prepared_dir)
@@ -426,6 +462,8 @@ def prepare_fig2_input_from_standard(
         'topic_rows': len(raw.topics),
         'topic_edge_rows': len(raw.topic_edges),
         'landmark_rows': int(raw.works['is_landmark'].sum()),
+        'display_community_missing_rows': int(raw.works['display_community'].isna().sum()),
+        'analysis_community_fallback_rows': int((raw.works['analysis_community'] < 0).sum()),
     }
     save_prepare_report(report, prepared_dir)
     progress_log(f'Prepared normalized Fig. 2 input in {prepared_dir}', progress)
@@ -535,12 +573,18 @@ def normalize_works(works: pd.DataFrame, data_dir: Path) -> pd.DataFrame:
             out['primary_field'] = out['primary_field'].fillna(out[candidate].replace('', pd.NA))
     out['primary_field'] = out['primary_field'].fillna('unknown_field')
 
+    if 'analysis_community' not in out.columns:
+        if 'community' in out.columns:
+            out['analysis_community'] = pd.to_numeric(out['community'], errors='coerce')
+        elif 'display_community' in out.columns:
+            out['analysis_community'] = pd.to_numeric(out['display_community'], errors='coerce')
+        else:
+            out['analysis_community'] = -1
+    out['analysis_community'] = pd.to_numeric(out['analysis_community'], errors='coerce').fillna(-1).astype(int)
+
     if 'display_community' not in out.columns:
         out['display_community'] = pd.NA
-    community_fallback = out['community'] if 'community' in out.columns else pd.Series(-1, index=out.index)
     out['display_community'] = pd.to_numeric(out['display_community'], errors='coerce')
-    out['display_community'] = out['display_community'].fillna(pd.to_numeric(community_fallback, errors='coerce'))
-    out['display_community'] = out['display_community'].fillna(-1).astype(int)
 
     if 'is_landmark' not in out.columns:
         if 'anchor_label' in out.columns:
@@ -595,7 +639,7 @@ def load_raw_data(
     if citations_path.name == 'paper_edges.csv' and direct_only:
         progress_log(f'Kept {len(citations):,} direct citation edges from paper_edges.csv', progress)
 
-    require_columns(works, ['id', 'year', 'display_community', 'primary_field', 'is_landmark'], works_path.name)
+    require_columns(works, ['id', 'year', 'analysis_community', 'display_community', 'primary_field', 'is_landmark'], works_path.name)
     require_columns(citations, ['source', 'target'], citations_path.name)
     require_columns(topics, ['community', 'label', 'x', 'y'], topics_path.name)
     require_columns(topic_edges, ['source_community', 'target_community', 'weight'], topic_edges_path.name)
@@ -604,7 +648,8 @@ def load_raw_data(
     citations['source'] = citations['source'].astype(str)
     citations['target'] = citations['target'].astype(str)
     works['year'] = works['year'].astype(int)
-    works['display_community'] = works['display_community'].astype(int)
+    works['analysis_community'] = works['analysis_community'].astype(int)
+    works['display_community'] = pd.to_numeric(works['display_community'], errors='coerce')
     works['is_landmark'] = works['is_landmark'].astype(int)
 
     if 'domain' not in works.columns:
@@ -697,8 +742,13 @@ def build_prior_graph(works: pd.DataFrame, citations: pd.DataFrame, year: int) -
 
 def get_reference_rows(raw: RawData, paper_id: str, year: int) -> pd.DataFrame:
     refs = raw.citations[raw.citations['source'] == str(paper_id)].copy()
-    meta = raw.works[['id', 'year', 'display_community', 'primary_field']].rename(columns={
-        'id': 'target', 'display_community': 'target_comm', 'primary_field': 'target_field', 'year': 'target_year'})
+    meta = raw.works[['id', 'year', 'analysis_community', 'display_community', 'primary_field']].rename(columns={
+        'id': 'target',
+        'analysis_community': 'target_analysis_comm',
+        'display_community': 'target_display_comm',
+        'primary_field': 'target_field',
+        'year': 'target_year',
+    })
     refs = refs.merge(meta, on='target', how='left')
     refs = refs[refs['target_year'] < year].copy()
     return refs
@@ -730,6 +780,81 @@ def assortativity_by_comm(g: nx.Graph, community_map: Mapping[str, int]) -> floa
         return float(0.0 if np.isnan(val) else val)
     except Exception:
         return 0.0
+
+
+def build_local_reference_graph(
+    refs: pd.DataFrame,
+    citation_neighbors: Mapping[str, set],
+    paper_id: Optional[str] = None,
+    paper_comm: Optional[int] = None,
+) -> Tuple[nx.Graph, Dict[str, int]]:
+    ref_ids = set(refs['target'].astype(str))
+    g = nx.Graph()
+    g.add_nodes_from(ref_ids)
+    for u in ref_ids:
+        for v in citation_neighbors.get(u, set()):
+            if v in ref_ids and u < v:
+                g.add_edge(u, v)
+    comm_meta = refs[['target', 'target_analysis_comm']].dropna(subset=['target_analysis_comm']).copy()
+    comm_meta['target_analysis_comm'] = comm_meta['target_analysis_comm'].astype(int)
+    comm_map = dict(zip(comm_meta['target'].astype(str), comm_meta['target_analysis_comm']))
+    if paper_id is not None:
+        pid = str(paper_id)
+        g.add_node(pid)
+        for rid in ref_ids:
+            g.add_edge(pid, rid)
+        if paper_comm is None:
+            paper_comm = choose_publication_day_community(refs, -1)[0]
+        comm_map[pid] = int(paper_comm)
+    return g, comm_map
+
+
+def build_citation_neighbors(citations: pd.DataFrame) -> Dict[str, set]:
+    neighbors: Dict[str, set] = {}
+    for row in citations.itertuples(index=False):
+        u = str(row.source)
+        v = str(row.target)
+        neighbors.setdefault(u, set()).add(v)
+        neighbors.setdefault(v, set()).add(u)
+    return neighbors
+
+
+def boundary_mixing_share(g: nx.Graph, community_map: Mapping[str, int]) -> float:
+    if g.number_of_edges() == 0:
+        return 0.0
+    total = 0
+    cross = 0
+    for u, v in g.edges():
+        if u in community_map and v in community_map:
+            total += 1
+            if community_map[u] != community_map[v]:
+                cross += 1
+    return float(cross / total) if total else 0.0
+
+
+def focal_bridge_betweenness_from_reference_components(g_ref: nx.Graph, ref_count: int) -> float:
+    if ref_count <= 1:
+        return 0.0
+    comp_sizes = [len(c) for c in nx.connected_components(g_ref)] if g_ref.number_of_nodes() else []
+    if len(comp_sizes) <= 1:
+        return 0.0
+    bridge_pairs = 0.0
+    seen = 0
+    for size in comp_sizes:
+        bridge_pairs += seen * size
+        seen += size
+    denom = ref_count * (ref_count - 1) / 2.0
+    return float(bridge_pairs / max(denom, 1.0))
+
+
+def burt_effective_size_proxy(g_ref: nx.Graph, ref_count: int) -> Tuple[float, float, float]:
+    if ref_count <= 0:
+        return 0.0, 0.0, 1.0
+    internal_edges = float(g_ref.number_of_edges())
+    effective_size = max(0.0, float(ref_count) - (2.0 * internal_edges / max(1.0, float(ref_count))))
+    burt_ip = effective_size / max(1.0, float(ref_count))
+    constraint_proxy = max(1e-9, 1.0 - burt_ip)
+    return float(effective_size), float(burt_ip), float(1.0 / constraint_proxy)
 
 
 def pair_zscore_lookup(prior_refs: pd.DataFrame) -> Dict[Tuple[str, str], float]:
@@ -791,16 +916,207 @@ def percentile_vs_controls(value: float, controls: Sequence[float]) -> float:
     return float((arr <= value).mean() * 100.0)
 
 
-def field_year_normalize(df: pd.DataFrame, metric_cols: Sequence[str]) -> pd.DataFrame:
-    out = df.copy()
-    for col in metric_cols:
-        out[col + '_z'] = out.groupby(['primary_field', 'year'])[col].transform(lambda s: (s - s.mean()) / (s.std(ddof=0) + 1e-9))
+def rank_normal_scores(values: Sequence[float]) -> np.ndarray:
+    arr = np.asarray(values, dtype=float)
+    out = np.full(len(arr), np.nan, dtype=float)
+    mask = np.isfinite(arr)
+    n = int(mask.sum())
+    if n == 0:
+        return out
+    if n == 1 or np.nanstd(arr[mask]) < 1e-12:
+        out[mask] = 0.0
+        return out
+    ranks = pd.Series(arr[mask]).rank(method='average').to_numpy(dtype=float)
+    p = np.clip((ranks - 0.5) / n, 1e-6, 1.0 - 1e-6)
+    out[mask] = np.clip([NORMAL_DIST.inv_cdf(float(v)) for v in p], -3.0, 3.0)
     return out
+
+
+def winsorized_series(values: pd.Series, lower_q: float = 0.01, upper_q: float = 0.99) -> pd.Series:
+    vals = pd.to_numeric(values, errors='coerce').astype(float).replace([np.inf, -np.inf], np.nan)
+    finite = vals[np.isfinite(vals)]
+    if len(finite) < 4:
+        return vals
+    lo = float(finite.quantile(lower_q))
+    hi = float(finite.quantile(upper_q))
+    return vals.clip(lower=lo, upper=hi)
+
+
+def transformed_metric_values(df: pd.DataFrame, col: str) -> pd.Series:
+    vals = pd.to_numeric(df[col], errors='coerce').astype(float).replace([np.inf, -np.inf], np.nan)
+    if col == 'B':
+        vals = pd.Series(np.log1p(np.clip(vals.to_numpy(dtype=float), 0.0, None)), index=df.index)
+    elif col == 'DeltaQ0':
+        vals = winsorized_series(vals)
+    elif col == 'Uzzi' and 'field_variety' in df.columns:
+        vals = vals.copy()
+        invalid = pd.to_numeric(df['field_variety'], errors='coerce').fillna(0) < 2
+        vals.loc[invalid] = np.nan
+    return vals.replace([np.inf, -np.inf], np.nan)
+
+
+def field_year_rank_normalize(
+    df: pd.DataFrame,
+    metric_cols: Sequence[str],
+    min_field_year: int = 20,
+    min_field: int = 50,
+) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    out = df.copy()
+    diagnostics: List[Dict[str, Any]] = []
+    for col in metric_cols:
+        transformed = transformed_metric_values(out, col)
+        out[col + '_transformed'] = transformed
+        z = np.full(len(out), np.nan, dtype=float)
+        scope = pd.Series('missing', index=out.index, dtype=object)
+        valid = transformed.notna() & np.isfinite(transformed.to_numpy(dtype=float))
+
+        for _, idx in out.loc[valid].groupby(['primary_field', 'year']).groups.items():
+            idx = pd.Index(idx)
+            vals = transformed.loc[idx].to_numpy(dtype=float)
+            if len(idx) >= min_field_year and np.nanstd(vals) > 1e-12:
+                z[out.index.get_indexer(idx)] = rank_normal_scores(vals)
+                scope.loc[idx] = 'field_year'
+
+        remaining = valid & ~np.isfinite(z)
+        for _, idx in out.loc[remaining].groupby('primary_field').groups.items():
+            idx = pd.Index(idx)
+            field_name = out.loc[idx[0], 'primary_field']
+            field_idx = out.index[(out['primary_field'] == field_name) & valid]
+            vals = transformed.loc[field_idx].to_numpy(dtype=float)
+            if len(field_idx) >= min_field and np.nanstd(vals) > 1e-12:
+                z_field = pd.Series(rank_normal_scores(vals), index=field_idx)
+                z[out.index.get_indexer(idx)] = z_field.loc[idx].to_numpy(dtype=float)
+                scope.loc[idx] = 'field'
+
+        remaining = valid & ~np.isfinite(z)
+        if remaining.any():
+            valid_idx = out.index[valid]
+            vals = transformed.loc[valid_idx].to_numpy(dtype=float)
+            z_global = pd.Series(rank_normal_scores(vals), index=valid_idx)
+            rem_idx = out.index[remaining]
+            z[out.index.get_indexer(rem_idx)] = z_global.loc[rem_idx].to_numpy(dtype=float)
+            scope.loc[rem_idx] = 'global'
+
+        out[col + '_z'] = z
+        out[col + '_z_scope'] = scope
+        finite = transformed.to_numpy(dtype=float)
+        finite = finite[np.isfinite(finite)]
+        valid_ratio = float(valid.mean()) if len(out) else 0.0
+        diagnostics.append({
+            'metric': col,
+            'valid_ratio': valid_ratio,
+            'missing_rate': 1.0 - valid_ratio,
+            'zero_rate': float(np.mean(np.abs(finite) < 1e-12)) if len(finite) else np.nan,
+            'unique_count': int(pd.Series(finite).nunique()) if len(finite) else 0,
+            'iqr': float(np.percentile(finite, 75) - np.percentile(finite, 25)) if len(finite) else np.nan,
+            'field_year_fallback_ratio': float(np.mean(scope.loc[valid] != 'field_year')) if valid.any() else 1.0,
+            'field_fallback_ratio': float(np.mean(scope.loc[valid] == 'field')) if valid.any() else 0.0,
+            'global_fallback_ratio': float(np.mean(scope.loc[valid] == 'global')) if valid.any() else 0.0,
+        })
+    return out, pd.DataFrame(diagnostics)
+
+
+def choose_publication_day_community(refs: pd.DataFrame, singleton_comm: int) -> Tuple[int, str]:
+    vals = pd.to_numeric(refs.get('target_analysis_comm', pd.Series(dtype=float)), errors='coerce').dropna().astype(int)
+    vals = vals[vals >= 0]
+    if vals.empty:
+        return int(singleton_comm), 'singleton_no_reference_community'
+    counts = vals.value_counts()
+    max_count = int(counts.max())
+    candidates = sorted(int(c) for c, count in counts.items() if int(count) == max_count)
+    source = 'reference_majority'
+    if len(candidates) > 1:
+        source = 'reference_majority_tie_min'
+    return int(candidates[0]), source
+
+
+def add_reference_bins(df: pd.DataFrame, n_bins: int = 4) -> pd.DataFrame:
+    out = df.copy()
+    if out['reference_count'].nunique() <= 1:
+        out['ref_bin'] = 0
+        return out
+    q = min(n_bins, max(2, out['reference_count'].nunique()))
+    out['ref_bin'] = pd.qcut(out['reference_count'].rank(method='first'), q=q, labels=False, duplicates='drop')
+    out['ref_bin'] = out['ref_bin'].fillna(0).astype(int)
+    return out
+
+
+def matched_control_pool(df: pd.DataFrame, row: pd.Series, min_controls: int = 20) -> Tuple[pd.DataFrame, str]:
+    same_base = df['paper_id'] != row['paper_id']
+    non_landmark = df['is_landmark'].astype(int) == 0
+    tiers = [
+        ('field_year_refbin', same_base & non_landmark &
+         (df['primary_field'] == row['primary_field']) &
+         (df['year'].between(int(row['year']) - 1, int(row['year']) + 1)) &
+         (df['ref_bin'] == row['ref_bin'])),
+        ('field_year', same_base & non_landmark &
+         (df['primary_field'] == row['primary_field']) &
+         (df['year'].between(int(row['year']) - 1, int(row['year']) + 1))),
+        ('field_year3', same_base & non_landmark &
+         (df['primary_field'] == row['primary_field']) &
+         (df['year'].between(int(row['year']) - 3, int(row['year']) + 3))),
+        ('field_all_years', same_base & non_landmark & (df['primary_field'] == row['primary_field'])),
+        ('all_non_landmark', same_base & non_landmark),
+    ]
+    for tier, mask in tiers:
+        pool = df[mask].copy()
+        if len(pool) >= min_controls or tier == 'all_non_landmark':
+            return pool, tier
+    return df.iloc[0:0].copy(), 'no_controls'
+
+
+def residualize(y: np.ndarray, controls: np.ndarray) -> np.ndarray:
+    x = np.column_stack([np.ones(len(y)), controls])
+    beta, *_ = np.linalg.lstsq(x, y, rcond=None)
+    return y - x @ beta
+
+
+def partial_spearman(x: Sequence[float], y: Sequence[float], controls: pd.DataFrame) -> float:
+    frame = pd.DataFrame({'x': x, 'y': y}).join(controls.reset_index(drop=True))
+    frame = frame.replace([np.inf, -np.inf], np.nan).dropna()
+    if len(frame) < 5 or frame['x'].nunique() <= 1 or frame['y'].nunique() <= 1:
+        return np.nan
+    xr = frame['x'].rank(method='average').to_numpy(dtype=float)
+    yr = frame['y'].rank(method='average').to_numpy(dtype=float)
+    ctrl_cols = [c for c in frame.columns if c not in {'x', 'y'}]
+    ctrl = frame[ctrl_cols].rank(method='average').to_numpy(dtype=float)
+    rx = residualize(xr, ctrl)
+    ry = residualize(yr, ctrl)
+    if np.nanstd(rx) <= 1e-12 or np.nanstd(ry) <= 1e-12:
+        return np.nan
+    return float(np.corrcoef(rx, ry)[0, 1])
+
+
+def graph_delta_diagnostics(graph_deltas: pd.DataFrame, delta_cols: Sequence[str]) -> pd.DataFrame:
+    rows = []
+    for col in delta_cols:
+        values = pd.to_numeric(graph_deltas[col], errors='coerce').replace([np.inf, -np.inf], np.nan)
+        finite = values.dropna().to_numpy(dtype=float)
+        reasons = []
+        active = True
+        if len(finite) == 0:
+            active = False
+            reasons.append('all_nan')
+        elif np.nanstd(finite) <= 1e-12 or pd.Series(finite).nunique() <= 1:
+            active = False
+            reasons.append('zero_variance')
+        nonzero_rate = float(np.mean(np.abs(finite) > 1e-12)) if len(finite) else 0.0
+        rows.append({
+            'delta': col,
+            'active': int(active),
+            'finite_ratio': float(values.notna().mean()) if len(values) else 0.0,
+            'nonzero_rate': nonzero_rate,
+            'std': float(np.nanstd(finite)) if len(finite) else np.nan,
+            'unique_count': int(pd.Series(finite).nunique()) if len(finite) else 0,
+            'drop_reasons': ';'.join(reasons),
+        })
+    return pd.DataFrame(rows)
 
 
 def compute_all_metrics(
     raw: RawData,
     focal_ids: Optional[Sequence[str]] = None,
+    min_controls: int = 20,
     progress: bool = False,
     progress_interval: int = 25,
 ) -> ComputedData:
@@ -814,7 +1130,21 @@ def compute_all_metrics(
         raise ValueError('No focal papers found to compute Fig. 2 metrics.')
 
     topic_graph = community_graph_from_topic_edges(raw)
-    comm_map_all = dict(zip(works['id'].astype(str), works['display_community'].astype(int)))
+    comm_map_all = dict(zip(works['id'].astype(str), works['analysis_community'].astype(int)))
+    singleton_comm = int(max([c for c in comm_map_all.values() if c >= 0] or [0]) + 1)
+    citation_neighbors = build_citation_neighbors(raw.citations)
+    target_meta = works[['id', 'year', 'analysis_community', 'display_community', 'primary_field']].rename(columns={
+        'id': 'target',
+        'analysis_community': 'target_analysis_comm',
+        'display_community': 'target_display_comm',
+        'primary_field': 'target_field',
+        'year': 'target_year',
+    })
+    citations_with_targets = raw.citations.merge(target_meta, on='target', how='left')
+    refs_by_source = {
+        str(source): group.copy()
+        for source, group in citations_with_targets.groupby('source', sort=False)
+    }
     progress_interval = max(1, int(progress_interval))
 
     paper_rows = []
@@ -829,9 +1159,20 @@ def compute_all_metrics(
     )
     progress_log('Precomputing prior graphs by year...', progress)
     prior_graphs = {}
+    prior_component_sizes: Dict[int, Dict[str, int]] = {}
+    prior_component_ids: Dict[int, Dict[str, int]] = {}
     for idx, year in enumerate(years, start=1):
         graph = build_prior_graph(works, raw.citations, int(year))
         prior_graphs[year] = graph
+        comp_size: Dict[str, int] = {}
+        comp_id: Dict[str, int] = {}
+        for cid, nodes in enumerate(nx.connected_components(graph)):
+            size = len(nodes)
+            for node in nodes:
+                comp_size[str(node)] = size
+                comp_id[str(node)] = cid
+        prior_component_sizes[year] = comp_size
+        prior_component_ids[year] = comp_id
         progress_log(
             f'  prior graph {idx}/{len(years)} for year {int(year)}: '
             f'{graph.number_of_nodes():,} nodes, {graph.number_of_edges():,} edges',
@@ -870,34 +1211,35 @@ def compute_all_metrics(
             )
         pid = str(row.id)
         year = int(row.year)
-        refs = get_reference_rows(raw, pid, year)
+        refs_all = refs_by_source.get(pid)
+        if refs_all is None:
+            refs = pd.DataFrame(columns=citations_with_targets.columns)
+        else:
+            refs = refs_all[refs_all['target_year'] < year].copy()
         if refs.empty:
             skipped_empty_refs += 1
             continue
         ref_ids = refs['target'].astype(str).tolist()
         ref_fields = refs['target_field'].dropna().astype(str).tolist()
-        ref_comms = refs['target_comm'].dropna().astype(int).tolist()
+        ref_comms = refs['target_analysis_comm'].dropna().astype(int).tolist()
+        ref_display_comms = refs['target_display_comm'].dropna().astype(int).tolist()
         ref_count = len(ref_ids)
+        pcomm, p_community_source = choose_publication_day_community(refs, singleton_comm)
 
-        Gm = prior_graphs[year].copy()
-        G0 = Gm.copy()
-        G0.add_node(pid)
-        for rid in ref_ids:
-            G0.add_edge(pid, str(rid))
+        Gm_local, comm_m_local = build_local_reference_graph(refs, citation_neighbors)
+        G0_local, comm_0_local = build_local_reference_graph(refs, citation_neighbors, paper_id=pid, paper_comm=pcomm)
 
         # core seven metrics
-        try:
-            B = float(nx.betweenness_centrality(G0, normalized=True).get(pid, 0.0))
-        except Exception:
-            B = 0.0
+        B = focal_bridge_betweenness_from_reference_components(Gm_local, ref_count)
 
         RS = rao_stirling(ref_fields, dist_by_year[year])
         RTD = simpson_diversity(pd.Series(ref_comms).value_counts().values)
         PDE = shannon_entropy(pd.Series(ref_fields).value_counts().values)
 
-        q_minus = modularity_from_partition(Gm, comm_map_all)
-        q_zero = modularity_from_partition(G0, {**comm_map_all, pid: comm_map_all.get(ref_ids[0], -1) if ref_ids else -1})
-        DeltaQ0 = q_zero - q_minus
+        q_minus = modularity_from_partition(Gm_local, comm_m_local)
+        q_zero = modularity_from_partition(G0_local, comm_0_local)
+        DeltaQ0_raw_q0_minus_qminus = q_zero - q_minus
+        DeltaQ0 = q_minus - q_zero
 
         # Uzzi-style atypicality: negative tail of field-pair z-scores, flipped so larger = more atypical
         z_lookup = pairz_by_year[year]
@@ -908,51 +1250,50 @@ def compute_all_metrics(
                 zs.append(z_lookup.get((fi, fj), 0.0))
         Uzzi = float(max(0.0, -np.percentile(zs, 10))) if zs else 0.0
 
-        # Burt IP: effective size normalized by degree, or inverse constraint fallback
-        try:
-            eff_size = nx.effective_size(G0, [pid])[pid]
-        except Exception:
-            eff_size = float(ref_count)
-        try:
-            constraint = nx.constraint(G0, [pid])[pid]
-        except Exception:
-            constraint = 1.0
-        BurtIP = float(eff_size / max(1.0, ref_count))
-        constraint_inv = float(1.0 / max(constraint, 1e-9))
+        # Burt IP proxy: high when references are mutually non-redundant in the prior local graph.
+        eff_size, BurtIP, constraint_inv = burt_effective_size_proxy(Gm_local, ref_count)
 
         # candidate / alternatives
         try:
-            pagerank = float(nx.pagerank(G0).get(pid, 0.0))
+            pagerank = float(nx.pagerank(G0_local).get(pid, 0.0))
         except Exception:
             pagerank = 0.0
         try:
-            closeness = float(nx.closeness_centrality(G0, pid))
+            closeness = float(nx.closeness_centrality(G0_local, pid))
         except Exception:
             closeness = 0.0
-        degree = float(G0.degree(pid))
+        degree = float(G0_local.degree(pid))
         field_shannon = PDE
         field_variety = float(len(set(ref_fields)))
         field_simpson = simpson_diversity(pd.Series(ref_fields).value_counts().values)
         community_simpson = RTD
         field_entropy_norm = float(PDE / max(math.log(max(2, len(set(ref_fields)))), 1e-9)) if len(set(ref_fields)) > 1 else 0.0
         pair_surprisal = Uzzi
-        conductance_delta = -DeltaQ0  # placeholder directional alternative, explicitly computed from modularity shock family
+        conductance_delta = DeltaQ0  # same direction: higher = stronger boundary shock
 
         # graph delta observables for panel f
         uniq_comms = sorted(set(ref_comms))
-        cross_pairs = sum(1 for i, ci in enumerate(uniq_comms) for cj in uniq_comms[i+1:] if ci != cj)
         community_reach = len(uniq_comms)
-        modularity_shock = -DeltaQ0
-        pshort = path_shortening(ref_comms, topic_graph)
-        comp_reach = len(nx.node_connected_component(G0, pid)) if pid in G0 else 1
-        assort_minus = assortativity_by_comm(Gm, comm_map_all)
-        assort_zero = assortativity_by_comm(G0, {**comm_map_all, pid: uniq_comms[0] if uniq_comms else -1})
-        boundary_mixing = -(assort_zero - assort_minus)
+        modularity_shock = DeltaQ0
+        pshort = path_shortening(ref_display_comms, topic_graph)
+        seen_components = set()
+        comp_reach = 1
+        for rid in ref_ids:
+            cid = prior_component_ids[year].get(rid)
+            if cid is None or cid in seen_components:
+                continue
+            seen_components.add(cid)
+            comp_reach += int(prior_component_sizes[year].get(rid, 0))
+        boundary_mixing = boundary_mixing_share(G0_local, comm_0_local) - boundary_mixing_share(Gm_local, comm_m_local)
 
         paper_rows.append({
             'paper_id': pid, 'title': row.title, 'domain': row.domain, 'year': year,
             'primary_field': row.primary_field, 'is_landmark': int(row.is_landmark), 'reference_count': ref_count,
             'B': B, 'RS': RS, 'DeltaQ0': DeltaQ0, 'Uzzi': Uzzi, 'RTD': RTD, 'BurtIP': BurtIP, 'PDE': PDE,
+            'DeltaQ0_raw_q0_minus_qminus': DeltaQ0_raw_q0_minus_qminus,
+            'p_analysis_community': pcomm,
+            'p_community_source': p_community_source,
+            'field_variety': field_variety,
         })
 
         candidate_rows.append({
@@ -969,8 +1310,7 @@ def compute_all_metrics(
 
         delta_rows.append({
             'paper_id': pid, 'title': row.title, 'domain': row.domain, 'year': year,
-            'primary_field': row.primary_field, 'is_landmark': int(row.is_landmark),
-            'cross_community_gain': float(cross_pairs),
+            'primary_field': row.primary_field, 'is_landmark': int(row.is_landmark), 'reference_count': ref_count,
             'community_reach': float(community_reach),
             'modularity_shock': float(modularity_shock),
             'path_shortening': float(pshort),
@@ -989,11 +1329,11 @@ def compute_all_metrics(
     )
 
     metric_cols = ['B', 'RS', 'DeltaQ0', 'Uzzi', 'RTD', 'BurtIP', 'PDE']
-    progress_log('Normalizing metrics by field-year groups...', progress)
-    paper_metrics = field_year_normalize(paper_metrics, metric_cols)
+    progress_log('Rank-normalizing metrics by field-year / field / global scopes...', progress)
+    paper_metrics, metric_diagnostics = field_year_rank_normalize(paper_metrics, metric_cols)
 
     candidate_cols = [c for c in candidate_metrics.columns if c not in ['paper_id', 'title', 'domain', 'year', 'primary_field', 'is_landmark', 'reference_count']]
-    cand_norm = field_year_normalize(candidate_metrics.rename(columns={c: c for c in candidate_cols}), candidate_cols)
+    cand_norm, _ = field_year_rank_normalize(candidate_metrics.rename(columns={c: c for c in candidate_cols}), candidate_cols)
     cand_z_cols = [c + '_z' for c in candidate_cols]
     progress_log('Computing candidate-metric redundancy correlations...', progress)
     redundancy_corr = cand_norm[cand_z_cols].corr(method='spearman')
@@ -1002,32 +1342,34 @@ def compute_all_metrics(
 
     progress_log('Computing indicator-to-graph-delta correlations...', progress)
     merged = paper_metrics[['paper_id'] + [m + '_z' for m in metric_cols]].merge(graph_deltas, on='paper_id', how='inner')
-    delta_cols = ['cross_community_gain', 'community_reach', 'modularity_shock', 'path_shortening', 'component_reach', 'boundary_mixing']
-    corr_mat = pd.DataFrame(index=metric_cols, columns=delta_cols, dtype=float)
+    delta_cols = ['community_reach', 'modularity_shock', 'path_shortening', 'component_reach', 'boundary_mixing']
+    delta_diagnostics = graph_delta_diagnostics(graph_deltas, delta_cols)
+    active_delta_cols = delta_diagnostics.loc[delta_diagnostics['active'].astype(int) == 1, 'delta'].astype(str).tolist()
+    corr_mat = pd.DataFrame(index=metric_cols, columns=active_delta_cols, dtype=float)
+    controls = pd.DataFrame({
+        'year': pd.to_numeric(merged['year'], errors='coerce'),
+        'log_reference_count': np.log1p(pd.to_numeric(merged['reference_count'], errors='coerce').fillna(0)),
+    })
     for m in metric_cols:
-        for d in delta_cols:
-            corr_mat.loc[m, d] = merged[m + '_z'].corr(merged[d], method='spearman')
+        for d in active_delta_cols:
+            corr_mat.loc[m, d] = partial_spearman(merged[m + '_z'], merged[d], controls)
 
     # matched-control percentiles for landmark papers
     progress_log('Computing landmark matched-control percentiles...', progress)
     percentile_rows = []
     landmarks = paper_metrics[paper_metrics['is_landmark'] == 1].copy()
     if not landmarks.empty:
-        paper_metrics['ref_bin'] = pd.qcut(paper_metrics['reference_count'].rank(method='first'), q=min(4, max(2, paper_metrics['reference_count'].nunique())), duplicates='drop')
-        for lm in landmarks.itertuples(index=False):
-            pool = paper_metrics[(paper_metrics['is_landmark'] == 0) &
-                                 (paper_metrics['primary_field'] == lm.primary_field) &
-                                 (paper_metrics['year'].between(lm.year - 1, lm.year + 1))].copy()
-            if 'ref_bin' in paper_metrics.columns:
-                lm_bin = paper_metrics.loc[paper_metrics['paper_id'] == lm.paper_id, 'ref_bin'].iloc[0]
-                pool = pool[pool['ref_bin'] == lm_bin]
-            if len(pool) < 5:
-                pool = paper_metrics[(paper_metrics['is_landmark'] == 0) &
-                                     (paper_metrics['year'].between(lm.year - 1, lm.year + 1))].copy()
+        paper_metrics = add_reference_bins(paper_metrics)
+        landmarks = paper_metrics[paper_metrics['is_landmark'] == 1].copy()
+        for _, lm in landmarks.iterrows():
+            pool, tier = matched_control_pool(paper_metrics, lm, min_controls=min_controls)
             for m in metric_cols:
-                pct = percentile_vs_controls(float(getattr(lm, m)), pool[m].values)
-                percentile_rows.append({'paper_id': lm.paper_id, 'title': lm.title, 'metric': m, 'percentile': pct,
-                                        'year': lm.year, 'primary_field': lm.primary_field, 'n_controls': len(pool)})
+                pct = percentile_vs_controls(float(lm[m]), pool[m].values)
+                percentile_rows.append({
+                    'paper_id': lm['paper_id'], 'title': lm['title'], 'metric': m, 'percentile': pct,
+                    'year': lm['year'], 'primary_field': lm['primary_field'], 'n_controls': len(pool),
+                    'control_tier': tier,
+                })
     percentile_long = pd.DataFrame(percentile_rows)
     landmark_summary = percentile_long.groupby('metric', as_index=False).agg(percentile=('percentile', 'median')) if not percentile_long.empty else pd.DataFrame(columns=['metric', 'percentile'])
     progress_log('Metric computation finished.', progress)
@@ -1040,6 +1382,905 @@ def compute_all_metrics(
         indicator_delta_corr=corr_mat,
         percentile_long=percentile_long,
         landmark_summary=landmark_summary,
+        metric_standardization_diagnostics=metric_diagnostics,
+        graph_delta_diagnostics=delta_diagnostics,
+    )
+
+
+# --------------------------
+# Strong-evidence multi-domain mode
+# --------------------------
+
+FIG3_STRONG_INPUT_SUBDIR = 'fig2_strong_input'
+DEFINITION_LINKED_DELTAS = {'modularity_shock'}
+STRONG_FUTURE_DELTAS = [
+    'community_reach',
+    'field_entropy',
+    'cross_community_adoption',
+    'path_shortening',
+    'modularity_shock',
+    'partition_change',
+    'boundary_mixing',
+    'hub_formation',
+]
+INDEPENDENT_FUTURE_DELTAS = [
+    'community_reach',
+    'field_entropy',
+    'cross_community_adoption',
+    'path_shortening',
+    'partition_change',
+    'boundary_mixing',
+    'hub_formation',
+]
+EXPECTED_FUTURE_LINKS = {
+    'B': ['path_shortening', 'hub_formation', 'boundary_mixing'],
+    'RS': ['field_entropy', 'community_reach', 'cross_community_adoption'],
+    'DeltaQ0': ['boundary_mixing', 'partition_change', 'modularity_shock'],
+    'Uzzi': ['partition_change', 'boundary_mixing'],
+    'RTD': ['community_reach', 'field_entropy'],
+    'BurtIP': ['path_shortening', 'hub_formation'],
+    'PDE': ['field_entropy', 'community_reach', 'cross_community_adoption'],
+}
+
+
+def parse_domain_string(value: str) -> List[str]:
+    parts = []
+    for token in str(value or '').replace(',', ' ').split():
+        token = token.strip()
+        if token:
+            parts.append(token)
+    return list(dict.fromkeys(parts))
+
+
+def stable_int_id(value: object, modulo: int = 100_000_000) -> int:
+    text = str(value or 'unknown')
+    digest = hashlib.md5(text.encode('utf-8')).hexdigest()
+    return int(digest[:12], 16) % modulo
+
+
+def normalize_openalex_id(value: object) -> str:
+    text = str(value or '').strip()
+    if not text:
+        return ''
+    if text.startswith('https://openalex.org/'):
+        return text
+    if '/W' in text:
+        return 'https://openalex.org/' + text.rsplit('/', 1)[-1]
+    if text.startswith('W') and text[1:].isdigit():
+        return f'https://openalex.org/{text}'
+    return text
+
+
+def read_fig1_raw_records(fig1_dir: Path) -> Tuple[Dict[str, Dict[str, Any]], Dict[str, List[str]]]:
+    path = fig1_dir / 'works_raw.jsonl'
+    if not path.exists():
+        return {}, {}
+    by_id: Dict[str, Dict[str, Any]] = {}
+    refs_by_id: Dict[str, List[str]] = {}
+    with path.open('r', encoding='utf-8') as f:
+        for line in f:
+            if not line.strip():
+                continue
+            rec = json.loads(line)
+            wid = normalize_openalex_id(rec.get('id'))
+            if not wid:
+                continue
+            refs = [normalize_openalex_id(ref) for ref in (rec.get('refs') or []) if normalize_openalex_id(ref)]
+            by_id[wid] = rec
+            refs_by_id[wid] = refs
+    return by_id, refs_by_id
+
+
+def closure_work_row(work: Mapping[str, Any], domain: str) -> Dict[str, Any]:
+    wid = normalize_openalex_id(work.get('id') or (work.get('ids') or {}).get('openalex'))
+    primary = work.get('primary_topic') or {}
+    topics = work.get('topics') or []
+    topic = primary or (topics[0] if topics else {})
+    topic_id = normalize_openalex_id(topic.get('id'))
+    topic_name = str(topic.get('display_name') or 'unknown_topic')
+    field_obj = topic.get('field') or {}
+    subfield_obj = topic.get('subfield') or {}
+    primary_field = str(
+        subfield_obj.get('display_name')
+        or field_obj.get('display_name')
+        or topic_name
+        or domain
+    )
+    return {
+        'id': wid,
+        'year': int(work.get('publication_year') or 0),
+        'title': work.get('display_name') or wid,
+        'domain': domain,
+        'primary_field': primary_field,
+        'primary_topic': topic_name,
+        'display_community': stable_int_id(topic_id or topic_name),
+        'community_label': topic_name,
+        'is_landmark': 0,
+        'anchor_label': '',
+        'short_id': wid.rsplit('/', 1)[-1],
+        'doi': work.get('doi') or '',
+        'cited_by_count': work.get('cited_by_count', np.nan),
+        'is_closure_node': 1,
+    }
+
+
+def add_reference_closure_nodes(
+    raw: Any,
+    fig1_dir: Path,
+    domain: str,
+    reference_closure: str,
+    online_expand: bool,
+    closure_cap: int,
+    closure_coverage_target: float,
+    openalex_api_key: Optional[str],
+    email: Optional[str],
+    progress: bool,
+) -> Tuple[Any, Dict[str, Any]]:
+    """Optionally add out-of-corpus reference metadata as background nodes."""
+    records_by_id, refs_by_id = read_fig1_raw_records(fig1_dir)
+    existing_ids = set(raw.works['id'].astype(str))
+    total_refs = 0
+    internal_refs = 0
+    external_counts: Counter[str] = Counter()
+    for source, refs in refs_by_id.items():
+        if source not in existing_ids:
+            continue
+        for ref in refs:
+            total_refs += 1
+            if ref in existing_ids:
+                internal_refs += 1
+            else:
+                external_counts[ref] += 1
+
+    ordered_external = external_counts.most_common(max(0, int(closure_cap)))
+    target_ids: List[str] = []
+    covered_by_targeted = internal_refs
+    target_coverage = float(closure_coverage_target)
+    for ref, count in ordered_external:
+        if len(target_ids) >= int(closure_cap):
+            break
+        target_ids.append(ref)
+        covered_by_targeted += int(count)
+        if total_refs and covered_by_targeted / total_refs >= target_coverage:
+            break
+
+    report: Dict[str, Any] = {
+        'domain': domain,
+        'reference_closure_mode': reference_closure,
+        'online_expand': int(bool(online_expand)),
+        'raw_records': len(records_by_id),
+        'total_reference_mentions': int(total_refs),
+        'internal_reference_mentions': int(internal_refs),
+        'external_reference_mentions': int(total_refs - internal_refs),
+        'external_unique_references': int(len(external_counts)),
+        'closure_cap': int(closure_cap),
+        'closure_coverage_target': float(closure_coverage_target),
+        'targeted_closure_unique_references': int(len(target_ids)),
+        'coverage_without_closure': float(internal_refs / total_refs) if total_refs else 1.0,
+        'coverage_if_targeted_materialized': float(covered_by_targeted / total_refs) if total_refs else 1.0,
+        'materialized_closure_unique_references': 0,
+        'coverage_materialized': float(internal_refs / total_refs) if total_refs else 1.0,
+        'status': 'audit_only_no_online_closure',
+    }
+    raw.works = raw.works.copy()
+    if 'is_closure_node' not in raw.works.columns:
+        raw.works['is_closure_node'] = 0
+    raw.works['is_closure_node'] = pd.to_numeric(raw.works['is_closure_node'], errors='coerce').fillna(0).astype(int)
+
+    should_fetch = reference_closure in {'required', 'auto'} and bool(online_expand) and len(target_ids) > 0
+    if not should_fetch:
+        if reference_closure == 'required' and not online_expand:
+            report['status'] = 'required_but_online_expand_false'
+        return raw, report
+
+    try:
+        from experiments.kg_perturbation_fig3.dataset_builder import OpenAlexClient  # pylint: disable=import-outside-toplevel
+        from experiments.kg_perturbation_fig3.fig3_empirical_weight_learning import topics_from_works_and_citations  # pylint: disable=import-outside-toplevel
+    except Exception as exc:
+        report['status'] = f'openalex_import_failed:{exc}'
+        return raw, report
+
+    client = OpenAlexClient(
+        api_key=openalex_api_key,
+        email=email,
+        sleep_seconds=0.1,
+        timeout_seconds=60,
+        max_retries=5,
+    )
+    progress_log(
+        f'[{domain}] Fetching OpenAlex reference-closure metadata for up to {len(target_ids):,} refs.',
+        progress,
+    )
+    rows: List[Dict[str, Any]] = []
+    fetched_work_refs: Dict[str, List[str]] = {}
+    for idx, ref in enumerate(target_ids, start=1):
+        if idx == 1 or idx % 250 == 0 or idx == len(target_ids):
+            progress_log(f'[{domain}] closure fetch {idx:,}/{len(target_ids):,}', progress)
+        work = client.get_work(ref)
+        if not work:
+            continue
+        row = closure_work_row(work, domain)
+        if not row['id'] or int(row['year']) <= 0:
+            continue
+        rows.append(row)
+        fetched_work_refs[row['id']] = [
+            normalize_openalex_id(item)
+            for item in (work.get('referenced_works') or [])
+            if normalize_openalex_id(item)
+        ]
+        time.sleep(0.01)
+
+    if not rows:
+        report['status'] = 'online_fetch_returned_no_usable_closure_nodes'
+        return raw, report
+
+    closure_df = pd.DataFrame(rows).drop_duplicates(subset=['id'])
+    closure_ids = set(closure_df['id'].astype(str))
+    works = pd.concat([raw.works, closure_df], ignore_index=True).drop_duplicates(subset=['id'])
+    valid_ids = set(works['id'].astype(str))
+
+    extra_edges: List[Dict[str, str]] = []
+    for source, refs in refs_by_id.items():
+        if source not in existing_ids:
+            continue
+        for ref in refs:
+            if ref in closure_ids:
+                extra_edges.append({'source': source, 'target': ref})
+    for source, refs in fetched_work_refs.items():
+        if source not in closure_ids:
+            continue
+        for ref in refs:
+            if ref in valid_ids:
+                extra_edges.append({'source': source, 'target': ref})
+
+    citations = pd.concat([raw.citations, pd.DataFrame(extra_edges)], ignore_index=True).drop_duplicates()
+    topics, topic_edges = topics_from_works_and_citations(works, citations)
+    raw.works = works
+    raw.citations = citations
+    raw.topics = topics
+    raw.topic_edges = topic_edges
+    materialized_mentions = internal_refs + sum(external_counts.get(ref, 0) for ref in closure_ids)
+    report.update({
+        'materialized_closure_unique_references': int(len(closure_ids)),
+        'closure_citation_edges_added': int(len(extra_edges)),
+        'coverage_materialized': float(materialized_mentions / total_refs) if total_refs else 1.0,
+        'status': 'online_closure_materialized',
+    })
+    return raw, report
+
+
+def fig3_raw_to_fig2_raw(raw: Any, domain: Optional[str] = None) -> RawData:
+    works = raw.works.copy()
+    if domain is not None and 'domain' in works.columns:
+        works = works[works['domain'].astype(str) == str(domain)].copy()
+        valid_ids = set(works['id'].astype(str))
+        citations = raw.citations[raw.citations['source'].astype(str).isin(valid_ids) & raw.citations['target'].astype(str).isin(valid_ids)].copy()
+    else:
+        citations = raw.citations.copy()
+    if 'analysis_community' not in works.columns:
+        works['analysis_community'] = pd.to_numeric(works['display_community'], errors='coerce').fillna(-1).astype(int)
+    if 'anchor_label' not in works.columns:
+        works['anchor_label'] = ''
+    topics = raw.topics.copy()
+    topic_edges = raw.topic_edges.copy()
+    return RawData(works=works, citations=citations, topics=topics, topic_edges=topic_edges)
+
+
+def domain_input_audit(domain: str, fig1_dir: Path, raw: Any, closure_report: Mapping[str, Any]) -> Dict[str, Any]:
+    works = raw.works.copy()
+    citations = raw.citations.copy()
+    eligible_years = pd.to_numeric(works['year'], errors='coerce').dropna()
+    closure_node_count = 0
+    if 'is_closure_node' in works.columns:
+        closure_node_count = int(pd.to_numeric(works['is_closure_node'], errors='coerce').fillna(0).sum())
+    return {
+        'domain': domain,
+        'fig1_dir': str(fig1_dir),
+        'raw_papers': int(len(works)),
+        'closure_nodes': closure_node_count,
+        'citation_edges': int(len(citations)),
+        'landmarks': int(pd.to_numeric(works.get('is_landmark', 0), errors='coerce').fillna(0).sum()),
+        'year_min': int(eligible_years.min()) if len(eligible_years) else 0,
+        'year_max': int(eligible_years.max()) if len(eligible_years) else 0,
+        'reference_closure_coverage': float(closure_report.get('coverage_materialized', np.nan)),
+        'reference_closure_status': str(closure_report.get('status', 'unknown')),
+    }
+
+
+def controls_with_domain_dummies(df: pd.DataFrame) -> pd.DataFrame:
+    controls = pd.DataFrame({
+        'year': pd.to_numeric(df['year'], errors='coerce'),
+        'log_reference_count': np.log1p(pd.to_numeric(df['reference_count'], errors='coerce').fillna(0)),
+    }, index=df.index)
+    if 'domain' in df.columns and df['domain'].nunique() > 1:
+        dummies = pd.get_dummies(df['domain'].astype(str), prefix='domain', drop_first=True)
+        controls = pd.concat([controls, dummies.astype(float)], axis=1)
+    return controls.reset_index(drop=True)
+
+
+def partial_spearman_bootstrap(
+    df: pd.DataFrame,
+    x_col: str,
+    y_col: str,
+    control_cols: Sequence[str],
+    n_bootstrap: int,
+    seed: int,
+) -> Dict[str, float]:
+    work = df[[x_col, y_col, 'domain'] + list(control_cols)].replace([np.inf, -np.inf], np.nan).dropna().copy()
+    if len(work) < 20 or work[x_col].nunique() <= 1 or work[y_col].nunique() <= 1:
+        return {'rho': np.nan, 'ci_low': np.nan, 'ci_high': np.nan, 'n': int(len(work)), 'n_bootstrap': 0}
+    rho = partial_spearman(work[x_col], work[y_col], work[list(control_cols)])
+    rng = np.random.default_rng(int(seed))
+    domains = work['domain'].astype(str).unique().tolist()
+    vals: List[float] = []
+    for _ in range(int(n_bootstrap)):
+        if domains:
+            sampled_domains = rng.choice(domains, size=len(domains), replace=True)
+            boot = pd.concat([work[work['domain'].astype(str) == d] for d in sampled_domains], ignore_index=True)
+        else:
+            boot = work.sample(n=len(work), replace=True, random_state=int(rng.integers(0, 1_000_000_000)))
+        if boot[x_col].nunique() <= 1 or boot[y_col].nunique() <= 1:
+            continue
+        val = partial_spearman(boot[x_col], boot[y_col], boot[list(control_cols)])
+        if np.isfinite(val):
+            vals.append(float(val))
+    if vals:
+        ci_low, ci_high = np.percentile(vals, [2.5, 97.5])
+    else:
+        ci_low = ci_high = np.nan
+    return {
+        'rho': float(rho),
+        'ci_low': float(ci_low),
+        'ci_high': float(ci_high),
+        'n': int(len(work)),
+        'n_bootstrap': int(len(vals)),
+    }
+
+
+def residualized_spearman_corr(df: pd.DataFrame, cols: Sequence[str]) -> pd.DataFrame:
+    work = df[list(cols) + ['domain', 'year', 'reference_count']].replace([np.inf, -np.inf], np.nan).dropna().copy()
+    out = pd.DataFrame(index=list(cols), columns=list(cols), dtype=float)
+    if len(work) < 10:
+        return out
+    controls = controls_with_domain_dummies(work)
+    for c1 in cols:
+        for c2 in cols:
+            out.loc[c1, c2] = partial_spearman(work[c1], work[c2], controls)
+    return out
+
+
+def future_composite_scores(graph_deltas: pd.DataFrame, active_delta_cols: Sequence[str]) -> pd.Series:
+    active = [c for c in active_delta_cols if c in INDEPENDENT_FUTURE_DELTAS and c in graph_deltas.columns]
+    if not active:
+        return pd.Series(np.nan, index=graph_deltas.index)
+    z_cols = []
+    for col in active:
+        vals = pd.to_numeric(graph_deltas[col], errors='coerce').replace([np.inf, -np.inf], np.nan)
+        z_cols.append(pd.Series(rank_normal_scores(vals), index=graph_deltas.index))
+    return pd.concat(z_cols, axis=1).mean(axis=1)
+
+
+def build_matched_percentiles(
+    paper_metrics: pd.DataFrame,
+    graph_deltas: pd.DataFrame,
+    active_delta_cols: Sequence[str],
+    min_controls: int,
+) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    metric_cols = [m[0] for m in METRIC_SPECS]
+    df = paper_metrics.merge(
+        graph_deltas[['paper_id'] + [c for c in active_delta_cols if c in graph_deltas.columns]],
+        on='paper_id',
+        how='left',
+    )
+    df = add_reference_bins(df)
+    df['future_rgpm_proxy'] = future_composite_scores(df, active_delta_cols)
+    focal_parts = []
+    landmarks = df[df['is_landmark'].astype(int) == 1].copy()
+    if not landmarks.empty:
+        landmarks['profile_type'] = 'landmark'
+        focal_parts.append(landmarks)
+    high_rows = []
+    for domain, sub in df[df['is_landmark'].astype(int) == 0].groupby('domain', sort=True):
+        vals = pd.to_numeric(sub['future_rgpm_proxy'], errors='coerce').replace([np.inf, -np.inf], np.nan)
+        vals = vals.dropna()
+        if vals.empty:
+            continue
+        threshold = float(vals.quantile(0.90))
+        picked = sub[pd.to_numeric(sub['future_rgpm_proxy'], errors='coerce') >= threshold].copy()
+        picked = picked.sort_values('future_rgpm_proxy', ascending=False).head(250)
+        picked['profile_type'] = 'future_top_decile'
+        high_rows.append(picked)
+    if high_rows:
+        focal_parts.append(pd.concat(high_rows, ignore_index=True))
+    if not focal_parts:
+        return pd.DataFrame(), pd.DataFrame()
+    focals = pd.concat(focal_parts, ignore_index=True).drop_duplicates(subset=['paper_id', 'profile_type'])
+    percentile_rows: List[Dict[str, Any]] = []
+    control_rows: List[Dict[str, Any]] = []
+    for _, row in focals.iterrows():
+        pool, tier = matched_control_pool(df, row, min_controls=min_controls)
+        control_rows.append({
+            'paper_id': row['paper_id'],
+            'title': row.get('title', ''),
+            'domain': row.get('domain', ''),
+            'year': row.get('year', np.nan),
+            'primary_field': row.get('primary_field', ''),
+            'profile_type': row.get('profile_type', 'focal'),
+            'control_tier': tier,
+            'n_controls': int(len(pool)),
+        })
+        for metric in metric_cols:
+            pct = percentile_vs_controls(float(row[metric]), pool[metric].values) if metric in row and metric in pool else np.nan
+            percentile_rows.append({
+                'paper_id': row['paper_id'],
+                'title': row.get('title', ''),
+                'domain': row.get('domain', ''),
+                'year': row.get('year', np.nan),
+                'primary_field': row.get('primary_field', ''),
+                'profile_type': row.get('profile_type', 'focal'),
+                'metric': metric,
+                'percentile': pct,
+                'n_controls': int(len(pool)),
+                'control_tier': tier,
+                'future_rgpm_proxy': row.get('future_rgpm_proxy', np.nan),
+            })
+    return pd.DataFrame(percentile_rows), pd.DataFrame(control_rows)
+
+
+def build_evidence_support(bootstrap: pd.DataFrame) -> pd.DataFrame:
+    rows: List[Dict[str, Any]] = []
+    for metric, outcomes in EXPECTED_FUTURE_LINKS.items():
+        sub = bootstrap[(bootstrap['metric'] == metric) & (bootstrap['future_outcome'].isin(outcomes))].copy()
+        significant = sub[(pd.to_numeric(sub['ci_low'], errors='coerce') > 0) & (pd.to_numeric(sub['rho'], errors='coerce') > 0)]
+        rows.append({
+            'metric': metric,
+            'expected_outcomes': ','.join(outcomes),
+            'tested_expected_outcomes': int(len(sub)),
+            'significant_expected_outcomes': int(len(significant)),
+            'best_expected_rho': float(pd.to_numeric(sub['rho'], errors='coerce').max()) if not sub.empty else np.nan,
+        })
+    return pd.DataFrame(rows)
+
+
+def build_quality_gates(
+    paper_metrics: pd.DataFrame,
+    graph_delta_diagnostics_df: pd.DataFrame,
+    reference_closure_report: pd.DataFrame,
+    matched_controls: pd.DataFrame,
+    bootstrap: pd.DataFrame,
+    composite_rho: float,
+) -> Dict[str, Any]:
+    active_independent = graph_delta_diagnostics_df[
+        (graph_delta_diagnostics_df['active'].astype(int) == 1)
+        & (~graph_delta_diagnostics_df['delta'].astype(str).isin(DEFINITION_LINKED_DELTAS))
+    ]
+    relaxed_tiers = {'field_year3', 'field_all_years', 'all_non_landmark', 'no_controls'}
+    relaxed_ratio = float(matched_controls['control_tier'].isin(relaxed_tiers).mean()) if not matched_controls.empty else 1.0
+    min_closure = float(pd.to_numeric(reference_closure_report['coverage_materialized'], errors='coerce').min()) if not reference_closure_report.empty else 0.0
+    sig_expected = 0
+    for metric, outcomes in EXPECTED_FUTURE_LINKS.items():
+        sub = bootstrap[(bootstrap['metric'] == metric) & (bootstrap['future_outcome'].isin(outcomes))]
+        sig_expected += int(((pd.to_numeric(sub['ci_low'], errors='coerce') > 0) & (pd.to_numeric(sub['rho'], errors='coerce') > 0)).sum())
+    checks = {
+        'included_domains_min4': int(paper_metrics['domain'].nunique() >= 4),
+        'total_eligible_papers_min8000': int(len(paper_metrics) >= 8000),
+        'active_future_outcomes_min5': int(len(active_independent) >= 5),
+        'relaxed_control_tier_ratio_max25pct': int(relaxed_ratio <= 0.25),
+        'reference_closure_coverage_min80pct': int(min_closure >= 0.80),
+        'significant_expected_links_min4': int(sig_expected >= 4),
+        'mechanism_composite_rho_min020': int(np.isfinite(composite_rho) and composite_rho >= 0.20),
+    }
+    overall = bool(all(checks.values()))
+    return {
+        'overall_pass': overall,
+        'status_label': 'strong experimental evidence' if overall else 'multi-domain diagnostic evidence',
+        'checks': checks,
+        'n_domains': int(paper_metrics['domain'].nunique()),
+        'total_eligible_papers': int(len(paper_metrics)),
+        'active_future_outcomes': active_independent['delta'].astype(str).tolist(),
+        'relaxed_control_tier_ratio': relaxed_ratio,
+        'min_reference_closure_coverage': min_closure,
+        'significant_expected_links': int(sig_expected),
+        'mechanism_composite_partial_spearman': float(composite_rho) if np.isfinite(composite_rho) else None,
+        'thresholds': {
+            'domains_min': 4,
+            'eligible_papers_min': 8000,
+            'active_future_outcomes_min': 5,
+            'relaxed_control_tier_ratio_max': 0.25,
+            'reference_closure_coverage_min': 0.80,
+            'significant_expected_links_min': 4,
+            'mechanism_composite_rho_min': 0.20,
+        },
+    }
+
+
+def build_strong_comp_from_tables(
+    metrics: pd.DataFrame,
+    deltas: pd.DataFrame,
+    input_audit: pd.DataFrame,
+    reference_closure_report: pd.DataFrame,
+    future_tau: int,
+    min_controls: int,
+    bootstrap_reps: int,
+    seed: int,
+    progress: bool,
+) -> ComputedData:
+    metric_cols = [m[0] for m in METRIC_SPECS]
+    paper_metrics = metrics.copy()
+    if 'DeltaQ0_raw_q0_minus_qminus' not in paper_metrics.columns and 'DeltaQ0' in paper_metrics.columns:
+        paper_metrics['DeltaQ0_raw_q0_minus_qminus'] = -pd.to_numeric(paper_metrics['DeltaQ0'], errors='coerce')
+    paper_metrics, metric_diag = field_year_rank_normalize(paper_metrics, metric_cols)
+
+    candidate_cols = [
+        'B', 'degree_p', 'RS', 'field_simpson', 'field_variety', 'DeltaQ0', 'Uzzi',
+        'RTD', 'community_variety', 'BurtIP', 'effective_size', 'constraint_inv', 'PDE',
+    ]
+    candidate_cols = [c for c in candidate_cols if c in paper_metrics.columns]
+    candidate_metrics = paper_metrics[
+        ['paper_id', 'title', 'domain', 'year', 'primary_field', 'is_landmark', 'reference_count'] + candidate_cols
+    ].copy()
+    candidate_metrics = candidate_metrics.rename(columns={'degree_p': 'degree'})
+    candidate_cols = ['degree' if c == 'degree_p' else c for c in candidate_cols]
+    candidate_norm, _ = field_year_rank_normalize(candidate_metrics, candidate_cols)
+    redundancy_corr = residualized_spearman_corr(candidate_norm, [c + '_z' for c in candidate_cols])
+    redundancy_corr.index = candidate_cols
+    redundancy_corr.columns = candidate_cols
+
+    graph_deltas = deltas.copy()
+    delta_cols = [c for c in STRONG_FUTURE_DELTAS if c in graph_deltas.columns]
+    delta_diag = graph_delta_diagnostics(graph_deltas, delta_cols)
+    active_delta_cols = delta_diag.loc[delta_diag['active'].astype(int) == 1, 'delta'].astype(str).tolist()
+
+    progress_log('Computing strong-mode indicator/future partial correlations with bootstrap CIs...', progress)
+    merged = paper_metrics[['paper_id', 'domain', 'year', 'reference_count'] + [m + '_z' for m in metric_cols]].merge(
+        graph_deltas[['paper_id'] + active_delta_cols],
+        on='paper_id',
+        how='inner',
+    )
+    controls = controls_with_domain_dummies(merged)
+    merged_for_corr = merged.reset_index(drop=True).join(controls.add_prefix('ctrl_'))
+    control_cols = [c for c in merged_for_corr.columns if c.startswith('ctrl_')]
+    corr_mat = pd.DataFrame(index=metric_cols, columns=active_delta_cols, dtype=float)
+    boot_rows: List[Dict[str, Any]] = []
+    for metric in metric_cols:
+        x_col = metric + '_z'
+        for outcome in active_delta_cols:
+            stats = partial_spearman_bootstrap(
+                merged_for_corr,
+                x_col=x_col,
+                y_col=outcome,
+                control_cols=control_cols,
+                n_bootstrap=bootstrap_reps,
+                seed=seed + stable_int_id(metric + outcome, modulo=100_000),
+            )
+            corr_mat.loc[metric, outcome] = stats['rho']
+            boot_rows.append({
+                'metric': metric,
+                'future_outcome': outcome,
+                **stats,
+                'definition_linked_internal_check': int(outcome in DEFINITION_LINKED_DELTAS),
+            })
+    bootstrap = pd.DataFrame(boot_rows)
+    support = build_evidence_support(bootstrap)
+
+    percentile_long, matched_controls = build_matched_percentiles(
+        paper_metrics,
+        graph_deltas,
+        active_delta_cols=active_delta_cols,
+        min_controls=min_controls,
+    )
+    landmark_summary = (
+        percentile_long[percentile_long['profile_type'] == 'landmark']
+        .groupby('metric', as_index=False)
+        .agg(percentile=('percentile', 'median'))
+        if not percentile_long.empty else pd.DataFrame(columns=['metric', 'percentile'])
+    )
+    if landmark_summary.empty and not percentile_long.empty:
+        landmark_summary = percentile_long.groupby('metric', as_index=False).agg(percentile=('percentile', 'median'))
+
+    domain_rows: List[Dict[str, Any]] = []
+    for domain, sub in paper_metrics.groupby('domain', sort=True):
+        controls_sub = matched_controls[matched_controls['domain'].astype(str) == str(domain)] if not matched_controls.empty else pd.DataFrame()
+        closure_sub = reference_closure_report[reference_closure_report['domain'].astype(str) == str(domain)]
+        domain_rows.append({
+            'domain': domain,
+            'eligible_papers': int(len(sub)),
+            'landmark_papers': int(pd.to_numeric(sub['is_landmark'], errors='coerce').fillna(0).sum()),
+            'year_min': int(pd.to_numeric(sub['year'], errors='coerce').min()),
+            'year_max': int(pd.to_numeric(sub['year'], errors='coerce').max()),
+            'median_reference_count': float(pd.to_numeric(sub['reference_count'], errors='coerce').median()),
+            'median_controls': float(pd.to_numeric(controls_sub['n_controls'], errors='coerce').median()) if not controls_sub.empty else np.nan,
+            'relaxed_control_ratio': float(controls_sub['control_tier'].isin({'field_year3', 'field_all_years', 'all_non_landmark', 'no_controls'}).mean()) if not controls_sub.empty else np.nan,
+            'reference_closure_coverage': float(pd.to_numeric(closure_sub['coverage_materialized'], errors='coerce').iloc[0]) if not closure_sub.empty else np.nan,
+        })
+    domain_adequacy = pd.DataFrame(domain_rows)
+
+    future_proxy = future_composite_scores(graph_deltas, active_delta_cols)
+    composite_frame = paper_metrics[['paper_id', 'domain', 'year', 'reference_count'] + [m + '_z' for m in metric_cols]].merge(
+        pd.DataFrame({'paper_id': graph_deltas['paper_id'], 'future_rgpm_proxy': future_proxy}),
+        on='paper_id',
+        how='inner',
+    )
+    composite_frame['indicator_composite'] = composite_frame[[m + '_z' for m in metric_cols]].mean(axis=1)
+    comp_controls = controls_with_domain_dummies(composite_frame)
+    composite_rho = partial_spearman(composite_frame['indicator_composite'], composite_frame['future_rgpm_proxy'], comp_controls)
+    quality = build_quality_gates(
+        paper_metrics=paper_metrics,
+        graph_delta_diagnostics_df=delta_diag,
+        reference_closure_report=reference_closure_report,
+        matched_controls=matched_controls,
+        bootstrap=bootstrap,
+        composite_rho=composite_rho,
+    )
+
+    return ComputedData(
+        paper_metrics=paper_metrics,
+        candidate_metrics=candidate_metrics,
+        graph_deltas=graph_deltas,
+        redundancy_corr=redundancy_corr,
+        indicator_delta_corr=corr_mat,
+        percentile_long=percentile_long,
+        landmark_summary=landmark_summary,
+        metric_standardization_diagnostics=metric_diag,
+        graph_delta_diagnostics=delta_diag,
+        input_audit=input_audit,
+        domain_adequacy=domain_adequacy,
+        reference_closure_report=reference_closure_report,
+        matched_controls=matched_controls,
+        indicator_future_corr_bootstrap=bootstrap,
+        evidence_support=support,
+        quality_gates=quality,
+        evidence_mode='strong',
+        future_tau=int(future_tau),
+    )
+
+
+def build_strong_evidence_data(args: argparse.Namespace, progress: bool) -> Tuple[RawData, ComputedData]:
+    try:
+        from experiments.kg_perturbation_fig3 import fig3_empirical_weight_learning as fig3  # pylint: disable=import-outside-toplevel
+    except Exception as exc:
+        raise RuntimeError(f'Cannot import Fig. 3 data builders required for strong evidence mode: {exc}') from exc
+
+    domains = parse_domain_string(args.domains) or DEFAULT_STRONG_DOMAINS
+    progress_log(f'Strong mode domains: {", ".join(domains)}', progress)
+    raw_by_domain: Dict[str, Any] = {}
+    audit_rows: List[Dict[str, Any]] = []
+    closure_rows: List[Dict[str, Any]] = []
+
+    for domain in domains:
+        fig1_dir = args.data_dir / domain if (args.data_dir / domain).exists() else args.data_dir
+        prepared_dir = fig3.prepare_fig3_input_data(
+            data_dir=args.data_dir,
+            out_dir=args.out_dir,
+            domain=domain,
+            direct_only=not args.include_hybrid_edges,
+            analysis_end_year=None,
+            fig1_config=args.fig1_config,
+            fig1_corpus_source=args.fig1_corpus_source,
+            run_fig1_if_missing=args.run_fig1_if_missing,
+            use_fig1_cache=not args.no_fig1_cache,
+            openalex_api_key=args.openalex_api_key,
+            email=args.email,
+            progress=progress,
+        )
+        raw3 = fig3.load_raw_data(prepared_dir)
+        raw3, closure_report = add_reference_closure_nodes(
+            raw=raw3,
+            fig1_dir=fig1_dir,
+            domain=domain,
+            reference_closure=args.reference_closure,
+            online_expand=args.online_expand,
+            closure_cap=args.reference_closure_cap,
+            closure_coverage_target=args.closure_coverage_target,
+            openalex_api_key=args.openalex_api_key,
+            email=args.email,
+            progress=progress,
+        )
+        raw_by_domain[domain] = raw3
+        closure_rows.append(closure_report)
+        audit_rows.append(domain_input_audit(domain, fig1_dir, raw3, closure_report))
+        domain_out = args.out_dir / FIG3_STRONG_INPUT_SUBDIR / domain
+        fig3.write_raw_data(raw3, domain_out)
+
+    if len(raw_by_domain) < 2:
+        raise ValueError('Strong evidence mode requires at least two available domains.')
+
+    multi_raw = fig3.combine_domain_raws(raw_by_domain)
+    multi_input_dir = args.out_dir / FIG3_STRONG_INPUT_SUBDIR / 'multi_domain'
+    fig3.write_raw_data(multi_raw, multi_input_dir)
+    (multi_input_dir / 'fig2_strong_input_report.json').write_text(
+        json.dumps({
+            'source_kind': 'fig2_strong_combined_raw',
+            'domains': domains,
+            'fig1_corpus_source': args.fig1_corpus_source,
+            'future_tau': int(args.future_tau),
+            'works_rows': int(len(multi_raw.works)),
+            'citation_rows': int(len(multi_raw.citations)),
+            'analysis_end_year': int(multi_raw.analysis_end_year),
+        }, ensure_ascii=False, indent=2),
+        encoding='utf-8',
+    )
+
+    progress_log('Computing strong-mode publication-day indicators and future graph deltas...', progress)
+    metrics, deltas = fig3.compute_indicator_and_delta_tables(
+        multi_raw,
+        tau=int(args.future_tau),
+        min_refs=int(args.min_refs),
+        max_papers=args.max_papers,
+        progress=progress,
+        progress_interval=int(args.progress_interval),
+    )
+    input_audit = pd.DataFrame(audit_rows)
+    closure_report = pd.DataFrame(closure_rows)
+    comp = build_strong_comp_from_tables(
+        metrics=metrics,
+        deltas=deltas,
+        input_audit=input_audit,
+        reference_closure_report=closure_report,
+        future_tau=int(args.future_tau),
+        min_controls=int(args.min_controls),
+        bootstrap_reps=int(args.bootstrap_reps),
+        seed=int(args.seed),
+        progress=progress,
+    )
+    example_raw = load_panel_a_example_raw(args, progress)
+    return example_raw, comp
+
+
+def load_panel_a_example_raw(args: argparse.Namespace, progress: bool) -> RawData:
+    """Load a clean single-domain selected corpus for Panel a illustration."""
+    domain = args.example_domain or DEFAULT_DOMAIN
+    legacy_prepared = DEFAULT_OUTPUT_DIR / 'fig2_input' / domain
+    if has_standard_input_files(legacy_prepared):
+        progress_log(f'Using legacy selected-domain Panel a input: {legacy_prepared}', progress)
+        return load_raw_data(legacy_prepared, domain=None, direct_only=not args.include_hybrid_edges, progress=progress)
+
+    fig1_dir = args.data_dir / domain if (args.data_dir / domain).exists() else args.data_dir
+    prepared_dir = args.out_dir / 'fig2_panel_a_input' / domain
+    if has_fig1_export_files(fig1_dir):
+        progress_log(f'Preparing selected-domain Panel a input from Fig. 1 exports: {fig1_dir}', progress)
+        prepare_fig2_input_from_fig1(
+            fig1_dir=fig1_dir,
+            prepared_dir=prepared_dir,
+            direct_only=not args.include_hybrid_edges,
+            progress=progress,
+        )
+        return load_raw_data(prepared_dir, domain=None, direct_only=not args.include_hybrid_edges, progress=progress)
+
+    strong_domain_dir = args.out_dir / FIG3_STRONG_INPUT_SUBDIR / domain
+    if (strong_domain_dir / 'works.csv').exists():
+        try:
+            from experiments.kg_perturbation_fig3 import fig3_empirical_weight_learning as fig3  # pylint: disable=import-outside-toplevel
+            return fig3_raw_to_fig2_raw(fig3.load_raw_data(strong_domain_dir))
+        except Exception:
+            pass
+    raise FileNotFoundError(f'Cannot find a single-domain input for Panel a: {domain}')
+
+
+def strong_run_config(args: argparse.Namespace) -> Dict[str, Any]:
+    return {
+        'evidence_mode': 'strong',
+        'domains': parse_domain_string(args.domains) or DEFAULT_STRONG_DOMAINS,
+        'fig1_corpus_source': args.fig1_corpus_source,
+        'future_tau': int(args.future_tau),
+        'min_refs': int(args.min_refs),
+        'min_controls': int(args.min_controls),
+        'reference_closure': args.reference_closure,
+        'reference_closure_cap': int(args.reference_closure_cap),
+        'closure_coverage_target': float(args.closure_coverage_target),
+        'online_expand': bool(args.online_expand),
+        'max_papers': args.max_papers,
+    }
+
+
+def normalized_strong_cache_config(config: Mapping[str, Any]) -> Dict[str, Any]:
+    out = dict(config)
+    if not bool(out.get('online_expand', False)):
+        out['reference_closure'] = 'no_online_closure'
+    return out
+
+
+def load_exported_strong_comp(args: argparse.Namespace) -> Optional[ComputedData]:
+    required = [
+        'fig2_input_audit.csv',
+        'fig2_domain_adequacy.csv',
+        'fig2_reference_closure_report.csv',
+        'fig2_publication_day_indicators.csv',
+        'fig2_future_graph_deltas.csv',
+        'fig2_matched_controls.csv',
+        'fig2_candidate_metrics.csv',
+        'fig2_candidate_redundancy.csv',
+        'fig2_indicator_future_corr.csv',
+        'fig2_indicator_future_corr_bootstrap.csv',
+        'fig2_quality_gates.json',
+    ]
+    if not all((args.out_dir / name).exists() for name in required):
+        return None
+    paper_metrics = pd.read_csv(args.out_dir / 'fig2_publication_day_indicators.csv')
+    graph_deltas = pd.read_csv(args.out_dir / 'fig2_future_graph_deltas.csv')
+    candidate_metrics = pd.read_csv(args.out_dir / 'fig2_candidate_metrics.csv')
+    redundancy_corr = pd.read_csv(args.out_dir / 'fig2_candidate_redundancy.csv', index_col=0)
+    indicator_corr = pd.read_csv(args.out_dir / 'fig2_indicator_future_corr.csv', index_col=0)
+    percentile_path = args.out_dir / 'fig2_landmark_percentiles.csv'
+    summary_path = args.out_dir / 'fig2_landmark_percentile_summary.csv'
+    metric_diag_path = args.out_dir / 'fig2_metric_standardization_diagnostics.csv'
+    delta_diag_path = args.out_dir / 'fig2_future_graph_delta_diagnostics.csv'
+    if not delta_diag_path.exists():
+        delta_diag_path = args.out_dir / 'fig2_graph_delta_diagnostics.csv'
+    evidence_support_path = args.out_dir / 'fig2_mechanism_evidence_support.csv'
+    closure_report = pd.read_csv(args.out_dir / 'fig2_reference_closure_report.csv')
+    if not bool(args.online_expand):
+        closure_report['reference_closure_mode'] = args.reference_closure
+        if args.reference_closure == 'off':
+            closure_report['status'] = 'closure_disabled_cached_raw_only'
+    quality = json.loads((args.out_dir / 'fig2_quality_gates.json').read_text(encoding='utf-8'))
+    return ComputedData(
+        paper_metrics=paper_metrics,
+        candidate_metrics=candidate_metrics,
+        graph_deltas=graph_deltas,
+        redundancy_corr=redundancy_corr,
+        indicator_delta_corr=indicator_corr,
+        percentile_long=pd.read_csv(percentile_path) if percentile_path.exists() else pd.DataFrame(),
+        landmark_summary=pd.read_csv(summary_path) if summary_path.exists() else pd.DataFrame(),
+        metric_standardization_diagnostics=pd.read_csv(metric_diag_path) if metric_diag_path.exists() else pd.DataFrame(),
+        graph_delta_diagnostics=pd.read_csv(delta_diag_path) if delta_diag_path.exists() else graph_delta_diagnostics(graph_deltas, [c for c in STRONG_FUTURE_DELTAS if c in graph_deltas.columns]),
+        input_audit=pd.read_csv(args.out_dir / 'fig2_input_audit.csv'),
+        domain_adequacy=pd.read_csv(args.out_dir / 'fig2_domain_adequacy.csv'),
+        reference_closure_report=closure_report,
+        matched_controls=pd.read_csv(args.out_dir / 'fig2_matched_controls.csv'),
+        indicator_future_corr_bootstrap=pd.read_csv(args.out_dir / 'fig2_indicator_future_corr_bootstrap.csv'),
+        evidence_support=pd.read_csv(evidence_support_path) if evidence_support_path.exists() else pd.DataFrame(),
+        quality_gates=quality,
+        evidence_mode='strong',
+        future_tau=int(args.future_tau),
+    )
+
+
+def load_strong_cache_if_valid(args: argparse.Namespace, progress: bool) -> Optional[Tuple[RawData, ComputedData]]:
+    config_path = args.out_dir / 'fig2_strong_run_config.json'
+    required = [
+        args.out_dir / 'fig2_publication_day_indicators.csv',
+        args.out_dir / 'fig2_future_graph_deltas.csv',
+        args.out_dir / 'fig2_input_audit.csv',
+        args.out_dir / 'fig2_reference_closure_report.csv',
+    ]
+    if args.no_reuse_cache or not config_path.exists() or not all(path.exists() for path in required):
+        return None
+    try:
+        old_config = json.loads(config_path.read_text(encoding='utf-8'))
+    except Exception:
+        return None
+    if normalized_strong_cache_config(old_config) != normalized_strong_cache_config(strong_run_config(args)):
+        return None
+    progress_log('Reusing cached strong-mode Fig. 2 tables with matching run config.', progress)
+    comp = load_exported_strong_comp(args)
+    if comp is None:
+        metrics = pd.read_csv(args.out_dir / 'fig2_publication_day_indicators.csv')
+        deltas = pd.read_csv(args.out_dir / 'fig2_future_graph_deltas.csv')
+        input_audit = pd.read_csv(args.out_dir / 'fig2_input_audit.csv')
+        closure_report = pd.read_csv(args.out_dir / 'fig2_reference_closure_report.csv')
+        comp = build_strong_comp_from_tables(
+            metrics=metrics,
+            deltas=deltas,
+            input_audit=input_audit,
+            reference_closure_report=closure_report,
+            future_tau=int(args.future_tau),
+            min_controls=int(args.min_controls),
+            bootstrap_reps=int(args.bootstrap_reps),
+            seed=int(args.seed),
+            progress=progress,
+        )
+    try:
+        raw = load_panel_a_example_raw(args, progress)
+    except Exception:
+        raw = RawData(works=pd.DataFrame(), citations=pd.DataFrame(), topics=pd.DataFrame(), topic_edges=pd.DataFrame())
+    return raw, comp
+
+
+def save_strong_run_config(args: argparse.Namespace) -> None:
+    (args.out_dir / 'fig2_strong_run_config.json').write_text(
+        json.dumps(strong_run_config(args), ensure_ascii=False, indent=2),
+        encoding='utf-8',
     )
 
 
@@ -1058,7 +2299,32 @@ def _topic_positions(topics: pd.DataFrame, x: float, y: float, w: float, h: floa
     return pos
 
 
-def draw_panel_a(ax, raw: RawData, focus_paper_id: Optional[str]) -> None:
+def display_topic_edges_for_active(raw: RawData, active_ids: Sequence[str]) -> pd.DataFrame:
+    active = set(str(x) for x in active_ids)
+    if not active:
+        return pd.DataFrame(columns=['source_community', 'target_community', 'weight'])
+    meta = raw.works[['id', 'display_community']].copy()
+    src = meta.rename(columns={'id': 'source', 'display_community': 'source_community'})
+    tgt = meta.rename(columns={'id': 'target', 'display_community': 'target_community'})
+    edges = raw.citations[raw.citations['source'].isin(active) & raw.citations['target'].isin(active)].copy()
+    if edges.empty:
+        return pd.DataFrame(columns=['source_community', 'target_community', 'weight'])
+    edges = edges.merge(src, on='source', how='left').merge(tgt, on='target', how='left')
+    edges = edges.dropna(subset=['source_community', 'target_community'])
+    if edges.empty:
+        return pd.DataFrame(columns=['source_community', 'target_community', 'weight'])
+    edges['source_community'] = edges['source_community'].astype(int)
+    edges['target_community'] = edges['target_community'].astype(int)
+    edges = edges[edges['source_community'] != edges['target_community']].copy()
+    if edges.empty:
+        return pd.DataFrame(columns=['source_community', 'target_community', 'weight'])
+    pairs = np.sort(edges[['source_community', 'target_community']].to_numpy(dtype=int), axis=1)
+    edges['u'] = pairs[:, 0]
+    edges['v'] = pairs[:, 1]
+    return edges.groupby(['u', 'v'], as_index=False).size().rename(columns={'u': 'source_community', 'v': 'target_community', 'size': 'weight'})
+
+
+def draw_panel_a(ax, raw: RawData, focus_paper_id: Optional[str], future_tau: Optional[int] = None) -> None:
     panel_frame(ax, 'a', 'Real publication-day measurement setting')
     works = raw.works
     if focus_paper_id is None:
@@ -1070,25 +2336,53 @@ def draw_panel_a(ax, raw: RawData, focus_paper_id: Optional[str]) -> None:
         focus = works.loc[works['id'].astype(str) == str(focus_paper_id)].iloc[0]
     focus_year = int(focus['year'])
     focus_title = str(focus['title'])
+    focus_id = str(focus['id'])
+    max_year = int(works['year'].max())
+    future_year = min(max_year, focus_year + int(future_tau)) if future_tau is not None else max_year
 
     boxes = [
-        (0.03, 0.29, 0.28, 0.58, f'Prior graph G−\n({focus_year-1})', '#2E7D32', 'prior'),
-        (0.36, 0.29, 0.28, 0.58, f'Publication-day graph G0\n(landmark year {focus_year})', '#2563EB', 'pub'),
-        (0.69, 0.29, 0.28, 0.58, f'Future graph G+τ\n({focus_year+1}–{works.year.max()})', '#6D4C8D', 'future'),
+        (0.03, 0.30, 0.28, 0.57, f'Prior graph G−\n(year < {focus_year})', '#2E7D32', 'prior'),
+        (0.36, 0.30, 0.28, 0.57, f'Publication-day G0\n(add p in {focus_year})', '#2563EB', 'pub'),
+        (0.69, 0.30, 0.28, 0.57, f'Future graph G+τ\n(year ≤ {future_year})', '#6D4C8D', 'future'),
     ]
 
     pos = _topic_positions(raw.topics, 0, 0, 1, 1)
-    colors = {int(c): mcolors.to_hex(plt.get_cmap('tab20')(i % 20)) for i, c in enumerate(sorted(raw.topics['community'].unique()))}
+    display_topics = set(int(c) for c in raw.topics['community'].dropna().astype(int))
+    colors = {int(c): mcolors.to_hex(plt.get_cmap('tab20')(i % 20)) for i, c in enumerate(sorted(display_topics))}
     meta = works[['id', 'display_community', 'year']].copy()
-    lm_refs = raw.citations[raw.citations['source'] == str(focus['id'])]['target'].astype(str).tolist()
+    lm_refs = get_reference_rows(raw, focus_id, focus_year)
+    ref_comms_all = pd.to_numeric(lm_refs['target_display_comm'], errors='coerce')
+    visible_ref_comms = sorted(set(ref_comms_all.dropna().astype(int)) & display_topics)
+    outside_ref_count = int(ref_comms_all.isna().sum() + (~ref_comms_all.dropna().astype(int).isin(display_topics)).sum())
+    focus_display = pd.to_numeric(pd.Series([focus.get('display_community', np.nan)]), errors='coerce').iloc[0]
+    focus_comm = int(focus_display) if pd.notna(focus_display) and int(focus_display) in pos else None
 
     for x, y, w, h, title, edgecolor, mode in boxes:
         rounded_box(ax, x, y, w, h, '#FCFCFD', edgecolor, 0.70, 0.015, zorder=1)
         ax.text(x + 0.02, y + h - 0.035, title, ha='left', va='top', fontsize=7.2, fontweight='bold')
-        year_cut = focus_year - 1 if mode == 'prior' else (focus_year if mode == 'pub' else works['year'].max())
-        active = meta[meta['year'] <= year_cut].copy()
-        counts = active.groupby('display_community').size().to_dict()
-        # community halos and nodes
+        if mode == 'prior':
+            active = meta[meta['year'] < focus_year].copy()
+        elif mode == 'pub':
+            active = meta[(meta['year'] < focus_year) | (meta['id'].astype(str) == focus_id)].copy()
+        else:
+            active = meta[meta['year'] <= future_year].copy()
+        active_ids = active['id'].astype(str).tolist()
+        active_display = active.dropna(subset=['display_community']).copy()
+        active_display['display_community'] = active_display['display_community'].astype(int)
+        active_display = active_display[active_display['display_community'].isin(display_topics)]
+        counts = active_display.groupby('display_community').size().to_dict()
+
+        edges = display_topic_edges_for_active(raw, active_ids)
+        if not edges.empty:
+            edge_max = max(float(edges['weight'].max()), 1.0)
+            for r in edges.sort_values('weight', ascending=False).head(14).itertuples(index=False):
+                c1 = int(r.source_community); c2 = int(r.target_community)
+                if c1 in counts and c2 in counts and c1 in pos and c2 in pos:
+                    x1 = x + pos[c1][0]*w; y1 = y + pos[c1][1]*h
+                    x2 = x + pos[c2][0]*w; y2 = y + pos[c2][1]*h
+                    lw = 0.35 + 1.1 * (math.log1p(float(r.weight)) / math.log1p(edge_max))
+                    ax.plot([x1, x2], [y1, y2], color='#BFC5CF', lw=lw, alpha=0.42, transform=ax.transAxes, zorder=1)
+
         for comm, count in counts.items():
             if comm not in pos:
                 continue
@@ -1103,24 +2397,24 @@ def draw_panel_a(ax, raw: RawData, focus_paper_id: Optional[str]) -> None:
                 th = 2*math.pi*j/npts
                 ax.scatter([px + rr*0.62*math.cos(th)], [py + rr*0.62*math.sin(th)], s=18,
                            color=colors[comm], edgecolors='white', linewidths=0.4, transform=ax.transAxes, zorder=3)
-        # topic edges
-        for r in raw.topic_edges.itertuples(index=False):
-            c1 = int(r.source_community); c2 = int(r.target_community)
-            if c1 in counts and c2 in counts and c1 in pos and c2 in pos:
-                x1 = x + pos[c1][0]*w; y1 = y + pos[c1][1]*h
-                x2 = x + pos[c2][0]*w; y2 = y + pos[c2][1]*h
-                ax.plot([x1, x2], [y1, y2], color='#C7CBD1', lw=0.6, alpha=0.45, transform=ax.transAxes, zorder=1)
 
         if mode in {'pub', 'future'}:
-            # focal paper star and its ref links to communities
-            fc = x + 0.43*w; fy = y + 0.34*h
+            if focus_comm is not None:
+                fc = x + pos[focus_comm][0]*w
+                fy = y + pos[focus_comm][1]*h
+            else:
+                fc = x + 0.50*w
+                fy = y + 0.36*h
             ax.scatter([fc], [fy], marker='*', s=160, color='#DC2626', edgecolors='white', linewidths=0.6, transform=ax.transAxes, zorder=5)
             ax.text(fc + 0.012, fy + 0.01, 'p', fontsize=7, fontstyle='italic', fontweight='bold', transform=ax.transAxes)
-            ref_comms = meta[meta['id'].isin(lm_refs)]['display_community'].dropna().astype(int).tolist()
-            for c in sorted(set(ref_comms)):
+            for c in visible_ref_comms:
                 if c in pos:
                     x2 = x + pos[c][0]*w; y2 = y + pos[c][1]*h
-                    ax.plot([fc, x2], [fy, y2], color='#3B82F6' if mode == 'pub' else '#64748B', lw=0.8, ls='--' if mode == 'pub' else '-', alpha=0.7, transform=ax.transAxes, zorder=2)
+                    if abs(fc - x2) + abs(fy - y2) < 0.005:
+                        continue
+                    ax.plot([fc, x2], [fy, y2], color='#3B82F6' if mode == 'pub' else '#64748B',
+                            lw=0.9, ls='--' if mode == 'pub' else '-', alpha=0.75, transform=ax.transAxes, zorder=2)
+        ax.text(x + w - 0.015, y + 0.015, f'n={len(active_ids):,}', ha='right', va='bottom', fontsize=5.4, color=TEXT_LIGHT, transform=ax.transAxes)
 
     draw_arrow(ax, (0.315, 0.58), (0.355, 0.58), color='#64748B', lw=1.8, ms=18)
     draw_arrow(ax, (0.645, 0.58), (0.685, 0.58), color='#64748B', lw=1.8, ms=18)
@@ -1129,73 +2423,145 @@ def draw_panel_a(ax, raw: RawData, focus_paper_id: Optional[str]) -> None:
     legend_y = 0.15
     rounded_box(ax, 0.03, 0.12, 0.61, 0.11, '#FFFFFF', '#E2E8F0', 0.6, 0.012)
     ax.scatter([0.055], [legend_y], marker='*', s=90, color='#DC2626', transform=ax.transAxes)
-    ax.text(0.075, legend_y, f'Landmark paper\n(e.g., {focus_title[:18]})', ha='left', va='center', fontsize=5.4)
+    ax.text(0.075, legend_y, f'Landmark community\n({focus_title[:18]})', ha='left', va='center', fontsize=5.4)
     ax.plot([0.21, 0.25], [legend_y, legend_y], color='#3B82F6', lw=1.0, ls='--', transform=ax.transAxes)
-    ax.text(0.265, legend_y, 'Reference links from p\nto existing papers', ha='left', va='center', fontsize=5.4)
+    ax.text(0.265, legend_y, 'Publication-day\nreference links', ha='left', va='center', fontsize=5.4)
     ax.plot([0.43, 0.47], [legend_y, legend_y], color='#C7CBD1', lw=0.9, transform=ax.transAxes)
-    ax.text(0.485, legend_y, 'Existing links among\nprior papers', ha='left', va='center', fontsize=5.4)
+    ax.text(0.485, legend_y, 'Snapshot-specific\nprior links', ha='left', va='center', fontsize=5.4)
     rounded_box(ax, 0.67, 0.12, 0.18, 0.11, blend_with_white('#2563EB', 0.92), '#93C5FD', 0.6, 0.012)
     ax.text(0.76, legend_y, 'Seven indicators are\ncomputed at G0 using\nonly G− and references.', ha='center', va='center', fontsize=5.4, color='#1D4ED8', fontweight='bold')
     rounded_box(ax, 0.03, 0.03, 0.61, 0.07, '#FFFFFF', '#E2E8F0', 0.6, 0.012)
-    ax.text(0.05, 0.065, 'Data: OpenAlex citation graph. Topic communities detected by Leiden clustering.', fontsize=5.2, color=TEXT_LIGHT, ha='left', va='center')
-    ax.text(0.05, 0.042, 'Node size ≈ number of papers. Edge width ≈ connection strength.', fontsize=5.0, color=TEXT_LIGHT, ha='left', va='center')
+    ax.text(0.05, 0.065, 'Display topics use the Fig. 1 layout; edges are recomputed within each time snapshot.', fontsize=5.2, color=TEXT_LIGHT, ha='left', va='center')
+    ax.text(0.05, 0.042, f'Node size ≈ papers. Edge width ≈ citation links. References outside displayed topics: {outside_ref_count}.', fontsize=5.0, color=TEXT_LIGHT, ha='left', va='center')
 
 
-def draw_panel_b(ax) -> None:
-    panel_frame(ax, 'b', 'Multi-stage screening from 92 candidates to 7 indicators')
+def draw_panel_b(ax, comp: Optional[ComputedData] = None) -> None:
+    comp = None
+    if comp is not None and comp.evidence_mode == 'strong':
+        panel_frame(ax, 'b', 'Multi-domain data construction and evidence audit')
+        audit = comp.input_audit.copy()
+        quality = comp.quality_gates or {}
+        closure = comp.reference_closure_report.copy()
+        active_future = comp.graph_delta_diagnostics.loc[
+            (comp.graph_delta_diagnostics['active'].astype(int) == 1)
+            & (~comp.graph_delta_diagnostics['delta'].astype(str).isin(DEFINITION_LINKED_DELTAS)),
+            'delta',
+        ].astype(str).tolist()
+        stages = [
+            ('Domains', int(audit['domain'].nunique()) if not audit.empty else 0, '#E8F1E3'),
+            ('Raw\npapers', int(audit['raw_papers'].sum()) if 'raw_papers' in audit else len(comp.paper_metrics), '#D9E6CF'),
+            ('Reference\nedges', int(audit['citation_edges'].sum()) if 'citation_edges' in audit else len(comp.graph_deltas), '#D6EAF8'),
+            ('Eligible\nfocal papers', int(len(comp.paper_metrics)), '#E6DCF4'),
+            ('Active future\noutcomes', int(len(active_future)), '#FDE2CF'),
+            ('Final\nindicators', 7, '#FDE7DF'),
+        ]
+        xs = np.linspace(0.11, 0.86, len(stages))
+        y = 0.73
+        for i, (label, count, color) in enumerate(stages):
+            rounded_box(ax, xs[i] - 0.06, y - 0.08, 0.12, 0.16, color, BORDER, 0.7, 0.018, zorder=2)
+            display_count = f'{count:,}' if count >= 1000 else str(count)
+            ax.text(xs[i], y + 0.028, display_count, ha='center', va='center', fontsize=13.5, fontweight='bold', transform=ax.transAxes)
+            ax.text(xs[i], y - 0.048, label, ha='center', va='center', fontsize=6.1, fontweight='bold', transform=ax.transAxes)
+            if i < len(stages) - 1:
+                draw_arrow(ax, (xs[i] + 0.063, y), (xs[i+1] - 0.063, y), color='#6B7280', lw=1.0, ms=11)
+
+        min_closure = float(pd.to_numeric(closure.get('coverage_materialized', pd.Series(dtype=float)), errors='coerce').min()) if not closure.empty else np.nan
+        median_controls = float(pd.to_numeric(comp.matched_controls.get('n_controls', pd.Series(dtype=float)), errors='coerce').median()) if not comp.matched_controls.empty else np.nan
+        status = str(quality.get('status_label', 'multi-domain diagnostic evidence'))
+        table_rows = [
+            ('Corpus', f'{int(audit["domain"].nunique()) if not audit.empty else 0} domains; {int(audit["raw_papers"].sum()) if "raw_papers" in audit else 0:,} raw/background papers'),
+            ('Closure', f'min weighted reference coverage = {min_closure:.1%}' if np.isfinite(min_closure) else 'closure audit unavailable'),
+            ('Publication-day', f'{len(comp.paper_metrics):,} eligible papers; indicators use references and G− only'),
+            ('Future validation', f'τ={comp.future_tau}; {len(active_future)} independent future graph outcomes'),
+            ('Controls', f'median matched controls n≈{median_controls:.0f}' if np.isfinite(median_controls) else 'matched controls unavailable'),
+            ('Gate status', status),
+        ]
+        x0, y0, w, h = 0.07, 0.22, 0.86, 0.36
+        rounded_box(ax, x0, y0, w, h, '#FFFFFF', '#E5E7EB', 0.6, 0.010)
+        for i, (k, v) in enumerate(table_rows):
+            yy = y0 + h - 0.048 - i * 0.052
+            if i:
+                ax.plot([x0 + 0.02, x0 + w - 0.02], [yy + 0.026, yy + 0.026], color='#EEF2F7', lw=0.7, transform=ax.transAxes)
+            ax.text(x0 + 0.035, yy, k, fontsize=6.0, fontweight='bold', ha='left', va='center', transform=ax.transAxes)
+            ax.text(x0 + 0.25, yy, v, fontsize=5.8, ha='left', va='center', color=TEXT_MID, transform=ax.transAxes)
+        x = 0.17
+        ax.text(0.50, 0.15, 'Seven publication-day perturbation indicators', ha='center', va='center', fontsize=6.8, fontweight='bold')
+        for key, label, color, _ in METRIC_SPECS:
+            width = 0.075 if len(label) <= 4 else 0.105
+            draw_pill(ax, x, 0.075, label, color, width, 0.043, fontsize=5.5)
+            x += width + 0.013
+        return
+
+    panel_frame(ax, 'b', 'Curated screening from 92 candidates to seven indicators')
     stages = [
-        ('Stage 1\nNo future leakage', 'Computable on\npublication day', 'Future citations, FWCI,\nCD index, burst, altmetric', '#D9E6CF'),
-        ('Stage 2\nReference-only', 'Use only references\nand prior graph G−', 'Author reputation, journal\nimpact, institution, funding', '#D8E7D1'),
-        ('Stage 3\nLinked to graph\nperturbation', 'Mechanistically linked to\nexpansion / bridging /\nreconfiguration', 'Generic controls (ref count,\nmean age), popularity measures', '#D6EAF8'),
-        ('Stage 4\nNon-redundant\nmechanisms', 'Remove highly correlated /\noverlapping metrics', 'PageRank, degree, closeness,\nSimpson, DIV, effective size, ...', '#E6DCF4'),
-        ('Stage 5\nInterpretable &\nrobust', 'Interpretable, stable across\ndomains, validation-ready', 'Unstable, low signal,\nhard to interpret', '#FDE2CF'),
-        ('Stage 6\nFinal basis', '', '', '#FDE7DF'),
+        ('Candidates', 92, '#E8F1E3'),
+        ('No future\nleakage', 67, '#D9E6CF'),
+        ('Reference-\nonly', 49, '#D6EAF8'),
+        ('Graph\nperturbation', 29, '#E6DCF4'),
+        ('Non-\nredundant', 12, '#FDE2CF'),
+        ('Final\nbasis', 7, '#FDE7DF'),
     ]
-    counts = [92, 67, 49, 29, 12, 7]
-    widths = [0.28, 0.25, 0.22, 0.19, 0.16, 0.13]
-    x = 0.06
-    y0 = 0.18
-    h = 0.67
-    for i, ((title, crit, excl, fc), n, w) in enumerate(zip(stages, counts, widths)):
-        patch = mpatches.Polygon([[x, y0+h],[x+w, y0+h],[x+w-0.02, y0],[x+0.02, y0]], closed=True,
-                                  transform=ax.transAxes, facecolor=fc, edgecolor=BORDER, linewidth=0.7)
-        ax.add_patch(patch)
-        ax.text(x+w/2, y0+h-0.05, title, ha='center', va='top', fontsize=7, fontweight='bold')
-        ax.text(x+w/2, y0+0.37, f'{n}', ha='center', va='center', fontsize=20, fontweight='bold')
-        if crit:
-            ax.text(0.54, y0+h-0.05 - i*0.117, crit, ha='left', va='top', fontsize=6.1)
-            ax.text(0.77, y0+h-0.05 - i*0.117, excl, ha='left', va='top', fontsize=5.9)
-        if i < len(counts)-1:
-            draw_arrow(ax, (x+w/2, y0-0.01), (x+w/2, y0-0.055), color='#374151', lw=1.0, ms=10)
-        x += 0.08
-    ax.text(0.56, 0.89, 'Criterion', fontsize=7, fontweight='bold')
-    ax.text(0.79, 0.89, 'Exclude examples', fontsize=7, fontweight='bold')
-    ax.text(0.65, 0.12, 'Final seven-parameter basis', ha='center', va='center', fontsize=7, fontweight='bold')
-    x = 0.44
+    xs = np.linspace(0.11, 0.86, len(stages))
+    y = 0.73
+    for i, (label, count, color) in enumerate(stages):
+        rounded_box(ax, xs[i] - 0.055, y - 0.08, 0.11, 0.16, color, BORDER, 0.7, 0.018, zorder=2)
+        ax.text(xs[i], y + 0.028, str(count), ha='center', va='center', fontsize=18, fontweight='bold', transform=ax.transAxes)
+        ax.text(xs[i], y - 0.047, label, ha='center', va='center', fontsize=6.5, fontweight='bold', transform=ax.transAxes)
+        if i < len(stages) - 1:
+            draw_arrow(ax, (xs[i] + 0.060, y), (xs[i+1] - 0.060, y), color='#6B7280', lw=1.1, ms=12)
+
+    table_rows = [
+        ('1', 'Computable at publication day', 'future citations, FWCI, burst, altmetrics'),
+        ('2', 'Uses only references and prior graph G−', 'author reputation, journal, institution'),
+        ('3', 'Mechanistically tied to graph change', 'ref count, mean age, generic popularity'),
+        ('4', 'Representative, not redundant', 'degree, PageRank, closeness, Simpson variants'),
+        ('5', 'Interpretable and robust across domains', 'unstable or hard-to-interpret metrics'),
+    ]
+    x0, y0, w, h = 0.07, 0.24, 0.86, 0.34
+    rounded_box(ax, x0, y0, w, h, '#FFFFFF', '#E5E7EB', 0.6, 0.010)
+    col_x = [x0 + 0.035, x0 + 0.17, x0 + 0.55]
+    ax.text(col_x[0], y0 + h - 0.045, 'Step', fontsize=6.6, fontweight='bold', ha='left', transform=ax.transAxes)
+    ax.text(col_x[1], y0 + h - 0.045, 'Criterion', fontsize=6.6, fontweight='bold', ha='left', transform=ax.transAxes)
+    ax.text(col_x[2], y0 + h - 0.045, 'Removed examples', fontsize=6.6, fontweight='bold', ha='left', transform=ax.transAxes)
+    for i, (step, crit, examples) in enumerate(table_rows):
+        yy = y0 + h - 0.092 - i * 0.055
+        ax.plot([x0 + 0.02, x0 + w - 0.02], [yy + 0.028, yy + 0.028], color='#EEF2F7', lw=0.7, transform=ax.transAxes)
+        ax.text(col_x[0], yy, step, fontsize=6.1, fontweight='bold', ha='left', va='center', transform=ax.transAxes)
+        ax.text(col_x[1], yy, crit, fontsize=5.8, ha='left', va='center', transform=ax.transAxes)
+        ax.text(col_x[2], yy, examples, fontsize=5.6, ha='left', va='center', color=TEXT_MID, transform=ax.transAxes)
+
+    ax.text(0.50, 0.17, 'Final seven-parameter basis', ha='center', va='center', fontsize=7, fontweight='bold')
+    x = 0.19
     for key, label, color, _ in METRIC_SPECS:
-        draw_pill(ax, x, 0.06, label, color, 0.08 if label != 'Burt IP' else 0.10, 0.04, fontsize=6)
-        x += 0.095
+        width = 0.075 if len(label) <= 4 else 0.105
+        draw_pill(ax, x, 0.09, label, color, width, 0.043, fontsize=5.8)
+        x += width + 0.015
 
 
-def draw_panel_c(ax) -> None:
-    panel_frame(ax, 'c', 'Publication-day evidence channels covered by the seven indicators')
-    x_label = 0.16; x0 = 0.23; x1 = 0.97; y0 = 0.18; y1 = 0.82
-    nrows = len(METRIC_SPECS); ncols = len(EVIDENCE_CHANNELS)
+def draw_panel_c(ax, comp: Optional[ComputedData] = None) -> None:
+    comp = None
+    title = 'Mechanism map with cross-domain empirical support' if comp is not None and comp.evidence_mode == 'strong' else 'Publication-day evidence channels covered by seven indicators'
+    panel_frame(ax, 'c', title)
+    x_label = 0.16; x0 = 0.21; x1 = 0.90 if comp is not None and comp.evidence_mode == 'strong' else 0.97; y0 = 0.18; y1 = 0.82
+    order = ['RS', 'PDE', 'B', 'RTD', 'BurtIP', 'DeltaQ0', 'Uzzi']
+    spec_map = {key: (label, color, desc) for key, label, color, desc in METRIC_SPECS}
+    nrows = len(order); ncols = len(EVIDENCE_CHANNELS)
     colw = (x1-x0)/ncols; rowh = (y1-y0)/nrows
 
-    for i, (title, color, subtitle) in enumerate(EVIDENCE_CHANNELS):
+    for i, (title, color, _) in enumerate(EVIDENCE_CHANNELS):
         hx = x0 + i*colw
         rounded_box(ax, hx, 0.83, colw, 0.10, '#F8FAFC', '#E2E8F0', 0.5, 0.006)
-        ax.text(hx+colw/2, 0.885, title, ha='center', va='center', fontsize=7, color=color, fontweight='bold')
+        ax.text(hx+colw/2, 0.885, title, ha='center', va='center', fontsize=7.4, color=color, fontweight='bold')
     for i in range(ncols+1):
         xx = x0 + i*colw
         ax.plot([xx, xx], [y0, 0.93], color=GRID, lw=0.6, transform=ax.transAxes)
     for j in range(nrows+1):
         yy = y1 - j*rowh
         ax.plot([0.08, x1], [yy, yy], color=GRID, lw=0.6, transform=ax.transAxes)
-    for r, (key, label, color, _) in enumerate(METRIC_SPECS):
+    for r, key in enumerate(order):
+        label, color, _ = spec_map[key]
         cy = y1 - (r+0.5)*rowh
-        ax.text(0.12, cy, label, ha='center', va='center', fontsize=7, color=color, fontweight='bold')
+        ax.text(0.12, cy, label, ha='center', va='center', fontsize=6.6, color=color, fontweight='bold')
         for c, (title, col, _) in enumerate(EVIDENCE_CHANNELS):
             cx = x0 + (c+0.5)*colw
             status = EVIDENCE_MAP.get(key, {}).get(title, '')
@@ -1203,17 +2569,38 @@ def draw_panel_c(ax) -> None:
                 ax.scatter([cx], [cy], s=90, color=col, edgecolors='white', linewidths=0.5, transform=ax.transAxes)
             elif status == 'secondary':
                 ax.scatter([cx], [cy], s=55, facecolors='white', edgecolors='#6B7280', linewidths=0.7, transform=ax.transAxes)
+    if comp is not None and comp.evidence_mode == 'strong':
+        support = comp.evidence_support.set_index('metric') if not comp.evidence_support.empty else pd.DataFrame()
+        rounded_box(ax, 0.905, 0.83, 0.075, 0.10, '#F8FAFC', '#E2E8F0', 0.5, 0.006)
+        ax.text(0.942, 0.885, 'Empirical\nsupport', ha='center', va='center', fontsize=6.1, color=TEXT_MID, fontweight='bold')
+        ax.plot([0.905, 0.905], [y0, 0.93], color=GRID, lw=0.6, transform=ax.transAxes)
+        ax.plot([0.98, 0.98], [y0, 0.93], color=GRID, lw=0.6, transform=ax.transAxes)
+        for r, key in enumerate(order):
+            cy = y1 - (r+0.5)*rowh
+            if not support.empty and key in support.index:
+                got = int(support.loc[key, 'significant_expected_outcomes'])
+                tested = int(support.loc[key, 'tested_expected_outcomes'])
+                text = f'{got}/{tested}'
+                face = '#DCFCE7' if got else '#F8FAFC'
+                edge = '#22C55E' if got else '#CBD5E1'
+            else:
+                text = 'n/e'
+                face = '#F8FAFC'
+                edge = '#CBD5E1'
+            rounded_box(ax, 0.918, cy - 0.022, 0.052, 0.043, face, edge, 0.55, 0.010, zorder=3)
+            ax.text(0.944, cy, text, ha='center', va='center', fontsize=5.5, fontweight='bold', transform=ax.transAxes)
     ax.scatter([0.20], [0.09], s=90, color='#4B5563', edgecolors='white', linewidths=0.5, transform=ax.transAxes)
     ax.text(0.23, 0.09, 'Primary evidence', fontsize=5.8, va='center')
     ax.scatter([0.45], [0.09], s=55, facecolors='white', edgecolors='#6B7280', linewidths=0.7, transform=ax.transAxes)
     ax.text(0.48, 0.09, 'Secondary evidence', fontsize=5.8, va='center')
-    ax.plot([0.72, 0.76], [0.09, 0.09], color='#9CA3AF', lw=0.8, ls='--', transform=ax.transAxes)
-    ax.text(0.78, 0.09, 'Not primary', fontsize=5.8, va='center')
+    if comp is not None and comp.evidence_mode == 'strong':
+        ax.text(0.70, 0.09, 'Support = positive bootstrap-CI links among expected future outcomes', fontsize=5.2, va='center', color=TEXT_LIGHT)
 
 
 def plot_redundancy_heatmap(ax, comp: ComputedData, selected_only: bool = False) -> None:
     corr = comp.redundancy_corr.copy()
     selected_metrics = [m[0] for m in METRIC_SPECS]
+    color_map = {m[0]: m[2] for m in METRIC_SPECS}
     if not selected_only:
         desired = ['B', 'degree', 'pagerank', 'closeness', 'RS', 'field_shannon', 'field_simpson', 'field_variety',
                    'DeltaQ0', 'conductance_delta', 'Uzzi', 'pair_surprisal', 'RTD', 'community_simpson',
@@ -1233,45 +2620,83 @@ def plot_redundancy_heatmap(ax, comp: ComputedData, selected_only: bool = False)
     ax.set_xticklabels(corr.columns, rotation=90, fontsize=5)
     ax.set_yticklabels(corr.index, fontsize=5)
     ax.tick_params(length=0)
-    for i, rname in enumerate(corr.index):
-        if rname in selected_metrics:
-            ax.add_patch(mpatches.Rectangle((i-0.5, i-0.5), 1, 1, fill=False, edgecolor='black', linewidth=0.9))
+    for i, name in enumerate(corr.columns):
+        if name in selected_metrics:
+            ax.get_xticklabels()[i].set_color(color_map[name])
+            ax.get_xticklabels()[i].set_fontweight('bold')
+    for i, name in enumerate(corr.index):
+        if name in selected_metrics:
+            ax.get_yticklabels()[i].set_color(color_map[name])
+            ax.get_yticklabels()[i].set_fontweight('bold')
+            ax.add_patch(mpatches.Rectangle((-0.95, i-0.45), 0.25, 0.90, facecolor=color_map[name],
+                                            edgecolor='none', clip_on=False, zorder=4))
+            ax.add_patch(mpatches.Rectangle((i-0.45, -0.95), 0.90, 0.25, facecolor=color_map[name],
+                                            edgecolor='none', clip_on=False, zorder=4))
     for s in ax.spines.values(): s.set_visible(False)
     return im, corr
 
 
 def draw_panel_d(ax, comp: ComputedData) -> None:
-    panel_frame(ax, 'd', 'Candidate metric redundancy map (empirical)')
-    ax.text(0.05, 0.90, 'Spearman correlation (papers, field-year normalized)', fontsize=6.5, fontweight='bold')
+    title = 'Multi-domain candidate redundancy and representative selection' if comp.evidence_mode == 'strong' else 'Candidate metric redundancy and representative selection'
+    panel_frame(ax, 'd', title)
+    subtitle = 'Partial Spearman after domain/year/reference controls' if comp.evidence_mode == 'strong' else 'Spearman correlation (rank-normalized papers)'
+    ax.text(0.05, 0.90, subtitle, fontsize=6.5, fontweight='bold')
     # inset heatmap axes
-    hax = ax.inset_axes([0.06, 0.18, 0.60, 0.68])
+    hax = ax.inset_axes([0.06, 0.31, 0.60, 0.55])
     im, corr = plot_redundancy_heatmap(hax, comp, selected_only=False)
-    cax = ax.inset_axes([0.69, 0.20, 0.03, 0.64])
+    cax = ax.inset_axes([0.69, 0.32, 0.03, 0.52])
     cb = plt.colorbar(im, cax=cax)
     cb.ax.tick_params(labelsize=5)
     cb.outline.set_linewidth(0.5)
     # legend / families
     lx = 0.76; y = 0.83
-    fam_lines = [
-        ('Bridge position', ['Betweenness (B)', 'Bridge score', 'Participation coeff.', 'Closeness', 'PageRank', 'Degree'], '#0B4FA3'),
-        ('Diversity / breadth', ['RS', 'DIV', 'Shannon (fields)', 'Simpson (fields)', 'Field variety'], '#2E7D32'),
-        ('Atypical recombination', ['Uzzi', 'PMI surprisal', 'Wang W'], '#7C3AED'),
-        ('Structural holes', ['Burt IP', 'Effective size', 'Constraint'], '#2563EB'),
-        ('Modularity / boundary', ['ΔQ0', 'Conductance change', 'Community surprise'], '#F97316'),
+    available = set(corr.columns.astype(str))
+    name_map = {
+        'B': 'B',
+        'degree': 'Degree',
+        'pagerank': 'PageRank',
+        'closeness': 'Closeness',
+        'RS': 'RS',
+        'PDE': 'PDE',
+        'field_shannon': 'Field Shannon',
+        'field_simpson': 'Field Simpson',
+        'field_variety': 'Field variety',
+        'Uzzi': 'Uzzi-style',
+        'pair_surprisal': 'Pair surprisal proxy',
+        'BurtIP': 'Burt IP',
+        'effective_size': 'Effective size',
+        'constraint_inv': 'Constraint inverse',
+        'DeltaQ0': 'ΔQ0',
+        'conductance_delta': 'Conductance delta',
+        'RTD': 'RTD',
+        'community_simpson': 'Community Simpson',
+        'community_variety': 'Community variety',
+    }
+    family_defs = [
+        ('Bridge position', ['B', 'degree', 'pagerank', 'closeness'], '#0B4FA3'),
+        ('Breadth / diversity', ['RS', 'PDE', 'field_shannon', 'field_simpson', 'field_variety'], '#2E7D32'),
+        ('Atypical recombination', ['Uzzi', 'pair_surprisal'], '#7C3AED'),
+        ('Structural holes', ['BurtIP', 'effective_size', 'constraint_inv'], '#2563EB'),
+        ('Boundary / target', ['DeltaQ0', 'conductance_delta', 'RTD', 'community_simpson', 'community_variety'], '#F97316'),
     ]
+    fam_lines = []
+    for title, keys, color in family_defs:
+        lines = [name_map[k] for k in keys if k in available]
+        if lines:
+            fam_lines.append((title, lines, color))
     for title, lines, color in fam_lines:
         ax.plot([lx, lx], [y-0.05, y+0.02], color=color, lw=1.5, transform=ax.transAxes)
         ax.text(lx+0.015, y+0.015, title, fontsize=5.8, fontweight='bold', color=color, transform=ax.transAxes, ha='left', va='top')
         for i, line in enumerate(lines):
             ax.text(lx+0.015, y-0.01 - i*0.025, line, fontsize=5.0, color=TEXT_DARK, transform=ax.transAxes, ha='left', va='top')
-        y -= 0.17
-    rounded_box(ax, 0.03, 0.05, 0.94, 0.08, '#FFFFFF', '#E2E8F0', 0.6, 0.012)
-    ax.text(0.05, 0.09, 'Seven selected indicators (boxed) are lowly correlated with each other but capture different families of graph perturbation mechanisms.', fontsize=5.7, va='center')
+        y -= 0.13 + 0.022 * max(1, len(lines))
+    rounded_box(ax, 0.03, 0.018, 0.94, 0.058, '#FFFFFF', '#E2E8F0', 0.6, 0.010)
+    ax.text(0.05, 0.047, 'Colored ticks mark selected indicators; selected indicators occupy distinct candidate-metric modules.', fontsize=5.2, va='center')
 
 
 def draw_panel_e(ax, comp: ComputedData) -> None:
-    panel_frame(ax, 'e', 'Landmark perturbation percentiles (vs. matched controls)')
-    ax.text(0.05, 0.90, 'Percentile among same-year, same-field matched controls (higher = stronger perturbation)', fontsize=6.5, fontweight='bold')
+    panel_frame(ax, 'e', 'Landmarks and high-future cases vs controls')
+    ax.text(0.05, 0.90, 'Percentile among tiered matched controls; all indicators oriented higher = stronger perturbation', fontsize=6.3, fontweight='bold')
     order = [m[0] for m in METRIC_SPECS]
     label_map = {m[0]: m[1] for m in METRIC_SPECS}; color_map = {m[0]: m[2] for m in METRIC_SPECS}
     pdat = comp.percentile_long.copy()
@@ -1280,51 +2705,80 @@ def draw_panel_e(ax, comp: ComputedData) -> None:
     agg = pdat.groupby('metric', as_index=False)['percentile'].median()
     y_positions = np.linspace(0.77, 0.22, len(order))
 
-    # grey reference distribution band (conceptual control range from actual per-landmark percentiles)
     plot_left, plot_right = 0.22, 0.86
+    for t in np.linspace(0, 100, 5):
+        xx = plot_left + (t/100)*(plot_right-plot_left)
+        ax.plot([xx, xx], [0.17, 0.83], color='#E5E7EB', lw=0.6, transform=ax.transAxes, zorder=0)
     for y, key in zip(y_positions, order):
-        vals = pdat.loc[pdat['metric'] == key, 'percentile'].dropna().values
+        sub = pdat[pdat['metric'] == key].copy()
+        vals = sub['percentile'].dropna().values
         if len(vals) == 0:
             continue
-        # draw ticks / distribution along percentile axis
-        for t in np.linspace(0, 100, 5):
-            xx = plot_left + (t/100)*(plot_right-plot_left)
-            ax.plot([xx, xx], [0.17, 0.83], color='#E5E7EB', lw=0.6, transform=ax.transAxes, zorder=0)
-        for v in vals:
+        if 'profile_type' in sub.columns:
+            high_vals = sub.loc[sub['profile_type'] == 'future_top_decile', 'percentile'].dropna().values
+            landmark_vals = sub.loc[sub['profile_type'] == 'landmark', 'percentile'].dropna().values
+        else:
+            high_vals = np.array([])
+            landmark_vals = vals
+        for v in high_vals:
             xx = plot_left + (v/100)*(plot_right-plot_left)
-            ax.scatter([xx], [y], s=10, color='#BDBDBD', alpha=0.7, transform=ax.transAxes, zorder=2)
-        med = float(np.median(vals))
+            ax.scatter([xx], [y], s=7, color='#BDBDBD', alpha=0.55, transform=ax.transAxes, zorder=2)
+        for v in landmark_vals:
+            xx = plot_left + (v/100)*(plot_right-plot_left)
+            ax.scatter([xx], [y], s=18, facecolors='white', edgecolors=color_map[key], linewidths=0.7, transform=ax.transAxes, zorder=3)
+        star_vals = landmark_vals if len(landmark_vals) else vals
+        med = float(np.median(star_vals))
         xx = plot_left + (med/100)*(plot_right-plot_left)
         ax.scatter([xx], [y], marker='*', s=120, color=color_map[key], edgecolors='white', linewidths=0.6, transform=ax.transAxes, zorder=4)
         ax.text(0.17, y, label_map[key], fontsize=7, color=color_map[key], fontweight='bold', ha='right', va='center', transform=ax.transAxes)
         ax.text(0.87, y, f'{med:.0f}', fontsize=8, color=TEXT_DARK, fontweight='bold', ha='left', va='center', transform=ax.transAxes)
-        ax.text(0.05, y, CANDIDATE_GROUPS[[g for g, vals2 in CANDIDATE_GROUPS.items() if key in vals2][0]][0] if any(key in vals2 for vals2 in CANDIDATE_GROUPS.values()) else '', fontsize=5.2, color=TEXT_MID, ha='left', va='center', transform=ax.transAxes)
-    ax.text(0.915, 0.83, 'Landmark\npercentile', fontsize=6.2, fontweight='bold', ha='center', va='center', transform=ax.transAxes)
+    ax.text(0.915, 0.83, 'Median\npercentile', fontsize=6.2, fontweight='bold', ha='center', va='center', transform=ax.transAxes)
     for t in range(0, 101, 25):
         xx = plot_left + (t/100)*(plot_right-plot_left)
-        ax.text(xx, 0.13, f'{t}', fontsize=5.5, color=TEXT_LIGHT, ha='center', transform=ax.transAxes)
-    ax.text((plot_left+plot_right)/2, 0.085, 'Percentile', fontsize=6.2, fontweight='bold', ha='center', transform=ax.transAxes)
-    rounded_box(ax, 0.03, 0.04, 0.94, 0.08, '#FFFFFF', '#E2E8F0', 0.6, 0.012)
-    ex_domain = comp.paper_metrics.loc[comp.paper_metrics['is_landmark'] == 1, 'domain'].iloc[0] if (comp.paper_metrics['is_landmark'] == 1).any() else 'example domain'
+        ax.text(xx, 0.155, f'{t}', fontsize=5.5, color=TEXT_LIGHT, ha='center', transform=ax.transAxes)
+    ax.text((plot_left+plot_right)/2, 0.125, 'Percentile', fontsize=6.2, fontweight='bold', ha='center', transform=ax.transAxes)
+    rounded_box(ax, 0.03, 0.020, 0.94, 0.082, '#FFFFFF', '#E2E8F0', 0.6, 0.010)
+    ex_domain = f'{comp.paper_metrics["domain"].nunique()} domains' if comp.evidence_mode == 'strong' else (comp.paper_metrics.loc[comp.paper_metrics['is_landmark'] == 1, 'domain'].iloc[0] if (comp.paper_metrics['is_landmark'] == 1).any() else 'example domain')
     n_controls = int(pdat['n_controls'].median()) if 'n_controls' in pdat else 0
-    ax.text(0.05, 0.08, f'Example domain: {ex_domain}. Stars show median landmark percentile; gray dots are landmark-specific percentiles vs. matched controls (n ≈ {n_controls}).', fontsize=5.7, va='center')
+    if 'control_tier' in pdat:
+        tier_summary = ', '.join(pdat.drop_duplicates('paper_id')['control_tier'].astype(str).value_counts().head(2).index.tolist())
+    else:
+        tier_summary = 'matched controls'
+    if comp.evidence_mode == 'strong':
+        note = f'{ex_domain}: gray dots = future top-decile cases; open circles = landmarks; stars = landmark median. Median controls n≈{n_controls}; tiers: {tier_summary}.'
+    else:
+        note = f'{ex_domain}: gray dots = landmark percentiles; stars = median. Median controls n≈{n_controls}; tiers: {tier_summary}.'
+    ax.text(0.05, 0.061, wrap(note, 142), fontsize=5.0, va='center')
 
 
 def draw_panel_f(ax, comp: ComputedData) -> None:
-    panel_frame(ax, 'f', 'Indicator–to–graph-delta correspondence (empirical)')
-    ax.text(0.05, 0.90, 'Spearman correlation between indicators and direct graph deltas at publication day', fontsize=6.5, fontweight='bold')
+    title = 'Publication-day indicators predict future G+τ graph deltas' if comp.evidence_mode == 'strong' else 'Internal correspondence with direct graph-delta observables'
+    panel_frame(ax, 'f', title)
+    control_text = 'Partial Spearman with domain/year/log-reference controls; cells marked + have positive bootstrap CI' if comp.evidence_mode == 'strong' else 'Partial Spearman correlation, controlling year and log reference count'
+    ax.text(0.05, 0.90, control_text, fontsize=6.2, fontweight='bold')
     corr = comp.indicator_delta_corr.copy()
     order = [m[0] for m in METRIC_SPECS]
     corr = corr.loc[order, :]
     label_map = {m[0]: m[1] for m in METRIC_SPECS}
     color_map = {m[0]: m[2] for m in METRIC_SPECS}
     cols = list(corr.columns)
-    heat_ax = ax.inset_axes([0.06, 0.19, 0.86, 0.64])
-    arr = corr.values.astype(float)
+    pretty_map = {
+        'community_reach': 'Community\nreach',
+        'field_entropy': 'Field\nentropy',
+        'cross_community_adoption': 'Cross-community\nadoption',
+        'modularity_shock': 'Modularity\nshock*',
+        'path_shortening': 'Path\nshortening',
+        'partition_change': 'Partition\nchange',
+        'boundary_mixing': 'Boundary\nmixing',
+        'hub_formation': 'Hub\nformation',
+        'component_reach': 'Component\nreach',
+    }
+    heat_ax = ax.inset_axes([0.10, 0.31, 0.80, 0.50])
+    arr = corr.values.astype(float) if cols else np.zeros((len(order), 1))
     im = heat_ax.imshow(arr, cmap='RdBu_r', vmin=-1, vmax=1)
     heat_ax.set_xticks(range(len(cols))); heat_ax.set_yticks(range(len(order)))
-    pretty_cols = ['Cross-community\nedge gain', 'Community\nreach', 'Modularity\nshock\n(-ΔQ0)', 'Path\nshortening\namong refs', 'Component\nreach', 'Boundary\nmixing\n(-assort.)']
-    heat_ax.set_xticklabels(pretty_cols, fontsize=5.5)
+    pretty_cols = [pretty_map.get(c, c.replace('_', '\n')) for c in cols]
+    heat_ax.set_xticklabels(pretty_cols, fontsize=5.0, rotation=25, ha='right', rotation_mode='anchor')
     heat_ax.set_yticklabels([label_map[k] for k in order], fontsize=6)
     heat_ax.tick_params(length=0)
     for i, k in enumerate(order):
@@ -1332,31 +2786,57 @@ def draw_panel_f(ax, comp: ComputedData) -> None:
     for i in range(arr.shape[0]):
         for j in range(arr.shape[1]):
             val = arr[i, j]
-            heat_ax.text(j, i, f'{val:.2f}', ha='center', va='center', fontsize=5.5, color='black')
+            marker = ''
+            if comp.evidence_mode == 'strong' and not comp.indicator_future_corr_bootstrap.empty and j < len(cols):
+                metric = order[i]
+                outcome = cols[j]
+                b = comp.indicator_future_corr_bootstrap[
+                    (comp.indicator_future_corr_bootstrap['metric'] == metric)
+                    & (comp.indicator_future_corr_bootstrap['future_outcome'] == outcome)
+                ]
+                if not b.empty and float(b['ci_low'].iloc[0]) > 0 and float(b['rho'].iloc[0]) > 0:
+                    marker = '+'
+            txt = f'{val:.2f}{marker}' if np.isfinite(val) else 'n/e'
+            heat_ax.text(j, i, txt, ha='center', va='center', fontsize=5.5, color='black')
     for s in heat_ax.spines.values(): s.set_visible(False)
-    cax = ax.inset_axes([0.15, 0.11, 0.62, 0.03])
+    cax = ax.inset_axes([0.20, 0.165, 0.56, 0.026])
     cb = plt.colorbar(im, cax=cax, orientation='horizontal')
     cb.ax.tick_params(labelsize=5)
-    cb.set_label('Spearman ρ', fontsize=6, fontweight='bold')
+    cb.set_label('', fontsize=0)
     rounded_box(ax, 0.03, 0.04, 0.94, 0.08, '#FFFFFF', '#E2E8F0', 0.6, 0.012)
-    ax.text(0.05, 0.08, 'Positive correlations (red) indicate stronger alignment of the indicator with the structural change induced at publication day.', fontsize=5.7, va='center')
+    dropped = comp.graph_delta_diagnostics.loc[comp.graph_delta_diagnostics['active'].astype(int) == 0, 'delta'].astype(str).tolist()
+    dropped_note = f'Dropped zero-variance/non-estimable deltas: {", ".join(dropped[:2])}.' if dropped else 'All displayed deltas passed variance screening.'
+    if comp.evidence_mode == 'strong':
+        note = f'Red = stronger future alignment after controls. *Definition-linked internal check, not independent validation. {dropped_note}'
+    else:
+        note = f'Red = stronger alignment after controls. *Definition-linked internal check. {dropped_note}'
+    ax.text(0.05, 0.08, note, fontsize=5.2, va='center')
 
 
 # --------------------------
 # Full figure assembly
 # --------------------------
 
-def assemble_figure(raw: RawData, comp: ComputedData, focus_paper_id: Optional[str], outpath: Path) -> None:
+def assemble_figure(raw: RawData, comp: ComputedData, focus_paper_id: Optional[str], future_tau: Optional[int], outpath: Path) -> None:
     setup_style()
     fig = plt.figure(figsize=(20, 13), dpi=300)
     gs = GridSpec(2, 3, figure=fig, height_ratios=[1, 1.1], width_ratios=[1.1, 1.0, 1.0], hspace=0.12, wspace=0.04)
-    fig.text(0.5, 0.985, 'Fig. 2 | Why these seven indicators?', ha='center', va='top', fontsize=20, fontweight='bold')
-    fig.text(0.5, 0.955, 'Empirical evidence for a publication-day, reference-only basis capturing graph perturbations',
-             ha='center', va='top', fontsize=11.5, color=TEXT_MID)
+    if comp.evidence_mode == 'strong':
+        status = str((comp.quality_gates or {}).get('status_label', 'multi-domain diagnostic evidence'))
+        if status == 'strong experimental evidence':
+            title = 'Fig. 2 | Publication-day graph perturbations predict future cross-community knowledge movement'
+        else:
+            title = 'Fig. 2 diagnostic | Publication-day perturbations in multi-domain raw citation data'
+        subtitle = 'Multi-domain evidence using raw citation corpora, reference-closure audits, matched controls, and future graph deltas'
+    else:
+        title = 'Fig. 2 | Why these seven indicators?'
+        subtitle = 'Construction and empirical checks of a publication-day graph-perturbation basis'
+    fig.text(0.5, 0.985, title, ha='center', va='top', fontsize=18.0 if comp.evidence_mode == 'strong' else 20, fontweight='bold')
+    fig.text(0.5, 0.955, subtitle, ha='center', va='top', fontsize=11.0, color=TEXT_MID)
 
-    axa = fig.add_subplot(gs[0, 0]); draw_panel_a(axa, raw, focus_paper_id)
-    axb = fig.add_subplot(gs[0, 1]); draw_panel_b(axb)
-    axc = fig.add_subplot(gs[0, 2]); draw_panel_c(axc)
+    axa = fig.add_subplot(gs[0, 0]); draw_panel_a(axa, raw, focus_paper_id, future_tau=future_tau)
+    axb = fig.add_subplot(gs[0, 1]); draw_panel_b(axb, comp)
+    axc = fig.add_subplot(gs[0, 2]); draw_panel_c(axc, comp)
     axd = fig.add_subplot(gs[1, 0]); draw_panel_d(axd, comp)
     axe = fig.add_subplot(gs[1, 1]); draw_panel_e(axe, comp)
     axf = fig.add_subplot(gs[1, 2]); draw_panel_f(axf, comp)
@@ -1364,16 +2844,16 @@ def assemble_figure(raw: RawData, comp: ComputedData, focus_paper_id: Optional[s
     plt.close(fig)
 
 
-def save_single_panel(panel: str, raw: RawData, comp: Optional[ComputedData], focus_paper_id: Optional[str], outpath: Path) -> None:
+def save_single_panel(panel: str, raw: RawData, comp: Optional[ComputedData], focus_paper_id: Optional[str], future_tau: Optional[int], outpath: Path) -> None:
     setup_style()
     size_map = {'a': (7.6, 6.0), 'b': (7.1, 6.0), 'c': (7.0, 6.0), 'd': (7.5, 6.8), 'e': (7.1, 6.8), 'f': (7.1, 6.8)}
     fig, ax = plt.subplots(figsize=size_map.get(panel, (7, 6)), dpi=300)
     if panel == 'a':
-        draw_panel_a(ax, raw, focus_paper_id)
+        draw_panel_a(ax, raw, focus_paper_id, future_tau=future_tau)
     elif panel == 'b':
-        draw_panel_b(ax)
+        draw_panel_b(ax, comp)
     elif panel == 'c':
-        draw_panel_c(ax)
+        draw_panel_c(ax, comp)
     elif panel == 'd':
         if comp is None:
             raise ValueError('Panel d requires computed metrics.')
@@ -1398,6 +2878,28 @@ def save_single_panel(panel: str, raw: RawData, comp: Optional[ComputedData], fo
 
 def export_tables(comp: ComputedData, out_dir: Path) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
+    if comp.evidence_mode == 'strong':
+        comp.input_audit.to_csv(out_dir / 'fig2_input_audit.csv', index=False)
+        comp.domain_adequacy.to_csv(out_dir / 'fig2_domain_adequacy.csv', index=False)
+        comp.reference_closure_report.to_csv(out_dir / 'fig2_reference_closure_report.csv', index=False)
+        comp.paper_metrics.to_csv(out_dir / 'fig2_publication_day_indicators.csv', index=False)
+        comp.graph_deltas.to_csv(out_dir / 'fig2_future_graph_deltas.csv', index=False)
+        comp.matched_controls.to_csv(out_dir / 'fig2_matched_controls.csv', index=False)
+        comp.candidate_metrics.to_csv(out_dir / 'fig2_candidate_metrics.csv', index=False)
+        comp.redundancy_corr.to_csv(out_dir / 'fig2_candidate_redundancy.csv')
+        comp.indicator_delta_corr.to_csv(out_dir / 'fig2_indicator_future_corr.csv')
+        comp.indicator_future_corr_bootstrap.to_csv(out_dir / 'fig2_indicator_future_corr_bootstrap.csv', index=False)
+        comp.percentile_long.to_csv(out_dir / 'fig2_landmark_percentiles.csv', index=False)
+        comp.landmark_summary.to_csv(out_dir / 'fig2_landmark_percentile_summary.csv', index=False)
+        comp.metric_standardization_diagnostics.to_csv(out_dir / 'fig2_metric_standardization_diagnostics.csv', index=False)
+        comp.graph_delta_diagnostics.to_csv(out_dir / 'fig2_future_graph_delta_diagnostics.csv', index=False)
+        comp.graph_delta_diagnostics.to_csv(out_dir / 'fig2_graph_delta_diagnostics.csv', index=False)
+        comp.evidence_support.to_csv(out_dir / 'fig2_mechanism_evidence_support.csv', index=False)
+        (out_dir / 'fig2_quality_gates.json').write_text(
+            json.dumps(comp.quality_gates, ensure_ascii=False, indent=2, default=lambda x: x.item() if hasattr(x, 'item') else str(x)),
+            encoding='utf-8',
+        )
+        return
     comp.paper_metrics.to_csv(out_dir / 'fig2_paper_metrics.csv', index=False)
     comp.candidate_metrics.to_csv(out_dir / 'fig2_candidate_metrics.csv', index=False)
     comp.graph_deltas.to_csv(out_dir / 'fig2_graph_deltas.csv', index=False)
@@ -1405,6 +2907,8 @@ def export_tables(comp: ComputedData, out_dir: Path) -> None:
     comp.indicator_delta_corr.to_csv(out_dir / 'fig2_indicator_delta_corr.csv')
     comp.percentile_long.to_csv(out_dir / 'fig2_landmark_percentiles.csv', index=False)
     comp.landmark_summary.to_csv(out_dir / 'fig2_landmark_percentile_summary.csv', index=False)
+    comp.metric_standardization_diagnostics.to_csv(out_dir / 'fig2_metric_standardization_diagnostics.csv', index=False)
+    comp.graph_delta_diagnostics.to_csv(out_dir / 'fig2_graph_delta_diagnostics.csv', index=False)
 
 
 # --------------------------
@@ -1417,21 +2921,51 @@ def parse_args() -> argparse.Namespace:
                    help='Local data directory. Accepts a directory with works.csv/citations.csv/topics.csv/topic_edges.csv, '
                         'a Fig. 1 domain directory with works_selected.csv/paper_edges.csv/topic_nodes.csv/topic_edges.csv, '
                         f'or a Fig. 1 output root. Default: {DEFAULT_FIG1_DATA_ROOT}')
+    p.add_argument('--evidence-mode', choices=['strong', 'legacy'], default='strong',
+                   help='strong uses multi-domain Fig. 1 raw/Fig. 3 future-delta evidence; legacy preserves the single-domain diagnostic figure.')
     p.add_argument('--domain', type=str, default=DEFAULT_DOMAIN,
                    help=f'Fig. 1 domain subdirectory to read when --data-dir is a root. Default: {DEFAULT_DOMAIN}')
+    p.add_argument('--domains', type=str, default=','.join(DEFAULT_STRONG_DOMAINS),
+                   help='Comma/space separated domains for --evidence-mode strong.')
+    p.add_argument('--fig1-corpus-source', choices=['raw', 'selected'], default='raw',
+                   help='For strong mode, use Fig. 1 works_raw.jsonl or selected Fig. 1 corpus. Default: raw.')
     p.add_argument('--include-hybrid-edges', action='store_true',
                    help='When reading paper_edges.csv, include bibliographic/cocitation-only edges. '
                         'By default only rows with direct > 0 are used as citation links.')
     p.add_argument('--panel', type=str, default='all', choices=['a', 'b', 'c', 'd', 'e', 'f', 'all'],
                    help='Which panel to draw. Use all to assemble the full figure.')
-    p.add_argument('--out-dir', type=Path, default=DEFAULT_OUTPUT_DIR)
+    p.add_argument('--out-dir', type=Path, default=DEFAULT_STRONG_OUTPUT_DIR)
     p.add_argument('--focus-paper-id', type=str, default=None,
                    help='Paper id to highlight in panel a. Defaults to the earliest landmark.')
+    p.add_argument('--future-tau', type=int, default=10,
+                   help='Future horizon for strong-mode G+τ validation and panel a. Default: 10.')
+    p.add_argument('--example-domain', type=str, default=DEFAULT_DOMAIN,
+                   help='Domain used for panel a example in strong mode. Default: crispr.')
     p.add_argument('--focal-paper-list', type=Path, default=None,
                    help='Optional text file with one focal paper id per line for metric computation. Defaults to all papers.')
     p.add_argument('--export-tables', action='store_true', help='Export all intermediate computed tables.')
-    p.add_argument('--progress-interval', type=int, default=25,
-                   help='Print one focal-paper progress update every N papers while computing metrics. Default: 25.')
+    p.add_argument('--progress-interval', type=int, default=100,
+                   help='Print one focal-paper progress update every N papers while computing metrics. Default: 100.')
+    p.add_argument('--min-controls', type=int, default=50,
+                   help='Minimum controls requested for matched-control percentile matching. Default: 50.')
+    p.add_argument('--min-refs', type=int, default=5,
+                   help='Minimum prior references required for strong-mode publication-day indicators. Default: 5.')
+    p.add_argument('--max-papers', type=int, default=None,
+                   help='Optional debug cap for strong-mode metric computation.')
+    p.add_argument('--bootstrap-reps', type=int, default=300,
+                   help='Bootstrap replicates for strong-mode indicator/future correlations. Default: 300.')
+    p.add_argument('--seed', type=int, default=2028,
+                   help='Random seed for strong-mode bootstrap diagnostics.')
+    p.add_argument('--reference-closure', choices=['auto', 'off', 'required'], default='auto',
+                   help='Reference-closure policy for strong mode. auto audits locally and materializes closure only with --online-expand.')
+    p.add_argument('--reference-closure-cap', type=int, default=50000,
+                   help='Maximum out-of-corpus reference IDs to materialize per domain when --online-expand is set.')
+    p.add_argument('--closure-coverage-target', type=float, default=0.80,
+                   help='Weighted reference coverage target for closure materialization. Default: 0.80.')
+    p.add_argument('--online-expand', action='store_true',
+                   help='Fetch OpenAlex metadata for reference-closure nodes. Disabled by default for reproducibility.')
+    p.add_argument('--no-reuse-cache', action='store_true',
+                   help='Force recomputation of strong-mode metrics even when matching exported tables exist.')
     p.add_argument('--no-prepare-input', action='store_true',
                    help='Read --data-dir directly instead of first preparing normalized Fig. 2 input in --out-dir.')
     p.add_argument('--fig1-config', type=Path, default=None,
@@ -1451,7 +2985,33 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     progress = not args.quiet
-    progress_log(f'Starting Fig. 2 empirical pipeline: panel={args.panel}', progress)
+    progress_log(f'Starting Fig. 2 empirical pipeline: panel={args.panel}, evidence_mode={args.evidence_mode}', progress)
+    args.out_dir.mkdir(parents=True, exist_ok=True)
+    if args.evidence_mode == 'strong':
+        cached = load_strong_cache_if_valid(args, progress)
+        if cached is None:
+            raw, comp = build_strong_evidence_data(args, progress)
+            save_strong_run_config(args)
+        else:
+            raw, comp = cached
+        if args.export_tables:
+            progress_log('Exporting strong-evidence intermediate tables...', progress)
+            export_tables(comp, args.out_dir)
+            save_strong_run_config(args)
+            progress_log('Strong-evidence tables exported.', progress)
+        if args.panel == 'all':
+            outpath = args.out_dir / 'fig2_empirical_full.png'
+            progress_log(f'Assembling strong-mode full figure: {outpath}', progress)
+            assemble_figure(raw, comp, args.focus_paper_id, args.future_tau, outpath)
+            progress_log(f'Saved full figure: {outpath}', progress)
+        else:
+            outpath = args.out_dir / f'panel_{args.panel}.png'
+            progress_log(f'Drawing strong-mode panel {args.panel}: {outpath}', progress)
+            save_single_panel(args.panel, raw, comp, args.focus_paper_id, args.future_tau, outpath)
+            progress_log(f'Saved panel {args.panel}: {outpath}', progress)
+        progress_log('Done.', progress)
+        return
+
     source_data_dir = args.data_dir
     if not args.no_prepare_input:
         source_data_dir = prepare_fig2_input_data(
@@ -1479,6 +3039,7 @@ def main() -> None:
     comp = compute_all_metrics(
         raw,
         focal_ids=focal_ids,
+        min_controls=args.min_controls,
         progress=progress,
         progress_interval=args.progress_interval,
     ) if needs_metrics else None
@@ -1493,12 +3054,12 @@ def main() -> None:
             raise ValueError('Full figure requires computed metrics.')
         outpath = args.out_dir / 'fig2_empirical_full.png'
         progress_log(f'Assembling full figure: {outpath}', progress)
-        assemble_figure(raw, comp, args.focus_paper_id, outpath)
+        assemble_figure(raw, comp, args.focus_paper_id, args.future_tau, outpath)
         progress_log(f'Saved full figure: {outpath}', progress)
     else:
         outpath = args.out_dir / f'panel_{args.panel}.png'
         progress_log(f'Drawing panel {args.panel}: {outpath}', progress)
-        save_single_panel(args.panel, raw, comp, args.focus_paper_id, outpath)
+        save_single_panel(args.panel, raw, comp, args.focus_paper_id, args.future_tau, outpath)
         progress_log(f'Saved panel {args.panel}: {outpath}', progress)
     progress_log('Done.', progress)
 

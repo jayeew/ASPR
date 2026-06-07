@@ -10,3 +10,7 @@ outputs/checkpoints/
 outputs/downloads/
 outputs/graphrag/
 outputs/logs/
+
+# Large generated Fig. 3 input tables; keep local, do not push to GitHub.
+outputs/kg_perturbation_fig3/strong_evidence_tau10/fig3_input/multi_domain/citations.csv
+outputs/kg_perturbation_fig3/strong_evidence_tau10/fig3_input/multi_domain/works.csv
