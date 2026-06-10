@@ -1,0 +1,151 @@
+{
+  "overall_pass": false,
+  "status_label": "underpowered multi-domain diagnostic run",
+  "target_version": "RGPM structural residual over primary future graph deltas",
+  "thresholds": {
+    "active_graph_deltas_min": 5,
+    "active_delta_z_cap_hit_rate_max": 0.05,
+    "oof_spearman_min": 0.25,
+    "learned_vs_equal_min": 0.03,
+    "learned_vs_best_single_min": 0.0,
+    "score_iqr_min": 0.35
+  },
+  "data_requirements": {
+    "domains_min": 20,
+    "domains_target_max": 40,
+    "papers_per_domain_min": 3000,
+    "total_papers_min": 60000,
+    "landmark_or_high_cases_per_domain_min": 100,
+    "high_perturbation_quantile": 0.9,
+    "control_median_min": 50,
+    "relaxed_control_tier_rate_max": 0.15
+  },
+  "checks": {
+    "active_graph_deltas": 0,
+    "active_delta_z_cap_hit_rate": 0,
+    "oof_spearman": 0,
+    "learned_vs_equal": 1,
+    "learned_vs_best_single": 1,
+    "score_iqr": 0,
+    "mean_delta_reliability": 0,
+    "domain_count": 0,
+    "total_papers": 1,
+    "papers_per_domain": 1,
+    "landmark_or_high_cases_per_domain": 1,
+    "matched_control_median": 1,
+    "matched_control_relaxation": 1
+  },
+  "association_checks": {
+    "active_graph_deltas": 0,
+    "active_delta_z_cap_hit_rate": 0,
+    "oof_spearman": 0,
+    "learned_vs_equal": 1,
+    "learned_vs_best_single": 1,
+    "score_iqr": 0,
+    "mean_delta_reliability": 0
+  },
+  "data_checks": {
+    "domain_count": 0,
+    "total_papers": 1,
+    "papers_per_domain": 1,
+    "landmark_or_high_cases_per_domain": 1,
+    "matched_control_median": 1,
+    "matched_control_relaxation": 1
+  },
+  "data_profile": {
+    "n_domains": 4,
+    "total_papers": 83944,
+    "min_papers_per_domain": 20986,
+    "min_landmark_or_high_cases_per_domain": 2109,
+    "control_median_min_by_domain": 247.0,
+    "relaxed_control_tier_rate_max_by_domain": 0.030020013342228154,
+    "domains": [
+      "crispr",
+      "graphene_2d_materials",
+      "ipsc_reprogramming",
+      "transformer_foundation_models"
+    ],
+    "domains_below_paper_min": [],
+    "domains_below_landmark_or_high_case_min": [],
+    "domains_with_relaxed_controls": []
+  },
+  "domain_adequacy": [
+    {
+      "domain": "crispr",
+      "n_papers": 20986,
+      "n_landmarks": 11,
+      "n_high_perturbation_cases": 2099,
+      "n_landmark_or_high_cases": 2109,
+      "high_perturbation_quantile": 0.9,
+      "high_perturbation_threshold": 0.8999868960259221,
+      "control_median": 247.0,
+      "relaxed_control_tier_rate": 0.030020013342228154,
+      "pass_papers_per_domain_min": 1,
+      "pass_landmark_or_high_cases_min": 1,
+      "pass_control_median_min": 1,
+      "pass_relaxed_control_tier_rate_max": 1
+    },
+    {
+      "domain": "graphene_2d_materials",
+      "n_papers": 20986,
+      "n_landmarks": 11,
+      "n_high_perturbation_cases": 2099,
+      "n_landmark_or_high_cases": 2109,
+      "high_perturbation_quantile": 0.9,
+      "high_perturbation_threshold": 0.8999868960259221,
+      "control_median": 247.0,
+      "relaxed_control_tier_rate": 0.030020013342228154,
+      "pass_papers_per_domain_min": 1,
+      "pass_landmark_or_high_cases_min": 1,
+      "pass_control_median_min": 1,
+      "pass_relaxed_control_tier_rate_max": 1
+    },
+    {
+      "domain": "ipsc_reprogramming",
+      "n_papers": 20986,
+      "n_landmarks": 11,
+      "n_high_perturbation_cases": 2099,
+      "n_landmark_or_high_cases": 2109,
+      "high_perturbation_quantile": 0.9,
+      "high_perturbation_threshold": 0.9000047650814829,
+      "control_median": 247.0,
+      "relaxed_control_tier_rate": 0.030020013342228154,
+      "pass_papers_per_domain_min": 1,
+      "pass_landmark_or_high_cases_min": 1,
+      "pass_control_median_min": 1,
+      "pass_relaxed_control_tier_rate_max": 1
+    },
+    {
+      "domain": "transformer_foundation_models",
+      "n_papers": 20986,
+      "n_landmarks": 11,
+      "n_high_perturbation_cases": 2099,
+      "n_landmark_or_high_cases": 2109,
+      "high_perturbation_quantile": 0.9,
+      "high_perturbation_threshold": 0.9000047650814829,
+      "control_median": 247.0,
+      "relaxed_control_tier_rate": 0.030020013342228154,
+      "pass_papers_per_domain_min": 1,
+      "pass_landmark_or_high_cases_min": 1,
+      "pass_control_median_min": 1,
+      "pass_relaxed_control_tier_rate_max": 1
+    }
+  ],
+  "active_graph_deltas": [
+    "community_reach",
+    "cross_community_adoption",
+    "modularity_shock"
+  ],
+  "n_active_graph_deltas": 3,
+  "active_delta_z_cap_hit_rate_max": 0.22747307728962166,
+  "mean_delta_reliability": 0.0,
+  "learned_oof_spearman": 0.23564563275512662,
+  "equal_weight_oof_spearman": 0.18926486935586678,
+  "best_single_oof_spearman": 0.1592385783565346,
+  "learned_vs_equal_delta": 0.04638076339925984,
+  "learned_vs_best_single_delta": 0.07640705439859202,
+  "nonlinear_upper_bound_oof_spearman": 0.3099235768370031,
+  "nonlinear_vs_linear_delta": 0.07427794408187649,
+  "nonlinear_diagnostic_interpretation": "nonlinear_signal_above_linear_simplex",
+  "score_oof_iqr": 0.30192324409800964
+}

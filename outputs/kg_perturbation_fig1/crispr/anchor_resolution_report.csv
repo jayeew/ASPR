@@ -1,0 +1,4 @@
+label,year,openalex_id,doi,arxiv_id,title,resolved,resolved_id,resolved_title,reference_stub,method
+Jinek 2012,2012,W2045435533,10.1126/science.1225829,,A Programmable Dual-RNA-Guided DNA Endonuclease in Adaptive Bacterial Immunity,1,https://openalex.org/W2045435533,A Programmable Dual-RNA–Guided DNA Endonuclease in Adaptive Bacterial Immunity,0,openalex_id
+Cong/Mali 2013,2013,W2064815984,10.1126/science.1231143,,Multiplex Genome Engineering Using CRISPR/Cas Systems,1,https://openalex.org/W2064815984,Multiplex Genome Engineering Using CRISPR/Cas Systems,0,openalex_id
+Mali 2013,2013,W2003171404,10.1126/science.1232033,,RNA-Guided Human Genome Engineering via Cas9,1,https://openalex.org/W2003171404,RNA-Guided Human Genome Engineering via Cas9,0,openalex_id

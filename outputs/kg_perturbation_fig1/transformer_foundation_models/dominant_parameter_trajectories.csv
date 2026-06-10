@@ -1,21 +1,21 @@
 parameter,label,window_index,window,standardized_value
-B,$B$ (bridge centrality),1,2002-2006,-1.5012043656137612
-B,$B$ (bridge centrality),2,2007-2011,-0.793299042509389
-B,$B$ (bridge centrality),3,2012-2016,0.3136747587338663
-B,$B$ (bridge centrality),4,2017-2021,1.1589805704682759
-B,$B$ (bridge centrality),5,2022-2026,0.8218480789210079
-RTD,RTD (reference target diversity),1,2002-2006,-1.505595547824143
-RTD,RTD (reference target diversity),2,2007-2011,-0.7331847688677109
-RTD,RTD (reference target diversity),3,2012-2016,0.3707942629845457
-RTD,RTD (reference target diversity),4,2017-2021,1.3298767264345839
-RTD,RTD (reference target diversity),5,2022-2026,0.538109327272724
-Uzzi,Uzzi novelty (-p10),1,2002-2006,-1.834043810601433
-Uzzi,Uzzi novelty (-p10),2,2007-2011,0.00297609531082928
-Uzzi,Uzzi novelty (-p10),3,2012-2016,0.21937002540093212
-Uzzi,Uzzi novelty (-p10),4,2017-2021,1.1862213688007377
-Uzzi,Uzzi novelty (-p10),5,2022-2026,0.4254763210889341
+B,$B$ (bridge centrality),1,2002-2006,-0.9360913263284499
+B,$B$ (bridge centrality),2,2007-2011,-0.9731886324210409
+B,$B$ (bridge centrality),3,2012-2016,-0.5029380369789583
+B,$B$ (bridge centrality),4,2017-2021,1.2906442449531481
+B,$B$ (bridge centrality),5,2022-2024,1.1215737507753012
+RTD,RTD (reference target diversity),1,2002-2006,-0.9121771432700172
+RTD,RTD (reference target diversity),2,2007-2011,-0.9270303272095864
+RTD,RTD (reference target diversity),3,2012-2016,-0.5327865482261741
+RTD,RTD (reference target diversity),4,2017-2021,1.5111956512401852
+RTD,RTD (reference target diversity),5,2022-2024,0.8607983674655927
+Uzzi,Uzzi novelty (-p10),1,2002-2006,-1.7544332266825406
+Uzzi,Uzzi novelty (-p10),2,2007-2011,0.12948648428758486
+Uzzi,Uzzi novelty (-p10),3,2012-2016,-0.17570524999364875
+Uzzi,Uzzi novelty (-p10),4,2017-2021,1.2561006227328417
+Uzzi,Uzzi novelty (-p10),5,2022-2024,0.5445513696557625
 DeltaQ,$\Delta Q$ directionality,1,2002-2006,0.0
-DeltaQ,$\Delta Q$ directionality,2,2007-2011,-0.8458114065274972
-DeltaQ,$\Delta Q$ directionality,3,2012-2016,1.6586750809341184
-DeltaQ,$\Delta Q$ directionality,4,2017-2021,1.7997454078968005
-DeltaQ,$\Delta Q$ directionality,5,2022-2026,0.6225732445912673
+DeltaQ,$\Delta Q$ directionality,2,2007-2011,0.7627412026997928
+DeltaQ,$\Delta Q$ directionality,3,2012-2016,1.1904575039078242
+DeltaQ,$\Delta Q$ directionality,4,2017-2021,-1.602199635022176
+DeltaQ,$\Delta Q$ directionality,5,2022-2024,-0.6744782210379646

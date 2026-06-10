@@ -1,6 +1,19 @@
 domain_name: "Graphene and 2D materials"
 slug: "graphene_2d_materials"
 search_query: '("graphene" OR "single-layer graphite" OR "atomically thin carbon" OR "two-dimensional material" OR "two-dimensional materials" OR "2D materials" OR "transition metal dichalcogenide" OR "MoS2" OR "van der Waals heterostructure" OR "van der Waals heterostructures")'
+search_groups:
+  - name: "graphene_core"
+    query: '("graphene" OR "single-layer graphite" OR "atomically thin carbon" OR "monolayer graphene" OR "graphene oxide" OR "reduced graphene oxide")'
+    max_works_per_window: 760
+  - name: "carbon_precursors"
+    query: '("graphite exfoliation" OR "carbon nanotube" OR "fullerene" OR "carbon nanomaterial" OR "thin carbon film")'
+    max_works_per_window: 420
+  - name: "2d_materials"
+    query: '("two-dimensional material" OR "two-dimensional materials" OR "2D materials" OR "monolayer MoS2" OR "two-dimensional MoS2" OR "transition metal dichalcogenide")'
+    max_works_per_window: 620
+  - name: "vdw_devices"
+    query: '("van der Waals heterostructure" OR "van der Waals heterostructures" OR "graphene transistor" OR "graphene sensor" OR "graphene photodetector" OR "graphene supercapacitor")'
+    max_works_per_window: 620
 start_year: 1990
 end_year: 2014
 window_size: 5
@@ -12,8 +25,64 @@ max_anchor_citers: 800
 work_types: ["article", "preprint", "review"]
 anchors:
   - label: "Novoselov 2004"
+    openalex_id: "W2058122340"
     doi: "10.1126/science.1102896"
+    title: "Electric Field Effect in Atomically Thin Carbon Films"
     year: 2004
+relevance_filter:
+  enabled: true
+  keep_anchor_citers: true
+  strong_positive_keywords:
+    - "graphene"
+    - "single-layer graphite"
+    - "atomically thin carbon"
+    - "monolayer graphene"
+    - "graphene oxide"
+    - "two-dimensional material"
+    - "2d material"
+    - "van der waals heterostructure"
+    - "transition metal dichalcogenide"
+    - "monolayer mos2"
+    - "two-dimensional mos2"
+  positive_keywords:
+    - "graphene"
+    - "graphite"
+    - "atomically thin"
+    - "single-layer"
+    - "monolayer"
+    - "carbon nanotube"
+    - "fullerene"
+    - "carbon nanomaterial"
+    - "two-dimensional material"
+    - "2d material"
+    - "transition metal dichalcogenide"
+    - "tmd"
+    - "mos2"
+    - "ws2"
+    - "wse2"
+    - "van der waals"
+    - "heterostructure"
+    - "quantum hall"
+    - "dirac"
+    - "graphene oxide"
+    - "supercapacitor"
+    - "optoelectronic"
+  negative_primary_topics:
+    - "astrophysical"
+    - "tribology"
+    - "lubricants"
+    - "protein interaction"
+    - "hydrodesulfurization"
+    - "nonlocal and gradient elasticity"
+    - "machines that walk"
+  negative_keywords:
+    - "astrophysical"
+    - "protein structure"
+    - "lubrication"
+    - "abrasive wear"
+    - "hydrodesulfurization"
+    - "thiophene coordination"
+    - "adaptive suspension vehicle"
 api:
   sleep_seconds: 0.1
   max_retries: 6
@@ -28,6 +97,7 @@ graph:
   random_seed: 42
 metrics:
   curve_mode: "raw"
+  signed_compression: true
   betweenness_sample: 250
   semantic_sample: 600
 plot:
@@ -37,10 +107,16 @@ plot:
   fig_height_single: 11.0
   dpi: 300
   display_mode: "cluster_schematic"
-  display_max_topics: 8
+  display_max_topics: "auto"
+  display_max_topics_auto_cap: 8
+  adaptive_display_topics: true
+  event_topics_per_spec: 1
+  event_max_topics: 5
   display_min_topic_size: 8
-  display_max_backbone_edges: 15
-  display_extra_edges: 6
+  display_max_backbone_edges: 18
+  display_extra_edges: 8
+  edge_gain_highlight_ratio: 0.12
+  edge_gain_highlight_min: 4.0
   cluster_radius_min: 0.135
   cluster_radius_max: 0.235
   max_representative_papers: 6
@@ -54,7 +130,9 @@ plot:
   metric_scale: "unit"
   metric_panel_title: "Dominant parameter trajectories explaining the graph transitions in panel a"
   metric_y_label: "Standardized\nparameter value"
-  metric_landmark_label: ""
+  metric_landmark_label: "Graphene isolation"
+  landmark_focus_year: 2004
+  top_landmark_label: "2004\ngraphene isolation"
   dominant_parameter_ylim: [-1.5, 1.5]
   dominant_parameters:
     - key: "RS"
@@ -114,10 +192,21 @@ plot:
   show_retrieval_date: false
   panel_captions:
     - "Carbon nanomaterial priors"
+    - "Graphite and nanotube consolidation"
     - "Graphene isolation shock"
     - "2D-materials expansion"
-    - "van der Waals reconfiguration"
-    - "Compression into device hubs"
+    - "Device and heterostructure hubs"
+  event_topic_keywords:
+    - name: "Graphene\nisolation"
+      keywords: ["graphene", "single-layer graphite", "atomically thin carbon", "electric field effect", "monolayer"]
+    - name: "Electronic\ntransport"
+      keywords: ["transport", "mobility", "quantum hall", "dirac", "carrier", "conductance"]
+    - name: "2D materials\nexpansion"
+      keywords: ["two-dimensional", "2d material", "transition metal dichalcogenide", "monolayer mos2", "tmd"]
+    - name: "van der Waals\nheterostructures"
+      keywords: ["van der waals", "heterostructure", "stacked", "twisted", "moire"]
+    - name: "Devices &\nenergy"
+      keywords: ["device", "transistor", "sensor", "photodetector", "supercapacitor", "electrode"]
   topic_layout_templates:
     - name: "Carbon\nprecursors"
       x: -0.78

@@ -1,67 +1,189 @@
 domain_name: "Transformer and foundation models"
 slug: "transformer_foundation_models"
-search_query: '("statistical machine translation" OR "phrase-based machine translation" OR "language model" OR "word embedding" OR "sequence-to-sequence" OR "attention mechanism" OR "neural machine translation" OR "self-attention" OR "transformer architecture" OR "attention is all you need" OR "pre-trained language model" OR "BERT" OR "large language model" OR "foundation model")'
+search_query: '("statistical machine translation" OR "neural machine translation" OR "transformer" OR "BERT" OR "large language model" OR "foundation model")'
+search_groups:
+  - name: "core_nlp"
+    query: '("statistical machine translation" OR "phrase-based machine translation" OR "neural machine translation" OR "sequence-to-sequence" OR "word embedding" OR "language model")'
+    max_works_per_window: 520
+  - name: "transformer_bert"
+    query: '("self-attention" OR "multi-head attention" OR "transformer" OR "attention is all you need" OR "BERT" OR "pre-trained language model" OR "masked language model")'
+    max_works_per_window: 700
+  - name: "llm_foundation"
+    query: '("large language model" OR "foundation model" OR "GPT-3" OR "ChatGPT" OR "GPT-4" OR "instruction tuning" OR "in-context learning" OR "LLaMA")'
+    max_works_per_window: 760
+  - name: "multimodal_foundation"
+    query: '("vision-language" OR "multimodal foundation model" OR "CLIP" OR "vision transformer" OR "diffusion model" OR "generative AI")'
+    max_works_per_window: 520
 start_year: 2002
-end_year: 2026
+end_year: 2024
 window_size: 5
+custom_windows:
+  - [2002, 2006]
+  - [2007, 2011]
+  - [2012, 2016]
+  - [2017, 2021]
+  - [2022, 2024]
+snapshot_years: [2006, 2011, 2016, 2021, 2024]
 language: "en"
 include_abstract: false
 max_works_per_window: 1600
 fetch_anchor_citers: true
-max_anchor_citers: 800
+max_anchor_citers: 900
 work_types: ["article", "preprint", "review"]
 anchors:
   - label: "Vaswani 2017"
+    openalex_id: "W2963403868"
     doi: "10.48550/arXiv.1706.03762"
+    arxiv_id: "1706.03762"
+    title: "Attention Is All You Need"
     year: 2017
+    cited_by_count: 125000
+    primary_topic: "Natural Language Processing Techniques"
+    topics: ["Natural Language Processing Techniques", "Machine Translation", "Transformer", "Self-attention"]
+    keywords: ["Transformer", "self-attention", "machine translation"]
+    allow_reference_stub: true
   - label: "BERT 2018"
-    doi: "10.48550/arXiv.1810.04805"
+    openalex_id: "W2963341956"
+    doi: "10.18653/v1/N19-1423"
+    arxiv_id: "1810.04805"
+    title: "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding"
     year: 2018
+    primary_topic: "Natural Language Processing Techniques"
+    topics: ["Natural Language Processing Techniques", "Topic Modeling", "Language Model Pretraining"]
+    keywords: ["BERT", "pretraining", "masked language model"]
   - label: "GPT-3 2020"
+    openalex_id: "W3030163527"
     doi: "10.48550/arXiv.2005.14165"
+    arxiv_id: "2005.14165"
+    title: "Language Models are Few-Shot Learners"
     year: 2020
+    primary_topic: "Topic Modeling"
+    topics: ["Topic Modeling", "Natural Language Processing Techniques", "Large Language Models"]
+    keywords: ["GPT-3", "large language model", "in-context learning"]
+relevance_filter:
+  enabled: true
+  keep_anchor_citers: true
+  strong_positive_keywords:
+    - "natural language processing"
+    - "computational linguistics"
+    - "machine translation"
+    - "large language model"
+    - "foundation model"
+    - "self-attention"
+    - "multi-head attention"
+    - "bert"
+    - "gpt"
+    - "chatgpt"
+    - "llm"
+    - "in-context learning"
+    - "instruction tuning"
+    - "vision-language"
+    - "vision transformer"
+  positive_keywords:
+    - "natural language processing"
+    - "computational linguistics"
+    - "language model"
+    - "large language model"
+    - "foundation model"
+    - "machine translation"
+    - "sequence-to-sequence"
+    - "seq2seq"
+    - "word embedding"
+    - "contextual embedding"
+    - "attention"
+    - "self-attention"
+    - "multi-head"
+    - "transformer"
+    - "bert"
+    - "gpt"
+    - "chatgpt"
+    - "llama"
+    - "instruction tuning"
+    - "in-context learning"
+    - "prompt"
+    - "vision-language"
+    - "multimodal"
+    - "clip"
+    - "vision transformer"
+    - "diffusion model"
+    - "generative ai"
+  negative_primary_topics:
+    - "biomedical text mining"
+    - "protein"
+    - "rna"
+    - "drug discovery"
+    - "materials"
+    - "battery"
+    - "power systems"
+    - "time series analysis"
+    - "anomaly detection"
+    - "medical imaging"
+    - "diabetic foot"
+    - "haptic"
+    - "robot"
+    - "remote sensing"
+    - "quantum"
+    - "psychology"
+  negative_keywords:
+    - "protein folding"
+    - "rna"
+    - "genomics"
+    - "molecular"
+    - "battery"
+    - "photovoltaic"
+    - "diabetic"
+    - "haptic terrain"
+    - "sensor fault"
 api:
   sleep_seconds: 0.1
   max_retries: 6
   timeout_seconds: 60
   per_page: 100
 graph:
-  max_papers_for_graph: 4500
-  max_edges: 150000
+  max_papers_for_graph: 5200
+  max_edges: 180000
   min_shared_references: 1
   min_cocitations: 1
-  community_resolution: 2.2
+  community_resolution: 2.15
   random_seed: 42
 metrics:
   curve_mode: "raw"
-  betweenness_sample: 250
-  semantic_sample: 600
+  signed_compression: true
+  betweenness_sample: 300
+  semantic_sample: 700
 plot:
   title: "Fig. 1 | Citation knowledge-graph perturbation after a landmark innovation"
-  subtitle: "Example domain: Transformer and foundation models. Real OpenAlex data; publication-style display uses data-derived topic snapshots."
-  fig_width_single: 22
-  fig_height_single: 11.0
+  subtitle: "Example domain: Transformer and foundation models. Real OpenAlex data; display highlights data-derived topic snapshots and post-GPT-3 expansion."
+  fig_width_single: 25
+  fig_height_single: 11.2
   dpi: 300
   display_mode: "cluster_schematic"
-  display_max_topics: 8
-  display_min_topic_size: 8
-  display_max_backbone_edges: 15
-  display_extra_edges: 6
-  cluster_radius_min: 0.135
-  cluster_radius_max: 0.235
+  display_max_topics: "auto"
+  display_max_topics_auto_cap: 9
+  adaptive_display_topics: true
+  event_topics_per_spec: 1
+  event_max_topics: 6
+  display_min_topic_size: 6
+  display_max_backbone_edges: 22
+  display_extra_edges: 10
+  edge_gain_highlight_ratio: 0.12
+  edge_gain_highlight_min: 4.0
+  cluster_radius_min: 0.125
+  cluster_radius_max: 0.225
   max_representative_papers: 6
   min_papers_per_display_topic: 3
-  max_labels_per_panel: 8
-  node_size_min: 64
+  max_labels_per_panel: 9
+  node_size_min: 58
   show_internal_cluster_edges: true
   show_time_axis: true
   show_panel_captions: true
+  top_landmark_label: "2017-2020\nTransformer/BERT/GPT-3"
   metric_x_axis: "years"
   metric_scale: "unit"
   metric_panel_title: "Dominant parameter trajectories explaining the graph transitions in panel a"
   metric_y_label: "Standardized\nparameter value"
-  metric_landmark_label: ""
-  landmark_focus_year: 2017
+  metric_landmark_label: "GPT-3 / LLM boom"
+  landmark_focus_year: 2020
   dominant_parameter_ylim: [-1.5, 1.5]
   dominant_parameters:
     - key: "B"
@@ -74,37 +196,37 @@ plot:
       label: "$\\Delta Q$ directionality"
   parameter_callouts:
     - parameter: "B"
-      window: "landmark"
+      window: "2017-2021"
       text: "architecture-level\nbridging"
-      dx: -4.0
+      dx: -3.0
       dy: 0.35
       color: "#1D4ED8"
     - parameter: "Uzzi"
-      window: "landmark"
-      text: "atypical model\nrecombination"
-      dx: 2.2
+      window: "2017-2021"
+      text: "scaling and\nfew-shot recombination"
+      dx: 1.7
       dy: 0.35
       color: "#7C3AED"
     - parameter: "RTD"
-      window: "2020-2024"
-      text: "standardization into\nfoundation-model hubs"
-      dx: -3.8
+      window: "2022-2024"
+      text: "LLM boom spreads\nacross applications"
+      dx: -3.2
       dy: 0.30
       color: "#F97316"
   parameter_interpretation_boxes:
     - title: "Bridging"
       formula: "B up + RTD up"
-      description: "Architecture-level communities connect"
+      description: "Architecture and pretraining communities connect"
       icon: "bridge"
       color: "#1D4ED8"
     - title: "Novelty"
       formula: "Uzzi up"
-      description: "Attention-only recombination is atypical"
+      description: "Scaling and prompting recombine references"
       icon: "novelty"
       color: "#7C3AED"
-    - title: "Standardization"
-      formula: "Uzzi down; B high"
-      description: "Convergence into foundation-model hubs"
+    - title: "Expansion"
+      formula: "edge gain + topic birth"
+      description: "LLM applications add visible mass"
       icon: "target"
       color: "#F97316"
   parameter_box_width: 0.18
@@ -121,10 +243,21 @@ plot:
   show_retrieval_date: false
   panel_captions:
     - "Statistical NLP priors"
-    - "Phrase-based MT and LMs"
-    - "Neural sequence consolidation"
-    - "Innovation shock: self-attention"
-    - "Compression into foundation models"
+    - "Phrase-based MT and embeddings"
+    - "Neural seq2seq consolidation"
+    - "Transformer/BERT/GPT-3 shock"
+    - "ChatGPT/GPT-4 LLM boom"
+  event_topic_keywords:
+    - name: "Transformer /\nself-attention"
+      keywords: ["transformer", "self-attention", "self attention", "multi-head", "multihead", "attention is all you need", "positional encoding"]
+    - name: "BERT /\npretraining"
+      keywords: ["bert", "pretraining", "pre-trained", "masked language model", "contextual", "elmo", "representation learning"]
+    - name: "GPT /\nLLMs"
+      keywords: ["large language model", "large language models", "llm", "gpt", "in-context", "few-shot", "prompt", "instruction tuning", "rlhf", "llama"]
+    - name: "Foundation &\nmultimodal"
+      keywords: ["foundation model", "foundation models", "multimodal", "vision-language", "clip", "diffusion", "vision transformer", "generative ai"]
+    - name: "LLM\napplications"
+      keywords: ["chatgpt", "gpt-4", "agent", "tool use", "retrieval augmented", "rag", "code generation", "evaluation", "alignment"]
   topic_layout_templates:
     - name: "Statistical MT\n& language models"
       x: -0.78
@@ -153,8 +286,12 @@ plot:
     - name: "Large language\nmodels"
       x: 0.82
       y: -0.20
-      keywords: ["large language model", "large language models", "llm", "gpt", "generative pre-trained", "prompt", "in-context", "instruction tuning"]
+      keywords: ["large language model", "large language models", "llm", "gpt", "generative pre-trained", "prompt", "in-context", "instruction tuning", "rlhf"]
     - name: "Foundation &\nmultimodal models"
       x: 0.24
       y: -0.72
-      keywords: ["foundation model", "foundation models", "multimodal", "vision-language", "clip", "diffusion", "generative ai", "alignment"]
+      keywords: ["foundation model", "foundation models", "multimodal", "vision-language", "clip", "diffusion", "vision transformer", "generative ai", "alignment"]
+    - name: "LLM\napplications"
+      x: -0.52
+      y: -0.68
+      keywords: ["chatgpt", "gpt-4", "agent", "tool use", "retrieval augmented", "rag", "code generation", "benchmark", "evaluation", "education", "medicine"]

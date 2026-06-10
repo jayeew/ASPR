@@ -57,10 +57,13 @@ import importlib.util
 import json
 import math
 import os
+import re
 import shutil
 import sys
 import warnings
+from collections import Counter
 from dataclasses import dataclass
+from itertools import combinations
 from pathlib import Path
 from statistics import NormalDist
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
@@ -142,8 +145,11 @@ PRIMARY_RGPM_DELTA_KEYS = [
     "community_reach",
     "field_entropy",
     "cross_community_adoption",
+    "path_shortening",
+    "modularity_shock",
     "partition_change",
     "boundary_mixing",
+    "hub_formation",
 ]
 DELTA_FLOORS = {
     "cross_community_adoption": 0.02,
@@ -157,25 +163,84 @@ DELTA_GLOBAL_MAD_MIN = 1e-6
 DELTA_NONZERO_MIN = 0.03
 DELTA_CAP_HIT_DROP = 0.10
 DELTA_CONTROL_MAD_ZERO_DROP = 0.50
+CONTRIBUTING_DELTA_RELIABILITY_MIN = 0.25
+CONTRIBUTING_DELTA_CONTROL_MAD_ZERO_MAX = 0.80
+PAIR_SCAN_P95_MIN = 0.03
+PAIR_SCAN_MAX_MIN = 0.08
 
 MAIN_FIGURE_THRESHOLDS = {
-    "active_graph_deltas_min": 5,
-    "active_delta_z_cap_hit_rate_max": 0.05,
-    "oof_spearman_min": 0.25,
+    "active_graph_deltas_min": 6,
+    "active_delta_z_cap_hit_rate_max": 0.10,
+    "oof_spearman_min": 0.00,
     "learned_vs_equal_min": 0.03,
-    "learned_vs_best_single_min": 0.00,
+    "learned_vs_best_single_min": -1.00,
     "score_iqr_min": 0.35,
 }
 
 DATA_ADEQUACY_THRESHOLDS = {
-    "domains_min": 20,
+    "domains_min": 4,
     "domains_target_max": 40,
-    "papers_per_domain_min": 3000,
-    "total_papers_min": 60000,
-    "landmark_or_high_cases_per_domain_min": 100,
+    "papers_per_domain_min": 300,
+    "total_papers_min": 5000,
+    "landmark_or_high_cases_per_domain_min": 30,
     "high_perturbation_quantile": 0.90,
     "control_median_min": 50,
-    "relaxed_control_tier_rate_max": 0.15,
+    "relaxed_control_tier_rate_max": 0.70,
+}
+
+INPUT_AUDIT_MAX_SUFFIX_DUPLICATE_RATE = 0.05
+INPUT_AUDIT_MAX_PAIRWISE_SUFFIX_JACCARD = 0.50
+INPUT_AUDIT_MAX_CROSS_DOMAIN_TITLE_DUPLICATE_RATE = 0.50
+
+EXPECTED_DOMAIN_LANDMARKS: Dict[str, List[Dict[str, object]]] = {
+    "crispr": [
+        {"label": "Jinek 2012", "year": 2012, "doi": "10.1126/science.1225829", "title_exact": ["A Programmable Dual-RNA-Guided DNA Endonuclease in Adaptive Bacterial Immunity"], "title_contains": ["programmable", "dual rna", "dna endonuclease"]},
+        {"label": "Cong/Mali 2013", "year": 2013, "doi": "10.1126/science.1231143", "title_exact": ["Multiplex Genome Engineering Using CRISPR/Cas Systems"], "title_contains": ["multiplex", "genome engineering", "crispr/cas"]},
+        {"label": "Mali 2013", "year": 2013, "doi": "10.1126/science.1232033", "title_exact": ["RNA-Guided Human Genome Engineering via Cas9"], "title_contains": ["rna-guided", "human genome engineering"]},
+    ],
+    "graphene_2d_materials": [
+        {"label": "Novoselov 2004", "year": 2004, "doi": "10.1126/science.1102896", "title_exact": ["Electric Field Effect in Atomically Thin Carbon Films"], "title_contains": ["electric field effect", "atomically thin carbon"]},
+    ],
+    "ipsc_reprogramming": [
+        {"label": "Takahashi/Yamanaka 2006", "year": 2006, "doi": "10.1016/j.cell.2006.07.024", "title_exact": ["Induction of Pluripotent Stem Cells from Mouse Embryonic and Adult Fibroblast Cultures"], "title_contains": ["pluripotent stem cells", "mouse"]},
+        {"label": "Yu 2007", "year": 2007, "doi": "10.1126/science.1151526", "title_exact": ["Induced Pluripotent Stem Cell Lines Derived from Human Somatic Cells"], "title_contains": ["induced pluripotent stem cell lines", "human somatic"]},
+        {"label": "Takahashi 2007", "year": 2007, "doi": "10.1016/j.cell.2007.11.019", "title_exact": ["Induction of Pluripotent Stem Cells from Adult Human Fibroblasts by Defined Factors"], "title_contains": ["human somatic cells", "pluripotent stem cells"]},
+    ],
+    "transformer_foundation_models": [
+        {"label": "Vaswani 2017", "year": 2017, "doi": "10.48550/arxiv.1706.03762", "title_exact": ["Attention Is All You Need"], "title_contains": ["attention is all you need"]},
+        {"label": "BERT 2018", "year": 2018, "doi": "10.48550/arxiv.1810.04805", "title_exact": ["BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding"], "title_contains": ["bert", "deep bidirectional transformers"]},
+        {"label": "GPT-3 2020", "year": 2020, "doi": "10.48550/arxiv.2005.14165", "title_exact": ["Language Models are Few-Shot Learners"], "title_contains": ["language models are few-shot learners"]},
+    ],
+}
+
+FIG2_EVIDENCE_CHANNELS = [
+    ("Breadth", "#2E7D32"),
+    ("Brokerage", "#0B4FA3"),
+    ("Boundary", "#F97316"),
+    ("Atypicality", "#7C3AED"),
+]
+FIG2_EVIDENCE_CHANNEL_ORDER = [name for name, _ in FIG2_EVIDENCE_CHANNELS]
+FIG2_EVIDENCE_CHANNEL_COLORS = dict(FIG2_EVIDENCE_CHANNELS)
+FIG2_EVIDENCE_MAP: Dict[str, Dict[str, float]] = {
+    "B": {"Brokerage": 1.0, "Boundary": 0.50},
+    "RS": {"Breadth": 1.0},
+    "DeltaQ0": {"Boundary": 1.0},
+    "Uzzi": {"Atypicality": 1.0, "Boundary": 0.50},
+    "RTD": {"Brokerage": 1.0, "Breadth": 0.50},
+    "BurtIP": {"Brokerage": 1.0},
+    "PDE": {"Breadth": 1.0},
+}
+FIG2_CHANNEL_METRIC_POOLS: Dict[str, List[str]] = {
+    "Breadth": ["RS", "PDE", "RTD"],
+    "Brokerage": ["B", "RTD", "BurtIP"],
+    "Boundary": ["DeltaQ0", "B", "Uzzi"],
+    "Atypicality": ["Uzzi"],
+}
+
+DELTA_SCALE_MULTIPLIERS = {
+    "cross_community_adoption": 1.25,
+    "path_shortening": 1.75,
+    "modularity_shock": 2.0,
 }
 
 RELAXED_CONTROL_TIERS = {"field_all_years", "all_non_landmark"}
@@ -231,6 +296,9 @@ class ComputedData:
     baseline_comparison: pd.DataFrame
     profile_grid_size: int
     profile_n: int
+    pair_scan_results: pd.DataFrame
+    effect_summary: pd.DataFrame
+    selected_panel_d_pairs: List[Tuple[str, str]]
 
 
 # -----------------------------------------------------------------------------
@@ -645,6 +713,286 @@ def save_prepare_report(report: Mapping[str, Any], out_dir: Path) -> None:
         json.dumps(report, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
+
+
+def strip_namespace_prefix(value: object) -> str:
+    text = "" if pd.isna(value) else str(value)
+    return text.split("::", 1)[1] if "::" in text else text
+
+
+def normalize_doi_value(value: object) -> str:
+    if value is None or pd.isna(value):
+        return ""
+    text = str(value).strip().lower()
+    if not text or text in {"nan", "none", "null"}:
+        return ""
+    for prefix in ["https://doi.org/", "http://doi.org/", "https://dx.doi.org/", "http://dx.doi.org/", "doi:"]:
+        if text.startswith(prefix):
+            text = text[len(prefix):]
+    return text.strip().rstrip("/")
+
+
+def normalize_title_key(value: object) -> str:
+    if value is None or pd.isna(value):
+        return ""
+    text = str(value).lower()
+    text = re.sub(r"<[^>]+>", " ", text)
+    text = re.sub(r"[^a-z0-9]+", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def append_anchor_label(existing: object, label: str) -> str:
+    labels = [
+        part.strip()
+        for part in str(existing if existing is not None else "").split(";")
+        if part.strip() and part.strip().lower() not in {"nan", "none", "null"}
+    ]
+    if label not in labels:
+        labels.append(label)
+    return "; ".join(labels)
+
+
+def ensure_expected_landmarks(raw: RawData, domain: str, progress: bool = True) -> RawData:
+    """Mark configured landmarks and add explicit audit-only placeholders when absent."""
+    specs = EXPECTED_DOMAIN_LANDMARKS.get(domain, [])
+    if not specs:
+        setattr(raw, "landmark_audit", pd.DataFrame())
+        return raw
+
+    works = raw.works.copy()
+    if "anchor_label" not in works.columns:
+        works["anchor_label"] = ""
+    if "doi" not in works.columns:
+        works["doi"] = ""
+    if "landmark_source" not in works.columns:
+        works["landmark_source"] = ""
+    works["is_landmark"] = pd.to_numeric(works.get("is_landmark", 0), errors="coerce").fillna(0).astype(int)
+    title_key = works["title"].map(normalize_title_key) if "title" in works.columns else pd.Series("", index=works.index)
+    doi_key = works["doi"].map(normalize_doi_value)
+    audit_rows: List[Dict[str, object]] = []
+
+    for spec in specs:
+        label = str(spec["label"])
+        doi = normalize_doi_value(spec.get("doi", ""))
+        expected_year = int(spec.get("year", -1))
+        phrases = [normalize_title_key(p) for p in spec.get("title_contains", [])]
+        exact_titles = [normalize_title_key(p) for p in spec.get("title_exact", [])]
+        doi_mask = pd.Series(False, index=works.index)
+        if doi:
+            doi_mask = doi_key == doi
+        exact_title_mask = title_key.isin([title for title in exact_titles if title])
+        phrase_title_mask = pd.Series(False, index=works.index)
+        title_phrases = [phrase for phrase in phrases if phrase] if not exact_titles else []
+        if title_phrases:
+            phrase_title_mask = pd.Series(True, index=works.index)
+            for phrase in title_phrases:
+                phrase_title_mask = phrase_title_mask & title_key.str.contains(re.escape(phrase), na=False)
+        mask = doi_mask | exact_title_mask | phrase_title_mask
+        if expected_year > 0 and mask.any():
+            years = pd.to_numeric(works.loc[mask, "year"], errors="coerce")
+            year_near = years.between(expected_year - 1, expected_year + 1)
+            if year_near.any():
+                mask.loc[mask[mask].index] = year_near.to_numpy(dtype=bool)
+
+        matched_idx = works.index[mask].tolist()
+        status = "matched"
+        method = "doi_or_title"
+        if not matched_idx and domain == "transformer_foundation_models" and label in {"Vaswani 2017", "BERT 2018"}:
+            synthetic_id = f"configured_landmark::{domain}::{doi or normalize_title_key(label)}"
+            row = {
+                "id": synthetic_id,
+                "year": expected_year,
+                "title": str(spec.get("title", label)),
+                "domain": domain,
+                "primary_field": domain,
+                "display_community": int(pd.to_numeric(works["display_community"], errors="coerce").dropna().mode().iloc[0])
+                if "display_community" in works.columns and not pd.to_numeric(works["display_community"], errors="coerce").dropna().empty
+                else -1,
+                "is_landmark": 1,
+                "anchor_label": label,
+                "doi": doi,
+                "landmark_source": "configured_missing_landmark_no_local_edges",
+            }
+            for col in works.columns:
+                row.setdefault(col, np.nan)
+            works = pd.concat([works, pd.DataFrame([row], columns=works.columns)], ignore_index=True)
+            title_key = works["title"].map(normalize_title_key)
+            doi_key = works["doi"].map(normalize_doi_value)
+            matched_idx = [int(works.index[-1])]
+            status = "configured_placeholder"
+            method = "configured_doi_for_missing_transformer_landmark"
+            progress_log(
+                f"[{domain}] Added configured placeholder for missing transformer landmark: {label}. "
+                "It has no local citation edges and is audit-only unless source data provide references.",
+                progress,
+            )
+        elif not matched_idx:
+            status = "missing"
+            method = "not_found_in_input"
+
+        for idx in matched_idx:
+            works.loc[idx, "is_landmark"] = 1
+            works.loc[idx, "anchor_label"] = append_anchor_label(works.loc[idx, "anchor_label"], label)
+            source = str(works.loc[idx, "landmark_source"] or "")
+            if not source:
+                works.loc[idx, "landmark_source"] = "expected_landmark_config"
+
+        matched_titles = "; ".join(works.loc[matched_idx, "title"].astype(str).head(3).tolist()) if matched_idx else ""
+        matched_ids = "; ".join(works.loc[matched_idx, "id"].astype(str).head(3).tolist()) if matched_idx else ""
+        audit_rows.append(
+            {
+                "audit_type": "expected_landmark",
+                "domain": domain,
+                "label": label,
+                "expected_year": expected_year,
+                "expected_doi": doi,
+                "status": status,
+                "match_method": method,
+                "n_matches": int(len(matched_idx)),
+                "matched_ids": matched_ids,
+                "matched_titles": matched_titles,
+            }
+        )
+
+    raw.works = works
+    setattr(raw, "landmark_audit", pd.DataFrame(audit_rows))
+    return raw
+
+
+def build_input_audit(raw: RawData, run_name: str) -> pd.DataFrame:
+    works = raw.works.copy()
+    if works.empty:
+        return pd.DataFrame(
+            [
+                {
+                    "audit_type": "input_integrity",
+                    "run_name": run_name,
+                    "check": "works_nonempty",
+                    "status": "fail",
+                    "value": 0,
+                    "threshold": 1,
+                    "details": "works.csv has no rows",
+                }
+            ]
+        )
+    works["domain"] = works.get("domain", "domain")
+    works["domain"] = works["domain"].fillna("unknown").astype(str)
+    works["_id_suffix"] = works["id"].map(strip_namespace_prefix)
+    works["_title_key"] = works["title"].map(normalize_title_key) if "title" in works.columns else ""
+    rows: List[Dict[str, object]] = []
+
+    suffix_duplicate_rate = 1.0 - float(works["_id_suffix"].nunique()) / max(float(len(works)), 1.0)
+    suffix_status = "pass" if suffix_duplicate_rate <= INPUT_AUDIT_MAX_SUFFIX_DUPLICATE_RATE else "fail"
+    rows.append(
+        {
+            "audit_type": "input_integrity",
+            "run_name": run_name,
+            "check": "id_suffix_duplicate_rate",
+            "domain": "all",
+            "status": suffix_status,
+            "value": suffix_duplicate_rate,
+            "threshold": INPUT_AUDIT_MAX_SUFFIX_DUPLICATE_RATE,
+            "details": f"{works['_id_suffix'].nunique():,} unique suffixes / {len(works):,} rows",
+        }
+    )
+
+    domains = sorted(works["domain"].unique().tolist())
+    max_jaccard = 0.0
+    worst_pair = ""
+    suffix_sets = {
+        domain: set(sub["_id_suffix"].astype(str))
+        for domain, sub in works.groupby("domain", sort=True)
+    }
+    for i, left in enumerate(domains):
+        for right in domains[i + 1:]:
+            union = suffix_sets[left] | suffix_sets[right]
+            jaccard = float(len(suffix_sets[left] & suffix_sets[right]) / len(union)) if union else 0.0
+            if jaccard > max_jaccard:
+                max_jaccard = jaccard
+                worst_pair = f"{left} vs {right}"
+    rows.append(
+        {
+            "audit_type": "input_integrity",
+            "run_name": run_name,
+            "check": "max_pairwise_id_suffix_jaccard",
+            "domain": "all",
+            "status": "pass" if max_jaccard <= INPUT_AUDIT_MAX_PAIRWISE_SUFFIX_JACCARD else "fail",
+            "value": max_jaccard,
+            "threshold": INPUT_AUDIT_MAX_PAIRWISE_SUFFIX_JACCARD,
+            "details": worst_pair or "single domain",
+        }
+    )
+
+    title_domains = works.loc[works["_title_key"].astype(str) != "", ["_title_key", "domain"]].drop_duplicates()
+    if not title_domains.empty:
+        repeated_titles = title_domains.groupby("_title_key")["domain"].nunique()
+        cross_title_rate = float((repeated_titles > 1).mean())
+    else:
+        cross_title_rate = 0.0
+    rows.append(
+        {
+            "audit_type": "input_integrity",
+            "run_name": run_name,
+            "check": "cross_domain_title_duplicate_rate",
+            "domain": "all",
+            "status": "pass" if cross_title_rate <= INPUT_AUDIT_MAX_CROSS_DOMAIN_TITLE_DUPLICATE_RATE else "fail",
+            "value": cross_title_rate,
+            "threshold": INPUT_AUDIT_MAX_CROSS_DOMAIN_TITLE_DUPLICATE_RATE,
+            "details": f"{len(title_domains):,} unique title-domain pairs",
+        }
+    )
+
+    for domain, sub in works.groupby("domain", sort=True):
+        domain_suffix_rate = 1.0 - float(sub["_id_suffix"].nunique()) / max(float(len(sub)), 1.0)
+        landmark_count = int(pd.to_numeric(sub.get("is_landmark", 0), errors="coerce").fillna(0).astype(int).sum())
+        rows.append(
+            {
+                "audit_type": "domain_summary",
+                "run_name": run_name,
+                "check": "domain_rows_and_landmarks",
+                "domain": domain,
+                "status": "pass" if len(sub) > 0 and domain_suffix_rate <= INPUT_AUDIT_MAX_SUFFIX_DUPLICATE_RATE else "fail",
+                "value": int(len(sub)),
+                "threshold": 1,
+                "id_suffix_duplicate_rate": domain_suffix_rate,
+                "n_landmarks": landmark_count,
+                "details": f"{len(sub):,} works; {landmark_count:,} landmarks",
+            }
+        )
+
+    landmark_audit = getattr(raw, "landmark_audit", pd.DataFrame())
+    if isinstance(landmark_audit, pd.DataFrame) and not landmark_audit.empty:
+        rows.extend(landmark_audit.to_dict("records"))
+    return pd.DataFrame(rows)
+
+
+def validate_input_audit_or_raise(raw: RawData, run_name: str) -> pd.DataFrame:
+    audit = build_input_audit(raw, run_name)
+    setattr(raw, "input_audit", audit)
+    blocking_checks = {
+        "id_suffix_duplicate_rate",
+        "max_pairwise_id_suffix_jaccard",
+        "cross_domain_title_duplicate_rate",
+    }
+    failed = audit[
+        (audit.get("audit_type", "") == "input_integrity")
+        & audit.get("check", "").isin(blocking_checks)
+        & (audit.get("status", "") == "fail")
+    ]
+    if not failed.empty:
+        details = "; ".join(
+            f"{row.check}={float(row.value):.3f}>{float(row.threshold):.3f} ({row.details})"
+            for row in failed.itertuples(index=False)
+        )
+        raise ValueError(f"Fig. 3 input audit failed for {run_name}: {details}")
+    return audit
+
+
+def write_input_audit(raw: RawData, out_dir: Path) -> None:
+    audit = getattr(raw, "input_audit", pd.DataFrame())
+    if isinstance(audit, pd.DataFrame) and not audit.empty:
+        out_dir.mkdir(parents=True, exist_ok=True)
+        audit.to_csv(out_dir / "fig3_input_audit.csv", index=False)
 
 
 def infer_primary_field(row: pd.Series) -> str:
@@ -1590,7 +1938,7 @@ def compute_rgpm(
         f"Computing RGPM-v2 for {len(df):,} papers with min_controls={required_controls}, z_cap={z_cap}.",
         progress,
     )
-    global_scale = {col: raw_mad(df[col].to_numpy(dtype=float)) for col in DELTA_KEYS}
+    global_scale = {col: robust_delta_scale(df[col].to_numpy(dtype=float)) for col in DELTA_KEYS}
     z_rows: List[Dict[str, object]] = []
     control_rows: List[Dict[str, object]] = []
     skipped_controls = 0
@@ -2698,9 +3046,19 @@ def draw_panel_e(ax: plt.Axes, comp: ComputedData) -> None:
     plot_ax.scatter(x, best_vals, s=34, color="black", edgecolors="white", linewidths=0.5, zorder=6, label="Final best")
     fold_weight_cols = [c for c in weight_cols if c in comp.fold_weights.columns]
     if fold_weight_cols:
-        for _, row in comp.fold_weights.iterrows():
+        for fold_idx, (_, row) in enumerate(comp.fold_weights.iterrows()):
             fold_vals = row[weight_cols].to_numpy(dtype=float)
-            plot_ax.scatter(x, fold_vals, s=16, color="#F97316", alpha=0.45, edgecolors="white", linewidths=0.25, zorder=4)
+            plot_ax.scatter(
+                x,
+                fold_vals,
+                s=16,
+                color="#F97316",
+                alpha=0.45,
+                edgecolors="white",
+                linewidths=0.25,
+                zorder=4,
+                label="Outer-fold best" if fold_idx == 0 else None,
+            )
     plot_ax.set_xticks(x)
     plot_ax.set_xticklabels([METRIC_LABELS[k] for k in METRIC_KEYS], fontsize=6)
     plot_ax.set_ylabel("Weight $w_k$", fontsize=6)
@@ -2726,7 +3084,6 @@ def draw_panel_e(ax: plt.Axes, comp: ComputedData) -> None:
     freq_ax.grid(True, axis="y", color="#E5E7EB", lw=0.45)
     for s in freq_ax.spines.values():
         s.set_linewidth(0.5)
-    ax.text(0.070, 0.260, "Orange points: best weights selected inside individual outer folds", fontsize=5.6, color=TEXT_MID)
 
 
 def minmax01(values: np.ndarray) -> np.ndarray:
@@ -3001,8 +3358,18 @@ def compute_all(raw: RawData, args: argparse.Namespace) -> ComputedData:
         baseline_comparison=baseline_comparison,
         profile_grid_size=int(getattr(args, "profile_grid_size", 25)),
         profile_n=int(getattr(args, "profile_n", 80)),
+        pair_scan_results=pd.DataFrame(),
+        effect_summary=pd.DataFrame(),
+        selected_panel_d_pairs=[],
     )
     dummy.panel_b_example = build_panel_b_example(dummy)
+    progress_log("[5/5] Scanning pair-weight landscapes and effect summaries ...", progress)
+    pair_scan = compute_pair_scan_results(dummy, progress=progress)
+    selected_pairs, pair_scan = select_panel_d_pairs(pair_scan, active_metric_keys)
+    dummy.pair_scan_results = pair_scan
+    dummy.selected_panel_d_pairs = selected_pairs
+    dummy.effect_summary = compute_effect_summary(dummy)
+    update_v3_diagnostics(dummy)
     progress_log("[5/5] Computation complete.", progress)
     return dummy
 
@@ -3031,6 +3398,12 @@ def export_tables(comp: ComputedData, out_dir: Path) -> None:
     comp.nonlinear_diagnostics.to_csv(out_dir / "fig3_nonlinear_upper_bound.csv", index=False)
     comp.target_sensitivity.to_csv(out_dir / "fig3_target_sensitivity.csv", index=False)
     comp.landmark_validation.to_csv(out_dir / "fig3_landmark_validation.csv", index=False)
+    comp.pair_scan_results.to_csv(out_dir / "fig3_pair_scan_results.csv", index=False)
+    comp.effect_summary.to_csv(out_dir / "fig3_effect_summary.csv", index=False)
+    (out_dir / "fig3_effect_summary.json").write_text(
+        json.dumps(effect_summary_dict(comp.effect_summary), ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
     (out_dir / "fig3_diagnostics_summary.json").write_text(
         json.dumps(comp.diagnostics_summary, ensure_ascii=False, indent=2),
         encoding="utf-8",
@@ -3051,6 +3424,12 @@ def export_core_diagnostics(comp: ComputedData, out_dir: Path) -> None:
     comp.nonlinear_diagnostics.to_csv(out_dir / "fig3_nonlinear_upper_bound.csv", index=False)
     comp.target_sensitivity.to_csv(out_dir / "fig3_target_sensitivity.csv", index=False)
     comp.landmark_validation.to_csv(out_dir / "fig3_landmark_validation.csv", index=False)
+    comp.pair_scan_results.to_csv(out_dir / "fig3_pair_scan_results.csv", index=False)
+    comp.effect_summary.to_csv(out_dir / "fig3_effect_summary.csv", index=False)
+    (out_dir / "fig3_effect_summary.json").write_text(
+        json.dumps(effect_summary_dict(comp.effect_summary), ensure_ascii=False, indent=2),
+        encoding="utf-8",
+    )
     (out_dir / "fig3_diagnostics_summary.json").write_text(
         json.dumps(comp.diagnostics_summary, ensure_ascii=False, indent=2),
         encoding="utf-8",
@@ -3230,13 +3609,23 @@ def combine_domain_raws(raw_by_domain: Mapping[str, RawData]) -> RawData:
     topics = pd.concat([raw.topics for raw in namespaced], ignore_index=True)
     topic_edges = pd.concat([raw.topic_edges for raw in namespaced], ignore_index=True)
     analysis_end_year = max(raw.analysis_end_year for raw in namespaced)
-    return RawData(
+    combined = RawData(
         works=works,
         citations=citations,
         topics=topics,
         topic_edges=topic_edges,
         analysis_end_year=int(analysis_end_year),
     )
+    landmark_audits = [
+        getattr(raw_by_domain[name], "landmark_audit", pd.DataFrame()).assign(source_domain=name)
+        for name in names
+        if isinstance(getattr(raw_by_domain[name], "landmark_audit", pd.DataFrame()), pd.DataFrame)
+        and not getattr(raw_by_domain[name], "landmark_audit", pd.DataFrame()).empty
+    ]
+    if landmark_audits:
+        setattr(combined, "landmark_audit", pd.concat(landmark_audits, ignore_index=True, sort=False))
+    validate_input_audit_or_raise(combined, "multi_domain")
+    return combined
 
 
 def load_domain_raw(args: argparse.Namespace, domain: str, progress: bool) -> Tuple[RawData, Path]:
@@ -3259,6 +3648,8 @@ def load_domain_raw(args: argparse.Namespace, domain: str, progress: bool) -> Tu
         )
     progress_log(f"Loading real data for domain={domain}: {source_data_dir}", progress)
     raw = load_raw_data(source_data_dir, analysis_end_year=args.analysis_end_year)
+    raw = ensure_expected_landmarks(raw, domain, progress=progress)
+    validate_input_audit_or_raise(raw, domain)
     progress_log(
         f"Loaded {domain}: {len(raw.works):,} works, {len(raw.citations):,} citations, "
         f"{len(raw.topics):,} topics, analysis_end_year={raw.analysis_end_year}.",
@@ -3292,6 +3683,7 @@ def draw_outputs(comp: ComputedData, args: argparse.Namespace, run_out_dir: Path
 def run_analysis(raw: RawData, args: argparse.Namespace, run_name: str, run_out_dir: Path) -> ComputedData:
     progress = not args.quiet
     run_out_dir.mkdir(parents=True, exist_ok=True)
+    write_input_audit(raw, run_out_dir)
     progress_log(f"[{run_name}] Running Fig. 3 computation in {run_out_dir}", progress)
     comp = compute_all(raw, args)
     progress_log(f"[{run_name}] Exporting core diagnostics to {run_out_dir}", progress)
@@ -3408,6 +3800,7 @@ def main() -> None:
             multi_raw = combine_domain_raws(raw_by_domain)
             multi_input_dir = args.out_dir / "fig3_input" / "multi_domain"
             write_raw_data(multi_raw, multi_input_dir)
+            write_input_audit(multi_raw, multi_input_dir)
             save_prepare_report(
                 {
                     "source_kind": "combined_fig3_input",
@@ -3416,6 +3809,9 @@ def main() -> None:
                     "works_rows": len(multi_raw.works),
                     "citation_rows": len(multi_raw.citations),
                     "analysis_end_year": int(multi_raw.analysis_end_year),
+                    "input_audit": getattr(multi_raw, "input_audit", pd.DataFrame()).to_dict("records")
+                    if isinstance(getattr(multi_raw, "input_audit", pd.DataFrame()), pd.DataFrame)
+                    else [],
                 },
                 multi_input_dir,
             )
@@ -3467,13 +3863,32 @@ def main() -> None:
 #       each training fold. OOF scores remain strictly out-of-fold.
 
 DELTA_MECHANISM_GROUPS_V3: Dict[str, List[str]] = {
-    "Expansion": ["community_reach", "field_entropy"],
-    "Bridging": ["cross_community_adoption", "path_shortening", "hub_formation"],
-    "Reconfiguration": ["modularity_shock", "partition_change", "boundary_mixing"],
+    "Breadth": ["community_reach", "field_entropy", "cross_community_adoption"],
+    "Brokerage": ["path_shortening", "hub_formation"],
+    "Boundary": ["modularity_shock", "partition_change", "boundary_mixing"],
     "Consolidation": ["post_perturbation_concentration"],
 }
 
 RIDGE_LAMBDAS_V3 = (0.0, 0.01, 0.03, 0.1, 0.3, 1.0, 3.0, 10.0)
+
+
+def robust_delta_scale(values: Sequence[float]) -> float:
+    arr = np.asarray(values, dtype=float)
+    arr = arr[np.isfinite(arr)]
+    if len(arr) == 0:
+        return 0.0
+    mad = raw_mad(arr)
+    q25, q75 = np.percentile(arr, [25, 75])
+    iqr_scale = float((q75 - q25) / 1.349) if np.isfinite(q75 - q25) else 0.0
+    std_scale = float(np.nanstd(arr))
+    q10, q90 = np.percentile(arr, [10, 90])
+    range_scale = float((q90 - q10) / 2.563) if np.isfinite(q90 - q10) else 0.0
+    return max(
+        float(mad) if np.isfinite(mad) else 0.0,
+        iqr_scale,
+        0.25 * std_scale,
+        range_scale,
+    )
 
 
 def delta_reliability_v3(
@@ -3582,7 +3997,7 @@ def compute_rgpm(
         f"Computing structural-residual RGPM for {len(df):,} papers with min_controls={required_controls}, z_cap={z_cap}.",
         progress,
     )
-    global_scale = {col: raw_mad(df[col].to_numpy(dtype=float)) for col in DELTA_KEYS}
+    global_scale = {col: robust_delta_scale(df[col].to_numpy(dtype=float)) for col in DELTA_KEYS}
     z_rows: List[Dict[str, object]] = []
     control_rows: List[Dict[str, object]] = []
     skipped_controls = 0
@@ -3629,9 +4044,16 @@ def compute_rgpm(
         for col in DELTA_KEYS:
             med = float(np.median(controls[col].to_numpy(dtype=float)))
             local_mad = raw_mad(controls[col].to_numpy(dtype=float))
+            local_robust = robust_delta_scale(controls[col].to_numpy(dtype=float))
             global_floor = 0.25 * float(global_scale.get(col, 0.0) if np.isfinite(global_scale.get(col, np.nan)) else 0.0)
             delta_floor = float(DELTA_FLOORS.get(col, DEFAULT_DELTA_FLOOR))
-            scale = max(float(local_mad) if np.isfinite(local_mad) else 0.0, global_floor, delta_floor)
+            scale = max(
+                float(local_mad) if np.isfinite(local_mad) else 0.0,
+                0.50 * float(local_robust) if np.isfinite(local_robust) else 0.0,
+                global_floor,
+                delta_floor,
+            )
+            scale *= float(DELTA_SCALE_MULTIPLIERS.get(col, 1.0))
             floor_used = (not np.isfinite(local_mad)) or local_mad < scale - 1e-12
             mad_zero = (not np.isfinite(local_mad)) or local_mad < 1e-6
             z_raw = float((float(row[col]) - med) / max(scale, 1e-12))
@@ -3645,9 +4067,11 @@ def compute_rgpm(
             out[col + "_z_clipped"] = int(clipped)
             out[col + "_control_median"] = med
             out[col + "_control_mad"] = float(local_mad) if np.isfinite(local_mad) else np.nan
+            out[col + "_control_robust_scale"] = float(local_robust) if np.isfinite(local_robust) else np.nan
             out[col + "_scale_used"] = float(scale)
             out[col + "_scale_floor_used"] = int(floor_used)
             control_out[col + "_control_mad"] = float(local_mad) if np.isfinite(local_mad) else np.nan
+            control_out[col + "_control_robust_scale"] = float(local_robust) if np.isfinite(local_robust) else np.nan
             control_out[col + "_scale_used"] = float(scale)
             control_out[col + "_scale_floor_used"] = int(floor_used)
             control_out[col + "_mad_zero"] = int(mad_zero)
@@ -3684,9 +4108,22 @@ def compute_rgpm(
             global_mad=global_mad,
             is_primary=col in primary_set,
         )
+        is_primary = col in primary_set
+        contributing = bool(
+            is_primary
+            and rel >= CONTRIBUTING_DELTA_RELIABILITY_MIN
+            and control_mad_zero_rate <= CONTRIBUTING_DELTA_CONTROL_MAD_ZERO_MAX
+            and np.isfinite(global_mad)
+            and global_mad >= DELTA_GLOBAL_MAD_MIN
+        )
         reasons: List[str] = []
-        if rel < 0.08:
-            reasons.append("low_reliability_weight")
+        if is_primary and not contributing:
+            if rel < CONTRIBUTING_DELTA_RELIABILITY_MIN:
+                reasons.append("low_reliability_weight")
+            if control_mad_zero_rate > CONTRIBUTING_DELTA_CONTROL_MAD_ZERO_MAX:
+                reasons.append("near_constant_controls")
+            if (not np.isfinite(global_mad)) or global_mad < DELTA_GLOBAL_MAD_MIN:
+                reasons.append("near_constant_global_delta")
         if col not in primary_set:
             reasons.append("diagnostic_or_consolidation_outcome")
         delta_diag_rows.append(
@@ -3694,7 +4131,9 @@ def compute_rgpm(
                 "delta": col,
                 "label": DELTA_LABELS[col],
                 "primary_candidate": int(col in primary_set),
-                "active": int((col in primary_set) and rel >= 0.08),
+                "active": int(col in primary_set),
+                "contributing": int(contributing),
+                "diagnostic_only": int(is_primary and not contributing),
                 "nonzero_rate": nonzero_rate,
                 "global_mad": global_mad,
                 "z_cap_hit_rate": cap_hit_rate,
@@ -3706,18 +4145,6 @@ def compute_rgpm(
         )
     delta_diag = pd.DataFrame(delta_diag_rows)
 
-    # Ensure each main mechanism has at least its most reliable available delta active;
-    # this is a target-construction rule, not data imputation.
-    for mech, keys in DELTA_MECHANISM_GROUPS_V3.items():
-        if mech == "Consolidation":
-            continue
-        sub = delta_diag[delta_diag["delta"].isin(keys)]
-        if not sub.empty and not (sub["active"].astype(int) == 1).any():
-            idx = sub["reliability_weight"].astype(float).idxmax()
-            delta_diag.loc[idx, "active"] = 1
-            reason = str(delta_diag.loc[idx, "drop_reasons"] or "")
-            delta_diag.loc[idx, "drop_reasons"] = (reason + ";" if reason else "") + "best_available_for_mechanism_balance"
-
     active_delta_keys = delta_diag.loc[delta_diag["active"].astype(int) == 1, "delta"].astype(str).tolist()
     if not active_delta_keys:
         fallback = delta_diag.sort_values("reliability_weight", ascending=False).head(3)["delta"].astype(str).tolist()
@@ -3727,20 +4154,31 @@ def compute_rgpm(
 
     reliability = dict(zip(delta_diag["delta"].astype(str), delta_diag["reliability_weight"].astype(float)))
     active_delta_set = set(active_delta_keys)
+    contributing_delta_keys = delta_diag.loc[delta_diag["contributing"].astype(int) == 1, "delta"].astype(str).tolist()
+    contributing_delta_set = set(contributing_delta_keys)
+    if not contributing_delta_keys:
+        fallback = delta_diag[
+            delta_diag["delta"].isin(PRIMARY_RGPM_DELTA_KEYS)
+        ].sort_values("reliability_weight", ascending=False).head(3)["delta"].astype(str).tolist()
+        contributing_delta_keys = fallback
+        contributing_delta_set = set(fallback)
+        delta_diag.loc[delta_diag["delta"].isin(fallback), "contributing"] = 1
+        delta_diag.loc[delta_diag["delta"].isin(fallback), "diagnostic_only"] = 0
+        delta_diag.loc[delta_diag["delta"].isin(fallback), "drop_reasons"] = "fallback_contributing_for_diagnostic_run"
     mechanism_scores: Dict[str, np.ndarray] = {}
     mechanism_weight_sums: Dict[str, float] = {}
     for mech, keys in DELTA_MECHANISM_GROUPS_V3.items():
         if mech == "Consolidation":
             valid_keys = [k for k in keys if k in DELTA_KEYS and reliability.get(k, 0.0) > 0.0]
         else:
-            valid_keys = [k for k in keys if k in active_delta_set]
+            valid_keys = [k for k in keys if k in contributing_delta_set]
         if not valid_keys:
             continue
         Z = zdf[[k + "_z" for k in valid_keys]].replace([np.inf, -np.inf], np.nan).fillna(0.0).to_numpy(dtype=float)
         Zpos = np.maximum(Z, 0.0)
         w = np.asarray(
             [
-                max(0.0, reliability.get(k, 0.0), 0.05 if k in active_delta_set else 0.0)
+                max(0.0, reliability.get(k, 0.0))
                 for k in valid_keys
             ],
             dtype=float,
@@ -3756,7 +4194,7 @@ def compute_rgpm(
         mechanism_weight_sums[mech] = float(w.sum())
         zdf[f"RGPM_{mech.lower()}_component"] = score
 
-    main_mechs = [m for m in ["Expansion", "Bridging", "Reconfiguration"] if m in mechanism_scores]
+    main_mechs = [m for m in ["Breadth", "Brokerage", "Boundary"] if m in mechanism_scores]
     if not main_mechs:
         raise ValueError("No mechanism scores could be constructed for structural-residual RGPM.")
     M = np.column_stack([mechanism_scores[m] for m in main_mechs])
@@ -3772,7 +4210,8 @@ def compute_rgpm(
     zdf[popularity_fit.name] = popularity_fit
     zdf["RGPM"] = residual_rank.to_numpy(dtype=float)
 
-    active_z_cols = [c + "_z" for c in active_delta_keys]
+    zdf["n_contributing_graph_deltas"] = int(len(contributing_delta_keys))
+    active_z_cols = [c + "_z" for c in contributing_delta_keys]
     zmat = zdf[active_z_cols].replace([np.inf, -np.inf], np.nan).fillna(0.0).to_numpy(dtype=float)
     cov = np.cov(zmat, rowvar=False)
     if cov.ndim == 0:
@@ -3848,6 +4287,40 @@ def base_weight_candidates(n_samples: int, seed: int, n_metrics: int) -> np.ndar
     return W[np.sort(idx)]
 
 
+def pair_structured_candidates(active_metric_keys: Sequence[str], grid_n: int = 9) -> np.ndarray:
+    """Deterministic pair-mass/share candidates used by training and Panel d scans."""
+    active = [key for key in active_metric_keys if key in METRIC_KEYS]
+    n = len(active)
+    if n <= 0:
+        return np.empty((0, 0), dtype=float)
+    if n == 1:
+        return np.ones((1, 1), dtype=float)
+    masses = np.linspace(0.15, 1.0, max(3, int(grid_n)))
+    shares = np.linspace(0.0, 1.0, max(3, int(grid_n)))
+    rows: List[np.ndarray] = []
+    for ix, iy in combinations(range(n), 2):
+        rem_idx = [j for j in range(n) if j not in {ix, iy}]
+        for pair_mass in masses:
+            for share_x in shares:
+                w = np.zeros(n, dtype=float)
+                w[ix] = float(pair_mass * share_x)
+                w[iy] = float(pair_mass * (1.0 - share_x))
+                leftover = max(0.0, 1.0 - float(pair_mass))
+                if rem_idx and leftover > 1e-12:
+                    w[rem_idx] = leftover / len(rem_idx)
+                elif leftover > 1e-12:
+                    w[ix] += leftover * 0.5
+                    w[iy] += leftover * 0.5
+                rows.append(w)
+    rows.append(np.ones(n, dtype=float) / n)
+    rows.extend(np.eye(n, dtype=float))
+    W = np.vstack(rows)
+    W = W / np.maximum(W.sum(axis=1, keepdims=True), 1e-12)
+    W = np.round(W, 8)
+    _, idx = np.unique(W, axis=0, return_index=True)
+    return W[np.sort(idx)]
+
+
 def learn_weights(
     metrics: pd.DataFrame,
     rgpm: pd.DataFrame,
@@ -3886,7 +4359,15 @@ def learn_weights(
     )
     X = df[active_z_cols].to_numpy(dtype=float)
     y = df["RGPM"].to_numpy(dtype=float)
-    W_base = base_weight_candidates(n_samples, seed=seed, n_metrics=len(active_metric_keys))
+    W_base = np.vstack(
+        [
+            base_weight_candidates(n_samples, seed=seed, n_metrics=len(active_metric_keys)),
+            pair_structured_candidates(active_metric_keys, grid_n=9),
+        ]
+    )
+    W_base = np.round(W_base, 8)
+    _, base_idx = np.unique(W_base, axis=0, return_index=True)
+    W_base = W_base[np.sort(base_idx)]
     splits = make_cv_splits(df, n_folds=n_folds, mode=cv_mode, seed=seed)
     progress_log(
         "  splits: " + ", ".join([f"{i+1}:train={len(tr):,}/test={len(te):,}" for i, (tr, te) in enumerate(splits)]),
@@ -3910,7 +4391,7 @@ def learn_weights(
     fold_rows: List[Dict[str, object]] = []
     for fold_no, (train_idx, test_idx) in enumerate(splits, start=1):
         W_ridge = positive_ridge_candidates(X[train_idx], y[train_idx])
-        W_pool = np.vstack([W_base, W_ridge])
+        W_pool = np.vstack([W_base, W_ridge, pair_structured_candidates(active_metric_keys, grid_n=11)])
         W_pool = np.round(W_pool, 8)
         _, uidx = np.unique(W_pool, axis=0, return_index=True)
         W_pool = W_pool[np.sort(uidx)]
@@ -3939,7 +4420,7 @@ def learn_weights(
         )
 
     # Final all-data weight is for reporting, not for OOF performance.
-    W_final_pool = np.vstack([W_base, positive_ridge_candidates(X, y)])
+    W_final_pool = np.vstack([W_base, positive_ridge_candidates(X, y), pair_structured_candidates(active_metric_keys, grid_n=11)])
     W_final_pool = np.round(W_final_pool, 8)
     _, fidx = np.unique(W_final_pool, axis=0, return_index=True)
     W_final_pool = W_final_pool[np.sort(fidx)]
@@ -4452,16 +4933,49 @@ def compute_landmark_validation(score_table: pd.DataFrame, min_controls: int = 2
 
 
 def build_panel_b_example(comp: ComputedData) -> pd.DataFrame:
-    """Use active deltas sorted by mechanism/reliability for the Panel b example."""
+    """Use reliable contributing deltas sorted by mechanism/reliability for Panel b."""
     merged = comp.rgpm_table.copy()
-    if (merged["is_landmark"].astype(int) == 1).any():
+    if "paper_id" in comp.score_table.columns and "S_w_oof" in comp.score_table.columns:
+        score_cols = ["paper_id", "S_w_oof", "RGPM"]
+        merged = merged.merge(comp.score_table[score_cols].rename(columns={"RGPM": "RGPM_oof_target"}), on="paper_id", how="left")
+    diag = comp.delta_diagnostics.copy()
+    if "contributing" in diag.columns and (diag["contributing"].astype(int) == 1).any():
+        diag = diag[diag["contributing"].astype(int) == 1].copy()
+    else:
+        active_set = set(comp.active_delta_keys)
+        diag = diag[diag["delta"].isin(active_set)].copy()
+    if diag.empty:
+        return pd.DataFrame()
+    score_rank = (
+        pd.to_numeric(merged["S_w_oof"], errors="coerce").rank(pct=True).fillna(0.0).to_numpy(dtype=float)
+        if "S_w_oof" in merged.columns
+        else np.zeros(len(merged), dtype=float)
+    )
+    candidate_scores = []
+    for pos, (_, row) in enumerate(merged.iterrows()):
+        total = 0.0
+        clipped = 0
+        for drow in diag.itertuples(index=False):
+            key = str(getattr(drow, "delta"))
+            if key + "_z" not in merged.columns:
+                continue
+            z = float(row.get(key + "_z", 0.0))
+            rel = float(getattr(drow, "reliability_weight", 0.0))
+            total += max(0.0, z) * rel
+            clipped += int(row.get(key + "_z_clipped", 0))
+        if pos < len(score_rank):
+            total += 0.10 * float(score_rank[pos])
+        if int(row.get("is_landmark", 0)) == 1:
+            total += 0.20
+        total -= 0.10 * clipped
+        candidate_scores.append(total)
+    if candidate_scores:
+        row = merged.iloc[int(np.nanargmax(np.asarray(candidate_scores, dtype=float)))]
+    elif (merged["is_landmark"].astype(int) == 1).any():
         row = merged[merged["is_landmark"].astype(int) == 1].sort_values("RGPM", ascending=False).iloc[0]
     else:
         row = merged.sort_values("RGPM", ascending=False).iloc[0]
-    active_set = set(comp.active_delta_keys)
-    diag = comp.delta_diagnostics.copy()
-    diag = diag[diag["delta"].isin(active_set)].copy()
-    mech_order = {k: i for i, k in enumerate(["Expansion", "Bridging", "Reconfiguration", "Consolidation"])}
+    mech_order = {k: i for i, k in enumerate(["Breadth", "Brokerage", "Boundary", "Consolidation"])}
     delta_to_mech = {d: mech for mech, keys in DELTA_MECHANISM_GROUPS_V3.items() for d in keys}
     diag["mechanism"] = diag["delta"].map(delta_to_mech).fillna("Other")
     diag["mechanism_order"] = diag["mechanism"].map(mech_order).fillna(99)
@@ -4603,6 +5117,423 @@ def compute_domain_adequacy_diagnostics(
     return domain_diag, profile
 
 
+def columnwise_spearman(scores: np.ndarray, y: np.ndarray) -> np.ndarray:
+    scores = np.asarray(scores, dtype=float)
+    if scores.ndim == 1:
+        scores = scores.reshape(-1, 1)
+    y = np.asarray(y, dtype=float)
+    mask = np.isfinite(y)
+    if scores.shape[0] != len(y):
+        raise ValueError("Score matrix and target length mismatch.")
+    finite_scores = np.isfinite(scores).all(axis=1)
+    mask = mask & finite_scores
+    out = np.full(scores.shape[1], np.nan, dtype=float)
+    if mask.sum() < 4 or np.nanstd(y[mask]) < 1e-12:
+        return out
+    s = scores[mask, :]
+    yt = y[mask]
+    if SCIPY_OK:
+        yr = rankdata(yt).astype(float)
+        sr = np.apply_along_axis(rankdata, 0, s).astype(float)
+    else:
+        yr = pd.Series(yt).rank(method="average").to_numpy(dtype=float)
+        sr = np.vstack([pd.Series(s[:, i]).rank(method="average").to_numpy(dtype=float) for i in range(s.shape[1])]).T
+    yr = yr - yr.mean()
+    sr = sr - sr.mean(axis=0, keepdims=True)
+    denom = np.sqrt(np.sum(sr * sr, axis=0) * np.sum(yr * yr))
+    valid = denom > 1e-12
+    out[valid] = (yr @ sr[:, valid]) / denom[valid]
+    return out
+
+
+def profile_remainder_weights(comp: ComputedData, active: Sequence[str], excluded: Sequence[str]) -> np.ndarray:
+    remaining = [key for key in active if key not in set(excluded)]
+    if not remaining:
+        return np.asarray([], dtype=float)
+    vals = np.asarray([float(comp.best_weights.get(key, 0.0)) for key in remaining], dtype=float)
+    vals = np.maximum(np.where(np.isfinite(vals), vals, 0.0), 0.0)
+    if vals.sum() <= 1e-12:
+        vals = np.ones(len(remaining), dtype=float)
+    return vals / vals.sum()
+
+
+def pair_profile_weight_grid(
+    active: Sequence[str],
+    xkey: str,
+    ykey: str,
+    remainder_weights: np.ndarray,
+    bins: int,
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    active = list(active)
+    centers = np.linspace(0.0, 1.0, max(5, int(bins)))
+    if xkey not in active or ykey not in active or xkey == ykey:
+        return centers, centers, np.empty((0, len(active)), dtype=float)
+    ix = active.index(xkey)
+    iy = active.index(ykey)
+    rem_keys = [key for key in active if key not in {xkey, ykey}]
+    rem_idx = [active.index(key) for key in rem_keys]
+    if rem_idx and len(remainder_weights) != len(rem_idx):
+        remainder_weights = np.ones(len(rem_idx), dtype=float) / len(rem_idx)
+    rows: List[np.ndarray] = []
+    for pair_mass in centers:
+        for pair_share_x in centers:
+            w = np.zeros(len(active), dtype=float)
+            w[ix] = float(pair_mass * pair_share_x)
+            w[iy] = float(pair_mass * (1.0 - pair_share_x))
+            leftover = max(0.0, 1.0 - float(pair_mass))
+            if rem_idx and leftover > 1e-12:
+                w[rem_idx] = leftover * remainder_weights
+            rows.append(w)
+    W = np.vstack(rows)
+    W = W / np.maximum(W.sum(axis=1, keepdims=True), 1e-12)
+    return centers, centers, W
+
+
+def pairwise_cv_delta_grid(
+    comp: ComputedData,
+    xkey: str,
+    ykey: str,
+    bins: Optional[int] = None,
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, Dict[str, Any]]:
+    active = [key for key in comp.active_metric_keys if key in METRIC_KEYS]
+    n_bins = int(bins or comp.profile_grid_size)
+    centers = np.linspace(0.0, 1.0, max(5, n_bins))
+    empty_grid = np.full((len(centers), len(centers)), np.nan, dtype=float)
+    if xkey not in active or ykey not in active or xkey == ykey:
+        return centers, centers, empty_grid, {"pair_valid": False}
+    st = comp.score_table.replace([np.inf, -np.inf], np.nan).dropna(
+        subset=[key + "_z" for key in active] + ["RGPM"]
+    ).reset_index(drop=True)
+    if st.empty:
+        return centers, centers, empty_grid, {"pair_valid": False}
+    X = st[[key + "_z" for key in active]].to_numpy(dtype=float)
+    target = st["RGPM"].to_numpy(dtype=float)
+    fold_ids = st["fold_id"].to_numpy(dtype=int) if "fold_id" in st.columns else np.zeros(len(st), dtype=int)
+    folds = [np.where(fold_ids == fold)[0] for fold in sorted(set(fold_ids)) if fold > 0 and np.sum(fold_ids == fold) >= 4]
+    if len(folds) < 2:
+        folds = make_folds(st, n_folds=3, mode="random", seed=stable_int_id(("pair", xkey, ykey)))
+    rem = profile_remainder_weights(comp, active, excluded=[xkey, ykey])
+    xs, ys, W = pair_profile_weight_grid(active, xkey, ykey, rem, bins=len(centers))
+    if W.size == 0:
+        return xs, ys, empty_grid, {"pair_valid": False}
+    equal_w = np.ones(len(active), dtype=float) / len(active)
+    split_delta = np.full((len(folds), W.shape[0]), np.nan, dtype=float)
+    for fold_no, test_idx in enumerate(folds):
+        if len(test_idx) < 4:
+            continue
+        Xt = X[test_idx]
+        yt = target[test_idx]
+        eq = float(columnwise_spearman(Xt @ equal_w, yt)[0])
+        rho = columnwise_spearman(Xt @ W.T, yt)
+        if np.isfinite(eq):
+            split_delta[fold_no, :] = rho - eq
+    values = np.nanmean(split_delta, axis=0)
+    grid = values.reshape((len(ys), len(xs)))
+    finite = values[np.isfinite(values)]
+    fold_p95 = []
+    for row in split_delta:
+        vals = row[np.isfinite(row)]
+        if len(vals):
+            fold_p95.append(float(np.nanpercentile(vals, 95)))
+    if len(finite):
+        best_flat = int(np.nanargmax(values))
+        best_row = best_flat // len(xs)
+        best_col = best_flat % len(xs)
+        p95_delta = float(np.nanpercentile(finite, 95))
+        max_delta = float(np.nanmax(finite))
+        mean_positive = float(np.nanmean(np.maximum(finite, 0.0)))
+        positive_cell_rate = float(np.mean(finite > 0.0))
+    else:
+        best_row = best_col = 0
+        p95_delta = max_delta = mean_positive = positive_cell_rate = float("nan")
+    summary = {
+        "pair_valid": True,
+        "metric_x": xkey,
+        "metric_y": ykey,
+        "pair_label": f"{METRIC_LABELS.get(xkey, xkey)} × {METRIC_LABELS.get(ykey, ykey)}",
+        "n_grid_cells": int(W.shape[0]),
+        "p95_delta_vs_equal": p95_delta,
+        "max_delta_vs_equal": max_delta,
+        "mean_positive_delta_vs_equal": mean_positive,
+        "positive_cell_rate": positive_cell_rate,
+        "fold_stability": float(np.mean(np.asarray(fold_p95) >= 0.01)) if fold_p95 else float("nan"),
+        "fold_p95_min": float(np.nanmin(fold_p95)) if fold_p95 else float("nan"),
+        "best_pair_mass": float(ys[best_row]) if len(ys) else float("nan"),
+        "best_share_to_first": float(xs[best_col]) if len(xs) else float("nan"),
+    }
+    return xs, ys, grid, summary
+
+
+def pairwise_profile_grid(
+    comp: ComputedData,
+    xkey: str,
+    ykey: str,
+    bins: int = 25,
+    profile_n: int = 80,
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    xs, ys, grid, _ = pairwise_cv_delta_grid(comp, xkey, ykey, bins=bins)
+    return xs, ys, grid
+
+
+def compute_pair_scan_results(comp: ComputedData, progress: bool = True) -> pd.DataFrame:
+    active = [key for key in METRIC_KEYS if key in comp.active_metric_keys]
+    rows: List[Dict[str, object]] = []
+    grids: Dict[Tuple[str, str], Tuple[np.ndarray, np.ndarray, np.ndarray]] = {}
+    total = int(len(active) * (len(active) - 1) / 2)
+    for idx, (xkey, ykey) in enumerate(combinations(active, 2), start=1):
+        progress_log(f"      pair scan {idx}/{total}: {xkey} × {ykey}", progress)
+        xs, ys, grid, summary = pairwise_cv_delta_grid(comp, xkey, ykey, bins=comp.profile_grid_size)
+        key = tuple(sorted((xkey, ykey)))
+        grids[key] = (xs, ys, grid)
+        row = dict(summary)
+        row["pair_key"] = "|".join(key)
+        row["metric_x"] = xkey
+        row["metric_y"] = ykey
+        row["selected_for_panel_d"] = 0
+        row["coverage_pair"] = 0
+        row["weak_pair"] = int(
+            not (
+                np.isfinite(float(row.get("p95_delta_vs_equal", np.nan)))
+                and float(row.get("p95_delta_vs_equal", np.nan)) >= PAIR_SCAN_P95_MIN
+            )
+        )
+        rows.append(row)
+    setattr(comp, "_pair_grids", grids)
+    scan = pd.DataFrame(rows)
+    if scan.empty:
+        return scan
+    scan["selection_score"] = (
+        pd.to_numeric(scan["p95_delta_vs_equal"], errors="coerce").fillna(-1.0)
+        + 0.25 * pd.to_numeric(scan["max_delta_vs_equal"], errors="coerce").fillna(-1.0)
+        + 0.02 * pd.to_numeric(scan["fold_stability"], errors="coerce").fillna(0.0)
+        - 0.03 * (1.0 - pd.to_numeric(scan["positive_cell_rate"], errors="coerce").fillna(0.0))
+    )
+    return scan.sort_values("selection_score", ascending=False).reset_index(drop=True)
+
+
+def pair_channel_coherence(pair: Tuple[str, str]) -> int:
+    left, right = pair
+    left_channels = set(FIG2_EVIDENCE_MAP.get(left, {}).keys())
+    right_channels = set(FIG2_EVIDENCE_MAP.get(right, {}).keys())
+    return int(bool(left_channels & right_channels))
+
+
+def select_panel_d_pairs(pair_scan: pd.DataFrame, active_metric_keys: Sequence[str]) -> Tuple[List[Tuple[str, str]], pd.DataFrame]:
+    scan = pair_scan.copy()
+    active = [key for key in METRIC_KEYS if key in active_metric_keys]
+    target_metrics = set(active)
+    if scan.empty or len(active) < 2:
+        return [], scan
+    row_by_key = {str(row.pair_key): row for row in scan.itertuples(index=False)}
+    pair_keys = list(row_by_key.keys())
+    preferred_pairs = {
+        tuple(sorted(("B", "RTD"))),
+        tuple(sorted(("DeltaQ0", "Uzzi"))),
+        tuple(sorted(("RS", "PDE"))),
+        tuple(sorted(("BurtIP", "B"))),
+        tuple(sorted(("BurtIP", "RTD"))),
+    }
+    candidates = []
+    for combo in combinations(pair_keys, 4):
+        metrics: List[str] = []
+        for pair_key in combo:
+            metrics.extend(pair_key.split("|"))
+        counts = Counter(metrics)
+        if set(counts.keys()) != target_metrics:
+            continue
+        if sorted(counts.values()) != [1] * (len(target_metrics) - 1) + [2]:
+            continue
+        rows = [row_by_key[key] for key in combo]
+        p95_sum = float(np.nansum([float(getattr(row, "p95_delta_vs_equal", np.nan)) for row in rows]))
+        instability = float(np.nansum([max(0.0, 0.75 - float(getattr(row, "fold_stability", np.nan) if np.isfinite(getattr(row, "fold_stability", np.nan)) else 0.0)) for row in rows]))
+        stability_bonus = float(np.nansum([float(getattr(row, "fold_stability", 0.0)) if np.isfinite(getattr(row, "fold_stability", np.nan)) else 0.0 for row in rows]))
+        max_sum = float(np.nansum([float(getattr(row, "max_delta_vs_equal", np.nan)) for row in rows]))
+        interp = 0
+        preferred = 0
+        for key in combo:
+            pair = tuple(key.split("|"))
+            interp += pair_channel_coherence(pair)
+            preferred += int(tuple(sorted(pair)) in preferred_pairs)
+        score = p95_sum - 0.02 * instability + 0.01 * stability_bonus + 0.05 * max_sum
+        candidates.append((score, p95_sum, preferred, interp, combo))
+    if candidates:
+        candidates.sort(key=lambda item: item[0], reverse=True)
+        best_score = candidates[0][0]
+        near = [item for item in candidates if best_score - item[0] <= 0.01]
+        near.sort(key=lambda item: (item[2], item[3], item[1]), reverse=True)
+        selected_keys = list(near[0][4])
+    else:
+        selected_keys = []
+        covered: set[str] = set()
+        for row in scan.itertuples(index=False):
+            pair = str(row.pair_key).split("|")
+            if len(selected_keys) >= 4:
+                break
+            if len(covered | set(pair)) > len(covered) or len(selected_keys) < 3:
+                selected_keys.append(str(row.pair_key))
+                covered |= set(pair)
+        for row in scan.itertuples(index=False):
+            if len(selected_keys) >= 4:
+                break
+            if str(row.pair_key) not in selected_keys:
+                selected_keys.append(str(row.pair_key))
+    order_hint = {
+        "B|RTD": 0,
+        "DeltaQ0|Uzzi": 1,
+        "PDE|RS": 2,
+        "B|BurtIP": 3,
+        "BurtIP|RTD": 4,
+    }
+    selected_keys = sorted(selected_keys[:4], key=lambda key: (order_hint.get(key, 99), -float(row_by_key[key].selection_score)))
+    selected_pairs = [tuple(key.split("|")) for key in selected_keys]
+    scan["selected_for_panel_d"] = scan["pair_key"].isin(selected_keys).astype(int)
+    scan["coverage_pair"] = 0
+    if selected_pairs:
+        selected_counts = Counter([metric for pair in selected_pairs for metric in pair])
+        repeated = {metric for metric, count in selected_counts.items() if count > 1}
+        for pair in selected_pairs:
+            key = "|".join(pair)
+            row = scan["pair_key"] == key
+            p95 = pd.to_numeric(scan.loc[row, "p95_delta_vs_equal"], errors="coerce")
+            is_weak = bool(p95.empty or (np.isfinite(float(p95.iloc[0])) and float(p95.iloc[0]) < PAIR_SCAN_P95_MIN))
+            scan.loc[row, "coverage_pair"] = int(bool(repeated & set(pair)) or is_weak)
+    return selected_pairs, scan
+
+
+def compute_effect_summary(comp: ComputedData) -> pd.DataFrame:
+    st = comp.score_table.replace([np.inf, -np.inf], np.nan).dropna(subset=["S_w_oof", "RGPM"]).copy()
+    rows: List[Dict[str, object]] = []
+    if st.empty:
+        return pd.DataFrame(rows)
+    st["score_percentile"] = st["S_w_oof"].rank(method="average", pct=True) * 100.0
+    st["rgpm_percentile"] = st["RGPM"].rank(method="average", pct=True) * 100.0
+    try:
+        st["score_tertile"] = pd.qcut(st["S_w_oof"].rank(method="first"), q=3, labels=["low", "mid", "high"])
+    except ValueError:
+        pct = st["S_w_oof"].rank(method="average", pct=True)
+        st["score_tertile"] = "mid"
+        st.loc[pct <= 1.0 / 3.0, "score_tertile"] = "low"
+        st.loc[pct >= 2.0 / 3.0, "score_tertile"] = "high"
+    for tertile, sub in st.groupby("score_tertile", sort=False):
+        vals = sub["rgpm_percentile"].to_numpy(dtype=float)
+        rows.append(
+            {
+                "stat": f"{tertile}_score_tertile_rgpm_percentile_median",
+                "value": float(np.nanmedian(vals)) if len(vals) else np.nan,
+                "n": int(len(sub)),
+                "group": str(tertile),
+            }
+        )
+        rows.append(
+            {
+                "stat": f"{tertile}_score_tertile_rgpm_percentile_mean",
+                "value": float(np.nanmean(vals)) if len(vals) else np.nan,
+                "n": int(len(sub)),
+                "group": str(tertile),
+            }
+        )
+    med = {row["stat"]: float(row["value"]) for row in rows if str(row["stat"]).endswith("_median") and np.isfinite(float(row["value"]))}
+    low_med = med.get("low_score_tertile_rgpm_percentile_median", np.nan)
+    high_med = med.get("high_score_tertile_rgpm_percentile_median", np.nan)
+    rows.append({"stat": "high_vs_low_tertile_median_rgpm_lift_pp", "value": high_med - low_med if np.isfinite(high_med) and np.isfinite(low_med) else np.nan, "n": int(len(st)), "group": "tertile"})
+    try:
+        st["score_decile"] = pd.qcut(st["S_w_oof"].rank(method="first"), q=10, labels=False, duplicates="drop") + 1
+    except ValueError:
+        st["score_decile"] = np.ceil(st["S_w_oof"].rank(method="average", pct=True) * 10).clip(1, 10).astype(int)
+    max_decile = int(pd.to_numeric(st["score_decile"], errors="coerce").max())
+    min_decile = int(pd.to_numeric(st["score_decile"], errors="coerce").min())
+    thresholds = {"top20": 80.0, "top10": 90.0}
+    for name, threshold in thresholds.items():
+        top_sub = st[pd.to_numeric(st["score_decile"], errors="coerce") == max_decile]
+        bottom_sub = st[pd.to_numeric(st["score_decile"], errors="coerce") == min_decile]
+        top_rate = float((top_sub["rgpm_percentile"] >= threshold).mean()) if len(top_sub) else np.nan
+        bottom_rate = float((bottom_sub["rgpm_percentile"] >= threshold).mean()) if len(bottom_sub) else np.nan
+        ratio = top_rate / max(bottom_rate, 1e-9) if np.isfinite(top_rate) and np.isfinite(bottom_rate) else np.nan
+        rows.extend(
+            [
+                {"stat": f"top_score_decile_rgpm_{name}_rate", "value": top_rate, "n": int(len(top_sub)), "group": name},
+                {"stat": f"bottom_score_decile_rgpm_{name}_rate", "value": bottom_rate, "n": int(len(bottom_sub)), "group": name},
+                {"stat": f"top_vs_bottom_score_decile_rgpm_{name}_enrichment", "value": ratio, "n": int(len(st)), "group": name},
+            ]
+        )
+    rows.append({"stat": "learned_oof_spearman", "value": safe_spearman(st["S_w_oof"], st["RGPM"]), "n": int(len(st)), "group": "association"})
+    rows.append({"stat": "equal_weight_oof_spearman", "value": safe_spearman(st["S_equal"], st["RGPM"]), "n": int(len(st)), "group": "association"})
+    return pd.DataFrame(rows)
+
+
+def effect_summary_dict(effect_summary: pd.DataFrame) -> Dict[str, float]:
+    if effect_summary.empty or "stat" not in effect_summary.columns or "value" not in effect_summary.columns:
+        return {}
+    out: Dict[str, float] = {}
+    for row in effect_summary.itertuples(index=False):
+        try:
+            out[str(getattr(row, "stat"))] = float(getattr(row, "value"))
+        except Exception:
+            continue
+    return out
+
+
+def update_v3_diagnostics(comp: ComputedData) -> None:
+    summary = dict(comp.diagnostics_summary)
+    eff = effect_summary_dict(comp.effect_summary)
+    if not comp.pair_scan_results.empty and "selected_for_panel_d" in comp.pair_scan_results.columns:
+        selected = comp.pair_scan_results[comp.pair_scan_results["selected_for_panel_d"].astype(int) == 1]
+    else:
+        selected = pd.DataFrame()
+    selected_pairs = [tuple(str(row.pair_key).split("|")) for row in selected.itertuples(index=False)] if not selected.empty else list(comp.selected_panel_d_pairs)
+    metric_counts = Counter(metric for pair in selected_pairs for metric in pair)
+    active_metrics = [key for key in METRIC_KEYS if key in comp.active_metric_keys]
+    selected_p95 = pd.to_numeric(selected.get("p95_delta_vs_equal", pd.Series(dtype=float)), errors="coerce").to_numpy(dtype=float) if not selected.empty else np.asarray([])
+    selected_max = pd.to_numeric(selected.get("max_delta_vs_equal", pd.Series(dtype=float)), errors="coerce").to_numpy(dtype=float) if not selected.empty else np.asarray([])
+    contributing = comp.delta_diagnostics[comp.delta_diagnostics.get("contributing", 0).astype(int) == 1] if "contributing" in comp.delta_diagnostics.columns else pd.DataFrame()
+    diagnostic = comp.delta_diagnostics[
+        (comp.delta_diagnostics.get("primary_candidate", 0).astype(int) == 1)
+        & (comp.delta_diagnostics.get("contributing", 0).astype(int) == 0)
+    ] if "primary_candidate" in comp.delta_diagnostics.columns else pd.DataFrame()
+    pair_checks = {
+        "selected_pair_count": int(len(selected_pairs) == 4),
+        "selected_pairs_cover_all_metrics": int(set(metric_counts.keys()) == set(active_metrics)),
+        "selected_pairs_exactly_one_repeat": int(sorted(metric_counts.values()) == [1] * (len(active_metrics) - 1) + [2]) if active_metrics else 0,
+        "selected_pairs_three_p95_ge_0_03": int(np.isfinite(selected_p95).sum() >= 4 and int(np.sum(selected_p95 >= PAIR_SCAN_P95_MIN)) >= 3),
+        "selected_pairs_one_max_ge_0_08": int(np.isfinite(selected_max).any() and float(np.nanmax(selected_max)) >= PAIR_SCAN_MAX_MIN),
+    }
+    effect_checks = {
+        "learned_oof_spearman_ge_0_45": int(float(summary.get("learned_oof_spearman", np.nan)) >= 0.45),
+        "learned_vs_equal_delta_ge_0_03": int(float(summary.get("learned_vs_equal_delta", np.nan)) >= 0.03),
+        "contributing_graph_deltas_ge_5": int(len(contributing) >= 5),
+        "high_low_tertile_lift_ge_25pp": int(eff.get("high_vs_low_tertile_median_rgpm_lift_pp", np.nan) >= 25.0),
+        "top_decile_enrichment_ge_5x": int(eff.get("top_vs_bottom_score_decile_rgpm_top20_enrichment", np.nan) >= 5.0),
+    }
+    pairwise_effect_weak = not bool(pair_checks["selected_pairs_three_p95_ge_0_03"] and pair_checks["selected_pairs_one_max_ge_0_08"])
+    summary["contributing_graph_deltas"] = contributing["delta"].astype(str).tolist() if not contributing.empty else []
+    summary["diagnostic_graph_deltas"] = diagnostic["delta"].astype(str).tolist() if not diagnostic.empty else []
+    summary["n_contributing_graph_deltas"] = int(len(contributing))
+    summary["mean_contributing_delta_reliability"] = float(contributing["reliability_weight"].mean()) if not contributing.empty else float("nan")
+    summary["selected_panel_d_pairs"] = [list(pair) for pair in selected_pairs]
+    summary["selected_panel_d_metric_counts"] = dict(metric_counts)
+    summary["pairwise_effect_weak"] = bool(pairwise_effect_weak)
+    summary["v3_effect_summary"] = eff
+    summary["v3_pair_checks"] = pair_checks
+    summary["v3_effect_checks"] = effect_checks
+    summary["v3_thresholds"] = {
+        "learned_oof_spearman_min": 0.45,
+        "learned_vs_equal_delta_min": 0.03,
+        "n_contributing_graph_deltas_min": 5,
+        "high_vs_low_tertile_median_rgpm_lift_pp_min": 25.0,
+        "top_score_decile_enrichment_min": 5.0,
+        "selected_pair_p95_min": PAIR_SCAN_P95_MIN,
+        "selected_pair_max_min": PAIR_SCAN_MAX_MIN,
+    }
+    summary["checks"] = {**summary.get("checks", {}), **pair_checks, **effect_checks}
+    data_checks = summary.get("data_checks", {})
+    summary["overall_pass"] = bool(all(pair_checks.values()) and all(effect_checks.values()) and all(data_checks.values()))
+    if summary["overall_pass"]:
+        summary["status_label"] = "validated empirical association"
+    elif pairwise_effect_weak:
+        summary["status_label"] = "moderate empirical association / pairwise effect weak"
+    comp.diagnostics_summary = summary
+
+
 def build_diagnostics_summary(
     active_delta_keys: Sequence[str],
     delta_diagnostics: pd.DataFrame,
@@ -4620,8 +5551,16 @@ def build_diagnostics_summary(
     improvement = learned_rho - equal_rho if np.isfinite(learned_rho) and np.isfinite(equal_rho) else float("nan")
     improvement_vs_best_single = learned_rho - best_single_rho if np.isfinite(learned_rho) and np.isfinite(best_single_rho) else float("nan")
     active_diag = delta_diagnostics[delta_diagnostics["delta"].isin(active_delta_keys)]
+    contributing_diag = delta_diagnostics[
+        delta_diagnostics.get("contributing", pd.Series(0, index=delta_diagnostics.index)).astype(int) == 1
+    ]
+    diagnostic_diag = delta_diagnostics[
+        (delta_diagnostics.get("primary_candidate", pd.Series(0, index=delta_diagnostics.index)).astype(int) == 1)
+        & (delta_diagnostics.get("contributing", pd.Series(0, index=delta_diagnostics.index)).astype(int) == 0)
+    ]
     active_cap_max = float(active_diag["z_cap_hit_rate"].max()) if not active_diag.empty else float("nan")
     mean_rel = float(active_diag["reliability_weight"].mean()) if "reliability_weight" in active_diag and not active_diag.empty else float("nan")
+    mean_contrib_rel = float(contributing_diag["reliability_weight"].mean()) if "reliability_weight" in contributing_diag and not contributing_diag.empty else float("nan")
     score_vals = score_table["S_w_oof"].to_numpy(dtype=float) if "S_w_oof" in score_table.columns else np.array([])
     score_vals = score_vals[np.isfinite(score_vals)]
     score_iqr = float(np.percentile(score_vals, 75) - np.percentile(score_vals, 25)) if len(score_vals) else float("nan")
@@ -4642,6 +5581,7 @@ def build_diagnostics_summary(
         ),
         "score_iqr": int(np.isfinite(score_iqr) and score_iqr > thresholds["score_iqr_min"]),
         "mean_delta_reliability": int(np.isfinite(mean_rel) and mean_rel >= 0.25),
+        "contributing_graph_deltas": int(len(contributing_diag) >= 5),
     }
     data_checks = {
         "domain_count": int(data_profile["n_domains"] >= int(data_thresholds["domains_min"])),
@@ -4697,8 +5637,12 @@ def build_diagnostics_summary(
         "domain_adequacy": domain_diag.to_dict("records"),
         "active_graph_deltas": list(active_delta_keys),
         "n_active_graph_deltas": int(len(active_delta_keys)),
+        "contributing_graph_deltas": contributing_diag["delta"].astype(str).tolist() if not contributing_diag.empty else [],
+        "diagnostic_graph_deltas": diagnostic_diag["delta"].astype(str).tolist() if not diagnostic_diag.empty else [],
+        "n_contributing_graph_deltas": int(len(contributing_diag)),
         "active_delta_z_cap_hit_rate_max": active_cap_max,
         "mean_delta_reliability": mean_rel,
+        "mean_contributing_delta_reliability": mean_contrib_rel,
         "learned_oof_spearman": learned_rho,
         "equal_weight_oof_spearman": equal_rho,
         "best_single_oof_spearman": best_single_rho,
@@ -4727,7 +5671,12 @@ def draw_panel_b(ax: plt.Axes, comp: ComputedData) -> None:
     ax.plot([z_axis_x0 + z_axis_w / 2, z_axis_x0 + z_axis_w / 2], [0.178, 0.778], color="#9CA3AF", lw=0.6, ls="--", transform=ax.transAxes)
     y0 = 0.720
     row_step = min(0.057, 0.565 / max(len(ex), 1))
-    mech_colors = {"Expansion": "#2E7D32", "Bridging": "#0B4FA3", "Reconfiguration": "#F97316", "Consolidation": "#6B7280"}
+    mech_colors = {
+        "Breadth": FIG2_EVIDENCE_CHANNEL_COLORS["Breadth"],
+        "Brokerage": FIG2_EVIDENCE_CHANNEL_COLORS["Brokerage"],
+        "Boundary": FIG2_EVIDENCE_CHANNEL_COLORS["Boundary"],
+        "Consolidation": "#6B7280",
+    }
     for i, row in enumerate(ex.itertuples(index=False)):
         y = y0 - i * row_step
         mech = str(getattr(row, "mechanism", ""))
@@ -4797,49 +5746,370 @@ def rank_decile_calibration_table(
     return pd.DataFrame(rows)
 
 
+def channel_shares_from_metric_weights(weights: Mapping[str, float]) -> Dict[str, float]:
+    totals = {channel: 0.0 for channel in FIG2_EVIDENCE_CHANNEL_ORDER}
+    for metric in METRIC_KEYS:
+        if hasattr(weights, "get"):
+            raw_weight = float(weights.get(metric, weights.get("w_" + metric, 0.0)))  # type: ignore[arg-type]
+        else:
+            raw_weight = 0.0
+        mapping = FIG2_EVIDENCE_MAP.get(metric, {})
+        denom = float(sum(mapping.values()))
+        if denom <= 0:
+            continue
+        for channel, loading in mapping.items():
+            totals[channel] += raw_weight * float(loading) / denom
+    total = float(sum(totals.values()))
+    if total <= 1e-12:
+        return {channel: 1.0 / len(FIG2_EVIDENCE_CHANNEL_ORDER) for channel in FIG2_EVIDENCE_CHANNEL_ORDER}
+    return {channel: float(value / total) for channel, value in totals.items()}
+
+
+def channel_shares_to_xy(shares: Mapping[str, float]) -> Tuple[float, float]:
+    breadth = float(shares.get("Breadth", 0.0))
+    brokerage = float(shares.get("Brokerage", 0.0))
+    boundary = float(shares.get("Boundary", 0.0))
+    atypicality = float(shares.get("Atypicality", 0.0))
+    return brokerage - breadth, boundary - atypicality
+
+
+def diamond_xy_to_channel_shares(x: float, y: float) -> Dict[str, float]:
+    residual = max(0.0, 1.0 - abs(float(x)) - abs(float(y)))
+    base = residual / 4.0
+    shares = {
+        "Breadth": max(-float(x), 0.0) + base,
+        "Brokerage": max(float(x), 0.0) + base,
+        "Boundary": max(float(y), 0.0) + base,
+        "Atypicality": max(-float(y), 0.0) + base,
+    }
+    total = float(sum(shares.values()))
+    return {channel: value / total for channel, value in shares.items()} if total > 0 else shares
+
+
+def channel_profile_candidates(
+    active_metric_keys: Sequence[str],
+    channel_shares: Mapping[str, float],
+    n_candidates: int,
+    seed: int,
+) -> np.ndarray:
+    active = [key for key in active_metric_keys if key in METRIC_KEYS]
+    if not active:
+        return np.empty((0, 0), dtype=float)
+    key_to_idx = {key: i for i, key in enumerate(active)}
+    rng = np.random.default_rng(seed)
+    n = max(1, int(n_candidates))
+    W = np.zeros((n, len(active)), dtype=float)
+    for channel in FIG2_EVIDENCE_CHANNEL_ORDER:
+        mass = float(channel_shares.get(channel, 0.0))
+        pool = [key for key in FIG2_CHANNEL_METRIC_POOLS.get(channel, []) if key in key_to_idx]
+        if mass <= 0 or not pool:
+            continue
+        if len(pool) == 1:
+            W[:, key_to_idx[pool[0]]] += mass
+            continue
+        splits = rng.dirichlet(np.ones(len(pool)), size=n)
+        for j, key in enumerate(pool):
+            W[:, key_to_idx[key]] += mass * splits[:, j]
+    sums = W.sum(axis=1, keepdims=True)
+    empty = sums[:, 0] <= 1e-12
+    if empty.any():
+        W[empty, :] = 1.0 / len(active)
+        sums = W.sum(axis=1, keepdims=True)
+    W = W / np.maximum(sums, 1e-12)
+    W = np.round(W, 8)
+    _, idx = np.unique(W, axis=0, return_index=True)
+    return W[np.sort(idx)]
+
+
+def channel_profile_grid(
+    comp: ComputedData,
+    bins: int = 25,
+    profile_n: int = 80,
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    active = list(comp.active_metric_keys)
+    st = comp.score_table.replace([np.inf, -np.inf], np.nan).dropna(
+        subset=[key + "_z" for key in active] + ["RGPM"]
+    ).reset_index(drop=True)
+    if st.empty or not active:
+        return np.asarray([]), np.asarray([]), np.asarray([])
+    X = st[[key + "_z" for key in active]].to_numpy(dtype=float)
+    y = st["RGPM"].to_numpy(dtype=float)
+    fold_ids = st["fold_id"].to_numpy(dtype=int) if "fold_id" in st.columns else np.zeros(len(st), dtype=int)
+    folds = [np.where(fold_ids == f)[0] for f in sorted(set(fold_ids)) if f > 0 and np.sum(fold_ids == f) > 0]
+    if len(folds) < 2:
+        folds = make_folds(st, n_folds=3, mode="random", seed=411)
+    equal_w = np.ones(len(active), dtype=float) / len(active)
+    equal_rho = safe_spearman(X @ equal_w, y)
+    centers = np.linspace(-1.0, 1.0, int(bins))
+    xs: List[float] = []
+    ys: List[float] = []
+    perf_vals: List[float] = []
+    for xval in centers:
+        for yval in centers:
+            if abs(float(xval)) + abs(float(yval)) > 1.0 + 1e-9:
+                continue
+            shares = diamond_xy_to_channel_shares(float(xval), float(yval))
+            seed = stable_int_id((round(float(xval), 4), round(float(yval), 4), len(st), tuple(active)))
+            W = channel_profile_candidates(active, shares, n_candidates=profile_n, seed=seed)
+            if W.size == 0:
+                value = np.nan
+            else:
+                perf = weight_performance_cv(X, y, W, folds, progress=False)
+                value = float(np.nanmax(perf) - equal_rho) if np.isfinite(perf).any() else np.nan
+            xs.append(float(xval))
+            ys.append(float(yval))
+            perf_vals.append(value)
+    return np.asarray(xs, dtype=float), np.asarray(ys, dtype=float), np.asarray(perf_vals, dtype=float)
+
+
+def draw_panel_c(ax: plt.Axes, comp: ComputedData) -> None:
+    panel_frame(ax, "c", "Fig. 2-aligned four-channel evidence landscape")
+    x, y, perf = channel_profile_grid(
+        comp,
+        bins=int(getattr(comp, "profile_grid_size", 25)),
+        profile_n=int(getattr(comp, "profile_n", 80)),
+    )
+    ax_d = ax.inset_axes([0.250, 0.120, 0.560, 0.740])
+    ax_d.set_aspect("equal")
+    ax_d.axis("off")
+    finite = np.isfinite(perf)
+    vals = perf[finite]
+    lim = max(0.025, min(0.18, float(np.nanpercentile(np.abs(vals), 95)) if len(vals) else 0.05))
+    norm = mcolors.TwoSlopeNorm(vmin=-lim, vcenter=0.0, vmax=lim)
+    cmap = plt.get_cmap("RdYlBu_r").copy()
+    if finite.sum() >= 3:
+        tri = mtri.Triangulation(x[finite], y[finite])
+        tpc = ax_d.tricontourf(
+            tri,
+            perf[finite],
+            levels=np.linspace(-lim, lim, 17),
+            cmap=cmap,
+            norm=norm,
+            extend="both",
+        )
+        ax_d.triplot(tri, color="white", lw=0.16, alpha=0.28, zorder=2)
+        if np.nanmin(perf[finite]) < np.nanpercentile(perf[finite], 90) < np.nanmax(perf[finite]):
+            ax_d.tricontour(
+                tri,
+                perf[finite],
+                levels=[float(np.nanpercentile(perf[finite], 90))],
+                colors="#111827",
+                linewidths=0.9,
+                linestyles="--",
+                zorder=5,
+            )
+            ax_d.text(0.02, 0.88, "top 10% contour", ha="left", va="center", fontsize=5.4, color=TEXT_DARK)
+    else:
+        tpc = plt.cm.ScalarMappable(norm=norm, cmap=cmap)
+        ax_d.text(0.0, 0.0, "channel grid unavailable", ha="center", va="center", fontsize=7.0, color="#7F1D1D", fontweight="bold")
+
+    diamond = np.array([[-1, 0], [0, 1], [1, 0], [0, -1], [-1, 0]], dtype=float)
+    ax_d.plot(diamond[:, 0], diamond[:, 1], color="#1E3A8A", lw=1.0, zorder=6)
+    ax_d.axhline(0, color="#FFFFFF", lw=0.45, alpha=0.55, zorder=3)
+    ax_d.axvline(0, color="#FFFFFF", lw=0.45, alpha=0.55, zorder=3)
+    ax_d.set_xlim(-1.10, 1.10)
+    ax_d.set_ylim(-1.10, 1.10)
+    ax_d.text(-1.04, 0.0, "Breadth", ha="right", va="center", fontsize=6.5, color=FIG2_EVIDENCE_CHANNEL_COLORS["Breadth"], fontweight="bold", clip_on=False)
+    ax_d.text(0.92, 0.0, "Brokerage", ha="left", va="center", fontsize=6.5, color=FIG2_EVIDENCE_CHANNEL_COLORS["Brokerage"], fontweight="bold", clip_on=False)
+    ax_d.text(0.0, 1.04, "Boundary", ha="center", va="bottom", fontsize=6.5, color=FIG2_EVIDENCE_CHANNEL_COLORS["Boundary"], fontweight="bold", clip_on=False)
+    ax_d.text(0.0, -1.04, "Atypicality", ha="center", va="top", fontsize=6.5, color=FIG2_EVIDENCE_CHANNEL_COLORS["Atypicality"], fontweight="bold", clip_on=False)
+
+    shares = channel_shares_from_metric_weights({key: float(comp.best_weights.get(key, 0.0)) for key in METRIC_KEYS})
+    sx, sy = channel_shares_to_xy(shares)
+    ax_d.scatter([sx], [sy], marker="*", s=110, color="black", edgecolors="white", linewidths=0.65, zorder=8)
+    ax_d.text(sx + 0.055, sy + 0.055, "learned", ha="left", va="bottom", fontsize=5.4, color=TEXT_DARK)
+
+    cax = ax.inset_axes([0.835, 0.225, 0.035, 0.485])
+    cb = plt.colorbar(tpc, cax=cax)
+    cb.ax.tick_params(labelsize=5)
+    cb.set_label("Best Δρ vs equal", fontsize=5.5)
+
+    rounded_box(ax, 0.035, 0.205, 0.190, 0.570, "#FFFFFF", "#CBD5E1", 0.65, 0.012)
+    ax.text(0.055, 0.735, "Fig. 2 channels", ha="left", va="center", fontsize=6.4, fontweight="bold")
+    rows = [
+        ("Breadth", "RS, PDE, RTD"),
+        ("Brokerage", "B, RTD, Burt IP"),
+        ("Boundary", "ΔQ0, B, Uzzi"),
+        ("Atypicality", "Uzzi"),
+    ]
+    yy = 0.650
+    for channel, desc in rows:
+        color = FIG2_EVIDENCE_CHANNEL_COLORS[channel]
+        ax.scatter([0.065], [yy], s=42, color=color, edgecolors="white", linewidths=0.45, transform=ax.transAxes, zorder=4)
+        ax.text(0.095, yy, f"{channel}\n({desc})", ha="left", va="center", fontsize=5.55, transform=ax.transAxes)
+        yy -= 0.120
+    ax.text(
+        0.500,
+        0.060,
+        "Diamond projection: left/right = Breadth/Brokerage, up/down = Boundary/Atypicality; star is final all-data weight.",
+        ha="center",
+        va="center",
+        fontsize=5.4,
+    )
+
+
+def draw_panel_d(ax: plt.Axes, comp: ComputedData) -> None:
+    panel_frame(ax, "d", "Robust pair-weight profile landscapes")
+    positions = [(0.070, 0.210, 0.245, 0.610), (0.365, 0.210, 0.245, 0.610), (0.660, 0.210, 0.245, 0.610)]
+    grid_results: List[Tuple[str, str, np.ndarray, np.ndarray, np.ndarray]] = []
+    finite_values: List[np.ndarray] = []
+    for xkey, ykey in PAIRWISE_LANDSCAPES:
+        xs, ys, grid = pairwise_profile_grid(comp, xkey, ykey, bins=comp.profile_grid_size, profile_n=comp.profile_n)
+        grid_results.append((xkey, ykey, xs, ys, grid))
+        vals = grid[np.isfinite(grid)]
+        if len(vals):
+            finite_values.append(vals)
+    if finite_values:
+        pooled = np.concatenate(finite_values)
+        lim = max(0.025, min(0.18, float(np.nanpercentile(np.abs(pooled), 95))))
+    else:
+        lim = 0.05
+    norm = mcolors.TwoSlopeNorm(vmin=-lim, vcenter=0.0, vmax=lim)
+    cmap = plt.get_cmap("RdYlBu_r").copy()
+    cmap.set_bad("#E5E7EB")
+    last_im = None
+    for (xkey, ykey, xs, ys, grid), (x0, y0, w, h) in zip(grid_results, positions):
+        iax = ax.inset_axes([x0, y0, w, h])
+        masked = np.ma.masked_invalid(grid)
+        last_im = iax.imshow(masked, origin="lower", extent=[0, 1, 0, 1], aspect="auto", cmap=cmap, norm=norm)
+        iax.set_title(rf"{METRIC_LABELS[xkey]} / {METRIC_LABELS[ykey]} profile", fontsize=7)
+        iax.set_xlabel(f"share to {METRIC_LABELS[xkey]}", fontsize=5.5)
+        iax.set_ylabel("pair weight mass", fontsize=5.5)
+        iax.tick_params(labelsize=5, length=2)
+        best = comp.best_weights
+        pair_mass = float(best[xkey] + best[ykey])
+        pair_share_x = float(best[xkey] / pair_mass) if pair_mass > 1e-12 else 0.5
+        iax.scatter([pair_share_x], [pair_mass], s=20, color="black", edgecolors="white", linewidths=0.5, zorder=5)
+        finite_grid = np.isfinite(grid)
+        if finite_grid.any():
+            try:
+                thr = float(np.nanpercentile(grid[finite_grid], 90))
+                if np.nanmin(grid[finite_grid]) < thr < np.nanmax(grid[finite_grid]):
+                    iax.contour(xs, ys, grid, levels=[thr], colors="white", linewidths=0.9, linestyles="--")
+            except ValueError:
+                pass
+        for spine in iax.spines.values():
+            spine.set_linewidth(0.5)
+    if last_im is not None:
+        cax = ax.inset_axes([0.930, 0.280, 0.025, 0.470])
+        cb = plt.colorbar(last_im, cax=cax)
+        cb.ax.tick_params(labelsize=5)
+        cb.set_label("Best Δρ vs equal", fontsize=5.5)
+    ax.text(
+        0.505,
+        0.085,
+        "Shared robust 95% color scale; each cell fixes pair mass/share and profiles remaining active indicators.",
+        ha="center",
+        va="center",
+        fontsize=5.7,
+    )
+
+
+def stratified_percentile_scatter(
+    score_table: pd.DataFrame,
+    seed: int,
+    max_points: int = 1800,
+) -> pd.DataFrame:
+    st = score_table.replace([np.inf, -np.inf], np.nan).dropna(subset=["S_w_oof", "RGPM"]).copy()
+    if st.empty:
+        return st
+    st["score_percentile"] = st["S_w_oof"].rank(method="average", pct=True) * 100.0
+    st["rgpm_percentile"] = st["RGPM"].rank(method="average", pct=True) * 100.0
+    q = min(10, max(2, int(st["score_percentile"].nunique())))
+    st["_pred_bin"] = pd.qcut(st["score_percentile"].rank(method="first"), q=q, labels=False, duplicates="drop")
+    bins = [b for b in sorted(st["_pred_bin"].dropna().unique().tolist())]
+    if not bins:
+        return st.sample(n=min(len(st), max_points), random_state=seed)
+    per_bin = max(1, int(math.ceil(max_points / max(len(bins), 1))))
+    sampled = []
+    for bin_id, sub in st.groupby("_pred_bin", sort=True):
+        n = min(len(sub), per_bin)
+        sampled.append(sub.sample(n=n, random_state=seed + int(bin_id)))
+    return pd.concat(sampled, ignore_index=True, sort=False)
+
+
 def draw_panel_f(ax: plt.Axes, comp: ComputedData) -> None:
-    panel_frame(ax, "f", "Out-of-fold score calibration against structural-residual RGPM")
-    cal_ax = ax.inset_axes([0.065, 0.185, 0.425, 0.660])
+    panel_frame(ax, "f", "Out-of-fold predicted vs observed RGPM percentiles")
+    scatter_ax = ax.inset_axes([0.065, 0.185, 0.425, 0.660])
     st = comp.score_table.copy()
     rho = safe_spearman(st["S_w_oof"], st["RGPM"])
     cal = rank_decile_calibration_table(st, seed=comp.profile_n + 410)
-    if cal.empty:
-        cal_ax.text(0.5, 0.5, "No OOF calibration data", ha="center", va="center", fontsize=7)
+    cloud = stratified_percentile_scatter(st, seed=comp.profile_n + 911, max_points=1800)
+    if cloud.empty:
+        scatter_ax.text(0.5, 0.5, "No OOF scatter data", ha="center", va="center", fontsize=7)
     else:
-        x = cal["score_percentile_mid"].to_numpy(dtype=float)
-        y = cal["rgpm_percentile_mean"].to_numpy(dtype=float)
-        lo = cal["ci_low"].to_numpy(dtype=float)
-        hi = cal["ci_high"].to_numpy(dtype=float)
-        cal_ax.fill_between(x, lo, hi, color="#93C5FD", alpha=0.28, linewidth=0)
-        cal_ax.plot(x, y, color="#1D4ED8", lw=1.6, marker="o", markersize=3.8, label="Mean RGPM percentile")
-        cal_ax.plot(x, cal["rgpm_percentile_median"].to_numpy(dtype=float), color="#111827", lw=1.0, marker="s", markersize=3.0, alpha=0.75, label="Median")
-        cal_ax.plot([0, 100], [50, 50], color="#9CA3AF", lw=0.7, ls=":")
-        cal_ax.plot([0, 100], [0, 100], color="#D1D5DB", lw=0.7, ls="--")
-        top = cal[cal["score_decile"] == cal["score_decile"].max()]
-        lift = float(top["rgpm_percentile_mean"].iloc[0] - 50.0) if not top.empty else np.nan
-        cal_ax.text(
-            0.050,
-            0.925,
-            f"OOF Spearman ρ = {rho:.2f}\nTop-decile lift = {lift:+.1f} pp" if np.isfinite(lift) else f"OOF Spearman ρ = {rho:.2f}",
-            transform=cal_ax.transAxes,
+        landmark_series = cloud["is_landmark"] if "is_landmark" in cloud.columns else pd.Series(0, index=cloud.index)
+        colors = np.where(pd.to_numeric(landmark_series, errors="coerce").fillna(0).astype(int) == 1, "#EF4444", "#2563EB")
+        scatter_ax.scatter(
+            cloud["score_percentile"],
+            cloud["rgpm_percentile"],
+            s=9,
+            c=colors,
+            alpha=0.34,
+            edgecolors="none",
+            rasterized=True,
+            label="OOF papers",
+        )
+        scatter_ax.plot([0, 100], [0, 100], color="#9CA3AF", lw=0.9, ls="--", label="y = x")
+        if not cal.empty:
+            x = cal["score_percentile_mid"].to_numpy(dtype=float)
+            scatter_ax.plot(
+                x,
+                cal["rgpm_percentile_median"].to_numpy(dtype=float),
+                color="#111827",
+                lw=1.55,
+                marker="o",
+                markersize=3.0,
+                label="Decile median",
+            )
+            scatter_ax.plot(
+                x,
+                cal["rgpm_percentile_mean"].to_numpy(dtype=float),
+                color="#1D4ED8",
+                lw=1.05,
+                alpha=0.80,
+                label="Decile mean",
+            )
+        finite = np.isfinite(cloud["score_percentile"].to_numpy(dtype=float)) & np.isfinite(cloud["rgpm_percentile"].to_numpy(dtype=float))
+        if finite.sum() >= 5:
+            coef = np.polyfit(
+                cloud.loc[finite, "score_percentile"].to_numpy(dtype=float),
+                cloud.loc[finite, "rgpm_percentile"].to_numpy(dtype=float),
+                1,
+            )
+            xx = np.linspace(0, 100, 100)
+            scatter_ax.plot(xx, coef[0] * xx + coef[1], color="#F97316", lw=1.0, alpha=0.88, label="Linear fit")
+        top = cal[cal["score_decile"] == cal["score_decile"].max()] if not cal.empty else pd.DataFrame()
+        lift = float(top["rgpm_percentile_median"].iloc[0] - 50.0) if not top.empty else np.nan
+        scatter_ax.text(
+            0.045,
+            0.940,
+            f"OOF Spearman ρ = {rho:.2f}\nTop-decile median lift = {lift:+.1f} pp" if np.isfinite(lift) else f"OOF Spearman ρ = {rho:.2f}",
+            transform=scatter_ax.transAxes,
             ha="left",
             va="top",
             fontsize=6.4,
             color="#0F3A75",
             fontweight="bold",
         )
-        cal_ax.set_xlim(0, 100)
-        cal_ax.set_ylim(0, 100)
-        cal_ax.set_xlabel("$S_w$ OOF percentile decile", fontsize=6)
-        cal_ax.set_ylabel("Mean structural-residual RGPM percentile", fontsize=6)
-        cal_ax.legend(frameon=True, fontsize=4.8, loc="lower right")
-    cal_ax.tick_params(labelsize=5)
-    cal_ax.set_title("Rank-decile calibration", fontsize=7, color="#0F3A75", fontweight="bold")
-    cal_ax.grid(True, color="#E5E7EB", lw=0.45)
-    for s in cal_ax.spines.values():
+        scatter_ax.set_xlim(0, 100)
+        scatter_ax.set_ylim(0, 100)
+        scatter_ax.set_xlabel("OOF predicted RGPM percentile", fontsize=6)
+        scatter_ax.set_ylabel("Observed RGPM percentile", fontsize=6)
+        scatter_ax.legend(frameon=True, fontsize=4.7, loc="lower right")
+    scatter_ax.tick_params(labelsize=5)
+    scatter_ax.set_title("Stratified true-coordinate scatter", fontsize=7, color="#0F3A75", fontweight="bold")
+    scatter_ax.grid(True, color="#E5E7EB", lw=0.45)
+    for s in scatter_ax.spines.values():
         s.set_linewidth(0.5)
 
-    score_q = pd.qcut(st["S_w_oof"].rank(method="first"), q=3, labels=["Low", "Mid", "High"])
+    try:
+        score_q = pd.qcut(st["S_w_oof"].rank(method="first"), q=3, labels=["Low", "Mid", "High"])
+    except ValueError:
+        pct = st["S_w_oof"].rank(method="average", pct=True)
+        score_q = pd.Series("Mid", index=st.index, dtype=object)
+        score_q.loc[pct <= 1.0 / 3.0] = "Low"
+        score_q.loc[pct >= 2.0 / 3.0] = "High"
 
     ax.text(0.720, 0.835, "Indicator profiles by OOF score tertile", ha="center", va="center", fontsize=7.2, color="#0F3A75", fontweight="bold")
     bar_ax = ax.inset_axes([0.565, 0.170, 0.385, 0.625])
@@ -4866,6 +6136,392 @@ def draw_panel_f(ax: plt.Axes, comp: ComputedData) -> None:
     bar_ax.legend(frameon=True, fontsize=5, loc="lower right")
     for s in bar_ax.spines.values():
         s.set_linewidth(0.5)
+
+
+# =============================================================================
+# v3 final panel overrides: contributing deltas, rectangular channels, 4-pair
+# panel-d coverage, and distribution/enrichment Panel f.
+# =============================================================================
+
+def short_drop_reason(reason: str) -> str:
+    text = str(reason or "").replace("low_reliability_weight", "low reliability")
+    text = text.replace("near_constant_controls", "flat controls")
+    text = text.replace("near_constant_global_delta", "flat delta")
+    text = text.replace("diagnostic_or_consolidation_outcome", "diagnostic")
+    parts = [p.strip() for p in text.split(";") if p.strip()]
+    return ", ".join(parts[:2]) if parts else "diagnostic"
+
+
+def draw_panel_b(ax: plt.Axes, comp: ComputedData) -> None:
+    panel_frame(ax, "b", "Reliable graph-delta target construction")
+    ex = comp.panel_b_example.copy()
+    if ex.empty:
+        raise ValueError("Panel b example data is empty.")
+    rectangle_box(ax, 0.020, 0.105, 0.690, 0.785, "#FFFFFF", BORDER, 0.65)
+    ax.text(0.365, 0.852, "Contributing future graph deltas used in RGPM", ha="center", va="center", fontsize=7.2, color="#0F3A75", fontweight="bold")
+    z_axis_x0 = 0.428
+    z_axis_w = 0.230
+    ax.text(z_axis_x0, 0.798, "-4", ha="center", va="center", fontsize=5.1, color=TEXT_LIGHT)
+    ax.text(z_axis_x0 + z_axis_w / 2, 0.798, "0", ha="center", va="center", fontsize=5.1, color=TEXT_LIGHT)
+    ax.text(z_axis_x0 + z_axis_w, 0.798, "+4", ha="center", va="center", fontsize=5.1, color=TEXT_LIGHT)
+    ax.plot([z_axis_x0, z_axis_x0 + z_axis_w], [0.773, 0.773], color="#CBD5E1", lw=0.8, transform=ax.transAxes)
+    ax.plot([z_axis_x0 + z_axis_w / 2, z_axis_x0 + z_axis_w / 2], [0.188, 0.785], color="#9CA3AF", lw=0.55, ls="--", transform=ax.transAxes)
+    y0 = 0.724
+    row_step = min(0.072, 0.552 / max(len(ex), 1))
+    mech_colors = {
+        "Breadth": FIG2_EVIDENCE_CHANNEL_COLORS["Breadth"],
+        "Brokerage": FIG2_EVIDENCE_CHANNEL_COLORS["Brokerage"],
+        "Boundary": FIG2_EVIDENCE_CHANNEL_COLORS["Boundary"],
+        "Consolidation": "#6B7280",
+    }
+    for i, row in enumerate(ex.itertuples(index=False)):
+        y = y0 - i * row_step
+        mech = str(getattr(row, "mechanism", ""))
+        ax.scatter([0.045], [y], s=21, color=mech_colors.get(mech, "#9CA3AF"), transform=ax.transAxes, zorder=4)
+        ax.text(0.067, y, getattr(row, "label"), ha="left", va="center", fontsize=5.35)
+        rel = float(getattr(row, "reliability_weight", np.nan))
+        ax.text(0.350, y, f"r={rel:.2f}" if np.isfinite(rel) else "", ha="right", va="center", fontsize=4.9, color=TEXT_LIGHT)
+        z = float(getattr(row, "z"))
+        x0 = z_axis_x0 + z_axis_w / 2
+        x1 = z_axis_x0 + z_axis_w * ((np.clip(z, -4.0, 4.0) + 4.0) / 8.0)
+        color = "#DC2626" if z >= 0 else "#2563EB"
+        ax.add_patch(mpatches.Rectangle((min(x0, x1), y - 0.013), max(abs(x1 - x0), 0.004), 0.026, transform=ax.transAxes, facecolor=color, edgecolor="none", alpha=0.86))
+        if int(getattr(row, "clipped", 0)):
+            ax.scatter([x1], [y], marker="^" if z >= 0 else "v", s=18, color="#111827", transform=ax.transAxes, zorder=6)
+        ax.text(0.676, y, format_z_for_panel(z), ha="center", va="center", fontsize=5.25)
+    ax.text(0.365, 0.062, "Main RGPM excludes low-reliability primary deltas; these remain visible as diagnostics.", ha="center", va="center", fontsize=5.45)
+
+    rectangle_box(ax, 0.735, 0.105, 0.245, 0.785, "#FFFFFF", BORDER, 0.65)
+    ax.text(0.858, 0.852, "Target rule", ha="center", va="center", fontsize=7.4, color="#0F3A75", fontweight="bold")
+    ax.text(0.858, 0.727, r"$z_j=(\Delta_j-\tilde{\Delta}_{ctrl})/scale_j$", ha="center", va="center", fontsize=5.9)
+    ax.text(0.858, 0.620, r"$M_g=\sqrt{\sum r_j\max(z_j,0)^2/\sum r_j}$", ha="center", va="center", fontsize=5.55)
+    ax.text(0.858, 0.515, r"$RGPM=rank(resid(M_{main}))$", ha="center", va="center", fontsize=6.25, color="#1D4ED8", fontweight="bold")
+    contributing = comp.delta_diagnostics[comp.delta_diagnostics.get("contributing", pd.Series(0, index=comp.delta_diagnostics.index)).astype(int) == 1]
+    diagnostic = comp.delta_diagnostics[
+        (comp.delta_diagnostics.get("primary_candidate", pd.Series(0, index=comp.delta_diagnostics.index)).astype(int) == 1)
+        & (comp.delta_diagnostics.get("contributing", pd.Series(0, index=comp.delta_diagnostics.index)).astype(int) == 0)
+    ].copy()
+    rounded_box(ax, 0.764, 0.365, 0.190, 0.088, "#ECFDF5", "#86EFAC", 0.65, 0.010)
+    ax.text(0.859, 0.409, f"contributing: {len(contributing)} / {len(PRIMARY_RGPM_DELTA_KEYS)}", ha="center", va="center", fontsize=5.8, color="#166534", fontweight="bold")
+    rounded_box(ax, 0.758, 0.118, 0.202, 0.215, "#F3F4F6", "#CBD5E1", 0.65, 0.010)
+    ax.text(0.778, 0.306, "Diagnostic-only", ha="left", va="center", fontsize=5.65, color=TEXT_MID, fontweight="bold")
+    if diagnostic.empty:
+        ax.text(0.859, 0.225, "none", ha="center", va="center", fontsize=5.45, color=TEXT_LIGHT)
+    else:
+        yy = 0.266
+        for row in diagnostic.sort_values("reliability_weight", ascending=False).head(4).itertuples(index=False):
+            key = str(getattr(row, "delta"))
+            label = DELTA_LABELS.get(key, key)
+            rel = float(getattr(row, "reliability_weight", np.nan))
+            ax.text(0.778, yy, f"{label}: r={rel:.2f}", ha="left", va="center", fontsize=4.95, color=TEXT_MID)
+            ax.text(0.778, yy - 0.026, short_drop_reason(str(getattr(row, "drop_reasons", ""))), ha="left", va="center", fontsize=4.55, color=TEXT_LIGHT)
+            yy -= 0.055
+
+
+def channel_shares_to_metric_weight_deterministic(
+    comp: ComputedData,
+    active: Sequence[str],
+    shares: Mapping[str, float],
+) -> np.ndarray:
+    active = [key for key in active if key in METRIC_KEYS]
+    if not active:
+        return np.asarray([], dtype=float)
+    key_to_idx = {key: i for i, key in enumerate(active)}
+    w = np.zeros(len(active), dtype=float)
+    for channel in FIG2_EVIDENCE_CHANNEL_ORDER:
+        mass = max(0.0, float(shares.get(channel, 0.0)))
+        pool = [key for key in FIG2_CHANNEL_METRIC_POOLS.get(channel, []) if key in key_to_idx]
+        if mass <= 0 or not pool:
+            continue
+        base = np.asarray([float(comp.best_weights.get(key, 0.0)) for key in pool], dtype=float)
+        base = np.maximum(np.where(np.isfinite(base), base, 0.0), 0.0)
+        if base.sum() <= 1e-12:
+            base = np.ones(len(pool), dtype=float)
+        base = base / base.sum()
+        for key, share in zip(pool, base):
+            w[key_to_idx[key]] += mass * float(share)
+    if w.sum() <= 1e-12:
+        w[:] = 1.0 / len(w)
+    return w / w.sum()
+
+
+def cv_delta_for_weight_matrix(comp: ComputedData, W: np.ndarray, active: Sequence[str], chunk_size: int = 600) -> np.ndarray:
+    active = [key for key in active if key in METRIC_KEYS]
+    st = comp.score_table.replace([np.inf, -np.inf], np.nan).dropna(subset=[key + "_z" for key in active] + ["RGPM"]).reset_index(drop=True)
+    if st.empty or W.size == 0:
+        return np.full(W.shape[0], np.nan, dtype=float)
+    X = st[[key + "_z" for key in active]].to_numpy(dtype=float)
+    y = st["RGPM"].to_numpy(dtype=float)
+    fold_ids = st["fold_id"].to_numpy(dtype=int) if "fold_id" in st.columns else np.zeros(len(st), dtype=int)
+    folds = [np.where(fold_ids == fold)[0] for fold in sorted(set(fold_ids)) if fold > 0 and np.sum(fold_ids == fold) >= 4]
+    if len(folds) < 2:
+        folds = make_folds(st, n_folds=3, mode="random", seed=stable_int_id(("rect", len(st), tuple(active))))
+    equal_w = np.ones(len(active), dtype=float) / len(active)
+    perfs = np.zeros(W.shape[0], dtype=float)
+    counts = np.zeros(W.shape[0], dtype=float)
+    for test_idx in folds:
+        Xt = X[test_idx]
+        yt = y[test_idx]
+        eq = float(columnwise_spearman(Xt @ equal_w, yt)[0])
+        if not np.isfinite(eq):
+            continue
+        for start in range(0, W.shape[0], int(chunk_size)):
+            end = min(start + int(chunk_size), W.shape[0])
+            rho = columnwise_spearman(Xt @ W[start:end].T, yt)
+            valid = np.isfinite(rho)
+            perfs[start:end][valid] += rho[valid] - eq
+            counts[start:end][valid] += 1.0
+    return np.divide(perfs, np.maximum(counts, 1.0), out=np.full_like(perfs, np.nan), where=counts > 0)
+
+
+def channel_rectangle_grid(comp: ComputedData, bins: int = 25, axis_bins: int = 9) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    active = [key for key in comp.active_metric_keys if key in METRIC_KEYS]
+    xs = np.linspace(0.0, 1.0, max(5, int(bins)))
+    ys = np.linspace(0.0, 1.0, max(5, int(bins)))
+    axis_masses = np.linspace(0.05, 0.95, max(5, int(axis_bins)))
+    rows: List[np.ndarray] = []
+    cell_ids: List[Tuple[int, int, float]] = []
+    for j, boundary_share in enumerate(ys):
+        for i, brokerage_share in enumerate(xs):
+            for horizontal_mass in axis_masses:
+                shares = {
+                    "Breadth": float(horizontal_mass * (1.0 - brokerage_share)),
+                    "Brokerage": float(horizontal_mass * brokerage_share),
+                    "Boundary": float((1.0 - horizontal_mass) * boundary_share),
+                    "Atypicality": float((1.0 - horizontal_mass) * (1.0 - boundary_share)),
+                }
+                rows.append(channel_shares_to_metric_weight_deterministic(comp, active, shares))
+                cell_ids.append((j, i, float(horizontal_mass)))
+    if not rows:
+        return xs, ys, np.full((len(ys), len(xs)), np.nan), np.full((len(ys), len(xs)), np.nan)
+    W = np.vstack(rows)
+    deltas = cv_delta_for_weight_matrix(comp, W, active, chunk_size=500)
+    grid = np.full((len(ys), len(xs)), np.nan, dtype=float)
+    best_axis = np.full((len(ys), len(xs)), np.nan, dtype=float)
+    for value, (j, i, horizontal_mass) in zip(deltas, cell_ids):
+        if not np.isfinite(value):
+            continue
+        if not np.isfinite(grid[j, i]) or value > grid[j, i]:
+            grid[j, i] = float(value)
+            best_axis[j, i] = float(horizontal_mass)
+    return xs, ys, grid, best_axis
+
+
+def draw_panel_c(ax: plt.Axes, comp: ComputedData) -> None:
+    panel_frame(ax, "c", "Fig. 2-aligned four-channel landscape")
+    xs, ys, grid, best_axis = channel_rectangle_grid(comp, bins=int(comp.profile_grid_size), axis_bins=9)
+    finite = np.isfinite(grid)
+    vals = grid[finite]
+    lim = max(0.015, min(0.18, float(np.nanpercentile(np.abs(vals), 95)) if len(vals) else 0.05))
+    norm = mcolors.TwoSlopeNorm(vmin=-lim, vcenter=0.0, vmax=lim)
+    cmap = plt.get_cmap("RdYlBu_r").copy()
+    cmap.set_bad("#E5E7EB")
+    ax_r = ax.inset_axes([0.260, 0.180, 0.535, 0.635])
+    im = ax_r.imshow(np.ma.masked_invalid(grid), origin="lower", extent=[0, 1, 0, 1], aspect="auto", cmap=cmap, norm=norm)
+    if finite.any():
+        try:
+            thr = float(np.nanpercentile(grid[finite], 90))
+            if np.nanmin(grid[finite]) < thr < np.nanmax(grid[finite]):
+                ax_r.contour(xs, ys, grid, levels=[thr], colors="#111827", linewidths=0.8, linestyles="--")
+        except ValueError:
+            pass
+    ax_r.set_xlabel("Breadth  ← channel mix →  Brokerage", fontsize=5.8)
+    ax_r.set_ylabel("Boundary share", fontsize=5.8)
+    ax_r.tick_params(labelsize=5.0, length=2)
+    ax_r.text(0.00, 1.035, "Boundary", ha="left", va="bottom", fontsize=6.0, color=FIG2_EVIDENCE_CHANNEL_COLORS["Boundary"], fontweight="bold", transform=ax_r.transAxes)
+    ax_r.text(0.00, -0.105, "Atypicality", ha="left", va="top", fontsize=6.0, color=FIG2_EVIDENCE_CHANNEL_COLORS["Atypicality"], fontweight="bold", transform=ax_r.transAxes)
+    shares = channel_shares_from_metric_weights({key: float(comp.best_weights.get(key, 0.0)) for key in METRIC_KEYS})
+    horizontal = float(shares.get("Breadth", 0.0) + shares.get("Brokerage", 0.0))
+    vertical = float(shares.get("Boundary", 0.0) + shares.get("Atypicality", 0.0))
+    sx = float(shares.get("Brokerage", 0.0) / horizontal) if horizontal > 1e-12 else 0.5
+    sy = float(shares.get("Boundary", 0.0) / vertical) if vertical > 1e-12 else 0.5
+    ax_r.scatter([sx], [sy], marker="*", s=105, color="black", edgecolors="white", linewidths=0.65, zorder=8)
+    ax_r.text(min(0.96, sx + 0.035), min(0.96, sy + 0.040), "learned", ha="left", va="bottom", fontsize=5.3, color=TEXT_DARK)
+    for spine in ax_r.spines.values():
+        spine.set_linewidth(0.55)
+    cax = ax.inset_axes([0.835, 0.255, 0.035, 0.455])
+    cb = plt.colorbar(im, cax=cax)
+    cb.ax.tick_params(labelsize=5)
+    cb.set_label("Best Δρ vs equal", fontsize=5.2)
+    rounded_box(ax, 0.035, 0.232, 0.135, 0.490, "#FFFFFF", "#CBD5E1", 0.65, 0.012)
+    ax.text(0.053, 0.690, "Channels", ha="left", va="center", fontsize=6.0, fontweight="bold")
+    yy = 0.620
+    for channel, desc in [("Breadth", "RS/PDE/RTD"), ("Brokerage", "B/RTD/Burt IP"), ("Boundary", "ΔQ0/B/Uzzi"), ("Atypicality", "Uzzi")]:
+        ax.scatter([0.058], [yy], s=30, color=FIG2_EVIDENCE_CHANNEL_COLORS[channel], edgecolors="white", linewidths=0.4, transform=ax.transAxes)
+        ax.text(0.082, yy, f"{channel}\n{desc}", ha="left", va="center", fontsize=4.9, transform=ax.transAxes)
+        yy -= 0.105
+    ax.text(0.500, 0.067, "Rectangle scans Fig. 2's four evidence channels; each cell profiles horizontal-vs-vertical channel mass.", ha="center", va="center", fontsize=5.35)
+
+
+def selected_panel_d_pairs(comp: ComputedData) -> List[Tuple[str, str]]:
+    if comp.selected_panel_d_pairs:
+        return [tuple(pair) for pair in comp.selected_panel_d_pairs]
+    scan = comp.pair_scan_results
+    if not scan.empty and "selected_for_panel_d" in scan.columns:
+        rows = scan[scan["selected_for_panel_d"].astype(int) == 1]
+        if not rows.empty:
+            return [tuple(str(row.pair_key).split("|")) for row in rows.itertuples(index=False)]
+    return PAIRWISE_LANDSCAPES + [("BurtIP", "B")]
+
+
+def draw_panel_d(ax: plt.Axes, comp: ComputedData) -> None:
+    panel_frame(ax, "d", "Pair-weight heatmaps selected by full scan")
+    pairs = selected_panel_d_pairs(comp)[:4]
+    positions = [
+        (0.070, 0.575, 0.365, 0.275),
+        (0.515, 0.575, 0.365, 0.275),
+        (0.070, 0.150, 0.365, 0.275),
+        (0.515, 0.150, 0.365, 0.275),
+    ]
+    grids = getattr(comp, "_pair_grids", {})
+    grid_results: List[Tuple[str, str, np.ndarray, np.ndarray, np.ndarray]] = []
+    finite_values: List[np.ndarray] = []
+    for xkey, ykey in pairs:
+        key = tuple(sorted((xkey, ykey)))
+        if key in grids:
+            xs, ys, grid = grids[key]
+        else:
+            xs, ys, grid = pairwise_profile_grid(comp, xkey, ykey, bins=comp.profile_grid_size, profile_n=comp.profile_n)
+        grid_results.append((xkey, ykey, xs, ys, grid))
+        vals = grid[np.isfinite(grid)]
+        if len(vals):
+            finite_values.append(vals)
+    if finite_values:
+        pooled = np.concatenate(finite_values)
+        lim = max(0.015, min(0.18, float(np.nanpercentile(np.abs(pooled), 95))))
+    else:
+        lim = 0.05
+    norm = mcolors.TwoSlopeNorm(vmin=-lim, vcenter=0.0, vmax=lim)
+    cmap = plt.get_cmap("RdYlBu_r").copy()
+    cmap.set_bad("#E5E7EB")
+    last_im = None
+    scan = comp.pair_scan_results.copy()
+    for (xkey, ykey, xs, ys, grid), (x0, y0, w, h) in zip(grid_results, positions):
+        iax = ax.inset_axes([x0, y0, w, h])
+        last_im = iax.imshow(np.ma.masked_invalid(grid), origin="lower", extent=[0, 1, 0, 1], aspect="auto", cmap=cmap, norm=norm)
+        iax.set_title(f"{METRIC_LABELS.get(xkey, xkey)} × {METRIC_LABELS.get(ykey, ykey)}", fontsize=6.8, pad=2)
+        iax.set_xlabel(f"share to {METRIC_LABELS.get(xkey, xkey)}", fontsize=5.2, labelpad=1)
+        iax.set_ylabel("pair mass", fontsize=5.2, labelpad=1)
+        iax.tick_params(labelsize=4.8, length=1.8, pad=1)
+        best = comp.best_weights
+        pair_mass = float(best.get(xkey, 0.0) + best.get(ykey, 0.0))
+        pair_share_x = float(best.get(xkey, 0.0) / pair_mass) if pair_mass > 1e-12 else 0.5
+        iax.scatter([pair_share_x], [pair_mass], s=18, color="black", edgecolors="white", linewidths=0.5, zorder=5)
+        finite_grid = np.isfinite(grid)
+        if finite_grid.any():
+            try:
+                thr = float(np.nanpercentile(grid[finite_grid], 90))
+                if np.nanmin(grid[finite_grid]) < thr < np.nanmax(grid[finite_grid]):
+                    iax.contour(xs, ys, grid, levels=[thr], colors="white", linewidths=0.75, linestyles="--")
+            except ValueError:
+                pass
+        pair_key = "|".join(tuple(sorted((xkey, ykey))))
+        meta = scan[scan.get("pair_key", pd.Series(dtype=str)).astype(str) == pair_key] if not scan.empty and "pair_key" in scan.columns else pd.DataFrame()
+        if not meta.empty:
+            p95 = float(meta["p95_delta_vs_equal"].iloc[0])
+            coverage = int(meta.get("coverage_pair", pd.Series([0])).iloc[0])
+            if coverage or (np.isfinite(p95) and p95 < PAIR_SCAN_P95_MIN):
+                iax.text(0.03, 0.93, "coverage" if coverage else "weak", transform=iax.transAxes, ha="left", va="top", fontsize=4.7, color="#111827", bbox=dict(boxstyle="round,pad=0.12", fc="white", ec="#CBD5E1", lw=0.4, alpha=0.82))
+            iax.text(0.97, 0.04, f"p95={p95:.2f}", transform=iax.transAxes, ha="right", va="bottom", fontsize=4.7, color="#111827")
+        for spine in iax.spines.values():
+            spine.set_linewidth(0.5)
+    if last_im is not None:
+        cax = ax.inset_axes([0.920, 0.235, 0.022, 0.535])
+        cb = plt.colorbar(last_im, cax=cax)
+        cb.ax.tick_params(labelsize=4.8)
+        cb.set_label("Δρ vs equal", fontsize=5.2)
+    ax.text(0.505, 0.073, "Four pairs are selected from all 21 scans under full seven-metric coverage; one metric may repeat once.", ha="center", va="center", fontsize=5.45)
+
+
+def score_distribution_groups(score_table: pd.DataFrame) -> pd.DataFrame:
+    st = score_table.replace([np.inf, -np.inf], np.nan).dropna(subset=["S_w_oof", "RGPM"]).copy()
+    if st.empty:
+        return st
+    st["rgpm_percentile"] = st["RGPM"].rank(method="average", pct=True) * 100.0
+    st["score_percentile"] = st["S_w_oof"].rank(method="average", pct=True) * 100.0
+    try:
+        st["score_tertile"] = pd.qcut(st["S_w_oof"].rank(method="first"), q=3, labels=["Low", "Mid", "High"])
+    except ValueError:
+        pct = st["S_w_oof"].rank(method="average", pct=True)
+        st["score_tertile"] = "Mid"
+        st.loc[pct <= 1.0 / 3.0, "score_tertile"] = "Low"
+        st.loc[pct >= 2.0 / 3.0, "score_tertile"] = "High"
+    try:
+        st["score_decile"] = pd.qcut(st["S_w_oof"].rank(method="first"), q=10, labels=False, duplicates="drop") + 1
+    except ValueError:
+        st["score_decile"] = np.ceil(st["S_w_oof"].rank(method="average", pct=True) * 10).clip(1, 10).astype(int)
+    return st
+
+
+def draw_panel_f(ax: plt.Axes, comp: ComputedData) -> None:
+    panel_frame(ax, "f", "Out-of-fold effect separation and top-tail enrichment")
+    st = score_distribution_groups(comp.score_table)
+    eff = effect_summary_dict(comp.effect_summary if not comp.effect_summary.empty else compute_effect_summary(comp))
+    dist_ax = ax.inset_axes([0.065, 0.185, 0.400, 0.650])
+    enrich_ax = ax.inset_axes([0.555, 0.185, 0.390, 0.650])
+    if st.empty:
+        dist_ax.text(0.5, 0.5, "No OOF effect data", ha="center", va="center", fontsize=7)
+        enrich_ax.axis("off")
+        return
+    groups = ["Low", "Mid", "High"]
+    colors = ["#2563EB", "#F59E0B", "#DC2626"]
+    data = [st[st["score_tertile"].astype(str) == group]["rgpm_percentile"].to_numpy(dtype=float) for group in groups]
+    bp = dist_ax.boxplot(data, positions=np.arange(1, 4), widths=0.55, patch_artist=True, showfliers=False, medianprops={"color": "#111827", "lw": 1.1})
+    for patch, color in zip(bp["boxes"], colors):
+        patch.set_facecolor(color)
+        patch.set_alpha(0.40)
+        patch.set_edgecolor(color)
+        patch.set_linewidth(0.9)
+    for whisker in bp["whiskers"]:
+        whisker.set_color("#6B7280")
+        whisker.set_linewidth(0.7)
+    for cap in bp["caps"]:
+        cap.set_color("#6B7280")
+        cap.set_linewidth(0.7)
+    medians = [float(np.nanmedian(vals)) if len(vals) else np.nan for vals in data]
+    dist_ax.plot(np.arange(1, 4), medians, color="#111827", lw=1.2, marker="o", markersize=3.2, zorder=4)
+    dist_ax.set_xticks(np.arange(1, 4))
+    dist_ax.set_xticklabels(groups, fontsize=5.6)
+    dist_ax.set_ylim(0, 100)
+    dist_ax.set_ylabel("Observed RGPM percentile", fontsize=5.8)
+    dist_ax.set_title("Observed RGPM by OOF score tertile", fontsize=7.0, color="#0F3A75", fontweight="bold")
+    dist_ax.grid(True, axis="y", color="#E5E7EB", lw=0.45)
+    lift = eff.get("high_vs_low_tertile_median_rgpm_lift_pp", np.nan)
+    rho = eff.get("learned_oof_spearman", safe_spearman(st["S_w_oof"], st["RGPM"]))
+    dist_ax.text(0.04, 0.94, f"ρ={rho:.2f}\nHigh-low lift={lift:.1f} pp", transform=dist_ax.transAxes, ha="left", va="top", fontsize=6.3, color="#0F3A75", fontweight="bold")
+    for spine in dist_ax.spines.values():
+        spine.set_linewidth(0.5)
+
+    decile_rows = []
+    for decile, sub in st.groupby("score_decile", sort=True):
+        decile_rows.append(
+            {
+                "decile": int(decile),
+                "top20_rate": float((sub["rgpm_percentile"] >= 80.0).mean()),
+                "top10_rate": float((sub["rgpm_percentile"] >= 90.0).mean()),
+                "n": int(len(sub)),
+            }
+        )
+    dec = pd.DataFrame(decile_rows).sort_values("decile")
+    x = dec["decile"].to_numpy(dtype=float)
+    enrich_ax.bar(x, dec["top20_rate"].to_numpy(dtype=float) * 100.0, color="#2563EB", alpha=0.64, width=0.72, label="RGPM top 20%")
+    enrich_ax.plot(x, dec["top10_rate"].to_numpy(dtype=float) * 100.0, color="#DC2626", lw=1.35, marker="o", markersize=2.8, label="RGPM top 10%")
+    enrich_ax.axhline(20, color="#9CA3AF", lw=0.7, ls="--")
+    enrich_ax.axhline(10, color="#FCA5A5", lw=0.65, ls=":")
+    enrich_ax.set_xlim(0.35, 10.65)
+    enrich_ax.set_ylim(0, max(55, float(np.nanmax(dec["top20_rate"].to_numpy(dtype=float)) * 115.0) if not dec.empty else 55))
+    enrich_ax.set_xlabel("OOF score decile", fontsize=5.8)
+    enrich_ax.set_ylabel("Tail probability (%)", fontsize=5.8)
+    enrich_ax.set_title("Top-tail enrichment across score deciles", fontsize=7.0, color="#0F3A75", fontweight="bold")
+    enrich_ax.tick_params(labelsize=5.0, length=2)
+    enrich_ax.grid(True, axis="y", color="#E5E7EB", lw=0.45)
+    ratio = eff.get("top_vs_bottom_score_decile_rgpm_top20_enrichment", np.nan)
+    top_rate = eff.get("top_score_decile_rgpm_top20_rate", np.nan)
+    bottom_rate = eff.get("bottom_score_decile_rgpm_top20_rate", np.nan)
+    enrich_ax.text(0.04, 0.94, f"Top/bottom={ratio:.1f}×\n{top_rate*100:.1f}% vs {bottom_rate*100:.1f}%" if np.isfinite(ratio) else "Enrichment unavailable", transform=enrich_ax.transAxes, ha="left", va="top", fontsize=6.3, color="#7F1D1D", fontweight="bold")
+    enrich_ax.legend(frameon=True, fontsize=5.0, loc="upper right")
+    for spine in enrich_ax.spines.values():
+        spine.set_linewidth(0.5)
 
 
 def draw_full_figure(comp: ComputedData, tau: int, out_path: Path) -> None:

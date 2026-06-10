@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "config_hash": "184d82dea1413d3f475fa2be6af612e4d0de1151a2b413276f3c5aaccde471b4",
+  "domain_name": "CRISPR-Cas genome editing",
+  "slug": "crispr",
+  "search_query": "(\"CRISPR\" OR \"Cas9\" OR \"Cas12\" OR \"Cas13\" OR \"RNA-guided nuclease\" OR \"guide RNA\" OR \"genome editing\")",
+  "search_groups": [
+    {
+      "name": "adaptive_immunity",
+      "query": "(\"CRISPR\" OR \"clustered regularly interspaced short palindromic repeats\" OR \"CRISPR-Cas\" OR \"CRISPR loci\" OR \"CRISPR spacer\" OR \"adaptive bacterial immunity\")",
+      "max_works_per_window": 520
+    },
+    {
+      "name": "cas9_editing",
+      "query": "(\"Cas9\" OR \"RNA-guided nuclease\" OR \"single guide RNA\" OR \"sgRNA\" OR \"CRISPR genome editing\" OR \"CRISPR-Cas9\")",
+      "max_works_per_window": 760
+    },
+    {
+      "name": "new_editors",
+      "query": "(\"Cas12\" OR \"Cpf1\" OR \"Cas13\" OR \"base editing\" OR \"prime editing\" OR \"CRISPR editor\")",
+      "max_works_per_window": 620
+    },
+    {
+      "name": "screens_therapy",
+      "query": "(\"CRISPR screen\" OR \"CRISPR screening\" OR \"pooled CRISPR\" OR \"CRISPR diagnostics\" OR \"CRISPR therapy\" OR \"CRISPR delivery\")",
+      "max_works_per_window": 620
+    }
+  ],
+  "start_year": 2000,
+  "end_year": 2024,
+  "window_size": 5,
+  "custom_windows": [],
+  "snapshot_years": [],
+  "anchors": [
+    {
+      "label": "Jinek 2012",
+      "openalex_id": "W2045435533",
+      "doi": "10.1126/science.1225829",
+      "title": "A Programmable Dual-RNA-Guided DNA Endonuclease in Adaptive Bacterial Immunity",
+      "year": 2012
+    },
+    {
+      "label": "Cong/Mali 2013",
+      "openalex_id": "W2064815984",
+      "doi": "10.1126/science.1231143",
+      "title": "Multiplex Genome Engineering Using CRISPR/Cas Systems",
+      "year": 2013
+    },
+    {
+      "label": "Mali 2013",
+      "openalex_id": "W2003171404",
+      "doi": "10.1126/science.1232033",
+      "title": "RNA-Guided Human Genome Engineering via Cas9",
+      "year": 2013
+    }
+  ],
+  "retrieval_date": "2026-06-10T02:31:54Z"
+}

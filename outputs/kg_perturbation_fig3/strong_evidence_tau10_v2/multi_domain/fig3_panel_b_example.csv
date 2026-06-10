@@ -1,0 +1,9 @@
+key,label,z,z_raw,clipped,reliability_weight,mechanism
+community_reach,Community reach (D1),4.0,74.86847430190207,1,0.6237389378150587,Breadth
+field_entropy,Field entropy (D2),4.0,6.564935502415504,1,0.5313569111462367,Breadth
+cross_community_adoption,Cross-community adoption (D3),2.379119203078629,2.379119203078629,0,0.3616893500230386,Breadth
+path_shortening,Path shortening (D4),0.0,0.0,0,0.0,Brokerage
+hub_formation,Hub formation ↑ (D9),0.0,0.0,0,0.0,Brokerage
+partition_change,Partition divergence (D6),1.9529596487850798,1.9529596487850798,0,0.6385392113351126,Boundary
+boundary_mixing,Boundary mixing ↑ (D7),-4.0,-6.006543332447549,1,0.6157376130390719,Boundary
+modularity_shock,Modularity shock −ΔQ (D5),0.0,0.0,0,0.0,Boundary

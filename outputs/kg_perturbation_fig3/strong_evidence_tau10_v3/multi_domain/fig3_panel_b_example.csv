@@ -1,0 +1,6 @@
+key,label,z,z_raw,clipped,reliability_weight,mechanism
+community_reach,Community reach (D1),4.0,8.787428571428572,1,0.6338787444356694,Breadth
+field_entropy,Field entropy (D2),4.0,9.58918822566427,1,0.5397712940747241,Breadth
+cross_community_adoption,Cross-community adoption (D3),4.0,4.836841025641027,1,0.3697151132850109,Breadth
+partition_change,Partition divergence (D6),4.0,8.822775101942186,1,0.6393855191036152,Boundary
+boundary_mixing,Boundary mixing ↑ (D7),4.0,10.102328016613011,1,0.6031936122108619,Boundary

@@ -1,0 +1,4 @@
+label,year,openalex_id,doi,arxiv_id,title,resolved,resolved_id,resolved_title,reference_stub,method
+Vaswani 2017,2017,W2963403868,10.48550/arXiv.1706.03762,1706.03762,Attention Is All You Need,1,https://openalex.org/W2963403868,Attention Is All You Need,1,openalex_id
+BERT 2018,2018,W2963341956,10.18653/v1/N19-1423,1810.04805,BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding,1,https://openalex.org/W2963341956,BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding,0,openalex_id
+GPT-3 2020,2020,W3030163527,10.48550/arXiv.2005.14165,2005.14165,Language Models are Few-Shot Learners,1,https://openalex.org/W3030163527,Language Models are Few-Shot Learners,0,openalex_id

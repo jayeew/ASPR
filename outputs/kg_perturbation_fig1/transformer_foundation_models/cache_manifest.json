@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "config_hash": "8d16068e70fb22eca8a7b35a9f6c914deb5c8b4e35dc4605aa5e8371ea71a8ef",
+  "domain_name": "Transformer and foundation models",
+  "slug": "transformer_foundation_models",
+  "search_query": "(\"statistical machine translation\" OR \"neural machine translation\" OR \"transformer\" OR \"BERT\" OR \"large language model\" OR \"foundation model\")",
+  "search_groups": [
+    {
+      "name": "core_nlp",
+      "query": "(\"statistical machine translation\" OR \"phrase-based machine translation\" OR \"neural machine translation\" OR \"sequence-to-sequence\" OR \"word embedding\" OR \"language model\")",
+      "max_works_per_window": 520
+    },
+    {
+      "name": "transformer_bert",
+      "query": "(\"self-attention\" OR \"multi-head attention\" OR \"transformer\" OR \"attention is all you need\" OR \"BERT\" OR \"pre-trained language model\" OR \"masked language model\")",
+      "max_works_per_window": 700
+    },
+    {
+      "name": "llm_foundation",
+      "query": "(\"large language model\" OR \"foundation model\" OR \"GPT-3\" OR \"ChatGPT\" OR \"GPT-4\" OR \"instruction tuning\" OR \"in-context learning\" OR \"LLaMA\")",
+      "max_works_per_window": 760
+    },
+    {
+      "name": "multimodal_foundation",
+      "query": "(\"vision-language\" OR \"multimodal foundation model\" OR \"CLIP\" OR \"vision transformer\" OR \"diffusion model\" OR \"generative AI\")",
+      "max_works_per_window": 520
+    }
+  ],
+  "start_year": 2002,
+  "end_year": 2024,
+  "window_size": 5,
+  "custom_windows": [
+    [
+      2002,
+      2006
+    ],
+    [
+      2007,
+      2011
+    ],
+    [
+      2012,
+      2016
+    ],
+    [
+      2017,
+      2019
+    ],
+    [
+      2020,
+      2021
+    ],
+    [
+      2022,
+      2024
+    ]
+  ],
+  "snapshot_years": [
+    2006,
+    2011,
+    2016,
+    2019,
+    2021,
+    2024
+  ],
+  "anchors": [
+    {
+      "label": "Vaswani 2017",
+      "openalex_id": "W2963403868",
+      "doi": "10.48550/arXiv.1706.03762",
+      "arxiv_id": "1706.03762",
+      "title": "Attention Is All You Need",
+      "year": 2017,
+      "cited_by_count": 125000,
+      "primary_topic": "Natural Language Processing Techniques",
+      "topics": [
+        "Natural Language Processing Techniques",
+        "Machine Translation",
+        "Transformer",
+        "Self-attention"
+      ],
+      "keywords": [
+        "Transformer",
+        "self-attention",
+        "machine translation"
+      ],
+      "allow_reference_stub": true
+    },
+    {
+      "label": "BERT 2018",
+      "openalex_id": "W2963341956",
+      "doi": "10.18653/v1/N19-1423",
+      "arxiv_id": "1810.04805",
+      "title": "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding",
+      "year": 2018,
+      "primary_topic": "Natural Language Processing Techniques",
+      "topics": [
+        "Natural Language Processing Techniques",
+        "Topic Modeling",
+        "Language Model Pretraining"
+      ],
+      "keywords": [
+        "BERT",
+        "pretraining",
+        "masked language model"
+      ]
+    },
+    {
+      "label": "GPT-3 2020",
+      "openalex_id": "W3030163527",
+      "doi": "10.48550/arXiv.2005.14165",
+      "arxiv_id": "2005.14165",
+      "title": "Language Models are Few-Shot Learners",
+      "year": 2020,
+      "primary_topic": "Topic Modeling",
+      "topics": [
+        "Topic Modeling",
+        "Natural Language Processing Techniques",
+        "Large Language Models"
+      ],
+      "keywords": [
+        "GPT-3",
+        "large language model",
+        "in-context learning"
+      ]
+    }
+  ],
+  "retrieval_date": "2026-06-10T02:56:57Z"
+}

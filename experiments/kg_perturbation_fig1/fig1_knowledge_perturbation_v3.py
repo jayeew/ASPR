@@ -64,6 +64,7 @@ from __future__ import annotations
 import argparse
 import collections
 import datetime as dt
+import hashlib
 import itertools
 import json
 import math
@@ -133,9 +134,12 @@ DEFAULT_CONFIG: Dict[str, Any] = {
     "domain_name": "CRISPR-Cas genome editing",
     "slug": "crispr",
     "search_query": '("CRISPR" OR "Cas9" OR "RNA-guided nuclease" OR "genome editing")',
+    "search_groups": [],
     "start_year": 2000,
     "end_year": 2024,
     "window_size": 5,
+    "custom_windows": [],
+    "snapshot_years": [],
     "work_types": [],  # Example: ["article", "preprint", "review"]
     "language": "en",
     "include_abstract": False,
@@ -143,6 +147,14 @@ DEFAULT_CONFIG: Dict[str, Any] = {
     "max_anchor_citers": 500,
     "fetch_anchor_citers": True,
     "anchors": [],
+    "relevance_filter": {
+        "enabled": False,
+        "positive_keywords": [],
+        "strong_positive_keywords": [],
+        "negative_keywords": [],
+        "negative_primary_topics": [],
+        "keep_anchor_citers": True,
+    },
     "api": {
         "sleep_seconds": 0.10,
         "max_retries": 6,
@@ -171,6 +183,7 @@ DEFAULT_CONFIG: Dict[str, Any] = {
         "betweenness_sample": 250,
         "semantic_sample": 600,
         "curve_mode": "cumulative_positive",
+        "signed_compression": True,
     },
     "plot": {
         "fig_width_single": 22,
@@ -347,6 +360,7 @@ def load_config(path: Path) -> Dict[str, Any]:
     cfg = deep_update(DEFAULT_CONFIG, user_cfg)
     if not cfg.get("slug"):
         cfg["slug"] = slugify(cfg["domain_name"])
+    validate_time_windows(cfg)
     return cfg
 
 
@@ -385,6 +399,77 @@ def normalize_doi(value: Optional[str]) -> Optional[str]:
     return value.strip()
 
 
+def normalize_text_key(value: Optional[str]) -> str:
+    text = str(value or "").lower()
+    text = re.sub(r"<[^>]+>", " ", text)
+    text = re.sub(r"[^a-z0-9]+", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def normalize_arxiv_id(value: Optional[str]) -> Optional[str]:
+    if not value:
+        return None
+    text = str(value).strip().lower()
+    text = text.replace("arxiv:", "").replace("https://arxiv.org/abs/", "")
+    text = text.replace("http://arxiv.org/abs/", "")
+    m = re.search(r"(\d{4}\.\d{4,5})(v\d+)?", text)
+    return m.group(1) if m else text or None
+
+
+def config_data_fingerprint(cfg: Mapping[str, Any]) -> str:
+    """Hash only the config parts that affect fetched/cached works."""
+    keys = [
+        "domain_name",
+        "slug",
+        "search_query",
+        "search_groups",
+        "start_year",
+        "end_year",
+        "window_size",
+        "custom_windows",
+        "snapshot_years",
+        "language",
+        "include_abstract",
+        "max_works_per_window",
+        "max_anchor_citers",
+        "fetch_anchor_citers",
+        "work_types",
+        "anchors",
+        "relevance_filter",
+    ]
+    payload = {k: cfg.get(k) for k in keys}
+    text = json.dumps(payload, sort_keys=True, ensure_ascii=True, default=str)
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def cache_manifest(cfg: Mapping[str, Any]) -> Dict[str, Any]:
+    return {
+        "schema_version": 1,
+        "config_hash": config_data_fingerprint(cfg),
+        "domain_name": cfg.get("domain_name"),
+        "slug": cfg.get("slug"),
+        "search_query": cfg.get("search_query"),
+        "search_groups": cfg.get("search_groups") or [],
+        "start_year": cfg.get("start_year"),
+        "end_year": cfg.get("end_year"),
+        "window_size": cfg.get("window_size"),
+        "custom_windows": cfg.get("custom_windows") or [],
+        "snapshot_years": cfg.get("snapshot_years") or [],
+        "anchors": cfg.get("anchors") or [],
+        "retrieval_date": dt.datetime.utcnow().replace(microsecond=0).isoformat() + "Z",
+    }
+
+
+def cache_matches_config(manifest_path: Path, cfg: Mapping[str, Any]) -> bool:
+    if not manifest_path.exists():
+        return False
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except Exception:
+        return False
+    return str(manifest.get("config_hash") or "") == config_data_fingerprint(cfg)
+
+
 def year_int(value: Any) -> Optional[int]:
     try:
         if value is None or (isinstance(value, float) and np.isnan(value)):
@@ -403,8 +488,54 @@ def make_rolling_windows(start_year: int, end_year: int, window_size: int) -> Li
     return windows
 
 
+def parse_window_pair(value: Any) -> Tuple[int, int]:
+    if isinstance(value, Mapping):
+        start = year_int(value.get("start") or value.get("from") or value.get("rolling_start"))
+        end = year_int(value.get("end") or value.get("to") or value.get("rolling_end"))
+    elif isinstance(value, (list, tuple)) and len(value) >= 2:
+        start = year_int(value[0])
+        end = year_int(value[1])
+    else:
+        raise ValueError(f"Invalid window entry: {value!r}")
+    if start is None or end is None or start > end:
+        raise ValueError(f"Invalid window bounds: {value!r}")
+    return int(start), int(end)
+
+
+def make_rolling_windows_from_config(cfg: Mapping[str, Any]) -> List[Tuple[int, int]]:
+    custom = cfg.get("custom_windows") or []
+    if custom:
+        return [parse_window_pair(v) for v in custom]
+    return make_rolling_windows(int(cfg["start_year"]), int(cfg["end_year"]), int(cfg["window_size"]))
+
+
 def make_cumulative_windows(start_year: int, rolling_windows: Sequence[Tuple[int, int]]) -> List[Tuple[int, int]]:
     return [(start_year, end) for _, end in rolling_windows]
+
+
+def make_cumulative_windows_from_config(
+    cfg: Mapping[str, Any],
+    rolling_windows: Sequence[Tuple[int, int]],
+) -> List[Tuple[int, int]]:
+    snapshot_years = [year_int(y) for y in (cfg.get("snapshot_years") or [])]
+    snapshot_years = [int(y) for y in snapshot_years if y is not None]
+    if snapshot_years:
+        return [(int(cfg["start_year"]), min(int(cfg["end_year"]), y)) for y in snapshot_years]
+    return make_cumulative_windows(int(cfg["start_year"]), rolling_windows)
+
+
+def validate_time_windows(cfg: Mapping[str, Any]) -> None:
+    rolling = make_rolling_windows_from_config(cfg)
+    cumulative = make_cumulative_windows_from_config(cfg, rolling)
+    if len(rolling) != len(cumulative):
+        raise ValueError(
+            "custom_windows and snapshot_years must have the same length when both are provided."
+        )
+    prev_end = None
+    for start, end in rolling:
+        if prev_end is not None and start <= prev_end:
+            raise ValueError("custom_windows must be ordered and non-overlapping.")
+        prev_end = end
 
 
 def window_label(start_year: int, end_year: int, cfg_start_year: int) -> str:
@@ -551,26 +682,81 @@ def build_display_comm_map(G: nx.Graph, full_comm_map: Mapping[str, int], cfg: D
     visual layer while keeping all papers for metrics.
     """
     pcfg = cfg.get("plot", {})
-    max_topics = int(pcfg.get("display_max_topics", cfg.get("graph", {}).get("max_communities", 9)))
+    max_topics_raw = pcfg.get("display_max_topics", cfg.get("graph", {}).get("max_communities", 9))
+    if str(max_topics_raw).lower() == "auto":
+        max_topics = int(pcfg.get("display_max_topics_auto_cap", 12))
+    else:
+        max_topics = int(max_topics_raw)
     min_size = int(pcfg.get("display_min_topic_size", cfg.get("graph", {}).get("min_community_size", 6)))
     members = community_members(full_comm_map)
     weighted_deg = dict(G.degree(weight="weight"))
     scored: List[Tuple[float, int]] = []
     anchor_comms: Set[int] = set()
+    event_specs = pcfg.get("event_topic_keywords") or []
+    event_specs = [{"keywords": item} if isinstance(item, str) else dict(item or {}) for item in event_specs]
+    event_candidates_by_spec: List[List[Tuple[float, float, int]]] = [[] for _ in event_specs]
+    event_strength: Dict[int, float] = collections.defaultdict(float)
     for c, nodes in members.items():
         has_anchor = any(G.nodes[n].get("anchor_label") for n in nodes if n in G)
         if has_anchor:
             anchor_comms.add(int(c))
+        comm_text = ""
+        if event_specs:
+            text_parts: List[str] = []
+            for n in nodes:
+                if n not in G:
+                    continue
+                data = G.nodes[n]
+                text_parts.append(str(data.get("title") or ""))
+                text_parts.append(str(data.get("primary_topic") or ""))
+                text_parts.extend(str(t) for t in (data.get("topics") or []))
+            comm_text = " ".join(text_parts)
         if len(nodes) < min_size and not has_anchor:
             continue
         citation_score = sum(safe_log1p(float(G.nodes[n].get("cited_by_count") or 0)) for n in nodes if n in G)
         degree_score = sum(float(weighted_deg.get(n, 0.0)) for n in nodes)
         score = 3.0 * safe_log1p(len(nodes)) + 0.45 * safe_log1p(citation_score) + 0.35 * safe_log1p(degree_score)
+        event_match = False
+        for spec_i, spec in enumerate(event_specs):
+            event_score = score_keyword_match(comm_text, spec.get("keywords") or [])
+            if event_score > 0:
+                event_match = True
+                event_strength[int(c)] += event_score
+                event_candidates_by_spec[spec_i].append((event_score, score, int(c)))
         if has_anchor:
             score += 1000.0
+        if event_match:
+            score += 80.0
         scored.append((score, int(c)))
     scored.sort(reverse=True)
+    max_topics = max(max_topics, len(anchor_comms))
+
+    event_comms: Set[int] = set()
+    event_topics_per_spec = max(0, int(pcfg.get("event_topics_per_spec", 1)))
+    for candidates in event_candidates_by_spec:
+        candidates.sort(reverse=True)
+        for _, _, c in candidates[:event_topics_per_spec]:
+            event_comms.add(c)
+    max_event_topics = int(pcfg.get("event_max_topics", max_topics))
+    if len(event_comms) > max_event_topics:
+        event_comms = set(
+            sorted(
+                event_comms,
+                key=lambda c: (float(event_strength.get(c, 0.0)), len(members.get(c, []))),
+                reverse=True,
+            )[:max_event_topics]
+        )
+
     keep: List[int] = []
+    event_slots = max(0, max_topics - len(anchor_comms))
+    ranked_event_comms = sorted(
+        event_comms - anchor_comms,
+        key=lambda c: (float(event_strength.get(c, 0.0)), len(members.get(c, []))),
+        reverse=True,
+    )[:event_slots]
+    for c in sorted(anchor_comms) + ranked_event_comms:
+        if c not in keep:
+            keep.append(c)
     for _, c in scored:
         if c not in keep:
             keep.append(c)
@@ -684,11 +870,19 @@ def select_backbone_edges(
             break
 
     prev_edges = {tuple(sorted((int(u), int(v)))) for u, v in TGprev.edges()}
+    prev_weights = {
+        tuple(sorted((int(u), int(v)))): float(d.get("weight", 0.0))
+        for u, v, d in TGprev.edges(data=True)
+    }
+    gain_ratio = float(pcfg.get("edge_gain_highlight_ratio", 0.15))
+    gain_abs = float(pcfg.get("edge_gain_highlight_min", 5.0))
     out = []
     for key, (u, v, d) in chosen.items():
-        is_new = key not in prev_edges
+        prev_weight = prev_weights.get(key, 0.0)
+        weight_gain = float(d.get("weight", 0.0)) - prev_weight
+        is_new = key not in prev_edges or weight_gain >= max(gain_abs, gain_ratio * max(prev_weight, 1.0))
         out.append((u, v, d, is_new))
-    out.sort(key=lambda x: (x[3], float(x[2].get("weight", 1.0))), reverse=False)
+    out.sort(key=lambda x: (x[3], float(x[2].get("weight", 1.0))), reverse=True)
     return out[:max_edges]
 
 
@@ -859,6 +1053,37 @@ class OpenAlexClient:
         except Exception:
             return None
 
+    def get_work_by_title(
+        self,
+        title: str,
+        year: Optional[int] = None,
+        include_abstract: bool = False,
+    ) -> Optional[Dict[str, Any]]:
+        title_key = normalize_text_key(title)
+        if not title_key:
+            return None
+        from_year = year - 1 if year else None
+        to_year = year + 1 if year else None
+        try:
+            records = self.list_works(
+                search_query=title,
+                from_year=from_year,
+                to_year=to_year,
+                max_records=25,
+                work_types=[],
+                language=None,
+                include_abstract=include_abstract,
+                sort=None,
+                per_page=25,
+            )
+        except Exception:
+            return None
+        for rec in records:
+            rec_title = rec.get("display_name") or rec.get("title")
+            if normalize_text_key(rec_title) == title_key:
+                return rec
+        return None
+
 
 # -----------------------------------------------------------------------------
 # Work normalization and fetching
@@ -922,10 +1147,261 @@ def normalize_work(work: Mapping[str, Any], include_abstract: bool = False) -> D
         "text": " ".join([p for p in text_parts if p]),
         "anchor_label": "",
         "anchor_year": None,
+        "anchor_citer": bool(work.get("_aspr_anchor_citer")),
+        "reference_stub": bool(work.get("_aspr_reference_stub")),
     }
 
 
-def mark_anchors(works: Dict[str, Dict[str, Any]], anchors: Sequence[Mapping[str, Any]]) -> None:
+def resolve_anchor_matches(
+    works: Mapping[str, Dict[str, Any]],
+    anchors: Sequence[Mapping[str, Any]],
+) -> Tuple[Dict[str, List[Mapping[str, Any]]], List[Dict[str, Any]]]:
+    doi_to_id = {normalize_doi(w.get("doi")): wid for wid, w in works.items() if w.get("doi")}
+    short_to_id = {short_openalex_id(wid): wid for wid in works}
+    title_to_id = {
+        normalize_text_key(w.get("title")): wid
+        for wid, w in works.items()
+        if normalize_text_key(w.get("title"))
+    }
+    arxiv_to_id: Dict[str, str] = {}
+    for wid, w in works.items():
+        doi = normalize_doi(w.get("doi"))
+        if not doi:
+            continue
+        m = re.search(r"arxiv[./](\d{4}\.\d{4,5})(?:v\d+)?", doi)
+        if m:
+            arxiv_to_id[m.group(1)] = wid
+
+    matches: Dict[str, List[Mapping[str, Any]]] = collections.defaultdict(list)
+    rows: List[Dict[str, Any]] = []
+    for a in anchors or []:
+        label = str(a.get("label") or a.get("name") or a.get("doi") or a.get("openalex_id") or "landmark")
+        matched_id = None
+        method = ""
+        if a.get("openalex_id"):
+            matched_id = short_to_id.get(short_openalex_id(a.get("openalex_id")))
+            method = "openalex_id" if matched_id else ""
+        if not matched_id and a.get("doi"):
+            matched_id = doi_to_id.get(normalize_doi(a.get("doi")))
+            method = "doi" if matched_id else ""
+        arxiv_id = normalize_arxiv_id(a.get("arxiv_id") or a.get("doi"))
+        if not matched_id and arxiv_id:
+            matched_id = arxiv_to_id.get(arxiv_id)
+            method = "arxiv_id" if matched_id else ""
+        if not matched_id and a.get("title"):
+            matched_id = title_to_id.get(normalize_text_key(a.get("title")))
+            method = "title" if matched_id else ""
+        if matched_id:
+            matches[matched_id].append(a)
+        rows.append(
+            {
+                "label": label,
+                "year": year_int(a.get("year")),
+                "openalex_id": a.get("openalex_id", ""),
+                "doi": a.get("doi", ""),
+                "arxiv_id": a.get("arxiv_id", ""),
+                "title": a.get("title", ""),
+                "resolved": int(bool(matched_id)),
+                "resolved_id": matched_id or "",
+                "resolved_title": works.get(matched_id, {}).get("title", "") if matched_id else "",
+                "reference_stub": int(bool(works.get(matched_id, {}).get("reference_stub"))) if matched_id else 0,
+                "method": method,
+            }
+        )
+    return dict(matches), rows
+
+
+def write_anchor_resolution_report(
+    domain_dir: Path,
+    rows: Sequence[Mapping[str, Any]],
+    fail_on_unresolved: bool = True,
+) -> None:
+    report = pd.DataFrame(list(rows))
+    if not report.empty:
+        report.to_csv(domain_dir / "anchor_resolution_report.csv", index=False)
+    unresolved = report[report["resolved"].astype(int) == 0] if not report.empty else pd.DataFrame()
+    if fail_on_unresolved and not unresolved.empty:
+        labels = ", ".join(str(v) for v in unresolved["label"].tolist())
+        raise RuntimeError(
+            f"Unresolved landmark anchors for {domain_dir.name}: {labels}. "
+            f"See {domain_dir / 'anchor_resolution_report.csv'}."
+        )
+
+
+def mark_anchors(works: Dict[str, Dict[str, Any]], anchors: Sequence[Mapping[str, Any]]) -> List[Dict[str, Any]]:
+    for w in works.values():
+        w["anchor_label"] = ""
+        w["anchor_year"] = None
+    matches, rows = resolve_anchor_matches(works, anchors)
+    for matched_id, anchor_items in matches.items():
+        labels: List[str] = []
+        years: List[int] = []
+        for a in anchor_items:
+            label = a.get("label") or a.get("name") or a.get("doi") or a.get("openalex_id") or "landmark"
+            label = str(label)
+            if label not in labels:
+                labels.append(label)
+            a_year = year_int(a.get("year")) or year_int(works[matched_id].get("year"))
+            if a_year is not None:
+                years.append(a_year)
+        works[matched_id]["anchor_label"] = "; ".join(labels)
+        works[matched_id]["anchor_year"] = min(years) if years else works[matched_id].get("year")
+    return rows
+
+
+def make_anchor_reference_stub(anchor: Mapping[str, Any]) -> Optional[Dict[str, Any]]:
+    """Create a minimal work record for OpenAlex reference IDs that cannot be dereferenced."""
+    openalex_id = normalize_openalex_id(anchor.get("openalex_id"))
+    title = str(anchor.get("title") or "").strip()
+    year = year_int(anchor.get("year"))
+    if not (openalex_id and title and year):
+        return None
+    doi = normalize_doi(anchor.get("doi"))
+    arxiv_id = normalize_arxiv_id(anchor.get("arxiv_id") or anchor.get("doi"))
+    if not doi and arxiv_id:
+        doi = f"10.48550/arxiv.{arxiv_id}"
+    return {
+        "id": openalex_id,
+        "display_name": title,
+        "title": title,
+        "doi": f"https://doi.org/{doi}" if doi else None,
+        "publication_year": year,
+        "publication_date": f"{year}-01-01",
+        "type": anchor.get("type") or "preprint",
+        "language": anchor.get("language") or "en",
+        "cited_by_count": int(anchor.get("cited_by_count") or 0),
+        "fwci": None,
+        "citation_normalized_percentile": None,
+        "referenced_works": [],
+        "primary_topic": {"display_name": anchor.get("primary_topic") or "Transformer and foundation models"},
+        "topics": [{"display_name": v} for v in (anchor.get("topics") or ["Natural Language Processing Techniques"])],
+        "keywords": [{"display_name": v} for v in (anchor.get("keywords") or ["Transformer", "Self-attention"])],
+        "_aspr_reference_stub": True,
+    }
+
+
+def apply_anchor_metadata_fallback(rec: Dict[str, Any], anchor: Mapping[str, Any]) -> Dict[str, Any]:
+    title = str(rec.get("display_name") or rec.get("title") or "").strip()
+    if (not title or title == "Untitled") and anchor.get("title"):
+        rec["display_name"] = str(anchor["title"])
+        rec["title"] = str(anchor["title"])
+    if not rec.get("publication_year") and anchor.get("year"):
+        rec["publication_year"] = year_int(anchor.get("year"))
+    if not rec.get("publication_date") and anchor.get("year"):
+        rec["publication_date"] = f"{year_int(anchor.get('year'))}-01-01"
+    if not rec.get("doi") and anchor.get("doi"):
+        doi = normalize_doi(anchor.get("doi"))
+        rec["doi"] = f"https://doi.org/{doi}" if doi else anchor.get("doi")
+    if not rec.get("topics") and anchor.get("topics"):
+        rec["topics"] = [{"display_name": v} for v in (anchor.get("topics") or [])]
+    if not rec.get("primary_topic") and anchor.get("primary_topic"):
+        rec["primary_topic"] = {"display_name": anchor.get("primary_topic")}
+    return rec
+
+
+def fetch_anchor_work(client: OpenAlexClient, anchor: Mapping[str, Any], include_abstract: bool) -> Optional[Dict[str, Any]]:
+    rec: Optional[Dict[str, Any]] = None
+    if anchor.get("openalex_id"):
+        rec = client.get_work_by_openalex_id(str(anchor["openalex_id"]), include_abstract=include_abstract)
+        if rec:
+            return apply_anchor_metadata_fallback(rec, anchor)
+    if anchor.get("doi"):
+        rec = client.get_work_by_doi(str(anchor["doi"]), include_abstract=include_abstract)
+        if rec:
+            return apply_anchor_metadata_fallback(rec, anchor)
+    arxiv_id = normalize_arxiv_id(anchor.get("arxiv_id") or anchor.get("doi"))
+    if arxiv_id:
+        rec = client.get_work_by_doi(f"10.48550/arxiv.{arxiv_id}", include_abstract=include_abstract)
+        if rec:
+            return apply_anchor_metadata_fallback(rec, anchor)
+    if anchor.get("title"):
+        rec = client.get_work_by_title(
+            str(anchor["title"]),
+            year=year_int(anchor.get("year")),
+            include_abstract=include_abstract,
+        )
+        if rec:
+            return apply_anchor_metadata_fallback(rec, anchor)
+    if anchor.get("allow_reference_stub", False):
+        return make_anchor_reference_stub(anchor)
+    return None
+
+
+def ensure_anchor_records(
+    works: Dict[str, Dict[str, Any]],
+    cfg: Mapping[str, Any],
+    client: OpenAlexClient,
+) -> List[Dict[str, Any]]:
+    anchors = cfg.get("anchors") or []
+    rows = mark_anchors(works, anchors)
+    unresolved = {str(row.get("label")) for row in rows if not int(row.get("resolved") or 0)}
+    if not unresolved:
+        return rows
+
+    for anchor in anchors:
+        label = str(anchor.get("label") or anchor.get("name") or anchor.get("doi") or anchor.get("openalex_id") or "landmark")
+        if label not in unresolved:
+            continue
+        rec = fetch_anchor_work(client, anchor, include_abstract=bool(cfg.get("include_abstract")))
+        if rec and rec.get("id"):
+            rec["_aspr_anchor_seed"] = True
+            norm = normalize_work(rec, include_abstract=bool(cfg.get("include_abstract")))
+            if norm.get("id") and norm.get("year"):
+                works[norm["id"]] = norm
+    return mark_anchors(works, anchors)
+
+
+def iter_search_groups(cfg: Mapping[str, Any]) -> List[Dict[str, Any]]:
+    groups = cfg.get("search_groups") or []
+    if groups:
+        out = []
+        for group in groups:
+            if isinstance(group, str):
+                out.append({"name": group[:32], "query": group})
+            elif isinstance(group, Mapping) and group.get("query"):
+                out.append(dict(group))
+        return out
+    return [{"name": "default", "query": cfg.get("search_query", ""), "max_works_per_window": cfg.get("max_works_per_window")}]
+
+
+def work_matches_relevance_filter(work: Mapping[str, Any], cfg: Mapping[str, Any]) -> bool:
+    fcfg = cfg.get("relevance_filter") or {}
+    if not fcfg.get("enabled", False):
+        return True
+    if work.get("anchor_label"):
+        return True
+    if bool(fcfg.get("keep_anchor_citers", True)) and work.get("anchor_citer"):
+        return True
+    text = normalize_text_key(
+        " ".join(
+            [
+                str(work.get("title") or ""),
+                str(work.get("primary_topic") or ""),
+                " ".join(str(t) for t in (work.get("topics") or [])),
+            ]
+        )
+    )
+    topic_text = normalize_text_key(str(work.get("primary_topic") or ""))
+    positives = [normalize_text_key(v) for v in fcfg.get("positive_keywords") or []]
+    strong_positives = [normalize_text_key(v) for v in fcfg.get("strong_positive_keywords") or []]
+    negatives = [normalize_text_key(v) for v in fcfg.get("negative_keywords") or []]
+    negative_topics = [normalize_text_key(v) for v in fcfg.get("negative_primary_topics") or []]
+    has_positive = not positives or any(p and p in text for p in positives)
+    has_strong_positive = any(p and p in text for p in strong_positives)
+    if has_strong_positive:
+        return True
+    has_negative = any(n and n in text for n in negatives)
+    has_negative_topic = any(n and n in topic_text for n in negative_topics)
+    return bool(has_positive and not has_negative and not has_negative_topic)
+
+
+def apply_relevance_filter(works: Dict[str, Dict[str, Any]], cfg: Mapping[str, Any]) -> Dict[str, Dict[str, Any]]:
+    if not (cfg.get("relevance_filter") or {}).get("enabled", False):
+        return works
+    return {wid: w for wid, w in works.items() if work_matches_relevance_filter(w, cfg)}
+
+
+def mark_anchors_legacy(works: Dict[str, Dict[str, Any]], anchors: Sequence[Mapping[str, Any]]) -> None:
     doi_to_id = {normalize_doi(w.get("doi")): wid for wid, w in works.items() if w.get("doi")}
     short_to_id = {short_openalex_id(wid): wid for wid in works}
     for a in anchors or []:
@@ -947,66 +1423,74 @@ def fetch_domain_works(
     client: OpenAlexClient,
     out_dir: Path,
     use_cache: bool = True,
+    force_cache: bool = False,
 ) -> Dict[str, Dict[str, Any]]:
     slug = cfg["slug"]
     domain_dir = out_dir / slug
     domain_dir.mkdir(parents=True, exist_ok=True)
     cache_path = domain_dir / "works_raw.jsonl"
+    manifest_path = domain_dir / "cache_manifest.json"
 
     if use_cache and cache_path.exists():
-        works: Dict[str, Dict[str, Any]] = {}
-        with open(cache_path, "r", encoding="utf-8") as f:
-            for line in f:
-                rec = json.loads(line)
-                if rec.get("id"):
-                    works[rec["id"]] = rec
-        mark_anchors(works, cfg.get("anchors") or [])
-        print(f"[{slug}] Loaded {len(works):,} cached works from {cache_path}")
-        return works
+        if force_cache or cache_matches_config(manifest_path, cfg):
+            works: Dict[str, Dict[str, Any]] = {}
+            with open(cache_path, "r", encoding="utf-8") as f:
+                for line in f:
+                    rec = json.loads(line)
+                    if rec.get("id"):
+                        works[rec["id"]] = rec
+            report_rows = ensure_anchor_records(works, cfg, client)
+            works = apply_relevance_filter(works, cfg)
+            report_rows = ensure_anchor_records(works, cfg, client)
+            write_anchor_resolution_report(domain_dir, report_rows)
+            print(f"[{slug}] Loaded {len(works):,} cached works from {cache_path}")
+            return works
+        print(f"[{slug}] Cache manifest mismatch; re-downloading works. Use --force-cache to override.")
 
-    rolling = make_rolling_windows(cfg["start_year"], cfg["end_year"], cfg["window_size"])
+    rolling = make_rolling_windows_from_config(cfg)
     raw_by_id: Dict[str, Dict[str, Any]] = {}
     api_cfg = cfg.get("api", {})
+    search_groups = iter_search_groups(cfg)
 
     for y0, y1 in rolling:
-        print(f"[{slug}] Fetching search window {y0}-{y1} ...")
-        records = client.list_works(
-            search_query=cfg["search_query"],
-            from_year=y0,
-            to_year=y1,
-            max_records=int(cfg["max_works_per_window"]),
-            work_types=cfg.get("work_types") or [],
-            language=cfg.get("language"),
-            include_abstract=bool(cfg.get("include_abstract")),
-            sort=None,  # default OpenAlex search ranking mixes relevance and citations
-            per_page=int(api_cfg.get("per_page", 100)),
-        )
-        for r in records:
-            wid = normalize_openalex_id(r.get("id"))
-            if wid:
-                raw_by_id[wid] = r
+        for group in search_groups:
+            query = str(group.get("query") or "").strip()
+            if not query:
+                continue
+            group_name = str(group.get("name") or "search")
+            max_records = int(group.get("max_works_per_window") or cfg.get("max_works_per_window", 1200))
+            sort = group.get("sort")
+            print(f"[{slug}] Fetching {group_name} window {y0}-{y1} ...")
+            records = client.list_works(
+                search_query=query,
+                from_year=y0,
+                to_year=y1,
+                max_records=max_records,
+                work_types=cfg.get("work_types") or [],
+                language=cfg.get("language"),
+                include_abstract=bool(cfg.get("include_abstract")),
+                sort=str(sort) if sort else None,
+                per_page=int(api_cfg.get("per_page", 100)),
+            )
+            for r in records:
+                wid = normalize_openalex_id(r.get("id"))
+                if wid:
+                    raw_by_id[wid] = r
 
     # Always add known landmark papers, even if the keyword query misses them.
     for a in cfg.get("anchors") or []:
-        rec = None
-        if a.get("doi"):
-            print(f"[{slug}] Fetching anchor DOI {a.get('doi')} ...")
-            rec = client.get_work_by_doi(str(a["doi"]), include_abstract=bool(cfg.get("include_abstract")))
-        elif a.get("openalex_id"):
-            print(f"[{slug}] Fetching anchor OpenAlex ID {a.get('openalex_id')} ...")
-            rec = client.get_work_by_openalex_id(str(a["openalex_id"]), include_abstract=bool(cfg.get("include_abstract")))
+        label = a.get("label") or a.get("title") or a.get("doi") or a.get("openalex_id")
+        print(f"[{slug}] Fetching anchor {label} ...")
+        rec = fetch_anchor_work(client, a, include_abstract=bool(cfg.get("include_abstract")))
         if rec and rec.get("id"):
+            rec["_aspr_anchor_seed"] = True
             raw_by_id[normalize_openalex_id(rec["id"])] = rec
 
     # Optional: fetch citing papers of anchors to better capture downstream disturbance.
     if cfg.get("fetch_anchor_citers", True) and cfg.get("anchors"):
         anchor_records: List[Dict[str, Any]] = []
         for a in cfg.get("anchors") or []:
-            rec = None
-            if a.get("doi"):
-                rec = client.get_work_by_doi(str(a["doi"]), include_abstract=False)
-            elif a.get("openalex_id"):
-                rec = client.get_work_by_openalex_id(str(a["openalex_id"]), include_abstract=False)
+            rec = fetch_anchor_work(client, a, include_abstract=False)
             if rec and rec.get("id"):
                 anchor_records.append(rec)
         for rec in anchor_records:
@@ -1029,6 +1513,7 @@ def fetch_domain_works(
             for r in citers:
                 wid = normalize_openalex_id(r.get("id"))
                 if wid:
+                    r["_aspr_anchor_citer"] = True
                     raw_by_id[wid] = r
 
     works: Dict[str, Dict[str, Any]] = {}
@@ -1037,10 +1522,14 @@ def fetch_domain_works(
         if rec.get("id") and rec.get("year"):
             works[rec["id"]] = rec
 
-    mark_anchors(works, cfg.get("anchors") or [])
+    report_rows = mark_anchors(works, cfg.get("anchors") or [])
+    works = apply_relevance_filter(works, cfg)
+    report_rows = mark_anchors(works, cfg.get("anchors") or [])
+    write_anchor_resolution_report(domain_dir, report_rows)
     with open(cache_path, "w", encoding="utf-8") as f:
         for rec in works.values():
             f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+    manifest_path.write_text(json.dumps(cache_manifest(cfg), ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"[{slug}] Saved {len(works):,} works to {cache_path}")
     return works
 
@@ -1129,6 +1618,8 @@ def build_hybrid_graph(
             doi=w.get("doi", ""),
             anchor_label=w.get("anchor_label", ""),
             anchor_year=w.get("anchor_year"),
+            anchor_citer=bool(w.get("anchor_citer")),
+            reference_stub=bool(w.get("reference_stub")),
         )
 
     # Direct citation edges among selected papers.
@@ -1588,6 +2079,23 @@ def primary_topic_set(G: nx.Graph, nodes: Iterable[str]) -> Set[str]:
     return out
 
 
+def shannon_entropy(values: Iterable[str]) -> float:
+    items = [str(v).strip().lower() for v in values if str(v).strip()]
+    if not items:
+        return 0.0
+    counts = collections.Counter(items)
+    total = float(sum(counts.values()))
+    return float(-sum((c / total) * math.log(max(c / total, 1e-12)) for c in counts.values()))
+
+
+def edge_weight_sum(G: nx.Graph, edges: Iterable[Tuple[str, str]]) -> float:
+    total = 0.0
+    for u, v in edges:
+        if G.has_edge(u, v):
+            total += float(G[u][v].get("weight", 1.0))
+    return total
+
+
 def compute_perturbation_metrics(
     G: nx.Graph,
     global_comm_map: Mapping[str, int],
@@ -1611,6 +2119,8 @@ def compute_perturbation_metrics(
     prev_path = np.nan
     prev_hub = 0.0
     prev_sem = 0.0
+    prev_field_entropy = 0.0
+    prev_paper_rate = 0.0
     seen_topics: Set[str] = set()
 
     for i, ((r0, r1), (c0, c1)) in enumerate(zip(rolling_windows, cumulative_windows)):
@@ -1625,6 +2135,24 @@ def compute_perturbation_metrics(
         new_edges = curr_edges - prev_cum_edges
         curr_topics = primary_topic_set(G, roll_nodes)
         new_topics = curr_topics - seen_topics
+        new_edge_weight = edge_weight_sum(G, new_edges)
+        prev_edge_weight = edge_weight_sum(G, prev_cum_edges)
+        new_cross_edges = {
+            (u, v)
+            for u, v in new_edges
+            if global_comm_map.get(u) is not None
+            and global_comm_map.get(v) is not None
+            and global_comm_map.get(u) != global_comm_map.get(v)
+        }
+        cross_comm_weight_gain = edge_weight_sum(G, new_cross_edges)
+        edge_gain_rate = new_edge_weight / max(prev_edge_weight, 1.0)
+        topic_birth_rate = len(new_topics) / max(len(curr_topics), 1)
+        anchor_citer_count = sum(1 for n in roll_nodes if G.nodes[n].get("anchor_citer") or G.nodes[n].get("anchor_label"))
+        anchor_citer_reach = anchor_citer_count / max(len(roll_nodes), 1)
+        curr_field_entropy = shannon_entropy(G.nodes[n].get("primary_topic") for n in roll_nodes if n in G)
+        field_entropy_gain = curr_field_entropy - prev_field_entropy if i > 0 else 0.0
+        paper_rate = len(roll_nodes) / max((r1 - r0 + 1), 1)
+        paper_burst_yoy = (paper_rate / max(prev_paper_rate, 1e-9)) - 1.0 if i > 0 else 0.0
         expansion_raw = safe_log1p(len(new_nodes)) + safe_log1p(len(new_edges)) + safe_log1p(len(new_topics))
 
         # Bridging: cross-community edge ratio + participation + betweenness of rolling papers.
@@ -1695,11 +2223,15 @@ def compute_perturbation_metrics(
             sem_gain = 0.0
         else:
             if np.isfinite(prev_path) and np.isfinite(curr_path):
-                path_gain = max(0.0, prev_path - curr_path)
+                path_gain = prev_path - curr_path
             else:
                 path_gain = 0.0
-            hub_gain = max(0.0, curr_hub - prev_hub)
-            sem_gain = max(0.0, prev_sem - curr_sem)
+            hub_gain = curr_hub - prev_hub
+            sem_gain = prev_sem - curr_sem
+        if not bool(cfg.get("metrics", {}).get("signed_compression", True)):
+            path_gain = max(0.0, path_gain)
+            hub_gain = max(0.0, hub_gain)
+            sem_gain = max(0.0, sem_gain)
         compression_raw = path_gain + hub_gain + sem_gain
 
         rows.append(
@@ -1716,6 +2248,15 @@ def compute_perturbation_metrics(
                 "new_nodes": len(new_nodes),
                 "new_edges": len(new_edges),
                 "new_topics": len(new_topics),
+                "new_edge_weight": new_edge_weight,
+                "edge_gain_rate": edge_gain_rate,
+                "cross_comm_weight_gain": cross_comm_weight_gain,
+                "topic_birth_rate": topic_birth_rate,
+                "anchor_citer_count": anchor_citer_count,
+                "anchor_citer_reach": anchor_citer_reach,
+                "field_entropy": curr_field_entropy,
+                "field_entropy_gain": field_entropy_gain,
+                "paper_burst_yoy": paper_burst_yoy,
                 "intercommunity_edge_ratio": inter_ratio,
                 "participation_mean": part_mean,
                 "bridge_betweenness_top": bridge_bc,
@@ -1744,6 +2285,8 @@ def compute_perturbation_metrics(
         prev_path = curr_path
         prev_hub = curr_hub
         prev_sem = curr_sem
+        prev_field_entropy = curr_field_entropy
+        prev_paper_rate = paper_rate
         seen_topics |= curr_topics
 
     df = pd.DataFrame(rows)
@@ -1768,6 +2311,27 @@ def compute_perturbation_metrics(
             0.55 * robust_minmax(df["Expansion_raw"].values)
             + 0.45 * robust_minmax(df["new_edges"].values)
         )
+        z_cols = [
+            "Expansion_raw",
+            "Bridging_raw",
+            "Reconfiguration_raw",
+            "Compression_raw",
+            "new_edge_weight",
+            "edge_gain_rate",
+            "cross_comm_weight_gain",
+            "topic_birth_rate",
+            "anchor_citer_reach",
+            "field_entropy_gain",
+            "paper_burst_yoy",
+        ]
+        event_idx = landmark_window_index(df, cfg)
+        non_event = df.index != event_idx if event_idx is not None else np.ones(len(df), dtype=bool)
+        for col in z_cols:
+            vals = df[col].astype(float).values
+            base = vals[non_event]
+            center = float(np.nanmean(base)) if len(base) else float(np.nanmean(vals))
+            scale = float(np.nanstd(base)) if len(base) else float(np.nanstd(vals))
+            df[f"{col}_non_event_z"] = (vals - center) / scale if scale > 1e-12 else 0.0
     curve_mode = str(cfg.get("metrics", {}).get("curve_mode", "cumulative_positive")).lower()
     for metric in METRIC_NAMES:
         raw = np.asarray(df[f"{metric}_raw"].values, dtype=float)
@@ -2210,6 +2774,84 @@ def dominant_parameter_table(metrics: pd.DataFrame, cfg: Dict[str, Any]) -> pd.D
     return pd.DataFrame(rows)
 
 
+def compute_snapshot_delta_metrics(result: "DomainResult") -> pd.DataFrame:
+    rows: List[Dict[str, Any]] = []
+    prev_nodes: Set[str] = set()
+    prev_edges: Set[Tuple[str, str]] = set()
+    prev_field_entropy = 0.0
+    prev_paper_rate = 0.0
+    seen_display_topics: Set[int] = set()
+    G = result.G
+
+    for i, ((r0, r1), (c0, c1)) in enumerate(zip(result.rolling_windows, result.cumulative_windows)):
+        active = node_set_until_year(G, c1)
+        rolling_nodes = node_set_for_years(G, r0, r1)
+        Gcum = G.subgraph(active).copy()
+        curr_edges = edge_key_set(Gcum)
+        new_nodes = active - prev_nodes
+        new_edges = curr_edges - prev_edges
+        new_edge_weight = edge_weight_sum(G, new_edges)
+        prev_edge_weight = edge_weight_sum(G, prev_edges)
+        display_nodes = {n for n in active if n in result.display_comm_map}
+        hidden_node_ratio = 1.0 - (len(display_nodes) / max(len(active), 1))
+        TG = make_topic_graph(G, result.display_comm_map, result.display_labels, active_nodes=active)
+        display_topics = {int(n) for n in TG.nodes()}
+        new_display_topics = display_topics - seen_display_topics
+        possible_pairs = max(1, len(display_topics) * (len(display_topics) - 1) // 2)
+        display_saturation = TG.number_of_edges() / possible_pairs if len(display_topics) > 1 else 0.0
+        cross_edges = {
+            (u, v)
+            for u, v in new_edges
+            if result.comm_map.get(u) is not None
+            and result.comm_map.get(v) is not None
+            and result.comm_map.get(u) != result.comm_map.get(v)
+        }
+        cross_display_edges = {
+            (u, v)
+            for u, v in new_edges
+            if result.display_comm_map.get(u) is not None
+            and result.display_comm_map.get(v) is not None
+            and result.display_comm_map.get(u) != result.display_comm_map.get(v)
+        }
+        curr_field_entropy = shannon_entropy(G.nodes[n].get("primary_topic") for n in rolling_nodes if n in G)
+        anchor_citer_count = sum(1 for n in rolling_nodes if G.nodes[n].get("anchor_citer") or G.nodes[n].get("anchor_label"))
+        paper_rate = len(rolling_nodes) / max((r1 - r0 + 1), 1)
+        rows.append(
+            {
+                "snapshot_index": i + 1,
+                "rolling_start": r0,
+                "rolling_end": r1,
+                "cumulative_start": c0,
+                "cumulative_end": c1,
+                "n_cumulative_papers": len(active),
+                "n_rolling_papers": len(rolling_nodes),
+                "new_nodes": len(new_nodes),
+                "new_edges": len(new_edges),
+                "new_edge_weight": new_edge_weight,
+                "edge_gain_rate": new_edge_weight / max(prev_edge_weight, 1.0),
+                "cross_community_edge_weight": edge_weight_sum(G, cross_edges),
+                "cross_display_edge_weight": edge_weight_sum(G, cross_display_edges),
+                "hidden_node_ratio": hidden_node_ratio,
+                "displayed_topics": len(display_topics),
+                "new_display_topics": len(new_display_topics),
+                "display_saturation": display_saturation,
+                "topic_birth_rate": len(new_display_topics) / max(len(display_topics), 1),
+                "anchor_citer_count": anchor_citer_count,
+                "anchor_citer_reach": anchor_citer_count / max(len(rolling_nodes), 1),
+                "field_entropy": curr_field_entropy,
+                "field_entropy_gain": curr_field_entropy - prev_field_entropy if i > 0 else 0.0,
+                "paper_burst_yoy": (paper_rate / max(prev_paper_rate, 1e-9)) - 1.0 if i > 0 else 0.0,
+            }
+        )
+        prev_nodes = set(active)
+        prev_edges = set(curr_edges)
+        prev_field_entropy = curr_field_entropy
+        prev_paper_rate = paper_rate
+        seen_display_topics |= display_topics
+
+    return pd.DataFrame(rows)
+
+
 def draw_snapshot(
     ax: plt.Axes,
     G: nx.Graph,
@@ -2232,7 +2874,8 @@ def draw_snapshot(
     if prev_end_year:
         TGprev = filter_topic_graph_for_display(TGprev, prev_end_year, cfg["plot"])
 
-    year_label = str(panel_label).splitlines()[-1]
+    panel_lines = str(panel_label or "").splitlines()
+    year_label = panel_lines[-1] if panel_lines else str(end_year)
     ax.set_title(year_label, fontsize=10.5, pad=8, fontweight="bold")
     ax.set_xticks([])
     ax.set_yticks([])
@@ -2396,7 +3039,7 @@ def draw_snapshot(
         captions = pcfg.get("panel_captions") or []
         # Determine caption index from cumulative end year.
         idx = None
-        ends = [e for _, e in make_cumulative_windows(cfg["start_year"], make_rolling_windows(cfg["start_year"], cfg["end_year"], cfg["window_size"]))]
+        ends = [e for _, e in make_cumulative_windows_from_config(cfg, make_rolling_windows_from_config(cfg))]
         if end_year in ends:
             idx = ends.index(end_year)
         if idx is not None and idx < len(captions):
@@ -2429,7 +3072,8 @@ def draw_metric_panel(ax: plt.Axes, metrics: pd.DataFrame, cfg: Dict[str, Any], 
         x = 0.5 * (metrics["rolling_start"].values.astype(float) + metrics["rolling_end"].values.astype(float))
         labels = [f"{int(a)}-{int(b)}" for a, b in zip(metrics["rolling_start"], metrics["rolling_end"])]
         ax.set_xlim(float(metrics["rolling_start"].min()) - 0.5, float(metrics["rolling_end"].max()) + 1.0)
-        ax.set_xlabel("Rolling 5-year publication window", fontsize=8.5 if not compact else 7, labelpad=8 if not compact else 4)
+        x_label = "Rolling publication window" if cfg.get("custom_windows") else "Rolling 5-year publication window"
+        ax.set_xlabel(x_label, fontsize=8.5 if not compact else 7, labelpad=8 if not compact else 4)
     else:
         x = np.arange(len(metrics))
         labels = [str(v).split("\n")[0] for v in metrics["label"].tolist()]
@@ -2517,6 +3161,7 @@ def draw_metric_panel(ax: plt.Axes, metrics: pd.DataFrame, cfg: Dict[str, Any], 
 
 def draw_top_time_axis(ax: plt.Axes, result: "DomainResult") -> None:
     cfg = result.cfg
+    pcfg = cfg.get("plot", {})
     ax.set_xlim(cfg["start_year"], cfg["end_year"] + 1)
     ax.set_ylim(0, 1)
     ax.axis("off")
@@ -2544,7 +3189,13 @@ def draw_top_time_axis(ax: plt.Axes, result: "DomainResult") -> None:
             color="#DC2626",
             arrowprops=dict(arrowstyle="->", lw=0.8, color="#DC2626"),
         )
-        ax.text((x0 + x1) / 2, 0.86, "2012-2013\nlandmark papers", ha="center", va="top", fontsize=8.6, color="#B91C1C", fontweight="bold")
+        event_label = str(pcfg.get("top_landmark_label") or "").strip()
+        if not event_label:
+            if min(anchor_years) == max(anchor_years):
+                event_label = f"{min(anchor_years)}\nlandmark paper"
+            else:
+                event_label = f"{min(anchor_years)}-{max(anchor_years)}\nlandmark papers"
+        ax.text((x0 + x1) / 2, 0.86, event_label, ha="center", va="top", fontsize=8.6, color="#B91C1C", fontweight="bold")
     ax.text(cfg["end_year"] + 0.75, y - 0.20, "yr", ha="left", va="top", fontsize=8, color="#60636B")
 
 
@@ -2554,8 +3205,9 @@ def draw_single_domain_figure(result: "DomainResult", out_dir: Path) -> None:
     domain_dir = out_dir / cfg["slug"]
     domain_dir.mkdir(parents=True, exist_ok=True)
 
+    n_snapshots = max(1, len(result.cumulative_windows))
     fig = plt.figure(figsize=(pcfg["fig_width_single"], pcfg["fig_height_single"]), dpi=pcfg["dpi"])
-    gs = GridSpec(3, 5, figure=fig, height_ratios=[0.44, 2.95, 1.35], hspace=0.30, wspace=0.13)
+    gs = GridSpec(3, n_snapshots, figure=fig, height_ratios=[0.44, 2.95, 1.35], hspace=0.30, wspace=0.13)
 
     title = pcfg.get("title") or "Knowledge-graph perturbation"
     subtitle = pcfg.get("subtitle") or ""
@@ -2641,18 +3293,19 @@ def draw_multi_domain_figure(results: Sequence["DomainResult"], out_dir: Path) -
     if not results:
         return
     nrows = len(results)
-    ncols = len(results[0].cumulative_windows) + 1
+    max_snapshots = max(len(r.cumulative_windows) for r in results)
+    ncols = max_snapshots + 1
     pcfg = results[0].cfg["plot"]
-    fig_w = float(pcfg.get("fig_width_multi", 26))
-    fig_h = float(pcfg.get("row_height_multi", 4.1)) * nrows
+    fig_w = float(pcfg.get("fig_width_multi", 28))
+    fig_h = float(pcfg.get("row_height_multi", 4.35)) * nrows
     fig = plt.figure(figsize=(fig_w, fig_h), dpi=int(pcfg.get("dpi", 300)))
     gs = GridSpec(
         nrows,
         ncols,
         figure=fig,
-        width_ratios=[1, 1, 1, 1, 1, 1.15],
-        hspace=0.25,
-        wspace=0.13,
+        width_ratios=[1.0] * max_snapshots + [1.65],
+        hspace=0.28,
+        wspace=0.16,
     )
 
     fig.suptitle(
@@ -2664,6 +3317,22 @@ def draw_multi_domain_figure(results: Sequence["DomainResult"], out_dir: Path) -
 
     for r, result in enumerate(results):
         cfg = result.cfg
+        pcfg_domain = cfg.get("plot", {})
+        cfg_draw = deep_update(
+            cfg,
+            {
+                "plot": {
+                    "show_internal_cluster_edges": False,
+                    "max_representative_papers": min(int(pcfg_domain.get("max_representative_papers", 6)), 5),
+                    "max_labels_per_panel": min(int(pcfg_domain.get("max_labels_per_panel", 8)), 6),
+                    "display_max_backbone_edges": min(int(pcfg_domain.get("display_max_backbone_edges", 15)), 12),
+                    "display_extra_edges": min(int(pcfg_domain.get("display_extra_edges", 6)), 4),
+                    "cluster_radius_min": min(float(pcfg_domain.get("cluster_radius_min", 0.13)), 0.10),
+                    "cluster_radius_max": min(float(pcfg_domain.get("cluster_radius_max", 0.24)), 0.18),
+                    "node_size_min": min(float(pcfg_domain.get("node_size_min", 64)), 46),
+                }
+            },
+        )
         for i, (_, end) in enumerate(result.cumulative_windows):
             prev_end = result.cumulative_windows[i - 1][1] if i > 0 else None
             ax = fig.add_subplot(gs[r, i])
@@ -2674,14 +3343,17 @@ def draw_multi_domain_figure(results: Sequence["DomainResult"], out_dir: Path) -
                 result.display_labels,
                 result.pos,
                 result.color_map,
-                cfg,
+                cfg_draw,
                 end_year=end,
                 prev_end_year=prev_end,
                 panel_label=window_label(cfg["start_year"], end, cfg["start_year"]) if r == 0 else "",
                 show_ylabel=(i == 0),
             )
+        for i in range(len(result.cumulative_windows), max_snapshots):
+            ax = fig.add_subplot(gs[r, i])
+            ax.axis("off")
         axm = fig.add_subplot(gs[r, ncols - 1])
-        draw_metric_panel(axm, result.metrics, cfg, compact=True)
+        draw_metric_panel(axm, result.metrics, cfg_draw, compact=True)
         axm.text(
             0.02,
             0.98,
@@ -2755,6 +3427,8 @@ def export_tables(result: DomainResult, out_dir: Path) -> None:
                 "display_community": result.display_comm_map.get(wid),
                 "display_label": result.display_labels.get(result.display_comm_map.get(wid), "") if wid in result.display_comm_map else "",
                 "anchor_label": w.get("anchor_label"),
+                "anchor_citer": int(bool(w.get("anchor_citer"))),
+                "reference_stub": int(bool(w.get("reference_stub"))),
             }
         )
     pd.DataFrame(rows).sort_values(["year", "cited_by_count"], ascending=[True, False]).to_csv(
@@ -2805,16 +3479,23 @@ def export_tables(result: DomainResult, out_dir: Path) -> None:
     pd.DataFrame(topic_edge_rows).to_csv(domain_dir / "topic_edges.csv", index=False)
 
     result.metrics.to_csv(domain_dir / "perturbation_metrics.csv", index=False)
+    compute_snapshot_delta_metrics(result).to_csv(domain_dir / "snapshot_delta_metrics.csv", index=False)
     dominant_parameter_table(result.metrics, cfg).to_csv(domain_dir / "dominant_parameter_trajectories.csv", index=False)
 
 
-def run_domain(cfg: Dict[str, Any], client: OpenAlexClient, out_dir: Path, use_cache: bool = True) -> DomainResult:
+def run_domain(
+    cfg: Dict[str, Any],
+    client: OpenAlexClient,
+    out_dir: Path,
+    use_cache: bool = True,
+    force_cache: bool = False,
+) -> DomainResult:
     slug = cfg["slug"]
     print(f"\n=== Running domain: {cfg['domain_name']} ({slug}) ===")
-    rolling = make_rolling_windows(cfg["start_year"], cfg["end_year"], cfg["window_size"])
-    cumulative = make_cumulative_windows(cfg["start_year"], rolling)
+    rolling = make_rolling_windows_from_config(cfg)
+    cumulative = make_cumulative_windows_from_config(cfg, rolling)
 
-    works_all = fetch_domain_works(cfg, client, out_dir, use_cache=use_cache)
+    works_all = fetch_domain_works(cfg, client, out_dir, use_cache=use_cache, force_cache=force_cache)
     works_selected = select_balanced_papers(works_all, cfg, rolling)
     print(f"[{slug}] Selected {len(works_selected):,}/{len(works_all):,} works for graph construction")
 
@@ -2869,6 +3550,7 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser.add_argument("--openalex-api-key", default=os.getenv("OPENALEX_API_KEY"), help="OpenAlex API key.")
     parser.add_argument("--email", default=os.getenv("OPENALEX_EMAIL"), help="Optional contact email for API calls.")
     parser.add_argument("--no-cache", action="store_true", help="Ignore cached works_raw.jsonl and re-download data.")
+    parser.add_argument("--force-cache", action="store_true", help="Use works_raw.jsonl even when cache_manifest.json does not match the config.")
     return parser.parse_args(argv)
 
 
@@ -2890,7 +3572,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     results = []
     for cfg in cfgs:
-        result = run_domain(cfg, client, out_dir, use_cache=not args.no_cache)
+        result = run_domain(cfg, client, out_dir, use_cache=not args.no_cache, force_cache=bool(args.force_cache))
         results.append(result)
 
     if len(results) > 1:

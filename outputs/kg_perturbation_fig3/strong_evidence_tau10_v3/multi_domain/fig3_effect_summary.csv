@@ -1,0 +1,16 @@
+stat,value,n,group
+low_score_tertile_rgpm_percentile_median,33.69601889338732,1976,low
+low_score_tertile_rgpm_percentile_mean,38.059416267818406,1976,low
+mid_score_tertile_rgpm_percentile_median,45.68994601889339,1976,mid
+mid_score_tertile_rgpm_percentile_mean,47.66223869975468,1976,mid
+high_score_tertile_rgpm_percentile_median,67.99932523616735,1976,high
+high_score_tertile_rgpm_percentile_mean,64.30364867615161,1976,high
+high_vs_low_tertile_median_rgpm_lift_pp,34.30330634278003,5928,tertile
+top_score_decile_rgpm_top20_rate,0.45699831365935917,593,top20
+bottom_score_decile_rgpm_top20_rate,0.06239460370994941,593,top20
+top_vs_bottom_score_decile_rgpm_top20_enrichment,7.324324324324324,5928,top20
+top_score_decile_rgpm_top10_rate,0.28499156829679595,593,top10
+bottom_score_decile_rgpm_top10_rate,0.025295109612141653,593,top10
+top_vs_bottom_score_decile_rgpm_top10_enrichment,11.266666666666666,5928,top10
+learned_oof_spearman,0.4056501056367717,5928,association
+equal_weight_oof_spearman,0.35958088643916664,5928,association

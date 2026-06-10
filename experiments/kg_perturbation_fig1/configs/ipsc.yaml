@@ -1,6 +1,19 @@
 domain_name: "iPSC and cellular reprogramming"
 slug: "ipsc_reprogramming"
 search_query: '("induced pluripotent stem cell" OR "induced pluripotent stem cells" OR "iPSC" OR "iPS cells" OR "cellular reprogramming" OR "Yamanaka factors" OR "pluripotency" OR "pluripotent stem cell" OR "embryonic stem cell" OR "somatic cell nuclear transfer")'
+search_groups:
+  - name: "stem_cell_priors"
+    query: '("embryonic stem cell" OR "pluripotent stem cell" OR "pluripotency" OR "somatic cell nuclear transfer" OR "therapeutic cloning")'
+    max_works_per_window: 520
+  - name: "reprogramming_factors"
+    query: '("cellular reprogramming" OR "Yamanaka factors" OR "Oct4" OR "Sox2" OR "Klf4" OR "c-Myc" OR "Nanog")'
+    max_works_per_window: 620
+  - name: "ipsc_platform"
+    query: '("induced pluripotent stem cell" OR "induced pluripotent stem cells" OR "iPSC" OR "iPS cells" OR "patient-specific iPS")'
+    max_works_per_window: 760
+  - name: "ipsc_applications"
+    query: '("iPSC disease model" OR "induced pluripotent stem cell disease model" OR "iPSC differentiation" OR "iPSC organoid" OR "iPSC regenerative medicine")'
+    max_works_per_window: 620
 start_year: 1995
 end_year: 2019
 window_size: 5
@@ -12,14 +25,68 @@ max_anchor_citers: 800
 work_types: ["article", "preprint", "review"]
 anchors:
   - label: "Takahashi/Yamanaka 2006"
+    openalex_id: "W2125987139"
     doi: "10.1016/j.cell.2006.07.024"
+    title: "Induction of Pluripotent Stem Cells from Mouse Embryonic and Adult Fibroblast Cultures by Defined Factors"
     year: 2006
   - label: "Takahashi 2007"
+    openalex_id: "W2138977668"
     doi: "10.1016/j.cell.2007.11.019"
+    title: "Induction of Pluripotent Stem Cells from Adult Human Fibroblasts by Defined Factors"
     year: 2007
   - label: "Yu 2007"
+    openalex_id: "W2142046859"
     doi: "10.1126/science.1151526"
+    title: "Induced Pluripotent Stem Cell Lines Derived from Human Somatic Cells"
     year: 2007
+relevance_filter:
+  enabled: true
+  keep_anchor_citers: true
+  strong_positive_keywords:
+    - "induced pluripotent stem cell"
+    - "induced pluripotent stem cells"
+    - "ipsc"
+    - "ips cell"
+    - "ips cells"
+    - "cellular reprogramming"
+    - "yamanaka"
+    - "reprogramming factors"
+    - "patient-specific ips"
+  positive_keywords:
+    - "induced pluripotent"
+    - "ipsc"
+    - "ips cell"
+    - "ips cells"
+    - "cellular reprogramming"
+    - "reprogramming"
+    - "yamanaka"
+    - "oct4"
+    - "sox2"
+    - "klf4"
+    - "c-myc"
+    - "nanog"
+    - "pluripotency"
+    - "pluripotent stem"
+    - "embryonic stem"
+    - "somatic cell nuclear transfer"
+    - "fibroblast"
+    - "disease model"
+    - "directed differentiation"
+    - "organoid"
+    - "regenerative medicine"
+  negative_primary_topics:
+    - "parallel computing"
+    - "toxic organic pollutants"
+    - "renal and related cancers"
+    - "neonatal respiratory"
+    - "t-cell and b-cell immunology"
+    - "3d printing"
+  negative_keywords:
+    - "short-range molecular dynamics"
+    - "dioxin-binding"
+    - "surfactant protein"
+    - "btk-deficient"
+    - "syk-deficient"
 api:
   sleep_seconds: 0.1
   max_retries: 6
@@ -34,6 +101,7 @@ graph:
   random_seed: 42
 metrics:
   curve_mode: "raw"
+  signed_compression: true
   betweenness_sample: 250
   semantic_sample: 600
 plot:
@@ -43,10 +111,16 @@ plot:
   fig_height_single: 11.0
   dpi: 300
   display_mode: "cluster_schematic"
-  display_max_topics: 8
+  display_max_topics: "auto"
+  display_max_topics_auto_cap: 8
+  adaptive_display_topics: true
+  event_topics_per_spec: 1
+  event_max_topics: 5
   display_min_topic_size: 8
-  display_max_backbone_edges: 15
-  display_extra_edges: 6
+  display_max_backbone_edges: 18
+  display_extra_edges: 8
+  edge_gain_highlight_ratio: 0.12
+  edge_gain_highlight_min: 4.0
   cluster_radius_min: 0.135
   cluster_radius_max: 0.235
   max_representative_papers: 6
@@ -60,7 +134,9 @@ plot:
   metric_scale: "unit"
   metric_panel_title: "Dominant parameter trajectories explaining the graph transitions in panel a"
   metric_y_label: "Standardized\nparameter value"
-  metric_landmark_label: ""
+  metric_landmark_label: "iPSC platform"
+  landmark_focus_year: 2006
+  top_landmark_label: "2006-2007\niPSC reprogramming"
   dominant_parameter_ylim: [-1.5, 1.5]
   dominant_parameters:
     - key: "RTD"
@@ -124,6 +200,17 @@ plot:
     - "Innovation shock: iPSC platform"
     - "Disease-model reconfiguration"
     - "Compression into regenerative hubs"
+  event_topic_keywords:
+    - name: "Reprogramming\nfactors"
+      keywords: ["oct4", "sox2", "klf4", "c-myc", "nanog", "yamanaka", "defined factors"]
+    - name: "iPSC\ngeneration"
+      keywords: ["induced pluripotent", "ipsc", "ips cell", "ips cells", "reprogramming", "fibroblast"]
+    - name: "Human\niPS cells"
+      keywords: ["human", "adult human fibroblast", "patient-specific", "somatic", "derived"]
+    - name: "Disease models\n& screening"
+      keywords: ["disease model", "modeling", "modelling", "patient", "drug screening", "toxicity"]
+    - name: "Differentiation\n& organoids"
+      keywords: ["differentiation", "lineage", "organoid", "cardiomyocyte", "neuron"]
   topic_layout_templates:
     - name: "Embryonic\nstem cells"
       x: -0.78

@@ -1,6 +1,19 @@
 domain_name: "CRISPR-Cas genome editing"
 slug: "crispr"
 search_query: '("CRISPR" OR "Cas9" OR "Cas12" OR "Cas13" OR "RNA-guided nuclease" OR "guide RNA" OR "genome editing")'
+search_groups:
+  - name: "adaptive_immunity"
+    query: '("CRISPR" OR "clustered regularly interspaced short palindromic repeats" OR "CRISPR-Cas" OR "CRISPR loci" OR "CRISPR spacer" OR "adaptive bacterial immunity")'
+    max_works_per_window: 520
+  - name: "cas9_editing"
+    query: '("Cas9" OR "RNA-guided nuclease" OR "single guide RNA" OR "sgRNA" OR "CRISPR genome editing" OR "CRISPR-Cas9")'
+    max_works_per_window: 760
+  - name: "new_editors"
+    query: '("Cas12" OR "Cpf1" OR "Cas13" OR "base editing" OR "prime editing" OR "CRISPR editor")'
+    max_works_per_window: 620
+  - name: "screens_therapy"
+    query: '("CRISPR screen" OR "CRISPR screening" OR "pooled CRISPR" OR "CRISPR diagnostics" OR "CRISPR therapy" OR "CRISPR delivery")'
+    max_works_per_window: 620
 start_year: 2000
 end_year: 2024
 window_size: 5
@@ -12,14 +25,74 @@ max_anchor_citers: 800
 work_types: ["article", "preprint", "review"]
 anchors:
   - label: "Jinek 2012"
+    openalex_id: "W2045435533"
     doi: "10.1126/science.1225829"
+    title: "A Programmable Dual-RNA-Guided DNA Endonuclease in Adaptive Bacterial Immunity"
     year: 2012
   - label: "Cong/Mali 2013"
+    openalex_id: "W2064815984"
     doi: "10.1126/science.1231143"
+    title: "Multiplex Genome Engineering Using CRISPR/Cas Systems"
     year: 2013
   - label: "Mali 2013"
+    openalex_id: "W2003171404"
     doi: "10.1126/science.1232033"
+    title: "RNA-Guided Human Genome Engineering via Cas9"
     year: 2013
+relevance_filter:
+  enabled: true
+  keep_anchor_citers: true
+  strong_positive_keywords:
+    - "crispr"
+    - "crispr-cas"
+    - "cas9"
+    - "cas12"
+    - "cas13"
+    - "cpf1"
+    - "rna-guided nuclease"
+    - "single guide rna"
+    - "sgrna"
+    - "genome editing"
+    - "gene editing"
+    - "base editing"
+    - "prime editing"
+  positive_keywords:
+    - "crispr"
+    - "cas9"
+    - "cas12"
+    - "cas13"
+    - "cpf1"
+    - "rna-guided"
+    - "guide rna"
+    - "sgrna"
+    - "crrna"
+    - "tracrrna"
+    - "nuclease"
+    - "genome editing"
+    - "gene editing"
+    - "base editing"
+    - "prime editing"
+    - "bacterial immunity"
+    - "spacer acquisition"
+    - "pooled screen"
+    - "crispr screen"
+    - "diagnostics"
+  negative_primary_topics:
+    - "qualitative research"
+    - "trypanosoma"
+    - "psychoses"
+    - "lipoprotein"
+    - "plant virus"
+    - "rna modifications and cancer"
+    - "rna and protein synthesis"
+    - "microRNA in disease regulation"
+  negative_keywords:
+    - "qualitative research"
+    - "trypanosome"
+    - "kinetoplastid"
+    - "lipoprotein lipase"
+    - "psychoses of epilepsy"
+    - "snoRNA host gene"
 api:
   sleep_seconds: 0.1
   max_retries: 6
@@ -34,6 +107,7 @@ graph:
   random_seed: 42
 metrics:
   curve_mode: "raw"
+  signed_compression: true
   betweenness_sample: 250
   semantic_sample: 600
 plot:
@@ -43,10 +117,16 @@ plot:
   fig_height_single: 11.0
   dpi: 300
   display_mode: "cluster_schematic"
-  display_max_topics: 8
+  display_max_topics: "auto"
+  display_max_topics_auto_cap: 8
+  adaptive_display_topics: true
+  event_topics_per_spec: 1
+  event_max_topics: 5
   display_min_topic_size: 8
-  display_max_backbone_edges: 15
-  display_extra_edges: 6
+  display_max_backbone_edges: 18
+  display_extra_edges: 8
+  edge_gain_highlight_ratio: 0.12
+  edge_gain_highlight_min: 4.0
   cluster_radius_min: 0.135
   cluster_radius_max: 0.235
   max_representative_papers: 6
@@ -60,7 +140,9 @@ plot:
   metric_scale: "unit"
   metric_panel_title: "Dominant parameter trajectories explaining the graph transitions in panel a"
   metric_y_label: "Standardized\nparameter value"
-  metric_landmark_label: ""
+  metric_landmark_label: "Programmable Cas9"
+  landmark_focus_year: 2012
+  top_landmark_label: "2012-2013\nprogrammable Cas9"
   dominant_parameter_ylim: [-1.5, 1.5]
   dominant_parameters:
     - key: "B"
@@ -133,6 +215,17 @@ plot:
     - "Innovation shock: programmable Cas9"
     - "Field reconfiguration"
     - "Compression into translational hubs"
+  event_topic_keywords:
+    - name: "Programmable\nCas9"
+      keywords: ["cas9", "rna-guided", "single guide rna", "dual-rna", "endonuclease", "programmable"]
+    - name: "Genome\nediting"
+      keywords: ["genome editing", "gene editing", "engineering", "targeted", "cleavage", "knockout"]
+    - name: "Base/prime\nediting"
+      keywords: ["base editing", "prime editing", "editor", "deaminase", "pegRNA"]
+    - name: "Screens &\ndiagnostics"
+      keywords: ["screen", "screening", "diagnostic", "detection", "pooled"]
+    - name: "Delivery &\ntherapy"
+      keywords: ["delivery", "therapy", "clinical", "in vivo", "therapeutic"]
   topic_layout_templates:
     - name: "Immune\ndefence"
       x: -0.78
