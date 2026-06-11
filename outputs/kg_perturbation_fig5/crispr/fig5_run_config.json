@@ -1,0 +1,28 @@
+{
+  "fig3_run_dir": "/home/jayee/workspace/ASPR/outputs/kg_perturbation_fig3/strong_evidence_tau10_v3/multi_domain",
+  "fig3_input_dir": "/home/jayee/workspace/ASPR/outputs/kg_perturbation_fig3/strong_evidence_tau10_v3/fig3_input/multi_domain",
+  "out_dir": "outputs/kg_perturbation_fig5/crispr",
+  "domain_filter": [
+    "crispr"
+  ],
+  "cutoff_year": 2020,
+  "validation_start": null,
+  "validation_end": 2026,
+  "top_n": 10,
+  "case_count": 3,
+  "min_historical_papers": 5,
+  "min_future_papers": 2,
+  "score_column": "S_w_oof",
+  "rgpm_column": "RGPM_structural_residual_tau10",
+  "min_input_year": 2000,
+  "max_input_year": 2024,
+  "backtest_windows": [
+    "1995:2000",
+    "2000:2005",
+    "2005:2010",
+    "2010:2015",
+    "2015:2020",
+    "2020:2026"
+  ],
+  "seed": 2028
+}

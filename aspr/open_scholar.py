@@ -1,11 +1,14 @@
 import argparse
+import hashlib
 import json
 import os
 import sys
+from functools import lru_cache
 from pathlib import Path
+from typing import Any, Dict, List, Tuple
 
 import requests
-from FlagEmbedding import BGEM3FlagModel,FlagReranker
+from FlagEmbedding import BGEM3FlagModel, FlagReranker
 from openai import OpenAI
 from pypdf import PdfReader
 
@@ -23,11 +26,32 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = PROJECT_ROOT / "data"
 OUTPUTS_DIR = PROJECT_ROOT / "outputs"
 DOWNLOAD_DIR = OUTPUTS_DIR / "downloads"
-MOST_RELATED_PAPERS_PATH = DATA_DIR / "most_related_paper.json"
-TOTAL_RELATED_PAPERS_PATH = DATA_DIR / "total_related_papers.json"
+RETRIEVAL_CACHE_DIR = DATA_DIR / "retrieval_cache"
 TEMP_PROMPT_PATH = OUTPUTS_DIR / "temp.json"
 
-def keywords_extract(query):
+
+def _query_cache_paths(title: str, abstract: str, key_words: List[str]) -> Tuple[Path, Path]:
+    payload = {
+        "title": title.strip(),
+        "abstract": abstract.strip(),
+        "key_words": [kw.strip().lower() for kw in key_words],
+    }
+    cache_key = hashlib.sha1(json.dumps(payload, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()[:16]
+    return (
+        RETRIEVAL_CACHE_DIR / f"{cache_key}_most_related_papers.json",
+        RETRIEVAL_CACHE_DIR / f"{cache_key}_total_related_papers.jsonl",
+    )
+
+
+def _as_bool(value: Any) -> bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        return value.strip().lower() in {"1", "true", "yes", "y", "and"}
+    return bool(value)
+
+
+def keywords_extract(query: str) -> List[str]:
     from langchain_openai import ChatOpenAI
     from langchain_core.prompts import PromptTemplate
     from langchain_core.output_parsers import StrOutputParser
@@ -60,8 +84,19 @@ def keywords_extract(query):
         print(f"Raw output: {keywords}")
         return []
 
-def retrieval_recall(query, reference):
-    model = BGEM3FlagModel('BAAI/bge-m3', use_fp16=True)
+
+@lru_cache(maxsize=1)
+def _get_recall_model() -> BGEM3FlagModel:
+    return BGEM3FlagModel("BAAI/bge-m3", use_fp16=True)
+
+
+@lru_cache(maxsize=1)
+def _get_reranker() -> FlagReranker:
+    return FlagReranker("OpenSciLM/OpenScholar_Reranker", use_fp16=True)
+
+
+def retrieval_recall(query: str, reference: List[str]) -> Tuple[List[str], List[float]]:
+    model = _get_recall_model()
     sentence_pairs = [(query, ref) for ref in reference]
     similarity_scores = model.compute_score(
         sentence_pairs,
@@ -76,8 +111,9 @@ def retrieval_recall(query, reference):
     # print(sorted_scores)
     return sorted_references, sorted_scores
     
-def retrieval_rerank(query, reference):
-    model = FlagReranker("OpenSciLM/OpenScholar_Reranker", use_fp16=True)
+
+def retrieval_rerank(query: str, reference: List[str]) -> Tuple[List[str], List[float]]:
+    model = _get_reranker()
     sentence_pairs = [(query, ref) for ref in reference]
     rerank_scores = model.compute_score(
         sentence_pairs,
@@ -90,7 +126,8 @@ def retrieval_rerank(query, reference):
 
     return sorted_references, sorted_scores
 
-def extract_text_with_pypdf(pdf_path):
+
+def extract_text_with_pypdf(pdf_path: str) -> str:
     reader = PdfReader(pdf_path)
     text = ""
     for page in reader.pages:
@@ -119,42 +156,57 @@ class Reviewer:
             args=self.args
         )
 
-    def __call__(self, title, abstract, key_words):
+    def __call__(self, title: str, abstract: str, key_words: List[str]):
         DATA_DIR.mkdir(parents=True, exist_ok=True)
+        RETRIEVAL_CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
-        # 检查 most_related_paper.json 是否存在
-        if MOST_RELATED_PAPERS_PATH.exists():
-            print(f"Loading papers from {MOST_RELATED_PAPERS_PATH}...")
-            with MOST_RELATED_PAPERS_PATH.open("r", encoding="utf-8") as file:
+        if not key_words:
+            key_words = keywords_extract(abstract)
+
+        most_related_path, total_related_path = _query_cache_paths(title, abstract, key_words)
+
+        if most_related_path.exists():
+            print(f"Loading papers from {most_related_path}...")
+            with most_related_path.open("r", encoding="utf-8") as file:
                 paper_after_retrieval = json.load(file)
             print(f"Loaded {len(paper_after_retrieval)} papers from cache.")
         else:
-            if not key_words:
-                key_words = keywords_extract(abstract)
-            if TOTAL_RELATED_PAPERS_PATH.exists():
-                with TOTAL_RELATED_PAPERS_PATH.open("r", encoding="utf-8") as file:
+            if total_related_path.exists():
+                with total_related_path.open("r", encoding="utf-8") as file:
                     papers = [json.loads(line.strip()) for line in file if line.strip()]
             else:
                 papers = self.open_scholar.search_semantic_scholar(key_words)
-                with TOTAL_RELATED_PAPERS_PATH.open("w", encoding="utf-8") as file:
+                with total_related_path.open("w", encoding="utf-8") as file:
                     for paper in papers:
-                        print(json.dumps(paper), file=file)
+                        print(json.dumps(paper, ensure_ascii=False), file=file)
             
             item2Id, Id2paper = {}, {}
             paper_formatted = []
             for idx, paper in enumerate(papers):
-                item = f'Title:{paper["title"]}. Abstract:{paper["abstract"]}'
+                item = f'Title:{paper.get("title", "")}. Abstract:{paper.get("abstract", "")}'
                 paper_formatted.append(item)
                 item2Id[item] = paper["paperId"]
                 Id2paper[paper["paperId"]] = paper
 
+            if not paper_formatted:
+                paper_after_retrieval = []
+                with most_related_path.open("w", encoding="utf-8") as file:
+                    json.dump(paper_after_retrieval, file, indent=2, ensure_ascii=False)
+                return evaluate_paper_innovation(
+                    paper_title=title,
+                    paper_abstract=abstract,
+                    retrieved_papers=paper_after_retrieval,
+                )
+
             print('Start retrieval recall...')
-            paper_recalled, _ = retrieval_recall(title+abstract, paper_formatted)
-            paper_recalled = paper_recalled[:round(len(paper_recalled)/10)]
+            paper_recalled, _ = retrieval_recall(title + "\n" + abstract, paper_formatted)
+            top_n = max(1, int(getattr(self.args, "top_n", 10)))
+            recall_n = min(len(paper_recalled), max(top_n * 5, round(len(paper_recalled) / 10), top_n))
+            paper_recalled = paper_recalled[:recall_n]
             print('Recalled papers:', len(paper_recalled))
             print('Start retrieval rerank...')
-            paper_reranked, _ = retrieval_rerank(title+abstract, paper_recalled)
-            paper_reranked = paper_reranked[:round(len(paper_reranked)/10)]
+            paper_reranked, _ = retrieval_rerank(title + "\n" + abstract, paper_recalled)
+            paper_reranked = paper_reranked[:min(len(paper_reranked), top_n)]
             print('Reranked papers:', len(paper_reranked))
 
             # 去重
@@ -166,10 +218,9 @@ class Reviewer:
                     seen_ids.add(paper_id)
                     paper_after_retrieval.append(Id2paper[paper_id])
             
-            # 保存检索结果到 most_related_paper.json
-            with MOST_RELATED_PAPERS_PATH.open("w", encoding="utf-8") as file:
-                json.dump(paper_after_retrieval, file, indent=2)
-            print(f"Saved {len(paper_after_retrieval)} papers to {MOST_RELATED_PAPERS_PATH}")
+            with most_related_path.open("w", encoding="utf-8") as file:
+                json.dump(paper_after_retrieval, file, indent=2, ensure_ascii=False)
+            print(f"Saved {len(paper_after_retrieval)} papers to {most_related_path}")
 
         
         reviews = evaluate_paper_innovation(
@@ -259,13 +310,13 @@ class Reviewer:
 class OpenScholar:
     def __init__(self, args):
         self.s2_api_key = args.s2_api_key
-        self.and_search = args.and_search
+        self.and_search = _as_bool(args.and_search)
         self.url = "http://api.semanticscholar.org/graph/v1/paper/search/bulk"
 
     def __call__(self,):
         pass
 
-    def search_semantic_scholar(self, key_words):
+    def search_semantic_scholar(self, key_words: List[str]) -> List[Dict[str, Any]]:
         papers = []
         for kw in key_words:
             print(f"Searching for papers with keyword: {kw}")
@@ -275,28 +326,39 @@ class OpenScholar:
         print(f"Retrieved {len(papers)} papers...")
         formatted_papers = []
         for paper in papers:
+            open_access_pdf = paper.get("openAccessPdf") or {}
+            external_ids = paper.get("externalIds") or {}
             formatted_papers.append({
-                "paperId":paper["paperId"],
-                "year":paper["year"],
-                "title":paper["title"],
-                "authors": (', ').join([author["name"] for author in paper["authors"]]),
-                "venue":paper["venue"],
-                "citationCount":paper["citationCount"],
-                "abstract":paper["abstract"],
-                "isOpenAccess":paper["isOpenAccess"],
-                "url":paper["openAccessPdf"]["url"]
+                "paperId": paper.get("paperId", ""),
+                "year": paper.get("year") or 0,
+                "title": paper.get("title") or "",
+                "authors": ", ".join([author.get("name", "") for author in paper.get("authors") or []]),
+                "venue": paper.get("venue") or "",
+                "citationCount": paper.get("citationCount") or 0,
+                "abstract": paper.get("abstract") or "",
+                "isOpenAccess": bool(paper.get("isOpenAccess")),
+                "url": open_access_pdf.get("url") or paper.get("url") or "",
+                "externalIds": external_ids,
+                "doi": external_ids.get("DOI") or external_ids.get("doi") or "",
+                "fieldsOfStudy": paper.get("fieldsOfStudy") or [],
+                "s2FieldsOfStudy": paper.get("s2FieldsOfStudy") or [],
             })
 
         return formatted_papers
 
-    def _search_paper_via_query(self, query):
-        if self.and_search:
-            query = ' + '.join([f'"{kw}"' for kw in query])
-        else:
-            query = ' | '.join([f'"{kw}"' for kw in query])
+    def _search_paper_via_query(self, query: str | List[str]) -> List[Dict[str, Any]]:
+        terms = [query] if isinstance(query, str) else query
+        terms = [term.strip() for term in terms if str(term).strip()]
+        if not terms:
+            return []
+        separator = " + " if self.and_search else " | "
+        query = separator.join([f'"{term}"' for term in terms])
         query_params = {
             'query': query,
-            'fields': "paperId,title,year,authors.name,abstract,venue,citationCount,url,externalIds,isOpenAccess,openAccessPdf",
+            'fields': (
+                "paperId,title,year,authors.name,abstract,venue,citationCount,url,"
+                "externalIds,isOpenAccess,openAccessPdf,fieldsOfStudy,s2FieldsOfStudy"
+            ),
             "year": "2021-",
             "sort": "citationCount:desc"
         }
@@ -307,9 +369,9 @@ class OpenScholar:
             headers=headers
         )
         if response.status_code == 200:
-            response_data = response.json()["data"]
+            response_data = response.json().get("data", [])
         else:
-            raise response.status_code
+            raise RuntimeError(f"Semantic Scholar request failed: {response.status_code} {response.text[:200]}")
 
         return response_data
 
@@ -327,7 +389,7 @@ if __name__ == '__main__':
                         help='Port for small model server')
     parser.add_argument('--api_port', type=int, default=38015,
                         help='Port for API server')
-    parser.add_argument('--and_search', type=bool, default='False',
+    parser.add_argument('--and_search', type=_as_bool, default=False,
                         help='and / or search')
     parser.add_argument('--reranker_path', type=str, default='OpenSciLM/OpenScholar_Reranker',
                         help='Path to reranker model')

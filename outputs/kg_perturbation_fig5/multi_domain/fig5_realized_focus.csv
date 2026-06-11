@@ -1,0 +1,21 @@
+focus_id,focus_label,realized_rank,realized_score,is_hotspot,is_landmark_related,domain,future_papers,future_citations,future_rgpm_top_tail,predicted_rank
+transformer_foundation_models::300071,Artificial Intelligence in Healthcare and Education,1.0,0.9393941306405805,True,False,transformer_foundation_models,188.0,47939.0,0.0,
+transformer_foundation_models::300480,Multimodal Machine Learning Applications,2.0,0.9384222152098455,True,False,transformer_foundation_models,90.0,30509.0,0.0,39.0
+transformer_foundation_models::300032,Advanced Neural Network Applications,3.0,0.9384095929315242,True,False,transformer_foundation_models,76.0,64548.0,0.0,241.0
+transformer_foundation_models::300420,Machine Learning in Materials Science,4.0,0.9376270116756075,True,False,transformer_foundation_models,33.0,5416.0,0.0,348.0
+transformer_foundation_models::300688,Software Engineering Research,5.0,0.9374250552224678,True,False,transformer_foundation_models,46.0,7291.0,0.0,70.0
+transformer_foundation_models::300741,Topic Modeling,6.0,0.937172609656043,True,True,transformer_foundation_models,651.0,133485.0,0.0,106.0
+transformer_foundation_models::300692,Software Testing and Debugging Techniques,7.0,0.9366172294099085,True,False,transformer_foundation_models,21.0,3150.0,0.0,452.0
+transformer_foundation_models::300298,Generative Adversarial Networks and Image Synthesis,8.0,0.9365288734616599,True,False,transformer_foundation_models,20.0,4879.0,0.0,330.0
+transformer_foundation_models::300418,Machine Learning in Bioinformatics,9.0,0.9356579362574944,True,False,transformer_foundation_models,17.0,7605.0,0.0,279.0
+transformer_foundation_models::300310,Genomics and Phylogenetic Studies,10.0,0.9353045124645,True,False,transformer_foundation_models,14.0,7349.0,0.0,232.0
+transformer_foundation_models::300466,Misinformation and Its Impacts,11.0,0.9347491322183654,False,False,transformer_foundation_models,17.0,2677.0,0.0,
+transformer_foundation_models::300419,Machine Learning in Healthcare,12.0,0.9343957084253709,False,False,transformer_foundation_models,18.0,4255.0,0.0,333.0
+transformer_foundation_models::300592,Privacy-Preserving Technologies in Data,13.0,0.9342694856421583,False,False,transformer_foundation_models,19.0,1944.0,0.0,331.0
+transformer_foundation_models::300209,Domain Adaptation and Few-Shot Learning,14.0,0.9339917955190913,False,False,transformer_foundation_models,19.0,4551.0,0.0,153.0
+transformer_foundation_models::300414,Machine Fault Diagnosis Techniques,15.0,0.933019880088356,False,False,transformer_foundation_models,12.0,3201.0,0.0,
+transformer_foundation_models::300005,AI in cancer detection,16.0,0.9329441464184285,False,False,transformer_foundation_models,11.0,4214.0,0.0,
+crispr::128,CRISPR and Genetic Engineering,17.0,0.9328305459135374,False,True,crispr,879.0,84629.0,0.0,25.0
+transformer_foundation_models::300158,Computational Drug Discovery Methods,18.0,0.9324013884506154,False,False,transformer_foundation_models,19.0,1906.0,0.0,299.0
+transformer_foundation_models::300629,Reinforcement Learning in Robotics,19.0,0.9319343641527296,False,False,transformer_foundation_models,11.0,2486.0,0.0,
+transformer_foundation_models::300626,Recommender Systems and Techniques,20.0,0.9315178289681288,False,False,transformer_foundation_models,17.0,1877.0,0.0,121.0

@@ -1,0 +1,20 @@
+predicted_focus,realized_focus,predicted_focus_id,realized_focus_id,match_score,hit_type
+Salmonella and Campylobacter epidemiology,,crispr::814,,0.0,missed
+RNA modifications and cancer,,crispr::768,,0.0,missed
+Trypanosoma species research and implications,,crispr::900,,0.0,missed
+Bacteriophages and microbial interactions,,crispr::100,,0.0,missed
+RNA and protein synthesis mechanisms,,crispr::767,,0.0,missed
+Legionella and Acanthamoeba research,,crispr::510,,0.0,missed
+Antimicrobial Resistance in Staphylococcus,,crispr::64,,0.0,missed
+RNA Research and Splicing,,crispr::766,,0.0,missed
+Cancer-related gene regulation,,crispr::140,,0.0,missed
+CRISPR and Genetic Engineering,CRISPR and Genetic Engineering,crispr::128,crispr::128,1.0,exact_hit
+,Extracellular vesicles in disease,,crispr::318,0.0,unexpected_realized
+,CAR-T cell therapy research,,crispr::126,0.0,unexpected_realized
+,RNA Interference and Gene Delivery,,crispr::765,0.0,unexpected_realized
+,Advanced biosensing and bioanalysis techniques,,crispr::30,0.0,unexpected_realized
+,Biosensors and Analytical Detection,,crispr::114,0.0,unexpected_realized
+,Plant Virus Research Studies,,crispr::714,0.0,unexpected_realized
+,SARS-CoV-2 detection and testing,,crispr::813,0.0,unexpected_realized
+,Hemoglobinopathies and Related Disorders,,crispr::410,0.0,unexpected_realized
+,MicroRNA in disease regulation,,crispr::581,0.0,unexpected_realized

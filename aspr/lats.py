@@ -9,7 +9,21 @@ import sys
 from collections import deque
 from pathlib import Path
 from typing import Optional, Literal, List, Dict, Any
-import backoff
+try:
+    import backoff
+except ImportError:
+    class _BackoffShim:
+        @staticmethod
+        def expo(*args, **kwargs):
+            return None
+
+        @staticmethod
+        def on_exception(*args, **kwargs):
+            def decorator(func):
+                return func
+            return decorator
+
+    backoff = _BackoffShim()
 from contextlib import redirect_stdout
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage
 from typing_extensions import TypedDict
@@ -31,6 +45,8 @@ if __package__ in {None, ""}:
         INNOVATION_IMPROVEMENT_PROMPT,
         INNOVATION_REFLECTION_PROMPT,
     )
+    from aspr.graph_innovation_scorer import GraphInnovationScorer
+    from aspr.review_committee import run_reviewer_committee
 else:
     from .prompts import (
         FINAL_INNOVATION_REPORT_PROMPT,
@@ -38,6 +54,8 @@ else:
         INNOVATION_IMPROVEMENT_PROMPT,
         INNOVATION_REFLECTION_PROMPT,
     )
+    from .graph_innovation_scorer import GraphInnovationScorer
+    from .review_committee import run_reviewer_committee
 
 
 # ============================================================================
@@ -67,6 +85,8 @@ class PaperInfo(BaseModel):
     year: int = Field(description="发表年份")
     abstract: str = Field(description="论文摘要")
     citation_count: Optional[int] = Field(default=None, description="被引次数")
+    doi: Optional[str] = Field(default=None, description="DOI")
+    fields_of_study: List[str] = Field(default_factory=list, description="领域标签")
     
     def to_citation_string(self) -> str:
         """生成引用字符串"""
@@ -74,7 +94,8 @@ class PaperInfo(BaseModel):
     
     def to_context_string(self) -> str:
         """生成上下文字符串（用于输入模型）"""
-        return f"[{self.index}] Title: {self.title}\nAuthors: {self.authors}\nVenue: {self.venue}, {self.year}\nAbstract: {self.abstract}\n"
+        fields = f"\nFields: {', '.join(self.fields_of_study)}" if self.fields_of_study else ""
+        return f"[{self.index}] Title: {self.title}\nAuthors: {self.authors}\nVenue: {self.venue}, {self.year}{fields}\nAbstract: {self.abstract}\n"
 
 
 class InnovationEvaluation(BaseModel):
@@ -100,21 +121,36 @@ class Reflection(BaseModel):
     )
     found_solution: bool = Field(
         default=False,
-        description="是否达到高质量创新性评价标准 (True/False)。只有当评价充分对比了相关研究、正确识别创新点、论证逻辑清晰、引用规范时为 True"
+        description="是否达到高质量创新性评价标准 (True/False)。只有当评价充分对比了相关研究、正确识别创新点、论证逻辑清晰、引用规范、且图谱证据对齐时为 True"
     )
     comparison_adequacy: int = Field(default=0, description="对比充分性评分 (0-10)", ge=0, le=10)
     innovation_accuracy: int = Field(default=0, description="创新性识别准确性评分 (0-10)", ge=0, le=10)
     citation_normative: int = Field(default=0, description="引用规范性评分 (0-10)", ge=0, le=10)
+    graph_metric_alignment: int = Field(default=0, description="图谱结构证据对齐评分 (0-10)", ge=0, le=10)
+    uncertainty_calibration: int = Field(default=0, description="不确定性校准评分 (0-10)", ge=0, le=10)
+    readability: int = Field(default=0, description="表达清晰度评分 (0-10)", ge=0, le=10)
 
     @field_validator('reflections', mode='before')
     @classmethod
     def extract_str_(cls, v):
         return str(v)
 
-    @field_validator('score', mode='before')
+    @field_validator(
+        'score',
+        'comparison_adequacy',
+        'innovation_accuracy',
+        'citation_normative',
+        'graph_metric_alignment',
+        'uncertainty_calibration',
+        'readability',
+        mode='before',
+    )
     @classmethod
     def extract_int_(cls, v):
-        return int(v)
+        try:
+            return max(0, min(int(float(v)), 10))
+        except (TypeError, ValueError):
+            return 0
 
     @field_validator('found_solution', mode='before')
     @classmethod
@@ -140,11 +176,34 @@ class Reflection(BaseModel):
 
     def as_message(self):
         return HumanMessage(
-            content=f"反思: {self.reflections}\n得分: {self.score}/10"
+            content=(
+                f"反思: {self.reflections}\n"
+                f"综合得分: {self.score}/10\n"
+                f"图谱对齐: {self.graph_metric_alignment}/10\n"
+                f"不确定性校准: {self.uncertainty_calibration}/10"
+            )
         )
 
     @property
     def normalized_score(self) -> float:
+        component_scores = [
+            self.innovation_accuracy,
+            self.comparison_adequacy,
+            self.citation_normative,
+            self.graph_metric_alignment,
+            self.uncertainty_calibration,
+            self.readability,
+        ]
+        if any(score > 0 for score in component_scores):
+            weighted = (
+                self.innovation_accuracy * 0.30
+                + self.comparison_adequacy * 0.20
+                + self.citation_normative * 0.15
+                + self.graph_metric_alignment * 0.20
+                + self.uncertainty_calibration * 0.10
+                + self.readability * 0.05
+            )
+            return weighted / 10.0
         return self.score / 10.0
 
 
@@ -209,8 +268,8 @@ class Node:
             raise ValueError("Cannot obtain UCT from root node")
         if self.visits == 0:
             return float('inf')
-        average_reward = self.value / self.visits
-        exploration_term = math.sqrt(math.log(self.parent.visits) / self.visits)
+        average_reward = self.value
+        exploration_term = math.sqrt(math.log(max(self.parent.visits, 1)) / self.visits)
         return average_reward + exploration_weight * exploration_term
 
     def backpropagate(self, reward: float):
@@ -248,7 +307,11 @@ class Node:
         all_nodes = [self] + self._get_all_children()
         best_node = max(
             all_nodes,
-            key=lambda node: int(node.is_terminal and node.is_solved) * node.value,
+            key=lambda node: (
+                int(node.is_solved),
+                node.value,
+                node.reflection.normalized_score if node.reflection else 0.0,
+            ),
         )
         return best_node
 
@@ -269,6 +332,10 @@ class TreeState(TypedDict):
     paper_title: str
     paper_abstract: str
     related_papers: List[PaperInfo]  # 相关论文列表
+    graph_metric_evidence: str       # 七指标图谱证据块
+    committee_evidence: str          # 审稿委员会结构化证据块
+    committee_disagreement_score: float
+    recommended_tone: str
     best_evaluation: Optional[str]   # 最佳创新性评价
 
 
@@ -307,6 +374,15 @@ def safe_extract_content(content_value: Any, fallback: str = "") -> str:
 
 def extract_with_regex(text: str) -> Dict[str, Any]:
     """从文本中提取反思结果"""
+    def extract_dimension(pattern: str, default: int = 5) -> int:
+        match = re.search(pattern, text)
+        if not match:
+            return default
+        try:
+            return max(0, min(int(match.group(1)), 10))
+        except ValueError:
+            return default
+
     # 提取 reflections
     reflections_match = re.search(r'<reflections>(.*?)</reflections>', text, re.DOTALL)
     reflections = reflections_match.group(1).strip() if reflections_match else ""
@@ -320,20 +396,21 @@ def extract_with_regex(text: str) -> Dict[str, Any]:
     found_solution = fs_match.group(1).lower() == 'true' if fs_match else False
     
     # 提取各维度评分
-    acc_match = re.search(r'创新性识别准确性[:：]\s*(\d+)', text)
-    innovation_accuracy = int(acc_match.group(1)) if acc_match else 5
-    
-    comp_match = re.search(r'对比充分性[:：]\s*(\d+)', text)
-    comparison_adequacy = int(comp_match.group(1)) if comp_match else 5
-    
-    cite_match = re.search(r'引用规范性[:：]\s*(\d+)', text)
-    citation_normative = int(cite_match.group(1)) if cite_match else 5
+    innovation_accuracy = extract_dimension(r'创新性识别准确性[:：]\s*(\d+)')
+    comparison_adequacy = extract_dimension(r'对比充分性[:：]\s*(\d+)')
+    citation_normative = extract_dimension(r'引用规范性[:：]\s*(\d+)')
+    graph_metric_alignment = extract_dimension(r'图谱结构证据对齐[:：]\s*(\d+)')
+    uncertainty_calibration = extract_dimension(r'不确定性校准[:：]\s*(\d+)')
+    readability = extract_dimension(r'表达清晰度[:：]\s*(\d+)')
     
     # 计算加权综合得分
-    calculated_score = int(
-        innovation_accuracy * 0.5 + 
-        comparison_adequacy * 0.3 + 
-        citation_normative * 0.2
+    calculated_score = round(
+        innovation_accuracy * 0.30
+        + comparison_adequacy * 0.20
+        + citation_normative * 0.15
+        + graph_metric_alignment * 0.20
+        + uncertainty_calibration * 0.10
+        + readability * 0.05
     )
     # 如果LLM没有提供score，使用计算值
     if score == 0 and (innovation_accuracy > 0 or comparison_adequacy > 0 or citation_normative > 0):
@@ -346,7 +423,41 @@ def extract_with_regex(text: str) -> Dict[str, Any]:
         "comparison_adequacy": comparison_adequacy,
         "innovation_accuracy": innovation_accuracy,
         "citation_normative": citation_normative,
+        "graph_metric_alignment": graph_metric_alignment,
+        "uncertainty_calibration": uncertainty_calibration,
+        "readability": readability,
     }
+
+
+def calibrate_reflection_with_committee(
+    reflection: Reflection,
+    disagreement_score: float = 0.0,
+    recommended_tone: str = "balanced",
+) -> Reflection:
+    """Adjust reflection scores using committee disagreement and tone."""
+    tone = (recommended_tone or "balanced").lower()
+    disagreement_score = max(0.0, min(float(disagreement_score or 0.0), 1.0))
+    if tone == "conservative":
+        if reflection.uncertainty_calibration < 7:
+            reflection.uncertainty_calibration = max(0, reflection.uncertainty_calibration - 2)
+        if reflection.graph_metric_alignment < 7:
+            reflection.graph_metric_alignment = max(0, reflection.graph_metric_alignment - 1)
+        reflection.found_solution = False
+    elif tone == "assertive" and disagreement_score < 0.30:
+        if reflection.graph_metric_alignment >= 7:
+            reflection.graph_metric_alignment = min(10, reflection.graph_metric_alignment + 1)
+        if reflection.uncertainty_calibration >= 6:
+            reflection.uncertainty_calibration = min(10, reflection.uncertainty_calibration + 1)
+
+    if disagreement_score >= 0.45:
+        reflection.uncertainty_calibration = max(0, reflection.uncertainty_calibration - 1)
+        reflection.found_solution = False
+    if disagreement_score >= 0.65:
+        reflection.graph_metric_alignment = max(0, reflection.graph_metric_alignment - 1)
+        reflection.found_solution = False
+
+    reflection.score = max(0, min(round(reflection.normalized_score * 10), 10))
+    return reflection
 
 
 def format_related_papers(papers: List[PaperInfo]) -> str:
@@ -423,9 +534,28 @@ def reflection_chain(inputs) -> Reflection:
         
         lats_logging(f"生成反思: \n{str(refdict)}\n")
         reflection = Reflection(**refdict)
+        if any(
+            score > 0
+            for score in (
+                reflection.innovation_accuracy,
+                reflection.comparison_adequacy,
+                reflection.citation_normative,
+                reflection.graph_metric_alignment,
+                reflection.uncertainty_calibration,
+                reflection.readability,
+            )
+        ):
+            reflection.score = max(0, min(round(reflection.normalized_score * 10), 10))
+        reflection = calibrate_reflection_with_committee(
+            reflection,
+            disagreement_score=float(inputs.get("committee_disagreement_score", 0.0) or 0.0),
+            recommended_tone=str(inputs.get("recommended_tone", "balanced") or "balanced"),
+        )
         
         # 只有包含 AIMessage 的候选才可能是有效解
         if not isinstance(inputs.get("candidate", [None])[-1], AIMessage):
+            reflection.found_solution = False
+        if reflection.graph_metric_alignment < 6 or reflection.uncertainty_calibration < 5:
             reflection.found_solution = False
             
         return reflection
@@ -474,12 +604,18 @@ def generate_initial_response(state: TreeState) -> dict:
     lats_logging("生成初始创新性评价...")
     
     related_papers_str = format_related_papers(state["related_papers"])
+    graph_metric_evidence = state.get("graph_metric_evidence", "图谱结构证据未计算。")
+    committee_evidence = state.get("committee_evidence", "审稿委员会证据未计算。")
+    committee_disagreement_score = float(state.get("committee_disagreement_score", 0.0) or 0.0)
+    recommended_tone = state.get("recommended_tone", "balanced")
     
     try:
         res = initial_answer_chain.invoke({
             "paper_title": state["paper_title"],
             "paper_abstract": state["paper_abstract"],
-            "related_papers": related_papers_str
+            "related_papers": related_papers_str,
+            "graph_metric_evidence": graph_metric_evidence,
+            "committee_evidence": committee_evidence,
         })
         # 检查res和res.content是否有效
         if res is None:
@@ -528,6 +664,10 @@ def generate_initial_response(state: TreeState) -> dict:
         "paper_title": state["paper_title"],
         "paper_abstract": state["paper_abstract"],
         "related_papers": related_papers_str,
+        "graph_metric_evidence": graph_metric_evidence,
+        "committee_evidence": committee_evidence,
+        "committee_disagreement_score": committee_disagreement_score,
+        "recommended_tone": recommended_tone,
         "current_evaluation": evaluation_text,
         "candidate": output_messages
     })
@@ -556,20 +696,21 @@ def expand(state: TreeState, config: RunnableConfig) -> dict:
     root = state["root"]
     print_tree(root)
     
-    # 找到当前路径上的最深层叶子节点（沿最佳路径展开）
+    # 沿 UCB 路径选择待扩展叶子节点
     def get_deepest_leaf(node: Node) -> Node:
         if not node.children:
             return node
-        # 沿着分数最高的子节点递归
-        best_child = max(node.children, key=lambda c: c.value)
+        best_child = max(node.children, key=lambda c: c.upper_confidence_bound())
         return get_deepest_leaf(best_child)
     
     expand_node = get_deepest_leaf(root)
     lats_logging(f"展开节点: {expand_node}, 深度: {expand_node.depth}")
     
-    # 获取从根到当前节点的完整轨迹
-    messages = expand_node.get_trajectory()
     related_papers_str = format_related_papers(state["related_papers"])
+    graph_metric_evidence = state.get("graph_metric_evidence", "图谱结构证据未计算。")
+    committee_evidence = state.get("committee_evidence", "审稿委员会证据未计算。")
+    committee_disagreement_score = float(state.get("committee_disagreement_score", 0.0) or 0.0)
+    recommended_tone = state.get("recommended_tone", "balanced")
     
     # 生成改进后的评价
     n_candidates = config["configurable"].get("N", 5)
@@ -586,6 +727,8 @@ def expand(state: TreeState, config: RunnableConfig) -> dict:
             "paper_title": state["paper_title"],
             "paper_abstract": state["paper_abstract"],
             "related_papers": related_papers_str,
+            "graph_metric_evidence": graph_metric_evidence,
+            "committee_evidence": committee_evidence,
             "current_evaluation": current_evaluation,
             "reflection_feedback": reflection_feedback
         })
@@ -600,6 +743,10 @@ def expand(state: TreeState, config: RunnableConfig) -> dict:
             "paper_title": state["paper_title"],
             "paper_abstract": state["paper_abstract"],
             "related_papers": related_papers_str,
+            "graph_metric_evidence": graph_metric_evidence,
+            "committee_evidence": committee_evidence,
+            "committee_disagreement_score": committee_disagreement_score,
+            "recommended_tone": recommended_tone,
             "current_evaluation": safe_extract_content(candidate.content, fallback=current_evaluation),
             "candidate": msges
         } for candidate, msges in zip(new_candidates, output_messages)],
@@ -613,9 +760,11 @@ def expand(state: TreeState, config: RunnableConfig) -> dict:
         child_node = Node([candidate], parent=expand_node, reflection=reflection, evaluation=content_str)
         child_nodes.append(child_node)
     
-    # 只选择分数最高的子节点保留，抛弃其他
-    best_child = max(child_nodes, key=lambda c: c.value)
-    expand_node.children = [best_child]
+    # 保留多个高分候选，让后续轮次可以继续探索不同修正路径
+    beam_width = max(1, int(config["configurable"].get("beam_width", 3)))
+    child_nodes = sorted(child_nodes, key=lambda c: c.value, reverse=True)
+    expand_node.children = child_nodes[:beam_width]
+    best_child = expand_node.children[0]
     
     lats_logging(f"选择最佳候选: {best_child}, 分数: {best_child.value:.4f}")
     
@@ -729,7 +878,9 @@ def lats_logging(event: str):
 
 def generate_final_report(paper_title: str, paper_abstract: str, 
                          related_papers: List[PaperInfo], 
-                         best_evaluation: str) -> str:
+                         best_evaluation: str,
+                         graph_metric_evidence: str = "图谱结构证据未计算。",
+                         committee_evidence: str = "审稿委员会证据未计算。") -> str:
     """生成最终的创新性评价报告"""
     lats_logging("生成最终创新性评价报告...")
     
@@ -739,6 +890,8 @@ def generate_final_report(paper_title: str, paper_abstract: str,
         "paper_title": paper_title,
         "paper_abstract": paper_abstract,
         "related_papers_with_metadata": related_papers_str,
+        "graph_metric_evidence": graph_metric_evidence,
+        "committee_evidence": committee_evidence,
         "draft_evaluation": best_evaluation
     })
     
@@ -747,13 +900,67 @@ def generate_final_report(paper_title: str, paper_abstract: str,
     return report_content
 
 
+def build_graph_metric_evidence(
+    paper_title: str,
+    paper_abstract: str,
+    related_papers_data: List[Dict[str, Any]],
+    max_related_papers: int = 10,
+) -> tuple[str, Dict[str, Any]]:
+    """Compute seven-indicator graph evidence for prompt grounding."""
+    evidence = GraphInnovationScorer().score(
+        paper_title=paper_title,
+        paper_abstract=paper_abstract,
+        retrieved_papers=related_papers_data[:max_related_papers],
+    )
+    return evidence.to_prompt_block(), evidence.to_dict()
+
+
+def build_committee_evidence(
+    paper_title: str,
+    paper_abstract: str,
+    related_papers_data: List[Dict[str, Any]],
+    graph_metric_result: Dict[str, Any],
+    use_committee: bool = True,
+) -> tuple[str, Dict[str, Any], float, str]:
+    """Run the reviewer committee and render its prompt block."""
+    if not use_committee:
+        empty_report = {
+            "claim_cards": [],
+            "agent_reviews": [],
+            "disagreement_score": 0.0,
+            "meta_review_summary": "Reviewer committee disabled for ablation.",
+            "recommended_tone": "balanced",
+        }
+        return "【审稿委员会证据 / Reviewer Committee Evidence】\nReviewer committee disabled for ablation.", empty_report, 0.0, "balanced"
+
+    committee_report = run_reviewer_committee(
+        paper_title=paper_title,
+        paper_abstract=paper_abstract,
+        related_papers=related_papers_data,
+        graph_metric_result=graph_metric_result,
+    )
+    return (
+        committee_report.to_prompt_block(),
+        committee_report.to_dict(),
+        committee_report.disagreement_score,
+        committee_report.recommended_tone,
+    )
+
+
 def run_innovation_evaluation(
     paper_title: str,
     paper_abstract: str,
     related_papers_data: List[Dict[str, Any]],
     max_iterations: int = 3,
-    max_related_papers: int = 10
-) -> tuple[str, list]:
+    max_related_papers: int = 10,
+    graph_metric_evidence: Optional[str] = None,
+    graph_metric_result: Optional[Dict[str, Any]] = None,
+    committee_evidence: Optional[str] = None,
+    committee_report_result: Optional[Dict[str, Any]] = None,
+    committee_disagreement_score: float = 0.0,
+    recommended_tone: str = "balanced",
+    use_committee: bool = True,
+) -> tuple[str, list, Dict[str, Any], float, str]:
     """
     运行创新性评价树搜索
     
@@ -765,10 +972,30 @@ def run_innovation_evaluation(
         max_related_papers: 最大相关论文数量
     
     Returns:
-        (最终评价报告, 日志列表)
+        (最终评价报告, 日志列表, committee 报告, committee 分歧分数, 建议语气)
     """
     global lats_log
     lats_log = []
+    if graph_metric_evidence is None or graph_metric_result is None:
+        graph_metric_evidence, graph_metric_result = build_graph_metric_evidence(
+            paper_title=paper_title,
+            paper_abstract=paper_abstract,
+            related_papers_data=related_papers_data,
+            max_related_papers=max_related_papers,
+        )
+    if committee_evidence is None or committee_report_result is None:
+        (
+            committee_evidence,
+            committee_report_result,
+            committee_disagreement_score,
+            recommended_tone,
+        ) = build_committee_evidence(
+            paper_title=paper_title,
+            paper_abstract=paper_abstract,
+            related_papers_data=related_papers_data[:max_related_papers],
+            graph_metric_result=graph_metric_result,
+            use_committee=use_committee,
+        )
     
     # 转换相关论文数据
     related_papers = []
@@ -780,13 +1007,21 @@ def run_innovation_evaluation(
             venue=paper_data.get("venue", "").replace("<sub>", "").replace("</sub>", ""),
             year=paper_data.get("year", 2024),
             abstract=paper_data.get("abstract", "").replace("<sub>", "").replace("</sub>", ""),
-            citation_count=paper_data.get("citationCount")
+            citation_count=paper_data.get("citationCount"),
+            doi=paper_data.get("doi"),
+            fields_of_study=paper_data.get("fieldsOfStudy") or [
+                item.get("category", "")
+                for item in (paper_data.get("s2FieldsOfStudy") or [])
+                if isinstance(item, dict) and item.get("category")
+            ],
         )
         related_papers.append(paper)
     
     lats_logging(f"开始创新性评价树搜索")
     lats_logging(f"论文标题: {paper_title}")
     lats_logging(f"相关论文数量: {len(related_papers)}")
+    lats_logging("已载入七指标图谱证据")
+    lats_logging(f"已载入审稿委员会证据: tone={recommended_tone}, disagreement={committee_disagreement_score:.3f}")
     
     last_step = None
     graph = build_graph()
@@ -798,6 +1033,10 @@ def run_innovation_evaluation(
         "paper_title": paper_title,
         "paper_abstract": paper_abstract,
         "related_papers": related_papers,
+        "graph_metric_evidence": graph_metric_evidence,
+        "committee_evidence": committee_evidence,
+        "committee_disagreement_score": committee_disagreement_score,
+        "recommended_tone": recommended_tone,
         "best_evaluation": None
     }
     
@@ -820,15 +1059,17 @@ def run_innovation_evaluation(
                 paper_title,
                 paper_abstract,
                 related_papers,
-                best_evaluation
+                best_evaluation,
+                graph_metric_evidence=graph_metric_evidence,
+                committee_evidence=committee_evidence,
             )
             
             lats_logging("最终树结构:")
             print_tree(root)
             
-            return final_report, lats_log
+            return final_report, lats_log, committee_report_result, committee_disagreement_score, recommended_tone
     
-    return "评价生成失败", lats_log
+    return "评价生成失败", lats_log, committee_report_result or {}, committee_disagreement_score, recommended_tone
 
 
 # ============================================================================
@@ -838,7 +1079,8 @@ def run_innovation_evaluation(
 def evaluate_paper_innovation(
     paper_title: str,
     paper_abstract: str,
-    retrieved_papers: List[Dict[str, Any]]
+    retrieved_papers: List[Dict[str, Any]],
+    use_committee: bool = True,
 ) -> Dict[str, Any]:
     """
     评价论文学术创新性（用于与 open_scholar 集成）
@@ -851,14 +1093,42 @@ def evaluate_paper_innovation(
     Returns:
         包含创新性评价结果的字典
     """
-    report, log = run_innovation_evaluation(
+    graph_metric_evidence, graph_metric_result = build_graph_metric_evidence(
         paper_title=paper_title,
         paper_abstract=paper_abstract,
-        related_papers_data=retrieved_papers
+        related_papers_data=retrieved_papers,
+    )
+    (
+        committee_evidence,
+        committee_report_result,
+        committee_disagreement_score,
+        recommended_tone,
+    ) = build_committee_evidence(
+        paper_title=paper_title,
+        paper_abstract=paper_abstract,
+        related_papers_data=retrieved_papers,
+        graph_metric_result=graph_metric_result,
+        use_committee=use_committee,
+    )
+    report, log, committee_report_result, committee_disagreement_score, recommended_tone = run_innovation_evaluation(
+        paper_title=paper_title,
+        paper_abstract=paper_abstract,
+        related_papers_data=retrieved_papers,
+        graph_metric_evidence=graph_metric_evidence,
+        graph_metric_result=graph_metric_result,
+        committee_evidence=committee_evidence,
+        committee_report_result=committee_report_result,
+        committee_disagreement_score=committee_disagreement_score,
+        recommended_tone=recommended_tone,
+        use_committee=use_committee,
     )
     
     return {
         "innovation_evaluation": report,
+        "graph_metric_evidence": graph_metric_result,
+        "committee_report": committee_report_result,
+        "committee_disagreement_score": committee_disagreement_score,
+        "recommended_tone": recommended_tone,
         "evaluation_log": log,
         "success": True
     }
