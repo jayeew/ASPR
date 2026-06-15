@@ -4,6 +4,16 @@ ASPR（Academic Scientific Paper Review）是一个面向学术论文自动评�
 
 本仓库已经按功能重新整理。核心原则是：可复用代码放在 `aspr/`，一次性任务脚本放在 `scripts/`，缓存和数据放在 `data/`，生成结果放在 `outputs/`，独立实验放在 `experiments/`。
 
+## 环境变量与密钥
+
+项目启动时会自动读取仓库根目录的 `.env` 和 `.env.local`。推荐先复制示例文件，再在本地填写密钥：
+
+```bash
+cp .env.example .env
+```
+
+常用变量包括 `OPENALEX_EMAIL`、`OPENALEX_API_KEY`、`OPENALEX_API_KEYS`、`S2_API_KEY`、`NCBI_EMAIL`、`NCBI_API_KEY`、`HF_TOKEN`。其中 `OPENALEX_API_KEYS` 支持逗号或空格分隔的多个 key，corpus/Fig1/Fig2/Fig3 抓取路径会轮换使用。命令行参数仍可覆盖 `.env`。
+
 ## 项目结构
 
 ```text
@@ -88,8 +98,7 @@ ASPR/
 ### 运行主评审流程
 
 ```bash
-export S2_API_KEY="your_semantic_scholar_api_key"
-python -m aspr.open_scholar --s2_api_key "$S2_API_KEY" --large_model_port 38011
+python -m aspr.open_scholar
 ```
 
 ### 单独运行 LATS 创新性评价测试
@@ -168,7 +177,6 @@ data/paper_reconstruction_sft/
 如需上传 HuggingFace Hub：
 
 ```bash
-export HF_TOKEN="your_huggingface_token"
 python scripts/hfdata_builder.py --push-to-hub
 ```
 
@@ -222,8 +230,6 @@ experiments/kg_validator/README.md
 运行 CRISPR 示例：
 
 ```bash
-export OPENALEX_API_KEY="your_openalex_key"
-export OPENALEX_EMAIL="your.email@example.com"
 bash experiments/kg_perturbation_fig1/run_crispr_example.sh
 ```
 
@@ -245,6 +251,42 @@ experiments/kg_perturbation_fig1/configs/
 - `outputs/`：运行时生成的图表、日志、下载文件、checkpoint、GraphRAG 索引。
 - `outputs/downloads/`、`outputs/checkpoints/`、`outputs/graphrag/`、`outputs/logs/` 默认在 `.gitignore` 中忽略。
 - 已经存在的演示图表和实验历史结果保留在 `outputs/demo/`、`outputs/kg_validator/`、`outputs/kg_perturbation_fig1/`。
+
+### 统一论文图谱数据层
+
+推荐把可复用论文图谱语料集中放在：
+
+```text
+data/knowledge_corpus/v1_large/
+```
+
+该目录由 `aspr.corpus` 管理，包含 canonical 表 `works.csv`、`citations.csv`、`topics.csv`、`topic_edges.csv`、`domains.csv`、`landmarks.csv`，以及各实验可直接读取的 `views/fig1|fig2|fig3|fig5/`。
+
+快速复用现有本地 Fig1/Fig3 数据：
+
+```bash
+python -m aspr.corpus build --offline
+```
+
+按大规模混合领域配置从本地数据起步，并用 OpenAlex 补齐缺口领域：
+
+```bash
+python -m aspr.corpus build \
+  --profile v1_large \
+  --max-domains 48 \
+  --papers-per-domain 4000 \
+  --start-year 1980 \
+  --end-year 2025
+```
+
+质量审计与重新生成实验视图：
+
+```bash
+python -m aspr.corpus audit
+python -m aspr.corpus make-views
+```
+
+Fig2/Fig3/Fig5 的默认输入会优先使用该 corpus view；没有生成时仍回退到旧的 `outputs/kg_perturbation_fig1/` 或 Fig3 输出目录。Fig1 可通过 `--corpus-dir data/knowledge_corpus/v1_large` 先 materialize 兼容缓存再绘图。
 
 ## 依赖说明
 

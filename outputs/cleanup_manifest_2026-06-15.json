@@ -1,0 +1,239 @@
+{
+  "created_at": "2026-06-15T09:34:34.290166+00:00",
+  "policy": "Keep v1_strict as canonical local corpus; keep v2_strict summaries/results; delete older generated corpora, old kg perturbation outputs, logs, and reproducible per-run prepared inputs.",
+  "delete_targets": [
+    {
+      "path": "data/knowledge_corpus/v1_large",
+      "exists_before_cleanup": true,
+      "size_bytes": 1360727704,
+      "size_human": "1.3 GB",
+      "reason": "superseded by current canonical data/knowledge_corpus/v1_strict",
+      "exists_after_cleanup": false
+    },
+    {
+      "path": "outputs/corpus_screening/v1",
+      "exists_before_cleanup": true,
+      "size_bytes": 5274574437,
+      "size_human": "4.9 GB",
+      "reason": "old v1_large screening run superseded by outputs/corpus_screening/v2_strict",
+      "exists_after_cleanup": false
+    },
+    {
+      "path": "outputs/kg_perturbation_fig1",
+      "exists_before_cleanup": true,
+      "size_bytes": 180535544,
+      "size_human": "172.2 MB",
+      "reason": "legacy Fig. 1 outputs/cache superseded by strict corpus views",
+      "exists_after_cleanup": false
+    },
+    {
+      "path": "outputs/kg_perturbation_fig2",
+      "exists_before_cleanup": true,
+      "size_bytes": 13499274,
+      "size_human": "12.9 MB",
+      "reason": "legacy Fig. 2 outputs superseded by strict corpus views/reruns",
+      "exists_after_cleanup": false
+    },
+    {
+      "path": "outputs/kg_perturbation_fig2_strong",
+      "exists_before_cleanup": true,
+      "size_bytes": 137413331,
+      "size_human": "131.0 MB",
+      "reason": "legacy Fig. 2 strong outputs superseded by strict corpus views/reruns",
+      "exists_after_cleanup": false
+    },
+    {
+      "path": "outputs/kg_perturbation_fig3",
+      "exists_before_cleanup": true,
+      "size_bytes": 891166991,
+      "size_human": "849.9 MB",
+      "reason": "legacy Fig. 3 outputs superseded by strict screening results",
+      "exists_after_cleanup": false
+    },
+    {
+      "path": "outputs/kg_perturbation_fig3_auto",
+      "exists_before_cleanup": true,
+      "size_bytes": 49066691,
+      "size_human": "46.8 MB",
+      "reason": "old auto corpus source already imported into strict corpus",
+      "exists_after_cleanup": false
+    },
+    {
+      "path": "outputs/kg_perturbation_fig5",
+      "exists_before_cleanup": true,
+      "size_bytes": 9931349,
+      "size_human": "9.5 MB",
+      "reason": "legacy Fig. 5 outputs superseded by strict corpus defaults",
+      "exists_after_cleanup": false
+    },
+    {
+      "path": "outputs/logs",
+      "exists_before_cleanup": true,
+      "size_bytes": 0,
+      "size_human": "0 B",
+      "reason": "execution logs, reproducible/non-canonical",
+      "exists_after_cleanup": false
+    },
+    {
+      "path": "outputs/corpus_screening/v2_strict/fig3_runs/set06_rank01/fig3_input",
+      "exists_before_cleanup": true,
+      "size_bytes": 77877539,
+      "size_human": "74.3 MB",
+      "reason": "reproducible Fig. 3 prepared input duplicated from data/knowledge_corpus/v1_strict/views",
+      "exists_after_cleanup": false
+    },
+    {
+      "path": "outputs/corpus_screening/v2_strict/fig3_runs/set08_rank01/fig3_input",
+      "exists_before_cleanup": true,
+      "size_bytes": 95234329,
+      "size_human": "90.8 MB",
+      "reason": "reproducible Fig. 3 prepared input duplicated from data/knowledge_corpus/v1_strict/views",
+      "exists_after_cleanup": false
+    },
+    {
+      "path": "outputs/corpus_screening/v2_strict/fig3_runs/set08_rank02/fig3_input",
+      "exists_before_cleanup": true,
+      "size_bytes": 94456304,
+      "size_human": "90.1 MB",
+      "reason": "reproducible Fig. 3 prepared input duplicated from data/knowledge_corpus/v1_strict/views",
+      "exists_after_cleanup": false
+    },
+    {
+      "path": "outputs/corpus_screening/v2_strict/fig3_runs/set08_rank03/fig3_input",
+      "exists_before_cleanup": true,
+      "size_bytes": 94810146,
+      "size_human": "90.4 MB",
+      "reason": "reproducible Fig. 3 prepared input duplicated from data/knowledge_corpus/v1_strict/views",
+      "exists_after_cleanup": false
+    },
+    {
+      "path": "outputs/corpus_screening/v2_strict/fig3_runs/set08_rank04/fig3_input",
+      "exists_before_cleanup": true,
+      "size_bytes": 94683506,
+      "size_human": "90.3 MB",
+      "reason": "reproducible Fig. 3 prepared input duplicated from data/knowledge_corpus/v1_strict/views",
+      "exists_after_cleanup": false
+    },
+    {
+      "path": "outputs/corpus_screening/v2_strict/fig3_runs/set08_rank05/fig3_input",
+      "exists_before_cleanup": true,
+      "size_bytes": 96456172,
+      "size_human": "92.0 MB",
+      "reason": "reproducible Fig. 3 prepared input duplicated from data/knowledge_corpus/v1_strict/views",
+      "exists_after_cleanup": false
+    },
+    {
+      "path": "outputs/corpus_screening/v2_strict/fig3_runs/strict_broad10/fig3_input",
+      "exists_before_cleanup": true,
+      "size_bytes": 113223274,
+      "size_human": "108.0 MB",
+      "reason": "reproducible Fig. 3 prepared input duplicated from data/knowledge_corpus/v1_strict/views",
+      "exists_after_cleanup": false
+    },
+    {
+      "path": "outputs/corpus_screening/v2_strict/fig3_runs/strict_core6_finance/fig3_input",
+      "exists_before_cleanup": true,
+      "size_bytes": 71307699,
+      "size_human": "68.0 MB",
+      "reason": "reproducible Fig. 3 prepared input duplicated from data/knowledge_corpus/v1_strict/views",
+      "exists_after_cleanup": false
+    },
+    {
+      "path": "outputs/corpus_screening/v2_strict/fig3_runs/strict_core6_finance_no_transformer/fig3_input",
+      "exists_before_cleanup": true,
+      "size_bytes": 83858684,
+      "size_human": "80.0 MB",
+      "reason": "reproducible Fig. 3 prepared input duplicated from data/knowledge_corpus/v1_strict/views",
+      "exists_after_cleanup": false
+    },
+    {
+      "path": "outputs/corpus_screening/v2_strict/fig3_runs/strict_core6_income/fig3_input",
+      "exists_before_cleanup": true,
+      "size_bytes": 66575044,
+      "size_human": "63.5 MB",
+      "reason": "reproducible Fig. 3 prepared input duplicated from data/knowledge_corpus/v1_strict/views",
+      "exists_after_cleanup": false
+    },
+    {
+      "path": "outputs/corpus_screening/v2_strict/fig3_runs/strict_core6_monetary/fig3_input",
+      "exists_before_cleanup": true,
+      "size_bytes": 68516042,
+      "size_human": "65.3 MB",
+      "reason": "reproducible Fig. 3 prepared input duplicated from data/knowledge_corpus/v1_strict/views",
+      "exists_after_cleanup": false
+    },
+    {
+      "path": "outputs/corpus_screening/v2_strict/fig3_runs/strict_no_transformer8/fig3_input",
+      "exists_before_cleanup": true,
+      "size_bytes": 97319735,
+      "size_human": "92.8 MB",
+      "reason": "reproducible Fig. 3 prepared input duplicated from data/knowledge_corpus/v1_strict/views",
+      "exists_after_cleanup": false
+    }
+  ],
+  "kept_paths": [
+    {
+      "path": "data/knowledge_corpus/v1_strict",
+      "exists": true,
+      "size_bytes": 1265414804,
+      "size_human": "1.2 GB",
+      "reason": "current canonical strict corpus and experiment views"
+    },
+    {
+      "path": "outputs/corpus_screening/v2_strict",
+      "exists": true,
+      "size_bytes": 1379241571,
+      "size_human": "1.3 GB",
+      "reason": "current strict screening summaries and Fig. 3 result tables; only nested fig3_input dirs are pruned"
+    },
+    {
+      "path": "data/papers.json",
+      "exists": true,
+      "size_bytes": 10690429,
+      "size_human": "10.2 MB",
+      "reason": "OpenScholar/Semantic Scholar legacy retrieval cache"
+    },
+    {
+      "path": "data/total_related_papers.json",
+      "exists": true,
+      "size_bytes": 17026400,
+      "size_human": "16.2 MB",
+      "reason": "OpenScholar/Semantic Scholar legacy retrieval cache"
+    },
+    {
+      "path": "data/most_related_paper.json",
+      "exists": true,
+      "size_bytes": 148119,
+      "size_human": "144.6 KB",
+      "reason": "OpenScholar/Fig. 4 legacy reranking cache"
+    },
+    {
+      "path": "data/paper_reconstruction_sft",
+      "exists": true,
+      "size_bytes": 1732726,
+      "size_human": "1.7 MB",
+      "reason": "local HF-format training dataset"
+    }
+  ],
+  "estimated_reclaim_bytes": 8971233795,
+  "estimated_reclaim_human": "8.4 GB",
+  "completed_at": "2026-06-15T09:36:16.905321+00:00",
+  "post_cleanup_sizes": {
+    "data": {
+      "size_bytes": 1295012478,
+      "size_human": "1.2 GB"
+    },
+    "outputs": {
+      "size_bytes": 324930604,
+      "size_human": "309.9 MB"
+    },
+    "data/knowledge_corpus/v1_strict": {
+      "size_bytes": 1265414804,
+      "size_human": "1.2 GB"
+    },
+    "outputs/corpus_screening/v2_strict": {
+      "size_bytes": 324923097,
+      "size_human": "309.9 MB"
+    }
+  }
+}

@@ -46,8 +46,8 @@ http://localhost:11434/v1
 ### 2.2 主入口运行
 
 ```bash
+cp .env.example .env  # fill S2_API_KEY if you use Semantic Scholar
 python -m aspr.open_scholar \
-  --s2_api_key "$S2_API_KEY" \
   --large_model_port 38011 \
   --top_n 10
 ```
@@ -560,7 +560,10 @@ python -c "import langchain_core, langchain_openai, langgraph, pydantic"
 如果 Semantic Scholar 检索为空，检查：
 
 ```bash
-echo "$S2_API_KEY"
+python - <<'PY'
+from aspr.env import getenv
+print(bool(getenv("S2_API_KEY")))
+PY
 ```
 
 以及 `open_scholar.py` 中的年份过滤：

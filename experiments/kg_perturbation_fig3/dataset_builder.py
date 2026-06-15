@@ -22,8 +22,8 @@ import argparse
 import hashlib
 import json
 import math
-import os
 import re
+import sys
 import time
 import urllib.parse
 from dataclasses import dataclass
@@ -32,6 +32,12 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 import pandas as pd
 import requests
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from aspr.env import getenv
 
 
 NOBEL_API_BASE = "https://api.nobelprize.org/2.1"
@@ -130,6 +136,8 @@ def slugify(text: str) -> str:
 
 def short_openalex_id(value: object) -> str:
     text = str(value or "").strip()
+    if text.lower() in {"nan", "none", "null", "<na>"}:
+        return ""
     if not text:
         return ""
     return text.rstrip("/").split("/")[-1]
@@ -153,6 +161,21 @@ def normalize_doi(value: object) -> str:
 def stable_int_id(value: str, modulo: int = 1_000_000_000) -> int:
     digest = hashlib.sha1(str(value).encode("utf-8")).hexdigest()
     return int(digest[:12], 16) % modulo
+
+
+def split_api_keys(value: object) -> List[str]:
+    if value is None:
+        return []
+    if isinstance(value, (list, tuple, set)):
+        raw = []
+        for item in value:
+            raw.extend(split_api_keys(item))
+        return list(dict.fromkeys(raw))
+    text = str(value or "").strip()
+    if not text:
+        return []
+    parts = [part.strip() for part in re.split(r"[,;\s]+", text) if part.strip()]
+    return list(dict.fromkeys(parts))
 
 
 def tokens(text: str) -> List[str]:
@@ -191,6 +214,7 @@ class RestClient:
         self,
         base_url: str,
         api_key: Optional[str] = None,
+        api_keys: Optional[Sequence[str]] = None,
         email: Optional[str] = None,
         sleep_seconds: float = 0.1,
         timeout_seconds: int = 60,
@@ -198,27 +222,39 @@ class RestClient:
         key_header: Optional[str] = None,
     ) -> None:
         self.base_url = base_url.rstrip("/")
-        self.api_key = api_key
+        self.api_keys = split_api_keys([api_key, api_keys])
+        self.api_key = self.api_keys[0] if self.api_keys else None
+        self._api_key_index = 0
         self.email = email
         self.sleep_seconds = float(sleep_seconds)
         self.timeout_seconds = int(timeout_seconds)
         self.max_retries = int(max_retries)
         self.session = requests.Session()
         self.session.headers.update({"User-Agent": "aspr-fig3-dataset-builder/1.0"})
-        if api_key and key_header:
-            self.session.headers.update({key_header: api_key})
+        if self.api_key and key_header:
+            self.session.headers.update({key_header: self.api_key})
+
+    def next_api_key(self) -> Optional[str]:
+        if not self.api_keys:
+            return None
+        key = self.api_keys[self._api_key_index % len(self.api_keys)]
+        self._api_key_index += 1
+        return key
 
     def get_json(self, path_or_url: str, params: Optional[Mapping[str, Any]] = None) -> Dict[str, Any]:
-        params_dict = dict(params or {})
-        if self.api_key and self.base_url == OPENALEX_API_BASE:
-            params_dict["api_key"] = self.api_key
-        if self.email and self.base_url == OPENALEX_API_BASE:
-            params_dict["mailto"] = self.email
+        base_params = dict(params or {})
         if path_or_url.startswith("http://") or path_or_url.startswith("https://"):
             url = path_or_url
         else:
             url = f"{self.base_url}/{path_or_url.lstrip('/')}"
         for attempt in range(self.max_retries + 1):
+            params_dict = dict(base_params)
+            if self.base_url == OPENALEX_API_BASE:
+                api_key = self.next_api_key()
+                if api_key:
+                    params_dict["api_key"] = api_key
+                if self.email:
+                    params_dict["mailto"] = self.email
             if self.sleep_seconds > 0:
                 time.sleep(self.sleep_seconds)
             try:
@@ -246,10 +282,12 @@ class OpenAlexClient(RestClient):
         sleep_seconds: float,
         timeout_seconds: int,
         max_retries: int,
+        api_keys: Optional[Sequence[str]] = None,
     ) -> None:
         super().__init__(
             OPENALEX_API_BASE,
             api_key=api_key,
+            api_keys=api_keys,
             email=email,
             sleep_seconds=sleep_seconds,
             timeout_seconds=timeout_seconds,
@@ -262,18 +300,29 @@ class OpenAlexClient(RestClient):
         max_records: int,
         params: Optional[Mapping[str, Any]] = None,
         per_page: int = 100,
+        progress: bool = False,
+        progress_label: str = "",
+        progress_interval: int = 5,
     ) -> List[Dict[str, Any]]:
         params_dict = dict(params or {})
         params_dict["per_page"] = int(per_page)
         params_dict["cursor"] = "*"
         out: List[Dict[str, Any]] = []
+        page = 0
         while len(out) < int(max_records):
             data = self.get_json(endpoint, params=params_dict)
+            page += 1
             results = data.get("results", []) or []
             if not results:
                 break
             remaining = int(max_records) - len(out)
             out.extend(results[:remaining])
+            if progress and (page == 1 or page % int(progress_interval) == 0 or len(out) >= int(max_records)):
+                meta = data.get("meta") or {}
+                total = meta.get("count")
+                suffix = f" / OpenAlex count {int(total):,}" if isinstance(total, int) else ""
+                label = progress_label or endpoint
+                progress_log(f"{label}: fetched {len(out):,}/{int(max_records):,} rows across {page:,} pages{suffix}", progress)
             next_cursor = (data.get("meta") or {}).get("next_cursor")
             if not next_cursor or len(results) < per_page:
                 break
@@ -311,6 +360,8 @@ class OpenAlexClient(RestClient):
         filters: Optional[Sequence[str]] = None,
         sort: Optional[str] = None,
         per_page: int = 100,
+        progress: bool = False,
+        progress_label: str = "",
     ) -> List[Dict[str, Any]]:
         params: Dict[str, Any] = {"select": OPENALEX_WORK_SELECT}
         filt = [f for f in (filters or []) if f]
@@ -320,7 +371,14 @@ class OpenAlexClient(RestClient):
             params["search"] = search
         if sort:
             params["sort"] = sort
-        return self.list_cursor("/works", max_records=max_records, params=params, per_page=per_page)
+        return self.list_cursor(
+            "/works",
+            max_records=max_records,
+            params=params,
+            per_page=per_page,
+            progress=progress,
+            progress_label=progress_label,
+        )
 
     def get_work(self, openalex_id_or_doi: str) -> Optional[Dict[str, Any]]:
         ident = str(openalex_id_or_doi or "").strip()
@@ -857,27 +915,37 @@ def collect_domain_works(
     if domain.topic_id:
         filters.append(f"primary_topic.id:{short_openalex_id(domain.topic_id)}")
     topic_quota = max(100, int(max_papers_per_domain) * 70 // 100)
+    progress_log(f"[{domain.slug}] Fetching core OpenAlex works: target={topic_quota:,}", progress)
     works = openalex.list_works(
         max_records=topic_quota,
         search=None if domain.topic_id else domain.query,
         filters=filters,
         sort="cited_by_count:desc",
+        progress=progress,
+        progress_label=f"[{domain.slug}] core works",
     )
+    progress_log(f"[{domain.slug}] Core works fetched: {len(works):,}", progress)
     by_id: Dict[str, Dict[str, Any]] = {
         normalize_openalex_id(work.get("id")): work
         for work in works
         if normalize_openalex_id(work.get("id"))
     }
 
-    landmark_rows = landmarks[
-        (landmarks["include_main"].astype(int) == 1)
-        & (
-            (landmarks["primary_topic_id"].astype(str) == domain.topic_id)
-            | (landmarks["primary_topic"].astype(str).str.lower() == domain.display_name.lower())
-        )
-    ].copy() if not landmarks.empty else pd.DataFrame()
+    if not landmarks.empty and {"include_main", "primary_topic_id", "primary_topic"}.issubset(landmarks.columns):
+        landmark_rows = landmarks[
+            (landmarks["include_main"].astype(int) == 1)
+            & (
+                (landmarks["primary_topic_id"].astype(str) == domain.topic_id)
+                | (landmarks["primary_topic"].astype(str).str.lower() == domain.display_name.lower())
+            )
+        ].copy()
+    else:
+        landmark_rows = pd.DataFrame(columns=["id"])
     landmark_work_ids: List[str] = []
-    for row in landmark_rows.to_dict("records"):
+    landmark_records = landmark_rows.to_dict("records")
+    if landmark_records:
+        progress_log(f"[{domain.slug}] Expanding {len(landmark_records):,} landmark anchors", progress)
+    for anchor_idx, row in enumerate(landmark_records, start=1):
         work = openalex.get_work(str(row["id"]))
         if work:
             wid = normalize_openalex_id(work.get("id"))
@@ -885,6 +953,10 @@ def collect_domain_works(
             if wid:
                 landmark_work_ids.append(wid)
             if max_anchor_citers > 0:
+                progress_log(
+                    f"[{domain.slug}] Landmark {anchor_idx:,}/{len(landmark_records):,}: fetching up to {int(max_anchor_citers):,} citers",
+                    progress,
+                )
                 sid = short_openalex_id(work.get("id"))
                 citer_filters = [
                     f"from_publication_date:{int(row.get('year') or start_year)}-01-01",
@@ -903,6 +975,8 @@ def collect_domain_works(
                             max_records=max_anchor_citers,
                             filters=citer_filters + [citation_filter],
                             sort="cited_by_count:desc",
+                            progress=progress,
+                            progress_label=f"[{domain.slug}] anchor {anchor_idx} citers",
                         )
                         if citer_candidates:
                             break
@@ -927,7 +1001,7 @@ def collect_domain_works(
     ordered_ids.extend(remaining_ids)
     selected = [by_id[wid] for wid in ordered_ids[: int(max_papers_per_domain)]]
     selected_ids = {normalize_openalex_id(work.get("id")) for work in selected}
-    landmark_ids = set(landmark_rows["id"].astype(str).tolist()) & selected_ids
+    landmark_ids = set(landmark_rows.get("id", pd.Series(dtype=str)).astype(str).tolist()) & selected_ids
     works_rows = [normalize_work_for_fig3(work, domain, landmark_ids) for work in selected]
     refs_rows: List[Dict[str, str]] = []
     for work in selected:
@@ -1013,9 +1087,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-candidates-per-nobel", type=int, default=50)
     parser.add_argument("--extra-landmarks", type=Path, default=None, help="Optional CSV/JSON non-Nobel landmark seed file.")
     parser.add_argument("--work-types", nargs="+", default=["article", "preprint", "review", "book-chapter", "book"])
-    parser.add_argument("--openalex-api-key", default=os.getenv("OPENALEX_API_KEY"))
-    parser.add_argument("--openalex-email", default=os.getenv("OPENALEX_EMAIL"))
-    parser.add_argument("--s2-api-key", default=os.getenv("S2_API_KEY"))
+    parser.add_argument("--openalex-api-key", default=getenv("OPENALEX_API_KEY"))
+    parser.add_argument("--openalex-api-keys", default=getenv("OPENALEX_API_KEYS"), help="Comma/space separated OpenAlex API keys used in round-robin order.")
+    parser.add_argument("--openalex-email", default=getenv("OPENALEX_EMAIL"))
+    parser.add_argument("--s2-api-key", default=getenv("S2_API_KEY"))
     parser.add_argument("--use-semantic-scholar", action="store_true", help="Use Semantic Scholar as optional landmark-match enhancer.")
     parser.add_argument("--sleep-seconds", type=float, default=0.1)
     parser.add_argument("--timeout-seconds", type=int, default=60)
@@ -1030,6 +1105,7 @@ def main() -> None:
     args.out_dir.mkdir(parents=True, exist_ok=True)
     openalex = OpenAlexClient(
         api_key=args.openalex_api_key,
+        api_keys=split_api_keys(args.openalex_api_keys),
         email=args.openalex_email,
         sleep_seconds=args.sleep_seconds,
         timeout_seconds=args.timeout_seconds,

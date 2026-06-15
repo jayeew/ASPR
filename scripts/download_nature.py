@@ -22,6 +22,11 @@ import requests
 from tqdm import tqdm
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from aspr.env import getenv
+
 OUTPUTS_DIR = PROJECT_ROOT / "outputs"
 LOG_DIR = OUTPUTS_DIR / "logs"
 LOG_DIR.mkdir(parents=True, exist_ok=True)
@@ -741,8 +746,8 @@ def main():
     parser.add_argument('--year', type=int, default=2023, help='下载年份')
     parser.add_argument('--journal-id', type=str, default='41551',
                         help='杂志编号（如 41551 对应 Nature Biomedical Engineering，41467 对应 Nature Communications）')
-    parser.add_argument('--email', type=str, default=os.getenv("NCBI_EMAIL", ""), help='您的邮箱（NCBI要求，也可设置 NCBI_EMAIL）')
-    parser.add_argument('--api-key', type=str, default=os.getenv("NCBI_API_KEY", ""), help='NCBI API密钥（可选，也可设置 NCBI_API_KEY）')
+    parser.add_argument('--email', type=str, default=getenv("NCBI_EMAIL"), help='您的邮箱（NCBI要求，也可设置 NCBI_EMAIL）')
+    parser.add_argument('--api-key', type=str, default=getenv("NCBI_API_KEY"), help='NCBI API密钥（可选，也可设置 NCBI_API_KEY）')
     parser.add_argument('--no-download', action='store_true', help='只生成链接，不下载PDF')
     parser.add_argument('--test', action='store_true', default=False, help='测试模式（只处理前10篇）')
     parser.add_argument('--output-dir', type=str, default=None,

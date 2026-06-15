@@ -1,7 +1,0 @@
-key,label,z,z_raw,clipped,reliability_weight,mechanism
-community_reach,Community reach (D1),4.0,10.117361392148927,1,0.7275253528753854,Expansion
-field_entropy,Field entropy (D2),2.648922726766693,2.648922726766693,0,0.5188346181679764,Expansion
-cross_community_adoption,Cross-community adoption (D3),1.3988351837840691,1.3988351837840691,0,0.5618662986751068,Bridging
-boundary_mixing,Boundary mixing ↑ (D7),4.0,6.972216943737517,1,0.8026023377059044,Reconfiguration
-partition_change,Partition divergence (D6),2.6658904193007658,2.6658904193007658,0,0.7856639115501296,Reconfiguration
-post_perturbation_concentration,Compression diagnostic (D8),-0.8120996644917657,-0.8120996644917657,0,0.33800078220452506,Consolidation

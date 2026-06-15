@@ -15,7 +15,7 @@ experiments/kg_perturbation_fig1/fig1_knowledge_perturbation_v3.py
 单领域运行：
 
 ```bash
-export OPENALEX_API_KEY="YOUR_KEY"
+cp .env.example .env  # fill OPENALEX_API_KEY or OPENALEX_API_KEYS
 python experiments/kg_perturbation_fig1/fig1_knowledge_perturbation_v3.py \
   --config experiments/kg_perturbation_fig1/configs/crispr.yaml
 ```

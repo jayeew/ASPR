@@ -14,10 +14,12 @@ from pypdf import PdfReader
 
 if __package__ in {None, ""}:
     sys.path.append(str(Path(__file__).resolve().parents[1]))
+    from aspr.env import getenv, getenv_int
     from aspr.lats import evaluate_paper_innovation
     from aspr.pdf_downloader import ACLPDFDownloader
     from aspr.prompts import generation_instance_prompts_summarization, prompts_keywords_extraction
 else:
+    from .env import getenv, getenv_int
     from .lats import evaluate_paper_innovation
     from .pdf_downloader import ACLPDFDownloader
     from .prompts import generation_instance_prompts_summarization, prompts_keywords_extraction
@@ -377,25 +379,25 @@ class OpenScholar:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='OpenScholar API Server')
-    parser.add_argument('--s2_api_key', type=str, default=os.getenv("S2_API_KEY", ""),
-                        help='Semantic Scholar API key or S2_API_KEY environment variable')
+    parser.add_argument('--s2_api_key', type=str, default=getenv("S2_API_KEY"),
+                        help='Semantic Scholar API key. Defaults to S2_API_KEY from .env/environment.')
     parser.add_argument('--large_model', type=str, default='OpenSciLM/Llama-3.1_OpenScholar-8B',
                         help='Large model name')
-    parser.add_argument('--large_model_port', type=int, default=38011,
+    parser.add_argument('--large_model_port', type=int, default=getenv_int("ASPR_LARGE_MODEL_PORT", 38011),
                         help='Port for large model server')
     parser.add_argument('--small_model', type=str, default='Qwen/Qwen3-0.6B',
                         help='Small model name')
-    parser.add_argument('--small_model_port', type=int, default=38014,
+    parser.add_argument('--small_model_port', type=int, default=getenv_int("ASPR_SMALL_MODEL_PORT", 38014),
                         help='Port for small model server')
-    parser.add_argument('--api_port', type=int, default=38015,
+    parser.add_argument('--api_port', type=int, default=getenv_int("ASPR_API_PORT", 38015),
                         help='Port for API server')
     parser.add_argument('--and_search', type=_as_bool, default=False,
                         help='and / or search')
     parser.add_argument('--reranker_path', type=str, default='OpenSciLM/OpenScholar_Reranker',
                         help='Path to reranker model')
-    parser.add_argument('--top_n', type=int, default=10,
+    parser.add_argument('--top_n', type=int, default=getenv_int("ASPR_TOP_N", 10),
                         help='Top N papers to retrieve')
-    parser.add_argument('--max_tokens', type=int, default=3000,
+    parser.add_argument('--max_tokens', type=int, default=getenv_int("ASPR_MAX_TOKENS", 3000),
                         help='Maximum tokens for generation')
     parser.add_argument('--search_batch_size', type=int, default=100,
                         help='Batch size for search generation')

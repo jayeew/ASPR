@@ -31,6 +31,13 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from aspr.env import load_env
+
+load_env()
 os.environ.setdefault("MPLCONFIGDIR", "/tmp/aspr_matplotlib_cache")
 
 import matplotlib
@@ -45,7 +52,8 @@ from matplotlib.gridspec import GridSpec
 from matplotlib.patches import FancyArrowPatch
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_CORPUS_ROOT = PROJECT_ROOT / "data" / "knowledge_corpus" / "v1_strict"
+DEFAULT_CORPUS_FIG5_INPUT_DIR = DEFAULT_CORPUS_ROOT / "views" / "fig5" / "multi_domain"
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "outputs" / "kg_perturbation_fig5"
 DEFAULT_BACKTEST_WINDOWS = [
     "1995:2000",
@@ -333,6 +341,13 @@ def default_fig3_root() -> Path:
     return path if path is not None else candidates[0]
 
 
+def default_fig5_input_dir(fig3_root: Path) -> Path:
+    """Prefer the unified corpus Fig. 5 view, then fall back to the Fig. 3 run input."""
+    if DEFAULT_CORPUS_FIG5_INPUT_DIR.exists():
+        return DEFAULT_CORPUS_FIG5_INPUT_DIR
+    return fig3_root / "fig3_input" / "multi_domain"
+
+
 def choose_column(df: pd.DataFrame, candidates: Sequence[str], name: str, required: bool = True) -> Optional[str]:
     """Pick the first available column from a candidate list."""
     for col in candidates:
@@ -347,7 +362,7 @@ def read_csv_required(path: Path, name: str) -> pd.DataFrame:
     """Read a required CSV file."""
     if not path.exists():
         raise FileNotFoundError(f"Missing {name}: {path}")
-    return pd.read_csv(path)
+    return pd.read_csv(path, low_memory=False)
 
 
 def clean_label(label: object, domain: Optional[str] = None) -> str:
@@ -444,7 +459,7 @@ def load_data(
     scores = read_csv_required(fig3_run_dir / "fig3_score_table.csv", "Fig. 3 score table")
     works = normalize_works(read_csv_required(fig3_input_dir / "works.csv", "Fig. 3 works table"))
     topics_path = fig3_input_dir / "topics.csv"
-    topics = prepare_topics(pd.read_csv(topics_path) if topics_path.exists() else pd.DataFrame())
+    topics = prepare_topics(pd.read_csv(topics_path, low_memory=False) if topics_path.exists() else pd.DataFrame())
     score_col = choose_column(scores, SCORE_CANDIDATES, "publication-day score", required=True)
     rgpm_col = choose_column(scores, RGPM_CANDIDATES, "RGPM outcome", required=False)
     score_df = normalize_scores(scores, score_col, rgpm_col)
@@ -1396,12 +1411,12 @@ def parse_args() -> argparse.Namespace:
     fig3_root = default_fig3_root()
     parser = argparse.ArgumentParser(description="Build Fig. 5 forecast-outcome validation tables and figure.")
     parser.add_argument("--fig3-run-dir", type=Path, default=fig3_root / "multi_domain", help="Directory with fig3_score_table.csv.")
-    parser.add_argument("--fig3-input-dir", type=Path, default=fig3_root / "fig3_input" / "multi_domain", help="Directory with works.csv and topics.csv.")
+    parser.add_argument("--fig3-input-dir", type=Path, default=default_fig5_input_dir(fig3_root), help="Directory with works.csv and topics.csv.")
     parser.add_argument("--out-dir", type=Path, default=DEFAULT_OUTPUT_DIR, help="Output directory.")
     parser.add_argument("--domain-filter", nargs="+", default=None, help="Optional domain names to keep, for example crispr.")
     parser.add_argument("--cutoff-year", type=int, default=2020, help="Last historical year visible to the forecast.")
     parser.add_argument("--validation-start", type=int, default=None, help="First validation year. Default: cutoff-year + 1.")
-    parser.add_argument("--validation-end", type=int, default=2026, help="Requested final validation year.")
+    parser.add_argument("--validation-end", type=int, default=2025, help="Requested final validation year. Use an explicit value for partial 2026 analysis.")
     parser.add_argument("--top-n", type=int, default=10, help="Top-N focus list size for panels b/c.")
     parser.add_argument("--case-count", type=int, default=3, help="Number of key innovation case cards.")
     parser.add_argument("--min-historical-papers", type=int, default=5, help="Minimum pre-cutoff papers for a focus to be ranked.")

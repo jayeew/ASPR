@@ -1,6 +1,0 @@
-delta,active,finite_ratio,nonzero_rate,std,unique_count,drop_reasons
-community_reach,1,1.0,1.0,3.1083220461376158,15,
-modularity_shock,1,1.0,0.639866925422789,0.07023976775805924,2007,
-path_shortening,0,1.0,0.0,0.0,1,zero_variance
-component_reach,1,1.0,1.0,1076.7665116280828,58,
-boundary_mixing,1,1.0,0.6332131965622401,0.11096335655541159,1776,

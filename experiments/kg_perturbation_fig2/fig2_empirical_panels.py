@@ -14,6 +14,12 @@ from pathlib import Path
 from statistics import NormalDist
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from aspr.env import getenv
+
 os.environ.setdefault('MPLCONFIGDIR', '/tmp/aspr_matplotlib_cache')
 
 import matplotlib
@@ -27,10 +33,9 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
 DEFAULT_FIG1_DATA_ROOT = PROJECT_ROOT / 'outputs' / 'kg_perturbation_fig1'
+DEFAULT_CORPUS_ROOT = PROJECT_ROOT / 'data' / 'knowledge_corpus' / 'v1_strict'
+DEFAULT_CORPUS_FIG2_DATA_ROOT = DEFAULT_CORPUS_ROOT / 'views' / 'fig2'
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / 'outputs' / 'kg_perturbation_fig2'
 DEFAULT_STRONG_OUTPUT_DIR = PROJECT_ROOT / 'outputs' / 'kg_perturbation_fig2_strong'
 DEFAULT_DOMAIN = 'crispr'
@@ -40,6 +45,25 @@ DEFAULT_STRONG_DOMAINS = [
     'ipsc_reprogramming',
     'transformer_foundation_models',
 ]
+
+
+def default_fig2_data_root() -> Path:
+    """Prefer the unified corpus view, then fall back to legacy Fig. 1 exports."""
+    return DEFAULT_CORPUS_FIG2_DATA_ROOT if DEFAULT_CORPUS_FIG2_DATA_ROOT.exists() else DEFAULT_FIG1_DATA_ROOT
+
+
+def default_strong_domains() -> List[str]:
+    """Load strong-mode domains from the unified corpus manifest when available."""
+    manifest_path = DEFAULT_CORPUS_ROOT / 'manifest.json'
+    if manifest_path.exists():
+        try:
+            payload = json.loads(manifest_path.read_text(encoding='utf-8'))
+            domains = [str(item) for item in payload.get('domains_with_data') or [] if str(item).strip()]
+            if domains:
+                return domains
+        except Exception:
+            pass
+    return DEFAULT_STRONG_DOMAINS
 
 try:
     from scipy.cluster.hierarchy import linkage, dendrogram, leaves_list
@@ -482,6 +506,7 @@ def run_fig1_pipeline_for_input(
     fig1_out_dir: Path,
     use_cache: bool,
     openalex_api_key: Optional[str],
+    openalex_api_keys: Optional[str],
     email: Optional[str],
     progress: bool,
 ) -> Path:
@@ -490,12 +515,14 @@ def run_fig1_pipeline_for_input(
         OpenAlexClient,
         load_config,
         run_domain,
+        split_api_keys,
     )
 
     cfg = load_config(fig1_config)
     api_cfg = cfg.get('api', {})
     client = OpenAlexClient(
         api_key=openalex_api_key,
+        api_keys=split_api_keys(openalex_api_keys),
         email=email,
         sleep_seconds=float(api_cfg.get('sleep_seconds', 0.1)),
         max_retries=int(api_cfg.get('max_retries', 6)),
@@ -514,6 +541,7 @@ def prepare_fig2_input_data(
     run_fig1_if_missing: bool,
     use_fig1_cache: bool,
     openalex_api_key: Optional[str],
+    openalex_api_keys: Optional[str],
     email: Optional[str],
     progress: bool,
 ) -> Path:
@@ -534,6 +562,7 @@ def prepare_fig2_input_data(
             out_dir / 'fig1_source',
             use_cache=use_fig1_cache,
             openalex_api_key=openalex_api_key,
+            openalex_api_keys=openalex_api_keys,
             email=email,
             progress=progress,
         )
@@ -1513,6 +1542,7 @@ def add_reference_closure_nodes(
     closure_cap: int,
     closure_coverage_target: float,
     openalex_api_key: Optional[str],
+    openalex_api_keys: Optional[str],
     email: Optional[str],
     progress: bool,
 ) -> Tuple[Any, Dict[str, Any]]:
@@ -1582,6 +1612,7 @@ def add_reference_closure_nodes(
 
     client = OpenAlexClient(
         api_key=openalex_api_key,
+        api_keys=openalex_api_keys,
         email=email,
         sleep_seconds=0.1,
         timeout_seconds=60,
@@ -2060,6 +2091,7 @@ def build_strong_evidence_data(args: argparse.Namespace, progress: bool) -> Tupl
             run_fig1_if_missing=args.run_fig1_if_missing,
             use_fig1_cache=not args.no_fig1_cache,
             openalex_api_key=args.openalex_api_key,
+            openalex_api_keys=args.openalex_api_keys,
             email=args.email,
             progress=progress,
         )
@@ -2073,6 +2105,7 @@ def build_strong_evidence_data(args: argparse.Namespace, progress: bool) -> Tupl
             closure_cap=args.reference_closure_cap,
             closure_coverage_target=args.closure_coverage_target,
             openalex_api_key=args.openalex_api_key,
+            openalex_api_keys=args.openalex_api_keys,
             email=args.email,
             progress=progress,
         )
@@ -2917,15 +2950,15 @@ def export_tables(comp: ComputedData, out_dir: Path) -> None:
 
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description='Empirical Fig. 2 pipeline: compute data and draw panels a–f separately or jointly.')
-    p.add_argument('--data-dir', type=Path, default=DEFAULT_FIG1_DATA_ROOT,
+    p.add_argument('--data-dir', type=Path, default=default_fig2_data_root(),
                    help='Local data directory. Accepts a directory with works.csv/citations.csv/topics.csv/topic_edges.csv, '
                         'a Fig. 1 domain directory with works_selected.csv/paper_edges.csv/topic_nodes.csv/topic_edges.csv, '
-                        f'or a Fig. 1 output root. Default: {DEFAULT_FIG1_DATA_ROOT}')
+                        f'or a Fig. 1 output root. Default prefers {DEFAULT_CORPUS_FIG2_DATA_ROOT}, then {DEFAULT_FIG1_DATA_ROOT}')
     p.add_argument('--evidence-mode', choices=['strong', 'legacy'], default='strong',
                    help='strong uses multi-domain Fig. 1 raw/Fig. 3 future-delta evidence; legacy preserves the single-domain diagnostic figure.')
     p.add_argument('--domain', type=str, default=DEFAULT_DOMAIN,
                    help=f'Fig. 1 domain subdirectory to read when --data-dir is a root. Default: {DEFAULT_DOMAIN}')
-    p.add_argument('--domains', type=str, default=','.join(DEFAULT_STRONG_DOMAINS),
+    p.add_argument('--domains', type=str, default=','.join(default_strong_domains()),
                    help='Comma/space separated domains for --evidence-mode strong.')
     p.add_argument('--fig1-corpus-source', choices=['raw', 'selected'], default='raw',
                    help='For strong mode, use Fig. 1 works_raw.jsonl or selected Fig. 1 corpus. Default: raw.')
@@ -2974,9 +3007,11 @@ def parse_args() -> argparse.Namespace:
                    help='Run the Fig. 1 pipeline to materialize source data if --data-dir does not contain usable exports.')
     p.add_argument('--no-fig1-cache', action='store_true',
                    help='When running Fig. 1, ignore cached works_raw.jsonl and re-download.')
-    p.add_argument('--openalex-api-key', default=os.getenv('OPENALEX_API_KEY'),
+    p.add_argument('--openalex-api-key', default=getenv('OPENALEX_API_KEY'),
                    help='OpenAlex API key passed through when --run-fig1-if-missing is used.')
-    p.add_argument('--email', default=os.getenv('OPENALEX_EMAIL'),
+    p.add_argument('--openalex-api-keys', default=getenv('OPENALEX_API_KEYS'),
+                   help='Comma/space separated OpenAlex API keys passed through to online fetchers.')
+    p.add_argument('--email', default=getenv('OPENALEX_EMAIL'),
                    help='OpenAlex contact email passed through when --run-fig1-if-missing is used.')
     p.add_argument('--quiet', action='store_true', help='Suppress progress logs.')
     return p.parse_args()
@@ -3023,6 +3058,7 @@ def main() -> None:
             run_fig1_if_missing=args.run_fig1_if_missing,
             use_fig1_cache=not args.no_fig1_cache,
             openalex_api_key=args.openalex_api_key,
+            openalex_api_keys=args.openalex_api_keys,
             email=args.email,
             progress=progress,
         )

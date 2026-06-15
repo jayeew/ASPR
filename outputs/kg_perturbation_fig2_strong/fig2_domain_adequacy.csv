@@ -1,5 +1,0 @@
-domain,eligible_papers,landmark_papers,year_min,year_max,median_reference_count,median_controls,relaxed_control_ratio,reference_closure_coverage
-crispr,1432,3,2002,2014,13.0,5920.0,0.9178082191780822,0.2946985584378965
-graphene_2d_materials,325,1,1991,2004,7.0,5920.0,0.9705882352941176,0.2970633341876065
-ipsc_reprogramming,2604,3,1996,2010,13.0,5920.0,0.6719367588932806,0.2295537723514802
-transformer_foundation_models,1567,0,2001,2014,9.0,112.0,0.6496815286624203,0.145977441445589

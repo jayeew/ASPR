@@ -1,5 +1,0 @@
-domain,n_papers,n_landmarks,n_high_perturbation_cases,n_landmark_or_high_cases,high_perturbation_quantile,high_perturbation_threshold,control_median,relaxed_control_tier_rate,pass_papers_per_domain_min,pass_landmark_or_high_cases_min,pass_control_median_min,pass_relaxed_control_tier_rate_max
-crispr,20986,11,2099,2109,0.9,0.8999868960259221,247.0,0.030020013342228154,1,1,1,1
-graphene_2d_materials,20986,11,2099,2109,0.9,0.8999868960259221,247.0,0.030020013342228154,1,1,1,1
-ipsc_reprogramming,20986,11,2099,2109,0.9,0.9000047650814829,247.0,0.030020013342228154,1,1,1,1
-transformer_foundation_models,20986,11,2099,2109,0.9,0.9000047650814829,247.0,0.030020013342228154,1,1,1,1

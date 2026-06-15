@@ -68,6 +68,12 @@ from pathlib import Path
 from statistics import NormalDist
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from aspr.env import getenv
+
 os.environ.setdefault("MPLCONFIGDIR", "/tmp/aspr_matplotlib_cache")
 
 import matplotlib
@@ -94,8 +100,9 @@ except Exception:
 # Constants and visual metadata
 # -----------------------------------------------------------------------------
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_FIG1_DATA_ROOT = PROJECT_ROOT / "outputs" / "kg_perturbation_fig1"
+DEFAULT_CORPUS_ROOT = PROJECT_ROOT / "data" / "knowledge_corpus" / "v1_strict"
+DEFAULT_CORPUS_FIG3_DATA_ROOT = DEFAULT_CORPUS_ROOT / "views" / "fig3"
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "outputs" / "kg_perturbation_fig3"
 DEFAULT_DOMAIN = "crispr"
 DEFAULT_DOMAINS = [
@@ -104,6 +111,25 @@ DEFAULT_DOMAINS = [
     "ipsc_reprogramming",
     "transformer_foundation_models",
 ]
+
+
+def default_fig3_data_root() -> Path:
+    """Prefer the unified corpus Fig. 3 view, then fall back to legacy Fig. 1 exports."""
+    return DEFAULT_CORPUS_FIG3_DATA_ROOT if DEFAULT_CORPUS_FIG3_DATA_ROOT.exists() else DEFAULT_FIG1_DATA_ROOT
+
+
+def default_domains() -> List[str]:
+    """Load domain defaults from the unified corpus manifest when available."""
+    manifest_path = DEFAULT_CORPUS_ROOT / "manifest.json"
+    if manifest_path.exists():
+        try:
+            payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+            domains = [str(item) for item in payload.get("domains_with_data") or [] if str(item).strip()]
+            if domains:
+                return domains
+        except Exception:
+            pass
+    return DEFAULT_DOMAINS
 
 TEXT_DARK = "#111827"
 TEXT_MID = "#374151"
@@ -1249,6 +1275,7 @@ def run_fig1_pipeline_for_input(
     fig1_out_dir: Path,
     use_cache: bool,
     openalex_api_key: Optional[str],
+    openalex_api_keys: Optional[str],
     email: Optional[str],
     progress: bool,
 ) -> Path:
@@ -1258,6 +1285,7 @@ def run_fig1_pipeline_for_input(
     api_cfg = cfg.get("api", {})
     client = fig1.OpenAlexClient(
         api_key=openalex_api_key,
+        api_keys=fig1.split_api_keys(openalex_api_keys),
         email=email,
         sleep_seconds=float(api_cfg.get("sleep_seconds", 0.1)),
         max_retries=int(api_cfg.get("max_retries", 6)),
@@ -1278,6 +1306,7 @@ def prepare_fig3_input_data(
     run_fig1_if_missing: bool,
     use_fig1_cache: bool,
     openalex_api_key: Optional[str],
+    openalex_api_keys: Optional[str],
     email: Optional[str],
     progress: bool,
 ) -> Path:
@@ -1303,6 +1332,7 @@ def prepare_fig3_input_data(
             out_dir / "fig1_source",
             use_cache=use_fig1_cache,
             openalex_api_key=openalex_api_key,
+            openalex_api_keys=openalex_api_keys,
             email=email,
             progress=progress,
         )
@@ -3254,6 +3284,7 @@ def compute_all(raw: RawData, args: argparse.Namespace) -> ComputedData:
         min_controls=args.min_controls,
         z_cap=args.z_cap,
         tau=args.tau,
+        delta_variant=args.delta_variant,
         progress=progress,
         progress_interval=progress_interval,
     )
@@ -3314,6 +3345,7 @@ def compute_all(raw: RawData, args: argparse.Namespace) -> ComputedData:
         control_diag,
         nonlinear_diag,
     )
+    diagnostics_summary["delta_variant"] = args.delta_variant
     domain_diag = pd.DataFrame(diagnostics_summary.get("domain_adequacy", []))
     progress_log(
         f"      diagnostics: {diagnostics_summary['status_label']} "
@@ -3513,13 +3545,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--data-dir",
         type=Path,
-        default=DEFAULT_FIG1_DATA_ROOT,
+        default=default_fig3_data_root(),
         help="Local data directory. Accepts standard Fig. 3 input, a Fig. 1 domain export directory, "
-             f"or a Fig. 1 output root. Default: {DEFAULT_FIG1_DATA_ROOT}",
+             f"or a Fig. 1 output root. Default prefers {DEFAULT_CORPUS_FIG3_DATA_ROOT}, then {DEFAULT_FIG1_DATA_ROOT}",
     )
     parser.add_argument("--domain", type=str, default=DEFAULT_DOMAIN,
                         help=f"Fig. 1 domain subdirectory to read when --data-dir is a root. Default: {DEFAULT_DOMAIN}.")
-    parser.add_argument("--domains", nargs="+", default=DEFAULT_DOMAINS,
+    parser.add_argument("--domains", nargs="+", default=default_domains(),
                         help="Domain list used by --run-mode multi_domain/both.")
     parser.add_argument("--run-mode", choices=["single_domain", "multi_domain", "both"], default="both",
                         help="Run one or more single-domain analyses, a combined multi-domain analysis, or both.")
@@ -3533,6 +3565,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--min-refs", type=int, default=5, help="Minimum number of prior references required for a paper.")
     parser.add_argument("--min-controls", type=int, default=50, help="Minimum matched-control target; matching relaxes if not met. A hard floor of 10 is enforced.")
     parser.add_argument("--z-cap", type=float, default=4.0, help="Winsorization cap for matched-control graph-delta z-scores used in RGPM construction.")
+    parser.add_argument(
+        "--delta-variant",
+        choices=["matched_control_v3", "domain_residual_v2"],
+        default="matched_control_v3",
+        help="Future graph-delta normalization variant. The default preserves the current matched-control v3 target.",
+    )
     parser.add_argument("--n-weight-samples", type=int, default=30000, help="Number of Dirichlet weight vectors to evaluate.")
     parser.add_argument("--n-folds", type=int, default=5, help="Number of cross-validation folds.")
     parser.add_argument("--cv-mode", choices=["random", "time", "time_block", "domain"], default="time_block", help="Cross-validation split mode.")
@@ -3562,9 +3600,11 @@ def parse_args() -> argparse.Namespace:
                         help="Run the Fig. 1 pipeline to materialize source data if --data-dir does not contain usable exports.")
     parser.add_argument("--no-fig1-cache", action="store_true",
                         help="When running Fig. 1, ignore cached works_raw.jsonl and re-download.")
-    parser.add_argument("--openalex-api-key", default=os.getenv("OPENALEX_API_KEY"),
+    parser.add_argument("--openalex-api-key", default=getenv("OPENALEX_API_KEY"),
                         help="OpenAlex API key passed through when --run-fig1-if-missing is used.")
-    parser.add_argument("--email", default=os.getenv("OPENALEX_EMAIL"),
+    parser.add_argument("--openalex-api-keys", default=getenv("OPENALEX_API_KEYS"),
+                        help="Comma/space separated OpenAlex API keys passed through to online fetchers.")
+    parser.add_argument("--email", default=getenv("OPENALEX_EMAIL"),
                         help="OpenAlex contact email passed through when --run-fig1-if-missing is used.")
     parser.add_argument("--quiet", action="store_true", help="Suppress Fig. 3 progress logs.")
     return parser.parse_args()
@@ -3643,6 +3683,7 @@ def load_domain_raw(args: argparse.Namespace, domain: str, progress: bool) -> Tu
             run_fig1_if_missing=args.run_fig1_if_missing,
             use_fig1_cache=not args.no_fig1_cache,
             openalex_api_key=args.openalex_api_key,
+            openalex_api_keys=args.openalex_api_keys,
             email=args.email,
             progress=progress,
         )
@@ -3967,12 +4008,82 @@ def structural_residual_target(
     )
 
 
+def residualize_delta_z_domain_residual_v2(zdf: pd.DataFrame, z_cap: float = 4.0) -> pd.DataFrame:
+    """Rank-normalize graph deltas within domain/year bins and residualize popularity."""
+    out = zdf.copy()
+    if out.empty:
+        return out
+    year = pd.to_numeric(out.get("year", 0), errors="coerce").fillna(0).astype(int)
+    out["_year_bin_v2"] = (year // 5) * 5
+    covariates = []
+    for col in ["reference_count", "n_future_citers", "cited_by_count"]:
+        if col in out.columns:
+            covariates.append(np.log1p(pd.to_numeric(out[col], errors="coerce").fillna(0).to_numpy(dtype=float)))
+        else:
+            covariates.append(np.zeros(len(out), dtype=float))
+    year_vals = year.to_numpy(dtype=float)
+    covariates.append((year_vals - float(np.nanmean(year_vals))) / max(float(np.nanstd(year_vals)), 1.0))
+    X = np.column_stack([np.ones(len(out), dtype=float), *covariates])
+
+    for col in DELTA_KEYS:
+        z_col = col + "_z"
+        if z_col not in out.columns:
+            continue
+        original = pd.to_numeric(out[z_col], errors="coerce")
+        out[col + "_z_matched_control"] = original
+        ranked = pd.Series(np.nan, index=out.index, dtype=float)
+        for _, idx in out.groupby(["domain", "_year_bin_v2"], sort=False).groups.items():
+            idx_list = list(idx)
+            vals = original.loc[idx_list].to_numpy(dtype=float)
+            if np.isfinite(vals).sum() >= 20 and np.nanstd(vals) > 1e-12:
+                ranked.loc[idx_list] = rank_normal_scores(vals)
+        missing = ranked.isna()
+        if missing.any():
+            for _, idx in out[missing].groupby("domain", sort=False).groups.items():
+                idx_list = list(idx)
+                vals = original.loc[idx_list].to_numpy(dtype=float)
+                if np.isfinite(vals).sum() >= 20 and np.nanstd(vals) > 1e-12:
+                    ranked.loc[idx_list] = rank_normal_scores(vals)
+        missing = ranked.isna()
+        if missing.any():
+            global_ranked = pd.Series(rank_normal_scores(original.to_numpy(dtype=float)), index=out.index)
+            ranked.loc[missing] = global_ranked.loc[missing]
+        y = ranked.to_numpy(dtype=float)
+        mask = np.isfinite(y) & np.isfinite(X).all(axis=1)
+        residual = np.full(len(out), np.nan, dtype=float)
+        fitted = np.full(len(out), np.nan, dtype=float)
+        if mask.sum() >= max(12, X.shape[1] + 4):
+            Xf = X[mask]
+            yf = y[mask]
+            lam = 1e-3
+            try:
+                beta = np.linalg.solve(Xf.T @ Xf + lam * np.eye(Xf.shape[1]), Xf.T @ yf)
+            except Exception:
+                beta = np.linalg.pinv(Xf.T @ Xf + lam * np.eye(Xf.shape[1])) @ yf
+            fitted[mask] = Xf @ beta
+            residual[mask] = yf - fitted[mask]
+        elif mask.any():
+            residual[mask] = y[mask] - float(np.nanmean(y[mask]))
+            fitted[mask] = float(np.nanmean(y[mask]))
+        residual_ranked = rank_normal_scores(residual)
+        capped = np.clip(residual_ranked, -float(z_cap), float(z_cap)) if z_cap is not None and z_cap > 0 else residual_ranked
+        out[col + "_z_domain_residual_raw"] = residual_ranked
+        out[col + "_z_domain_residual_fitted"] = fitted
+        out[z_col] = capped
+        out[col + "_z_raw"] = residual_ranked
+        out[col + "_z_clipped"] = (np.abs(capped - residual_ranked) > 1e-9).astype(int)
+    out = out.drop(columns=["_year_bin_v2"], errors="ignore")
+    out["delta_variant"] = "domain_residual_v2"
+    return out
+
+
 def compute_rgpm(
     metrics: pd.DataFrame,
     deltas: pd.DataFrame,
     min_controls: int = 20,
     z_cap: float = 4.0,
     tau: int = 10,
+    delta_variant: str = "matched_control_v3",
     progress: bool = True,
     progress_interval: int = 100,
 ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, List[str], pd.DataFrame]:
@@ -4089,6 +4200,11 @@ def compute_rgpm(
     if zdf.empty:
         raise ValueError("Could not compute matched-control z-scores. Check landmark/control coverage and min_controls.")
     control_diag = pd.DataFrame(control_rows)
+    if delta_variant == "domain_residual_v2":
+        progress_log("  Applying domain_residual_v2 graph-delta normalization.", progress)
+        zdf = residualize_delta_z_domain_residual_v2(zdf, z_cap=z_cap)
+    else:
+        zdf["delta_variant"] = "matched_control_v3"
 
     # Delta diagnostics + reliability weights.
     primary_set = set(PRIMARY_RGPM_DELTA_KEYS)

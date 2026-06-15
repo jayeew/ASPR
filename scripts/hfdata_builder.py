@@ -1,12 +1,16 @@
+from __future__ import annotations
+
 import argparse
-import os
+import sys
 from pathlib import Path
 from typing import Dict, List
 
-from datasets import Dataset
-from huggingface_hub import create_repo
-
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from aspr.env import getenv
+
 DEFAULT_SOURCE_ROOT = PROJECT_ROOT.parent / "dataset"
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "data" / "paper_reconstruction_sft"
 SYSTEM_PROMPT = """You are an expert academic reviewer tasked with providing a thorough and balanced evaluation of research papers.
@@ -48,6 +52,8 @@ def build_dataset(paper_dir: Path, recon_dir: Path) -> Dataset:
     Returns:
         HuggingFace Dataset ready for saving or upload.
     """
+    from datasets import Dataset
+
     data = []
     for recon_file in recon_dir.glob("*.md"):
         file_id = recon_file.stem
@@ -86,9 +92,11 @@ def main() -> None:
     print(f"Saved {len(dataset)} examples to {args.output_dir}")
 
     if args.push_to_hub:
-        token = os.getenv("HF_TOKEN")
+        from huggingface_hub import create_repo
+
+        token = getenv("HF_TOKEN")
         if not token:
-            raise RuntimeError("Set HF_TOKEN before using --push-to-hub.")
+            raise RuntimeError("Set HF_TOKEN in .env/.env.local or the shell before using --push-to-hub.")
         create_repo(args.repo_id, repo_type="dataset", token=token, exist_ok=True)
         dataset.push_to_hub(args.repo_id, token=token)
 

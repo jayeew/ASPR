@@ -18,7 +18,7 @@ with any other field by editing only a YAML file.
 Typical usage
 -------------
 
-    export OPENALEX_API_KEY="YOUR_KEY"
+    cp .env.example .env  # then set OPENALEX_API_KEY or OPENALEX_API_KEYS
     python experiments/kg_perturbation_fig1/fig1_knowledge_perturbation_v3.py \
         --config experiments/kg_perturbation_fig1/configs/crispr.yaml
 
@@ -99,6 +99,11 @@ from tqdm import tqdm
 # -----------------------------------------------------------------------------
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from aspr.env import getenv
+
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "outputs" / "kg_perturbation_fig1"
 
 SELECT_FIELDS = ",".join(
@@ -371,10 +376,26 @@ def slugify(text: str) -> str:
     return text or "domain"
 
 
+def split_api_keys(value: Any) -> List[str]:
+    if value is None:
+        return []
+    if isinstance(value, (list, tuple, set)):
+        out: List[str] = []
+        for item in value:
+            out.extend(split_api_keys(item))
+        return list(dict.fromkeys(out))
+    text = str(value or "").strip()
+    if not text:
+        return []
+    return list(dict.fromkeys(part.strip() for part in re.split(r"[,;\s]+", text) if part.strip()))
+
+
 def normalize_openalex_id(value: Optional[str]) -> Optional[str]:
     if not value:
         return None
     value = str(value).strip()
+    if value.lower() in {"nan", "none", "null", "<na>"}:
+        return None
     m = re.search(r"(W\d+)$", value)
     if m:
         return f"https://openalex.org/{m.group(1)}"
@@ -899,17 +920,15 @@ class OpenAlexClient:
     def __init__(
         self,
         api_key: str,
+        api_keys: Optional[Sequence[str]] = None,
         email: Optional[str] = None,
         sleep_seconds: float = 0.1,
         max_retries: int = 6,
         timeout_seconds: int = 60,
     ):
-        if not api_key:
-            raise ValueError(
-                "OPENALEX_API_KEY is required. Create a free key at openalex.org/settings/api "
-                "and pass it with --openalex-api-key or export OPENALEX_API_KEY."
-            )
-        self.api_key = api_key
+        self.api_keys = split_api_keys([api_key, api_keys])
+        self.api_key = self.api_keys[0] if self.api_keys else ""
+        self._api_key_index = 0
         self.email = email
         self.sleep_seconds = sleep_seconds
         self.max_retries = max_retries
@@ -917,14 +936,24 @@ class OpenAlexClient:
         self.session = requests.Session()
         self.session.headers.update({"User-Agent": "kg-perturbation-fig1/1.0"})
 
+    def next_api_key(self) -> str:
+        if not self.api_keys:
+            return ""
+        key = self.api_keys[self._api_key_index % len(self.api_keys)]
+        self._api_key_index += 1
+        return key
+
     def get_json(self, path: str, params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-        params = dict(params or {})
-        params["api_key"] = self.api_key
-        if self.email:
-            params["mailto"] = self.email
+        base_params = dict(params or {})
         url = f"{self.BASE_URL.rstrip('/')}/{path.lstrip('/')}"
 
         for attempt in range(self.max_retries + 1):
+            params = dict(base_params)
+            api_key = self.next_api_key()
+            if api_key:
+                params["api_key"] = api_key
+            if self.email:
+                params["mailto"] = self.email
             if self.sleep_seconds > 0:
                 time.sleep(self.sleep_seconds)
             try:
@@ -3547,8 +3576,15 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
         help="One or more YAML config files. One file gives a single-domain figure; multiple files also create a multi-domain figure.",
     )
     parser.add_argument("--out-dir", default=str(DEFAULT_OUTPUT_DIR), help="Output directory.")
-    parser.add_argument("--openalex-api-key", default=os.getenv("OPENALEX_API_KEY"), help="OpenAlex API key.")
-    parser.add_argument("--email", default=os.getenv("OPENALEX_EMAIL"), help="Optional contact email for API calls.")
+    parser.add_argument("--openalex-api-key", default=getenv("OPENALEX_API_KEY"), help="OpenAlex API key.")
+    parser.add_argument("--openalex-api-keys", default=getenv("OPENALEX_API_KEYS"), help="Comma/space separated OpenAlex API keys used in round-robin order.")
+    parser.add_argument("--email", default=getenv("OPENALEX_EMAIL"), help="Optional contact email for API calls.")
+    parser.add_argument(
+        "--corpus-dir",
+        type=Path,
+        default=None,
+        help="Optional unified corpus directory. When provided, materialize Fig. 1 cache files from the corpus before drawing.",
+    )
     parser.add_argument("--no-cache", action="store_true", help="Ignore cached works_raw.jsonl and re-download data.")
     parser.add_argument("--force-cache", action="store_true", help="Use works_raw.jsonl even when cache_manifest.json does not match the config.")
     return parser.parse_args(argv)
@@ -3561,9 +3597,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     # Load configs first so API behavior can be controlled by the first config.
     cfgs = [load_config(Path(p)) for p in args.config]
+    if args.corpus_dir is not None:
+        from aspr.corpus import materialize_fig1_cache  # pylint: disable=import-outside-toplevel
+
+        materialize_fig1_cache(Path(args.corpus_dir), out_dir, [cfg["slug"] for cfg in cfgs])
     first_api = cfgs[0].get("api", {})
     client = OpenAlexClient(
         api_key=args.openalex_api_key,
+        api_keys=split_api_keys(args.openalex_api_keys),
         email=args.email,
         sleep_seconds=float(first_api.get("sleep_seconds", 0.1)),
         max_retries=int(first_api.get("max_retries", 6)),
@@ -3572,7 +3613,13 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     results = []
     for cfg in cfgs:
-        result = run_domain(cfg, client, out_dir, use_cache=not args.no_cache, force_cache=bool(args.force_cache))
+        result = run_domain(
+            cfg,
+            client,
+            out_dir,
+            use_cache=True if args.corpus_dir is not None else not args.no_cache,
+            force_cache=True if args.corpus_dir is not None else bool(args.force_cache),
+        )
         results.append(result)
 
     if len(results) > 1:

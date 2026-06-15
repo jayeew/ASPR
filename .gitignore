@@ -5,12 +5,16 @@ __pycache__/
 
 *.txt
 *.log
+.env
+.env.local
+.env.*.local
 
 outputs/checkpoints/
 outputs/downloads/
 outputs/graphrag/
 outputs/logs/
 
-# Large generated Fig. 3 input tables; keep local, do not push to GitHub.
-outputs/kg_perturbation_fig3/strong_evidence_tau10/fig3_input/multi_domain/citations.csv
-outputs/kg_perturbation_fig3/strong_evidence_tau10/fig3_input/multi_domain/works.csv
+# Generated corpus and experiment artifacts are large local data products.
+data/knowledge_corpus/
+outputs/corpus_screening/
+outputs/kg_perturbation_fig*/
