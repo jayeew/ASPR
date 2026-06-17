@@ -22,8 +22,10 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 DEFAULT_CORPUS_DIR = PROJECT_ROOT / "data" / "knowledge_corpus" / "v1_strict"
-DEFAULT_OUT_DIR = PROJECT_ROOT / "outputs" / "corpus_screening" / "v2_strict"
+DEFAULT_OUT_DIR = PROJECT_ROOT / "outputs" / "corpus_screening" / "v3_fig3pass"
 FIG3_SCRIPT = PROJECT_ROOT / "experiments" / "kg_perturbation_fig3" / "fig3_empirical_weight_learning.py"
+METRIC_KEYS = ("B", "RS", "DeltaQ0", "Uzzi", "RTD", "BurtIP", "PDE")
+PRIMARY_TARGET_PRIORITY = ("RGPM", "RGPM_structural_residual_tau10", "RGPM_v3_balanced", "RGPM_mahalanobis_debug")
 
 BIOMED_HINTS = (
     "medicine",
@@ -749,6 +751,96 @@ def strict_fixed_candidate_definitions() -> Dict[str, List[str]]:
             "genome_wide_association_studies",
             "gravitational_waves",
         ],
+        "strict_broad10_replace_weak_controls": [
+            "crispr",
+            "graphene_2d_materials",
+            "ipsc_reprogramming",
+            "perovskite_solar_cells",
+            "financial_markets_and_investment_strategies",
+            "monetary_policy_and_economic_impact",
+            "autophagy_in_disease_and_therapy",
+            "ubiquitin_and_proteasome_pathways",
+            "genome_wide_association_studies",
+            "gamma_ray_bursts_and_supernovae",
+        ],
+        "strict_high_signal10_no_income_gw": [
+            "crispr",
+            "graphene_2d_materials",
+            "ipsc_reprogramming",
+            "perovskite_solar_cells",
+            "financial_markets_and_investment_strategies",
+            "monetary_policy_and_economic_impact",
+            "genetics_aging_and_longevity_in_model_organisms",
+            "gamma_ray_bursts_and_supernovae",
+            "autophagy_in_disease_and_therapy",
+            "ubiquitin_and_proteasome_pathways",
+        ],
+        "strict_econ_bio_material12": [
+            "crispr",
+            "graphene_2d_materials",
+            "ipsc_reprogramming",
+            "perovskite_solar_cells",
+            "financial_markets_and_investment_strategies",
+            "monetary_policy_and_economic_impact",
+            "economic_theories_and_models",
+            "spectroscopy_and_quantum_chemical_studies",
+            "genetics_aging_and_longevity_in_model_organisms",
+            "gamma_ray_bursts_and_supernovae",
+            "autophagy_in_disease_and_therapy",
+            "ubiquitin_and_proteasome_pathways",
+        ],
+        "strict_control_dense10": [
+            "spectroscopy_and_quantum_chemical_studies",
+            "monetary_policy_and_economic_impact",
+            "financial_markets_and_investment_strategies",
+            "genetics_aging_and_longevity_in_model_organisms",
+            "gamma_ray_bursts_and_supernovae",
+            "autophagy_in_disease_and_therapy",
+            "ubiquitin_and_proteasome_pathways",
+            "graphene_2d_materials",
+            "ipsc_reprogramming",
+            "perovskite_solar_cells",
+        ],
+        "strict_broad12_augmented_controls": [
+            "crispr",
+            "graphene_2d_materials",
+            "ipsc_reprogramming",
+            "perovskite_solar_cells",
+            "financial_markets_and_investment_strategies",
+            "income_poverty_and_inequality",
+            "monetary_policy_and_economic_impact",
+            "autophagy_in_disease_and_therapy",
+            "ubiquitin_and_proteasome_pathways",
+            "genome_wide_association_studies",
+            "gravitational_waves",
+            "gamma_ray_bursts_and_supernovae",
+        ],
+        "strict_policy_finance12": [
+            "crispr",
+            "graphene_2d_materials",
+            "ipsc_reprogramming",
+            "perovskite_solar_cells",
+            "financial_markets_and_investment_strategies",
+            "monetary_policy_and_economic_impact",
+            "economic_theory_and_institutions",
+            "economic_theories_and_models",
+            "banking_stability_regulation_efficiency",
+            "autophagy_in_disease_and_therapy",
+            "ubiquitin_and_proteasome_pathways",
+            "genetics_aging_and_longevity_in_model_organisms",
+        ],
+        "strict_physics_materials10": [
+            "graphene_2d_materials",
+            "perovskite_solar_cells",
+            "spectroscopy_and_quantum_chemical_studies",
+            "theoretical_and_computational_physics",
+            "gamma_ray_bursts_and_supernovae",
+            "exoplanets",
+            "topological_insulators",
+            "quantum_computing",
+            "lithium_ion_solid_state_batteries",
+            "hydrogen_electrocatalysis",
+        ],
     }
 
 
@@ -855,6 +947,9 @@ def run_one_fig3_candidate(args: argparse.Namespace, row: Mapping[str, Any]) -> 
         return_code = 0
     parsed = parse_fig3_run(run_dir / "multi_domain", candidate_id, row)
     parsed["fig3_return_code"] = return_code
+    parsed["domains"] = str(row.get("domains", ""))
+    parsed["set_size"] = int(row.get("set_size", len(domains)) or len(domains))
+    parsed["fixed_candidate"] = int(row.get("fixed_candidate", 0) or 0)
     parsed["fig3_command"] = " ".join(command)
     parsed["fig3_run_dir"] = str(run_dir / "multi_domain")
     return parsed
@@ -913,12 +1008,96 @@ def _baseline_value(path: Path, model: str) -> float:
     return float(pd.to_numeric(sub["oof_spearman"], errors="coerce").dropna().iloc[0]) if not sub.empty else float("nan")
 
 
+def finite_float(value: object, default: float = np.nan) -> float:
+    try:
+        out = float(value)
+    except (TypeError, ValueError):
+        return default
+    return out if math.isfinite(out) else default
+
+
+def first_present_target(frame: pd.DataFrame) -> str:
+    if frame.empty or "target" not in frame.columns:
+        return "RGPM"
+    targets = set(frame["target"].astype(str))
+    for target in PRIMARY_TARGET_PRIORITY:
+        if target in targets:
+            return target
+    return str(frame["target"].astype(str).iloc[0])
+
+
+def metric_target_corr(frame: pd.DataFrame, metric: str, target: str) -> float:
+    if frame.empty or not {"scope", "domain", "metric", "target", "spearman"}.issubset(frame.columns):
+        return float("nan")
+    sub = frame[
+        (frame["scope"].astype(str) == "all")
+        & (frame["domain"].astype(str) == "all")
+        & (frame["metric"].astype(str) == metric)
+        & (frame["target"].astype(str) == target)
+    ]
+    if sub.empty:
+        sub = frame[(frame["metric"].astype(str) == metric) & (frame["target"].astype(str) == target)]
+    values = pd.to_numeric(sub["spearman"], errors="coerce").dropna()
+    return float(values.iloc[0]) if not values.empty else float("nan")
+
+
+def parse_best_weight(frame: pd.DataFrame, metric: str) -> float:
+    if frame.empty:
+        return float("nan")
+    if "weight" in frame.columns:
+        labels = frame.iloc[:, 0].astype(str)
+        sub = frame[labels == metric]
+        values = pd.to_numeric(sub["weight"], errors="coerce").dropna()
+        return float(values.iloc[0]) if not values.empty else float("nan")
+    col = "w_" + metric
+    if col in frame.columns:
+        values = pd.to_numeric(frame[col], errors="coerce").dropna()
+        return float(values.iloc[0]) if not values.empty else float("nan")
+    return float("nan")
+
+
+def strict_fail_reasons(row: Mapping[str, Any]) -> str:
+    checks = [
+        ("oof_spearman_lt_0.45", finite_float(row.get("learned_oof_spearman"), 0.0) < 0.45),
+        ("delta_vs_equal_lt_0.03", finite_float(row.get("delta_vs_equal"), 0.0) < 0.03),
+        ("score_iqr_le_0.35", finite_float(row.get("score_iqr"), 0.0) <= 0.35),
+        ("contributing_graph_deltas_lt_5", finite_float(row.get("n_contributing_graph_deltas"), 0.0) < 5),
+        ("min_effective_papers_per_domain_lt_500", finite_float(row.get("min_effective_papers_per_domain"), 0.0) < 500),
+        ("total_effective_papers_lt_9000", finite_float(row.get("total_effective_papers"), 0.0) < 9000),
+        ("relaxed_control_rate_gt_0.50", finite_float(row.get("relaxed_control_tier_rate_max_by_domain"), 1.0) > 0.50),
+        ("matched_control_median_lt_50", finite_float(row.get("matched_control_median_min_by_domain"), 0.0) < 50),
+        ("selected_pair_max_delta_lt_0.08", finite_float(row.get("selected_pair_max_delta"), 0.0) < 0.08),
+    ]
+    return ";".join(name for name, failed in checks if failed)
+
+
+def strict_pass_gap(row: Mapping[str, Any]) -> float:
+    return float(
+        max(0.0, 0.45 - finite_float(row.get("learned_oof_spearman"), 0.0)) / 0.45
+        + max(0.0, 0.03 - finite_float(row.get("delta_vs_equal"), 0.0)) / 0.03
+        + max(0.0, 0.35 - finite_float(row.get("score_iqr"), 0.0)) / 0.35
+        + max(0.0, 5.0 - finite_float(row.get("n_contributing_graph_deltas"), 0.0)) / 5.0
+        + max(0.0, 500.0 - finite_float(row.get("min_effective_papers_per_domain"), 0.0)) / 500.0
+        + max(0.0, 9000.0 - finite_float(row.get("total_effective_papers"), 0.0)) / 9000.0
+        + max(0.0, finite_float(row.get("relaxed_control_tier_rate_max_by_domain"), 1.0) - 0.50) / 0.50
+        + max(0.0, 50.0 - finite_float(row.get("matched_control_median_min_by_domain"), 0.0)) / 50.0
+        + max(0.0, 0.08 - finite_float(row.get("selected_pair_max_delta"), 0.0)) / 0.08
+    )
+
+
 def parse_fig3_run(run_dir: Path, candidate_id: str, proxy_row: Mapping[str, Any]) -> Dict[str, Any]:
     summary = read_json_dict(run_dir / "fig3_diagnostics_summary.json")
     cv = read_csv(run_dir / "fig3_cv_summary.csv")
     score = read_csv(run_dir / "fig3_score_table.csv")
     landmark = read_csv(run_dir / "fig3_landmark_validation.csv")
     effect = read_csv(run_dir / "fig3_effect_summary.csv")
+    domain_adequacy = read_csv(run_dir / "fig3_diagnostics_domain_adequacy.csv")
+    pair_scan = read_csv(run_dir / "fig3_pair_scan_results.csv")
+    fold_weights = read_csv(run_dir / "fig3_fold_weights.csv")
+    best_weights = read_csv(run_dir / "fig3_best_weights.csv")
+    target_corr = read_csv(run_dir / "fig3_indicator_target_correlations.csv")
+    delta_stability = read_csv(run_dir / "fig3_diagnostics_delta_stability.csv")
+    coverage_diag = read_csv(run_dir / "coverage_constrained_weights.csv")
     baseline_path = run_dir / "fig3_baseline_comparison.csv"
     learned = float(summary.get("learned_oof_spearman", np.nan))
     if not math.isfinite(learned) and not cv.empty and "test_spearman" in cv.columns:
@@ -953,6 +1132,43 @@ def parse_fig3_run(run_dir: Path, candidate_id: str, proxy_row: Mapping[str, Any
     total_papers = int(data_profile.get("total_papers", 0) or 0)
     min_papers = int(data_profile.get("min_papers_per_domain", 0) or 0)
     relaxed_rate = float(data_profile.get("relaxed_control_tier_rate_max_by_domain", np.nan))
+    matched_control_median_min = float(data_profile.get("matched_control_median_min_by_domain", np.nan))
+    if not math.isfinite(matched_control_median_min) and not domain_adequacy.empty and "control_median" in domain_adequacy.columns:
+        values = pd.to_numeric(domain_adequacy["control_median"], errors="coerce").dropna()
+        matched_control_median_min = float(values.min()) if not values.empty else float("nan")
+    if pair_scan.empty:
+        selected_pair_max_delta = float("nan")
+        selected_pair_p95_delta = float("nan")
+    else:
+        pair_sub = pair_scan
+        if "selected_for_panel_d" in pair_scan.columns and pd.to_numeric(pair_scan["selected_for_panel_d"], errors="coerce").fillna(0).sum() > 0:
+            pair_sub = pair_scan[pd.to_numeric(pair_scan["selected_for_panel_d"], errors="coerce").fillna(0) > 0]
+        selected_pair_max_delta = finite_float(pd.to_numeric(pair_sub.get("max_delta_vs_equal", pd.Series(dtype=float)), errors="coerce").max())
+        selected_pair_p95_delta = finite_float(pd.to_numeric(pair_sub.get("p95_delta_vs_equal", pd.Series(dtype=float)), errors="coerce").max())
+    w_b_fold_median = finite_float(pd.to_numeric(fold_weights.get("w_B", pd.Series(dtype=float)), errors="coerce").median())
+    w_rs_fold_median = finite_float(pd.to_numeric(fold_weights.get("w_RS", pd.Series(dtype=float)), errors="coerce").median())
+    w_b_best = parse_best_weight(best_weights, "B")
+    w_rs_best = parse_best_weight(best_weights, "RS")
+    target_name = first_present_target(target_corr)
+    b_corr = metric_target_corr(target_corr, "B", target_name)
+    rs_corr = metric_target_corr(target_corr, "RS", target_name)
+    brs_corr_values = [value for value in [b_corr, rs_corr] if math.isfinite(finite_float(value))]
+    brs_corr_mean = float(np.mean(brs_corr_values)) if brs_corr_values else float("nan")
+    if not delta_stability.empty and "reliability_weight" in delta_stability.columns:
+        delta_sub = delta_stability
+        if "contributing" in delta_stability.columns and pd.to_numeric(delta_stability["contributing"], errors="coerce").fillna(0).sum() > 0:
+            delta_sub = delta_stability[pd.to_numeric(delta_stability["contributing"], errors="coerce").fillna(0) > 0]
+        domain_delta_reliability_min = finite_float(pd.to_numeric(delta_sub["reliability_weight"], errors="coerce").min())
+    else:
+        domain_delta_reliability_min = float("nan")
+    coverage_spearman = float("nan")
+    coverage_brs_total = float("nan")
+    if not coverage_diag.empty and {"metric", "coverage_constrained_weight"}.issubset(coverage_diag.columns):
+        if "coverage_spearman" in coverage_diag.columns:
+            values = pd.to_numeric(coverage_diag["coverage_spearman"], errors="coerce").dropna()
+            coverage_spearman = float(values.iloc[0]) if not values.empty else float("nan")
+        cov = coverage_diag[coverage_diag["metric"].astype(str).isin(["B", "RS"])]
+        coverage_brs_total = finite_float(pd.to_numeric(cov["coverage_constrained_weight"], errors="coerce").sum())
     top20_enrichment = float(effect_lookup.get("top_vs_bottom_score_decile_rgpm_top20_enrichment", np.nan))
     high_low_lift = float(effect_lookup.get("high_vs_low_tertile_median_rgpm_lift_pp", np.nan))
     spearman_score = clipped_ratio(learned + 0.05, 0.40)
@@ -968,7 +1184,7 @@ def parse_fig3_run(run_dir: Path, candidate_id: str, proxy_row: Mapping[str, Any
         + 0.10 * data_quality
         + 0.05 * diversity
     )
-    return {
+    result = {
         "candidate_id": candidate_id,
         "learned_oof_spearman": learned,
         "equal_weight_oof_spearman": equal,
@@ -982,9 +1198,25 @@ def parse_fig3_run(run_dir: Path, candidate_id: str, proxy_row: Mapping[str, Any
         "n_contributing_graph_deltas": n_contributing,
         "active_delta_z_cap_hit_rate_max": float(summary.get("active_delta_z_cap_hit_rate_max", np.nan)),
         "mean_delta_reliability": float(summary.get("mean_delta_reliability", np.nan)),
+        "domain_delta_reliability_min": domain_delta_reliability_min,
         "total_effective_papers": total_papers,
         "min_effective_papers_per_domain": min_papers,
         "relaxed_control_tier_rate_max_by_domain": relaxed_rate,
+        "matched_control_median_min_by_domain": matched_control_median_min,
+        "selected_pair_max_delta": selected_pair_max_delta,
+        "selected_pair_p95_delta": selected_pair_p95_delta,
+        "w_B_fold_median": w_b_fold_median,
+        "w_RS_fold_median": w_rs_fold_median,
+        "w_B_best": w_b_best,
+        "w_RS_best": w_rs_best,
+        "B_RS_fold_median_total": finite_float(w_b_fold_median, 0.0) + finite_float(w_rs_fold_median, 0.0),
+        "B_RS_best_total": finite_float(w_b_best, 0.0) + finite_float(w_rs_best, 0.0),
+        "B_marginal_target_corr": b_corr,
+        "RS_marginal_target_corr": rs_corr,
+        "B_RS_marginal_target_corr_mean": brs_corr_mean,
+        "marginal_target_name": target_name,
+        "coverage_constrained_spearman": coverage_spearman,
+        "coverage_constrained_B_RS_total": coverage_brs_total,
         "top20_enrichment": top20_enrichment,
         "high_low_tertile_rgpm_lift_pp": high_low_lift,
         "data_checks_pass_count": int(sum(int(bool(v)) for v in data_checks.values())),
@@ -992,6 +1224,9 @@ def parse_fig3_run(run_dir: Path, candidate_id: str, proxy_row: Mapping[str, Any
         "delta_variant": str(summary.get("delta_variant", "")),
         "fig3_screening_score": final,
     }
+    result["strict_fail_reasons"] = strict_fail_reasons(result)
+    result["strict_pass_gap"] = strict_pass_gap(result)
+    return result
 
 
 def attach_fig3_paper_scores(papers: pd.DataFrame, run_matrix: pd.DataFrame) -> pd.DataFrame:
@@ -1044,22 +1279,44 @@ def build_recommended_outputs(
             total_papers = pd.to_numeric(series_col("total_effective_papers"), errors="coerce").fillna(0.0)
             min_papers = pd.to_numeric(series_col("min_effective_papers_per_domain"), errors="coerce").fillna(0.0)
             relaxed = pd.to_numeric(series_col("relaxed_control_tier_rate_max_by_domain"), errors="coerce").fillna(1.0)
+            control_median = pd.to_numeric(series_col("matched_control_median_min_by_domain"), errors="coerce").fillna(0.0)
+            pair_max = pd.to_numeric(series_col("selected_pair_max_delta"), errors="coerce").fillna(0.0)
+            delta_reliability = pd.to_numeric(series_col("domain_delta_reliability_min"), errors="coerce").fillna(0.0)
+            brs_corr = pd.to_numeric(series_col("B_RS_marginal_target_corr_mean"), errors="coerce").fillna(0.0).clip(lower=0.0)
+            brs_fold = pd.to_numeric(series_col("B_RS_fold_median_total"), errors="coerce").fillna(0.0)
+            pass_gap = pd.to_numeric(series_col("strict_pass_gap"), errors="coerce").fillna(9.0)
             top20 = pd.to_numeric(series_col("top20_enrichment"), errors="coerce").fillna(0.0)
             high_low = pd.to_numeric(series_col("high_low_tertile_rgpm_lift_pp"), errors="coerce").fillna(0.0)
             proxy = pd.to_numeric(series_col("set_proxy_score"), errors="coerce").fillna(0.0)
-            strict_quality = (
-                0.22 * clipped_ratio_series(learned, 0.55)
-                + 0.14 * clipped_ratio_series(delta_equal.clip(lower=0.0), 0.18)
-                + 0.12 * clipped_ratio_series(score_iqr, 0.60)
-                + 0.12 * clipped_ratio_series(contributing, 6.0)
-                + 0.10 * clipped_ratio_series(total_papers, 8000.0)
-                + 0.10 * clipped_ratio_series(min_papers, 700.0)
-                + 0.08 * clipped_ratio_series((0.70 - relaxed).clip(lower=0.0), 0.70)
-                + 0.06 * clipped_ratio_series(top20, 12.0)
-                + 0.04 * clipped_ratio_series(high_low, 60.0)
-                + 0.02 * proxy
-            )
-            sets["strict_screening_score"] = 2.0 * overall_pass + strict_quality
+            if getattr(args, "optimize_for", "fig3") == "strict_pass":
+                strict_quality = (
+                    0.26 * clipped_ratio_series(learned, 0.55)
+                    + 0.16 * clipped_ratio_series(pair_max.clip(lower=0.0), 0.10)
+                    + 0.12 * clipped_ratio_series(control_median, 80.0)
+                    + 0.10 * clipped_ratio_series(delta_reliability, 0.50)
+                    + 0.09 * clipped_ratio_series(total_papers, 9000.0)
+                    + 0.08 * clipped_ratio_series(min_papers, 700.0)
+                    + 0.07 * clipped_ratio_series((0.50 - relaxed).clip(lower=0.0), 0.50)
+                    + 0.05 * clipped_ratio_series(score_iqr, 0.60)
+                    + 0.03 * clipped_ratio_series(brs_corr, 0.25)
+                    + 0.02 * clipped_ratio_series(brs_fold, 0.10)
+                    + 0.02 * proxy
+                )
+                sets["strict_screening_score"] = 3.0 * overall_pass + strict_quality - 0.04 * pass_gap.clip(lower=0.0, upper=6.0)
+            else:
+                strict_quality = (
+                    0.22 * clipped_ratio_series(learned, 0.55)
+                    + 0.14 * clipped_ratio_series(delta_equal.clip(lower=0.0), 0.18)
+                    + 0.12 * clipped_ratio_series(score_iqr, 0.60)
+                    + 0.12 * clipped_ratio_series(contributing, 6.0)
+                    + 0.10 * clipped_ratio_series(total_papers, 8000.0)
+                    + 0.10 * clipped_ratio_series(min_papers, 700.0)
+                    + 0.08 * clipped_ratio_series((0.70 - relaxed).clip(lower=0.0), 0.70)
+                    + 0.06 * clipped_ratio_series(top20, 12.0)
+                    + 0.04 * clipped_ratio_series(high_low, 60.0)
+                    + 0.02 * proxy
+                )
+                sets["strict_screening_score"] = 2.0 * overall_pass + strict_quality
             sets["final_screening_score"] = sets["strict_screening_score"]
         else:
             sets["final_screening_score"] = sets["fig3_screening_score"].fillna(sets["set_proxy_score"])
@@ -1118,7 +1375,16 @@ def write_reproduce_commands(args: argparse.Namespace, sets: pd.DataFrame) -> No
     path = args.out_dir / "reproduce_commands.sh"
     lines = ["#!/usr/bin/env bash", "set -euo pipefail", ""]
     command_sets = sets.copy()
-    if args.strict_pass_target and "fixed_candidate" in command_sets.columns:
+    if (
+        args.strict_pass_target
+        and getattr(args, "optimize_for", "fig3") == "strict_pass"
+        and "fig3_overall_pass" in command_sets.columns
+    ):
+        command_sets = command_sets.sort_values(
+            ["fig3_overall_pass", "final_screening_score"],
+            ascending=[False, False],
+        )
+    elif args.strict_pass_target and "fixed_candidate" in command_sets.columns:
         command_sets = command_sets.sort_values(
             ["fixed_candidate", "final_screening_score"],
             ascending=[False, False],
@@ -1133,6 +1399,80 @@ def write_reproduce_commands(args: argparse.Namespace, sets: pd.DataFrame) -> No
     path.write_text("\n".join(lines), encoding="utf-8")
 
 
+def collect_next_round_enrichment_domains(
+    run_matrix: pd.DataFrame,
+    domain_scores: pd.DataFrame,
+    max_candidates: int = 5,
+) -> pd.DataFrame:
+    if run_matrix.empty or "fig3_run_dir" not in run_matrix.columns:
+        return pd.DataFrame()
+    if "strict_pass_gap" in run_matrix.columns:
+        closest = run_matrix.sort_values(["strict_pass_gap", "learned_oof_spearman"], ascending=[True, False])
+    else:
+        closest = run_matrix.sort_values("learned_oof_spearman", ascending=False)
+    domain_lookup = domain_scores.set_index("domain").to_dict("index") if "domain" in domain_scores.columns else {}
+    rows: List[Dict[str, Any]] = []
+    for _, run_row in closest.head(int(max_candidates)).iterrows():
+        adequacy = read_csv(Path(str(run_row.get("fig3_run_dir", ""))) / "fig3_diagnostics_domain_adequacy.csv")
+        if adequacy.empty or "domain" not in adequacy.columns:
+            continue
+        for item in adequacy.to_dict("records"):
+            domain = str(item.get("domain", ""))
+            meta = domain_lookup.get(domain, {})
+            n_papers = finite_float(item.get("n_papers"), 0.0)
+            control_median = finite_float(item.get("control_median"), 0.0)
+            relaxed = finite_float(item.get("relaxed_control_tier_rate"), 1.0)
+            high_cases = finite_float(item.get("n_landmark_or_high_cases"), 0.0)
+            raw_works = finite_float(meta.get("n_works"), 0.0)
+            c_per_work = finite_float(meta.get("citation_rows_per_work"), 0.0)
+            reasons = []
+            if n_papers < 1000:
+                reasons.append("tau10_effective_lt_1000")
+            if control_median < 60:
+                reasons.append("control_median_lt_60")
+            if relaxed > 0.50:
+                reasons.append("relaxed_control_rate_gt_0.50")
+            if high_cases < 30:
+                reasons.append("landmark_or_high_cases_lt_30")
+            if raw_works < 4000:
+                reasons.append("raw_works_lt_4000")
+            if c_per_work < 5:
+                reasons.append("citation_rows_per_work_lt_5")
+            if not reasons:
+                continue
+            priority = (
+                max(0.0, 1000.0 - n_papers) / 1000.0
+                + max(0.0, 60.0 - control_median) / 60.0
+                + max(0.0, relaxed - 0.50)
+                + max(0.0, 4000.0 - raw_works) / 4000.0
+                + max(0.0, 5.0 - c_per_work) / 5.0
+            )
+            rows.append(
+                {
+                    "domain": domain,
+                    "candidate_id": run_row.get("candidate_id", ""),
+                    "priority_score": priority,
+                    "reasons": ";".join(reasons),
+                    "tau10_effective_papers": n_papers,
+                    "control_median": control_median,
+                    "relaxed_control_tier_rate": relaxed,
+                    "landmark_or_high_cases": high_cases,
+                    "raw_works": raw_works,
+                    "citation_rows_per_work": c_per_work,
+                    "recommended_action": "Fetch older <=2015 works and citation/reference closure; target raw works >=4000, tau10 effective >=1000, citations/work >=5.",
+                }
+            )
+    out = pd.DataFrame(rows)
+    if out.empty:
+        return out
+    out = (
+        out.sort_values(["priority_score", "domain"], ascending=[False, True])
+        .drop_duplicates("domain", keep="first")
+        .reset_index(drop=True)
+    )
+    return out
+
+
 def write_report(
     args: argparse.Namespace,
     domain_scores: pd.DataFrame,
@@ -1141,6 +1481,9 @@ def write_report(
     recommended_papers: pd.DataFrame,
     run_matrix: pd.DataFrame,
 ) -> None:
+    enrichment = collect_next_round_enrichment_domains(run_matrix, domain_scores)
+    if not enrichment.empty:
+        enrichment.to_csv(args.out_dir / "next_round_enrichment_domains.csv", index=False)
     report_json = {
         "corpus_dir": str(args.corpus_dir),
         "stage": args.stage,
@@ -1149,21 +1492,32 @@ def write_report(
         "n_candidate_sets": int(len(candidate_sets)),
         "n_fig3_runs": int(len(run_matrix)),
         "strict_pass_target": bool(getattr(args, "strict_pass_target", False)),
+        "optimize_for": str(getattr(args, "optimize_for", "fig3")),
         "n_fig3_overall_pass": int(run_matrix["fig3_overall_pass"].fillna(False).astype(bool).sum()) if "fig3_overall_pass" in run_matrix else 0,
         "top_domain_sets": recommended_sets.head(10).to_dict("records"),
         "top_papers": recommended_papers.head(30).to_dict("records"),
     }
+    if not enrichment.empty:
+        report_json["next_round_enrichment_domains"] = enrichment.head(20).to_dict("records")
+    if not run_matrix.empty and "strict_pass_gap" in run_matrix.columns:
+        report_json["closest_strict_failures"] = (
+            run_matrix.sort_values(["fig3_overall_pass", "strict_pass_gap", "learned_oof_spearman"], ascending=[False, True, False])
+            .head(10)
+            .to_dict("records")
+        )
     write_json(args.out_dir / "screening_report.json", report_json)
     lines = [
         "# Corpus Screening Report",
         "",
         f"- Corpus: `{args.corpus_dir}`",
         f"- Stage: `{args.stage}`",
+        f"- Optimize for: `{getattr(args, 'optimize_for', 'fig3')}`",
         f"- Complete end year: `{args.complete_end_year}`",
         f"- Domains scored: {len(domain_scores)}",
         f"- Candidate domain sets: {len(candidate_sets)}",
         f"- Fig3 runs parsed: {len(run_matrix)}",
         f"- Strict pass target: {bool(getattr(args, 'strict_pass_target', False))}",
+        f"- Fig3 strict passes: {report_json['n_fig3_overall_pass']}",
         "",
         "## Top Domain Sets",
         "",
@@ -1173,6 +1527,29 @@ def write_report(
             f"- **{row['candidate_id']}** score={float(row['final_screening_score']):.3f} "
             f"domains=`{row['domains']}`"
         )
+        if "strict_fail_reasons" in row and nonempty_text(row.get("strict_fail_reasons", "")):
+            lines.append(f"  - gap={float(row.get('strict_pass_gap', np.nan)):.3f}; fail=`{row['strict_fail_reasons']}`")
+    if report_json["n_fig3_overall_pass"] == 0 and not run_matrix.empty and "strict_pass_gap" in run_matrix.columns:
+        lines.extend(["", "## Closest Strict Failures", ""])
+        closest = run_matrix.sort_values(["strict_pass_gap", "learned_oof_spearman"], ascending=[True, False]).head(5)
+        for _, row in closest.iterrows():
+            lines.append(
+                f"- **{row['candidate_id']}** gap={float(row.get('strict_pass_gap', np.nan)):.3f}, "
+                f"rho={float(row.get('learned_oof_spearman', np.nan)):.3f}, "
+                f"pair={float(row.get('selected_pair_max_delta', np.nan)):.3f}, "
+                f"control_min={float(row.get('matched_control_median_min_by_domain', np.nan)):.1f}, "
+                f"fail=`{row.get('strict_fail_reasons', '')}`"
+            )
+        if not enrichment.empty:
+            lines.extend(["", "## Next Enrichment Targets", ""])
+            for _, row in enrichment.head(12).iterrows():
+                lines.append(
+                    f"- **{row['domain']}** priority={float(row['priority_score']):.2f}, "
+                    f"tau10_n={float(row['tau10_effective_papers']):.0f}, "
+                    f"control_median={float(row['control_median']):.1f}, "
+                    f"cit/work={float(row['citation_rows_per_work']):.2f}, "
+                    f"reasons=`{row['reasons']}`"
+                )
     lines.extend(["", "## Top Papers", ""])
     for _, row in recommended_papers.head(20).iterrows():
         lines.append(
@@ -1236,6 +1613,12 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser.add_argument("--corpus-dir", type=Path, default=DEFAULT_CORPUS_DIR)
     parser.add_argument("--out-dir", type=Path, default=DEFAULT_OUT_DIR)
     parser.add_argument("--stage", choices=["proxy", "fig3", "all"], default="all")
+    parser.add_argument(
+        "--optimize-for",
+        choices=["proxy", "fig3", "strict_pass"],
+        default="fig3",
+        help="Ranking objective for recommended outputs and report ordering.",
+    )
     parser.add_argument("--complete-end-year", type=int, default=2025)
     parser.add_argument("--candidate-set-sizes", nargs="+", type=int, default=[4, 6, 8, 12])
     parser.add_argument("--beam-width", type=int, default=12)

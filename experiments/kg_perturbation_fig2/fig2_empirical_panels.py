@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import json
 import math
 import os
+import re
 import sys
 import textwrap
 import time
@@ -34,6 +36,7 @@ import numpy as np
 import pandas as pd
 
 DEFAULT_FIG1_DATA_ROOT = PROJECT_ROOT / 'outputs' / 'kg_perturbation_fig1'
+DEFAULT_STRICT_FIG1_DATA_ROOT = PROJECT_ROOT / 'outputs' / 'kg_perturbation_fig1_strict_best4'
 DEFAULT_CORPUS_ROOT = PROJECT_ROOT / 'data' / 'knowledge_corpus' / 'v1_strict'
 DEFAULT_CORPUS_FIG2_DATA_ROOT = DEFAULT_CORPUS_ROOT / 'views' / 'fig2'
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / 'outputs' / 'kg_perturbation_fig2'
@@ -119,6 +122,11 @@ EVIDENCE_MAP = {
     'BurtIP': {'Brokerage': 'primary'},
     'PDE': {'Breadth': 'primary'},
 }
+
+PANEL_A_MAX_TOPICS = 9
+PANEL_A_MAX_REFERENCE_TOPICS = 4
+PANEL_A_MAX_BACKBONE_EDGES = 10
+PANEL_A_MAX_BEADS_PER_TOPIC = 6
 
 NORMAL_DIST = NormalDist()
 
@@ -229,6 +237,12 @@ LOCAL_FILE_ALIASES = {
 
 STANDARD_INPUT_FILES = ('works.csv', 'citations.csv', 'topics.csv', 'topic_edges.csv')
 FIG1_EXPORT_FILES = ('works_selected.csv', 'paper_edges.csv', 'topic_nodes.csv', 'topic_edges.csv')
+FIG1_CONFIG_ALIASES = {
+    'crispr': 'crispr.yaml',
+    'graphene_2d_materials': 'graphene.yaml',
+    'ipsc_reprogramming': 'ipsc.yaml',
+    'transformer_foundation_models': 'transformer.yaml',
+}
 
 
 def first_existing_file(data_dir: Path, candidates: Sequence[str]) -> Optional[Path]:
@@ -249,6 +263,34 @@ def has_standard_input_files(data_dir: Path) -> bool:
 
 def has_fig1_export_files(data_dir: Path) -> bool:
     return all((data_dir / name).exists() for name in FIG1_EXPORT_FILES)
+
+
+def resolve_panel_a_fig1_snapshot_dir(args: argparse.Namespace) -> Optional[Path]:
+    """Find a Fig. 1 domain output directory whose snapshots can be reused."""
+    domain = args.example_domain if args.evidence_mode == 'strong' else args.domain
+    candidates: List[Path] = []
+    if args.fig1_snapshot_dir is not None:
+        candidates.append(args.fig1_snapshot_dir)
+    if args.data_dir is not None:
+        candidates.append(args.data_dir)
+        if domain:
+            candidates.append(args.data_dir / domain)
+    if domain:
+        candidates.extend([
+            DEFAULT_STRICT_FIG1_DATA_ROOT / domain,
+            DEFAULT_FIG1_DATA_ROOT / domain,
+        ])
+
+    seen: set[str] = set()
+    for candidate in candidates:
+        path = Path(candidate)
+        key = str(path.resolve()) if path.exists() else str(path)
+        if key in seen:
+            continue
+        seen.add(key)
+        if has_fig1_export_files(path):
+            return path
+    return None
 
 
 def resolve_standard_data_dir(data_dir: Path, domain: Optional[str]) -> Optional[Path]:
@@ -2321,17 +2363,6 @@ def save_strong_run_config(args: argparse.Namespace) -> None:
 # Plotting helpers
 # --------------------------
 
-def _topic_positions(topics: pd.DataFrame, x: float, y: float, w: float, h: float) -> Dict[int, Tuple[float, float]]:
-    tx = topics['x'].astype(float).to_numpy(); ty = topics['y'].astype(float).to_numpy()
-    xmin, xmax = tx.min(), tx.max(); ymin, ymax = ty.min(), ty.max()
-    xs = (tx - xmin) / (xmax - xmin + 1e-9)
-    ys = (ty - ymin) / (ymax - ymin + 1e-9)
-    pos = {}
-    for (_, row), xr, yr in zip(topics.iterrows(), xs, ys):
-        pos[int(row['community'])] = (x + 0.12*w + xr*0.76*w, y + 0.14*h + yr*0.70*h)
-    return pos
-
-
 def display_topic_edges_for_active(raw: RawData, active_ids: Sequence[str]) -> pd.DataFrame:
     active = set(str(x) for x in active_ids)
     if not active:
@@ -2357,8 +2388,740 @@ def display_topic_edges_for_active(raw: RawData, active_ids: Sequence[str]) -> p
     return edges.groupby(['u', 'v'], as_index=False).size().rename(columns={'u': 'source_community', 'v': 'target_community', 'size': 'weight'})
 
 
-def draw_panel_a(ax, raw: RawData, focus_paper_id: Optional[str], future_tau: Optional[int] = None) -> None:
-    panel_frame(ax, 'a', 'Real publication-day measurement setting')
+def _panel_a_clean_label(value: object, max_len: int = 26) -> str:
+    text = re.sub(r'\s+', ' ', str(value or '')).strip()
+    if text.lower() in {'', 'nan', 'none', '<na>', 'unknown_field'}:
+        return ''
+    text = text.replace('Crispr', 'CRISPR').replace('Rna', 'RNA').replace('Dna', 'DNA').replace('Cas9', 'Cas9')
+    if len(text) <= max_len:
+        return text
+    return text[: max_len - 1].rstrip() + '…'
+
+
+def _panel_a_topic_label(raw: RawData, comm: int) -> str:
+    if not raw.topics.empty and {'community', 'label'}.issubset(raw.topics.columns):
+        topic_rows = raw.topics[pd.to_numeric(raw.topics['community'], errors='coerce') == int(comm)]
+        if not topic_rows.empty:
+            label = _panel_a_clean_label(topic_rows['label'].iloc[0])
+            if label:
+                return label
+    works = raw.works.copy()
+    works['display_community'] = pd.to_numeric(works.get('display_community'), errors='coerce')
+    sub = works[works['display_community'] == int(comm)]
+    for col in ['display_label', 'community_label', 'primary_topic', 'primary_field']:
+        if col not in sub.columns:
+            continue
+        labels = sub[col].dropna().astype(str)
+        labels = labels[~labels.str.lower().isin({'', 'nan', 'none', '<na>'})]
+        if not labels.empty:
+            raw_label = str(labels.value_counts().index[0])
+            if raw_label == 'CRISPR and Genetic Engineering':
+                return 'CRISPR / editing'
+            label = _panel_a_clean_label(raw_label)
+            if label:
+                return label
+    return f'Topic {int(comm)}'
+
+
+def _panel_a_disc_points(key: object, n: int, radius: float) -> np.ndarray:
+    if n <= 0:
+        return np.zeros((0, 2))
+    seed = int(hashlib.sha1(str(key).encode('utf-8')).hexdigest()[:8], 16)
+    rng = np.random.default_rng(seed)
+    points = []
+    for i in range(n):
+        if i == 0:
+            rr = 0.06 * radius
+            theta = float(rng.uniform(0, 2 * math.pi))
+        else:
+            rr = radius * (0.34 + 0.48 * ((i - 1) / max(1, n - 1)))
+            theta = 2 * math.pi * (i - 1) / max(1, n - 1) + float(rng.uniform(-0.24, 0.24))
+        points.append([rr * math.cos(theta), rr * math.sin(theta)])
+    return np.asarray(points, dtype=float)
+
+
+def _panel_a_scaled_radii(counts: Mapping[int, int], rmin: float = 0.028, rmax: float = 0.048) -> Dict[int, float]:
+    if not counts:
+        return {}
+    keys = list(counts.keys())
+    vals = np.log1p(np.asarray([max(0, int(counts[k])) for k in keys], dtype=float))
+    lo = float(vals.min())
+    hi = float(vals.max())
+    if abs(hi - lo) < 1e-9:
+        return {int(k): 0.5 * (rmin + rmax) for k in keys}
+    return {int(k): float(rmin + (v - lo) / (hi - lo) * (rmax - rmin)) for k, v in zip(keys, vals)}
+
+
+def _panel_a_edge_lookup(edges: pd.DataFrame) -> Dict[Tuple[int, int], float]:
+    if edges.empty:
+        return {}
+    out: Dict[Tuple[int, int], float] = {}
+    for row in edges.itertuples(index=False):
+        c1 = int(row.source_community)
+        c2 = int(row.target_community)
+        key = tuple(sorted((c1, c2)))
+        out[key] = float(row.weight)
+    return out
+
+
+def _panel_a_available_topics(raw: RawData) -> set[int]:
+    if raw.topics.empty or 'community' not in raw.topics.columns:
+        return set(pd.to_numeric(raw.works.get('display_community'), errors='coerce').dropna().astype(int))
+    return set(pd.to_numeric(raw.topics['community'], errors='coerce').dropna().astype(int))
+
+
+def _panel_a_select_topics(
+    raw: RawData,
+    focus_id: str,
+    focus_year: int,
+    future_year: int,
+    max_topics: int = PANEL_A_MAX_TOPICS,
+) -> Tuple[List[int], int]:
+    works = raw.works.copy()
+    works['display_community'] = pd.to_numeric(works.get('display_community'), errors='coerce')
+    works['year'] = pd.to_numeric(works.get('year'), errors='coerce')
+    available = _panel_a_available_topics(raw)
+    focus_rows = works.loc[works['id'].astype(str) == str(focus_id)]
+    focus_display = pd.to_numeric(focus_rows.get('display_community'), errors='coerce')
+    focus_comm = int(focus_display.iloc[0]) if len(focus_display) and pd.notna(focus_display.iloc[0]) else -1
+
+    future = works[(works['year'] <= future_year) & works['display_community'].notna()].copy()
+    prior = works[(works['year'] < focus_year) & works['display_community'].notna()].copy()
+    future_counts = future['display_community'].astype(int).value_counts()
+    prior_counts = prior['display_community'].astype(int).value_counts()
+
+    refs = get_reference_rows(raw, focus_id, focus_year)
+    ref_counts = pd.to_numeric(refs.get('target_display_comm'), errors='coerce').dropna().astype(int).value_counts()
+
+    selected: List[int] = []
+
+    def add_topic(comm: object) -> None:
+        try:
+            c = int(comm)
+        except (TypeError, ValueError):
+            return
+        if available and c not in available:
+            return
+        if c not in selected:
+            selected.append(c)
+
+    add_topic(focus_comm)
+    for comm in ref_counts.head(PANEL_A_MAX_REFERENCE_TOPICS).index:
+        add_topic(comm)
+
+    growth_rows = []
+    for comm, n_future in future_counts.items():
+        n_prior = int(prior_counts.get(comm, 0))
+        growth_rows.append((int(n_future) - n_prior, int(n_future), int(comm)))
+    for _, _, comm in sorted(growth_rows, reverse=True):
+        if len(selected) >= max_topics:
+            break
+        add_topic(comm)
+    for comm in future_counts.index:
+        if len(selected) >= max_topics:
+            break
+        add_topic(comm)
+    return selected[:max_topics], focus_comm
+
+
+def _panel_a_topic_positions(raw: RawData, selected_topics: Sequence[int], future_ids: Sequence[str], focus_comm: int) -> Dict[int, Tuple[float, float]]:
+    selected = [int(c) for c in selected_topics]
+    if not selected:
+        return {}
+    if len(selected) == 1:
+        return {selected[0]: (0.50, 0.47)}
+
+    edges = display_topic_edges_for_active(raw, future_ids)
+    selected_set = set(selected)
+    graph = nx.Graph()
+    graph.add_nodes_from(selected)
+    if not edges.empty:
+        for row in edges.itertuples(index=False):
+            c1 = int(row.source_community)
+            c2 = int(row.target_community)
+            if c1 in selected_set and c2 in selected_set and c1 != c2:
+                graph.add_edge(c1, c2, weight=float(math.log1p(float(row.weight))))
+
+    if graph.number_of_edges() == 0:
+        hub = focus_comm if focus_comm in selected_set else selected[0]
+        for comm in selected:
+            if comm != hub:
+                graph.add_edge(hub, comm, weight=0.1)
+
+    initial: Dict[int, Tuple[float, float]] = {}
+    hub = focus_comm if focus_comm in selected_set else selected[0]
+    initial[hub] = (0.0, 0.0)
+    others = [c for c in selected if c != hub]
+    for i, comm in enumerate(others):
+        angle = 2 * math.pi * i / max(len(others), 1)
+        radius = 0.75 + 0.12 * (i % 2)
+        initial[comm] = (radius * math.cos(angle), radius * math.sin(angle))
+
+    try:
+        layout = nx.spring_layout(
+            graph,
+            pos=initial,
+            seed=42,
+            iterations=250,
+            k=0.9 / math.sqrt(max(len(selected), 1)),
+            weight='weight',
+        )
+    except Exception:
+        layout = initial
+
+    xs = np.array([layout[c][0] for c in selected], dtype=float)
+    ys = np.array([layout[c][1] for c in selected], dtype=float)
+    xspan = float(xs.max() - xs.min()) or 1.0
+    yspan = float(ys.max() - ys.min()) or 1.0
+    out: Dict[int, Tuple[float, float]] = {}
+    for comm in selected:
+        lx, ly = layout[comm]
+        out[comm] = (
+            0.17 + 0.66 * ((float(lx) - float(xs.min())) / xspan),
+            0.18 + 0.58 * ((float(ly) - float(ys.min())) / yspan),
+        )
+    return out
+
+
+def _panel_a_draw_snapshot(
+    ax,
+    raw: RawData,
+    active: pd.DataFrame,
+    prev_active: pd.DataFrame,
+    selected_topics: Sequence[int],
+    pos: Mapping[int, Tuple[float, float]],
+    colors: Mapping[int, str],
+    focus_comm: Optional[int],
+    focus_label: str,
+    x: float,
+    y: float,
+    w: float,
+    h: float,
+    title: str,
+    caption: str,
+    show_anchor: bool,
+    visible_ref_comms: Sequence[int],
+) -> None:
+    rect = mpatches.Rectangle(
+        (x, y),
+        w,
+        h,
+        transform=ax.transAxes,
+        facecolor='white',
+        edgecolor='#D9D9D9',
+        linewidth=0.72,
+        zorder=1,
+        clip_on=False,
+    )
+    ax.add_patch(rect)
+    ax.text(x + w / 2, y + h + 0.026, title, ha='center', va='bottom', fontsize=7.3, fontweight='bold', transform=ax.transAxes)
+
+    display_topics = set(int(c) for c in selected_topics)
+    active_ids = active['id'].astype(str).tolist()
+    active_display = active.dropna(subset=['display_community']).copy()
+    active_display['display_community'] = active_display['display_community'].astype(int)
+    active_display = active_display[active_display['display_community'].isin(display_topics)]
+    counts = active_display.groupby('display_community').size().to_dict()
+
+    prev_ids = prev_active['id'].astype(str).tolist() if not prev_active.empty else []
+    prev_display = prev_active.dropna(subset=['display_community']).copy() if not prev_active.empty else pd.DataFrame()
+    prev_counts: Dict[int, int] = {}
+    if not prev_display.empty:
+        prev_display['display_community'] = prev_display['display_community'].astype(int)
+        prev_display = prev_display[prev_display['display_community'].isin(display_topics)]
+        prev_counts = prev_display.groupby('display_community').size().to_dict()
+
+    if not counts:
+        ax.text(x + w / 2, y + h / 2, 'No displayed topics', ha='center', va='center', fontsize=6.8, color=TEXT_MID, transform=ax.transAxes)
+        ax.text(x + w - 0.012, y + 0.014, f'n={len(active_ids):,}', ha='right', va='bottom', fontsize=5.1, color=TEXT_LIGHT, transform=ax.transAxes)
+        ax.text(x + w / 2, y - 0.052, caption, ha='center', va='top', fontsize=5.2, color=TEXT_LIGHT, transform=ax.transAxes)
+        return
+
+    radii = _panel_a_scaled_radii({int(k): int(v) for k, v in counts.items()})
+    edges = display_topic_edges_for_active(raw, active_ids)
+    if not edges.empty:
+        edges = edges[
+            edges['source_community'].astype(int).isin(display_topics)
+            & edges['target_community'].astype(int).isin(display_topics)
+        ].copy()
+    prev_edges = display_topic_edges_for_active(raw, prev_ids)
+    if not prev_edges.empty:
+        prev_edges = prev_edges[
+            prev_edges['source_community'].astype(int).isin(display_topics)
+            & prev_edges['target_community'].astype(int).isin(display_topics)
+        ].copy()
+    prev_edge_lookup = _panel_a_edge_lookup(prev_edges)
+
+    # Topic halos first, matching Fig. 1's soft cluster snapshot style.
+    for comm in sorted(counts, key=lambda c: counts[c], reverse=True):
+        if comm not in pos:
+            continue
+        px = x + pos[comm][0] * w
+        py = y + pos[comm][1] * h
+        radius = radii.get(int(comm), 0.035)
+        base_color = colors.get(int(comm), '#9CA3AF')
+        is_new_topic = int(prev_counts.get(int(comm), 0)) == 0
+        halo = mpatches.Circle(
+            (px, py),
+            radius,
+            transform=ax.transAxes,
+            facecolor=mcolors.to_rgba(base_color, 0.13 if is_new_topic else 0.09),
+            edgecolor=mcolors.to_rgba(base_color, 0.72),
+            linewidth=0.78,
+            zorder=2,
+        )
+        ax.add_patch(halo)
+        if show_anchor and focus_comm is not None and int(comm) == int(focus_comm):
+            ax.add_patch(
+                mpatches.Circle(
+                    (px, py),
+                    radius * 1.30,
+                    transform=ax.transAxes,
+                    facecolor='none',
+                    edgecolor='#DC2626',
+                    linewidth=0.85,
+                    linestyle='--',
+                    alpha=0.58,
+                    zorder=3,
+                )
+            )
+
+    # Curved sparse backbone edges. Darker edges are new or strongly amplified
+    # relative to the previous snapshot, mirroring Fig. 1's transition cue.
+    if not edges.empty:
+        edge_max = max(float(edges['weight'].max()), 1.0)
+        for idx, row in enumerate(edges.sort_values('weight', ascending=False).head(PANEL_A_MAX_BACKBONE_EDGES).itertuples(index=False)):
+            c1 = int(row.source_community)
+            c2 = int(row.target_community)
+            if c1 not in counts or c2 not in counts or c1 not in pos or c2 not in pos:
+                continue
+            key = tuple(sorted((c1, c2)))
+            prev_weight = float(prev_edge_lookup.get(key, 0.0))
+            is_new = prev_weight <= 0 or float(row.weight) >= 1.35 * max(prev_weight, 1.0)
+            x1 = x + pos[c1][0] * w
+            y1 = y + pos[c1][1] * h
+            x2 = x + pos[c2][0] * w
+            y2 = y + pos[c2][1] * h
+            lw = 0.34 + 1.10 * min(1.0, math.log1p(float(row.weight)) / math.log1p(edge_max))
+            rad = (0.13 + 0.04 * (idx % 3)) * (-1 if idx % 2 else 1)
+            edge = FancyArrowPatch(
+                (x1, y1),
+                (x2, y2),
+                transform=ax.transAxes,
+                arrowstyle='-',
+                connectionstyle=f'arc3,rad={rad}',
+                linewidth=lw,
+                color='#3F3F46' if is_new else '#9CA3AF',
+                alpha=0.50 if is_new else 0.26,
+                shrinkA=7,
+                shrinkB=7,
+                zorder=4 if is_new else 3,
+            )
+            ax.add_patch(edge)
+
+    label_candidates = list(dict.fromkeys(
+        ([int(focus_comm)] if focus_comm is not None and int(focus_comm) in counts else [])
+        + [int(c) for c in sorted(counts, key=lambda c: counts[c], reverse=True)[:2]]
+    ))
+
+    for comm in sorted(counts, key=lambda c: counts[c], reverse=True):
+        if comm not in pos:
+            continue
+        px = x + pos[comm][0] * w
+        py = y + pos[comm][1] * h
+        radius = radii.get(int(comm), 0.035)
+        base_color = colors.get(int(comm), '#9CA3AF')
+        n_beads = int(np.clip(round(3 + math.log1p(int(counts[comm]))), 4, PANEL_A_MAX_BEADS_PER_TOPIC))
+        points = _panel_a_disc_points(comm, n_beads, radius * 0.62)
+        if len(points) > 2:
+            for j in range(1, len(points)):
+                ax.plot(
+                    [px + points[0, 0], px + points[j, 0]],
+                    [py + points[0, 1], py + points[j, 1]],
+                    color='#9CA3AF',
+                    linewidth=0.34,
+                    alpha=0.32,
+                    transform=ax.transAxes,
+                    zorder=5,
+                )
+        ax.scatter(
+            px + points[:, 0],
+            py + points[:, 1],
+            s=16,
+            color=base_color,
+            edgecolors='white',
+            linewidths=0.42,
+            alpha=0.94,
+            transform=ax.transAxes,
+            zorder=6,
+        )
+
+        if show_anchor and focus_comm is not None and int(comm) == int(focus_comm):
+            ax.scatter([px], [py], marker='*', s=95, color='#DC2626', edgecolors='white', linewidths=0.58, transform=ax.transAxes, zorder=8)
+            label = _panel_a_clean_label(focus_label or 'landmark', 24)
+            ax.annotate(
+                label,
+                xy=(px, py),
+                xytext=(px + 0.065, py - 0.055),
+                textcoords=ax.transAxes,
+                fontsize=4.9,
+                color='#B91C1C',
+                fontweight='bold',
+                arrowprops=dict(arrowstyle='-', color='#B91C1C', lw=0.58, alpha=0.82),
+                zorder=9,
+            )
+
+        if int(comm) in label_candidates:
+            label = 'Landmark topic' if (focus_comm is not None and int(comm) == int(focus_comm)) else _panel_a_topic_label(raw, int(comm))
+            ax.text(
+                px,
+                py + radius * 0.90,
+                _panel_a_clean_label(label, 22),
+                fontsize=4.7,
+                ha='center',
+                va='bottom',
+                color='#2F2F36',
+                transform=ax.transAxes,
+                zorder=10,
+                bbox=dict(boxstyle='round,pad=0.08', facecolor='white', edgecolor='none', alpha=0.68),
+            )
+
+    if show_anchor and focus_comm is not None:
+        for comm in visible_ref_comms:
+            if int(comm) not in pos or int(comm) not in counts or int(comm) == int(focus_comm):
+                continue
+            fc = x + pos[int(focus_comm)][0] * w
+            fy = y + pos[int(focus_comm)][1] * h
+            x2 = x + pos[int(comm)][0] * w
+            y2 = y + pos[int(comm)][1] * h
+            ax.add_patch(
+                FancyArrowPatch(
+                    (fc, fy),
+                    (x2, y2),
+                    transform=ax.transAxes,
+                    arrowstyle='-',
+                    connectionstyle='arc3,rad=0.12',
+                    linewidth=0.72,
+                    color='#3B82F6',
+                    linestyle='--',
+                    alpha=0.72,
+                    shrinkA=7,
+                    shrinkB=7,
+                    zorder=7,
+                )
+            )
+
+    shown_topics = sum(1 for c in counts if c in display_topics)
+    ax.text(
+        x + 0.012,
+        y + 0.018,
+        f'n={len(active_ids):,} papers\n{shown_topics} displayed topics',
+        ha='left',
+        va='bottom',
+        fontsize=4.8,
+        color=TEXT_LIGHT,
+        transform=ax.transAxes,
+    )
+    ax.text(x + w / 2, y - 0.052, caption, ha='center', va='top', fontsize=5.2, color=TEXT_LIGHT, transform=ax.transAxes)
+
+
+def _fig1_config_path_for_snapshot_dir(fig1_dir: Path) -> Optional[Path]:
+    config_dir = PROJECT_ROOT / 'experiments' / 'kg_perturbation_fig1' / 'configs'
+    candidates = [config_dir / f'{fig1_dir.name}.yaml']
+    alias = FIG1_CONFIG_ALIASES.get(fig1_dir.name)
+    if alias:
+        candidates.insert(0, config_dir / alias)
+    for path in candidates:
+        if path.exists():
+            return path
+    return None
+
+
+def _fig1_snapshot_windows(fig1_dir: Path, works: pd.DataFrame) -> List[Tuple[int, int]]:
+    metrics_path = fig1_dir / 'snapshot_delta_metrics.csv'
+    windows: List[Tuple[int, int]] = []
+    if metrics_path.exists():
+        metrics = pd.read_csv(metrics_path)
+        if {'cumulative_start', 'cumulative_end'}.issubset(metrics.columns):
+            for row in metrics.sort_values('cumulative_end').itertuples(index=False):
+                start = pd.to_numeric(pd.Series([getattr(row, 'cumulative_start')]), errors='coerce').iloc[0]
+                end = pd.to_numeric(pd.Series([getattr(row, 'cumulative_end')]), errors='coerce').iloc[0]
+                if pd.notna(start) and pd.notna(end):
+                    windows.append((int(start), int(end)))
+    if not windows:
+        years = pd.to_numeric(works['year'], errors='coerce').dropna()
+        if years.empty:
+            return []
+        start = int(years.min())
+        end = int(years.max())
+        ends = list(range(start + 4, end + 1, 5)) or [end]
+        if ends[-1] < end:
+            ends.append(end)
+        windows = [(start, int(item)) for item in ends]
+
+    unique: List[Tuple[int, int]] = []
+    seen: set[Tuple[int, int]] = set()
+    for start, end in sorted(windows, key=lambda item: (item[1], item[0])):
+        key = (int(start), int(end))
+        if key not in seen:
+            seen.add(key)
+            unique.append(key)
+    return unique
+
+
+def _fig1_displayed_topic_counts(fig1_dir: Path) -> Dict[int, int]:
+    metrics_path = fig1_dir / 'snapshot_delta_metrics.csv'
+    if not metrics_path.exists():
+        return {}
+    metrics = pd.read_csv(metrics_path)
+    if not {'cumulative_end', 'displayed_topics'}.issubset(metrics.columns):
+        return {}
+    out: Dict[int, int] = {}
+    for row in metrics.itertuples(index=False):
+        end = pd.to_numeric(pd.Series([getattr(row, 'cumulative_end')]), errors='coerce').iloc[0]
+        topics = pd.to_numeric(pd.Series([getattr(row, 'displayed_topics')]), errors='coerce').iloc[0]
+        if pd.notna(end) and pd.notna(topics):
+            out[int(end)] = int(topics)
+    return out
+
+
+def _choose_fig1_panel_a_windows(
+    windows: Sequence[Tuple[int, int]],
+    focus_year: int,
+    displayed_topic_counts: Optional[Mapping[int, int]] = None,
+) -> List[Tuple[Tuple[int, int], str]]:
+    if not windows:
+        return []
+    displayed_topic_counts = displayed_topic_counts or {}
+    nonempty = [item for item in windows if int(displayed_topic_counts.get(int(item[1]), 1)) > 0]
+    first = nonempty[0] if nonempty else windows[0]
+    first_caption = 'First non-empty Fig. 1 snapshot' if first != windows[0] else 'First Fig. 1 snapshot'
+    landmark = next((item for item in windows if int(item[1]) >= int(focus_year)), windows[min(len(windows) - 1, len(windows) // 2)])
+    final = windows[-1]
+    selected = [
+        (first, first_caption),
+        (landmark, 'Landmark publication window'),
+        (final, 'Final Fig. 1 snapshot'),
+    ]
+    out: List[Tuple[Tuple[int, int], str]] = []
+    seen: set[Tuple[int, int]] = set()
+    for window, caption in selected:
+        if window not in seen:
+            out.append((window, caption))
+            seen.add(window)
+    if len(out) < 3:
+        for window in windows:
+            if window not in seen:
+                out.append((window, 'Intermediate Fig. 1 snapshot'))
+                seen.add(window)
+            if len(out) >= 3:
+                break
+    return out[:3]
+
+
+def _load_fig1_snapshot_cfg(fig1_dir: Path, windows: Sequence[Tuple[int, int]], works: pd.DataFrame) -> Dict[str, Any]:
+    from experiments.kg_perturbation_fig1.fig1_knowledge_perturbation_v3 import DEFAULT_CONFIG, load_config  # pylint: disable=import-outside-toplevel
+
+    config_path = _fig1_config_path_for_snapshot_dir(fig1_dir)
+    if config_path is not None:
+        cfg = load_config(config_path)
+    else:
+        cfg = copy.deepcopy(DEFAULT_CONFIG)
+        cfg['slug'] = fig1_dir.name
+        cfg['domain_name'] = str(works.get('domain', pd.Series([fig1_dir.name])).dropna().iloc[0]) if 'domain' in works.columns and works['domain'].notna().any() else fig1_dir.name
+    if windows:
+        cfg['start_year'] = int(windows[0][0])
+        cfg['end_year'] = int(windows[-1][1])
+        cfg['snapshot_years'] = [int(end) for _, end in windows]
+        cfg['custom_windows'] = []
+    pcfg = cfg.setdefault('plot', {})
+    pcfg['show_panel_captions'] = False
+    pcfg.setdefault('min_papers_per_display_topic', 3)
+    pcfg.setdefault('display_max_backbone_edges', 18)
+    pcfg.setdefault('display_extra_edges', 8)
+    pcfg.setdefault('max_representative_papers', 7)
+    return cfg
+
+
+def _build_fig1_snapshot_graph(raw: RawData) -> Tuple[nx.Graph, Dict[str, int], Dict[int, str], Dict[int, np.ndarray], Dict[int, Any]]:
+    from experiments.kg_perturbation_fig1.fig1_knowledge_perturbation_v3 import community_color_map  # pylint: disable=import-outside-toplevel
+
+    works = raw.works.copy()
+    graph = nx.Graph()
+    for row in works.itertuples(index=False):
+        paper_id = str(getattr(row, 'id'))
+        year = pd.to_numeric(pd.Series([getattr(row, 'year', np.nan)]), errors='coerce').iloc[0]
+        anchor_label = str(getattr(row, 'anchor_label', '') or '').strip()
+        if anchor_label.lower() in {'nan', 'none'}:
+            anchor_label = ''
+        graph.add_node(
+            paper_id,
+            year=int(year) if pd.notna(year) else None,
+            title=str(getattr(row, 'title', paper_id) or paper_id),
+            cited_by_count=int(pd.to_numeric(pd.Series([getattr(row, 'cited_by_count', 0)]), errors='coerce').fillna(0).iloc[0]),
+            primary_topic=str(getattr(row, 'primary_topic', '') or ''),
+            topics=[],
+            anchor_label=anchor_label,
+            anchor_year=int(year) if anchor_label and pd.notna(year) else None,
+        )
+
+    selected_ids = set(graph.nodes())
+    citations = raw.citations.copy()
+    if not citations.empty:
+        for row in citations.itertuples(index=False):
+            source = str(getattr(row, 'source'))
+            target = str(getattr(row, 'target'))
+            if source not in selected_ids or target not in selected_ids or source == target:
+                continue
+            weight = pd.to_numeric(pd.Series([getattr(row, 'weight', 1.0)]), errors='coerce').fillna(1.0).iloc[0]
+            if graph.has_edge(source, target):
+                graph[source][target]['weight'] += float(weight)
+            else:
+                graph.add_edge(source, target, weight=float(weight))
+
+    comm_map: Dict[str, int] = {}
+    for row in works.dropna(subset=['display_community']).itertuples(index=False):
+        comm_map[str(getattr(row, 'id'))] = int(getattr(row, 'display_community'))
+
+    labels: Dict[int, str] = {}
+    pos: Dict[int, np.ndarray] = {}
+    topics = raw.topics.copy()
+    if not topics.empty:
+        for row in topics.dropna(subset=['community']).itertuples(index=False):
+            comm = int(getattr(row, 'community'))
+            labels[comm] = str(getattr(row, 'label', f'Topic {comm}') or f'Topic {comm}')
+            x = pd.to_numeric(pd.Series([getattr(row, 'x', np.nan)]), errors='coerce').iloc[0]
+            y = pd.to_numeric(pd.Series([getattr(row, 'y', np.nan)]), errors='coerce').iloc[0]
+            if pd.notna(x) and pd.notna(y):
+                pos[comm] = np.asarray([float(x), float(y)], dtype=float)
+
+    color_map = community_color_map(list(pos.keys() or labels.keys()))
+    return graph, comm_map, labels, pos, color_map
+
+
+def _compress_fig1_snapshot_axes(inset) -> None:
+    """Scale Fig. 1 snapshot artists so they fit inside the smaller Fig. 2 panel."""
+    inset.title.set_fontsize(7.2)
+    for text in inset.texts:
+        fontsize = float(text.get_fontsize())
+        text.set_fontsize(max(3.8, fontsize * 0.68))
+        color = str(text.get_color()).lower()
+        if color in {'#b91c1c', 'firebrick'}:
+            text.set_fontsize(max(4.2, fontsize * 0.62))
+            text.set_text(_panel_a_clean_label(text.get_text(), 22))
+    for collection in inset.collections:
+        if hasattr(collection, 'get_sizes') and hasattr(collection, 'set_sizes'):
+            sizes = collection.get_sizes()
+            if len(sizes):
+                collection.set_sizes(np.asarray(sizes, dtype=float) * 0.58)
+    for line in inset.lines:
+        line.set_linewidth(max(0.25, float(line.get_linewidth()) * 0.70))
+    inset.tick_params(labelsize=4)
+
+
+def _draw_panel_a_from_fig1_exports(
+    ax,
+    fig1_dir: Path,
+    focus_paper_id: Optional[str],
+    future_tau: Optional[int],
+) -> bool:
+    if not has_fig1_export_files(fig1_dir):
+        return False
+
+    from experiments.kg_perturbation_fig1.fig1_knowledge_perturbation_v3 import draw_snapshot, window_label  # pylint: disable=import-outside-toplevel
+
+    snapshot_raw = load_raw_data(fig1_dir, domain=None, direct_only=False, progress=False)
+    works = snapshot_raw.works
+    if focus_paper_id is None:
+        lms = works[works['is_landmark'] == 1].sort_values('year')
+        if lms.empty:
+            return False
+        focus = lms.iloc[0]
+    else:
+        focus_rows = works.loc[works['id'].astype(str) == str(focus_paper_id)]
+        if focus_rows.empty:
+            return False
+        focus = focus_rows.iloc[0]
+    focus_year = int(focus['year'])
+    focus_label = str(focus.get('anchor_label') or '').strip() or str(focus.get('title') or 'landmark paper')
+
+    windows = _fig1_snapshot_windows(fig1_dir, works)
+    displayed_topic_counts = _fig1_displayed_topic_counts(fig1_dir)
+    selected_windows = _choose_fig1_panel_a_windows(windows, focus_year, displayed_topic_counts)
+    if len(selected_windows) < 3:
+        return False
+
+    cfg = _load_fig1_snapshot_cfg(fig1_dir, windows, works)
+    graph, comm_map, labels, pos, color_map = _build_fig1_snapshot_graph(snapshot_raw)
+    if graph.number_of_nodes() == 0 or not pos:
+        return False
+
+    boxes = [
+        (0.035, 0.315, 0.285, 0.55),
+        (0.36, 0.315, 0.285, 0.55),
+        (0.685, 0.315, 0.285, 0.55),
+    ]
+    for idx, (((start_year, end_year), caption), (x, y, w, h)) in enumerate(zip(selected_windows, boxes)):
+        inset = ax.inset_axes([x, y, w, h])
+        prev_end = selected_windows[idx - 1][0][1] if idx > 0 else None
+        draw_snapshot(
+            inset,
+            graph,
+            comm_map,
+            labels,
+            pos,
+            color_map,
+            cfg,
+            end_year=int(end_year),
+            prev_end_year=prev_end,
+            panel_label=window_label(int(start_year), int(end_year), int(windows[0][0])),
+            show_ylabel=False,
+        )
+        _compress_fig1_snapshot_axes(inset)
+        inset.text(0.5, -0.105, caption, ha='center', va='top', fontsize=5.4, color=TEXT_LIGHT, transform=inset.transAxes)
+
+    first_snapshot_note = 'first non-empty snapshot' if selected_windows[0][1].startswith('First non-empty') else 'first snapshot'
+    draw_arrow(ax, (0.324, 0.58), (0.354, 0.58), color='#64748B', lw=1.5, ms=15)
+    draw_arrow(ax, (0.649, 0.58), (0.679, 0.58), color='#64748B', lw=1.5, ms=15)
+
+    legend_y = 0.145
+    rounded_box(ax, 0.035, 0.105, 0.63, 0.095, '#FFFFFF', '#E2E8F0', 0.6, 0.010)
+    ax.scatter([0.06], [legend_y], marker='*', s=90, color='#DC2626', edgecolors='white', linewidths=0.55, transform=ax.transAxes)
+    ax.text(0.083, legend_y, f'Landmark topic\n({_panel_a_clean_label(focus_label, 22)})', ha='left', va='center', fontsize=5.4)
+    ax.plot([0.255, 0.30], [legend_y, legend_y], color='#3F3F46', lw=1.15, alpha=0.58, transform=ax.transAxes)
+    ax.text(0.315, legend_y, 'Fig. 1 backbone\nand topic layout', ha='left', va='center', fontsize=5.4)
+    rounded_box(ax, 0.69, 0.105, 0.20, 0.095, blend_with_white('#2563EB', 0.92), '#93C5FD', 0.6, 0.010)
+    tau_note = f'G+{int(future_tau)} remains used\nfor scoring panels.' if future_tau is not None else 'Future horizon remains\nused for scoring panels.'
+    ax.text(0.79, legend_y, tau_note, ha='center', va='center', fontsize=5.2, color='#1D4ED8', fontweight='bold')
+    rounded_box(ax, 0.035, 0.035, 0.83, 0.052, '#FFFFFF', '#E2E8F0', 0.6, 0.012)
+    ax.text(
+        0.055,
+        0.061,
+        f'Panel a reuses Fig. 1 exports from {fig1_dir.name}: {first_snapshot_note}, landmark window ({focus_year}), and final snapshot.',
+        fontsize=5.25,
+        color=TEXT_LIGHT,
+        ha='left',
+        va='center',
+        transform=ax.transAxes,
+    )
+    return True
+
+
+def draw_panel_a(
+    ax,
+    raw: RawData,
+    focus_paper_id: Optional[str],
+    future_tau: Optional[int] = None,
+    fig1_snapshot_dir: Optional[Path] = None,
+) -> None:
+    panel_frame(ax, 'a', 'Publication-day graph perturbation snapshots')
+    if fig1_snapshot_dir is not None:
+        try:
+            if _draw_panel_a_from_fig1_exports(ax, fig1_snapshot_dir, focus_paper_id, future_tau):
+                return
+        except Exception as exc:
+            ax.text(0.035, 0.91, f'Fig. 1 snapshot reuse failed; using fallback layout. ({type(exc).__name__})', fontsize=5.2, color=TEXT_LIGHT, transform=ax.transAxes)
+
     works = raw.works
     if focus_paper_id is None:
         lms = works[works['is_landmark'] == 1].sort_values('year')
@@ -2370,17 +3133,20 @@ def draw_panel_a(ax, raw: RawData, focus_paper_id: Optional[str], future_tau: Op
     focus_year = int(focus['year'])
     focus_title = str(focus['title'])
     focus_id = str(focus['id'])
+    focus_label = str(focus.get('anchor_label') or '').strip() or focus_title
     max_year = int(works['year'].max())
     future_year = min(max_year, focus_year + int(future_tau)) if future_tau is not None else max_year
 
     boxes = [
-        (0.03, 0.30, 0.28, 0.57, f'Prior graph G−\n(year < {focus_year})', '#2E7D32', 'prior'),
-        (0.36, 0.30, 0.28, 0.57, f'Publication-day G0\n(add p in {focus_year})', '#2563EB', 'pub'),
-        (0.69, 0.30, 0.28, 0.57, f'Future graph G+τ\n(year ≤ {future_year})', '#6D4C8D', 'future'),
+        (0.03, 0.34, 0.28, 0.48, f'G−  prior\n< {focus_year}', 'Prior knowledge modules', 'prior'),
+        (0.36, 0.34, 0.28, 0.48, f'G0  publication day\n{focus_year}', 'Landmark insertion', 'pub'),
+        (0.69, 0.34, 0.28, 0.48, f'G+τ  future\n≤ {future_year}', 'Field reconfiguration', 'future'),
     ]
 
-    pos = _topic_positions(raw.topics, 0, 0, 1, 1)
-    display_topics = set(int(c) for c in raw.topics['community'].dropna().astype(int))
+    future_ids_for_layout = works.loc[pd.to_numeric(works['year'], errors='coerce') <= future_year, 'id'].astype(str).tolist()
+    selected_topics, focus_comm = _panel_a_select_topics(raw, focus_id, focus_year, future_year)
+    pos = _panel_a_topic_positions(raw, selected_topics, future_ids_for_layout, focus_comm)
+    display_topics = set(selected_topics)
     colors = {int(c): mcolors.to_hex(plt.get_cmap('tab20')(i % 20)) for i, c in enumerate(sorted(display_topics))}
     meta = works[['id', 'display_community', 'year']].copy()
     lm_refs = get_reference_rows(raw, focus_id, focus_year)
@@ -2390,82 +3156,53 @@ def draw_panel_a(ax, raw: RawData, focus_paper_id: Optional[str], future_tau: Op
     focus_display = pd.to_numeric(pd.Series([focus.get('display_community', np.nan)]), errors='coerce').iloc[0]
     focus_comm = int(focus_display) if pd.notna(focus_display) and int(focus_display) in pos else None
 
-    for x, y, w, h, title, edgecolor, mode in boxes:
-        rounded_box(ax, x, y, w, h, '#FCFCFD', edgecolor, 0.70, 0.015, zorder=1)
-        ax.text(x + 0.02, y + h - 0.035, title, ha='left', va='top', fontsize=7.2, fontweight='bold')
+    for x, y, w, h, title, caption, mode in boxes:
         if mode == 'prior':
             active = meta[meta['year'] < focus_year].copy()
+            prev_active = pd.DataFrame(columns=meta.columns)
         elif mode == 'pub':
             active = meta[(meta['year'] < focus_year) | (meta['id'].astype(str) == focus_id)].copy()
+            prev_active = meta[meta['year'] < focus_year].copy()
         else:
             active = meta[meta['year'] <= future_year].copy()
-        active_ids = active['id'].astype(str).tolist()
-        active_display = active.dropna(subset=['display_community']).copy()
-        active_display['display_community'] = active_display['display_community'].astype(int)
-        active_display = active_display[active_display['display_community'].isin(display_topics)]
-        counts = active_display.groupby('display_community').size().to_dict()
+            prev_active = meta[(meta['year'] < focus_year) | (meta['id'].astype(str) == focus_id)].copy()
+        _panel_a_draw_snapshot(
+            ax,
+            raw,
+            active,
+            prev_active,
+            selected_topics,
+            pos,
+            colors,
+            focus_comm,
+            focus_label,
+            x,
+            y,
+            w,
+            h,
+            title,
+            caption,
+            show_anchor=mode in {'pub', 'future'},
+            visible_ref_comms=visible_ref_comms,
+        )
 
-        edges = display_topic_edges_for_active(raw, active_ids)
-        if not edges.empty:
-            edge_max = max(float(edges['weight'].max()), 1.0)
-            for r in edges.sort_values('weight', ascending=False).head(14).itertuples(index=False):
-                c1 = int(r.source_community); c2 = int(r.target_community)
-                if c1 in counts and c2 in counts and c1 in pos and c2 in pos:
-                    x1 = x + pos[c1][0]*w; y1 = y + pos[c1][1]*h
-                    x2 = x + pos[c2][0]*w; y2 = y + pos[c2][1]*h
-                    lw = 0.35 + 1.1 * (math.log1p(float(r.weight)) / math.log1p(edge_max))
-                    ax.plot([x1, x2], [y1, y2], color='#BFC5CF', lw=lw, alpha=0.42, transform=ax.transAxes, zorder=1)
-
-        for comm, count in counts.items():
-            if comm not in pos:
-                continue
-            cx, cy = pos[comm]
-            px = x + (cx)*w; py = y + (cy)*h
-            rr = 0.022 + 0.018 * (np.log1p(count) / max(np.log1p(max(counts.values())), 1e-9))
-            circ = mpatches.Circle((px, py), rr, transform=ax.transAxes, facecolor=mcolors.to_rgba(colors[comm], 0.10),
-                                   edgecolor=mcolors.to_rgba(colors[comm], 0.70), lw=0.8)
-            ax.add_patch(circ)
-            npts = max(4, min(8, int(round(np.log1p(count))) + 3))
-            for j in range(npts):
-                th = 2*math.pi*j/npts
-                ax.scatter([px + rr*0.62*math.cos(th)], [py + rr*0.62*math.sin(th)], s=18,
-                           color=colors[comm], edgecolors='white', linewidths=0.4, transform=ax.transAxes, zorder=3)
-
-        if mode in {'pub', 'future'}:
-            if focus_comm is not None:
-                fc = x + pos[focus_comm][0]*w
-                fy = y + pos[focus_comm][1]*h
-            else:
-                fc = x + 0.50*w
-                fy = y + 0.36*h
-            ax.scatter([fc], [fy], marker='*', s=160, color='#DC2626', edgecolors='white', linewidths=0.6, transform=ax.transAxes, zorder=5)
-            ax.text(fc + 0.012, fy + 0.01, 'p', fontsize=7, fontstyle='italic', fontweight='bold', transform=ax.transAxes)
-            for c in visible_ref_comms:
-                if c in pos:
-                    x2 = x + pos[c][0]*w; y2 = y + pos[c][1]*h
-                    if abs(fc - x2) + abs(fy - y2) < 0.005:
-                        continue
-                    ax.plot([fc, x2], [fy, y2], color='#3B82F6' if mode == 'pub' else '#64748B',
-                            lw=0.9, ls='--' if mode == 'pub' else '-', alpha=0.75, transform=ax.transAxes, zorder=2)
-        ax.text(x + w - 0.015, y + 0.015, f'n={len(active_ids):,}', ha='right', va='bottom', fontsize=5.4, color=TEXT_LIGHT, transform=ax.transAxes)
-
-    draw_arrow(ax, (0.315, 0.58), (0.355, 0.58), color='#64748B', lw=1.8, ms=18)
-    draw_arrow(ax, (0.645, 0.58), (0.685, 0.58), color='#64748B', lw=1.8, ms=18)
+    draw_arrow(ax, (0.315, 0.57), (0.355, 0.57), color='#64748B', lw=1.55, ms=16)
+    draw_arrow(ax, (0.645, 0.57), (0.685, 0.57), color='#64748B', lw=1.55, ms=16)
 
     # legend / note
-    legend_y = 0.15
-    rounded_box(ax, 0.03, 0.12, 0.61, 0.11, '#FFFFFF', '#E2E8F0', 0.6, 0.012)
+    legend_y = 0.155
+    rounded_box(ax, 0.03, 0.12, 0.61, 0.10, '#FFFFFF', '#E2E8F0', 0.6, 0.010)
     ax.scatter([0.055], [legend_y], marker='*', s=90, color='#DC2626', transform=ax.transAxes)
-    ax.text(0.075, legend_y, f'Landmark community\n({focus_title[:18]})', ha='left', va='center', fontsize=5.4)
+    ax.text(0.075, legend_y, f'Landmark topic\n({_panel_a_clean_label(focus_label, 18)})', ha='left', va='center', fontsize=5.4)
     ax.plot([0.21, 0.25], [legend_y, legend_y], color='#3B82F6', lw=1.0, ls='--', transform=ax.transAxes)
     ax.text(0.265, legend_y, 'Publication-day\nreference links', ha='left', va='center', fontsize=5.4)
-    ax.plot([0.43, 0.47], [legend_y, legend_y], color='#C7CBD1', lw=0.9, transform=ax.transAxes)
-    ax.text(0.485, legend_y, 'Snapshot-specific\nprior links', ha='left', va='center', fontsize=5.4)
-    rounded_box(ax, 0.67, 0.12, 0.18, 0.11, blend_with_white('#2563EB', 0.92), '#93C5FD', 0.6, 0.012)
+    ax.plot([0.43, 0.47], [legend_y, legend_y], color='#3F3F46', lw=1.0, alpha=0.55, transform=ax.transAxes)
+    ax.text(0.485, legend_y, 'New/amplified\ntopic links', ha='left', va='center', fontsize=5.4)
+    rounded_box(ax, 0.67, 0.12, 0.18, 0.10, blend_with_white('#2563EB', 0.92), '#93C5FD', 0.6, 0.010)
     ax.text(0.76, legend_y, 'Seven indicators are\ncomputed at G0 using\nonly G− and references.', ha='center', va='center', fontsize=5.4, color='#1D4ED8', fontweight='bold')
     rounded_box(ax, 0.03, 0.03, 0.61, 0.07, '#FFFFFF', '#E2E8F0', 0.6, 0.012)
-    ax.text(0.05, 0.065, 'Display topics use the Fig. 1 layout; edges are recomputed within each time snapshot.', fontsize=5.2, color=TEXT_LIGHT, ha='left', va='center')
-    ax.text(0.05, 0.042, f'Node size ≈ papers. Edge width ≈ citation links. References outside displayed topics: {outside_ref_count}.', fontsize=5.0, color=TEXT_LIGHT, ha='left', va='center')
+    ax.text(0.05, 0.065, f'Fig. 1-style topic snapshots: top {len(display_topics)} explanatory communities, full counts retained in labels.', fontsize=5.2, color=TEXT_LIGHT, ha='left', va='center')
+    ax.text(0.05, 0.042, f'Halo size ≈ papers. Curved backbone edge width ≈ citation links. Landmark references outside displayed topics: {outside_ref_count}.', fontsize=5.0, color=TEXT_LIGHT, ha='left', va='center')
 
 
 def draw_panel_b(ax, comp: Optional[ComputedData] = None) -> None:
@@ -2850,7 +3587,14 @@ def draw_panel_f(ax, comp: ComputedData) -> None:
 # Full figure assembly
 # --------------------------
 
-def assemble_figure(raw: RawData, comp: ComputedData, focus_paper_id: Optional[str], future_tau: Optional[int], outpath: Path) -> None:
+def assemble_figure(
+    raw: RawData,
+    comp: ComputedData,
+    focus_paper_id: Optional[str],
+    future_tau: Optional[int],
+    outpath: Path,
+    fig1_snapshot_dir: Optional[Path] = None,
+) -> None:
     setup_style()
     fig = plt.figure(figsize=(20, 13), dpi=300)
     gs = GridSpec(2, 3, figure=fig, height_ratios=[1, 1.1], width_ratios=[1.1, 1.0, 1.0], hspace=0.12, wspace=0.04)
@@ -2867,7 +3611,7 @@ def assemble_figure(raw: RawData, comp: ComputedData, focus_paper_id: Optional[s
     fig.text(0.5, 0.985, title, ha='center', va='top', fontsize=18.0 if comp.evidence_mode == 'strong' else 20, fontweight='bold')
     fig.text(0.5, 0.955, subtitle, ha='center', va='top', fontsize=11.0, color=TEXT_MID)
 
-    axa = fig.add_subplot(gs[0, 0]); draw_panel_a(axa, raw, focus_paper_id, future_tau=future_tau)
+    axa = fig.add_subplot(gs[0, 0]); draw_panel_a(axa, raw, focus_paper_id, future_tau=future_tau, fig1_snapshot_dir=fig1_snapshot_dir)
     axb = fig.add_subplot(gs[0, 1]); draw_panel_b(axb, comp)
     axc = fig.add_subplot(gs[0, 2]); draw_panel_c(axc, comp)
     axd = fig.add_subplot(gs[1, 0]); draw_panel_d(axd, comp)
@@ -2877,12 +3621,20 @@ def assemble_figure(raw: RawData, comp: ComputedData, focus_paper_id: Optional[s
     plt.close(fig)
 
 
-def save_single_panel(panel: str, raw: RawData, comp: Optional[ComputedData], focus_paper_id: Optional[str], future_tau: Optional[int], outpath: Path) -> None:
+def save_single_panel(
+    panel: str,
+    raw: RawData,
+    comp: Optional[ComputedData],
+    focus_paper_id: Optional[str],
+    future_tau: Optional[int],
+    outpath: Path,
+    fig1_snapshot_dir: Optional[Path] = None,
+) -> None:
     setup_style()
     size_map = {'a': (7.6, 6.0), 'b': (7.1, 6.0), 'c': (7.0, 6.0), 'd': (7.5, 6.8), 'e': (7.1, 6.8), 'f': (7.1, 6.8)}
     fig, ax = plt.subplots(figsize=size_map.get(panel, (7, 6)), dpi=300)
     if panel == 'a':
-        draw_panel_a(ax, raw, focus_paper_id, future_tau=future_tau)
+        draw_panel_a(ax, raw, focus_paper_id, future_tau=future_tau, fig1_snapshot_dir=fig1_snapshot_dir)
     elif panel == 'b':
         draw_panel_b(ax, comp)
     elif panel == 'c':
@@ -2974,6 +3726,9 @@ def parse_args() -> argparse.Namespace:
                    help='Future horizon for strong-mode G+τ validation and panel a. Default: 10.')
     p.add_argument('--example-domain', type=str, default=DEFAULT_DOMAIN,
                    help='Domain used for panel a example in strong mode. Default: crispr.')
+    p.add_argument('--fig1-snapshot-dir', type=Path, default=None,
+                   help='Optional Fig. 1 domain output directory used to reuse the first, landmark-window, '
+                        'and final Fig. 1 snapshots in panel a. Defaults to strict Fig. 1 best4 outputs when available.')
     p.add_argument('--focal-paper-list', type=Path, default=None,
                    help='Optional text file with one focal paper id per line for metric computation. Defaults to all papers.')
     p.add_argument('--export-tables', action='store_true', help='Export all intermediate computed tables.')
@@ -3022,6 +3777,9 @@ def main() -> None:
     progress = not args.quiet
     progress_log(f'Starting Fig. 2 empirical pipeline: panel={args.panel}, evidence_mode={args.evidence_mode}', progress)
     args.out_dir.mkdir(parents=True, exist_ok=True)
+    fig1_snapshot_dir = resolve_panel_a_fig1_snapshot_dir(args) if args.panel in {'a', 'all'} else None
+    if fig1_snapshot_dir is not None:
+        progress_log(f'Panel a will reuse Fig. 1 snapshots from: {fig1_snapshot_dir}', progress)
     if args.evidence_mode == 'strong':
         cached = load_strong_cache_if_valid(args, progress)
         if cached is None:
@@ -3037,12 +3795,12 @@ def main() -> None:
         if args.panel == 'all':
             outpath = args.out_dir / 'fig2_empirical_full.png'
             progress_log(f'Assembling strong-mode full figure: {outpath}', progress)
-            assemble_figure(raw, comp, args.focus_paper_id, args.future_tau, outpath)
+            assemble_figure(raw, comp, args.focus_paper_id, args.future_tau, outpath, fig1_snapshot_dir=fig1_snapshot_dir)
             progress_log(f'Saved full figure: {outpath}', progress)
         else:
             outpath = args.out_dir / f'panel_{args.panel}.png'
             progress_log(f'Drawing strong-mode panel {args.panel}: {outpath}', progress)
-            save_single_panel(args.panel, raw, comp, args.focus_paper_id, args.future_tau, outpath)
+            save_single_panel(args.panel, raw, comp, args.focus_paper_id, args.future_tau, outpath, fig1_snapshot_dir=fig1_snapshot_dir)
             progress_log(f'Saved panel {args.panel}: {outpath}', progress)
         progress_log('Done.', progress)
         return
@@ -3090,12 +3848,12 @@ def main() -> None:
             raise ValueError('Full figure requires computed metrics.')
         outpath = args.out_dir / 'fig2_empirical_full.png'
         progress_log(f'Assembling full figure: {outpath}', progress)
-        assemble_figure(raw, comp, args.focus_paper_id, args.future_tau, outpath)
+        assemble_figure(raw, comp, args.focus_paper_id, args.future_tau, outpath, fig1_snapshot_dir=fig1_snapshot_dir)
         progress_log(f'Saved full figure: {outpath}', progress)
     else:
         outpath = args.out_dir / f'panel_{args.panel}.png'
         progress_log(f'Drawing panel {args.panel}: {outpath}', progress)
-        save_single_panel(args.panel, raw, comp, args.focus_paper_id, args.future_tau, outpath)
+        save_single_panel(args.panel, raw, comp, args.focus_paper_id, args.future_tau, outpath, fig1_snapshot_dir=fig1_snapshot_dir)
         progress_log(f'Saved panel {args.panel}: {outpath}', progress)
     progress_log('Done.', progress)
 

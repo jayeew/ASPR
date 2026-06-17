@@ -17,6 +17,12 @@ search_groups:
 start_year: 2000
 end_year: 2024
 window_size: 5
+custom_windows:
+  - [2000, 2009]
+  - [2010, 2014]
+  - [2015, 2019]
+  - [2020, 2024]
+snapshot_years: [2009, 2014, 2019, 2024]
 language: "en"
 include_abstract: false
 max_works_per_window: 1600
@@ -147,16 +153,16 @@ plot:
   dominant_parameters:
     - key: "B"
       label: "$B$ (bridge centrality)"
-      values: [0.20, 0.35, 1.35, 1.40, 1.20]
+      values: [0.35, 1.35, 1.40, 1.20]
     - key: "RTD"
       label: "RTD (reference target diversity)"
-      values: [-0.60, -0.20, 0.85, 0.75, 0.45]
+      values: [-0.20, 0.85, 0.75, 0.45]
     - key: "Uzzi"
       label: "Uzzi novelty (-p10)"
-      values: [0.05, 0.20, 1.10, 1.00, 0.40]
+      values: [0.20, 1.10, 1.00, 0.40]
     - key: "DeltaQ"
       label: "$\\Delta Q$ directionality"
-      values: [-0.05, -0.10, -0.95, -0.30, 0.10]
+      values: [-0.10, -0.95, -0.30, 0.10]
   parameter_callouts:
     - parameter: "B"
       window: "landmark"
@@ -210,7 +216,6 @@ plot:
   parameter_box_icon_size: 34
   show_retrieval_date: false
   panel_captions:
-    - "Fragmented prior knowledge"
     - "Mechanistic consolidation"
     - "Innovation shock: programmable Cas9"
     - "Field reconfiguration"

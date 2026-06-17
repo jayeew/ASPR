@@ -3406,6 +3406,91 @@ def compute_all(raw: RawData, args: argparse.Namespace) -> ComputedData:
     return dummy
 
 
+def coverage_constrained_weight_diagnostics(
+    comp: ComputedData,
+    min_mechanism_weight: float = 0.05,
+) -> pd.DataFrame:
+    """Diagnostic-only B/RS coverage weights; never used for strict pass scoring."""
+    if comp.score_table.empty or "RGPM" not in comp.score_table.columns:
+        return pd.DataFrame()
+    best = np.asarray([float(comp.best_weights.get(key, 0.0)) for key in METRIC_KEYS], dtype=float)
+    best = np.clip(np.nan_to_num(best, nan=0.0, posinf=0.0, neginf=0.0), 0.0, None)
+    if best.sum() <= 0:
+        best = np.ones(len(METRIC_KEYS), dtype=float) / len(METRIC_KEYS)
+    else:
+        best = best / best.sum()
+
+    corr = comp.indicator_target_correlations.copy()
+    signals: Dict[str, float] = {"B": 0.0, "RS": 0.0}
+    if not corr.empty and {"scope", "domain", "metric", "target", "spearman"}.issubset(corr.columns):
+        for metric in signals:
+            sub = corr[
+                (corr["scope"].astype(str) == "all")
+                & (corr["domain"].astype(str) == "all")
+                & (corr["metric"].astype(str) == metric)
+                & (corr["target"].astype(str) == "RGPM")
+            ]
+            values = pd.to_numeric(sub["spearman"], errors="coerce").dropna()
+            signals[metric] = max(0.0, float(values.iloc[0])) if not values.empty else 0.0
+    signal_sum = signals["B"] + signals["RS"]
+    b_share = signals["B"] / signal_sum if signal_sum > 0 else 0.5
+
+    constrained = best.copy()
+    b_idx = METRIC_KEYS.index("B")
+    rs_idx = METRIC_KEYS.index("RS")
+    brs_current = float(best[b_idx] + best[rs_idx])
+    if brs_current < min_mechanism_weight:
+        other_idx = [idx for idx, key in enumerate(METRIC_KEYS) if key not in {"B", "RS"}]
+        other_sum = float(best[other_idx].sum())
+        if other_sum > 0:
+            constrained[other_idx] = best[other_idx] * ((1.0 - min_mechanism_weight) / other_sum)
+        else:
+            constrained[other_idx] = 0.0
+        constrained[b_idx] = min_mechanism_weight * b_share
+        constrained[rs_idx] = min_mechanism_weight * (1.0 - b_share)
+    if constrained.sum() > 0:
+        constrained = constrained / constrained.sum()
+
+    st = comp.score_table
+    coverage_score = np.zeros(len(st), dtype=float)
+    for key, weight in zip(METRIC_KEYS, constrained):
+        col = key + "_z"
+        if col in st.columns:
+            coverage_score += float(weight) * pd.to_numeric(st[col], errors="coerce").fillna(0.0).to_numpy(dtype=float)
+    coverage_spearman = safe_spearman(coverage_score, st["RGPM"])
+    unconstrained_spearman = safe_spearman(st["S_w"], st["RGPM"]) if "S_w" in st.columns else np.nan
+    oof_spearman = safe_spearman(st["S_w_oof"], st["RGPM"]) if "S_w_oof" in st.columns else np.nan
+
+    rows: List[Dict[str, object]] = []
+    for idx, key in enumerate(METRIC_KEYS):
+        fold_col = "w_" + key
+        fold_median = (
+            float(pd.to_numeric(comp.fold_weights[fold_col], errors="coerce").median())
+            if fold_col in comp.fold_weights.columns
+            else np.nan
+        )
+        rows.append(
+            {
+                "metric": key,
+                "group": "B_RS_mechanism" if key in {"B", "RS"} else "other",
+                "active_metric": int(key in comp.active_metric_keys),
+                "unconstrained_weight": float(best[idx]),
+                "coverage_constrained_weight": float(constrained[idx]),
+                "fold_median_weight": fold_median,
+                "marginal_target_corr": signals.get(key, np.nan),
+                "min_B_RS_total": float(min_mechanism_weight),
+                "unconstrained_B_RS_total": brs_current,
+                "coverage_B_RS_total": float(constrained[b_idx] + constrained[rs_idx]),
+                "coverage_spearman": coverage_spearman,
+                "unconstrained_full_spearman": unconstrained_spearman,
+                "learned_oof_spearman": oof_spearman,
+                "diagnostic_only": 1,
+                "note": "Coverage-constrained diagnostic only; strict pass uses unconstrained OOF weights.",
+            }
+        )
+    return pd.DataFrame(rows)
+
+
 def export_tables(comp: ComputedData, out_dir: Path) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     comp.paper_metrics.to_csv(out_dir / "fig3_publication_day_indicators.csv", index=False)
@@ -3432,6 +3517,7 @@ def export_tables(comp: ComputedData, out_dir: Path) -> None:
     comp.landmark_validation.to_csv(out_dir / "fig3_landmark_validation.csv", index=False)
     comp.pair_scan_results.to_csv(out_dir / "fig3_pair_scan_results.csv", index=False)
     comp.effect_summary.to_csv(out_dir / "fig3_effect_summary.csv", index=False)
+    coverage_constrained_weight_diagnostics(comp).to_csv(out_dir / "coverage_constrained_weights.csv", index=False)
     (out_dir / "fig3_effect_summary.json").write_text(
         json.dumps(effect_summary_dict(comp.effect_summary), ensure_ascii=False, indent=2),
         encoding="utf-8",
@@ -3458,6 +3544,7 @@ def export_core_diagnostics(comp: ComputedData, out_dir: Path) -> None:
     comp.landmark_validation.to_csv(out_dir / "fig3_landmark_validation.csv", index=False)
     comp.pair_scan_results.to_csv(out_dir / "fig3_pair_scan_results.csv", index=False)
     comp.effect_summary.to_csv(out_dir / "fig3_effect_summary.csv", index=False)
+    coverage_constrained_weight_diagnostics(comp).to_csv(out_dir / "coverage_constrained_weights.csv", index=False)
     (out_dir / "fig3_effect_summary.json").write_text(
         json.dumps(effect_summary_dict(comp.effect_summary), ensure_ascii=False, indent=2),
         encoding="utf-8",
