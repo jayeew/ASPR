@@ -8,6 +8,7 @@ from typing import Dict, Iterable, List, Optional
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_ENV_FILES = (PROJECT_ROOT / ".env", PROJECT_ROOT / ".env.local")
+SYSTEM_ENV = dict(os.environ)
 _LOADED = False
 
 
@@ -90,6 +91,15 @@ def ensure_env_loaded() -> None:
 def getenv(name: str, default: str = "") -> str:
     ensure_env_loaded()
     return os.getenv(name, default)
+
+
+def getenv_system(name: str, default: str = "") -> str:
+    """Return a variable from the process/system environment only.
+
+    This intentionally ignores values loaded from project `.env` files. Use it
+    for secrets that should be managed outside the repository workspace.
+    """
+    return SYSTEM_ENV.get(name, default)
 
 
 def getenv_int(name: str, default: int) -> int:

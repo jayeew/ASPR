@@ -84,6 +84,13 @@ INNOVATION_GENERATION_PROMPT = """你是一位专业的学术论文评审专家�
 - 如果 B / RTD / BurtIP 较高，可以讨论结构洞、跨社区桥接或低冗余知识连接。
 - 如果图谱证据置信度低，必须使用保守措辞，并说明不确定性。
 
+【创新性语气校准规则】
+- 默认从“中等/不确定创新性”开始判断，而不是默认假设论文高度创新。
+- 只有同时满足 clear prior-art contrast、strong textual/experimental evidence、graph signal support，才允许使用 strong novelty language。
+- 如果 evidence/rigor、limitations、prior-art contrast 或 graph confidence 较弱，必须降调为 promising / partially substantiated / uncertain。
+- 禁止把 useful / interesting / technically solid 直接写成 highly novel、groundbreaking、transformative。
+- 如果检索证据不足、图谱信号弱或论文 dossier 信息不完整，创新性立场最高只能是 moderate，并明确不确定性。
+
 请生成一份详细的创新性评价报告，包含：
 1. 主要创新点总结（2-3条）
 2. 与相关研究的对比分析
@@ -147,6 +154,13 @@ INNOVATION_REFLECTION_PROMPT = """你是一位严格的学术论文评审专家�
    - 是否呈现了反方质疑和不确定性？
    - 是否遵守 recommended tone？
 
+8. **创新性过度声称硬检查**
+   - overclaiming_check: 是否把 useful / interesting / technically solid 误写成 high novelty？
+   - prior_art_support_check: 强创新表述是否有 clear prior-art contrast 支持？
+   - evidence_rigor_check: 证据、实验、方法或严谨性不足时是否已经降调？
+   - graph_signal_consistency_check: 图谱置信度低或结构信号弱时，是否仍声称 groundbreaking / transformative？
+   - 任一硬检查失败时，必须降低不确定性校准分或将 found_solution 置为 false。
+
 请输出以下格式的反思结果：
 <reflections>
 你的详细反思内容，指出评价的优点和不足，提出改进建议...
@@ -191,6 +205,8 @@ INNOVATION_IMPROVEMENT_PROMPT = """你是一位专业的学术论文评审专家
 5. 去除不必要的内容
 6. 让创新性声明与七维图谱证据一致：证据强时指出对应机制，证据弱时保守表达并说明不确定性
 7. 按审稿委员会 claim cards 修正每条 claim 的证据、图谱支持、反方质疑和不确定性
+8. 删除或降调 unsupported overclaiming，不要把 useful / interesting / technically solid 直接等同于 high novelty
+9. 在最终段落中给出校准后的创新性立场，例如 promising but partially substantiated novelty
 
 保持评价的专业性和客观性，确保引用格式正确 [序号]。"""
 
@@ -234,7 +250,10 @@ FINAL_INNOVATION_REPORT_PROMPT = """你是一位资深的学术论文评审专�
 ## 4. 图谱结构证据 (Graph-based Evidence)
 说明七维图谱指标如何支持或限制上述创新性判断。若证据置信度低，必须明确说明原因，并避免过度声称颠覆性。
 
-## 5. 参考文献 (References)
+## 5. 校准后的创新性立场 (Calibrated Innovation Stance)
+用自然语言总结 calibrated stance。不要密集罗列指标数值；应表达结构证据较强、有限或不确定，并在证据不足时主动降调，例如 “promising but partially substantiated novelty”。
+
+## 6. 参考文献 (References)
 使用标准学术引用格式列出所有引用的文献：
 [1] 作者. 标题. 期刊/会议名, 年份.
 [2] 作者. 标题. 期刊/会议名, 年份.

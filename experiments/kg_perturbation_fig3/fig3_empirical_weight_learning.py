@@ -73,6 +73,12 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from aspr.env import getenv
+from experiments.figure_quality import (
+    strict_main_figure_failed,
+    write_figure_quality_report,
+    write_run_manifest,
+    write_strict_failure_report,
+)
 
 os.environ.setdefault("MPLCONFIGDIR", "/tmp/aspr_matplotlib_cache")
 
@@ -3675,6 +3681,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--audit-only", action="store_true",
                         help="Run computation and export diagnostics, but skip figure rendering.")
     parser.add_argument("--export-tables", action="store_true", help="Export all computed intermediate tables.")
+    parser.add_argument("--strict-main-figure", action="store_true",
+                        help="Write outputs but exit non-zero unless the selected run passes all main-figure gates.")
     parser.add_argument("--diagnostics", action="store_true", help="Export diagnostic tables and pass/fail summary. Enabled automatically with --export-tables.")
     parser.add_argument("--formats", nargs="+", default=["png", "svg"], choices=["png", "svg", "pdf"], help="Output figure formats.")
     parser.add_argument("--no-prepare-input", action="store_true",
@@ -3823,6 +3831,19 @@ def run_analysis(raw: RawData, args: argparse.Namespace, run_name: str, run_out_
         progress_log(f"[{run_name}] Audit-only mode: skipping figure rendering.", progress)
     else:
         draw_outputs(comp, args, run_out_dir, run_name)
+    run_domains = (
+        sorted(raw.works["domain"].astype(str).dropna().unique().tolist())
+        if "domain" in raw.works.columns
+        else [run_name]
+    )
+    write_fig3_reports(
+        args,
+        run_out_dir,
+        run_name=run_name,
+        quality_gates=comp.diagnostics_summary,
+        generated_files=expected_fig3_files(args, run_out_dir, selected=False),
+        domains=run_domains,
+    )
     return comp
 
 
@@ -3884,6 +3905,64 @@ def copy_selected_outputs(selection: Mapping[str, Any], args: argparse.Namespace
             dst = args.out_dir / f"fig3_selected_panel_{args.panel}.{ext}"
         if src.exists():
             shutil.copy2(src, dst)
+
+
+def expected_fig3_files(args: argparse.Namespace, out_dir: Path, selected: bool = False) -> List[Path]:
+    if args.audit_only:
+        return []
+    files: List[Path] = []
+    if args.panel == "all":
+        stem = "fig3_selected_weight_learning_full" if selected else "fig3_weight_learning_full"
+        files.extend(out_dir / f"{stem}.{ext}" for ext in args.formats)
+        if not selected:
+            files.extend(out_dir / f"fig3_panel_{panel}.png" for panel in ["a", "b", "c", "d", "e", "f"])
+    else:
+        stem = f"fig3_selected_panel_{args.panel}" if selected else f"fig3_panel_{args.panel}"
+        files.extend(out_dir / f"{stem}.{ext}" for ext in args.formats)
+    return files
+
+
+def write_fig3_reports(
+    args: argparse.Namespace,
+    out_dir: Path,
+    *,
+    run_name: str,
+    quality_gates: Mapping[str, Any],
+    generated_files: Sequence[Path],
+    domains: Sequence[str],
+) -> None:
+    write_run_manifest(
+        out_dir,
+        figure="fig3",
+        argv=sys.argv,
+        inputs={
+            "data_dir": str(args.data_dir),
+            "run_mode": args.run_mode,
+            "panel": args.panel,
+            "tau": int(args.tau),
+            "cv_mode": args.cv_mode,
+            "delta_variant": args.delta_variant,
+            "min_refs": int(args.min_refs),
+            "min_controls": int(args.min_controls),
+            "fig1_corpus_source": args.fig1_corpus_source,
+            "strict_main_figure": bool(args.strict_main_figure),
+            "run_name": run_name,
+        },
+        domains=domains,
+        quality_gates=quality_gates,
+        extra={
+            "formats": list(args.formats),
+            "export_tables": bool(args.export_tables),
+            "audit_only": bool(args.audit_only),
+        },
+    )
+    write_figure_quality_report(
+        out_dir,
+        figure="fig3",
+        generated_files=generated_files,
+        quality_gates=quality_gates,
+        extra={"run_name": run_name},
+    )
 
 
 def main() -> None:
@@ -3966,6 +4045,22 @@ def main() -> None:
         encoding="utf-8",
     )
     copy_selected_outputs(selection, args)
+    write_fig3_reports(
+        args,
+        args.out_dir,
+        run_name=f"selected:{selection.get('selected_run')}",
+        quality_gates=selection.get("summary", {}),
+        generated_files=expected_fig3_files(args, args.out_dir, selected=True),
+        domains=domains,
+    )
+    if args.strict_main_figure and strict_main_figure_failed(selection.get("summary", {})):
+        write_strict_failure_report(
+            args.out_dir,
+            figure="fig3",
+            quality_gates=selection.get("summary", {}),
+            message="Fig. 3 remains diagnostic because the selected run failed at least one main-figure gate.",
+        )
+        raise SystemExit(2)
     progress_log(
         f"Selected run: {selection.get('selected_run')} ({selection.get('reason')}). "
         f"Selection report: {args.out_dir / 'fig3_run_selection.json'}",

@@ -21,6 +21,13 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from aspr.env import getenv
+from experiments.figure_quality import (
+    normalize_reference_closure_report,
+    strict_main_figure_failed,
+    write_figure_quality_report,
+    write_run_manifest,
+    write_strict_failure_report,
+)
 
 os.environ.setdefault('MPLCONFIGDIR', '/tmp/aspr_matplotlib_cache')
 
@@ -1915,6 +1922,36 @@ def build_evidence_support(bootstrap: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def reference_closure_gate_values(reference_closure_report: pd.DataFrame) -> Tuple[pd.DataFrame, int, float]:
+    normalized = normalize_reference_closure_report(reference_closure_report)
+    if normalized.empty:
+        return normalized, 0, 0.0
+    measured = pd.to_numeric(normalized['coverage_measured'], errors='coerce').fillna(0).astype(int)
+    measured_all = int(len(normalized) > 0 and measured.min() == 1)
+    measured_coverage = pd.to_numeric(
+        normalized.loc[measured.astype(bool), 'coverage_materialized'],
+        errors='coerce',
+    )
+    min_closure = float(measured_coverage.min()) if not measured_coverage.empty else 0.0
+    return normalized, measured_all, min_closure
+
+
+def refresh_reference_closure_quality(
+    quality_gates: Mapping[str, Any],
+    reference_closure_report: pd.DataFrame,
+) -> Tuple[Dict[str, Any], pd.DataFrame]:
+    normalized, measured_all, min_closure = reference_closure_gate_values(reference_closure_report)
+    quality = copy.deepcopy(dict(quality_gates))
+    checks = dict(quality.get('checks') or {})
+    checks['reference_closure_coverage_min80pct'] = int(measured_all == 1 and min_closure >= 0.80)
+    quality['checks'] = checks
+    quality['reference_closure_measured_all_domains'] = bool(measured_all)
+    quality['min_reference_closure_coverage'] = min_closure
+    quality['overall_pass'] = bool(all(checks.values())) if checks else False
+    quality['status_label'] = 'strong experimental evidence' if quality['overall_pass'] else 'multi-domain diagnostic evidence'
+    return quality, normalized
+
+
 def build_quality_gates(
     paper_metrics: pd.DataFrame,
     graph_delta_diagnostics_df: pd.DataFrame,
@@ -1929,7 +1966,7 @@ def build_quality_gates(
     ]
     relaxed_tiers = {'field_year3', 'field_all_years', 'all_non_landmark', 'no_controls'}
     relaxed_ratio = float(matched_controls['control_tier'].isin(relaxed_tiers).mean()) if not matched_controls.empty else 1.0
-    min_closure = float(pd.to_numeric(reference_closure_report['coverage_materialized'], errors='coerce').min()) if not reference_closure_report.empty else 0.0
+    _, closure_measured_all, min_closure = reference_closure_gate_values(reference_closure_report)
     sig_expected = 0
     for metric, outcomes in EXPECTED_FUTURE_LINKS.items():
         sub = bootstrap[(bootstrap['metric'] == metric) & (bootstrap['future_outcome'].isin(outcomes))]
@@ -1939,7 +1976,7 @@ def build_quality_gates(
         'total_eligible_papers_min8000': int(len(paper_metrics) >= 8000),
         'active_future_outcomes_min5': int(len(active_independent) >= 5),
         'relaxed_control_tier_ratio_max25pct': int(relaxed_ratio <= 0.25),
-        'reference_closure_coverage_min80pct': int(min_closure >= 0.80),
+        'reference_closure_coverage_min80pct': int(closure_measured_all == 1 and min_closure >= 0.80),
         'significant_expected_links_min4': int(sig_expected >= 4),
         'mechanism_composite_rho_min020': int(np.isfinite(composite_rho) and composite_rho >= 0.20),
     }
@@ -1952,6 +1989,7 @@ def build_quality_gates(
         'total_eligible_papers': int(len(paper_metrics)),
         'active_future_outcomes': active_independent['delta'].astype(str).tolist(),
         'relaxed_control_tier_ratio': relaxed_ratio,
+        'reference_closure_measured_all_domains': bool(closure_measured_all),
         'min_reference_closure_coverage': min_closure,
         'significant_expected_links': int(sig_expected),
         'mechanism_composite_partial_spearman': float(composite_rho) if np.isfinite(composite_rho) else None,
@@ -1980,6 +2018,7 @@ def build_strong_comp_from_tables(
 ) -> ComputedData:
     metric_cols = [m[0] for m in METRIC_SPECS]
     paper_metrics = metrics.copy()
+    reference_closure_report = normalize_reference_closure_report(reference_closure_report)
     if 'DeltaQ0_raw_q0_minus_qminus' not in paper_metrics.columns and 'DeltaQ0' in paper_metrics.columns:
         paper_metrics['DeltaQ0_raw_q0_minus_qminus'] = -pd.to_numeric(paper_metrics['DeltaQ0'], errors='coerce')
     paper_metrics, metric_diag = field_year_rank_normalize(paper_metrics, metric_cols)
@@ -2151,6 +2190,7 @@ def build_strong_evidence_data(args: argparse.Namespace, progress: bool) -> Tupl
             email=args.email,
             progress=progress,
         )
+        closure_report = normalize_reference_closure_report(pd.DataFrame([closure_report])).iloc[0].to_dict()
         raw_by_domain[domain] = raw3
         closure_rows.append(closure_report)
         audit_rows.append(domain_input_audit(domain, fig1_dir, raw3, closure_report))
@@ -2289,6 +2329,7 @@ def load_exported_strong_comp(args: argparse.Namespace) -> Optional[ComputedData
         if args.reference_closure == 'off':
             closure_report['status'] = 'closure_disabled_cached_raw_only'
     quality = json.loads((args.out_dir / 'fig2_quality_gates.json').read_text(encoding='utf-8'))
+    quality, closure_report = refresh_reference_closure_quality(quality, closure_report)
     return ComputedData(
         paper_metrics=paper_metrics,
         candidate_metrics=candidate_metrics,
@@ -3696,6 +3737,41 @@ def export_tables(comp: ComputedData, out_dir: Path) -> None:
     comp.graph_delta_diagnostics.to_csv(out_dir / 'fig2_graph_delta_diagnostics.csv', index=False)
 
 
+def write_fig2_reports(args: argparse.Namespace, comp: ComputedData, generated_files: Sequence[Path]) -> None:
+    quality = comp.quality_gates if comp.evidence_mode == 'strong' else {}
+    write_run_manifest(
+        args.out_dir,
+        figure='fig2',
+        argv=sys.argv,
+        inputs={
+            'data_dir': str(args.data_dir),
+            'evidence_mode': args.evidence_mode,
+            'domains': parse_domain_string(args.domains) if args.evidence_mode == 'strong' else [args.domain],
+            'future_tau': int(args.future_tau),
+            'reference_closure': getattr(args, 'reference_closure', None),
+            'online_expand': bool(getattr(args, 'online_expand', False)),
+            'fig1_corpus_source': getattr(args, 'fig1_corpus_source', None),
+        },
+        domains=parse_domain_string(args.domains) if args.evidence_mode == 'strong' else [args.domain],
+        quality_gates=quality,
+        extra={
+            'panel': args.panel,
+            'export_tables': bool(args.export_tables),
+            'strict_main_figure': bool(getattr(args, 'strict_main_figure', False)),
+        },
+    )
+    write_figure_quality_report(
+        args.out_dir,
+        figure='fig2',
+        generated_files=generated_files,
+        quality_gates=quality,
+        extra={
+            'domain_adequacy_rows': int(len(comp.domain_adequacy)) if comp.evidence_mode == 'strong' else 0,
+            'reference_closure_rows': int(len(comp.reference_closure_report)) if comp.evidence_mode == 'strong' else 0,
+        },
+    )
+
+
 # --------------------------
 # CLI
 # --------------------------
@@ -3732,6 +3808,8 @@ def parse_args() -> argparse.Namespace:
     p.add_argument('--focal-paper-list', type=Path, default=None,
                    help='Optional text file with one focal paper id per line for metric computation. Defaults to all papers.')
     p.add_argument('--export-tables', action='store_true', help='Export all intermediate computed tables.')
+    p.add_argument('--strict-main-figure', action='store_true',
+                   help='Write outputs but exit non-zero unless all strong-evidence quality gates pass.')
     p.add_argument('--progress-interval', type=int, default=100,
                    help='Print one focal-paper progress update every N papers while computing metrics. Default: 100.')
     p.add_argument('--min-controls', type=int, default=50,
@@ -3802,6 +3880,15 @@ def main() -> None:
             progress_log(f'Drawing strong-mode panel {args.panel}: {outpath}', progress)
             save_single_panel(args.panel, raw, comp, args.focus_paper_id, args.future_tau, outpath, fig1_snapshot_dir=fig1_snapshot_dir)
             progress_log(f'Saved panel {args.panel}: {outpath}', progress)
+        write_fig2_reports(args, comp, [outpath])
+        if args.strict_main_figure and strict_main_figure_failed(comp.quality_gates):
+            write_strict_failure_report(
+                args.out_dir,
+                figure='fig2',
+                quality_gates=comp.quality_gates,
+                message='Fig. 2 remains diagnostic because at least one strong-evidence quality gate failed.',
+            )
+            raise SystemExit(2)
         progress_log('Done.', progress)
         return
 

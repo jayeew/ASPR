@@ -5,10 +5,14 @@ import os
 import sys
 from functools import lru_cache
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import requests
-from FlagEmbedding import BGEM3FlagModel, FlagReranker
+try:
+    from FlagEmbedding import BGEM3FlagModel, FlagReranker
+except ImportError:  # pragma: no cover - exercised in lightweight environments.
+    BGEM3FlagModel = None  # type: ignore[assignment]
+    FlagReranker = None  # type: ignore[assignment]
 from openai import OpenAI
 from pypdf import PdfReader
 
@@ -30,6 +34,19 @@ OUTPUTS_DIR = PROJECT_ROOT / "outputs"
 DOWNLOAD_DIR = OUTPUTS_DIR / "downloads"
 RETRIEVAL_CACHE_DIR = DATA_DIR / "retrieval_cache"
 TEMP_PROMPT_PATH = OUTPUTS_DIR / "temp.json"
+DEFAULT_RECALL_MODEL = "BAAI/bge-m3"
+DEFAULT_RERANKER_MODEL = "OpenSciLM/OpenScholar_Reranker"
+
+_RECALL_MODEL_FAILURE = ""
+_RERANKER_MODEL_FAILURE = ""
+_FALLBACK_MESSAGES_REPORTED: set[str] = set()
+_LAST_RECALL_BACKEND = "bge_m3"
+_LAST_RERANKER_BACKEND = "openscholar_reranker"
+_LAST_RECALL_BATCH_SIZE_USED = ""
+_LAST_RERANKER_BATCH_SIZE_USED = ""
+_LAST_RECALL_FAILURE = ""
+_LAST_RERANKER_FAILURE = ""
+_LAST_RETRIEVAL_FAILURE_STAGE = ""
 
 
 def _query_cache_paths(title: str, abstract: str, key_words: List[str]) -> Tuple[Path, Path]:
@@ -88,43 +105,226 @@ def keywords_extract(query: str) -> List[str]:
 
 
 @lru_cache(maxsize=1)
-def _get_recall_model() -> BGEM3FlagModel:
-    return BGEM3FlagModel("BAAI/bge-m3", use_fp16=True)
+def _get_recall_model():
+    if BGEM3FlagModel is None:
+        raise OSError("FlagEmbedding is not installed.")
+    return BGEM3FlagModel(getenv("ASPR_RECALL_MODEL_PATH", DEFAULT_RECALL_MODEL), use_fp16=True)
 
 
 @lru_cache(maxsize=1)
-def _get_reranker() -> FlagReranker:
-    return FlagReranker("OpenSciLM/OpenScholar_Reranker", use_fp16=True)
+def _get_reranker():
+    if FlagReranker is None:
+        raise OSError("FlagEmbedding is not installed.")
+    return FlagReranker(getenv("ASPR_RERANKER_MODEL_PATH", DEFAULT_RERANKER_MODEL), use_fp16=True)
+
+
+def _csv_ints(value: str) -> List[int]:
+    out: List[int] = []
+    for item in str(value or "").split(","):
+        item = item.strip()
+        if not item:
+            continue
+        try:
+            number = int(item)
+        except ValueError:
+            continue
+        if number > 0 and number not in out:
+            out.append(number)
+    return out
+
+
+def _retry_batches(primary_env: str, retry_env: str, default_primary: int, default_retry: Sequence[int]) -> List[int]:
+    primary = getenv_int(primary_env, default_primary)
+    values = [primary]
+    values.extend(_csv_ints(getenv(retry_env, ",".join(str(item) for item in default_retry))))
+    out: List[int] = []
+    for value in values:
+        if value > 0 and value not in out:
+            out.append(value)
+    return out or list(default_retry)
+
+
+def _is_cuda_oom(exc: BaseException) -> bool:
+    text = str(exc).lower()
+    return "cuda out of memory" in text or "outofmemoryerror" in text
+
+
+def _empty_cuda_cache() -> None:
+    try:
+        import torch
+
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+    except Exception:
+        return
+
+
+def _fallback_message_once(key: str, message: str) -> None:
+    if key in _FALLBACK_MESSAGES_REPORTED:
+        return
+    _FALLBACK_MESSAGES_REPORTED.add(key)
+    print(message)
+
+
+def _tfidf_rank(query: str, reference: List[str]) -> Tuple[List[str], List[float]]:
+    if not reference:
+        return [], []
+    try:
+        from sklearn.feature_extraction.text import TfidfVectorizer
+        from sklearn.metrics.pairwise import cosine_similarity
+
+        matrix = TfidfVectorizer(stop_words="english").fit_transform([query] + list(reference))
+        scores = cosine_similarity(matrix[0:1], matrix[1:]).ravel().tolist()
+    except Exception:
+        query_terms = {term.lower() for term in query.split() if term.strip()}
+        scores = []
+        for ref in reference:
+            ref_terms = {term.lower() for term in ref.split() if term.strip()}
+            denom = max(1, len(query_terms | ref_terms))
+            scores.append(len(query_terms & ref_terms) / denom)
+    paired = sorted(zip(reference, scores), key=lambda item: item[1], reverse=True)
+    return [item for item, _ in paired], [float(score) for _, score in paired]
+
+
+def retrieval_backend_status() -> Dict[str, str]:
+    return {
+        "flagembedding_installed": str(BGEM3FlagModel is not None and FlagReranker is not None),
+        "recall_model_path": getenv("ASPR_RECALL_MODEL_PATH", DEFAULT_RECALL_MODEL),
+        "reranker_model_path": getenv("ASPR_RERANKER_MODEL_PATH", DEFAULT_RERANKER_MODEL),
+        "recall_backend": _LAST_RECALL_BACKEND,
+        "reranker_backend": _LAST_RERANKER_BACKEND,
+        "recall_batch_size_used": _LAST_RECALL_BATCH_SIZE_USED,
+        "rerank_batch_size_used": _LAST_RERANKER_BATCH_SIZE_USED,
+        "retrieval_failure_stage": _LAST_RETRIEVAL_FAILURE_STAGE,
+        "recall_failure": _LAST_RECALL_FAILURE or _RECALL_MODEL_FAILURE,
+        "reranker_failure": _LAST_RERANKER_FAILURE or _RERANKER_MODEL_FAILURE,
+    }
 
 
 def retrieval_recall(query: str, reference: List[str]) -> Tuple[List[str], List[float]]:
-    model = _get_recall_model()
+    global _LAST_RECALL_BACKEND, _LAST_RECALL_BATCH_SIZE_USED, _LAST_RECALL_FAILURE
+    global _LAST_RETRIEVAL_FAILURE_STAGE, _RECALL_MODEL_FAILURE
+
+    _LAST_RECALL_BACKEND = "bge_m3"
+    _LAST_RECALL_BATCH_SIZE_USED = ""
+    _LAST_RECALL_FAILURE = ""
+    _LAST_RETRIEVAL_FAILURE_STAGE = ""
+    try:
+        model = _get_recall_model()
+    except Exception as exc:
+        _RECALL_MODEL_FAILURE = f"{type(exc).__name__}: {exc}"
+        _LAST_RECALL_FAILURE = _RECALL_MODEL_FAILURE
+        _LAST_RECALL_BACKEND = "tfidf_fallback"
+        _LAST_RETRIEVAL_FAILURE_STAGE = "retrieval_recall_model_load"
+        _fallback_message_once(
+            "recall_model_load",
+            f"Neural recall unavailable ({_LAST_RECALL_FAILURE}); using TF-IDF lexical recall fallback.",
+        )
+        return _tfidf_rank(query, reference)
+
     sentence_pairs = [(query, ref) for ref in reference]
-    similarity_scores = model.compute_score(
-        sentence_pairs,
-        max_passage_length=2048,  # a smaller max length leads to a lower latency
-        weights_for_different_modes=[0.4, 0.2, 0.4],
-        batch_size=100
-    )['colbert+sparse+dense']
+    last_exc: Optional[BaseException] = None
+    for batch_size in _retry_batches("ASPR_RECALL_BATCH_SIZE", "ASPR_RECALL_RETRY_BATCHES", 8, [8, 4, 2, 1]):
+        try:
+            result = model.compute_score(
+                sentence_pairs,
+                max_passage_length=2048,
+                weights_for_different_modes=[0.4, 0.2, 0.4],
+                batch_size=batch_size,
+            )
+            similarity_scores = result["colbert+sparse+dense"] if isinstance(result, dict) else result
+            _LAST_RECALL_BATCH_SIZE_USED = str(batch_size)
+            _LAST_RECALL_BACKEND = "bge_m3"
+            _LAST_RECALL_FAILURE = ""
+            _LAST_RETRIEVAL_FAILURE_STAGE = ""
+            break
+        except Exception as exc:
+            last_exc = exc
+            _LAST_RECALL_FAILURE = f"{type(exc).__name__}: {exc}"
+            if _is_cuda_oom(exc):
+                _empty_cuda_cache()
+                continue
+            _LAST_RECALL_BACKEND = "tfidf_fallback"
+            _LAST_RETRIEVAL_FAILURE_STAGE = "retrieval_recall_error"
+            _fallback_message_once(
+                "recall_compute_error",
+                f"Neural recall failed ({_LAST_RECALL_FAILURE}); using TF-IDF lexical recall fallback.",
+            )
+            return _tfidf_rank(query, reference)
+    else:
+        _LAST_RECALL_BACKEND = "tfidf_fallback"
+        _LAST_RETRIEVAL_FAILURE_STAGE = "retrieval_recall_oom" if last_exc and _is_cuda_oom(last_exc) else "retrieval_recall_error"
+        _fallback_message_once(
+            "recall_compute_oom",
+            f"Neural recall exhausted retry batches ({_LAST_RECALL_FAILURE}); using TF-IDF lexical recall fallback.",
+        )
+        return _tfidf_rank(query, reference)
+
     paired = list(zip(reference, similarity_scores))
     paired_sorted = sorted(paired, key=lambda x: x[1], reverse=True)
     sorted_references = [p for p, s in paired_sorted]
-    sorted_scores = [s for p, s in paired_sorted]
-    # print(sorted_scores)
+    sorted_scores = [float(s) for p, s in paired_sorted]
     return sorted_references, sorted_scores
     
 
 def retrieval_rerank(query: str, reference: List[str]) -> Tuple[List[str], List[float]]:
-    model = _get_reranker()
+    global _LAST_RERANKER_BACKEND, _LAST_RERANKER_BATCH_SIZE_USED, _LAST_RERANKER_FAILURE
+    global _LAST_RETRIEVAL_FAILURE_STAGE, _RERANKER_MODEL_FAILURE
+
+    _LAST_RERANKER_BACKEND = "openscholar_reranker"
+    _LAST_RERANKER_BATCH_SIZE_USED = ""
+    _LAST_RERANKER_FAILURE = ""
+    try:
+        model = _get_reranker()
+    except Exception as exc:
+        _RERANKER_MODEL_FAILURE = f"{type(exc).__name__}: {exc}"
+        _LAST_RERANKER_FAILURE = _RERANKER_MODEL_FAILURE
+        _LAST_RERANKER_BACKEND = "tfidf_fallback"
+        if not _LAST_RETRIEVAL_FAILURE_STAGE:
+            _LAST_RETRIEVAL_FAILURE_STAGE = "retrieval_rerank_model_load"
+        _fallback_message_once(
+            "reranker_model_load",
+            f"Neural reranker unavailable ({_LAST_RERANKER_FAILURE}); using TF-IDF lexical rerank fallback.",
+        )
+        return _tfidf_rank(query, reference)
+
     sentence_pairs = [(query, ref) for ref in reference]
-    rerank_scores = model.compute_score(
-        sentence_pairs,
-        batch_size=100
-    )
+    last_exc: Optional[BaseException] = None
+    for batch_size in _retry_batches("ASPR_RERANK_BATCH_SIZE", "ASPR_RERANK_RETRY_BATCHES", 16, [16, 8, 4, 2, 1]):
+        try:
+            rerank_scores = model.compute_score(sentence_pairs, batch_size=batch_size)
+            _LAST_RERANKER_BATCH_SIZE_USED = str(batch_size)
+            _LAST_RERANKER_BACKEND = "openscholar_reranker"
+            _LAST_RERANKER_FAILURE = ""
+            break
+        except Exception as exc:
+            last_exc = exc
+            _LAST_RERANKER_FAILURE = f"{type(exc).__name__}: {exc}"
+            if _is_cuda_oom(exc):
+                _empty_cuda_cache()
+                continue
+            _LAST_RERANKER_BACKEND = "tfidf_fallback"
+            if not _LAST_RETRIEVAL_FAILURE_STAGE:
+                _LAST_RETRIEVAL_FAILURE_STAGE = "retrieval_rerank_error"
+            _fallback_message_once(
+                "reranker_compute_error",
+                f"Neural reranker failed ({_LAST_RERANKER_FAILURE}); using TF-IDF lexical rerank fallback.",
+            )
+            return _tfidf_rank(query, reference)
+    else:
+        _LAST_RERANKER_BACKEND = "tfidf_fallback"
+        if not _LAST_RETRIEVAL_FAILURE_STAGE:
+            _LAST_RETRIEVAL_FAILURE_STAGE = "retrieval_rerank_oom" if last_exc and _is_cuda_oom(last_exc) else "retrieval_rerank_error"
+        _fallback_message_once(
+            "reranker_compute_oom",
+            f"Neural reranker exhausted retry batches ({_LAST_RERANKER_FAILURE}); using TF-IDF lexical rerank fallback.",
+        )
+        return _tfidf_rank(query, reference)
+
     paired = list(zip(reference, rerank_scores))
     paired_sorted = sorted(paired, key=lambda x: x[1], reverse=True)
     sorted_references = [p for p, s in paired_sorted]
-    sorted_scores = [s for p, s in paired_sorted]
+    sorted_scores = [float(s) for p, s in paired_sorted]
 
     return sorted_references, sorted_scores
 
@@ -313,13 +513,17 @@ class OpenScholar:
     def __init__(self, args):
         self.s2_api_key = args.s2_api_key
         self.and_search = _as_bool(args.and_search)
-        self.url = "http://api.semanticscholar.org/graph/v1/paper/search/bulk"
+        self.url = "https://api.semanticscholar.org/graph/v1/paper/search/bulk"
+        self.s2_key_status = "not_checked"
+        self.last_retrieval_source = "not_run"
+        self.last_query_audits: List[Dict[str, Any]] = []
 
     def __call__(self,):
         pass
 
     def search_semantic_scholar(self, key_words: List[str]) -> List[Dict[str, Any]]:
         papers = []
+        self.last_query_audits = []
         for kw in key_words:
             print(f"Searching for papers with keyword: {kw}")
             papers_kw = self._search_paper_via_query(kw)
@@ -364,18 +568,46 @@ class OpenScholar:
             "year": "2021-",
             "sort": "citationCount:desc"
         }
-        headers = {"x-api-key":self.s2_api_key}
-        response = requests.get(
-            self.url,
-            params=query_params,
-            headers=headers
-        )
-        if response.status_code == 200:
-            response_data = response.json().get("data", [])
-        else:
-            raise RuntimeError(f"Semantic Scholar request failed: {response.status_code} {response.text[:200]}")
+        attempts: List[Tuple[str, Dict[str, str]]] = []
+        if self.s2_api_key:
+            attempts.append(("semantic_scholar_keyed", {"x-api-key": self.s2_api_key}))
+        attempts.append(("semantic_scholar_anonymous", {}))
 
-        return response_data
+        last_error = ""
+        for source, headers in attempts:
+            response = requests.get(
+                self.url,
+                params=query_params,
+                headers=headers,
+                timeout=60,
+            )
+            self.last_query_audits.append(
+                {
+                    "source": source,
+                    "query": query,
+                    "status_code": response.status_code,
+                    "used_key": bool(headers.get("x-api-key")),
+                }
+            )
+            if response.status_code == 200:
+                self.last_retrieval_source = source
+                if source == "semantic_scholar_keyed":
+                    self.s2_key_status = "s2_key_ok"
+                elif self.s2_key_status == "not_checked":
+                    self.s2_key_status = "s2_key_missing"
+                return response.json().get("data", [])
+            last_error = f"{response.status_code} {response.text[:200]}"
+            if source == "semantic_scholar_keyed" and response.status_code in {401, 403}:
+                self.s2_key_status = "s2_key_rejected"
+                continue
+            if source == "semantic_scholar_keyed":
+                self.s2_key_status = f"s2_key_failed_{response.status_code}"
+                continue
+            break
+
+        raise RuntimeError(f"Semantic Scholar request failed: {last_error}")
+
+        return []
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='OpenScholar API Server')

@@ -76,7 +76,14 @@ HIT_BLUE = "#0B4FA3"
 MISSED_GRAY = "#9CA3AF"
 LANDMARK_RED = "#DC2626"
 UNEXPECTED_GREEN = "#10B981"
-PANEL_BORDER = "#6B7280"
+PANEL_BORDER = "#B8C2D1"
+DOMAIN_COLORS = {
+    "crispr": "#2563EB",
+    "graphene_2d_materials": "#F97316",
+    "ipsc_reprogramming": "#0F766E",
+    "transformer_foundation_models": "#7C3AED",
+}
+FALLBACK_COLORS = ["#2563EB", "#8B5CF6", "#F97316", "#0F766E", "#DC2626", "#94A3B8"]
 
 SCORE_CANDIDATES = ("S_w_oof", "S_w", "S_equal")
 RGPM_CANDIDATES = (
@@ -213,9 +220,9 @@ def panel_frame(ax: plt.Axes, label: str, title: str) -> None:
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.axis("off")
-    rounded_box(ax, 0.0, 0.0, 1.0, 1.0, PANEL_FACE, PANEL_BORDER, 0.85, 0.045, zorder=0)
-    ax.text(0.022, 0.965, label, ha="left", va="top", fontsize=16, fontweight="bold")
-    ax.text(0.100, 0.955, title, ha="left", va="top", fontsize=9.2, fontweight="bold")
+    rounded_box(ax, 0.0, 0.0, 1.0, 1.0, PANEL_FACE, PANEL_BORDER, 0.75, 0.020, zorder=0)
+    ax.text(0.022, 0.965, label, ha="left", va="top", fontsize=15, fontweight="bold")
+    ax.text(0.070, 0.955, title, ha="left", va="top", fontsize=10.2, fontweight="bold")
 
 
 def draw_arrow(
@@ -1104,32 +1111,61 @@ def draw_panel_a(ax: plt.Axes, tables: Fig5Tables) -> None:
     """Draw forecasting setting panel."""
     panel_frame(ax, "a", "Forecast setting")
     focus = tables.focus
-    ax.text(0.10, 0.78, "1950-2020\nhistorical KG", ha="center", va="center", fontsize=9.0, fontweight="bold")
-    ax.text(0.50, 0.78, "forecast", ha="center", va="center", fontsize=8.0, color=TEXT_MID, fontweight="bold")
+    score_col = "predicted_score" if "predicted_score" in focus.columns else "forecast_score"
+    cutoff = int(tables.summary.get("cutoff_year", 2020))
+    ax.text(0.28, 0.865, f"Historical knowledge graph\n(1950-{cutoff})", ha="center", va="top", fontsize=8.8, fontweight="bold")
+    ax.text(0.80, 0.865, f"Future window\n({tables.summary['validation_start']}-{tables.summary['validation_end_requested']})", ha="center", va="top", fontsize=8.8, fontweight="bold")
+    cloud = focus.sort_values("historical_size", ascending=False).head(130).copy()
+    if not cloud.empty:
+        x = 0.08 + 0.35 * normalize_series(cloud["cluster_x"])
+        y = 0.23 + 0.50 * normalize_series(cloud["cluster_y"])
+        sizes = 8 + 42 * normalize_series(np.log1p(cloud["historical_size"]))
+        colors = [color_for_domain(domain) for domain in cloud["domain"]]
+        # Deterministic nearest-neighbour scaffolding gives the left cloud a KG texture.
+        coords = np.column_stack([x, y])
+        for i in range(min(len(coords), 75)):
+            distances = np.sum((coords - coords[i]) ** 2, axis=1)
+            neighbours = np.argsort(distances)[1:3]
+            for j in neighbours:
+                if j <= i:
+                    continue
+                ax.plot([coords[i, 0], coords[j, 0]], [coords[i, 1], coords[j, 1]], transform=ax.transAxes, color="#CBD5E1", lw=0.35, alpha=0.42, zorder=1)
+        ax.scatter(x, y, s=sizes, c=colors, alpha=0.82, edgecolor="white", linewidth=0.28, transform=ax.transAxes, zorder=2)
+        important = cloud.sort_values([score_col, "realized_score"], ascending=False).head(5)
+        for _, row in important.iterrows():
+            idx = cloud.index.get_loc(row.name)
+            ax.scatter([x[idx]], [y[idx]], s=sizes[idx] * 1.35, facecolor="none", edgecolor=color_for_domain(row.get("domain")), linewidth=1.1, transform=ax.transAxes, zorder=4)
+    ax.text(0.50, 0.62, "Forecast", ha="center", va="center", fontsize=9.0, color=PREDICTED_BLUE, fontweight="bold")
     val_text = f"{tables.summary['validation_start']}-{tables.summary['validation_end_requested']}\nrealized outcomes"
-    ax.text(0.86, 0.78, val_text, ha="center", va="center", fontsize=9.0, fontweight="bold")
-    draw_arrow(ax, (0.22, 0.78), (0.42, 0.78), color=PREDICTED_BLUE, lw=1.6, mutation_scale=14)
-    draw_arrow(ax, (0.58, 0.78), (0.74, 0.78), color=REALIZED_GREEN, lw=1.6, mutation_scale=14)
-    draw_topic_cloud(ax, focus)
-    draw_pill(ax, 0.28, 0.45, "pre-2021 information only", PREDICTED_BLUE, 0.44, height=0.058)
+    draw_arrow(ax, (0.47, 0.51), (0.64, 0.51), color=PREDICTED_BLUE, lw=2.2, mutation_scale=24)
+    ax.text(0.50, 0.42, "Frontier forecasting\nusing only pre-cutoff\nknowledge structure", ha="center", va="top", fontsize=6.8, color=TEXT_MID)
+    rounded_box(ax, 0.66, 0.24, 0.28, 0.49, "#F8FAFC", "#8AB4F8", 0.8, 0.018, linestyle=(0, (4, 3)), zorder=1)
+    rng_points = []
+    for i in range(90):
+        px = 0.69 + 0.21 * stable_float(f"future-x-{i}")
+        py = 0.29 + 0.36 * stable_float(f"future-y-{i}")
+        rng_points.append((px, py))
+    ax.scatter([p[0] for p in rng_points], [p[1] for p in rng_points], s=9, c="#D8DEE7", alpha=0.55, transform=ax.transAxes, zorder=2)
+    future_colors = [PREDICTED_BLUE, "#F97316", REALIZED_GREEN, "#7C3AED", LANDMARK_RED]
+    for (px, py), color in zip([(0.73, 0.61), (0.84, 0.62), (0.84, 0.40), (0.73, 0.34), (0.90, 0.29)], future_colors):
+        draw_question_focus(ax, px, py, color)
+    ax.text(0.80, 0.20, "Predict emerging foci\nand key innovations", ha="center", va="top", fontsize=7.1, color=TEXT_DARK)
+    ax.text(0.50, 0.29, "only pre-2021\nknowledge structure", ha="center", va="center", fontsize=6.8, color=TEXT_MID)
     ax.text(
         0.50,
-        0.25,
+        0.11,
         f"Actual local validation: {tables.summary['validation_start']}-{tables.summary['validation_end_actual']}",
         ha="center",
         va="center",
-        fontsize=7.4,
+        fontsize=6.5,
         color=TEXT_MID,
     )
-    ax.text(
-        0.50,
-        0.14,
-        "Outputs: focus list, key innovation cases, historical backtests",
-        ha="center",
-        va="center",
-        fontsize=6.9,
-        color=TEXT_LIGHT,
-    )
+    legend_domains = list(dict.fromkeys(focus["domain"].astype(str).tolist()))[:5]
+    legend_x = 0.05
+    for domain in legend_domains:
+        ax.scatter([legend_x], [0.055], s=20, color=color_for_domain(domain), transform=ax.transAxes, zorder=5)
+        ax.text(legend_x + 0.018, 0.055, clean_label(domain.replace("_", " ").title()), ha="left", va="center", fontsize=5.7, transform=ax.transAxes)
+        legend_x += 0.17
 
 
 def draw_topic_cloud(ax: plt.Axes, focus: pd.DataFrame) -> None:
@@ -1159,20 +1195,48 @@ def normalize_series(values: pd.Series | np.ndarray) -> np.ndarray:
 
 def draw_panel_b(ax: plt.Axes, tables: Fig5Tables, top_n: int) -> None:
     """Draw predicted-vs-realized ranked focus alignment panel."""
-    panel_frame(ax, "b", "Predicted future focus aligns with realized hotspots")
+    panel_frame(ax, "b", f"Top predicted research foci ({tables.summary['validation_start']}-{tables.summary['validation_end_requested']})")
     focus = tables.focus
+    score_col = "predicted_score" if "predicted_score" in focus.columns else "forecast_score"
     pred = focus.loc[focus["predicted_rank"].le(top_n)].sort_values("predicted_rank")
-    real = focus.loc[focus["realized_rank"].le(top_n)].sort_values("realized_rank")
-    pred_y = {str(row["focus_id"]): 0.82 - i * 0.066 for i, (_, row) in enumerate(pred.iterrows())}
-    real_y = {str(row["focus_id"]): 0.82 - i * 0.066 for i, (_, row) in enumerate(real.iterrows())}
-    ax.text(0.07, 0.89, f"Predicted Top {top_n}", fontsize=7.6, fontweight="bold", color=PREDICTED_BLUE)
-    ax.text(0.64, 0.89, f"Realized Top {top_n}", fontsize=7.6, fontweight="bold", color=REALIZED_GREEN)
-    draw_ranked_list(ax, pred, pred_y, "predicted_rank", x=0.07, align="left")
-    draw_ranked_list(ax, real, real_y, "realized_rank", x=0.64, align="left")
-    draw_alignment_lines(ax, pred, real, pred_y, real_y)
+    if pred.empty:
+        ax.text(0.5, 0.5, "No predicted focus available", ha="center", va="center", fontsize=8, color=TEXT_LIGHT)
+        return
+    ax.text(0.11, 0.86, "Predicted research foci (word cloud)", fontsize=7.3, fontweight="bold", color=TEXT_DARK)
+    word_positions = [
+        (0.20, 0.64), (0.29, 0.54), (0.23, 0.43), (0.32, 0.35), (0.18, 0.31),
+        (0.10, 0.73), (0.39, 0.71), (0.09, 0.43), (0.41, 0.47), (0.38, 0.25),
+    ]
+    scores = pd.to_numeric(pred[score_col], errors="coerce").fillna(0.0)
+    score_norm = normalize_series(scores)
+    for idx, (_, row) in enumerate(pred.head(min(top_n, len(word_positions))).iterrows()):
+        x, y = word_positions[idx]
+        color = color_for_domain(row.get("domain")) if idx < 5 else blend_with_white(PREDICTED_BLUE, 0.45)
+        fontsize = 6.0 + 8.8 * float(score_norm[idx])
+        label = ellipsize(row["focus_label"], 34)
+        ax.text(x, y, label, transform=ax.transAxes, ha="center", va="center", fontsize=fontsize, color=color, fontweight="bold" if idx < 5 else "normal", alpha=0.95)
+    ax.text(0.07, 0.22, "Forecast score combines pre-cutoff graph score,\nhistorical seed strength and topic-level concentration.", transform=ax.transAxes, ha="left", va="top", fontsize=5.8, color=TEXT_LIGHT)
+
+    bar_ax = ax.inset_axes([0.55, 0.16, 0.38, 0.68])
+    bar_rows = pred.head(min(8, top_n)).iloc[::-1].copy()
+    bar_scores = pd.to_numeric(bar_rows[score_col], errors="coerce").fillna(0.0)
+    y = np.arange(len(bar_rows))
+    colors = [color_for_domain(domain) for domain in bar_rows["domain"]]
+    bar_ax.barh(y, bar_scores, color=colors, alpha=0.82, height=0.55)
+    bar_ax.set_yticks(y)
+    labels = [f"{int(rank)}  {ellipsize(label, 31)}" for rank, label in zip(bar_rows["predicted_rank"], bar_rows["focus_label"])]
+    bar_ax.set_yticklabels(labels, fontsize=6.3)
+    bar_ax.set_xlim(0, max(1.0, float(bar_scores.max()) * 1.15))
+    bar_ax.set_xlabel("Forecast priority score", fontsize=6.4)
+    bar_ax.set_title("Top predicted foci (by forecast score)", fontsize=7.3, fontweight="bold", pad=6)
+    bar_ax.grid(axis="x", color=GRID, lw=0.45, alpha=0.55)
+    for spine in ["top", "right"]:
+        bar_ax.spines[spine].set_visible(False)
+    for yi, value in zip(y, bar_scores):
+        bar_ax.text(float(value) + max(0.02, float(bar_scores.max()) * 0.02), yi, f"{value:.2f}", va="center", fontsize=6.2, color=TEXT_DARK)
     hit_count = int((tables.alignment["hit_type"] == "exact_hit").sum()) if not tables.alignment.empty else 0
     semantic_count = int((tables.alignment["hit_type"] == "semantic_hit").sum()) if not tables.alignment.empty else 0
-    draw_pill(ax, 0.36, 0.075, f"{hit_count + semantic_count}/{top_n} hits", HIT_BLUE, 0.24, height=0.054)
+    draw_pill(ax, 0.39, 0.055, f"{hit_count + semantic_count}/{top_n} realized hits", HIT_BLUE, 0.20, height=0.050, fontsize=6.2)
 
 
 def draw_ranked_list(
@@ -1223,14 +1287,96 @@ def color_for_category(category: str) -> str:
     return "#CBD5E1"
 
 
+def color_for_domain(domain: object) -> str:
+    """Return a stable color for one domain label."""
+    key = str(domain or "").strip()
+    if key in DOMAIN_COLORS:
+        return DOMAIN_COLORS[key]
+    idx = int(stable_float(key) * len(FALLBACK_COLORS)) % len(FALLBACK_COLORS)
+    return FALLBACK_COLORS[idx]
+
+
+def draw_question_focus(ax: plt.Axes, x: float, y: float, color: str, radius: float = 0.055) -> None:
+    """Draw a dashed future focus bubble."""
+    circle = mpatches.Circle(
+        (x, y),
+        radius,
+        transform=ax.transAxes,
+        facecolor=blend_with_white(color, 0.92),
+        edgecolor=color,
+        linewidth=1.1,
+        linestyle=(0, (4, 3)),
+        alpha=0.95,
+        zorder=5,
+    )
+    ax.add_patch(circle)
+    ax.text(x, y, "?", transform=ax.transAxes, ha="center", va="center", fontsize=14, color=color, fontweight="bold", zorder=6)
+
+
+def draw_take_home(ax: plt.Axes, text: str) -> None:
+    """Draw the Fig. 5 take-home message strip."""
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.axis("off")
+    rounded_box(ax, 0.16, 0.16, 0.68, 0.68, "#F8FBFF", "#8AB4F8", 0.85, 0.020, zorder=0)
+    # Simple binocular icon made from vector patches, kept evidence-neutral.
+    icon_x, icon_y = 0.205, 0.50
+    ax.add_patch(mpatches.Circle((icon_x - 0.018, icon_y), 0.025, transform=ax.transAxes, facecolor="none", edgecolor=PREDICTED_BLUE, lw=1.4))
+    ax.add_patch(mpatches.Circle((icon_x + 0.018, icon_y), 0.025, transform=ax.transAxes, facecolor="none", edgecolor=PREDICTED_BLUE, lw=1.4))
+    ax.plot([icon_x - 0.006, icon_x + 0.006], [icon_y + 0.015, icon_y + 0.015], transform=ax.transAxes, color=PREDICTED_BLUE, lw=1.2)
+    ax.plot([icon_x - 0.030, icon_x - 0.014], [icon_y + 0.033, icon_y + 0.018], transform=ax.transAxes, color=PREDICTED_BLUE, lw=1.2)
+    ax.plot([icon_x + 0.030, icon_x + 0.014], [icon_y + 0.033, icon_y + 0.018], transform=ax.transAxes, color=PREDICTED_BLUE, lw=1.2)
+    ax.text(0.255, 0.56, "Take-home message:", transform=ax.transAxes, ha="left", va="center", fontsize=9.2, fontweight="bold", color=TEXT_DARK)
+    ax.text(0.405, 0.56, textwrap.fill(text, width=118), transform=ax.transAxes, ha="left", va="center", fontsize=8.7, color=TEXT_DARK)
+
+
 def draw_panel_c(ax: plt.Axes, tables: Fig5Tables) -> None:
     """Draw frontier landscape map panel."""
-    panel_frame(ax, "c", "Forecasted frontier landscape and realized emergence")
+    panel_frame(ax, "c", "Predicted frontier landscape (topic map)")
     focus = tables.focus.copy()
-    map_ax = ax.inset_axes([0.075, 0.13, 0.83, 0.74])
-    sizes = 18 + 170 * normalize_series(np.log1p(focus["historical_size"]))
-    colors = [color_for_category(str(item)) for item in focus["forecast_category"]]
+    score_col = "predicted_score" if "predicted_score" in focus.columns else "forecast_score"
+    legend_ax = ax.inset_axes([0.035, 0.16, 0.16, 0.70])
+    legend_ax.set_xlim(0, 1)
+    legend_ax.set_ylim(0, 1)
+    legend_ax.axis("off")
+    legend_ax.text(0.0, 0.94, "Circle size: historical\nknowledge volume\n(1950-2020)", transform=legend_ax.transAxes, fontsize=5.9, fontweight="bold", va="top")
+    for y, size, label in [(0.72, 90, "Large"), (0.61, 52, "Medium"), (0.51, 26, "Small")]:
+        legend_ax.scatter([0.12], [y], s=size, facecolor="white", edgecolor=TEXT_DARK, linewidth=0.7, transform=legend_ax.transAxes)
+        legend_ax.text(0.28, y, label, transform=legend_ax.transAxes, va="center", fontsize=5.7)
+    legend_ax.text(0.0, 0.36, "Color intensity:\nforecast strength\n(2021-2026)", transform=legend_ax.transAxes, fontsize=5.9, fontweight="bold", va="top")
+    for i in range(18):
+        legend_ax.add_patch(
+            mpatches.Rectangle(
+                (0.05, 0.06 + i * 0.011),
+                0.13,
+                0.012,
+                transform=legend_ax.transAxes,
+                facecolor=plt.cm.turbo(i / 17),
+                edgecolor="none",
+            )
+        )
+    legend_ax.text(0.24, 0.25, "High", transform=legend_ax.transAxes, fontsize=5.5, va="center")
+    legend_ax.text(0.24, 0.06, "Low", transform=legend_ax.transAxes, fontsize=5.5, va="center")
+
+    map_ax = ax.inset_axes([0.20, 0.10, 0.74, 0.78])
+    hist_norm = normalize_series(np.log1p(focus["historical_size"]))
+    sizes = 18 + 185 * hist_norm
+    strength = normalize_series(pd.to_numeric(focus[score_col], errors="coerce").fillna(0.0))
+    base_colors = [blend_with_white("#94A3B8", 0.45) for _ in range(len(focus))]
+    colors = [
+        color_for_category(str(category)) if str(category) in {"hit", "predicted_only", "unexpected_realized"} else base_colors[i]
+        for i, category in enumerate(focus["forecast_category"])
+    ]
     edge_colors = [REALIZED_GREEN if bool(item) else "white" for item in focus["is_hotspot"]]
+    coords = focus[["cluster_x", "cluster_y"]].to_numpy(dtype=float)
+    if len(coords) > 4:
+        for i in range(min(len(coords), 140)):
+            distances = np.sum((coords - coords[i]) ** 2, axis=1)
+            neighbours = np.argsort(distances)[1:3]
+            for j in neighbours:
+                if j <= i:
+                    continue
+                map_ax.plot([coords[i, 0], coords[j, 0]], [coords[i, 1], coords[j, 1]], color="#CBD5E1", lw=0.35, alpha=0.22, zorder=0)
     map_ax.scatter(
         focus["cluster_x"],
         focus["cluster_y"],
@@ -1241,20 +1387,26 @@ def draw_panel_c(ax: plt.Axes, tables: Fig5Tables) -> None:
         alpha=0.86,
         zorder=2,
     )
+    top_pred = focus[focus["predicted_rank"].le(6)].copy()
+    for _, row in top_pred.iterrows():
+        radius_size = 420 + 520 * float(normalize_series(pd.Series([row.get(score_col, 0), focus[score_col].max()]))[0])
+        map_ax.scatter([row["cluster_x"]], [row["cluster_y"]], s=radius_size, color=color_for_domain(row.get("domain")), alpha=0.10, edgecolor="none", zorder=1)
+        map_ax.scatter([row["cluster_x"]], [row["cluster_y"]], s=radius_size * 0.45, color=color_for_domain(row.get("domain")), alpha=0.10, edgecolor="none", zorder=1)
     landmark = focus[focus["is_landmark_related"].fillna(False)]
     if not landmark.empty:
-        map_ax.scatter(landmark["cluster_x"], landmark["cluster_y"], s=28, marker="*", color=LANDMARK_RED, zorder=4)
-    label_focus = select_map_labels(focus)
-    offsets = [(8, 8), (8, -12), (-52, 10), (-52, -14), (10, 22)]
+        map_ax.scatter(landmark["cluster_x"], landmark["cluster_y"], s=34, marker="*", color=LANDMARK_RED, zorder=4)
+    label_focus = pd.concat([top_pred.head(4), select_map_labels(focus)], ignore_index=True).drop_duplicates("focus_id").head(7)
+    offsets = [(10, 12), (10, -14), (-58, 12), (-58, -15), (12, 26), (-42, 24), (15, -25)]
     for i, (_, row) in enumerate(label_focus.iterrows()):
         dx, dy = offsets[i % len(offsets)]
         map_ax.annotate(
-            wrap_text(row["focus_label"], 16),
+            wrap_text(row["focus_label"], 18),
             xy=(row["cluster_x"], row["cluster_y"]),
             xytext=(dx, dy),
             textcoords="offset points",
-            fontsize=5.2,
-            color=TEXT_DARK,
+            fontsize=5.7,
+            color=color_for_domain(row.get("domain")),
+            fontweight="bold",
             bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.76, "pad": 0.8},
             zorder=5,
         )
@@ -1281,30 +1433,42 @@ def draw_map_legend(ax: plt.Axes) -> None:
         ("unexpected", UNEXPECTED_GREEN),
         ("background", "#CBD5E1"),
     ]
-    x = 0.08
+    x = 0.42
     for label, color in items:
         ax.scatter([x], [0.065], s=22, color=color, transform=ax.transAxes, zorder=5)
         ax.text(x + 0.025, 0.065, label, ha="left", va="center", fontsize=5.8, transform=ax.transAxes)
-        x += 0.22
+        x += 0.135
 
 
 def draw_panel_d(ax: plt.Axes, tables: Fig5Tables) -> None:
     """Draw representative key innovation cases."""
-    panel_frame(ax, "d", "Representative predicted key innovations")
-    cases = tables.key_innovations.head(3)
+    panel_frame(ax, "d", "Representative predicted key innovations (examples)")
+    cases = tables.key_innovations.head(4)
     if cases.empty:
         ax.text(0.5, 0.5, "No case available", ha="center", va="center", fontsize=8, color=TEXT_LIGHT)
         return
-    card_h = 0.225
-    y0 = 0.685
+    card_colors = [PREDICTED_BLUE, "#F97316", REALIZED_GREEN, "#7C3AED"]
+    card_w = 0.215
+    card_h = 0.74
+    y = 0.12
     for i, (_, row) in enumerate(cases.iterrows()):
-        y = y0 - i * 0.265
-        rounded_box(ax, 0.06, y, 0.88, card_h, blend_with_white(PREDICTED_BLUE, 0.94), "#B6C7E6", 0.7, 0.026, zorder=1)
-        ax.text(0.085, y + card_h - 0.036, wrap_text(row["case_label"], 38), ha="left", va="top", fontsize=7.0, fontweight="bold")
-        ax.text(0.085, y + card_h - 0.080, "pre-2021 seed", ha="left", va="top", fontsize=5.4, color=PREDICTED_BLUE, fontweight="bold")
-        ax.text(0.085, y + card_h - 0.108, wrap_text(ellipsize(row["seed_papers"], 115), 58), ha="left", va="top", fontsize=5.0, color=TEXT_MID)
-        ax.text(0.085, y + 0.034, wrap_text(ellipsize(row["realized_evidence"], 118), 60), ha="left", va="bottom", fontsize=5.0, color=REALIZED_GREEN)
-        ax.scatter([0.91], [y + card_h - 0.055], s=40, marker="*", color=LANDMARK_RED, transform=ax.transAxes, zorder=4)
+        x = 0.035 + i * 0.238
+        color = card_colors[i % len(card_colors)]
+        rounded_box(ax, x, y, card_w, card_h, blend_with_white(color, 0.94), blend_with_white(color, 0.45), 0.7, 0.018, zorder=1)
+        ax.add_patch(mpatches.Circle((x + 0.025, y + card_h - 0.045), 0.019, transform=ax.transAxes, facecolor=color, edgecolor="white", lw=0.7, zorder=3))
+        ax.text(x + 0.025, y + card_h - 0.045, str(i + 1), transform=ax.transAxes, ha="center", va="center", fontsize=7.2, color="white", fontweight="bold", zorder=4)
+        ax.text(x + 0.052, y + card_h - 0.038, wrap_text(row["case_label"], 22), ha="left", va="top", fontsize=7.0, fontweight="bold", color=color, transform=ax.transAxes)
+        # Lightweight abstract icon: three connected nodes inside each card.
+        icon_cx, icon_cy = x + card_w / 2, y + 0.52
+        icon_points = [(icon_cx - 0.035, icon_cy + 0.018), (icon_cx + 0.032, icon_cy + 0.028), (icon_cx - 0.005, icon_cy - 0.035)]
+        ax.plot([p[0] for p in icon_points + [icon_points[0]]], [p[1] for p in icon_points + [icon_points[0]]], transform=ax.transAxes, color=color, lw=1.2, alpha=0.85)
+        for px, py in icon_points:
+            ax.add_patch(mpatches.Circle((px, py), 0.014, transform=ax.transAxes, facecolor="white", edgecolor=color, lw=1.2))
+        ax.text(x + card_w / 2, y + 0.375, "Predicted role", transform=ax.transAxes, ha="center", va="center", fontsize=6.8, fontweight="bold", color=TEXT_DARK)
+        ax.text(x + card_w / 2, y + 0.315, wrap_text(ellipsize(row.get("case_summary", ""), 54), 22), transform=ax.transAxes, ha="center", va="center", fontsize=6.1, color=color, fontweight="bold")
+        ax.text(x + card_w / 2, y + 0.205, "Why highlighted", transform=ax.transAxes, ha="center", va="center", fontsize=6.7, fontweight="bold", color=TEXT_DARK)
+        why = f"{ellipsize(row.get('seed_papers', ''), 72)} {ellipsize(row.get('realized_evidence', ''), 78)}"
+        ax.text(x + card_w / 2, y + 0.105, wrap_text(why, 26), transform=ax.transAxes, ha="center", va="center", fontsize=5.8, color=TEXT_DARK)
 
 
 def draw_panel_e(ax: plt.Axes, tables: Fig5Tables) -> None:
@@ -1347,10 +1511,10 @@ def draw_panel_e(ax: plt.Axes, tables: Fig5Tables) -> None:
 def draw_full_figure(tables: Fig5Tables, out_path: Path, top_n: int) -> None:
     """Draw the full five-panel Fig. 5."""
     setup_style()
-    fig = plt.figure(figsize=(18.0, 10.5), dpi=300)
+    fig = plt.figure(figsize=(18.8, 11.4), dpi=300)
     fig.text(
         0.5,
-        0.985,
+        0.986,
         "Fig. 5 | Forecasting future research focus and key innovations from historical knowledge graphs",
         ha="center",
         va="top",
@@ -1358,33 +1522,47 @@ def draw_full_figure(tables: Fig5Tables, out_path: Path, top_n: int) -> None:
         fontweight="bold",
     )
     subtitle = (
-        "Predictions made using pre-2021 information are compared with realized "
-        f"{tables.summary['validation_start']}-{tables.summary['validation_end_actual']} hotspots and breakthrough cases"
+        "Holdout validation: pre-cutoff knowledge graphs are used to forecast "
+        f"{tables.summary['validation_start']}-{tables.summary['validation_end_actual']} research hotspots and seed innovations"
     )
-    fig.text(0.5, 0.958, subtitle, ha="center", va="top", fontsize=9.7, color=TEXT_MID)
-    gs = GridSpec(2, 6, figure=fig, height_ratios=[0.9, 1.12], hspace=0.085, wspace=0.045)
-    ax_a = fig.add_subplot(gs[0, 0:2])
-    ax_b = fig.add_subplot(gs[0, 2:6])
-    ax_c = fig.add_subplot(gs[1, 0:2])
-    ax_d = fig.add_subplot(gs[1, 2:4])
-    ax_e = fig.add_subplot(gs[1, 4:6])
+    fig.text(0.5, 0.958, subtitle, ha="center", va="top", fontsize=9.8, color=TEXT_MID, fontstyle="italic")
+    gs = GridSpec(
+        3,
+        2,
+        figure=fig,
+        height_ratios=[1.03, 1.02, 0.16],
+        width_ratios=[1.04, 1.09],
+        left=0.025,
+        right=0.985,
+        top=0.925,
+        bottom=0.050,
+        hspace=0.030,
+        wspace=0.020,
+    )
+    ax_a = fig.add_subplot(gs[0, 0])
+    ax_b = fig.add_subplot(gs[0, 1])
+    ax_c = fig.add_subplot(gs[1, 0])
+    ax_d = fig.add_subplot(gs[1, 1])
+    ax_summary = fig.add_subplot(gs[2, :])
     draw_panel_a(ax_a, tables)
     draw_panel_b(ax_b, tables, top_n)
     draw_panel_c(ax_c, tables)
     draw_panel_d(ax_d, tables)
-    draw_panel_e(ax_e, tables)
+    draw_take_home(
+        ax_summary,
+        "By learning from how past landmark innovations reshaped the knowledge graph, "
+        "the model highlights where the field may be heading and which pre-cutoff ideas are most likely to seed future breakthroughs.",
+    )
     fig.text(
-        0.012,
-        0.012,
-        "Focus forecasts are topic-level aggregations of publication-day graph scores; realized hotspots combine "
-        "post-cutoff publication growth, citation impact, graph-perturbation outcomes, and landmark flags. "
-        "Backtests use the same aggregation over historical windows.",
-        ha="left",
+        0.5,
+        0.016,
+        "Note: Forecasts are topic-level aggregations of publication-day graph scores; realized hotspots combine post-cutoff growth, citation impact, graph-perturbation outcomes and landmark flags. Historical backtests are exported separately.",
+        ha="center",
         va="bottom",
-        fontsize=5.7,
+        fontsize=6.4,
         color=TEXT_DARK,
     )
-    fig.savefig(out_path, dpi=300)
+    fig.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
 
 

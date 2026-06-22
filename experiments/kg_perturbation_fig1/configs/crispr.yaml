@@ -153,16 +153,12 @@ plot:
   dominant_parameters:
     - key: "B"
       label: "$B$ (bridge centrality)"
-      values: [0.35, 1.35, 1.40, 1.20]
     - key: "RTD"
       label: "RTD (reference target diversity)"
-      values: [-0.20, 0.85, 0.75, 0.45]
     - key: "Uzzi"
       label: "Uzzi novelty (-p10)"
-      values: [0.20, 1.10, 1.00, 0.40]
     - key: "DeltaQ"
       label: "$\\Delta Q$ directionality"
-      values: [-0.10, -0.95, -0.30, 0.10]
   parameter_callouts:
     - parameter: "B"
       window: "landmark"

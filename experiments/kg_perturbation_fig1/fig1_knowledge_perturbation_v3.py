@@ -103,6 +103,11 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from aspr.env import getenv
+from experiments.figure_quality import (
+    write_figure_quality_report,
+    write_json,
+    write_run_manifest,
+)
 
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "outputs" / "kg_perturbation_fig1"
 
@@ -2477,12 +2482,21 @@ def standardize_parameter_values(values: Sequence[float], spec: Mapping[str, Any
     return (arr - center) / scale if scale > 1e-12 else np.zeros_like(arr)
 
 
-def dominant_parameter_trajectories(metrics: pd.DataFrame, cfg: Dict[str, Any]) -> List[Dict[str, Any]]:
+def dominant_parameter_trajectories(
+    metrics: pd.DataFrame,
+    cfg: Dict[str, Any],
+    allow_manual: bool = True,
+) -> List[Dict[str, Any]]:
     trajectories: List[Dict[str, Any]] = []
     n = len(metrics)
     for spec in dominant_parameter_specs(cfg):
         manual = "values" in spec and spec.get("values") is not None
         if manual:
+            if not allow_manual:
+                raise ValueError(
+                    f"dominant parameter {spec['key']} uses manual_schematic values; "
+                    "main-figure mode requires computed trajectories."
+                )
             raw_values = list(spec.get("values") or [])
             if len(raw_values) < n:
                 raw_values = raw_values + [np.nan] * (n - len(raw_values))
@@ -2504,6 +2518,9 @@ def dominant_parameter_trajectories(metrics: pd.DataFrame, cfg: Dict[str, Any]) 
                 "color": str(spec.get("color") or "#374151"),
                 "values": y,
                 "spec": spec,
+                "source_column": str(spec.get("source") or ""),
+                "provenance": "manual_schematic" if manual else "computed",
+                "manual_values": int(bool(manual)),
             }
         )
     return trajectories
@@ -2785,9 +2802,13 @@ def draw_parameter_interpretation_boxes(ax: plt.Axes, cfg: Dict[str, Any]) -> No
         )
 
 
-def dominant_parameter_table(metrics: pd.DataFrame, cfg: Dict[str, Any]) -> pd.DataFrame:
+def dominant_parameter_table(
+    metrics: pd.DataFrame,
+    cfg: Dict[str, Any],
+    allow_manual: bool = True,
+) -> pd.DataFrame:
     rows: List[Dict[str, Any]] = []
-    trajectories = dominant_parameter_trajectories(metrics, cfg)
+    trajectories = dominant_parameter_trajectories(metrics, cfg, allow_manual=allow_manual)
     labels = [f"{int(a)}-{int(b)}" for a, b in zip(metrics["rolling_start"], metrics["rolling_end"])]
     for trajectory in trajectories:
         for i, value in enumerate(np.asarray(trajectory["values"], dtype=float)):
@@ -2798,6 +2819,9 @@ def dominant_parameter_table(metrics: pd.DataFrame, cfg: Dict[str, Any]) -> pd.D
                     "window_index": i + 1,
                     "window": labels[i],
                     "standardized_value": value,
+                    "source_column": trajectory.get("source_column", ""),
+                    "provenance": trajectory.get("provenance", "computed"),
+                    "manual_values": int(trajectory.get("manual_values", 0)),
                 }
             )
     return pd.DataFrame(rows)
@@ -3095,7 +3119,13 @@ def draw_snapshot(
     )
 
 
-def draw_metric_panel(ax: plt.Axes, metrics: pd.DataFrame, cfg: Dict[str, Any], compact: bool = False) -> None:
+def draw_metric_panel(
+    ax: plt.Axes,
+    metrics: pd.DataFrame,
+    cfg: Dict[str, Any],
+    compact: bool = False,
+    panel_label: str = "b",
+) -> None:
     pcfg = cfg.get("plot", {})
     if pcfg.get("metric_x_axis", "years") == "years":
         x = 0.5 * (metrics["rolling_start"].values.astype(float) + metrics["rolling_end"].values.astype(float))
@@ -3121,7 +3151,8 @@ def draw_metric_panel(ax: plt.Axes, metrics: pd.DataFrame, cfg: Dict[str, Any], 
         else:
             ax.axvspan(float(landmark_idx) - 0.5, float(landmark_idx) + 0.5, color="#FEE2E2", alpha=0.55, lw=0, zorder=0)
 
-    trajectories = dominant_parameter_trajectories(metrics, cfg)
+    allow_manual = bool(pcfg.get("allow_manual_trajectories", False))
+    trajectories = dominant_parameter_trajectories(metrics, cfg, allow_manual=allow_manual)
     for trajectory in trajectories:
         y = np.asarray(trajectory["values"], dtype=float)
         ax.plot(
@@ -3161,7 +3192,8 @@ def draw_metric_panel(ax: plt.Axes, metrics: pd.DataFrame, cfg: Dict[str, Any], 
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
     title = str(pcfg.get("metric_panel_title", "Dominant parameter trajectories"))
-    ax.set_title(f"b  {title}", fontsize=10.5 if not compact else 8, fontweight="bold", loc="left")
+    title_prefix = f"{panel_label}  " if panel_label else ""
+    ax.set_title(f"{title_prefix}{title}", fontsize=10.5 if not compact else 8, fontweight="bold", loc="left")
 
     if landmark_idx is not None and 0 <= landmark_idx < len(x):
         label = str(pcfg.get("metric_landmark_label", "")).strip()
@@ -3382,7 +3414,7 @@ def draw_multi_domain_figure(results: Sequence["DomainResult"], out_dir: Path) -
             ax = fig.add_subplot(gs[r, i])
             ax.axis("off")
         axm = fig.add_subplot(gs[r, ncols - 1])
-        draw_metric_panel(axm, result.metrics, cfg_draw, compact=True)
+        draw_metric_panel(axm, result.metrics, cfg_draw, compact=True, panel_label="")
         axm.text(
             0.02,
             0.98,
@@ -3433,6 +3465,84 @@ class DomainResult:
     metrics: pd.DataFrame
     rolling_windows: List[Tuple[int, int]]
     cumulative_windows: List[Tuple[int, int]]
+
+
+def count_manual_parameter_specs(cfg: Mapping[str, Any]) -> int:
+    return int(
+        sum(
+            1
+            for spec in dominant_parameter_specs(dict(cfg))
+            if "values" in spec and spec.get("values") is not None
+        )
+    )
+
+
+def build_edge_cap_diagnostics(result: DomainResult) -> Dict[str, Any]:
+    cfg = result.cfg
+    gcfg = cfg.get("graph", {})
+    max_edges = int(gcfg.get("max_edges", 0))
+    edge_count = int(result.G.number_of_edges())
+    direct_edges = 0
+    bibliographic_edges = 0
+    cocitation_edges = 0
+    hybrid_only_edges = 0
+    for _, _, data in result.G.edges(data=True):
+        direct = float(data.get("direct", 0) or 0)
+        bibliographic = float(data.get("bibliographic", 0) or 0)
+        cocitation = float(data.get("cocitation", 0) or 0)
+        if direct > 0:
+            direct_edges += 1
+        else:
+            hybrid_only_edges += 1
+        if bibliographic > 0:
+            bibliographic_edges += 1
+        if cocitation > 0:
+            cocitation_edges += 1
+    return {
+        "domain": cfg.get("slug"),
+        "domain_name": cfg.get("domain_name"),
+        "graph_max_edges": max_edges,
+        "exported_edges": edge_count,
+        "edge_cap_hit": int(max_edges > 0 and edge_count >= max_edges),
+        "direct_edges": direct_edges,
+        "bibliographic_edges": bibliographic_edges,
+        "cocitation_edges": cocitation_edges,
+        "hybrid_only_edges": hybrid_only_edges,
+        "hybrid_only_edge_ratio": float(hybrid_only_edges / edge_count) if edge_count else 0.0,
+        "interpretation": "edge_cap_hit_density_not_interpretable"
+        if max_edges > 0 and edge_count >= max_edges
+        else "edge_cap_not_hit",
+    }
+
+
+def build_fig1_quality_gates(results: Sequence[DomainResult]) -> Dict[str, Any]:
+    edge_reports = [build_edge_cap_diagnostics(result) for result in results]
+    manual_counts = {str(result.cfg.get("slug")): count_manual_parameter_specs(result.cfg) for result in results}
+    final_horizons = {
+        str(result.cfg.get("slug")): int(result.cumulative_windows[-1][1] - result.cumulative_windows[0][0] + 1)
+        if result.cumulative_windows
+        else 0
+        for result in results
+    }
+    checks = {
+        "manual_trajectories_absent": int(all(count == 0 for count in manual_counts.values())),
+        "edge_cap_not_hit_all_domains": int(all(int(report["edge_cap_hit"]) == 0 for report in edge_reports)),
+        "final_cumulative_horizon_consistent": int(len(set(final_horizons.values())) <= 1),
+    }
+    overall = bool(all(checks.values()))
+    return {
+        "overall_pass": overall,
+        "status_label": "main-figure ready" if overall else "diagnostic / schematic evidence",
+        "checks": checks,
+        "manual_trajectory_counts": manual_counts,
+        "edge_cap_diagnostics": edge_reports,
+        "final_cumulative_horizon_years": final_horizons,
+        "thresholds": {
+            "manual_trajectories_allowed_in_main": 0,
+            "edge_cap_hit_allowed": 0,
+            "final_cumulative_horizon_unique_values": 1,
+        },
+    }
 
 
 def export_tables(result: DomainResult, out_dir: Path) -> None:
@@ -3509,7 +3619,12 @@ def export_tables(result: DomainResult, out_dir: Path) -> None:
 
     result.metrics.to_csv(domain_dir / "perturbation_metrics.csv", index=False)
     compute_snapshot_delta_metrics(result).to_csv(domain_dir / "snapshot_delta_metrics.csv", index=False)
-    dominant_parameter_table(result.metrics, cfg).to_csv(domain_dir / "dominant_parameter_trajectories.csv", index=False)
+    allow_manual = bool(cfg.get("plot", {}).get("allow_manual_trajectories", False))
+    dominant_parameter_table(result.metrics, cfg, allow_manual=allow_manual).to_csv(
+        domain_dir / "dominant_parameter_trajectories.csv",
+        index=False,
+    )
+    write_json(domain_dir / "edge_cap_diagnostics.json", build_edge_cap_diagnostics(result))
 
 
 def run_domain(
@@ -3563,6 +3678,33 @@ def run_domain(
     )
     export_tables(result, out_dir)
     draw_single_domain_figure(result, out_dir)
+    domain_dir = out_dir / cfg["slug"]
+    quality = build_fig1_quality_gates([result])
+    generated = [domain_dir / f"fig1_{cfg['slug']}_real.{ext}" for ext in ["png", "svg", "pdf"]]
+    write_run_manifest(
+        domain_dir,
+        figure="fig1",
+        argv=None,
+        inputs={
+            "domain_config_slug": cfg.get("slug"),
+            "domain_name": cfg.get("domain_name"),
+        },
+        domains=[str(cfg.get("slug"))],
+        quality_gates=quality,
+        extra={
+            "rolling_windows": rolling,
+            "cumulative_windows": cumulative,
+            "selected_papers": len(works_selected),
+            "all_papers": len(works_all),
+        },
+    )
+    write_figure_quality_report(
+        domain_dir,
+        figure="fig1",
+        generated_files=generated,
+        quality_gates=quality,
+        extra={"edge_cap_diagnostics_path": str(domain_dir / "edge_cap_diagnostics.json")},
+    )
     print(f"[{slug}] Done. Outputs in {out_dir / slug}")
     return result
 
@@ -3587,6 +3729,11 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     )
     parser.add_argument("--no-cache", action="store_true", help="Ignore cached works_raw.jsonl and re-download data.")
     parser.add_argument("--force-cache", action="store_true", help="Use works_raw.jsonl even when cache_manifest.json does not match the config.")
+    parser.add_argument(
+        "--allow-schematic-trajectories",
+        action="store_true",
+        help="Allow YAML dominant_parameters.values. Without this flag, Fig. 1 main-figure mode requires computed trajectories.",
+    )
     return parser.parse_args(argv)
 
 
@@ -3597,6 +3744,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     # Load configs first so API behavior can be controlled by the first config.
     cfgs = [load_config(Path(p)) for p in args.config]
+    for cfg in cfgs:
+        cfg.setdefault("plot", {})["allow_manual_trajectories"] = bool(args.allow_schematic_trajectories)
     if args.corpus_dir is not None:
         from aspr.corpus import materialize_fig1_cache  # pylint: disable=import-outside-toplevel
 
@@ -3626,6 +3775,35 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         draw_multi_domain_figure(results, out_dir)
         print(f"Multi-domain figure written to {out_dir}")
 
+    quality = build_fig1_quality_gates(results)
+    generated_files: List[Path] = []
+    if len(results) > 1:
+        generated_files.extend(out_dir / f"fig1_multi_domain_real.{ext}" for ext in ["png", "svg", "pdf"])
+    write_run_manifest(
+        out_dir,
+        figure="fig1",
+        argv=sys.argv if argv is None else list(argv),
+        inputs={
+            "config": [str(Path(p)) for p in args.config],
+            "corpus_dir": str(args.corpus_dir) if args.corpus_dir is not None else None,
+            "allow_schematic_trajectories": bool(args.allow_schematic_trajectories),
+        },
+        domains=[str(result.cfg.get("slug")) for result in results],
+        quality_gates=quality,
+        extra={
+            "selected_papers_by_domain": {
+                str(result.cfg.get("slug")): len(result.works_selected)
+                for result in results
+            },
+        },
+    )
+    write_figure_quality_report(
+        out_dir,
+        figure="fig1",
+        generated_files=generated_files,
+        quality_gates=quality,
+        extra={"domain_reports": [str(out_dir / str(result.cfg.get("slug")) / "figure_quality_report.json") for result in results]},
+    )
     return 0
 
 
