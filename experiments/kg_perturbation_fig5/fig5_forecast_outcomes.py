@@ -84,6 +84,12 @@ DOMAIN_COLORS = {
     "transformer_foundation_models": "#7C3AED",
 }
 FALLBACK_COLORS = ["#2563EB", "#8B5CF6", "#F97316", "#0F766E", "#DC2626", "#94A3B8"]
+DOMAIN_LAYOUT_CENTERS = {
+    "crispr": (0.64, 0.62),
+    "graphene_2d_materials": (0.36, 0.62),
+    "ipsc_reprogramming": (0.48, 0.38),
+    "transformer_foundation_models": (0.72, 0.38),
+}
 
 SCORE_CANDIDATES = ("S_w_oof", "S_w", "S_equal")
 RGPM_CANDIDATES = (
@@ -1117,8 +1123,9 @@ def draw_panel_a(ax: plt.Axes, tables: Fig5Tables) -> None:
     ax.text(0.80, 0.865, f"Future window\n({tables.summary['validation_start']}-{tables.summary['validation_end_requested']})", ha="center", va="top", fontsize=8.8, fontweight="bold")
     cloud = focus.sort_values("historical_size", ascending=False).head(130).copy()
     if not cloud.empty:
-        x = 0.08 + 0.35 * normalize_series(cloud["cluster_x"])
-        y = 0.23 + 0.50 * normalize_series(cloud["cluster_y"])
+        cloud_x, cloud_y = focus_layout_coordinates(cloud, spread=0.22)
+        x = 0.055 + 0.39 * cloud_x
+        y = 0.19 + 0.56 * cloud_y
         sizes = 8 + 42 * normalize_series(np.log1p(cloud["historical_size"]))
         colors = [color_for_domain(domain) for domain in cloud["domain"]]
         # Deterministic nearest-neighbour scaffolding gives the left cloud a KG texture.
@@ -1191,6 +1198,38 @@ def normalize_series(values: pd.Series | np.ndarray) -> np.ndarray:
     if abs(mx - mn) < 1e-12:
         return np.full_like(arr, 0.5, dtype=float)
     return (np.nan_to_num(arr, nan=mn) - mn) / (mx - mn)
+
+
+def focus_layout_coordinates(focus: pd.DataFrame, spread: float = 0.18) -> Tuple[np.ndarray, np.ndarray]:
+    """Return deterministic display coordinates that avoid ring-like topic layouts."""
+    if focus.empty:
+        return np.asarray([], dtype=float), np.asarray([], dtype=float)
+    raw_x = normalize_series(pd.to_numeric(focus.get("cluster_x", 0.0), errors="coerce").fillna(0.0)) - 0.5
+    raw_y = normalize_series(pd.to_numeric(focus.get("cluster_y", 0.0), errors="coerce").fillna(0.0)) - 0.5
+    volume = normalize_series(np.log1p(pd.to_numeric(focus.get("historical_size", 0.0), errors="coerce").fillna(0.0)))
+    domains = list(dict.fromkeys(focus.get("domain", pd.Series(["all"] * len(focus))).astype(str).tolist()))
+    centers: Dict[str, Tuple[float, float]] = {}
+    fallback_i = 0
+    for domain in domains:
+        if domain in DOMAIN_LAYOUT_CENTERS:
+            centers[domain] = DOMAIN_LAYOUT_CENTERS[domain]
+        else:
+            angle = 2.0 * math.pi * fallback_i / max(1, len(domains))
+            centers[domain] = (0.52 + 0.22 * math.cos(angle), 0.52 + 0.20 * math.sin(angle))
+            fallback_i += 1
+    xs: List[float] = []
+    ys: List[float] = []
+    for pos, (_, row) in enumerate(focus.iterrows()):
+        focus_id = str(row.get("focus_id", pos))
+        cx, cy = centers.get(str(row.get("domain", "")), (0.52, 0.52))
+        angle = 2.0 * math.pi * stable_float(f"{focus_id}:layout-angle")
+        radial = math.sqrt(stable_float(f"{focus_id}:layout-radius"))
+        local_x = spread * radial * math.cos(angle) + 0.09 * float(raw_x[pos])
+        local_y = spread * 0.78 * radial * math.sin(angle) + 0.09 * float(raw_y[pos])
+        prominence_pull = 0.035 * float(volume[pos])
+        xs.append(float(np.clip(cx + local_x + prominence_pull, 0.055, 0.945)))
+        ys.append(float(np.clip(cy + local_y + 0.015 * float(volume[pos]), 0.075, 0.925)))
+    return np.asarray(xs, dtype=float), np.asarray(ys, dtype=float)
 
 
 def draw_panel_b(ax: plt.Axes, tables: Fig5Tables, top_n: int) -> None:
@@ -1343,7 +1382,15 @@ def draw_panel_c(ax: plt.Axes, tables: Fig5Tables) -> None:
     for y, size, label in [(0.72, 90, "Large"), (0.61, 52, "Medium"), (0.51, 26, "Small")]:
         legend_ax.scatter([0.12], [y], s=size, facecolor="white", edgecolor=TEXT_DARK, linewidth=0.7, transform=legend_ax.transAxes)
         legend_ax.text(0.28, y, label, transform=legend_ax.transAxes, va="center", fontsize=5.7)
-    legend_ax.text(0.0, 0.36, "Color intensity:\nforecast strength\n(2021-2026)", transform=legend_ax.transAxes, fontsize=5.9, fontweight="bold", va="top")
+    legend_ax.text(
+        0.0,
+        0.36,
+        f"Color intensity:\nforecast strength\n({tables.summary['validation_start']}-{tables.summary['validation_end_requested']})",
+        transform=legend_ax.transAxes,
+        fontsize=5.9,
+        fontweight="bold",
+        va="top",
+    )
     for i in range(18):
         legend_ax.add_patch(
             mpatches.Rectangle(
@@ -1359,16 +1406,20 @@ def draw_panel_c(ax: plt.Axes, tables: Fig5Tables) -> None:
     legend_ax.text(0.24, 0.06, "Low", transform=legend_ax.transAxes, fontsize=5.5, va="center")
 
     map_ax = ax.inset_axes([0.20, 0.10, 0.74, 0.78])
+    focus["map_x"], focus["map_y"] = focus_layout_coordinates(focus, spread=0.21)
     hist_norm = normalize_series(np.log1p(focus["historical_size"]))
     sizes = 18 + 185 * hist_norm
     strength = normalize_series(pd.to_numeric(focus[score_col], errors="coerce").fillna(0.0))
-    base_colors = [blend_with_white("#94A3B8", 0.45) for _ in range(len(focus))]
+    base_colors = [mcolors.to_hex(plt.cm.turbo(0.15 + 0.72 * float(value))) for value in strength]
     colors = [
         color_for_category(str(category)) if str(category) in {"hit", "predicted_only", "unexpected_realized"} else base_colors[i]
         for i, category in enumerate(focus["forecast_category"])
     ]
-    edge_colors = [REALIZED_GREEN if bool(item) else "white" for item in focus["is_hotspot"]]
-    coords = focus[["cluster_x", "cluster_y"]].to_numpy(dtype=float)
+    edge_colors = [
+        color_for_category(str(category)) if str(category) != "background" else ("#FFFFFF" if not bool(is_hotspot) else REALIZED_GREEN)
+        for category, is_hotspot in zip(focus["forecast_category"], focus["is_hotspot"])
+    ]
+    coords = focus[["map_x", "map_y"]].to_numpy(dtype=float)
     if len(coords) > 4:
         for i in range(min(len(coords), 140)):
             distances = np.sum((coords - coords[i]) ** 2, axis=1)
@@ -1378,8 +1429,8 @@ def draw_panel_c(ax: plt.Axes, tables: Fig5Tables) -> None:
                     continue
                 map_ax.plot([coords[i, 0], coords[j, 0]], [coords[i, 1], coords[j, 1]], color="#CBD5E1", lw=0.35, alpha=0.22, zorder=0)
     map_ax.scatter(
-        focus["cluster_x"],
-        focus["cluster_y"],
+        focus["map_x"],
+        focus["map_y"],
         s=sizes,
         c=colors,
         edgecolor=edge_colors,
@@ -1388,28 +1439,33 @@ def draw_panel_c(ax: plt.Axes, tables: Fig5Tables) -> None:
         zorder=2,
     )
     top_pred = focus[focus["predicted_rank"].le(6)].copy()
+    score_max = float(pd.to_numeric(focus[score_col], errors="coerce").fillna(0.0).max())
     for _, row in top_pred.iterrows():
-        radius_size = 420 + 520 * float(normalize_series(pd.Series([row.get(score_col, 0), focus[score_col].max()]))[0])
-        map_ax.scatter([row["cluster_x"]], [row["cluster_y"]], s=radius_size, color=color_for_domain(row.get("domain")), alpha=0.10, edgecolor="none", zorder=1)
-        map_ax.scatter([row["cluster_x"]], [row["cluster_y"]], s=radius_size * 0.45, color=color_for_domain(row.get("domain")), alpha=0.10, edgecolor="none", zorder=1)
+        score_value = float(pd.to_numeric(pd.Series([row.get(score_col, 0.0)]), errors="coerce").fillna(0.0).iloc[0])
+        radius_size = 420 + 520 * (score_value / max(score_max, 1e-9))
+        map_ax.scatter([row["map_x"]], [row["map_y"]], s=radius_size, color=color_for_domain(row.get("domain")), alpha=0.11, edgecolor="none", zorder=1)
+        map_ax.scatter([row["map_x"]], [row["map_y"]], s=radius_size * 0.45, color=color_for_domain(row.get("domain")), alpha=0.12, edgecolor="none", zorder=1)
     landmark = focus[focus["is_landmark_related"].fillna(False)]
     if not landmark.empty:
-        map_ax.scatter(landmark["cluster_x"], landmark["cluster_y"], s=34, marker="*", color=LANDMARK_RED, zorder=4)
+        map_ax.scatter(landmark["map_x"], landmark["map_y"], s=34, marker="*", color=LANDMARK_RED, zorder=4)
     label_focus = pd.concat([top_pred.head(4), select_map_labels(focus)], ignore_index=True).drop_duplicates("focus_id").head(7)
-    offsets = [(10, 12), (10, -14), (-58, 12), (-58, -15), (12, 26), (-42, 24), (15, -25)]
+    offsets = [(18, 16), (18, -18), (-70, 16), (-70, -20), (18, 34), (-58, 34), (22, -34)]
     for i, (_, row) in enumerate(label_focus.iterrows()):
         dx, dy = offsets[i % len(offsets)]
         map_ax.annotate(
             wrap_text(row["focus_label"], 18),
-            xy=(row["cluster_x"], row["cluster_y"]),
+            xy=(row["map_x"], row["map_y"]),
             xytext=(dx, dy),
             textcoords="offset points",
             fontsize=5.7,
             color=color_for_domain(row.get("domain")),
             fontweight="bold",
             bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.76, "pad": 0.8},
+            arrowprops={"arrowstyle": "-", "color": color_for_domain(row.get("domain")), "lw": 0.55, "alpha": 0.60},
             zorder=5,
         )
+    map_ax.set_xlim(0, 1)
+    map_ax.set_ylim(0, 1)
     map_ax.set_xticks([])
     map_ax.set_yticks([])
     for spine in map_ax.spines.values():
@@ -1596,7 +1652,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--validation-start", type=int, default=None, help="First validation year. Default: cutoff-year + 1.")
     parser.add_argument("--validation-end", type=int, default=2025, help="Requested final validation year. Use an explicit value for partial 2026 analysis.")
     parser.add_argument("--top-n", type=int, default=10, help="Top-N focus list size for panels b/c.")
-    parser.add_argument("--case-count", type=int, default=3, help="Number of key innovation case cards.")
+    parser.add_argument("--case-count", type=int, default=4, help="Number of key innovation case cards.")
     parser.add_argument("--min-historical-papers", type=int, default=5, help="Minimum pre-cutoff papers for a focus to be ranked.")
     parser.add_argument("--min-future-papers", type=int, default=2, help="Minimum validation-window papers for a focus to be ranked.")
     parser.add_argument("--semantic-threshold", type=float, default=0.42, help="Token Jaccard threshold for semantic focus matches.")
