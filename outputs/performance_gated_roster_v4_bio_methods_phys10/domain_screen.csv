@@ -1,0 +1,11 @@
+domain,display_name,field_name,family,n_works,n_landmarks,first_landmark_year,n_citation_rows,local_reference_closure,quality_score,quality_pass,failure_reasons
+crispr,CRISPR-Cas genome editing,"Biochemistry, Genetics and Molecular Biology",biology_biomedicine,2995,3,2012,354164,0.09700590686800466,1.0,1,
+ipsc_reprogramming,iPSC and cellular reprogramming,"Biochemistry, Genetics and Molecular Biology",biology_biomedicine,2918,3,2006,326516,0.08539550894902546,1.0,1,
+gamma_ray_bursts_and_supernovae,Gamma-ray bursts and supernovae,Physics and Astronomy,physics_astronomy,3000,2,1998,390957,0.08704282056594459,0.8888888888888888,1,
+organoids,Organoids and stem-cell models,Medicine,biology_biomedicine,2863,2,2009,432790,0.054620023568012196,0.8888888888888888,1,
+topological_insulators,Topological insulators,Physics and Astronomy,physics_astronomy,2845,2,2005,254120,0.11774752085628837,0.8888888888888888,1,
+click_chemistry_cuaac,Click chemistry CuAAC,Chemistry,materials_chemistry,3000,1,2002,328836,0.05038681896142758,0.7777777777777778,1,
+genome_wide_association_studies,Genome-wide association studies,Medicine,biology_biomedicine,2880,1,2007,313809,0.08083898167356576,0.7777777777777778,1,
+immune_checkpoint_therapy,Immune checkpoint therapy,Medicine,biology_biomedicine,2849,1,2010,384685,0.08164862159949049,0.7777777777777778,1,
+random_forests,Random forests,Computer Science,methods_computing,2890,1,2001,290670,0.02765679292668662,0.7777777777777778,1,
+magnetic_properties_of_thin_films,Magnetic properties of thin films,Physics and Astronomy,physics_astronomy,2956,3,1988,452285,0.017661430292846326,0.9610238382141055,0,low_local_reference_closure

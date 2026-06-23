@@ -1,0 +1,12 @@
+{
+  "bottom_score_decile_rgpm_top10_rate": 0.0684931506849315,
+  "bottom_score_decile_rgpm_top20_rate": 0.1506849315068493,
+  "high_score_tertile_rgpm_percentile_median": 69.64285714285714,
+  "high_vs_low_tertile_median_rgpm_lift_pp": 37.22527472527472,
+  "low_score_tertile_rgpm_percentile_median": 32.417582417582416,
+  "n": 728,
+  "top_score_decile_rgpm_top10_rate": 0.3150684931506849,
+  "top_score_decile_rgpm_top20_rate": 0.5068493150684932,
+  "top_vs_bottom_score_decile_rgpm_top10_enrichment": 4.6,
+  "top_vs_bottom_score_decile_rgpm_top20_enrichment": 3.363636363636364
+}

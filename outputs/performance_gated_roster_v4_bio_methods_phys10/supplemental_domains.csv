@@ -1,0 +1,2 @@
+domain,display_name,field_name,family,n_works,n_landmarks,first_landmark_year,n_citation_rows,local_reference_closure,quality_score,quality_pass,failure_reasons,recommended_role,exclusion_reason
+magnetic_properties_of_thin_films,Magnetic properties of thin films,Physics and Astronomy,physics_astronomy,2956,3,1988,452285,0.017661430292846326,0.9610238382141055,0,low_local_reference_closure,supplemental_or_failed_screen,low_local_reference_closure

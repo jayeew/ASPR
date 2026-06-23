@@ -375,6 +375,8 @@ def work_to_row(
     meta: Mapping[str, Any],
     landmark_labels: Mapping[str, str],
     fetched_at: str,
+    landmark_source_label: str = "landmark_registry_v3",
+    source_dataset_prefix: str = "openalex_v3",
 ) -> Dict[str, Any]:
     work = record.get("work") or {}
     work_id = normalize_openalex_id(work.get("id"))
@@ -408,13 +410,13 @@ def work_to_row(
         "legacy_is_landmark": is_landmark,
         "is_landmark": is_landmark,
         "anchor_label": label,
-        "reliable_anchor_source": "landmark_registry_v3" if is_landmark else "",
+        "reliable_anchor_source": landmark_source_label if is_landmark else "",
         "anchor_policy": "strict",
         "document_type": nonempty(work.get("type")),
         "cited_by_count": int(safe_numeric(work.get("cited_by_count"), default=0)),
         "reference_count": int(len(refs)),
         "source_provider": "openalex",
-        "source_dataset": f"openalex_v3_{source_kind}",
+        "source_dataset": f"{source_dataset_prefix}_{source_kind}",
         "fetched_at": fetched_at,
         "referenced_works": json.dumps(refs, ensure_ascii=False),
         "partial_2026": int(year >= 2026),
@@ -425,6 +427,7 @@ def citation_rows_from_records(
     records: Sequence[Mapping[str, Any]],
     selected_ids: set[str],
     local_references_only: bool,
+    source_dataset_prefix: str = "openalex_v3",
 ) -> List[Dict[str, str]]:
     rows: List[Dict[str, str]] = []
     for record in records:
@@ -443,7 +446,7 @@ def citation_rows_from_records(
                     "source": source,
                     "target": target,
                     "relation": "reference",
-                    "source_dataset": f"openalex_v3_{nonempty(record.get('source_kind')) or 'query_core'}",
+                    "source_dataset": f"{source_dataset_prefix}_{nonempty(record.get('source_kind')) or 'query_core'}",
                 }
             )
     return rows
@@ -473,7 +476,36 @@ def trim_domain_tables(
     return out, kept_citations.reset_index(drop=True)
 
 
-def standardize_landmarks(registry: pd.DataFrame) -> pd.DataFrame:
+def global_deduplicate_works(
+    works: pd.DataFrame,
+    citations: pd.DataFrame,
+    domains: Sequence[str],
+) -> tuple[pd.DataFrame, pd.DataFrame, Dict[str, int]]:
+    """Assign each OpenAlex work id to one domain, preserving landmarks first."""
+    if works.empty or "id" not in works.columns or not works["id"].duplicated().any():
+        return works.copy(), citations.copy(), {"dropped_duplicate_works": 0}
+    domain_order = {slugify(domain): idx for idx, domain in enumerate(domains)}
+    out = works.copy()
+    out["_domain_order"] = out.get("domain", "").astype(str).map(slugify).map(domain_order).fillna(len(domain_order))
+    out["_is_landmark_sort"] = pd.to_numeric(out.get("is_landmark", 0), errors="coerce").fillna(0).astype(int)
+    out["_cited_sort"] = pd.to_numeric(out.get("cited_by_count", 0), errors="coerce").fillna(0)
+    out["_year_sort"] = pd.to_numeric(out.get("year", 9999), errors="coerce").fillna(9999)
+    out = out.sort_values(
+        ["_is_landmark_sort", "_cited_sort", "_domain_order", "_year_sort", "id"],
+        ascending=[False, False, True, True, True],
+    )
+    before = int(len(out))
+    out = out.drop_duplicates("id", keep="first")
+    dropped = before - int(len(out))
+    out = out.drop(columns=["_domain_order", "_is_landmark_sort", "_cited_sort", "_year_sort"], errors="ignore")
+    keep_ids = set(out["id"].astype(str))
+    kept_citations = citations.copy()
+    if not kept_citations.empty and "source" in kept_citations.columns:
+        kept_citations = kept_citations[kept_citations["source"].astype(str).isin(keep_ids)].copy()
+    return out.reset_index(drop=True), kept_citations.reset_index(drop=True), {"dropped_duplicate_works": int(dropped)}
+
+
+def standardize_landmarks(registry: pd.DataFrame, landmark_source_label: str = "strict_manual_v3") -> pd.DataFrame:
     columns = [
         "domain",
         "landmark_source",
@@ -499,8 +531,8 @@ def standardize_landmarks(registry: pd.DataFrame) -> pd.DataFrame:
     out["source_id"] = out.get("source_id", out["doi"])
     out["match_confidence"] = pd.to_numeric(out.get("title_similarity", 1.0), errors="coerce").fillna(1.0)
     out["include_main"] = 1
-    out["landmark_source"] = "strict_manual_v3"
-    out["accepted_landmark_source"] = "strict_manual_v3"
+    out["landmark_source"] = landmark_source_label
+    out["accepted_landmark_source"] = landmark_source_label
     out["needs_manual_confirmation"] = 0
     out["evidence_key"] = out["doi"].where(out["doi"].astype(str) != "", out["id"])
     for col in columns:
@@ -578,14 +610,29 @@ def build_graph(args: argparse.Namespace) -> Dict[str, Any]:
                 work_id = normalize_openalex_id((record.get("work") or {}).get("id"))
                 if work_id:
                     landmark_label_lookup[work_id] = nonempty(record.get("anchor_label")) or work_id
-        work_rows = [work_to_row(record, meta, landmark_label_lookup, fetched_at) for record in selected]
+        work_rows = [
+            work_to_row(
+                record,
+                meta,
+                landmark_label_lookup,
+                fetched_at,
+                landmark_source_label=args.landmark_source_label,
+                source_dataset_prefix=args.source_dataset_prefix,
+            )
+            for record in selected
+        ]
         works = pd.DataFrame(work_rows)
         for col in root_work_columns():
             if col not in works.columns:
                 works[col] = ""
         works = works[root_work_columns()].copy()
         selected_ids = set(works["id"].astype(str))
-        citation_rows = citation_rows_from_records(selected, selected_ids, args.local_references_only)
+        citation_rows = citation_rows_from_records(
+            selected,
+            selected_ids,
+            args.local_references_only,
+            source_dataset_prefix=args.source_dataset_prefix,
+        )
         citations = pd.DataFrame(citation_rows)
         if not citations.empty:
             citations = citations.drop_duplicates(["source", "target"]).reset_index(drop=True)
@@ -606,7 +653,7 @@ def build_graph(args: argparse.Namespace) -> Dict[str, Any]:
                 "field_name": meta.get("field_name", ""),
                 "subfield_name": meta.get("subfield_name", ""),
                 "topic_id": meta.get("topic_id", ""),
-                "seed_source": "landmark_registry_v3_openalex",
+                "seed_source": args.domain_seed_source,
                 "n_works": int(len(works)),
             }
         )
@@ -642,8 +689,14 @@ def build_graph(args: argparse.Namespace) -> Dict[str, Any]:
             all_citations[col] = ""
     if not all_citations.empty:
         all_citations = all_citations.drop_duplicates(["source", "target"]).reset_index(drop=True)
+    global_dedupe_report = {"dropped_duplicate_works": 0}
+    if args.global_dedupe_work_ids:
+        all_works, all_citations, global_dedupe_report = global_deduplicate_works(all_works, all_citations, domains)
+        counts_by_domain = all_works["domain"].astype(str).value_counts().to_dict() if not all_works.empty else {}
+        for row in domain_rows:
+            row["n_works"] = int(counts_by_domain.get(str(row.get("slug")), 0))
     selected_registry = pd.concat(selected_landmark_rows, ignore_index=True, sort=False) if selected_landmark_rows else pd.DataFrame()
-    landmarks = standardize_landmarks(selected_registry)
+    landmarks = standardize_landmarks(selected_registry, landmark_source_label=args.landmark_source_label)
     all_works = apply_strict_anchor_policy(all_works, landmarks, complete_end_year=DEFAULT_COMPLETE_END_YEAR)
     topics, topic_edges = build_topics_and_edges(
         all_works,
@@ -664,11 +717,14 @@ def build_graph(args: argparse.Namespace) -> Dict[str, Any]:
     quality_report = audit_corpus(args.out_dir, min_papers_per_domain=args.min_papers_per_domain)
     make_views(args.out_dir, anchor_policy="strict")
     manifest = {
-        "artifact_kind": "openalex_v3_citation_graph",
+        "artifact_kind": args.artifact_kind,
         "created_at": fetched_at,
         "figure_logic_policy": FIGURE_LOGIC_POLICY,
         "registry_csv": str(args.registry_csv),
         "domain_seed_csv": str(args.domain_seed_csv),
+        "landmark_source_label": args.landmark_source_label,
+        "source_dataset_prefix": args.source_dataset_prefix,
+        "domain_seed_source": args.domain_seed_source,
         "out_dir": str(args.out_dir),
         "report_dir": str(args.report_dir),
         "checkpoint_dir": str(checkpoint_dir),
@@ -677,6 +733,8 @@ def build_graph(args: argparse.Namespace) -> Dict[str, Any]:
         "n_works": int(len(all_works)),
         "n_citation_rows": int(len(all_citations)),
         "n_landmarks": int(len(landmarks)),
+        "global_dedupe_work_ids": bool(args.global_dedupe_work_ids),
+        "global_dedupe_report": global_dedupe_report,
         "papers_per_domain": int(args.papers_per_domain),
         "max_anchor_citers": int(args.max_anchor_citers),
         "local_references_only": bool(args.local_references_only),
@@ -685,6 +743,8 @@ def build_graph(args: argparse.Namespace) -> Dict[str, Any]:
     }
     write_json(args.out_dir / "manifest.json", manifest)
     write_json(args.report_dir / "openalex_v3_citation_graph_manifest.json", manifest)
+    if args.artifact_kind != "openalex_v3_citation_graph":
+        write_json(args.report_dir / f"{args.artifact_kind}_manifest.json", manifest)
     return manifest
 
 
@@ -695,6 +755,10 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser.add_argument("--out-dir", type=Path, default=DEFAULT_OUT_DIR)
     parser.add_argument("--report-dir", type=Path, default=DEFAULT_REPORT_DIR)
     parser.add_argument("--checkpoint-dir", type=Path, default=None)
+    parser.add_argument("--artifact-kind", default="openalex_v3_citation_graph")
+    parser.add_argument("--landmark-source-label", default="strict_manual_v3")
+    parser.add_argument("--source-dataset-prefix", default="openalex_v3")
+    parser.add_argument("--domain-seed-source", default="landmark_registry_v3_openalex")
     parser.add_argument("--domains", nargs="+", default=None)
     parser.add_argument("--max-domains", type=int, default=None)
     parser.add_argument("--papers-per-domain", type=int, default=2500)
@@ -705,6 +769,7 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser.add_argument("--end-year", type=int, default=DEFAULT_COMPLETE_END_YEAR)
     parser.add_argument("--work-types", nargs="+", default=OPENALEX_WORK_TYPES)
     parser.add_argument("--local-references-only", action="store_true")
+    parser.add_argument("--global-dedupe-work-ids", action="store_true")
     parser.add_argument("--refresh", action="store_true")
     parser.add_argument("--fail-on-domain-error", action="store_true")
     parser.add_argument("--sleep-seconds", type=float, default=0.1)
