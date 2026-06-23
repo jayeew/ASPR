@@ -162,7 +162,7 @@ def normalize_openalex_id(value: object) -> str:
 
 def normalize_doi(value: object) -> str:
     text = str(value or "").strip()
-    if not text:
+    if not text or text.lower() in {"nan", "none", "null", "<na>"}:
         return ""
     text = re.sub(r"^https?://(dx\.)?doi\.org/", "", text, flags=re.I)
     return text.lower()
@@ -596,7 +596,9 @@ def _strict_label_lookup(landmarks: pd.DataFrame) -> Dict[Tuple[str, str, str], 
     for row in labeled.to_dict("records"):
         domain = str(row.get("domain") or "")
         label = str(row.get("label") or "")
-        for key_col in ["id_norm", "doi_norm", "title_norm"]:
+        exact_keys = [key_col for key_col in ["id_norm", "doi_norm"] if str(row.get(key_col) or "")]
+        key_cols = exact_keys or ["title_norm"]
+        for key_col in key_cols:
             value = str(row.get(key_col) or "")
             if value:
                 lookup[(domain, key_col, value)] = label
@@ -651,7 +653,11 @@ def apply_strict_anchor_policy(
     lm = prepare_strict_landmarks(landmarks, complete_end_year=complete_end_year)
     id_sets = _domain_value_sets(lm, "id_norm")
     doi_sets = _domain_value_sets(lm, "doi_norm")
-    title_sets = _domain_value_sets(lm, "title_norm")
+    title_fallback = lm[
+        lm.get("id_norm", pd.Series("", index=lm.index)).astype(str).str.strip().eq("")
+        & lm.get("doi_norm", pd.Series("", index=lm.index)).astype(str).str.strip().eq("")
+    ].copy()
+    title_sets = _domain_value_sets(title_fallback, "title_norm")
     label_lookup = _strict_label_lookup(lm)
 
     out["strict_landmark_id_match"] = [
@@ -1253,6 +1259,11 @@ def _filter_topics(topics: pd.DataFrame, works: pd.DataFrame) -> pd.DataFrame:
     out = topics.copy()
     out["community"] = pd.to_numeric(out["community"], errors="coerce").fillna(-1).astype(int)
     out = out[out["community"].isin(communities)].copy()
+    if "domain" in out.columns and "domain" in works.columns:
+        domains = set(works["domain"].dropna().astype(str))
+        topic_domains = out["domain"].dropna().astype(str)
+        if domains and topic_domains.ne("").any():
+            out = out[out["domain"].astype(str).isin(domains)].copy()
     for col in ["label", "x", "y", "domain", "topic_id"]:
         if col not in out.columns:
             out[col] = "" if col in {"label", "domain", "topic_id"} else 0.0

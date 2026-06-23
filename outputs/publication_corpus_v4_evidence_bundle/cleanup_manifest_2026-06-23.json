@@ -1,0 +1,68 @@
+﻿[
+    {
+        "path":  "data/knowledge_corpus/v2_publication_v3_balanced_444",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v2_publication_v3_balanced_444",
+        "mb":  480.48,
+        "reason":  "failed balanced-444 candidate corpus; manifest and quality report copied to evidence bundle"
+    },
+    {
+        "path":  "data/knowledge_corpus/v1_strict_landmark_external_topup_dedup_protein2_meta_topup_ready_refsupport_candidates_v3d_magnetic_deep_topup",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v1_strict_landmark_external_topup_dedup_protein2_meta_topup_ready_refsupport_candidates_v3d_magnetic_deep_topup",
+        "mb":  222.33,
+        "reason":  "transition corpus for failed default magnetic deep top-up; superseded by retained v3e source"
+    },
+    {
+        "path":  "data/knowledge_corpus/v1_strict_landmark_external_topup_dedup_protein2_meta_topup_ready_refsupport_candidates_v3c_landmark_refs",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v1_strict_landmark_external_topup_dedup_protein2_meta_topup_ready_refsupport_candidates_v3c_landmark_refs",
+        "mb":  222.33,
+        "reason":  "transition corpus for landmark reference support; superseded by retained v3e source"
+    },
+    {
+        "path":  "data/knowledge_corpus/v1_strict_landmark_external_topup_dedup_protein2_meta_topup_ready_refsupport_candidates_v3a_global",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v1_strict_landmark_external_topup_dedup_protein2_meta_topup_ready_refsupport_candidates_v3a_global",
+        "mb":  222.15,
+        "reason":  "transition corpus for landmark repair; superseded by retained v3e source"
+    },
+    {
+        "path":  "data/knowledge_corpus/v1_strict_landmark_external_topup_dedup_protein2_meta_topup_ready_refsupport_candidates_v3b_external_landmarks",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v1_strict_landmark_external_topup_dedup_protein2_meta_topup_ready_refsupport_candidates_v3b_external_landmarks",
+        "mb":  222.15,
+        "reason":  "transition corpus for external landmarks; superseded by retained v3e source"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig3_v2_publication_v3_balanced_444_core_long",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig3_v2_publication_v3_balanced_444_core_long",
+        "mb":  182.85,
+        "reason":  "complete negative balanced-444 Fig3 run; summaries copied to evidence bundle"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig3_v2_publication_v3_balanced_444_core",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig3_v2_publication_v3_balanced_444_core",
+        "mb":  126.13,
+        "reason":  "aborted balanced-444 Fig3 run; only partial/incomplete output"
+    },
+    {
+        "path":  "outputs/publication_corpus_v7_landmark_repair_candidate_audit",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v7_landmark_repair_candidate_audit",
+        "mb":  11.27,
+        "reason":  "intermediate landmark repair audit; magnetic records copied to evidence bundle"
+    },
+    {
+        "path":  "outputs/publication_corpus_v10_balanced_444_fig3_subset_diagnostics",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v10_balanced_444_fig3_subset_diagnostics",
+        "mb":  0.2,
+        "reason":  "failed balanced-444 subset diagnostics; key tables copied to evidence bundle"
+    },
+    {
+        "path":  "outputs/publication_corpus_v8_magnetic_manual_topup_candidate_audit",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v8_magnetic_manual_topup_candidate_audit",
+        "mb":  0.07,
+        "reason":  "intermediate magnetic repair audit; key audit files copied to evidence bundle"
+    },
+    {
+        "path":  "outputs/publication_corpus_v9_balanced_444_candidate_audit",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v9_balanced_444_candidate_audit",
+        "mb":  0.07,
+        "reason":  "failed balanced-444 candidate audit; key audit files copied to evidence bundle"
+    }
+]

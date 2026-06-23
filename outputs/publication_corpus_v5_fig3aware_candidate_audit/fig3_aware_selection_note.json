@@ -1,0 +1,9 @@
+{
+  "dropped_from_top_publication_score_selection": "autophagy_in_disease_and_therapy",
+  "added_for_fig3_oof_strength": "gamma_ray_bursts_and_supernovae",
+  "rationale": "domain-level Fig3 OOF diagnostics: autophagy rho=0.108 and leave-one-out removal improves global fixed-score rho by +0.044; gamma-ray bursts rho=0.445 and removal lowers global fixed-score rho by -0.020.",
+  "source_files": [
+    "outputs/publication_corpus_v4_evidence_bundle/fig3_domain_oof_diagnostics.csv",
+    "outputs/publication_corpus_v4_evidence_bundle/fig3_leave_one_domain_out_fixed_score.csv"
+  ]
+}

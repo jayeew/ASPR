@@ -93,6 +93,55 @@ def test_strict_anchor_policy_cleans_noisy_domain_and_recovers_manual_match() ->
     assert strict.loc[strict["domain"] == "perovskite_solar_cells", "anchor_label"].iloc[0] == "Kojima 2009"
 
 
+def test_strict_anchor_policy_uses_title_only_when_no_exact_identifier() -> None:
+    works = pd.DataFrame(
+        [
+            {
+                "id": "https://openalex.org/W1",
+                "doi": "10.1000/exact",
+                "title": "The ubiquitin system",
+                "year": 1998,
+                "domain": "ubiquitin_and_proteasome_pathways",
+                "primary_field": "Biology",
+                "display_community": 1,
+                "display_topic_label": "topic",
+                "is_landmark": 0,
+                "anchor_label": "",
+            },
+            {
+                "id": "https://openalex.org/W2",
+                "doi": "10.1000/other",
+                "title": "The ubiquitin system",
+                "year": 2000,
+                "domain": "ubiquitin_and_proteasome_pathways",
+                "primary_field": "Biology",
+                "display_community": 1,
+                "display_topic_label": "topic",
+                "is_landmark": 0,
+                "anchor_label": "",
+            },
+        ]
+    )
+    landmarks = pd.DataFrame(
+        [
+            {
+                "domain": "ubiquitin_and_proteasome_pathways",
+                "id": "https://openalex.org/W1",
+                "doi": "10.1000/exact",
+                "title": "The ubiquitin system",
+                "year": 1998,
+                "label": "Exact 1998",
+                "include_main": 1,
+            }
+        ]
+    )
+
+    strict = apply_strict_anchor_policy(works, landmarks)
+
+    assert strict["is_landmark"].tolist() == [1, 0]
+    assert strict["anchor_label"].tolist() == ["Exact 1998", ""]
+
+
 def test_offline_corpus_build_creates_views() -> None:
     with tempfile.TemporaryDirectory(prefix="aspr_corpus_") as tmp:
         root = Path(tmp)

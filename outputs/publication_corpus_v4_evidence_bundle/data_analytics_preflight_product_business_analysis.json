@@ -1,0 +1,923 @@
+﻿{
+  "schema": "data_analytics_preflight.v1",
+  "read_only": true,
+  "workflow": "product-business-analysis",
+  "request_mode": "ordinary_workflow",
+  "state": {
+    "state_dir": "C:\\Users\\jayee\\.codex\\state\\plugins\\data-analytics",
+    "user_context_status": "missing",
+    "onboarding_state_status": "missing"
+  },
+  "files": {
+    "user_context": {
+      "path": "C:\\Users\\jayee\\.codex\\state\\plugins\\data-analytics\\user-context.md",
+      "status": "missing",
+      "bytes": 0,
+      "sha256": null,
+      "mtime": null,
+      "sections": [],
+      "omitted": false,
+      "error": null
+    },
+    "onboarding_state": {
+      "path": "C:\\Users\\jayee\\.codex\\state\\plugins\\data-analytics\\onboarding-state.json",
+      "status": "missing",
+      "bytes": 0,
+      "sha256": null,
+      "mtime": null,
+      "sections": [],
+      "omitted": false,
+      "error": null
+    }
+  },
+  "current_skill_experience": {
+    "skill": "product-business-analysis",
+    "introduced": false,
+    "tried": false,
+    "dismissed": false,
+    "intro_eligible": true,
+    "cta_owner": "skill"
+  },
+  "context": {
+    "user_context": {
+      "scope": "source_routing_preferences_and_semantic_layer_registry",
+      "source_routing_preferences": {},
+      "semantic_layer_count": 0,
+      "normalization_complete": false
+    },
+    "source_preferences": {},
+    "source_category_config": {
+      "structured_data": {
+        "label": "Data warehouse",
+        "preferred_plugins": [
+          "Databricks",
+          "BigQuery",
+          "Snowflake"
+        ],
+        "relevant_skills": []
+      },
+      "team_communication": {
+        "label": "Team communication",
+        "preferred_plugins": [
+          "Slack",
+          "Teams"
+        ],
+        "relevant_skills": []
+      },
+      "company_docs": {
+        "label": "Company docs",
+        "preferred_plugins": [
+          "Google Drive",
+          "SharePoint",
+          "Notion"
+        ],
+        "relevant_skills": []
+      },
+      "dashboards_bi": {
+        "label": "Dashboards and BI",
+        "preferred_plugins": [
+          "ThoughtSpot",
+          "Omni Analytics",
+          "Metabase"
+        ],
+        "relevant_skills": []
+      },
+      "behavior_signals": {
+        "label": "Behavior signals",
+        "preferred_plugins": [
+          "Amplitude",
+          "Mixpanel",
+          "PostHog"
+        ],
+        "relevant_skills": []
+      },
+      "notebook_lab": {
+        "label": "Notebook lab",
+        "preferred_plugins": [
+          "Hex",
+          "Deepnote"
+        ],
+        "relevant_skills": []
+      },
+      "email_context": {
+        "label": "Email context",
+        "preferred_plugins": [
+          "Gmail",
+          "Outlook Email"
+        ],
+        "relevant_skills": []
+      },
+      "calendar_context": {
+        "label": "Calendar context",
+        "preferred_plugins": [
+          "Google Calendar",
+          "Outlook Calendar"
+        ],
+        "relevant_skills": []
+      },
+      "code_repository": {
+        "label": "Code repository",
+        "preferred_plugins": [
+          "GitHub"
+        ],
+        "relevant_skills": []
+      }
+    },
+    "connector_confirmation": {
+      "structured_data": {
+        "id": "structured_data",
+        "label": "Data warehouse",
+        "state_scope": "onboarding_only_not_durable_connector_readiness",
+        "workflow_time_behavior": "attempt_actual_reads_only_when_a_workflow_needs_the_source",
+        "eager_read": false,
+        "preferred_plugins": [
+          "Databricks",
+          "BigQuery",
+          "Snowflake"
+        ],
+        "status": "needs_confirmation",
+        "candidates": [
+          "Databricks",
+          "BigQuery",
+          "Snowflake"
+        ],
+        "setup_action": "run_plugin_first_source_setup",
+        "preferred": null,
+        "plugin_preference_order": [
+          "Databricks",
+          "BigQuery",
+          "Snowflake"
+        ],
+        "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+        "setup_recovery": {
+          "type": "plugin_first_source_setup",
+          "preferred_plugins": [
+            "Databricks",
+            "BigQuery",
+            "Snowflake"
+          ],
+          "configured_source_routes": [
+            "Databricks",
+            "BigQuery",
+            "Snowflake"
+          ],
+          "candidate_lookup": "functions.list_available_plugins_to_install",
+          "candidate_match": "plugin_name_slug_or_app_connector_id_intersection",
+          "install_request": "functions.request_plugin_install",
+          "install_requires_user_approval": true,
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source"
+        }
+      },
+      "team_communication": {
+        "id": "team_communication",
+        "label": "Team communication",
+        "state_scope": "onboarding_only_not_durable_connector_readiness",
+        "workflow_time_behavior": "attempt_actual_reads_only_when_a_workflow_needs_the_source",
+        "eager_read": false,
+        "preferred_plugins": [
+          "Slack",
+          "Teams"
+        ],
+        "status": "needs_confirmation",
+        "candidates": [
+          "Slack",
+          "Teams"
+        ],
+        "setup_action": "run_plugin_first_source_setup",
+        "preferred": null,
+        "plugin_preference_order": [
+          "Slack",
+          "Teams"
+        ],
+        "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+        "setup_recovery": {
+          "type": "plugin_first_source_setup",
+          "preferred_plugins": [
+            "Slack",
+            "Teams"
+          ],
+          "configured_source_routes": [
+            "Slack",
+            "Teams"
+          ],
+          "candidate_lookup": "functions.list_available_plugins_to_install",
+          "candidate_match": "plugin_name_slug_or_app_connector_id_intersection",
+          "install_request": "functions.request_plugin_install",
+          "install_requires_user_approval": true,
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source"
+        }
+      },
+      "company_docs": {
+        "id": "company_docs",
+        "label": "Company docs",
+        "state_scope": "onboarding_only_not_durable_connector_readiness",
+        "workflow_time_behavior": "attempt_actual_reads_only_when_a_workflow_needs_the_source",
+        "eager_read": false,
+        "preferred_plugins": [
+          "Google Drive",
+          "SharePoint",
+          "Notion"
+        ],
+        "status": "needs_confirmation",
+        "candidates": [
+          "Google Drive",
+          "SharePoint",
+          "Notion"
+        ],
+        "setup_action": "run_plugin_first_source_setup",
+        "preferred": null,
+        "plugin_preference_order": [
+          "Google Drive",
+          "SharePoint",
+          "Notion"
+        ],
+        "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+        "setup_recovery": {
+          "type": "plugin_first_source_setup",
+          "preferred_plugins": [
+            "Google Drive",
+            "SharePoint",
+            "Notion"
+          ],
+          "configured_source_routes": [
+            "Google Drive",
+            "SharePoint",
+            "Notion"
+          ],
+          "candidate_lookup": "functions.list_available_plugins_to_install",
+          "candidate_match": "plugin_name_slug_or_app_connector_id_intersection",
+          "install_request": "functions.request_plugin_install",
+          "install_requires_user_approval": true,
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source"
+        }
+      },
+      "dashboards_bi": {
+        "id": "dashboards_bi",
+        "label": "Dashboards and BI",
+        "state_scope": "onboarding_only_not_durable_connector_readiness",
+        "workflow_time_behavior": "attempt_actual_reads_only_when_a_workflow_needs_the_source",
+        "eager_read": false,
+        "preferred_plugins": [
+          "ThoughtSpot",
+          "Omni Analytics",
+          "Metabase"
+        ],
+        "status": "needs_confirmation",
+        "candidates": [
+          "ThoughtSpot",
+          "Omni Analytics",
+          "Metabase"
+        ],
+        "setup_action": "run_plugin_first_source_setup",
+        "preferred": null,
+        "plugin_preference_order": [
+          "ThoughtSpot",
+          "Omni Analytics",
+          "Metabase"
+        ],
+        "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+        "setup_recovery": {
+          "type": "plugin_first_source_setup",
+          "preferred_plugins": [
+            "ThoughtSpot",
+            "Omni Analytics",
+            "Metabase"
+          ],
+          "configured_source_routes": [
+            "ThoughtSpot",
+            "Omni Analytics",
+            "Metabase"
+          ],
+          "candidate_lookup": "functions.list_available_plugins_to_install",
+          "candidate_match": "plugin_name_slug_or_app_connector_id_intersection",
+          "install_request": "functions.request_plugin_install",
+          "install_requires_user_approval": true,
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source"
+        }
+      },
+      "behavior_signals": {
+        "id": "behavior_signals",
+        "label": "Behavior signals",
+        "state_scope": "onboarding_only_not_durable_connector_readiness",
+        "workflow_time_behavior": "attempt_actual_reads_only_when_a_workflow_needs_the_source",
+        "eager_read": false,
+        "preferred_plugins": [
+          "Amplitude",
+          "Mixpanel",
+          "PostHog"
+        ],
+        "status": "needs_confirmation",
+        "candidates": [
+          "Amplitude",
+          "Mixpanel",
+          "PostHog"
+        ],
+        "setup_action": "run_plugin_first_source_setup",
+        "preferred": null,
+        "plugin_preference_order": [
+          "Amplitude",
+          "Mixpanel",
+          "PostHog"
+        ],
+        "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+        "setup_recovery": {
+          "type": "plugin_first_source_setup",
+          "preferred_plugins": [
+            "Amplitude",
+            "Mixpanel",
+            "PostHog"
+          ],
+          "configured_source_routes": [
+            "Amplitude",
+            "Mixpanel",
+            "PostHog"
+          ],
+          "candidate_lookup": "functions.list_available_plugins_to_install",
+          "candidate_match": "plugin_name_slug_or_app_connector_id_intersection",
+          "install_request": "functions.request_plugin_install",
+          "install_requires_user_approval": true,
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source"
+        }
+      },
+      "notebook_lab": {
+        "id": "notebook_lab",
+        "label": "Notebook lab",
+        "state_scope": "onboarding_only_not_durable_connector_readiness",
+        "workflow_time_behavior": "attempt_actual_reads_only_when_a_workflow_needs_the_source",
+        "eager_read": false,
+        "preferred_plugins": [
+          "Hex",
+          "Deepnote"
+        ],
+        "status": "needs_confirmation",
+        "candidates": [
+          "Hex",
+          "Deepnote"
+        ],
+        "setup_action": "run_plugin_first_source_setup",
+        "preferred": null,
+        "plugin_preference_order": [
+          "Hex",
+          "Deepnote"
+        ],
+        "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+        "setup_recovery": {
+          "type": "plugin_first_source_setup",
+          "preferred_plugins": [
+            "Hex",
+            "Deepnote"
+          ],
+          "configured_source_routes": [
+            "Hex",
+            "Deepnote"
+          ],
+          "candidate_lookup": "functions.list_available_plugins_to_install",
+          "candidate_match": "plugin_name_slug_or_app_connector_id_intersection",
+          "install_request": "functions.request_plugin_install",
+          "install_requires_user_approval": true,
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source"
+        }
+      },
+      "email_context": {
+        "id": "email_context",
+        "label": "Email context",
+        "state_scope": "onboarding_only_not_durable_connector_readiness",
+        "workflow_time_behavior": "attempt_actual_reads_only_when_a_workflow_needs_the_source",
+        "eager_read": false,
+        "preferred_plugins": [
+          "Gmail",
+          "Outlook Email"
+        ],
+        "status": "needs_confirmation",
+        "candidates": [
+          "Gmail",
+          "Outlook Email"
+        ],
+        "setup_action": "run_plugin_first_source_setup",
+        "preferred": null,
+        "plugin_preference_order": [
+          "Gmail",
+          "Outlook Email"
+        ],
+        "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+        "setup_recovery": {
+          "type": "plugin_first_source_setup",
+          "preferred_plugins": [
+            "Gmail",
+            "Outlook Email"
+          ],
+          "configured_source_routes": [
+            "Gmail",
+            "Outlook Email"
+          ],
+          "candidate_lookup": "functions.list_available_plugins_to_install",
+          "candidate_match": "plugin_name_slug_or_app_connector_id_intersection",
+          "install_request": "functions.request_plugin_install",
+          "install_requires_user_approval": true,
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source"
+        }
+      },
+      "calendar_context": {
+        "id": "calendar_context",
+        "label": "Calendar context",
+        "state_scope": "onboarding_only_not_durable_connector_readiness",
+        "workflow_time_behavior": "attempt_actual_reads_only_when_a_workflow_needs_the_source",
+        "eager_read": false,
+        "preferred_plugins": [
+          "Google Calendar",
+          "Outlook Calendar"
+        ],
+        "status": "needs_confirmation",
+        "candidates": [
+          "Google Calendar",
+          "Outlook Calendar"
+        ],
+        "setup_action": "run_plugin_first_source_setup",
+        "preferred": null,
+        "plugin_preference_order": [
+          "Google Calendar",
+          "Outlook Calendar"
+        ],
+        "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+        "setup_recovery": {
+          "type": "plugin_first_source_setup",
+          "preferred_plugins": [
+            "Google Calendar",
+            "Outlook Calendar"
+          ],
+          "configured_source_routes": [
+            "Google Calendar",
+            "Outlook Calendar"
+          ],
+          "candidate_lookup": "functions.list_available_plugins_to_install",
+          "candidate_match": "plugin_name_slug_or_app_connector_id_intersection",
+          "install_request": "functions.request_plugin_install",
+          "install_requires_user_approval": true,
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source"
+        }
+      },
+      "code_repository": {
+        "id": "code_repository",
+        "label": "Code repository",
+        "state_scope": "onboarding_only_not_durable_connector_readiness",
+        "workflow_time_behavior": "attempt_actual_reads_only_when_a_workflow_needs_the_source",
+        "eager_read": false,
+        "preferred_plugins": [
+          "GitHub"
+        ],
+        "status": "needs_confirmation",
+        "candidates": [
+          "GitHub"
+        ],
+        "setup_action": "run_plugin_first_source_setup",
+        "preferred": null,
+        "plugin_preference_order": [
+          "GitHub"
+        ],
+        "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+        "setup_recovery": {
+          "type": "plugin_first_source_setup",
+          "preferred_plugins": [
+            "GitHub"
+          ],
+          "configured_source_routes": [
+            "GitHub"
+          ],
+          "candidate_lookup": "functions.list_available_plugins_to_install",
+          "candidate_match": "plugin_name_slug_or_app_connector_id_intersection",
+          "install_request": "functions.request_plugin_install",
+          "install_requires_user_approval": true,
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source"
+        }
+      }
+    },
+    "connector_setup_summary": {
+      "status": "pending",
+      "classification_status": "pending",
+      "action_required": false,
+      "has_setup_gaps": true,
+      "ready": [],
+      "active": [],
+      "needs_attention": [
+        {
+          "id": "structured_data",
+          "label": "Data warehouse",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "Databricks",
+            "BigQuery",
+            "Snowflake"
+          ]
+        },
+        {
+          "id": "team_communication",
+          "label": "Team communication",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "Slack",
+            "Teams"
+          ]
+        },
+        {
+          "id": "company_docs",
+          "label": "Company docs",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "Google Drive",
+            "SharePoint",
+            "Notion"
+          ]
+        },
+        {
+          "id": "dashboards_bi",
+          "label": "Dashboards and BI",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "ThoughtSpot",
+            "Omni Analytics",
+            "Metabase"
+          ]
+        },
+        {
+          "id": "behavior_signals",
+          "label": "Behavior signals",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "Amplitude",
+            "Mixpanel",
+            "PostHog"
+          ]
+        },
+        {
+          "id": "notebook_lab",
+          "label": "Notebook lab",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "Hex",
+            "Deepnote"
+          ]
+        },
+        {
+          "id": "email_context",
+          "label": "Email context",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "Gmail",
+            "Outlook Email"
+          ]
+        },
+        {
+          "id": "calendar_context",
+          "label": "Calendar context",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "Google Calendar",
+            "Outlook Calendar"
+          ]
+        },
+        {
+          "id": "code_repository",
+          "label": "Code repository",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "GitHub"
+          ]
+        }
+      ],
+      "needs_choice": [
+        {
+          "id": "structured_data",
+          "label": "Data warehouse",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "Databricks",
+            "BigQuery",
+            "Snowflake"
+          ]
+        },
+        {
+          "id": "team_communication",
+          "label": "Team communication",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "Slack",
+            "Teams"
+          ]
+        },
+        {
+          "id": "company_docs",
+          "label": "Company docs",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "Google Drive",
+            "SharePoint",
+            "Notion"
+          ]
+        },
+        {
+          "id": "dashboards_bi",
+          "label": "Dashboards and BI",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "ThoughtSpot",
+            "Omni Analytics",
+            "Metabase"
+          ]
+        },
+        {
+          "id": "behavior_signals",
+          "label": "Behavior signals",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "Amplitude",
+            "Mixpanel",
+            "PostHog"
+          ]
+        },
+        {
+          "id": "notebook_lab",
+          "label": "Notebook lab",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "Hex",
+            "Deepnote"
+          ]
+        },
+        {
+          "id": "email_context",
+          "label": "Email context",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "Gmail",
+            "Outlook Email"
+          ]
+        },
+        {
+          "id": "calendar_context",
+          "label": "Calendar context",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "Google Calendar",
+            "Outlook Calendar"
+          ]
+        },
+        {
+          "id": "code_repository",
+          "label": "Code repository",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "GitHub"
+          ]
+        }
+      ],
+      "fallback_or_closed": [],
+      "not_set_up": [],
+      "plugin_setup_opportunities": [
+        {
+          "id": "structured_data",
+          "label": "Data warehouse",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "Databricks",
+            "BigQuery",
+            "Snowflake"
+          ]
+        },
+        {
+          "id": "team_communication",
+          "label": "Team communication",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "Slack",
+            "Teams"
+          ]
+        },
+        {
+          "id": "company_docs",
+          "label": "Company docs",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "Google Drive",
+            "SharePoint",
+            "Notion"
+          ]
+        },
+        {
+          "id": "dashboards_bi",
+          "label": "Dashboards and BI",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "ThoughtSpot",
+            "Omni Analytics",
+            "Metabase"
+          ]
+        },
+        {
+          "id": "behavior_signals",
+          "label": "Behavior signals",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "Amplitude",
+            "Mixpanel",
+            "PostHog"
+          ]
+        },
+        {
+          "id": "notebook_lab",
+          "label": "Notebook lab",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "Hex",
+            "Deepnote"
+          ]
+        },
+        {
+          "id": "email_context",
+          "label": "Email context",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "Gmail",
+            "Outlook Email"
+          ]
+        },
+        {
+          "id": "calendar_context",
+          "label": "Calendar context",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "Google Calendar",
+            "Outlook Calendar"
+          ]
+        },
+        {
+          "id": "code_repository",
+          "label": "Code repository",
+          "status": "needs_confirmation",
+          "preferred": null,
+          "setup_action": "run_plugin_first_source_setup",
+          "fallback_setup_action": "ask_user_to_choose_or_confirm_source",
+          "candidates": [
+            "GitHub"
+          ]
+        }
+      ],
+      "unresolved_core_ids": [
+        "structured_data",
+        "team_communication",
+        "company_docs"
+      ],
+      "core_complete": false,
+      "next_action": {
+        "category_id": "structured_data",
+        "label": "Data warehouse",
+        "status": "needs_confirmation",
+        "preferred": null,
+        "setup_action": "run_plugin_first_source_setup"
+      },
+      "user_facing_guidance": "Use this summary for capability or setup-status answers. During onboarding, resolve one highest-value source action at a time. Active sources are FYI only; attempt actual reads only when a workflow needs the source."
+    },
+    "semantic_layers": [],
+    "hero_prompt_candidates": [],
+    "primary_hero_prompt": null,
+    "extra_hero_prompt_candidates": []
+  },
+  "control": {
+    "response_mode": "ordinary_workflow",
+    "final_obligations": [
+      {
+        "id": "offer_data_analytics_onboarding_next_step",
+        "timing": "append_after_main_answer",
+        "template": "---\n\n## Data Analytics Setup Required\n\nThis is required before Data Analytics can reliably use your configured sources and any authoritative semantic-layer context you choose to set up. It also gives you a useful overview of the plugin's key functionality.\n\nReply `start` to continue.",
+        "next_action": {
+          "id": "start_data_analytics_onboarding"
+        },
+        "skip_when": "the response requires a clarification or the user asked for quiet behavior"
+      }
+    ],
+    "conditional_guidance": [
+      {
+        "id": "context_gap_note",
+        "template": "Data Analytics would get sharper here with a little more saved context, such as trusted dashboard or table pointers, metric definitions, semantic-layer context, source-of-truth docs, or preferred output format.",
+        "potential_gaps": [
+          "Data Analytics source-routing preferences or semantic-layer registry are missing or unreadable"
+        ]
+      }
+    ],
+    "onboarding_progress": {
+      "status": "missing",
+      "core_onboarding": {
+        "complete": false,
+        "remaining_step_ids": [
+          "orientation",
+          "source_setup_confirmation",
+          "semantic_layer_setup",
+          "hero_prompt"
+        ],
+        "next_action": {
+          "id": "start_data_analytics_onboarding",
+          "label": "show orientation"
+        }
+      },
+      "task_list": [
+        {
+          "id": "orientation",
+          "label": "Orientation",
+          "status": "in_progress"
+        },
+        {
+          "id": "source_setup_confirmation",
+          "label": "Check main analytics sources",
+          "status": "pending"
+        },
+        {
+          "id": "semantic_layer_setup",
+          "label": "Set Up Data Context",
+          "status": "pending"
+        },
+        {
+          "id": "hero_prompt",
+          "label": "Hero prompt",
+          "status": "pending"
+        }
+      ]
+    }
+  }
+}

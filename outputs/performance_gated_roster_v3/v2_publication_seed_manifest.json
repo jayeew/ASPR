@@ -1,0 +1,111 @@
+{
+  "artifact_kind": "performance_gated_v3_seed",
+  "created_at": "2026-06-23T04:40:08+00:00",
+  "decision": {
+    "baseline": {
+      "contributing_graph_deltas": [
+        "community_reach",
+        "field_entropy",
+        "cross_community_adoption",
+        "partition_change",
+        "boundary_mixing"
+      ],
+      "domains": [
+        "crispr",
+        "exoplanets",
+        "gamma_ray_bursts_and_supernovae",
+        "genetics_aging_and_longevity_in_model_organisms",
+        "graphene_2d_materials",
+        "ipsc_reprogramming",
+        "mass_spectrometry_techniques_and_applications",
+        "microbiome_metagenomics",
+        "perovskite_solar_cells",
+        "topological_insulators",
+        "ubiquitin_and_proteasome_pathways"
+      ],
+      "equal_weight_oof_spearman": 0.2224057969553026,
+      "latest_fold": 4,
+      "latest_fold_test_spearman": 0.2600954371418219,
+      "learned_oof_spearman": 0.2962548310873628,
+      "learned_vs_equal_delta": 0.07384903413206018,
+      "n_contributing_graph_deltas": 5,
+      "n_domains": 11,
+      "overall_pass": false,
+      "run_dir": "outputs\\kg_perturbation_fig3_v3_openalex_graph_strong11_no_magnetic_audit\\multi_domain",
+      "status_label": "underpowered multi-domain diagnostic run"
+    },
+    "candidate": {
+      "contributing_graph_deltas": [
+        "community_reach",
+        "field_entropy",
+        "cross_community_adoption",
+        "partition_change",
+        "boundary_mixing"
+      ],
+      "domains": [
+        "crispr",
+        "exoplanets",
+        "gamma_ray_bursts_and_supernovae",
+        "genetics_aging_and_longevity_in_model_organisms",
+        "graphene_2d_materials",
+        "ipsc_reprogramming",
+        "magnetic_properties_of_thin_films",
+        "mass_spectrometry_techniques_and_applications",
+        "microbiome_metagenomics",
+        "perovskite_solar_cells",
+        "topological_insulators",
+        "ubiquitin_and_proteasome_pathways"
+      ],
+      "equal_weight_oof_spearman": 0.21897951721895328,
+      "latest_fold": 4,
+      "latest_fold_test_spearman": 0.2602754525266331,
+      "learned_oof_spearman": 0.2952581414947922,
+      "learned_vs_equal_delta": 0.0762786242758389,
+      "n_contributing_graph_deltas": 5,
+      "n_domains": 12,
+      "overall_pass": false,
+      "run_dir": "outputs\\kg_perturbation_fig3_v3_openalex_graph_all12_audit\\multi_domain",
+      "status_label": "underpowered multi-domain diagnostic run"
+    },
+    "candidate_domain": "magnetic_properties_of_thin_films",
+    "checks": {
+      "improves_contributing_deltas": false,
+      "improves_latest_fold": true,
+      "improves_oof": false
+    },
+    "created_at": "2026-06-23T04:40:08+00:00",
+    "final_domains": [
+      "crispr",
+      "exoplanets",
+      "gamma_ray_bursts_and_supernovae",
+      "genetics_aging_and_longevity_in_model_organisms",
+      "graphene_2d_materials",
+      "ipsc_reprogramming",
+      "mass_spectrometry_techniques_and_applications",
+      "microbiome_metagenomics",
+      "perovskite_solar_cells",
+      "topological_insulators",
+      "ubiquitin_and_proteasome_pathways"
+    ],
+    "gate_policy": "include only if OOF, latest time-block fold, and contributing deltas strictly improve",
+    "include_candidate": false
+  },
+  "figure_logic_policy": "fixed_consumer_contract",
+  "final_domains": [
+    "crispr",
+    "exoplanets",
+    "gamma_ray_bursts_and_supernovae",
+    "genetics_aging_and_longevity_in_model_organisms",
+    "graphene_2d_materials",
+    "ipsc_reprogramming",
+    "mass_spectrometry_techniques_and_applications",
+    "microbiome_metagenomics",
+    "perovskite_solar_cells",
+    "topological_insulators",
+    "ubiquitin_and_proteasome_pathways"
+  ],
+  "n_final_domains": 11,
+  "n_seed_landmarks": 23,
+  "selection_policy": "strict_performance_gate_v3",
+  "source_corpus_dir": "data\\knowledge_corpus\\v3_openalex_graph"
+}

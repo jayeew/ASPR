@@ -1,0 +1,368 @@
+﻿[
+    {
+        "path":  "data/knowledge_corpus/v1_strict",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v1_strict",
+        "mb":  1206.79,
+        "reason":  "old source/intermediate corpus superseded by retained fig3aware12 source or retained magnetic v3e source"
+    },
+    {
+        "path":  "data/knowledge_corpus/v3_fig3ready_publication",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v3_fig3ready_publication",
+        "mb":  363.87,
+        "reason":  "old source/intermediate corpus superseded by retained fig3aware12 source or retained magnetic v3e source"
+    },
+    {
+        "path":  "data/knowledge_corpus/v4_publication_candidate8",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v4_publication_candidate8",
+        "mb":  363.87,
+        "reason":  "old source/intermediate corpus superseded by retained fig3aware12 source or retained magnetic v3e source"
+    },
+    {
+        "path":  "data/knowledge_corpus/v1_strict_landmark_external_topup_dedup_protein2_meta_topup_ready_refsupport_size_topup_candidates",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v1_strict_landmark_external_topup_dedup_protein2_meta_topup_ready_refsupport_size_topup_candidates",
+        "mb":  224.89,
+        "reason":  "old source/intermediate corpus superseded by retained fig3aware12 source or retained magnetic v3e source"
+    },
+    {
+        "path":  "data/knowledge_corpus/v1_strict_landmark_external_topup4",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v1_strict_landmark_external_topup4",
+        "mb":  222.36,
+        "reason":  "old source/intermediate corpus superseded by retained fig3aware12 source or retained magnetic v3e source"
+    },
+    {
+        "path":  "data/knowledge_corpus/v1_strict_landmark_external_topup_dedup_protein2_meta_topup_ready_refsupport_closure_topup_candidates_b",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v1_strict_landmark_external_topup_dedup_protein2_meta_topup_ready_refsupport_closure_topup_candidates_b",
+        "mb":  222.15,
+        "reason":  "old source/intermediate corpus superseded by retained fig3aware12 source or retained magnetic v3e source"
+    },
+    {
+        "path":  "data/knowledge_corpus/v1_strict_landmark_external_topup_dedup_protein2_meta_topup_ready_refsupport",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v1_strict_landmark_external_topup_dedup_protein2_meta_topup_ready_refsupport",
+        "mb":  220.63,
+        "reason":  "old source/intermediate corpus superseded by retained fig3aware12 source or retained magnetic v3e source"
+    },
+    {
+        "path":  "data/knowledge_corpus/v1_strict_landmark_external_topup_dedup_protein2_meta_topup_ready",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v1_strict_landmark_external_topup_dedup_protein2_meta_topup_ready",
+        "mb":  220.46,
+        "reason":  "old source/intermediate corpus superseded by retained fig3aware12 source or retained magnetic v3e source"
+    },
+    {
+        "path":  "data/knowledge_corpus/v1_strict_landmark_external_topup3",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v1_strict_landmark_external_topup3",
+        "mb":  214.69,
+        "reason":  "old source/intermediate corpus superseded by retained fig3aware12 source or retained magnetic v3e source"
+    },
+    {
+        "path":  "data/knowledge_corpus/v1_strict_landmark_external_topup2",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v1_strict_landmark_external_topup2",
+        "mb":  214.67,
+        "reason":  "old source/intermediate corpus superseded by retained fig3aware12 source or retained magnetic v3e source"
+    },
+    {
+        "path":  "data/knowledge_corpus/v1_strict_landmark_external_topup",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v1_strict_landmark_external_topup",
+        "mb":  214.67,
+        "reason":  "old source/intermediate corpus superseded by retained fig3aware12 source or retained magnetic v3e source"
+    },
+    {
+        "path":  "data/knowledge_corpus/v1_strict_landmark_external",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v1_strict_landmark_external",
+        "mb":  214.66,
+        "reason":  "old source/intermediate corpus superseded by retained fig3aware12 source or retained magnetic v3e source"
+    },
+    {
+        "path":  "data/knowledge_corpus/v1_strict_landmark_repaired",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v1_strict_landmark_repaired",
+        "mb":  214.52,
+        "reason":  "old source/intermediate corpus superseded by retained fig3aware12 source or retained magnetic v3e source"
+    },
+    {
+        "path":  "data/knowledge_corpus/v1_strict_landmark_external_topup_dedup_protein2",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v1_strict_landmark_external_topup_dedup_protein2",
+        "mb":  211.34,
+        "reason":  "old source/intermediate corpus superseded by retained fig3aware12 source or retained magnetic v3e source"
+    },
+    {
+        "path":  "data/knowledge_corpus/v1_strict_landmark_external_topup_dedup_protein",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v1_strict_landmark_external_topup_dedup_protein",
+        "mb":  211.3,
+        "reason":  "old source/intermediate corpus superseded by retained fig3aware12 source or retained magnetic v3e source"
+    },
+    {
+        "path":  "data/knowledge_corpus/v1_strict_landmark_external_topup_dedup",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v1_strict_landmark_external_topup_dedup",
+        "mb":  211.24,
+        "reason":  "old source/intermediate corpus superseded by retained fig3aware12 source or retained magnetic v3e source"
+    },
+    {
+        "path":  "data/knowledge_corpus/v1_strict_landmark_external_topup_dedup_protein2_meta",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v1_strict_landmark_external_topup_dedup_protein2_meta",
+        "mb":  208.32,
+        "reason":  "old source/intermediate corpus superseded by retained fig3aware12 source or retained magnetic v3e source"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig3_v2_publication11_refsupport_core",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig3_v2_publication11_refsupport_core",
+        "mb":  169.77,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig3_v2_publication_fig3aware10_subset_best_core",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig3_v2_publication_fig3aware10_subset_best_core",
+        "mb":  137.35,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig3_v3_fig3ready8_core",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig3_v3_fig3ready8_core",
+        "mb":  132.89,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig3_v2_publication10_core2",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig3_v2_publication10_core2",
+        "mb":  127.94,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig3_v2_publication10_core",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig3_v2_publication10_core",
+        "mb":  89.05,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig3_v2_publication10",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig3_v2_publication10",
+        "mb":  89.03,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig1_audit",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig1_audit",
+        "mb":  79.13,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig2_audit",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig2_audit",
+        "mb":  67.95,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig3_audit",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig3_audit",
+        "mb":  63.3,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig5",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig5",
+        "mb":  28.29,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig3_strict_smoke",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig3_strict_smoke",
+        "mb":  7.19,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig5_v2_publication10_diagnostic",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig5_v2_publication10_diagnostic",
+        "mb":  4.25,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig5_v2_publication11_refsupport_diagnostic_fixed_input",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig5_v2_publication11_refsupport_diagnostic_fixed_input",
+        "mb":  4.03,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig5_v2_publication_fig3aware12_diagnostic",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig5_v2_publication_fig3aware12_diagnostic",
+        "mb":  4.01,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig5_v2_publication11_refsupport_diagnostic",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig5_v2_publication11_refsupport_diagnostic",
+        "mb":  4.01,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig5_v3_fig3ready8_diagnostic",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig5_v3_fig3ready8_diagnostic",
+        "mb":  3.7,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig5_v3_fig3ready8_cutoff2015_diagnostic",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig5_v3_fig3ready8_cutoff2015_diagnostic",
+        "mb":  3.67,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig5_optimized",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig5_optimized",
+        "mb":  3.14,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig5_baseline",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig5_baseline",
+        "mb":  1.89,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig4_style_smoke",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig4_style_smoke",
+        "mb":  1.49,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig3_v2_publication_fig3aware12_forecast_scores_debug2",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig3_v2_publication_fig3aware12_forecast_scores_debug2",
+        "mb":  0.43,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig3_v2_publication_fig3aware12_forecast_scores_debug3",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig3_v2_publication_fig3aware12_forecast_scores_debug3",
+        "mb":  0.35,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/publication_corpus_v5_fig3aware_subset_diagnostics",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v5_fig3aware_subset_diagnostics",
+        "mb":  0.2,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/publication_corpus_v5_size_topup_candidate_audit",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v5_size_topup_candidate_audit",
+        "mb":  0.07,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/publication_corpus_v6_extra_closure_topup_candidate_audit",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v6_extra_closure_topup_candidate_audit",
+        "mb":  0.07,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/publication_corpus_v5_closure_topup_candidate_audit",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v5_closure_topup_candidate_audit",
+        "mb":  0.07,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/publication_corpus_v4_refsupport_candidate_audit",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v4_refsupport_candidate_audit",
+        "mb":  0.07,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/publication_corpus_v4_candidate_audit",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v4_candidate_audit",
+        "mb":  0.06,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/kg_perturbation_fig3_v2_publication_fig3aware12_forecast_scores_debug",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig3_v2_publication_fig3aware12_forecast_scores_debug",
+        "mb":  0.04,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/publication_corpus_v3_fig3ready_meta_seed",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v3_fig3ready_meta_seed",
+        "mb":  0.03,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/publication_corpus_v3_fig3ready_seed_strict_refs",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v3_fig3ready_seed_strict_refs",
+        "mb":  0.03,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/publication_corpus_v2_dedup_source",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v2_dedup_source",
+        "mb":  0.03,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/publication_corpus_v3_fig3ready_meta_topup_seed",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v3_fig3ready_meta_topup_seed",
+        "mb":  0.03,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/publication_corpus_v3_fig3ready_seed",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v3_fig3ready_seed",
+        "mb":  0.03,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/publication_corpus_v2_topup4_source",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v2_topup4_source",
+        "mb":  0.03,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/publication_corpus_v2_repaired_source",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v2_repaired_source",
+        "mb":  0.03,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/publication_corpus_v2_external_source",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v2_external_source",
+        "mb":  0.03,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/publication_corpus_v2_topup_source",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v2_topup_source",
+        "mb":  0.03,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/publication_corpus_v2_dedup_science_seed",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v2_dedup_science_seed",
+        "mb":  0.03,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/publication_corpus_v2_dedup_science_seed10",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v2_dedup_science_seed10",
+        "mb":  0.03,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/publication_corpus_v2_final_quality",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v2_final_quality",
+        "mb":  0.02,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/publication_corpus_v3_fig3ready_publication_quality",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v3_fig3ready_publication_quality",
+        "mb":  0.01,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/publication_corpus_v2_materialized",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v2_materialized",
+        "mb":  0.01,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    },
+    {
+        "path":  "outputs/publication_corpus_v2",
+        "full_path":  "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR\\outputs\\publication_corpus_v2",
+        "mb":  0.01,
+        "reason":  "old intermediate or failed diagnostic output superseded by evidence bundle/current runs"
+    }
+]
