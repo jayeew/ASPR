@@ -4,11 +4,56 @@ Fig. 5 is a result-oriented forecasting experiment. It asks whether a knowledge
 graph truncated at 2020 can recover research foci and seed innovations that
 become important after 2020.
 
-The implementation is deliberately separate from the Fig. 1-3 computation code:
-it reads existing Fig. 3 paper-level scores and builds the five minimal tables
-needed for the new Fig. 5 layout.
+The implementation is deliberately separate from the Fig. 1-3 computation code.
+The preferred workflow now produces an auditable data package first, then an
+image-2 handoff package for drawing the four-panel publication figure. The older
+`fig5_forecast_outcomes.py` script remains available for a deterministic
+analytical figure.
 
-## Main Command
+## Preferred Data + Image-2 Workflow
+
+Build the default multi-domain Fig. 5 data package:
+
+```bash
+python -m experiments.kg_perturbation_fig5.build_fig5_plot_data \
+  --out-dir outputs/kg_perturbation_fig5/plot_data
+```
+
+Build the image-2 handoff package from those tables:
+
+```bash
+python -m experiments.kg_perturbation_fig5.build_fig5_image2_handoff \
+  --plot-data-dir outputs/kg_perturbation_fig5/plot_data \
+  --out-dir outputs/kg_perturbation_fig5/image2_handoff
+```
+
+For a CRISPR-Cas case-study figure that visually matches the supplied Fig. 5
+reference more closely:
+
+```bash
+python -m experiments.kg_perturbation_fig5.build_fig5_plot_data \
+  --domain-filter crispr \
+  --out-dir outputs/kg_perturbation_fig5/crispr_plot_data
+
+python -m experiments.kg_perturbation_fig5.build_fig5_image2_handoff \
+  --plot-data-dir outputs/kg_perturbation_fig5/crispr_plot_data \
+  --out-dir outputs/kg_perturbation_fig5/crispr_image2_handoff
+```
+
+The handoff package contains:
+
+```text
+fig5_image2_prompt.md
+fig5_panel_text.json
+fig5_visual_reference_notes.md
+fig5_layout_draft.png
+```
+
+`fig5_panel_text.json` is the source of truth for figure text, rankings, scores,
+and card copy. The drawing model should preserve that text and avoid inventing
+new scientific claims.
+
+## Legacy Analytical Figure Command
 
 ```bash
 python -m experiments.kg_perturbation_fig5.fig5_forecast_outcomes \
@@ -20,11 +65,12 @@ Without `--domain-filter`, the script uses the multi-domain Fig. 3 input.
 
 ## Default Inputs
 
-The script auto-detects the newest local Fig. 3 run, defaulting to:
+The data-package script auto-detects the newest local Fig. 3 run. In this
+workspace it prefers:
 
 ```text
-outputs/kg_perturbation_fig3/strong_evidence_tau10_v3/multi_domain/
-outputs/kg_perturbation_fig3/strong_evidence_tau10_v3/fig3_input/multi_domain/
+outputs/redraw_v6a_best_fig3/multi_domain/
+outputs/redraw_v6a_best_fig3/fig3_input/multi_domain/
 ```
 
 Required files:
@@ -35,7 +81,7 @@ works.csv
 topics.csv
 ```
 
-## Outputs
+## Legacy Analytical Outputs
 
 ```text
 fig5_predicted_focus.csv

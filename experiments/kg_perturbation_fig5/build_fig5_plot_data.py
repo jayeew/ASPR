@@ -317,6 +317,7 @@ def resolve_default_run_dir() -> Path:
     """Resolve the best local Fig. 3 run directory."""
     candidates = [
         DEFAULT_FIG3_RUN_DIR,
+        PROJECT_ROOT / "outputs" / "redraw_v6a_best_fig3" / "multi_domain",
         PROJECT_ROOT / "outputs" / "kg_perturbation_fig3_audit" / "multi_domain",
         PROJECT_ROOT / "outputs" / "kg_perturbation_fig3" / "strong_evidence_tau10_v3" / "multi_domain",
         PROJECT_ROOT / "outputs" / "kg_perturbation_fig3" / "strong_evidence_tau10_v2" / "multi_domain",
@@ -330,6 +331,7 @@ def resolve_default_input_dir(run_dir: Path) -> Path:
     if DEFAULT_FIG3_INPUT_DIR.exists():
         return DEFAULT_FIG3_INPUT_DIR
     candidates = [
+        PROJECT_ROOT / "outputs" / "redraw_v6a_best_fig3" / "fig3_input" / "multi_domain",
         run_dir.parent / "fig3_input" / "multi_domain",
         PROJECT_ROOT / "outputs" / "kg_perturbation_fig3_audit" / "fig3_input" / "multi_domain",
         DEFAULT_CORPUS_ROOT / "views" / "fig5" / "multi_domain",
