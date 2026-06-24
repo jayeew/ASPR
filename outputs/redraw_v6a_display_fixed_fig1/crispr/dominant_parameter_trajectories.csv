@@ -1,0 +1,21 @@
+parameter,label,window_index,window,standardized_value,source_column,provenance,manual_values
+B,$B$ (bridge centrality),1,2010-2014,1.687728192063142,B_proxy_raw,computed,0
+B,$B$ (bridge centrality),2,2015-2016,0.545221387233301,B_proxy_raw,computed,0
+B,$B$ (bridge centrality),3,2017-2018,-0.402288155686295,B_proxy_raw,computed,0
+B,$B$ (bridge centrality),4,2019-2021,-0.8236497310455775,B_proxy_raw,computed,0
+B,$B$ (bridge centrality),5,2022-2024,-1.0070116925645602,B_proxy_raw,computed,0
+RTD,RTD (reference target diversity),1,2010-2014,1.7239997354483296,RTD_proxy_raw,computed,0
+RTD,RTD (reference target diversity),2,2015-2016,0.48568539881408135,RTD_proxy_raw,computed,0
+RTD,RTD (reference target diversity),3,2017-2018,-0.44996247602959016,RTD_proxy_raw,computed,0
+RTD,RTD (reference target diversity),4,2019-2021,-0.7364101897531709,RTD_proxy_raw,computed,0
+RTD,RTD (reference target diversity),5,2022-2024,-1.02331246847965,RTD_proxy_raw,computed,0
+Uzzi,Uzzi novelty (-p10),1,2010-2014,0.16844375197610095,Uzzi_proxy_raw,computed,0
+Uzzi,Uzzi novelty (-p10),2,2015-2016,1.6612050589725007,Uzzi_proxy_raw,computed,0
+Uzzi,Uzzi novelty (-p10),3,2017-2018,0.0807482890153162,Uzzi_proxy_raw,computed,0
+Uzzi,Uzzi novelty (-p10),4,2019-2021,-0.5189098677369283,Uzzi_proxy_raw,computed,0
+Uzzi,Uzzi novelty (-p10),5,2022-2024,-1.3914872322269893,Uzzi_proxy_raw,computed,0
+DeltaQ,$\Delta Q$ directionality,1,2010-2014,0.0,DeltaQ_directionality_raw,computed,0
+DeltaQ,$\Delta Q$ directionality,2,2015-2016,2.7104272061569405,DeltaQ_directionality_raw,computed,0
+DeltaQ,$\Delta Q$ directionality,3,2017-2018,1.0490782668033178,DeltaQ_directionality_raw,computed,0
+DeltaQ,$\Delta Q$ directionality,4,2019-2021,0.37355059215365716,DeltaQ_directionality_raw,computed,0
+DeltaQ,$\Delta Q$ directionality,5,2022-2024,0.10859028010811217,DeltaQ_directionality_raw,computed,0

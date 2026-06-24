@@ -1,0 +1,340 @@
+community,label,x,y,domain,topic_id
+32517050,Plant Stress Responses and Tolerance,0.8085804852388019,-0.5883855869164232,ubiquitin_and_proteasome_pathways,https://openalex.org/T10014
+32517051,Genomics and Phylogenetic Studies,0.8096709222765494,-0.5868841432683644,ubiquitin_and_proteasome_pathways,https://openalex.org/T10015
+32517313,Phytochemicals and Antioxidant Activities,0.8107585713048094,-0.5853806787516856,ubiquitin_and_proteasome_pathways,https://openalex.org/T10035
+32517316,Tuberculosis Research and Epidemiology,0.8118434285783874,-0.5838751985433948,ubiquitin_and_proteasome_pathways,https://openalex.org/T10038
+32517443,Protein Structure and Dynamics,0.8129254903617005,-0.582367707827442,ubiquitin_and_proteasome_pathways,https://openalex.org/T10044
+32517703,MicroRNA in disease regulation,0.8140047529287917,-0.5808582117947002,ubiquitin_and_proteasome_pathways,https://openalex.org/T10062
+32517704,Nanoparticle-Based Drug Delivery,0.815081212563344,-0.5793467156429463,ubiquitin_and_proteasome_pathways,https://openalex.org/T10063
+32517706,Atrial Fibrillation Management and Outcomes,0.8161548655586913,-0.5778332245768448,ubiquitin_and_proteasome_pathways,https://openalex.org/T10065
+32517707,Gut microbiota and health,0.8172257082178327,-0.576317743807929,ubiquitin_and_proteasome_pathways,https://openalex.org/T10066
+32517835,Hepatocellular Carcinoma Treatment and Prognosis,0.818293736853443,-0.5748002785545848,ubiquitin_and_proteasome_pathways,https://openalex.org/T10073
+32517838,Plant-Microbe Interactions and Immunity,0.8193589477878868,-0.5732808340420313,ubiquitin_and_proteasome_pathways,https://openalex.org/T10076
+32517839,Neuroscience and Neuropharmacology Research,0.8204213373532326,-0.5717594155023012,ubiquitin_and_proteasome_pathways,https://openalex.org/T10077
+32517968,Parkinson's Disease Mechanisms and Treatments,0.821480901891262,-0.5702360281742278,ubiquitin_and_proteasome_pathways,https://openalex.org/T10085
+32517969,Alzheimer's disease research and treatments,0.8225376377534871,-0.5687106773034187,ubiquitin_and_proteasome_pathways,https://openalex.org/T10086
+32518095,Malaria Research and Control,0.823591541301157,-0.5671833681422479,ubiquitin_and_proteasome_pathways,https://openalex.org/T10091
+32534078,scientometrics and bibliometrics research,0.8246426089052759,-0.5656541059498289,ubiquitin_and_proteasome_pathways,https://openalex.org/T10102
+32534081,Osteoarthritis Treatment and Mechanisms,0.8256908369466119,-0.5641228959920023,ubiquitin_and_proteasome_pathways,https://openalex.org/T10105
+32534082,Autism Spectrum Disorder Research,0.8267362218157105,-0.5625897435413165,ubiquitin_and_proteasome_pathways,https://openalex.org/T10106
+32534209,HIV Research and Treatment,0.82777875991291,-0.5610546538770043,ubiquitin_and_proteasome_pathways,https://openalex.org/T10112
+32534213,Sperm and Testicular Function,0.8288184476483477,-0.5595176322849739,ubiquitin_and_proteasome_pathways,https://openalex.org/T10116
+32534215,SARS-CoV-2 and COVID-19 Research,0.8298552814419785,-0.5579786840577824,ubiquitin_and_proteasome_pathways,https://openalex.org/T10118
+32534338,Bacterial Genetics and Biotechnology,0.8308892577235831,-0.5564378144946235,ubiquitin_and_proteasome_pathways,https://openalex.org/T10120
+32534340,Toxic Organic Pollutants Impact,0.8319203729327816,-0.5548950289013063,ubiquitin_and_proteasome_pathways,https://openalex.org/T10122
+32534341,DNA Repair Mechanisms,0.8329486235190467,-0.5533503325902365,ubiquitin_and_proteasome_pathways,https://openalex.org/T10123
+32534347,Glioma Diagnosis and Treatment,0.8339740059417149,-0.5518037308803996,ubiquitin_and_proteasome_pathways,https://openalex.org/T10129
+32534474,Insect-Plant Interactions and Control,0.8349965166699992,-0.5502552290973415,ubiquitin_and_proteasome_pathways,https://openalex.org/T10135
+32534476,Multiple Sclerosis Research Studies,0.836016152183,-0.5487048325731522,ubiquitin_and_proteasome_pathways,https://openalex.org/T10137
+32534603,Chronic Obstructive Pulmonary Disease (COPD) Research,0.8370329089697183,-0.5471525466464461,ubiquitin_and_proteasome_pathways,https://openalex.org/T10143
+32534606,Cervical Cancer and HPV Research,0.8380467835290684,-0.5455983766623421,ubiquitin_and_proteasome_pathways,https://openalex.org/T10146
+32534731,Antifungal resistance and susceptibility,0.8390577723698889,-0.5440423279724472,ubiquitin_and_proteasome_pathways,https://openalex.org/T10150
+32534732,Hepatitis C virus research,0.8400658720109555,-0.5424844059348368,ubiquitin_and_proteasome_pathways,https://openalex.org/T10151
+32534733,Animal Nutrition and Physiology,0.8410710789809912,-0.5409246159140395,ubiquitin_and_proteasome_pathways,https://openalex.org/T10152
+32534736,Nitric Oxide and Endothelin Effects,0.8420733898186814,-0.5393629632810127,ubiquitin_and_proteasome_pathways,https://openalex.org/T10155
+32534739,Cancer Immunotherapy and Biomarkers,0.8430728010726823,-0.53779945341313,ubiquitin_and_proteasome_pathways,https://openalex.org/T10158
+32534865,Metal complexes synthesis and properties,0.8440693093016346,-0.5362340916941607,ubiquitin_and_proteasome_pathways,https://openalex.org/T10163
+32534868,Mosquito-borne diseases and control,0.8450629110741775,-0.5346668835142464,ubiquitin_and_proteasome_pathways,https://openalex.org/T10166
+32534871,Protein Kinase Regulation and GTPase Signaling,0.8460536029689553,-0.5330978342698921,ubiquitin_and_proteasome_pathways,https://openalex.org/T10169
+32534999,Mesenchymal stem cell research,0.8470413815746344,-0.5315269493639384,ubiquitin_and_proteasome_pathways,https://openalex.org/T10176
+32535128,Plant Molecular Biology Research,0.8480262434899112,-0.529954234205549,ubiquitin_and_proteasome_pathways,https://openalex.org/T10184
+32535129,Lymphoma Diagnosis and Treatment,0.8490081853235252,-0.5283796942101907,ubiquitin_and_proteasome_pathways,https://openalex.org/T10185
+32535255,Air Quality and Health Impacts,0.8499872036942736,-0.5268033347996095,ubiquitin_and_proteasome_pathways,https://openalex.org/T10190
+32535261,Pain Mechanisms and Treatments,0.8509632952310168,-0.5252251614018215,ubiquitin_and_proteasome_pathways,https://openalex.org/T10196
+32551369,Computational Drug Discovery Methods,0.8519364565726957,-0.5236451794510854,ubiquitin_and_proteasome_pathways,https://openalex.org/T10211
+32551376,Sepsis Diagnosis and Treatment,0.8529066843683395,-0.5220633943878901,ubiquitin_and_proteasome_pathways,https://openalex.org/T10218
+32551501,Genomics and Chromatin Dynamics,0.8538739752770802,-0.5204798116589309,ubiquitin_and_proteasome_pathways,https://openalex.org/T10222
+32551504,Essential Oils and Antimicrobial Activity,0.8548383259681607,-0.5188944367170963,ubiquitin_and_proteasome_pathways,https://openalex.org/T10225
+32551631,Pancreatic and Hepatic Oncology Research,0.8557997331209509,-0.5173072750214414,ubiquitin_and_proteasome_pathways,https://openalex.org/T10231
+32551634,Obstructive Sleep Apnea Research,0.8567581934249542,-0.5157183320371778,ubiquitin_and_proteasome_pathways,https://openalex.org/T10234
+32551636,Aquatic Ecosystems and Phytoplankton Dynamics,0.8577137035798214,-0.5141276132356503,ubiquitin_and_proteasome_pathways,https://openalex.org/T10236
+32551761,Plant tissue culture and regeneration,0.8586662602953629,-0.5125351240943161,ubiquitin_and_proteasome_pathways,https://openalex.org/T10240
+32551894,Microbial Natural Products and Biosynthesis,0.8596158602915572,-0.5109408700967324,ubiquitin_and_proteasome_pathways,https://openalex.org/T10252
+32552024,Genetic Associations and Epidemiology,0.8605625002985667,-0.5093448567325278,ubiquitin_and_proteasome_pathways,https://openalex.org/T10261
+32552031,Developmental Biology and Gene Regulation,0.8615061770567437,-0.507747089497394,ubiquitin_and_proteasome_pathways,https://openalex.org/T10268
+32552032,Epigenetics and DNA Methylation,0.8624468873166442,-0.5061475738930609,ubiquitin_and_proteasome_pathways,https://openalex.org/T10269
+32552158,Synthesis and biological activity,0.8633846278390409,-0.5045463154272766,ubiquitin_and_proteasome_pathways,https://openalex.org/T10274
+32552160,Helicobacter pylori-related gastroenterology studies,0.8643193953949301,-0.5029433196137935,ubiquitin_and_proteasome_pathways,https://openalex.org/T10276
+32552416,Pregnancy and preeclampsia studies,0.8652511867655469,-0.5013385919723442,ubiquitin_and_proteasome_pathways,https://openalex.org/T10290
+32552419,Thyroid Disorders and Treatments,0.8661799987423744,-0.4997321380286246,ubiquitin_and_proteasome_pathways,https://openalex.org/T10293
+32552420,Cell death mechanisms and regulation,0.8671058281271535,-0.498123963314277,ubiquitin_and_proteasome_pathways,https://openalex.org/T10294
+32568399,Mitochondrial Function and Pathology,0.8680286717318973,-0.4965140733668663,ubiquitin_and_proteasome_pathways,https://openalex.org/T10301
+32568401,Photosynthetic Processes and Mechanisms,0.8689485263788983,-0.4949024737298664,ubiquitin_and_proteasome_pathways,https://openalex.org/T10303
+32568406,Systemic Lupus Erythematosus Research,0.869865388900742,-0.4932891699526361,ubiquitin_and_proteasome_pathways,https://openalex.org/T10308
+32568407,Acute Myeloid Leukemia Research,0.8707792561403173,-0.491674167590403,ubiquitin_and_proteasome_pathways,https://openalex.org/T10309
+32568662,Respiratory Support and Mechanisms,0.8716901249508267,-0.4900574722042428,ubiquitin_and_proteasome_pathways,https://openalex.org/T10322
+32568669,Thyroid Cancer Diagnosis and Treatment,0.8725979921957969,-0.4884390893610624,ubiquitin_and_proteasome_pathways,https://openalex.org/T10329
+32568797,Cancer Cells and Metastasis,0.8735028547490903,-0.4868190246335794,ubiquitin_and_proteasome_pathways,https://openalex.org/T10336
+32568922,Hepatitis B Virus Studies,0.8744047094949168,-0.4851972836003003,ubiquitin_and_proteasome_pathways,https://openalex.org/T10340
+32568924,Circadian rhythm and melatonin,0.8753035533278408,-0.4835738718455079,ubiquitin_and_proteasome_pathways,https://openalex.org/T10342
+32569054,Liver Disease Diagnosis and Treatment,0.8761993831527981,-0.4819487949592322,ubiquitin_and_proteasome_pathways,https://openalex.org/T10351
+32569188,Reproductive Biology and Fertility,0.8770921958850999,-0.4803220585372417,ubiquitin_and_proteasome_pathways,https://openalex.org/T10364
+32569316,Immune Response and Inflammation,0.8779819884504471,-0.4786936681810186,ubiquitin_and_proteasome_pathways,https://openalex.org/T10371
+32569324,Cellular Mechanics and Interactions,0.8788687577849409,-0.4770636294977378,ubiquitin_and_proteasome_pathways,https://openalex.org/T10379
+32569451,Plant Diversity and Evolution,0.8797525008350914,-0.4754319481002539,ubiquitin_and_proteasome_pathways,https://openalex.org/T10385
+32569453,Fatty Acid Research and Health,0.8806332145578316,-0.4737986296070728,ubiquitin_and_proteasome_pathways,https://openalex.org/T10387
+32569581,Lipoproteins and Cardiovascular Health,0.8815108959205231,-0.4721636796423425,ubiquitin_and_proteasome_pathways,https://openalex.org/T10394
+32569584,Nutrition and Health in Aging,0.882385541900971,-0.4705271038358255,ubiquitin_and_proteasome_pathways,https://openalex.org/T10397
+32585560,Diabetes Treatment and Management,0.8832571494874313,-0.4688889078228846,ubiquitin_and_proteasome_pathways,https://openalex.org/T10401
+32585563,Enzyme Catalysis and Immobilization,0.884125715678622,-0.4672490972444617,ubiquitin_and_proteasome_pathways,https://openalex.org/T10404
+32585566,Lipid Membrane Structure and Behavior,0.8849912374837352,-0.4656076777470568,ubiquitin_and_proteasome_pathways,https://openalex.org/T10407
+32585694,Cannabis and Cannabinoid Research,0.885853711922445,-0.4639646549827107,ubiquitin_and_proteasome_pathways,https://openalex.org/T10414
+32585697,Lung Cancer Treatments and Mutations,0.8867131360249196,-0.4623200346089842,ubiquitin_and_proteasome_pathways,https://openalex.org/T10417
+32585823,Angiogenesis and VEGF in Cancer,0.8875695068318297,-0.4606738222889407,ubiquitin_and_proteasome_pathways,https://openalex.org/T10422
+32585824,Neurobiology and Insect Physiology Research,0.8884228213943596,-0.4590260236911256,ubiquitin_and_proteasome_pathways,https://openalex.org/T10423
+32585956,Chromosomal and Genetic Variations,0.8892730767742184,-0.4573766444895444,ubiquitin_and_proteasome_pathways,https://openalex.org/T10434
+32586084,Muscle Physiology and Disorders,0.8901202700436486,-0.4557256903636464,ubiquitin_and_proteasome_pathways,https://openalex.org/T10441
+32586088,Antioxidant Activity and Oxidative Stress,0.8909643982854372,-0.4540731669983032,ubiquitin_and_proteasome_pathways,https://openalex.org/T10445
+32586092,Renal cell carcinoma treatment,0.891805458592924,-0.4524190800837919,ubiquitin_and_proteasome_pathways,https://openalex.org/T10449
+32586216,Iron Metabolism and Disorders,0.8926434480700146,-0.4507634353157707,ubiquitin_and_proteasome_pathways,https://openalex.org/T10452
+32586354,Psoriasis: Treatment and Pathogenesis,0.8934783638311875,-0.4491062383952643,ubiquitin_and_proteasome_pathways,https://openalex.org/T10469
+32586479,Postharvest Quality and Shelf Life Management,0.8943102030015047,-0.447447495028643,ubiquitin_and_proteasome_pathways,https://openalex.org/T10473
+32586610,Nerve injury and regeneration,0.8951389627166242,-0.4457872109275972,ubiquitin_and_proteasome_pathways,https://openalex.org/T10483
+32586613,Salmonella and Campylobacter epidemiology,0.8959646401228054,-0.4441253918091282,ubiquitin_and_proteasome_pathways,https://openalex.org/T10486
+32586740,Microtubule and mitosis dynamics,0.8967872323769233,-0.4424620433955191,ubiquitin_and_proteasome_pathways,https://openalex.org/T10492
+32586742,Plant Virus Research Studies,0.8976067366464745,-0.4407971714143212,ubiquitin_and_proteasome_pathways,https://openalex.org/T10494
+32586745,Fungal and yeast genetics research,0.8984231501095891,-0.4391307815983329,ubiquitin_and_proteasome_pathways,https://openalex.org/T10497
+32586747,Folate and B Vitamins Research,0.8992364699550417,-0.4374628796855744,ubiquitin_and_proteasome_pathways,https://openalex.org/T10499
+32602725,Pluripotent Stem Cells Research,0.9000466933822572,-0.4357934714192781,ubiquitin_and_proteasome_pathways,https://openalex.org/T10505
+32602726,Aquaculture disease management and microbiota,0.9008538176013242,-0.4341225625478593,ubiquitin_and_proteasome_pathways,https://openalex.org/T10506
+32602856,Cancer-related molecular mechanisms research,0.9016578398330024,-0.4324501588249031,ubiquitin_and_proteasome_pathways,https://openalex.org/T10515
+32602857,Parathyroid Disorders and Treatments,0.9024587573087324,-0.4307762660091416,ubiquitin_and_proteasome_pathways,https://openalex.org/T10516
+32602860,Advanced Proteomics Techniques and Applications,0.9032565672706464,-0.4291008898644332,ubiquitin_and_proteasome_pathways,https://openalex.org/T10519
+32602983,RNA and protein synthesis mechanisms,0.9040512669715768,-0.4274240361597446,ubiquitin_and_proteasome_pathways,https://openalex.org/T10521
+32602988,HIV/AIDS drug development and treatment,0.9048428536750666,-0.4257457106691293,ubiquitin_and_proteasome_pathways,https://openalex.org/T10526
+32602990,"Adipokines, Inflammation, and Metabolic Diseases",0.9056313246553762,-0.4240659191717116,ubiquitin_and_proteasome_pathways,https://openalex.org/T10528
+32602991,Stress Responses and Cortisol,0.9064166771974964,-0.4223846674516602,ubiquitin_and_proteasome_pathways,https://openalex.org/T10529
+32603120,Attention Deficit Hyperactivity Disorder,0.9071989085971544,-0.4207019612981761,ubiquitin_and_proteasome_pathways,https://openalex.org/T10537
+32603244,Advanced Fluorescence Microscopy Techniques,0.9079780161608269,-0.4190178065054628,ubiquitin_and_proteasome_pathways,https://openalex.org/T10540
+32603247,Prostate Cancer Treatment and Research,0.9087539972057448,-0.417332208872717,ubiquitin_and_proteasome_pathways,https://openalex.org/T10543
+32603253,Neonatal Respiratory Health Research,0.909526849059906,-0.4156451742041026,ubiquitin_and_proteasome_pathways,https://openalex.org/T10549
+32603637,Drug Transport and Resistance Mechanisms,0.910296569062084,-0.4139567083087295,ubiquitin_and_proteasome_pathways,https://openalex.org/T10570
+32603768,Immunotherapy and Immune Responses,0.9110631545618352,-0.4122668170006384,ubiquitin_and_proteasome_pathways,https://openalex.org/T10580
+32603771,Cancer-related Molecular Pathways,0.9118266029195088,-0.4105755060987788,ubiquitin_and_proteasome_pathways,https://openalex.org/T10583
+32603775,Autophagy in Disease and Therapy,0.9125869115062596,-0.4088827814269837,ubiquitin_and_proteasome_pathways,https://openalex.org/T10587
+32619883,Glycosylation and Glycoproteins Research,0.91334407770405,-0.4071886488139599,ubiquitin_and_proteasome_pathways,https://openalex.org/T10602
+32619885,RNA Research and Splicing,0.9140980989056656,-0.4054931140932583,ubiquitin_and_proteasome_pathways,https://openalex.org/T10604
+32620015,Virus-based gene therapy research,0.9148489725147194,-0.4037961831032608,ubiquitin_and_proteasome_pathways,https://openalex.org/T10613
+32620019,Cellular transport and secretion,0.9155966959456644,-0.4020978616871551,ubiquitin_and_proteasome_pathways,https://openalex.org/T10617
+32620143,Protease and Inhibitor Mechanisms,0.9163412666238,-0.4003981556929173,ubiquitin_and_proteasome_pathways,https://openalex.org/T10620
+32620144,Gene Regulatory Network Analysis,0.9170826819852826,-0.3986970709732904,ubiquitin_and_proteasome_pathways,https://openalex.org/T10621
+32620148,Herpesvirus Infections and Treatments,0.9178209394771324,-0.3969946133857663,ubiquitin_and_proteasome_pathways,https://openalex.org/T10625
+32620275,"Cancer, Hypoxia, and Metabolism",0.9185560365572436,-0.3952907887925645,ubiquitin_and_proteasome_pathways,https://openalex.org/T10631
+32620407,Plasma Applications and Diagnostics,0.9192879706943938,-0.393585603060609,ubiquitin_and_proteasome_pathways,https://openalex.org/T10642
+32620408,Marine and coastal plant biology,0.9200167393682503,-0.3918790620615149,ubiquitin_and_proteasome_pathways,https://openalex.org/T10643
+32620414,Multiple Myeloma Research and Treatments,0.920742340069383,-0.3901711716715582,ubiquitin_and_proteasome_pathways,https://openalex.org/T10649
+32620672,Cystic Fibrosis Research Advances,0.9214647702992677,-0.3884619377716663,ubiquitin_and_proteasome_pathways,https://openalex.org/T10665
+32620804,"Genetics, Aging, and Longevity in Model Organisms",0.9221840275702976,-0.3867513662473921,ubiquitin_and_proteasome_pathways,https://openalex.org/T10676
+32620806,Inflammatory mediators and NSAID effects,0.9229001094057936,-0.3850394629888919,ubiquitin_and_proteasome_pathways,https://openalex.org/T10678
+32620932,Mass Spectrometry Techniques and Applications,0.923613013340008,-0.3833262338909119,ubiquitin_and_proteasome_pathways,https://openalex.org/T10683
+32620934,Viral-associated cancers and disorders,0.9243227369181392,-0.3816116848527577,ubiquitin_and_proteasome_pathways,https://openalex.org/T10685
+32620935,Effects and risks of endocrine disrupting chemicals,0.925029277696334,-0.3798958217782852,ubiquitin_and_proteasome_pathways,https://openalex.org/T10686
+32637044,Insect and Arachnid Ecology and Behavior,0.9257326332416996,-0.3781786505758738,ubiquitin_and_proteasome_pathways,https://openalex.org/T10702
+32637048,Traumatic Brain Injury and Neurovascular Disturbances,0.926432801132312,-0.3764601771584053,ubiquitin_and_proteasome_pathways,https://openalex.org/T10706
+32637308,Ion Transport and Channel Regulation,0.9271297789572224,-0.3747404074432485,ubiquitin_and_proteasome_pathways,https://openalex.org/T10724
+32637309,RNA Interference and Gene Delivery,0.9278235643164672,-0.3730193473522335,ubiquitin_and_proteasome_pathways,https://openalex.org/T10725
+32637571,Heart Rate Variability and Autonomic Control,0.928514154821076,-0.3712970028116344,ubiquitin_and_proteasome_pathways,https://openalex.org/T10745
+32637702,HER2/EGFR in Cancer Research,0.9292015480930792,-0.3695733797521474,ubiquitin_and_proteasome_pathways,https://openalex.org/T10755
+32637703,Estrogen and related hormone effects,0.9298857417655164,-0.3678484841088728,ubiquitin_and_proteasome_pathways,https://openalex.org/T10756
+32637960,Wound Healing and Treatments,0.930566733482444,-0.3661223218212928,ubiquitin_and_proteasome_pathways,https://openalex.org/T10771
+32637962,Extracellular vesicles in disease,0.931244520898945,-0.3643948988332496,ubiquitin_and_proteasome_pathways,https://openalex.org/T10773
+32638092,Nanoplatforms for cancer theranostics,0.9319191016811362,-0.3626662210929274,ubiquitin_and_proteasome_pathways,https://openalex.org/T10782
+32638221,Heavy Metal Exposure and Toxicity,0.9325904735061756,-0.3609362945528298,ubiquitin_and_proteasome_pathways,https://openalex.org/T10790
+32654466,Cardiovascular Function and Risk Factors,0.9332586340622706,-0.3592051251697626,ubiquitin_and_proteasome_pathways,https://openalex.org/T10821
+32654468,Research on Leishmaniasis Studies,0.9339235810486862,-0.3574727189048108,ubiquitin_and_proteasome_pathways,https://openalex.org/T10823
+32654470,Plant Pathogens and Fungal Diseases,0.934585312175754,-0.3557390817233163,ubiquitin_and_proteasome_pathways,https://openalex.org/T10825
+32654602,Metabolomics and Mass Spectrometry Studies,0.9352438251648774,-0.3540042195948635,ubiquitin_and_proteasome_pathways,https://openalex.org/T10836
+32654605,Pancreatic function and diabetes,0.9358991177485432,-0.3522681384932489,ubiquitin_and_proteasome_pathways,https://openalex.org/T10839
+32654862,Bipolar Disorder and Treatment,0.9365511876703247,-0.3505308443964723,ubiquitin_and_proteasome_pathways,https://openalex.org/T10854
+32654863,Amyotrophic Lateral Sclerosis Research,0.9372000326848952,-0.3487923432867063,ubiquitin_and_proteasome_pathways,https://openalex.org/T10855
+32654866,Clinical Nutrition and Gastroenterology,0.9378456505580296,-0.3470526411502818,ubiquitin_and_proteasome_pathways,https://openalex.org/T10858
+32654996,Intensive Care Unit Cognitive Disorders,0.9384880390666162,-0.3453117439776665,ubiquitin_and_proteasome_pathways,https://openalex.org/T10867
+32654998,Polysaccharides and Plant Cell Walls,0.9391271959986646,-0.3435696577634379,ubiquitin_and_proteasome_pathways,https://openalex.org/T10869
+32655120,Interstitial Lung Diseases and Idiopathic Pulmonary Fibrosis,0.9397631191533098,-0.3418263885062739,ubiquitin_and_proteasome_pathways,https://openalex.org/T10870
+32655121,Catalytic Alkyne Reactions,0.9403958063408236,-0.3400819422089215,ubiquitin_and_proteasome_pathways,https://openalex.org/T10871
+32655125,Pesticide Exposure and Toxicity,0.9410252553826196,-0.3383363248781835,ubiquitin_and_proteasome_pathways,https://openalex.org/T10875
+32655128,CRISPR and Genetic Engineering,0.9416514641112612,-0.336589542524895,ubiquitin_and_proteasome_pathways,https://openalex.org/T10878
+32655258,Bioinformatics and Genomic Networks,0.9422744303704708,-0.3348416011639009,ubiquitin_and_proteasome_pathways,https://openalex.org/T10887
+32671500,Trace Elements in Health,0.9428941520151348,-0.333092506814038,ubiquitin_and_proteasome_pathways,https://openalex.org/T10915
+32671631,Spinal Cord Injury Research,0.9435106269113128,-0.3313422654981124,ubiquitin_and_proteasome_pathways,https://openalex.org/T10925
+32671635,Wnt/β-catenin signaling in development and cancer,0.9441238529362432,-0.3295908832428822,ubiquitin_and_proteasome_pathways,https://openalex.org/T10929
+32671761,Heat shock proteins research,0.9447338279783526,-0.3278383660790307,ubiquitin_and_proteasome_pathways,https://openalex.org/T10934
+32671762,Endometriosis Research and Treatment,0.945340549937261,-0.3260847200411526,ubiquitin_and_proteasome_pathways,https://openalex.org/T10935
+32671764,"Telomeres, Telomerase, and Senescence",0.9459440167237908,-0.3243299511677272,ubiquitin_and_proteasome_pathways,https://openalex.org/T10937
+32671891,Escherichia coli research studies,0.9465442262599736,-0.3225740655011002,ubiquitin_and_proteasome_pathways,https://openalex.org/T10943
+32671893,Lysosomal Storage Disorders Research,0.947141176479055,-0.3208170690874653,ubiquitin_and_proteasome_pathways,https://openalex.org/T10945
+32671895,Fluorine in Organic Chemistry,0.947734865325506,-0.3190589679768377,ubiquitin_and_proteasome_pathways,https://openalex.org/T10947
+32671897,Genetic Neurodegenerative Diseases,0.9483252907550268,-0.3172997682230388,ubiquitin_and_proteasome_pathways,https://openalex.org/T10949
+32672021,PI3K/AKT/mTOR signaling in cancer,0.9489124507345534,-0.3155394758836741,ubiquitin_and_proteasome_pathways,https://openalex.org/T10952
+32672026,Photodynamic Therapy Research Studies,0.9494963432422692,-0.313778097020106,ubiquitin_and_proteasome_pathways,https://openalex.org/T10957
+32672156,Liver physiology and pathology,0.9500769662676056,-0.3120156376974446,ubiquitin_and_proteasome_pathways,https://openalex.org/T10966
+34765140,Skin Protection and Aging,0.9506543178112544,-0.3102521039845156,ubiquitin_and_proteasome_pathways,https://openalex.org/T11013
+34765143,Monoclonal and Polyclonal Antibodies Research,0.9512283958851708,-0.3084875019538472,ubiquitin_and_proteasome_pathways,https://openalex.org/T11016
+34765268,Immune Cell Function and Interaction,0.951799198512582,-0.3067218376816469,ubiquitin_and_proteasome_pathways,https://openalex.org/T11020
+34765277,Renal Diseases and Glomerulopathies,0.9523667237279954,-0.3049551172477751,ubiquitin_and_proteasome_pathways,https://openalex.org/T11029
+34765531,Ubiquitin and proteasome pathways,0.9529309695772016,-0.3031873467357343,ubiquitin_and_proteasome_pathways,https://openalex.org/T11041
+34765662,Sirtuins and Resveratrol in Medicine,0.9534919341172852,-0.3014185322326392,ubiquitin_and_proteasome_pathways,https://openalex.org/T11051
+34765667,Physiological and biochemical adaptations,0.954049615416628,-0.2996486798292026,ubiquitin_and_proteasome_pathways,https://openalex.org/T11056
+34765668,Cardiac Ischemia and Reperfusion,0.9546040115549188,-0.2978777956197075,ubiquitin_and_proteasome_pathways,https://openalex.org/T11057
+34765799,Colorectal Cancer Treatments and Studies,0.9551551206231568,-0.2961058857019945,ubiquitin_and_proteasome_pathways,https://openalex.org/T11067
+34765800,Tendon Structure and Treatment,0.955702940723662,-0.2943329561774297,ubiquitin_and_proteasome_pathways,https://openalex.org/T11068
+34765925,Peroxisome Proliferator-Activated Receptors,0.9562474699700774,-0.2925590131508957,ubiquitin_and_proteasome_pathways,https://openalex.org/T11072
+34765931,Inflammasome and immune disorders,0.9567887064873788,-0.2907840627307637,ubiquitin_and_proteasome_pathways,https://openalex.org/T11078
+34766059,Fungal Biology and Applications,0.95732664841188,-0.2890081110288713,ubiquitin_and_proteasome_pathways,https://openalex.org/T11085
+34766187,Spondyloarthritis Studies and Treatments,0.9578612938912392,-0.2872311641605085,ubiquitin_and_proteasome_pathways,https://openalex.org/T11092
+34766193,Seed Germination and Physiology,0.9583926410844664,-0.2854532282443854,ubiquitin_and_proteasome_pathways,https://openalex.org/T11098
+34782170,Antimicrobial Peptides and Activities,0.9589206881619275,-0.2836743094026235,ubiquitin_and_proteasome_pathways,https://openalex.org/T11103
+34782174,Selenium in Biological Systems,0.9594454333053524,-0.2818944137607279,ubiquitin_and_proteasome_pathways,https://openalex.org/T11107
+34782300,Viral Infections and Immunology Research,0.9599668747078416,-0.2801135474475643,ubiquitin_and_proteasome_pathways,https://openalex.org/T11112
+34782565,Virology and Viral Diseases,0.9604850105738708,-0.2783317165953448,ubiquitin_and_proteasome_pathways,https://openalex.org/T11135
+34782691,Natural Antidiabetic Agents Studies,0.960999839119298,-0.2765489273395995,ubiquitin_and_proteasome_pathways,https://openalex.org/T11140
+34782693,Advanced Glycation End Products research,0.9615113585713704,-0.2747651858191603,ubiquitin_and_proteasome_pathways,https://openalex.org/T11142
+34782695,melanin and skin pigmentation,0.9620195671687288,-0.2729804981761365,ubiquitin_and_proteasome_pathways,https://openalex.org/T11144
+34782822,Endoplasmic Reticulum Stress and Disease,0.9625244631614148,-0.2711948705558976,ubiquitin_and_proteasome_pathways,https://openalex.org/T11150
+34782826,Parasitic infections in humans and animals,0.9630260448108766,-0.2694083091070494,ubiquitin_and_proteasome_pathways,https://openalex.org/T11154
+34782827,Toxoplasma gondii Research Studies,0.963524310389975,-0.2676208199814117,ubiquitin_and_proteasome_pathways,https://openalex.org/T11155
+34782829,Chronic Lymphocytic Leukemia Research,0.9640192581829892,-0.2658324093339995,ubiquitin_and_proteasome_pathways,https://openalex.org/T11157
+34783092,Receptor Mechanisms and Signaling,0.9645108864856236,-0.2640430833229999,ubiquitin_and_proteasome_pathways,https://openalex.org/T11178
+34783346,3D Printing in Biomedical Research,0.9649991936050114,-0.262252848109754,ubiquitin_and_proteasome_pathways,https://openalex.org/T11190
+34783349,Adenosine and Purinergic Signaling,0.9654841778597228,-0.2604617098587333,ubiquitin_and_proteasome_pathways,https://openalex.org/T11193
+34799335,Alcohol Consumption and Health Effects,0.9659658375797704,-0.2586696747375166,ubiquitin_and_proteasome_pathways,https://openalex.org/T11207
+34799462,Genomic variations and chromosomal abnormalities,0.966444171106613,-0.2568767489167748,ubiquitin_and_proteasome_pathways,https://openalex.org/T11213
+34799464,Chronic Myeloid Leukemia Treatments,0.9669191767931644,-0.2550829385702404,ubiquitin_and_proteasome_pathways,https://openalex.org/T11215
+34799468,Bone Metabolism and Diseases,0.9673908530037968,-0.2532882498746961,ubiquitin_and_proteasome_pathways,https://openalex.org/T11219
+34799723,Urinary Tract Infections Management,0.9678591981143462,-0.2514926890099489,ubiquitin_and_proteasome_pathways,https://openalex.org/T11232
+34799728,Plant Gene Expression Analysis,0.96832421051212,-0.249696262158806,ubiquitin_and_proteasome_pathways,https://openalex.org/T11237
+34799859,Plant nutrient uptake and metabolism,0.968785888595901,-0.2478989755070611,ubiquitin_and_proteasome_pathways,https://openalex.org/T11247
+34800120,Neuroinflammation and Neurodegeneration Mechanisms,0.9692442307759536,-0.2461008352434623,ubiquitin_and_proteasome_pathways,https://openalex.org/T11266
+34800122,Light effects on plants,0.9696992354740286,-0.2443018475597032,ubiquitin_and_proteasome_pathways,https://openalex.org/T11268
+34800249,Botulinum Toxin and Related Neurological Disorders,0.9701509011233692,-0.2425020186503909,ubiquitin_and_proteasome_pathways,https://openalex.org/T11274
+34800385,Single-cell and spatial transcriptomics,0.9705992261687164,-0.2407013547130319,ubiquitin_and_proteasome_pathways,https://openalex.org/T11289
+34800514,Ferroptosis and cancer prognosis,0.9710442090663136,-0.2388998619480081,ubiquitin_and_proteasome_pathways,https://openalex.org/T11297
+34816494,"Amyloidosis: Diagnosis, Treatment, Outcomes",0.9714858482839132,-0.2370975465585534,ubiquitin_and_proteasome_pathways,https://openalex.org/T11305
+34816497,Sphingolipid Metabolism and Signaling,0.9719241423007812,-0.2352944147507353,ubiquitin_and_proteasome_pathways,https://openalex.org/T11308
+34816623,Immune cells in cancer,0.9723590896077016,-0.2334904727334318,ubiquitin_and_proteasome_pathways,https://openalex.org/T11313
+34816626,Mycobacterium research and diagnosis,0.9727906887069836,-0.2316857267183123,ubiquitin_and_proteasome_pathways,https://openalex.org/T11316
+34816629,Curcumin's Biomedical Applications,0.9732189381124642,-0.2298801829198148,ubiquitin_and_proteasome_pathways,https://openalex.org/T11319
+34816884,"Genomics, phytochemicals, and oxidative stress",0.9736438363495158,-0.2280738475551226,ubiquitin_and_proteasome_pathways,https://openalex.org/T11332
+34816887,Prion Diseases and Protein Misfolding,0.9740653819550495,-0.2262667268441455,ubiquitin_and_proteasome_pathways,https://openalex.org/T11335
+34816889,Tryptophan and brain disorders,0.974483573477522,-0.2244588270094968,ubiquitin_and_proteasome_pathways,https://openalex.org/T11337
+34816891,"Metabolism, Diabetes, and Cancer",0.9748984094769372,-0.222650154276475,ubiquitin_and_proteasome_pathways,https://openalex.org/T11339
+34817013,Marine Sponges and Natural Products,0.9753098885248556,-0.2208407148730368,ubiquitin_and_proteasome_pathways,https://openalex.org/T11340
+34817279,Cholangiocarcinoma and Gallbladder Cancer Studies,0.9757180092043954,-0.2190305150297812,ubiquitin_and_proteasome_pathways,https://openalex.org/T11364
+34817283,Long-Term Effects of COVID-19,0.9761227701102396,-0.2172195609799268,ubiquitin_and_proteasome_pathways,https://openalex.org/T11368
+34817284,Genetic factors in colorectal cancer,0.9765241698486408,-0.2154078589592838,ubiquitin_and_proteasome_pathways,https://openalex.org/T11369
+34817677,Muscle metabolism and nutrition,0.9769222070374244,-0.2135954152062441,ubiquitin_and_proteasome_pathways,https://openalex.org/T11399
+34833656,Cerebrospinal fluid and hydrocephalus,0.9773168803059948,-0.2117822359617493,ubiquitin_and_proteasome_pathways,https://openalex.org/T11406
+34833782,Tea Polyphenols and Effects,0.9777081882953392,-0.2099683274692763,ubiquitin_and_proteasome_pathways,https://openalex.org/T11411
+34833783,Genetic and Kidney Cyst Diseases,0.9780961296580336,-0.2081536959748139,ubiquitin_and_proteasome_pathways,https://openalex.org/T11412
+34833789,Plant Micronutrient Interactions and Effects,0.9784807030582462,-0.2063383477268351,ubiquitin_and_proteasome_pathways,https://openalex.org/T11418
+34834174,Click Chemistry and Applications,0.978861907171742,-0.2045222889762873,ubiquitin_and_proteasome_pathways,https://openalex.org/T11440
+34834307,Oral Health Pathology and Treatment,0.9792397406858884,-0.20270552597656,ubiquitin_and_proteasome_pathways,https://openalex.org/T11452
+34834312,Adipose Tissue and Metabolism,0.9796142022996588,-0.2008880649834702,ubiquitin_and_proteasome_pathways,https://openalex.org/T11457
+34834444,Genetic Mapping and Diversity in Plants and Animals,0.9799852907236372,-0.1990699122552384,ubiquitin_and_proteasome_pathways,https://openalex.org/T11468
+34834698,Connexins and lens biology,0.9803530046800228,-0.1972510740524654,ubiquitin_and_proteasome_pathways,https://openalex.org/T11480
+34834700,RNA modifications and cancer,0.9807173429026348,-0.1954315566381131,ubiquitin_and_proteasome_pathways,https://openalex.org/T11482
+34834834,Animal Virus Infections Studies,0.981078304136916,-0.1936113662774813,ubiquitin_and_proteasome_pathways,https://openalex.org/T11495
+34850812,TGF-β signaling in diseases,0.9814358871399372,-0.1917905092381898,ubiquitin_and_proteasome_pathways,https://openalex.org/T11501
+34850814,Cytokine Signaling Pathways and Interactions,0.9817900906804028,-0.1899689917901503,ubiquitin_and_proteasome_pathways,https://openalex.org/T11503
+34850942,Reproductive System and Pregnancy,0.9821409135386528,-0.1881468202055531,ubiquitin_and_proteasome_pathways,https://openalex.org/T11510
+34851206,Chemokine receptors and signaling,0.9824883545066688,-0.1863240007588348,ubiquitin_and_proteasome_pathways,https://openalex.org/T11532
+34851207,Melanoma and MAPK Pathways,0.9828324123880776,-0.1845005397266679,ubiquitin_and_proteasome_pathways,https://openalex.org/T11533
+34851208,Erythropoietin and Anemia Treatment,0.9831730859981548,-0.1826764433879335,ubiquitin_and_proteasome_pathways,https://openalex.org/T11534
+34851209,Chemotherapy-induced cardiotoxicity and mitigation,0.98351037416383,-0.1808517180236976,ubiquitin_and_proteasome_pathways,https://openalex.org/T11535
+34851336,Neuroendocrine regulation and behavior,0.9838442757236898,-0.1790263699171946,ubiquitin_and_proteasome_pathways,https://openalex.org/T11541
+34851475,Retinoids in leukemia and cellular processes,0.984174789527982,-0.1772004053538045,ubiquitin_and_proteasome_pathways,https://openalex.org/T11559
+34851597,Animal Disease Management and Epidemiology,0.9845019144386202,-0.1753738306210245,ubiquitin_and_proteasome_pathways,https://openalex.org/T11560
+34851598,Protein Hydrolysis and Bioactive Peptides,0.984825649329187,-0.1735466520084589,ubiquitin_and_proteasome_pathways,https://openalex.org/T11561
+34851861,Nanopore and Nanochannel Transport Studies,0.9851459930849386,-0.1717188758077873,ubiquitin_and_proteasome_pathways,https://openalex.org/T11582
+34851864,Exercise and Physiological Responses,0.9854629446028071,-0.1698905083127503,ubiquitin_and_proteasome_pathways,https://openalex.org/T11585
+34851991,NF-κB Signaling Pathways,0.9857765027914066,-0.1680615558191219,ubiquitin_and_proteasome_pathways,https://openalex.org/T11591
+34851997,"Neutrophil, Myeloperoxidase and Oxidative Mechanisms",0.9860866665710352,-0.1662320246246915,ubiquitin_and_proteasome_pathways,https://openalex.org/T11597
+34868110,Enzyme Production and Characterization,0.9863934348736794,-0.1644019210292403,ubiquitin_and_proteasome_pathways,https://openalex.org/T11617
+34868111,Cholesterol and Lipid Metabolism,0.9866968066430172,-0.1625712513345221,ubiquitin_and_proteasome_pathways,https://openalex.org/T11618
+34868498,Genomics and Rare Diseases,0.9869967808344224,-0.1607400218442403,ubiquitin_and_proteasome_pathways,https://openalex.org/T11642
+34868766,interferon and immune responses,0.9872933564149688,-0.1589082388640228,ubiquitin_and_proteasome_pathways,https://openalex.org/T11668
+34868896,Congenital heart defects research,0.9875865323634312,-0.1570759087014083,ubiquitin_and_proteasome_pathways,https://openalex.org/T11677
+34869025,Zebrafish Biomedical Research Applications,0.9878763076702928,-0.155243037665813,ubiquitin_and_proteasome_pathways,https://openalex.org/T11685
+34885142,Traditional Chinese Medicine Analysis,0.9881626813377444,-0.1534096320685213,ubiquitin_and_proteasome_pathways,https://openalex.org/T11709
+34885399,Inflammatory Myopathies and Dermatomyositis,0.9884456523796916,-0.1515756982226569,ubiquitin_and_proteasome_pathways,https://openalex.org/T11724
+34885400,Immunodeficiency and Autoimmune Disorders,0.9887252198217554,-0.1497412424431604,ubiquitin_and_proteasome_pathways,https://openalex.org/T11725
+34885532,Histone Deacetylase Inhibitors Research,0.9890013827012774,-0.1479062710467734,ubiquitin_and_proteasome_pathways,https://openalex.org/T11736
+34885790,Cancer Treatment and Pharmacology,0.9892741400673224,-0.1460707903520074,ubiquitin_and_proteasome_pathways,https://openalex.org/T11752
+34885924,Circular RNAs in diseases,0.9895434909806812,-0.1442348066791324,ubiquitin_and_proteasome_pathways,https://openalex.org/T11765
+34886051,Plant Pathogens and Resistance,0.9898094345138746,-0.1423983263501499,ubiquitin_and_proteasome_pathways,https://openalex.org/T11771
+34886052,Genetics and Neurodevelopmental Disorders,0.9900719697511569,-0.1405613556887685,ubiquitin_and_proteasome_pathways,https://openalex.org/T11772
+34902819,Nuclear Structure and Function,0.9903310957885172,-0.1387239010203892,ubiquitin_and_proteasome_pathways,https://openalex.org/T11841
+34902822,Lipid metabolism and biosynthesis,0.9905868117336852,-0.1368859686720765,ubiquitin_and_proteasome_pathways,https://openalex.org/T11844
+34902823,Cancer therapeutics and mechanisms,0.9908391167061316,-0.1350475649725409,ubiquitin_and_proteasome_pathways,https://openalex.org/T11845
+34902826,Heme Oxygenase-1 and Carbon Monoxide,0.9910880098370738,-0.1332086962521151,ubiquitin_and_proteasome_pathways,https://openalex.org/T11848
+34903213,Barrier Structure and Function Studies,0.991333490269476,-0.1313693688427347,ubiquitin_and_proteasome_pathways,https://openalex.org/T11872
+34903220,Protist diversity and phylogeny,0.9915755571580548,-0.1295295890779147,ubiquitin_and_proteasome_pathways,https://openalex.org/T11879
+34903344,Plant biochemistry and biosynthesis,0.99181420966928,-0.127689363292726,ubiquitin_and_proteasome_pathways,https://openalex.org/T11882
+34903346,Redox biology and oxidative stress,0.992049446981379,-0.1258486978237763,ubiquitin_and_proteasome_pathways,https://openalex.org/T11884
+34919590,PARP inhibition in cancer therapy,0.9922812682843392,-0.1240075990091864,ubiquitin_and_proteasome_pathways,https://openalex.org/T11914
+34919721,Polyamine Metabolism and Applications,0.9925096727799104,-0.1221660731885709,ubiquitin_and_proteasome_pathways,https://openalex.org/T11924
+34919724,Plant Reproductive Biology,0.9927346596816072,-0.1203241267030149,ubiquitin_and_proteasome_pathways,https://openalex.org/T11927
+34919725,Genetic Syndromes and Imprinting,0.9929562282147136,-0.1184817658950493,ubiquitin_and_proteasome_pathways,https://openalex.org/T11928
+34920372,Molecular Biology Techniques and Applications,0.9931743776162832,-0.1166389971086361,ubiquitin_and_proteasome_pathways,https://openalex.org/T11970
+37013106,Hedgehog Signaling Pathway Studies,0.9933891071351436,-0.1147958266891359,ubiquitin_and_proteasome_pathways,https://openalex.org/T12009
+37013230,Diatoms and Algae Research,0.993600416031898,-0.1129522609832985,ubiquitin_and_proteasome_pathways,https://openalex.org/T12012
+37013362,Cholinesterase and Neurodegenerative Diseases,0.9938083035789284,-0.1111083063392304,ubiquitin_and_proteasome_pathways,https://openalex.org/T12023
+37013761,Berberine and alkaloids research,0.994012769060398,-0.1092639691063801,ubiquitin_and_proteasome_pathways,https://openalex.org/T12059
+37013884,Axon Guidance and Neuronal Signaling,0.9942138117722528,-0.1074192556355133,ubiquitin_and_proteasome_pathways,https://openalex.org/T12061
+37013888,Hippo pathway signaling and YAP/TAZ,0.9944114310222252,-0.1055741722786896,ubiquitin_and_proteasome_pathways,https://openalex.org/T12065
+37014017,Isotope Analysis in Ecology,0.994605626129836,-0.1037287253892433,ubiquitin_and_proteasome_pathways,https://openalex.org/T12073
+37030262,Protein Tyrosine Phosphatases,0.9947963964263964,-0.1018829213217592,ubiquitin_and_proteasome_pathways,https://openalex.org/T12104
+37030389,Bone and Dental Protein Studies,0.994983741255011,-0.1000367664320541,ubiquitin_and_proteasome_pathways,https://openalex.org/T12110
+37030782,Renal and related cancers,0.9951676599705788,-0.0981902670771527,ubiquitin_and_proteasome_pathways,https://openalex.org/T12140
+37047553,Marine Ecology and Invasive Species,0.9953481519397968,-0.0963434296152641,ubiquitin_and_proteasome_pathways,https://openalex.org/T12213
+37047687,Neuroblastoma Research and Treatments,0.9955252165411614,-0.0944962604057625,ubiquitin_and_proteasome_pathways,https://openalex.org/T12226
+37047690,Pharmacological Effects and Toxicity Studies,0.9956988531649712,-0.0926487658091635,ubiquitin_and_proteasome_pathways,https://openalex.org/T12229
+37047946,Research in Cotton Cultivation,0.995869061213328,-0.0908009521871058,ubiquitin_and_proteasome_pathways,https://openalex.org/T12243
+37048209,Tissue Engineering and Regenerative Medicine,0.9960358401001396,-0.0889528259023232,ubiquitin_and_proteasome_pathways,https://openalex.org/T12264
+37048212,Diet and metabolism studies,0.9961991892511224,-0.0871043933186286,ubiquitin_and_proteasome_pathways,https://openalex.org/T12267
+37048474,Fibroblast Growth Factor Research,0.9963591081038018,-0.0852556608008906,ubiquitin_and_proteasome_pathways,https://openalex.org/T12287
+37048606,Phytochemicals and Medicinal Plants,0.9965155961075158,-0.0834066347150054,ubiquitin_and_proteasome_pathways,https://openalex.org/T12298
+37065506,Cancer Diagnosis and Treatment,0.9966686527234156,-0.0815573214278859,ubiquitin_and_proteasome_pathways,https://openalex.org/T12379
+37081874,Enzyme function and inhibition,0.9968182774244684,-0.0797077273074299,ubiquitin_and_proteasome_pathways,https://openalex.org/T12412
+37082138,Phosphodiesterase function and regulation,0.9969644696954584,-0.0778578587225046,ubiquitin_and_proteasome_pathways,https://openalex.org/T12434
+37082266,Porphyrin Metabolism and Disorders,0.9971072290329892,-0.0760077220429234,ubiquitin_and_proteasome_pathways,https://openalex.org/T12441
+37082532,"Cancer, Lipids, and Metabolism",0.9972465549454852,-0.0741573236394174,ubiquitin_and_proteasome_pathways,https://openalex.org/T12465
+37082660,Plant responses to water stress,0.9973824469531938,-0.0723066698836251,ubiquitin_and_proteasome_pathways,https://openalex.org/T12472
+37082663,Plant Parasitism and Resistance,0.9975149045881864,-0.0704557671480598,ubiquitin_and_proteasome_pathways,https://openalex.org/T12475
+37082665,Toxin Mechanisms and Immunotoxins,0.9976439273943598,-0.0686046218060951,ubiquitin_and_proteasome_pathways,https://openalex.org/T12477
+37098907,Peptidase Inhibition and Analysis,0.997769514927439,-0.0667532402319396,ubiquitin_and_proteasome_pathways,https://openalex.org/T12505
+37099172,"IL-33, ST2, and ILC Pathways",0.9978916667549776,-0.0649016288006139,ubiquitin_and_proteasome_pathways,https://openalex.org/T12528
+37099299,Protein Degradation and Inhibitors,0.9980103824563598,-0.0630497938879306,ubiquitin_and_proteasome_pathways,https://openalex.org/T12534
+37099561,Vitamin C and Antioxidants Research,0.9981256616228016,-0.0611977418704713,ubiquitin_and_proteasome_pathways,https://openalex.org/T12554
+37099689,bioluminescence and chemiluminescence research,0.998237503857352,-0.0593454791255676,ubiquitin_and_proteasome_pathways,https://openalex.org/T12561
+37116071,Spatial Neglect and Hemispheric Dysfunction,0.9983459087748956,-0.0574930120312734,ubiquitin_and_proteasome_pathways,https://openalex.org/T12608
+37116194,RNA regulation and disease,0.9984508760021518,-0.0556403469663504,ubiquitin_and_proteasome_pathways,https://openalex.org/T12610
+37116325,Signaling Pathways in Disease,0.9985524051776784,-0.053787490310236,ubiquitin_and_proteasome_pathways,https://openalex.org/T12620
+37116982,Phagocytosis and Immune Regulation,0.998650495951871,-0.0519344484430325,ubiquitin_and_proteasome_pathways,https://openalex.org/T12672
+37117120,Silymarin and Mushroom Poisoning,0.9987451479869656,-0.0500812277454792,ubiquitin_and_proteasome_pathways,https://openalex.org/T12689
+37133753,Dietary Effects on Health,0.998836360957038,-0.0482278345989285,ubiquitin_and_proteasome_pathways,https://openalex.org/T12745
+37134142,Plant pathogens and resistance mechanisms,0.9989241345480074,-0.0463742753853292,ubiquitin_and_proteasome_pathways,https://openalex.org/T12771
+37134406,Caveolin-1 and cellular processes,0.9990084684576352,-0.0445205564872028,ubiquitin_and_proteasome_pathways,https://openalex.org/T12793
+37150654,Biochemical and Molecular Research,0.9990893623955271,-0.0426666842876155,ubiquitin_and_proteasome_pathways,https://openalex.org/T12827
+37150656,Advanced Breast Cancer Therapies,0.9991668160831344,-0.0408126651701673,ubiquitin_and_proteasome_pathways,https://openalex.org/T12829
+37150783,FOXO transcription factor regulation,0.9992408292537536,-0.0389585055189599,ubiquitin_and_proteasome_pathways,https://openalex.org/T12835
+37151046,Transgenic Plants and Applications,0.9993114016525292,-0.0371042117185824,ubiquitin_and_proteasome_pathways,https://openalex.org/T12856
+37151048,Plant Disease Resistance and Genetics,0.9993785330364532,-0.0352497901540832,ubiquitin_and_proteasome_pathways,https://openalex.org/T12858
+37167817,Animal Genetics and Reproduction,0.9994422231743662,-0.0333952472109514,ubiquitin_and_proteasome_pathways,https://openalex.org/T12929
+37168332,Heterotopic Ossification and Related Conditions,0.9995024718469584,-0.0315405892750933,ubiquitin_and_proteasome_pathways,https://openalex.org/T12960
+37168726,Phytase and its Applications,0.9995592788467704,-0.0296858227328128,ubiquitin_and_proteasome_pathways,https://openalex.org/T12991
+39261322,Free Radicals and Antioxidants,0.9996126439781942,-0.027830953970788,ubiquitin_and_proteasome_pathways,https://openalex.org/T13013
+39262112,Cancer-related cognitive impairment studies,0.9996625670574724,-0.0259759893760461,ubiquitin_and_proteasome_pathways,https://openalex.org/T13077
+39278618,Biotin and Related Studies,0.999709047912701,-0.0241209353359488,ubiquitin_and_proteasome_pathways,https://openalex.org/T13127
+39279011,Cancer-related gene regulation,0.9997520863838284,-0.0222657982381597,ubiquitin_and_proteasome_pathways,https://openalex.org/T13157
+39295772,Plant and Fungal Interactions Research,0.9997916823226562,-0.0204105844706334,ubiquitin_and_proteasome_pathways,https://openalex.org/T13220
+39296559,Andrographolide Research and Applications,0.9998278355928408,-0.018555300421588,ubiquitin_and_proteasome_pathways,https://openalex.org/T13281
+39329963,Immune responses and vaccinations,0.9998605460698924,-0.0166999524794808,ubiquitin_and_proteasome_pathways,https://openalex.org/T13410
+39329968,Calcium signaling and nucleotide metabolism,0.9998898136411758,-0.0148445470329934,ubiquitin_and_proteasome_pathways,https://openalex.org/T13415
+39330881,Neurological diseases and metabolism,0.999915638205912,-0.0129890904709993,ubiquitin_and_proteasome_pathways,https://openalex.org/T13481
+39347261,14-3-3 protein interactions,0.9999380196751768,-0.0111335891825535,ubiquitin_and_proteasome_pathways,https://openalex.org/T13526
+39364554,Calpain Protease Function and Regulation,0.999956957971902,-0.0092780495568638,ubiquitin_and_proteasome_pathways,https://openalex.org/T13637
+39382241,Cancer Mechanisms and Therapy,0.9999724530308762,-0.0074224779832677,ubiquitin_and_proteasome_pathways,https://openalex.org/T13779
+39416037,"Genetics, Bioinformatics, and Biomedical Research",0.9999845047987436,-0.005566880851216,ubiquitin_and_proteasome_pathways,https://openalex.org/T13937
+39416817,Nuclear Receptors and Signaling,0.9999931132340052,-0.0037112645502449,ubiquitin_and_proteasome_pathways,https://openalex.org/T13991
+41526968,Neurological Disease Mechanisms and Treatments,0.9999982783070192,-0.0018556354699576,ubiquitin_and_proteasome_pathways,https://openalex.org/T14144

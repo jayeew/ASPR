@@ -1,0 +1,11 @@
+{
+  "source_kind": "standard_fig3_input",
+  "source_dir": "data\\knowledge_corpus\\v2_publication_v6a_locked_candidate\\views\\fig2\\genetics_aging_and_longevity_in_model_organisms",
+  "prepared_dir": "outputs\\redraw_v6a_display_fixed_fig2\\fig3_input\\genetics_aging_and_longevity_in_model_organisms",
+  "works_rows": 2500,
+  "citation_rows": 12362,
+  "topic_rows": 445,
+  "topic_edge_rows": 1106,
+  "landmark_rows": 2,
+  "analysis_end_year": 2025
+}

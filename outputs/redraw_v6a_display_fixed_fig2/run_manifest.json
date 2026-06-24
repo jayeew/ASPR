@@ -1,0 +1,110 @@
+{
+  "command_argv": [
+    "experiments/kg_perturbation_fig2/fig2_empirical_panels.py",
+    "--data-dir",
+    "data/knowledge_corpus/v2_publication_v6a_locked_candidate/views/fig2",
+    "--evidence-mode",
+    "strong",
+    "--domains",
+    "crispr,exoplanets,gamma_ray_bursts_and_supernovae,genetics_aging_and_longevity_in_model_organisms,graphene_2d_materials,ipsc_reprogramming,microbiome_metagenomics,perovskite_solar_cells,topological_insulators,ubiquitin_and_proteasome_pathways",
+    "--example-domain",
+    "crispr",
+    "--fig1-snapshot-dir",
+    "outputs/redraw_v6a_display_fixed_fig1/crispr",
+    "--out-dir",
+    "outputs/redraw_v6a_display_fixed_fig2",
+    "--panel",
+    "all",
+    "--export-tables",
+    "--no-prepare-input",
+    "--min-controls",
+    "50",
+    "--min-refs",
+    "5",
+    "--quiet"
+  ],
+  "conda_default_env": null,
+  "conda_prefix": null,
+  "created_at_utc": "2026-06-24T04:25:51.004912+00:00",
+  "cwd": "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR",
+  "domains": [
+    "crispr",
+    "exoplanets",
+    "gamma_ray_bursts_and_supernovae",
+    "genetics_aging_and_longevity_in_model_organisms",
+    "graphene_2d_materials",
+    "ipsc_reprogramming",
+    "microbiome_metagenomics",
+    "perovskite_solar_cells",
+    "topological_insulators",
+    "ubiquitin_and_proteasome_pathways"
+  ],
+  "extra": {
+    "export_tables": true,
+    "panel": "all",
+    "strict_main_figure": false
+  },
+  "figure": "fig2",
+  "inputs": {
+    "data_dir": "data\\knowledge_corpus\\v2_publication_v6a_locked_candidate\\views\\fig2",
+    "domains": [
+      "crispr",
+      "exoplanets",
+      "gamma_ray_bursts_and_supernovae",
+      "genetics_aging_and_longevity_in_model_organisms",
+      "graphene_2d_materials",
+      "ipsc_reprogramming",
+      "microbiome_metagenomics",
+      "perovskite_solar_cells",
+      "topological_insulators",
+      "ubiquitin_and_proteasome_pathways"
+    ],
+    "evidence_mode": "strong",
+    "fig1_corpus_source": "raw",
+    "future_tau": 10,
+    "online_expand": false,
+    "reference_closure": "auto"
+  },
+  "output_dir": "outputs\\redraw_v6a_display_fixed_fig2",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python_executable": "C:\\Users\\jayee\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+  "python_version": "3.12.13",
+  "quality_gates": {
+    "active_future_outcomes": [
+      "community_reach",
+      "field_entropy",
+      "cross_community_adoption",
+      "path_shortening",
+      "partition_change",
+      "boundary_mixing",
+      "hub_formation"
+    ],
+    "checks": {
+      "active_future_outcomes_min5": 1,
+      "included_domains_min4": 1,
+      "mechanism_composite_rho_min020": 1,
+      "reference_closure_coverage_min80pct": 0,
+      "relaxed_control_tier_ratio_max25pct": 0,
+      "significant_expected_links_min4": 1,
+      "total_eligible_papers_min8000": 0
+    },
+    "mechanism_composite_partial_spearman": 0.20918818941589706,
+    "min_reference_closure_coverage": 0.0,
+    "n_domains": 10,
+    "overall_pass": false,
+    "reference_closure_measured_all_domains": false,
+    "relaxed_control_tier_ratio": 0.33849129593810445,
+    "significant_expected_links": 12,
+    "status_label": "multi-domain diagnostic evidence",
+    "thresholds": {
+      "active_future_outcomes_min": 5,
+      "domains_min": 4,
+      "eligible_papers_min": 8000,
+      "mechanism_composite_rho_min": 0.2,
+      "reference_closure_coverage_min": 0.8,
+      "relaxed_control_tier_ratio_max": 0.25,
+      "significant_expected_links_min": 4
+    },
+    "total_eligible_papers": 5087
+  }
+}

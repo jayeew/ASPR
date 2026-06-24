@@ -1,0 +1,21 @@
+parameter,label,window_index,window,standardized_value,source_column,provenance,manual_values
+B,$B$ (bridge centrality),1,1995-2005,-1.3680538042958768,B_proxy_raw,computed,0
+B,$B$ (bridge centrality),2,2006-2010,-0.9622502034651645,B_proxy_raw,computed,0
+B,$B$ (bridge centrality),3,2011-2015,0.29432403386649303,B_proxy_raw,computed,0
+B,$B$ (bridge centrality),4,2016-2020,1.1650774958009429,B_proxy_raw,computed,0
+B,$B$ (bridge centrality),5,2021-2024,0.8709024780936087,B_proxy_raw,computed,0
+RS,RS (reference span),1,1995-2005,-1.764559603444343,RS_proxy_raw,computed,0
+RS,RS (reference span),2,2006-2010,-0.05452166192884196,RS_proxy_raw,computed,0
+RS,RS (reference span),3,2011-2015,0.9369802029804638,RS_proxy_raw,computed,0
+RS,RS (reference span),4,2016-2020,0.9961963459866584,RS_proxy_raw,computed,0
+RS,RS (reference span),5,2021-2024,-0.11409528359393664,RS_proxy_raw,computed,0
+RTD,RTD (reference target diversity),1,1995-2005,-1.7335859585908,RTD_proxy_raw,computed,0
+RTD,RTD (reference target diversity),2,2006-2010,-0.4986719861839713,RTD_proxy_raw,computed,0
+RTD,RTD (reference target diversity),3,2011-2015,0.5562008535531588,RTD_proxy_raw,computed,0
+RTD,RTD (reference target diversity),4,2016-2020,0.9646439047932012,RTD_proxy_raw,computed,0
+RTD,RTD (reference target diversity),5,2021-2024,0.7114131864284021,RTD_proxy_raw,computed,0
+Uzzi,Uzzi novelty (-p10),1,1995-2005,-1.945661425384137,Uzzi_proxy_raw,computed,0
+Uzzi,Uzzi novelty (-p10),2,2006-2010,0.4954877870113832,Uzzi_proxy_raw,computed,0
+Uzzi,Uzzi novelty (-p10),3,2011-2015,0.8460621187352765,Uzzi_proxy_raw,computed,0
+Uzzi,Uzzi novelty (-p10),4,2016-2020,0.4899347073575111,Uzzi_proxy_raw,computed,0
+Uzzi,Uzzi novelty (-p10),5,2021-2024,0.11417681227996603,Uzzi_proxy_raw,computed,0

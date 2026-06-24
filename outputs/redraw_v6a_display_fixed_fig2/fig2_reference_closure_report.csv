@@ -1,0 +1,11 @@
+domain,reference_closure_mode,online_expand,raw_records,total_reference_mentions,internal_reference_mentions,external_reference_mentions,external_unique_references,closure_cap,closure_coverage_target,targeted_closure_unique_references,coverage_without_closure,coverage_if_targeted_materialized,materialized_closure_unique_references,coverage_materialized,status,coverage_materialized_raw_reported,coverage_measured,coverage_status,quality_gate_pass
+crispr,auto,0,0,0,0,0,0,50000,0.8,0,1.0,1.0,0,,audit_only_no_online_closure,1.0,0,not_measured,0
+exoplanets,auto,0,0,0,0,0,0,50000,0.8,0,1.0,1.0,0,,audit_only_no_online_closure,1.0,0,not_measured,0
+gamma_ray_bursts_and_supernovae,auto,0,0,0,0,0,0,50000,0.8,0,1.0,1.0,0,,audit_only_no_online_closure,1.0,0,not_measured,0
+genetics_aging_and_longevity_in_model_organisms,auto,0,0,0,0,0,0,50000,0.8,0,1.0,1.0,0,,audit_only_no_online_closure,1.0,0,not_measured,0
+graphene_2d_materials,auto,0,0,0,0,0,0,50000,0.8,0,1.0,1.0,0,,audit_only_no_online_closure,1.0,0,not_measured,0
+ipsc_reprogramming,auto,0,0,0,0,0,0,50000,0.8,0,1.0,1.0,0,,audit_only_no_online_closure,1.0,0,not_measured,0
+microbiome_metagenomics,auto,0,0,0,0,0,0,50000,0.8,0,1.0,1.0,0,,audit_only_no_online_closure,1.0,0,not_measured,0
+perovskite_solar_cells,auto,0,0,0,0,0,0,50000,0.8,0,1.0,1.0,0,,audit_only_no_online_closure,1.0,0,not_measured,0
+topological_insulators,auto,0,0,0,0,0,0,50000,0.8,0,1.0,1.0,0,,audit_only_no_online_closure,1.0,0,not_measured,0
+ubiquitin_and_proteasome_pathways,auto,0,0,0,0,0,0,50000,0.8,0,1.0,1.0,0,,audit_only_no_online_closure,1.0,0,not_measured,0

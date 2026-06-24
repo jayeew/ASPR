@@ -1,0 +1,11 @@
+{
+  "source_kind": "standard_fig3_input",
+  "source_dir": "data\\knowledge_corpus\\v2_publication_v6a_locked_candidate\\views\\fig2\\ubiquitin_and_proteasome_pathways",
+  "prepared_dir": "outputs\\redraw_v6a_best_fig2\\fig3_input\\ubiquitin_and_proteasome_pathways",
+  "works_rows": 2500,
+  "citation_rows": 11396,
+  "topic_rows": 339,
+  "topic_edge_rows": 1439,
+  "landmark_rows": 2,
+  "analysis_end_year": 2024
+}

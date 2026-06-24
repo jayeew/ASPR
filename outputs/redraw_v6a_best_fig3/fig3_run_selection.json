@@ -1,0 +1,372 @@
+{
+  "selected_run": "multi_domain",
+  "selected_kind": "multi_domain",
+  "selected_out_dir": "outputs\\redraw_v6a_best_fig3\\multi_domain",
+  "reason": "multi_domain selected as the required evidence base; single-domain weights remain diagnostic",
+  "summary": {
+    "overall_pass": false,
+    "status_label": "underpowered multi-domain diagnostic run",
+    "target_version": "RGPM structural residual over primary future graph deltas",
+    "thresholds": {
+      "active_graph_deltas_min": 6,
+      "active_delta_z_cap_hit_rate_max": 0.1,
+      "oof_spearman_min": 0.0,
+      "learned_vs_equal_min": 0.03,
+      "learned_vs_best_single_min": -1.0,
+      "score_iqr_min": 0.35
+    },
+    "data_requirements": {
+      "domains_min": 4,
+      "domains_target_max": 40,
+      "papers_per_domain_min": 300,
+      "total_papers_min": 5000,
+      "landmark_or_high_cases_per_domain_min": 30,
+      "high_perturbation_quantile": 0.9,
+      "control_median_min": 50,
+      "relaxed_control_tier_rate_max": 0.7
+    },
+    "checks": {
+      "active_graph_deltas": 1,
+      "active_delta_z_cap_hit_rate": 1,
+      "oof_spearman": 1,
+      "learned_vs_equal": 1,
+      "learned_vs_best_single": 1,
+      "score_iqr": 1,
+      "mean_delta_reliability": 1,
+      "contributing_graph_deltas": 1,
+      "domain_count": 1,
+      "total_papers": 1,
+      "papers_per_domain": 0,
+      "landmark_or_high_cases_per_domain": 0,
+      "matched_control_median": 1,
+      "matched_control_relaxation": 1,
+      "selected_pair_count": 1,
+      "selected_pairs_cover_all_metrics": 1,
+      "selected_pairs_exactly_one_repeat": 1,
+      "selected_pairs_three_p95_ge_0_03": 1,
+      "selected_pairs_one_max_ge_0_08": 1,
+      "learned_oof_spearman_ge_0_45": 0,
+      "learned_vs_equal_delta_ge_0_03": 1,
+      "contributing_graph_deltas_ge_5": 1,
+      "high_low_tertile_lift_ge_25pp": 1,
+      "top_decile_enrichment_ge_5x": 0
+    },
+    "association_checks": {
+      "active_graph_deltas": 1,
+      "active_delta_z_cap_hit_rate": 1,
+      "oof_spearman": 1,
+      "learned_vs_equal": 1,
+      "learned_vs_best_single": 1,
+      "score_iqr": 1,
+      "mean_delta_reliability": 1,
+      "contributing_graph_deltas": 1
+    },
+    "data_checks": {
+      "domain_count": 1,
+      "total_papers": 1,
+      "papers_per_domain": 0,
+      "landmark_or_high_cases_per_domain": 0,
+      "matched_control_median": 1,
+      "matched_control_relaxation": 1
+    },
+    "data_profile": {
+      "n_domains": 10,
+      "total_papers": 5087,
+      "min_papers_per_domain": 255,
+      "min_landmark_or_high_cases_per_domain": 26,
+      "control_median_min_by_domain": 77.0,
+      "relaxed_control_tier_rate_max_by_domain": 0.4865350089766607,
+      "domains": [
+        "crispr",
+        "exoplanets",
+        "gamma_ray_bursts_and_supernovae",
+        "genetics_aging_and_longevity_in_model_organisms",
+        "graphene_2d_materials",
+        "ipsc_reprogramming",
+        "microbiome_metagenomics",
+        "perovskite_solar_cells",
+        "topological_insulators",
+        "ubiquitin_and_proteasome_pathways"
+      ],
+      "domains_below_paper_min": [
+        "crispr",
+        "graphene_2d_materials",
+        "perovskite_solar_cells"
+      ],
+      "domains_below_landmark_or_high_case_min": [
+        "crispr",
+        "graphene_2d_materials"
+      ],
+      "domains_with_relaxed_controls": []
+    },
+    "domain_adequacy": [
+      {
+        "domain": "crispr",
+        "n_papers": 261,
+        "n_landmarks": 0,
+        "n_high_perturbation_cases": 27,
+        "n_landmark_or_high_cases": 27,
+        "high_perturbation_quantile": 0.9,
+        "high_perturbation_threshold": 0.8454885000982898,
+        "control_median": 186.0,
+        "relaxed_control_tier_rate": 0.04980842911877394,
+        "pass_papers_per_domain_min": 0,
+        "pass_landmark_or_high_cases_min": 0,
+        "pass_control_median_min": 1,
+        "pass_relaxed_control_tier_rate_max": 1
+      },
+      {
+        "domain": "exoplanets",
+        "n_papers": 657,
+        "n_landmarks": 0,
+        "n_high_perturbation_cases": 66,
+        "n_landmark_or_high_cases": 66,
+        "high_perturbation_quantile": 0.9,
+        "high_perturbation_threshold": 0.9206605071751524,
+        "control_median": 99.0,
+        "relaxed_control_tier_rate": 0.0395738203957382,
+        "pass_papers_per_domain_min": 1,
+        "pass_landmark_or_high_cases_min": 1,
+        "pass_control_median_min": 1,
+        "pass_relaxed_control_tier_rate_max": 1
+      },
+      {
+        "domain": "gamma_ray_bursts_and_supernovae",
+        "n_papers": 729,
+        "n_landmarks": 0,
+        "n_high_perturbation_cases": 73,
+        "n_landmark_or_high_cases": 73,
+        "high_perturbation_quantile": 0.9,
+        "high_perturbation_threshold": 0.9073717318655397,
+        "control_median": 99.0,
+        "relaxed_control_tier_rate": 0.04801097393689986,
+        "pass_papers_per_domain_min": 1,
+        "pass_landmark_or_high_cases_min": 1,
+        "pass_control_median_min": 1,
+        "pass_relaxed_control_tier_rate_max": 1
+      },
+      {
+        "domain": "genetics_aging_and_longevity_in_model_organisms",
+        "n_papers": 551,
+        "n_landmarks": 0,
+        "n_high_perturbation_cases": 56,
+        "n_landmark_or_high_cases": 56,
+        "high_perturbation_quantile": 0.9,
+        "high_perturbation_threshold": 0.9152742284253981,
+        "control_median": 78.0,
+        "relaxed_control_tier_rate": 0.24319419237749546,
+        "pass_papers_per_domain_min": 1,
+        "pass_landmark_or_high_cases_min": 1,
+        "pass_control_median_min": 1,
+        "pass_relaxed_control_tier_rate_max": 1
+      },
+      {
+        "domain": "graphene_2d_materials",
+        "n_papers": 255,
+        "n_landmarks": 0,
+        "n_high_perturbation_cases": 26,
+        "n_landmark_or_high_cases": 26,
+        "high_perturbation_quantile": 0.9,
+        "high_perturbation_threshold": 0.8958914881069392,
+        "control_median": 77.0,
+        "relaxed_control_tier_rate": 0.12156862745098039,
+        "pass_papers_per_domain_min": 0,
+        "pass_landmark_or_high_cases_min": 0,
+        "pass_control_median_min": 1,
+        "pass_relaxed_control_tier_rate_max": 1
+      },
+      {
+        "domain": "ipsc_reprogramming",
+        "n_papers": 812,
+        "n_landmarks": 0,
+        "n_high_perturbation_cases": 82,
+        "n_landmark_or_high_cases": 82,
+        "high_perturbation_quantile": 0.9,
+        "high_perturbation_threshold": 0.9093571849813249,
+        "control_median": 113.0,
+        "relaxed_control_tier_rate": 0.24876847290640394,
+        "pass_papers_per_domain_min": 1,
+        "pass_landmark_or_high_cases_min": 1,
+        "pass_control_median_min": 1,
+        "pass_relaxed_control_tier_rate_max": 1
+      },
+      {
+        "domain": "microbiome_metagenomics",
+        "n_papers": 492,
+        "n_landmarks": 1,
+        "n_high_perturbation_cases": 50,
+        "n_landmark_or_high_cases": 51,
+        "high_perturbation_quantile": 0.9,
+        "high_perturbation_threshold": 0.8883231767249853,
+        "control_median": 173.0,
+        "relaxed_control_tier_rate": 0.2784552845528455,
+        "pass_papers_per_domain_min": 1,
+        "pass_landmark_or_high_cases_min": 1,
+        "pass_control_median_min": 1,
+        "pass_relaxed_control_tier_rate_max": 1
+      },
+      {
+        "domain": "perovskite_solar_cells",
+        "n_papers": 299,
+        "n_landmarks": 1,
+        "n_high_perturbation_cases": 30,
+        "n_landmark_or_high_cases": 31,
+        "high_perturbation_quantile": 0.9,
+        "high_perturbation_threshold": 0.8356988401808529,
+        "control_median": 138.0,
+        "relaxed_control_tier_rate": 0.013377926421404682,
+        "pass_papers_per_domain_min": 0,
+        "pass_landmark_or_high_cases_min": 1,
+        "pass_control_median_min": 1,
+        "pass_relaxed_control_tier_rate_max": 1
+      },
+      {
+        "domain": "topological_insulators",
+        "n_papers": 474,
+        "n_landmarks": 0,
+        "n_high_perturbation_cases": 48,
+        "n_landmark_or_high_cases": 48,
+        "high_perturbation_quantile": 0.9,
+        "high_perturbation_threshold": 0.8747985059956751,
+        "control_median": 87.0,
+        "relaxed_control_tier_rate": 0.0379746835443038,
+        "pass_papers_per_domain_min": 1,
+        "pass_landmark_or_high_cases_min": 1,
+        "pass_control_median_min": 1,
+        "pass_relaxed_control_tier_rate_max": 1
+      },
+      {
+        "domain": "ubiquitin_and_proteasome_pathways",
+        "n_papers": 557,
+        "n_landmarks": 1,
+        "n_high_perturbation_cases": 56,
+        "n_landmark_or_high_cases": 57,
+        "high_perturbation_quantile": 0.9,
+        "high_perturbation_threshold": 0.8976607037546688,
+        "control_median": 77.0,
+        "relaxed_control_tier_rate": 0.4865350089766607,
+        "pass_papers_per_domain_min": 1,
+        "pass_landmark_or_high_cases_min": 1,
+        "pass_control_median_min": 1,
+        "pass_relaxed_control_tier_rate_max": 1
+      }
+    ],
+    "active_graph_deltas": [
+      "community_reach",
+      "field_entropy",
+      "cross_community_adoption",
+      "path_shortening",
+      "modularity_shock",
+      "partition_change",
+      "boundary_mixing",
+      "hub_formation"
+    ],
+    "n_active_graph_deltas": 8,
+    "contributing_graph_deltas": [
+      "community_reach",
+      "field_entropy",
+      "cross_community_adoption",
+      "partition_change",
+      "boundary_mixing"
+    ],
+    "diagnostic_graph_deltas": [
+      "path_shortening",
+      "modularity_shock",
+      "hub_formation"
+    ],
+    "n_contributing_graph_deltas": 5,
+    "active_delta_z_cap_hit_rate_max": 0.07076862590918026,
+    "mean_delta_reliability": 0.49061303622842506,
+    "mean_contributing_delta_reliability": 0.7218652272202492,
+    "learned_oof_spearman": 0.29317719965722583,
+    "equal_weight_oof_spearman": 0.21762994655897314,
+    "best_single_oof_spearman": 0.24486597840463187,
+    "learned_vs_equal_delta": 0.07554725309825269,
+    "learned_vs_best_single_delta": 0.04831122125259396,
+    "nonlinear_upper_bound_oof_spearman": 0.3236219762865661,
+    "nonlinear_vs_linear_delta": 0.030444776629340253,
+    "nonlinear_diagnostic_interpretation": "nonlinear_upper_bound_close_to_linear",
+    "score_oof_iqr": 0.9504505470553455,
+    "delta_variant": "matched_control_v3",
+    "selected_panel_d_pairs": [
+      [
+        "DeltaQ0",
+        "Uzzi"
+      ],
+      [
+        "PDE",
+        "RS"
+      ],
+      [
+        "BurtIP",
+        "RTD"
+      ],
+      [
+        "B",
+        "BurtIP"
+      ]
+    ],
+    "selected_panel_d_metric_counts": {
+      "DeltaQ0": 1,
+      "Uzzi": 1,
+      "PDE": 1,
+      "RS": 1,
+      "BurtIP": 2,
+      "RTD": 1,
+      "B": 1
+    },
+    "pairwise_effect_weak": false,
+    "v3_effect_summary": {
+      "high_score_tertile_rgpm_percentile_median": 64.5121651511428,
+      "high_score_tertile_rgpm_percentile_mean": 59.785369050544766,
+      "mid_score_tertile_rgpm_percentile_median": 50.811010076185795,
+      "mid_score_tertile_rgpm_percentile_mean": 50.06743918149387,
+      "low_score_tertile_rgpm_percentile_median": 35.75817154091914,
+      "low_score_tertile_rgpm_percentile_mean": 40.19129847999677,
+      "high_vs_low_tertile_median_rgpm_lift_pp": 28.753993610223652,
+      "top_score_decile_rgpm_top20_rate": 0.3759213759213759,
+      "bottom_score_decile_rgpm_top20_rate": 0.085995085995086,
+      "top_vs_bottom_score_decile_rgpm_top20_enrichment": 4.371428571428571,
+      "top_score_decile_rgpm_top10_rate": 0.21621621621621623,
+      "bottom_score_decile_rgpm_top10_rate": 0.04176904176904177,
+      "top_vs_bottom_score_decile_rgpm_top10_enrichment": 5.176470588235294,
+      "learned_oof_spearman": 0.29317719965722583,
+      "equal_weight_oof_spearman": 0.19248753208142064
+    },
+    "v3_pair_checks": {
+      "selected_pair_count": 1,
+      "selected_pairs_cover_all_metrics": 1,
+      "selected_pairs_exactly_one_repeat": 1,
+      "selected_pairs_three_p95_ge_0_03": 1,
+      "selected_pairs_one_max_ge_0_08": 1
+    },
+    "v3_effect_checks": {
+      "learned_oof_spearman_ge_0_45": 0,
+      "learned_vs_equal_delta_ge_0_03": 1,
+      "contributing_graph_deltas_ge_5": 1,
+      "high_low_tertile_lift_ge_25pp": 1,
+      "top_decile_enrichment_ge_5x": 0
+    },
+    "v3_thresholds": {
+      "learned_oof_spearman_min": 0.45,
+      "learned_vs_equal_delta_min": 0.03,
+      "n_contributing_graph_deltas_min": 5,
+      "high_vs_low_tertile_median_rgpm_lift_pp_min": 25.0,
+      "top_score_decile_enrichment_min": 5.0,
+      "selected_pair_p95_min": 0.03,
+      "selected_pair_max_min": 0.08
+    }
+  },
+  "all_runs": [
+    {
+      "name": "multi_domain",
+      "kind": "multi_domain",
+      "out_dir": "outputs\\redraw_v6a_best_fig3\\multi_domain",
+      "overall_pass": false,
+      "learned_oof_spearman": 0.29317719965722583,
+      "status_label": "underpowered multi-domain diagnostic run",
+      "n_domains": 10,
+      "min_papers_per_domain": 255
+    }
+  ]
+}

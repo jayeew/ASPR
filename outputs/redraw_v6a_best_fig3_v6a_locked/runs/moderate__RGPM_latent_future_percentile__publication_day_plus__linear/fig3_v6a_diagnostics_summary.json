@@ -1,0 +1,91 @@
+{
+  "artifact_kind": "fig3_v5_rank_learning",
+  "best_single_oof_spearman": 0.3186398676082614,
+  "contributing_graph_deltas": [
+    "community_reach",
+    "field_entropy",
+    "cross_community_adoption",
+    "partition_change",
+    "boundary_mixing"
+  ],
+  "created_at": "2026-06-24T03:06:29+00:00",
+  "data_profile": {
+    "control_median_min_by_domain": 77.0,
+    "domains": [
+      "crispr",
+      "exoplanets",
+      "gamma_ray_bursts_and_supernovae",
+      "genetics_aging_and_longevity_in_model_organisms",
+      "graphene_2d_materials",
+      "ipsc_reprogramming",
+      "microbiome_metagenomics",
+      "perovskite_solar_cells",
+      "topological_insulators",
+      "ubiquitin_and_proteasome_pathways"
+    ],
+    "domains_below_landmark_or_high_case_min": [
+      "crispr",
+      "graphene_2d_materials"
+    ],
+    "domains_below_paper_min": [
+      "crispr",
+      "graphene_2d_materials",
+      "perovskite_solar_cells"
+    ],
+    "domains_with_relaxed_controls": [],
+    "min_landmark_or_high_cases_per_domain": 26,
+    "min_papers_per_domain": 255,
+    "n_domains": 10,
+    "relaxed_control_tier_rate_max_by_domain": 0.4865350089766607,
+    "total_papers": 5087
+  },
+  "effect_summary": {
+    "bottom_score_decile_rgpm_top10_rate": 0.0,
+    "bottom_score_decile_rgpm_top20_rate": 0.021164021164021163,
+    "high_score_tertile_rgpm_percentile_median": 72.54901960784314,
+    "high_vs_low_tertile_median_rgpm_lift_pp": 45.468998410174876,
+    "low_score_tertile_rgpm_percentile_median": 27.08002119766826,
+    "n": 1887,
+    "top_score_decile_rgpm_top10_rate": 0.3544973544973545,
+    "top_score_decile_rgpm_top20_rate": 0.5185185185185185,
+    "top_vs_bottom_score_decile_rgpm_top10_enrichment": null,
+    "top_vs_bottom_score_decile_rgpm_top20_enrichment": 24.5
+  },
+  "equal_weight_oof_spearman": 0.13120437036293442,
+  "feature_cols": [
+    "B_z",
+    "RS_z",
+    "DeltaQ0_z",
+    "Uzzi_z",
+    "RTD_z",
+    "BurtIP_z",
+    "PDE_z",
+    "degree_p",
+    "effective_size",
+    "constraint_inv",
+    "field_variety",
+    "field_simpson",
+    "community_variety",
+    "reference_count_log"
+  ],
+  "l2_grid": [
+    0.0,
+    0.001,
+    0.01,
+    0.1
+  ],
+  "latest_fold_test_spearman": 0.6422272120041035,
+  "learned_oof_spearman": 0.5464782663039197,
+  "learned_vs_best_single_delta": 0.2278383986956583,
+  "learned_vs_equal_delta": 0.4152738959409853,
+  "method": "nested_time_block_linear_rank_learning",
+  "model_grid": [
+    "simplex_pairwise",
+    "signed_pairwise",
+    "ridge_rank"
+  ],
+  "n_contributing_graph_deltas": 5,
+  "source_fig3_status_label": "underpowered multi-domain diagnostic run",
+  "target_col": "RGPM_latent_future_percentile",
+  "target_transform": "raw"
+}

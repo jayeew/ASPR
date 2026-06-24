@@ -6,6 +6,8 @@ import sys
 import tempfile
 from pathlib import Path
 
+import pandas as pd
+
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
@@ -31,6 +33,9 @@ from experiments.kg_perturbation_fig4.main_fig4 import (  # noqa: E402
     write_csv,
     write_json,
     write_jsonl,
+)
+from experiments.kg_perturbation_fig4.draw_fig4_publication_summary import (  # noqa: E402
+    draw_figure as draw_publication_summary,
 )
 
 
@@ -722,9 +727,15 @@ def test_metrics_same_text_similarity_and_coverage() -> None:
         assert rows[0]["consistency_cosine"] > 0.99
         assert rows[0]["coverage_score"] == 1.0
         assert rows[0]["innovation_stance_agreement"] == 1.0
+        assert rows[0]["stance_exact_agreement"] == 1.0
+        assert rows[0]["stance_within_one_agreement"] == 1.0
         assert rows[0]["semantic_claim_alignment"] == 1.0
+        assert rows[0]["strict_claim_recall"] == 1.0
+        assert rows[0]["soft_claim_recall"] == 1.0
         assert rows[0]["structured_semantic_consistency_mean"] == 5.0
         assert rows[0]["overclaiming_score_1_5"] == 1.0
+        assert rows[0]["overclaiming_flag"] == 0.0
+        assert rows[0]["claim_validation_pass"] == 1.0
         assert rows[0]["novelty_alignment"] == 1.0
         assert rows[0]["phrase_claim_coverage_supplementary"] == 1.0
         assert rows[0]["included_in_main"]
@@ -807,6 +818,57 @@ def test_draw_fig4_smoke_outputs_all_formats() -> None:
         assert (out_dir / "fig4_full.png").exists()
         assert (out_dir / "fig4_full.pdf").exists()
         assert (out_dir / "fig4_full.svg").exists()
+
+
+def test_publication_summary_emphasizes_claim_validation_metrics() -> None:
+    with tempfile.TemporaryDirectory(prefix="aspr_fig4_pub_summary_") as tmp:
+        root = Path(tmp)
+        metrics_path = root / "fig4_metrics_summary.csv"
+        out_dir = root / "summary"
+        rows = []
+        for idx in range(4):
+            rows.append(
+                {
+                    "paper_id": f"paper_{idx}",
+                    "included_in_main": True,
+                    "screen_pass": True,
+                    "agent_success": True,
+                    "graph_metric_valid": True,
+                    "peer_innovation_stance_1_5": 4,
+                    "agent_innovation_stance_1_5": 4,
+                    "stance_exact_agreement": 1.0,
+                    "stance_within_one_agreement": 1.0,
+                    "quadratic_weighted_kappa": 1.0,
+                    "semantic_claim_alignment": 0.875,
+                    "strict_claim_recall": 0.75,
+                    "soft_claim_recall": 1.0,
+                    "overclaiming_score_1_5": 1.0,
+                    "overclaiming_flag": 0.0,
+                    "claim_validation_pass": 1.0,
+                    "missing_peer_point_rate": 0.0,
+                    "contradiction_rate": 0.0,
+                    "consistency_cosine": 0.68,
+                    "novelty_semantic_coverage": 1.0,
+                    "significance_semantic_coverage": 1.0,
+                    "prior_art_semantic_coverage": 0.5,
+                    "evidence_rigor_semantic_coverage": 1.0,
+                    "limitations_semantic_coverage": 0.5,
+                    "future_work_semantic_coverage": 1.0,
+                    "entailed_points": 3,
+                    "related_points": 1,
+                    "no_match_points": 0,
+                    "contradicted_points": 0,
+                }
+            )
+        write_csv(metrics_path, rows)
+
+        result = draw_publication_summary(pd.read_csv(metrics_path), out_dir, dpi=120)
+
+        assert result["summary"]["strict_claim_recall_mean"] == 0.75
+        assert result["summary"]["soft_claim_recall_mean"] == 1.0
+        assert result["summary"]["low_overclaiming_rate_mean"] == 1.0
+        assert (out_dir / "fig4_claim_validation_summary.png").exists()
+        assert (out_dir / "fig4_claim_validation_summary.svg").exists()
 
 
 if __name__ == "__main__":

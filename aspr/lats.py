@@ -64,9 +64,13 @@ else:
 
 # 配置 ChatOpenAI 连接本地 Ollama
 llm = ChatOpenAI(
-    model="qwen3-coder:30b",
-    base_url="http://localhost:11434/v1",
-    api_key="ollama",
+    model=os.getenv("ASPR_LATS_LLM_MODEL", "qwen3-coder:30b"),
+    base_url=os.getenv("ASPR_LATS_LLM_BASE_URL")
+    or os.getenv("ASPR_LLM_BASE_URL", "http://localhost:11434/v1"),
+    api_key=os.getenv("ASPR_LATS_LLM_API_KEY")
+    or os.getenv("ASPR_LLM_API_KEY")
+    or os.getenv("DEEPSEEK_API_KEY")
+    or "ollama",
     temperature=0.2,
     # max_tokens=9000,
 )
@@ -1080,6 +1084,10 @@ def evaluate_paper_innovation(
     paper_title: str,
     paper_abstract: str,
     retrieved_papers: List[Dict[str, Any]],
+    paper_context: Optional[str] = None,
+    max_iterations: int = 3,
+    graph_metric_evidence: Optional[str] = None,
+    graph_metric_result: Optional[Any] = None,
     use_committee: bool = True,
 ) -> Dict[str, Any]:
     """
@@ -1093,11 +1101,15 @@ def evaluate_paper_innovation(
     Returns:
         包含创新性评价结果的字典
     """
-    graph_metric_evidence, graph_metric_result = build_graph_metric_evidence(
-        paper_title=paper_title,
-        paper_abstract=paper_abstract,
-        related_papers_data=retrieved_papers,
-    )
+    evaluation_abstract = paper_abstract
+    if paper_context:
+        evaluation_abstract = f"{paper_abstract}\n\nFull paper dossier for evaluation:\n{paper_context}"
+    if graph_metric_evidence is None or graph_metric_result is None:
+        graph_metric_evidence, graph_metric_result = build_graph_metric_evidence(
+            paper_title=paper_title,
+            paper_abstract=evaluation_abstract,
+            related_papers_data=retrieved_papers,
+        )
     (
         committee_evidence,
         committee_report_result,
@@ -1105,14 +1117,14 @@ def evaluate_paper_innovation(
         recommended_tone,
     ) = build_committee_evidence(
         paper_title=paper_title,
-        paper_abstract=paper_abstract,
+        paper_abstract=evaluation_abstract,
         related_papers_data=retrieved_papers,
         graph_metric_result=graph_metric_result,
         use_committee=use_committee,
     )
     report, log, committee_report_result, committee_disagreement_score, recommended_tone = run_innovation_evaluation(
         paper_title=paper_title,
-        paper_abstract=paper_abstract,
+        paper_abstract=evaluation_abstract,
         related_papers_data=retrieved_papers,
         graph_metric_evidence=graph_metric_evidence,
         graph_metric_result=graph_metric_result,
@@ -1120,6 +1132,7 @@ def evaluate_paper_innovation(
         committee_report_result=committee_report_result,
         committee_disagreement_score=committee_disagreement_score,
         recommended_tone=recommended_tone,
+        max_iterations=max_iterations,
         use_committee=use_committee,
     )
     

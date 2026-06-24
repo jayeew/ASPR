@@ -1,0 +1,11 @@
+domain,n_papers,n_landmarks,n_high_perturbation_cases,n_landmark_or_high_cases,high_perturbation_quantile,high_perturbation_threshold,control_median,relaxed_control_tier_rate,pass_papers_per_domain_min,pass_landmark_or_high_cases_min,pass_control_median_min,pass_relaxed_control_tier_rate_max
+crispr,261,0,27,27,0.9,0.8454885000982898,186.0,0.04980842911877394,0,0,1,1
+exoplanets,657,0,66,66,0.9,0.9206605071751524,99.0,0.0395738203957382,1,1,1,1
+gamma_ray_bursts_and_supernovae,729,0,73,73,0.9,0.9073717318655397,99.0,0.04801097393689986,1,1,1,1
+genetics_aging_and_longevity_in_model_organisms,551,0,56,56,0.9,0.9152742284253981,78.0,0.24319419237749546,1,1,1,1
+graphene_2d_materials,255,0,26,26,0.9,0.8958914881069392,77.0,0.12156862745098039,0,0,1,1
+ipsc_reprogramming,812,0,82,82,0.9,0.9093571849813249,113.0,0.24876847290640394,1,1,1,1
+microbiome_metagenomics,492,1,50,51,0.9,0.8883231767249853,173.0,0.2784552845528455,1,1,1,1
+perovskite_solar_cells,299,1,30,31,0.9,0.8356988401808529,138.0,0.013377926421404682,0,1,1,1
+topological_insulators,474,0,48,48,0.9,0.8747985059956751,87.0,0.0379746835443038,1,1,1,1
+ubiquitin_and_proteasome_pathways,557,1,56,57,0.9,0.8976607037546688,77.0,0.4865350089766607,1,1,1,1

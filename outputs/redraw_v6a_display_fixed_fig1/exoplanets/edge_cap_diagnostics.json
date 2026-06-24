@@ -1,0 +1,13 @@
+{
+  "bibliographic_edges": 145689,
+  "cocitation_edges": 18670,
+  "direct_edges": 8373,
+  "domain": "exoplanets",
+  "domain_name": "Exoplanet discovery and characterization",
+  "edge_cap_hit": 1,
+  "exported_edges": 150000,
+  "graph_max_edges": 150000,
+  "hybrid_only_edge_ratio": 0.94418,
+  "hybrid_only_edges": 141627,
+  "interpretation": "edge_cap_hit_density_not_interpretable"
+}

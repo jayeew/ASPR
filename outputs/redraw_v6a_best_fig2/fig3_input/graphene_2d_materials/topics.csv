@@ -1,0 +1,171 @@
+community,label,x,y,domain,topic_id
+18991755,Advanced Chemical Physics Studies,-0.2649378603639372,0.9642654873766764,graphene_2d_materials,https://openalex.org/T10002
+18991890,Adsorption and biosorption for pollutant removal,-0.2667267294631139,0.9637721991165292,graphene_2d_materials,https://openalex.org/T10016
+18991892,Advancements in Battery Materials,-0.2685146801192152,0.9632755922167217,graphene_2d_materials,https://openalex.org/T10018
+18992015,Quantum Information and Cryptography,-0.2703017061756361,0.9627756683872624,graphene_2d_materials,https://openalex.org/T10020
+18992017,Semiconductor Quantum Structures and Devices,-0.2720878014789565,0.9622724293495828,graphene_2d_materials,https://openalex.org/T10022
+18992019,TiO2 Photocatalysis and Solar Cells,-0.2738729598789612,0.9617658768365288,graphene_2d_materials,https://openalex.org/T10024
+18992146,Electrocatalysts for Energy Conversion,-0.2756571752286607,0.961256012592356,graphene_2d_materials,https://openalex.org/T10030
+18992153,Physics of Superconductivity and Magnetism,-0.2774404413843127,0.9607428383727238,graphene_2d_materials,https://openalex.org/T10037
+18992282,Organic Electronics and Photovoltaics,-0.2792227522054434,0.9602263559446896,graphene_2d_materials,https://openalex.org/T10045
+18992286,Magnetic properties of thin films,-0.2810041015548691,0.9597065670867012,graphene_2d_materials,https://openalex.org/T10049
+18992542,Nanoparticle-Based Drug Delivery,-0.2827844832987168,0.9591834735885924,graphene_2d_materials,https://openalex.org/T10063
+18992674,Carbon Nanotubes in Composites,-0.2845638913064441,0.958657077251576,graphene_2d_materials,https://openalex.org/T10074
+18992678,Advanced Photocatalysis Techniques,-0.2863423194508629,0.958127379888238,graphene_2d_materials,https://openalex.org/T10078
+18992679,Nanoparticles: synthesis and applications,-0.2881197616081591,0.9575943833225306,graphene_2d_materials,https://openalex.org/T10079
+18992804,Graphene research and applications,-0.2898962116579125,0.9570580893897668,graphene_2d_materials,https://openalex.org/T10083
+18992932,ZnO doping and properties,-0.2916716634831204,0.9565184999366136,graphene_2d_materials,https://openalex.org/T10090
+18992938,Metal-Organic Frameworks: Synthesis and Applications,-0.2934461109702168,0.9559756168210856,graphene_2d_materials,https://openalex.org/T10096
+18992939,Luminescence Properties of Advanced Materials,-0.2952195480090946,0.9554294419125392,graphene_2d_materials,https://openalex.org/T10097
+18992941,GaN-based semiconductor devices and materials,-0.2969919684931249,0.954879977091665,graphene_2d_materials,https://openalex.org/T10099
+19008921,Ferroelectric and Piezoelectric Materials,-0.2987633663191801,0.9543272242504828,graphene_2d_materials,https://openalex.org/T10107
+19009308,Gold and Silver Nanoparticles Synthesis and Applications,-0.3005337353876541,0.9537711852923338,graphene_2d_materials,https://openalex.org/T10131
+19009309,Advanced ceramic materials synthesis,-0.3023030696024827,0.9532118621318748,graphene_2d_materials,https://openalex.org/T10132
+19009578,Ionosphere and magnetosphere dynamics,-0.3040713628711653,0.9526492566950714,graphene_2d_materials,https://openalex.org/T10159
+19009840,Supercapacitor Materials and Fabrication,-0.3058386091047855,0.9520833709191912,graphene_2d_materials,https://openalex.org/T10179
+19009962,Analytical chemistry methods development,-0.3076048022180327,0.9515142067527972,graphene_2d_materials,https://openalex.org/T10180
+19010095,Catalytic Processes in Materials Science,-0.3093699361292223,0.9509417661557414,graphene_2d_materials,https://openalex.org/T10192
+19010100,Membrane Separation Technologies,-0.3111340047603166,0.950366051099158,graphene_2d_materials,https://openalex.org/T10197
+19026082,Advanced biosensing and bioanalysis techniques,-0.3128970020369468,0.9497870635654556,graphene_2d_materials,https://openalex.org/T10207
+19026206,Advanced oxidation water treatment,-0.3146589218884332,0.949204805548312,graphene_2d_materials,https://openalex.org/T10210
+19026208,Electrochemical sensors and biosensors,-0.3164197582478049,0.9486192790526664,graphene_2d_materials,https://openalex.org/T10212
+19026215,Mechanical Behavior of Composites,-0.3181795050518229,0.9480304860947124,graphene_2d_materials,https://openalex.org/T10219
+19026474,Aquatic Ecosystems and Phytoplankton Dynamics,-0.3199381562410001,0.9474384287018917,graphene_2d_materials,https://openalex.org/T10236
+19026604,Metamaterials and Metasurfaces Applications,-0.3216957057596219,0.9468431089128856,graphene_2d_materials,https://openalex.org/T10245
+19026606,Perovskite Materials and Applications,-0.3234521475557662,0.9462445287776108,graphene_2d_materials,https://openalex.org/T10247
+19026997,2D Materials and Applications,-0.3252074755813263,0.9456426903572094,graphene_2d_materials,https://openalex.org/T10275
+19027124,Advanced Battery Materials and Technologies,-0.3269616837920308,0.9450375957240432,graphene_2d_materials,https://openalex.org/T10281
+19027259,Plasmonic and Surface Plasmon Research,-0.328714766147463,0.9444292469616868,graphene_2d_materials,https://openalex.org/T10295
+19027263,Photonic and Optical Devices,-0.330466716611084,0.9438176461649196,graphene_2d_materials,https://openalex.org/T10299
+19043242,Liquid Crystal Research Advancements,-0.3322175291502525,0.9432027954397194,graphene_2d_materials,https://openalex.org/T10306
+19043499,Quantum Dots Synthesis And Properties,-0.3339671977362449,0.9425846969032544,graphene_2d_materials,https://openalex.org/T10321
+19043637,Advanced Sensor and Energy Harvesting Materials,-0.335715716344277,0.9419633526838764,graphene_2d_materials,https://openalex.org/T10338
+19043763,"Hydrogels: synthesis, properties, applications",-0.3374630789535242,0.9413387649211136,graphene_2d_materials,https://openalex.org/T10343
+19043894,Zeolite Catalysis and Synthesis,-0.3392092795471427,0.9407109357656624,graphene_2d_materials,https://openalex.org/T10353
+19044023,Silicon Carbide Semiconductor Technologies,-0.3409543121122905,0.9400798673793812,graphene_2d_materials,https://openalex.org/T10361
+19044160,Metal and Thin Film Mechanics,-0.3426981706401459,0.9394455619352818,graphene_2d_materials,https://openalex.org/T10377
+19044286,Quantum and electron transport phenomena,-0.3444408491259315,0.9388080216175227,graphene_2d_materials,https://openalex.org/T10382
+19060402,Advanced Polymer Synthesis and Characterization,-0.346182341568933,0.9381672486214016,graphene_2d_materials,https://openalex.org/T10405
+19060406,Fuel Cells and Related Materials,-0.347922641972519,0.9375232451533468,graphene_2d_materials,https://openalex.org/T10409
+19060531,High-pressure geophysics and materials,-0.3496617443441639,0.936876013430911,graphene_2d_materials,https://openalex.org/T10413
+19060664,Cold Atom Physics and Bose-Einstein Condensates,-0.3513996426954671,0.9362255556827628,graphene_2d_materials,https://openalex.org/T10425
+19060921,Advanced Thermoelectric Materials and Devices,-0.353136331042174,0.9355718741486792,graphene_2d_materials,https://openalex.org/T10440
+19061184,Gas Sensing Nanomaterials and Sensors,-0.3548718034041958,0.9349149710795382,graphene_2d_materials,https://openalex.org/T10461
+19061316,Semiconductor materials and devices,-0.3566060538056315,0.9342548487373106,graphene_2d_materials,https://openalex.org/T10472
+19061322,Diamond and Carbon-based Materials Research,-0.3583390762747879,0.933591509395052,graphene_2d_materials,https://openalex.org/T10478
+19061576,Orbital Angular Momentum in Optics,-0.3600708648441996,0.9329249553368965,graphene_2d_materials,https://openalex.org/T10490
+19061577,Enhanced Oil Recovery Techniques,-0.3618014135506502,0.9322551888580464,graphene_2d_materials,https://openalex.org/T10491
+19077559,Polymer Nanocomposites and Properties,-0.3635307164351922,0.9315822122647662,graphene_2d_materials,https://openalex.org/T10501
+19077560,Advanced Memory and Neural Computing,-0.3652587675431688,0.9309060278743744,graphene_2d_materials,https://openalex.org/T10502
+19078082,Advanced Fluorescence Microscopy Techniques,-0.366985560924233,0.9302266380152344,graphene_2d_materials,https://openalex.org/T10540
+19078221,Advancements in Semiconductor Devices and Circuit Design,-0.3687110906323683,0.9295440450267484,graphene_2d_materials,https://openalex.org/T10558
+19078350,Laser-Matter Interactions and Applications,-0.3704353507259103,0.9288582512593468,graphene_2d_materials,https://openalex.org/T10566
+19078737,Chalcogenide Semiconductor Thin Films,-0.3721583352675663,0.9281692590744824,graphene_2d_materials,https://openalex.org/T10590
+19094850,Advanced Cellulose Research Studies,-0.3738800383244348,0.9274770708446216,graphene_2d_materials,https://openalex.org/T10610
+19094984,Thin-Film Transistor Technologies,-0.3756004539680279,0.9267816889532352,graphene_2d_materials,https://openalex.org/T10623
+19095381,Topological Materials and Phenomena,-0.3773195762742908,0.9260831157947916,graphene_2d_materials,https://openalex.org/T10657
+19095505,Conducting polymers and applications,-0.379037399323622,0.9253813537747478,graphene_2d_materials,https://openalex.org/T10660
+19095507,Ultrasonics and Acoustic Wave Propagation,-0.3807539172008931,0.9246764053095414,graphene_2d_materials,https://openalex.org/T10662
+19095508,Advanced Battery Technologies Research,-0.3824691239954709,0.923968272826582,graphene_2d_materials,https://openalex.org/T10663
+19095511,Photonic Crystals and Applications,-0.3841830138012368,0.9232569587642429,graphene_2d_materials,https://openalex.org/T10666
+19095769,Quantum Computing Algorithms and Architecture,-0.3858955807166058,0.9225424655718528,graphene_2d_materials,https://openalex.org/T10682
+19112018,Aluminum Alloys Composites Properties,-0.3876068188445496,0.9218247957096882,graphene_2d_materials,https://openalex.org/T10717
+19112151,Electrospun Nanofibers in Biomedical Applications,-0.389316722292615,0.9211039516489627,graphene_2d_materials,https://openalex.org/T10729
+19112278,Mesoporous Materials and Catalysis,-0.3910252851729442,0.9203799358718212,graphene_2d_materials,https://openalex.org/T10735
+19112537,Terahertz technology and applications,-0.3927325016022959,0.9196527508713288,graphene_2d_materials,https://openalex.org/T10752
+19112798,Wound Healing and Treatments,-0.3944383657020646,0.918922399151465,graphene_2d_materials,https://openalex.org/T10771
+19112930,Nanoplatforms for cancer theranostics,-0.3961428715983022,0.918188883227112,graphene_2d_materials,https://openalex.org/T10782
+19113067,Crystallography and molecular interactions,-0.3978460134217373,0.9174522056240482,graphene_2d_materials,https://openalex.org/T10798
+19129047,Energetic Materials and Combustion,-0.3995477853077946,0.9167123688789393,graphene_2d_materials,https://openalex.org/T10806
+19129173,Hydrogen Storage and Materials,-0.4012481813966169,0.9159693755393288,graphene_2d_materials,https://openalex.org/T10811
+19129305,Acoustic Wave Phenomena Research,-0.4029471958330847,0.9152232281636288,graphene_2d_materials,https://openalex.org/T10822
+19129703,Advanced Electron Microscopy Techniques and Applications,-0.4046448227668347,0.9144739293211136,graphene_2d_materials,https://openalex.org/T10857
+19130095,Multiferroics and related materials,-0.4063410563522825,0.9137214815919078,graphene_2d_materials,https://openalex.org/T10886
+19146336,Molecular Junctions and Nanostructures,-0.4080358907486414,0.9129658875669796,graphene_2d_materials,https://openalex.org/T10913
+19146340,Smart Grid Security and Resilience,-0.4097293201199425,0.9122071498481306,graphene_2d_materials,https://openalex.org/T10917
+19146466,Magnetic Properties and Synthesis of Ferrites,-0.4114213386350543,0.9114452710479878,graphene_2d_materials,https://openalex.org/T10922
+19146467,Force Microscopy Techniques and Applications,-0.4131119404677044,0.910680253789994,graphene_2d_materials,https://openalex.org/T10923
+19146603,Phase Change Materials Research,-0.4148011197964983,0.9099121007083988,graphene_2d_materials,https://openalex.org/T10938
+19147122,Radioactive element chemistry and processing,-0.4164888708049394,0.9091408144482496,graphene_2d_materials,https://openalex.org/T10973
+19147258,Advanced Fiber Laser Technologies,-0.4181751876814497,0.9083663976653829,graphene_2d_materials,https://openalex.org/T10988
+21241023,Dark Matter and Cosmic Phenomena,-0.4198600646193888,0.9075888530264146,graphene_2d_materials,https://openalex.org/T11090
+21241024,Extraction and Separation Processes,-0.4215434958170764,0.9068081832087304,graphene_2d_materials,https://openalex.org/T11091
+21257275,Transition Metal Oxide Nanomaterials,-0.4232254754778074,0.9060243909004788,graphene_2d_materials,https://openalex.org/T11128
+21257791,Acoustic Wave Resonator Technologies,-0.424905997809878,0.9052374788005588,graphene_2d_materials,https://openalex.org/T11160
+21257929,Spectroscopy and Quantum Chemical Studies,-0.4265850570266008,0.904447449618612,graphene_2d_materials,https://openalex.org/T11177
+21258184,3D Printing in Biomedical Research,-0.4282626473463268,0.9036543060750144,graphene_2d_materials,https://openalex.org/T11190
+21274432,Electromagnetic wave absorption materials,-0.4299387629924646,0.9028580509008652,graphene_2d_materials,https://openalex.org/T11224
+21274559,Innovative Energy Harvesting Technologies,-0.431613398193502,0.902058686837978,graphene_2d_materials,https://openalex.org/T11230
+21274690,Luminescence and Fluorescent Materials,-0.4332865471830232,0.9012562166388722,graphene_2d_materials,https://openalex.org/T11240
+21274823,Evolutionary Game Theory and Cooperation,-0.4349582041997305,0.9004506430667621,graphene_2d_materials,https://openalex.org/T11252
+21275085,Nanowire Synthesis and Applications,-0.4366283634874636,0.8996419688955487,graphene_2d_materials,https://openalex.org/T11272
+21275090,Thermal properties of materials,-0.4382970192952191,0.8988301969098091,graphene_2d_materials,https://openalex.org/T11277
+21275091,Calcium Carbonate Crystallization and Inhibition,-0.4399641658771716,0.8980153299047876,graphene_2d_materials,https://openalex.org/T11278
+21275220,Polyoxometalates: Synthesis and Applications,-0.4416297974926918,0.8971973706863858,graphene_2d_materials,https://openalex.org/T11286
+21275352,Ferroptosis and cancer prognosis,-0.4432939084063671,0.896376322071153,graphene_2d_materials,https://openalex.org/T11297
+21275353,Synthesis and Properties of Aromatic Compounds,-0.4449564928880209,0.8955521868862767,graphene_2d_materials,https://openalex.org/T11298
+21291463,Phase-change materials and chalcogenides,-0.4466175452127344,0.8947249679695717,graphene_2d_materials,https://openalex.org/T11315
+21291852,Boron and Carbon Nanomaterials Research,-0.4482770596608617,0.8938946681694729,graphene_2d_materials,https://openalex.org/T11341
+21291853,Carbon and Quantum Dots Applications,-0.4499350305180553,0.8930612903450226,graphene_2d_materials,https://openalex.org/T11342
+21292115,Membrane Separation and Gas Transport,-0.4515914520752812,0.8922248373658621,graphene_2d_materials,https://openalex.org/T11362
+21292120,Particle accelerators and beam dynamics,-0.4532463186288405,0.891385312112222,graphene_2d_materials,https://openalex.org/T11367
+21308489,Minerals Flotation and Separation Techniques,-0.4548996244803889,0.8905427174749121,graphene_2d_materials,https://openalex.org/T11401
+21308623,Quantum optics and atomic interactions,-0.4565513639369567,0.8896970563553105,graphene_2d_materials,https://openalex.org/T11414
+21308759,Semiconductor Lasers and Optical Devices,-0.4582015313109672,0.8888483316653548,graphene_2d_materials,https://openalex.org/T11429
+21308885,Electrochemical Analysis and Applications,-0.4598501209202573,0.887996546327532,graphene_2d_materials,https://openalex.org/T11434
+21309021,Mechanical and Optical Resonators,-0.4614971270880965,0.8871417032748676,graphene_2d_materials,https://openalex.org/T11449
+21309151,Advanced Wireless Communication Technologies,-0.4631425441432065,0.8862838054509165,graphene_2d_materials,https://openalex.org/T11458
+21309407,Analytical Chemistry and Sensors,-0.4647863664197823,0.8854228558097514,graphene_2d_materials,https://openalex.org/T11472
+21325914,Nanomaterials and Printing Technologies,-0.4664285882575087,0.8845588573159546,graphene_2d_materials,https://openalex.org/T11523
+21326311,Lubricants and Their Additives,-0.4680692040015824,0.8836918129446063,graphene_2d_materials,https://openalex.org/T11557
+21326699,Nanopore and Nanochannel Transport Studies,-0.4697082080027299,0.8828217256812749,graphene_2d_materials,https://openalex.org/T11582
+21342818,Dielectric materials and actuators,-0.4713455946172279,0.8819485985220068,graphene_2d_materials,https://openalex.org/T11608
+21343210,Advanced Semiconductor Detectors and Materials,-0.4729813582069219,0.8810724344733158,graphene_2d_materials,https://openalex.org/T11637
+21343603,Advanced Chemical Sensor Technologies,-0.4746154931392474,0.8801932365521726,graphene_2d_materials,https://openalex.org/T11667
+21343860,Advanced Condensed Matter Physics,-0.4762479937872467,0.8793110077859952,graphene_2d_materials,https://openalex.org/T11682
+21343989,Advanced battery technologies research,-0.4778788545295899,0.8784257512126378,graphene_2d_materials,https://openalex.org/T11690
+21359979,Photochromic and Fluorescence Chemistry,-0.4795080697505938,0.8775374698803805,graphene_2d_materials,https://openalex.org/T11708
+21360371,Advanced Materials and Mechanics,-0.4811356338402421,0.8766461668479184,graphene_2d_materials,https://openalex.org/T11737
+21360630,SARS-CoV-2 detection and testing,-0.4827615411942033,0.8757518451843521,graphene_2d_materials,https://openalex.org/T11754
+21360634,Organic and Molecular Conductors Research,-0.4843857862138507,0.8748545079691764,graphene_2d_materials,https://openalex.org/T11758
+21360763,Iron-based superconductors research,-0.4860083633062819,0.8739541582922694,graphene_2d_materials,https://openalex.org/T11766
+21361023,CO2 Reduction Techniques and Catalysts,-0.4876292668843377,0.8730507992538827,graphene_2d_materials,https://openalex.org/T11784
+21361027,Nonlinear Optical Materials Studies,-0.489248491366621,0.8721444339646303,graphene_2d_materials,https://openalex.org/T11788
+21361159,"Adhesion, Friction, and Surface Interactions",-0.4908660311775178,0.8712350655454772,graphene_2d_materials,https://openalex.org/T11799
+21377136,Quantum many-body systems,-0.4924818807472139,0.8703226971277304,graphene_2d_materials,https://openalex.org/T11804
+21377658,Ultrasound and Cavitation Phenomena,-0.4940960345117154,0.869407331853026,graphene_2d_materials,https://openalex.org/T11842
+21377789,Clay minerals and soil interactions,-0.495708486912868,0.8684889728733203,graphene_2d_materials,https://openalex.org/T11852
+21377790,Semiconductor materials and interfaces,-0.4973192323983754,0.8675676233508779,graphene_2d_materials,https://openalex.org/T11853
+21377927,Per- and polyfluoroalkyl substances research,-0.4989282654218199,0.8666432864582602,graphene_2d_materials,https://openalex.org/T11869
+21394300,Copper-based nanomaterials and applications,-0.5005355804426793,0.8657159653783162,graphene_2d_materials,https://openalex.org/T11907
+21394429,Pickering emulsions and particle stabilization,-0.5021411719263479,0.8647856633041704,graphene_2d_materials,https://openalex.org/T11915
+21394817,Layered Double Hydroxides Synthesis and Applications,-0.5037450343441539,0.8638523834392119,graphene_2d_materials,https://openalex.org/T11940
+21394825,Machine Learning in Materials Science,-0.5053471621733812,0.862916128997083,graphene_2d_materials,https://openalex.org/T11948
+23487943,Solar-Powered Water Purification Methods,-0.5069475498972836,0.86197690320167,graphene_2d_materials,https://openalex.org/T12008
+23488336,Covalent Organic Framework Applications,-0.50854619200511,0.8610347092870889,graphene_2d_materials,https://openalex.org/T12038
+23488337,Electron and X-Ray Spectroscopy Techniques,-0.510143082992118,0.8600895504976775,graphene_2d_materials,https://openalex.org/T12039
+23488465,MXene and MAX Phase Materials,-0.5117382173595956,0.8591414300879823,graphene_2d_materials,https://openalex.org/T12046
+23488856,Membrane-based Ion Separation Techniques,-0.5133315896148791,0.8581903513227478,graphene_2d_materials,https://openalex.org/T12074
+23488860,Environmental remediation with nanomaterials,-0.5149231942713738,0.857236317476905,graphene_2d_materials,https://openalex.org/T12078
+23505229,Ammonia Synthesis and Nitrogen Reduction,-0.51651302584857,0.8562793318355608,graphene_2d_materials,https://openalex.org/T12112
+23505358,Air Quality Monitoring and Forecasting,-0.5181010788720639,0.8553193976939862,graphene_2d_materials,https://openalex.org/T12120
+23505629,Nanocluster Synthesis and Applications,-0.5196873478735763,0.854356518357605,graphene_2d_materials,https://openalex.org/T12149
+23522519,Quantum Electrodynamics and Casimir Effect,-0.5212718273909701,0.8533906971419823,graphene_2d_materials,https://openalex.org/T12220
+23522781,Nanomaterials for catalytic reactions,-0.5228545119682717,0.8524219373728132,graphene_2d_materials,https://openalex.org/T12240
+23523047,Tissue Engineering and Regenerative Medicine,-0.5244353961556869,0.8514502423859117,graphene_2d_materials,https://openalex.org/T12264
+23523310,Surface Chemistry and Catalysis,-0.5260144745096211,0.8504756155271985,graphene_2d_materials,https://openalex.org/T12285
+23539420,Advanced Nanomaterials in Catalysis,-0.527591741592698,0.8494980601526904,graphene_2d_materials,https://openalex.org/T12302
+23539942,Anodic Oxide Films and Nanostructures,-0.529167191973779,0.848517579628487,graphene_2d_materials,https://openalex.org/T12340
+23540206,Tribology and Wear Analysis,-0.5307408202279791,0.8475341773307622,graphene_2d_materials,https://openalex.org/T12362
+23556584,Characterization and Applications of Magnetic Nanoparticles,-0.5323126209366901,0.846547856645749,graphene_2d_materials,https://openalex.org/T12405
+23557105,Thermal Radiation and Cooling Technologies,-0.5338825886875949,0.8455586209697306,graphene_2d_materials,https://openalex.org/T12442
+23557371,Near-Field Optical Microscopy,-0.5354507180746886,0.8445664737090268,graphene_2d_materials,https://openalex.org/T12466
+23574011,Ga2O3 and related materials,-0.5370170036982963,0.8435714182799842,graphene_2d_materials,https://openalex.org/T12529
+23574796,Electronic and Structural Properties of Oxides,-0.5385814401650927,0.842573458108962,graphene_2d_materials,https://openalex.org/T12588
+23591033,Neural Networks and Reservoir Computing,-0.5401440220881187,0.8415725966323225,graphene_2d_materials,https://openalex.org/T12611
+23591034,Strong Light-Matter Interactions,-0.541704744086802,0.8405688372964182,graphene_2d_materials,https://openalex.org/T12612
+23591170,Graphene and Nanomaterials Applications,-0.5432636007869741,0.8395621835575797,graphene_2d_materials,https://openalex.org/T12627
+23625231,Ferroelectric and Negative Capacitance Devices,-0.5448205868208895,0.8385526388821047,graphene_2d_materials,https://openalex.org/T12808
+25736428,Magnesium Oxide Properties and Applications,-0.546375696827245,0.8375402067462447,graphene_2d_materials,https://openalex.org/T13039
+25770743,Laser-Ablation Synthesis of Nanoparticles,-0.5479289254511963,0.8365248906361946,graphene_2d_materials,https://openalex.org/T13232
+25822225,Surface and Thin Film Phenomena,-0.5494802673443777,0.8355066940480795,graphene_2d_materials,https://openalex.org/T13531

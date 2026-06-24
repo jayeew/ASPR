@@ -1,0 +1,375 @@
+community,label,x,y,domain,topic_id
+34886001,Genetic diversity and population structure,1.0,0.0,crispr,https://openalex.org/T10012
+34886003,Plant Stress Responses and Tolerance,0.9999982783070192,0.0018556354699568,crispr,https://openalex.org/T10014
+34886004,Genomics and Phylogenetic Studies,0.9999931132340052,0.0037112645502445,crispr,https://openalex.org/T10015
+34886262,T-cell and B-cell Immunology,0.9999845047987436,0.0055668808512159,crispr,https://openalex.org/T10031
+34886269,Tuberculosis Research and Epidemiology,0.9999724530308762,0.007422477983268,crispr,https://openalex.org/T10038
+34886393,COVID-19 Clinical Research Studies,0.999956957971902,0.0092780495568636,crispr,https://openalex.org/T10041
+34886396,Protein Structure and Dynamics,0.9999380196751768,0.0111335891825536,crispr,https://openalex.org/T10044
+34886656,MicroRNA in disease regulation,0.999915638205912,0.0129890904709989,crispr,https://openalex.org/T10062
+34886657,Nanoparticle-Based Drug Delivery,0.9998898136411758,0.0148445470329924,crispr,https://openalex.org/T10063
+34886660,Gut microbiota and health,0.9998605460698924,0.0166999524794811,crispr,https://openalex.org/T10066
+34886791,Plant-Microbe Interactions and Immunity,0.9998278355928408,0.0185553004215878,crispr,https://openalex.org/T10076
+34886792,Neuroscience and Neuropharmacology Research,0.9997916823226562,0.0204105844706336,crispr,https://openalex.org/T10077
+34886794,Nanoparticles: synthesis and applications,0.9997520863838284,0.0222657982381593,crispr,https://openalex.org/T10079
+34886921,Parkinson's Disease Mechanisms and Treatments,0.999709047912701,0.0241209353359479,crispr,https://openalex.org/T10085
+34886922,Alzheimer's disease research and treatments,0.9996625670574724,0.0259759893760464,crispr,https://openalex.org/T10086
+34887048,Malaria Research and Control,0.9996126439781942,0.0278309539707878,crispr,https://openalex.org/T10091
+34887051,Epilepsy research and treatment,0.9995592788467704,0.029685822732813,crispr,https://openalex.org/T10094
+34887053,Metal-Organic Frameworks: Synthesis and Applications,0.9995024718469584,0.0315405892750929,crispr,https://openalex.org/T10096
+34903034,Osteoarthritis Treatment and Mechanisms,0.9994422231743662,0.0333952472109504,crispr,https://openalex.org/T10105
+34903035,Autism Spectrum Disorder Research,0.9993785330364532,0.0352497901540826,crispr,https://openalex.org/T10106
+34903162,HIV Research and Treatment,0.9993114016525292,0.0371042117185822,crispr,https://openalex.org/T10112
+34903166,Sperm and Testicular Function,0.9992408292537536,0.03895850551896,crispr,https://openalex.org/T10116
+34903168,SARS-CoV-2 and COVID-19 Research,0.9991668160831344,0.0408126651701669,crispr,https://openalex.org/T10118
+34903169,Sustainability and Climate Change Governance,0.9990893623955271,0.0426666842876154,crispr,https://openalex.org/T10119
+34903292,Building Energy and Comfort Optimization,0.9990084684576352,0.0445205564872023,crispr,https://openalex.org/T10121
+34903294,DNA Repair Mechanisms,0.9989241345480074,0.0463742753853299,crispr,https://openalex.org/T10123
+34903300,Glioma Diagnosis and Treatment,0.998836360957038,0.0482278345989287,crispr,https://openalex.org/T10129
+34903423,Gold and Silver Nanoparticles Synthesis and Applications,0.9987451479869656,0.0500812277454789,crispr,https://openalex.org/T10131
+34903427,Insect-Plant Interactions and Control,0.998650495951871,0.0519344484430325,crispr,https://openalex.org/T10135
+34903431,Heavy metals in environment,0.9985524051776784,0.0537874903102354,crispr,https://openalex.org/T10139
+34903553,Food composition and properties,0.9984508760021518,0.0556403469663493,crispr,https://openalex.org/T10140
+34903554,Probiotics and Fermented Foods,0.9983459087748956,0.0574930120312735,crispr,https://openalex.org/T10141
+34903556,Chronic Obstructive Pulmonary Disease (COPD) Research,0.998237503857352,0.0593454791255672,crispr,https://openalex.org/T10143
+34903559,Cervical Cancer and HPV Research,0.9981256616228016,0.0611977418704713,crispr,https://openalex.org/T10146
+34903560,Antibiotic Resistance in Bacteria,0.9980103824563598,0.06304979388793,crispr,https://openalex.org/T10147
+34903684,Antifungal resistance and susceptibility,0.9978916667549776,0.0649016288006137,crispr,https://openalex.org/T10150
+34903685,Hepatitis C virus research,0.997769514927439,0.0667532402319398,crispr,https://openalex.org/T10151
+34903692,Cancer Immunotherapy and Biomarkers,0.9976439273943598,0.0686046218060956,crispr,https://openalex.org/T10158
+34903818,Metal complexes synthesis and properties,0.9975149045881864,0.0704557671480598,crispr,https://openalex.org/T10163
+34903821,Mosquito-borne diseases and control,0.997382446953194,0.0723066698836245,crispr,https://openalex.org/T10166
+34903822,Influenza Virus Research Studies,0.9972465549454852,0.0741573236394172,crispr,https://openalex.org/T10167
+34903824,Protein Kinase Regulation and GTPase Signaling,0.9971072290329892,0.0760077220429227,crispr,https://openalex.org/T10169
+34903946,Retinal Diseases and Treatments,0.9969644696954584,0.0778578587225052,crispr,https://openalex.org/T10170
+34903947,Biofuel production and bioconversion,0.9968182774244684,0.0797077273074299,crispr,https://openalex.org/T10171
+34903952,Mesenchymal stem cell research,0.9966686527234156,0.0815573214278854,crispr,https://openalex.org/T10176
+34904081,Plant Molecular Biology Research,0.9965155961075158,0.0834066347150052,crispr,https://openalex.org/T10184
+34920190,Rheumatoid Arthritis Research and Therapies,0.996359108103802,0.0852556608008899,crispr,https://openalex.org/T10200
+34920197,Advanced biosensing and bioanalysis techniques,0.9961991892511224,0.0871043933186291,crispr,https://openalex.org/T10207
+34920322,Computational Drug Discovery Methods,0.9960358401001396,0.0889528259023232,crispr,https://openalex.org/T10211
+34920328,Cardiac electrophysiology and arrhythmias,0.995869061213328,0.0908009521871053,crispr,https://openalex.org/T10217
+34920454,Genomics and Chromatin Dynamics,0.9956988531649712,0.0926487658091633,crispr,https://openalex.org/T10222
+34920584,Pancreatic and Hepatic Oncology Research,0.9955252165411614,0.0944962604057618,crispr,https://openalex.org/T10231
+34920714,Plant tissue culture and regeneration,0.9953481519397968,0.0963434296152638,crispr,https://openalex.org/T10240
+34920847,Microbial Natural Products and Biosynthesis,0.9951676599705788,0.0981902670771527,crispr,https://openalex.org/T10252
+34920977,Genetic Associations and Epidemiology,0.994983741255011,0.1000367664320544,crispr,https://openalex.org/T10261
+34920982,Plant Water Relations and Carbon Dynamics,0.9947963964263964,0.101882921321759,crispr,https://openalex.org/T10266
+34920984,Developmental Biology and Gene Regulation,0.994605626129836,0.1037287253892426,crispr,https://openalex.org/T10268
+34920985,Epigenetics and DNA Methylation,0.9944114310222252,0.1055741722786893,crispr,https://openalex.org/T10269
+34921113,Helicobacter pylori-related gastroenterology studies,0.9942138117722528,0.1074192556355133,crispr,https://openalex.org/T10276
+34921373,Cell death mechanisms and regulation,0.994012769060398,0.1092639691063804,crispr,https://openalex.org/T10294
+34937352,Mitochondrial Function and Pathology,0.9938083035789286,0.1111083063392303,crispr,https://openalex.org/T10301
+34937354,Photosynthetic Processes and Mechanisms,0.993600416031898,0.1129522609832978,crispr,https://openalex.org/T10303
+34937360,Acute Myeloid Leukemia Research,0.9933891071351436,0.1147958266891356,crispr,https://openalex.org/T10309
+34937617,Microbial bioremediation and biosurfactants,0.9931743776162834,0.1166389971086353,crispr,https://openalex.org/T10324
+34937748,"Hearing, Cochlea, Tinnitus, Genetics",0.9929562282147136,0.1184817658950497,crispr,https://openalex.org/T10334
+34937750,Cancer Cells and Metastasis,0.9927346596816072,0.1203241267030148,crispr,https://openalex.org/T10336
+34937875,Hepatitis B Virus Studies,0.9925096727799104,0.1221660731885711,crispr,https://openalex.org/T10340
+34937876,Coral and Marine Ecosystems Studies,0.9922812682843392,0.1240075990091861,crispr,https://openalex.org/T10341
+34937877,Circadian rhythm and melatonin,0.9920494469813792,0.1258486978237755,crispr,https://openalex.org/T10342
+34938007,Liver Disease Diagnosis and Treatment,0.99181420966928,0.1276893632927255,crispr,https://openalex.org/T10351
+34938141,Reproductive Biology and Fertility,0.9915755571580548,0.1295295890779145,crispr,https://openalex.org/T10364
+34938269,Immune Response and Inflammation,0.991333490269476,0.1313693688427349,crispr,https://openalex.org/T10371
+34938273,Pharmacogenetics and Drug Metabolism,0.991088009837074,0.1332086962521148,crispr,https://openalex.org/T10375
+34938534,Lipoproteins and Cardiovascular Health,0.990839116706132,0.1350475649725401,crispr,https://openalex.org/T10394
+34954519,Lipid Membrane Structure and Behavior,0.9905868117336852,0.136885968672076,crispr,https://openalex.org/T10407
+34954650,Lung Cancer Treatments and Mutations,0.9903310957885172,0.138723901020389,crispr,https://openalex.org/T10417
+34954652,Pharmaceutical and Antibiotic Environmental Impacts,0.9900719697511569,0.1405613556887688,crispr,https://openalex.org/T10419
+34954776,Angiogenesis and VEGF in Cancer,0.9898094345138746,0.1423983263501496,crispr,https://openalex.org/T10422
+34954777,Neurobiology and Insect Physiology Research,0.9895434909806812,0.1442348066791325,crispr,https://openalex.org/T10423
+34954909,Chromosomal and Genetic Variations,0.9892741400673224,0.1460707903520069,crispr,https://openalex.org/T10434
+34954914,Climate change impacts on agriculture,0.9890013827012776,0.1479062710467724,crispr,https://openalex.org/T10439
+34955037,Muscle Physiology and Disorders,0.9887252198217554,0.1497412424431606,crispr,https://openalex.org/T10441
+34955041,Antioxidant Activity and Oxidative Stress,0.9884456523796916,0.1515756982226566,crispr,https://openalex.org/T10445
+34955044,Memory and Neural Mechanisms,0.9881626813377444,0.1534096320685213,crispr,https://openalex.org/T10448
+34955045,Renal cell carcinoma treatment,0.9878763076702928,0.1552430376658126,crispr,https://openalex.org/T10449
+34955167,Aquaculture Nutrition and Growth,0.9875865323634316,0.1570759087014073,crispr,https://openalex.org/T10450
+34955307,Psoriasis: Treatment and Pathogenesis,0.9872933564149688,0.1589082388640231,crispr,https://openalex.org/T10469
+34955432,Postharvest Quality and Shelf Life Management,0.9869967808344224,0.16074002184424,crispr,https://openalex.org/T10473
+34955435,Algal biology and biofuel production,0.9866968066430172,0.1625712513345222,crispr,https://openalex.org/T10476
+34955563,Nerve injury and regeneration,0.9863934348736794,0.1644019210292398,crispr,https://openalex.org/T10483
+34955566,Salmonella and Campylobacter epidemiology,0.9860866665710354,0.1662320246246905,crispr,https://openalex.org/T10486
+34955569,Regulation of Appetite and Obesity,0.9857765027914068,0.1680615558191212,crispr,https://openalex.org/T10489
+34955693,Microtubule and mitosis dynamics,0.9854629446028071,0.16989050831275,crispr,https://openalex.org/T10492
+34955695,Plant Virus Research Studies,0.9851459930849384,0.1717188758077873,crispr,https://openalex.org/T10494
+34955698,Fungal and yeast genetics research,0.9848256493291871,0.1735466520084585,crispr,https://openalex.org/T10497
+34955699,Migraine and Headache Studies,0.9845019144386202,0.1753738306210244,crispr,https://openalex.org/T10498
+34955700,Folate and B Vitamins Research,0.984174789527982,0.1772004053538039,crispr,https://openalex.org/T10499
+34971678,Pluripotent Stem Cells Research,0.9838442757236896,0.1790263699171952,crispr,https://openalex.org/T10505
+34971679,Aquaculture disease management and microbiota,0.98351037416383,0.1808517180236976,crispr,https://openalex.org/T10506
+34971809,Cancer-related molecular mechanisms research,0.9831730859981548,0.1826764433879331,crispr,https://openalex.org/T10515
+34971810,Parathyroid Disorders and Treatments,0.9828324123880776,0.1845005397266678,crispr,https://openalex.org/T10516
+34971813,Advanced Proteomics Techniques and Applications,0.9824883545066688,0.1863240007588342,crispr,https://openalex.org/T10519
+34971935,Mycotoxins in Agriculture and Food,0.9821409135386528,0.188146820205552,crispr,https://openalex.org/T10520
+34971936,RNA and protein synthesis mechanisms,0.9817900906804028,0.1899689917901504,crispr,https://openalex.org/T10521
+34971943,"Adipokines, Inflammation, and Metabolic Diseases",0.9814358871399376,0.1917905092381894,crispr,https://openalex.org/T10528
+34972068,Molecular Sensors and Ion Detection,0.981078304136916,0.1936113662774813,crispr,https://openalex.org/T10532
+34972069,Teaching and Learning Programming,0.9807173429026348,0.1954315566381125,crispr,https://openalex.org/T10533
+34972197,Advanced Fluorescence Microscopy Techniques,0.9803530046800228,0.1972510740524651,crispr,https://openalex.org/T10540
+34972200,Prostate Cancer Treatment and Research,0.9799852907236372,0.1990699122552385,crispr,https://openalex.org/T10543
+34972332,Hemoglobinopathies and Related Disorders,0.9796142022996588,0.2008880649834706,crispr,https://openalex.org/T10554
+34972590,Drug Transport and Resistance Mechanisms,0.9792397406858884,0.2027055259765599,crispr,https://openalex.org/T10570
+34972721,Immunotherapy and Immune Responses,0.9788619071717422,0.2045222889762868,crispr,https://openalex.org/T10580
+34972722,Neural dynamics and brain function,0.9784807030582462,0.2063383477268349,crispr,https://openalex.org/T10581
+34972724,Cancer-related Molecular Pathways,0.9780961296580336,0.2081536959748131,crispr,https://openalex.org/T10583
+34972728,Autophagy in Disease and Therapy,0.9777081882953392,0.2099683274692768,crispr,https://openalex.org/T10587
+34972855,Bacterial biofilms and quorum sensing,0.9773168803059948,0.2117822359617492,crispr,https://openalex.org/T10593
+34988836,Glycosylation and Glycoproteins Research,0.9769222070374244,0.2135954152062435,crispr,https://openalex.org/T10602
+34988838,RNA Research and Splicing,0.976524169848641,0.2154078589592835,crispr,https://openalex.org/T10604
+34988842,Neurogenesis and neuroplasticity mechanisms,0.9761227701102398,0.217219560979926,crispr,https://openalex.org/T10608
+34988968,Virus-based gene therapy research,0.9757180092043952,0.2190305150297817,crispr,https://openalex.org/T10613
+34988972,Cellular transport and secretion,0.9753098885248556,0.2208407148730367,crispr,https://openalex.org/T10617
+34988974,Esophageal Cancer Research and Treatment,0.9748984094769372,0.2226501542764744,crispr,https://openalex.org/T10619
+34989097,Gene Regulatory Network Analysis,0.974483573477522,0.2244588270094965,crispr,https://openalex.org/T10621
+34989228,"Cancer, Hypoxia, and Metabolism",0.97406538195505,0.2262667268441447,crispr,https://openalex.org/T10631
+34989625,Cystic Fibrosis Research Advances,0.973643836349516,0.2280738475551222,crispr,https://openalex.org/T10665
+34989757,"Genetics, Aging, and Longevity in Model Organisms",0.9732189381124642,0.2298801829198148,crispr,https://openalex.org/T10676
+34989885,Mass Spectrometry Techniques and Applications,0.9727906887069836,0.2316857267183126,crispr,https://openalex.org/T10683
+34990014,Retinal Development and Disorders,0.9723590896077018,0.2334904727334316,crispr,https://openalex.org/T10691
+34990018,Parasites and Host Interactions,0.9719241423007812,0.2352944147507346,crispr,https://openalex.org/T10695
+34990022,Primate Behavior and Ecology,0.9714858482839134,0.237097546558553,crispr,https://openalex.org/T10699
+35005997,Insect and Arachnid Ecology and Behavior,0.9710442090663136,0.238899861948008,crispr,https://openalex.org/T10702
+35005999,Advancements in Transdermal Drug Delivery,0.9705992261687164,0.2407013547130322,crispr,https://openalex.org/T10704
+35006126,Arsenic contamination and mitigation,0.9701509011233692,0.2425020186503907,crispr,https://openalex.org/T10710
+35006262,RNA Interference and Gene Delivery,0.9696992354740288,0.2443018475597025,crispr,https://openalex.org/T10725
+35006391,Wheat and Barley Genetics and Pathology,0.9692442307759538,0.2461008352434619,crispr,https://openalex.org/T10733
+35006527,Growth Hormone and Insulin-like Growth Factors,0.9687858885959012,0.2478989755070602,crispr,https://openalex.org/T10748
+35006651,Forensic and Genetic Research,0.96832421051212,0.2496962621588064,crispr,https://openalex.org/T10751
+35006653,Microplastics and Plastic Pollution,0.9678591981143462,0.2514926890099487,crispr,https://openalex.org/T10753
+35006655,HER2/EGFR in Cancer Research,0.9673908530037968,0.2532882498746963,crispr,https://openalex.org/T10755
+35006656,Estrogen and related hormone effects,0.9669191767931646,0.25508293857024,crispr,https://openalex.org/T10756
+35006790,BRCA gene mutations in cancer,0.9664441711066132,0.256876748916774,crispr,https://openalex.org/T10769
+35006913,Wound Healing and Treatments,0.9659658375797704,0.2586696747375169,crispr,https://openalex.org/T10771
+35006915,Extracellular vesicles in disease,0.965484177859723,0.2604617098587332,crispr,https://openalex.org/T10773
+35006916,Weed Control and Herbicide Applications,0.9649991936050114,0.2622528481097541,crispr,https://openalex.org/T10774
+35006921,Coastal wetland ecosystem dynamics,0.9645108864856236,0.2640430833229995,crispr,https://openalex.org/T10779
+35007045,Nanoplatforms for cancer theranostics,0.9640192581829896,0.2658324093339986,crispr,https://openalex.org/T10782
+35023288,Hydrogen Storage and Materials,0.9635243103899752,0.2676208199814112,crispr,https://openalex.org/T10811
+35023550,Cell Adhesion Molecules Research,0.9630260448108766,0.2694083091070492,crispr,https://openalex.org/T10831
+35023555,Metabolomics and Mass Spectrometry Studies,0.9625244631614148,0.2711948705558978,crispr,https://openalex.org/T10836
+35023558,Pancreatic function and diabetes,0.9620195671687288,0.2729804981761362,crispr,https://openalex.org/T10839
+35023816,Amyotrophic Lateral Sclerosis Research,0.9615113585713706,0.2747651858191594,crispr,https://openalex.org/T10855
+35023948,Nutritional Studies and Diet,0.9609998391192984,0.276548927339599,crispr,https://openalex.org/T10866
+35024081,CRISPR and Genetic Engineering,0.9604850105738708,0.2783317165953445,crispr,https://openalex.org/T10878
+35024206,Cardiomyopathy and Myosin Studies,0.9599668747078416,0.2801135474475645,crispr,https://openalex.org/T10882
+35024211,Bioinformatics and Genomic Networks,0.9594454333053526,0.2818944137607275,crispr,https://openalex.org/T10887
+35024335,Trypanosoma species research and implications,0.9589206881619275,0.2836743094026235,crispr,https://openalex.org/T10890
+35024340,Species Distribution and Climate Change,0.9583926410844664,0.2854532282443848,crispr,https://openalex.org/T10895
+35024342,Antibiotic Use and Resistance,0.9578612938912396,0.2872311641605074,crispr,https://openalex.org/T10897
+35040326,Edible Oils Quality and Analysis,0.95732664841188,0.2890081110288716,crispr,https://openalex.org/T10909
+35040453,Trace Elements in Health,0.9567887064873788,0.2907840627307634,crispr,https://openalex.org/T10915
+35040588,Wnt/β-catenin signaling in development and cancer,0.9562474699700774,0.2925590131508957,crispr,https://openalex.org/T10929
+35040712,Microbial Metabolic Engineering and Bioproduction,0.955702940723662,0.2943329561774293,crispr,https://openalex.org/T10932
+35040714,Heat shock proteins research,0.9551551206231572,0.2961058857019935,crispr,https://openalex.org/T10934
+35040715,Endometriosis Research and Treatment,0.9546040115549188,0.2978777956197077,crispr,https://openalex.org/T10935
+35040717,"Telomeres, Telomerase, and Senescence",0.9540496154166282,0.2996486798292022,crispr,https://openalex.org/T10937
+35040846,Lysosomal Storage Disorders Research,0.9534919341172852,0.3014185322326392,crispr,https://openalex.org/T10945
+35040850,Genetic Neurodegenerative Diseases,0.9529309695772018,0.3031873467357338,crispr,https://openalex.org/T10949
+35040974,PI3K/AKT/mTOR signaling in cancer,0.9523667237279954,0.3049551172477749,crispr,https://openalex.org/T10952
+35040980,Ultrasound and Hyperthermia Applications,0.9517991985125822,0.3067218376816463,crispr,https://openalex.org/T10958
+35041103,Hypothalamic control of reproductive hormones,0.9512283958851706,0.3084875019538477,crispr,https://openalex.org/T10960
+35041109,Liver physiology and pathology,0.9506543178112544,0.3102521039845156,crispr,https://openalex.org/T10966
+35041240,Viral gastroenteritis research and epidemiology,0.9500769662676056,0.3120156376974441,crispr,https://openalex.org/T10976
+35041366,Cytomegalovirus and herpesvirus research,0.9494963432422692,0.3137780970201059,crispr,https://openalex.org/T10981
+35041503,Ocular Surface and Contact Lens,0.9489124507345535,0.3155394758836734,crispr,https://openalex.org/T10997
+35041505,Organ Transplantation Techniques and Outcomes,0.9483252907550264,0.3172997682230393,crispr,https://openalex.org/T10999
+37133960,Renin-Angiotensin System Studies,0.947734865325506,0.3190589679768377,crispr,https://openalex.org/T11001
+37134093,Skin Protection and Aging,0.9471411764790552,0.3208170690874648,crispr,https://openalex.org/T11013
+37134095,Down syndrome and intellectual disability research,0.9465442262599736,0.3225740655011,crispr,https://openalex.org/T11015
+37134096,Monoclonal and Polyclonal Antibodies Research,0.9459440167237912,0.3243299511677265,crispr,https://openalex.org/T11016
+37134221,Immune Cell Function and Interaction,0.9453405499372612,0.3260847200411523,crispr,https://openalex.org/T11020
+37134230,Renal Diseases and Glomerulopathies,0.9447338279783526,0.3278383660790307,crispr,https://openalex.org/T11029
+37134359,Fungal Infections and Studies,0.9441238529362432,0.3295908832428817,crispr,https://openalex.org/T11037
+37134484,Ubiquitin and proteasome pathways,0.9435106269113128,0.3313422654981123,crispr,https://openalex.org/T11041
+37134491,Bacteriophages and microbial interactions,0.9428941520151348,0.3330925068140374,crispr,https://openalex.org/T11048
+37134615,Sirtuins and Resveratrol in Medicine,0.9422744303704708,0.3348416011639006,crispr,https://openalex.org/T11051
+37134752,Colorectal Cancer Treatments and Studies,0.9416514641112612,0.336589542524895,crispr,https://openalex.org/T11067
+37134878,Peroxisome Proliferator-Activated Receptors,0.9410252553826194,0.3383363248781839,crispr,https://openalex.org/T11072
+37134881,Insect Resistance and Genetics,0.9403958063408236,0.3400819422089214,crispr,https://openalex.org/T11075
+37134883,Genetic and Clinical Aspects of Sex Determination and Chromosomal Abnormalities,0.93976311915331,0.3418263885062733,crispr,https://openalex.org/T11077
+37134884,Inflammasome and immune disorders,0.9391271959986648,0.3435696577634377,crispr,https://openalex.org/T11078
+37135012,Fungal Biology and Applications,0.9384880390666164,0.3453117439776657,crispr,https://openalex.org/T11085
+37135146,Seed Germination and Physiology,0.9378456505580296,0.3470526411502821,crispr,https://openalex.org/T11098
+37151127,Selenium in Biological Systems,0.9372000326848952,0.3487923432867061,crispr,https://openalex.org/T11107
+37151253,Viral Infections and Immunology Research,0.9365511876703252,0.3505308443964717,crispr,https://openalex.org/T11112
+37151254,Music History and Culture,0.9358991177485432,0.3522681384932487,crispr,https://openalex.org/T11113
+37151514,Proteoglycans and glycosaminoglycans research,0.9352438251648776,0.3540042195948627,crispr,https://openalex.org/T11131
+37151775,Endoplasmic Reticulum Stress and Disease,0.934585312175754,0.3557390817233167,crispr,https://openalex.org/T11150
+37151780,Toxoplasma gondii Research Studies,0.9339235810486864,0.3574727189048107,crispr,https://openalex.org/T11155
+37151782,Chronic Lymphocytic Leukemia Research,0.9332586340622704,0.3592051251697629,crispr,https://openalex.org/T11157
+37152045,Receptor Mechanisms and Signaling,0.9325904735061756,0.3609362945528295,crispr,https://openalex.org/T11178
+37152046,Nematode management and characterization studies,0.9319191016811366,0.3626662210929267,crispr,https://openalex.org/T11179
+37152299,3D Printing in Biomedical Research,0.9312445208989452,0.3643948988332492,crispr,https://openalex.org/T11190
+37152302,Adenosine and Purinergic Signaling,0.930566733482444,0.3661223218212927,crispr,https://openalex.org/T11193
+37168285,Ion Channels and Receptors,0.9298857417655162,0.367848484108873,crispr,https://openalex.org/T11204
+37168289,Lignin and Wood Chemistry,0.9292015480930792,0.3695733797521471,crispr,https://openalex.org/T11208
+37168415,Genomic variations and chromosomal abnormalities,0.9285141548210764,0.3712970028116336,crispr,https://openalex.org/T11213
+37168551,Bat Biology and Ecology Studies,0.9278235643164676,0.373019347352233,crispr,https://openalex.org/T11228
+37168552,Genetics and Plant Breeding,0.9271297789572224,0.3747404074432484,crispr,https://openalex.org/T11229
+37168681,Plant Gene Expression Analysis,0.926432801132312,0.3764601771584056,crispr,https://openalex.org/T11237
+37168812,Plant nutrient uptake and metabolism,0.9257326332416996,0.3781786505758736,crispr,https://openalex.org/T11247
+37168945,Agriculture Sustainability and Environmental Impact,0.925029277696334,0.3798958217782853,crispr,https://openalex.org/T11259
+37169073,Neuroinflammation and Neurodegeneration Mechanisms,0.9243227369181394,0.3816116848527573,crispr,https://openalex.org/T11266
+37169075,Light effects on plants,0.9236130133400084,0.383326233890911,crispr,https://openalex.org/T11268
+37169336,Cancer Genomics and Diagnostics,0.9229001094057936,0.3850394629888922,crispr,https://openalex.org/T11287
+37169338,Single-cell and spatial transcriptomics,0.9221840275702978,0.3867513662473918,crispr,https://openalex.org/T11289
+37169467,Ferroptosis and cancer prognosis,0.9214647702992677,0.3884619377716664,crispr,https://openalex.org/T11297
+37185447,"Amyloidosis: Diagnosis, Treatment, Outcomes",0.9207423400693832,0.3901711716715577,crispr,https://openalex.org/T11305
+37185450,Sphingolipid Metabolism and Signaling,0.9200167393682508,0.3918790620615139,crispr,https://openalex.org/T11308
+37185576,Immune cells in cancer,0.9192879706943936,0.3935856030606092,crispr,https://openalex.org/T11313
+37185837,"Genomics, phytochemicals, and oxidative stress",0.9185560365572436,0.3952907887925643,crispr,https://openalex.org/T11332
+37185840,Prion Diseases and Protein Misfolding,0.9178209394771324,0.3969946133857664,crispr,https://openalex.org/T11335
+37185842,Tryptophan and brain disorders,0.9170826819852828,0.39869707097329,crispr,https://openalex.org/T11337
+37185844,"Metabolism, Diabetes, and Cancer",0.9163412666238004,0.4003981556929165,crispr,https://openalex.org/T11339
+37185968,Carbon and Quantum Dots Applications,0.9155966959456646,0.4020978616871546,crispr,https://openalex.org/T11342
+37185974,Celiac Disease Research and Management,0.9148489725147196,0.4037961831032606,crispr,https://openalex.org/T11348
+37186232,Cholangiocarcinoma and Gallbladder Cancer Studies,0.9140980989056656,0.4054931140932583,crispr,https://openalex.org/T11364
+37186237,Genetic factors in colorectal cancer,0.91334407770405,0.4071886488139595,crispr,https://openalex.org/T11369
+37186624,Biosensors and Analytical Detection,0.9125869115062596,0.4088827814269836,crispr,https://openalex.org/T11393
+37202606,Invertebrate Immune Response Mechanisms,0.9118266029195092,0.4105755060987782,crispr,https://openalex.org/T11403
+37202610,Innovative Microfluidic and Catalytic Techniques Innovation,0.9110631545618348,0.4122668170006389,crispr,https://openalex.org/T11407
+37202736,Genetic and Kidney Cyst Diseases,0.910296569062084,0.4139567083087297,crispr,https://openalex.org/T11412
+37202742,Plant Micronutrient Interactions and Effects,0.9095268490599062,0.4156451742041022,crispr,https://openalex.org/T11418
+37202871,Genetically Modified Organisms Research,0.9087539972057448,0.4173322088727169,crispr,https://openalex.org/T11426
+37203127,Click Chemistry and Applications,0.907978016160827,0.4190178065054623,crispr,https://openalex.org/T11440
+37203263,Microbial Inactivation Methods,0.9071989085971548,0.420701961298175,crispr,https://openalex.org/T11455
+37203265,Adipose Tissue and Metabolism,0.9064166771974964,0.4223846674516602,crispr,https://openalex.org/T11457
+37203397,Genetic Mapping and Diversity in Plants and Animals,0.9056313246553764,0.4240659191717111,crispr,https://openalex.org/T11468
+37203520,Legume Nitrogen Fixing Symbiosis,0.9048428536750668,0.4257457106691293,crispr,https://openalex.org/T11470
+37203652,Sulfur Compounds in Biology,0.9040512669715772,0.427424036159744,crispr,https://openalex.org/T11481
+37203653,RNA modifications and cancer,0.9032565672706464,0.429100889864433,crispr,https://openalex.org/T11482
+37203657,Micro and Nano Robotics,0.9024587573087322,0.4307762660091417,crispr,https://openalex.org/T11486
+37203783,CAR-T cell therapy research,0.9016578398330022,0.4324501588249035,crispr,https://openalex.org/T11491
+37203785,Water Treatment and Disinfection,0.9008538176013242,0.4341225625478593,crispr,https://openalex.org/T11493
+37203787,Animal Virus Infections Studies,0.9000466933822574,0.4357934714192776,crispr,https://openalex.org/T11495
+37219765,TGF-β signaling in diseases,0.8992364699550418,0.4374628796855742,crispr,https://openalex.org/T11501
+37219767,Cytokine Signaling Pathways and Interactions,0.8984231501095894,0.4391307815983323,crispr,https://openalex.org/T11503
+37220160,Melanoma and MAPK Pathways,0.8976067366464744,0.4407971714143217,crispr,https://openalex.org/T11533
+37220289,Neuroendocrine regulation and behavior,0.8967872323769233,0.4424620433955191,crispr,https://openalex.org/T11541
+37220294,Plant Physiology and Cultivation Studies,0.8959646401228057,0.4441253918091277,crispr,https://openalex.org/T11546
+37220550,Animal Disease Management and Epidemiology,0.8951389627166243,0.445787210927597,crispr,https://openalex.org/T11560
+37220551,Protein Hydrolysis and Bioactive Peptides,0.894310203001505,0.4474474950286423,crispr,https://openalex.org/T11561
+37220689,Plant Pathogenic Bacteria Studies,0.8934783638311873,0.4491062383952648,crispr,https://openalex.org/T11578
+37220813,Viral Infections and Outbreaks Research,0.8926434480700147,0.4507634353157707,crispr,https://openalex.org/T11581
+37220944,NF-κB Signaling Pathways,0.8918054585929243,0.4524190800837914,crispr,https://openalex.org/T11591
+37220946,Carbon dioxide utilization in catalysis,0.8909643982854373,0.454073166998303,crispr,https://openalex.org/T11593
+37220950,"Neutrophil, Myeloperoxidase and Oxidative Mechanisms",0.8901202700436489,0.4557256903636458,crispr,https://openalex.org/T11597
+37237063,Enzyme Production and Characterization,0.8892730767742185,0.457376644489544,crispr,https://openalex.org/T11617
+37237064,Cholesterol and Lipid Metabolism,0.8884228213943597,0.4590260236911255,crispr,https://openalex.org/T11618
+37237193,Metalloenzymes and iron-sulfur proteins,0.8875695068318296,0.460673822288941,crispr,https://openalex.org/T11626
+37237196,"Birth, Development, and Health",0.8867131360249197,0.462320034608984,crispr,https://openalex.org/T11629
+37237324,Artificial Intelligence in Healthcare and Education,0.8858537119224453,0.46396465498271,crispr,https://openalex.org/T11636
+37237451,Genomics and Rare Diseases,0.8849912374837353,0.4656076777470564,crispr,https://openalex.org/T11642
+37237714,Viral Infectious Diseases and Gene Expression in Insects,0.8841257156786221,0.4672490972444617,crispr,https://openalex.org/T11663
+37237719,interferon and immune responses,0.8832571494874311,0.4688889078228849,crispr,https://openalex.org/T11668
+37237849,Congenital heart defects research,0.8823855419009711,0.4705271038358253,crispr,https://openalex.org/T11677
+37237977,Vibrio bacteria research studies,0.8815108959205235,0.4721636796423419,crispr,https://openalex.org/T11684
+37237978,Zebrafish Biomedical Research Applications,0.8806332145578317,0.4737986296070725,crispr,https://openalex.org/T11685
+37237981,Microbial infections and disease research,0.8797525008350918,0.4754319481002532,crispr,https://openalex.org/T11688
+37254217,Biomedical Text Mining and Ontologies,0.8788687577849408,0.477063629497738,crispr,https://openalex.org/T11710
+37254353,Immunodeficiency and Autoimmune Disorders,0.8779819884504472,0.4786936681810184,crispr,https://openalex.org/T11725
+37254485,Histone Deacetylase Inhibitors Research,0.8770921958850999,0.4803220585372418,crispr,https://openalex.org/T11736
+37254486,Advanced Materials and Mechanics,0.8761993831527983,0.4819487949592319,crispr,https://openalex.org/T11737
+37254745,SARS-CoV-2 detection and testing,0.8753035533278413,0.4835738718455071,crispr,https://openalex.org/T11754
+37254872,Plant responses to elevated CO2,0.8744047094949166,0.4851972836003006,crispr,https://openalex.org/T11760
+37254876,Evolution and Genetic Dynamics,0.8735028547490904,0.4868190246335793,crispr,https://openalex.org/T11764
+37254877,Circular RNAs in diseases,0.8725979921957968,0.4884390893610626,crispr,https://openalex.org/T11765
+37255004,Plant Pathogens and Resistance,0.8716901249508269,0.4900574722042425,crispr,https://openalex.org/T11771
+37255005,Genetics and Neurodevelopmental Disorders,0.8707792561403177,0.4916741675904023,crispr,https://openalex.org/T11772
+37255008,COVID-19 diagnosis using AI,0.8698653889007424,0.4932891699526356,crispr,https://openalex.org/T11775
+37255266,Microbial Community Ecology and Physiology,0.8689485263788984,0.4949024737298662,crispr,https://openalex.org/T11791
+37271646,Bryophyte Studies and Records,0.8680286717318972,0.4965140733668665,crispr,https://openalex.org/T11836
+37271772,Nuclear Structure and Function,0.8671058281271538,0.4981239633142767,crispr,https://openalex.org/T11841
+37271775,Lipid metabolism and biosynthesis,0.8661799987423744,0.4997321380286245,crispr,https://openalex.org/T11844
+37271902,Concrete Corrosion and Durability,0.8652511867655471,0.5013385919723438,crispr,https://openalex.org/T11850
+37272166,Barrier Structure and Function Studies,0.8643193953949302,0.5029433196137933,crispr,https://openalex.org/T11872
+37272173,Protist diversity and phylogeny,0.8633846278390408,0.5045463154272767,crispr,https://openalex.org/T11879
+37272295,Forest ecology and management,0.8624468873166444,0.5061475738930605,crispr,https://openalex.org/T11880
+37272297,Plant biochemistry and biosynthesis,0.8615061770567437,0.5077470894973939,crispr,https://openalex.org/T11882
+37288408,Fungal Plant Pathogen Control,0.8605625002985671,0.5093448567325273,crispr,https://openalex.org/T11900
+37288543,PARP inhibition in cancer therapy,0.8596158602915578,0.5109408700967315,crispr,https://openalex.org/T11914
+37288677,Plant Reproductive Biology,0.8586662602953629,0.5125351240943163,crispr,https://openalex.org/T11927
+37288678,Genetic Syndromes and Imprinting,0.8577137035798215,0.5141276132356499,crispr,https://openalex.org/T11928
+37289200,Silk-based biomaterials and applications,0.8567581934249542,0.5157183320371778,crispr,https://openalex.org/T11966
+37289329,Lepidoptera: Biology and Taxonomy,0.8557997331209513,0.5173072750214409,crispr,https://openalex.org/T11974
+39382053,Bioenergy crop production and management,0.8548383259681612,0.5188944367170955,crispr,https://openalex.org/T12003
+39382059,Hedgehog Signaling Pathway Studies,0.8538739752770802,0.520479811658931,crispr,https://openalex.org/T12009
+39382185,"Fish biology, ecology, and behavior",0.8529066843683397,0.5220633943878898,crispr,https://openalex.org/T12014
+39382321,DNA and Biological Computing,0.8519364565726957,0.5236451794510854,crispr,https://openalex.org/T12029
+39382443,S100 Proteins and Annexins,0.850963295231017,0.5252251614018212,crispr,https://openalex.org/T12030
+39382577,Insect behavior and control techniques,0.8499872036942736,0.5268033347996094,crispr,https://openalex.org/T12043
+39382579,Rice Cultivation and Yield Improvement,0.8490081853235256,0.5283796942101902,crispr,https://openalex.org/T12045
+39382583,Tuberous Sclerosis Complex Research,0.848026243489911,0.5299542342055494,crispr,https://openalex.org/T12049
+39382841,Hippo pathway signaling and YAP/TAZ,0.8470413815746344,0.5315269493639383,crispr,https://openalex.org/T12065
+39399215,Protein Tyrosine Phosphatases,0.8460536029689556,0.5330978342698917,crispr,https://openalex.org/T12104
+39399347,Genetic and Environmental Crop Studies,0.8450629110741775,0.5346668835142463,crispr,https://openalex.org/T12115
+39399608,Insect symbiosis and bacterial influences,0.8440693093016349,0.5362340916941601,crispr,https://openalex.org/T12134
+39399735,Renal and related cancers,0.843072801072682,0.5377994534131304,crispr,https://openalex.org/T12140
+39400399,Vascular Anomalies and Treatments,0.8420733898186813,0.5393629632810129,crispr,https://openalex.org/T12199
+39416504,Aluminum toxicity and tolerance in plants and animals,0.8410710789809915,0.5409246159140392,crispr,https://openalex.org/T12211
+39416640,Neuroblastoma Research and Treatments,0.8400658720109556,0.5424844059348367,crispr,https://openalex.org/T12226
+39416771,Photoreceptor and optogenetics research,0.8390577723698892,0.5440423279724466,crispr,https://openalex.org/T12236
+39416899,Research in Cotton Cultivation,0.8380467835290685,0.5455983766623418,crispr,https://openalex.org/T12243
+39417031,Machine Learning in Bioinformatics,0.8370329089697183,0.5471525466464461,crispr,https://openalex.org/T12254
+39417032,Biosimilars and Bioanalytical Methods,0.8360161521829997,0.5487048325731525,crispr,https://openalex.org/T12255
+39417162,Tissue Engineering and Regenerative Medicine,0.8349965166699993,0.5502552290973414,crispr,https://openalex.org/T12264
+39417420,Magnesium in Health and Disease,0.8339740059417153,0.551803730880399,crispr,https://openalex.org/T12280
+39417421,Animal testing and alternatives,0.8329486235190469,0.5533503325902362,crispr,https://openalex.org/T12281
+39417426,Erythrocyte Function and Pathophysiology,0.8319203729327815,0.5548950289013064,crispr,https://openalex.org/T12286
+39417427,Fibroblast Growth Factor Research,0.8308892577235829,0.5564378144946238,crispr,https://openalex.org/T12287
+39433538,Cassava research and cyanide,0.8298552814419786,0.5579786840577823,crispr,https://openalex.org/T12305
+39433930,Lung Cancer Research Studies,0.828818447648348,0.5595176322849732,crispr,https://openalex.org/T12334
+39433932,Insect Utilization and Effects,0.8277787599129102,0.5610546538770039,crispr,https://openalex.org/T12336
+39434450,Advances in Cucurbitaceae Research,0.8267362218157109,0.5625897435413159,crispr,https://openalex.org/T12370
+39451088,Sugarcane Cultivation and Processing,0.8256908369466117,0.5641228959920026,crispr,https://openalex.org/T12431
+39451096,Dental Research and COVID-19,0.824642608905276,0.5656541059498288,crispr,https://openalex.org/T12439
+39451613,Plant responses to water stress,0.8235915413011573,0.5671833681422473,crispr,https://openalex.org/T12472
+39451616,Plant Parasitism and Resistance,0.8225376377534873,0.5687106773034184,crispr,https://openalex.org/T12475
+39451751,Microbial Metabolites in Food Biotechnology,0.8214809018912624,0.5702360281742271,crispr,https://openalex.org/T12489
+39468252,Protein Degradation and Inhibitors,0.8204213373532325,0.5717594155023015,crispr,https://openalex.org/T12534
+39468642,bioluminescence and chemiluminescence research,0.8193589477878868,0.5732808340420312,crispr,https://openalex.org/T12561
+39468773,Soybean genetics and cultivation,0.8182937368534429,0.5748002785545849,crispr,https://openalex.org/T12571
+39468778,vaccines and immunoinformatics approaches,0.8172257082178329,0.5763177438079289,crispr,https://openalex.org/T12576
+39485147,RNA regulation and disease,0.8161548655586919,0.5778332245768442,crispr,https://openalex.org/T12610
+39485278,Signaling Pathways in Disease,0.8150812125633442,0.5793467156429459,crispr,https://openalex.org/T12620
+39485284,"Cancer, Stress, Anesthesia, and Immune Response",0.8140047529287917,0.5808582117947002,crispr,https://openalex.org/T12626
+39485285,Graphene and Nanomaterials Applications,0.8129254903617004,0.5823677078274421,crispr,https://openalex.org/T12627
+39485540,Environmental DNA in Biodiversity Studies,0.8118434285783876,0.5838751985433945,crispr,https://openalex.org/T12640
+39485675,Xenotransplantation and immune response,0.81075857130481,0.5853806787516849,crispr,https://openalex.org/T12654
+39485935,Phagocytosis and Immune Regulation,0.8096709222765496,0.586884143268364,crispr,https://openalex.org/T12672
+39485936,Microbial Metabolism and Applications,0.808580485238802,0.588385586916423,crispr,https://openalex.org/T12673
+39502966,ATP Synthase and ATPases Research,0.8074872639463626,0.5898850045258122,crispr,https://openalex.org/T12763
+39503094,Amino Acid Enzymes and Metabolism,0.8063912621636145,0.5913823909334575,crispr,https://openalex.org/T12770
+39519600,Chromatin Remodeling and Cancer,0.8052924836645146,0.5928777409832802,crispr,https://openalex.org/T12820
+39519607,Biochemical and Molecular Research,0.8041909322325815,0.5943710495262127,crispr,https://openalex.org/T12827
+39519608,Plant Genetic and Mutation Studies,0.803086611660882,0.5958623114202171,crispr,https://openalex.org/T12828
+39519609,Advanced Breast Cancer Therapies,0.8019795257520179,0.5973515215303034,crispr,https://openalex.org/T12829
+39519999,Transgenic Plants and Applications,0.8008696783181134,0.5988386747285462,crispr,https://openalex.org/T12856
+39520002,Cell Image Analysis Techniques,0.7997570731808015,0.6003237658941033,crispr,https://openalex.org/T12859
+39520255,Seedling growth and survival studies,0.7986417141712111,0.6018067899132326,crispr,https://openalex.org/T12870
+39520518,Medicinal Plants and Neuroprotection,0.7975236051299537,0.6032877416793099,crispr,https://openalex.org/T12891
+39536770,Animal Genetics and Reproduction,0.7964027499071106,0.6047666160928464,crispr,https://openalex.org/T12929
+39537159,Atherosclerosis and Cardiovascular Diseases,0.7952791523622185,0.6062434080615074,crispr,https://openalex.org/T12955
+39537684,Cancer Research and Treatments,0.7941528163642577,0.6077181125001275,crispr,https://openalex.org/T12996
+41630275,Free Radicals and Antioxidants,0.7930237457916376,0.6091907243307306,crispr,https://openalex.org/T13013
+41630798,Molecular Communication and Nanonetworks,0.791891944532184,0.6106612384825456,crispr,https://openalex.org/T13052
+41647569,Agricultural pest management studies,0.7907574164831256,0.6121296498920247,crispr,https://openalex.org/T13125
+41647571,Biotin and Related Studies,0.7896201655510802,0.6135959535028607,crispr,https://openalex.org/T13127
+41647828,GABA and Rice Research,0.7884801956520417,0.6150601442660042,crispr,https://openalex.org/T13142
+41664725,Plant and Fungal Interactions Research,0.7873375107113666,0.6165222171396815,crispr,https://openalex.org/T13220
+41664987,Bioeconomy and Sustainability Development,0.7861921146637602,0.6179821670894112,crispr,https://openalex.org/T13240
+41665126,Williams Syndrome Research,0.7850440114532629,0.6194399890880223,crispr,https://openalex.org/T13258
+41682283,Genetics and Physical Performance,0.7838932050332375,0.6208956781156709,crispr,https://openalex.org/T13354
+41698916,Immune responses and vaccinations,0.7827396993663542,0.622349229159858,crispr,https://openalex.org/T13410
+41698923,Biomedical Ethics and Regulation,0.7815834984245786,0.6238006372154461,crispr,https://openalex.org/T13417
+41699178,Lipid metabolism and disorders,0.7804246061891569,0.6252498972846772,crispr,https://openalex.org/T13430
+41699442,GDF15 and Related Biomarkers,0.7792630266506021,0.6266970043771894,crispr,https://openalex.org/T13452
+41716341,Education Systems and Policy,0.7780987638086809,0.6281419535100348,crispr,https://openalex.org/T13532
+41751194,Cancer Mechanisms and Therapy,0.7769318216723996,0.6295847397076955,crispr,https://openalex.org/T13779
+41751453,Neurological Disorders and Treatments,0.7757622042599907,0.6310253580021017,crispr,https://openalex.org/T13796
+41768610,Aquatic life and conservation,0.7745899155988979,0.6324638034326489,crispr,https://openalex.org/T13892
+41785770,Nuclear Receptors and Signaling,0.7734149597257638,0.6339000710462139,crispr,https://openalex.org/T13991
+43878764,Silkworms and Sericulture Research,0.7722373406864148,0.6353341558971736,crispr,https://openalex.org/T14048
+43896184,Inflammation biomarkers and pathways,0.771057062535848,0.6367660530474197,crispr,https://openalex.org/T14165
+43930505,Clusterin in disease pathology,0.7698741293382164,0.638195757566378,crispr,https://openalex.org/T14364

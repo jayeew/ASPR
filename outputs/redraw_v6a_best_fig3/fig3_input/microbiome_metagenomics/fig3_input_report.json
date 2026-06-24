@@ -1,0 +1,11 @@
+{
+  "source_kind": "standard_fig3_input",
+  "source_dir": "data\\knowledge_corpus\\v2_publication_v6a_locked_candidate\\views\\fig3\\microbiome_metagenomics",
+  "prepared_dir": "outputs\\redraw_v6a_best_fig3\\fig3_input\\microbiome_metagenomics",
+  "works_rows": 2500,
+  "citation_rows": 23194,
+  "topic_rows": 308,
+  "topic_edge_rows": 1465,
+  "landmark_rows": 2,
+  "analysis_end_year": 2025
+}

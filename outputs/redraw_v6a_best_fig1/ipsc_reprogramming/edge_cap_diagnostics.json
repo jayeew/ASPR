@@ -1,0 +1,13 @@
+{
+  "bibliographic_edges": 138294,
+  "cocitation_edges": 24172,
+  "direct_edges": 13262,
+  "domain": "ipsc_reprogramming",
+  "domain_name": "iPSC and cellular reprogramming",
+  "edge_cap_hit": 1,
+  "exported_edges": 150000,
+  "graph_max_edges": 150000,
+  "hybrid_only_edge_ratio": 0.9115866666666667,
+  "hybrid_only_edges": 136738,
+  "interpretation": "edge_cap_hit_density_not_interpretable"
+}

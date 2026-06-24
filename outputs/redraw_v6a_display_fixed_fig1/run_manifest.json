@@ -1,0 +1,127 @@
+{
+  "command_argv": [
+    "experiments/kg_perturbation_fig1/fig1_knowledge_perturbation_v3.py",
+    "--config",
+    "experiments/kg_perturbation_fig1/configs/v6a_display_crispr.yaml",
+    "experiments/kg_perturbation_fig1/configs/v6a_display_graphene.yaml",
+    "experiments/kg_perturbation_fig1/configs/v6a_display_ipsc.yaml",
+    "experiments/kg_perturbation_fig1/configs/v6a_display_exoplanets.yaml",
+    "--corpus-dir",
+    "data/knowledge_corpus/v2_publication_v6a_locked_candidate",
+    "--out-dir",
+    "outputs/redraw_v6a_display_fixed_fig1"
+  ],
+  "conda_default_env": null,
+  "conda_prefix": null,
+  "created_at_utc": "2026-06-24T04:17:12.956927+00:00",
+  "cwd": "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR",
+  "domains": [
+    "crispr",
+    "graphene_2d_materials",
+    "ipsc_reprogramming",
+    "exoplanets"
+  ],
+  "extra": {
+    "selected_papers_by_domain": {
+      "crispr": 1028,
+      "exoplanets": 1300,
+      "graphene_2d_materials": 1630,
+      "ipsc_reprogramming": 1330
+    }
+  },
+  "figure": "fig1",
+  "inputs": {
+    "allow_schematic_trajectories": false,
+    "config": [
+      "experiments\\kg_perturbation_fig1\\configs\\v6a_display_crispr.yaml",
+      "experiments\\kg_perturbation_fig1\\configs\\v6a_display_graphene.yaml",
+      "experiments\\kg_perturbation_fig1\\configs\\v6a_display_ipsc.yaml",
+      "experiments\\kg_perturbation_fig1\\configs\\v6a_display_exoplanets.yaml"
+    ],
+    "corpus_dir": "data\\knowledge_corpus\\v2_publication_v6a_locked_candidate"
+  },
+  "output_dir": "outputs\\redraw_v6a_display_fixed_fig1",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python_executable": "C:\\Users\\jayee\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+  "python_version": "3.12.13",
+  "quality_gates": {
+    "checks": {
+      "edge_cap_not_hit_all_domains": 0,
+      "final_cumulative_horizon_consistent": 0,
+      "manual_trajectories_absent": 1
+    },
+    "edge_cap_diagnostics": [
+      {
+        "bibliographic_edges": 117296,
+        "cocitation_edges": 61182,
+        "direct_edges": 17414,
+        "domain": "crispr",
+        "domain_name": "CRISPR-Cas genome editing",
+        "edge_cap_hit": 1,
+        "exported_edges": 150000,
+        "graph_max_edges": 150000,
+        "hybrid_only_edge_ratio": 0.8839066666666666,
+        "hybrid_only_edges": 132586,
+        "interpretation": "edge_cap_hit_density_not_interpretable"
+      },
+      {
+        "bibliographic_edges": 141138,
+        "cocitation_edges": 28006,
+        "direct_edges": 12939,
+        "domain": "graphene_2d_materials",
+        "domain_name": "Graphene and 2D materials",
+        "edge_cap_hit": 1,
+        "exported_edges": 150000,
+        "graph_max_edges": 150000,
+        "hybrid_only_edge_ratio": 0.91374,
+        "hybrid_only_edges": 137061,
+        "interpretation": "edge_cap_hit_density_not_interpretable"
+      },
+      {
+        "bibliographic_edges": 138294,
+        "cocitation_edges": 24172,
+        "direct_edges": 13262,
+        "domain": "ipsc_reprogramming",
+        "domain_name": "iPSC and cellular reprogramming",
+        "edge_cap_hit": 1,
+        "exported_edges": 150000,
+        "graph_max_edges": 150000,
+        "hybrid_only_edge_ratio": 0.9115866666666667,
+        "hybrid_only_edges": 136738,
+        "interpretation": "edge_cap_hit_density_not_interpretable"
+      },
+      {
+        "bibliographic_edges": 145689,
+        "cocitation_edges": 18670,
+        "direct_edges": 8373,
+        "domain": "exoplanets",
+        "domain_name": "Exoplanet discovery and characterization",
+        "edge_cap_hit": 1,
+        "exported_edges": 150000,
+        "graph_max_edges": 150000,
+        "hybrid_only_edge_ratio": 0.94418,
+        "hybrid_only_edges": 141627,
+        "interpretation": "edge_cap_hit_density_not_interpretable"
+      }
+    ],
+    "final_cumulative_horizon_years": {
+      "crispr": 15,
+      "exoplanets": 30,
+      "graphene_2d_materials": 21,
+      "ipsc_reprogramming": 19
+    },
+    "manual_trajectory_counts": {
+      "crispr": 0,
+      "exoplanets": 0,
+      "graphene_2d_materials": 0,
+      "ipsc_reprogramming": 0
+    },
+    "overall_pass": false,
+    "status_label": "diagnostic / schematic evidence",
+    "thresholds": {
+      "edge_cap_hit_allowed": 0,
+      "final_cumulative_horizon_unique_values": 1,
+      "manual_trajectories_allowed_in_main": 0
+    }
+  }
+}

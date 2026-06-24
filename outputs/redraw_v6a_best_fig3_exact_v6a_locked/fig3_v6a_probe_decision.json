@@ -1,0 +1,43 @@
+{
+  "artifact_kind": "fig3_v6a_reliability_latent_probe_decision",
+  "best_run": {
+    "best_single_oof_spearman": 0.3186398676082614,
+    "cohort": "moderate",
+    "cohort_domain_min_rows": 20,
+    "equal_weight_oof_spearman": 0.13123086565736816,
+    "feature_expansion": "linear",
+    "feature_set": "publication_day_plus",
+    "latest_fold_test_spearman": 0.6421779791052799,
+    "learned_oof_spearman": 0.546554342701666,
+    "learned_vs_equal_delta": 0.41532347704429784,
+    "max_domain_share": 0.1679563040509786,
+    "min_rows_per_domain": 76,
+    "n_contributing_graph_deltas": 5,
+    "n_domains": 10,
+    "n_rows": 2197,
+    "run_dir": "outputs\\redraw_v6a_best_fig3_exact_v6a_locked\\runs\\moderate__RGPM_latent_future_percentile__publication_day_plus__linear",
+    "run_name": "moderate__RGPM_latent_future_percentile__publication_day_plus__linear",
+    "target_col": "RGPM_latent_future_percentile",
+    "top_bottom_enrichment": 999.0,
+    "top_bottom_enrichment_finite_max": 24.5,
+    "top_bottom_enrichment_had_infinite": true,
+    "v6a_gate_pass": 1
+  },
+  "created_at": "2026-06-24T03:07:57+00:00",
+  "final_pass": true,
+  "n_passing_runs": 1,
+  "n_runs": 1,
+  "next_step": "independent_recompute_and_materialization_gate",
+  "policy": "pre_registered_reliability_cohort_latent_target_probe",
+  "thresholds": {
+    "max_domain_share": 0.5,
+    "min_contributing_deltas": 5,
+    "min_domains": 8,
+    "min_enrichment": 5.0,
+    "min_latest_fold": 0.35,
+    "min_learned_vs_equal": 0.03,
+    "min_oof": 0.45,
+    "min_rows": 500,
+    "min_rows_per_domain": 20
+  }
+}

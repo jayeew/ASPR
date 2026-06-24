@@ -1,0 +1,206 @@
+domain_name: "Exoplanet discovery and characterization"
+slug: "exoplanets"
+search_query: '("exoplanet" OR "extrasolar planet" OR "planetary transit" OR "radial velocity planet" OR "hot Jupiter" OR "Kepler mission")'
+start_year: 1995
+end_year: 2024
+window_size: 5
+custom_windows:
+  - [1995, 2005]
+  - [2006, 2010]
+  - [2011, 2015]
+  - [2016, 2020]
+  - [2021, 2024]
+snapshot_years: [2005, 2010, 2015, 2020, 2024]
+language: "en"
+include_abstract: false
+max_works_per_window: 1600
+fetch_anchor_citers: true
+max_anchor_citers: 800
+work_types: ["article", "preprint", "review"]
+anchors:
+  - label: "Mayor/Queloz 1995"
+    openalex_id: "W1963760477"
+    doi: "10.1038/378355a0"
+    title: "A Jupiter-mass companion to a solar-type star"
+    year: 1995
+relevance_filter:
+  enabled: true
+  keep_anchor_citers: true
+  strong_positive_keywords:
+    - "exoplanet"
+    - "extrasolar planet"
+    - "planetary transit"
+    - "radial velocity"
+    - "hot jupiter"
+    - "kepler mission"
+  positive_keywords:
+    - "exoplanet"
+    - "extrasolar planet"
+    - "planetary transit"
+    - "radial velocity"
+    - "hot jupiter"
+    - "super-earth"
+    - "kepler"
+    - "transiting planet"
+    - "planetary system"
+    - "habitability"
+    - "habitable zone"
+    - "atmosphere"
+    - "direct imaging"
+    - "microlensing"
+  negative_primary_topics:
+    - "animal ecology"
+    - "general relativity"
+    - "medical imaging"
+  negative_keywords:
+    - "cell"
+    - "protein"
+    - "clinical"
+api:
+  sleep_seconds: 0.1
+  max_retries: 6
+  timeout_seconds: 60
+  per_page: 100
+graph:
+  max_papers_for_graph: 4500
+  max_edges: 150000
+  min_shared_references: 1
+  min_cocitations: 1
+  community_resolution: 2.2
+  random_seed: 42
+metrics:
+  curve_mode: "raw"
+  signed_compression: true
+  betweenness_sample: 250
+  semantic_sample: 600
+plot:
+  title: "Fig. 1 | Citation knowledge-graph perturbation after a landmark innovation"
+  subtitle: "Example domain: exoplanet discovery and characterization. Real OpenAlex data; publication-style display uses data-derived topic snapshots."
+  fig_width_single: 22
+  fig_height_single: 11.0
+  dpi: 300
+  display_mode: "cluster_schematic"
+  display_max_topics: "auto"
+  display_max_topics_auto_cap: 8
+  adaptive_display_topics: true
+  event_topics_per_spec: 1
+  event_max_topics: 5
+  display_min_topic_size: 5
+  display_max_backbone_edges: 18
+  display_extra_edges: 8
+  cluster_radius_min: 0.135
+  cluster_radius_max: 0.235
+  max_representative_papers: 6
+  min_papers_per_display_topic: 3
+  max_labels_per_panel: 8
+  node_size_min: 64
+  show_internal_cluster_edges: true
+  show_time_axis: true
+  show_panel_captions: true
+  metric_x_axis: "years"
+  metric_scale: "unit"
+  metric_panel_title: "Dominant parameter trajectories explaining the graph transitions in panel a"
+  metric_y_label: "Standardized\nparameter value"
+  metric_landmark_label: "First main-sequence exoplanet"
+  landmark_focus_year: 1995
+  top_landmark_label: "1995\n51 Pegasi b"
+  dominant_parameter_ylim: [-1.5, 1.5]
+  dominant_parameters:
+    - key: "B"
+      label: "$B$ (bridge centrality)"
+    - key: "RS"
+      label: "RS (reference span)"
+    - key: "RTD"
+      label: "RTD (reference target diversity)"
+    - key: "Uzzi"
+      label: "Uzzi novelty (-p10)"
+  parameter_callouts:
+    - parameter: "B"
+      window: "1995-2005"
+      text: "detection-method\nbridge"
+      dx: 2.2
+      dy: 0.35
+      color: "#1D4ED8"
+    - parameter: "RTD"
+      window: "2011-2015"
+      text: "Kepler-era\npopulation expansion"
+      dx: 1.8
+      dy: 0.35
+      color: "#F97316"
+  parameter_interpretation_boxes:
+    - title: "Detection bridge"
+      formula: "B + RS up"
+      description: "Planet searches connect stellar physics and instrumentation"
+      icon: "bridge"
+      color: "#1D4ED8"
+    - title: "Population expansion"
+      formula: "RTD up"
+      description: "Kepler-era surveys broaden target regimes"
+      icon: "target"
+      color: "#F97316"
+    - title: "Characterization"
+      formula: "Uzzi sustained"
+      description: "Atmospheres, orbits and habitability recombine"
+      icon: "novelty"
+      color: "#7C3AED"
+  parameter_box_width: 0.18
+  parameter_box_height: 0.34
+  parameter_box_gap: 0.035
+  parameter_box_y: -0.56
+  parameter_box_title_size: 7.8
+  parameter_box_formula_size: 8.2
+  parameter_box_description_size: 7.0
+  parameter_box_show_icons: false
+  parameter_box_corner_radius: 5.0
+  parameter_box_linewidth: 0.75
+  show_retrieval_date: false
+  panel_captions:
+    - "Radial-velocity detection bridge"
+    - "Transit surveys expand the field"
+    - "Kepler population reconfiguration"
+    - "Atmosphere and habitability branches"
+    - "Mature characterization hubs"
+  event_topic_keywords:
+    - name: "Radial\nvelocity"
+      keywords: ["radial velocity", "doppler", "51 pegasi", "hot jupiter", "companion"]
+    - name: "Transit\nsurveys"
+      keywords: ["transit", "transiting", "photometry", "light curve", "survey"]
+    - name: "Kepler\npopulation"
+      keywords: ["kepler", "super-earth", "planet occurrence", "population", "multi-planet"]
+    - name: "Atmospheres\n& spectra"
+      keywords: ["atmosphere", "spectroscopy", "transmission spectrum", "emission", "composition"]
+    - name: "Habitability\n& systems"
+      keywords: ["habitable", "habitability", "m dwarf", "planetary system", "dynamics"]
+  topic_layout_templates:
+    - name: "Radial\nvelocity"
+      x: -0.78
+      y: 0.42
+      keywords: ["radial velocity", "doppler", "velocity", "51 pegasi", "hot jupiter", "jupiter-mass"]
+    - name: "Transit\nphotometry"
+      x: -0.12
+      y: 0.55
+      keywords: ["transit", "transiting", "photometry", "light curve", "occultation"]
+    - name: "Kepler\npopulation"
+      x: 0.55
+      y: 0.24
+      keywords: ["kepler", "occurrence", "population", "candidate", "multi-planet", "super-earth"]
+    - name: "Planet\nformation"
+      x: -0.35
+      y: -0.20
+      keywords: ["formation", "protoplanetary", "disk", "migration", "dynamics"]
+    - name: "Atmospheres\n& spectra"
+      x: 0.34
+      y: -0.37
+      keywords: ["atmosphere", "spectroscopy", "spectrum", "transmission", "emission", "composition"]
+    - name: "Habitability\n& M dwarfs"
+      x: 0.15
+      y: -0.76
+      keywords: ["habitable", "habitability", "m dwarf", "earth-like", "terrestrial"]
+    - name: "Direct\nimaging"
+      x: -0.73
+      y: -0.42
+      keywords: ["direct imaging", "coronagraph", "adaptive optics", "imaging", "contrast"]
+    - name: "Systems\narchitecture"
+      x: 0.82
+      y: 0.42
+      keywords: ["planetary system", "orbits", "architecture", "resonance", "dynamics"]

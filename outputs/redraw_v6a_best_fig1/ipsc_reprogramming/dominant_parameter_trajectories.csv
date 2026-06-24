@@ -1,0 +1,21 @@
+parameter,label,window_index,window,standardized_value,source_column,provenance,manual_values
+RTD,RTD (reference target diversity),1,1995-1999,-1.2215089008969957,RTD_proxy_raw,computed,0
+RTD,RTD (reference target diversity),2,2000-2004,-1.2215089008969957,RTD_proxy_raw,computed,0
+RTD,RTD (reference target diversity),3,2005-2009,0.7017705437502036,RTD_proxy_raw,computed,0
+RTD,RTD (reference target diversity),4,2010-2014,0.9313653245895374,RTD_proxy_raw,computed,0
+RTD,RTD (reference target diversity),5,2015-2019,0.8098819334542507,RTD_proxy_raw,computed,0
+BurtIP,Burt IP (structural holes),1,1995-1999,-1.221760279752537,BurtIP_proxy_raw,computed,0
+BurtIP,Burt IP (structural holes),2,2000-2004,-1.221760279752537,BurtIP_proxy_raw,computed,0
+BurtIP,Burt IP (structural holes),3,2005-2009,0.6974432057493655,BurtIP_proxy_raw,computed,0
+BurtIP,Burt IP (structural holes),4,2010-2014,0.9165332152866152,BurtIP_proxy_raw,computed,0
+BurtIP,Burt IP (structural holes),5,2015-2019,0.829544138469094,BurtIP_proxy_raw,computed,0
+B,$B$ (bridge centrality),1,1995-1999,-1.2219702902856011,B_proxy_raw,computed,0
+B,$B$ (bridge centrality),2,2000-2004,-1.2219702902856011,B_proxy_raw,computed,0
+B,$B$ (bridge centrality),3,2005-2009,0.6989398367386853,B_proxy_raw,computed,0
+B,$B$ (bridge centrality),4,2010-2014,0.9081831825561891,B_proxy_raw,computed,0
+B,$B$ (bridge centrality),5,2015-2019,0.8368175612763269,B_proxy_raw,computed,0
+DeltaQ,$\Delta Q$ directionality,1,1995-1999,0.0,DeltaQ_directionality_raw,computed,0
+DeltaQ,$\Delta Q$ directionality,2,2000-2004,0.0,DeltaQ_directionality_raw,computed,0
+DeltaQ,$\Delta Q$ directionality,3,2005-2009,1.6751982191161627,DeltaQ_directionality_raw,computed,0
+DeltaQ,$\Delta Q$ directionality,4,2010-2014,2.584747040705315,DeltaQ_directionality_raw,computed,0
+DeltaQ,$\Delta Q$ directionality,5,2015-2019,0.8160458943623498,DeltaQ_directionality_raw,computed,0

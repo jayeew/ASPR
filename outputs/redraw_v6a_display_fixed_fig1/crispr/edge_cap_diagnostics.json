@@ -1,0 +1,13 @@
+{
+  "bibliographic_edges": 117296,
+  "cocitation_edges": 61182,
+  "direct_edges": 17414,
+  "domain": "crispr",
+  "domain_name": "CRISPR-Cas genome editing",
+  "edge_cap_hit": 1,
+  "exported_edges": 150000,
+  "graph_max_edges": 150000,
+  "hybrid_only_edge_ratio": 0.8839066666666666,
+  "hybrid_only_edges": 132586,
+  "interpretation": "edge_cap_hit_density_not_interpretable"
+}

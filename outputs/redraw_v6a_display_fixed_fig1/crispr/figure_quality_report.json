@@ -1,0 +1,69 @@
+{
+  "created_at_utc": "2026-06-24T04:13:15.652791+00:00",
+  "extra": {
+    "edge_cap_diagnostics_path": "outputs\\redraw_v6a_display_fixed_fig1\\crispr\\edge_cap_diagnostics.json"
+  },
+  "figure": "fig1",
+  "generated_files": [
+    {
+      "dpi": [
+        299.9994,
+        299.9994
+      ],
+      "exists": 1,
+      "height_px": 3410,
+      "image_probe_status": "ok",
+      "path": "outputs\\redraw_v6a_display_fixed_fig1\\crispr\\fig1_crispr_real.png",
+      "size_bytes": 1503209,
+      "width_px": 5622
+    },
+    {
+      "exists": 1,
+      "path": "outputs\\redraw_v6a_display_fixed_fig1\\crispr\\fig1_crispr_real.svg",
+      "size_bytes": 414371
+    },
+    {
+      "exists": 1,
+      "path": "outputs\\redraw_v6a_display_fixed_fig1\\crispr\\fig1_crispr_real.pdf",
+      "size_bytes": 97951
+    }
+  ],
+  "overall_pass": false,
+  "quality_gates": {
+    "checks": {
+      "edge_cap_not_hit_all_domains": 0,
+      "final_cumulative_horizon_consistent": 1,
+      "manual_trajectories_absent": 1
+    },
+    "edge_cap_diagnostics": [
+      {
+        "bibliographic_edges": 117296,
+        "cocitation_edges": 61182,
+        "direct_edges": 17414,
+        "domain": "crispr",
+        "domain_name": "CRISPR-Cas genome editing",
+        "edge_cap_hit": 1,
+        "exported_edges": 150000,
+        "graph_max_edges": 150000,
+        "hybrid_only_edge_ratio": 0.8839066666666666,
+        "hybrid_only_edges": 132586,
+        "interpretation": "edge_cap_hit_density_not_interpretable"
+      }
+    ],
+    "final_cumulative_horizon_years": {
+      "crispr": 15
+    },
+    "manual_trajectory_counts": {
+      "crispr": 0
+    },
+    "overall_pass": false,
+    "status_label": "diagnostic / schematic evidence",
+    "thresholds": {
+      "edge_cap_hit_allowed": 0,
+      "final_cumulative_horizon_unique_values": 1,
+      "manual_trajectories_allowed_in_main": 0
+    }
+  },
+  "status_label": "diagnostic / schematic evidence",
+  "visual_checks": {}
+}

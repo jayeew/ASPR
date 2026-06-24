@@ -1,0 +1,112 @@
+{
+  "command_argv": [
+    "experiments/kg_perturbation_fig1/fig1_knowledge_perturbation_v3.py",
+    "--config",
+    "experiments/kg_perturbation_fig1/configs/crispr.yaml",
+    "experiments/kg_perturbation_fig1/configs/graphene.yaml",
+    "experiments/kg_perturbation_fig1/configs/ipsc.yaml",
+    "--corpus-dir",
+    "data/knowledge_corpus/v2_publication_v6a_locked_candidate",
+    "--out-dir",
+    "outputs/redraw_v6a_best_fig1"
+  ],
+  "conda_default_env": null,
+  "conda_prefix": null,
+  "created_at_utc": "2026-06-24T02:48:20.404494+00:00",
+  "cwd": "\\\\wsl.localhost\\Ubuntu-24.04\\home\\jayee\\workspace\\ASPR",
+  "domains": [
+    "graphene_2d_materials"
+  ],
+  "extra": {
+    "all_papers": 1630,
+    "cumulative_windows": [
+      [
+        1990,
+        1994
+      ],
+      [
+        1990,
+        1999
+      ],
+      [
+        1990,
+        2004
+      ],
+      [
+        1990,
+        2009
+      ],
+      [
+        1990,
+        2014
+      ]
+    ],
+    "rolling_windows": [
+      [
+        1990,
+        1994
+      ],
+      [
+        1995,
+        1999
+      ],
+      [
+        2000,
+        2004
+      ],
+      [
+        2005,
+        2009
+      ],
+      [
+        2010,
+        2014
+      ]
+    ],
+    "selected_papers": 1630
+  },
+  "figure": "fig1",
+  "inputs": {
+    "domain_config_slug": "graphene_2d_materials",
+    "domain_name": "Graphene and 2D materials"
+  },
+  "output_dir": "outputs\\redraw_v6a_best_fig1\\graphene_2d_materials",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python_executable": "C:\\Users\\jayee\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+  "python_version": "3.12.13",
+  "quality_gates": {
+    "checks": {
+      "edge_cap_not_hit_all_domains": 0,
+      "final_cumulative_horizon_consistent": 1,
+      "manual_trajectories_absent": 1
+    },
+    "edge_cap_diagnostics": [
+      {
+        "bibliographic_edges": 141138,
+        "cocitation_edges": 28006,
+        "direct_edges": 12939,
+        "domain": "graphene_2d_materials",
+        "domain_name": "Graphene and 2D materials",
+        "edge_cap_hit": 1,
+        "exported_edges": 150000,
+        "graph_max_edges": 150000,
+        "hybrid_only_edge_ratio": 0.91374,
+        "hybrid_only_edges": 137061,
+        "interpretation": "edge_cap_hit_density_not_interpretable"
+      }
+    ],
+    "final_cumulative_horizon_years": {
+      "graphene_2d_materials": 25
+    },
+    "manual_trajectory_counts": {
+      "graphene_2d_materials": 0
+    },
+    "overall_pass": false,
+    "status_label": "diagnostic / schematic evidence",
+    "thresholds": {
+      "edge_cap_hit_allowed": 0,
+      "final_cumulative_horizon_unique_values": 1,
+      "manual_trajectories_allowed_in_main": 0
+    }
+  }
+}

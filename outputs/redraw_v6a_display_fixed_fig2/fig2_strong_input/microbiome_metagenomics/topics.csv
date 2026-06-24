@@ -1,0 +1,309 @@
+community,label,x,y,domain,topic_id
+87874756,Soil Carbon and Nitrogen Dynamics,0.0027834512081632,-0.9999961261921828,microbiome_metagenomics,https://openalex.org/T10004
+87874757,Ecology and Vegetation Dynamics Studies,0.004639074697496,-0.9999892394350808,microbiome_metagenomics,https://openalex.org/T10005
+87874883,"Obesity, Physical Activity, Diet",0.0064946822127042,-0.9999789093290696,microbiome_metagenomics,https://openalex.org/T10010
+87874887,Plant Stress Responses and Tolerance,0.0083502673642157,-0.9999651359097208,microbiome_metagenomics,https://openalex.org/T10014
+87874888,Genomics and Phylogenetic Studies,0.010205823762533,-0.9999479192244604,microbiome_metagenomics,https://openalex.org/T10015
+87875017,Schizophrenia research and treatment,0.0120613450182608,-0.9999272593325728,microbiome_metagenomics,https://openalex.org/T10023
+87875147,Marine and coastal ecosystems,0.0139168247421216,-0.999903156305198,microbiome_metagenomics,https://openalex.org/T10032
+87875150,Phytochemicals and Antioxidant Activities,0.0157722565449835,-0.9998756102253316,microbiome_metagenomics,https://openalex.org/T10035
+87875277,COVID-19 Clinical Research Studies,0.0176276340378795,-0.9998446211878256,microbiome_metagenomics,https://openalex.org/T10041
+87875408,Asthma and respiratory diseases,0.019482950832027,-0.9998101892993874,microbiome_metagenomics,https://openalex.org/T10051
+87875544,Gut microbiota and health,0.0213382005388552,-0.999772314678579,microbiome_metagenomics,https://openalex.org/T10066
+87875675,Plant-Microbe Interactions and Immunity,0.023193376770024,-0.9997309974558176,microbiome_metagenomics,https://openalex.org/T10076
+87875802,HIV/AIDS Research and Interventions,0.0250484731374449,-0.999686237773374,microbiome_metagenomics,https://openalex.org/T10082
+87875805,Parkinson's Disease Mechanisms and Treatments,0.0269034832533042,-0.9996380357853732,microbiome_metagenomics,https://openalex.org/T10085
+87875806,Alzheimer's disease research and treatments,0.0287584007300868,-0.9995863916577936,microbiome_metagenomics,https://openalex.org/T10086
+87875807,Archaeology and ancient environmental studies,0.0306132191805962,-0.9995313055684654,microbiome_metagenomics,https://openalex.org/T10087
+87875939,Ruminant Nutrition and Digestive Physiology,0.0324679322179772,-0.9994727777070712,microbiome_metagenomics,https://openalex.org/T10098
+87891914,Cloud Computing and Resource Management,0.0343225334557363,-0.9994108082751456,microbiome_metagenomics,https://openalex.org/T10101
+87891919,Autism Spectrum Disorder Research,0.0361770165077646,-0.9993453974860728,microbiome_metagenomics,https://openalex.org/T10106
+87892050,Sperm and Testicular Function,0.0380313749883621,-0.9992765455650876,microbiome_metagenomics,https://openalex.org/T10116
+87892052,SARS-CoV-2 and COVID-19 Research,0.0398856025122578,-0.9992042527492736,microbiome_metagenomics,https://openalex.org/T10118
+87892175,Bacterial Genetics and Biotechnology,0.0417396926946288,-0.9991285192875629,microbiome_metagenomics,https://openalex.org/T10120
+87892310,Inflammatory Bowel Disease,0.0435936391511279,-0.9990493454407352,microbiome_metagenomics,https://openalex.org/T10134
+87892437,Food composition and properties,0.0454474354979029,-0.9989667314814162,microbiome_metagenomics,https://openalex.org/T10140
+87892438,Probiotics and Fermented Foods,0.0473010753516156,-0.998880677694078,microbiome_metagenomics,https://openalex.org/T10141
+87892440,Chronic Obstructive Pulmonary Disease (COPD) Research,0.0491545523294704,-0.9987911843750372,microbiome_metagenomics,https://openalex.org/T10143
+87892443,Cervical Cancer and HPV Research,0.0510078600492288,-0.9986982518324532,microbiome_metagenomics,https://openalex.org/T10146
+87892444,Antibiotic Resistance in Bacteria,0.052860992129238,-0.9986018803863292,microbiome_metagenomics,https://openalex.org/T10147
+87892568,Antifungal resistance and susceptibility,0.0547139421884499,-0.998502070368509,microbiome_metagenomics,https://openalex.org/T10150
+87892570,Animal Nutrition and Physiology,0.0565667038464405,-0.9983988221226772,microbiome_metagenomics,https://openalex.org/T10152
+87892573,Nitric Oxide and Endothelin Effects,0.058419270723438,-0.9982921360043572,microbiome_metagenomics,https://openalex.org/T10155
+87892576,Cancer Immunotherapy and Biomarkers,0.060271636440338,-0.9981820123809104,microbiome_metagenomics,https://openalex.org/T10158
+87892831,Biofuel production and bioconversion,0.0621237946187311,-0.998068451631535,microbiome_metagenomics,https://openalex.org/T10171
+87892965,Plant Molecular Biology Research,0.0639757388809229,-0.9979514541472646,microbiome_metagenomics,https://openalex.org/T10184
+87893092,Air Quality and Health Impacts,0.0658274628499535,-0.9978310203309666,microbiome_metagenomics,https://openalex.org/T10190
+87893097,Antimicrobial Resistance in Staphylococcus,0.0676789601496218,-0.9977071505973412,microbiome_metagenomics,https://openalex.org/T10195
+87893099,Membrane Separation Technologies,0.0695302244045087,-0.99757984537292,microbiome_metagenomics,https://openalex.org/T10197
+87893101,Wildlife Ecology and Conservation,0.0713812492399971,-0.9974491050960632,microbiome_metagenomics,https://openalex.org/T10199
+87909206,Computational Drug Discovery Methods,0.0732320282822948,-0.9973149302169608,microbiome_metagenomics,https://openalex.org/T10211
+87909338,Genomics and Chromatin Dynamics,0.0750825551584535,-0.9971773211976284,microbiome_metagenomics,https://openalex.org/T10222
+87909342,Land Use and Ecosystem Services,0.0769328234963958,-0.9970362785119068,microbiome_metagenomics,https://openalex.org/T10226
+87909468,Pancreatic and Hepatic Oncology Research,0.0787828269249346,-0.9968918026454604,microbiome_metagenomics,https://openalex.org/T10231
+87909731,Microbial Natural Products and Biosynthesis,0.0806325590737931,-0.996743894095776,microbiome_metagenomics,https://openalex.org/T10252
+87909736,Oral microbiology and periodontitis research,0.0824820135736288,-0.996592553372159,microbiome_metagenomics,https://openalex.org/T10257
+87909869,Epigenetics and DNA Methylation,0.0843311840560569,-0.9964377809957344,microbiome_metagenomics,https://openalex.org/T10269
+87909991,Blockchain Technology Applications and Security,0.0861800641536705,-0.9962795774994432,microbiome_metagenomics,https://openalex.org/T10270
+87909997,Helicobacter pylori-related gastroenterology studies,0.0880286475000602,-0.9961179434280412,microbiome_metagenomics,https://openalex.org/T10276
+87910126,Anaerobic Digestion and Biogas Production,0.0898769277298417,-0.9959528793380964,microbiome_metagenomics,https://openalex.org/T10284
+87910254,Dialysis and Renal Disease Management,0.0917248984786712,-0.9957843857979888,microbiome_metagenomics,https://openalex.org/T10291
+87910259,Vector-borne infectious diseases,0.0935725533832729,-0.995612463387906,microbiome_metagenomics,https://openalex.org/T10296
+87926238,Photosynthetic Processes and Mechanisms,0.0954198860814587,-0.9954371126998438,microbiome_metagenomics,https://openalex.org/T10303
+87926372,Sleep and related disorders,0.0972668902121475,-0.995258334337602,microbiome_metagenomics,https://openalex.org/T10316
+87926501,Microbial bioremediation and biosurfactants,0.099113559415392,-0.9950761289167837,microbiome_metagenomics,https://openalex.org/T10324
+87926631,Meat and Animal Product Quality,0.1009598873323983,-0.9948904970647924,microbiome_metagenomics,https://openalex.org/T10333
+87926635,Liver Disease and Transplantation,0.102805867605545,-0.99470143942083,microbiome_metagenomics,https://openalex.org/T10337
+87926760,Coral and Marine Ecosystems Studies,0.1046514938784113,-0.9945089566358952,microbiome_metagenomics,https://openalex.org/T10341
+87926891,Liver Disease Diagnosis and Treatment,0.1064967597957918,-0.9943130493727804,microbiome_metagenomics,https://openalex.org/T10351
+87927026,Gastrointestinal motility and disorders,0.1083416590037247,-0.9941137183060702,microbiome_metagenomics,https://openalex.org/T10365
+87927153,Immune Response and Inflammation,0.1101861851495109,-0.993910964122138,microbiome_metagenomics,https://openalex.org/T10371
+87927414,Ovarian function and disorders,0.112030331881733,-0.9937047875191448,microbiome_metagenomics,https://openalex.org/T10390
+87927421,Nutrition and Health in Aging,0.1138740928502839,-0.9934951892070364,microbiome_metagenomics,https://openalex.org/T10397
+87943400,Enzyme Catalysis and Immobilization,0.1157174617063813,-0.9932821699075404,microbiome_metagenomics,https://openalex.org/T10404
+87943403,Lipid Membrane Structure and Behavior,0.1175604321025954,-0.9930657303541648,microbiome_metagenomics,https://openalex.org/T10407
+87943405,Fuel Cells and Related Materials,0.119402997692869,-0.9928458712921944,microbiome_metagenomics,https://openalex.org/T10409
+87943536,Pharmaceutical and Antibiotic Environmental Impacts,0.1212451521325365,-0.9926225934786886,microbiome_metagenomics,https://openalex.org/T10419
+87943666,Reproductive tract infections research,0.1230868890783483,-0.9923958976824796,microbiome_metagenomics,https://openalex.org/T10428
+87943793,Chromosomal and Genetic Variations,0.1249282021884943,-0.992165784684168,microbiome_metagenomics,https://openalex.org/T10434
+87944051,Aquaculture Nutrition and Growth,0.1267690851226226,-0.9919322552761218,microbiome_metagenomics,https://openalex.org/T10450
+87944052,Mycorrhizal Fungi and Plant Interactions,0.1286095315418637,-0.9916953102624728,microbiome_metagenomics,https://openalex.org/T10451
+87944053,Iron Metabolism and Disorders,0.1304495351088486,-0.9914549504591146,microbiome_metagenomics,https://openalex.org/T10452
+87944191,Psoriasis: Treatment and Pathogenesis,0.1322890894877364,-0.9912111766936982,microbiome_metagenomics,https://openalex.org/T10469
+87944319,Algal biology and biofuel production,0.1341281883442306,-0.9909639898056308,microbiome_metagenomics,https://openalex.org/T10476
+87944450,Salmonella and Campylobacter epidemiology,0.1359668253456022,-0.990713390646073,microbiome_metagenomics,https://openalex.org/T10486
+87944451,Plant and animal studies,0.1378049941607179,-0.9904593800779335,microbiome_metagenomics,https://openalex.org/T10487
+87944452,Nanocomposite Films for Food Packaging,0.1396426884600505,-0.9902019589758694,microbiome_metagenomics,https://openalex.org/T10488
+87944453,Regulation of Appetite and Obesity,0.1414799019157109,-0.9899411282262804,microbiome_metagenomics,https://openalex.org/T10489
+87944579,Plant Virus Research Studies,0.1433166282014631,-0.9896768887273076,microbiome_metagenomics,https://openalex.org/T10494
+87944584,Folate and B Vitamins Research,0.145152860992748,-0.98940924138883,microbiome_metagenomics,https://openalex.org/T10499
+87960563,Aquaculture disease management and microbiota,0.1469885939667108,-0.98913818713246,microbiome_metagenomics,https://openalex.org/T10506
+87960697,Advanced Proteomics Techniques and Applications,0.1488238208022117,-0.9888637268915426,microbiome_metagenomics,https://openalex.org/T10519
+87960819,Mycotoxins in Agriculture and Food,0.1506585351798582,-0.9885858616111498,microbiome_metagenomics,https://openalex.org/T10520
+87960820,RNA and protein synthesis mechanisms,0.1524927307820189,-0.9883045922480796,microbiome_metagenomics,https://openalex.org/T10521
+87960827,"Adipokines, Inflammation, and Metabolic Diseases",0.1543264012928519,-0.9880199197708504,microbiome_metagenomics,https://openalex.org/T10528
+87960957,Attention Deficit Hyperactivity Disorder,0.1561595403983195,-0.9877318451597,microbiome_metagenomics,https://openalex.org/T10537
+87961090,Neonatal Respiratory Health Research,0.1579921417862197,-0.98744036940658,microbiome_metagenomics,https://openalex.org/T10549
+87961214,Colorectal Cancer Screening and Detection,0.1598241991461968,-0.987145493515154,microbiome_metagenomics,https://openalex.org/T10552
+87961216,Hemoglobinopathies and Related Disorders,0.1616557061697694,-0.9868472185007936,microbiome_metagenomics,https://openalex.org/T10554
+87961217,Fire effects on ecosystems,0.1634866565503536,-0.9865455453905748,microbiome_metagenomics,https://openalex.org/T10555
+87961347,Wastewater Treatment and Nitrogen Removal,0.165317043983278,-0.9862404752232748,microbiome_metagenomics,https://openalex.org/T10564
+87961474,Drug Transport and Resistance Mechanisms,0.1671468621658157,-0.9859320090493674,microbiome_metagenomics,https://openalex.org/T10570
+87961739,Bacterial biofilms and quorum sensing,0.1689761047971947,-0.9856201479310208,microbiome_metagenomics,https://openalex.org/T10593
+87961740,Genetic and phenotypic traits in livestock,0.1708047655786257,-0.9853048929420936,microbiome_metagenomics,https://openalex.org/T10594
+87961742,Child Nutrition and Water Access,0.1726328382133256,-0.9849862451681302,microbiome_metagenomics,https://openalex.org/T10596
+87977720,Glycosylation and Glycoproteins Research,0.174460316406533,-0.9846642057063576,microbiome_metagenomics,https://openalex.org/T10602
+87977858,Esophageal Cancer Research and Treatment,0.176287193865536,-0.9843387756656824,microbiome_metagenomics,https://openalex.org/T10619
+87977981,Gene Regulatory Network Analysis,0.1781134642996914,-0.9840099561666856,microbiome_metagenomics,https://openalex.org/T10621
+87978377,Pneumonia and Respiratory Infections,0.1799391214204433,-0.9836777483416196,microbiome_metagenomics,https://openalex.org/T10654
+87978505,biodegradable polymer synthesis and properties,0.1817641589413515,-0.9833421533344044,microbiome_metagenomics,https://openalex.org/T10661
+87978509,Cystic Fibrosis Research Advances,0.1835885705781056,-0.9830031723006228,microbiome_metagenomics,https://openalex.org/T10665
+87978636,Gastroesophageal reflux and treatments,0.1854123500485531,-0.9826608064075176,microbiome_metagenomics,https://openalex.org/T10671
+87978638,Gestational Diabetes Research and Management,0.1872354910727173,-0.9823150568339868,microbiome_metagenomics,https://openalex.org/T10673
+87978641,"Genetics, Aging, and Longevity in Model Organisms",0.1890579873728209,-0.981965924770579,microbiome_metagenomics,https://openalex.org/T10676
+87978772,Effects and risks of endocrine disrupting chemicals,0.1908798326733048,-0.9816134114194912,microbiome_metagenomics,https://openalex.org/T10686
+87978899,Urban Green Space and Health,0.1927010207008517,-0.9812575179945628,microbiome_metagenomics,https://openalex.org/T10692
+87978900,Blood transfusion and management,0.19452154518441,-0.9808982457212724,microbiome_metagenomics,https://openalex.org/T10693
+87994881,Insect and Arachnid Ecology and Behavior,0.1963413998552086,-0.980535595836733,microbiome_metagenomics,https://openalex.org/T10702
+87995010,Arsenic contamination and mitigation,0.1981605784467891,-0.9801695695896878,microbiome_metagenomics,https://openalex.org/T10710
+87995534,Fermentation and Sensory Analysis,0.1999790746950156,-0.9798001682405068,microbiome_metagenomics,https://openalex.org/T10750
+87995535,Forensic and Genetic Research,0.2017968823381028,-0.9794273930611814,microbiome_metagenomics,https://openalex.org/T10751
+87995537,Microplastics and Plastic Pollution,0.2036139951166391,-0.9790512453353202,microbiome_metagenomics,https://openalex.org/T10753
+87995540,Estrogen and related hormone effects,0.2054304067736013,-0.9786717263581456,microbiome_metagenomics,https://openalex.org/T10756
+87995665,Pancreatitis Pathology and Treatment,0.2072461110543865,-0.9782888374364868,microbiome_metagenomics,https://openalex.org/T10760
+87995667,"Migration, Health and Trauma",0.2090611017068215,-0.9779025798887792,microbiome_metagenomics,https://openalex.org/T10762
+87995670,Marine Biology and Ecology Research,0.2108753724811945,-0.977512955045056,microbiome_metagenomics,https://openalex.org/T10765
+87995674,BRCA gene mutations in cancer,0.2126889171302703,-0.977119964246946,microbiome_metagenomics,https://openalex.org/T10769
+87995797,Wound Healing and Treatments,0.2145017294093139,-0.9767236088476686,microbiome_metagenomics,https://openalex.org/T10771
+88012180,Mercury impact and mitigation studies,0.2163138030761136,-0.976323890212028,microbiome_metagenomics,https://openalex.org/T10819
+88012307,Plant Pathogens and Fungal Diseases,0.2181251318910005,-0.9759208097164102,microbiome_metagenomics,https://openalex.org/T10825
+88012439,Metabolomics and Mass Spectrometry Studies,0.2199357096168713,-0.9755143687487762,microbiome_metagenomics,https://openalex.org/T10836
+88012440,Dermatology and Skin Diseases,0.2217455300192071,-0.9751045687086596,microbiome_metagenomics,https://openalex.org/T10837
+88012441,Animal Behavior and Welfare Studies,0.2235545868660969,-0.97469141100716,microbiome_metagenomics,https://openalex.org/T10838
+88012442,Pancreatic function and diabetes,0.2253628739282607,-0.9742748970669391,microbiome_metagenomics,https://openalex.org/T10839
+88012828,AI in cancer detection,0.2271703849790681,-0.9738550283222148,microbiome_metagenomics,https://openalex.org/T10862
+88012832,Nutritional Studies and Diet,0.2289771137945619,-0.9734318062187572,microbiome_metagenomics,https://openalex.org/T10866
+88012835,Polysaccharides and Plant Cell Walls,0.2307830541534757,-0.9730052322138838,microbiome_metagenomics,https://openalex.org/T10869
+88012960,Bacterial Infections and Vaccines,0.2325881998372614,-0.972575307776453,microbiome_metagenomics,https://openalex.org/T10873
+88012965,CRISPR and Genetic Engineering,0.234392544630105,-0.9721420343868606,microbiome_metagenomics,https://openalex.org/T10878
+88013093,Gene expression and cancer classification,0.2361960823189492,-0.971705413537035,microbiome_metagenomics,https://openalex.org/T10885
+88013095,Bioinformatics and Genomic Networks,0.2379988066935211,-0.971265446730429,microbiome_metagenomics,https://openalex.org/T10887
+88013224,Species Distribution and Climate Change,0.2398007115463423,-0.9708221354820192,microbiome_metagenomics,https://openalex.org/T10895
+88013226,Antibiotic Use and Resistance,0.2416017906727606,-0.9703754813182964,microbiome_metagenomics,https://openalex.org/T10897
+88029337,Trace Elements in Health,0.2434020378709646,-0.969925485777264,microbiome_metagenomics,https://openalex.org/T10915
+88029596,Microbial Metabolic Engineering and Bioproduction,0.2452014469420067,-0.9694721504084304,microbiome_metagenomics,https://openalex.org/T10932
+88029599,Endometriosis Research and Treatment,0.2470000116898304,-0.9690154767728036,microbiome_metagenomics,https://openalex.org/T10935
+88029728,Escherichia coli research studies,0.2487977259212804,-0.9685554664428876,microbiome_metagenomics,https://openalex.org/T10943
+88030121,Radioactive element chemistry and processing,0.2505945834461345,-0.9680921210026752,microbiome_metagenomics,https://openalex.org/T10973
+88030124,Viral gastroenteritis research and epidemiology,0.252390578077118,-0.967625442047644,microbiome_metagenomics,https://openalex.org/T10976
+88030127,Breastfeeding Practices and Influences,0.2541857036299272,-0.9671554311847496,microbiome_metagenomics,https://openalex.org/T10979
+88030253,Sinusitis and nasal conditions,0.2559799539232529,-0.9666820900324208,microbiome_metagenomics,https://openalex.org/T10984
+88030380,Infection Control and Ventilation,0.2577733227787989,-0.966205420220554,microbiome_metagenomics,https://openalex.org/T10990
+88030382,Forensic Anthropology and Bioarchaeology Studies,0.2595658040213047,-0.9657254233905068,microbiome_metagenomics,https://openalex.org/T10992
+88030385,Methane Hydrates and Related Phenomena,0.261357391478564,-0.9652421011950942,microbiome_metagenomics,https://openalex.org/T10995
+90122845,Indoor Air Quality and Microbial Exposure,0.2631480789814515,-0.9647554552985808,microbiome_metagenomics,https://openalex.org/T11002
+90122977,Skin Protection and Aging,0.2649378603639362,-0.9642654873766764,microbiome_metagenomics,https://openalex.org/T11013
+90123105,Immune Cell Function and Interaction,0.2667267294631135,-0.9637721991165292,microbiome_metagenomics,https://openalex.org/T11020
+90123112,Metabolism and Genetic Disorders,0.2685146801192151,-0.9632755922167217,microbiome_metagenomics,https://openalex.org/T11027
+90123243,Fungal Infections and Studies,0.2703017061756357,-0.9627756683872626,microbiome_metagenomics,https://openalex.org/T11037
+90123375,Bacteriophages and microbial interactions,0.2720878014789568,-0.9622724293495828,microbiome_metagenomics,https://openalex.org/T11048
+90123634,Insect Pest Control Strategies,0.273872959878962,-0.9617658768365284,microbiome_metagenomics,https://openalex.org/T11065
+90123636,Colorectal Cancer Treatments and Studies,0.2756571752286601,-0.961256012592356,microbiome_metagenomics,https://openalex.org/T11067
+90123764,Helminth infection and control,0.2774404413843125,-0.960742838372724,microbiome_metagenomics,https://openalex.org/T11074
+90123768,Inflammasome and immune disorders,0.2792227522054432,-0.9602263559446896,microbiome_metagenomics,https://openalex.org/T11078
+90123896,Fungal Biology and Applications,0.2810041015548695,-0.959706567086701,microbiome_metagenomics,https://openalex.org/T11085
+90123897,Parasitic Infections and Diagnostics,0.2827844832987164,-0.9591834735885924,microbiome_metagenomics,https://openalex.org/T11086
+90123899,Marine Bivalve and Aquaculture Studies,0.2845638913064435,-0.9586570772515762,microbiome_metagenomics,https://openalex.org/T11088
+90124024,Spondyloarthritis Studies and Treatments,0.2863423194508621,-0.9581273798882384,microbiome_metagenomics,https://openalex.org/T11092
+90140007,Antimicrobial Peptides and Activities,0.2881197616081585,-0.9575943833225308,microbiome_metagenomics,https://openalex.org/T11103
+90140403,Enzyme-mediated dye degradation,0.2898962116579126,-0.9570580893897668,microbiome_metagenomics,https://openalex.org/T11136
+90140406,"Gout, Hyperuricemia, Uric Acid",0.2916716634831203,-0.9565184999366136,microbiome_metagenomics,https://openalex.org/T11139
+90140662,Streptococcal Infections and Treatments,0.2934461109702173,-0.9559756168210854,microbiome_metagenomics,https://openalex.org/T11153
+90140922,Diabetes and associated disorders,0.2952195480090937,-0.9554294419125392,microbiome_metagenomics,https://openalex.org/T11171
+90141052,Pesticide and Herbicide Environmental Studies,0.2969919684931246,-0.9548799770916652,microbiome_metagenomics,https://openalex.org/T11180
+90141061,Transplantation: Methods and Outcomes,0.2987633663191804,-0.9543272242504828,microbiome_metagenomics,https://openalex.org/T11189
+90141183,3D Printing in Biomedical Research,0.300533735387654,-0.953771185292334,microbiome_metagenomics,https://openalex.org/T11190
+90141187,Ocular Diseases and Behçet’s Syndrome,0.302303069602483,-0.9532118621318748,microbiome_metagenomics,https://openalex.org/T11194
+90157172,Alcohol Consumption and Health Effects,0.3040713628711644,-0.9526492566950716,microbiome_metagenomics,https://openalex.org/T11207
+90157300,Human-Animal Interaction Studies,0.3058386091047851,-0.9520833709191912,microbiome_metagenomics,https://openalex.org/T11214
+90157433,Milk Quality and Mastitis in Dairy Cows,0.3076048022180328,-0.9515142067527972,microbiome_metagenomics,https://openalex.org/T11226
+90157559,Microbial Fuel Cells and Bioremediation,0.309369936129222,-0.9509417661557416,microbiome_metagenomics,https://openalex.org/T11231
+90157560,Urinary Tract Infections Management,0.3111340047603169,-0.9503660510991578,microbiome_metagenomics,https://openalex.org/T11232
+90157692,Respiratory viral infections research,0.3128970020369469,-0.9497870635654556,microbiome_metagenomics,https://openalex.org/T11243
+90157693,Climate Change and Health Impacts,0.3146589218884327,-0.9492048055483122,microbiome_metagenomics,https://openalex.org/T11244
+90157696,Plant nutrient uptake and metabolism,0.3164197582478041,-0.9486192790526669,microbiome_metagenomics,https://openalex.org/T11247
+90157822,Evolutionary Game Theory and Cooperation,0.3181795050518228,-0.9480304860947126,microbiome_metagenomics,https://openalex.org/T11252
+90157823,Nail Diseases and Treatments,0.3199381562410006,-0.9474384287018914,microbiome_metagenomics,https://openalex.org/T11253
+90157957,Neuroinflammation and Neurodegeneration Mechanisms,0.3216957057596218,-0.9468431089128856,microbiome_metagenomics,https://openalex.org/T11266
+90158087,Composting and Vermicomposting Techniques,0.3234521475557658,-0.946244528777611,microbiome_metagenomics,https://openalex.org/T11275
+90158215,Fibromyalgia and Chronic Fatigue Syndrome Research,0.3252074755813258,-0.9456426903572096,microbiome_metagenomics,https://openalex.org/T11282
+90158220,Cancer Genomics and Diagnostics,0.3269616837920305,-0.9450375957240432,microbiome_metagenomics,https://openalex.org/T11287
+90158221,Clostridium difficile and Clostridium perfringens research,0.3287147661474633,-0.9444292469616866,microbiome_metagenomics,https://openalex.org/T11288
+90158222,Single-cell and spatial transcriptomics,0.3304667166110841,-0.9438176461649196,microbiome_metagenomics,https://openalex.org/T11289
+90158344,Preterm Birth and Chorioamnionitis,0.332217529150253,-0.9432027954397192,microbiome_metagenomics,https://openalex.org/T11290
+90158347,Orthopedic Infections and Treatments,0.3339671977362442,-0.9425846969032546,microbiome_metagenomics,https://openalex.org/T11293
+90158348,Infant Nutrition and Health,0.3357157163442767,-0.9419633526838764,microbiome_metagenomics,https://openalex.org/T11294
+90158351,Ferroptosis and cancer prognosis,0.3374630789535237,-0.9413387649211138,microbiome_metagenomics,https://openalex.org/T11297
+90174334,Sphingolipid Metabolism and Signaling,0.3392092795471428,-0.9407109357656624,microbiome_metagenomics,https://openalex.org/T11308
+90174460,Immune cells in cancer,0.3409543121122907,-0.940079867379381,microbiome_metagenomics,https://openalex.org/T11313
+90174463,Mycobacterium research and diagnosis,0.3426981706401452,-0.939445561935282,microbiome_metagenomics,https://openalex.org/T11316
+90174720,Fecal contamination and water quality,0.3444408491259313,-0.938808021617523,microbiome_metagenomics,https://openalex.org/T11331
+90174722,Climate change and permafrost,0.3461823415689323,-0.9381672486214018,microbiome_metagenomics,https://openalex.org/T11333
+90174726,Tryptophan and brain disorders,0.3479226419725189,-0.9375232451533468,microbiome_metagenomics,https://openalex.org/T11337
+90174728,"Metabolism, Diabetes, and Cancer",0.3496617443441644,-0.9368760134309108,microbiome_metagenomics,https://openalex.org/T11339
+90174850,Marine Sponges and Natural Products,0.3513996426954673,-0.9362255556827628,microbiome_metagenomics,https://openalex.org/T11340
+90174858,Celiac Disease Research and Management,0.3531363310421737,-0.9355718741486794,microbiome_metagenomics,https://openalex.org/T11348
+90174989,Dysphagia Assessment and Management,0.3548718034041953,-0.9349149710795384,microbiome_metagenomics,https://openalex.org/T11358
+90174990,Effects of Radiation Exposure,0.3566060538056316,-0.9342548487373106,microbiome_metagenomics,https://openalex.org/T11359
+90175120,Long-Term Effects of COVID-19,0.3583390762747884,-0.933591509395052,microbiome_metagenomics,https://openalex.org/T11368
+90175505,Seaweed-derived Bioactive Compounds,0.3600708648441997,-0.9329249553368965,microbiome_metagenomics,https://openalex.org/T11390
+90191490,Invertebrate Immune Response Mechanisms,0.3618014135506499,-0.9322551888580464,microbiome_metagenomics,https://openalex.org/T11403
+90191494,Innovative Microfluidic and Catalytic Techniques Innovation,0.3635307164351917,-0.9315822122647665,microbiome_metagenomics,https://openalex.org/T11407
+90191619,Tea Polyphenols and Effects,0.3652587675431687,-0.9309060278743744,microbiome_metagenomics,https://openalex.org/T11411
+90192144,Oral Health Pathology and Treatment,0.3669855609242324,-0.9302266380152346,microbiome_metagenomics,https://openalex.org/T11452
+90192149,Adipose Tissue and Metabolism,0.3687110906323684,-0.9295440450267484,microbiome_metagenomics,https://openalex.org/T11457
+90192281,Genetic Mapping and Diversity in Plants and Animals,0.370435350725911,-0.9288582512593464,microbiome_metagenomics,https://openalex.org/T11468
+90192404,Legume Nitrogen Fixing Symbiosis,0.3721583352675656,-0.9281692590744828,microbiome_metagenomics,https://openalex.org/T11470
+90192537,RNA modifications and cancer,0.3738800383244346,-0.9274770708446216,microbiome_metagenomics,https://openalex.org/T11482
+90192667,CAR-T cell therapy research,0.3756004539680276,-0.9267816889532354,microbiome_metagenomics,https://openalex.org/T11491
+90192669,Water Treatment and Disinfection,0.3773195762742911,-0.9260831157947916,microbiome_metagenomics,https://openalex.org/T11493
+90192671,Animal Virus Infections Studies,0.3790373993236225,-0.9253813537747476,microbiome_metagenomics,https://openalex.org/T11495
+90208779,Reproductive System and Pregnancy,0.3807539172008926,-0.9246764053095416,microbiome_metagenomics,https://openalex.org/T11510
+90208784,Bacillus and Francisella bacterial research,0.382469123995471,-0.923968272826582,microbiome_metagenomics,https://openalex.org/T11515
+90208911,Salivary Gland Disorders and Functions,0.3841830138012362,-0.923256958764243,microbiome_metagenomics,https://openalex.org/T11521
+90208918,Lichen and fungal ecology,0.3858955807166059,-0.9225424655718528,microbiome_metagenomics,https://openalex.org/T11528
+90209042,Healthcare Systems and Reforms,0.3876068188445495,-0.9218247957096884,microbiome_metagenomics,https://openalex.org/T11531
+90209173,Neuroendocrine regulation and behavior,0.3893167222926153,-0.9211039516489627,microbiome_metagenomics,https://openalex.org/T11541
+90209306,Acne and Rosacea Treatments and Effects,0.3910252851729433,-0.9203799358718217,microbiome_metagenomics,https://openalex.org/T11553
+90209698,Nanopore and Nanochannel Transport Studies,0.3927325016022953,-0.9196527508713292,microbiome_metagenomics,https://openalex.org/T11582
+90209700,Biochemical Analysis and Sensing Techniques,0.3944383657020647,-0.9189223991514648,microbiome_metagenomics,https://openalex.org/T11584
+90209834,"Neutrophil, Myeloperoxidase and Oxidative Mechanisms",0.3961428715983021,-0.918188883227112,microbiome_metagenomics,https://openalex.org/T11597
+90226077,Metalloenzymes and iron-sulfur proteins,0.3978460134217374,-0.9174522056240482,microbiome_metagenomics,https://openalex.org/T11626
+90226080,"Birth, Development, and Health",0.3995477853077936,-0.9167123688789396,microbiome_metagenomics,https://openalex.org/T11629
+90226334,Insect and Pesticide Research,0.4012481813966166,-0.9159693755393288,microbiome_metagenomics,https://openalex.org/T11641
+90226602,Advanced Chemical Sensor Technologies,0.4029471958330846,-0.9152232281636288,microbiome_metagenomics,https://openalex.org/T11667
+90226858,Nosocomial Infections in ICU,0.4046448227668344,-0.9144739293211136,microbiome_metagenomics,https://openalex.org/T11681
+90226861,Vibrio bacteria research studies,0.4063410563522829,-0.9137214815919076,microbiome_metagenomics,https://openalex.org/T11684
+90226989,Forest Insect Ecology and Management,0.4080358907486415,-0.9129658875669796,microbiome_metagenomics,https://openalex.org/T11691
+90242976,Forensic Entomology and Diptera Studies,0.409729320119942,-0.9122071498481308,microbiome_metagenomics,https://openalex.org/T11706
+90243101,Biomedical Text Mining and Ontologies,0.4114213386350545,-0.9114452710479878,microbiome_metagenomics,https://openalex.org/T11710
+90243629,SARS-CoV-2 detection and testing,0.4131119404677043,-0.910680253789994,microbiome_metagenomics,https://openalex.org/T11754
+90243756,Plant responses to elevated CO2,0.4148011197964986,-0.9099121007083986,microbiome_metagenomics,https://openalex.org/T11760
+90243760,Evolution and Genetic Dynamics,0.4164888708049393,-0.9091408144482496,microbiome_metagenomics,https://openalex.org/T11764
+90244150,Microbial Community Ecology and Physiology,0.4181751876814492,-0.908366397665383,microbiome_metagenomics,https://openalex.org/T11791
+90260399,Ocular Infections and Treatments,0.4198600646193883,-0.9075888530264148,microbiome_metagenomics,https://openalex.org/T11826
+90260400,Polyomavirus and related diseases,0.4215434958170758,-0.9068081832087308,microbiome_metagenomics,https://openalex.org/T11827
+90260528,Liver Diseases and Immunity,0.4232254754778077,-0.9060243909004788,microbiome_metagenomics,https://openalex.org/T11834
+90260659,Lipid metabolism and biosynthesis,0.4249059978098779,-0.9052374788005588,microbiome_metagenomics,https://openalex.org/T11844
+90261057,Protist diversity and phylogeny,0.4265850570266011,-0.904447449618612,microbiome_metagenomics,https://openalex.org/T11879
+90261312,Kawasaki Disease and Coronary Complications,0.4282626473463258,-0.9036543060750148,microbiome_metagenomics,https://openalex.org/T11892
+90277558,Polyamine Metabolism and Applications,0.4299387629924645,-0.9028580509008652,microbiome_metagenomics,https://openalex.org/T11924
+90277562,Genetic Syndromes and Imprinting,0.4316133981935023,-0.902058686837978,microbiome_metagenomics,https://openalex.org/T11928
+90277692,Research Data Management Practices,0.4332865471830231,-0.9012562166388722,microbiome_metagenomics,https://openalex.org/T11937
+90278079,Neonatal and Maternal Infections,0.4349582041997308,-0.900450643066762,microbiome_metagenomics,https://openalex.org/T11961
+90278080,Cardiac Fibrosis and Remodeling,0.4366283634874627,-0.8996419688955491,microbiome_metagenomics,https://openalex.org/T11962
+90278085,Electrolyte and hormonal disorders,0.4382970192952189,-0.8988301969098093,microbiome_metagenomics,https://openalex.org/T11967
+90278209,Molecular Biology Techniques and Applications,0.4399641658771711,-0.8980153299047879,microbiome_metagenomics,https://openalex.org/T11970
+90278211,Chromium effects and bioremediation,0.4416297974926917,-0.8971973706863858,microbiome_metagenomics,https://openalex.org/T11972
+90278346,Scientific Computing and Data Management,0.4432939084063674,-0.8963763220711528,microbiome_metagenomics,https://openalex.org/T11986
+92370939,Spaceflight effects on biology,0.4449564928880212,-0.8955521868862765,microbiome_metagenomics,https://openalex.org/T12005
+92371465,Viral Infections and Vectors,0.4466175452127339,-0.8947249679695719,microbiome_metagenomics,https://openalex.org/T12047
+92371597,Allelopathy and phytotoxic interactions,0.4482770596608612,-0.8938946681694733,microbiome_metagenomics,https://openalex.org/T12058
+92371598,Berberine and alkaloids research,0.4499350305180552,-0.8930612903450226,microbiome_metagenomics,https://openalex.org/T12059
+92371852,Marine Biology and Environmental Chemistry,0.4515914520752814,-0.8922248373658619,microbiome_metagenomics,https://openalex.org/T12071
+92372120,Aquatic Invertebrate Ecology and Behavior,0.4532463186288405,-0.891385312112222,microbiome_metagenomics,https://openalex.org/T12097
+92388492,Insect symbiosis and bacterial influences,0.4548996244803888,-0.8905427174749122,microbiome_metagenomics,https://openalex.org/T12134
+92388757,Geochemistry and Geologic Mapping,0.4565513639369562,-0.8896970563553107,microbiome_metagenomics,https://openalex.org/T12157
+92388888,Bacterial Identification and Susceptibility Testing,0.4582015313109671,-0.8888483316653549,microbiome_metagenomics,https://openalex.org/T12167
+92389143,Polar Research and Ecology,0.4598501209202568,-0.8879965463275323,microbiome_metagenomics,https://openalex.org/T12180
+92389282,Oral health in cancer treatment,0.4614971270880963,-0.8871417032748677,microbiome_metagenomics,https://openalex.org/T12198
+92405651,"Yersinia bacterium, plague, ectoparasites research",0.4631425441432072,-0.8862838054509161,microbiome_metagenomics,https://openalex.org/T12232
+92405915,Machine Learning in Bioinformatics,0.4647863664197818,-0.8854228558097517,microbiome_metagenomics,https://openalex.org/T12254
+92406049,Diet and metabolism studies,0.4664285882575086,-0.8845588573159546,microbiome_metagenomics,https://openalex.org/T12267
+92406442,Otolaryngology and Infectious Diseases,0.4680692040015819,-0.8836918129446065,microbiome_metagenomics,https://openalex.org/T12297
+92422681,Animal health and immunology,0.4697082080027298,-0.8828217256812749,microbiome_metagenomics,https://openalex.org/T12322
+92422816,Insect Utilization and Effects,0.4713455946172282,-0.8819485985220066,microbiome_metagenomics,https://openalex.org/T12336
+92423212,Pneumocystis jirovecii pneumonia detection and treatment,0.4729813582069214,-0.8810724344733161,microbiome_metagenomics,https://openalex.org/T12369
+92423473,Identification and Quantification in Food,0.4746154931392473,-0.8801932365521727,microbiome_metagenomics,https://openalex.org/T12388
+92439585,Plant Growth Enhancement Techniques,0.4762479937872462,-0.8793110077859955,microbiome_metagenomics,https://openalex.org/T12407
+92440364,Pediatric Hepatobiliary Diseases and Treatments,0.4778788545295898,-0.8784257512126379,microbiome_metagenomics,https://openalex.org/T12460
+92440497,Plant responses to water stress,0.4795080697505944,-0.8775374698803802,microbiome_metagenomics,https://openalex.org/T12472
+92440500,Plant Parasitism and Resistance,0.4811356338402424,-0.8766461668479183,microbiome_metagenomics,https://openalex.org/T12475
+92440635,Microbial Metabolites in Food Biotechnology,0.4827615411942032,-0.8757518451843522,microbiome_metagenomics,https://openalex.org/T12489
+92440759,Zoonotic diseases and public health,0.4843857862138502,-0.8748545079691766,microbiome_metagenomics,https://openalex.org/T12492
+92457009,"IL-33, ST2, and ILC Pathways",0.4860083633062818,-0.8739541582922694,microbiome_metagenomics,https://openalex.org/T12528
+92457398,Vitamin C and Antioxidants Research,0.4876292668843372,-0.873050799253883,microbiome_metagenomics,https://openalex.org/T12554
+92457526,bioluminescence and chemiluminescence research,0.4892484913666213,-0.8721444339646302,microbiome_metagenomics,https://openalex.org/T12561
+92474301,Pomegranate: compositions and health benefits,0.490866031177517,-0.8712350655454778,microbiome_metagenomics,https://openalex.org/T12638
+92474424,Environmental DNA in Biodiversity Studies,0.4924818807472134,-0.8703226971277306,microbiome_metagenomics,https://openalex.org/T12640
+92474686,Plant Disease Management Techniques,0.4940960345117153,-0.8694073318530261,microbiome_metagenomics,https://openalex.org/T12660
+92475080,Coccidia and coccidiosis research,0.4957084869128675,-0.8684889728733206,microbiome_metagenomics,https://openalex.org/T12691
+92491195,Forest Ecology and Biodiversity Studies,0.4973192323983756,-0.8675676233508777,microbiome_metagenomics,https://openalex.org/T12713
+92491856,Stoma care and complications,0.4989282654218205,-0.8666432864582598,microbiome_metagenomics,https://openalex.org/T12769
+92492245,Banana Cultivation and Research,0.5005355804426789,-0.8657159653783165,microbiome_metagenomics,https://openalex.org/T12795
+92508488,Infections and bacterial resistance,0.5021411719263478,-0.8647856633041704,microbiome_metagenomics,https://openalex.org/T12824
+92508617,Biocrusts and Microbial Ecology,0.5037450343441537,-0.863852383439212,microbiome_metagenomics,https://openalex.org/T12832
+92508755,Parvovirus B19 Infection Studies,0.505347162173381,-0.862916128997083,microbiome_metagenomics,https://openalex.org/T12849
+92508883,Transgenic Plants and Applications,0.5069475498972835,-0.86197690320167,microbiome_metagenomics,https://openalex.org/T12856
+92508885,Plant Disease Resistance and Genetics,0.5085461920051103,-0.8610347092870888,microbiome_metagenomics,https://openalex.org/T12858
+92508886,Cell Image Analysis Techniques,0.5101430829921171,-0.8600895504976781,microbiome_metagenomics,https://openalex.org/T12859
+92525780,Plant and fungal interactions,0.5117382173595951,-0.8591414300879825,microbiome_metagenomics,https://openalex.org/T12934
+92525914,"Health, psychology, and well-being",0.5133315896148795,-0.8581903513227476,microbiome_metagenomics,https://openalex.org/T12947
+92526173,"Diet, Metabolism, and Disease",0.5149231942713737,-0.8572363174769051,microbiome_metagenomics,https://openalex.org/T12964
+92526309,Cardiovascular Disease and Adiposity,0.5165130258485702,-0.8562793318355607,microbiome_metagenomics,https://openalex.org/T12979
+92526568,Cancer Research and Treatments,0.518101078872063,-0.8553193976939868,microbiome_metagenomics,https://openalex.org/T12996
+94636712,GABA and Rice Research,0.5196873478735757,-0.8543565183576053,microbiome_metagenomics,https://openalex.org/T13142
+94637374,Digestive system and related health,0.5212718273909703,-0.8533906971419822,microbiome_metagenomics,https://openalex.org/T13199
+94654404,Infant Health and Development,0.5228545119682716,-0.8524219373728134,microbiome_metagenomics,https://openalex.org/T13289
+94671690,Child Nutrition and Feeding Issues,0.5244353961556871,-0.8514502423859115,microbiome_metagenomics,https://openalex.org/T13393
+94687800,Immune responses and vaccinations,0.526014474509621,-0.8504756155271985,microbiome_metagenomics,https://openalex.org/T13410
+94704835,Apelin-related biomedical research,0.5275917415926978,-0.8494980601526904,microbiome_metagenomics,https://openalex.org/T13505
+94705486,Biochemical effects in animals,0.5291671919737789,-0.8485175796284871,microbiome_metagenomics,https://openalex.org/T13551
+94705625,Microscopic Colitis,0.5307408202279791,-0.8475341773307623,microbiome_metagenomics,https://openalex.org/T13569
+94740069,Pediatric health and respiratory diseases,0.5323126209366903,-0.8465478566457489,microbiome_metagenomics,https://openalex.org/T13770
+94740339,Hops Chemistry and Applications,0.5338825886875948,-0.8455586209697306,microbiome_metagenomics,https://openalex.org/T13798
+94756451,"Tannin, Tannase and Anticancer Activities",0.5354507180746881,-0.8445664737090272,microbiome_metagenomics,https://openalex.org/T13817
+94773874,"Genetics, Bioinformatics, and Biomedical Research",0.5370170036982959,-0.8435714182799845,microbiome_metagenomics,https://openalex.org/T13937
+96884932,Biochemical and biochemical processes,0.5385814401650926,-0.8425734581089621,microbiome_metagenomics,https://openalex.org/T14150
+96919781,"Health, Environment, Cognitive Aging",0.5401440220881191,-0.8415725966323223,microbiome_metagenomics,https://openalex.org/T14393
+96919787,Invertebrate Taxonomy and Ecology,0.5417047440868019,-0.8405688372964182,microbiome_metagenomics,https://openalex.org/T14399

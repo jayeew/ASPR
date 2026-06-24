@@ -1,0 +1,11 @@
+{
+  "source_kind": "standard_fig3_input",
+  "source_dir": "data\\knowledge_corpus\\v2_publication_v6a_locked_candidate\\views\\fig2\\gamma_ray_bursts_and_supernovae",
+  "prepared_dir": "outputs\\redraw_v6a_display_fixed_fig2\\fig3_input\\gamma_ray_bursts_and_supernovae",
+  "works_rows": 2500,
+  "citation_rows": 27549,
+  "topic_rows": 76,
+  "topic_edge_rows": 345,
+  "landmark_rows": 2,
+  "analysis_end_year": 2025
+}

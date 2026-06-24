@@ -1,0 +1,11 @@
+{
+  "source_kind": "standard_fig3_input",
+  "source_dir": "data\\knowledge_corpus\\v2_publication_v6a_locked_candidate\\views\\fig2\\perovskite_solar_cells",
+  "prepared_dir": "outputs\\redraw_v6a_best_fig2\\fig3_input\\perovskite_solar_cells",
+  "works_rows": 2500,
+  "citation_rows": 41859,
+  "topic_rows": 81,
+  "topic_edge_rows": 144,
+  "landmark_rows": 3,
+  "analysis_end_year": 2025
+}

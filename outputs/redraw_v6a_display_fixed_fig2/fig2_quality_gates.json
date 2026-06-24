@@ -1,0 +1,38 @@
+{
+  "overall_pass": false,
+  "status_label": "multi-domain diagnostic evidence",
+  "checks": {
+    "included_domains_min4": 1,
+    "total_eligible_papers_min8000": 0,
+    "active_future_outcomes_min5": 1,
+    "relaxed_control_tier_ratio_max25pct": 0,
+    "reference_closure_coverage_min80pct": 0,
+    "significant_expected_links_min4": 1,
+    "mechanism_composite_rho_min020": 1
+  },
+  "n_domains": 10,
+  "total_eligible_papers": 5087,
+  "active_future_outcomes": [
+    "community_reach",
+    "field_entropy",
+    "cross_community_adoption",
+    "path_shortening",
+    "partition_change",
+    "boundary_mixing",
+    "hub_formation"
+  ],
+  "relaxed_control_tier_ratio": 0.33849129593810445,
+  "reference_closure_measured_all_domains": false,
+  "min_reference_closure_coverage": 0.0,
+  "significant_expected_links": 12,
+  "mechanism_composite_partial_spearman": 0.20918818941589706,
+  "thresholds": {
+    "domains_min": 4,
+    "eligible_papers_min": 8000,
+    "active_future_outcomes_min": 5,
+    "relaxed_control_tier_ratio_max": 0.25,
+    "reference_closure_coverage_min": 0.8,
+    "significant_expected_links_min": 4,
+    "mechanism_composite_rho_min": 0.2
+  }
+}
