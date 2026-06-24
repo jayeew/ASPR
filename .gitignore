@@ -13,6 +13,7 @@ outputs/checkpoints/
 outputs/downloads/
 outputs/graphrag/
 outputs/logs/
+.superpowers/
 
 # Generated corpus and experiment artifacts are large local data products.
 data/knowledge_corpus/
