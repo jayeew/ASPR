@@ -135,6 +135,22 @@ def test_build_handoff_writes_prompt_text_and_draft() -> None:
         assert (out_dir / "fig5_layout_draft.png").stat().st_size > 0
 
 
+def test_build_handoff_can_write_ai_cross_domain_lens() -> None:
+    """The handoff builder can create an explicitly labelled AI fusion lens."""
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp) / "plot_data"
+        out_dir = Path(tmp) / "ai_handoff"
+        write_fixture(root)
+
+        build_handoff(root, out_dir, theme="ai_cross_domain")
+
+        panel_text = json.loads((out_dir / "fig5_panel_text.json").read_text(encoding="utf-8"))
+        assert panel_text["theme_mode"] == "ai_cross_domain_lens"
+        assert panel_text["subtitle"] == "Multi-domain frontier lens: AI-enabled scientific discovery"
+        assert panel_text["panel_b"]["top_foci"][0]["focus_label"] == "AI-enabled scientific discovery"
+        assert panel_text["panel_d"]["cards"][0]["predicted_role"] == "general-purpose discovery engine"
+
+
 def test_default_fig5_data_paths_prefer_local_redraw_v6a_best_fig3() -> None:
     """Default Fig. 5 data inputs prefer the local validated Fig. 3 redraw run."""
     expected_run = FIG5_PROJECT_ROOT / "outputs" / "redraw_v6a_best_fig3" / "multi_domain"
@@ -146,5 +162,6 @@ def test_default_fig5_data_paths_prefer_local_redraw_v6a_best_fig3() -> None:
 
 if __name__ == "__main__":
     test_build_handoff_writes_prompt_text_and_draft()
+    test_build_handoff_can_write_ai_cross_domain_lens()
     test_default_fig5_data_paths_prefer_local_redraw_v6a_best_fig3()
     print("test_fig5_image2_handoff passed")

@@ -34,6 +34,132 @@ PURPLE = "#8B5CF6"
 RED = "#EF4444"
 GRAY = "#9CA3AF"
 
+AI_CROSS_DOMAIN_FOCI: List[Dict[str, Any]] = [
+    {
+        "rank": 1,
+        "focus_id": "ai_lens::scientific_discovery",
+        "focus_label": "AI-enabled scientific discovery",
+        "short_label": "AI-enabled scientific discovery",
+        "forecast_score": 0.96,
+        "display_color": BLUE,
+        "domain": "multi_domain",
+    },
+    {
+        "rank": 2,
+        "focus_id": "ai_lens::foundation_models",
+        "focus_label": "Foundation models for domain knowledge",
+        "short_label": "Foundation models for domain knowledge",
+        "forecast_score": 0.93,
+        "display_color": PURPLE,
+        "domain": "multi_domain",
+    },
+    {
+        "rank": 3,
+        "focus_id": "ai_lens::materials_design",
+        "focus_label": "AI-guided materials and device design",
+        "short_label": "AI-guided materials and device design",
+        "forecast_score": 0.90,
+        "display_color": ORANGE,
+        "domain": "materials",
+    },
+    {
+        "rank": 4,
+        "focus_id": "ai_lens::biomedical_ai",
+        "focus_label": "Biomedical AI for therapy and diagnostics",
+        "short_label": "Biomedical AI for therapy and diagnostics",
+        "forecast_score": 0.88,
+        "display_color": RED,
+        "domain": "biomedicine",
+    },
+    {
+        "rank": 5,
+        "focus_id": "ai_lens::autonomous_labs",
+        "focus_label": "Autonomous labs and robotic experimentation",
+        "short_label": "Autonomous labs and robotic experimentation",
+        "forecast_score": 0.84,
+        "display_color": GREEN,
+        "domain": "multi_domain",
+    },
+    {
+        "rank": 6,
+        "focus_id": "ai_lens::climate_agriculture",
+        "focus_label": "AI for climate, agriculture, and environment",
+        "short_label": "AI for climate, agriculture, and environment",
+        "forecast_score": 0.81,
+        "display_color": "#0F766E",
+        "domain": "environment",
+    },
+    {
+        "rank": 7,
+        "focus_id": "ai_lens::scientific_rag",
+        "focus_label": "Scientific knowledge graphs and RAG",
+        "short_label": "Scientific knowledge graphs and RAG",
+        "forecast_score": 0.78,
+        "display_color": "#0891B2",
+        "domain": "multi_domain",
+    },
+    {
+        "rank": 8,
+        "focus_id": "ai_lens::multimodal_fusion",
+        "focus_label": "Multimodal data fusion across experiments",
+        "short_label": "Multimodal data fusion across experiments",
+        "forecast_score": 0.75,
+        "display_color": "#7C3AED",
+        "domain": "multi_domain",
+    },
+]
+
+AI_CROSS_DOMAIN_CARDS: List[Dict[str, Any]] = [
+    {
+        "rank": 1,
+        "innovation_id": "ai_lens_card_1",
+        "innovation_label": "Foundation models for scientific reasoning",
+        "short_label": "Foundation models for scientific reasoning",
+        "predicted_role": "general-purpose discovery engine",
+        "short_reason": "Connects literature, data, and simulation across domains.",
+        "linked_focus_label": "Foundation models for domain knowledge",
+        "icon_type": "computation",
+        "display_color": PURPLE,
+        "seed_year": 2020,
+    },
+    {
+        "rank": 2,
+        "innovation_id": "ai_lens_card_2",
+        "innovation_label": "AI-guided materials and device design",
+        "short_label": "AI-guided materials and device design",
+        "predicted_role": "cross-domain accelerator",
+        "short_reason": "Prioritizes candidate materials and devices before costly experiments.",
+        "linked_focus_label": "AI-guided materials and device design",
+        "icon_type": "materials",
+        "display_color": ORANGE,
+        "seed_year": 2020,
+    },
+    {
+        "rank": 3,
+        "innovation_id": "ai_lens_card_3",
+        "innovation_label": "Biomedical AI for translation",
+        "short_label": "Biomedical AI for translation",
+        "predicted_role": "translational prioritization layer",
+        "short_reason": "Links multi-omics, imaging, and clinical evidence to target selection.",
+        "linked_focus_label": "Biomedical AI for therapy and diagnostics",
+        "icon_type": "biomedicine",
+        "display_color": RED,
+        "seed_year": 2020,
+    },
+    {
+        "rank": 4,
+        "innovation_id": "ai_lens_card_4",
+        "innovation_label": "Autonomous experimental platforms",
+        "short_label": "Autonomous experimental platforms",
+        "predicted_role": "closed-loop discovery system",
+        "short_reason": "Combines prediction, robotic testing, and feedback-driven optimization.",
+        "linked_focus_label": "Autonomous labs and robotic experimentation",
+        "icon_type": "automation",
+        "display_color": GREEN,
+        "seed_year": 2020,
+    },
+]
+
 
 def read_json(path: Path) -> Dict[str, Any]:
     """Read a JSON object."""
@@ -207,6 +333,61 @@ def build_panel_text(plot_data_dir: Path) -> Dict[str, Any]:
     }
 
 
+def apply_ai_cross_domain_lens(panel_text: Dict[str, Any]) -> Dict[str, Any]:
+    """Apply an explicitly labelled AI cross-domain thematic lens."""
+    out = json.loads(json.dumps(panel_text, ensure_ascii=False))
+    out["subtitle"] = "Multi-domain frontier lens: AI-enabled scientific discovery"
+    out["theme_mode"] = "ai_cross_domain_lens"
+    out["lens_note"] = (
+        "This handoff applies a user-requested multi-domain AI-cross-domain lens. "
+        "The strict data-driven top-N tables remain in the plot_data directory; "
+        "this view is a transparent thematic result package for a general Fig. 5 example."
+    )
+    out["panel_a"]["historical_heading"] = "Historical multi-domain knowledge graph (1980-2020)"
+    out["panel_a"]["future_heading"] = "Future frontier window (2021-2026)"
+    out["panel_a"]["method_note"] = "Cross-domain frontier forecasting with an explicit AI-fusion lens"
+    out["panel_a"]["future_note"] = "Predict AI-enabled foci and key cross-domain innovation roles"
+    out["panel_b"]["title"] = "Top predicted cross-domain research foci (AI lens, 2021-2026)"
+    out["panel_b"]["word_cloud_title"] = "Predicted AI-enabled research foci (word cloud)"
+    out["panel_b"]["bar_chart_title"] = "Top AI-enabled foci (by lens priority score)"
+    out["panel_b"]["axis_label"] = "AI-lens priority score"
+    out["panel_b"]["top_foci"] = [dict(item) for item in AI_CROSS_DOMAIN_FOCI]
+    out["panel_c"]["title"] = "AI-enabled frontier landscape (multi-domain topic map)"
+    out["panel_c"]["color_legend_title"] = "Color intensity: AI-lens frontier priority (2021-2026)"
+    out["panel_c"]["foci"] = []
+    positions = [
+        (0.46, 0.60),
+        (0.58, 0.65),
+        (0.78, 0.57),
+        (0.36, 0.42),
+        (0.68, 0.36),
+        (0.25, 0.62),
+        (0.52, 0.28),
+        (0.42, 0.72),
+    ]
+    for item, (plot_x, plot_y) in zip(AI_CROSS_DOMAIN_FOCI, positions):
+        focus = dict(item)
+        focus.update(
+            {
+                "plot_x": plot_x,
+                "plot_y": plot_y,
+                "hist_size": 40 + 9 * int(item["rank"]),
+                "display_size": round(150.0 + 360.0 * float(item["forecast_score"]), 1),
+            }
+        )
+        out["panel_c"]["foci"].append(focus)
+    out["panel_d"]["title"] = "Representative AI-enabled key innovations (examples)"
+    out["panel_d"]["cards"] = [dict(item) for item in AI_CROSS_DOMAIN_CARDS]
+    out["take_home"] = (
+        "Across domains, AI is expected to act less as a single field and more as a "
+        "general-purpose discovery layer linking literature, data, simulation, and experimentation."
+    )
+    out["image2_constraints"].append(
+        "Label this as an AI-cross-domain thematic lens, not as an unqualified strict top-N empirical ranking."
+    )
+    return out
+
+
 def render_prompt(panel_text: Dict[str, Any]) -> str:
     """Return a complete image-2 prompt embedding exact panel text JSON."""
     exact_json = json.dumps(panel_text, indent=2, ensure_ascii=False)
@@ -221,6 +402,7 @@ Critical accuracy requirements:
 - Preserve all visible numeric forecast scores from the JSON.
 - Keep the layout as four panels labeled a, b, c, d plus one bottom take-home strip.
 - Do not add a separate backtesting panel.
+- If `theme_mode` is present, preserve it in the visual framing and do not imply the lens is an unqualified strict top-N empirical ranking.
 - If text becomes too dense, prioritize exact top-ranked focus labels, scores, card headings, and take-home message over decorative detail.
 
 Visual direction:
@@ -491,13 +673,17 @@ def draw_layout_draft(panel_text: Dict[str, Any], out_path: Path) -> None:
     image.save(out_path)
 
 
-def build_handoff(plot_data_dir: Path, out_dir: Path) -> Dict[str, Path]:
+def build_handoff(plot_data_dir: Path, out_dir: Path, theme: str = "data") -> Dict[str, Path]:
     """Write image-2 handoff files from an existing Fig. 5 data package."""
     plot_data_dir = plot_data_dir.resolve()
     out_dir = out_dir.resolve()
     out_dir.mkdir(parents=True, exist_ok=True)
 
     panel_text = build_panel_text(plot_data_dir)
+    if theme == "ai_cross_domain":
+        panel_text = apply_ai_cross_domain_lens(panel_text)
+    elif theme != "data":
+        raise ValueError(f"Unknown handoff theme: {theme}")
     prompt = render_prompt(panel_text)
     notes = render_visual_notes(panel_text)
 
@@ -524,14 +710,21 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build Fig. 5 image-2 handoff assets.")
     parser.add_argument("--plot-data-dir", type=Path, default=DEFAULT_PLOT_DATA_DIR, help="Directory with Fig. 5 plot data.")
     parser.add_argument("--out-dir", type=Path, default=DEFAULT_OUT_DIR, help="Output directory for image-2 handoff assets.")
+    parser.add_argument(
+        "--theme",
+        choices=["data", "ai_cross_domain"],
+        default="data",
+        help="Handoff theme: strict data-driven text or an explicitly labelled AI cross-domain lens.",
+    )
     return parser.parse_args(argv)
 
 
 def main(argv: Optional[Sequence[str]] = None) -> None:
     """Command-line entry point."""
     args = parse_args(argv)
-    paths = build_handoff(args.plot_data_dir, args.out_dir)
+    paths = build_handoff(args.plot_data_dir, args.out_dir, theme=args.theme)
     print("[fig5-image2] wrote", args.out_dir)
+    print("[fig5-image2] theme:", args.theme)
     for label, path in paths.items():
         print(f"[fig5-image2] {label}: {path}")
 

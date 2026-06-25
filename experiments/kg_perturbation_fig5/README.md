@@ -40,6 +40,21 @@ python -m experiments.kg_perturbation_fig5.build_fig5_image2_handoff \
   --out-dir outputs/kg_perturbation_fig5/crispr_image2_handoff
 ```
 
+For a more general multi-domain example centered on AI as a cross-domain
+scientific discovery layer:
+
+```bash
+python -m experiments.kg_perturbation_fig5.build_fig5_image2_handoff \
+  --plot-data-dir outputs/kg_perturbation_fig5/plot_data \
+  --out-dir outputs/kg_perturbation_fig5/ai_cross_domain_image2_handoff \
+  --theme ai_cross_domain
+```
+
+This AI mode writes an explicit `theme_mode=ai_cross_domain_lens` marker in
+`fig5_panel_text.json`. It is a transparent thematic lens over the multi-domain
+data package, not an unqualified replacement for the strict data-driven top-N
+ranking.
+
 The handoff package contains:
 
 ```text
