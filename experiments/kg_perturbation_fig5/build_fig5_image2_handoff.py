@@ -27,11 +27,11 @@ TEXT_MID = "#374151"
 TEXT_LIGHT = "#64748B"
 PANEL_EDGE = "#B7C3D5"
 PANEL_FACE = "#FFFFFF"
-BLUE = "#2563EB"
-ORANGE = "#F97316"
-GREEN = "#4D963F"
-PURPLE = "#8B5CF6"
-RED = "#EF4444"
+BLUE = "#2E6FBB"
+ORANGE = "#F28E2B"
+GREEN = "#59A14F"
+PURPLE = "#8E63C7"
+RED = "#E15759"
 GRAY = "#9CA3AF"
 
 AI_CROSS_DOMAIN_FOCI: List[Dict[str, Any]] = [
@@ -95,7 +95,7 @@ AI_CROSS_DOMAIN_FOCI: List[Dict[str, Any]] = [
         "focus_label": "Scientific knowledge graphs and RAG",
         "short_label": "Scientific knowledge graphs and RAG",
         "forecast_score": 0.78,
-        "display_color": "#0891B2",
+        "display_color": "#4E9BA6",
         "domain": "multi_domain",
     },
     {
@@ -104,7 +104,7 @@ AI_CROSS_DOMAIN_FOCI: List[Dict[str, Any]] = [
         "focus_label": "Multimodal data fusion across experiments",
         "short_label": "Multimodal data fusion across experiments",
         "forecast_score": 0.75,
-        "display_color": "#7C3AED",
+        "display_color": "#7B6FD0",
         "domain": "multi_domain",
     },
 ]
@@ -171,6 +171,15 @@ def read_csv(path: Path) -> pd.DataFrame:
     if not path.exists():
         raise FileNotFoundError(path)
     return pd.read_csv(path, low_memory=False)
+
+
+def csv_row_count(path: Path) -> int:
+    """Count data rows in a CSV file without loading the full file."""
+    if not path.exists():
+        return 0
+    with path.open("r", encoding="utf-8", errors="ignore") as handle:
+        total = sum(1 for _ in handle)
+    return max(0, total - 1)
 
 
 def clean_float(value: object, digits: int = 2) -> float:
@@ -269,6 +278,7 @@ def records_for_panel_d(panel_d: pd.DataFrame) -> List[Dict[str, Any]]:
 
 def build_panel_text(plot_data_dir: Path) -> Dict[str, Any]:
     """Read generated Fig. 5 data tables and return exact figure text."""
+    base_dir = plot_data_dir / "base"
     derived_dir = plot_data_dir / "derived"
     config_dir = plot_data_dir / "config"
     panel_a = read_json(derived_dir / "fig5_panel_a_meta.json")
@@ -299,6 +309,13 @@ def build_panel_text(plot_data_dir: Path) -> Dict[str, Any]:
             "n_hist_papers": clean_int(panel_a.get("n_hist_papers", 0)),
             "n_hist_topics": clean_int(panel_a.get("n_hist_topics", 0)),
             "score_column": as_text(panel_a.get("score_column"), ""),
+            "network_data_basis": {
+                "papers": csv_row_count(base_dir / "papers_master.csv"),
+                "topic_nodes": csv_row_count(base_dir / "topic_nodes.csv"),
+                "topic_edges": csv_row_count(base_dir / "topic_edges.csv"),
+                "citation_edges": csv_row_count(base_dir / "citation_edges.csv"),
+                "visual_status": "data-backed schematic, not a literal full-network rendering",
+            },
         },
         "panel_b": {
             "label": "b",
@@ -347,11 +364,32 @@ def apply_ai_cross_domain_lens(panel_text: Dict[str, Any]) -> Dict[str, Any]:
     out["panel_a"]["future_heading"] = "Future frontier window (2021-2026)"
     out["panel_a"]["method_note"] = "Cross-domain frontier forecasting with an explicit AI-fusion lens"
     out["panel_a"]["future_note"] = "Predict AI-enabled foci and key cross-domain innovation roles"
+    out["panel_a"]["left_network_note"] = (
+        "Data-backed schematic built from multi-domain topic nodes, topic edges, citation edges, and paper records."
+    )
+    out["panel_a"]["future_bubbles"] = [
+        {"label": "AI-enabled discovery", "color": BLUE},
+        {"label": "Foundation models", "color": PURPLE},
+        {"label": "AI materials design", "color": ORANGE},
+        {"label": "Biomedical AI", "color": RED},
+        {"label": "Autonomous labs", "color": GREEN},
+    ]
     out["panel_b"]["title"] = "Top predicted cross-domain research foci (AI lens, 2021-2026)"
     out["panel_b"]["word_cloud_title"] = "Predicted AI-enabled research foci (word cloud)"
-    out["panel_b"]["bar_chart_title"] = "Top AI-enabled foci (by lens priority score)"
+    out["panel_b"]["display_mode"] = "word_cloud_only"
+    out["panel_b"]["bar_chart_title"] = ""
     out["panel_b"]["axis_label"] = "AI-lens priority score"
     out["panel_b"]["top_foci"] = [dict(item) for item in AI_CROSS_DOMAIN_FOCI]
+    out["panel_b"]["supporting_terms"] = [
+        {"label": "AI agents", "weight": 0.68, "color": BLUE},
+        {"label": "robotic labs", "weight": 0.64, "color": GREEN},
+        {"label": "scientific RAG", "weight": 0.62, "color": "#4E9BA6"},
+        {"label": "materials screening", "weight": 0.58, "color": ORANGE},
+        {"label": "multi-omics", "weight": 0.55, "color": RED},
+        {"label": "simulation", "weight": 0.52, "color": PURPLE},
+        {"label": "knowledge graphs", "weight": 0.48, "color": "#4E9BA6"},
+        {"label": "multimodal data", "weight": 0.45, "color": "#7B6FD0"},
+    ]
     out["panel_c"]["title"] = "AI-enabled frontier landscape (multi-domain topic map)"
     out["panel_c"]["color_legend_title"] = "Color intensity: AI-lens frontier priority (2021-2026)"
     out["panel_c"]["foci"] = []
@@ -391,6 +429,15 @@ def apply_ai_cross_domain_lens(panel_text: Dict[str, Any]) -> Dict[str, Any]:
 def render_prompt(panel_text: Dict[str, Any]) -> str:
     """Return a complete image-2 prompt embedding exact panel text JSON."""
     exact_json = json.dumps(panel_text, indent=2, ensure_ascii=False)
+    panel_b_mode = panel_text["panel_b"].get("display_mode", "word_cloud_plus_bars")
+    if panel_b_mode == "word_cloud_only":
+        panel_b_instruction = (
+            "Panel b: use the full panel for a rich, readable word cloud only. "
+            "Do not draw a right-side ranked bar chart in panel b. Use varied label sizes, "
+            "small supporting terms, and balanced white space."
+        )
+    else:
+        panel_b_instruction = "Panel b: word-cloud style focus names on the left and horizontal ranked bars on the right."
     return f"""Use case: scientific-educational
 Asset type: final publication figure, 1536 x 1024 landscape PNG
 Primary request: Create a four-panel publication figure closely matching the supplied Fig. 5 reference.
@@ -404,12 +451,13 @@ Critical accuracy requirements:
 - Do not add a separate backtesting panel.
 - If `theme_mode` is present, preserve it in the visual framing and do not imply the lens is an unqualified strict top-N empirical ranking.
 - If text becomes too dense, prioritize exact top-ranked focus labels, scores, card headings, and take-home message over decorative detail.
+- Avoid overlapping labels. Keep generous white space in the word cloud, map labels, and future-window bubbles.
 
 Visual direction:
 - Match the reference image closely: white background, thin light-blue-gray rounded panel borders, compact Nature-style typography, dark navy title, italic subtitle.
-- Panel a: historical knowledge graph on the left, large blue forecast arrow in the center, dashed future-window box with question-mark focus bubbles on the right.
-- Panel b: word-cloud style focus names on the left and horizontal ranked bars on the right.
-- Panel c: topic-map landscape with gray background network, colored forecast bubbles, labels, and compact size/color legends.
+- Panel a: historical knowledge graph on the left, large blue forecast arrow in the center, dashed future-window box with labelled predicted focus bubbles on the right. The left network is a data-backed schematic from the network_data_basis fields, not a literal full-network rendering. Avoid generic question-mark-only bubbles.
+- {panel_b_instruction}
+- Panel c: topic-map landscape with gray background network, soft translucent color halos around focus bubbles, direct labels, and compact size/color legends. Use the softer palette from the JSON, avoid harsh saturated blocks, avoid heavy black outlines, and keep labels outside bubbles where needed.
 - Panel d: four vertical innovation cards with rank badges, simple scientific line icons, predicted role text, and why-highlighted text.
 - Use blue, orange, green, purple, red, teal, and gray accents similar to the reference; avoid heavy gradients or unrelated decoration.
 
@@ -442,18 +490,20 @@ Reference image: `{panel_text['reference_image_path']}`
 
 - Title: {panel_text['panel_a']['title']}.
 - Left side shows a dense historical knowledge graph with colored clusters and a small legend.
+- Data basis: {panel_text['panel_a'].get('network_data_basis', {})}.
 - Center uses a blue forecast arrow.
-- Right side shows a dashed future-window box with pale gray nodes and colored question-mark bubbles.
+- Right side shows a dashed future-window box with labelled predicted focus bubbles, not generic question-mark bubbles.
 
 ## Panel b
 
-- Word cloud on the left, ranked horizontal bars on the right.
+- Display mode: {panel_text['panel_b'].get('display_mode', 'word_cloud_plus_bars')}.
+- If display mode is `word_cloud_only`, use all panel space for a richer word cloud and omit the ranked bar chart.
 - Top foci and scores:
 {foci_lines}
 
 ## Panel c
 
-- Topic map with a gray background network and colored focus bubbles.
+- Topic map with a gray background network, soft colored halos, and colored focus bubbles.
 - Include compact legends for historical volume and forecast strength.
 - Use the supplied focus positions as relative placement guidance, not as pixel-perfect coordinates.
 
@@ -524,6 +574,16 @@ def ellipse_center(draw: ImageDraw.ImageDraw, cx: float, cy: float, radius: floa
     draw.ellipse(box, fill=fill, outline=outline or fill, width=width)
 
 
+def blend_with_white(color: str, amount: float = 0.78) -> str:
+    """Blend a hex color with white."""
+    color = color.lstrip("#")
+    if len(color) != 6:
+        return "#EEF2F7"
+    rgb = [int(color[i : i + 2], 16) for i in (0, 2, 4)]
+    mixed = [int(channel * (1.0 - amount) + 255 * amount) for channel in rgb]
+    return "#" + "".join(f"{channel:02X}" for channel in mixed)
+
+
 def add_panel(draw: ImageDraw.ImageDraw, box: Tuple[int, int, int, int], label: str, title: str) -> None:
     """Draw one rounded panel frame."""
     x0, y0, x1, y1 = box
@@ -560,13 +620,20 @@ def draw_panel_a_draft(draw: ImageDraw.ImageDraw, panel: Dict[str, Any], box: Tu
     center_text(draw, (x0 + 0.57 * w, y0 + 0.38 * h), panel["arrow_label"], font(17, bold=True), BLUE)
     future_box = [x0 + 0.70 * w, y0 + 0.27 * h, x0 + 0.94 * w, y0 + 0.69 * h]
     draw.rounded_rectangle(future_box, radius=12, fill="#F8FAFC", outline="#7AA7FF", width=2)
-    for i, color in enumerate([BLUE, PURPLE, GREEN, ORANGE, RED]):
-        cx = x0 + (0.75 + 0.07 * (i % 2) + 0.10 * (i // 2)) * w
-        cy = y0 + (0.38 + 0.13 * (i % 3)) * h
-        ellipse_center(draw, cx, cy, 25, "#FFFFFF", outline=color, width=2)
-        center_text(draw, (cx, cy), "?", font(28, bold=True), color)
+    bubbles = panel.get("future_bubbles") or [{"label": "Emerging focus", "color": color} for color in [BLUE, PURPLE, GREEN, ORANGE, RED]]
+    bubble_xy = [(0.76, 0.38), (0.86, 0.43), (0.77, 0.59), (0.88, 0.59), (0.82, 0.51)]
+    for i, bubble in enumerate(bubbles[:5]):
+        color = bubble.get("color", BLUE)
+        cx = x0 + bubble_xy[i][0] * w
+        cy = y0 + bubble_xy[i][1] * h
+        ellipse_center(draw, cx, cy, 24, blend_with_white(color, 0.88), outline=color, width=2)
+        wrapped_text(draw, (cx, cy + 42), bubble.get("label", "Emerging focus"), 12, font(9, bold=True), color, anchor="mm", spacing=1)
     wrapped_text(draw, (x0 + 0.57 * w, y0 + 0.62 * h), panel["method_note"], 24, font(13), TEXT_MID, anchor="mm")
     wrapped_text(draw, (x0 + 0.82 * w, y0 + 0.75 * h), panel["future_note"], 22, font(14), TEXT_DARK, anchor="mm")
+    basis = panel.get("network_data_basis")
+    if basis:
+        note = f"Data-backed schematic: {basis.get('topic_nodes', 0)} topics, {basis.get('topic_edges', 0)} topic edges"
+        wrapped_text(draw, (x0 + 0.23 * w, y0 + 0.78 * h), note, 34, font(10), TEXT_LIGHT, anchor="mm")
 
 
 def draw_panel_b_draft(draw: ImageDraw.ImageDraw, panel: Dict[str, Any], box: Tuple[int, int, int, int]) -> None:
@@ -575,12 +642,26 @@ def draw_panel_b_draft(draw: ImageDraw.ImageDraw, panel: Dict[str, Any], box: Tu
     w = x1 - x0
     h = y1 - y0
     foci = panel["top_foci"][:8]
-    center_text(draw, (x0 + 0.25 * w, y0 + 0.16 * h), panel["word_cloud_title"], font(14, bold=True))
-    cloud_xy = [(0.24, 0.36), (0.31, 0.48), (0.25, 0.60), (0.35, 0.70), (0.19, 0.75), (0.14, 0.25), (0.43, 0.31), (0.41, 0.80)]
+    word_cloud_only = panel.get("display_mode") == "word_cloud_only"
+    center_text(draw, (x0 + (0.50 if word_cloud_only else 0.25) * w, y0 + 0.16 * h), panel["word_cloud_title"], font(14, bold=True))
+    if word_cloud_only:
+        cloud_xy = [(0.38, 0.34), (0.58, 0.45), (0.29, 0.56), (0.66, 0.60), (0.42, 0.72), (0.20, 0.32), (0.75, 0.34), (0.54, 0.76)]
+        supporting = panel.get("supporting_terms", [])
+        supporting_xy = [(0.18, 0.50), (0.78, 0.52), (0.25, 0.75), (0.74, 0.73), (0.50, 0.26), (0.14, 0.68), (0.84, 0.25), (0.34, 0.84)]
+    else:
+        cloud_xy = [(0.24, 0.36), (0.31, 0.48), (0.25, 0.60), (0.35, 0.70), (0.19, 0.75), (0.14, 0.25), (0.43, 0.31), (0.41, 0.80)]
+        supporting = []
+        supporting_xy = []
     for idx, item in enumerate(foci):
         cx, cy = cloud_xy[idx % len(cloud_xy)]
-        font_size = 14 + max(0, 7 - idx) * 2
+        font_size = (18 if word_cloud_only else 14) + max(0, 7 - idx) * (3 if word_cloud_only else 2)
         wrapped_text(draw, (x0 + cx * w, y0 + cy * h), item["short_label"], 16, font(font_size, bold=idx < 5), item["display_color"], anchor="mm")
+    for idx, item in enumerate(supporting[:8]):
+        cx, cy = supporting_xy[idx % len(supporting_xy)]
+        font_size = 11 + int(float(item.get("weight", 0.5)) * 8)
+        wrapped_text(draw, (x0 + cx * w, y0 + cy * h), item["label"], 16, font(font_size), item.get("color", TEXT_LIGHT), anchor="mm")
+    if word_cloud_only:
+        return
     center_text(draw, (x0 + 0.72 * w, y0 + 0.16 * h), panel["bar_chart_title"], font(14, bold=True))
     max_score = max([item["forecast_score"] for item in foci] or [1.0])
     for idx, item in enumerate(foci):
@@ -620,7 +701,9 @@ def draw_panel_c_draft(draw: ImageDraw.ImageDraw, panel: Dict[str, Any], box: Tu
             px = x0 + 0.28 * w + 0.56 * w * ((item["plot_x"] - min_x) / span_x)
             py = y0 + 0.22 * h + 0.54 * h * ((item["plot_y"] - min_y) / span_y)
             radius = max(14, min(34, item["display_size"] / 12))
-            ellipse_center(draw, px, py, radius, item["display_color"], outline=TEXT_DARK, width=1)
+            color = item["display_color"]
+            ellipse_center(draw, px, py, radius * 1.85, blend_with_white(color, 0.82), outline=blend_with_white(color, 0.72), width=1)
+            ellipse_center(draw, px, py, radius, color, outline=TEXT_DARK, width=1)
             wrapped_text(draw, (px + 42, py - 12), item["short_label"], 16, font(12, bold=True), item["display_color"])
 
 

@@ -106,6 +106,12 @@ def write_fixture(root: Path) -> None:
         json.dumps({"domain_filter": ["crispr"], "domains": ["crispr"]}),
         encoding="utf-8",
     )
+    base = root / "base"
+    base.mkdir(parents=True)
+    pd.DataFrame([{"topic_id": "crispr::1"}, {"topic_id": "crispr::2"}]).to_csv(base / "topic_nodes.csv", index=False)
+    pd.DataFrame([{"source_topic_id": "crispr::1", "target_topic_id": "crispr::2"}]).to_csv(base / "topic_edges.csv", index=False)
+    pd.DataFrame([{"source_paper_id": "p1", "target_paper_id": "p2"}]).to_csv(base / "citation_edges.csv", index=False)
+    pd.DataFrame([{"paper_id": "p1"}, {"paper_id": "p2"}]).to_csv(base / "papers_master.csv", index=False)
 
 
 def test_build_handoff_writes_prompt_text_and_draft() -> None:
@@ -147,6 +153,9 @@ def test_build_handoff_can_write_ai_cross_domain_lens() -> None:
         panel_text = json.loads((out_dir / "fig5_panel_text.json").read_text(encoding="utf-8"))
         assert panel_text["theme_mode"] == "ai_cross_domain_lens"
         assert panel_text["subtitle"] == "Multi-domain frontier lens: AI-enabled scientific discovery"
+        assert panel_text["panel_a"]["network_data_basis"]["topic_nodes"] == 2
+        assert panel_text["panel_a"]["future_bubbles"][0]["label"] == "AI-enabled discovery"
+        assert panel_text["panel_b"]["display_mode"] == "word_cloud_only"
         assert panel_text["panel_b"]["top_foci"][0]["focus_label"] == "AI-enabled scientific discovery"
         assert panel_text["panel_d"]["cards"][0]["predicted_role"] == "general-purpose discovery engine"
 
