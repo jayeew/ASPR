@@ -56,6 +56,9 @@ INNOVATION_GENERATION_PROMPT = """你是一位专业的学术论文评审专家�
 标题: {paper_title}
 摘要: {paper_abstract}
 
+【结构化全文摘要包 / Paper dossier】
+{paper_context}
+
 【相关研究工作】
 {related_papers}
 
@@ -79,6 +82,9 @@ INNOVATION_GENERATION_PROMPT = """你是一位专业的学术论文评审专家�
 
 【图谱证据使用原则】
 - 图谱指标是约束创新性表述的证据，不是自动判定论文好坏的标签。
+- 目标论文的标题、摘要和 dossier 永远优先于图谱指标和相关文献。创新点必须来自目标论文本身的研究对象、方法、实验、数据或发现。
+- 禁止把 B、RS、DeltaQ0、Uzzi、RTD、BurtIP、PDE、结构洞、边界扰动、非典型组合、潜在扩散熵等 ASPR 图谱指标写成“目标论文提出/构建/首次整合”的研究贡献，除非目标论文文本明确研究这些概念。
+- 每条主要创新 claim 必须包含目标论文中的具体实体、方法、数据、实验系统或发现；如果 claim 只包含图谱术语或跨学科泛化术语，必须删除或改写。
 - 如果 DeltaQ0 / Uzzi 较高，可以讨论边界扰动、非典型组合或范式重组，但必须结合摘要和相关文献。
 - 如果 RS / PDE 较高，可以讨论跨学科广度或潜在扩散范围。
 - 如果 B / RTD / BurtIP 较高，可以讨论结构洞、跨社区桥接或低冗余知识连接。
@@ -92,11 +98,16 @@ INNOVATION_GENERATION_PROMPT = """你是一位专业的学术论文评审专家�
 - 如果检索证据不足、图谱信号弱或论文 dossier 信息不完整，创新性立场最高只能是 moderate，并明确不确定性。
 
 请生成一份详细的创新性评价报告，包含：
-1. 主要创新点总结（2-3条）
-2. 与相关研究的对比分析
-3. 相关文献引用
-4. 图谱结构证据如何支持或限制上述创新性判断
-5. 按审稿委员会 claim cards 逐条说明：文本证据、相关工作差异、图谱支持、反方质疑和不确定性
+请使用以下稳定小节标题，便于后续与 peer review 逐维度对齐：
+1. Calibrated innovation stance
+2. Novelty claims
+3. Prior-art comparison
+4. Evidence and rigor
+5. Limitations and uncertainty
+6. Future work
+7. Graph-based evidence and claim cards
+
+每个 claim card 必须包含目标论文的具体实体、方法、实验、数据或发现；如果没有明确相关工作差异，必须降调 novelty；如果证据支持不足，必须写入 Evidence and rigor 或 Limitations and uncertainty，而不能正向包装成强创新。
 
 评价应当客观、专业、有依据。"""
 
@@ -106,6 +117,9 @@ INNOVATION_REFLECTION_PROMPT = """你是一位严格的学术论文评审专家�
 【待评价论文】
 标题: {paper_title}
 摘要: {paper_abstract}
+
+【结构化全文摘要包 / Paper dossier】
+{paper_context}
 
 【相关研究文献】
 {related_papers}
@@ -137,6 +151,8 @@ INNOVATION_REFLECTION_PROMPT = """你是一位严格的学术论文评审专家�
 
 4. **图谱结构证据对齐**（0-10分）
    - 当前评价是否正确使用七维图谱指标支持创新性判断？
+   - 是否把目标论文内容作为创新 claim 的来源，而不是把 B/RS/PDE/结构洞等 ASPR 指标误写成目标论文贡献？
+   - 每条主要 claim 是否包含目标论文中的具体研究对象、方法、实验、数据或发现？
    - 是否在 DeltaQ0/Uzzi 高时讨论边界扰动或非典型组合？
    - 是否在 RS/PDE 高时讨论知识广度或潜在扩散？
    - 是否在 B/RTD/BurtIP 高时讨论跨社区桥接或结构洞？
@@ -156,8 +172,11 @@ INNOVATION_REFLECTION_PROMPT = """你是一位严格的学术论文评审专家�
 
 8. **创新性过度声称硬检查**
    - overclaiming_check: 是否把 useful / interesting / technically solid 误写成 high novelty？
+   - paper_specificity_check: 是否存在只围绕 ASPR 图谱指标、结构洞、PDE 或跨学科泛化术语展开，而没有贴合目标论文领域内容的 claim？
    - prior_art_support_check: 强创新表述是否有 clear prior-art contrast 支持？
    - evidence_rigor_check: 证据、实验、方法或严谨性不足时是否已经降调？
+   - prior_art_section_check: 是否明确写出 Prior-art comparison；如果没有明确相关工作差异，是否已把 novelty 降调？
+   - evidence_section_check: 是否明确写出 Evidence and rigor；证据不足或 reviewer-like concerns 是否被放进局限/不确定性而非正向包装？
    - graph_signal_consistency_check: 图谱置信度低或结构信号弱时，是否仍声称 groundbreaking / transformative？
    - 任一硬检查失败时，必须降低不确定性校准分或将 found_solution 置为 false。
 
@@ -183,6 +202,9 @@ INNOVATION_IMPROVEMENT_PROMPT = """你是一位专业的学术论文评审专家
 标题: {paper_title}
 摘要: {paper_abstract}
 
+【结构化全文摘要包 / Paper dossier】
+{paper_context}
+
 【相关研究工作】
 {related_papers}
 
@@ -207,6 +229,9 @@ INNOVATION_IMPROVEMENT_PROMPT = """你是一位专业的学术论文评审专家
 7. 按审稿委员会 claim cards 修正每条 claim 的证据、图谱支持、反方质疑和不确定性
 8. 删除或降调 unsupported overclaiming，不要把 useful / interesting / technically solid 直接等同于 high novelty
 9. 在最终段落中给出校准后的创新性立场，例如 promising but partially substantiated novelty
+10. 硬性约束：创新点必须来自目标论文标题、摘要和 dossier 中的具体内容；不得把 ASPR 图谱指标或结构术语本身写成目标论文的研究贡献。
+11. 使用稳定小节标题：Calibrated innovation stance、Novelty claims、Prior-art comparison、Evidence and rigor、Limitations and uncertainty、Future work。
+12. 没有明确相关工作差异时，必须降低 novelty 强度；证据支持不足时，必须把相关内容写入 Evidence and rigor 或 Limitations and uncertainty。
 
 保持评价的专业性和客观性，确保引用格式正确 [序号]。"""
 
@@ -216,6 +241,9 @@ FINAL_INNOVATION_REPORT_PROMPT = """你是一位资深的学术论文评审专�
 【待评价论文】
 标题: {paper_title}
 摘要: {paper_abstract}
+
+【结构化全文摘要包 / Paper dossier】
+{paper_context}
 
 【相关研究工作（带完整信息）】
 {related_papers_with_metadata}
@@ -230,8 +258,22 @@ FINAL_INNOVATION_REPORT_PROMPT = """你是一位资深的学术论文评审专�
 【最终报告要求】
 请生成一份完整、专业的创新性评价报告，包含以下部分：
 
+【目标论文特异性硬约束】
+- 目标论文的标题、摘要和 dossier 是创新 claim 的唯一主来源；相关工作和图谱指标只能用于对比、校准和限制。
+- 每条主要 claim 必须包含目标论文中的具体研究对象、方法、数据、实验系统或发现。
+- 禁止把 B、RS、DeltaQ0、Uzzi、RTD、BurtIP、PDE、结构洞、边界扰动、非典型组合、潜在扩散熵等 ASPR 图谱指标写成目标论文自身提出的方法、理论或贡献，除非目标论文文本明确研究这些概念。
+- 如果图谱指标提示某类结构证据较强，只能写成“结构证据支持/限制该创新性判断”，不能写成“本文提出了该图谱指标框架”。
+
 ## 1. 创新点概述 (Innovation Summary)
 简明扼要地总结论文的主要创新贡献（2-4条）。
+
+必须包含以下稳定小节标题，便于 Fig.4 维度化 label extraction：
+- Calibrated innovation stance
+- Novelty claims
+- Prior-art comparison
+- Evidence and rigor
+- Limitations and uncertainty
+- Future work
 
 ## 2. Claim-level Committee Review
 按审稿委员会 claim cards 逐条评价每个创新声明。每条必须包含：

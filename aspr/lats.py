@@ -72,8 +72,13 @@ llm = ChatOpenAI(
     or os.getenv("DEEPSEEK_API_KEY")
     or "ollama",
     temperature=0.2,
-    # max_tokens=9000,
+    max_tokens=int(os.getenv("ASPR_LATS_MAX_TOKENS", "1800")),
 )
+
+
+def env_bool(name: str, default: str = "0") -> bool:
+    """Read a boolean-like environment flag."""
+    return os.getenv(name, default).strip().lower() in {"1", "true", "yes", "y"}
 
 
 # ============================================================================
@@ -335,7 +340,9 @@ class TreeState(TypedDict):
     root: Node
     paper_title: str
     paper_abstract: str
+    paper_context: str
     related_papers: List[PaperInfo]  # 相关论文列表
+    max_iterations: int              # LATS 扩展轮数上限
     graph_metric_evidence: str       # 七指标图谱证据块
     committee_evidence: str          # 审稿委员会结构化证据块
     committee_disagreement_score: float
@@ -519,21 +526,27 @@ reflection_llm_chain = (
     | StrOutputParser()
 )
 
+reflection_text_chain = reflection_prompt_template | llm.with_config(run_name="ReflectionText")
+
 @as_runnable
 def reflection_chain(inputs) -> Reflection:
     """执行反思链"""
     try:
         lats_logging(f"当前候选评价: \n{inputs.get('current_evaluation', '')}\n")
-        # 使用bind_tools时返回的是AIMessage，包含tool_calls
-        response = reflection_llm_chain_without_parser.invoke(inputs)
-        
-        # 从tool_calls中提取工具调用参数
-        if hasattr(response, 'tool_calls') and response.tool_calls:
-            tool_call = response.tool_calls[0]
-            refdict = tool_call.get('args', {})
+        if env_bool("ASPR_LATS_REFLECTION_USE_TOOLS", "0"):
+            # 使用bind_tools时返回的是AIMessage，包含tool_calls。部分 DeepSeek
+            # thinking-mode 模型不支持 tool_choice，默认使用文本解析路径。
+            response = reflection_llm_chain_without_parser.invoke(inputs)
+            if hasattr(response, 'tool_calls') and response.tool_calls:
+                tool_call = response.tool_calls[0]
+                refdict = tool_call.get('args', {})
+            else:
+                raw_text = response.content if hasattr(response, 'content') else str(response)
+                refdict = extract_with_regex(raw_text)
         else:
-            # 回退到文本解析
+            response = reflection_text_chain.invoke(inputs)
             raw_text = response.content if hasattr(response, 'content') else str(response)
+            raw_text = safe_extract_content(raw_text, fallback=str(response))
             refdict = extract_with_regex(raw_text)
         
         lats_logging(f"生成反思: \n{str(refdict)}\n")
@@ -573,6 +586,22 @@ def reflection_chain(inputs) -> Reflection:
         )
     except Exception as e:
         lats_logging(f"反思链执行失败: {e}")
+        if env_bool("ASPR_LATS_REFLECTION_USE_TOOLS", "0"):
+            try:
+                response = reflection_text_chain.invoke(inputs)
+                raw_text = response.content if hasattr(response, 'content') else str(response)
+                refdict = extract_with_regex(safe_extract_content(raw_text, fallback=str(response)))
+                reflection = Reflection(**refdict)
+                reflection = calibrate_reflection_with_committee(
+                    reflection,
+                    disagreement_score=float(inputs.get("committee_disagreement_score", 0.0) or 0.0),
+                    recommended_tone=str(inputs.get("recommended_tone", "balanced") or "balanced"),
+                )
+                if not isinstance(inputs.get("candidate", [None])[-1], AIMessage):
+                    reflection.found_solution = False
+                return reflection
+            except Exception as fallback_exc:  # noqa: BLE001 - final defensive fallback.
+                lats_logging(f"文本反思回退失败: {fallback_exc}")
         return Reflection(
             reflections="反思过程发生错误",
             score=0,
@@ -610,6 +639,7 @@ def generate_initial_response(state: TreeState) -> dict:
     related_papers_str = format_related_papers(state["related_papers"])
     graph_metric_evidence = state.get("graph_metric_evidence", "图谱结构证据未计算。")
     committee_evidence = state.get("committee_evidence", "审稿委员会证据未计算。")
+    paper_context = state.get("paper_context", "未提供结构化全文摘要包。")
     committee_disagreement_score = float(state.get("committee_disagreement_score", 0.0) or 0.0)
     recommended_tone = state.get("recommended_tone", "balanced")
     
@@ -617,6 +647,7 @@ def generate_initial_response(state: TreeState) -> dict:
         res = initial_answer_chain.invoke({
             "paper_title": state["paper_title"],
             "paper_abstract": state["paper_abstract"],
+            "paper_context": paper_context,
             "related_papers": related_papers_str,
             "graph_metric_evidence": graph_metric_evidence,
             "committee_evidence": committee_evidence,
@@ -667,6 +698,7 @@ def generate_initial_response(state: TreeState) -> dict:
     reflection = reflection_chain.invoke({
         "paper_title": state["paper_title"],
         "paper_abstract": state["paper_abstract"],
+        "paper_context": paper_context,
         "related_papers": related_papers_str,
         "graph_metric_evidence": graph_metric_evidence,
         "committee_evidence": committee_evidence,
@@ -713,6 +745,7 @@ def expand(state: TreeState, config: RunnableConfig) -> dict:
     related_papers_str = format_related_papers(state["related_papers"])
     graph_metric_evidence = state.get("graph_metric_evidence", "图谱结构证据未计算。")
     committee_evidence = state.get("committee_evidence", "审稿委员会证据未计算。")
+    paper_context = state.get("paper_context", "未提供结构化全文摘要包。")
     committee_disagreement_score = float(state.get("committee_disagreement_score", 0.0) or 0.0)
     recommended_tone = state.get("recommended_tone", "balanced")
     
@@ -730,6 +763,7 @@ def expand(state: TreeState, config: RunnableConfig) -> dict:
         improved = improvement_chain.invoke({
             "paper_title": state["paper_title"],
             "paper_abstract": state["paper_abstract"],
+            "paper_context": paper_context,
             "related_papers": related_papers_str,
             "graph_metric_evidence": graph_metric_evidence,
             "committee_evidence": committee_evidence,
@@ -746,6 +780,7 @@ def expand(state: TreeState, config: RunnableConfig) -> dict:
         [{
             "paper_title": state["paper_title"],
             "paper_abstract": state["paper_abstract"],
+            "paper_context": paper_context,
             "related_papers": related_papers_str,
             "graph_metric_evidence": graph_metric_evidence,
             "committee_evidence": committee_evidence,
@@ -782,12 +817,14 @@ def expand(state: TreeState, config: RunnableConfig) -> dict:
 def should_loop(state: TreeState) -> Literal["expand", "__end__"]:
     """判断是否继续扩展"""
     root = state["root"]
-    lats_logging(f"检查是否继续搜索。树高度: {root.height}, 已解决: {root.is_solved}")
+    max_iterations = max(0, int(state.get("max_iterations", 3) or 3))
+    max_height = max_iterations + 1
+    lats_logging(f"检查是否继续搜索。树高度: {root.height}, 已解决: {root.is_solved}, max_iterations={max_iterations}")
     
     if root.is_solved:
         lats_logging("找到解决方案，结束搜索")
         return "__end__"
-    if root.height >= 5:
+    if root.height >= max_height:
         lats_logging("达到最大高度，结束搜索")
         return "__end__"
     
@@ -873,7 +910,11 @@ def lats_logging(event: str):
     """记录日志"""
     global lats_log
     lats_log.append(event)
-    print(event)
+    preview_chars = max(200, int(os.getenv("ASPR_LATS_LOG_PREVIEW_CHARS", "2200")))
+    if os.getenv("ASPR_LATS_VERBOSE", "0").strip().lower() in {"1", "true", "yes"} or len(event) <= preview_chars:
+        print(event)
+    else:
+        print(event[:preview_chars] + "\n...[truncated in console log; full text kept in lats_log]...")
 
 
 # ============================================================================
@@ -883,6 +924,7 @@ def lats_logging(event: str):
 def generate_final_report(paper_title: str, paper_abstract: str, 
                          related_papers: List[PaperInfo], 
                          best_evaluation: str,
+                         paper_context: str = "未提供结构化全文摘要包。",
                          graph_metric_evidence: str = "图谱结构证据未计算。",
                          committee_evidence: str = "审稿委员会证据未计算。") -> str:
     """生成最终的创新性评价报告"""
@@ -893,6 +935,7 @@ def generate_final_report(paper_title: str, paper_abstract: str,
     final_report = final_report_chain.invoke({
         "paper_title": paper_title,
         "paper_abstract": paper_abstract,
+        "paper_context": paper_context,
         "related_papers_with_metadata": related_papers_str,
         "graph_metric_evidence": graph_metric_evidence,
         "committee_evidence": committee_evidence,
@@ -955,6 +998,7 @@ def run_innovation_evaluation(
     paper_title: str,
     paper_abstract: str,
     related_papers_data: List[Dict[str, Any]],
+    paper_context: Optional[str] = None,
     max_iterations: int = 3,
     max_related_papers: int = 10,
     graph_metric_evidence: Optional[str] = None,
@@ -980,6 +1024,7 @@ def run_innovation_evaluation(
     """
     global lats_log
     lats_log = []
+    paper_context_text = paper_context or "未提供结构化全文摘要包。"
     if graph_metric_evidence is None or graph_metric_result is None:
         graph_metric_evidence, graph_metric_result = build_graph_metric_evidence(
             paper_title=paper_title,
@@ -1030,13 +1075,17 @@ def run_innovation_evaluation(
     last_step = None
     graph = build_graph()
     
-    config = {"configurable": {"N": 5, "max_iterations": max_iterations}}
+    candidate_count = max(1, int(os.getenv("ASPR_LATS_CANDIDATES", "2")))
+    beam_width = max(1, int(os.getenv("ASPR_LATS_BEAM_WIDTH", "2")))
+    config = {"configurable": {"N": candidate_count, "beam_width": beam_width, "max_iterations": max_iterations}}
     
     initial_state = {
         "root": None,
         "paper_title": paper_title,
         "paper_abstract": paper_abstract,
+        "paper_context": paper_context_text,
         "related_papers": related_papers,
+        "max_iterations": max_iterations,
         "graph_metric_evidence": graph_metric_evidence,
         "committee_evidence": committee_evidence,
         "committee_disagreement_score": committee_disagreement_score,
@@ -1064,6 +1113,7 @@ def run_innovation_evaluation(
                 paper_abstract,
                 related_papers,
                 best_evaluation,
+                paper_context=paper_context_text,
                 graph_metric_evidence=graph_metric_evidence,
                 committee_evidence=committee_evidence,
             )
@@ -1101,13 +1151,10 @@ def evaluate_paper_innovation(
     Returns:
         包含创新性评价结果的字典
     """
-    evaluation_abstract = paper_abstract
-    if paper_context:
-        evaluation_abstract = f"{paper_abstract}\n\nFull paper dossier for evaluation:\n{paper_context}"
     if graph_metric_evidence is None or graph_metric_result is None:
         graph_metric_evidence, graph_metric_result = build_graph_metric_evidence(
             paper_title=paper_title,
-            paper_abstract=evaluation_abstract,
+            paper_abstract=paper_abstract,
             related_papers_data=retrieved_papers,
         )
     (
@@ -1117,15 +1164,16 @@ def evaluate_paper_innovation(
         recommended_tone,
     ) = build_committee_evidence(
         paper_title=paper_title,
-        paper_abstract=evaluation_abstract,
+        paper_abstract=paper_abstract,
         related_papers_data=retrieved_papers,
         graph_metric_result=graph_metric_result,
         use_committee=use_committee,
     )
     report, log, committee_report_result, committee_disagreement_score, recommended_tone = run_innovation_evaluation(
         paper_title=paper_title,
-        paper_abstract=evaluation_abstract,
+        paper_abstract=paper_abstract,
         related_papers_data=retrieved_papers,
+        paper_context=paper_context,
         graph_metric_evidence=graph_metric_evidence,
         graph_metric_result=graph_metric_result,
         committee_evidence=committee_evidence,

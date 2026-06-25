@@ -17,6 +17,8 @@ from experiments.kg_perturbation_fig4.main_fig4 import (  # noqa: E402
     Fig4ArgsForAgent,
     audit_markdown_inputs,
     build_paper_dossier,
+    candidate_records_for_peer_aspect,
+    coerce_semantic_match_refinement_payload,
     controlled_sample,
     draw_fig4,
     filter_prior_art_candidates,
@@ -221,6 +223,66 @@ def test_innovation_label_normalization_requires_quotes() -> None:
     assert missing["failure_reason"] == "missing_required_quotes"
 
 
+def test_point_records_require_exact_quotes_and_filter_revision_only_points() -> None:
+    text = (
+        "Reviewer #1: The work is novel because it introduces a bottom-up route. "
+        "The authors have addressed all concerns and no further comments remain."
+    )
+    payload = {
+        "overall_innovation_stance": {
+            "score_1_5": 4,
+            "label": "positive",
+            "quote": "work is novel",
+            "confidence": 0.9,
+        },
+        "aspects": {
+            "novelty": {
+                "score_1_5": 4,
+                "point_records": [
+                    {
+                        "point_id": "n1",
+                        "point": "The paper introduces a bottom-up route.",
+                        "quote": "introduces a bottom-up route",
+                        "polarity": "positive",
+                        "evidence_type": "novelty_claim",
+                        "confidence": 0.8,
+                        "source_role": "reviewer",
+                    },
+                    {
+                        "point_id": "n2",
+                        "point": "The authors addressed all concerns.",
+                        "quote": "addressed all concerns",
+                        "polarity": "neutral",
+                        "evidence_type": "novelty_claim",
+                        "confidence": 0.8,
+                        "source_role": "reviewer",
+                    },
+                    {
+                        "point_id": "n3",
+                        "point": "Invented novelty point.",
+                        "quote": "not present in source",
+                        "polarity": "positive",
+                        "evidence_type": "novelty_claim",
+                        "confidence": 0.8,
+                        "source_role": "reviewer",
+                    },
+                ],
+            }
+        },
+    }
+
+    normalized = normalize_innovation_label_payload(payload, "paper", "peer_review", text)
+
+    novelty = normalized["aspects"]["novelty"]
+    assert normalized["success"]
+    assert novelty["points"] == ["The paper introduces a bottom-up route."]
+    assert novelty["quotes"] == ["introduces a bottom-up route"]
+    assert len(novelty["point_records"]) == 1
+    assert novelty["point_records"][0]["evidence_type"] == "novelty_claim"
+    assert any("revision_only_point_dropped" in warning for warning in normalized["warnings"])
+    assert any("point_record_quote_not_exact" in warning for warning in normalized["warnings"])
+
+
 def test_peer_review_screen_requires_explicit_innovation_points() -> None:
     review = "The work is novel and significant. It compares well with prior art and raises useful evidence concerns."
     label = {
@@ -280,6 +342,79 @@ def test_semantic_match_heuristic_relations() -> None:
     assert rhcl3["relation"] in {"related", "no_match"}
 
 
+def test_semantic_refinement_payload_requires_real_candidate() -> None:
+    candidates = ["Agent discusses donor-specific safety assessment.", "Agent notes missing siRNA off-target controls."]
+    valid = coerce_semantic_match_refinement_payload(
+        {"relation": "related", "best_candidate_id": 2, "confidence": 0.8, "rationale": "same control concern"},
+        candidates,
+        min_confidence=0.55,
+    )
+    assert valid["relation"] == "related"
+    assert valid["best_agent_point"] == candidates[1]
+
+    invented = coerce_semantic_match_refinement_payload(
+        {"relation": "related", "best_agent_point": "Invented candidate text.", "confidence": 0.9},
+        candidates,
+        min_confidence=0.55,
+    )
+    assert invented["relation"] == "no_match"
+    assert invented["best_agent_point"] == ""
+
+    low_confidence = coerce_semantic_match_refinement_payload(
+        {"relation": "entailed", "best_candidate_id": 1, "confidence": 0.2},
+        candidates,
+        min_confidence=0.55,
+    )
+    assert low_confidence["relation"] == "no_match"
+
+
+def test_cross_aspect_candidate_fallback_is_controlled() -> None:
+    agent_label = {
+        "aspects": {
+            "limitations": {
+                "points": ["The agent notes missing siRNA off-target controls."],
+                "quotes": ["missing siRNA off-target controls"],
+            },
+            "future_work": {
+                "points": ["Future work should test larger cohorts."],
+                "quotes": ["larger cohorts"],
+            },
+            "significance": {
+                "points": ["The finding is clinically important."],
+                "quotes": ["clinically important"],
+            },
+        }
+    }
+
+    evidence_records = candidate_records_for_peer_aspect(
+        agent_label,
+        "evidence_rigor",
+        "Reviewer asks for off-target controls.",
+    )
+    assert any(record["aspect"] == "limitations" for record in evidence_records)
+
+    unrelated_records = candidate_records_for_peer_aspect(
+        agent_label,
+        "significance",
+        "Reviewer says the result is important.",
+    )
+    assert all(record["aspect"] == "significance" for record in unrelated_records)
+
+    future_gap_records = candidate_records_for_peer_aspect(
+        agent_label,
+        "limitations",
+        "The reviewer says additional cohort testing is needed.",
+    )
+    assert any(record["aspect"] == "future_work" for record in future_gap_records)
+
+    ordinary_limitation_records = candidate_records_for_peer_aspect(
+        agent_label,
+        "limitations",
+        "The reviewer says the current sample is small.",
+    )
+    assert all(record["aspect"] != "future_work" for record in ordinary_limitation_records)
+
+
 def test_prompt_calibration_rules_are_present() -> None:
     from aspr.prompts import (
         FINAL_INNOVATION_REPORT_PROMPT,
@@ -289,8 +424,12 @@ def test_prompt_calibration_rules_are_present() -> None:
 
     assert "默认从“中等/不确定创新性”开始判断" in INNOVATION_GENERATION_PROMPT
     assert "clear prior-art contrast" in INNOVATION_GENERATION_PROMPT
+    assert "Prior-art comparison" in INNOVATION_GENERATION_PROMPT
+    assert "Evidence and rigor" in INNOVATION_GENERATION_PROMPT
     assert "overclaiming_check" in INNOVATION_REFLECTION_PROMPT
+    assert "prior_art_section_check" in INNOVATION_REFLECTION_PROMPT
     assert "校准后的创新性立场" in FINAL_INNOVATION_REPORT_PROMPT
+    assert "Limitations and uncertainty" in FINAL_INNOVATION_REPORT_PROMPT
 
 
 def test_structured_consistency_heuristic_scores_and_overclaiming() -> None:
@@ -742,7 +881,12 @@ def test_metrics_same_text_similarity_and_coverage() -> None:
         assert len([match for match in matches if match["match_method"] == "normalized_phrase_overlap"]) == 5
         assert len([match for match in matches if match["match_method"] == "innovation_label_point_overlap"]) == 6
         metrics_csv = read_csv_records(out_dir / "fig4_metrics_summary.csv")
-        assert metrics_csv[0]["embedding_backend"] == "tfidf"
+        assert metrics_csv[0]["embedding_backend"] in {"bge-m3", "lexical_fallback"}
+        aspect_summary = read_csv_records(out_dir / "fig4_aspect_relation_summary.csv")
+        assert aspect_summary
+        assert sum(int(float(row["total_points"])) for row in aspect_summary) == len(semantic_matches)
+        examples = json.loads((out_dir / "fig4_claim_examples.json").read_text(encoding="utf-8"))
+        assert examples["examples"]
 
 
 def test_draw_fig4_smoke_outputs_all_formats() -> None:
@@ -818,6 +962,7 @@ def test_draw_fig4_smoke_outputs_all_formats() -> None:
         assert (out_dir / "fig4_full.png").exists()
         assert (out_dir / "fig4_full.pdf").exists()
         assert (out_dir / "fig4_full.svg").exists()
+        assert (out_dir / "fig4_system_dashboard.png").exists()
 
 
 def test_publication_summary_emphasizes_claim_validation_metrics() -> None:

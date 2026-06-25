@@ -2,6 +2,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import sys
 from functools import lru_cache
 from pathlib import Path
@@ -13,18 +14,19 @@ try:
 except ImportError:  # pragma: no cover - exercised in lightweight environments.
     BGEM3FlagModel = None  # type: ignore[assignment]
     FlagReranker = None  # type: ignore[assignment]
-from openai import OpenAI
+try:
+    from openai import OpenAI
+except ImportError:  # pragma: no cover - exercised in lightweight environments.
+    OpenAI = None  # type: ignore[assignment]
 from pypdf import PdfReader
 
 if __package__ in {None, ""}:
     sys.path.append(str(Path(__file__).resolve().parents[1]))
-    from aspr.env import getenv, getenv_int
-    from aspr.lats import evaluate_paper_innovation
+    from aspr.env import getenv, getenv_bool, getenv_int
     from aspr.pdf_downloader import ACLPDFDownloader
     from aspr.prompts import generation_instance_prompts_summarization, prompts_keywords_extraction
 else:
-    from .env import getenv, getenv_int
-    from .lats import evaluate_paper_innovation
+    from .env import getenv, getenv_bool, getenv_int
     from .pdf_downloader import ACLPDFDownloader
     from .prompts import generation_instance_prompts_summarization, prompts_keywords_extraction
 
@@ -47,6 +49,16 @@ _LAST_RERANKER_BATCH_SIZE_USED = ""
 _LAST_RECALL_FAILURE = ""
 _LAST_RERANKER_FAILURE = ""
 _LAST_RETRIEVAL_FAILURE_STAGE = ""
+
+
+def _evaluate_paper_innovation(*args, **kwargs):
+    """Lazy-load the LATS evaluator so retrieval utilities import in light envs."""
+    if __package__ in {None, ""}:
+        from aspr.lats import evaluate_paper_innovation
+    else:
+        from .lats import evaluate_paper_innovation
+
+    return evaluate_paper_innovation(*args, **kwargs)
 
 
 def _query_cache_paths(title: str, abstract: str, key_words: List[str]) -> Tuple[Path, Path]:
@@ -108,14 +120,20 @@ def keywords_extract(query: str) -> List[str]:
 def _get_recall_model():
     if BGEM3FlagModel is None:
         raise OSError("FlagEmbedding is not installed.")
-    return BGEM3FlagModel(getenv("ASPR_RECALL_MODEL_PATH", DEFAULT_RECALL_MODEL), use_fp16=True)
+    return BGEM3FlagModel(
+        getenv("ASPR_RECALL_MODEL_PATH", DEFAULT_RECALL_MODEL),
+        use_fp16=getenv_bool("ASPR_RETRIEVAL_USE_FP16", True),
+    )
 
 
 @lru_cache(maxsize=1)
 def _get_reranker():
     if FlagReranker is None:
         raise OSError("FlagEmbedding is not installed.")
-    return FlagReranker(getenv("ASPR_RERANKER_MODEL_PATH", DEFAULT_RERANKER_MODEL), use_fp16=True)
+    return FlagReranker(
+        getenv("ASPR_RERANKER_MODEL_PATH", DEFAULT_RERANKER_MODEL),
+        use_fp16=getenv_bool("ASPR_RETRIEVAL_USE_FP16", True),
+    )
 
 
 def _csv_ints(value: str) -> List[int]:
@@ -350,6 +368,8 @@ class Reviewer:
 
 
     def initialize_models(self,):
+        if OpenAI is None:
+            raise ImportError("openai is required to initialize Reviewer large-model client")
         self.client_large = OpenAI(
             api_key="",
             base_url=f'http://localhost:{self.args.large_model_port}/v1',
@@ -394,7 +414,7 @@ class Reviewer:
                 paper_after_retrieval = []
                 with most_related_path.open("w", encoding="utf-8") as file:
                     json.dump(paper_after_retrieval, file, indent=2, ensure_ascii=False)
-                return evaluate_paper_innovation(
+                return _evaluate_paper_innovation(
                     paper_title=title,
                     paper_abstract=abstract,
                     retrieved_papers=paper_after_retrieval,
@@ -425,7 +445,7 @@ class Reviewer:
             print(f"Saved {len(paper_after_retrieval)} papers to {most_related_path}")
 
         
-        reviews = evaluate_paper_innovation(
+        reviews = _evaluate_paper_innovation(
             paper_title=title,
             paper_abstract=abstract,
             retrieved_papers=paper_after_retrieval
@@ -511,9 +531,20 @@ class Reviewer:
 
 class OpenScholar:
     def __init__(self, args):
-        self.s2_api_key = args.s2_api_key
+        self.s2_api_key = getattr(args, "s2_api_key", "") or getenv("S2_API_KEY")
+        self.openalex_api_key = self._first_openalex_key(
+            getattr(args, "openalex_api_key", "") or getenv("OPENALEX_API_KEY") or getenv("OPENALEX_API_KEYS")
+        )
         self.and_search = _as_bool(args.and_search)
-        self.url = "https://api.semanticscholar.org/graph/v1/paper/search/bulk"
+        self.retrieval_provider = (
+            getattr(args, "retrieval_provider", "") or getenv("ASPR_RETRIEVAL_PROVIDER", "semantic_scholar")
+        ).strip().lower()
+        self.url = getenv("ASPR_S2_SEARCH_URL", "https://api.semanticscholar.org/graph/v1/paper/search")
+        self.search_limit = max(1, min(getenv_int("ASPR_S2_SEARCH_LIMIT", 100), 100))
+        self.search_year = getenv("ASPR_S2_SEARCH_YEAR", "2021-")
+        self.openalex_url = getenv("ASPR_OPENALEX_WORKS_URL", "https://api.openalex.org/works")
+        self.openalex_per_page = max(1, min(getenv_int("ASPR_OPENALEX_PER_PAGE", 100), 200))
+        self.openalex_from_year = getenv_int("ASPR_OPENALEX_FROM_YEAR", 2021)
         self.s2_key_status = "not_checked"
         self.last_retrieval_source = "not_run"
         self.last_query_audits: List[Dict[str, Any]] = []
@@ -521,7 +552,14 @@ class OpenScholar:
     def __call__(self,):
         pass
 
+    @staticmethod
+    def _first_openalex_key(raw_value: str) -> str:
+        keys = [part.strip() for part in re.split(r"[,;\s]+", str(raw_value or "")) if part.strip()]
+        return keys[0] if keys else ""
+
     def search_semantic_scholar(self, key_words: List[str]) -> List[Dict[str, Any]]:
+        if self.retrieval_provider in {"openalex", "oa"}:
+            return self.search_openalex(key_words)
         papers = []
         self.last_query_audits = []
         for kw in key_words:
@@ -552,6 +590,124 @@ class OpenScholar:
 
         return formatted_papers
 
+    def search_openalex(self, key_words: List[str]) -> List[Dict[str, Any]]:
+        """Search OpenAlex works and normalize them to the ASPR paper schema."""
+        works: List[Dict[str, Any]] = []
+        self.last_query_audits = []
+        for kw in key_words:
+            print(f"Searching OpenAlex works with keyword: {kw}")
+            works_kw = self._search_openalex_via_query(kw)
+            print(f"Found {len(works_kw)} OpenAlex works for keyword: {kw}")
+            works.extend(works_kw)
+        print(f"Retrieved {len(works)} OpenAlex works...")
+        return [self._format_openalex_work(work) for work in works]
+
+    def _search_openalex_via_query(self, query: str) -> List[Dict[str, Any]]:
+        query = str(query or "").strip()
+        if not query:
+            return []
+        query_params: Dict[str, Any] = {
+            "search": query,
+            "filter": f"from_publication_date:{self.openalex_from_year}-01-01",
+            "sort": "cited_by_count:desc",
+            "per-page": self.openalex_per_page,
+        }
+        if self.openalex_api_key:
+            query_params["api_key"] = self.openalex_api_key
+        headers = {
+            "Accept": "application/json",
+            # Avoid intermittent urllib3 brotli decode failures from OpenAlex.
+            "Accept-Encoding": "gzip, deflate",
+        }
+        response = requests.get(self.openalex_url, params=query_params, headers=headers, timeout=60)
+        self.last_query_audits.append(
+            {
+                "source": "openalex",
+                "query": query,
+                "status_code": response.status_code,
+                "used_key": bool(self.openalex_api_key),
+                "content_encoding": response.headers.get("Content-Encoding", ""),
+            }
+        )
+        if response.status_code != 200:
+            self.last_retrieval_source = "openalex_failed"
+            self.s2_key_status = f"openalex_failed_{response.status_code}"
+            raise RuntimeError(f"OpenAlex request failed: {response.status_code} {response.text[:200]}")
+        self.last_retrieval_source = "openalex"
+        self.s2_key_status = "openalex_key_ok" if self.openalex_api_key else "openalex_key_missing"
+        payload = response.json()
+        results = payload.get("results", [])
+        return results if isinstance(results, list) else []
+
+    @staticmethod
+    def _reconstruct_openalex_abstract(inverted_index: Any) -> str:
+        if not isinstance(inverted_index, dict):
+            return ""
+        positioned: List[Tuple[int, str]] = []
+        for word, positions in inverted_index.items():
+            if not isinstance(positions, list):
+                continue
+            for position in positions:
+                try:
+                    positioned.append((int(position), str(word)))
+                except (TypeError, ValueError):
+                    continue
+        return " ".join(word for _, word in sorted(positioned))
+
+    @staticmethod
+    def _strip_doi_prefix(value: Any) -> str:
+        text = str(value or "").strip()
+        for prefix in ("https://doi.org/", "http://doi.org/", "doi:"):
+            if text.lower().startswith(prefix):
+                return text[len(prefix) :]
+        return text
+
+    def _format_openalex_work(self, work: Dict[str, Any]) -> Dict[str, Any]:
+        ids = work.get("ids") if isinstance(work.get("ids"), dict) else {}
+        open_access = work.get("open_access") if isinstance(work.get("open_access"), dict) else {}
+        primary_location = work.get("primary_location") if isinstance(work.get("primary_location"), dict) else {}
+        source = primary_location.get("source") if isinstance(primary_location.get("source"), dict) else {}
+        authors = []
+        for authorship in work.get("authorships") or []:
+            if not isinstance(authorship, dict):
+                continue
+            author = authorship.get("author") if isinstance(authorship.get("author"), dict) else {}
+            if author.get("display_name"):
+                authors.append(str(author.get("display_name")))
+        concepts = [
+            str(concept.get("display_name"))
+            for concept in work.get("concepts") or []
+            if isinstance(concept, dict) and concept.get("display_name")
+        ]
+        topics = [
+            str(topic.get("display_name"))
+            for topic in work.get("topics") or []
+            if isinstance(topic, dict) and topic.get("display_name")
+        ]
+        doi = self._strip_doi_prefix(work.get("doi") or ids.get("doi"))
+        return {
+            "paperId": ids.get("openalex") or work.get("id", ""),
+            "year": work.get("publication_year") or 0,
+            "title": work.get("display_name") or "",
+            "authors": ", ".join(authors),
+            "venue": source.get("display_name") or "",
+            "citationCount": work.get("cited_by_count") or 0,
+            "abstract": self._reconstruct_openalex_abstract(work.get("abstract_inverted_index")),
+            "isOpenAccess": bool(open_access.get("is_oa")),
+            "url": primary_location.get("pdf_url") or primary_location.get("landing_page_url") or ids.get("doi") or work.get("id", ""),
+            "externalIds": {
+                "DOI": doi,
+                "OpenAlex": ids.get("openalex") or work.get("id", ""),
+                "MAG": ids.get("mag", ""),
+                "PMID": ids.get("pmid", ""),
+                "PMCID": ids.get("pmcid", ""),
+            },
+            "doi": doi,
+            "fieldsOfStudy": list(dict.fromkeys(topics + concepts))[:12],
+            "s2FieldsOfStudy": [],
+            "retrieval_source": "openalex",
+        }
+
     def _search_paper_via_query(self, query: str | List[str]) -> List[Dict[str, Any]]:
         terms = [query] if isinstance(query, str) else query
         terms = [term.strip() for term in terms if str(term).strip()]
@@ -565,7 +721,8 @@ class OpenScholar:
                 "paperId,title,year,authors.name,abstract,venue,citationCount,url,"
                 "externalIds,isOpenAccess,openAccessPdf,fieldsOfStudy,s2FieldsOfStudy"
             ),
-            "year": "2021-",
+            "year": self.search_year,
+            "limit": self.search_limit,
             "sort": "citationCount:desc"
         }
         attempts: List[Tuple[str, Dict[str, str]]] = []
@@ -613,6 +770,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='OpenScholar API Server')
     parser.add_argument('--s2_api_key', type=str, default=getenv("S2_API_KEY"),
                         help='Semantic Scholar API key. Defaults to S2_API_KEY from .env/environment.')
+    parser.add_argument('--openalex_api_key', type=str, default=getenv("OPENALEX_API_KEY") or getenv("OPENALEX_API_KEYS"),
+                        help='OpenAlex API key. Defaults to OPENALEX_API_KEY(S) from .env/environment.')
+    parser.add_argument('--retrieval_provider', type=str, default=getenv("ASPR_RETRIEVAL_PROVIDER", "semantic_scholar"),
+                        choices=["semantic_scholar", "openalex"],
+                        help='Bibliographic search provider.')
     parser.add_argument('--large_model', type=str, default='OpenSciLM/Llama-3.1_OpenScholar-8B',
                         help='Large model name')
     parser.add_argument('--large_model_port', type=int, default=getenv_int("ASPR_LARGE_MODEL_PORT", 38011),
