@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 import textwrap
 from pathlib import Path
@@ -160,6 +161,74 @@ AI_CROSS_DOMAIN_CARDS: List[Dict[str, Any]] = [
     },
 ]
 
+STRICT_AI_TERMS: List[str] = [
+    r"\bAI\b",
+    r"AI/ML",
+    r"artificial intelligence",
+    r"machine learning",
+    r"deep learning",
+    r"neural networks?",
+    r"neural computing",
+    r"transformers?",
+    r"foundation models?",
+    r"large language models?",
+    r"language models?",
+    r"computer vision",
+    r"reinforcement learning",
+    r"generative AI",
+    r"diffusion models?",
+    r"multimodal",
+    r"representation learning",
+    r"natural language processing",
+]
+STRICT_AI_DISPLAY_TERMS: List[str] = [
+    "AI",
+    "AI/ML",
+    "artificial intelligence",
+    "machine learning",
+    "deep learning",
+    "neural network",
+    "neural computing",
+    "transformer",
+    "foundation model",
+    "large language model",
+    "language model",
+    "computer vision",
+    "reinforcement learning",
+    "generative AI",
+    "diffusion model",
+    "multimodal",
+    "representation learning",
+    "natural language processing",
+]
+STRICT_AI_PATTERN = re.compile("|".join(f"(?:{term})" for term in STRICT_AI_TERMS), flags=re.IGNORECASE)
+STRICT_AI_FOCUS_FIELDS = [
+    "focus_label",
+    "short_label",
+    "keyword_list",
+    "category",
+    "focus_group",
+    "description",
+    "domain",
+    "domain_label",
+]
+STRICT_AI_INNOVATION_FIELDS = [
+    "innovation_label",
+    "short_label",
+    "predicted_role",
+    "short_reason",
+    "linked_focus_label",
+    "description",
+    "icon_type",
+]
+STRICT_AI_PAPER_FIELDS = [
+    "title",
+    "topic_label",
+    "keywords",
+    "field",
+    "domain",
+]
+
 
 def read_json(path: Path) -> Dict[str, Any]:
     """Read a JSON object."""
@@ -200,6 +269,340 @@ def as_text(value: object, fallback: str = "") -> str:
     if text.lower() in {"nan", "none", "<na>"}:
         return fallback
     return text
+
+
+def shorten_text(value: object, max_chars: int = 58) -> str:
+    """Shorten display text without changing the underlying source field."""
+    text = re.sub(r"\s+", " ", as_text(value)).strip()
+    if len(text) <= max_chars:
+        return text
+    return textwrap.shorten(text, width=max_chars, placeholder="...")
+
+
+def read_csv_optional(path: Path) -> pd.DataFrame:
+    """Read an optional CSV file."""
+    if not path.exists():
+        return pd.DataFrame()
+    return pd.read_csv(path, low_memory=False)
+
+
+def combine_text_fields(frame: pd.DataFrame, fields: Sequence[str]) -> pd.Series:
+    """Combine selected text fields for auditable regex filtering."""
+    combined = pd.Series([""] * len(frame), index=frame.index, dtype="object")
+    for field in fields:
+        if field not in frame.columns:
+            continue
+        series = frame[field].fillna("").astype(str)
+        series = series.where(~series.str.lower().isin({"nan", "none", "<na>"}), "")
+        combined = combined + " " + series
+    return combined.str.strip()
+
+
+def strict_ai_mask(frame: pd.DataFrame, fields: Sequence[str]) -> pd.Series:
+    """Return rows whose real table fields match the strict AI/ML pattern."""
+    if frame.empty:
+        return pd.Series([], dtype=bool, index=frame.index)
+    return combine_text_fields(frame, fields).str.contains(STRICT_AI_PATTERN, regex=True, na=False)
+
+
+def source_row_number(index: object) -> int:
+    """Return one-based CSV row number including the header row."""
+    try:
+        return int(index) + 2
+    except (TypeError, ValueError):
+        return 0
+
+
+def sort_strict_ai_foci(foci: pd.DataFrame) -> pd.DataFrame:
+    """Sort strict AI focus rows by real forecast strength."""
+    if foci.empty:
+        return foci.copy()
+    out = foci.copy()
+    out["_rank_sort"] = pd.to_numeric(out.get("forecast_rank"), errors="coerce").fillna(1e9)
+    out["_score_sort"] = pd.to_numeric(out.get("forecast_score"), errors="coerce").fillna(-1.0)
+    out["_label_sort"] = out.get("focus_label", "").fillna("").astype(str)
+    return out.sort_values(["_score_sort", "_rank_sort", "_label_sort"], ascending=[False, True, True])
+
+
+def filter_strict_ai_foci(forecast_focus: pd.DataFrame) -> pd.DataFrame:
+    """Filter forecast focus rows with strict AI/ML terms only."""
+    focus = forecast_focus.copy()
+    focus["_source_table"] = "derived/forecast_focus.csv"
+    focus["_source_row_number"] = [source_row_number(index) for index in focus.index]
+    focus["_matched_text"] = combine_text_fields(focus, STRICT_AI_FOCUS_FIELDS)
+    matched = focus[strict_ai_mask(focus, STRICT_AI_FOCUS_FIELDS)].copy()
+    return sort_strict_ai_foci(matched)
+
+
+def strict_ai_display_rank(row: pd.Series, fallback_rank: int) -> int:
+    """Use the real forecast rank when present, otherwise a local fallback rank."""
+    rank = pd.to_numeric(pd.Series([row.get("forecast_rank")]), errors="coerce").iloc[0]
+    if pd.isna(rank) or float(rank) <= 0:
+        return fallback_rank
+    return int(rank)
+
+
+def records_for_strict_ai_panel_b(ai_focus: pd.DataFrame, top_n: int = 8) -> List[Dict[str, Any]]:
+    """Return strict AI focus records for the word-cloud panel."""
+    rows: List[Dict[str, Any]] = []
+    for fallback_rank, (index, row) in enumerate(ai_focus.head(top_n).iterrows(), start=1):
+        focus_label = as_text(row.get("focus_label"), "AI/ML-related focus")
+        rows.append(
+            {
+                "rank": strict_ai_display_rank(row, fallback_rank),
+                "strict_ai_rank": fallback_rank,
+                "focus_id": as_text(row.get("focus_id")),
+                "focus_label": focus_label,
+                "short_label": as_text(row.get("short_label"), shorten_text(focus_label, 34)),
+                "forecast_score": clean_float(row.get("forecast_score", 0.0)),
+                "display_color": as_text(row.get("display_color"), BLUE),
+                "domain": as_text(row.get("domain")),
+                "historical_size": clean_int(row.get("historical_size", 0)),
+                "source_table": as_text(row.get("_source_table"), "derived/forecast_focus.csv"),
+                "source_row_number": clean_int(row.get("_source_row_number", source_row_number(index))),
+                "filter_match_fields": STRICT_AI_FOCUS_FIELDS,
+            }
+        )
+    return rows
+
+
+def display_size_from_score(score: object) -> float:
+    """Return a stable bubble size derived from the real forecast score."""
+    value = max(0.0, min(1.0, clean_float(score, 4)))
+    return round(80.0 + 420.0 * (value**0.5), 1)
+
+
+def records_for_strict_ai_panel_c(ai_focus: pd.DataFrame, top_n: int = 8) -> List[Dict[str, Any]]:
+    """Return strict AI focus records for the topic-map panel."""
+    rows: List[Dict[str, Any]] = []
+    for fallback_rank, (index, row) in enumerate(ai_focus.head(top_n).iterrows(), start=1):
+        focus_label = as_text(row.get("focus_label"), "AI/ML-related focus")
+        rows.append(
+            {
+                "rank": strict_ai_display_rank(row, fallback_rank),
+                "strict_ai_rank": fallback_rank,
+                "focus_id": as_text(row.get("focus_id")),
+                "focus_label": focus_label,
+                "short_label": as_text(row.get("short_label"), shorten_text(focus_label, 34)),
+                "plot_x": clean_float(row.get("x", 0.0), 4),
+                "plot_y": clean_float(row.get("y", 0.0), 4),
+                "forecast_score": clean_float(row.get("forecast_score", 0.0)),
+                "hist_size": clean_int(row.get("historical_size", 0)),
+                "display_size": display_size_from_score(row.get("forecast_score", 0.0)),
+                "display_color": as_text(row.get("display_color"), BLUE),
+                "domain": as_text(row.get("domain")),
+                "source_table": as_text(row.get("_source_table"), "derived/forecast_focus.csv"),
+                "source_row_number": clean_int(row.get("_source_row_number", source_row_number(index))),
+                "display_size_formula": "80 + 420 * sqrt(forecast_score)",
+            }
+        )
+    return rows
+
+
+def parse_json_list_cell(value: object) -> List[str]:
+    """Parse a JSON-list CSV cell into strings."""
+    text = as_text(value)
+    if not text:
+        return []
+    try:
+        parsed = json.loads(text)
+    except json.JSONDecodeError:
+        return [text]
+    if isinstance(parsed, list):
+        return [str(item) for item in parsed if str(item).strip()]
+    return [str(parsed)]
+
+
+def matched_strict_ai_terms(text: str) -> List[str]:
+    """Return display terms from the strict AI/ML list that appear in text."""
+    matches: List[str] = []
+    for pattern, label in zip(STRICT_AI_TERMS, STRICT_AI_DISPLAY_TERMS):
+        if re.search(pattern, text, flags=re.IGNORECASE) and label not in matches:
+            matches.append(label)
+    return matches
+
+
+def strict_ai_supporting_terms(ai_focus: pd.DataFrame, max_terms: int = 10) -> List[Dict[str, Any]]:
+    """Build word-cloud support terms from real strict-AI focus rows."""
+    counts: Dict[str, Dict[str, Any]] = {}
+    for _, row in ai_focus.iterrows():
+        source_text = as_text(row.get("_matched_text"))
+        source_terms = matched_strict_ai_terms(source_text)
+        for keyword in parse_json_list_cell(row.get("keyword_list")):
+            if len(keyword) >= 4 and keyword.lower() not in {"studies", "research", "using"}:
+                source_terms.append(keyword)
+        for term in source_terms:
+            key = term.lower()
+            score = clean_float(row.get("forecast_score", 0.0), 4)
+            if key not in counts:
+                counts[key] = {
+                    "label": term,
+                    "weight": 0.0,
+                    "color": as_text(row.get("display_color"), TEXT_LIGHT),
+                    "source_table": "derived/forecast_focus.csv",
+                }
+            counts[key]["weight"] += max(0.15, score)
+    terms = sorted(counts.values(), key=lambda item: (-float(item["weight"]), str(item["label"]).lower()))
+    if not terms:
+        return []
+    max_weight = max(float(item["weight"]) for item in terms) or 1.0
+    for item in terms:
+        item["weight"] = round(0.35 + 0.45 * float(item["weight"]) / max_weight, 3)
+    return terms[:max_terms]
+
+
+def strict_ai_exact_innovation_cards(
+    forecast_innovations: pd.DataFrame,
+    ai_focus: pd.DataFrame,
+    card_count: int,
+) -> Tuple[List[Dict[str, Any]], set[str]]:
+    """Build cards from real forecast_innovations rows that match strict AI/ML."""
+    if forecast_innovations.empty:
+        return [], set()
+    innovations = forecast_innovations.copy()
+    innovations["_source_table"] = "derived/forecast_innovations.csv"
+    innovations["_source_row_number"] = [source_row_number(index) for index in innovations.index]
+    ai_focus_ids = set(ai_focus.get("focus_id", pd.Series(dtype=str)).astype(str))
+    linked_focus = innovations.get("linked_focus_id", pd.Series([""] * len(innovations), index=innovations.index)).astype(str)
+    label_match = strict_ai_mask(innovations, STRICT_AI_INNOVATION_FIELDS)
+    topic_match = linked_focus.isin(ai_focus_ids)
+    candidates = innovations[label_match | topic_match].copy()
+    if candidates.empty:
+        return [], set()
+    candidates["_rank_sort"] = pd.to_numeric(candidates.get("forecast_rank"), errors="coerce").fillna(1e9)
+    candidates["_seed_score_sort"] = pd.to_numeric(candidates.get("seed_score"), errors="coerce").fillna(-1.0)
+    candidates = candidates.sort_values(["_rank_sort", "_seed_score_sort"], ascending=[True, False])
+
+    rows: List[Dict[str, Any]] = []
+    used_papers: set[str] = set()
+    for card_rank, (_, row) in enumerate(candidates.head(card_count).iterrows(), start=1):
+        label = as_text(row.get("innovation_label"), "AI/ML-related seed innovation")
+        papers = as_text(row.get("representative_papers"))
+        used_papers.update(parse_json_list_cell(papers))
+        rows.append(
+            {
+                "rank": card_rank,
+                "innovation_id": as_text(row.get("innovation_id"), f"strict_ai_innovation_{card_rank}"),
+                "innovation_label": label,
+                "short_label": as_text(row.get("short_label"), shorten_text(label, 42)),
+                "predicted_role": as_text(row.get("predicted_role"), "AI/ML-related seed innovation"),
+                "short_reason": as_text(row.get("short_reason"), "Matched the strict AI/ML filter in the real innovation table."),
+                "linked_focus_label": as_text(row.get("linked_focus_label"), "AI/ML-related focus"),
+                "icon_type": as_text(row.get("icon_type"), "computation"),
+                "display_color": as_text(row.get("display_color"), BLUE),
+                "seed_year": clean_int(row.get("seed_year", 0)),
+                "seed_score": clean_float(row.get("seed_score", 0.0)),
+                "representative_papers": papers,
+                "source_table": "derived/forecast_innovations.csv",
+                "source_row_number": clean_int(row.get("_source_row_number", 0)),
+                "filter_match_fields": STRICT_AI_INNOVATION_FIELDS,
+            }
+        )
+    return rows, used_papers
+
+
+def strict_ai_paper_seed_cards(
+    papers_master: pd.DataFrame,
+    ai_focus: pd.DataFrame,
+    existing_cards: int,
+    used_papers: set[str],
+    card_count: int,
+    cutoff_year: int,
+) -> List[Dict[str, Any]]:
+    """Build fallback seed cards from real papers_master rows."""
+    if papers_master.empty or existing_cards >= card_count:
+        return []
+    papers = papers_master.copy()
+    papers["_source_table"] = "base/papers_master.csv"
+    papers["_source_row_number"] = [source_row_number(index) for index in papers.index]
+    papers["_matched_text"] = combine_text_fields(papers, STRICT_AI_PAPER_FIELDS)
+
+    ai_focus_ids = set(ai_focus.get("focus_id", pd.Series(dtype=str)).astype(str))
+    text_match = strict_ai_mask(papers, STRICT_AI_PAPER_FIELDS)
+    title_match = strict_ai_mask(papers, ["title"])
+    topic_match = papers.get("topic_id", pd.Series([""] * len(papers), index=papers.index)).astype(str).isin(ai_focus_ids)
+    years = pd.to_numeric(papers.get("year", pd.Series([0] * len(papers), index=papers.index)), errors="coerce").fillna(0)
+    candidates = papers[(text_match | topic_match) & years.le(cutoff_year)].copy()
+    if candidates.empty:
+        return []
+
+    candidates["_title_match_sort"] = title_match.loc[candidates.index].astype(int)
+    candidates["_topic_match_sort"] = topic_match.loc[candidates.index].astype(int)
+    candidates["_selected_score_sort"] = pd.to_numeric(candidates.get("selected_score"), errors="coerce")
+    if "rgpm_score" in candidates.columns:
+        candidates["_selected_score_sort"] = candidates["_selected_score_sort"].fillna(pd.to_numeric(candidates["rgpm_score"], errors="coerce"))
+    candidates["_selected_score_sort"] = candidates["_selected_score_sort"].fillna(0.0)
+    candidates["_cited_sort"] = pd.to_numeric(candidates.get("cited_by_count"), errors="coerce").fillna(0.0)
+    candidates["_year_sort"] = pd.to_numeric(candidates.get("year"), errors="coerce").fillna(0.0)
+    candidates = candidates.sort_values(
+        ["_title_match_sort", "_topic_match_sort", "_selected_score_sort", "_cited_sort", "_year_sort"],
+        ascending=[False, False, False, False, False],
+    )
+
+    focus_color = ai_focus.set_index(ai_focus["focus_id"].astype(str))["display_color"].to_dict() if "focus_id" in ai_focus.columns else {}
+    rows: List[Dict[str, Any]] = []
+    used_topics: set[str] = set()
+    for _, row in candidates.iterrows():
+        paper_id = as_text(row.get("paper_id"))
+        topic_id = as_text(row.get("topic_id"))
+        if paper_id in used_papers:
+            continue
+        if topic_id in used_topics and len(rows) + existing_cards < card_count - 1:
+            continue
+        rank = existing_cards + len(rows) + 1
+        title = as_text(row.get("title"), "AI/ML-related seed paper")
+        topic_label = as_text(row.get("topic_label"), "AI/ML-related focus")
+        score = clean_float(row.get("_selected_score_sort", 0.0))
+        rows.append(
+            {
+                "rank": rank,
+                "innovation_id": f"strict_ai_seed_{rank}",
+                "innovation_label": title,
+                "short_label": shorten_text(title, 42),
+                "predicted_role": "AI/ML-related seed paper",
+                "short_reason": f"Matched strict AI/ML filter via title/topic; selected_score={score:.2f}.",
+                "linked_focus_label": topic_label,
+                "icon_type": "computation",
+                "display_color": as_text(focus_color.get(topic_id), BLUE),
+                "seed_year": clean_int(row.get("year", 0)),
+                "seed_score": score,
+                "representative_papers": json.dumps([paper_id], ensure_ascii=False),
+                "source_paper_id": paper_id,
+                "source_table": "base/papers_master.csv",
+                "source_row_number": clean_int(row.get("_source_row_number", 0)),
+                "filter_match_fields": STRICT_AI_PAPER_FIELDS,
+            }
+        )
+        used_papers.add(paper_id)
+        used_topics.add(topic_id)
+        if len(rows) + existing_cards >= card_count:
+            break
+    return rows
+
+
+def build_strict_ai_cards(
+    plot_data_dir: Path,
+    ai_focus: pd.DataFrame,
+    cutoff_year: int,
+    card_count: int = 4,
+) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+    """Build strict AI/ML panel d cards from real tables."""
+    derived_dir = plot_data_dir / "derived"
+    base_dir = plot_data_dir / "base"
+    forecast_innovations = read_csv_optional(derived_dir / "forecast_innovations.csv")
+    papers_master = read_csv_optional(base_dir / "papers_master.csv")
+
+    cards, used_papers = strict_ai_exact_innovation_cards(forecast_innovations, ai_focus, card_count)
+    fallback_cards = strict_ai_paper_seed_cards(papers_master, ai_focus, len(cards), used_papers, card_count, cutoff_year)
+    cards.extend(fallback_cards)
+
+    meta = {
+        "forecast_innovations_rows": int(len(forecast_innovations)),
+        "papers_master_rows": int(len(papers_master)),
+        "cards_from_forecast_innovations": int(len(cards) - len(fallback_cards)),
+        "cards_from_papers_master": int(len(fallback_cards)),
+    }
+    return cards, meta
 
 
 def infer_subtitle(config: Dict[str, Any]) -> str:
@@ -422,6 +825,95 @@ def apply_ai_cross_domain_lens(panel_text: Dict[str, Any]) -> Dict[str, Any]:
     )
     out["image2_constraints"].append(
         "Label this as an AI-cross-domain thematic lens, not as an unqualified strict top-N empirical ranking."
+    )
+    return out
+
+
+def apply_strict_ai_filtered_lens(panel_text: Dict[str, Any], plot_data_dir: Path) -> Dict[str, Any]:
+    """Apply a strict AI/ML filter using only generated source tables."""
+    derived_dir = plot_data_dir / "derived"
+    forecast_focus = read_csv(derived_dir / "forecast_focus.csv")
+    ai_focus = filter_strict_ai_foci(forecast_focus)
+    if ai_focus.empty:
+        raise ValueError(
+            "Strict AI-filtered theme found no AI/ML-related rows in derived/forecast_focus.csv. "
+            "Check the data package or adjust the explicit strict AI term list."
+        )
+
+    out = json.loads(json.dumps(panel_text, ensure_ascii=False))
+    focus_records = records_for_strict_ai_panel_b(ai_focus)
+    map_records = records_for_strict_ai_panel_c(ai_focus)
+    cutoff_year = clean_int(out["panel_a"].get("historical_end_year", 2020))
+    cards, card_meta = build_strict_ai_cards(plot_data_dir, ai_focus, cutoff_year)
+
+    out["subtitle"] = "Strict AI/ML-filtered multi-domain forecast"
+    out["theme_mode"] = "strict_ai_filtered"
+    out["audit_note"] = (
+        "Panels b/c/d are generated only from rows in the real Fig. 5 data package "
+        "that match the explicit strict AI/ML regex terms. No hand-authored AI lens "
+        "topics or seed cards are substituted."
+    )
+    out["strict_filter"] = {
+        "mode": "strict_ai_filtered",
+        "regex_terms": STRICT_AI_DISPLAY_TERMS,
+        "source_tables": {
+            "panel_b": "derived/forecast_focus.csv",
+            "panel_c": "derived/forecast_focus.csv",
+            "panel_d": "derived/forecast_innovations.csv; fallback base/papers_master.csv",
+        },
+        "match_fields": {
+            "focus": STRICT_AI_FOCUS_FIELDS,
+            "innovation": STRICT_AI_INNOVATION_FIELDS,
+            "paper": STRICT_AI_PAPER_FIELDS,
+        },
+        "counts": {
+            "forecast_focus_rows": int(len(forecast_focus)),
+            "strict_ai_focus_rows": int(len(ai_focus)),
+            **card_meta,
+        },
+        "sort_order": "forecast_score desc, forecast_rank asc, focus_label asc",
+    }
+
+    out["panel_a"]["historical_heading"] = "Historical multi-domain knowledge graph"
+    out["panel_a"]["future_heading"] = "Strict AI/ML-filtered future window"
+    out["panel_a"]["method_note"] = "Strict regex filter over real topic and seed tables"
+    out["panel_a"]["future_note"] = "AI/ML-related foci and auditable seed papers only"
+    out["panel_a"]["left_network_note"] = (
+        "Network basis remains the full multi-domain topic/citation table; b/c/d are strict-filtered."
+    )
+    out["panel_a"]["future_bubbles"] = [
+        {"label": shorten_text(item["short_label"], 24), "color": item["display_color"]}
+        for item in focus_records[:5]
+    ]
+
+    out["panel_b"]["title"] = "Strict AI/ML-related predicted research foci"
+    out["panel_b"]["word_cloud_title"] = "AI/ML-related foci from forecast_focus.csv"
+    out["panel_b"]["display_mode"] = "word_cloud_only"
+    out["panel_b"]["bar_chart_title"] = ""
+    out["panel_b"]["axis_label"] = "Forecast priority score"
+    out["panel_b"]["top_foci"] = focus_records
+    out["panel_b"]["supporting_terms"] = strict_ai_supporting_terms(ai_focus)
+    out["panel_b"]["source_table"] = "derived/forecast_focus.csv"
+
+    out["panel_c"]["title"] = "Strict AI/ML frontier landscape (real topic positions)"
+    out["panel_c"]["color_legend_title"] = "Color intensity: real forecast score after strict AI/ML filter"
+    out["panel_c"]["foci"] = map_records
+    out["panel_c"]["source_table"] = "derived/forecast_focus.csv"
+
+    out["panel_d"]["title"] = "Auditable AI/ML-related seed innovations"
+    out["panel_d"]["cards"] = cards
+    out["panel_d"]["source_tables"] = ["derived/forecast_innovations.csv", "base/papers_master.csv"]
+
+    leading = ", ".join(item["short_label"] for item in focus_records[:3])
+    out["take_home"] = (
+        f"Under a strict AI/ML term filter, the real forecast tables surface {leading}; "
+        "every displayed focus and seed card is traceable to source CSV rows."
+    )
+    out["image2_constraints"].extend(
+        [
+            "For strict_ai_filtered mode, panels b/c/d must use only the supplied source-backed JSON rows.",
+            "Do not add hand-authored AI lens concepts that are absent from the strict-filtered tables.",
+        ]
     )
     return out
 
@@ -765,6 +1257,8 @@ def build_handoff(plot_data_dir: Path, out_dir: Path, theme: str = "data") -> Di
     panel_text = build_panel_text(plot_data_dir)
     if theme == "ai_cross_domain":
         panel_text = apply_ai_cross_domain_lens(panel_text)
+    elif theme == "strict_ai_filtered":
+        panel_text = apply_strict_ai_filtered_lens(panel_text, plot_data_dir)
     elif theme != "data":
         raise ValueError(f"Unknown handoff theme: {theme}")
     prompt = render_prompt(panel_text)
@@ -795,9 +1289,12 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser.add_argument("--out-dir", type=Path, default=DEFAULT_OUT_DIR, help="Output directory for image-2 handoff assets.")
     parser.add_argument(
         "--theme",
-        choices=["data", "ai_cross_domain"],
+        choices=["data", "ai_cross_domain", "strict_ai_filtered"],
         default="data",
-        help="Handoff theme: strict data-driven text or an explicitly labelled AI cross-domain lens.",
+        help=(
+            "Handoff theme: strict data-driven text, an explicitly labelled AI cross-domain lens, "
+            "or a strict AI/ML-filtered real-table view."
+        ),
     )
     return parser.parse_args(argv)
 

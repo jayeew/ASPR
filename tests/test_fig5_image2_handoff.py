@@ -111,7 +111,86 @@ def write_fixture(root: Path) -> None:
     pd.DataFrame([{"topic_id": "crispr::1"}, {"topic_id": "crispr::2"}]).to_csv(base / "topic_nodes.csv", index=False)
     pd.DataFrame([{"source_topic_id": "crispr::1", "target_topic_id": "crispr::2"}]).to_csv(base / "topic_edges.csv", index=False)
     pd.DataFrame([{"source_paper_id": "p1", "target_paper_id": "p2"}]).to_csv(base / "citation_edges.csv", index=False)
-    pd.DataFrame([{"paper_id": "p1"}, {"paper_id": "p2"}]).to_csv(base / "papers_master.csv", index=False)
+    pd.DataFrame(
+        [
+            {
+                "paper_id": "p1",
+                "title": "A deep learning model for materials discovery",
+                "year": 2019,
+                "domain": "materials",
+                "topic_id": "materials::ml",
+                "topic_label": "Machine Learning in Materials Science",
+                "selected_score": 0.91,
+                "cited_by_count": 42,
+            },
+            {
+                "paper_id": "p2",
+                "title": "A programmable precision editing platform",
+                "year": 2018,
+                "domain": "crispr",
+                "topic_id": "crispr::1",
+                "topic_label": "Precision genome editing",
+                "selected_score": 0.82,
+                "cited_by_count": 36,
+            },
+        ]
+    ).to_csv(base / "papers_master.csv", index=False)
+    pd.DataFrame(
+        [
+            {
+                "forecast_rank": 1,
+                "focus_id": "crispr::1",
+                "focus_label": "Precision genome editing",
+                "short_label": "Precision genome editing",
+                "forecast_score": 0.93,
+                "display_color": "#2563EB",
+                "domain": "crispr",
+                "domain_label": "CRISPR",
+                "historical_size": 120,
+                "x": 0.2,
+                "y": 0.6,
+                "keyword_list": '["precision", "genome", "editing"]',
+                "description": "Precision genome editing supported by 120 pre-cutoff papers.",
+            },
+            {
+                "forecast_rank": 7,
+                "focus_id": "materials::ml",
+                "focus_label": "Machine Learning in Materials Science",
+                "short_label": "Machine Learning in Materials",
+                "forecast_score": 0.77,
+                "display_color": "#7C3AED",
+                "domain": "materials",
+                "domain_label": "Materials",
+                "historical_size": 18,
+                "x": 0.7,
+                "y": 0.3,
+                "keyword_list": '["machine", "learning", "materials"]',
+                "description": "Machine Learning in Materials Science supported by 18 pre-cutoff papers.",
+            },
+        ]
+    ).to_csv(derived / "forecast_focus.csv", index=False)
+    pd.DataFrame(
+        [
+            {
+                "innovation_id": "innovation_ai_1",
+                "innovation_label": "Deep learning model for materials discovery",
+                "short_label": "Deep learning model",
+                "forecast_rank": 7,
+                "predicted_role": "computational discovery seed",
+                "short_reason": "High-scoring seed for Machine Learning in Materials Science.",
+                "linked_focus_id": "materials::ml",
+                "linked_focus_label": "Machine Learning in Materials Science",
+                "linked_topic_ids": '["materials::ml"]',
+                "representative_papers": '["p1"]',
+                "icon_type": "computation",
+                "description": "Deep learning model anchors the predicted focus Machine Learning in Materials Science.",
+                "seed_year": 2019,
+                "seed_score": 0.91,
+                "color_group": "computational",
+                "display_color": "#7C3AED",
+            }
+        ]
+    ).to_csv(derived / "forecast_innovations.csv", index=False)
 
 
 def test_build_handoff_writes_prompt_text_and_draft() -> None:
@@ -160,6 +239,27 @@ def test_build_handoff_can_write_ai_cross_domain_lens() -> None:
         assert panel_text["panel_d"]["cards"][0]["predicted_role"] == "general-purpose discovery engine"
 
 
+def test_build_handoff_can_write_strict_ai_filtered_theme_from_real_tables() -> None:
+    """Strict AI mode filters real focus and seed tables without thematic replacements."""
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp) / "plot_data"
+        out_dir = Path(tmp) / "strict_ai_handoff"
+        write_fixture(root)
+
+        build_handoff(root, out_dir, theme="strict_ai_filtered")
+
+        panel_text = json.loads((out_dir / "fig5_panel_text.json").read_text(encoding="utf-8"))
+        assert panel_text["theme_mode"] == "strict_ai_filtered"
+        assert panel_text["panel_b"]["display_mode"] == "word_cloud_only"
+        assert panel_text["panel_b"]["top_foci"][0]["focus_label"] == "Machine Learning in Materials Science"
+        assert panel_text["panel_b"]["top_foci"][0]["source_table"] == "derived/forecast_focus.csv"
+        assert panel_text["panel_c"]["foci"][0]["source_table"] == "derived/forecast_focus.csv"
+        assert panel_text["panel_d"]["cards"][0]["source_table"] == "derived/forecast_innovations.csv"
+        assert panel_text["panel_d"]["cards"][0]["representative_papers"] == '["p1"]'
+        assert "AI-enabled scientific discovery" not in json.dumps(panel_text, ensure_ascii=False)
+        assert panel_text["strict_filter"]["source_tables"]["panel_b"] == "derived/forecast_focus.csv"
+
+
 def test_default_fig5_data_paths_prefer_local_redraw_v6a_best_fig3() -> None:
     """Default Fig. 5 data inputs prefer the local validated Fig. 3 redraw run."""
     expected_run = FIG5_PROJECT_ROOT / "outputs" / "redraw_v6a_best_fig3" / "multi_domain"
@@ -172,5 +272,6 @@ def test_default_fig5_data_paths_prefer_local_redraw_v6a_best_fig3() -> None:
 if __name__ == "__main__":
     test_build_handoff_writes_prompt_text_and_draft()
     test_build_handoff_can_write_ai_cross_domain_lens()
+    test_build_handoff_can_write_strict_ai_filtered_theme_from_real_tables()
     test_default_fig5_data_paths_prefer_local_redraw_v6a_best_fig3()
     print("test_fig5_image2_handoff passed")

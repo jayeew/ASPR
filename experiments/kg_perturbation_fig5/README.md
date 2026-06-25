@@ -55,6 +55,24 @@ This AI mode writes an explicit `theme_mode=ai_cross_domain_lens` marker in
 data package, not an unqualified replacement for the strict data-driven top-N
 ranking.
 
+For a strict AI/ML-filtered version, use only rows from the generated Fig. 5
+tables whose real topic, focus, innovation, or seed-paper fields match the
+explicit AI/ML term filter:
+
+```bash
+python -m experiments.kg_perturbation_fig5.build_fig5_image2_handoff \
+  --plot-data-dir outputs/kg_perturbation_fig5/plot_data \
+  --out-dir outputs/kg_perturbation_fig5/strict_ai_filtered_image2_handoff \
+  --theme strict_ai_filtered
+```
+
+This mode writes `theme_mode=strict_ai_filtered` and a `strict_filter` audit
+block in `fig5_panel_text.json`. Panels b and c are rebuilt from
+`derived/forecast_focus.csv`; panel d first checks
+`derived/forecast_innovations.csv` and then falls back to matching seed papers
+in `base/papers_master.csv`, preserving source table, source row, and paper-id
+fields.
+
 The handoff package contains:
 
 ```text
