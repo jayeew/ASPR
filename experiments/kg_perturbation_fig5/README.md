@@ -4,11 +4,89 @@ Fig. 5 is a result-oriented forecasting experiment. It asks whether a knowledge
 graph truncated at 2020 can recover research foci and seed innovations that
 become important after 2020.
 
-The implementation is deliberately separate from the Fig. 1-3 computation code:
-it reads existing Fig. 3 paper-level scores and builds the five minimal tables
-needed for the new Fig. 5 layout.
+The implementation is deliberately separate from the Fig. 1-3 computation code.
+The preferred workflow now produces an auditable data package first, then an
+image-2 handoff package for drawing the four-panel publication figure. The older
+`fig5_forecast_outcomes.py` script remains available for a deterministic
+analytical figure.
 
-## Main Command
+## Preferred Data + Image-2 Workflow
+
+Build the default multi-domain Fig. 5 data package:
+
+```bash
+python -m experiments.kg_perturbation_fig5.build_fig5_plot_data \
+  --out-dir outputs/kg_perturbation_fig5/plot_data
+```
+
+Build the image-2 handoff package from those tables:
+
+```bash
+python -m experiments.kg_perturbation_fig5.build_fig5_image2_handoff \
+  --plot-data-dir outputs/kg_perturbation_fig5/plot_data \
+  --out-dir outputs/kg_perturbation_fig5/image2_handoff
+```
+
+For a CRISPR-Cas case-study figure that visually matches the supplied Fig. 5
+reference more closely:
+
+```bash
+python -m experiments.kg_perturbation_fig5.build_fig5_plot_data \
+  --domain-filter crispr \
+  --out-dir outputs/kg_perturbation_fig5/crispr_plot_data
+
+python -m experiments.kg_perturbation_fig5.build_fig5_image2_handoff \
+  --plot-data-dir outputs/kg_perturbation_fig5/crispr_plot_data \
+  --out-dir outputs/kg_perturbation_fig5/crispr_image2_handoff
+```
+
+For a more general multi-domain example centered on AI as a cross-domain
+scientific discovery layer:
+
+```bash
+python -m experiments.kg_perturbation_fig5.build_fig5_image2_handoff \
+  --plot-data-dir outputs/kg_perturbation_fig5/plot_data \
+  --out-dir outputs/kg_perturbation_fig5/ai_cross_domain_image2_handoff \
+  --theme ai_cross_domain
+```
+
+This AI mode writes an explicit `theme_mode=ai_cross_domain_lens` marker in
+`fig5_panel_text.json`. It is a transparent thematic lens over the multi-domain
+data package, not an unqualified replacement for the strict data-driven top-N
+ranking.
+
+For a strict AI/ML-filtered version, use only rows from the generated Fig. 5
+tables whose real topic, focus, innovation, or seed-paper fields match the
+explicit AI/ML term filter:
+
+```bash
+python -m experiments.kg_perturbation_fig5.build_fig5_image2_handoff \
+  --plot-data-dir outputs/kg_perturbation_fig5/plot_data \
+  --out-dir outputs/kg_perturbation_fig5/strict_ai_filtered_image2_handoff \
+  --theme strict_ai_filtered
+```
+
+This mode writes `theme_mode=strict_ai_filtered` and a `strict_filter` audit
+block in `fig5_panel_text.json`. Panels b and c are rebuilt from
+`derived/forecast_focus.csv`; panel d first checks
+`derived/forecast_innovations.csv` and then falls back to matching seed papers
+in `base/papers_master.csv`, preserving source table, source row, and paper-id
+fields.
+
+The handoff package contains:
+
+```text
+fig5_image2_prompt.md
+fig5_panel_text.json
+fig5_visual_reference_notes.md
+fig5_layout_draft.png
+```
+
+`fig5_panel_text.json` is the source of truth for figure text, rankings, scores,
+and card copy. The drawing model should preserve that text and avoid inventing
+new scientific claims.
+
+## Legacy Analytical Figure Command
 
 ```bash
 python -m experiments.kg_perturbation_fig5.fig5_forecast_outcomes \
@@ -20,11 +98,12 @@ Without `--domain-filter`, the script uses the multi-domain Fig. 3 input.
 
 ## Default Inputs
 
-The script auto-detects the newest local Fig. 3 run, defaulting to:
+The data-package script auto-detects the newest local Fig. 3 run. In this
+workspace it prefers:
 
 ```text
-outputs/kg_perturbation_fig3/strong_evidence_tau10_v3/multi_domain/
-outputs/kg_perturbation_fig3/strong_evidence_tau10_v3/fig3_input/multi_domain/
+outputs/redraw_v6a_best_fig3/multi_domain/
+outputs/redraw_v6a_best_fig3/fig3_input/multi_domain/
 ```
 
 Required files:
@@ -35,7 +114,7 @@ works.csv
 topics.csv
 ```
 
-## Outputs
+## Legacy Analytical Outputs
 
 ```text
 fig5_predicted_focus.csv

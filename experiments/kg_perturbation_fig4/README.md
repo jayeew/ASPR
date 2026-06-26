@@ -2,22 +2,31 @@
 
 ## 一句话目标
 
-Fig.4 用真实 Nature 子刊论文 PDF、真实 Transparent Peer Review PDF 和 ASPR agent 输出，系统评估自动创新性评价和人工同行评审之间的关系。
+Fig.4 用真实 Nature 子刊论文全文、真实 Transparent Peer Review 和 ASPR innovation agent 输出，验证 ASPR 的创新性评价是否与人类同行评审中关于 novelty、significance、prior-art comparison、evidence/rigor、limitations 和 future work 的判断一致。
 
 这张图不使用示意数据。每个数值都必须能从 manifest、agent 输出、解析文本和指标表追溯回来。
 
 ## 这张图想回答什么
 
-Fig.4 回答四个问题：
+Fig.4 主图回答一个问题：
 
 ```text
-1. Consistency: agent 的创新性评价和人工 peer review 在语义上是否一致？
-2. Efficiency: agent 生成评价相对人工 peer review 基准能节省多少时间？
-3. Readability: agent 输出是否比人工评审文本更容易读、错误更少？
-4. Coverage: agent 是否覆盖了人工评审关注的关键创新点、方法、证据和局限？
+ASPR graph-perturbation innovation evaluation 是否与真实 peer review 的创新性相关判断对齐？
 ```
 
-最终输出包括 Fig.4 a-e 五个 panel、全图拼接文件、逐论文指标表和输入审计表。
+主图不再声称 ASPR 替代完整 peer review；它只验证创新性评价与真实 peer-review labels 的一致性。Efficiency/readability 仍保留为 supplement/system dashboard，不作为 Fig.4 主结论。
+
+主图 panel：
+
+```text
+a. Validation workflow
+b. Human vs ASPR innovation stance
+c. Aspect-level semantic alignment
+d. Claim-evidence examples
+e. BGE-only vs BGE+LLM-refined sensitivity
+```
+
+最终输出包括 Fig.4 主图、system dashboard supplement、逐论文指标表、aspect relation summary、claim examples 和输入审计表。
 
 ## 数据边界
 
@@ -36,12 +45,16 @@ outputs/fig4/
   fig4_input_audit.csv
   fig4_agent_outputs.jsonl
   fig4_metrics_summary.csv
+  fig4_aspect_relation_summary.csv
+  fig4_claim_examples.json
+  fig4_semantic_claim_matches.jsonl
   fig4_panel_a.png
   fig4_panel_b.png
   fig4_panel_c.png
   fig4_panel_d.png
   fig4_panel_e.png
   fig4_full.png
+  fig4_system_dashboard.png
   cache/
     <paper_id>/
       retrieved_papers.json
@@ -199,25 +212,77 @@ outputs/fig4/fig4_metrics_summary.csv
 | `included_in_main` | 是否进入主图 |
 | `exclusion_reason` | 排除原因 |
 
-### Consistency
+### Innovation validation consistency
 
-目的：衡量 agent 评价和人工 peer review 在语义上的一致性。
+目的：衡量 ASPR innovation agent 对创新性、意义、相关工作差异、证据严谨性和局限的判断，是否覆盖真实 peer review 中对应的 quote-grounded judgement。
 
-默认方法：
+主指标：
 
 ```text
-embedding(agent_eval_text) vs embedding(peer_review_text)
-metric = cosine similarity
-range = [-1, 1], 主图可线性映射到 [0, 1]
+innovation_stance_agreement
+stance_within_one_agreement
+quadratic_weighted_kappa
+claim_evidence_coverage = (entailed + related) / total_peer_points
+aspect-level relation proportions = entailed / related / no_match / contradicted
 ```
 
-推荐模型优先级：
+语义匹配方法：
 
-1. `BAAI/bge-m3`，与项目已有 `FlagEmbedding` 使用习惯一致；
-2. 本地可用的 SentenceTransformer / SciBERT；
-3. OpenAI-compatible embedding 服务，前提是记录模型名和服务地址。
+1. BGE-M3 对 reviewer point 与 ASPR candidate point 做 embedding match。
+2. 只对 BGE no_match 且相似度接近阈值的点做 bounded LLM/NLI refinement。
+3. 不降低 BGE 阈值刷分；所有 refinement 必须保留 `bge_only_relation`、`refined_relation`、`relation_source` 和 raw judge response/error。
+4. `contradicted` 单独显示，不计入 matched。
 
-同一批 Fig.4 结果必须使用同一个 embedding 模型。模型名、版本、设备和 batch size 写入 `outputs/fig4/fig4_run_config.json`。
+允许的 cross-aspect fallback：
+
+```text
+novelty <-> prior_art_comparison
+evidence_rigor <-> limitations
+limitations <-> future_work only for future-work gap statements
+```
+
+每条跨维度命中必须写入 `cross_aspect_match=true` 和 `candidate_aspect`。
+
+同一批 Fig.4 结果必须使用同一个 embedding 模型。模型名、版本、设备和 batch size 写入运行配置或日志。
+
+### Peer-review label extraction
+
+真实 peer review 不直接整段与 agent 输出算相似度，而是先抽取 quote-grounded innovation labels。
+
+每个 aspect 保留旧字段：
+
+```json
+{
+  "points": ["brief extracted judgement"],
+  "quotes": ["exact quote copied from source"]
+}
+```
+
+同时新增 `point_records`：
+
+```json
+{
+  "point_id": "novelty_1",
+  "point": "brief extracted judgement",
+  "quote": "exact quote copied from source",
+  "polarity": "positive|negative|mixed|neutral",
+  "evidence_type": "novelty_claim|significance_claim|prior_art_comparison|evidence_support|rigor_concern|limitation|future_work",
+  "confidence": 0.0,
+  "source_role": "reviewer|editor"
+}
+```
+
+无 exact quote 的 point 必须丢弃；author response、license boilerplate、acceptance-only revision text 不得生成 innovation point。
+
+### Supplementary system dashboard
+
+Efficiency/readability 作为 ASPR system properties 保留到：
+
+```text
+outputs/fig4/fig4_system_dashboard.png
+```
+
+这些结果不作为 Fig.4 主图结论，只用于 supplement 或 Fig.8-10 系统能力讨论。
 
 ### Efficiency
 
@@ -491,4 +556,3 @@ Fig.4 使用 ASPR 的现有 agent 能力，但不改变核心包默认行为。
 
 - Publons / Clarivate. Global State of Peer Review 2018: https://publons.com/static/Publons-Global-State-Of-Peer-Review-2018.pdf
 - Nature News 对 peer-review 时间调查的报道: https://www.nature.com/articles/d41586-018-06602-y
-
