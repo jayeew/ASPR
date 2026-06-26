@@ -1,0 +1,119 @@
+{
+  "artifact_kind": "fig3_v5_rank_learning",
+  "best_single_oof_spearman": 0.2672369422587961,
+  "contributing_graph_deltas": [
+    "community_reach",
+    "field_entropy",
+    "cross_community_adoption",
+    "partition_change",
+    "boundary_mixing"
+  ],
+  "created_at": "2026-06-23T17:03:14+00:00",
+  "data_profile": {
+    "control_median_min_by_domain": 87.0,
+    "domains": [
+      "click_chemistry_cuaac",
+      "crispr",
+      "gamma_ray_bursts_and_supernovae",
+      "genome_wide_association_studies",
+      "immune_checkpoint_therapy",
+      "ipsc_reprogramming",
+      "magnetic_properties_of_thin_films",
+      "organoids",
+      "random_forests",
+      "topological_insulators"
+    ],
+    "domains_below_landmark_or_high_case_min": [
+      "crispr",
+      "immune_checkpoint_therapy",
+      "magnetic_properties_of_thin_films",
+      "organoids",
+      "random_forests"
+    ],
+    "domains_below_paper_min": [
+      "crispr",
+      "immune_checkpoint_therapy",
+      "magnetic_properties_of_thin_films",
+      "organoids",
+      "random_forests"
+    ],
+    "domains_with_relaxed_controls": [
+      "random_forests"
+    ],
+    "min_landmark_or_high_cases_per_domain": 6,
+    "min_papers_per_domain": 60,
+    "n_domains": 10,
+    "relaxed_control_tier_rate_max_by_domain": 0.8064516129032258,
+    "total_papers": 4049
+  },
+  "effect_summary": {
+    "bottom_score_decile_rgpm_top10_rate": 0.037037037037037035,
+    "bottom_score_decile_rgpm_top20_rate": 0.10185185185185185,
+    "high_score_tertile_rgpm_percentile_median": 64.94288360605125,
+    "high_vs_low_tertile_median_rgpm_lift_pp": 27.66285890707009,
+    "low_score_tertile_rgpm_percentile_median": 37.280024698981165,
+    "n": 3239,
+    "top_score_decile_rgpm_top10_rate": 0.18518518518518517,
+    "top_score_decile_rgpm_top20_rate": 0.33641975308641975,
+    "top_vs_bottom_score_decile_rgpm_top10_enrichment": 5.0,
+    "top_vs_bottom_score_decile_rgpm_top20_enrichment": 3.303030303030303
+  },
+  "equal_weight_oof_spearman": 0.2010492775320463,
+  "feature_cols": [
+    "B_z",
+    "RS_z",
+    "DeltaQ0_z",
+    "Uzzi_z",
+    "RTD_z",
+    "BurtIP_z",
+    "PDE_z",
+    "B_z_sq",
+    "RS_z_sq",
+    "DeltaQ0_z_sq",
+    "Uzzi_z_sq",
+    "RTD_z_sq",
+    "BurtIP_z_sq",
+    "PDE_z_sq",
+    "B_z_x_RS_z",
+    "B_z_x_DeltaQ0_z",
+    "B_z_x_Uzzi_z",
+    "B_z_x_RTD_z",
+    "B_z_x_BurtIP_z",
+    "B_z_x_PDE_z",
+    "RS_z_x_DeltaQ0_z",
+    "RS_z_x_Uzzi_z",
+    "RS_z_x_RTD_z",
+    "RS_z_x_BurtIP_z",
+    "RS_z_x_PDE_z",
+    "DeltaQ0_z_x_Uzzi_z",
+    "DeltaQ0_z_x_RTD_z",
+    "DeltaQ0_z_x_BurtIP_z",
+    "DeltaQ0_z_x_PDE_z",
+    "Uzzi_z_x_RTD_z",
+    "Uzzi_z_x_BurtIP_z",
+    "Uzzi_z_x_PDE_z",
+    "RTD_z_x_BurtIP_z",
+    "RTD_z_x_PDE_z",
+    "BurtIP_z_x_PDE_z"
+  ],
+  "l2_grid": [
+    0.0,
+    0.001,
+    0.01,
+    0.1
+  ],
+  "latest_fold_test_spearman": 0.36902514756665555,
+  "learned_oof_spearman": 0.2985178684071311,
+  "learned_vs_best_single_delta": 0.03128092614833505,
+  "learned_vs_equal_delta": 0.09746859087508483,
+  "method": "nested_time_block_linear_rank_learning",
+  "model_grid": [
+    "simplex_pairwise",
+    "signed_pairwise",
+    "ridge_rank"
+  ],
+  "n_contributing_graph_deltas": 5,
+  "source_fig3_status_label": "underpowered multi-domain diagnostic run",
+  "target_col": "RGPM",
+  "target_transform": "raw"
+}

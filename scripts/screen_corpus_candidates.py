@@ -379,7 +379,17 @@ def annotate_citations(citations: pd.DataFrame, works: pd.DataFrame) -> pd.DataF
                 "target_community",
             ]
         )
-    meta = works.set_index("id")[["domain", "year", "display_community"]].to_dict("index")
+    meta_frame = works.copy()
+    meta_frame["id"] = meta_frame["id"].map(normalize_id)
+    if meta_frame["id"].duplicated().any():
+        meta_frame["_anchor_sort"] = safe_numeric(meta_frame.get("reliable_anchor", 0))
+        meta_frame["_cited_sort"] = safe_numeric(meta_frame.get("cited_by_count", 0))
+        meta_frame = (
+            meta_frame.sort_values(["_anchor_sort", "_cited_sort"], ascending=[False, False])
+            .drop_duplicates("id", keep="first")
+            .drop(columns=["_anchor_sort", "_cited_sort"], errors="ignore")
+        )
+    meta = meta_frame.set_index("id")[["domain", "year", "display_community"]].to_dict("index")
     out = citations[["source", "target"]].copy()
     out["source"] = out["source"].map(normalize_id)
     out["target"] = out["target"].map(normalize_id)

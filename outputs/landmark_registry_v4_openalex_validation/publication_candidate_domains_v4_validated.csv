@@ -1,0 +1,77 @@
+slug,display_name,field_name,query,n_landmarks,first_landmark_year
+advanced_mri_techniques_and_applications,Advanced MRI Techniques and Applications,Medicine,Advanced MRI Techniques and Applications,1,1981
+ancient_dna,Ancient DNA,Biochemistry Genetics and Molecular Biology,ancient DNA paleogenomics,1,1985
+autophagy_in_disease_and_therapy,Autophagy in Disease and Therapy,Medicine,Autophagy in Disease and Therapy,3,2005
+backpropagation_deep_learning,Backpropagation neural networks,Computer Science,backpropagation neural networks Rumelhart,1,1986
+banking_stability_regulation_efficiency,"Banking stability, regulation, efficiency","Economics, Econometrics and Finance","Banking stability, regulation, efficiency",2,1996
+bose_einstein_condensates,Bose-Einstein condensates,Physics and Astronomy,Bose Einstein condensation dilute gas,1,1995
+car_t_cell_therapy,CAR-T cell therapy,Medicine,"""CAR-T"" OR ""chimeric antigen receptor T cell""",2,2011
+carbon_nanotubes,Carbon nanotubes,Materials Science,carbon nanotubes Iijima,1,1991
+causal_diagrams,Causal diagrams and graphical causal inference,Computer Science,causal diagrams Pearl empirical research,1,1995
+chip_seq_genomics,ChIP-seq genomics,Biochemistry Genetics and Molecular Biology,ChIP-seq chromatin immunoprecipitation sequencing,1,2007
+click_chemistry_cuaac,Click chemistry CuAAC,Chemistry,click chemistry copper catalyzed azide alkyne cycloaddition,1,2002
+colloidal_quantum_dots,Colloidal quantum dots,Materials Science,colloidal quantum dots nanocrystals,1,1993
+convolutional_neural_networks,Convolutional neural networks,Computer Science,convolutional neural networks LeCun,1,1998
+covalent_organic_frameworks,Covalent organic frameworks,Chemistry,covalent organic frameworks COF Yaghi,1,2005
+crispr,CRISPR-Cas genome editing,"Biochemistry, Genetics and Molecular Biology","""CRISPR"" OR ""Cas9"" OR ""genome editing""",3,2012
+dna_sequencing_sanger,DNA sequencing by chain termination,Biochemistry Genetics and Molecular Biology,Sanger DNA sequencing chain termination,1,1977
+dye_sensitized_solar_cells,Dye-sensitized solar cells,Materials Science,dye sensitized solar cells Gratzel,1,1991
+economic_growth_and_productivity,Economic Growth and Productivity,"Economics, Econometrics and Finance",Economic Growth and Productivity,2,1977
+economic_theories_and_models,Economic theories and models,"Economics, Econometrics and Finance",Economic theories and models,2,1998
+economic_theory_and_institutions,Economic Theory and Institutions,"Economics, Econometrics and Finance",Economic Theory and Institutions,3,1972
+economic_theory_and_policy,Economic Theory and Policy,"Economics, Econometrics and Finance",Economic Theory and Policy,3,1970
+environmental_metagenomics,Environmental metagenomics,Biochemistry Genetics and Molecular Biology,environmental metagenomics Sargasso Sea,1,2004
+exoplanets,Exoplanets,Physics and Astronomy,"""exoplanet"" OR ""extrasolar planet"" OR ""transiting planet""",1,1995
+financial_markets_and_investment_strategies,Financial Markets and Investment Strategies,"Economics, Econometrics and Finance",Financial Markets and Investment Strategies,3,1975
+fractional_quantum_hall_effect,Fractional quantum Hall effect,Physics and Astronomy,fractional quantum Hall effect,1,1982
+gamma_ray_bursts_and_supernovae,Gamma-ray bursts and supernovae,Physics and Astronomy,Gamma-ray bursts and supernovae,2,1998
+gender_labor_and_family_dynamics,"Gender, Labor, and Family Dynamics",Social Sciences,"Gender, Labor, and Family Dynamics",1,1976
+genetics_aging_and_longevity_in_model_organisms,"Genetics, Aging, and Longevity in Model Organisms","Biochemistry, Genetics and Molecular Biology","Genetics, Aging, and Longevity in Model Organisms",3,1993
+genome_wide_association_studies,Genome-wide association studies,Medicine,"""genome-wide association study"" OR ""GWAS""",1,2007
+graphene_2d_materials,Graphene and 2D materials,Materials Science,"""graphene"" OR ""two-dimensional materials"" OR ""van der Waals heterostructure""",1,2004
+green_fluorescent_protein,GFP and fluorescent proteins,Biochemistry Genetics and Molecular Biology,green fluorescent protein GFP biology,1,1994
+high_entropy_alloys,High-entropy alloys,Materials Science,high entropy alloys,1,2004
+high_tc_superconductivity,High-Tc superconductivity,Physics and Astronomy,high temperature superconductivity cuprates,1,1986
+human_genome_project,Human Genome Project,Biochemistry Genetics and Molecular Biology,human genome project sequencing,1,2001
+immune_checkpoint_therapy,Immune checkpoint therapy,Medicine,"""immune checkpoint inhibitor"" OR ""PD-1"" OR ""CTLA-4"" OR ""cancer immunotherapy""",1,2010
+income_poverty_and_inequality,"Income, Poverty, and Inequality",Social Sciences,"Income, Poverty, and Inequality",3,1973
+ipsc_reprogramming,iPSC and cellular reprogramming,"Biochemistry, Genetics and Molecular Biology","""induced pluripotent stem cell"" OR ""cellular reprogramming"" OR ""Yamanaka factors""",3,2006
+lasso_regularization,LASSO regularization,Computer Science,LASSO regularization statistics,1,1996
+latent_dirichlet_allocation,Latent Dirichlet allocation,Computer Science,latent Dirichlet allocation topic model,1,2003
+lithium_ion_batteries,Lithium-ion battery cathodes,Materials Science,lithium ion batteries LiCoO2 Goodenough,1,1980
+magnetic_properties_of_thin_films,Magnetic properties of thin films,Physics and Astronomy,Magnetic properties of thin films,3,1988
+mass_spectrometry_techniques_and_applications,Mass Spectrometry Techniques and Applications,Chemistry,Mass Spectrometry Techniques and Applications,3,1987
+mcmc_gibbs_sampling,Gibbs sampling and MCMC,Computer Science,Gibbs sampling Markov random fields,1,1984
+metal_organic_frameworks,Metal-organic frameworks,Chemistry,metal organic frameworks MOF Yaghi,1,1995
+metamaterials_negative_index,Negative-index metamaterials,Physics and Astronomy,negative index metamaterials,1,2000
+microarray_gene_expression,DNA microarrays and gene expression profiling,Biochemistry Genetics and Molecular Biology,DNA microarray gene expression profiling,1,1995
+microbiome_metagenomics,Microbiome and metagenomics,Medicine,"""microbiome"" OR ""metagenomics"" OR ""human microbiome""",2,2010
+monetary_policy_and_economic_impact,Monetary Policy and Economic Impact,"Economics, Econometrics and Finance",Monetary Policy and Economic Impact,2,1990
+mrna_vaccines_lnp,mRNA vaccines and lipid nanoparticles,Medicine,"""mRNA vaccine"" OR ""lipid nanoparticle"" OR ""modified mRNA""",1,2005
+mxenes_2d_carbides,MXenes and 2D carbides,Materials Science,MXenes two dimensional carbides,1,2011
+nanopore_sequencing,Nanopore sequencing,"Biochemistry, Genetics and Molecular Biology","""nanopore sequencing"" OR ""MinION"" OR ""single-molecule sequencing""",1,1996
+neutrino_oscillations,Neutrino oscillations,Physics and Astronomy,neutrino oscillations Super Kamiokande,1,1998
+optogenetics,Optogenetics,Biochemistry Genetics and Molecular Biology,optogenetics Boyden channelrhodopsin neuroscience,1,2005
+organic_leds,Organic light-emitting diodes,Materials Science,organic light emitting diode OLED Tang VanSlyke,1,1987
+organoids,Organoids and stem-cell models,Medicine,"""organoid"" OR ""cerebral organoid"" OR ""intestinal organoid""",2,2009
+pagerank_web_search,PageRank and web search,Computer Science,PageRank web search Brin Page,1,1998
+pcr_polymerase_chain_reaction,PCR polymerase chain reaction,Biochemistry Genetics and Molecular Biology,polymerase chain reaction PCR DNA amplification,1,1985
+perovskite_solar_cells,Perovskite solar cells,Materials Science,"""perovskite solar cell"" OR ""organometal halide perovskite""",3,2009
+photocatalytic_water_splitting,Photocatalytic water splitting,Chemistry,photocatalytic water splitting Fujishima Honda,1,1972
+photonic_crystals,Photonic crystals,Physics and Astronomy,photonic crystals photonic band gap,1,1987
+quantum_hall_effect,Quantum Hall effect,Physics and Astronomy,quantum Hall effect,1,1980
+quantum_teleportation,Quantum teleportation,Physics and Astronomy,quantum teleportation Bennett,1,1993
+quasicrystals,Quasicrystals,Materials Science,quasicrystals Shechtman,1,1984
+random_forests,Random forests,Computer Science,random forests machine learning,1,2001
+rna_interference,RNA interference,"Biochemistry, Genetics and Molecular Biology","""RNA interference"" OR ""siRNA"" OR ""gene silencing""",1,1998
+rna_interference_and_gene_delivery,rna interference and gene delivery,,rna interference and gene delivery,1,2001
+single_cell_rna_seq,Single-cell RNA sequencing,"Biochemistry, Genetics and Molecular Biology","""single-cell RNA-seq"" OR ""single cell transcriptomics"" OR ""Drop-seq""",2,2009
+spectroscopy_and_quantum_chemical_studies,Spectroscopy and Quantum Chemical Studies,Physics and Astronomy,Spectroscopy and Quantum Chemical Studies,2,1987
+super_resolution_microscopy,Super-resolution microscopy,"Biochemistry, Genetics and Molecular Biology","""super-resolution microscopy"" OR ""STED microscopy"" OR ""PALM microscopy"" OR ""STORM microscopy""",1,2006
+support_vector_machines,Support vector machines,Computer Science,support vector machines Cortes Vapnik,1,1995
+sustainable_development_and_environmental_policy,Sustainable Development and Environmental Policy,Environmental Science,Sustainable Development and Environmental Policy,1,1986
+synthetic_biology,Synthetic biology,"Biochemistry, Genetics and Molecular Biology","""synthetic biology"" OR ""genetic circuit"" OR ""minimal genome""",2,2000
+theoretical_and_computational_physics,Theoretical and Computational Physics,Physics and Astronomy,Theoretical and Computational Physics,1,1971
+topological_insulators,Topological insulators,Physics and Astronomy,"""topological insulator"" OR ""quantum spin Hall"" OR ""topological materials""",2,2005
+ubiquitin_and_proteasome_pathways,Ubiquitin and proteasome pathways,"Biochemistry, Genetics and Molecular Biology",Ubiquitin and proteasome pathways,2,1980
+ultracold_optical_lattices,Ultracold atoms in optical lattices,Physics and Astronomy,optical lattice Mott insulator ultracold atoms,1,2002

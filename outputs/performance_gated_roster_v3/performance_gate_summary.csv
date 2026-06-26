@@ -1,0 +1,3 @@
+run,run_dir,n_domains,learned_oof_spearman,equal_weight_oof_spearman,learned_vs_equal_delta,latest_fold,latest_fold_test_spearman,n_contributing_graph_deltas,overall_pass,status_label
+baseline,outputs\kg_perturbation_fig3_v3_openalex_graph_strong11_no_magnetic_audit\multi_domain,11,0.2962548310873628,0.2224057969553026,0.07384903413206018,4,0.2600954371418219,5,False,underpowered multi-domain diagnostic run
+candidate,outputs\kg_perturbation_fig3_v3_openalex_graph_all12_audit\multi_domain,12,0.2952581414947922,0.21897951721895328,0.0762786242758389,4,0.2602754525266331,5,False,underpowered multi-domain diagnostic run

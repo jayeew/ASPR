@@ -1,0 +1,22 @@
+{
+  "artifact_kind": "landmark_registry_v3_manifest",
+  "blocked_main_domains_without_v3_landmarks": [
+    "spectroscopy_and_quantum_chemical_studies"
+  ],
+  "coverage_csv": "outputs\\landmark_registry_v3\\landmark_registry_v3_domain_coverage.csv",
+  "coverage_json": "outputs\\landmark_registry_v3\\landmark_registry_v3_domain_coverage.json",
+  "created_at": "2026-06-23T02:58:09+00:00",
+  "failed_rows": [],
+  "max_landmarks_per_domain": 3,
+  "n_domains": 12,
+  "n_passed_rows": 25,
+  "n_seed_rows": 25,
+  "performance_gated_candidates": [
+    "magnetic_properties_of_thin_films"
+  ],
+  "policy": "strict_manual_or_authority_backed_doi_only_no_legacy_fig1_anchor",
+  "registry_csv": "data\\knowledge_corpus\\landmark_registry_v3.csv",
+  "registry_json": "data\\knowledge_corpus\\landmark_registry_v3.json",
+  "target_roster_path": "outputs\\publication_corpus_v5_fig3aware_candidate_audit\\publication_target_domains.json",
+  "validation_csv": "outputs\\landmark_registry_v3\\landmark_registry_v3_validation.csv"
+}

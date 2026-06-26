@@ -1,0 +1,38 @@
+{
+  "artifact_kind": "performance_gate_decision_v5_method",
+  "baseline_metrics": {
+    "equal_weight_oof_spearman": 0.19958874144544506,
+    "learned_oof_spearman": 0.28369441964369524,
+    "learned_vs_equal_delta": 0.08410567819825018
+  },
+  "baseline_run_dir": "\\home\\jayee\\workspace\\ASPR\\outputs\\kg_perturbation_fig3_v4_final_bio_methods_phys10\\multi_domain",
+  "checks": {
+    "beats_baseline": true,
+    "contributing_graph_deltas": true,
+    "latest_fold": true,
+    "learned_beats_equal": true,
+    "learned_oof_spearman": false,
+    "learned_vs_equal_delta": true,
+    "top_bottom_enrichment": true
+  },
+  "created_at": "2026-06-23T17:03:42+00:00",
+  "final_pass": false,
+  "materialization_status": "blocked_failed_v5_method_gate",
+  "selection_policy": "nested_time_block_rank_learning_must_beat_fig3_baseline",
+  "thresholds": {
+    "min_contributing_deltas": 5,
+    "min_enrichment": 5.0,
+    "min_latest_fold": 0.35,
+    "min_learned_vs_equal": 0.03,
+    "min_oof": 0.45
+  },
+  "v5_metrics": {
+    "equal_weight_oof_spearman": 0.2010492775320463,
+    "latest_fold_test_spearman": 0.36902514756665555,
+    "learned_oof_spearman": 0.2985178684071311,
+    "learned_vs_equal_delta": 0.09746859087508483,
+    "n_contributing_graph_deltas": 5,
+    "top_bottom_enrichment": 5.0
+  },
+  "v5_run_dir": "\\home\\jayee\\workspace\\ASPR\\outputs\\fig3_v5_rank_learning_bio_methods_phys10_interactions"
+}

@@ -1,0 +1,38 @@
+{
+  "artifact_kind": "openalex_v4_final_graph",
+  "checkpoint_dir": "\\home\\jayee\\workspace\\ASPR\\outputs\\openalex_v4_final_graph_bio_methods_phys10\\checkpoints",
+  "created_at": "2026-06-23T09:21:36+00:00",
+  "domain_fetch_report": "\\home\\jayee\\workspace\\ASPR\\outputs\\openalex_v4_final_graph_bio_methods_phys10\\domain_fetch_report.csv",
+  "domain_seed_csv": "\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\publication_candidate_domains_v4.csv",
+  "domain_seed_source": "landmark_registry_v4_openalex",
+  "domains": [
+    "click_chemistry_cuaac",
+    "crispr",
+    "gamma_ray_bursts_and_supernovae",
+    "genome_wide_association_studies",
+    "immune_checkpoint_therapy",
+    "ipsc_reprogramming",
+    "magnetic_properties_of_thin_films",
+    "organoids",
+    "random_forests",
+    "topological_insulators"
+  ],
+  "figure_logic_policy": "fixed_consumer_contract",
+  "global_dedupe_report": {
+    "dropped_duplicate_works": 804
+  },
+  "global_dedupe_work_ids": true,
+  "landmark_source_label": "strict_manual_v4",
+  "local_references_only": false,
+  "max_anchor_citers": 250,
+  "n_citation_rows": 3528832,
+  "n_domains": 10,
+  "n_landmarks": 19,
+  "n_works": 29196,
+  "out_dir": "\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\v4_final_graph_bio_methods_phys10",
+  "papers_per_domain": 3000,
+  "quality_overall_pass": true,
+  "registry_csv": "\\home\\jayee\\workspace\\ASPR\\data\\knowledge_corpus\\landmark_registry_v4.csv",
+  "report_dir": "\\home\\jayee\\workspace\\ASPR\\outputs\\openalex_v4_final_graph_bio_methods_phys10",
+  "source_dataset_prefix": "openalex_v4_final"
+}

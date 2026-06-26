@@ -1,0 +1,56 @@
+{
+  "artifact_kind": "performance_gate_decision_v4",
+  "created_at": "2026-06-23T09:05:00+00:00",
+  "figure_logic_policy": "fixed_consumer_contract",
+  "final_domains": [],
+  "final_evaluation": {
+    "final_pass": false,
+    "status": "pending_final_fig3_recompute"
+  },
+  "final_pass": false,
+  "materialization_status": "blocked_pending_or_failed_final_gate",
+  "screen": {
+    "candidate_domains": [
+      "autophagy_in_disease_and_therapy",
+      "crispr",
+      "economic_theory_and_institutions",
+      "economic_theory_and_policy",
+      "financial_markets_and_investment_strategies",
+      "genetics_aging_and_longevity_in_model_organisms",
+      "income_poverty_and_inequality",
+      "ipsc_reprogramming",
+      "magnetic_properties_of_thin_films",
+      "mass_spectrometry_techniques_and_applications",
+      "perovskite_solar_cells",
+      "banking_stability_regulation_efficiency",
+      "car_t_cell_therapy",
+      "economic_growth_and_productivity",
+      "economic_theories_and_models",
+      "gamma_ray_bursts_and_supernovae",
+      "microbiome_metagenomics",
+      "monetary_policy_and_economic_impact",
+      "organoids",
+      "single_cell_rna_seq",
+      "spectroscopy_and_quantum_chemical_studies",
+      "synthetic_biology",
+      "topological_insulators",
+      "ubiquitin_and_proteasome_pathways",
+      "ancient_dna"
+    ],
+    "n_quality_pass": 74,
+    "n_screen_domains": 76
+  },
+  "selection_policy": "large_candidate_pool_strict_performance_gate_v4",
+  "thresholds": {
+    "ideal_latest_fold": 0.4,
+    "max_domains": 12,
+    "max_family_share": 0.5,
+    "min_contributing_deltas": 5,
+    "min_domains": 8,
+    "min_enrichment": 5.0,
+    "min_latest_fold": 0.35,
+    "min_learned_vs_equal": 0.03,
+    "min_oof": 0.45,
+    "top_screen_domains": 25
+  }
+}
