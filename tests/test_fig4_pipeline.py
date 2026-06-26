@@ -16,6 +16,7 @@ if str(PROJECT_ROOT) not in sys.path:
 from experiments.kg_perturbation_fig4.main_fig4 import (  # noqa: E402
     Fig4ArgsForAgent,
     audit_markdown_inputs,
+    build_fig3_weighted_prior_rows,
     build_paper_dossier,
     candidate_records_for_peer_aspect,
     coerce_semantic_match_refinement_payload,
@@ -23,12 +24,14 @@ from experiments.kg_perturbation_fig4.main_fig4 import (  # noqa: E402
     draw_fig4,
     filter_prior_art_candidates,
     heuristic_structured_consistency,
+    load_fig3_weight_config,
     load_fig3_weights,
     normalize_innovation_label_payload,
     parse_article_markdown,
     parse_peer_review_markdown,
     read_csv_records,
     run_aspr_agent_for_row,
+    run_graph_prior_stage,
     run_metrics_stage,
     screen_peer_review_label,
     semantic_match_one_point,
@@ -467,6 +470,112 @@ def test_fig3_weights_load_and_normalize() -> None:
     assert weights["PDE"] == 0.25
 
 
+def test_fig3_weight_config_missing_path_reports_warning() -> None:
+    with tempfile.TemporaryDirectory(prefix="aspr_fig4_missing_weights_") as tmp:
+        config = load_fig3_weight_config(Path(tmp) / "missing_weights.csv")
+
+    assert round(sum(config["weights"].values()), 6) == 1.0
+    assert config["warning"].startswith("missing_fig3_weights")
+    assert config["weights_source"] == "equal_weight_fallback"
+
+
+def test_fig3_weighted_prior_uses_z_style_scores_not_raw_product() -> None:
+    with tempfile.TemporaryDirectory(prefix="aspr_fig4_sw_") as tmp:
+        root = Path(tmp)
+        weights_path = root / "fig3_best_weights.csv"
+        reference_path = root / "fig3_publication_day_indicators.csv"
+        write_csv(weights_path, [{"metric": "DeltaQ0", "weight": 1.0}])
+        write_csv(
+            reference_path,
+            [
+                {"paper_id": "r0", "DeltaQ0": 0.0},
+                {"paper_id": "r1", "DeltaQ0": 1.0},
+                {"paper_id": "r2", "DeltaQ0": 2.0},
+                {"paper_id": "r3", "DeltaQ0": 3.0},
+            ],
+        )
+
+        rows = build_fig3_weighted_prior_rows(
+            [{"paper_id": "paper", "DeltaQ0": 2.5}],
+            weights_path=weights_path,
+            reference_indicators_path=reference_path,
+            reference_scores_path=root / "missing_score_table.csv",
+        )
+
+    assert len(rows) == 1
+    assert rows[0]["fig3_sw"] != 2.5
+    assert rows[0]["fig3_sw_normalization"] == "fig3_reference_rank_normal"
+    assert rows[0]["fig3_sw_percentile_source"] == "fig3_reference_distribution"
+    assert float(rows[0]["fig3_sw_percentile"]) > 0.5
+    assert rows[0]["fig3_sw_tier"] in {"middle", "high"}
+
+
+def test_graph_prior_prompt_hides_individual_metric_values() -> None:
+    from experiments.kg_perturbation_fig4.main_fig4 import graph_metric_prompt_block
+
+    prompt = graph_metric_prompt_block(
+        {
+            "fig3_sw": 0.73,
+            "fig3_sw_percentile": 0.82,
+            "fig3_sw_tier": "high",
+            "fig3_sw_quality_flag": "ok",
+            "B": 0.11,
+            "RS": 0.22,
+            "DeltaQ0": 0.33,
+            "Uzzi": 0.44,
+            "RTD": 0.55,
+            "BurtIP": 0.66,
+            "PDE": 0.77,
+        }
+    )
+
+    assert "Fig.3-weighted graph innovation prior" in prompt
+    assert "0.730" in prompt
+    assert "82%" in prompt
+    assert "high" in prompt
+    for metric in ["B", "RS", "DeltaQ0", "Uzzi", "RTD", "BurtIP", "PDE"]:
+        assert metric not in prompt
+    for value in ["0.110", "0.220", "0.330", "0.440", "0.550", "0.660", "0.770"]:
+        assert value not in prompt
+
+
+def test_graph_prior_stage_writes_one_row_per_manifest_entry() -> None:
+    with tempfile.TemporaryDirectory(prefix="aspr_fig4_graph_prior_") as tmp:
+        root = Path(tmp)
+        weights_path = root / "fig3_best_weights.csv"
+        reference_path = root / "fig3_publication_day_indicators.csv"
+        write_csv(root / "fig4_manifest.csv", [{"paper_id": "paper_a"}, {"paper_id": "paper_b"}])
+        write_csv(
+            root / "fig4_graph_metrics.csv",
+            [
+                {"paper_id": "paper_a", "DeltaQ0": 0.25, "RTD": 0.75},
+                {"paper_id": "paper_b", "DeltaQ0": 0.75, "RTD": 0.25},
+            ],
+        )
+        write_csv(weights_path, [{"metric": "DeltaQ0", "weight": 1.0}])
+        write_csv(
+            reference_path,
+            [
+                {"paper_id": "r0", "DeltaQ0": 0.0},
+                {"paper_id": "r1", "DeltaQ0": 0.5},
+                {"paper_id": "r2", "DeltaQ0": 1.0},
+            ],
+        )
+
+        rows = run_graph_prior_stage(
+            root,
+            weights_path=weights_path,
+            reference_indicators_path=reference_path,
+            reference_scores_path=root / "missing_score_table.csv",
+            quiet=True,
+        )
+
+        assert len(rows) == 2
+        assert {row["paper_id"] for row in rows} == {"paper_a", "paper_b"}
+        assert all(row["fig3_weights_hash"] for row in rows)
+        assert (root / "fig4_graph_prior.csv").exists()
+
+
 def test_s2_keyed_403_falls_back_to_anonymous() -> None:
     import aspr.open_scholar as open_scholar
 
@@ -821,6 +930,22 @@ def test_metrics_same_text_similarity_and_coverage() -> None:
             ],
         )
         write_csv(
+            out_dir / "fig4_graph_prior.csv",
+            [
+                {
+                    "paper_id": "paper",
+                    "fig3_sw": 0.42,
+                    "fig3_sw_percentile": 0.80,
+                    "fig3_sw_tier": "high",
+                    "fig3_weights_source": "synthetic_weights.csv",
+                    "fig3_weights_hash": "abc123",
+                    "fig3_sw_quality_flag": "ok",
+                    "graph_prior_prompt_mode": "fig3_sw_only",
+                    "fallback_percentile_source": "",
+                }
+            ],
+        )
+        write_csv(
             out_dir / "fig4_retrieval_diagnostics.csv",
             [{"paper_id": "paper", "retrieval_source": "semantic_scholar_anonymous", "s2_key_status": "s2_key_rejected"}],
         )
@@ -878,10 +1003,15 @@ def test_metrics_same_text_similarity_and_coverage() -> None:
         assert rows[0]["novelty_alignment"] == 1.0
         assert rows[0]["phrase_claim_coverage_supplementary"] == 1.0
         assert rows[0]["included_in_main"]
+        assert rows[0]["fig3_sw"] == 0.42
+        assert rows[0]["fig3_sw_percentile"] == 0.80
+        assert rows[0]["fig3_sw_tier"] == "high"
+        assert rows[0]["graph_prior_prompt_mode"] == "fig3_sw_only"
         assert len([match for match in matches if match["match_method"] == "normalized_phrase_overlap"]) == 5
         assert len([match for match in matches if match["match_method"] == "innovation_label_point_overlap"]) == 6
         metrics_csv = read_csv_records(out_dir / "fig4_metrics_summary.csv")
         assert metrics_csv[0]["embedding_backend"] in {"bge-m3", "lexical_fallback"}
+        assert metrics_csv[0]["fig3_sw_tier"] == "high"
         aspect_summary = read_csv_records(out_dir / "fig4_aspect_relation_summary.csv")
         assert aspect_summary
         assert sum(int(float(row["total_points"])) for row in aspect_summary) == len(semantic_matches)
@@ -942,6 +1072,9 @@ def test_draw_fig4_smoke_outputs_all_formats() -> None:
                     "agent_future_work": 3.1,
                     "total_peer_aspects": 9,
                     "covered_peer_aspects": 7,
+                    "fig3_sw": -0.8 + idx * 0.15,
+                    "fig3_sw_percentile": (idx + 1) / 13,
+                    "fig3_sw_tier": "low" if idx < 4 else ("middle" if idx < 8 else "high"),
                 }
             )
             for aspect in aspects:
@@ -963,6 +1096,9 @@ def test_draw_fig4_smoke_outputs_all_formats() -> None:
         assert (out_dir / "fig4_full.pdf").exists()
         assert (out_dir / "fig4_full.svg").exists()
         assert (out_dir / "fig4_system_dashboard.png").exists()
+        assert panel_data["sw_tier_counts"]["low"] == 4
+        assert panel_data["sw_tier_counts"]["middle"] == 4
+        assert panel_data["sw_tier_counts"]["high"] == 4
 
 
 def test_publication_summary_emphasizes_claim_validation_metrics() -> None:

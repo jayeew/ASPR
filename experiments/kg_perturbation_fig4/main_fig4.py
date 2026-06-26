@@ -13,6 +13,7 @@ import textwrap
 import time
 from dataclasses import dataclass, replace
 from pathlib import Path
+from statistics import NormalDist
 from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 
@@ -26,6 +27,9 @@ DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "outputs" / "kg_perturbation_fig4"
 DEFAULT_SAMPLE_SEED = 20260617
 DEFAULT_41467_CAP = 0.50
 DEFAULT_HUMAN_HOURS = 5.0
+DEFAULT_FIG3_WEIGHTS_PATH = PROJECT_ROOT / "outputs" / "redraw_v6a_best_fig3" / "multi_domain" / "fig3_best_weights.csv"
+DEFAULT_FIG3_SCORE_TABLE_PATH = PROJECT_ROOT / "outputs" / "redraw_v6a_best_fig3" / "multi_domain" / "fig3_score_table.csv"
+DEFAULT_FIG3_INDICATORS_PATH = PROJECT_ROOT / "outputs" / "redraw_v6a_best_fig3" / "multi_domain" / "fig3_publication_day_indicators.csv"
 
 INNOVATION_METRIC_NAMES = ["B", "RS", "DeltaQ0", "Uzzi", "RTD", "BurtIP", "PDE"]
 RATING_ASPECTS = ["significance", "novelty", "rigor", "limitations", "future_work"]
@@ -839,14 +843,247 @@ def _first_sentence(text: str, fallback: str = "") -> str:
     return cleaned[: match.start()].strip() if match else cleaned[:280]
 
 
+def fig3_weights_path_from_env() -> Path:
+    return Path(os.getenv("FIG4_FIG3_WEIGHTS_PATH", str(DEFAULT_FIG3_WEIGHTS_PATH)))
+
+
+def fig3_score_table_path_from_env() -> Path:
+    return Path(os.getenv("FIG4_FIG3_SCORE_TABLE_PATH", str(DEFAULT_FIG3_SCORE_TABLE_PATH)))
+
+
+def fig3_indicators_path_from_env() -> Path:
+    return Path(os.getenv("FIG4_FIG3_INDICATORS_PATH", str(DEFAULT_FIG3_INDICATORS_PATH)))
+
+
+def metric_name_from_weight_row(row: Mapping[str, Any]) -> str:
+    """Read Fig.3 weight files written either as named rows or pandas Series CSV."""
+    for key in ("metric", "name", "feature", ""):
+        value = normalize_whitespace(str(row.get(key) or ""))
+        if value:
+            return value
+    return ""
+
+
+def file_sha1(path: Path, length: int = 12) -> str:
+    if not path.exists():
+        return ""
+    return hashlib.sha1(path.read_bytes()).hexdigest()[:length]
+
+
+def load_fig3_weights(path: Path) -> Dict[str, float]:
+    config = load_fig3_weight_config(path)
+    return dict(config["weights"])
+
+
+def load_fig3_weight_config(path: Path) -> Dict[str, Any]:
+    """Load Fig.3 simplex weights with explicit fallback metadata."""
+    if not path.exists():
+        equal = 1.0 / len(INNOVATION_METRIC_NAMES)
+        return {
+            "weights": {metric: equal for metric in INNOVATION_METRIC_NAMES},
+            "weights_source": "equal_weight_fallback",
+            "weights_hash": "",
+            "warning": f"missing_fig3_weights:{path}",
+        }
+    rows = read_csv_records(path)
+    raw: Dict[str, float] = {}
+    for row in rows:
+        metric = metric_name_from_weight_row(row)
+        if metric in INNOVATION_METRIC_NAMES:
+            raw[metric] = max(0.0, numeric(row.get("weight"), 0.0))
+    total = sum(raw.values())
+    if total <= 0:
+        equal = 1.0 / len(INNOVATION_METRIC_NAMES)
+        return {
+            "weights": {metric: equal for metric in INNOVATION_METRIC_NAMES},
+            "weights_source": "equal_weight_fallback",
+            "weights_hash": file_sha1(path),
+            "warning": f"empty_fig3_weights:{path}",
+        }
+    return {
+        "weights": {metric: raw.get(metric, 0.0) / total for metric in INNOVATION_METRIC_NAMES},
+        "weights_source": str(path),
+        "weights_hash": file_sha1(path),
+        "warning": "",
+    }
+
+
+def transform_fig3_metric_value(metric: str, value: Any) -> float:
+    """Apply the lightweight global transforms used before Fig.3 rank-normalization."""
+    number = numeric(value, float("nan"))
+    if not math.isfinite(number):
+        return float("nan")
+    if metric == "B":
+        return math.log1p(max(number, 0.0))
+    return number
+
+
+def load_fig3_reference_metric_values(reference_indicators_path: Path) -> Dict[str, List[float]]:
+    rows = read_csv_records(reference_indicators_path)
+    out: Dict[str, List[float]] = {metric: [] for metric in INNOVATION_METRIC_NAMES}
+    for metric in INNOVATION_METRIC_NAMES:
+        transformed_key = f"{metric}_transformed"
+        for row in rows:
+            raw_value = row.get(transformed_key) if transformed_key in row else row.get(metric)
+            value = numeric(raw_value, float("nan")) if transformed_key in row else transform_fig3_metric_value(metric, raw_value)
+            if math.isfinite(value):
+                out[metric].append(value)
+        out[metric].sort()
+    return out
+
+
+def empirical_percentile(value: float, reference_values: Sequence[float]) -> float:
+    values = [float(item) for item in reference_values if math.isfinite(float(item))]
+    if not values or not math.isfinite(value):
+        return float("nan")
+    less = 0
+    equal = 0
+    for item in values:
+        if item < value:
+            less += 1
+        elif item == value:
+            equal += 1
+    percentile = (less + 0.5 * max(equal, 1)) / len(values)
+    epsilon = 1.0 / (2.0 * max(len(values), 1))
+    return clamp(percentile, epsilon, 1.0 - epsilon, default=0.5)
+
+
+def rank_normal_from_reference(value: float, reference_values: Sequence[float]) -> float:
+    percentile = empirical_percentile(value, reference_values)
+    if not math.isfinite(percentile):
+        return 0.0
+    return clamp(NormalDist().inv_cdf(percentile), -3.0, 3.0, default=0.0)
+
+
+def percentile_tier(percentile: Any) -> str:
+    value = numeric(percentile, float("nan"))
+    if not math.isfinite(value):
+        return "unknown"
+    if value < 1.0 / 3.0:
+        return "low"
+    if value < 2.0 / 3.0:
+        return "middle"
+    return "high"
+
+
+def fig3_score_reference_values(
+    weights: Mapping[str, float],
+    metric_reference_values: Mapping[str, Sequence[float]],
+    reference_indicators_path: Path,
+    reference_scores_path: Path,
+) -> Tuple[List[float], str]:
+    score_rows = read_csv_records(reference_scores_path)
+    for score_key in ("S_w_oof", "S_w"):
+        values = [numeric(row.get(score_key), float("nan")) for row in score_rows]
+        values = sorted(value for value in values if math.isfinite(value))
+        if values:
+            return values, "fig3_score_table"
+    indicator_rows = read_csv_records(reference_indicators_path)
+    values: List[float] = []
+    for row in indicator_rows:
+        weighted = 0.0
+        has_any = False
+        for metric in INNOVATION_METRIC_NAMES:
+            if f"{metric}_z" in row:
+                z_value = numeric(row.get(f"{metric}_z"), float("nan"))
+            else:
+                z_value = rank_normal_from_reference(
+                    transform_fig3_metric_value(metric, row.get(metric)),
+                    metric_reference_values.get(metric, []),
+                )
+            if math.isfinite(z_value):
+                weighted += z_value * numeric(weights.get(metric), 0.0)
+                has_any = True
+        if has_any:
+            values.append(weighted)
+    return sorted(values), "fig3_reference_distribution" if values else ""
+
+
+def build_fig3_weighted_prior_rows(
+    graph_rows: Sequence[Mapping[str, Any]],
+    weights_path: Optional[Path] = None,
+    reference_scores_path: Optional[Path] = None,
+    reference_indicators_path: Optional[Path] = None,
+) -> List[Dict[str, Any]]:
+    """Compute Fig.3-weighted S_w priors for Fig.4 graph rows."""
+    weights_config = load_fig3_weight_config(weights_path or fig3_weights_path_from_env())
+    weights = weights_config["weights"]
+    indicators_path = reference_indicators_path or fig3_indicators_path_from_env()
+    scores_path = reference_scores_path or fig3_score_table_path_from_env()
+    metric_reference_values = load_fig3_reference_metric_values(indicators_path)
+    score_reference_values, score_source = fig3_score_reference_values(weights, metric_reference_values, indicators_path, scores_path)
+    rows: List[Dict[str, Any]] = []
+    for graph_row in graph_rows:
+        out = dict(graph_row)
+        weighted = 0.0
+        z_count = 0
+        missing_metrics: List[str] = []
+        for metric in INNOVATION_METRIC_NAMES:
+            transformed = transform_fig3_metric_value(metric, graph_row.get(metric))
+            z_value = rank_normal_from_reference(transformed, metric_reference_values.get(metric, []))
+            out[f"{metric}_z"] = z_value
+            if math.isfinite(z_value):
+                weighted += z_value * numeric(weights.get(metric), 0.0)
+                z_count += 1
+            else:
+                missing_metrics.append(metric)
+        out["fig3_sw"] = weighted
+        out["fig3_sw_normalization"] = "fig3_reference_rank_normal"
+        out["fig3_weights_source"] = weights_config["weights_source"]
+        out["fig3_weights_hash"] = weights_config["weights_hash"]
+        out["fig3_weights_warning"] = weights_config["warning"]
+        out["fig3_sw_reference_source"] = score_source
+        out["graph_prior_prompt_mode"] = "fig3_sw_only"
+        out["fig3_sw_quality_flag"] = "ok" if z_count == len(INNOVATION_METRIC_NAMES) and not weights_config["warning"] else "limited"
+        if missing_metrics:
+            out["fig3_sw_quality_flag"] = "limited"
+            out["fig3_sw_missing_metrics"] = ",".join(missing_metrics)
+        rows.append(out)
+    if score_reference_values:
+        for out in rows:
+            percentile = empirical_percentile(numeric(out.get("fig3_sw")), score_reference_values)
+            out["fig3_sw_percentile"] = percentile
+            out["fig3_sw_percentile_source"] = score_source or "fig3_reference_distribution"
+            out["fallback_percentile_source"] = ""
+            out["fig3_sw_tier"] = percentile_tier(percentile)
+    else:
+        sw_values = sorted(numeric(row.get("fig3_sw")) for row in rows if math.isfinite(numeric(row.get("fig3_sw"))))
+        for out in rows:
+            percentile = empirical_percentile(numeric(out.get("fig3_sw")), sw_values)
+            out["fig3_sw_percentile"] = percentile
+            out["fig3_sw_percentile_source"] = "fig4_batch"
+            out["fallback_percentile_source"] = "fig4_batch"
+            out["fig3_sw_tier"] = percentile_tier(percentile)
+            if out["fig3_sw_quality_flag"] == "ok":
+                out["fig3_sw_quality_flag"] = "limited"
+    sw_values = sorted(numeric(row.get("fig3_sw")) for row in rows if math.isfinite(numeric(row.get("fig3_sw"))))
+    for out in rows:
+        batch_percentile = empirical_percentile(numeric(out.get("fig3_sw")), sw_values)
+        out["fig4_sw_batch_percentile"] = batch_percentile
+        out["fig4_sw_ladder_tier"] = percentile_tier(batch_percentile)
+    return rows
+
+
 def graph_metric_prompt_block(metrics: Mapping[str, Any]) -> str:
-    metric_lines = [f"- {metric}: {numeric(metrics.get(metric), 0.0):.3f}" for metric in INNOVATION_METRIC_NAMES]
+    sw = numeric(metrics.get("fig3_sw"), float("nan"))
+    percentile = numeric(metrics.get("fig3_sw_percentile"), float("nan"))
+    tier = str(metrics.get("fig3_sw_tier") or "unknown")
+    quality = str(metrics.get("fig3_sw_quality_flag") or metrics.get("graph_prior_quality_flag") or "limited")
+    if not math.isfinite(sw):
+        return (
+            "Fig.3-weighted graph innovation prior: unavailable.\n"
+            "Graph prior quality: limited.\n"
+            "Use conservative innovation language and rely on the dossier plus prior-art comparison."
+        )
+    percentile_text = f"{percentile * 100:.0f}%" if math.isfinite(percentile) else "n/a"
     return (
-        "Graph-structure innovation evidence:\n"
-        f"Weighted Fig.3 score: {numeric(metrics.get('weighted_score_fig3'), 0.0):.3f}/1.000\n"
-        f"Confidence: {numeric(metrics.get('graph_confidence'), 0.0):.3f}/1.000\n"
-        f"Dominant mechanisms: {metrics.get('top_mechanisms', '') or 'none'}\n"
-        + "\n".join(metric_lines)
+        "Fig.3-weighted graph innovation prior:\n"
+        f"S_w = {sw:.3f}\n"
+        f"Fig.3 reference percentile = {percentile_text}\n"
+        f"Prior tier = {tier}\n"
+        f"Evidence quality flag = {quality}\n"
+        "Use S_w as the only graph-perturbation prior for calibration. "
+        "Do not discuss individual component indicators or treat the prior as a standalone conclusion."
     )
 
 
@@ -854,11 +1091,32 @@ def graph_metric_result_from_row(row: Mapping[str, Any]) -> Dict[str, Any]:
     metric_values = {metric: numeric(row.get(metric), 0.0) for metric in INNOVATION_METRIC_NAMES}
     return {
         "metrics": metric_values,
-        "weighted_score": numeric(row.get("weighted_score_fig3"), 0.0),
+        "weighted_score": numeric(row.get("fig3_sw"), numeric(row.get("weighted_score_fig3"), 0.0)),
+        "fig3_sw": numeric(row.get("fig3_sw"), float("nan")),
+        "fig3_sw_percentile": numeric(row.get("fig3_sw_percentile"), float("nan")),
+        "fig3_sw_tier": row.get("fig3_sw_tier", ""),
         "confidence": numeric(row.get("graph_confidence"), 0.0),
         "top_mechanisms": str(row.get("top_mechanisms") or ""),
         "diagnostics": {"metric_source": row.get("metric_source", ""), "doi": row.get("doi", "")},
     }
+
+
+def build_graph_prior_for_retrieved_papers(
+    row: Mapping[str, Any],
+    retrieved: Sequence[Mapping[str, Any]],
+    metric_source: str = "agent_retrieved_prior_art_graph_scorer",
+) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+    """Compute raw graph metrics and the Fig.3 S_w prior from retrieved papers."""
+    from aspr.graph_innovation_scorer import GraphInnovationScorer
+
+    evidence = GraphInnovationScorer().score(
+        paper_title=str(row.get("title") or ""),
+        paper_abstract=str(row.get("abstract") or ""),
+        retrieved_papers=[dict(paper) for paper in retrieved if isinstance(paper, Mapping)],
+    )
+    graph_row = flatten_graph_metric_evidence(row, evidence.to_dict(), metric_source)
+    prior_row = build_fig3_weighted_prior_rows([graph_row])[0]
+    return graph_row, prior_row
 
 
 def build_lightweight_agent_evaluation(
@@ -1031,6 +1289,28 @@ def run_aspr_agent_for_row(
             "excluded_future_count": excluded_future_count,
         },
     )
+    prior_path = cache_dir / "fig4_graph_prior.json"
+    try:
+        if prior_path.exists():
+            prior_row = read_json(prior_path)
+            if graph_path.exists():
+                graph_metric_result = graph_metric_result_from_row({**read_json(graph_path), **prior_row})
+            else:
+                graph_metric_result = graph_metric_result_from_row(prior_row)
+        elif graph_path.exists() and bool_value(read_json(graph_path).get("graph_metric_valid")):
+            graph_row = read_json(graph_path)
+            prior_row = build_fig3_weighted_prior_rows([graph_row])[0]
+            write_json(prior_path, prior_row)
+            graph_metric_result = graph_metric_result_from_row({**graph_row, **prior_row})
+        else:
+            graph_row, prior_row = build_graph_prior_for_retrieved_papers(row, retrieved)
+            write_json(graph_path, graph_row)
+            write_json(prior_path, prior_row)
+            graph_metric_result = graph_metric_result_from_row(prior_row)
+        graph_metric_evidence_text = graph_metric_prompt_block(prior_row)
+    except Exception as exc:  # noqa: BLE001 - keep the batch running with conservative graph-prior text.
+        graph_metric_evidence_text = graph_metric_prompt_block({})
+        graph_metric_result = {"metrics": {}, "weighted_score": 0.0, "confidence": 0.0, "diagnostics": {"graph_prior_error": str(exc)}}
     try:
         if bool_value(os.getenv("FIG4_LIGHTWEIGHT_AGENT", "0")):
             raise RuntimeError("lightweight_agent_requested")
@@ -1177,7 +1457,10 @@ def compute_graph_metric_evidence_from_retrieval(
         return {}, "missing_retrieved_papers_cache"
     retrieved = read_json(retrieved_path)
     if isinstance(retrieved, Mapping):
-        papers = retrieved.get("papers") if isinstance(retrieved.get("papers"), list) else []
+        if isinstance(retrieved.get("retrieved_papers"), list):
+            papers = retrieved.get("retrieved_papers")
+        else:
+            papers = retrieved.get("papers") if isinstance(retrieved.get("papers"), list) else []
     elif isinstance(retrieved, list):
         papers = retrieved
     else:
@@ -1213,6 +1496,39 @@ def run_graph_metrics_stage(output_dir: Path, quiet: bool = False) -> List[Dict[
         if idx == 1 or idx % 10 == 0 or idx == len(manifest):
             progress_log(f"Graph metrics progress {idx}/{len(manifest)}.", quiet)
     write_csv(output_dir / "fig4_graph_metrics.csv", rows)
+    return rows
+
+
+def run_graph_prior_stage(
+    output_dir: Path,
+    weights_path: Optional[Path] = None,
+    reference_scores_path: Optional[Path] = None,
+    reference_indicators_path: Optional[Path] = None,
+    quiet: bool = False,
+) -> List[Dict[str, Any]]:
+    """Materialize Fig.3-weighted S_w priors for Fig.4 from graph metrics."""
+    manifest = read_csv_records(output_dir / "fig4_manifest.csv")
+    graph_by_paper = group_csv_by_paper(output_dir / "fig4_graph_metrics.csv")
+    graph_rows: List[Dict[str, Any]] = []
+    for row in manifest:
+        paper_id = str(row.get("paper_id") or "")
+        graph_row = dict(graph_by_paper.get(paper_id, {}))
+        graph_row["paper_id"] = paper_id
+        graph_rows.append(graph_row)
+    rows = build_fig3_weighted_prior_rows(
+        graph_rows,
+        weights_path=weights_path,
+        reference_scores_path=reference_scores_path,
+        reference_indicators_path=reference_indicators_path,
+    )
+    write_csv(output_dir / "fig4_graph_prior.csv", rows)
+    for row in rows:
+        paper_id = str(row.get("paper_id") or "")
+        if paper_id:
+            cache_dir = output_dir / "cache" / paper_id
+            cache_dir.mkdir(parents=True, exist_ok=True)
+            write_json(cache_dir / "fig4_graph_prior.json", row)
+    progress_log(f"Graph prior progress {len(rows)}/{len(manifest)}.", quiet)
     return rows
 
 
@@ -2747,23 +3063,6 @@ def heuristic_structured_consistency(peer_label: Mapping[str, Any], agent_label:
     return out
 
 
-def load_fig3_weights(path: Path) -> Dict[str, float]:
-    if not path.exists():
-        equal = 1.0 / len(INNOVATION_METRIC_NAMES)
-        return {metric: equal for metric in INNOVATION_METRIC_NAMES}
-    rows = read_csv_records(path)
-    raw: Dict[str, float] = {}
-    for row in rows:
-        metric = str(row.get("metric") or row.get("name") or row.get("feature") or "")
-        if metric in INNOVATION_METRIC_NAMES:
-            raw[metric] = max(0.0, numeric(row.get("weight"), 0.0))
-    total = sum(raw.values())
-    if total <= 0:
-        equal = 1.0 / len(INNOVATION_METRIC_NAMES)
-        return {metric: equal for metric in INNOVATION_METRIC_NAMES}
-    return {metric: raw.get(metric, 0.0) / total for metric in INNOVATION_METRIC_NAMES}
-
-
 def label_score(label: Mapping[str, Any], path: Sequence[str]) -> float:
     value: Any = label
     for key in path:
@@ -3068,6 +3367,23 @@ def compact_example_text(text: Any, max_chars: int = 220) -> str:
     return cleaned[: max_chars - 1].rstrip() + "..."
 
 
+def mostly_ascii(text: Any) -> bool:
+    cleaned = normalize_whitespace(str(text or ""))
+    if not cleaned:
+        return False
+    ascii_count = sum(1 for char in cleaned if ord(char) < 128)
+    return ascii_count / max(len(cleaned), 1) >= 0.92
+
+
+def display_safe_agent_point(text: Any) -> str:
+    cleaned = compact_example_text(text, 220)
+    if not cleaned:
+        return ""
+    if mostly_ascii(cleaned):
+        return cleaned
+    return "[non-English ASPR point; see fig4_claim_examples.json]"
+
+
 def select_claim_examples(semantic_rows: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
     """Deterministically choose one matched, one missed, and one contradicted claim example."""
     relation_targets = [
@@ -3094,7 +3410,16 @@ def select_claim_examples(semantic_rows: Sequence[Mapping[str, Any]]) -> Dict[st
         if not candidates:
             continue
         if example_type == "matched":
-            candidates = sorted(candidates, key=lambda row: (semantic_refined_relation(row) != "entailed", str(row.get("paper_id") or "")))
+            candidates = sorted(
+                candidates,
+                key=lambda row: (
+                    not mostly_ascii(row.get("best_agent_point")),
+                    semantic_refined_relation(row) != "entailed",
+                    str(row.get("paper_id") or ""),
+                ),
+            )
+        else:
+            candidates = sorted(candidates, key=lambda row: (not mostly_ascii(row.get("best_agent_point")), str(row.get("paper_id") or "")))
         row = candidates[0]
         examples.append(
             {
@@ -3104,15 +3429,151 @@ def select_claim_examples(semantic_rows: Sequence[Mapping[str, Any]]) -> Dict[st
                 "aspect_label": ASPECT_DISPLAY_NAMES.get(str(row.get("aspect") or ""), str(row.get("aspect") or "")),
                 "relation": semantic_refined_relation(row),
                 "bge_only_relation": semantic_bge_relation(row),
-                "peer_quote": compact_example_text(row.get("peer_quote"), 260),
-                "peer_point": compact_example_text(row.get("peer_point"), 220),
-                "agent_point": compact_example_text(row.get("best_agent_point"), 220),
+                "peer_quote": compact_example_text(row.get("peer_quote"), 150),
+                "peer_point": compact_example_text(row.get("peer_point"), 140),
+                "agent_point": display_safe_agent_point(row.get("best_agent_point")),
+                "raw_agent_point": compact_example_text(row.get("best_agent_point"), 220),
                 "candidate_aspect": row.get("candidate_aspect", ""),
                 "cross_aspect_match": bool_value(row.get("cross_aspect_match")),
                 "relation_source": row.get("relation_source", row.get("match_backend", "")),
             }
         )
     return {"examples": examples}
+
+
+SW_TIER_ORDER = ["low", "middle", "high"]
+
+
+def visual_sw_tier(row: Mapping[str, Any]) -> str:
+    """Return the display-only S_w ladder tier, falling back to Fig.3 reference tier."""
+    tier = str(row.get("fig4_sw_ladder_tier") or row.get("sw_visual_tier") or row.get("fig3_sw_tier") or "unknown")
+    return tier if tier in SW_TIER_ORDER else "unknown"
+
+
+def visual_sw_percentile(row: Mapping[str, Any]) -> float:
+    """Return display-only within-run S_w percentile, falling back to Fig.3 reference percentile."""
+    value = numeric(row.get("fig4_sw_batch_percentile"), float("nan"))
+    if math.isfinite(value):
+        return value
+    return numeric(row.get("fig3_sw_percentile"), float("nan"))
+
+
+def build_aspect_relation_by_sw_tier(
+    semantic_rows: Sequence[Mapping[str, Any]],
+    metric_rows: Sequence[Mapping[str, Any]],
+    included_paper_ids: Optional[set[str]] = None,
+) -> List[Dict[str, Any]]:
+    """Aggregate semantic alignment by innovation aspect and Fig.3 S_w tier."""
+    tier_by_paper = {
+        str(row.get("paper_id")): visual_sw_tier(row)
+        for row in metric_rows
+        if included_paper_ids is None or str(row.get("paper_id")) in included_paper_ids
+    }
+    rows = [
+        row
+        for row in semantic_rows
+        if str(row.get("paper_id")) in tier_by_paper
+    ]
+    out: List[Dict[str, Any]] = []
+    for aspect in INNOVATION_ASPECTS:
+        for tier in SW_TIER_ORDER:
+            aspect_rows = [
+                row
+                for row in rows
+                if str(row.get("aspect")) == aspect and tier_by_paper.get(str(row.get("paper_id"))) == tier
+            ]
+            counts = {relation: 0 for relation in SEMANTIC_RELATION_SCORES}
+            for row in aspect_rows:
+                counts[semantic_refined_relation(row)] += 1
+            total = sum(counts.values())
+            matched = counts["entailed"] + counts["related"]
+            out.append(
+                {
+                    "aspect": aspect,
+                    "aspect_label": ASPECT_DISPLAY_NAMES.get(aspect, aspect),
+                    "fig3_sw_tier": tier,
+                    "sw_visual_tier": tier,
+                    "tier_source": "fig4_sw_ladder_tier",
+                    "total_points": total,
+                    "entailed_points": counts["entailed"],
+                    "related_points": counts["related"],
+                    "contradicted_points": counts["contradicted"],
+                    "no_match_points": counts["no_match"],
+                    "matched_points": matched,
+                    "matched_rate": matched / total if total else float("nan"),
+                    "contradiction_rate": counts["contradicted"] / total if total else float("nan"),
+                }
+            )
+    return out
+
+
+def select_sw_ladder_examples(
+    semantic_rows: Sequence[Mapping[str, Any]],
+    metric_rows: Sequence[Mapping[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Choose one traceable claim example for each low/middle/high Fig.3 S_w tier."""
+    metric_by_paper = {str(row.get("paper_id")): row for row in metric_rows}
+    sorted_rows = sorted(
+        semantic_rows,
+        key=lambda row: (
+            str(row.get("paper_id") or ""),
+            str(row.get("aspect") or ""),
+            str(row.get("peer_point") or ""),
+        ),
+    )
+    examples: List[Dict[str, Any]] = []
+    for tier in SW_TIER_ORDER:
+        candidates = []
+        for row in sorted_rows:
+            paper_id = str(row.get("paper_id") or "")
+            metric = metric_by_paper.get(paper_id, {})
+            if visual_sw_tier(metric) != tier:
+                continue
+            if not normalize_whitespace(str(row.get("peer_point") or row.get("peer_quote") or "")):
+                continue
+            candidates.append(row)
+        if not candidates:
+            continue
+        candidates = sorted(
+            candidates,
+            key=lambda row: (
+                semantic_refined_relation(row) not in {"entailed", "related"},
+                semantic_refined_relation(row) == "contradicted",
+                not mostly_ascii(row.get("best_agent_point")),
+                -numeric(metric_by_paper.get(str(row.get("paper_id") or ""), {}).get("fig3_sw_percentile"), 0.0)
+                if tier == "high"
+                else abs(
+                    numeric(metric_by_paper.get(str(row.get("paper_id") or ""), {}).get("fig3_sw_percentile"), 0.5)
+                    - (0.16 if tier == "low" else 0.50)
+                ),
+                str(row.get("paper_id") or ""),
+            ),
+        )
+        row = candidates[0]
+        metric = metric_by_paper.get(str(row.get("paper_id") or ""), {})
+        examples.append(
+            {
+                "example_type": f"{tier}_sw",
+                "paper_id": row.get("paper_id", ""),
+                "fig3_sw": numeric(metric.get("fig3_sw"), float("nan")),
+                "fig3_sw_percentile": numeric(metric.get("fig3_sw_percentile"), float("nan")),
+                "fig3_sw_tier": metric.get("fig3_sw_tier", ""),
+                "fig4_sw_batch_percentile": visual_sw_percentile(metric),
+                "fig4_sw_ladder_tier": tier,
+                "aspect": row.get("aspect", ""),
+                "aspect_label": ASPECT_DISPLAY_NAMES.get(str(row.get("aspect") or ""), str(row.get("aspect") or "")),
+                "relation": semantic_refined_relation(row),
+                "bge_only_relation": semantic_bge_relation(row),
+                "peer_quote": compact_example_text(row.get("peer_quote"), 155),
+                "peer_point": compact_example_text(row.get("peer_point"), 145),
+                "agent_point": display_safe_agent_point(row.get("best_agent_point")),
+                "raw_agent_point": compact_example_text(row.get("best_agent_point"), 220),
+                "candidate_aspect": row.get("candidate_aspect", ""),
+                "cross_aspect_match": bool_value(row.get("cross_aspect_match")),
+                "relation_source": row.get("relation_source", row.get("match_backend", "")),
+            }
+        )
+    return examples
 
 
 def quadratic_weighted_kappa_single(left: Any, right: Any) -> float:
@@ -3124,12 +3585,18 @@ def quadratic_weighted_kappa_single(left: Any, right: Any) -> float:
 
 
 def run_metrics_stage(output_dir: Path, human_hours: float = DEFAULT_HUMAN_HOURS, judge_backend: str = "none", quiet: bool = False) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+    if not (output_dir / "fig4_graph_prior.csv").exists() and (output_dir / "fig4_graph_metrics.csv").exists():
+        try:
+            run_graph_prior_stage(output_dir, quiet=True)
+        except Exception as exc:  # noqa: BLE001 - keep metrics robust for partial/lightweight runs.
+            progress_log(f"Graph prior stage skipped during metrics: {exc}", quiet)
     manifest = read_csv_records(output_dir / "fig4_manifest.csv")
     agents = {str(row.get("paper_id")): row for row in read_jsonl(output_dir / "fig4_agent_outputs.jsonl")}
     ratings = group_jsonl_by_kind(output_dir / "fig4_rating_judgements.jsonl")
     labels = group_jsonl_by_kind(output_dir / "fig4_innovation_label_judgements.jsonl")
     screen = group_csv_by_paper(output_dir / "fig4_peer_review_screen.csv")
     graph = group_csv_by_paper(output_dir / "fig4_graph_metrics.csv")
+    graph_prior = group_csv_by_paper(output_dir / "fig4_graph_prior.csv")
     retrieval = group_csv_by_paper(output_dir / "fig4_retrieval_diagnostics.csv")
     semantic_rows = read_jsonl(output_dir / "fig4_semantic_claim_matches.jsonl")
     structured = {str(row.get("paper_id")): row for row in read_jsonl(output_dir / "fig4_structured_consistency_judgements.jsonl")}
@@ -3140,6 +3607,7 @@ def run_metrics_stage(output_dir: Path, human_hours: float = DEFAULT_HUMAN_HOURS
         parsed_path = Path(str(row.get("parsed_text_cache") or output_dir / "cache" / paper_id / "parsed_text.json"))
         parsed = read_json(parsed_path) if parsed_path.exists() else {}
         agent = agents.get(paper_id, {})
+        prior_row = graph_prior.get(paper_id, {})
         peer_text = str(parsed.get("peer_review_text") or "")
         agent_text = str(agent.get("innovation_evaluation") or "")
         peer_rating = ratings.get((paper_id, "peer_review"), {})
@@ -3226,8 +3694,12 @@ def run_metrics_stage(output_dir: Path, human_hours: float = DEFAULT_HUMAN_HOURS
             "coverage_score": coverage_score,
             "phrase_claim_coverage_supplementary": coverage_score,
             "innovation_stance_agreement": score_agreement(stance_peer, stance_agent),
-            "stance_exact_agreement": 1.0 if stance_pair_available and round(stance_peer) == round(stance_agent) else float("nan"),
-            "stance_within_one_agreement": 1.0 if stance_pair_available and abs(stance_peer - stance_agent) <= 1 else float("nan"),
+            "stance_exact_agreement": (
+                1.0 if stance_pair_available and round(stance_peer) == round(stance_agent) else (0.0 if stance_pair_available else float("nan"))
+            ),
+            "stance_within_one_agreement": (
+                1.0 if stance_pair_available and abs(stance_peer - stance_agent) <= 1 else (0.0 if stance_pair_available else float("nan"))
+            ),
             "quadratic_weighted_kappa": quadratic_weighted_kappa_single(stance_peer, stance_agent),
             "peer_innovation_stance_1_5": stance_peer,
             "agent_innovation_stance_1_5": stance_agent,
@@ -3274,6 +3746,18 @@ def run_metrics_stage(output_dir: Path, human_hours: float = DEFAULT_HUMAN_HOURS
             "agent_tense_errors_per_5000": agent_readability.get("tense_errors_per_5000"),
             "total_peer_aspects": total_phrase,
             "covered_peer_aspects": covered_phrase,
+            "fig3_sw": numeric(prior_row.get("fig3_sw"), float("nan")),
+            "fig3_sw_percentile": numeric(prior_row.get("fig3_sw_percentile"), float("nan")),
+            "fig3_sw_tier": prior_row.get("fig3_sw_tier", ""),
+            "fig3_weights_source": prior_row.get("fig3_weights_source", ""),
+            "fig3_weights_hash": prior_row.get("fig3_weights_hash", ""),
+            "fig3_sw_quality_flag": prior_row.get("fig3_sw_quality_flag", ""),
+            "fig3_sw_normalization": prior_row.get("fig3_sw_normalization", ""),
+            "fig3_sw_percentile_source": prior_row.get("fig3_sw_percentile_source", ""),
+            "fallback_percentile_source": prior_row.get("fallback_percentile_source", ""),
+            "fig4_sw_batch_percentile": numeric(prior_row.get("fig4_sw_batch_percentile"), float("nan")),
+            "fig4_sw_ladder_tier": prior_row.get("fig4_sw_ladder_tier", ""),
+            "graph_prior_prompt_mode": prior_row.get("graph_prior_prompt_mode", ""),
             **aspect_outputs,
         }
         for aspect in RATING_ASPECTS:
@@ -3282,18 +3766,986 @@ def run_metrics_stage(output_dir: Path, human_hours: float = DEFAULT_HUMAN_HOURS
         for key, value in graph.get(paper_id, {}).items():
             if key not in metric_row:
                 metric_row[key] = value
+        for key, value in prior_row.items():
+            if key not in metric_row:
+                metric_row[key] = value
         rows.append(metric_row)
         progress_log(f"Metrics progress {len(rows)}/{len(manifest)}.", quiet)
     write_csv(output_dir / "fig4_metrics_summary.csv", rows)
     write_jsonl(output_dir / "fig4_aspect_matches.jsonl", all_matches)
     included_paper_ids = {str(row.get("paper_id")) for row in rows if bool_value(row.get("included_in_main", True))}
     write_csv(output_dir / "fig4_aspect_relation_summary.csv", build_aspect_relation_summary(semantic_rows, included_paper_ids))
-    write_json(output_dir / "fig4_claim_examples.json", select_claim_examples(semantic_rows))
+    write_csv(output_dir / "fig4_aspect_relation_by_sw_tier.csv", build_aspect_relation_by_sw_tier(semantic_rows, rows, included_paper_ids))
+    claim_examples = select_claim_examples(semantic_rows)
+    claim_examples["sw_ladder_examples"] = select_sw_ladder_examples(semantic_rows, rows)
+    write_json(output_dir / "fig4_claim_examples.json", claim_examples)
     return rows, all_matches
+
+
+def draw_fig4_sw_centric(output_dir: Path, human_hours: float = DEFAULT_HUMAN_HOURS, quiet: bool = False) -> Dict[str, Any]:
+    """Draw the S_w-centric manuscript Fig.4."""
+    rows = read_csv_records(output_dir / "fig4_metrics_summary.csv")
+    main_rows = [row for row in rows if bool_value(row.get("included_in_main", True))]
+    semantic_rows = read_jsonl(output_dir / "fig4_semantic_claim_matches.jsonl")
+    included_paper_ids = {str(row.get("paper_id")) for row in main_rows}
+    aspect_tier_path = output_dir / "fig4_aspect_relation_by_sw_tier.csv"
+    if aspect_tier_path.exists():
+        aspect_tier_summary = read_csv_records(aspect_tier_path)
+    else:
+        aspect_tier_summary = build_aspect_relation_by_sw_tier(semantic_rows, main_rows, included_paper_ids)
+        write_csv(aspect_tier_path, aspect_tier_summary)
+    examples_path = output_dir / "fig4_claim_examples.json"
+    if examples_path.exists():
+        examples = read_json(examples_path)
+    else:
+        examples = select_claim_examples(semantic_rows)
+    if not isinstance(examples.get("sw_ladder_examples"), list) or not examples.get("sw_ladder_examples"):
+        examples["sw_ladder_examples"] = select_sw_ladder_examples(semantic_rows, main_rows)
+        write_json(examples_path, examples)
+
+    n_main = len(main_rows)
+    tier_counts = {
+        tier: sum(1 for row in main_rows if str(row.get("fig3_sw_tier") or "unknown") == tier)
+        for tier in SW_TIER_ORDER
+    }
+
+    def finite_col(column: str) -> List[float]:
+        return [value for value in (numeric(row.get(column)) for row in main_rows) if math.isfinite(value)]
+
+    def mean_col(column: str) -> float:
+        return safe_mean(row.get(column) for row in main_rows)
+
+    def ranks(values: Sequence[float]) -> List[float]:
+        indexed = sorted(enumerate(values), key=lambda item: item[1])
+        output = [0.0 for _value in values]
+        start = 0
+        while start < len(indexed):
+            end = start + 1
+            while end < len(indexed) and indexed[end][1] == indexed[start][1]:
+                end += 1
+            rank_value = (start + 1 + end) / 2.0
+            for idx in range(start, end):
+                output[indexed[idx][0]] = rank_value
+            start = end
+        return output
+
+    def pearson(xs: Sequence[float], ys: Sequence[float]) -> float:
+        if len(xs) < 2 or len(xs) != len(ys):
+            return float("nan")
+        x_mean = sum(xs) / len(xs)
+        y_mean = sum(ys) / len(ys)
+        numerator = sum((x - x_mean) * (y - y_mean) for x, y in zip(xs, ys))
+        x_den = math.sqrt(sum((x - x_mean) ** 2 for x in xs))
+        y_den = math.sqrt(sum((y - y_mean) ** 2 for y in ys))
+        return numerator / (x_den * y_den) if x_den and y_den else float("nan")
+
+    def spearman(xs: Sequence[float], ys: Sequence[float]) -> float:
+        return pearson(ranks(xs), ranks(ys))
+
+    def kendall_tau(xs: Sequence[float], ys: Sequence[float]) -> float:
+        concordant = 0
+        discordant = 0
+        for i in range(len(xs)):
+            for j in range(i + 1, len(xs)):
+                x_delta = xs[i] - xs[j]
+                y_delta = ys[i] - ys[j]
+                if x_delta == 0 or y_delta == 0:
+                    continue
+                if x_delta * y_delta > 0:
+                    concordant += 1
+                elif x_delta * y_delta < 0:
+                    discordant += 1
+        total = concordant + discordant
+        return (concordant - discordant) / total if total else float("nan")
+
+    def fmt_float(value: float, digits: int = 2, fallback: str = "n/a") -> str:
+        return f"{value:.{digits}f}" if math.isfinite(value) else fallback
+
+    def fmt_pct(value: float, digits: int = 0, fallback: str = "n/a") -> str:
+        return f"{value * 100:.{digits}f}%" if math.isfinite(value) else fallback
+
+    def wrapped(text: Any, width: int = 52) -> str:
+        return textwrap.fill(normalize_whitespace(str(text or "")), width=width)
+
+    refined_counts = {relation: 0 for relation in SEMANTIC_RELATION_SCORES}
+    semantic_for_main = [row for row in semantic_rows if not included_paper_ids or str(row.get("paper_id")) in included_paper_ids]
+    for row in semantic_for_main:
+        refined_counts[semantic_refined_relation(row)] += 1
+    semantic_total = sum(refined_counts.values())
+    matched_total = refined_counts["entailed"] + refined_counts["related"]
+    summary = {
+        "n_main": n_main,
+        "sw_tier_counts": tier_counts,
+        "mean_fig3_sw_percentile": safe_mean(row.get("fig3_sw_percentile") for row in main_rows),
+        "mean_stance_within_one": mean_col("stance_within_one_agreement"),
+        "mean_quadratic_weighted_kappa": mean_col("quadratic_weighted_kappa"),
+        "mean_claim_evidence_coverage": mean_col("claim_evidence_coverage"),
+        "mean_contradiction_rate": mean_col("contradiction_rate"),
+        "semantic_matched_rate": matched_total / semantic_total if semantic_total else float("nan"),
+    }
+
+    try:
+        import matplotlib
+
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+        from matplotlib.colors import LinearSegmentedColormap
+        from matplotlib.patches import FancyBboxPatch
+    except ImportError:
+        _draw_fig4_fallback(output_dir, summary)
+        progress_log(f"Drew fallback Fig.4 with n={n_main}.", quiet)
+        return summary
+
+    peer_color = "#e76f61"
+    peer_light = "#f9c4bd"
+    agent_color = "#2767c5"
+    agent_light = "#99bee9"
+    tier_colors = {"low": "#c9a227", "middle": "#73a960", "high": "#19784f"}
+    tier_fills = {"low": "#fff5cf", "middle": "#edf7df", "high": "#def2e7"}
+    heat_cmap = LinearSegmentedColormap.from_list("sw_alignment", ["#f5f7fb", "#dcefcf", "#53a869", "#166b45"])
+    dark = "#101827"
+    muted = "#526173"
+    panel_edge = "#c9d0da"
+    grid = "#e7ebf1"
+
+    fig = plt.figure(figsize=(14.02, 11.22), dpi=100, facecolor="white")
+    fig.text(
+        0.5,
+        0.982,
+        "Fig. 4 | Fig.3 S_w prior calibrates ASPR innovation judgements against quote-grounded peer review",
+        ha="center",
+        va="top",
+        fontsize=13.0,
+        fontweight="bold",
+        color="black",
+    )
+
+    def panel(bounds: Tuple[float, float, float, float], label: str, title: str) -> None:
+        x, y, w, h = bounds
+        fig.patches.append(
+            FancyBboxPatch(
+                (x, y),
+                w,
+                h,
+                boxstyle="round,pad=0.007,rounding_size=0.007",
+                transform=fig.transFigure,
+                linewidth=0.9,
+                edgecolor=panel_edge,
+                facecolor="white",
+                zorder=-20,
+            )
+        )
+        fig.text(x + 0.010, y + h - 0.018, label, fontsize=12.5, fontweight="bold", color="black", ha="left", va="top")
+        fig.text(x + 0.035, y + h - 0.020, title, fontsize=9.4, fontweight="bold", color="black", ha="left", va="top")
+
+    def ax_in(bounds: Tuple[float, float, float, float], rel: Tuple[float, float, float, float]) -> Any:
+        x, y, w, h = bounds
+        rx, ry, rw, rh = rel
+        return fig.add_axes([x + rx * w, y + ry * h, rw * w, rh * h])
+
+    def style_axis(ax: Any, ygrid: bool = True, xgrid: bool = False) -> None:
+        if ygrid:
+            ax.grid(True, axis="y", color=grid, linewidth=0.8, zorder=0)
+        if xgrid:
+            ax.grid(True, axis="x", color=grid, linewidth=0.8, zorder=0)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.spines["left"].set_color("#b7c0cc")
+        ax.spines["bottom"].set_color("#b7c0cc")
+        ax.tick_params(axis="both", labelsize=7.1, width=0.8, length=3, colors="#1f2937")
+
+    panel_a = (0.020, 0.650, 0.355, 0.300)
+    panel_b = (0.395, 0.650, 0.585, 0.300)
+    panel_c = (0.020, 0.382, 0.460, 0.238)
+    panel_d = (0.500, 0.382, 0.480, 0.238)
+    panel_e = (0.020, 0.132, 0.960, 0.220)
+    summary_panel = (0.028, 0.040, 0.944, 0.064)
+
+    panel(panel_a, "a", "Fig.2 -> Fig.3 -> Fig.4 evidence bridge")
+    panel(panel_b, "b", "S_w prior distribution and stance calibration")
+    panel(panel_c, "c", "Human vs ASPR stance by S_w tier")
+    panel(panel_d, "d", "Aspect-level alignment by S_w tier")
+    panel(panel_e, "e", "Claim-evidence examples on the S_w ladder")
+
+    # Panel a: evidence bridge plus Fig.3 weight strip.
+    ax = ax_in(panel_a, (0.045, 0.180, 0.910, 0.680))
+    ax.axis("off")
+    workflow = [
+        ("Fig.2", "92 candidate\nsignals"),
+        ("Fig.3", "7 publication-day\nindicators"),
+        ("Weights", "learned\nbest weights"),
+        ("S_w", "single graph\nprior"),
+        ("Fig.4", "agent vs\npeer labels"),
+    ]
+    for idx, (head, body) in enumerate(workflow):
+        x0 = 0.015 + idx * 0.194
+        face = "#f8fbff" if idx in {0, 4} else ("#fff7d6" if idx in {2, 3} else "#f6fbf2")
+        edge = agent_color if idx in {0, 4} else (tier_colors["low"] if idx in {2, 3} else tier_colors["middle"])
+        ax.add_patch(
+            FancyBboxPatch(
+                (x0, 0.55),
+                0.145,
+                0.32,
+                boxstyle="round,pad=0.010,rounding_size=0.022",
+                transform=ax.transAxes,
+                facecolor=face,
+                edgecolor=edge,
+                linewidth=0.9,
+            )
+        )
+        ax.text(x0 + 0.072, 0.765, head, ha="center", va="center", fontsize=8.1, fontweight="bold", color=dark, transform=ax.transAxes)
+        ax.text(x0 + 0.072, 0.625, body, ha="center", va="center", fontsize=6.4, color=muted, transform=ax.transAxes)
+        if idx < len(workflow) - 1:
+            ax.annotate(
+                "",
+                xy=(x0 + 0.183, 0.710),
+                xytext=(x0 + 0.154, 0.710),
+                xycoords=ax.transAxes,
+                arrowprops={"arrowstyle": "->", "lw": 1.0, "color": "#7d8796"},
+            )
+    ax.text(
+        0.018,
+        0.455,
+        "Agent prompt receives only S_w, percentile and tier; component values stay in cache/CSV for audit.",
+        fontsize=6.9,
+        color=dark,
+        transform=ax.transAxes,
+    )
+    weights_config = load_fig3_weight_config(fig3_weights_path_from_env())
+    weight_items = [(metric, numeric(weights_config["weights"].get(metric), 0.0)) for metric in INNOVATION_METRIC_NAMES]
+    max_weight = max([value for _metric, value in weight_items] or [1.0])
+    strip_y = 0.130
+    strip_h = 0.220
+    ax.text(0.018, 0.350, "Fig.3 weight mass", fontsize=6.8, color=muted, fontweight="bold", transform=ax.transAxes)
+    for idx, (metric, weight) in enumerate(weight_items):
+        x0 = 0.020 + idx * 0.132
+        height = 0.055 + (weight / max_weight if max_weight else 0.0) * 0.135
+        ax.add_patch(
+            FancyBboxPatch(
+                (x0, strip_y),
+                0.055,
+                height,
+                boxstyle="round,pad=0.002,rounding_size=0.006",
+                transform=ax.transAxes,
+                facecolor="#d5b139",
+                edgecolor="#9d7f1c",
+                linewidth=0.45,
+            )
+        )
+        ax.text(x0 + 0.027, strip_y - 0.030, metric, ha="center", va="top", fontsize=5.6, color=dark, transform=ax.transAxes)
+    if weights_config.get("warning"):
+        ax.text(0.018, 0.030, "Weight fallback active; see fig4_graph_prior.csv.", fontsize=6.1, color=peer_color, transform=ax.transAxes)
+
+    # Panel b: S_w prior distribution and calibration markers.
+    ax = ax_in(panel_b, (0.055, 0.200, 0.895, 0.600))
+    for lo, hi, tier in [(0, 33.333, "low"), (33.333, 66.667, "middle"), (66.667, 100, "high")]:
+        ax.axvspan(lo, hi, color=tier_fills[tier], alpha=0.82, zorder=0)
+        ax.text((lo + hi) / 2, 0.935, f"{tier} prior\nn={tier_counts[tier]}", ha="center", va="top", fontsize=6.8, color=tier_colors[tier], fontweight="bold")
+    plotted = []
+    for idx, row in enumerate(sorted(main_rows, key=lambda item: numeric(item.get("fig3_sw_percentile"), 0.5))):
+        percentile = numeric(row.get("fig3_sw_percentile"), float("nan"))
+        if not math.isfinite(percentile):
+            continue
+        x_val = percentile * 100.0
+        jitter = ((((idx * 37) % 13) - 6) / 100.0)
+        agent_stance = numeric(row.get("agent_innovation_stance_1_5"), float("nan"))
+        peer_stance = numeric(row.get("peer_innovation_stance_1_5"), float("nan"))
+        tier = str(row.get("fig3_sw_tier") or "unknown")
+        plotted.append((x_val, 0.47 + jitter, agent_stance, peer_stance, tier))
+    if plotted:
+        xs = [item[0] for item in plotted]
+        ys = [item[1] for item in plotted]
+        colors = [item[2] if math.isfinite(item[2]) else 3.0 for item in plotted]
+        edge_colors = [tier_colors.get(item[4], "#8792a2") for item in plotted]
+        scatter = ax.scatter(xs, ys, c=colors, cmap="Blues", vmin=1, vmax=5, s=44, edgecolor=edge_colors, linewidth=0.80, zorder=3)
+        ax.scatter(xs, [y + 0.110 for y in ys], marker="|", s=150, color=peer_color, linewidth=1.6, zorder=4)
+        for x_val, y_val, _agent, peer, _tier in plotted:
+            if math.isfinite(peer):
+                ax.plot([x_val, x_val], [y_val + 0.030, y_val + 0.095], color=peer_light, linewidth=0.55, zorder=2)
+        cbar = fig.colorbar(scatter, ax=ax, fraction=0.035, pad=0.014)
+        cbar.ax.tick_params(labelsize=6.2, length=2)
+        cbar.set_label("ASPR stance", fontsize=6.6, fontweight="bold")
+    ax.text(1.5, 0.140, "blue circles: ASPR stance; coral ticks: peer-review stance", fontsize=6.7, color=muted)
+    ax.set_xlim(0, 100)
+    ax.set_ylim(0.20, 1.02)
+    ax.set_yticks([])
+    ax.set_xlabel("Fig.3 reference percentile of S_w", fontsize=7.2, fontweight="bold")
+    ax.set_xticks([0, 33, 67, 100])
+    ax.set_xticklabels(["0", "33", "67", "100"])
+    style_axis(ax, ygrid=False, xgrid=True)
+
+    # Panel c: stance scatter by S_w tier.
+    score_pairs = [
+        (
+            numeric(row.get("agent_innovation_stance_1_5")),
+            numeric(row.get("peer_innovation_stance_1_5")),
+            str(row.get("fig3_sw_tier") or "unknown"),
+        )
+        for row in main_rows
+        if math.isfinite(numeric(row.get("agent_innovation_stance_1_5")))
+        and math.isfinite(numeric(row.get("peer_innovation_stance_1_5")))
+    ]
+    ax = ax_in(panel_c, (0.120, 0.180, 0.780, 0.650))
+    ax.fill_between([1, 5], [0, 4], [2, 6], color="#f3f7fb", alpha=0.75, zorder=0)
+    if score_pairs:
+        for idx, (agent_score, peer_score, tier) in enumerate(score_pairs):
+            jitter_x = (((idx * 31) % 7) - 3) * 0.020
+            jitter_y = (((idx * 17) % 7) - 3) * 0.020
+            ax.scatter(
+                agent_score + jitter_x,
+                peer_score + jitter_y,
+                s=46,
+                color=tier_colors.get(tier, "#8792a2"),
+                alpha=0.85,
+                edgecolor="white",
+                linewidth=0.75,
+                zorder=3,
+            )
+        ax.plot([1, 5], [1, 5], color="#9aa4b2", linestyle="--", linewidth=0.9)
+        xs = [item[0] for item in score_pairs]
+        ys = [item[1] for item in score_pairs]
+        rho = spearman(xs, ys)
+        tau = kendall_tau(xs, ys)
+        ax.text(
+            0.055,
+            0.930,
+            f"Within-1 {fmt_pct(summary['mean_stance_within_one'])}\nQWK {fmt_float(summary['mean_quadratic_weighted_kappa'], 2)}\nN valid {len(score_pairs)}",
+            transform=ax.transAxes,
+            fontsize=7.2,
+            color=agent_color,
+            fontweight="bold",
+            va="top",
+            bbox={"boxstyle": "round,pad=0.18", "facecolor": "white", "edgecolor": "#e3e8f0", "alpha": 0.95},
+        )
+        ax.text(0.055, 0.050, f"Rank caveat: rho {fmt_float(rho, 2)}, tau {fmt_float(tau, 2)}", transform=ax.transAxes, fontsize=6.5, color=muted)
+    ax.set_xlim(0.8, 5.2)
+    ax.set_ylim(0.8, 5.2)
+    ax.set_xticks([1, 2, 3, 4, 5])
+    ax.set_yticks([1, 2, 3, 4, 5])
+    ax.set_xlabel("ASPR stance (1-5)", fontsize=7.2, fontweight="bold")
+    ax.set_ylabel("Peer-review stance (1-5)", fontsize=7.2, fontweight="bold")
+    style_axis(ax)
+    for idx, tier in enumerate(SW_TIER_ORDER):
+        fig.text(panel_c[0] + 0.260 + idx * 0.070, panel_c[1] + panel_c[3] - 0.034, tier, fontsize=6.7, color=dark, ha="left")
+        fig.patches.append(
+            FancyBboxPatch(
+                (panel_c[0] + 0.247 + idx * 0.070, panel_c[1] + panel_c[3] - 0.035),
+                0.009,
+                0.009,
+                boxstyle="round,pad=0,rounding_size=0.002",
+                transform=fig.transFigure,
+                facecolor=tier_colors[tier],
+                edgecolor=tier_colors[tier],
+            )
+        )
+
+    # Panel d: aspect alignment heatmap by S_w tier.
+    ax = ax_in(panel_d, (0.150, 0.180, 0.610, 0.650))
+    tier_aspect = {
+        (str(row.get("aspect")), str(row.get("fig3_sw_tier"))): row
+        for row in aspect_tier_summary
+    }
+    matrix = []
+    annotations: List[List[str]] = []
+    for aspect in INNOVATION_ASPECTS:
+        row_values = []
+        row_labels = []
+        for tier in SW_TIER_ORDER:
+            item = tier_aspect.get((aspect, tier), {})
+            matched_rate = numeric(item.get("matched_rate"), float("nan"))
+            total = numeric(item.get("total_points"), 0.0)
+            row_values.append(matched_rate if math.isfinite(matched_rate) else 0.0)
+            row_labels.append(f"{matched_rate * 100:.0f}%\nn={int(total)}" if math.isfinite(matched_rate) else "n/a")
+        matrix.append(row_values)
+        annotations.append(row_labels)
+    ax.imshow(matrix, cmap=heat_cmap, vmin=0, vmax=1, aspect="auto")
+    for y_idx, labels in enumerate(annotations):
+        for x_idx, label in enumerate(labels):
+            value = matrix[y_idx][x_idx]
+            ax.text(x_idx, y_idx, label, ha="center", va="center", fontsize=6.5, color="white" if value >= 0.62 else dark, fontweight="bold")
+    ax.set_xticks(range(len(SW_TIER_ORDER)))
+    ax.set_xticklabels([tier.title() for tier in SW_TIER_ORDER], fontsize=7.0, fontweight="bold")
+    ax.set_yticks(range(len(INNOVATION_ASPECTS)))
+    ax.set_yticklabels([ASPECT_DISPLAY_NAMES[aspect] for aspect in INNOVATION_ASPECTS], fontsize=7.0)
+    ax.tick_params(length=0)
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    ax_strip = ax_in(panel_d, (0.800, 0.180, 0.090, 0.650))
+    ax_strip.set_xlim(0, 1)
+    ax_strip.set_ylim(-0.5, len(INNOVATION_ASPECTS) - 0.5)
+    for y_idx, aspect in enumerate(INNOVATION_ASPECTS):
+        rows_for_aspect = [tier_aspect.get((aspect, tier), {}) for tier in SW_TIER_ORDER]
+        total = sum(numeric(row.get("total_points"), 0.0) for row in rows_for_aspect)
+        contradicted = sum(numeric(row.get("contradicted_points"), 0.0) for row in rows_for_aspect)
+        rate = contradicted / total if total else 0.0
+        ax_strip.barh(y_idx, min(rate, 1.0), height=0.55, color=peer_color, edgecolor="none")
+        ax_strip.text(min(rate + 0.03, 0.95), y_idx, f"{rate * 100:.0f}%", va="center", fontsize=5.9, color=dark)
+    ax_strip.set_yticks([])
+    ax_strip.set_xticks([0, 0.5, 1.0])
+    ax_strip.set_xticklabels(["0", "50", "100"], fontsize=5.8)
+    ax_strip.invert_yaxis()
+    ax_strip.set_title("Contrad.", fontsize=6.0, color=peer_color, pad=2)
+    for spine in ax_strip.spines.values():
+        spine.set_visible(False)
+
+    # Panel e: S_w ladder examples.
+    ax = ax_in(panel_e, (0.025, 0.095, 0.950, 0.780))
+    ax.axis("off")
+    ladder_examples = examples.get("sw_ladder_examples") if isinstance(examples.get("sw_ladder_examples"), list) else []
+    examples_by_tier = {str(example.get("fig3_sw_tier") or ""): example for example in ladder_examples}
+    for idx, tier in enumerate(SW_TIER_ORDER):
+        example = examples_by_tier.get(tier, {})
+        x0 = 0.006 + idx * 0.331
+        width = 0.308
+        ax.add_patch(
+            FancyBboxPatch(
+                (x0, 0.010),
+                width,
+                0.950,
+                boxstyle="round,pad=0.012,rounding_size=0.018",
+                transform=ax.transAxes,
+                facecolor=tier_fills[tier],
+                edgecolor="#cbd5e1",
+                linewidth=0.80,
+            )
+        )
+        ax.add_patch(
+            FancyBboxPatch(
+                (x0 + 0.006, 0.040),
+                0.010,
+                0.890,
+                boxstyle="round,pad=0,rounding_size=0.004",
+                transform=ax.transAxes,
+                facecolor=tier_colors[tier],
+                edgecolor=tier_colors[tier],
+                linewidth=0,
+            )
+        )
+        percentile = numeric(example.get("fig3_sw_percentile"), float("nan"))
+        title = f"{tier.title()} S_w | pctl {percentile * 100:.0f}%" if math.isfinite(percentile) else f"{tier.title()} S_w"
+        ax.text(x0 + 0.026, 0.900, title, transform=ax.transAxes, fontsize=7.1, fontweight="bold", color=tier_colors[tier], va="top")
+        if example:
+            ax.text(
+                x0 + 0.026,
+                0.815,
+                f"{example.get('paper_id')} | {example.get('relation')} | {example.get('aspect_label')}",
+                transform=ax.transAxes,
+                fontsize=5.9,
+                color=muted,
+                va="top",
+            )
+            ax.text(x0 + 0.026, 0.720, "Reviewer quote", transform=ax.transAxes, fontsize=6.0, fontweight="bold", color=peer_color)
+            ax.text(
+                x0 + 0.026,
+                0.665,
+                wrapped(compact_example_text(example.get("peer_quote") or example.get("peer_point"), 120), 34),
+                transform=ax.transAxes,
+                fontsize=5.55,
+                color=dark,
+                va="top",
+            )
+            ax.text(x0 + 0.026, 0.385, "ASPR point", transform=ax.transAxes, fontsize=6.0, fontweight="bold", color=agent_color)
+            ax.text(
+                x0 + 0.026,
+                0.330,
+                wrapped(compact_example_text(example.get("agent_point") or "(no matched candidate)", 120), 34),
+                transform=ax.transAxes,
+                fontsize=5.55,
+                color=dark,
+                va="top",
+            )
+            if bool_value(example.get("cross_aspect_match")):
+                ax.text(x0 + 0.026, 0.060, f"cross-aspect: {example.get('candidate_aspect')}", transform=ax.transAxes, fontsize=5.7, color=tier_colors["high"], fontweight="bold")
+        else:
+            ax.text(x0 + 0.026, 0.570, "No traceable semantic example in this tier.", transform=ax.transAxes, fontsize=6.0, color=muted)
+
+    # Summary strip.
+    x, y, w, h = summary_panel
+    fig.patches.append(
+        FancyBboxPatch(
+            (x, y),
+            w,
+            h,
+            boxstyle="round,pad=0.006,rounding_size=0.008",
+            transform=fig.transFigure,
+            linewidth=0.85,
+            edgecolor="#82b2f0",
+            facecolor="#f7fbff",
+            zorder=-20,
+        )
+    )
+    source_modes = sorted({str(row.get("graph_prior_prompt_mode") or "") for row in main_rows if str(row.get("graph_prior_prompt_mode") or "")})
+    source_text = source_modes[0] if source_modes else "fig3_sw_only"
+    summary_text = (
+        f"Summary | n={n_main}; S_w tiers low/middle/high={tier_counts['low']}/{tier_counts['middle']}/{tier_counts['high']}; "
+        f"within-1 stance {fmt_pct(summary['mean_stance_within_one'])}; "
+        f"QWK {fmt_float(summary['mean_quadratic_weighted_kappa'], 2)}; "
+        f"claim-evidence coverage {fmt_pct(summary['mean_claim_evidence_coverage'])}; "
+        f"contradiction {fmt_pct(summary['mean_contradiction_rate'])}; prompt mode {source_text}."
+    )
+    fig.text(x + 0.018, y + h / 2, summary_text, fontsize=7.8, color=dark, ha="left", va="center")
+    fig.text(
+        0.5,
+        0.018,
+        "Note: Agent sees only Fig.3 S_w/percentile/tier; component metrics and weights remain audit artifacts. Peer labels are quote-grounded.",
+        fontsize=7.2,
+        color=dark,
+        ha="center",
+        va="center",
+    )
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    for suffix in ("png", "pdf", "svg"):
+        fig.savefig(output_dir / f"fig4_full.{suffix}", dpi=100)
+    plt.close(fig)
+    draw_fig4_system_dashboard(output_dir, human_hours=human_hours, quiet=True)
+    progress_log(f"Drew S_w-centric Fig.4 with n={n_main}.", quiet)
+    return summary
+
+
+def draw_fig4_publication_summary(output_dir: Path, human_hours: float = DEFAULT_HUMAN_HOURS, quiet: bool = False) -> Dict[str, Any]:
+    """Draw the publication-facing Fig.4 with a Fig.1-3 compatible visual system."""
+    rows = read_csv_records(output_dir / "fig4_metrics_summary.csv")
+    main_rows = [row for row in rows if bool_value(row.get("included_in_main", True))]
+    semantic_rows = read_jsonl(output_dir / "fig4_semantic_claim_matches.jsonl")
+    included_paper_ids = {str(row.get("paper_id")) for row in main_rows}
+    aspect_tier_summary = build_aspect_relation_by_sw_tier(semantic_rows, main_rows, included_paper_ids)
+    write_csv(output_dir / "fig4_aspect_relation_by_sw_tier.csv", aspect_tier_summary)
+    examples_path = output_dir / "fig4_claim_examples.json"
+    examples = read_json(examples_path) if examples_path.exists() else select_claim_examples(semantic_rows)
+    ladder_examples = select_sw_ladder_examples(semantic_rows, main_rows)
+    examples["sw_ladder_examples"] = ladder_examples
+    write_json(examples_path, examples)
+
+    n_main = len(main_rows)
+    reference_tier_counts = {
+        tier: sum(1 for row in main_rows if str(row.get("fig3_sw_tier") or "unknown") == tier)
+        for tier in SW_TIER_ORDER
+    }
+    ladder_tier_counts = {
+        tier: sum(1 for row in main_rows if visual_sw_tier(row) == tier)
+        for tier in SW_TIER_ORDER
+    }
+
+    def finite_col(column: str) -> List[float]:
+        return [value for value in (numeric(row.get(column)) for row in main_rows) if math.isfinite(value)]
+
+    def mean_col(column: str) -> float:
+        return safe_mean(row.get(column) for row in main_rows)
+
+    def fmt_float(value: float, digits: int = 2, fallback: str = "n/a") -> str:
+        return f"{value:.{digits}f}" if math.isfinite(value) else fallback
+
+    def fmt_pct(value: float, digits: int = 0, fallback: str = "n/a") -> str:
+        return f"{value * 100:.{digits}f}%" if math.isfinite(value) else fallback
+
+    def wrapped(text: Any, width: int = 52) -> str:
+        return textwrap.fill(normalize_whitespace(str(text or "")), width=width)
+
+    semantic_for_main = [row for row in semantic_rows if not included_paper_ids or str(row.get("paper_id")) in included_paper_ids]
+    refined_counts = {relation: 0 for relation in SEMANTIC_RELATION_SCORES}
+    bge_counts = {relation: 0 for relation in SEMANTIC_RELATION_SCORES}
+    for row in semantic_for_main:
+        refined_counts[semantic_refined_relation(row)] += 1
+        bge_counts[semantic_bge_relation(row)] += 1
+    semantic_total = sum(refined_counts.values())
+    semantic_matched = refined_counts["entailed"] + refined_counts["related"]
+    summary = {
+        "n_main": n_main,
+        "sw_tier_counts": ladder_tier_counts,
+        "reference_sw_tier_counts": reference_tier_counts,
+        "mean_fig3_sw_percentile": safe_mean(row.get("fig3_sw_percentile") for row in main_rows),
+        "mean_stance_within_one": mean_col("stance_within_one_agreement"),
+        "mean_quadratic_weighted_kappa": mean_col("quadratic_weighted_kappa"),
+        "mean_claim_evidence_coverage": mean_col("claim_evidence_coverage"),
+        "mean_contradiction_rate": mean_col("contradiction_rate"),
+        "semantic_matched_rate": semantic_matched / semantic_total if semantic_total else float("nan"),
+    }
+
+    try:
+        import matplotlib
+
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+        from matplotlib.colors import LinearSegmentedColormap
+        from matplotlib.patches import FancyBboxPatch, Rectangle
+    except ImportError:
+        _draw_fig4_fallback(output_dir, summary)
+        progress_log(f"Drew fallback Fig.4 with n={n_main}.", quiet)
+        return summary
+
+    # Palette aligned with Fig.1-3: white/gray canvas, blue and teal evidence,
+    # orange/red for comparison or risk, purple only as a secondary indicator hue.
+    blue = "#2f69bf"
+    deep_blue = "#10223d"
+    teal = "#43c69a"
+    green = "#2e7d32"
+    orange = "#ff8a3d"
+    red = "#e3262e"
+    purple = "#8d5cf6"
+    cyan = "#1598b8"
+    navy = "#173f8a"
+    gray = "#667085"
+    pale_grid = "#e9edf3"
+    panel_edge = "#9aa4b2"
+    dark = "#111827"
+    peer_color = red
+    agent_color = blue
+    tier_colors = {"low": "#d7a52f", "middle": teal, "high": green}
+    tier_fills = {"low": "#fff5d9", "middle": "#e9f8f1", "high": "#ddf2e7"}
+    metric_colors = {
+        "B": blue,
+        "RS": green,
+        "DeltaQ0": orange,
+        "Uzzi": purple,
+        "RTD": cyan,
+        "BurtIP": navy,
+        "PDE": red,
+    }
+    heat_cmap = LinearSegmentedColormap.from_list("fig4_match", ["#f7f8fb", "#d8eef6", "#43c69a", "#166b45"])
+    count_cmap = LinearSegmentedColormap.from_list("fig4_count", ["#f7f8fb", "#a8c6ea", "#2f69bf"])
+
+    fig = plt.figure(figsize=(14.02, 11.22), dpi=100, facecolor="white")
+    fig.text(
+        0.5,
+        0.982,
+        "Fig. 4 | S_w-calibrated ASPR innovation judgements align with quote-grounded peer review",
+        ha="center",
+        va="top",
+        fontsize=13.0,
+        fontweight="bold",
+        color=dark,
+    )
+    fig.text(
+        0.5,
+        0.960,
+        "Agent-facing prior uses only Fig.3 S_w; within-50 S_w ladder is display-only because this Nature sample sits in the Fig.3 high-prior tail.",
+        ha="center",
+        va="top",
+        fontsize=8.2,
+        color=gray,
+    )
+
+    def panel(bounds: Tuple[float, float, float, float], label: str, title: str) -> None:
+        x, y, w, h = bounds
+        fig.patches.append(
+            FancyBboxPatch(
+                (x, y),
+                w,
+                h,
+                boxstyle="round,pad=0.006,rounding_size=0.007",
+                transform=fig.transFigure,
+                linewidth=0.90,
+                edgecolor=panel_edge,
+                facecolor="white",
+                zorder=-20,
+            )
+        )
+        fig.text(x + 0.010, y + h - 0.016, label, fontsize=12.2, fontweight="bold", color="black", ha="left", va="top")
+        fig.text(x + 0.036, y + h - 0.018, title, fontsize=8.9, fontweight="bold", color=dark, ha="left", va="top")
+
+    def ax_in(bounds: Tuple[float, float, float, float], rel: Tuple[float, float, float, float]) -> Any:
+        x, y, w, h = bounds
+        rx, ry, rw, rh = rel
+        return fig.add_axes([x + rx * w, y + ry * h, rw * w, rh * h])
+
+    def style_axis(ax: Any, ygrid: bool = True, xgrid: bool = False) -> None:
+        if ygrid:
+            ax.grid(True, axis="y", color=pale_grid, linewidth=0.8, zorder=0)
+        if xgrid:
+            ax.grid(True, axis="x", color=pale_grid, linewidth=0.8, zorder=0)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.spines["left"].set_color("#b7c0cc")
+        ax.spines["bottom"].set_color("#b7c0cc")
+        ax.tick_params(axis="both", labelsize=6.9, width=0.8, length=3, colors=dark)
+
+    panel_a = (0.030, 0.675, 0.420, 0.260)
+    panel_b = (0.472, 0.675, 0.498, 0.260)
+    panel_c = (0.030, 0.392, 0.286, 0.240)
+    panel_d = (0.342, 0.392, 0.286, 0.240)
+    panel_e = (0.654, 0.392, 0.316, 0.240)
+    panel_f = (0.030, 0.130, 0.940, 0.220)
+    summary_panel = (0.036, 0.045, 0.928, 0.055)
+    panel(panel_a, "a", "Evidence bridge from Fig.2/Fig.3 to Fig.4")
+    panel(panel_b, "b", "S_w top-tail position and within-sample ladder")
+    panel(panel_c, "c", "Stance agreement matrix")
+    panel(panel_d, "d", "S_w ladder calibration")
+    panel(panel_e, "e", "Aspect fingerprint by S_w ladder")
+    panel(panel_f, "f", "Quote-grounded claim-evidence examples")
+
+    # a. Flow with Fig.3 weight lollipop.
+    ax = ax_in(panel_a, (0.055, 0.175, 0.890, 0.700))
+    ax.axis("off")
+    flow = [
+        ("Fig.2", "92 -> 7\nsignals", blue),
+        ("Fig.3", "learned\nweights", teal),
+        ("S_w", "single\nprior", orange),
+        ("ASPR", "LATS\nreview", blue),
+        ("Peer", "quote\nlabels", red),
+    ]
+    for idx, (head, body, color) in enumerate(flow):
+        x0 = 0.018 + idx * 0.194
+        ax.add_patch(
+            FancyBboxPatch(
+                (x0, 0.610),
+                0.142,
+                0.300,
+                boxstyle="round,pad=0.010,rounding_size=0.016",
+                transform=ax.transAxes,
+                facecolor="#f8fafc",
+                edgecolor=color,
+                linewidth=0.95,
+            )
+        )
+        ax.text(x0 + 0.071, 0.805, head, ha="center", va="center", fontsize=7.8, fontweight="bold", color=dark, transform=ax.transAxes)
+        ax.text(x0 + 0.071, 0.685, body, ha="center", va="center", fontsize=6.2, color=gray, transform=ax.transAxes)
+        if idx < len(flow) - 1:
+            ax.annotate("", xy=(x0 + 0.180, 0.760), xytext=(x0 + 0.152, 0.760), xycoords=ax.transAxes, arrowprops={"arrowstyle": "->", "lw": 1.0, "color": gray})
+    ax.text(0.018, 0.525, "Agent prompt: S_w + Fig.3 percentile + tier only; seven component values are audit-only.", fontsize=6.6, color=dark, transform=ax.transAxes)
+    weights_config = load_fig3_weight_config(fig3_weights_path_from_env())
+    weights = [(metric, numeric(weights_config["weights"].get(metric), 0.0)) for metric in INNOVATION_METRIC_NAMES]
+    max_weight = max([value for _metric, value in weights] or [1.0])
+    ax.text(0.018, 0.420, "Fig.3 best weight mass", fontsize=6.7, color=gray, fontweight="bold", transform=ax.transAxes)
+    for idx, (metric, weight) in enumerate(weights):
+        x_pos = 0.050 + idx * 0.128
+        y0 = 0.125
+        height = 0.060 + (weight / max_weight if max_weight else 0.0) * 0.210
+        ax.plot([x_pos, x_pos], [y0, y0 + height], color=metric_colors.get(metric, blue), linewidth=2.0, transform=ax.transAxes, solid_capstyle="round")
+        ax.scatter([x_pos], [y0 + height], s=65, color=metric_colors.get(metric, blue), edgecolor="white", linewidth=0.8, transform=ax.transAxes, zorder=4)
+        ax.text(x_pos, 0.060, metric, ha="center", va="top", fontsize=5.6, color=dark, transform=ax.transAxes)
+    if weights_config.get("warning"):
+        ax.text(0.018, 0.010, "Weight fallback active; inspect fig4_graph_prior.csv.", fontsize=5.9, color=red, transform=ax.transAxes)
+
+    # b. Dual-rug: Fig.3 reference tail and within-50 ladder.
+    ax = ax_in(panel_b, (0.060, 0.180, 0.870, 0.670))
+    for lo, hi, tier in [(0, 33.333, "low"), (33.333, 66.667, "middle"), (66.667, 100, "high")]:
+        ax.axvspan(lo, hi, color=tier_fills[tier], alpha=0.58, zorder=0)
+    sorted_rows = sorted(main_rows, key=lambda row: numeric(row.get("fig3_sw_percentile"), 0.0))
+    ref_xs: List[float] = []
+    ladder_xs: List[float] = []
+    agent_scores: List[float] = []
+    edge_colors: List[str] = []
+    for idx, row in enumerate(sorted_rows):
+        ref_pct = numeric(row.get("fig3_sw_percentile"), float("nan"))
+        ladder_pct = visual_sw_percentile(row)
+        if not math.isfinite(ref_pct) or not math.isfinite(ladder_pct):
+            continue
+        ref_xs.append(ref_pct * 100.0)
+        ladder_xs.append(ladder_pct * 100.0)
+        agent_scores.append(numeric(row.get("agent_innovation_stance_1_5"), 3.0))
+        edge_colors.append(tier_colors.get(visual_sw_tier(row), gray))
+        jitter = (((idx * 23) % 11) - 5) * 0.010
+        ax.plot([ref_pct * 100.0, ladder_pct * 100.0], [1.02 + jitter, 0.33 + jitter], color="#c8d0db", linewidth=0.35, alpha=0.55, zorder=1)
+    if ref_xs:
+        ax.scatter(ref_xs, [1.02 + (((idx * 23) % 11) - 5) * 0.010 for idx in range(len(ref_xs))], s=34, color=teal, edgecolor="white", linewidth=0.5, zorder=3)
+        scatter = ax.scatter(ladder_xs, [0.33 + (((idx * 23) % 11) - 5) * 0.010 for idx in range(len(ladder_xs))], c=agent_scores, cmap="Blues", vmin=1, vmax=5, s=43, edgecolor=edge_colors, linewidth=0.9, zorder=4)
+        cbar = fig.colorbar(scatter, ax=ax, fraction=0.032, pad=0.012)
+        cbar.ax.tick_params(labelsize=5.8, length=2)
+        cbar.set_label("ASPR stance", fontsize=6.0, fontweight="bold")
+    ax.text(2, 1.175, f"Fig.3 reference tier: low/middle/high={reference_tier_counts['low']}/{reference_tier_counts['middle']}/{reference_tier_counts['high']}", fontsize=6.5, color=dark)
+    ax.text(2, 0.520, f"within-50 S_w ladder: low/middle/high={ladder_tier_counts['low']}/{ladder_tier_counts['middle']}/{ladder_tier_counts['high']}", fontsize=6.5, color=dark)
+    for tier, xpos in [("low", 16.5), ("middle", 50), ("high", 83.5)]:
+        ax.text(xpos, -0.050, tier, ha="center", va="top", fontsize=6.2, color=tier_colors[tier], fontweight="bold")
+    ax.set_xlim(0, 100)
+    ax.set_ylim(0.05, 1.32)
+    ax.set_yticks([0.33, 1.02])
+    ax.set_yticklabels(["within-50\nladder", "Fig.3 ref\npercentile"], fontsize=6.5)
+    ax.set_xlabel("S_w percentile scale", fontsize=7.0, fontweight="bold")
+    ax.set_xticks([0, 33, 67, 100])
+    ax.set_xticklabels(["0", "33", "67", "100"])
+    style_axis(ax, ygrid=False, xgrid=True)
+
+    # c. Stance agreement matrix.
+    ax = ax_in(panel_c, (0.170, 0.170, 0.565, 0.660))
+    matrix = [[0 for _ in range(5)] for _ in range(5)]
+    valid_pairs = []
+    for row in main_rows:
+        agent = numeric(row.get("agent_innovation_stance_1_5"), float("nan"))
+        peer = numeric(row.get("peer_innovation_stance_1_5"), float("nan"))
+        if math.isfinite(agent) and math.isfinite(peer):
+            a_idx = min(4, max(0, int(round(agent)) - 1))
+            p_idx = min(4, max(0, int(round(peer)) - 1))
+            matrix[4 - p_idx][a_idx] += 1
+            valid_pairs.append((agent, peer))
+    max_count = max([count for row in matrix for count in row] or [1])
+    ax.imshow(matrix, cmap=count_cmap, vmin=0, vmax=max_count, aspect="equal")
+    for y_idx, row_counts in enumerate(matrix):
+        for x_idx, count in enumerate(row_counts):
+            if count:
+                ax.text(x_idx, y_idx, str(count), ha="center", va="center", fontsize=7.0, color="white" if count > max_count * 0.48 else dark, fontweight="bold")
+    for x_idx in range(5):
+        for y_idx in range(5):
+            peer_score = 5 - y_idx
+            agent_score = x_idx + 1
+            if abs(peer_score - agent_score) <= 1:
+                ax.add_patch(Rectangle((x_idx - 0.5, y_idx - 0.5), 1, 1, fill=False, edgecolor=teal, linewidth=0.8))
+    ax.set_xticks(range(5))
+    ax.set_yticks(range(5))
+    ax.set_xticklabels(["1", "2", "3", "4", "5"], fontsize=6.8)
+    ax.set_yticklabels(["5", "4", "3", "2", "1"], fontsize=6.8)
+    ax.set_xlabel("ASPR stance", fontsize=6.8, fontweight="bold")
+    ax.set_ylabel("Peer stance", fontsize=6.8, fontweight="bold")
+    ax.tick_params(length=0)
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    fig.text(panel_c[0] + 0.205, panel_c[1] + 0.045, f"Within-1 {fmt_pct(summary['mean_stance_within_one'])} | QWK {fmt_float(summary['mean_quadratic_weighted_kappa'], 2)} | n={len(valid_pairs)}", fontsize=6.7, color=blue, fontweight="bold")
+
+    # d. S_w ladder calibration.
+    ax = ax_in(panel_d, (0.125, 0.205, 0.780, 0.610))
+    tier_x = list(range(len(SW_TIER_ORDER)))
+    agent_means = []
+    peer_means = []
+    for tier in SW_TIER_ORDER:
+        tier_rows = [row for row in main_rows if visual_sw_tier(row) == tier]
+        agent_means.append(safe_mean(row.get("agent_innovation_stance_1_5") for row in tier_rows))
+        peer_means.append(safe_mean(row.get("peer_innovation_stance_1_5") for row in tier_rows))
+    ax.plot(tier_x, [value if math.isfinite(value) else float("nan") for value in agent_means], marker="o", color=agent_color, linewidth=2.0, markersize=5.5, label="ASPR")
+    ax.plot(tier_x, [value if math.isfinite(value) else float("nan") for value in peer_means], marker="s", color=peer_color, linewidth=1.6, markersize=5.0, label="Peer")
+    for x_idx, tier in enumerate(SW_TIER_ORDER):
+        ax.text(x_idx, 1.05, f"n={ladder_tier_counts[tier]}", ha="center", va="bottom", fontsize=6.2, color=gray)
+    ax.set_xticks(tier_x)
+    ax.set_xticklabels([tier.title() for tier in SW_TIER_ORDER], fontsize=7.0, fontweight="bold")
+    ax.set_ylim(1, 5.2)
+    ax.set_yticks([1, 2, 3, 4, 5])
+    ax.set_ylabel("Innovation stance", fontsize=6.8, fontweight="bold")
+    ax.legend(frameon=False, fontsize=6.7, loc="upper left")
+    style_axis(ax, ygrid=True, xgrid=False)
+    ax.text(
+        0.98,
+        0.930,
+        "Within-run ladder;\nagent prior remains Fig.3 tier",
+        transform=ax.transAxes,
+        fontsize=5.8,
+        color=gray,
+        ha="right",
+        va="top",
+        bbox={"boxstyle": "round,pad=0.12", "facecolor": "white", "edgecolor": "#e5e7eb", "alpha": 0.92},
+    )
+
+    # e. Aspect fingerprint by S_w ladder.
+    ax = ax_in(panel_e, (0.185, 0.180, 0.570, 0.650))
+    tier_aspect = {(str(row.get("aspect")), str(row.get("sw_visual_tier") or row.get("fig3_sw_tier"))): row for row in aspect_tier_summary}
+    matrix_values = []
+    for aspect in INNOVATION_ASPECTS:
+        row_values = []
+        for tier in SW_TIER_ORDER:
+            item = tier_aspect.get((aspect, tier), {})
+            rate = numeric(item.get("matched_rate"), float("nan"))
+            row_values.append(rate if math.isfinite(rate) else 0.0)
+        matrix_values.append(row_values)
+    ax.imshow(matrix_values, cmap=heat_cmap, vmin=0, vmax=1, aspect="auto")
+    for y_idx, aspect in enumerate(INNOVATION_ASPECTS):
+        for x_idx, tier in enumerate(SW_TIER_ORDER):
+            item = tier_aspect.get((aspect, tier), {})
+            rate = numeric(item.get("matched_rate"), float("nan"))
+            total = int(numeric(item.get("total_points"), 0.0))
+            label = f"{rate * 100:.0f}%\n{total}" if math.isfinite(rate) else "n/a"
+            color = "white" if math.isfinite(rate) and rate >= 0.60 else dark
+            ax.text(x_idx, y_idx, label, ha="center", va="center", fontsize=5.8, color=color, fontweight="bold")
+    ax.set_xticks(range(len(SW_TIER_ORDER)))
+    ax.set_xticklabels([tier.title() for tier in SW_TIER_ORDER], fontsize=6.7, fontweight="bold")
+    ax.set_yticks(range(len(INNOVATION_ASPECTS)))
+    ax.set_yticklabels([ASPECT_DISPLAY_NAMES[aspect] for aspect in INNOVATION_ASPECTS], fontsize=6.6)
+    ax.tick_params(length=0)
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    ax_strip = ax_in(panel_e, (0.805, 0.180, 0.090, 0.650))
+    ax_strip.set_xlim(0, 1)
+    ax_strip.set_ylim(-0.5, len(INNOVATION_ASPECTS) - 0.5)
+    for y_idx, aspect in enumerate(INNOVATION_ASPECTS):
+        aspect_rows = [tier_aspect.get((aspect, tier), {}) for tier in SW_TIER_ORDER]
+        total = sum(numeric(row.get("total_points"), 0.0) for row in aspect_rows)
+        contradicted = sum(numeric(row.get("contradicted_points"), 0.0) for row in aspect_rows)
+        rate = contradicted / total if total else 0.0
+        ax_strip.barh(y_idx, min(rate, 1.0), color=red, height=0.48)
+        ax_strip.text(min(rate + 0.04, 0.96), y_idx, f"{rate * 100:.0f}%", va="center", fontsize=5.6, color=dark)
+    ax_strip.set_yticks([])
+    ax_strip.set_xticks([0, 0.5, 1.0])
+    ax_strip.set_xticklabels(["0", "50", "100"], fontsize=5.5)
+    ax_strip.invert_yaxis()
+    ax_strip.set_title("contrad.", fontsize=5.9, color=red, pad=2)
+    for spine in ax_strip.spines.values():
+        spine.set_visible(False)
+
+    # f. Claim examples as traceable cards.
+    ax = ax_in(panel_f, (0.020, 0.095, 0.960, 0.790))
+    ax.axis("off")
+    examples_by_tier = {str(example.get("fig4_sw_ladder_tier") or example.get("fig3_sw_tier") or ""): example for example in ladder_examples}
+    for idx, tier in enumerate(SW_TIER_ORDER):
+        example = examples_by_tier.get(tier, {})
+        x0 = 0.004 + idx * 0.333
+        width = 0.314
+        ax.add_patch(
+            FancyBboxPatch(
+                (x0, 0.018),
+                width,
+                0.940,
+                boxstyle="round,pad=0.010,rounding_size=0.014",
+                transform=ax.transAxes,
+                facecolor=tier_fills[tier],
+                edgecolor="#cbd5e1",
+                linewidth=0.75,
+            )
+        )
+        ax.add_patch(Rectangle((x0 + 0.010, 0.060), 0.010, 0.850, transform=ax.transAxes, facecolor=tier_colors[tier], edgecolor=tier_colors[tier]))
+        percentile = numeric(example.get("fig4_sw_batch_percentile"), float("nan"))
+        title = f"{tier.title()} S_w ladder | pctl {percentile * 100:.0f}%" if math.isfinite(percentile) else f"{tier.title()} S_w ladder"
+        ax.text(x0 + 0.028, 0.895, title, transform=ax.transAxes, fontsize=6.8, fontweight="bold", color=tier_colors[tier], va="top")
+        if example:
+            ax.text(x0 + 0.028, 0.805, f"{example.get('paper_id')} | {example.get('relation')} | {example.get('aspect_label')}", transform=ax.transAxes, fontsize=5.6, color=gray, va="top")
+            ax.text(x0 + 0.028, 0.700, "Reviewer quote", transform=ax.transAxes, fontsize=5.8, fontweight="bold", color=peer_color)
+            ax.text(x0 + 0.028, 0.645, wrapped(compact_example_text(example.get("peer_quote") or example.get("peer_point"), 122), 35), transform=ax.transAxes, fontsize=5.35, color=dark, va="top")
+            ax.text(x0 + 0.028, 0.385, "ASPR point", transform=ax.transAxes, fontsize=5.8, fontweight="bold", color=agent_color)
+            ax.text(x0 + 0.028, 0.330, wrapped(compact_example_text(example.get("agent_point") or "(no matched candidate)", 122), 35), transform=ax.transAxes, fontsize=5.35, color=dark, va="top")
+        else:
+            ax.text(x0 + 0.028, 0.560, "No traceable semantic example in this display tier.", transform=ax.transAxes, fontsize=5.9, color=gray)
+
+    # Summary strip.
+    x, y, w, h = summary_panel
+    fig.patches.append(
+        FancyBboxPatch(
+            (x, y),
+            w,
+            h,
+            boxstyle="round,pad=0.005,rounding_size=0.007",
+            transform=fig.transFigure,
+            linewidth=0.80,
+            edgecolor="#cbd5e1",
+            facecolor="#f8fafc",
+            zorder=-20,
+        )
+    )
+    summary_text = (
+        f"Summary | n={n_main}; Fig.3 reference high={reference_tier_counts['high']}/{n_main}; "
+        f"within-50 ladder low/middle/high={ladder_tier_counts['low']}/{ladder_tier_counts['middle']}/{ladder_tier_counts['high']}; "
+        f"within-1 stance {fmt_pct(summary['mean_stance_within_one'])}; "
+        f"QWK {fmt_float(summary['mean_quadratic_weighted_kappa'], 2)}; "
+        f"claim coverage {fmt_pct(summary['mean_claim_evidence_coverage'])}; contradiction {fmt_pct(summary['mean_contradiction_rate'])}."
+    )
+    fig.text(x + 0.018, y + h / 2, summary_text, fontsize=7.4, color=dark, ha="left", va="center")
+    fig.text(
+        0.5,
+        0.018,
+        "Traceability: S_w values in fig4_graph_prior.csv; plotted summary in fig4_metrics_summary.csv; claim examples from fig4_claim_examples.json.",
+        fontsize=6.9,
+        color=dark,
+        ha="center",
+        va="center",
+    )
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    for suffix in ("png", "pdf", "svg"):
+        fig.savefig(output_dir / f"fig4_full.{suffix}", dpi=100)
+    plt.close(fig)
+    draw_fig4_system_dashboard(output_dir, human_hours=human_hours, quiet=True)
+    progress_log(f"Drew publication-style Fig.4 with n={n_main}.", quiet)
+    return summary
 
 
 def draw_fig4(output_dir: Path, human_hours: float = DEFAULT_HUMAN_HOURS, quiet: bool = False) -> Dict[str, Any]:
     """Draw manuscript Fig.4 focused on peer-review innovation-validation evidence."""
+    return draw_fig4_publication_summary(output_dir, human_hours=human_hours, quiet=quiet)
     rows = read_csv_records(output_dir / "fig4_metrics_summary.csv")
     main_rows = [row for row in rows if bool_value(row.get("included_in_main", True))]
     semantic_rows = read_jsonl(output_dir / "fig4_semantic_claim_matches.jsonl")
@@ -3645,9 +5097,9 @@ def draw_fig4(output_dir: Path, human_hours: float = DEFAULT_HUMAN_HOURS, quiet:
         ax.text(x0 + 0.012, 0.885, f"{etype.title()} | {example.get('relation')} | {example.get('aspect_label')}", transform=ax.transAxes, fontsize=6.8, fontweight="bold", color=dark, va="top")
         ax.text(x0 + 0.012, 0.785, f"paper_id: {example.get('paper_id')}", transform=ax.transAxes, fontsize=6.0, color=muted, va="top")
         ax.text(x0 + 0.012, 0.670, "Reviewer quote", transform=ax.transAxes, fontsize=6.1, fontweight="bold", color=peer_color)
-        ax.text(x0 + 0.012, 0.615, wrapped(example.get("peer_quote") or example.get("peer_point"), 34), transform=ax.transAxes, fontsize=5.85, color=dark, va="top")
+        ax.text(x0 + 0.012, 0.615, wrapped(compact_example_text(example.get("peer_quote") or example.get("peer_point"), 130), 31), transform=ax.transAxes, fontsize=5.75, color=dark, va="top")
         ax.text(x0 + 0.012, 0.350, "ASPR point", transform=ax.transAxes, fontsize=6.1, fontweight="bold", color=agent_color)
-        ax.text(x0 + 0.012, 0.295, wrapped(example.get("agent_point") or "(no matched candidate)", 34), transform=ax.transAxes, fontsize=5.85, color=dark, va="top")
+        ax.text(x0 + 0.012, 0.295, wrapped(compact_example_text(example.get("agent_point") or "(no matched candidate)", 130), 31), transform=ax.transAxes, fontsize=5.75, color=dark, va="top")
         if bool_value(example.get("cross_aspect_match")):
             ax.text(x0 + 0.012, 0.065, f"cross-aspect: {example.get('candidate_aspect')}", transform=ax.transAxes, fontsize=5.8, color=green, fontweight="bold")
 
@@ -3702,7 +5154,6 @@ def draw_fig4(output_dir: Path, human_hours: float = DEFAULT_HUMAN_HOURS, quiet:
         if row_idx == 0:
             cell.set_facecolor("#f8fafc")
             cell.get_text().set_fontweight("bold")
-    ax.text(0.03, 0.02, "Contradicted points are shown separately and never counted as matched.", transform=ax.transAxes, fontsize=6.6, color=muted)
 
     # Summary strip.
     x, y, w, h = summary_panel
@@ -4685,7 +6136,7 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser.add_argument(
         "--stage",
         action="append",
-        choices=["audit", "sample", "agent", "graph", "labels", "screen", "rating", "semantic", "structured", "metrics", "draw"],
+        choices=["audit", "sample", "agent", "graph", "prior", "labels", "screen", "rating", "semantic", "structured", "metrics", "draw"],
         default=None,
     )
     parser.add_argument("--sample-size", type=int, default=0)
@@ -4708,6 +6159,9 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser.add_argument("--max-points-per-aspect", type=int, default=4)
     parser.add_argument("--semantic-llm-refine", action="store_true", default=None)
     parser.add_argument("--human-hours", type=float, default=DEFAULT_HUMAN_HOURS)
+    parser.add_argument("--fig3-weights-path", type=Path, default=fig3_weights_path_from_env())
+    parser.add_argument("--fig3-score-table-path", type=Path, default=fig3_score_table_path_from_env())
+    parser.add_argument("--fig3-indicators-path", type=Path, default=fig3_indicators_path_from_env())
     parser.add_argument("--quiet", action="store_true")
     return parser.parse_args(argv)
 
@@ -4741,6 +6195,21 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
         )
     if "graph" in stages:
         run_graph_metrics_stage(args.output_dir, quiet=args.quiet)
+        run_graph_prior_stage(
+            args.output_dir,
+            weights_path=args.fig3_weights_path,
+            reference_scores_path=args.fig3_score_table_path,
+            reference_indicators_path=args.fig3_indicators_path,
+            quiet=args.quiet,
+        )
+    if "prior" in stages:
+        run_graph_prior_stage(
+            args.output_dir,
+            weights_path=args.fig3_weights_path,
+            reference_scores_path=args.fig3_score_table_path,
+            reference_indicators_path=args.fig3_indicators_path,
+            quiet=args.quiet,
+        )
     if "labels" in stages:
         run_innovation_label_judge(
             args.output_dir,
