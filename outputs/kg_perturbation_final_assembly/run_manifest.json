@@ -1,0 +1,44 @@
+{
+  "command_argv": [
+    "experiments/kg_perturbation_final_assembly/build_final_assembly.py"
+  ],
+  "conda_default_env": null,
+  "conda_prefix": null,
+  "created_at_utc": "2026-06-26T18:18:47.740569+00:00",
+  "cwd": "/home/jayee/workspace/ASPR",
+  "domains": [],
+  "extra": {
+    "created_at_utc": "2026-06-26T18:18:47.740548+00:00"
+  },
+  "figure": "fig6_fig10_final_assembly",
+  "inputs": {
+    "figures": [
+      "outputs/redraw_v6a_best_fig1/fig1_multi_domain_real.png",
+      "outputs/redraw_v6a_best_fig2/fig2_empirical_full.png",
+      "outputs/redraw_v6a_best_fig3/fig3_selected_weight_learning_full.png",
+      "outputs/kg_perturbation_fig4_full50/fig4_full.png",
+      "outputs/kg_perturbation_fig5/strict_ai_filtered_image2_handoff/fig5_strict_ai_filtered_image2_generated_preview.png",
+      "outputs/kg_perturbation_fig6/fig6_full.png",
+      "outputs/kg_perturbation_fig7/fig7_full.png",
+      "outputs/kg_perturbation_fig8/fig8_full.png",
+      "outputs/kg_perturbation_fig9/fig9_full.png",
+      "outputs/kg_perturbation_fig10/fig10_full.png"
+    ]
+  },
+  "output_dir": "/home/jayee/workspace/ASPR/outputs/kg_perturbation_final_assembly",
+  "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python_executable": "/usr/bin/python3",
+  "python_version": "3.12.3",
+  "quality_gates": {
+    "checks": {
+      "all_figures_have_current_png": 1,
+      "caption_count_10": 1,
+      "contact_sheet_exists": 1,
+      "pipeline_gaps_recorded": 1,
+      "style_ledger_written": 1,
+      "three_rounds_recorded": 1
+    },
+    "overall_pass": true,
+    "status_label": "final_assembly_complete_with_pipeline_ready_gaps"
+  }
+}

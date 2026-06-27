@@ -1,0 +1,76 @@
+{
+  "caption_tone": "Evidence-first, caveat-visible, no overclaim that ASPR replaces peer review or that venue-family patterns are causal.",
+  "font": "Use DejaVu Sans / Inter / Aptos-compatible sans-serif. Panel labels use lowercase letter plus two spaces, e.g. `a  Robustness`.",
+  "palette": [
+    {
+      "color": "#8B1E2D",
+      "role": "Nature corpus / Nature Portfolio",
+      "use": "source corpus, Nature venue family, case-paper emphasis"
+    },
+    {
+      "color": "#2563EB",
+      "role": "ASPR graph agent",
+      "use": "graph evidence, perturbation agent, learned graph score"
+    },
+    {
+      "color": "#7C3AED",
+      "role": "ASPR-Qwen",
+      "use": "review-style model lane and Qwen-generated draft"
+    },
+    {
+      "color": "#F0986E",
+      "role": "Evidence / verifier / uncertainty",
+      "use": "evidence trace, safety flags, verifier gates"
+    },
+    {
+      "color": "#111827",
+      "role": "Fusion / final output",
+      "use": "full ASPR, final fused report, primary ink"
+    },
+    {
+      "color": "#64748B",
+      "role": "Neutral context",
+      "use": "axes, non-highlight venues, low-priority annotations"
+    }
+  ],
+  "panel_order": [
+    "Fig.1-Fig.5: measurement, empirical validation, learned score, peer-review validation, forecast/mechanism handoff",
+    "Fig.6: robustness and boundary conditions",
+    "Fig.7: venue-level interpretation",
+    "Fig.8: final ASPR algorithm",
+    "Fig.9: real ASPR case run",
+    "Fig.10: ASPR module ablation and reinforcement"
+  ],
+  "terminology": [
+    {
+      "avoid": "knowledge shock score as a standalone unexplained synonym",
+      "canonical_term": "graph-perturbation analysis",
+      "note": "Use for the measurement and validation method before ASPR is introduced.",
+      "use_in": "Fig.1-Fig.7"
+    },
+    {
+      "avoid": "generic agent, graph bot",
+      "canonical_term": "ASPR graph agent",
+      "note": "Use once the graph analysis is embedded into the ASPR system.",
+      "use_in": "Fig.8-Fig.10"
+    },
+    {
+      "avoid": "Qwen-only baseline, generic LLM reviewer",
+      "canonical_term": "ASPR-Qwen",
+      "note": "Name the domain review model trained from paper-review pairs.",
+      "use_in": "Fig.8-Fig.10"
+    },
+    {
+      "avoid": "post-processing",
+      "canonical_term": "fusion/verifier",
+      "note": "Use for the module that merges agent evidence and ASPR-Qwen text, then checks claims.",
+      "use_in": "Fig.8-Fig.10"
+    },
+    {
+      "avoid": "failed figure",
+      "canonical_term": "pipeline-ready gap",
+      "note": "Use when a figure is useful but a strict headline or live checkpoint remains pending.",
+      "use_in": "Fig.6-Fig.10 captions and audit notes"
+    }
+  ]
+}

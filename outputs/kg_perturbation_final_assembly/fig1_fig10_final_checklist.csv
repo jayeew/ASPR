@@ -1,0 +1,9 @@
+requirement,evidence,status,notes
+Fig.6承接方法可信度,Fig.6 role plus caption proxy notes,pass,Robustness and boundary-condition panels directly test Fig.1-Fig.5 method reliability.
+Fig.7转向venue-level interpretation,"Fig.7 role, outputs, and quality report",pass_with_gap,Venue-level outputs exist; strict interval-separated Nature dominance remains pipeline-ready.
+Fig.8提出最终方法ASPR,Fig.8 panel_text and full figure,pass,ASPR is defined as graph agent plus ASPR-Qwen plus fusion/verifier.
+Fig.9展示ASPR真实运行,"Fig.9 manifest, trace, quality report",pass_with_gap,Real manuscript and peer-review trace are present; ASPR-Qwen lane is assumed and labeled.
+Fig.10证明模块贡献,"Fig.10 ablation CSVs, quality report, full figure",pass_with_gap,Full ASPR real Fig.4 metrics plus LLM-as-judge ablation estimates.
+颜色字体panel label统一,style ledger plus generated figures,pass,Final assembly records canonical palette and label/caption conventions.
+避免表格堆砌,visual_mode audit,pass,"Figures use heatmaps, forest plots, scatter, storyboard, module diagrams, matrix cards, and Pareto bars."
+完成三轮一致性检查,rounds report,pass,"Round 1 audit, Round 2 terminology/visual fix, Round 3 checklist/captions are written."
