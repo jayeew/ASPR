@@ -660,23 +660,23 @@ def build_panel_review(
             "panel": "A",
             "title": "Cross-domain reproducibility",
             "role": "core",
-            "visual_form": "heatmap / tile matrix",
+            "visual_form": "bubble-lollipop domain ranking",
             "n_rows": len(panel_a),
             "keep_decision": "keep",
             "strength": "strong",
             "redundancy_assessment": "unique: domain-level reproducibility and coverage",
-            "rationale": "Required core panel; observed cached Fig.3/Fig.5 domain metrics show cross-domain stability and boundary cases.",
+            "rationale": "Required core panel; revised from heatmap to bubble-lollipop to reduce table-like repetition while retaining cross-domain stability and boundary cases.",
         },
         {
             "panel": "B",
             "title": "Data-quality perturbation",
             "role": "core",
-            "visual_form": "perturbation stability heatmap",
+            "visual_form": "multi-line perturbation retention curve",
             "n_rows": len(panel_b),
             "keep_decision": "keep",
             "strength": "strong_with_proxy_label",
             "redundancy_assessment": "unique: data-noise boundary condition",
-            "rationale": "Required core panel; score-table proxy explicitly marks no full graph-extraction rerun.",
+            "rationale": "Required core panel; revised from heatmap to stability curves so degradation shape and failure thresholds are visible.",
         },
         {
             "panel": "C",
@@ -693,34 +693,34 @@ def build_panel_review(
             "panel": "D",
             "title": "Temporal-window sensitivity",
             "role": "core",
-            "visual_form": "window heatmap",
+            "visual_form": "horizon trajectories over analysis-window length",
             "n_rows": len(panel_d),
             "keep_decision": "keep",
             "strength": "strong_with_proxy_label",
             "redundancy_assessment": "unique: analysis-window and confirmation-horizon boundary condition",
-            "rationale": "Required core panel; cached year slices show recommended window and sparse-window behavior.",
+            "rationale": "Required core panel; revised from heatmap to horizon trajectories to avoid another table-like matrix.",
         },
         {
             "panel": "E",
             "title": "Modeling-choice reproducibility",
             "role": "optional_supporting",
-            "visual_form": "forest plot",
+            "visual_form": "supporting forest plot / audit table",
             "n_rows": len(panel_e),
-            "keep_decision": "keep",
+            "keep_decision": "merge_to_supporting_audit",
             "strength": "supporting",
-            "redundancy_assessment": "non-overlapping: modeling choice rather than data condition",
-            "rationale": "Optional but useful; shows learned graph score is not replaced by bibliometric baselines or arbitrary weights.",
+            "redundancy_assessment": "non-overlapping but not needed as a main panel after four core panels",
+            "rationale": "Optional evidence retained in CSV/single panel and referenced in caption; removed from main figure to reduce visual sparsity.",
         },
         {
             "panel": "F",
             "title": "Failure modes",
             "role": "optional_supporting",
-            "visual_form": "failure taxonomy with case cards",
+            "visual_form": "supporting failure taxonomy / audit cases",
             "n_rows": len(panel_f),
-            "keep_decision": "keep",
+            "keep_decision": "merge_to_supporting_audit",
             "strength": "supporting_heuristic",
-            "redundancy_assessment": "non-overlapping: qualitative boundary taxonomy",
-            "rationale": "Optional but useful; turns Fig.4 peer/agent disagreement into explicit failure-boundary labels.",
+            "redundancy_assessment": "non-overlapping but visually sparse as a main panel",
+            "rationale": "Failure taxonomy retained in CSV/single panel and summarized in caption; removed from main figure to keep the figure compact.",
         },
     ]
     return pd.DataFrame(rows)
@@ -775,9 +775,10 @@ def write_metadata(
         ],
         "iteration_summary": {
             "round_1": "Generated coarse robustness panels from local Fig.1-Fig.5 caches and score tables.",
-            "round_2": "Reviewed panel redundancy and strength; A-D are required core panels, E-F are non-overlapping supporting panels.",
-            "round_3": "Kept six-panel closure figure so robustness, boundary conditions, modeling sensitivity, and failure taxonomy are visible together.",
-            "kept_panels": panel_review["panel"].tolist(),
+            "round_2": "Reviewed panel redundancy and strength; A/B/D were too table-like and E/F were visually sparse as main panels.",
+            "round_3": "Revised main figure to four varied core panels; moved E/F to supporting audit outputs and caption notes.",
+            "displayed_panels": ["A", "B", "C", "D"],
+            "supporting_panels": ["E", "F"],
             "dropped_panels": [],
         },
     }
@@ -803,10 +804,10 @@ def write_caption(panel_review: pd.DataFrame, *panels: pd.DataFrame) -> None:
     caption = f"""# Fig. 6 | Robustness and boundary conditions of graph-perturbation analysis
 
 The figure uses local Fig.1-Fig.5 / score-table / works-topics / Fig.4 cached data only.
+The main figure uses four visually distinct panels: Panel A is a cross-domain bubble-lollipop ranking, Panel B is a perturbation retention curve, Panel C is a literature-volume sensitivity curve, and Panel D is a temporal-window trajectory plot.
 Panel A merges domain-level Fig.3 OOF diagnostics, score coverage, and Fig.5 backtest summaries.
 Panels B-D are pipeline-ready robustness probes computed from cached score-table graph metrics with fixed seeds; they do not rerun OpenAlex retrieval or graph extraction.
-Panel E compares cached and recomputed modeling choices against the learned Fig.3 score.
-Panel F derives a failure taxonomy from cached Fig.4 peer/agent agreement, graph-prior, and retrieval diagnostics.
+Modeling-choice reproducibility and failure-mode taxonomy are retained as supporting audit CSV/single-panel outputs rather than occupying sparse main-figure panels.
 
 {chr(10).join(status_bits)}
 
@@ -833,44 +834,103 @@ def add_panel_title(ax: plt.Axes, letter: str, title: str, subtitle: str) -> Non
 
 
 def plot_panel_a(ax: plt.Axes, df: pd.DataFrame) -> None:
-    metrics = [
-        ("OOF rho", "oof_spearman_norm", "learned_oof_spearman", "{:.2f}"),
-        ("Graph Top10", "graph_top10_norm", "graph_top10_mean", "{:.2f}"),
-        ("Lift pp", "high_low_lift_norm", "high_vs_low_tertile_median_rgpm_lift_pp", "{:.0f}"),
-        ("Top20 enrich", "top20_enrichment_norm", "top_vs_bottom_score_decile_rgpm_top20_enrichment", "{:.1f}x"),
-        ("Score cov.", "score_coverage_norm", "score_rate", "{:.2f}"),
-    ]
-    plot_df = df.head(12).copy()
-    matrix = plot_df[[norm for _, norm, _, _ in metrics]].rename(columns={norm: label for label, norm, _, _ in metrics})
-    annotations = plot_df[[raw for _, _, raw, _ in metrics]].copy()
-    labels = []
-    for _, row in plot_df.iterrows():
-        domain = str(row["domain"]).replace("_", " ")
-        n = int(row["n_papers"]) if not pd.isna(row.get("n_papers")) else int(row.get("score_n", 0))
-        labels.append(f"{domain}  n={n}")
-    annot = annotations.to_numpy(dtype=float)
-    annot_text = np.empty_like(annot, dtype=object)
-    for j, (_, _, _, fmt) in enumerate(metrics):
-        for i in range(annot.shape[0]):
-            annot_text[i, j] = "NA" if np.isnan(annot[i, j]) else fmt.format(annot[i, j])
-    cmap = sns.blend_palette([TOKENS["panel"], COLORS["blue"]["xlight"], COLORS["blue"]["light"], COLORS["blue"]["base"], COLORS["blue"]["mid"]], as_cmap=True)
-    sns.heatmap(matrix, ax=ax, cmap=cmap, vmin=0, vmax=1, annot=annot_text, fmt="", linewidths=1.0, linecolor=TOKENS["panel"], cbar_kws={"label": "normalized stability"})
-    ax.set_yticklabels(labels, rotation=0, fontsize=7.5)
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=35, ha="right", fontsize=8)
-    ax.set_xlabel("")
+    plot_df = df.head(12).sort_values("learned_oof_spearman", ascending=True).copy()
+    y = np.arange(len(plot_df))
+    labels = [str(domain).replace("_", " ") for domain in plot_df["domain"]]
+    x = plot_df["learned_oof_spearman"].astype(float)
+    graph_top10 = plot_df["graph_top10_mean"].astype(float)
+    score_cov = plot_df["score_coverage_norm"].fillna(0.08).astype(float)
+    sizes = 90 + score_cov.clip(0.06, 1.0) * 420
+
+    ax.axvline(0, color=TOKENS["ink"], linestyle=":", linewidth=1.0)
+    ax.axvspan(0.30, 0.65, color=COLORS["blue"]["xlight"], alpha=0.55, zorder=0)
+    ax.hlines(y, 0, x, color=COLORS["neutral"]["base"], linewidth=1.1, zorder=1)
+    cmap = sns.blend_palette([COLORS["gold"]["light"], COLORS["blue"]["light"], COLORS["blue"]["mid"]], as_cmap=True)
+    scatter = ax.scatter(
+        x,
+        y,
+        s=sizes,
+        c=graph_top10,
+        cmap=cmap,
+        vmin=0,
+        vmax=0.85,
+        edgecolors=COLORS["blue"]["dark"],
+        linewidths=0.8,
+        zorder=3,
+    )
+    for xi, yi, n_papers in zip(x, y, plot_df["n_papers"]):
+        n_value = int(n_papers)
+        n_label = f"{n_value / 1000:.1f}k" if n_value >= 1000 else f"{n_value}"
+        ax.text(xi + 0.012, yi, f"{xi:.2f}  n={n_label}", va="center", ha="left", fontsize=7.2, color=TOKENS["ink"])
+
+    cbar = ax.figure.colorbar(scatter, ax=ax, pad=0.015, fraction=0.05)
+    cbar.set_label("Graph Top-10", fontsize=8)
+    cbar.ax.tick_params(labelsize=7)
+    for size_value, label in [(0.15, "low cov."), (0.45, "mid"), (0.75, "high")]:
+        ax.scatter([], [], s=90 + size_value * 420, color=COLORS["blue"]["light"], edgecolors=COLORS["blue"]["dark"], linewidths=0.8, label=label)
+    ax.legend(title="score coverage", loc="lower right", frameon=False, fontsize=6.8, title_fontsize=7.2, handletextpad=1.0)
+
+    ax.set_yticks(y, labels, fontsize=7.5)
+    ax.set_xlim(min(-0.18, float(x.min()) - 0.04), 0.70)
+    ax.set_xlabel("OOF Spearman with RGPM")
     ax.set_ylabel("")
-    add_panel_title(ax, "a", "Cross-domain reproducibility", "Cached Fig.3/Fig.5 metrics; values annotate raw metric units.")
+    ax.grid(axis="x", color=TOKENS["grid"])
+    ax.grid(axis="y", visible=False)
+    add_panel_title(ax, "a", "Cross-domain reproducibility", "Bubble size = score coverage; color = Fig.5 graph Top-10 recovery.")
 
 
 def plot_panel_b(ax: plt.Axes, df: pd.DataFrame) -> None:
-    matrix = df.pivot(index="noise_type", columns="noise_level", values="performance_retention_mean").sort_index()
-    cmap = sns.blend_palette([COLORS["orange"]["base"], COLORS["gold"]["light"], COLORS["blue"]["xlight"], COLORS["blue"]["base"]], as_cmap=True)
-    sns.heatmap(matrix, ax=ax, cmap=cmap, vmin=0.5, vmax=1.0, annot=True, fmt=".2f", linewidths=1.0, linecolor=TOKENS["panel"], cbar_kws={"label": "retention"})
+    max_level = df["noise_level"].max()
+    order = (
+        df[df["noise_level"] == max_level]
+        .sort_values("performance_retention_mean", ascending=False)["noise_type"]
+        .tolist()
+    )
+    palette = {
+        "community-label shuffle": COLORS["blue"]["mid"],
+        "citation-edge dropout": COLORS["blue"]["base"],
+        "prior-art scope narrowing": COLORS["gold"]["mid"],
+        "random-edge addition": COLORS["orange"]["mid"],
+        "unrelated-paper noise": COLORS["pink"]["mid"],
+    }
+    line_styles = ["-", "--", "-.", ":", "-"]
+    for i, noise_type in enumerate(order):
+        part = df[df["noise_type"] == noise_type].sort_values("noise_level")
+        color = palette.get(noise_type, COLORS["neutral"]["mid"])
+        ax.plot(
+            part["noise_level"],
+            part["performance_retention_mean"],
+            marker="o",
+            linewidth=1.2,
+            linestyle=line_styles[i % len(line_styles)],
+            color=color,
+        )
+        ax.fill_between(
+            part["noise_level"],
+            part["performance_retention_ci_low"],
+            part["performance_retention_ci_high"],
+            color=color,
+            alpha=0.12,
+            linewidth=0,
+        )
+        last = part.iloc[-1]
+        ax.text(
+            float(last["noise_level"]) + 0.012,
+            float(last["performance_retention_mean"]),
+            textwrap.fill(str(noise_type).replace("-", " "), 18),
+            va="center",
+            fontsize=7.1,
+            color=color,
+        )
+    ax.axhline(0.80, color=TOKENS["ink"], linestyle=":", linewidth=1.0)
+    ax.text(0.505, 0.812, "stability floor", ha="right", va="bottom", fontsize=7.2, color=TOKENS["muted"])
+    ax.set_xlim(-0.02, 0.62)
+    ax.set_ylim(0.56, 1.035)
     ax.set_xlabel("Perturbation level")
-    ax.set_ylabel("")
-    ax.set_xticklabels([f"{float(t.get_text()):.1f}" for t in ax.get_xticklabels()], rotation=0)
-    add_panel_title(ax, "b", "Data-quality perturbation", "Rank/Jaccard retention from cached graph-score perturbation proxies.")
-    ax.contour(np.arange(matrix.shape[1]) + 0.5, np.arange(matrix.shape[0]) + 0.5, matrix.to_numpy(), levels=[0.8], colors=[COLORS["orange"]["dark"]], linewidths=1.0)
+    ax.set_ylabel("Performance retention")
+    ax.grid(axis="y", color=TOKENS["grid"])
+    ax.grid(axis="x", visible=False)
+    add_panel_title(ax, "b", "Data-quality perturbation", "Retention curves show which noise types cross the stability floor.")
 
 
 def plot_panel_c(ax: plt.Axes, df: pd.DataFrame) -> None:
@@ -891,23 +951,31 @@ def plot_panel_c(ax: plt.Axes, df: pd.DataFrame) -> None:
 
 
 def plot_panel_d(ax: plt.Axes, df: pd.DataFrame) -> None:
-    matrix = df.pivot(index="confirmation_horizon_years", columns="analysis_window_years", values="spearman").sort_index(ascending=False)
-    counts = df.pivot(index="confirmation_horizon_years", columns="analysis_window_years", values="n_papers").sort_index(ascending=False)
-    annot = matrix.copy().astype(object)
-    for idx in annot.index:
-        for col in annot.columns:
-            value = matrix.loc[idx, col]
-            n = int(counts.loc[idx, col])
-            annot.loc[idx, col] = "NA" if np.isnan(value) else f"{value:.2f}\nn={n}"
-    cmap = sns.blend_palette([COLORS["orange"]["xlight"], COLORS["gold"]["light"], COLORS["blue"]["light"], COLORS["blue"]["mid"]], as_cmap=True)
-    sns.heatmap(matrix, ax=ax, cmap=cmap, vmin=0, vmax=max(0.55, float(np.nanmax(matrix.to_numpy()))), annot=annot, fmt="", linewidths=1.0, linecolor=TOKENS["panel"], cbar_kws={"label": "Spearman"})
+    horizons = sorted(df["confirmation_horizon_years"].unique())
+    families = [COLORS["blue"], COLORS["gold"], COLORS["olive"], COLORS["orange"], COLORS["pink"]]
+    ax.axvspan(3, 7, color=COLORS["blue"]["xlight"], alpha=0.55, zorder=0)
+    for i, horizon in enumerate(horizons):
+        part = df[df["confirmation_horizon_years"] == horizon].sort_values("analysis_window_years")
+        family = families[i % len(families)]
+        color = family["mid"] if i % 2 else family["base"]
+        sizes = 24 + np.sqrt(part["n_papers"].clip(lower=1)) * 1.2
+        ax.plot(part["analysis_window_years"], part["spearman"], color=color, linewidth=1.15, alpha=0.95)
+        ax.scatter(part["analysis_window_years"], part["spearman"], s=sizes, color=color, edgecolor=family["dark"], linewidth=0.7, zorder=3)
+        last = part.iloc[-1]
+        ax.text(float(last["analysis_window_years"]) + 0.25, float(last["spearman"]), f"{horizon}y horizon", va="center", fontsize=7.2, color=family["dark"])
+    recommended = df[(df["analysis_window_years"] == 5) & (df["confirmation_horizon_years"] == 5)]
+    if not recommended.empty:
+        row = recommended.iloc[0]
+        ax.scatter([row["analysis_window_years"]], [row["spearman"]], s=190, facecolors="none", edgecolors=COLORS["orange"]["dark"], linewidth=1.8, zorder=4)
+        ax.text(5.1, float(row["spearman"]) + 0.035, "5y/5y reference", fontsize=7.2, color=COLORS["orange"]["dark"])
+    ax.set_xlim(0.6, 11.5)
+    ax.set_xticks([1, 3, 5, 7, 10])
+    ax.set_ylim(max(0, float(df["spearman"].min()) - 0.04), min(0.65, float(df["spearman"].max()) + 0.08))
     ax.set_xlabel("Analysis window (years)")
-    ax.set_ylabel("Confirmation horizon (years)")
-    if 5 in matrix.columns and 5 in matrix.index:
-        x = list(matrix.columns).index(5)
-        y = list(matrix.index).index(5)
-        ax.add_patch(plt.Rectangle((x, y), 1, 1, fill=False, edgecolor=COLORS["orange"]["dark"], linewidth=2.0))
-    add_panel_title(ax, "d", "Temporal-window sensitivity", "Cached score-table year slices; horizon-specific graph targets are pipeline-ready proxies.")
+    ax.set_ylabel("Spearman(S_w, RGPM)")
+    ax.grid(axis="y", color=TOKENS["grid"])
+    ax.grid(axis="x", visible=False)
+    add_panel_title(ax, "d", "Temporal-window sensitivity", "Line = confirmation horizon; marker size = available papers.")
 
 
 def plot_panel_e(ax: plt.Axes, df: pd.DataFrame) -> None:
@@ -989,24 +1057,22 @@ def save_full_figure(
     panel_f: pd.DataFrame,
     failure_cases: pd.DataFrame,
 ) -> None:
-    fig, axes = plt.subplots(2, 3, figsize=(18.2, 11.8))
+    fig, axes = plt.subplots(2, 2, figsize=(14.8, 11.2))
     plot_panel_a(axes[0, 0], panel_a)
     plot_panel_b(axes[0, 1], panel_b)
-    plot_panel_c(axes[0, 2], panel_c)
-    plot_panel_d(axes[1, 0], panel_d)
-    plot_panel_e(axes[1, 1], panel_e)
-    plot_panel_f(fig, axes[1, 2], panel_f, failure_cases)
+    plot_panel_c(axes[1, 0], panel_c)
+    plot_panel_d(axes[1, 1], panel_d)
     fig.suptitle("Fig. 6 | Robustness and boundary conditions of graph-perturbation analysis", x=0.012, ha="left", fontsize=15, fontweight="semibold", color=TOKENS["ink"])
     fig.text(
         0.012,
         0.965,
-        "Local-cache audit figure. Proxy/pipeline-ready status is retained in CSV and metadata; no online data fetch or graph-extraction rerun was performed.",
+        "Four-panel closure view: cross-domain reproducibility, data-noise stability, literature-volume sensitivity, and temporal-window boundaries. Supporting modeling/failure analyses remain in audit outputs.",
         ha="left",
         va="top",
         fontsize=9,
         color=TOKENS["muted"],
     )
-    fig.tight_layout(rect=(0, 0.02, 1, 0.94), w_pad=2.2, h_pad=3.1)
+    fig.tight_layout(rect=(0, 0.02, 1, 0.94), w_pad=2.2, h_pad=3.0)
     fig.savefig(OUT_DIR / "fig6_full.png", dpi=260)
     fig.savefig(OUT_DIR / "fig6_full.svg")
     plt.close(fig)
