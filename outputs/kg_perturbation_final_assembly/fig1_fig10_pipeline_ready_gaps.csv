@@ -1,5 +1,0 @@
-figure,gap,severity,next_replacement
-Fig.6,"Some robustness panels are score-table proxy probes, not full graph extraction reruns.",pipeline-ready,Rerun perturbation experiments with fresh graph extraction and retrieval if strict main-figure claims require it.
-Fig.7,Strict Nature Portfolio interval separation is not supported by the current bootstrap gate.,pipeline-ready,Increase controlled sample coverage or refine uncertainty estimates until Nature lower CI exceeds the runner-up upper CI.
-Fig.9,ASPR-Qwen output is assumed for the case storyboard.,pipeline-ready,Replace assumed Qwen JSON with the real ASPR-Qwen checkpoint output.
-Fig.10,Ablation and preference rows use LLM-as-judge pipeline estimates where true human preference or rerun ablation data are absent.,pipeline-ready,Run real module ablations and collect blinded human preference ratings.

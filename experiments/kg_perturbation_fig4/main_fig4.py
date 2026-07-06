@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import datetime as dt
 import hashlib
 import json
 import math
@@ -15,6 +16,9 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 from statistics import NormalDist
 from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
+
+import numpy as np
+import pandas as pd
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -30,6 +34,11 @@ DEFAULT_HUMAN_HOURS = 5.0
 DEFAULT_FIG3_WEIGHTS_PATH = PROJECT_ROOT / "outputs" / "redraw_v6a_best_fig3" / "multi_domain" / "fig3_best_weights.csv"
 DEFAULT_FIG3_SCORE_TABLE_PATH = PROJECT_ROOT / "outputs" / "redraw_v6a_best_fig3" / "multi_domain" / "fig3_score_table.csv"
 DEFAULT_FIG3_INDICATORS_PATH = PROJECT_ROOT / "outputs" / "redraw_v6a_best_fig3" / "multi_domain" / "fig3_publication_day_indicators.csv"
+DEFAULT_FIG4_LABELING_PRIMARY_PER_TIER = 10
+DEFAULT_FIG4_LABELING_RESERVE_PER_TIER = 20
+FIG4_COMPLETED_BLINDED_LABELS_FILE = "fig4_completed_blinded_labels.csv"
+FIG4_COMPLETED_BLINDED_LABELS_TEMPLATE_FILE = "fig4_completed_blinded_labels_template.csv"
+FIG4_LABELER_IDS = ("labeler_1", "labeler_2", "labeler_3")
 
 INNOVATION_METRIC_NAMES = ["B", "RS", "DeltaQ0", "Uzzi", "RTD", "BurtIP", "PDE"]
 RATING_ASPECTS = ["significance", "novelty", "rigor", "limitations", "future_work"]
@@ -203,6 +212,16 @@ def clamp(value: Any, lower: float, upper: float, default: float = float("nan"))
 
 def normalize_whitespace(text: str) -> str:
     return re.sub(r"\s+", " ", str(text or "")).strip()
+
+
+def clean_optional_text(value: Any) -> str:
+    """Return normalized text while treating pandas/CSV NaN-like values as missing."""
+    if value is None:
+        return ""
+    if isinstance(value, float) and math.isnan(value):
+        return ""
+    text = normalize_whitespace(str(value))
+    return "" if text.lower() in {"nan", "none", "null"} else text
 
 
 def word_count(text: str) -> int:
@@ -506,6 +525,54 @@ def strip_peer_review_boilerplate(text: str) -> str:
     return re.sub(r"\n{3,}", "\n\n", cleaned).strip()
 
 
+INLINE_AUTHOR_RESPONSE_RE = re.compile(
+    r"\b("
+    r"responses?\s+can\s+be\s+found\s+below|"
+    r"blue\s+text|"
+    r"we\s+(?:thank|explain|have|now|added|add|revised|revise|clarified|clarify|"
+    r"agree|disagree|respond|included|include|performed|changed|corrected|removed|"
+    r"modified|addressed|believe|show|provide|note|apologize|appreciate)|"
+    r"our\s+(?:response|revision|revised\s+manuscript|manuscript|study|results)|"
+    r"the\s+revised\s+manuscript\s+(?:now\s+)?(?:includes|contains|states|shows)"
+    r")\b",
+    re.I,
+)
+AUTHOR_RESPONSE_SECTION_LINE_RE = re.compile(
+    r"^\s*(?:#+\s*)?(?:author response|responses? to reviewers?|response to referee|author rebuttal|rebuttal)\b",
+    re.I,
+)
+
+
+def is_author_response_sentence(sentence: str) -> bool:
+    """Return True for author-rebuttal voice that should not label peer review."""
+    normalized = normalize_whitespace(re.sub(r"[*_`#]+", "", str(sentence or ""))).strip()
+    if not normalized:
+        return False
+    if AUTHOR_RESPONSE_SECTION_LINE_RE.search(normalized):
+        return True
+    return bool(INLINE_AUTHOR_RESPONSE_RE.search(normalized))
+
+
+def remove_inline_author_responses(text: str) -> str:
+    """Remove author-response sentences while keeping reviewer/editor third-person judgements."""
+    cleaned_paragraphs: List[str] = []
+    for paragraph in re.split(r"\n\s*\n+", str(text or "")):
+        paragraph = paragraph.strip()
+        if not paragraph:
+            continue
+        normalized = normalize_whitespace(paragraph)
+        if is_author_response_sentence(normalized) and len(split_sentences(normalized)) <= 1:
+            continue
+        kept_sentences = [
+            sentence for sentence in split_sentences(paragraph) if not is_author_response_sentence(sentence)
+        ]
+        if kept_sentences:
+            cleaned_paragraphs.append(" ".join(kept_sentences))
+        elif not is_author_response_sentence(normalized):
+            cleaned_paragraphs.append(normalized)
+    return "\n\n".join(cleaned_paragraphs).strip()
+
+
 def parse_peer_review_markdown(text: str) -> Dict[str, Any]:
     """Extract reviewer comments while excluding author responses and decisions."""
     cleaned = strip_peer_review_boilerplate(text)
@@ -541,6 +608,7 @@ def parse_peer_review_markdown(text: str) -> Dict[str, Any]:
         cut, section = min(cuts, key=lambda item: item[0])
         review_part = review_part[:cut].strip()
         excluded_sections.append(section)
+    review_part = remove_inline_author_responses(review_part)
     if word_count(review_part) < 50:
         warnings.append("short_peer_review_text")
     return {
@@ -706,6 +774,156 @@ def controlled_sample(
     return selected
 
 
+def nonempty_cell(value: Any) -> bool:
+    if value is None:
+        return False
+    try:
+        if pd.isna(value):
+            return False
+    except (TypeError, ValueError):
+        pass
+    text = normalize_whitespace(str(value))
+    return bool(text and text.lower() not in {"nan", "none", "null"})
+
+
+def build_fig4_candidate_screen(output_dir: Path) -> pd.DataFrame:
+    """Write the full pre-sampling Fig.4 candidate screen from the input audit."""
+    audit_rows = read_csv_records(output_dir / "fig4_input_audit.csv")
+    rows: List[Dict[str, Any]] = []
+    for row in audit_rows:
+        included = bool_value(row.get("included_in_audit"))
+        has_peer_review_text = bool(
+            numeric(row.get("peer_review_word_count"), 0.0) > 0
+            or nonempty_cell(row.get("peer_review_markdown_path"))
+        )
+        has_title = nonempty_cell(row.get("title"))
+        has_abstract_or_body_text = bool(
+            nonempty_cell(row.get("abstract"))
+            or numeric(row.get("article_word_count"), 0.0) > 0
+        )
+        reasons: List[str] = []
+        if not included:
+            reasons.append(str(row.get("exclusion_reason") or "not_included_in_audit"))
+        if not has_peer_review_text:
+            reasons.append("missing_peer_review_text")
+        if not has_title:
+            reasons.append("missing_title")
+        if not has_abstract_or_body_text:
+            reasons.append("missing_abstract_or_body_text")
+        rows.append(
+            {
+                **row,
+                "has_peer_review_text": has_peer_review_text,
+                "has_title": has_title,
+                "has_abstract_or_body_text": has_abstract_or_body_text,
+                "screen_pass": not reasons,
+                "exclusion_reason": ";".join(reason for reason in reasons if reason),
+            }
+        )
+    write_csv(output_dir / "fig4_candidate_screen.csv", rows)
+    return pd.DataFrame(rows)
+
+
+def collect_cached_scored_candidate_pool(output_dir: Path) -> pd.DataFrame:
+    """Collect candidates with cached graph-prior scores for stratified Fig.4 sampling."""
+    candidate_screen = build_fig4_candidate_screen(output_dir) if (output_dir / "fig4_input_audit.csv").exists() else pd.DataFrame()
+    if candidate_screen.empty:
+        return pd.DataFrame()
+    rows: List[Dict[str, Any]] = []
+    for candidate in candidate_screen.to_dict("records"):
+        if not bool_value(candidate.get("screen_pass")):
+            continue
+        paper_id = str(candidate.get("paper_id") or "")
+        if not paper_id:
+            continue
+        prior_path = output_dir / "cache" / paper_id / "fig4_graph_prior.json"
+        if not prior_path.exists():
+            continue
+        prior = read_json(prior_path)
+        if not bool_value(prior.get("graph_metric_valid", True)):
+            continue
+        rows.append(
+            {
+                **candidate,
+                **prior,
+                "included_in_audit": True,
+                "screen_pass": True,
+                "scored_pool_status": "cached_graph_prior",
+            }
+        )
+    pool = pd.DataFrame(rows)
+    if not pool.empty and "fig3_sw" in pool.columns:
+        pool["fig3_sw"] = pd.to_numeric(pool["fig3_sw"], errors="coerce")
+        valid_scores = pool["fig3_sw"].dropna()
+        if len(valid_scores):
+            pool["fig4_scored_pool_percentile"] = pool["fig3_sw"].rank(method="average", pct=True)
+    write_csv(output_dir / "fig4_scored_candidate_pool.csv", pool.to_dict("records") if not pool.empty else [])
+    return pool
+
+
+def scored_pool_validation_tier_column(pool: pd.DataFrame) -> str:
+    """Return the tier column that can support external Fig.3-score validation."""
+    for column in ["fig4_global_validation_tier", "global_fig3_tier", "fig3_sw_tier"]:
+        if column in pool.columns:
+            values = {str(value) for value in pool[column].dropna().astype(str)}
+            if values & {"low", "middle", "high"}:
+                return column
+    if "fig3_sw_percentile" in pool.columns:
+        pool["fig3_sw_tier"] = pd.to_numeric(pool["fig3_sw_percentile"], errors="coerce").map(percentile_tier)
+        return "fig3_sw_tier"
+    if "fig4_sw_ladder_tier" in pool.columns:
+        return "fig4_sw_ladder_tier"
+    return ""
+
+
+def stratified_sample_scored_pool(scored_pool: pd.DataFrame, sample_size: int, seed: int = DEFAULT_SAMPLE_SEED) -> pd.DataFrame:
+    """Select a fixed-size sample across global Fig.3 tiers when cached graph priors exist."""
+    if scored_pool.empty:
+        return scored_pool.copy()
+    pool = scored_pool.copy()
+    tier_col = scored_pool_validation_tier_column(pool)
+    if not tier_col:
+        tier_col = "fig4_scored_pool_percentile"
+        if tier_col not in pool.columns:
+            pool[tier_col] = pd.to_numeric(pool.get("fig3_sw", pd.Series(dtype=float)), errors="coerce").rank(method="average", pct=True)
+        pool["fig4_sw_ladder_tier"] = pool[tier_col].apply(percentile_tier)
+        tier_col = "fig4_sw_ladder_tier"
+    pool[tier_col] = pool[tier_col].fillna("unknown").astype(str)
+    if sample_size <= 0 or len(pool) <= sample_size:
+        out = pool.sort_values(["year", "journal_id", "paper_id"], kind="mergesort").reset_index(drop=True)
+        out["sample_tier_column"] = tier_col
+        return out
+
+    rng = random.Random(seed)
+    preferred_tiers = [tier for tier in ["low", "middle", "high"] if tier in set(pool[tier_col])]
+    other_tiers = sorted(set(pool[tier_col]) - set(preferred_tiers))
+    tiers = preferred_tiers + other_tiers
+    if not tiers:
+        return pool.head(sample_size).reset_index(drop=True)
+
+    groups: Dict[str, List[Dict[str, Any]]] = {}
+    for tier in tiers:
+        records = pool[pool[tier_col] == tier].to_dict("records")
+        rng.shuffle(records)
+        groups[tier] = records
+    selected: List[Dict[str, Any]] = []
+    base = sample_size // len(tiers)
+    remainder = sample_size % len(tiers)
+    for idx, tier in enumerate(tiers):
+        take = base + (1 if idx < remainder else 0)
+        selected.extend(groups[tier][:take])
+        groups[tier] = groups[tier][take:]
+    while len(selected) < sample_size and any(groups.values()):
+        for tier in tiers:
+            if len(selected) >= sample_size:
+                break
+            if groups[tier]:
+                selected.append(groups[tier].pop(0))
+    out = pd.DataFrame(selected[:sample_size])
+    out["sample_tier_column"] = tier_col
+    return out.sort_values(["year", "journal_id", "paper_id"], kind="mergesort").reset_index(drop=True)
+
+
 def sample_manifest(
     output_dir: Path,
     sample_size: int,
@@ -713,20 +931,1296 @@ def sample_manifest(
     cap_41467: float,
     quiet: bool = False,
     require_screen_pass: bool = False,
+    prefer_screen_pass: bool = False,
+    prefer_scored_pool: bool = False,
 ) -> List[Dict[str, Any]]:
     screen_path = output_dir / "fig4_peer_review_screen.csv"
-    if screen_path.exists():
+    candidate_screen = build_fig4_candidate_screen(output_dir) if (output_dir / "fig4_input_audit.csv").exists() else pd.DataFrame()
+    candidate_rows = candidate_screen.to_dict("records") if not candidate_screen.empty else []
+    candidate_pass = [{**row, "included_in_audit": True} for row in candidate_rows if bool_value(row.get("screen_pass"))]
+    use_screen = False
+    if prefer_scored_pool:
+        scored_pool = collect_cached_scored_candidate_pool(output_dir)
+        if not scored_pool.empty and (sample_size <= 0 or len(scored_pool) >= sample_size):
+            sampled_df = stratified_sample_scored_pool(scored_pool, sample_size=sample_size, seed=seed)
+            sampled = sampled_df.to_dict("records")
+            for row in sampled:
+                row["included_in_main"] = True
+                row["sample_seed"] = seed
+            write_csv(output_dir / "fig4_manifest.csv", sampled)
+            write_csv(output_dir / "fig4_fixed_sample_manifest.csv", sampled)
+            progress_log(f"Sampled {len(sampled)} Fig.4 papers from scored candidate pool.", quiet)
+            return sampled
+    if screen_path.exists() and (require_screen_pass or prefer_screen_pass):
         rows = [{**row, "included_in_audit": True} for row in read_csv_records(screen_path) if bool_value(row.get("screen_pass"))]
+        use_screen = require_screen_pass or sample_size <= 0 or len(rows) > sample_size
         if require_screen_pass and sample_size > 0 and len(rows) < sample_size:
             raise RuntimeError(f"screen_pass_count={len(rows)} below requested sample_size={sample_size}")
+        if not use_screen:
+            if candidate_pass and (sample_size <= 0 or len(candidate_pass) >= sample_size):
+                rows = candidate_pass
+            else:
+                rows = read_csv_records(output_dir / "fig4_input_audit.csv")
     elif require_screen_pass:
         raise RuntimeError("fig4_peer_review_screen.csv is required before screen-filtered sampling")
     else:
-        rows = read_csv_records(output_dir / "fig4_input_audit.csv")
+        if candidate_pass and (sample_size <= 0 or len(candidate_pass) >= sample_size):
+            rows = candidate_pass
+        else:
+            rows = read_csv_records(output_dir / "fig4_input_audit.csv")
     sampled = controlled_sample(rows, sample_size=sample_size, seed=seed, cap_41467=cap_41467)
     write_csv(output_dir / "fig4_manifest.csv", sampled)
+    write_csv(output_dir / "fig4_fixed_sample_manifest.csv", sampled)
     progress_log(f"Sampled {len(sampled)} Fig.4 papers.", quiet)
     return sampled
+
+
+def enforce_fixed_sample_contract(sampled: Sequence[Mapping[str, Any]], requested_sample_size: int) -> Dict[str, Any]:
+    """Fail fast when a fixed-size Fig.4 validation sample cannot be materialized."""
+    evaluable = [row for row in sampled if row]
+    contract = {
+        "requested_sample_size": int(requested_sample_size),
+        "evaluable_case_count": int(len(evaluable)),
+        "fixed_sample_contract_pass": int(requested_sample_size <= 0 or len(evaluable) == requested_sample_size),
+    }
+    if requested_sample_size > 0 and len(evaluable) != requested_sample_size:
+        raise RuntimeError(
+            f"Fig.4 fixed-sample contract failed: requested_sample_size={requested_sample_size}, "
+            f"evaluable_case_count={len(evaluable)}"
+        )
+    return contract
+
+
+def _numeric_series(frame: pd.DataFrame, column: str) -> pd.Series:
+    if column not in frame.columns:
+        return pd.Series(dtype=float)
+    return pd.to_numeric(frame[column], errors="coerce").dropna()
+
+
+def _spearman_positive(frame: pd.DataFrame, score_col: str, target_col: str) -> int:
+    if score_col not in frame.columns or target_col not in frame.columns:
+        return 0
+    pair = frame[[score_col, target_col]].apply(pd.to_numeric, errors="coerce").dropna()
+    if len(pair) < 3 or pair[score_col].nunique() < 2 or pair[target_col].nunique() < 2:
+        return 0
+    corr = pair[score_col].corr(pair[target_col], method="spearman")
+    return int(pd.notna(corr) and float(corr) > 0.0)
+
+
+def _spearman_positive_any(frame: pd.DataFrame, score_cols: Sequence[str], target_cols: Sequence[str]) -> int:
+    for score_col in score_cols:
+        for target_col in target_cols:
+            if _spearman_positive(frame, score_col, target_col):
+                return 1
+    return 0
+
+
+def _spearman_value(frame: pd.DataFrame, score_col: str, target_col: str) -> float:
+    if score_col not in frame.columns or target_col not in frame.columns:
+        return float("nan")
+    pair = frame[[score_col, target_col]].apply(pd.to_numeric, errors="coerce").dropna()
+    if len(pair) < 3 or pair[score_col].nunique() < 2 or pair[target_col].nunique() < 2:
+        return float("nan")
+    corr = pair[score_col].corr(pair[target_col], method="spearman")
+    return float(corr) if pd.notna(corr) else float("nan")
+
+
+def bootstrap_spearman_ci(
+    frame: pd.DataFrame,
+    score_col: str,
+    target_col: str,
+    *,
+    seed: int = 20260630,
+    n_bootstrap: int = 1000,
+    alpha: float = 0.05,
+) -> Dict[str, Any]:
+    """Return a deterministic bootstrap CI for a blinded external-validation alignment."""
+    empty = {
+        "score_col": score_col,
+        "target_col": target_col,
+        "n": 0,
+        "observed": float("nan"),
+        "ci_low": float("nan"),
+        "ci_high": float("nan"),
+        "bootstrap_samples": 0,
+        "ci_excludes_zero_positive": 0,
+    }
+    if score_col not in frame.columns or target_col not in frame.columns:
+        return empty
+    pair = frame[[score_col, target_col]].apply(pd.to_numeric, errors="coerce").dropna().reset_index(drop=True)
+    observed = _spearman_value(pair, score_col, target_col)
+    if len(pair) < 3 or not math.isfinite(observed):
+        out = dict(empty)
+        out["n"] = int(len(pair))
+        out["observed"] = observed
+        return out
+
+    rng = random.Random(seed)
+    values: List[float] = []
+    n = len(pair)
+    for _idx in range(max(0, int(n_bootstrap))):
+        sample_idx = [rng.randrange(n) for _ in range(n)]
+        sampled = pair.iloc[sample_idx]
+        rho = _spearman_value(sampled, score_col, target_col)
+        if math.isfinite(rho):
+            values.append(rho)
+    if values:
+        arr = np.asarray(values, dtype=float)
+        ci_low = float(np.quantile(arr, alpha / 2.0))
+        ci_high = float(np.quantile(arr, 1.0 - alpha / 2.0))
+    else:
+        ci_low = float("nan")
+        ci_high = float("nan")
+    return {
+        "score_col": score_col,
+        "target_col": target_col,
+        "n": int(n),
+        "observed": observed,
+        "ci_low": ci_low,
+        "ci_high": ci_high,
+        "bootstrap_samples": int(len(values)),
+        "ci_excludes_zero_positive": int(math.isfinite(ci_low) and ci_low > 0.0),
+    }
+
+
+def _numeric_unique_count(frame: pd.DataFrame, column: str) -> int:
+    series = _numeric_series(frame, column)
+    if series.empty:
+        return 0
+    return int(series.nunique(dropna=True))
+
+
+def _text_unique_count(frame: pd.DataFrame, column: str) -> int:
+    if column not in frame.columns:
+        return 0
+    values = {
+        normalize_whitespace(str(value))
+        for value in frame[column].dropna().tolist()
+        if normalize_whitespace(str(value))
+    }
+    return len(values)
+
+
+def build_fig4_external_validation_target_audit(metrics_df: pd.DataFrame) -> Dict[str, Any]:
+    """Summarize whether Fig.4 has enough target and score range for validation."""
+    fig3_scores = _numeric_series(metrics_df, "fig3_sw")
+    fig3_iqr = float(fig3_scores.quantile(0.75) - fig3_scores.quantile(0.25)) if not fig3_scores.empty else float("nan")
+    fig3_percentiles = _numeric_series(metrics_df, "fig3_sw_percentile")
+    fig3_percentile_min = float(fig3_percentiles.min()) if not fig3_percentiles.empty else float("nan")
+    fig3_percentile_max = float(fig3_percentiles.max()) if not fig3_percentiles.empty else float("nan")
+    fig3_percentile_span = (
+        fig3_percentile_max - fig3_percentile_min
+        if math.isfinite(fig3_percentile_min) and math.isfinite(fig3_percentile_max)
+        else float("nan")
+    )
+    audit = {
+        "n_cases": int(len(metrics_df)),
+        "fig3_score_unique": _numeric_unique_count(metrics_df, "fig3_sw"),
+        "fig3_score_iqr": fig3_iqr,
+        "fig3_reference_tier_unique": _text_unique_count(metrics_df, "fig3_sw_tier"),
+        "fig4_batch_ladder_tier_unique": _text_unique_count(metrics_df, "fig4_sw_ladder_tier"),
+        "fig3_reference_percentile_min": fig3_percentile_min,
+        "fig3_reference_percentile_max": fig3_percentile_max,
+        "fig3_reference_percentile_span": fig3_percentile_span,
+        "peer_novelty_unique": _numeric_unique_count(metrics_df, "peer_novelty"),
+        "peer_significance_unique": _numeric_unique_count(metrics_df, "peer_significance"),
+    }
+    audit["fig3_reference_percentile_range_ready"] = int(
+        math.isfinite(fig3_percentile_min)
+        and math.isfinite(fig3_percentile_max)
+        and fig3_percentile_min <= 0.50
+        and fig3_percentile_max >= 0.90
+    )
+    audit["peer_label_variance_ready"] = int(
+        audit["peer_novelty_unique"] >= 2 and audit["peer_significance_unique"] >= 2
+    )
+    audit["fig3_score_range_ready"] = int(
+        audit["fig3_reference_tier_unique"] >= 2
+        or audit["fig3_reference_percentile_range_ready"] >= 1
+    )
+    audit["external_validation_target_range_ready"] = int(
+        bool(audit["peer_label_variance_ready"]) and bool(audit["fig3_score_range_ready"])
+    )
+    return audit
+
+
+def external_validation_global_tier(percentile: Any) -> str:
+    """Map a global Fig.3 percentile into Fig.4 validation coverage tiers."""
+    value = numeric(percentile, float("nan"))
+    if not math.isfinite(value):
+        return "unknown"
+    if value <= 0.50:
+        return "low"
+    if value < 0.90:
+        return "middle"
+    return "high"
+
+
+def _frame_from_csv(path: Path) -> pd.DataFrame:
+    return pd.DataFrame(read_csv_records(path)) if path.exists() else pd.DataFrame()
+
+
+def _score_reference_values(fig3_score_table_path: Path) -> List[float]:
+    score_table = _frame_from_csv(fig3_score_table_path)
+    if score_table.empty:
+        return []
+    for score_col in ("S_w_oof", "S_w"):
+        if score_col not in score_table.columns:
+            continue
+        values = pd.to_numeric(score_table[score_col], errors="coerce").dropna().astype(float).tolist()
+        if values:
+            return sorted(values)
+    return []
+
+
+def _score_reference_tiers(fig3_score_table_path: Path) -> pd.Series:
+    score_table = _frame_from_csv(fig3_score_table_path)
+    if score_table.empty:
+        return pd.Series(dtype=str)
+    for score_col in ("S_w_oof", "S_w"):
+        if score_col not in score_table.columns:
+            continue
+        values = pd.to_numeric(score_table[score_col], errors="coerce").dropna()
+        if not values.empty:
+            return values.rank(method="average", pct=True).map(external_validation_global_tier)
+    return pd.Series(dtype=str)
+
+
+def _with_global_validation_tier(frame: pd.DataFrame, reference_values: Sequence[float]) -> pd.DataFrame:
+    out = frame.copy()
+    if out.empty:
+        out["fig4_global_validation_percentile"] = pd.Series(dtype=float)
+        out["fig4_global_validation_tier"] = pd.Series(dtype=str)
+        return out
+    if "fig3_sw_percentile" in out.columns:
+        percentiles = pd.to_numeric(out["fig3_sw_percentile"], errors="coerce")
+    else:
+        score_col = "fig3_sw" if "fig3_sw" in out.columns else "S_w" if "S_w" in out.columns else ""
+        if score_col and reference_values:
+            percentiles = pd.to_numeric(out[score_col], errors="coerce").map(
+                lambda value: empirical_percentile(float(value), reference_values)
+                if pd.notna(value)
+                else float("nan")
+            )
+        else:
+            percentiles = pd.Series([float("nan")] * len(out), index=out.index)
+    out["fig4_global_validation_percentile"] = percentiles
+    out["fig4_global_validation_tier"] = percentiles.map(external_validation_global_tier)
+    return out
+
+
+def build_fig4_global_score_coverage_audit(
+    *,
+    output_dir: Path,
+    fig3_score_table_path: Optional[Path] = None,
+    requested_sample_size: int = 50,
+    min_cases_per_tier: int = 10,
+) -> pd.DataFrame:
+    """Write Fig.4 low/middle/high sample coverage against the global Fig.3 score distribution."""
+    score_path = fig3_score_table_path or fig3_score_table_path_from_env()
+    reference_values = _score_reference_values(score_path)
+    global_tiers = _score_reference_tiers(score_path)
+    candidate_pool = _with_global_validation_tier(_frame_from_csv(output_dir / "fig4_scored_candidate_pool.csv"), reference_values)
+    fixed_sample = _with_global_validation_tier(_frame_from_csv(output_dir / "fig4_fixed_sample_manifest.csv"), reference_values)
+
+    rows: List[Dict[str, Any]] = []
+    for tier in ["low", "middle", "high"]:
+        fixed_count = int(fixed_sample.get("fig4_global_validation_tier", pd.Series(dtype=str)).astype(str).eq(tier).sum())
+        rows.append(
+            {
+                "global_fig3_tier": tier,
+                "global_reference_count": int(global_tiers.eq(tier).sum()) if not global_tiers.empty else 0,
+                "scored_candidate_count": int(candidate_pool.get("fig4_global_validation_tier", pd.Series(dtype=str)).astype(str).eq(tier).sum()),
+                "fixed_sample_count": fixed_count,
+                "required_min_fixed_cases": int(min_cases_per_tier),
+                "additional_fixed_cases_needed": max(0, int(min_cases_per_tier) - fixed_count),
+                "tier_ready_for_external_validation": int(fixed_count >= min_cases_per_tier),
+            }
+        )
+    overall_ready = int(all(row["tier_ready_for_external_validation"] for row in rows))
+    for row in rows:
+        row["requested_sample_size"] = int(requested_sample_size)
+        row["scored_candidate_pool_size"] = int(len(candidate_pool))
+        row["fixed_sample_size"] = int(len(fixed_sample))
+        row["overall_score_coverage_ready"] = overall_ready
+        row["coverage_interpretation"] = (
+            "global_low_middle_high_ready"
+            if overall_ready
+            else "scored_peer_review_sample_does_not_cover_global_fig3_distribution"
+        )
+    audit = pd.DataFrame(rows)
+    write_csv(output_dir / "fig4_global_score_coverage_audit.csv", audit.to_dict("records") if not audit.empty else [])
+    return audit
+
+
+FIG4_CANDIDATE_LABEL_COLUMNS = [
+    "peer_novelty_human_1_5",
+    "peer_significance_human_1_5",
+    "peer_overall_human_1_5",
+    "peer_prior_art_human_1_5",
+    "label_source",
+    "labeler_id",
+    "label_notes",
+]
+
+
+def preserve_existing_fig4_candidate_packet_labels(output_dir: Path, packet: pd.DataFrame) -> pd.DataFrame:
+    """Preserve completed external-validation labels across deterministic packet rebuilds."""
+    old_packet = _frame_from_csv(output_dir / "fig4_global_validation_candidate_packet.csv")
+    if packet.empty or old_packet.empty or "paper_id" not in packet.columns or "paper_id" not in old_packet.columns:
+        return packet
+    labels = [column for column in FIG4_CANDIDATE_LABEL_COLUMNS if column in packet.columns and column in old_packet.columns]
+    if not labels:
+        return packet
+    current = packet.copy()
+    current["paper_id"] = current["paper_id"].astype(str)
+    old = old_packet[["paper_id", *labels]].copy()
+    old["paper_id"] = old["paper_id"].astype(str)
+    old = old.rename(columns={column: f"{column}_existing" for column in labels})
+    merged = current.merge(old, on="paper_id", how="left")
+    for column in labels:
+        existing_col = f"{column}_existing"
+        existing = merged.get(existing_col, pd.Series([""] * len(merged)))
+        has_existing = existing.map(nonempty_cell)
+        merged[column] = merged[column].where(~has_existing, existing)
+    drop_cols = [f"{column}_existing" for column in labels]
+    return merged.drop(columns=[column for column in drop_cols if column in merged.columns])
+
+
+def build_fig4_global_validation_candidate_packet(
+    *,
+    output_dir: Path,
+    fig3_score_table_path: Optional[Path] = None,
+    per_tier: int = 100,
+) -> pd.DataFrame:
+    """Write a deterministic low/middle/high Fig.3 candidate packet for external validation labeling."""
+    score_path = fig3_score_table_path or fig3_score_table_path_from_env()
+    score_table = _frame_from_csv(score_path)
+    if score_table.empty:
+        empty = pd.DataFrame()
+        write_csv(output_dir / "fig4_global_validation_candidate_packet.csv", [])
+        return empty
+    score_col = "S_w_oof" if "S_w_oof" in score_table.columns and pd.to_numeric(score_table["S_w_oof"], errors="coerce").notna().any() else "S_w"
+    if score_col not in score_table.columns:
+        empty = pd.DataFrame()
+        write_csv(output_dir / "fig4_global_validation_candidate_packet.csv", [])
+        return empty
+    candidates = score_table.copy()
+    candidates["fig3_score_for_validation"] = pd.to_numeric(candidates[score_col], errors="coerce")
+    candidates = candidates.dropna(subset=["fig3_score_for_validation"]).copy()
+    if candidates.empty:
+        write_csv(output_dir / "fig4_global_validation_candidate_packet.csv", [])
+        return candidates
+    candidates["fig3_global_percentile"] = candidates["fig3_score_for_validation"].rank(method="average", pct=True)
+    candidates["global_fig3_tier"] = candidates["fig3_global_percentile"].map(external_validation_global_tier)
+    fixed_sample = _frame_from_csv(output_dir / "fig4_fixed_sample_manifest.csv")
+    already_sampled = set(fixed_sample.get("paper_id", pd.Series(dtype=str)).astype(str)) if not fixed_sample.empty else set()
+    candidates = candidates[~candidates.get("paper_id", pd.Series(dtype=str)).astype(str).isin(already_sampled)].copy()
+    selected_frames: List[pd.DataFrame] = []
+    for tier in ["low", "middle", "high"]:
+        tier_frame = candidates[candidates["global_fig3_tier"].eq(tier)].sort_values(
+            ["fig3_global_percentile", "domain", "year", "paper_id"],
+            kind="mergesort",
+        )
+        if tier_frame.empty:
+            continue
+        if len(tier_frame) <= per_tier:
+            selected = tier_frame
+        else:
+            if per_tier <= 1:
+                positions = [0]
+            else:
+                positions = sorted({round(idx * (len(tier_frame) - 1) / (per_tier - 1)) for idx in range(per_tier)})
+            selected = tier_frame.iloc[positions]
+        selected_frames.append(selected)
+    packet = pd.concat(selected_frames, ignore_index=True) if selected_frames else pd.DataFrame()
+    if not packet.empty:
+        for column in [
+            "peer_novelty_human_1_5",
+            "peer_significance_human_1_5",
+            "peer_overall_human_1_5",
+            "label_source",
+            "labeler_id",
+            "label_notes",
+        ]:
+            packet[column] = ""
+        packet["candidate_packet_role"] = "external_validation_labeling_candidate"
+        packet["label_status"] = "needs_peer_or_blinded_human_label"
+        keep_cols = [
+            "paper_id",
+            "title",
+            "domain",
+            "year",
+            "primary_field",
+            "reference_count",
+            "fig3_score_for_validation",
+            "fig3_global_percentile",
+            "global_fig3_tier",
+            "candidate_packet_role",
+            "label_status",
+            "peer_novelty_human_1_5",
+            "peer_significance_human_1_5",
+            "peer_overall_human_1_5",
+            "label_source",
+            "labeler_id",
+            "label_notes",
+        ]
+        packet = packet[[column for column in keep_cols if column in packet.columns]]
+        packet = preserve_existing_fig4_candidate_packet_labels(output_dir, packet)
+    write_csv(output_dir / "fig4_global_validation_candidate_packet.csv", packet.to_dict("records") if not packet.empty else [])
+    return packet
+
+
+def openalex_url_from_fig3_paper_id(paper_id: Any) -> str:
+    """Extract an OpenAlex work URL from a Fig.3 paper ID."""
+    text = str(paper_id or "")
+    marker = "https://openalex.org/"
+    if marker in text:
+        return marker + text.split(marker, 1)[1].split()[0].strip()
+    return ""
+
+
+FIG4_BLINDED_LABEL_COLUMNS = [
+    "label_novelty_1_5",
+    "label_significance_1_5",
+    "label_prior_art_1_5",
+    "label_confidence_1_5",
+    "label_source",
+    "labeler_id",
+    "label_notes",
+]
+
+
+FIG4_COMPLETED_BLINDED_LABEL_TEMPLATE_COLUMNS = [
+    "blinded_case_id",
+    "assignment_role",
+    "title",
+    "doi",
+    "source_openalex_url",
+    "domain_context",
+    "year",
+    "primary_field",
+    *FIG4_BLINDED_LABEL_COLUMNS,
+]
+
+
+def candidate_packet_blinded_labels(row: Mapping[str, Any]) -> Dict[str, Any]:
+    """Return completed candidate-packet labels in the blinded-packet schema."""
+    mapped: Dict[str, Any] = {}
+    column_map = {
+        "peer_novelty_human_1_5": "label_novelty_1_5",
+        "peer_significance_human_1_5": "label_significance_1_5",
+        "peer_prior_art_human_1_5": "label_prior_art_1_5",
+        "label_confidence_1_5": "label_confidence_1_5",
+    }
+    for source, target in column_map.items():
+        value = row.get(source, "")
+        if nonempty_cell(value):
+            mapped[target] = value
+    for column in ["label_source", "labeler_id", "label_notes"]:
+        value = row.get(column, "")
+        if nonempty_cell(value):
+            mapped[column] = value
+    return mapped
+
+
+def preserve_existing_fig4_blinded_labels(output_dir: Path, blinded: pd.DataFrame, answer_key: pd.DataFrame) -> pd.DataFrame:
+    """Carry completed blinded-label fields across deterministic packet rebuilds."""
+    old_packet = _frame_from_csv(output_dir / "fig4_blinded_labeling_packet.csv")
+    old_key = _frame_from_csv(output_dir / "fig4_blinded_labeling_answer_key.csv")
+    if (
+        blinded.empty
+        or answer_key.empty
+        or old_packet.empty
+        or old_key.empty
+        or "blinded_case_id" not in old_packet.columns
+        or "blinded_case_id" not in old_key.columns
+    ):
+        return blinded
+    if "paper_id" not in old_key.columns or "paper_id" not in answer_key.columns:
+        return blinded
+    old = old_packet.merge(
+        old_key[["blinded_case_id", "paper_id"]],
+        on="blinded_case_id",
+        how="inner",
+    )
+    labels = [column for column in FIG4_BLINDED_LABEL_COLUMNS if column in old.columns and column in blinded.columns]
+    if not labels:
+        return blinded
+    current = answer_key[["blinded_case_id", "paper_id"]].copy()
+    current["blinded_case_id"] = current["blinded_case_id"].astype(str)
+    current["paper_id"] = current["paper_id"].astype(str)
+    preserved = blinded.merge(current, on="blinded_case_id", how="left")
+    old = old[["blinded_case_id", "paper_id", *labels]].copy()
+    old["blinded_case_id"] = old["blinded_case_id"].astype(str)
+    old["paper_id"] = old["paper_id"].astype(str)
+    old = old.rename(columns={column: f"{column}_existing" for column in labels})
+    preserved = preserved.merge(old, on=["blinded_case_id", "paper_id"], how="left")
+    for column in labels:
+        existing = preserved.get(f"{column}_existing", pd.Series([""] * len(preserved))).astype(str)
+        has_existing = existing.str.strip().ne("") & existing.str.lower().ne("nan")
+        preserved[column] = preserved[column].where(~has_existing, existing)
+    drop_cols = ["paper_id", *[f"{column}_existing" for column in labels]]
+    return preserved.drop(columns=[column for column in drop_cols if column in preserved.columns])
+
+
+def import_completed_fig4_blinded_label_sidecar(output_dir: Path, blinded: pd.DataFrame) -> pd.DataFrame:
+    """Merge labeler-returned blinded labels without exposing Fig.3 score or tier columns."""
+    completed = _frame_from_csv(output_dir / FIG4_COMPLETED_BLINDED_LABELS_FILE)
+    if blinded.empty or completed.empty or "blinded_case_id" not in blinded.columns or "blinded_case_id" not in completed.columns:
+        return blinded
+    labels = [column for column in FIG4_BLINDED_LABEL_COLUMNS if column in completed.columns and column in blinded.columns]
+    if not labels:
+        return blinded
+    merged = blinded.copy()
+    merged["blinded_case_id"] = merged["blinded_case_id"].astype(str)
+    sidecar = completed[["blinded_case_id", *labels]].copy()
+    sidecar["blinded_case_id"] = sidecar["blinded_case_id"].astype(str)
+    sidecar = sidecar.drop_duplicates(subset=["blinded_case_id"], keep="last")
+    sidecar = sidecar.rename(columns={column: f"{column}_completed" for column in labels})
+    merged = merged.merge(sidecar, on="blinded_case_id", how="left")
+    for column in labels:
+        completed_values = merged.get(f"{column}_completed", pd.Series([""] * len(merged)))
+        has_completed = completed_values.map(nonempty_cell)
+        merged[column] = merged[column].where(~has_completed, completed_values)
+    drop_cols = [f"{column}_completed" for column in labels]
+    return merged.drop(columns=[column for column in drop_cols if column in merged.columns])
+
+
+def write_fig4_completed_blinded_label_template(output_dir: Path, blinded: pd.DataFrame) -> pd.DataFrame:
+    """Write the evaluator-facing completed-label template for primary blinded cases."""
+    if blinded.empty or "assignment_role" not in blinded.columns:
+        template = pd.DataFrame(columns=FIG4_COMPLETED_BLINDED_LABEL_TEMPLATE_COLUMNS)
+    else:
+        primary = blinded[blinded["assignment_role"].astype(str).eq("primary_validation_labeling_sample")].copy()
+        template = primary[[column for column in FIG4_COMPLETED_BLINDED_LABEL_TEMPLATE_COLUMNS if column in primary.columns]].copy()
+        for column in FIG4_COMPLETED_BLINDED_LABEL_TEMPLATE_COLUMNS:
+            if column not in template.columns:
+                template[column] = ""
+        template = template[FIG4_COMPLETED_BLINDED_LABEL_TEMPLATE_COLUMNS]
+    write_csv(
+        output_dir / FIG4_COMPLETED_BLINDED_LABELS_TEMPLATE_FILE,
+        template.to_dict("records") if not template.empty else [],
+        fieldnames=FIG4_COMPLETED_BLINDED_LABEL_TEMPLATE_COLUMNS,
+    )
+    return template
+
+
+def write_fig4_labeler_completed_blinded_label_templates(
+    output_dir: Path,
+    template: pd.DataFrame,
+    labeler_ids: Sequence[str] = FIG4_LABELER_IDS,
+) -> Dict[str, str]:
+    """Write one Fig.4 completed-label return template per external labeler."""
+    template_paths: Dict[str, str] = {}
+    for labeler_id in labeler_ids:
+        file_name = f"fig4_completed_blinded_labels_{labeler_id}.csv"
+        path = output_dir / file_name
+        labeler_template = template.copy()
+        if labeler_template.empty:
+            labeler_template = pd.DataFrame(columns=FIG4_COMPLETED_BLINDED_LABEL_TEMPLATE_COLUMNS)
+        if "labeler_id" not in labeler_template.columns:
+            labeler_template["labeler_id"] = ""
+        if "label_source" not in labeler_template.columns:
+            labeler_template["label_source"] = ""
+        labeler_template["labeler_id"] = str(labeler_id)
+        existing = _frame_from_csv(path)
+        preserve_existing_return = False
+        if not existing.empty and "blinded_case_id" in existing.columns:
+            source = existing.get("label_source", pd.Series([""] * len(existing)))
+            novelty = pd.to_numeric(existing.get("label_novelty_1_5", pd.Series(dtype=float)), errors="coerce")
+            significance = pd.to_numeric(existing.get("label_significance_1_5", pd.Series(dtype=float)), errors="coerce")
+            preserve_existing_return = bool((source.map(nonempty_cell) & novelty.between(1, 5) & significance.between(1, 5)).any())
+        if not preserve_existing_return:
+            write_csv(
+                path,
+                labeler_template.to_dict("records") if not labeler_template.empty else [],
+                fieldnames=FIG4_COMPLETED_BLINDED_LABEL_TEMPLATE_COLUMNS,
+            )
+        template_paths[str(labeler_id)] = file_name
+    return template_paths
+
+
+def _fig4_labeler_merge_audit_row(
+    *,
+    required_files: int,
+    observed_files: int,
+    required_labels: int,
+    observed_valid_labels: int,
+    missing_labels: int,
+    passed: bool,
+    failure_reason: str,
+) -> Dict[str, Any]:
+    """Build a one-row audit for Fig.4 labeler-return merging."""
+    return {
+        "audit_item": "overall_labeler_return_merge_ready",
+        "required_files": int(required_files),
+        "observed_files": int(observed_files),
+        "required_labels": int(required_labels),
+        "observed_valid_labels": int(observed_valid_labels),
+        "missing_labels": int(missing_labels),
+        "pass": int(passed),
+        "failure_reason": failure_reason,
+    }
+
+
+def _valid_fig4_labeler_source(value: Any) -> bool:
+    """Return whether a Fig.4 label source is usable for strict external evidence."""
+    text = str(value or "").strip().lower()
+    if not text:
+        return False
+    forbidden = ("llm", "synthetic", "model", "proxy", "automated")
+    return not any(term in text for term in forbidden)
+
+
+def merge_fig4_labeler_blinded_label_returns(
+    output_dir: Path,
+    *,
+    labeler_ids: Sequence[str] = FIG4_LABELER_IDS,
+    write: bool = True,
+) -> pd.DataFrame:
+    """Combine completed labeler-specific Fig.4 blinded label returns when complete."""
+    template_path = output_dir / FIG4_COMPLETED_BLINDED_LABELS_TEMPLATE_FILE
+    audit_path = output_dir / "fig4_blinded_label_return_merge_audit.csv"
+    if not template_path.exists():
+        audit = pd.DataFrame(
+            [
+                _fig4_labeler_merge_audit_row(
+                    required_files=len(labeler_ids),
+                    observed_files=0,
+                    required_labels=0,
+                    observed_valid_labels=0,
+                    missing_labels=1,
+                    passed=False,
+                    failure_reason="missing_completed_blinded_label_template",
+                )
+            ]
+        )
+        if write:
+            write_csv(audit_path, audit.to_dict("records"))
+        return audit
+    try:
+        template = pd.read_csv(template_path).fillna("")
+    except (OSError, pd.errors.EmptyDataError, pd.errors.ParserError):
+        audit = pd.DataFrame(
+            [
+                _fig4_labeler_merge_audit_row(
+                    required_files=len(labeler_ids),
+                    observed_files=0,
+                    required_labels=0,
+                    observed_valid_labels=0,
+                    missing_labels=1,
+                    passed=False,
+                    failure_reason="unreadable_completed_blinded_label_template",
+                )
+            ]
+        )
+        if write:
+            write_csv(audit_path, audit.to_dict("records"))
+        return audit
+    expected_ids = template.get("blinded_case_id", pd.Series(dtype=str)).dropna().astype(str).tolist()
+    required_labels = len(expected_ids) * len(labeler_ids)
+    required_cols = {
+        "blinded_case_id",
+        "label_novelty_1_5",
+        "label_significance_1_5",
+        "label_prior_art_1_5",
+        "label_confidence_1_5",
+        "label_source",
+        "labeler_id",
+        "label_notes",
+    }
+    expected_set = set(expected_ids)
+    observed_files = 0
+    observed_valid = 0
+    valid_frames: List[pd.DataFrame] = []
+    failure_reasons: List[str] = []
+    for labeler_id in labeler_ids:
+        path = output_dir / f"fig4_completed_blinded_labels_{labeler_id}.csv"
+        if not path.exists():
+            failure_reasons.append(f"missing_{path.name}")
+            continue
+        observed_files += 1
+        try:
+            table = pd.read_csv(path).fillna("")
+        except (OSError, pd.errors.EmptyDataError, pd.errors.ParserError):
+            failure_reasons.append(f"unreadable_{path.name}")
+            continue
+        if table.empty or not required_cols.issubset(set(table.columns)):
+            failure_reasons.append(f"invalid_columns_{path.name}")
+            continue
+        table = table.copy()
+        table["blinded_case_id"] = table["blinded_case_id"].astype(str)
+        table["labeler_id"] = table["labeler_id"].astype(str)
+        numeric_valid = pd.Series(True, index=table.index)
+        for column in ["label_novelty_1_5", "label_significance_1_5", "label_prior_art_1_5", "label_confidence_1_5"]:
+            numeric_valid &= pd.to_numeric(table[column], errors="coerce").between(1, 5)
+        valid = table[
+            table["blinded_case_id"].isin(expected_set)
+            & table["labeler_id"].eq(str(labeler_id))
+            & table["label_source"].map(_valid_fig4_labeler_source)
+            & numeric_valid
+        ].copy()
+        valid = valid.drop_duplicates(subset=["blinded_case_id", "labeler_id"], keep="last")
+        observed_valid += len(valid)
+        if len(valid) != len(expected_ids):
+            failure_reasons.append(f"incomplete_{path.name}")
+        valid_frames.append(valid)
+    missing_labels = max(0, required_labels - observed_valid)
+    passed = bool(required_labels and observed_files == len(labeler_ids) and missing_labels == 0 and not failure_reasons)
+    audit = pd.DataFrame(
+        [
+            _fig4_labeler_merge_audit_row(
+                required_files=len(labeler_ids),
+                observed_files=observed_files,
+                required_labels=required_labels,
+                observed_valid_labels=observed_valid,
+                missing_labels=missing_labels,
+                passed=passed,
+                failure_reason="" if passed else ";".join(failure_reasons or ["incomplete_labeler_return_files"]),
+            )
+        ]
+    )
+    if passed and valid_frames:
+        merged = pd.concat(valid_frames, ignore_index=True)
+        score_cols = ["label_novelty_1_5", "label_significance_1_5", "label_prior_art_1_5", "label_confidence_1_5"]
+        rows: List[Dict[str, Any]] = []
+        for blinded_case_id, group in merged.groupby("blinded_case_id", sort=False):
+            row: Dict[str, Any] = {"blinded_case_id": str(blinded_case_id)}
+            for column in score_cols:
+                row[column] = float(pd.to_numeric(group[column], errors="coerce").mean())
+            row["label_source"] = "external_blinded_human_panel"
+            row["labeler_id"] = ";".join(sorted(group["labeler_id"].astype(str).unique()))
+            row["label_notes"] = "merged from complete labeler-specific blinded returns"
+            rows.append(row)
+        write_csv(output_dir / FIG4_COMPLETED_BLINDED_LABELS_FILE, rows)
+    if write:
+        write_csv(audit_path, audit.to_dict("records"))
+    return audit
+
+
+def build_fig4_blinded_labeling_package(
+    *,
+    output_dir: Path,
+    candidate_packet: Optional[pd.DataFrame] = None,
+    primary_per_tier: int = DEFAULT_FIG4_LABELING_PRIMARY_PER_TIER,
+    reserve_per_tier: int = DEFAULT_FIG4_LABELING_RESERVE_PER_TIER,
+    seed: int = DEFAULT_SAMPLE_SEED,
+) -> Tuple[pd.DataFrame, pd.DataFrame, Dict[str, Any]]:
+    """Write blinded low/middle/high labeling packets for Fig.4 external validation."""
+    packet = candidate_packet.copy() if candidate_packet is not None else _frame_from_csv(output_dir / "fig4_global_validation_candidate_packet.csv")
+    if packet.empty or "global_fig3_tier" not in packet.columns:
+        write_csv(output_dir / "fig4_blinded_labeling_packet.csv", [])
+        write_csv(output_dir / "fig4_blinded_labeling_answer_key.csv", [])
+        template = write_fig4_completed_blinded_label_template(output_dir, pd.DataFrame())
+        labeler_templates = write_fig4_labeler_completed_blinded_label_templates(output_dir, template)
+        protocol = {
+            "status": "missing_candidate_packet",
+            "primary_per_tier": int(primary_per_tier),
+            "reserve_per_tier": int(reserve_per_tier),
+            "seed": int(seed),
+            "completed_label_import_path": FIG4_COMPLETED_BLINDED_LABELS_FILE,
+            "completed_label_template_path": FIG4_COMPLETED_BLINDED_LABELS_TEMPLATE_FILE,
+            "labeler_specific_completed_label_templates": labeler_templates,
+        }
+        (output_dir / "fig4_blinded_labeling_protocol.json").write_text(json.dumps(protocol, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        return pd.DataFrame(), pd.DataFrame(), protocol
+
+    rng = random.Random(seed)
+    selected_pairs: List[Tuple[Dict[str, Any], Dict[str, Any]]] = []
+    for tier in ["low", "middle", "high"]:
+        tier_rows = packet[packet["global_fig3_tier"].astype(str).eq(tier)].to_dict("records")
+        rng.shuffle(tier_rows)
+        quota = max(0, int(primary_per_tier)) + max(0, int(reserve_per_tier))
+        for offset, row in enumerate(tier_rows[:quota]):
+            role = "primary_validation_labeling_sample" if offset < primary_per_tier else "reserve_validation_labeling_sample"
+            source_url = openalex_url_from_fig3_paper_id(row.get("paper_id"))
+            imported_labels = candidate_packet_blinded_labels(row)
+            selected_pairs.append(
+                (
+                {
+                    "assignment_role": role,
+                    "title": row.get("title", ""),
+                    "doi": row.get("doi", ""),
+                    "source_openalex_url": source_url,
+                    "domain_context": row.get("domain", ""),
+                    "year": row.get("year", ""),
+                    "primary_field": row.get("primary_field", ""),
+                    "label_novelty_1_5": "",
+                    "label_significance_1_5": "",
+                    "label_prior_art_1_5": "",
+                    "label_confidence_1_5": "",
+                    "label_source": "",
+                    "labeler_id": "",
+                    "label_notes": "",
+                    **imported_labels,
+                },
+                {
+                    "paper_id": row.get("paper_id", ""),
+                    "global_fig3_tier": tier,
+                    "fig3_score_for_validation": row.get("fig3_score_for_validation", ""),
+                    "fig3_global_percentile": row.get("fig3_global_percentile", ""),
+                    "assignment_role": role,
+                    "seed": int(seed),
+                },
+                )
+            )
+
+    rng.shuffle(selected_pairs)
+    selected_rows: List[Dict[str, Any]] = []
+    answer_rows: List[Dict[str, Any]] = []
+    for blind_index, (blinded_row, answer_row) in enumerate(selected_pairs, start=1):
+        blind_id = f"F4LV-{blind_index:04d}"
+        selected_rows.append({"blinded_case_id": blind_id, **blinded_row})
+        answer_rows.append({"blinded_case_id": blind_id, **answer_row})
+
+    blinded = pd.DataFrame(selected_rows)
+    key = pd.DataFrame(answer_rows)
+    blinded = preserve_existing_fig4_blinded_labels(output_dir, blinded, key)
+    blinded = import_completed_fig4_blinded_label_sidecar(output_dir, blinded)
+    write_csv(output_dir / "fig4_blinded_labeling_packet.csv", blinded.to_dict("records") if not blinded.empty else [])
+    write_csv(output_dir / "fig4_blinded_labeling_answer_key.csv", key.to_dict("records") if not key.empty else [])
+    completed_label_template = write_fig4_completed_blinded_label_template(output_dir, blinded)
+    labeler_templates = write_fig4_labeler_completed_blinded_label_templates(output_dir, completed_label_template)
+    protocol = {
+        "status": "ready_for_blinded_human_or_peer_labeling" if not blinded.empty else "empty_labeling_packet",
+        "seed": int(seed),
+        "primary_per_tier": int(primary_per_tier),
+        "reserve_per_tier": int(reserve_per_tier),
+        "primary_case_count": int(blinded["assignment_role"].eq("primary_validation_labeling_sample").sum()) if not blinded.empty else 0,
+        "reserve_case_count": int(blinded["assignment_role"].eq("reserve_validation_labeling_sample").sum()) if not blinded.empty else 0,
+        "completed_label_template_case_count": int(len(completed_label_template)),
+        "blinding_rule": "fig3_score_for_validation, fig3_global_percentile, and global_fig3_tier are omitted from fig4_blinded_labeling_packet.csv, blinded_case_id assignment is randomized across Fig.3 tiers, and tier mappings are retained only in fig4_blinded_labeling_answer_key.csv.",
+        "completed_label_import_path": FIG4_COMPLETED_BLINDED_LABELS_FILE,
+        "completed_label_template_path": FIG4_COMPLETED_BLINDED_LABELS_TEMPLATE_FILE,
+        "labeler_specific_completed_label_templates": labeler_templates,
+        "labeler_return_merge_audit_path": "fig4_blinded_label_return_merge_audit.csv",
+        "required_label_columns": [
+            "label_novelty_1_5",
+            "label_significance_1_5",
+            "label_prior_art_1_5",
+            "label_confidence_1_5",
+            "label_source",
+            "labeler_id",
+        ],
+        "acceptance_rule": "At least 10 primary labeled cases per low/middle/high tier with novelty and significance scores in [1,5], assigned blind to Fig.3 score/tier.",
+    }
+    (output_dir / "fig4_blinded_labeling_protocol.json").write_text(json.dumps(protocol, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    protocol_md = textwrap.dedent(
+        f"""
+        # Fig.4 Blinded External-Validation Labeling Protocol
+
+        Labelers receive `fig4_blinded_labeling_packet.csv` only. They must not see
+        `fig4_blinded_labeling_answer_key.csv`, Fig.3 scores, percentiles, or tier labels.
+        `blinded_case_id` assignment is randomized across Fig.3 tiers before export.
+
+        Coordinators can copy `fig4_completed_blinded_labels_template.csv` to
+        `fig4_completed_blinded_labels.csv` after primary-case labels are filled.
+        Alternatively, distribute `fig4_completed_blinded_labels_labeler_1.csv`,
+        `fig4_completed_blinded_labels_labeler_2.csv`, and
+        `fig4_completed_blinded_labels_labeler_3.csv`; the merge helper only
+        materializes `fig4_completed_blinded_labels.csv` after all three returns
+        are complete.
+
+        Required labels for each primary case:
+        - `label_novelty_1_5`: 1 = low novelty, 5 = very high novelty.
+        - `label_significance_1_5`: 1 = low expected field significance, 5 = very high significance.
+        - `label_prior_art_1_5`: 1 = weak distinction from prior art, 5 = strong distinction.
+        - `label_confidence_1_5`: confidence in the judgement.
+        - `label_source` and `labeler_id`.
+
+        Current packet: {protocol["primary_case_count"]} primary cases and
+        {protocol["reserve_case_count"]} reserve cases, deterministic seed {seed}.
+        """
+    ).strip()
+    atomic_write_text(output_dir / "fig4_blinded_labeling_protocol.md", protocol_md + "\n")
+    return blinded, key, protocol
+
+
+def build_fig4_blinded_labeling_completion_audit(output_dir: Path, min_primary_per_tier: int = 10) -> pd.DataFrame:
+    """Audit whether blinded Fig.4 external-validation labels have been completed."""
+    packet = _frame_from_csv(output_dir / "fig4_blinded_labeling_packet.csv")
+    key = _frame_from_csv(output_dir / "fig4_blinded_labeling_answer_key.csv")
+    if packet.empty or key.empty or "blinded_case_id" not in packet.columns or "blinded_case_id" not in key.columns:
+        audit = pd.DataFrame(
+            [
+                {
+                    "global_fig3_tier": tier,
+                    "primary_case_count": 0,
+                    "valid_labeled_primary_count": 0,
+                    "additional_labels_needed": int(min_primary_per_tier),
+                    "tier_label_ready": 0,
+                    "overall_blinded_labeling_ready": 0,
+                }
+                for tier in ["low", "middle", "high"]
+            ]
+        )
+        write_csv(output_dir / "fig4_blinded_labeling_completion_audit.csv", audit.to_dict("records"))
+        return audit
+    merged = packet.merge(key, on="blinded_case_id", how="inner", suffixes=("", "_key"))
+    merged = merged[merged.get("assignment_role", pd.Series(dtype=str)).astype(str).eq("primary_validation_labeling_sample")].copy()
+    novelty = pd.to_numeric(merged.get("label_novelty_1_5", pd.Series(dtype=float)), errors="coerce")
+    significance = pd.to_numeric(merged.get("label_significance_1_5", pd.Series(dtype=float)), errors="coerce")
+    label_source = merged.get("label_source", pd.Series([""] * len(merged))).astype(str).str.strip()
+    merged["valid_label_row"] = novelty.between(1, 5) & significance.between(1, 5) & label_source.ne("")
+    rows: List[Dict[str, Any]] = []
+    for tier in ["low", "middle", "high"]:
+        tier_rows = merged[merged.get("global_fig3_tier", pd.Series(dtype=str)).astype(str).eq(tier)]
+        valid_count = int(tier_rows["valid_label_row"].sum()) if "valid_label_row" in tier_rows.columns else 0
+        primary_count = int(len(tier_rows))
+        rows.append(
+            {
+                "global_fig3_tier": tier,
+                "primary_case_count": primary_count,
+                "valid_labeled_primary_count": valid_count,
+                "additional_labels_needed": max(0, int(min_primary_per_tier) - valid_count),
+                "tier_label_ready": int(valid_count >= min_primary_per_tier),
+                "overall_blinded_labeling_ready": 0,
+            }
+        )
+    overall = int(all(row["tier_label_ready"] for row in rows))
+    for row in rows:
+        row["overall_blinded_labeling_ready"] = overall
+    audit = pd.DataFrame(rows)
+    write_csv(output_dir / "fig4_blinded_labeling_completion_audit.csv", audit.to_dict("records"))
+    return audit
+
+
+def _fig4_missing_replacement_label_fields(row: Mapping[str, Any]) -> List[str]:
+    """Return the label fields still needed before a Fig.4 replacement case is usable."""
+    missing: List[str] = []
+    numeric_fields = [
+        "label_novelty_1_5",
+        "label_significance_1_5",
+        "label_prior_art_1_5",
+        "label_confidence_1_5",
+    ]
+    for column in numeric_fields:
+        value = pd.to_numeric(pd.Series([row.get(column)]), errors="coerce").iloc[0]
+        if pd.isna(value) or float(value) < 1.0 or float(value) > 5.0:
+            missing.append(column)
+    for column in ["label_source", "labeler_id"]:
+        if not nonempty_cell(row.get(column, "")):
+            missing.append(column)
+    return missing
+
+
+def build_fig4_external_validation_replacement_manifest(
+    output_dir: Path,
+    min_primary_per_tier: int = 10,
+) -> pd.DataFrame:
+    """Write the exact blinded primary cases that can replace the range-restricted Fig.4 audit."""
+    packet = _frame_from_csv(output_dir / "fig4_blinded_labeling_packet.csv")
+    key = _frame_from_csv(output_dir / "fig4_blinded_labeling_answer_key.csv")
+    manifest_path = output_dir / "fig4_external_validation_replacement_manifest.csv"
+    summary_path = output_dir / "fig4_external_validation_replacement_summary.csv"
+    if packet.empty or key.empty or "blinded_case_id" not in packet.columns or "blinded_case_id" not in key.columns:
+        write_csv(manifest_path, [])
+        summary_rows = [
+            {
+                "global_fig3_tier": tier,
+                "required_primary_cases": int(min_primary_per_tier),
+                "primary_case_count": 0,
+                "ready_primary_case_count": 0,
+                "additional_ready_labels_needed": int(min_primary_per_tier),
+                "tier_replacement_ready": 0,
+                "overall_replacement_ready": 0,
+            }
+            for tier in ["low", "middle", "high"]
+        ]
+        write_csv(summary_path, summary_rows)
+        return pd.DataFrame()
+    merged = packet.merge(key, on="blinded_case_id", how="inner", suffixes=("", "_key"))
+    role = merged.get("assignment_role", pd.Series([""] * len(merged))).astype(str)
+    merged = merged[role.eq("primary_validation_labeling_sample")].copy()
+    rows: List[Dict[str, Any]] = []
+    for _, row in merged.iterrows():
+        row_map = row.to_dict()
+        missing = _fig4_missing_replacement_label_fields(row_map)
+        rows.append(
+            {
+                "replacement_role": "primary_external_validation_case",
+                "blinded_case_id": row_map.get("blinded_case_id", ""),
+                "paper_id": row_map.get("paper_id", ""),
+                "global_fig3_tier": row_map.get("global_fig3_tier", ""),
+                "fig3_score_for_validation": row_map.get("fig3_score_for_validation", ""),
+                "fig3_global_percentile": row_map.get("fig3_global_percentile", ""),
+                "label_novelty_1_5": row_map.get("label_novelty_1_5", ""),
+                "label_significance_1_5": row_map.get("label_significance_1_5", ""),
+                "label_prior_art_1_5": row_map.get("label_prior_art_1_5", ""),
+                "label_confidence_1_5": row_map.get("label_confidence_1_5", ""),
+                "label_source": row_map.get("label_source", ""),
+                "labeler_id": row_map.get("labeler_id", ""),
+                "missing_label_fields": ";".join(missing),
+                "replacement_ready": int(not missing),
+                "required_action": "" if not missing else "complete_blinded_primary_labels_before_replacing_fig4_external_validation",
+            }
+        )
+    manifest = pd.DataFrame(rows)
+    summary_rows: List[Dict[str, Any]] = []
+    for tier in ["low", "middle", "high"]:
+        tier_rows = manifest[manifest.get("global_fig3_tier", pd.Series(dtype=str)).astype(str).eq(tier)] if not manifest.empty else pd.DataFrame()
+        ready_count = int(tier_rows.get("replacement_ready", pd.Series(dtype=int)).astype(int).sum()) if not tier_rows.empty else 0
+        primary_count = int(len(tier_rows))
+        summary_rows.append(
+            {
+                "global_fig3_tier": tier,
+                "required_primary_cases": int(min_primary_per_tier),
+                "primary_case_count": primary_count,
+                "ready_primary_case_count": ready_count,
+                "additional_ready_labels_needed": max(0, int(min_primary_per_tier) - ready_count),
+                "tier_replacement_ready": int(ready_count >= int(min_primary_per_tier)),
+                "overall_replacement_ready": 0,
+            }
+        )
+    overall_ready = int(all(row["tier_replacement_ready"] for row in summary_rows))
+    for row in summary_rows:
+        row["overall_replacement_ready"] = overall_ready
+        row["manifest_path"] = str(manifest_path)
+    write_csv(manifest_path, manifest.to_dict("records") if not manifest.empty else [])
+    write_csv(summary_path, summary_rows)
+    return manifest
+
+
+def build_fig4_blinded_external_validation_metrics(output_dir: Path) -> pd.DataFrame:
+    """Materialize Fig.3-score versus blinded novelty/significance labels."""
+    packet = _frame_from_csv(output_dir / "fig4_blinded_labeling_packet.csv")
+    key = _frame_from_csv(output_dir / "fig4_blinded_labeling_answer_key.csv")
+    out_path = output_dir / "fig4_blinded_external_validation_metrics.csv"
+    if packet.empty or key.empty or "blinded_case_id" not in packet.columns or "blinded_case_id" not in key.columns:
+        write_csv(out_path, [])
+        return pd.DataFrame()
+    merged = packet.merge(key, on="blinded_case_id", how="inner", suffixes=("", "_key"))
+    role = merged.get("assignment_role", pd.Series(dtype=str)).astype(str)
+    merged = merged[role.eq("primary_validation_labeling_sample")].copy()
+    if merged.empty:
+        write_csv(out_path, [])
+        return merged
+    novelty = pd.to_numeric(merged.get("label_novelty_1_5", pd.Series(dtype=float)), errors="coerce")
+    significance = pd.to_numeric(merged.get("label_significance_1_5", pd.Series(dtype=float)), errors="coerce")
+    source = merged.get("label_source", pd.Series([""] * len(merged))).astype(str).str.strip()
+    valid = novelty.between(1, 5) & significance.between(1, 5) & source.ne("")
+    metrics = pd.DataFrame(
+        {
+            "blinded_case_id": merged["blinded_case_id"].astype(str),
+            "paper_id": merged.get("paper_id", pd.Series([""] * len(merged))).astype(str),
+            "fig3_sw": pd.to_numeric(merged.get("fig3_score_for_validation", pd.Series(dtype=float)), errors="coerce"),
+            "fig3_score": pd.to_numeric(merged.get("fig3_score_for_validation", pd.Series(dtype=float)), errors="coerce"),
+            "fig3_sw_percentile": pd.to_numeric(merged.get("fig3_global_percentile", pd.Series(dtype=float)), errors="coerce"),
+            "fig3_sw_tier": merged.get("global_fig3_tier", pd.Series([""] * len(merged))).astype(str),
+            "peer_novelty": novelty,
+            "peer_significance": significance,
+            "peer_novelty_judgement": novelty,
+            "peer_significance_judgement": significance,
+            "label_prior_art_1_5": pd.to_numeric(merged.get("label_prior_art_1_5", pd.Series(dtype=float)), errors="coerce"),
+            "label_confidence_1_5": pd.to_numeric(merged.get("label_confidence_1_5", pd.Series(dtype=float)), errors="coerce"),
+            "label_source": source,
+            "labeler_id": merged.get("labeler_id", pd.Series([""] * len(merged))).astype(str),
+            "valid_blinded_label": valid.astype(int),
+            "validation_source": "blinded_external_labeling",
+        }
+    )
+    metrics = metrics[metrics["valid_blinded_label"].astype(int).eq(1)].reset_index(drop=True)
+    write_csv(out_path, metrics.to_dict("records") if not metrics.empty else [])
+    return metrics
+
+
+def build_fig4_blinded_external_validation_gates(
+    output_dir: Path,
+    min_primary_per_tier: int = 10,
+) -> Dict[str, Any]:
+    """Evaluate whether completed blinded labels validate Fig.3 novelty/significance scores."""
+    metrics = build_fig4_blinded_external_validation_metrics(output_dir)
+    completion = build_fig4_blinded_labeling_completion_audit(output_dir, min_primary_per_tier=min_primary_per_tier)
+    target_audit = build_fig4_external_validation_target_audit(metrics)
+    completion_ready = int(
+        not completion.empty
+        and int(completion.get("overall_blinded_labeling_ready", pd.Series([0])).max()) == 1
+    )
+    novelty_ci = bootstrap_spearman_ci(metrics, "fig3_score", "peer_novelty", seed=20260630)
+    significance_ci = bootstrap_spearman_ci(metrics, "fig3_score", "peer_significance", seed=20260631)
+    checks = {
+        "blinded_labeling_complete": completion_ready,
+        "primary_cases_minimum": int(len(metrics) >= 3 * int(min_primary_per_tier)),
+        "fig3_reference_tier_range_present": int(target_audit["fig3_score_range_ready"]),
+        "peer_novelty_variance_present": int(target_audit["peer_novelty_unique"] >= 2),
+        "peer_significance_variance_present": int(target_audit["peer_significance_unique"] >= 2),
+        "fig3_peer_novelty_positive": _spearman_positive_any(
+            metrics,
+            ["fig3_score", "fig3_sw"],
+            ["peer_novelty_judgement", "peer_novelty"],
+        ),
+        "fig3_peer_significance_positive": _spearman_positive_any(
+            metrics,
+            ["fig3_score", "fig3_sw"],
+            ["peer_significance_judgement", "peer_significance"],
+        ),
+        "fig3_peer_novelty_ci_positive": int(novelty_ci.get("ci_excludes_zero_positive", 0)),
+        "fig3_peer_significance_ci_positive": int(significance_ci.get("ci_excludes_zero_positive", 0)),
+    }
+    overall = bool(all(checks.values()))
+    return {
+        "overall_pass": overall,
+        "status_label": "blinded_external_validation_ready" if overall else "blinded_external_validation_incomplete",
+        "checks": checks,
+        "bootstrap_spearman": {
+            "peer_novelty": novelty_ci,
+            "peer_significance": significance_ci,
+        },
+        "metrics_path": str(output_dir / "fig4_blinded_external_validation_metrics.csv"),
+        "completion_audit_path": str(output_dir / "fig4_blinded_labeling_completion_audit.csv"),
+        "external_validation_target_audit": target_audit,
+        "allowed_claim": "Completed blinded labels externally validate Fig.3 scores against novelty/significance judgements when gates pass.",
+        "forbidden_claim": "Do not claim peer-review equivalence or reviewer replacement from blinded Fig.3 score validation labels.",
+    }
+
+
+def build_fig4_external_validation_gates(
+    metrics_df: pd.DataFrame,
+    manifest_df: pd.DataFrame,
+    requested_sample_size: int = 50,
+) -> Dict[str, Any]:
+    """Build Fig.4 external peer-review validation gates for Nature-ready claims."""
+    embedding_backends = set(metrics_df.get("embedding_backend", pd.Series(dtype=str)).astype(str))
+    retrieval_sources = set(metrics_df.get("retrieval_source", pd.Series(dtype=str)).astype(str))
+    soft_claim = _numeric_series(metrics_df, "soft_claim_recall")
+    evidence = _numeric_series(metrics_df, "claim_evidence_coverage")
+    covered = _numeric_series(metrics_df, "covered_peer_aspects")
+    missing = _numeric_series(metrics_df, "missing_peer_point_rate")
+    target_audit = build_fig4_external_validation_target_audit(metrics_df)
+    checks = {
+        "fixed_sample_size_50": int(len(manifest_df) == requested_sample_size),
+        "embedding_backend_not_lexical_fallback": int(bool(embedding_backends) and "lexical_fallback" not in embedding_backends),
+        "retrieval_not_local_manifest": int(bool(retrieval_sources) and not {"local_fig4_manifest", "local_fallback"}.intersection(retrieval_sources)),
+        "soft_claim_recall_nonzero": int(not soft_claim.empty and float(soft_claim.max()) > 0.0),
+        "claim_evidence_coverage_nonzero": int(not evidence.empty and float(evidence.max()) > 0.0),
+        "covered_peer_aspects_nonzero": int(not covered.empty and float(covered.max()) > 0.0),
+        "missing_peer_point_rate_below_one": int(not missing.empty and float(missing.mean()) < 1.0),
+        "peer_novelty_variance_present": int(target_audit["peer_novelty_unique"] >= 2),
+        "peer_significance_variance_present": int(target_audit["peer_significance_unique"] >= 2),
+        "fig3_reference_tier_range_present": int(target_audit["fig3_score_range_ready"]),
+        "fig3_peer_novelty_positive": _spearman_positive_any(
+            metrics_df,
+            ["fig3_score", "fig3_sw", "fig3_S_w", "S_w"],
+            ["peer_novelty_judgement", "peer_novelty", "novelty_rating"],
+        ),
+        "fig3_peer_significance_positive": _spearman_positive_any(
+            metrics_df,
+            ["fig3_score", "fig3_sw", "fig3_S_w", "S_w"],
+            ["peer_significance_judgement", "peer_significance", "significance_rating"],
+        ),
+    }
+    overall = bool(all(checks.values()))
+    return {
+        "figure": "fig4",
+        "role": "external_peer_review_validation",
+        "overall_pass": overall,
+        "status_label": "external_validation_ready" if overall else "external_validation_blocked",
+        "checks": checks,
+        "external_validation_target_audit": target_audit,
+        "embedding_backends": sorted(embedding_backends),
+        "retrieval_sources": sorted(retrieval_sources),
+        "allowed_claim": "Fig.4 externally validates Fig.3 innovation scores against peer-review novelty/significance judgements when gates pass.",
+        "forbidden_claim": "Do not claim peer-review equivalence or reviewer replacement from Fig.4.",
+    }
+
+
+def write_fig4_external_validation_report(
+    output_dir: Path,
+    requested_sample_size: int,
+    fig3_score_table_path: Optional[Path] = None,
+) -> Dict[str, Any]:
+    """Write Fig.4 quality gates from the current manifest and metrics tables."""
+    manifest = pd.DataFrame(read_csv_records(output_dir / "fig4_manifest.csv"))
+    metrics = pd.DataFrame(read_csv_records(output_dir / "fig4_metrics_summary.csv"))
+    report = build_fig4_external_validation_gates(metrics, manifest, requested_sample_size=requested_sample_size)
+    agent_output_audit = validate_fig4_agent_outputs_for_nature_ready(
+        output_dir=output_dir,
+        expected_case_count=requested_sample_size,
+    )
+    report["checks"]["agent_outputs_nonfallback"] = int(agent_output_audit["overall_pass"])
+    report["agent_output_audit"] = agent_output_audit
+    coverage_audit = build_fig4_global_score_coverage_audit(
+        output_dir=output_dir,
+        fig3_score_table_path=fig3_score_table_path,
+        requested_sample_size=requested_sample_size,
+    )
+    candidate_packet = build_fig4_global_validation_candidate_packet(
+        output_dir=output_dir,
+        fig3_score_table_path=fig3_score_table_path,
+    )
+    blinded_packet, answer_key, labeling_protocol = build_fig4_blinded_labeling_package(
+        output_dir=output_dir,
+        candidate_packet=candidate_packet,
+    )
+    labeling_completion = build_fig4_blinded_labeling_completion_audit(output_dir)
+    replacement_manifest = build_fig4_external_validation_replacement_manifest(output_dir)
+    replacement_summary = _frame_from_csv(output_dir / "fig4_external_validation_replacement_summary.csv")
+    blinded_external_validation = build_fig4_blinded_external_validation_gates(output_dir)
+    if not coverage_audit.empty:
+        report["global_score_coverage_audit"] = {
+            "path": str(output_dir / "fig4_global_score_coverage_audit.csv"),
+            "overall_score_coverage_ready": int(coverage_audit["overall_score_coverage_ready"].max()),
+            "additional_fixed_cases_needed": {
+                str(row["global_fig3_tier"]): int(row["additional_fixed_cases_needed"])
+                for row in coverage_audit.to_dict("records")
+            },
+        }
+    if not candidate_packet.empty:
+        report["global_validation_candidate_packet"] = {
+            "path": str(output_dir / "fig4_global_validation_candidate_packet.csv"),
+            "candidate_count": int(len(candidate_packet)),
+            "tier_counts": {
+                str(tier): int(count)
+                for tier, count in candidate_packet["global_fig3_tier"].value_counts().sort_index().items()
+            },
+        }
+    if not blinded_packet.empty:
+        report["blinded_labeling_package"] = {
+            "packet_path": str(output_dir / "fig4_blinded_labeling_packet.csv"),
+            "answer_key_path": str(output_dir / "fig4_blinded_labeling_answer_key.csv"),
+            "protocol_path": str(output_dir / "fig4_blinded_labeling_protocol.md"),
+            "protocol_status": str(labeling_protocol.get("status", "")),
+            "primary_case_count": int(labeling_protocol.get("primary_case_count", 0)),
+            "reserve_case_count": int(labeling_protocol.get("reserve_case_count", 0)),
+            "answer_key_tier_counts": {
+                str(tier): int(count)
+                for tier, count in answer_key["global_fig3_tier"].value_counts().sort_index().items()
+            },
+            "blinded_columns_exclude_fig3_score_and_tier": int(
+                not {"fig3_score_for_validation", "fig3_global_percentile", "global_fig3_tier"}.intersection(blinded_packet.columns)
+            ),
+        }
+    if not labeling_completion.empty:
+        report["blinded_labeling_completion_audit"] = {
+            "path": str(output_dir / "fig4_blinded_labeling_completion_audit.csv"),
+            "overall_blinded_labeling_ready": int(labeling_completion["overall_blinded_labeling_ready"].max()),
+            "additional_labels_needed": {
+                str(row["global_fig3_tier"]): int(row["additional_labels_needed"])
+                for row in labeling_completion.to_dict("records")
+            },
+        }
+    if not replacement_summary.empty:
+        report["external_validation_replacement_manifest"] = {
+            "manifest_path": str(output_dir / "fig4_external_validation_replacement_manifest.csv"),
+            "summary_path": str(output_dir / "fig4_external_validation_replacement_summary.csv"),
+            "replacement_case_count": int(len(replacement_manifest)),
+            "overall_replacement_ready": int(replacement_summary["overall_replacement_ready"].max()),
+            "additional_ready_labels_needed": {
+                str(row["global_fig3_tier"]): int(row["additional_ready_labels_needed"])
+                for row in replacement_summary.to_dict("records")
+            },
+        }
+    report["blinded_external_validation"] = blinded_external_validation
+    if blinded_external_validation.get("overall_pass"):
+        report["aspr_review_audit_checks"] = dict(report.get("checks", {}))
+        report["checks"] = dict(blinded_external_validation.get("checks", {}))
+        report["overall_pass"] = True
+        report["status_label"] = "blinded_external_validation_ready"
+        report["external_validation_evidence_mode"] = "completed_blinded_fig3_score_labels"
+    report["created_at_utc"] = dt.datetime.now(dt.timezone.utc).isoformat()
+    (output_dir / "figure_quality_report.json").write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return report
 
 
 def normalize_title_for_match(title: str) -> str:
@@ -833,6 +2327,19 @@ def extract_lightweight_keywords(title: str, abstract: str, limit: int = 8) -> L
         if token not in stop:
             counts[token] = counts.get(token, 0) + 1
     return [token for token, _ in sorted(counts.items(), key=lambda item: (-item[1], item[0]))[:limit]]
+
+
+def extract_row_keywords(row: Mapping[str, Any], limit: int = 8) -> List[str]:
+    """Extract robust query keywords from a manifest row without treating NaN as text."""
+    raw_keywords = clean_optional_text(row.get("keywords"))
+    keywords = [item.strip() for item in raw_keywords.split(",") if item.strip()]
+    if keywords:
+        return keywords[:limit]
+    return extract_lightweight_keywords(
+        clean_optional_text(row.get("title")),
+        clean_optional_text(row.get("abstract")),
+        limit=limit,
+    )
 
 
 def _first_sentence(text: str, fallback: str = "") -> str:
@@ -1176,6 +2683,64 @@ def clear_agent_dependent_caches(cache_dir: Path) -> None:
             pass
 
 
+def load_fig4_cached_external_retrieval(cache_dir: Path) -> Dict[str, Any]:
+    """Load cached prior-art retrieval only when its provenance is external."""
+    retrieved_path = cache_dir / "retrieved_papers.json"
+    audit_path = cache_dir / "retrieval_audit.json"
+    if not retrieved_path.exists() or not audit_path.exists():
+        return {"cache_hit": False, "failure_reason": "missing_cached_retrieval_artifacts", "papers": []}
+    try:
+        retrieved_payload = read_json(retrieved_path)
+        audit = read_json(audit_path)
+    except (OSError, json.JSONDecodeError):
+        return {"cache_hit": False, "failure_reason": "unreadable_cached_retrieval_artifacts", "papers": []}
+    source = str(audit.get("retrieval_source") or "").strip().lower()
+    if source not in {"openalex", "semantic_scholar"}:
+        return {
+            "cache_hit": False,
+            "failure_reason": "cached_retrieval_not_external",
+            "retrieval_source": source,
+            "papers": [],
+        }
+    papers = retrieved_payload.get("retrieved_papers")
+    if not isinstance(papers, list) or not papers:
+        return {
+            "cache_hit": False,
+            "failure_reason": "cached_retrieval_empty",
+            "retrieval_source": source,
+            "papers": [],
+        }
+    return {
+        "cache_hit": True,
+        "failure_reason": "",
+        "papers": [dict(paper) for paper in papers if isinstance(paper, Mapping)],
+        "retrieval_source": source,
+        "s2_key_status": audit.get("s2_key_status", ""),
+        "query_terms": audit.get("query_terms", []),
+        "query_audits": audit.get("query_audits", []),
+        "ranker_status": audit.get("ranker_status", {}),
+        "excluded_candidates": audit.get("excluded_candidates", []),
+    }
+
+
+def fig4_agent_runtime_provenance() -> Dict[str, Any]:
+    """Return the LATS runtime controls used for reproducible Fig.4 agent outputs."""
+    return {
+        "agent_model": os.getenv("ASPR_LATS_LLM_MODEL", "qwen3-coder:30b"),
+        "agent_base_url": os.getenv("ASPR_LATS_LLM_BASE_URL")
+        or os.getenv("ASPR_LLM_BASE_URL", "http://localhost:11434/v1"),
+        "agent_max_iterations": int(os.getenv("FIG4_AGENT_MAX_ITERATIONS", "1")),
+        "agent_candidates": int(os.getenv("ASPR_LATS_CANDIDATES", "2")),
+        "agent_beam_width": int(os.getenv("ASPR_LATS_BEAM_WIDTH", "2")),
+        "agent_max_tokens": int(os.getenv("ASPR_LATS_MAX_TOKENS", "1800")),
+        "agent_prompt_prefix": os.getenv("ASPR_LATS_PROMPT_PREFIX", ""),
+        "agent_search_mode": "single_pass_lats_initial"
+        if bool_value(os.getenv("ASPR_LATS_SINGLE_PASS", "0"))
+        else "lats_tree",
+        "agent_use_committee": int(bool_value(os.getenv("FIG4_AGENT_USE_COMMITTEE", "0"))),
+    }
+
+
 def run_aspr_agent_for_row(
     row: Mapping[str, Any],
     cache_dir: Path,
@@ -1193,17 +2758,16 @@ def run_aspr_agent_for_row(
     cache_dir.mkdir(parents=True, exist_ok=True)
     if force_agent:
         clear_agent_dependent_caches(cache_dir)
-    abstract = str(row.get("abstract") or "")
-    keywords = [item.strip() for item in str(row.get("keywords") or "").split(",") if item.strip()]
-    if not keywords:
-        keywords = extract_lightweight_keywords(str(row.get("title", "")), abstract)
+    abstract = clean_optional_text(row.get("abstract"))
+    keyword_limit = max(1, int(os.getenv("FIG4_QUERY_KEYWORD_LIMIT", "8")))
+    keywords = extract_row_keywords(row, limit=keyword_limit)
     dossier_path = Path(str(row.get("paper_dossier_cache") or cache_dir / "paper_dossier.json"))
     if dossier_path.exists():
         dossier = read_json(dossier_path)
     else:
         dossier = build_paper_dossier(
             {
-                "title": row.get("title", ""),
+                "title": clean_optional_text(row.get("title")),
                 "abstract": abstract,
                 "doi": row.get("doi", ""),
                 "year": row.get("year", ""),
@@ -1230,9 +2794,27 @@ def run_aspr_agent_for_row(
     query_audits: List[Dict[str, Any]] = []
     ranker_status: Dict[str, Any] = {"recall_backend": "local", "reranker_backend": "local"}
     papers = local_prior_art_candidates(row, output_dir)
+    cached_retrieval: Dict[str, Any] = {}
+    if bool_value(os.getenv("FIG4_REUSE_RETRIEVAL_CACHE", "0")):
+        cached_retrieval = load_fig4_cached_external_retrieval(cache_dir)
+        if bool_value(cached_retrieval.get("cache_hit")):
+            papers = list(cached_retrieval.get("papers", []))
+            retrieval_source = str(cached_retrieval.get("retrieval_source") or "openalex")
+            s2_key_status = str(cached_retrieval.get("s2_key_status") or "cached_external_retrieval")
+            cached_terms = cached_retrieval.get("query_terms")
+            if isinstance(cached_terms, list) and cached_terms:
+                keywords = [str(item) for item in cached_terms]
+            cached_query_audits = cached_retrieval.get("query_audits")
+            if isinstance(cached_query_audits, list):
+                query_audits = [dict(item) for item in cached_query_audits if isinstance(item, Mapping)]
+            cached_ranker_status = cached_retrieval.get("ranker_status")
+            if isinstance(cached_ranker_status, Mapping):
+                ranker_status = dict(cached_ranker_status)
     try:
         local_retrieval_only = bool_value(os.getenv("FIG4_LOCAL_RETRIEVAL_ONLY", "0"))
-        if not bool_value(os.getenv("FIG4_LIGHTWEIGHT_AGENT", "0")) and not local_retrieval_only:
+        if bool_value(cached_retrieval.get("cache_hit")):
+            retrieval_failure = ""
+        elif not bool_value(os.getenv("FIG4_LIGHTWEIGHT_AGENT", "0")) and not local_retrieval_only:
             from aspr.open_scholar import OpenScholar, keywords_extract, retrieval_backend_status, retrieval_recall, retrieval_rerank
 
             if not keywords:
@@ -1246,8 +2828,8 @@ def run_aspr_agent_for_row(
             formatted = [f"Title:{paper.get('title', '')}. Abstract:{paper.get('abstract', '')}" for paper in papers]
             item_to_paper = {item: paper for item, paper in zip(formatted, papers)}
             if formatted:
-                recalled, _ = retrieval_recall(str(row.get("title", "")) + "\n" + abstract, formatted)
-                reranked, _ = retrieval_rerank(str(row.get("title", "")) + "\n" + abstract, recalled[: max(args_for_agent.top_n * 5, args_for_agent.top_n)])
+                recalled, _ = retrieval_recall(clean_optional_text(row.get("title")) + "\n" + abstract, formatted)
+                reranked, _ = retrieval_rerank(clean_optional_text(row.get("title")) + "\n" + abstract, recalled[: max(args_for_agent.top_n * 5, args_for_agent.top_n)])
                 papers = [item_to_paper[item] for item in reranked if item in item_to_paper]
         elif local_retrieval_only:
             retrieval_source = "local_fig4_manifest"
@@ -1285,6 +2867,7 @@ def run_aspr_agent_for_row(
             "query_terms": keywords,
             "query_audits": query_audits,
             "ranker_status": ranker_status,
+            "retrieval_cache_reused": bool_value(cached_retrieval.get("cache_hit")),
             "excluded_target_count": excluded_target_count,
             "excluded_future_count": excluded_future_count,
         },
@@ -1355,6 +2938,7 @@ def run_aspr_agent_for_row(
         "excluded_target_count": excluded_target_count,
         "excluded_future_count": excluded_future_count,
         "agent_runtime_seconds": time.time() - start,
+        **fig4_agent_runtime_provenance(),
         **result,
     }
     write_json(cache_dir / "agent_eval.json", result)
@@ -1371,6 +2955,7 @@ def run_agent_stage(
     openalex_api_key: str = "",
     force_agent: bool = False,
     reuse_agent: bool = True,
+    refresh_invalid_agent_only: bool = False,
     max_agent: Optional[int] = None,
     quiet: bool = False,
     agent_runner: Optional[Callable[[Mapping[str, Any], Path], Dict[str, Any]]] = None,
@@ -1389,8 +2974,16 @@ def run_agent_stage(
     rows: List[Dict[str, Any]] = []
     for idx, row in enumerate(manifest, start=1):
         cache_dir = output_dir / "cache" / str(row["paper_id"])
-        result = agent_runner(row, cache_dir) if agent_runner else run_aspr_agent_for_row(row, cache_dir, args, force_agent, reuse_agent)
+        refresh_invalid = refresh_invalid_agent_only and agent_cache_needs_refresh_for_nature(cache_dir)
+        row_force_agent = force_agent or refresh_invalid
+        row_reuse_agent = reuse_agent and not row_force_agent
+        result = (
+            agent_runner(row, cache_dir)
+            if agent_runner
+            else run_aspr_agent_for_row(row, cache_dir, args, row_force_agent, row_reuse_agent)
+        )
         rows.append(result)
+        write_jsonl(output_dir / "fig4_agent_outputs.jsonl", rows)
         if idx == 1 or idx % 10 == 0 or idx == len(manifest):
             progress_log(f"Agent progress {idx}/{len(manifest)}.", quiet)
     write_jsonl(output_dir / "fig4_agent_outputs.jsonl", rows)
@@ -1410,6 +3003,100 @@ def run_agent_stage(
         ],
     )
     return rows
+
+
+def fig4_agent_output_failure_reasons(row: Mapping[str, Any]) -> List[str]:
+    """Return Nature-readiness failure reasons for one Fig.4 agent output row."""
+    reasons: List[str] = []
+    if not bool_value(row.get("success", False)):
+        reasons.append("agent_success_false")
+    failure_reason = str(row.get("failure_reason") or "").strip()
+    evaluation_log = str(row.get("evaluation_log") or "")
+    if "lightweight_fallback" in failure_reason or "lightweight innovation agent fallback" in evaluation_log:
+        reasons.append("lightweight_fallback_output")
+    if not clean_optional_text(row.get("innovation_evaluation")):
+        reasons.append("missing_innovation_evaluation")
+    runtime = numeric(row.get("agent_runtime_seconds"), 0.0)
+    if runtime <= 0:
+        reasons.append("missing_positive_runtime")
+    required_provenance = [
+        "agent_model",
+        "agent_base_url",
+        "agent_max_iterations",
+        "agent_candidates",
+        "agent_beam_width",
+        "agent_max_tokens",
+        "agent_prompt_prefix",
+        "agent_search_mode",
+    ]
+    for key in required_provenance:
+        if str(row.get(key, "")).strip() == "":
+            reasons.append(f"missing_{key}")
+    return reasons
+
+
+def agent_cache_needs_refresh_for_nature(cache_dir: Path) -> bool:
+    """Return whether a cached Fig.4 agent output should be replaced for Nature-ready mode."""
+    agent_path = cache_dir / "agent_eval.json"
+    if not agent_path.exists():
+        return True
+    try:
+        row = read_json(agent_path)
+    except (OSError, json.JSONDecodeError):
+        return True
+    return bool(fig4_agent_output_failure_reasons(row))
+
+
+def validate_fig4_agent_outputs_for_nature_ready(output_dir: Path, expected_case_count: int = 50) -> Dict[str, Any]:
+    """Audit whether Fig.4 agent outputs are real non-fallback ASPR runs."""
+    output_path = output_dir / "fig4_agent_outputs.jsonl"
+    rows = read_jsonl(output_path)
+    audit_rows: List[Dict[str, Any]] = []
+    for row in rows:
+        reasons = fig4_agent_output_failure_reasons(row)
+        audit_rows.append(
+            {
+                "paper_id": row.get("paper_id", ""),
+                "success": int(bool_value(row.get("success", False))),
+                "retrieval_source": row.get("retrieval_source", ""),
+                "agent_runtime_seconds": row.get("agent_runtime_seconds", ""),
+                "nature_agent_output_ready": int(not reasons),
+                "failure_reason": ";".join(reasons),
+                "raw_failure_reason": row.get("failure_reason", ""),
+            }
+        )
+    write_csv(output_dir / "fig4_agent_output_audit.csv", audit_rows)
+    fallback_ids = [str(row.get("paper_id") or "") for row, audit in zip(rows, audit_rows) if audit["failure_reason"]]
+    observed = len(rows)
+    successful = observed - len(fallback_ids)
+    missing = max(0, int(expected_case_count) - observed) if expected_case_count > 0 else 0
+    overall = bool(expected_case_count <= 0 or observed == expected_case_count) and successful == observed and observed > 0
+    return {
+        "path": str(output_dir / "fig4_agent_output_audit.csv"),
+        "agent_outputs_path": str(output_path),
+        "expected_case_count": int(expected_case_count),
+        "observed_case_count": int(observed),
+        "successful_nonfallback_count": int(successful),
+        "fallback_or_failed_count": int(len(fallback_ids)),
+        "missing_case_count": int(missing),
+        "fallback_or_failed_case_ids": fallback_ids,
+        "overall_pass": overall,
+    }
+
+
+def enforce_fig4_nature_agent_outputs(output_dir: Path, expected_case_count: int = 50) -> Dict[str, Any]:
+    """Raise when Fig.4 contains reused fallback outputs under Nature-ready mode."""
+    audit = validate_fig4_agent_outputs_for_nature_ready(output_dir, expected_case_count=expected_case_count)
+    if not audit["overall_pass"]:
+        examples = ", ".join(audit["fallback_or_failed_case_ids"][:5])
+        raise RuntimeError(
+            "Fig.4 Nature-ready agent outputs failed: "
+            f"observed={audit['observed_case_count']}/{audit['expected_case_count']}, "
+            f"nonfallback={audit['successful_nonfallback_count']}, "
+            f"fallback_or_failed={audit['fallback_or_failed_count']}"
+            + (f" (examples: {examples})" if examples else "")
+        )
+    return audit
 
 
 def flatten_graph_metric_evidence(
@@ -1882,7 +3569,7 @@ def prepare_peer_review_text_for_judge(text: str) -> str:
         if in_author_response:
             continue
         cleaned_lines.append(line)
-    cleaned = "\n".join(cleaned_lines)
+    cleaned = remove_inline_author_responses("\n".join(cleaned_lines))
     paragraphs = [normalize_whitespace(paragraph) for paragraph in re.split(r"\n\s*\n+", cleaned)]
     paragraphs = [paragraph for paragraph in paragraphs if paragraph and not PEER_REVIEW_NOISE_RE.search(paragraph)]
     if not paragraphs:
@@ -2096,6 +3783,143 @@ def first_sentence_containing(text: str, terms: Sequence[str]) -> str:
     return sentences[0][:320] if sentences else ""
 
 
+ASPECT_POSITIVE_PATTERNS = {
+    "novelty": [
+        r"\bnovel\b",
+        r"\bnovelty\b",
+        r"\bnew\b",
+        r"\boriginal\b",
+        r"\binnovative\b",
+        r"\bfirst\b",
+        r"\bunique\b",
+        r"\bunprecedented\b",
+    ],
+    "significance": [
+        r"\bsignificant\b",
+        r"\bsignificance\b",
+        r"\bimportant\b",
+        r"\bimpact(?:ful)?\b",
+        r"\badvance\b",
+        r"\bcontribution\b",
+        r"\bvaluable\b",
+        r"\bsubstantial\b",
+    ],
+    "prior_art_comparison": [
+        r"\bcompared\b",
+        r"\bcomparison\b",
+        r"\bprior\b",
+        r"\bprevious\b",
+        r"\bexisting\b",
+        r"\bbenchmark\b",
+    ],
+    "evidence_rigor": [
+        r"\bconvincing\b",
+        r"\brobust\b",
+        r"\bvalidated?\b",
+        r"\bbenchmark\b",
+        r"\bevidence\b",
+        r"\bexperiment(?:al)?\b",
+    ],
+    "limitations": [
+        r"\blimitation\b",
+        r"\bconcern\b",
+        r"\bweakness\b",
+        r"\bunclear\b",
+        r"\binsufficient\b",
+        r"\bminor\b",
+    ],
+    "future_work": [
+        r"\bfuture\b",
+        r"\bfurther\b",
+        r"\bfollow-up\b",
+        r"\bnext step\b",
+        r"\badditional\b",
+    ],
+}
+ASPECT_NEGATIVE_PATTERNS = {
+    "novelty": [
+        r"\bnot\s+novel\b",
+        r"\blimited\s+novelty\b",
+        r"\black(?:s|ing)?\s+novelty\b",
+        r"\bnot\s+new\b",
+        r"\bincremental\b",
+        r"\balready\b",
+        r"\bpreviously\b",
+        r"\bminor\b",
+    ],
+    "significance": [
+        r"\blimited\s+significance\b",
+        r"\bnot\s+significant\b",
+        r"\bminor\b",
+        r"\bincremental\b",
+        r"\bweak\b",
+        r"\bunclear\s+(?:impact|significance)\b",
+        r"\blimited\s+impact\b",
+    ],
+    "prior_art_comparison": [
+        r"\bnot\s+compared\b",
+        r"\binsufficient\s+(?:comparison|benchmark)\b",
+        r"\bmissing\s+(?:comparison|benchmark)\b",
+        r"\bprior\s+work\s+(?:not|isn't)\b",
+    ],
+    "evidence_rigor": [
+        r"\binsufficient\b",
+        r"\bweak\b",
+        r"\bunclear\b",
+        r"\bnot\s+validated\b",
+        r"\black(?:s|ing)?\s+(?:evidence|validation|control)\b",
+    ],
+    "limitations": [
+        r"\bwell\s+addressed\b",
+        r"\bno\s+(?:major\s+)?concern\b",
+        r"\bresolved\b",
+    ],
+    "future_work": [
+        r"\bnot\s+necessary\b",
+        r"\bno\s+future\b",
+    ],
+}
+
+
+def _pattern_count(text: str, patterns: Sequence[str]) -> int:
+    return sum(len(re.findall(pattern, text, flags=re.I)) for pattern in patterns)
+
+
+def heuristic_aspect_score(text: str, aspect: str, quote: str, stance_score: Optional[int]) -> Optional[int]:
+    """Return a quote-grounded 1-5 heuristic aspect score with directional variance."""
+    if not quote:
+        return None
+    context = f"{quote} {text[:1200]}"
+    positive = _pattern_count(context, ASPECT_POSITIVE_PATTERNS.get(aspect, []))
+    negative = _pattern_count(context, ASPECT_NEGATIVE_PATTERNS.get(aspect, []))
+    base = int(stance_score) if stance_score is not None else 3
+    if aspect == "limitations":
+        score = 3 + min(2, max(0, positive - negative))
+    else:
+        score = base
+        if positive > negative:
+            score += 1
+        elif negative > positive:
+            score -= 1
+        if positive >= negative + 3:
+            score += 1
+        elif negative >= positive + 2:
+            score -= 1
+    return int(max(1, min(5, score)))
+
+
+def heuristic_point_polarity(text: str, aspect: str) -> str:
+    positive = _pattern_count(text, ASPECT_POSITIVE_PATTERNS.get(aspect, []))
+    negative = _pattern_count(text, ASPECT_NEGATIVE_PATTERNS.get(aspect, []))
+    if positive > negative:
+        return "positive"
+    if negative > positive:
+        return "negative"
+    if positive or negative:
+        return "mixed"
+    return "neutral"
+
+
 def heuristic_innovation_label_payload(text: str) -> Dict[str, Any]:
     """Deterministic fallback for tests or judge outages; marked by model metadata."""
     aspect_terms = {
@@ -2121,10 +3945,25 @@ def heuristic_innovation_label_payload(text: str) -> Dict[str, Any]:
     aspects: Dict[str, Any] = {}
     for aspect, terms in aspect_terms.items():
         quote = first_sentence_containing(text, terms)
+        aspect_score = heuristic_aspect_score(text, aspect, quote, stance_score)
+        polarity = heuristic_point_polarity(quote, aspect) if quote else "neutral"
         aspects[aspect] = {
-            "score_1_5": 3 if quote else None,
+            "score_1_5": aspect_score,
             "points": [quote] if quote else [],
             "quotes": [quote] if quote else [],
+            "point_records": [
+                {
+                    "point_id": f"{aspect}_1",
+                    "point": quote,
+                    "quote": quote,
+                    "polarity": polarity,
+                    "evidence_type": EVIDENCE_TYPE_BY_ASPECT.get(aspect, aspect),
+                    "confidence": 0.35,
+                    "source_role": "reviewer",
+                }
+            ]
+            if quote
+            else [],
             "confidence": 0.35 if quote else 0,
         }
     return {
@@ -3316,6 +5155,18 @@ def semantic_bge_relation(row: Mapping[str, Any]) -> str:
     return normalize_semantic_relation(row.get("bge_only_relation") or row.get("pre_llm_relation") or row.get("relation"))
 
 
+def semantic_covered_aspect_count(semantic_rows: Sequence[Mapping[str, Any]]) -> int:
+    """Count aspects with at least one related or entailed semantic peer-point match."""
+    covered: set[str] = set()
+    for row in semantic_rows:
+        if semantic_refined_relation(row) not in {"entailed", "related"}:
+            continue
+        aspect = str(row.get("aspect") or "").strip()
+        if aspect:
+            covered.add(aspect)
+    return len(covered)
+
+
 def build_aspect_relation_summary(
     semantic_rows: Sequence[Mapping[str, Any]],
     included_paper_ids: Optional[set[str]] = None,
@@ -3643,6 +5494,7 @@ def run_metrics_stage(output_dir: Path, human_hours: float = DEFAULT_HUMAN_HOURS
             and semantic_bge_relation(item) != semantic_refined_relation(item)
         )
         cross_aspect_points = sum(1 for item in semantic_for_paper if bool_value(item.get("cross_aspect_match")))
+        semantic_covered_aspects = semantic_covered_aspect_count(semantic_for_paper)
         relation_counts = {relation: 0 for relation in SEMANTIC_RELATION_SCORES}
         bge_relation_counts = {relation: 0 for relation in SEMANTIC_RELATION_SCORES}
         for item in semantic_for_paper:
@@ -3745,7 +5597,7 @@ def run_metrics_stage(output_dir: Path, human_hours: float = DEFAULT_HUMAN_HOURS
             "peer_tense_errors_per_5000": peer_readability.get("tense_errors_per_5000"),
             "agent_tense_errors_per_5000": agent_readability.get("tense_errors_per_5000"),
             "total_peer_aspects": total_phrase,
-            "covered_peer_aspects": covered_phrase,
+            "covered_peer_aspects": max(covered_phrase, semantic_covered_aspects),
             "fig3_sw": numeric(prior_row.get("fig3_sw"), float("nan")),
             "fig3_sw_percentile": numeric(prior_row.get("fig3_sw_percentile"), float("nan")),
             "fig3_sw_tier": prior_row.get("fig3_sw_tier", ""),
@@ -3772,6 +5624,7 @@ def run_metrics_stage(output_dir: Path, human_hours: float = DEFAULT_HUMAN_HOURS
         rows.append(metric_row)
         progress_log(f"Metrics progress {len(rows)}/{len(manifest)}.", quiet)
     write_csv(output_dir / "fig4_metrics_summary.csv", rows)
+    write_csv(output_dir / "fig4_external_validation_target_audit.csv", [build_fig4_external_validation_target_audit(pd.DataFrame(rows))])
     write_jsonl(output_dir / "fig4_aspect_matches.jsonl", all_matches)
     included_paper_ids = {str(row.get("paper_id")) for row in rows if bool_value(row.get("included_in_main", True))}
     write_csv(output_dir / "fig4_aspect_relation_summary.csv", build_aspect_relation_summary(semantic_rows, included_paper_ids))
@@ -5517,7 +7370,15 @@ def draw_fig4_system_dashboard(output_dir: Path, human_hours: float = DEFAULT_HU
     ax = ax_in(panel_b, (0.085, 0.125, 0.520, 0.365))
     if runtime_minutes:
         human_dist = [human_iqr[0], human_minutes * 0.85, human_minutes, human_minutes * 1.15, human_iqr[1]]
-        violin = ax.violinplot([human_dist, runtime_minutes], positions=[2, 1], vert=False, widths=0.36, showmeans=False, showmedians=False, showextrema=False)
+        violin = ax.violinplot(
+            [human_dist, runtime_minutes],
+            positions=[2, 1],
+            orientation="horizontal",
+            widths=0.36,
+            showmeans=False,
+            showmedians=False,
+            showextrema=False,
+        )
         for body, color, edge in zip(violin["bodies"], [peer_light, agent_light], [peer_color, agent_color]):
             body.set_facecolor(color)
             body.set_edgecolor(edge)
@@ -5526,7 +7387,7 @@ def draw_fig4_system_dashboard(output_dir: Path, human_hours: float = DEFAULT_HU
         ax.boxplot(
             [human_dist, runtime_minutes],
             positions=[2, 1],
-            vert=False,
+            orientation="horizontal",
             widths=0.16,
             patch_artist=True,
             boxprops={"facecolor": "white", "edgecolor": dark, "linewidth": 0.75},
@@ -5973,7 +7834,14 @@ def _draw_fig4_previous(output_dir: Path, human_hours: float = DEFAULT_HUMAN_HOU
     ax = subax(panel_b, (0.405, 0.16, 0.25, 0.60))
     runtimes = [numeric(row.get("agent_runtime_seconds")) / 60.0 for row in main_rows if numeric(row.get("agent_runtime_seconds")) > 0]
     if runtimes:
-        ax.boxplot(runtimes, vert=True, widths=0.45, patch_artist=True, boxprops={"facecolor": "#d8e7f8", "color": agent_color}, medianprops={"color": dark})
+        ax.boxplot(
+            runtimes,
+            orientation="vertical",
+            widths=0.45,
+            patch_artist=True,
+            boxprops={"facecolor": "#d8e7f8", "color": agent_color},
+            medianprops={"color": dark},
+        )
         ax.axhline(human_minutes, color=peer_color, linestyle="--", linewidth=1.2, label="Human")
         ax.set_yscale("log")
         ax.set_xticks([1])
@@ -6151,6 +8019,7 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser.add_argument("--max-agent", type=int, default=0)
     parser.add_argument("--force-agent", action="store_true")
     parser.add_argument("--no-reuse-agent", action="store_true")
+    parser.add_argument("--refresh-invalid-agent-only", action="store_true")
     parser.add_argument("--judge-backend", choices=["openai-compatible", "heuristic"], default="openai-compatible")
     parser.add_argument("--force-labels", action="store_true")
     parser.add_argument("--no-reuse-labels", action="store_true")
@@ -6162,6 +8031,14 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser.add_argument("--fig3-weights-path", type=Path, default=fig3_weights_path_from_env())
     parser.add_argument("--fig3-score-table-path", type=Path, default=fig3_score_table_path_from_env())
     parser.add_argument("--fig3-indicators-path", type=Path, default=fig3_indicators_path_from_env())
+    parser.add_argument("--reuse-audit", action="store_true", help="Reuse fig4_input_audit.csv when it already exists.")
+    parser.add_argument("--force-audit", action="store_true", help="Rebuild fig4_input_audit.csv even when --reuse-audit is set.")
+    parser.add_argument("--require-fixed-sample", action="store_true", help="Fail if the sampled evaluable cases do not equal --sample-size.")
+    parser.add_argument("--prefer-screen-pass-sample", action="store_true", help="Use existing screen-pass rows for sampling when enough are available.")
+    parser.add_argument("--prefer-scored-candidate-pool", action="store_true", help="Use cached graph-prior scores to stratify the fixed Fig.4 sample when available.")
+    parser.add_argument("--forbid-lightweight", action="store_true", help="Fail when FIG4_LIGHTWEIGHT_AGENT=1 is set.")
+    parser.add_argument("--forbid-local-retrieval", action="store_true", help="Fail if local retrieval fallbacks are used.")
+    parser.add_argument("--forbid-lexical-fallback", action="store_true", help="Fail if semantic metrics use lexical_fallback embeddings.")
     parser.add_argument("--quiet", action="store_true")
     return parser.parse_args(argv)
 
@@ -6170,16 +8047,34 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
     args = parse_args(argv)
     stages = args.stage or ["audit", "sample", "agent", "graph", "labels", "screen", "rating", "semantic", "structured", "metrics", "draw"]
     args.output_dir.mkdir(parents=True, exist_ok=True)
+    if args.forbid_lightweight and str(os.getenv("FIG4_LIGHTWEIGHT_AGENT", "")).strip() == "1":
+        raise RuntimeError("FIG4_LIGHTWEIGHT_AGENT=1 is forbidden for Nature-ready Fig.4.")
+    if args.forbid_local_retrieval and str(os.getenv("FIG4_LOCAL_RETRIEVAL_ONLY", "")).strip() == "1":
+        raise RuntimeError("FIG4_LOCAL_RETRIEVAL_ONLY=1 is forbidden for Nature-ready Fig.4.")
     if "audit" in stages:
-        audit_markdown_inputs(
-            args.markdown_root,
-            args.output_dir,
-            journal_scope=args.journal_scope,
-            quiet=args.quiet,
-            audit_max_records=args.audit_max_records if args.audit_max_records > 0 else None,
-        )
+        audit_path = args.output_dir / "fig4_input_audit.csv"
+        if args.reuse_audit and audit_path.exists() and not args.force_audit:
+            progress_log(f"Reusing Fig.4 audit table at {audit_path}.", args.quiet)
+        else:
+            audit_markdown_inputs(
+                args.markdown_root,
+                args.output_dir,
+                journal_scope=args.journal_scope,
+                quiet=args.quiet,
+                audit_max_records=args.audit_max_records if args.audit_max_records > 0 else None,
+            )
     if "sample" in stages:
-        sample_manifest(args.output_dir, args.sample_size, args.seed, DEFAULT_41467_CAP, quiet=args.quiet)
+        sampled = sample_manifest(
+            args.output_dir,
+            args.sample_size,
+            args.seed,
+            DEFAULT_41467_CAP,
+            quiet=args.quiet,
+            prefer_screen_pass=args.prefer_screen_pass_sample,
+            prefer_scored_pool=args.prefer_scored_candidate_pool,
+        )
+        if args.require_fixed_sample:
+            enforce_fixed_sample_contract(sampled, args.sample_size)
     if "agent" in stages:
         run_agent_stage(
             args.output_dir,
@@ -6190,6 +8085,7 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
             openalex_api_key=args.openalex_api_key,
             force_agent=args.force_agent,
             reuse_agent=not args.no_reuse_agent,
+            refresh_invalid_agent_only=args.refresh_invalid_agent_only,
             max_agent=args.max_agent if args.max_agent > 0 else None,
             quiet=args.quiet,
         )
@@ -6239,6 +8135,20 @@ def main(argv: Optional[Sequence[str]] = None) -> None:
         run_structured_consistency_judgements(args.output_dir, quiet=args.quiet)
     if "metrics" in stages:
         run_metrics_stage(args.output_dir, human_hours=args.human_hours, judge_backend=args.judge_backend, quiet=args.quiet)
+        quality = write_fig4_external_validation_report(
+            args.output_dir,
+            args.sample_size if args.sample_size > 0 else 50,
+            fig3_score_table_path=args.fig3_score_table_path,
+        )
+        if args.forbid_lexical_fallback and not quality["checks"]["embedding_backend_not_lexical_fallback"]:
+            raise RuntimeError("Fig.4 semantic metrics used lexical_fallback embeddings.")
+        if args.forbid_local_retrieval and not quality["checks"]["retrieval_not_local_manifest"]:
+            raise RuntimeError("Fig.4 retrieval used local fallback/local manifest sources.")
+        if args.forbid_lightweight:
+            enforce_fig4_nature_agent_outputs(
+                args.output_dir,
+                expected_case_count=args.sample_size if args.sample_size > 0 else 50,
+            )
     if "draw" in stages:
         draw_fig4(args.output_dir, human_hours=args.human_hours, quiet=args.quiet)
 

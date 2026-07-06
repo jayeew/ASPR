@@ -12,6 +12,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from experiments.kg_perturbation_fig7.build_fig7_venue_contribution import (
+    build_pairwise_contribution_tests,
     build_portfolio_tables,
     field_year_zscore,
     map_venue_family,
@@ -84,6 +85,10 @@ class Fig7VenueContributionTests(unittest.TestCase):
             )
         portfolio, rankings, enrichment, mechanism, prepost = build_portfolio_tables(pd.DataFrame(rows))
         self.assertEqual(str(portfolio.iloc[0]["venue_family"]), "Nature Portfolio")
+        pairwise = build_pairwise_contribution_tests(pd.DataFrame(rows), portfolio, n_boot=200)
+        self.assertFalse(pairwise.empty)
+        self.assertEqual(str(pairwise.iloc[0]["comparator"]), "Other publishers")
+        self.assertGreater(float(pairwise.iloc[0]["aggregate_diff_ci_low"]), 0.0)
         nature_top5 = enrichment.loc[
             enrichment["venue_family"].eq("Nature Portfolio") & enrichment["top_k"].eq("top_5pct")
         ].iloc[0]

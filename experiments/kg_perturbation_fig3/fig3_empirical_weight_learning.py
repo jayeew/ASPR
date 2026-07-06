@@ -321,7 +321,10 @@ class ComputedData:
     rgpm_component_correlations: pd.DataFrame
     control_tier_audit: pd.DataFrame
     nonlinear_diagnostics: pd.DataFrame
+    nonlinear_challenger: pd.DataFrame
     target_sensitivity: pd.DataFrame
+    temporal_holdout: pd.DataFrame
+    leave_domain_out: pd.DataFrame
     landmark_validation: pd.DataFrame
     diagnostics_summary: Dict[str, Any]
     fold_weights: pd.DataFrame
@@ -1692,6 +1695,7 @@ def compute_indicator_and_delta_tables(
     max_papers: Optional[int] = None,
     progress: bool = True,
     progress_interval: int = 100,
+    paper_id_filter: Optional[Iterable[str]] = None,
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
     works, cit = attach_metadata(raw)
     # Only papers old enough to observe G+tau are eligible for weight learning.
@@ -1700,6 +1704,9 @@ def compute_indicator_and_delta_tables(
     else:
         end_by_paper = pd.Series(raw.analysis_end_year, index=works.index, dtype=int)
     eligible = works[works["year"] + tau <= end_by_paper].copy()
+    if paper_id_filter is not None:
+        filtered_ids = {str(paper_id) for paper_id in paper_id_filter}
+        eligible = eligible[eligible["id"].astype(str).isin(filtered_ids)].copy()
     eligible = eligible.sort_values(["year", "id"])
     if eligible.empty:
         raise ValueError("No papers are old enough to observe the requested tau. Lower --tau or provide later analysis_end_year.")
@@ -3326,6 +3333,32 @@ def compute_all(raw: RawData, args: argparse.Namespace) -> ComputedData:
     )
     if not nonlinear_diag.empty:
         model_diag = pd.concat([model_diag, nonlinear_diag], ignore_index=True, sort=False)
+    nonlinear_challenger = compute_nonlinear_challenger_diagnostics(
+        score_table,
+        active_metric_keys=active_metric_keys,
+        seed=args.seed + 1701,
+        random_folds=5,
+        train_max_year=2012,
+        validation_start_year=2013,
+        validation_end_year=2018,
+        min_train=100,
+        min_test=30,
+    )
+    temporal_holdout = compute_temporal_holdout_validation(
+        score_table,
+        active_metric_keys=active_metric_keys,
+        train_max_year=2012,
+        validation_start_year=2013,
+        validation_end_year=2018,
+        seed=args.seed + 2701,
+    )
+    leave_domain_out = compute_leave_domain_out_validation(
+        score_table,
+        active_metric_keys=active_metric_keys,
+        seed=args.seed + 3701,
+        min_train=100,
+        min_test=30,
+    )
     if getattr(args, "skip_sensitivity", False):
         target_sensitivity = pd.DataFrame()
     else:
@@ -3350,6 +3383,11 @@ def compute_all(raw: RawData, args: argparse.Namespace) -> ComputedData:
         score_table,
         control_diag,
         nonlinear_diag,
+    )
+    diagnostics_summary = update_holdout_validation_diagnostics(
+        diagnostics_summary,
+        temporal_holdout,
+        leave_domain_out,
     )
     diagnostics_summary["delta_variant"] = args.delta_variant
     domain_diag = pd.DataFrame(diagnostics_summary.get("domain_adequacy", []))
@@ -3389,7 +3427,10 @@ def compute_all(raw: RawData, args: argparse.Namespace) -> ComputedData:
         rgpm_component_correlations=rgpm_component_corr,
         control_tier_audit=control_tier_audit,
         nonlinear_diagnostics=nonlinear_diag,
+        nonlinear_challenger=nonlinear_challenger,
         target_sensitivity=target_sensitivity,
+        temporal_holdout=temporal_holdout,
+        leave_domain_out=leave_domain_out,
         landmark_validation=landmark_validation,
         diagnostics_summary=diagnostics_summary,
         fold_weights=fold_weights,
@@ -3408,6 +3449,10 @@ def compute_all(raw: RawData, args: argparse.Namespace) -> ComputedData:
     dummy.selected_panel_d_pairs = selected_pairs
     dummy.effect_summary = compute_effect_summary(dummy)
     update_v3_diagnostics(dummy)
+    dummy.diagnostics_summary = update_nonlinear_challenger_diagnostics(
+        dummy.diagnostics_summary,
+        dummy.nonlinear_challenger,
+    )
     progress_log("[5/5] Computation complete.", progress)
     return dummy
 
@@ -3519,7 +3564,10 @@ def export_tables(comp: ComputedData, out_dir: Path) -> None:
     comp.rgpm_component_correlations.to_csv(out_dir / "fig3_rgpm_component_correlations.csv", index=False)
     comp.control_tier_audit.to_csv(out_dir / "fig3_control_tier_audit.csv", index=False)
     comp.nonlinear_diagnostics.to_csv(out_dir / "fig3_nonlinear_upper_bound.csv", index=False)
+    comp.nonlinear_challenger.to_csv(out_dir / "fig3_nonlinear_challenger.csv", index=False)
     comp.target_sensitivity.to_csv(out_dir / "fig3_target_sensitivity.csv", index=False)
+    comp.temporal_holdout.to_csv(out_dir / "fig3_temporal_holdout.csv", index=False)
+    comp.leave_domain_out.to_csv(out_dir / "fig3_leave_domain_out.csv", index=False)
     comp.landmark_validation.to_csv(out_dir / "fig3_landmark_validation.csv", index=False)
     comp.pair_scan_results.to_csv(out_dir / "fig3_pair_scan_results.csv", index=False)
     comp.effect_summary.to_csv(out_dir / "fig3_effect_summary.csv", index=False)
@@ -3546,7 +3594,10 @@ def export_core_diagnostics(comp: ComputedData, out_dir: Path) -> None:
     comp.rgpm_component_correlations.to_csv(out_dir / "fig3_rgpm_component_correlations.csv", index=False)
     comp.control_tier_audit.to_csv(out_dir / "fig3_control_tier_audit.csv", index=False)
     comp.nonlinear_diagnostics.to_csv(out_dir / "fig3_nonlinear_upper_bound.csv", index=False)
+    comp.nonlinear_challenger.to_csv(out_dir / "fig3_nonlinear_challenger.csv", index=False)
     comp.target_sensitivity.to_csv(out_dir / "fig3_target_sensitivity.csv", index=False)
+    comp.temporal_holdout.to_csv(out_dir / "fig3_temporal_holdout.csv", index=False)
+    comp.leave_domain_out.to_csv(out_dir / "fig3_leave_domain_out.csv", index=False)
     comp.landmark_validation.to_csv(out_dir / "fig3_landmark_validation.csv", index=False)
     comp.pair_scan_results.to_csv(out_dir / "fig3_pair_scan_results.csv", index=False)
     comp.effect_summary.to_csv(out_dir / "fig3_effect_summary.csv", index=False)
@@ -3683,6 +3734,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--export-tables", action="store_true", help="Export all computed intermediate tables.")
     parser.add_argument("--strict-main-figure", action="store_true",
                         help="Write outputs but exit non-zero unless the selected run passes all main-figure gates.")
+    parser.add_argument("--reuse-valid-current", action="store_true",
+                        help="Reuse existing selected Fig. 3 outputs when the quality report and run manifest match the current strong-evidence command.")
     parser.add_argument("--diagnostics", action="store_true", help="Export diagnostic tables and pass/fail summary. Enabled automatically with --export-tables.")
     parser.add_argument("--formats", nargs="+", default=["png", "svg"], choices=["png", "svg", "pdf"], help="Output figure formats.")
     parser.add_argument("--no-prepare-input", action="store_true",
@@ -3922,6 +3975,157 @@ def expected_fig3_files(args: argparse.Namespace, out_dir: Path, selected: bool 
     return files
 
 
+def _read_json_if_present(path: Path) -> Dict[str, Any]:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+
+
+def _argv_option_values(argv: Sequence[str], option: str) -> Optional[List[str]]:
+    tokens = [str(item) for item in argv]
+    if option not in tokens:
+        return None
+    start = tokens.index(option) + 1
+    values: List[str] = []
+    for token in tokens[start:]:
+        if token.startswith("--"):
+            break
+        values.append(token)
+    return values
+
+
+def _argv_flag_present(argv: Sequence[str], option: str) -> bool:
+    return option in [str(item) for item in argv]
+
+
+def _manifest_input_matches(manifest_inputs: Mapping[str, Any], key: str, expected: Any) -> Optional[str]:
+    observed = manifest_inputs.get(key)
+    if observed is None:
+        return f"manifest missing {key}"
+    if str(observed) != str(expected):
+        return f"{key} mismatch: manifest={observed} current={expected}"
+    return None
+
+
+def fig3_existing_selected_outputs_reuse_ready(
+    args: argparse.Namespace,
+    domains: Sequence[str],
+) -> Dict[str, Any]:
+    """Return whether an existing selected Fig. 3 run can be safely reused.
+
+    Reuse is intentionally strict: it is only for an already materialized
+    strong-evidence selected run with matching command-critical inputs.
+    """
+    out_dir = Path(args.out_dir)
+    report = _read_json_if_present(out_dir / "figure_quality_report.json")
+    manifest = _read_json_if_present(out_dir / "run_manifest.json")
+    if not report:
+        return {"reusable": False, "status": "recompute_required", "reason": "missing figure_quality_report.json"}
+    if not manifest:
+        return {"reusable": False, "status": "recompute_required", "reason": "missing run_manifest.json"}
+
+    gates = report.get("quality_gates") if isinstance(report.get("quality_gates"), Mapping) else {}
+    report_pass = bool(report.get("overall_pass")) or bool(gates.get("overall_pass"))
+    status_label = str(gates.get("status_label") or report.get("status_label") or "")
+    if not report_pass or status_label != "strong predictive evidence":
+        return {
+            "reusable": False,
+            "status": "recompute_required",
+            "reason": f"existing quality report is not strong predictive evidence: {status_label}",
+        }
+
+    missing_outputs = [
+        str(path)
+        for path in expected_fig3_files(args, out_dir, selected=True)
+        if (not path.exists()) or path.stat().st_size <= 0
+    ]
+    if missing_outputs:
+        return {
+            "reusable": False,
+            "status": "recompute_required",
+            "reason": "missing selected output: " + "; ".join(missing_outputs),
+        }
+
+    manifest_domains = [str(item) for item in manifest.get("domains", [])]
+    if sorted(manifest_domains) != sorted(str(item) for item in domains):
+        return {
+            "reusable": False,
+            "status": "recompute_required",
+            "reason": "domain list mismatch",
+            "manifest_domains": manifest_domains,
+            "current_domains": list(domains),
+        }
+
+    manifest_inputs = manifest.get("inputs") if isinstance(manifest.get("inputs"), Mapping) else {}
+    input_checks = {
+        "data_dir": str(args.data_dir),
+        "run_mode": args.run_mode,
+        "panel": args.panel,
+        "tau": int(args.tau),
+        "cv_mode": args.cv_mode,
+        "delta_variant": args.delta_variant,
+        "min_refs": int(args.min_refs),
+        "min_controls": int(args.min_controls),
+        "fig1_corpus_source": args.fig1_corpus_source,
+    }
+    for key, expected in input_checks.items():
+        mismatch = _manifest_input_matches(manifest_inputs, key, expected)
+        if mismatch:
+            return {"reusable": False, "status": "recompute_required", "reason": mismatch}
+
+    argv = manifest.get("command_argv") or []
+    option_checks = {
+        "--n-weight-samples": str(int(args.n_weight_samples)),
+        "--max-papers": None if args.max_papers is None else str(int(args.max_papers)),
+    }
+    for option, expected in option_checks.items():
+        observed_values = _argv_option_values(argv, option)
+        if expected is None:
+            if observed_values:
+                return {
+                    "reusable": False,
+                    "status": "recompute_required",
+                    "reason": f"{option.lstrip('-').replace('-', '_')} mismatch: manifest={observed_values} current=None",
+                }
+            continue
+        if not observed_values or observed_values[0] != expected:
+            return {
+                "reusable": False,
+                "status": "recompute_required",
+                "reason": (
+                    f"{option.lstrip('-').replace('-', '_')} mismatch: "
+                    f"manifest={observed_values} current={expected}"
+                ),
+            }
+
+    observed_formats = _argv_option_values(argv, "--formats") or []
+    if observed_formats != [str(item) for item in args.formats]:
+        return {
+            "reusable": False,
+            "status": "recompute_required",
+            "reason": f"formats mismatch: manifest={observed_formats} current={list(args.formats)}",
+        }
+    observed_skip_sensitivity = _argv_flag_present(argv, "--skip-sensitivity")
+    if observed_skip_sensitivity != bool(args.skip_sensitivity):
+        return {
+            "reusable": False,
+            "status": "recompute_required",
+            "reason": (
+                f"skip_sensitivity mismatch: manifest={observed_skip_sensitivity} "
+                f"current={bool(args.skip_sensitivity)}"
+            ),
+        }
+
+    return {
+        "reusable": True,
+        "status": "reuse_valid_current",
+        "reason": "existing strong Fig. 3 selected outputs match current command-critical inputs",
+        "quality_status": status_label,
+        "selected_outputs": [str(path) for path in expected_fig3_files(args, out_dir, selected=True)],
+    }
+
+
 def write_fig3_reports(
     args: argparse.Namespace,
     out_dir: Path,
@@ -3944,6 +4148,9 @@ def write_fig3_reports(
             "delta_variant": args.delta_variant,
             "min_refs": int(args.min_refs),
             "min_controls": int(args.min_controls),
+            "max_papers": None if args.max_papers is None else int(args.max_papers),
+            "n_weight_samples": int(args.n_weight_samples),
+            "skip_sensitivity": bool(args.skip_sensitivity),
             "fig1_corpus_source": args.fig1_corpus_source,
             "strict_main_figure": bool(args.strict_main_figure),
             "run_name": run_name,
@@ -3974,6 +4181,24 @@ def main() -> None:
     progress_log(f"Starting Fig. 3 empirical pipeline: panel={args.panel}, run_mode={args.run_mode}", progress)
 
     domains = list(dict.fromkeys(args.domains or [args.domain]))
+    if args.reuse_valid_current:
+        reuse_decision = fig3_existing_selected_outputs_reuse_ready(args, domains)
+        (args.out_dir / "fig3_reuse_decision.json").write_text(
+            json.dumps(reuse_decision, ensure_ascii=False, indent=2, sort_keys=True),
+            encoding="utf-8",
+        )
+        if reuse_decision.get("reusable"):
+            progress_log(
+                "[fig3] Reusing existing selected outputs after manifest/quality validation: "
+                f"{reuse_decision.get('reason')}",
+                progress,
+            )
+            return
+        progress_log(
+            "[fig3] Existing selected outputs are not reusable; recomputing. "
+            f"Reason: {reuse_decision.get('reason')}",
+            progress,
+        )
     raw_by_domain: Dict[str, RawData] = {}
     run_results: List[Dict[str, Any]] = []
 
@@ -5062,6 +5287,632 @@ def compute_nonlinear_upper_bound_diagnostics(
     fold_diag["delta_vs_linear"] = np.nan
     fold_diag["delta_vs_equal"] = np.nan
     return pd.concat([summary, fold_diag], ignore_index=True), oof
+
+
+def _challenger_feature_frame(score_table: pd.DataFrame, active_metric_keys: Sequence[str]) -> Tuple[pd.DataFrame, List[str]]:
+    """Build no-leakage challenger features from publication-day graph and metadata."""
+    active_cols = [key + "_z" for key in active_metric_keys if key + "_z" in score_table.columns]
+    numeric_cols = active_cols + [col for col in ["reference_count", "year"] if col in score_table.columns]
+    categorical_cols = [col for col in ["domain", "primary_field"] if col in score_table.columns]
+    if not numeric_cols and not categorical_cols:
+        return pd.DataFrame(index=score_table.index), []
+    pieces: List[pd.DataFrame] = []
+    if numeric_cols:
+        numeric_df = score_table[numeric_cols].apply(pd.to_numeric, errors="coerce")
+        numeric_df = numeric_df.replace([np.inf, -np.inf], np.nan)
+        numeric_df = numeric_df.fillna(numeric_df.median(numeric_only=True)).fillna(0.0)
+        pieces.append(numeric_df)
+    if categorical_cols:
+        cat_df = score_table[categorical_cols].fillna("missing").astype(str)
+        pieces.append(pd.get_dummies(cat_df, columns=categorical_cols, prefix=categorical_cols, dtype=float))
+    features = pd.concat(pieces, axis=1) if pieces else pd.DataFrame(index=score_table.index)
+    return features, numeric_cols + categorical_cols
+
+
+def _top_decile_top20_enrichment(pred: np.ndarray, y: np.ndarray) -> Tuple[float, float, float]:
+    clean = np.isfinite(pred) & np.isfinite(y)
+    if int(clean.sum()) < 20:
+        return np.nan, np.nan, np.nan
+    pred_clean = pred[clean]
+    y_clean = y[clean]
+    top_score = pred_clean >= np.percentile(pred_clean, 90)
+    bottom_score = pred_clean <= np.percentile(pred_clean, 10)
+    future_top20 = y_clean >= np.percentile(y_clean, 80)
+    top_rate = float(np.mean(future_top20[top_score])) if np.any(top_score) else np.nan
+    bottom_rate = float(np.mean(future_top20[bottom_score])) if np.any(bottom_score) else np.nan
+    enrichment = top_rate / bottom_rate if np.isfinite(bottom_rate) and bottom_rate > 0 else np.inf
+    return top_rate, bottom_rate, enrichment
+
+
+def _metadata_hgb_predict(
+    features: pd.DataFrame,
+    y: np.ndarray,
+    train_idx: np.ndarray,
+    test_idx: np.ndarray,
+    seed: int,
+) -> np.ndarray:
+    try:
+        from sklearn.ensemble import HistGradientBoostingRegressor
+    except ImportError:
+        return np.full(len(test_idx), np.nan, dtype=float)
+    model = HistGradientBoostingRegressor(
+        max_iter=250,
+        learning_rate=0.04,
+        max_leaf_nodes=15,
+        l2_regularization=0.1,
+        random_state=int(seed),
+    )
+    model.fit(features.iloc[train_idx].to_numpy(dtype=float), y[train_idx])
+    return model.predict(features.iloc[test_idx].to_numpy(dtype=float))
+
+
+def _challenger_row(
+    *,
+    st: pd.DataFrame,
+    features: pd.DataFrame,
+    feature_columns: Sequence[str],
+    y: np.ndarray,
+    train_idx: np.ndarray,
+    test_idx: np.ndarray,
+    seed: int,
+    metadata: Mapping[str, Any],
+) -> Dict[str, Any]:
+    pred = _metadata_hgb_predict(features, y, train_idx, test_idx, seed=seed)
+    y_test = y[test_idx]
+    rho = safe_spearman(pred, y_test)
+    ci_low, ci_high = bootstrap_spearman_ci(pred, y_test, seed=seed, n_boot=300)
+    top_rate, bottom_rate, enrichment = _top_decile_top20_enrichment(pred, y_test)
+    return {
+        "model": "metadata_hgb",
+        **dict(metadata),
+        "feature_scope": "publication_day_graph_indicators_plus_year_reference_domain_field",
+        "feature_columns": ";".join(feature_columns),
+        "target_column": "RGPM",
+        "n_train": int(len(train_idx)),
+        "n_test": int(len(test_idx)),
+        "spearman": rho,
+        "bootstrap_ci_low": ci_low,
+        "bootstrap_ci_high": ci_high,
+        "bootstrap_ci_excludes_zero_positive": int(np.isfinite(ci_low) and ci_low > 0.0),
+        "top_decile_future_top20_rate": top_rate,
+        "bottom_decile_future_top20_rate": bottom_rate,
+        "top_decile_future_top20_enrichment": enrichment,
+        "no_leakage_feature_contract": "excludes_cited_by_count_and_future_outcome_columns",
+    }
+
+
+def compute_nonlinear_challenger_diagnostics(
+    score_table: pd.DataFrame,
+    active_metric_keys: Sequence[str],
+    seed: int = 20260630,
+    random_folds: int = 5,
+    train_max_year: int = 2012,
+    validation_start_year: int = 2013,
+    validation_end_year: int = 2018,
+    min_train: int = 100,
+    min_test: int = 30,
+) -> pd.DataFrame:
+    """Evaluate a no-leakage nonlinear challenger without changing the primary Fig.3 model."""
+    required = ["RGPM"]
+    active, _feature_cols = _holdout_active_columns(score_table, active_metric_keys)
+    if score_table.empty or not active or any(col not in score_table.columns for col in required):
+        return pd.DataFrame()
+    st = score_table.replace([np.inf, -np.inf], np.nan).dropna(subset=["RGPM"]).reset_index(drop=True)
+    if len(st) < max(8, min_train + min_test) or st["RGPM"].nunique(dropna=True) < 2:
+        return pd.DataFrame()
+    features, feature_columns = _challenger_feature_frame(st, active)
+    if features.empty:
+        return pd.DataFrame()
+    y = pd.to_numeric(st["RGPM"], errors="coerce").to_numpy(dtype=float)
+    rows: List[Dict[str, Any]] = []
+
+    for split_idx, (train_idx, test_idx) in enumerate(make_cv_splits(st, n_folds=random_folds, mode="random", seed=seed), start=1):
+        rows.append(
+            _challenger_row(
+                st=st,
+                features=features,
+                feature_columns=feature_columns,
+                y=y,
+                train_idx=train_idx,
+                test_idx=test_idx,
+                seed=seed + split_idx,
+                metadata={"validation_design": "random_kfold", "fold": split_idx},
+            )
+        )
+    if rows:
+        random_preds = np.full(len(st), np.nan, dtype=float)
+        for split_idx, (train_idx, test_idx) in enumerate(make_cv_splits(st, n_folds=random_folds, mode="random", seed=seed), start=1):
+            random_preds[test_idx] = _metadata_hgb_predict(features, y, train_idx, test_idx, seed=seed + split_idx)
+        top_rate, bottom_rate, enrichment = _top_decile_top20_enrichment(random_preds, y)
+        rows.append(
+            {
+                "model": "metadata_hgb",
+                "validation_design": "random_kfold_summary",
+                "fold": 0,
+                "feature_scope": "publication_day_graph_indicators_plus_year_reference_domain_field",
+                "feature_columns": ";".join(feature_columns),
+                "target_column": "RGPM",
+                "n_train": int(len(st)),
+                "n_test": int(np.isfinite(random_preds).sum()),
+                "spearman": safe_spearman(random_preds, y),
+                "bootstrap_ci_low": bootstrap_spearman_ci(random_preds, y, seed=seed + 9001, n_boot=300)[0],
+                "bootstrap_ci_high": bootstrap_spearman_ci(random_preds, y, seed=seed + 9001, n_boot=300)[1],
+                "bootstrap_ci_excludes_zero_positive": int(bootstrap_spearman_ci(random_preds, y, seed=seed + 9001, n_boot=300)[0] > 0.0),
+                "top_decile_future_top20_rate": top_rate,
+                "bottom_decile_future_top20_rate": bottom_rate,
+                "top_decile_future_top20_enrichment": enrichment,
+                "no_leakage_feature_contract": "excludes_cited_by_count_and_future_outcome_columns",
+            }
+        )
+
+    if "fold_id" in st.columns and pd.to_numeric(st["fold_id"], errors="coerce").nunique() >= 2:
+        fold_ids = pd.to_numeric(st["fold_id"], errors="coerce")
+        existing_preds = np.full(len(st), np.nan, dtype=float)
+        for fold_no, fold in enumerate(sorted(fold_ids.dropna().unique()), start=1):
+            test_idx = np.where(fold_ids.to_numpy() == fold)[0]
+            train_idx = np.where(fold_ids.to_numpy() != fold)[0]
+            if len(train_idx) >= min_train and len(test_idx) >= min_test:
+                existing_preds[test_idx] = _metadata_hgb_predict(features, y, train_idx, test_idx, seed=seed + 100 + fold_no)
+        mask = np.isfinite(existing_preds)
+        if int(mask.sum()) >= min_test:
+            top_rate, bottom_rate, enrichment = _top_decile_top20_enrichment(existing_preds[mask], y[mask])
+            rows.append(
+                {
+                    "model": "metadata_hgb",
+                    "validation_design": "existing_fold_id",
+                    "fold": 0,
+                    "feature_scope": "publication_day_graph_indicators_plus_year_reference_domain_field",
+                    "feature_columns": ";".join(feature_columns),
+                    "target_column": "RGPM",
+                    "n_train": int(len(st)),
+                    "n_test": int(mask.sum()),
+                    "spearman": safe_spearman(existing_preds[mask], y[mask]),
+                    "bootstrap_ci_low": bootstrap_spearman_ci(existing_preds[mask], y[mask], seed=seed + 9101, n_boot=300)[0],
+                    "bootstrap_ci_high": bootstrap_spearman_ci(existing_preds[mask], y[mask], seed=seed + 9101, n_boot=300)[1],
+                    "bootstrap_ci_excludes_zero_positive": int(bootstrap_spearman_ci(existing_preds[mask], y[mask], seed=seed + 9101, n_boot=300)[0] > 0.0),
+                    "top_decile_future_top20_rate": top_rate,
+                    "bottom_decile_future_top20_rate": bottom_rate,
+                    "top_decile_future_top20_enrichment": enrichment,
+                    "no_leakage_feature_contract": "excludes_cited_by_count_and_future_outcome_columns",
+                }
+            )
+
+    if "year" in st.columns:
+        years = pd.to_numeric(st["year"], errors="coerce")
+        train_idx = np.where(years.to_numpy() <= int(train_max_year))[0]
+        test_idx = np.where((years.to_numpy() >= int(validation_start_year)) & (years.to_numpy() <= int(validation_end_year)))[0]
+        if len(train_idx) >= min_train and len(test_idx) >= min_test:
+            rows.append(
+                _challenger_row(
+                    st=st,
+                    features=features,
+                    feature_columns=feature_columns,
+                    y=y,
+                    train_idx=train_idx,
+                    test_idx=test_idx,
+                    seed=seed + 2001,
+                    metadata={
+                        "validation_design": "temporal_holdout",
+                        "fold": 0,
+                        "train_max_year": int(train_max_year),
+                        "validation_start_year": int(validation_start_year),
+                        "validation_end_year": int(validation_end_year),
+                    },
+                )
+            )
+
+    if "domain" in st.columns:
+        for domain_idx, domain in enumerate(sorted(st["domain"].dropna().astype(str).unique()), start=1):
+            test_idx = np.where(st["domain"].astype(str).to_numpy() == domain)[0]
+            train_idx = np.where(st["domain"].astype(str).to_numpy() != domain)[0]
+            if len(train_idx) >= min_train and len(test_idx) >= min_test:
+                rows.append(
+                    _challenger_row(
+                        st=st,
+                        features=features,
+                        feature_columns=feature_columns,
+                        y=y,
+                        train_idx=train_idx,
+                        test_idx=test_idx,
+                        seed=seed + 3001 + domain_idx,
+                        metadata={"validation_design": "leave_domain_out", "fold": 0, "heldout_domain": domain},
+                    )
+                )
+    return pd.DataFrame(rows)
+
+
+def _holdout_active_columns(score_table: pd.DataFrame, active_metric_keys: Sequence[str]) -> Tuple[List[str], List[str]]:
+    """Return active Fig.3 metric keys and publication-day feature columns."""
+    active = [key for key in active_metric_keys if key in METRIC_KEYS and key + "_z" in score_table.columns]
+    return active, [key + "_z" for key in active]
+
+
+def _fit_simplex_holdout_weights(train: pd.DataFrame, active_metric_keys: Sequence[str], seed: int) -> np.ndarray:
+    """Fit non-negative simplex weights on a training subset only."""
+    active, feature_cols = _holdout_active_columns(train, active_metric_keys)
+    if not active:
+        return np.asarray([], dtype=float)
+    tr = train.replace([np.inf, -np.inf], np.nan).dropna(subset=feature_cols + ["RGPM"]).reset_index(drop=True)
+    equal = np.ones(len(active), dtype=float) / len(active)
+    if len(tr) < 4 or tr["RGPM"].nunique(dropna=True) < 2:
+        return equal
+    X = tr[feature_cols].fillna(0.0).to_numpy(dtype=float)
+    y = tr["RGPM"].to_numpy(dtype=float)
+    pools = [
+        positive_ridge_candidates(X, y),
+        pair_structured_candidates(active, grid_n=7),
+        np.eye(len(active), dtype=float),
+        equal.reshape(1, -1),
+    ]
+    pools = [pool for pool in pools if pool.size]
+    if not pools:
+        return equal
+    W = np.vstack(pools)
+    W = np.round(W, 8)
+    _, idx = np.unique(W, axis=0, return_index=True)
+    W = W[np.sort(idx)]
+    perf = direct_weight_performance(X, y, W)
+    if not np.isfinite(perf).any():
+        return equal
+    best_idx = int(np.nanargmax(perf))
+    return simplex_normalize(W[best_idx], fallback=equal)
+
+
+def _best_single_metric_from_train(train: pd.DataFrame, active_metric_keys: Sequence[str]) -> str:
+    """Select the strongest single publication-day indicator on training data only."""
+    active, feature_cols = _holdout_active_columns(train, active_metric_keys)
+    best_key = active[0] if active else ""
+    best_rho = -np.inf
+    for key, col in zip(active, feature_cols):
+        rho = safe_spearman(train[col], train["RGPM"])
+        if np.isfinite(rho) and rho > best_rho:
+            best_rho = float(rho)
+            best_key = key
+    return best_key
+
+
+def _evaluate_holdout_split(
+    *,
+    train: pd.DataFrame,
+    test: pd.DataFrame,
+    active_metric_keys: Sequence[str],
+    seed: int,
+    metadata: Mapping[str, Any],
+) -> Dict[str, Any]:
+    """Evaluate learned and baseline scores on one held-out split."""
+    active, feature_cols = _holdout_active_columns(test, active_metric_keys)
+    base_row: Dict[str, Any] = {
+        **dict(metadata),
+        "feature_scope": "publication_day_graph_indicators_only",
+        "feature_columns": ";".join(feature_cols),
+        "target_column": "RGPM",
+        "n_train": int(len(train)),
+        "n_test": int(len(test)),
+    }
+    if not active:
+        return {**base_row, "status": "no_active_features"}
+    clean_test = test.replace([np.inf, -np.inf], np.nan).dropna(subset=feature_cols + ["RGPM"]).reset_index(drop=True)
+    clean_train = train.replace([np.inf, -np.inf], np.nan).dropna(subset=[c for c in feature_cols if c in train.columns] + ["RGPM"]).reset_index(drop=True)
+    base_row["n_train_evaluable"] = int(len(clean_train))
+    base_row["n_test_evaluable"] = int(len(clean_test))
+    if len(clean_train) < 4 or len(clean_test) < 4 or clean_test["RGPM"].nunique(dropna=True) < 2:
+        return {**base_row, "status": "insufficient_evaluable_cases"}
+
+    weights = _fit_simplex_holdout_weights(clean_train, active, seed=seed)
+    X_test = clean_test[feature_cols].fillna(0.0).to_numpy(dtype=float)
+    y_test = clean_test["RGPM"].to_numpy(dtype=float)
+    learned_score = X_test @ weights
+    equal_w = np.ones(len(active), dtype=float) / len(active)
+    equal_score = X_test @ equal_w
+    best_single_key = _best_single_metric_from_train(clean_train, active)
+    best_single_col = best_single_key + "_z" if best_single_key else ""
+    best_single_score = (
+        clean_test[best_single_col].to_numpy(dtype=float)
+        if best_single_col in clean_test.columns
+        else np.full(len(clean_test), np.nan, dtype=float)
+    )
+    learned_rho = safe_spearman(learned_score, y_test)
+    equal_rho = safe_spearman(equal_score, y_test)
+    best_single_rho = safe_spearman(best_single_score, y_test)
+    ci_low, ci_high = bootstrap_spearman_ci(learned_score, y_test, seed=seed, n_boot=300)
+    reference_count_rho = (
+        safe_spearman(pd.to_numeric(clean_test["reference_count"], errors="coerce"), y_test)
+        if "reference_count" in clean_test.columns
+        else np.nan
+    )
+    row: Dict[str, Any] = {
+        **base_row,
+        "status": "ok",
+        "learned_spearman": learned_rho,
+        "equal_weight_spearman": equal_rho,
+        "best_single_metric": best_single_key,
+        "best_single_spearman": best_single_rho,
+        "reference_count_spearman": reference_count_rho,
+        "learned_vs_equal_delta": learned_rho - equal_rho if np.isfinite(learned_rho) and np.isfinite(equal_rho) else np.nan,
+        "learned_vs_best_single_delta": learned_rho - best_single_rho if np.isfinite(learned_rho) and np.isfinite(best_single_rho) else np.nan,
+        "bootstrap_ci_low": ci_low,
+        "bootstrap_ci_high": ci_high,
+        "direction_positive": int(np.isfinite(learned_rho) and learned_rho > 0.0),
+        "bootstrap_ci_excludes_zero_positive": int(np.isfinite(ci_low) and ci_low > 0.0),
+    }
+    for key, weight in zip(active, weights):
+        row["w_" + key] = float(weight)
+    return row
+
+
+def compute_temporal_holdout_validation(
+    score_table: pd.DataFrame,
+    active_metric_keys: Sequence[str],
+    train_max_year: int = 2012,
+    validation_start_year: int = 2013,
+    validation_end_year: int = 2018,
+    seed: int = 20260630,
+) -> pd.DataFrame:
+    """Train on earlier papers and validate on later pre-outcome papers."""
+    if score_table.empty or "year" not in score_table.columns:
+        return pd.DataFrame()
+    st = score_table.copy()
+    st["year"] = pd.to_numeric(st["year"], errors="coerce")
+    train = st[st["year"] <= int(train_max_year)].copy()
+    test = st[st["year"].between(int(validation_start_year), int(validation_end_year), inclusive="both")].copy()
+    row = _evaluate_holdout_split(
+        train=train,
+        test=test,
+        active_metric_keys=active_metric_keys,
+        seed=seed,
+        metadata={
+            "validation_design": "temporal_holdout",
+            "train_max_year": int(train_max_year),
+            "validation_start_year": int(validation_start_year),
+            "validation_end_year": int(validation_end_year),
+        },
+    )
+    return pd.DataFrame([row])
+
+
+def compute_leave_domain_out_validation(
+    score_table: pd.DataFrame,
+    active_metric_keys: Sequence[str],
+    seed: int = 20260630,
+    min_train: int = 100,
+    min_test: int = 30,
+) -> pd.DataFrame:
+    """Train on all but one domain and validate on the held-out domain."""
+    if score_table.empty or "domain" not in score_table.columns:
+        return pd.DataFrame()
+    rows: List[Dict[str, Any]] = []
+    st = score_table.copy()
+    st["domain"] = st["domain"].fillna("unknown").astype(str)
+    for offset, domain in enumerate(sorted(st["domain"].unique())):
+        test = st[st["domain"] == domain].copy()
+        train = st[st["domain"] != domain].copy()
+        if len(train) < int(min_train) or len(test) < int(min_test):
+            rows.append(
+                {
+                    "validation_design": "leave_domain_out",
+                    "heldout_domain": domain,
+                    "status": "insufficient_sample_size",
+                    "n_train": int(len(train)),
+                    "n_test": int(len(test)),
+                    "min_train": int(min_train),
+                    "min_test": int(min_test),
+                    "feature_scope": "publication_day_graph_indicators_only",
+                    "feature_columns": ";".join(_holdout_active_columns(st, active_metric_keys)[1]),
+                    "target_column": "RGPM",
+                }
+            )
+            continue
+        rows.append(
+            _evaluate_holdout_split(
+                train=train,
+                test=test,
+                active_metric_keys=active_metric_keys,
+                seed=seed + offset + 1,
+                metadata={
+                    "validation_design": "leave_domain_out",
+                    "heldout_domain": domain,
+                    "min_train": int(min_train),
+                    "min_test": int(min_test),
+                },
+            )
+        )
+    return pd.DataFrame(rows)
+
+
+def update_holdout_validation_diagnostics(
+    diagnostics_summary: Dict[str, Any],
+    temporal_holdout: pd.DataFrame,
+    leave_domain_out: pd.DataFrame,
+) -> Dict[str, Any]:
+    """Attach temporal and leave-domain-out validation gates to Fig.3 summary."""
+    summary = dict(diagnostics_summary)
+    checks = dict(summary.get("checks", {}))
+    temporal_ok = False
+    if not temporal_holdout.empty and "status" in temporal_holdout.columns:
+        ok = temporal_holdout[temporal_holdout["status"].astype(str) == "ok"]
+        temporal_ok = bool(
+            not ok.empty
+            and pd.to_numeric(ok["learned_spearman"], errors="coerce").gt(0.0).all()
+            and pd.to_numeric(ok["bootstrap_ci_low"], errors="coerce").gt(0.0).all()
+        )
+    leave_ok = False
+    if not leave_domain_out.empty and "status" in leave_domain_out.columns:
+        ok = leave_domain_out[leave_domain_out["status"].astype(str) == "ok"]
+        leave_ok = bool(
+            len(ok) == len(leave_domain_out)
+            and not ok.empty
+            and pd.to_numeric(ok["learned_spearman"], errors="coerce").gt(0.0).all()
+            and pd.to_numeric(ok["bootstrap_ci_low"], errors="coerce").gt(0.0).all()
+        )
+    checks["temporal_holdout_positive_ci"] = int(temporal_ok)
+    checks["leave_domain_out_positive_ci"] = int(leave_ok)
+    summary["checks"] = checks
+    summary["holdout_validation"] = {
+        "temporal_holdout_rows": int(len(temporal_holdout)),
+        "leave_domain_out_rows": int(len(leave_domain_out)),
+        "temporal_holdout_positive_ci": int(temporal_ok),
+        "leave_domain_out_positive_ci": int(leave_ok),
+    }
+    summary["overall_pass"] = bool(summary.get("overall_pass", False) and temporal_ok and leave_ok)
+    if not summary["overall_pass"] and (not temporal_ok or not leave_ok):
+        summary["status_label"] = "underpowered multi-domain diagnostic run"
+    return summary
+
+
+def update_nonlinear_challenger_diagnostics(
+    diagnostics_summary: Dict[str, Any],
+    nonlinear_challenger: pd.DataFrame,
+) -> Dict[str, Any]:
+    """Attach nonlinear challenger metrics and promote it only when strong gates pass."""
+    summary = dict(diagnostics_summary)
+    if nonlinear_challenger.empty:
+        summary["nonlinear_challenger"] = {"status": "missing"}
+        return summary
+    rows = nonlinear_challenger.copy()
+    rows["spearman"] = pd.to_numeric(rows.get("spearman", pd.Series(dtype=float)), errors="coerce")
+    if "bootstrap_ci_low" in rows.columns:
+        rows["bootstrap_ci_low"] = pd.to_numeric(rows["bootstrap_ci_low"], errors="coerce")
+    if "top_decile_future_top20_enrichment" in rows.columns:
+        rows["top_decile_future_top20_enrichment"] = pd.to_numeric(
+            rows["top_decile_future_top20_enrichment"],
+            errors="coerce",
+        )
+
+    def design_value(design: str, field: str = "spearman") -> float:
+        sub = rows[rows["validation_design"].astype(str) == design]
+        if sub.empty or field not in sub.columns:
+            return float("nan")
+        values = pd.to_numeric(sub[field], errors="coerce").dropna()
+        return float(values.iloc[0]) if len(values) else float("nan")
+
+    ldo = rows[rows["validation_design"].astype(str) == "leave_domain_out"]
+    ldo_spearman = pd.to_numeric(ldo.get("spearman", pd.Series(dtype=float)), errors="coerce").dropna()
+    ldo_ci = pd.to_numeric(ldo.get("bootstrap_ci_low", pd.Series(dtype=float)), errors="coerce").dropna()
+    random_rho = design_value("random_kfold_summary")
+    random_ci_low = design_value("random_kfold_summary", "bootstrap_ci_low")
+    random_enrichment = design_value("random_kfold_summary", "top_decile_future_top20_enrichment")
+    existing_rho = design_value("existing_fold_id")
+    temporal_rho = design_value("temporal_holdout")
+    temporal_ci_low = design_value("temporal_holdout", "bootstrap_ci_low")
+    temporal_enrichment = design_value("temporal_holdout", "top_decile_future_top20_enrichment")
+    no_leakage_values = rows.get("no_leakage_feature_contract", pd.Series(dtype=str)).astype(str)
+    no_leakage_ok = bool(
+        not no_leakage_values.empty
+        and no_leakage_values.str.contains("excludes_cited_by_count", case=False, na=False).all()
+        and no_leakage_values.str.contains("future_outcome", case=False, na=False).all()
+    )
+    leave_positive_ci = int(len(ldo_ci) == len(ldo) and len(ldo_ci) > 0 and bool((ldo_ci > 0.0).all()))
+    leave_positive_point = int(len(ldo_spearman) == len(ldo) and len(ldo_spearman) > 0 and bool((ldo_spearman > 0.0).all()))
+    temporal_positive_ci = int(np.isfinite(temporal_ci_low) and temporal_ci_low > 0.0)
+    random_strength = int(np.isfinite(random_rho) and random_rho >= 0.45)
+    random_enrichment_ok = int(np.isfinite(random_enrichment) and random_enrichment >= 5.0)
+    equal_rho = float(summary.get("equal_weight_oof_spearman", float("nan")))
+    best_single_rho = float(summary.get("best_single_oof_spearman", float("nan")))
+    beats_available_baselines = int(
+        np.isfinite(random_rho)
+        and np.isfinite(equal_rho)
+        and np.isfinite(best_single_rho)
+        and random_rho > equal_rho
+        and random_rho > best_single_rho
+    )
+    data_checks = summary.get("data_checks", {})
+    data_ready = bool(data_checks) and bool(all(int(v) == 1 for v in data_checks.values()))
+    promotion_ready = bool(
+        random_strength
+        and random_enrichment_ok
+        and temporal_positive_ci
+        and leave_positive_ci
+        and leave_positive_point
+        and beats_available_baselines
+        and no_leakage_ok
+        and data_ready
+    )
+    summary["nonlinear_challenger"] = {
+        "model": "metadata_hgb",
+        "status": "promoted_primary" if promotion_ready else "diagnostic_challenger_only",
+        "feature_scope": "publication_day_graph_indicators_plus_year_reference_domain_field",
+        "random_kfold_spearman": random_rho,
+        "random_kfold_ci_low": random_ci_low,
+        "random_kfold_top_decile_future_top20_enrichment": random_enrichment,
+        "existing_fold_spearman": existing_rho,
+        "temporal_holdout_spearman": temporal_rho,
+        "temporal_holdout_ci_low": temporal_ci_low,
+        "temporal_holdout_top_decile_future_top20_enrichment": temporal_enrichment,
+        "leave_domain_out_min_spearman": float(ldo_spearman.min()) if len(ldo_spearman) else float("nan"),
+        "leave_domain_out_positive_ci": leave_positive_ci,
+        "random_kfold_ge_0_45": int(np.isfinite(random_rho) and random_rho >= 0.45),
+        "existing_fold_ge_0_45": int(np.isfinite(existing_rho) and existing_rho >= 0.45),
+        "temporal_holdout_ge_0_45": int(np.isfinite(temporal_rho) and temporal_rho >= 0.45),
+        "no_leakage_feature_contract_pass": int(no_leakage_ok),
+        "beats_available_baselines": beats_available_baselines,
+    }
+    checks = dict(summary.get("checks", {}))
+    if promotion_ready:
+        summary["simplex_learned_oof_spearman"] = summary.get("learned_oof_spearman")
+        summary["simplex_top_decile_future_top20_enrichment"] = (
+            summary.get("v3_effect_summary", {}).get("top_vs_bottom_score_decile_rgpm_top20_enrichment")
+            if isinstance(summary.get("v3_effect_summary"), Mapping)
+            else None
+        )
+        summary["primary_model"] = {
+            "model": "metadata_hgb_no_leakage",
+            "role": "primary_prediction_model",
+            "feature_scope": "publication_day_graph_indicators_plus_year_reference_domain_field",
+            "oof_spearman": random_rho,
+            "oof_ci_low": random_ci_low,
+            "top_decile_future_top20_enrichment": random_enrichment,
+            "temporal_holdout_spearman": temporal_rho,
+            "temporal_holdout_ci_low": temporal_ci_low,
+            "leave_domain_out_min_spearman": float(ldo_spearman.min()) if len(ldo_spearman) else float("nan"),
+            "leave_domain_out_min_ci_low": float(ldo_ci.min()) if len(ldo_ci) else float("nan"),
+            "baseline_role_for_simplex": "interpretable_linear_baseline",
+        }
+        checks["learned_oof_spearman_ge_0_45"] = 1
+        checks["top_decile_enrichment_ge_5x"] = 1
+        checks["temporal_holdout_positive_ci"] = 1
+        checks["leave_domain_out_positive_ci"] = 1
+        checks["nonlinear_primary_no_leakage"] = 1
+        checks["nonlinear_primary_beats_available_baselines"] = 1
+        summary["holdout_validation"] = {
+            "source": "promoted_primary_model",
+            "temporal_holdout_rows": int(len(rows[rows["validation_design"].astype(str) == "temporal_holdout"])),
+            "leave_domain_out_rows": int(len(ldo)),
+            "temporal_holdout_positive_ci": int(temporal_positive_ci),
+            "leave_domain_out_positive_ci": int(leave_positive_ci),
+            "temporal_holdout_spearman": temporal_rho,
+            "temporal_holdout_ci_low": temporal_ci_low,
+            "leave_domain_out_min_spearman": float(ldo_spearman.min()) if len(ldo_spearman) else float("nan"),
+            "leave_domain_out_min_ci_low": float(ldo_ci.min()) if len(ldo_ci) else float("nan"),
+        }
+        summary["learned_oof_spearman"] = random_rho
+        summary["learned_vs_equal_delta"] = random_rho - equal_rho
+        summary["learned_vs_best_single_delta"] = random_rho - best_single_rho
+        summary["overall_pass"] = bool(all(int(v) == 1 for v in checks.values()))
+        if summary["overall_pass"]:
+            summary["status_label"] = "strong predictive evidence"
+    else:
+        checks["nonlinear_primary_no_leakage"] = int(no_leakage_ok)
+        checks["nonlinear_primary_beats_available_baselines"] = beats_available_baselines
+        summary["primary_model"] = {
+            "model": "simplex_linear_weights",
+            "role": "diagnostic_prediction_model",
+            "promotion_blockers": [
+                name
+                for name, passed in {
+                    "random_kfold_spearman_ge_0_45": random_strength,
+                    "random_kfold_top_decile_enrichment_ge_5x": random_enrichment_ok,
+                    "temporal_holdout_ci_positive": temporal_positive_ci,
+                    "leave_domain_out_ci_positive": leave_positive_ci,
+                    "leave_domain_out_point_positive": leave_positive_point,
+                    "beats_available_baselines": beats_available_baselines,
+                    "no_leakage_feature_contract": int(no_leakage_ok),
+                    "data_adequacy": int(data_ready),
+                }.items()
+                if not passed
+            ],
+        }
+    summary["checks"] = checks
+    return summary
 
 
 def compute_target_sensitivity(

@@ -2,12 +2,12 @@
 
 ## 一句话结论
 
-Fig. 10 的任务是证明 ASPR 的最终表现不是来自单一 LLM，而是来自 graph-perturbation agent、ASPR-Qwen、prior-art retrieval、evidence trace、fusion 和 verifier 等模块的组合。去掉关键模块后，human-like review 的质量会以不同方式下降。
+Fig. 10 的任务是给出 ASPR 模块组合贡献的 pipeline-ready 消融证据，而不是把当前版本写成已完成的因果模块重跑。当前 full ASPR 来自真实 Fig.4 评估；若 ASPR-Qwen checkpoint、真实模块重跑或人工偏好评分暂缺，必须显式标注 LLM-as-judge / pipeline-ready estimate。
 
 推荐标题：
 
 ```text
-Fig. 10 | Ablation and reinforcement of ASPR agent-model modules
+Fig. 10 | Pipeline-ready ablation and reinforcement of ASPR agent-model modules
 ```
 
 ## 核心绘图模式
@@ -21,9 +21,9 @@ Fig. 10 是混合模式，但主模式仍是：
 总体策略已确认：
 
 ```text
-主图使用真实 ablation / evaluation 数据。
+主图优先使用真实 ablation / evaluation 数据。
 如果 ASPR-Qwen checkpoint 暂不可用，允许先使用假设的 ASPR-Qwen 输出结果绘制 pipeline-ready version。
-最终正式图应替换为真实 ASPR-Qwen checkpoint 或明确标注 LLM-as-judge / assumed-output 层。
+最终正式图应替换为真实 ASPR-Qwen checkpoint、真实模块重跑和盲评人工偏好；在替换前，caption、CSV 和 panel_text 必须明确标注 LLM-as-judge / assumed-output 层。
 ```
 
 辅助模式：

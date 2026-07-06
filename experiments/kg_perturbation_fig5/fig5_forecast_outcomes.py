@@ -665,9 +665,20 @@ def add_focus_scores(focus: pd.DataFrame, min_historical_papers: int) -> None:
     size_p = percentile_score(np.log1p(focus["historical_size"]))
     score_p = percentile_score(focus["hist_top_tail_score"])
     citation_p = percentile_score(np.log1p(focus["historical_citations"]))
+    recent_p = percentile_score(np.log1p(focus["recent_hist_size"]))
+    historical_growth_ratio = (focus["recent_hist_size"] + 1.0) / (focus["prior_hist_size"] + 1.0)
+    historical_growth_p = percentile_score(np.log1p(historical_growth_ratio))
+    historical_landmark_p = percentile_score(np.log1p(focus["hist_landmarks"]))
     low_data_penalty = ((min_historical_papers - focus["historical_size"]).clip(lower=0) / max(1, min_historical_papers))
     score_coverage = focus["hist_scored_papers"] / focus["historical_size"].clip(lower=1)
-    focus["predicted_score"] = 0.72 * score_p + 0.20 * size_p + 0.08 * citation_p
+    focus["historical_growth_score"] = historical_growth_p
+    focus["predicted_score"] = (
+        0.20 * score_p
+        + 0.20 * historical_growth_p
+        + 0.20 * citation_p
+        + 0.30 * recent_p
+        + 0.10 * historical_landmark_p
+    )
     focus["predicted_score"] -= 0.20 * low_data_penalty + 0.10 * (1.0 - score_coverage.clip(0.0, 1.0))
     future_count_p = percentile_score(np.log1p(focus["future_papers"]))
     future_cite_p = percentile_score(np.log1p(focus["future_citations"]))
@@ -676,7 +687,7 @@ def add_focus_scores(focus: pd.DataFrame, min_historical_papers: int) -> None:
     growth_p = percentile_score(np.log1p(growth_ratio))
     landmark_bonus = (focus["future_landmarks"] > 0).astype(float) * 0.25
     focus["realized_score"] = 0.48 * future_count_p + 0.32 * future_cite_p + 0.12 * future_rgpm_p + 0.08 * growth_p + landmark_bonus
-    focus["growth_only_score"] = 0.85 * growth_p + 0.15 * size_p
+    focus["growth_only_score"] = 0.85 * historical_growth_p + 0.15 * size_p
     focus["citation_only_score"] = citation_p
 
 
@@ -933,6 +944,50 @@ def top_k_hit_rate(pred_ids: Sequence[str], real_ids: Sequence[str], k: int) -> 
     return len(set(pred) & set(real)) / float(denom)
 
 
+def ndcg_at_k(pred_ids: Sequence[str], real_ids: Sequence[str], k: int) -> float:
+    """Compute binary NDCG@k from predicted focus order against realized top-k membership."""
+    pred = list(pred_ids)[:k]
+    real_set = set(list(real_ids)[:k])
+    if not pred or not real_set:
+        return float("nan")
+    relevance = [1.0 if item in real_set else 0.0 for item in pred]
+    dcg = sum(rel / math.log2(idx + 2.0) for idx, rel in enumerate(relevance))
+    ideal_hits = min(len(real_set), len(pred), k)
+    idcg = sum(1.0 / math.log2(idx + 2.0) for idx in range(ideal_hits))
+    return float(dcg / idcg) if idcg else 0.0
+
+
+def add_backtest_baseline_columns(backtest: pd.DataFrame) -> pd.DataFrame:
+    """Add precision/NDCG and best non-graph baseline comparisons per window."""
+    if backtest.empty:
+        return backtest.copy()
+    out = backtest.copy()
+    if "precision_at_10" not in out.columns:
+        out["precision_at_10"] = pd.to_numeric(out.get("top10_hit_rate"), errors="coerce")
+    if "ndcg_at_10" not in out.columns:
+        out["ndcg_at_10"] = np.nan
+    for col in ["baseline_method", "baseline_precision_at_10", "baseline_ndcg_at_10", "delta_precision_at_10", "delta_ndcg_at_10"]:
+        if col not in out.columns:
+            out[col] = np.nan if col != "baseline_method" else ""
+    for window, group in out.groupby("window", sort=False):
+        baselines = group[~group["method"].astype(str).eq("graph_score")].copy()
+        if baselines.empty:
+            continue
+        baselines["_baseline_score"] = pd.to_numeric(baselines["ndcg_at_10"], errors="coerce").fillna(
+            pd.to_numeric(baselines["precision_at_10"], errors="coerce")
+        )
+        best = baselines.sort_values("_baseline_score", ascending=False).iloc[0]
+        mask = out["window"].eq(window) & out["method"].astype(str).eq("graph_score")
+        out.loc[mask, "baseline_method"] = str(best["method"])
+        out.loc[mask, "baseline_precision_at_10"] = float(best["precision_at_10"])
+        out.loc[mask, "baseline_ndcg_at_10"] = float(best["ndcg_at_10"])
+        out.loc[mask, "delta_precision_at_10"] = pd.to_numeric(out.loc[mask, "precision_at_10"], errors="coerce") - float(
+            best["precision_at_10"]
+        )
+        out.loc[mask, "delta_ndcg_at_10"] = pd.to_numeric(out.loc[mask, "ndcg_at_10"], errors="coerce") - float(best["ndcg_at_10"])
+    return out
+
+
 def ranked_ids(frame: pd.DataFrame, score_col: str, eligible_col: str, limit: int) -> List[str]:
     """Return focus ids ranked by a score column."""
     eligible = frame[eligible_col].fillna(False)
@@ -980,11 +1035,13 @@ def build_backtest(
                     "method": method,
                     "top5_hit_rate": top_k_hit_rate(pred_ids, real_ids, 5),
                     "top10_hit_rate": top_k_hit_rate(pred_ids, real_ids, 10),
+                    "precision_at_10": top_k_hit_rate(pred_ids, real_ids, 10),
+                    "ndcg_at_10": ndcg_at_k(pred_ids, real_ids, 10),
                     "n_predicted": len(pred_ids),
                     "n_realized": len(real_ids),
                 }
             )
-    return pd.DataFrame(rows)
+    return add_backtest_baseline_columns(pd.DataFrame(rows))
 
 
 def compute_tables(args: argparse.Namespace, data: LoadedData) -> Fig5Tables:
@@ -1076,6 +1133,144 @@ def value_or_none(value: object) -> Optional[float]:
     return number if np.isfinite(number) else None
 
 
+def build_alignment_metrics(alignment: pd.DataFrame, backtest: pd.DataFrame) -> pd.DataFrame:
+    """Summarize forecast/backtest alignment metrics for manuscript traceability."""
+    rows: List[Dict[str, Any]] = []
+    if not alignment.empty and "hit_type" in alignment.columns:
+        total = int(len(alignment))
+        for hit_type, count in alignment["hit_type"].astype(str).value_counts().sort_index().items():
+            rows.append(
+                {
+                    "metric_group": "predicted_realized_alignment",
+                    "metric": f"hit_type:{hit_type}",
+                    "value": float(count),
+                    "denominator": total,
+                }
+            )
+    if not backtest.empty:
+        for metric in ["precision_at_10", "ndcg_at_10", "baseline_precision_at_10", "baseline_ndcg_at_10"]:
+            if metric in backtest.columns:
+                values = pd.to_numeric(backtest[metric], errors="coerce").dropna()
+                if not values.empty:
+                    rows.append(
+                        {
+                            "metric_group": "retrospective_backtest",
+                            "metric": metric,
+                            "value": float(values.mean()),
+                            "denominator": int(len(values)),
+                        }
+                    )
+        if "method" in backtest.columns:
+            graph = backtest[backtest["method"].astype(str).eq("graph_score")].copy()
+            for metric in [
+                "precision_at_10",
+                "ndcg_at_10",
+                "baseline_precision_at_10",
+                "baseline_ndcg_at_10",
+                "delta_precision_at_10",
+                "delta_ndcg_at_10",
+            ]:
+                if metric in graph.columns:
+                    values = pd.to_numeric(graph[metric], errors="coerce").dropna()
+                    if not values.empty:
+                        rows.append(
+                            {
+                                "metric_group": "retrospective_backtest_graph_score",
+                                "metric": f"graph_score_{metric}",
+                                "value": float(values.mean()),
+                                "denominator": int(len(values)),
+                            }
+                        )
+    return pd.DataFrame(rows)
+
+
+def build_failure_cases(alignment: pd.DataFrame) -> pd.DataFrame:
+    """Extract forecast cases that were not exact or semantic hits."""
+    if alignment.empty:
+        return pd.DataFrame(columns=["focus_id", "hit_type", "failure_reason"])
+    table = alignment.copy()
+    if "hit_type" not in table.columns:
+        table["hit_type"] = "unknown"
+    failures = table[~table["hit_type"].astype(str).isin(["exact_hit", "semantic_hit"])].copy()
+    if "failure_reason" not in failures.columns:
+        failures["failure_reason"] = failures["hit_type"].astype(str).map(lambda value: f"forecast_alignment_{value}")
+    expected_cols = ["focus_id", "hit_type", "failure_reason"]
+    for col in expected_cols:
+        if col not in failures.columns:
+            failures[col] = ""
+    return failures
+
+
+def build_fig5_quality_report(out_dir: Path) -> Dict[str, Any]:
+    """Read Fig.5 outputs and report whether forecast claims trace to CSV backtests."""
+    backtest_focus = out_dir / "fig5_backtest_focus.csv"
+    alignment_metrics = out_dir / "fig5_alignment_metrics.csv"
+    failure_cases = out_dir / "fig5_failure_cases.csv"
+    checks = {
+        "backtest_table_present": int(backtest_focus.exists()),
+        "alignment_metrics_present": int(alignment_metrics.exists()),
+        "failure_cases_present": int(failure_cases.exists()),
+        "precision_at_10_present": 0,
+        "ndcg_at_10_present": 0,
+        "baseline_comparison_present": 0,
+        "mean_precision_delta_nonnegative": 0,
+        "mean_ndcg_delta_positive": 0,
+    }
+    mean_precision = float("nan")
+    mean_baseline_precision = float("nan")
+    mean_ndcg = float("nan")
+    mean_baseline_ndcg = float("nan")
+    mean_delta_precision = float("nan")
+    mean_delta_ndcg = float("nan")
+    if backtest_focus.exists():
+        table = pd.read_csv(backtest_focus)
+        checks["precision_at_10_present"] = int("precision_at_10" in table.columns and table["precision_at_10"].notna().any())
+        checks["ndcg_at_10_present"] = int("ndcg_at_10" in table.columns and table["ndcg_at_10"].notna().any())
+        baseline_cols = [col for col in table.columns if str(col).startswith("baseline_")]
+        checks["baseline_comparison_present"] = int(bool(baseline_cols))
+        graph = table[table.get("method", pd.Series(dtype=str)).astype(str).eq("graph_score")].copy()
+        if not graph.empty:
+            mean_precision = float(pd.to_numeric(graph.get("precision_at_10", pd.Series(dtype=float)), errors="coerce").mean())
+            mean_baseline_precision = float(
+                pd.to_numeric(graph.get("baseline_precision_at_10", pd.Series(dtype=float)), errors="coerce").mean()
+            )
+            mean_ndcg = float(pd.to_numeric(graph.get("ndcg_at_10", pd.Series(dtype=float)), errors="coerce").mean())
+            mean_baseline_ndcg = float(pd.to_numeric(graph.get("baseline_ndcg_at_10", pd.Series(dtype=float)), errors="coerce").mean())
+            mean_delta_precision = float(pd.to_numeric(graph.get("delta_precision_at_10", pd.Series(dtype=float)), errors="coerce").mean())
+            mean_delta_ndcg = float(pd.to_numeric(graph.get("delta_ndcg_at_10", pd.Series(dtype=float)), errors="coerce").mean())
+            checks["mean_precision_delta_nonnegative"] = int(np.isfinite(mean_delta_precision) and mean_delta_precision >= 0.0)
+            checks["mean_ndcg_delta_positive"] = int(np.isfinite(mean_delta_ndcg) and mean_delta_ndcg > 0.0)
+    overall = bool(
+        checks["backtest_table_present"]
+        and checks["alignment_metrics_present"]
+        and checks["precision_at_10_present"]
+        and checks["ndcg_at_10_present"]
+        and checks["baseline_comparison_present"]
+    )
+    return {
+        "figure": "fig5",
+        "overall_pass": overall,
+        "status_label": (
+            "forecast_backtest_beats_baseline"
+            if overall and checks["mean_precision_delta_nonnegative"] and checks["mean_ndcg_delta_positive"]
+            else "forecast_backtest_ready_but_baseline_underperforms"
+            if overall
+            else "forecast_backtest_incomplete"
+        ),
+        "quality_gates": {
+            "checks": checks,
+            "mean_precision_at_10": mean_precision,
+            "mean_baseline_precision_at_10": mean_baseline_precision,
+            "mean_ndcg_at_10": mean_ndcg,
+            "mean_baseline_ndcg_at_10": mean_baseline_ndcg,
+            "mean_delta_precision_at_10": mean_delta_precision,
+            "mean_delta_ndcg_at_10": mean_delta_ndcg,
+            "allowed_claim": "Forecast/backtest claims must trace to fig5_backtest_focus.csv and fig5_alignment_metrics.csv and beat no-leakage historical baselines before main-text use.",
+            "forbidden_claim": "Do not use image handoff or layout-only panels as evidence for forecast performance.",
+        },
+    }
+
+
 def write_outputs(out_dir: Path, tables: Fig5Tables, args: argparse.Namespace, data: LoadedData) -> None:
     """Write Fig. 5 tables and metadata."""
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -1084,10 +1279,15 @@ def write_outputs(out_dir: Path, tables: Fig5Tables, args: argparse.Namespace, d
     tables.alignment.to_csv(out_dir / "fig5_focus_alignment.csv", index=False)
     tables.key_innovations.to_csv(out_dir / "fig5_key_innovations.csv", index=False)
     tables.backtest.to_csv(out_dir / "fig5_backtest.csv", index=False)
+    tables.backtest.to_csv(out_dir / "fig5_backtest_focus.csv", index=False)
+    build_alignment_metrics(tables.alignment, tables.backtest).to_csv(out_dir / "fig5_alignment_metrics.csv", index=False)
+    build_failure_cases(tables.alignment).to_csv(out_dir / "fig5_failure_cases.csv", index=False)
     tables.focus.to_csv(out_dir / "fig5_focus_map.csv", index=False)
     (out_dir / "fig5_summary.json").write_text(json.dumps(tables.summary, indent=2), encoding="utf-8")
     run_config = build_run_config(args, data)
     (out_dir / "fig5_run_config.json").write_text(json.dumps(run_config, indent=2), encoding="utf-8")
+    report = build_fig5_quality_report(out_dir)
+    (out_dir / "figure_quality_report.json").write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 def build_run_config(args: argparse.Namespace, data: LoadedData) -> Dict[str, Any]:

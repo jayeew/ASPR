@@ -512,8 +512,16 @@ def generate_citations_section(evaluation_text: str, papers: List[PaperInfo]) ->
 # 链定义
 # ============================================================================
 
+def lats_prompt_template(template: str) -> PromptTemplate:
+    """Build a prompt template with an optional model-control prefix."""
+    prefix = os.getenv("ASPR_LATS_PROMPT_PREFIX", "").strip()
+    if prefix:
+        template = f"{prefix}\n\n{template}"
+    return PromptTemplate.from_template(template)
+
+
 # 反思链
-reflection_prompt_template = PromptTemplate.from_template(INNOVATION_REFLECTION_PROMPT)
+reflection_prompt_template = lats_prompt_template(INNOVATION_REFLECTION_PROMPT)
 
 reflection_llm_chain_without_parser = (
     reflection_prompt_template
@@ -610,19 +618,19 @@ def reflection_chain(inputs) -> Reflection:
 
 
 # 初始创新性评价生成链
-initial_evaluation_template = PromptTemplate.from_template(INNOVATION_GENERATION_PROMPT)
+initial_evaluation_template = lats_prompt_template(INNOVATION_GENERATION_PROMPT)
 
 initial_answer_chain = initial_evaluation_template | llm.with_config(run_name="GenerateInitialEvaluation")
 
 
 # 改进创新性评价链
-improvement_template = PromptTemplate.from_template(INNOVATION_IMPROVEMENT_PROMPT)
+improvement_template = lats_prompt_template(INNOVATION_IMPROVEMENT_PROMPT)
 
 improvement_chain = improvement_template | llm.with_config(run_name="ImproveEvaluation")
 
 
 # 最终报告生成链
-final_report_template =  PromptTemplate.from_template(FINAL_INNOVATION_REPORT_PROMPT)
+final_report_template =  lats_prompt_template(FINAL_INNOVATION_REPORT_PROMPT)
 
 final_report_chain = final_report_template | llm.with_config(run_name="GenerateFinalReport")
 
@@ -817,7 +825,8 @@ def expand(state: TreeState, config: RunnableConfig) -> dict:
 def should_loop(state: TreeState) -> Literal["expand", "__end__"]:
     """判断是否继续扩展"""
     root = state["root"]
-    max_iterations = max(0, int(state.get("max_iterations", 3) or 3))
+    raw_max_iterations = state.get("max_iterations", 3)
+    max_iterations = max(0, int(3 if raw_max_iterations is None else raw_max_iterations))
     max_height = max_iterations + 1
     lats_logging(f"检查是否继续搜索。树高度: {root.height}, 已解决: {root.is_solved}, max_iterations={max_iterations}")
     
@@ -1071,6 +1080,25 @@ def run_innovation_evaluation(
     lats_logging(f"相关论文数量: {len(related_papers)}")
     lats_logging("已载入七指标图谱证据")
     lats_logging(f"已载入审稿委员会证据: tone={recommended_tone}, disagreement={committee_disagreement_score:.3f}")
+
+    if env_bool("ASPR_LATS_SINGLE_PASS", "0"):
+        related_papers_str = format_related_papers(related_papers)
+        response = initial_answer_chain.invoke({
+            "paper_title": paper_title,
+            "paper_abstract": paper_abstract,
+            "paper_context": paper_context_text,
+            "related_papers": related_papers_str,
+            "graph_metric_evidence": graph_metric_evidence,
+            "committee_evidence": committee_evidence,
+        })
+        evaluation_text = safe_extract_content(
+            response.content if hasattr(response, "content") else str(response),
+            fallback="",
+        )
+        if not evaluation_text:
+            raise ValueError("single_pass_lats_initial returned empty evaluation text")
+        lats_logging(f"single-pass 初始评价生成完成，长度: {len(evaluation_text)}")
+        return evaluation_text, lats_log, committee_report_result, committee_disagreement_score, recommended_tone
     
     last_step = None
     graph = build_graph()

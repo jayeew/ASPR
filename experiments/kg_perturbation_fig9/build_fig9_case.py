@@ -6,10 +6,12 @@ import hashlib
 import json
 import math
 import os
+import sys
 import textwrap
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Optional, Sequence
 
+os.environ.setdefault("MPLCONFIGDIR", "/tmp/aspr_mplconfig")
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_MARKDOWN_ROOT = Path("/mnt/d/aspr_nature_markdown")
@@ -37,6 +39,14 @@ def atomic_write_text(path: Path, text: str) -> None:
 
 def write_json(path: Path, payload: Mapping[str, Any]) -> None:
     atomic_write_text(path, json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n")
+
+
+def read_json_if_present(path: Path) -> dict[str, Any]:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+    return payload if isinstance(payload, dict) else {}
 
 
 def write_csv(path: Path, rows: Sequence[Mapping[str, Any]], fieldnames: Optional[Sequence[str]] = None) -> None:
@@ -229,7 +239,7 @@ def build_module_alignment() -> list[dict[str, Any]]:
         },
         {
             "fig8_module": "8f final review schema",
-            "fig9_case_stage": "human-like review output",
+            "fig9_case_stage": "evidence-grounded review output",
             "fig9_panel": "9e,9f",
             "evidence_artifact": "fig9_fusion_output.json",
             "status": "schema_aligned",
@@ -297,17 +307,148 @@ def build_assumed_qwen_output() -> dict[str, Any]:
             "The electrostatic interface is indirect, so causal language should remain cautious.",
         ],
         "reviewer_style_recommendation": "Major revision at initial submission; likely acceptable after the added long-RNA and mutant validation.",
-        "human_like_review_tone": "constructive, mechanistic, cautious about overclaiming",
+        "review_style_tone": "constructive, mechanistic, cautious about overclaiming",
     }
 
 
-def build_fusion_output(agent_output: Mapping[str, Any], qwen_output: Mapping[str, Any]) -> dict[str, Any]:
+CHECKPOINT_METADATA_KEYS = {
+    "model_hash",
+    "training_config",
+    "data_version",
+    "prompt",
+    "decoding_config",
+    "seed",
+    "runtime_seconds",
+}
+CHECKPOINT_OUTPUT_FIELDS = (
+    "case_id",
+    "output_origin",
+    "checkpoint_invoked",
+    "summary_judgement",
+    "major_strengths",
+    "major_concerns",
+)
+
+
+def checkpoint_output_fields_complete(qwen_output: Mapping[str, Any]) -> bool:
+    """Return whether checkpoint output contains non-empty review content."""
+    if str(qwen_output.get("case_id") or "").strip() != CASE_ID:
+        return False
+    summary = str(qwen_output.get("summary_judgement") or "").strip()
+    strengths = qwen_output.get("major_strengths")
+    concerns = qwen_output.get("major_concerns")
+    return bool(
+        summary
+        and isinstance(strengths, list)
+        and any(str(item or "").strip() for item in strengths)
+        and isinstance(concerns, list)
+        and any(str(item or "").strip() for item in concerns)
+    )
+
+
+def checkpoint_qwen_metadata_complete(qwen_output: Mapping[str, Any]) -> bool:
+    """Return whether an ASPR-Qwen output is produced by a saved checkpoint."""
+    if not bool(qwen_output.get("checkpoint_invoked")):
+        return False
+    if str(qwen_output.get("output_origin", "")).strip().lower() == "assumed_aspr_qwen_output":
+        return False
+    if not checkpoint_output_fields_complete(qwen_output):
+        return False
+    metadata = qwen_output.get("checkpoint_metadata")
+    if not isinstance(metadata, Mapping):
+        return False
+    return all(metadata.get(key) not in (None, "") for key in CHECKPOINT_METADATA_KEYS)
+
+
+def normalize_checkpoint_qwen_output(qwen_output: Mapping[str, Any]) -> dict[str, Any]:
+    """Copy checkpoint metadata to top-level fields used by Fig.10 provenance gates."""
+    out = dict(qwen_output)
+    metadata = out.get("checkpoint_metadata")
+    if isinstance(metadata, Mapping):
+        for key in ["model_hash", "training_config", "data_version", "prompt", "decoding_config", "seed"]:
+            if out.get(key) in (None, "") and metadata.get(key) not in (None, ""):
+                out[key] = metadata.get(key)
+        if out.get("runtime") in (None, ""):
+            out["runtime"] = metadata.get("runtime_seconds", metadata.get("runtime"))
+    return out
+
+
+def merge_checkpoint_metadata_sidecar(qwen_output: Mapping[str, Any], metadata: Mapping[str, Any]) -> dict[str, Any]:
+    """Attach checkpoint metadata saved as a sidecar file to a checkpoint-generated Qwen output."""
+    out = dict(qwen_output)
+    if not bool(out.get("checkpoint_invoked")):
+        return out
+    if str(out.get("output_origin", "")).strip().lower() == "assumed_aspr_qwen_output":
+        return out
+    if not isinstance(out.get("checkpoint_metadata"), Mapping) and metadata:
+        out["checkpoint_metadata"] = dict(metadata)
+    return normalize_checkpoint_qwen_output(out)
+
+
+def build_checkpoint_metadata_template() -> dict[str, Any]:
+    """Return the required metadata sidecar schema for a real ASPR-Qwen checkpoint run."""
+    return {
+        "model_hash": "sha256:<model-or-adapter-hash>",
+        "training_config": {
+            "base_model": "",
+            "adapter_or_checkpoint_path": "",
+            "training_script": "",
+            "hyperparameters": {},
+        },
+        "data_version": "",
+        "prompt": "",
+        "decoding_config": {
+            "temperature": "",
+            "top_p": "",
+            "max_new_tokens": "",
+        },
+        "seed": "",
+        "runtime_seconds": "",
+    }
+
+
+def build_checkpoint_run_contract() -> dict[str, Any]:
+    """Describe the artifacts required to replace the Fig.9 ASPR-Qwen placeholder."""
+    return {
+        "case_id": CASE_ID,
+        "checkpoint_output_path": "fig9_aspr_qwen_output.json",
+        "checkpoint_metadata_path": "fig9_checkpoint_metadata.json",
+        "metadata_template_path": "fig9_checkpoint_metadata_template.json",
+        "required_metadata_keys": sorted(CHECKPOINT_METADATA_KEYS),
+        "required_checkpoint_output_fields": list(CHECKPOINT_OUTPUT_FIELDS),
+        "acceptance_rule": "fig9_aspr_qwen_output.json must be checkpoint-generated, checkpoint_invoked=true, output_origin != assumed_aspr_qwen_output, and either embed checkpoint_metadata or pair with fig9_checkpoint_metadata.json containing all required metadata keys.",
+        "rerun_command": "python3 experiments/kg_perturbation_fig9/build_fig9_case.py --markdown-root /mnt/d/aspr_nature_markdown --output-dir outputs/kg_perturbation_fig9",
+    }
+
+
+def write_checkpoint_contract_files(output_dir: Path) -> None:
+    """Write fillable Fig.9 checkpoint replacement templates."""
+    write_json(output_dir / "fig9_checkpoint_metadata_template.json", build_checkpoint_metadata_template())
+    write_json(output_dir / "fig9_checkpoint_run_contract.json", build_checkpoint_run_contract())
+
+
+def load_or_build_qwen_output(output_dir: Path) -> tuple[dict[str, Any], str, bool]:
+    """Preserve a checkpoint-generated ASPR-Qwen output; otherwise use the placeholder."""
+    existing = read_json_if_present(output_dir / "fig9_aspr_qwen_output.json")
+    sidecar_metadata = read_json_if_present(output_dir / "fig9_checkpoint_metadata.json")
+    existing = merge_checkpoint_metadata_sidecar(existing, sidecar_metadata)
+    if checkpoint_qwen_metadata_complete(existing):
+        return normalize_checkpoint_qwen_output(existing), "fig9_aspr_qwen_output.json", True
+    assumed = build_assumed_qwen_output()
+    return assumed, "fig9_assumed_aspr_qwen_output.json", False
+
+
+def build_fusion_output(
+    agent_output: Mapping[str, Any],
+    qwen_output: Mapping[str, Any],
+    qwen_artifact: str = "fig9_assumed_aspr_qwen_output.json",
+) -> dict[str, Any]:
     return {
         "case_id": CASE_ID,
         "doi": DOI,
         "fusion_inputs": {
             "agent": "fig9_agent_output.json",
-            "aspr_qwen": "fig9_assumed_aspr_qwen_output.json",
+            "aspr_qwen": qwen_artifact,
         },
         "fusion_status": "complete_for_pipeline_ready_figure",
         "final_review": {
@@ -360,9 +501,22 @@ def build_panel_text(
     metric_profile: Sequence[Mapping[str, Any]],
     trace_rows: Sequence[Mapping[str, Any]],
     module_alignment: Sequence[Mapping[str, Any]],
+    qwen_output: Optional[Mapping[str, Any]] = None,
 ) -> dict[str, Any]:
+    qwen_checkpoint_ready = checkpoint_qwen_metadata_complete(qwen_output or {})
+    qwen_title = "checkpoint-generated ASPR-Qwen lane" if qwen_checkpoint_ready else "assumed ASPR-Qwen lane"
+    qwen_boundary = (
+        "checkpoint-generated ASPR-Qwen output with saved model metadata"
+        if qwen_checkpoint_ready
+        else "assumed pipeline-ready placeholder until a real checkpoint run is saved"
+    )
+    qwen_status = (
+        "checkpoint-generated, metadata complete"
+        if qwen_checkpoint_ready
+        else "assumed, pipeline-ready placeholder"
+    )
     return {
-        "figure_title": "Fig. 9 | End-to-end ASPR run generating a human-like review from agent evidence and ASPR-Qwen",
+        "figure_title": f"Fig. 9 | Auditable single-case ASPR run with a {qwen_title}",
         "case": {
             "case_id": CASE_ID,
             "title": TITLE,
@@ -370,6 +524,11 @@ def build_panel_text(
             "doi": DOI,
             "manuscript_path": str(paper_path),
             "peer_review_path": str(peer_path),
+        },
+        "submission_boundary": {
+            "main_claim": "single auditable case run with source-line evidence trace",
+            "forbidden_claim": "representative ASPR checkpoint performance proof",
+            "aspr_qwen_boundary": qwen_boundary,
         },
         "panels": {
             "9a_input": {
@@ -406,9 +565,9 @@ def build_panel_text(
             },
             "9d_qwen": {
                 "title": "ASPR-Qwen reviewer output",
-                "status": "assumed, pipeline-ready placeholder",
+                "status": qwen_status,
                 "short_points": [
-                    "Human-like draft stresses novelty and significance.",
+                    "Review-style draft stresses novelty and significance.",
                     "Major concerns mirror long-RNA and mutant evidence.",
                     "Tone: constructive major revision, then acceptable.",
                 ],
@@ -505,6 +664,24 @@ def draw_fig9(
         "grid": "#d9e0ea",
         "paper": "#fbfcfe",
     }
+    boundary = str(panel_text.get("submission_boundary", {}).get("aspr_qwen_boundary", ""))
+    qwen_checkpoint_ready = boundary.startswith("checkpoint-generated")
+    qwen_run_phrase = (
+        "ASPR-Qwen is checkpoint-generated with saved metadata."
+        if qwen_checkpoint_ready
+        else "ASPR-Qwen is assumed/pipeline-ready."
+    )
+    qwen_setup_phrase = (
+        "ASPR-Qwen: checkpoint-generated output."
+        if qwen_checkpoint_ready
+        else "ASPR-Qwen: assumed output, pipeline-ready."
+    )
+    qwen_banner = (
+        "CHECKPOINT ASPR-Qwen OUTPUT - metadata complete"
+        if qwen_checkpoint_ready
+        else "ASSUMED ASPR-Qwen OUTPUT - pipeline-ready placeholder"
+    )
+    qwen_badge = "ASPR-Qwen checkpoint metadata complete" if qwen_checkpoint_ready else "ASPR-Qwen assumed, pipeline-ready"
     fig = plt.figure(figsize=(18, 11), dpi=180, facecolor="#f6f8fb")
     fig.text(
         0.5,
@@ -519,7 +696,7 @@ def draw_fig9(
     fig.text(
         0.5,
         0.952,
-        "One Nature Communications transparent-review case mapped onto the Fig.8 ASPR modules; ASPR-Qwen is assumed/pipeline-ready.",
+        f"One Nature Communications transparent-review case mapped onto the Fig.8 ASPR modules; {qwen_run_phrase}",
         ha="center",
         va="top",
         fontsize=8.5,
@@ -588,7 +765,7 @@ def draw_fig9(
     panel(panel_b, "b", "Execution timeline aligned to Fig.8 modules", colors["fusion"])
     panel(panel_c, "c", "Agent evidence and innovation profile", colors["agent"])
     panel(panel_d, "d", "ASPR-Qwen reviewer output", colors["qwen"])
-    panel(panel_e, "e", "Fusion into final human-like review", colors["fusion"])
+    panel(panel_e, "e", "Fusion into evidence-grounded review", colors["fusion"])
     panel(panel_f, "f", "Evidence trace, verifier, and peer-review comparison", colors["verifier"])
 
     card(
@@ -609,7 +786,7 @@ def draw_fig9(
         [
             "Inputs: paper markdown + peer-review markdown.",
             "Agent: local evidence/profile extraction.",
-            "ASPR-Qwen: assumed output, pipeline-ready.",
+            qwen_setup_phrase,
             "Verifier: source-line trace + human-review overlap.",
         ],
         colors["agent"],
@@ -754,7 +931,7 @@ def draw_fig9(
         width=48,
         max_lines=5,
     )
-    fig.text(0.485, 0.379, "ASSUMED ASPR-Qwen OUTPUT - pipeline-ready placeholder", ha="center", fontsize=7.2, color=colors["qwen"], fontweight="bold")
+    fig.text(0.485, 0.379, qwen_banner, ha="center", fontsize=7.2, color=colors["qwen"], fontweight="bold")
 
     card(
         (0.700, 0.505, 0.240, 0.095),
@@ -827,7 +1004,7 @@ def draw_fig9(
     badges = [
         ("5/6 human-review concerns matched", colors["green"]),
         ("2 unsupported claims removed", colors["verifier"]),
-        ("ASPR-Qwen assumed, pipeline-ready", colors["qwen"]),
+        (qwen_badge, colors["qwen"]),
     ]
     for idx, (label, color) in enumerate(badges):
         x0 = 0.010 + idx * 0.315
@@ -903,9 +1080,10 @@ def run(markdown_root: Path, output_dir: Path) -> dict[str, Any]:
     metric_profile = build_metric_profile()
     module_alignment = build_module_alignment()
     agent_output = build_agent_output(metric_profile, trace_rows)
+    qwen_output, qwen_artifact, checkpoint_ready = load_or_build_qwen_output(output_dir)
     assumed_qwen = build_assumed_qwen_output()
-    fusion_output = build_fusion_output(agent_output, assumed_qwen)
-    panel_text = build_panel_text(paper_path, peer_path, metric_profile, trace_rows, module_alignment)
+    fusion_output = build_fusion_output(agent_output, qwen_output, qwen_artifact=qwen_artifact)
+    panel_text = build_panel_text(paper_path, peer_path, metric_profile, trace_rows, module_alignment, qwen_output=qwen_output)
     runtime_log = build_runtime_log()
 
     manifest_rows = [
@@ -923,7 +1101,7 @@ def run(markdown_root: Path, output_dir: Path) -> dict[str, Any]:
             "peer_review_markdown": str(peer_path),
             "manuscript_sha1": sha1_file(paper_path),
             "peer_review_sha1": sha1_file(peer_path),
-            "aspr_qwen_status": "assumed_pipeline_ready_checkpoint_unavailable",
+            "aspr_qwen_status": "checkpoint_generated_metadata_complete" if checkpoint_ready else "assumed_pipeline_ready_checkpoint_unavailable",
             "selection_reason": "Clear Nature-family transparent-review case with manuscript, reviewer concerns, author responses, and final acceptance signals.",
         }
     ]
@@ -942,13 +1120,14 @@ def run(markdown_root: Path, output_dir: Path) -> dict[str, Any]:
     write_json(output_dir / "fig9_case_manifest.json", manifest_json)
     write_json(output_dir / "fig9_agent_output.json", agent_output)
     write_json(output_dir / "fig9_assumed_aspr_qwen_output.json", assumed_qwen)
-    write_json(output_dir / "fig9_aspr_qwen_output.json", assumed_qwen)
+    write_json(output_dir / "fig9_aspr_qwen_output.json", qwen_output)
     write_json(output_dir / "fig9_fusion_output.json", fusion_output)
     write_csv(output_dir / "fig9_claim_evidence_trace.csv", trace_rows)
     write_csv(output_dir / "fig9_metric_profile.csv", metric_profile)
     write_csv(output_dir / "fig9_fig8_module_alignment.csv", module_alignment)
     write_csv(output_dir / "fig9_runtime_log.csv", runtime_log)
     write_json(output_dir / "fig9_panel_text.json", panel_text)
+    write_checkpoint_contract_files(output_dir)
     atomic_write_text(output_dir / "fig9_image2_prompt.md", build_image2_prompt(panel_text) + "\n")
     figure_summary = draw_fig9(output_dir, metric_profile, trace_rows, module_alignment, panel_text)
 
@@ -961,6 +1140,8 @@ def run(markdown_root: Path, output_dir: Path) -> dict[str, Any]:
         "fig9_claim_evidence_trace.csv",
         "fig9_fig8_module_alignment.csv",
         "fig9_panel_text.json",
+        "fig9_checkpoint_metadata_template.json",
+        "fig9_checkpoint_run_contract.json",
         "fig9_full.png",
         "fig9_full.svg",
     ]
@@ -969,13 +1150,63 @@ def run(markdown_root: Path, output_dir: Path) -> dict[str, Any]:
         "complete": all((output_dir / name).exists() for name in required_files),
         "required_files": {name: (output_dir / name).exists() for name in required_files},
         "figure": figure_summary,
+        "submission_boundary": "single auditable checkpoint case run" if checkpoint_ready else "single auditable case run, not representative ASPR checkpoint performance",
+        "aspr_qwen_boundary": "checkpoint-generated ASPR-Qwen output with saved model metadata" if checkpoint_ready else "assumed pipeline-ready placeholder until a real checkpoint run is saved",
+        "replacement_gate": "checkpoint output and metadata are present for this case" if checkpoint_ready else "replace fig9_aspr_qwen_output.json with checkpoint-generated output and rerun fusion/verifier",
         "notes": [
-            "ASPR-Qwen output is assumed and explicitly labeled pipeline-ready.",
+            "ASPR-Qwen output is checkpoint-generated and metadata-complete." if checkpoint_ready else "ASPR-Qwen output is assumed and explicitly labeled pipeline-ready.",
             "Evidence rows are anchored to local manuscript and peer-review markdown line numbers.",
             "Final figure is a deterministic storyboard render, not a generated screenshot.",
         ],
     }
     write_json(output_dir / "fig9_quality_report.json", quality_report)
+    standard_quality_report = {
+        "figure": "fig9",
+        "status_label": "checkpoint_case_storyboard_ready" if checkpoint_ready else "prototype_storyboard_checkpoint_placeholder",
+        "overall_pass": bool(quality_report["complete"]),
+        "quality_gates": {
+            "checks": {
+                "required_files_present": int(bool(quality_report["complete"])),
+                "checkpoint_boundary_declared": 1,
+                "placeholder_not_main_claim": 1,
+                "deterministic_storyboard_render": 1,
+                "checkpoint_metadata_complete": int(checkpoint_ready),
+            },
+            "overall_pass": bool(quality_report["complete"]),
+            "status_label": "checkpoint_case_storyboard_ready" if checkpoint_ready else "prototype_storyboard_checkpoint_placeholder",
+            "checkpoint_generated_aspr_qwen": int(checkpoint_ready),
+            "main_claim_ready": int(checkpoint_ready),
+        },
+        "generated_files": [
+            {
+                "path": str(output_dir / "fig9_full.png"),
+                "exists": int((output_dir / "fig9_full.png").exists()),
+                "width_px": figure_summary.get("width_px"),
+                "height_px": figure_summary.get("height_px"),
+            },
+            {
+                "path": str(output_dir / "fig9_full.svg"),
+                "exists": int((output_dir / "fig9_full.svg").exists()),
+            },
+        ],
+        "submission_boundary": quality_report["submission_boundary"],
+        "aspr_qwen_boundary": quality_report["aspr_qwen_boundary"],
+        "replacement_gate": quality_report["replacement_gate"],
+    }
+    write_json(output_dir / "figure_quality_report.json", standard_quality_report)
+    run_manifest = {
+        "figure": "fig9",
+        "argv": sys.argv,
+        "inputs": {
+            "markdown_root": str(markdown_root),
+            "manuscript_markdown": str(paper_path),
+            "peer_review_markdown": str(peer_path),
+            "manuscript_sha1": sha1_file(paper_path),
+            "peer_review_sha1": sha1_file(peer_path),
+        },
+        "quality_gates": standard_quality_report["quality_gates"],
+    }
+    write_json(output_dir / "run_manifest.json", run_manifest)
     return quality_report
 
 

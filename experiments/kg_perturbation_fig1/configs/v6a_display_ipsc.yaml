@@ -102,11 +102,15 @@ api:
 graph:
   max_papers_for_graph: 4500
   max_edges: 150000
+  deterministic_hybrid_sampling: true
+  sampling_target_edges: 150000
+  sampling_seed: 20260630
   min_shared_references: 1
   min_cocitations: 1
   community_resolution: 2.2
   random_seed: 42
 metrics:
+  common_cumulative_horizon_years: 15
   curve_mode: "raw"
   signed_compression: true
   betweenness_sample: 250

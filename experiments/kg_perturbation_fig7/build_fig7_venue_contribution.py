@@ -438,6 +438,25 @@ def bootstrap_sum_interval(values: Sequence[float], seed: int = 13, n_boot: int 
     return (total, float(np.quantile(samples, 0.025)), float(np.quantile(samples, 0.975)))
 
 
+def bootstrap_difference_samples(
+    left: Sequence[float],
+    right: Sequence[float],
+    seed: int = 202607,
+    n_boot: int = 1600,
+) -> Tuple[np.ndarray, np.ndarray]:
+    """Bootstrap aggregate and per-paper mean differences for two families."""
+    left_arr = np.array([x for x in left if np.isfinite(x)], dtype=float)
+    right_arr = np.array([x for x in right if np.isfinite(x)], dtype=float)
+    if len(left_arr) == 0 or len(right_arr) == 0:
+        return np.array([], dtype=float), np.array([], dtype=float)
+    rng = np.random.default_rng(seed)
+    left_samples = rng.choice(left_arr, size=(n_boot, len(left_arr)), replace=True)
+    right_samples = rng.choice(right_arr, size=(n_boot, len(right_arr)), replace=True)
+    aggregate_diff = left_samples.sum(axis=1) - right_samples.sum(axis=1)
+    per_paper_diff = left_samples.mean(axis=1) - right_samples.mean(axis=1)
+    return aggregate_diff, per_paper_diff
+
+
 def bootstrap_ratio_interval(
     flags: Sequence[int],
     expected_rate: float,
@@ -725,7 +744,70 @@ def build_metric_sensitivity(df: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def build_confounder_audit(df: pd.DataFrame, portfolio: pd.DataFrame, sensitivity: pd.DataFrame, min_family_n: int) -> pd.DataFrame:
+def build_pairwise_contribution_tests(
+    df: pd.DataFrame,
+    portfolio: pd.DataFrame,
+    max_comparators: int = 5,
+    n_boot: int = 1600,
+) -> pd.DataFrame:
+    """Compare Nature Portfolio against top VCI competitors with bootstrap differences."""
+    if portfolio.empty or "Nature Portfolio" not in set(portfolio["venue_family"]):
+        return pd.DataFrame()
+    ordered = portfolio.sort_values("vci", ascending=False)
+    nature_values = finite_series(df.loc[df["venue_family_plot"].eq("Nature Portfolio"), "future_impact_controlled"]).dropna()
+    rows: List[Dict[str, Any]] = []
+    comparators = [name for name in ordered["venue_family"].astype(str).tolist() if name != "Nature Portfolio"][:max_comparators]
+    nature_vci = float(nature_values.sum())
+    nature_mean = float(nature_values.mean()) if len(nature_values) else np.nan
+    for idx, comparator in enumerate(comparators, start=1):
+        comparator_values = finite_series(df.loc[df["venue_family_plot"].eq(comparator), "future_impact_controlled"]).dropna()
+        if comparator_values.empty or nature_values.empty:
+            continue
+        aggregate_samples, per_paper_samples = bootstrap_difference_samples(
+            nature_values,
+            comparator_values,
+            seed=202607 + idx,
+            n_boot=n_boot,
+        )
+        aggregate_diff = nature_vci - float(comparator_values.sum())
+        per_paper_diff = nature_mean - float(comparator_values.mean())
+        aggregate_low = float(np.quantile(aggregate_samples, 0.025)) if len(aggregate_samples) else np.nan
+        aggregate_high = float(np.quantile(aggregate_samples, 0.975)) if len(aggregate_samples) else np.nan
+        per_low = float(np.quantile(per_paper_samples, 0.025)) if len(per_paper_samples) else np.nan
+        per_high = float(np.quantile(per_paper_samples, 0.975)) if len(per_paper_samples) else np.nan
+        winner_probability = float((aggregate_samples > 0).mean()) if len(aggregate_samples) else np.nan
+        per_paper_probability = float((per_paper_samples > 0).mean()) if len(per_paper_samples) else np.nan
+        rows.append(
+            {
+                "comparison": f"Nature Portfolio vs {comparator}",
+                "comparator": comparator,
+                "nature_n": int(len(nature_values)),
+                "comparator_n": int(len(comparator_values)),
+                "nature_vci": nature_vci,
+                "comparator_vci": float(comparator_values.sum()),
+                "aggregate_diff": aggregate_diff,
+                "aggregate_diff_ci_low": aggregate_low,
+                "aggregate_diff_ci_high": aggregate_high,
+                "aggregate_p_diff_le_0": float((aggregate_samples <= 0).mean()) if len(aggregate_samples) else np.nan,
+                "aggregate_winner_probability": winner_probability,
+                "per_paper_diff": per_paper_diff,
+                "per_paper_diff_ci_low": per_low,
+                "per_paper_diff_ci_high": per_high,
+                "per_paper_p_diff_le_0": float((per_paper_samples <= 0).mean()) if len(per_paper_samples) else np.nan,
+                "per_paper_winner_probability": per_paper_probability,
+                "interpretation": "pairwise_supported" if aggregate_low > 0 else "point_estimate_only_ci_crosses_zero",
+            }
+        )
+    return pd.DataFrame(rows)
+
+
+def build_confounder_audit(
+    df: pd.DataFrame,
+    portfolio: pd.DataFrame,
+    sensitivity: pd.DataFrame,
+    pairwise_tests: pd.DataFrame,
+    min_family_n: int,
+) -> pd.DataFrame:
     total = len(df)
     metadata_coverage = float(df["metadata_found"].fillna(0).mean()) if total else 0.0
     field_year_cells = df.groupby(["primary_field", "year"]).size()
@@ -739,6 +821,12 @@ def build_confounder_audit(df: pd.DataFrame, portfolio: pd.DataFrame, sensitivit
     interval_separated = False
     if len(top) >= 2 and top.iloc[0]["venue_family"] == "Nature Portfolio":
         interval_separated = bool(top.iloc[0]["vci_ci_low"] > top.iloc[1]["vci_ci_high"])
+    pairwise_supported = False
+    pairwise_probability = np.nan
+    if not pairwise_tests.empty:
+        first_pair = pairwise_tests.iloc[0]
+        pairwise_supported = bool(float(first_pair["aggregate_diff_ci_low"]) > 0)
+        pairwise_probability = float(first_pair["aggregate_winner_probability"])
     controls = [
         {
             "audit_item": "analysis_corpus",
@@ -805,6 +893,12 @@ def build_confounder_audit(df: pd.DataFrame, portfolio: pd.DataFrame, sensitivit
             "status": "pass" if interval_separated else "gap",
             "value": str(int(interval_separated)),
             "note": "Strict headline support requires Nature lower bootstrap CI to exceed runner-up upper CI.",
+        },
+        {
+            "audit_item": "pairwise_aggregate_difference",
+            "status": "pass" if pairwise_supported else "gap",
+            "value": f"{pairwise_probability:.3f}" if np.isfinite(pairwise_probability) else "nan",
+            "note": "Bootstrap winner probability for Nature aggregate VCI versus the runner-up; pass requires the 95% difference interval to stay above zero.",
         },
     ]
     return pd.DataFrame(controls)
@@ -1100,7 +1194,7 @@ def draw_audit_summary(
         headline = "Strict headline supported"
         color = NATURE_RED
     elif headline_supported:
-        headline = "Nature ranks #1 by aggregate VCI; interval caveat remains"
+        headline = "Nature ranks #1 by aggregate VCI; interval and pairwise caveats remain"
         color = NATURE_RED
     else:
         headline = "Pipeline-ready; Nature headline needs more support"
@@ -1147,20 +1241,25 @@ def compose_full_figure(panel_paths: Sequence[Path], path: Path, headline_suppor
     header_h = 130
     canvas = Image.new("RGB", (3 * w + 4 * margin, 2 * h + 3 * margin + header_h), _hex(SURFACE))
     draw = ImageDraw.Draw(canvas)
-    title = "Fig. 7 | Nature Portfolio has the strongest field-year normalized venue contribution in our corpus"
+    title = "Fig. 7 | Venue-family contribution under field-year controls"
     if not headline_supported:
         title = "Fig. 7 pipeline-ready | Venue-family contribution; Nature headline requires stricter support"
     draw.text((margin, 36), title, font=_font(38, bold=True), fill=_hex(INK))
     if strict_claim:
         caveat = "bootstrap intervals separate Nature from the runner-up"
     elif headline_supported:
-        caveat = "point estimate supported; interval separation and per-paper-intensity caveats are audited"
+        caveat = "point estimate supported; interval, pairwise-difference and per-paper-intensity caveats are audited"
     else:
         caveat = "pipeline-ready claim audit"
+    nature_summary = (
+        "Nature Portfolio has the top aggregate VCI point estimate in this corpus; "
+        if headline_supported
+        else "Nature Portfolio headline remains pipeline-ready in this corpus; "
+    )
     subtitle = (
         "Main layer: venue family. Nature Portfolio is highlighted in deep red; "
         "VCI is portfolio-level aggregate future graph-impact contribution; "
-        f"{caveat}."
+        f"{nature_summary}{caveat}."
     )
     _draw_wrapped(draw, (margin, 84), subtitle, _font(19), MUTED, canvas.width - 2 * margin, line_spacing=4)
     positions = [
@@ -1204,7 +1303,7 @@ Main metric: `VCI = sum(residual(field-year z(RGPM) ~ article type + log1p(refer
 
 Publication-day mechanism scores use the same field-year/control basis on the Fig.3 publication-day graph indicators. Top-K enrichment is observed family share of the top 1% and top 5% papers by controlled future graph-impact score divided by the corpus-wide expected share.
 
-Headline gate: Nature Portfolio must rank first by aggregate VCI for point-estimate support. Strict support additionally requires its 95% bootstrap interval to clear the runner-up interval. Current point-estimate support: `{headline_supported}`. Current strict gate: `{strict_claim}`.
+Headline gate: Nature Portfolio must rank first by aggregate VCI for point-estimate support. Strict support additionally requires its 95% bootstrap interval to clear the runner-up interval. A separate pairwise bootstrap difference test is written to `fig7_pairwise_contribution_tests.csv`; it is used as a reviewer-facing uncertainty audit rather than as a shortcut around the strict interval gate. Current point-estimate support: `{headline_supported}`. Current strict gate: `{strict_claim}`.
 """
     (out_dir / "fig7_methods.md").write_text(methods, encoding="utf-8")
 
@@ -1246,23 +1345,26 @@ def build_fig7(
     mapping_audit = build_venue_family_mapping_audit(df)
     journal_supplement = build_journal_supplement(df)
     sensitivity = build_metric_sensitivity(df)
-    audit = build_confounder_audit(df, portfolio, sensitivity, min_family_n)
+    pairwise_tests = build_pairwise_contribution_tests(df, portfolio)
+    audit = build_confounder_audit(df, portfolio, sensitivity, pairwise_tests, min_family_n)
 
     strict_claim = bool(audit.loc[audit["audit_item"].eq("strict_interval_separation"), "status"].eq("pass").any())
+    pairwise_supported = bool(audit.loc[audit["audit_item"].eq("pairwise_aggregate_difference"), "status"].eq("pass").any())
     headline_supported = bool(audit.loc[audit["audit_item"].eq("nature_rank"), "status"].eq("pass").any())
     quality_gates = {
         "overall_pass": headline_supported,
         "status_label": (
             "strict headline supported"
             if strict_claim
-            else "headline point-estimate supported with strict interval caveat"
+            else "headline point-estimate supported with strict interval and pairwise uncertainty caveats"
             if headline_supported
             else "pipeline-ready with headline gaps"
         ),
         "checks": {row["audit_item"]: int(row["status"] in {"pass", "measured"}) for _, row in audit.iterrows()},
-        "headline_claim": "Nature Portfolio has the strongest field-year normalized venue contribution in our corpus",
+        "headline_claim": "Nature Portfolio has the top aggregate VCI point estimate in the current field-year controlled corpus",
         "headline_point_estimate_supported": headline_supported,
         "strict_claim_supported": strict_claim,
+        "pairwise_difference_supported": pairwise_supported,
         "min_family_n": min_family_n,
     }
 
@@ -1275,6 +1377,7 @@ def build_fig7(
     prepost.to_csv(out_dir / "fig7_pre_post_publication_signal.csv", index=False)
     audit.to_csv(out_dir / "fig7_confounder_audit.csv", index=False)
     sensitivity.to_csv(out_dir / "fig7_metric_sensitivity.csv", index=False)
+    pairwise_tests.to_csv(out_dir / "fig7_pairwise_contribution_tests.csv", index=False)
     mapping_audit.to_csv(out_dir / "fig7_venue_family_mapping_audit.csv", index=False)
     journal_supplement.to_csv(out_dir / "fig7_journal_supplement.csv", index=False)
 
@@ -1318,7 +1421,7 @@ def build_fig7(
         },
         domains=sorted(df["domain"].dropna().astype(str).unique()),
         quality_gates=quality_gates,
-        extra={"gaps": gaps},
+        extra={"gaps": gaps, "pairwise_tests": str(out_dir / "fig7_pairwise_contribution_tests.csv")},
     )
     write_figure_quality_report(
         out_dir,
@@ -1330,7 +1433,7 @@ def build_fig7(
             "main_layer": "venue_family",
             "supplement_layer": "journal",
         },
-        extra={"metadata_source": metadata_source},
+        extra={"metadata_source": metadata_source, "pairwise_tests": str(out_dir / "fig7_pairwise_contribution_tests.csv")},
     )
     return {
         "out_dir": str(out_dir),

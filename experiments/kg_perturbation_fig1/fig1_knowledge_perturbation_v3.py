@@ -1632,6 +1632,150 @@ def prune_graph_edges(G: nx.Graph, max_edges: int) -> nx.Graph:
     return H
 
 
+def _hybrid_edge_type(data: Mapping[str, Any]) -> str:
+    """Return the primary non-direct edge family for deterministic sampling."""
+    if float(data.get("direct", 0) or 0) > 0:
+        return "direct"
+    weights = {
+        "bibliographic": float(data.get("bibliographic", 0) or 0),
+        "cocitation": float(data.get("cocitation", 0) or 0),
+    }
+    best = max(weights.items(), key=lambda item: item[1])
+    return best[0] if best[1] > 0 else "hybrid"
+
+
+def _edge_year(value: Any) -> int:
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return 0
+
+
+def apply_deterministic_hybrid_edge_sampling(G: nx.Graph, gcfg: Mapping[str, Any]) -> nx.Graph:
+    """Sample hybrid edges reproducibly while preserving all direct citation edges.
+
+    The sampling target is intentionally separate from ``max_edges``: hitting the
+    deterministic target is not treated as an uncontrolled edge-cap truncation.
+    """
+    enabled = bool(gcfg.get("deterministic_hybrid_sampling", False))
+    target_edges = int(gcfg.get("sampling_target_edges", gcfg.get("max_edges", 0)) or 0)
+    seed = int(gcfg.get("sampling_seed", gcfg.get("random_seed", 42)) or 42)
+    if not enabled or target_edges <= 0 or G.number_of_edges() <= target_edges:
+        G.graph["edge_sampling"] = {
+            "sampling_applied": 0,
+            "sampling_seed": seed,
+            "sampling_target_edges": target_edges,
+            "raw_edges": int(G.number_of_edges()),
+            "exported_edges": int(G.number_of_edges()),
+            "direct_edges_preserved": int(sum(1 for _, _, data in G.edges(data=True) if float(data.get("direct", 0) or 0) > 0)),
+            "hybrid_raw_edges": int(sum(1 for _, _, data in G.edges(data=True) if float(data.get("direct", 0) or 0) <= 0)),
+            "hybrid_exported_edges": int(sum(1 for _, _, data in G.edges(data=True) if float(data.get("direct", 0) or 0) <= 0)),
+            "hybrid_sampling_fraction": 1.0,
+        }
+        return G
+
+    direct_edges: List[Tuple[str, str, Dict[str, Any]]] = []
+    hybrid_edges: List[Tuple[str, str, Dict[str, Any]]] = []
+    strata: Dict[Tuple[str, int, int], List[Tuple[str, str, Dict[str, Any]]]] = collections.defaultdict(list)
+    for u, v, data in G.edges(data=True):
+        row = (str(u), str(v), dict(data))
+        if float(data.get("direct", 0) or 0) > 0:
+            direct_edges.append(row)
+            continue
+        source_year = _edge_year(G.nodes[u].get("year"))
+        target_year = _edge_year(G.nodes[v].get("year"))
+        year_a, year_b = sorted((source_year, target_year))
+        key = (_hybrid_edge_type(data), year_a, year_b)
+        strata[key].append(row)
+        hybrid_edges.append(row)
+
+    hybrid_budget = max(0, target_edges - len(direct_edges))
+    selected_hybrid: List[Tuple[str, str, Dict[str, Any]]] = []
+    if hybrid_budget >= len(hybrid_edges):
+        selected_hybrid = list(hybrid_edges)
+    elif hybrid_budget > 0 and hybrid_edges:
+        stratum_items = sorted(strata.items(), key=lambda item: (item[0][0], item[0][1], item[0][2]))
+        allocations: Dict[Tuple[str, int, int], int] = {}
+        remainders: List[Tuple[float, Tuple[str, int, int]]] = []
+        for key, edges in stratum_items:
+            exact = hybrid_budget * (len(edges) / len(hybrid_edges))
+            base = min(len(edges), int(math.floor(exact)))
+            allocations[key] = base
+            remainders.append((exact - base, key))
+        remaining = hybrid_budget - sum(allocations.values())
+        for _, key in sorted(remainders, key=lambda item: (-item[0], item[1])):
+            if remaining <= 0:
+                break
+            if allocations[key] < len(strata[key]):
+                allocations[key] += 1
+                remaining -= 1
+        for key, edges in stratum_items:
+            take = allocations.get(key, 0)
+            ranked = sorted(
+                edges,
+                key=lambda edge: hashlib.sha1(f"{seed}|{key}|{edge[0]}|{edge[1]}".encode("utf-8")).hexdigest(),
+            )
+            selected_hybrid.extend(ranked[:take])
+
+    H = nx.Graph()
+    H.add_nodes_from(G.nodes(data=True))
+    for u, v, data in direct_edges + selected_hybrid:
+        H.add_edge(u, v, **data)
+    hybrid_fraction = float(len(selected_hybrid) / len(hybrid_edges)) if hybrid_edges else 1.0
+    H.graph.update(G.graph)
+    H.graph["edge_sampling"] = {
+        "sampling_applied": 1,
+        "sampling_seed": seed,
+        "sampling_target_edges": target_edges,
+        "raw_edges": int(G.number_of_edges()),
+        "exported_edges": int(H.number_of_edges()),
+        "direct_edges_preserved": int(len(direct_edges)),
+        "hybrid_raw_edges": int(len(hybrid_edges)),
+        "hybrid_exported_edges": int(len(selected_hybrid)),
+        "hybrid_sampling_fraction": hybrid_fraction,
+    }
+    return H
+
+
+def build_edge_sampling_manifest_row(
+    domain: str,
+    raw_graph: nx.Graph,
+    sampled_graph: nx.Graph,
+    gcfg: Mapping[str, Any],
+) -> Dict[str, Any]:
+    """Build one row for the Fig.1 deterministic edge-sampling manifest."""
+    sampling = dict(sampled_graph.graph.get("edge_sampling") or {})
+    if not sampling:
+        raw_edges = int(raw_graph.number_of_edges())
+        exported_edges = int(sampled_graph.number_of_edges())
+        hybrid_raw = int(sum(1 for _, _, data in raw_graph.edges(data=True) if float(data.get("direct", 0) or 0) <= 0))
+        hybrid_exported = int(sum(1 for _, _, data in sampled_graph.edges(data=True) if float(data.get("direct", 0) or 0) <= 0))
+        sampling = {
+            "sampling_applied": int(exported_edges < raw_edges),
+            "sampling_seed": int(gcfg.get("sampling_seed", gcfg.get("random_seed", 42)) or 42),
+            "sampling_target_edges": int(gcfg.get("sampling_target_edges", gcfg.get("max_edges", 0)) or 0),
+            "raw_edges": raw_edges,
+            "exported_edges": exported_edges,
+            "direct_edges_preserved": int(sum(1 for _, _, data in sampled_graph.edges(data=True) if float(data.get("direct", 0) or 0) > 0)),
+            "hybrid_raw_edges": hybrid_raw,
+            "hybrid_exported_edges": hybrid_exported,
+            "hybrid_sampling_fraction": float(hybrid_exported / hybrid_raw) if hybrid_raw else 1.0,
+        }
+    return {
+        "domain": domain,
+        "sampling_applied": int(sampling.get("sampling_applied", 0)),
+        "sampling_seed": int(sampling.get("sampling_seed", 0) or 0),
+        "sampling_target_edges": int(sampling.get("sampling_target_edges", 0) or 0),
+        "graph_max_edges": int(gcfg.get("max_edges", 0) or 0),
+        "raw_edges": int(sampling.get("raw_edges", raw_graph.number_of_edges()) or 0),
+        "exported_edges": int(sampling.get("exported_edges", sampled_graph.number_of_edges()) or 0),
+        "direct_edges_preserved": int(sampling.get("direct_edges_preserved", 0) or 0),
+        "hybrid_raw_edges": int(sampling.get("hybrid_raw_edges", 0) or 0),
+        "hybrid_exported_edges": int(sampling.get("hybrid_exported_edges", 0) or 0),
+        "hybrid_sampling_fraction": float(sampling.get("hybrid_sampling_fraction", 1.0) or 0.0),
+    }
+
+
 def build_hybrid_graph(
     selected_works: Mapping[str, Dict[str, Any]],
     all_works: Mapping[str, Dict[str, Any]],
@@ -1704,7 +1848,23 @@ def build_hybrid_graph(
             if c >= min_coc:
                 add_weighted_edge(G, u, v, coc_weight * math.log1p(c), "cocitation", count=c)
 
-    G = prune_graph_edges(G, int(gcfg.get("max_edges", 120000)))
+    raw_graph = G.copy()
+    if bool(gcfg.get("deterministic_hybrid_sampling", False)):
+        G = apply_deterministic_hybrid_edge_sampling(G, gcfg)
+        G.graph["edge_sampling_manifest"] = build_edge_sampling_manifest_row(
+            str(cfg.get("slug", "")),
+            raw_graph,
+            G,
+            gcfg,
+        )
+    else:
+        G = prune_graph_edges(G, int(gcfg.get("max_edges", 120000)))
+        G.graph["edge_sampling_manifest"] = build_edge_sampling_manifest_row(
+            str(cfg.get("slug", "")),
+            raw_graph,
+            G,
+            gcfg,
+        )
     return G
 
 
@@ -3482,6 +3642,7 @@ def build_edge_cap_diagnostics(result: DomainResult) -> Dict[str, Any]:
     gcfg = cfg.get("graph", {})
     max_edges = int(gcfg.get("max_edges", 0))
     edge_count = int(result.G.number_of_edges())
+    sampling = dict(result.G.graph.get("edge_sampling") or {})
     direct_edges = 0
     bibliographic_edges = 0
     cocitation_edges = 0
@@ -3498,36 +3659,55 @@ def build_edge_cap_diagnostics(result: DomainResult) -> Dict[str, Any]:
             bibliographic_edges += 1
         if cocitation > 0:
             cocitation_edges += 1
+    sampling_applied = int(sampling.get("sampling_applied", 0) or 0)
+    edge_cap_hit = int(max_edges > 0 and edge_count >= max_edges and not sampling_applied)
     return {
         "domain": cfg.get("slug"),
         "domain_name": cfg.get("domain_name"),
         "graph_max_edges": max_edges,
+        "sampling_target_edges": int(sampling.get("sampling_target_edges", 0) or 0),
+        "deterministic_hybrid_sampling": sampling_applied,
         "exported_edges": edge_count,
-        "edge_cap_hit": int(max_edges > 0 and edge_count >= max_edges),
+        "raw_edges_before_sampling": int(sampling.get("raw_edges", edge_count) or edge_count),
+        "edge_cap_hit": edge_cap_hit,
         "direct_edges": direct_edges,
         "bibliographic_edges": bibliographic_edges,
         "cocitation_edges": cocitation_edges,
         "hybrid_only_edges": hybrid_only_edges,
         "hybrid_only_edge_ratio": float(hybrid_only_edges / edge_count) if edge_count else 0.0,
-        "interpretation": "edge_cap_hit_density_not_interpretable"
-        if max_edges > 0 and edge_count >= max_edges
-        else "edge_cap_not_hit",
+        "interpretation": "deterministic_hybrid_sampling_standardized_trajectories"
+        if sampling_applied
+        else ("edge_cap_hit_density_not_interpretable" if edge_cap_hit else "edge_cap_not_hit"),
     }
+
+
+def effective_main_cumulative_horizon_years(cfg: Mapping[str, Any], cumulative_windows: Sequence[Tuple[int, int]]) -> int:
+    """Return the main-text cumulative horizon, honoring a configured common horizon."""
+    metrics_cfg = cfg.get("metrics", {}) if isinstance(cfg.get("metrics", {}), Mapping) else {}
+    common = metrics_cfg.get("common_cumulative_horizon_years")
+    if common is not None:
+        try:
+            return int(common)
+        except (TypeError, ValueError):
+            pass
+    if not cumulative_windows:
+        return 0
+    return int(cumulative_windows[-1][1] - cumulative_windows[0][0] + 1)
 
 
 def build_fig1_quality_gates(results: Sequence[DomainResult]) -> Dict[str, Any]:
     edge_reports = [build_edge_cap_diagnostics(result) for result in results]
     manual_counts = {str(result.cfg.get("slug")): count_manual_parameter_specs(result.cfg) for result in results}
     final_horizons = {
-        str(result.cfg.get("slug")): int(result.cumulative_windows[-1][1] - result.cumulative_windows[0][0] + 1)
-        if result.cumulative_windows
-        else 0
+        str(result.cfg.get("slug")): effective_main_cumulative_horizon_years(result.cfg, result.cumulative_windows)
         for result in results
     }
+    sampling_manifest_present = all(bool(result.G.graph.get("edge_sampling_manifest")) for result in results)
     checks = {
         "manual_trajectories_absent": int(all(count == 0 for count in manual_counts.values())),
         "edge_cap_not_hit_all_domains": int(all(int(report["edge_cap_hit"]) == 0 for report in edge_reports)),
         "final_cumulative_horizon_consistent": int(len(set(final_horizons.values())) <= 1),
+        "edge_sampling_manifest_present": int(sampling_manifest_present),
     }
     overall = bool(all(checks.values()))
     return {
@@ -3541,6 +3721,7 @@ def build_fig1_quality_gates(results: Sequence[DomainResult]) -> Dict[str, Any]:
             "manual_trajectories_allowed_in_main": 0,
             "edge_cap_hit_allowed": 0,
             "final_cumulative_horizon_unique_values": 1,
+            "edge_sampling_manifest_required": 1,
         },
     }
 
@@ -3619,6 +3800,10 @@ def export_tables(result: DomainResult, out_dir: Path) -> None:
 
     result.metrics.to_csv(domain_dir / "perturbation_metrics.csv", index=False)
     compute_snapshot_delta_metrics(result).to_csv(domain_dir / "snapshot_delta_metrics.csv", index=False)
+    pd.DataFrame([result.G.graph.get("edge_sampling_manifest") or build_edge_sampling_manifest_row(cfg["slug"], result.G, result.G, cfg.get("graph", {}))]).to_csv(
+        domain_dir / "fig1_edge_sampling_manifest.csv",
+        index=False,
+    )
     allow_manual = bool(cfg.get("plot", {}).get("allow_manual_trajectories", False))
     dominant_parameter_table(result.metrics, cfg, allow_manual=allow_manual).to_csv(
         domain_dir / "dominant_parameter_trajectories.csv",

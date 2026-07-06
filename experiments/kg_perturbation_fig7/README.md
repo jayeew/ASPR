@@ -2,12 +2,12 @@
 
 ## 一句话结论
 
-Fig. 7 的任务是突出不同 journal / publisher / venue family 在承载 graph-perturbing research 上的系统差异，并把结论组织成 Nature / Nature Portfolio 对学术创新贡献最大的证据链。
+Fig. 7 的任务是突出不同 journal / publisher / venue family 在承载 graph-perturbing research 上的系统差异，并把结论组织成 venue-family contribution under field-year controls；Nature / Nature Portfolio 只能写成当前语料中的 aggregate VCI point-estimate 结果，不能写成因果 superiority。
 
 推荐标题：
 
 ```text
-Fig. 7 | Nature Portfolio has the strongest field-year normalized venue contribution in our corpus
+Fig. 7 | Venue-family contribution under field-year controls
 ```
 
 备选标题：
@@ -49,11 +49,12 @@ venue metrics CSV
 
 ## 预设主结论与数据纪律
 
-这张图的预设主结论是：
+这张图的投稿安全主结论是：
 
 ```text
-Nature Portfolio has the strongest field-year normalized venue contribution
-in our corpus.
+Nature Portfolio has the top aggregate VCI point estimate in the current
+field-year controlled corpus; strict interval separation and per-paper
+intensity caveats remain audited.
 ```
 
 但图稿必须避免给人“硬吹 Nature”的感觉。建议把结论写成数据支持的分层证据：

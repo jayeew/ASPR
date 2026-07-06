@@ -1,7 +1,0 @@
-role,color,use
-Nature corpus / Nature Portfolio,#8B1E2D,"source corpus, Nature venue family, case-paper emphasis"
-ASPR graph agent,#2563EB,"graph evidence, perturbation agent, learned graph score"
-ASPR-Qwen,#7C3AED,review-style model lane and Qwen-generated draft
-Evidence / verifier / uncertainty,#F0986E,"evidence trace, safety flags, verifier gates"
-Fusion / final output,#111827,"full ASPR, final fused report, primary ink"
-Neutral context,#64748B,"axes, non-highlight venues, low-priority annotations"

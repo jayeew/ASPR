@@ -1,8 +1,0 @@
-metric,expected_outcomes,tested_expected_outcomes,significant_expected_outcomes,best_expected_rho
-B,"path_shortening,hub_formation,boundary_mixing",3,2,0.18244962879394472
-RS,"field_entropy,community_reach,cross_community_adoption",3,2,0.10881999291503233
-DeltaQ0,"boundary_mixing,partition_change,modularity_shock",3,3,0.5402838290762813
-Uzzi,"partition_change,boundary_mixing",2,0,-0.009410041238476916
-RTD,"community_reach,field_entropy",2,2,0.08522669676805428
-BurtIP,"path_shortening,hub_formation",2,1,0.19884882528194878
-PDE,"field_entropy,community_reach,cross_community_adoption",3,2,0.11462776222818971

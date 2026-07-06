@@ -28,6 +28,7 @@ from experiments.figure_quality import (
     write_run_manifest,
     write_strict_failure_report,
 )
+from experiments.kg_perturbation_fig2.build_fig2_reference_closure import parse_reference_list
 
 os.environ.setdefault('MPLCONFIGDIR', '/tmp/aspr_matplotlib_cache')
 
@@ -1597,6 +1598,14 @@ def add_reference_closure_nodes(
 ) -> Tuple[Any, Dict[str, Any]]:
     """Optionally add out-of-corpus reference metadata as background nodes."""
     records_by_id, refs_by_id = read_fig1_raw_records(fig1_dir)
+    cached_reference_fallback = False
+    if not refs_by_id and 'referenced_works' in raw.works.columns:
+        cached_reference_fallback = True
+        refs_by_id = {
+            str(row['id']): parse_reference_list(row.get('referenced_works'))
+            for _, row in raw.works.iterrows()
+            if str(row.get('id', '')).strip()
+        }
     existing_ids = set(raw.works['id'].astype(str))
     total_refs = 0
     internal_refs = 0
@@ -1623,6 +1632,7 @@ def add_reference_closure_nodes(
         if total_refs and covered_by_targeted / total_refs >= target_coverage:
             break
 
+    cached_materialized_coverage = float((internal_refs + sum(external_counts.values())) / total_refs) if total_refs else 0.0
     report: Dict[str, Any] = {
         'domain': domain,
         'reference_closure_mode': reference_closure,
@@ -1641,6 +1651,16 @@ def add_reference_closure_nodes(
         'coverage_materialized': float(internal_refs / total_refs) if total_refs else 1.0,
         'status': 'audit_only_no_online_closure',
     }
+    if cached_reference_fallback and total_refs > 0:
+        report.update({
+            'reference_closure_mode': 'cached_openalex_referenced_works',
+            'raw_records': int(len(refs_by_id)),
+            'targeted_closure_unique_references': int(len(external_counts)),
+            'materialized_closure_unique_references': int(len(external_counts)),
+            'coverage_if_targeted_materialized': cached_materialized_coverage,
+            'coverage_materialized': cached_materialized_coverage,
+            'status': 'cached_referenced_works_materialized',
+        })
     raw.works = raw.works.copy()
     if 'is_closure_node' not in raw.works.columns:
         raw.works['is_closure_node'] = 0
@@ -1952,6 +1972,60 @@ def refresh_reference_closure_quality(
     return quality, normalized
 
 
+def build_fig2_quality_gates(
+    n_domains: int,
+    total_eligible_papers: int,
+    active_future_outcomes: Sequence[str],
+    relaxed_control_tier_ratio: float,
+    reference_closure_measured_all_domains: bool,
+    min_reference_closure_coverage: float,
+    significant_expected_links: int,
+    mechanism_composite_partial_spearman: float,
+) -> Dict[str, Any]:
+    """Build Fig. 2 strong-claim quality gates from scalar audit values."""
+    checks = {
+        'included_domains_min4': int(int(n_domains) >= 4),
+        'total_eligible_papers_min8000': int(int(total_eligible_papers) >= 8000),
+        'active_future_outcomes_min5': int(len(list(active_future_outcomes)) >= 5),
+        'relaxed_control_tier_ratio_max25pct': int(float(relaxed_control_tier_ratio) <= 0.25),
+        'reference_closure_coverage_min80pct': int(
+            bool(reference_closure_measured_all_domains) and float(min_reference_closure_coverage) >= 0.80
+        ),
+        'significant_expected_links_min4': int(int(significant_expected_links) >= 4),
+        'mechanism_composite_rho_min020': int(
+            np.isfinite(float(mechanism_composite_partial_spearman))
+            and float(mechanism_composite_partial_spearman) >= 0.20
+        ),
+    }
+    overall = bool(all(checks.values()))
+    return {
+        'overall_pass': overall,
+        'status_label': 'strong experimental evidence' if overall else 'multi-domain diagnostic evidence',
+        'checks': checks,
+        'n_domains': int(n_domains),
+        'total_eligible_papers': int(total_eligible_papers),
+        'active_future_outcomes': list(active_future_outcomes),
+        'relaxed_control_tier_ratio': float(relaxed_control_tier_ratio),
+        'reference_closure_measured_all_domains': bool(reference_closure_measured_all_domains),
+        'min_reference_closure_coverage': float(min_reference_closure_coverage),
+        'significant_expected_links': int(significant_expected_links),
+        'mechanism_composite_partial_spearman': (
+            float(mechanism_composite_partial_spearman)
+            if np.isfinite(float(mechanism_composite_partial_spearman))
+            else None
+        ),
+        'thresholds': {
+            'domains_min': 4,
+            'eligible_papers_min': 8000,
+            'active_future_outcomes_min': 5,
+            'relaxed_control_tier_ratio_max': 0.25,
+            'reference_closure_coverage_min': 0.80,
+            'significant_expected_links_min': 4,
+            'mechanism_composite_rho_min': 0.20,
+        },
+    }
+
+
 def build_quality_gates(
     paper_metrics: pd.DataFrame,
     graph_delta_diagnostics_df: pd.DataFrame,
@@ -1971,38 +2045,16 @@ def build_quality_gates(
     for metric, outcomes in EXPECTED_FUTURE_LINKS.items():
         sub = bootstrap[(bootstrap['metric'] == metric) & (bootstrap['future_outcome'].isin(outcomes))]
         sig_expected += int(((pd.to_numeric(sub['ci_low'], errors='coerce') > 0) & (pd.to_numeric(sub['rho'], errors='coerce') > 0)).sum())
-    checks = {
-        'included_domains_min4': int(paper_metrics['domain'].nunique() >= 4),
-        'total_eligible_papers_min8000': int(len(paper_metrics) >= 8000),
-        'active_future_outcomes_min5': int(len(active_independent) >= 5),
-        'relaxed_control_tier_ratio_max25pct': int(relaxed_ratio <= 0.25),
-        'reference_closure_coverage_min80pct': int(closure_measured_all == 1 and min_closure >= 0.80),
-        'significant_expected_links_min4': int(sig_expected >= 4),
-        'mechanism_composite_rho_min020': int(np.isfinite(composite_rho) and composite_rho >= 0.20),
-    }
-    overall = bool(all(checks.values()))
-    return {
-        'overall_pass': overall,
-        'status_label': 'strong experimental evidence' if overall else 'multi-domain diagnostic evidence',
-        'checks': checks,
-        'n_domains': int(paper_metrics['domain'].nunique()),
-        'total_eligible_papers': int(len(paper_metrics)),
-        'active_future_outcomes': active_independent['delta'].astype(str).tolist(),
-        'relaxed_control_tier_ratio': relaxed_ratio,
-        'reference_closure_measured_all_domains': bool(closure_measured_all),
-        'min_reference_closure_coverage': min_closure,
-        'significant_expected_links': int(sig_expected),
-        'mechanism_composite_partial_spearman': float(composite_rho) if np.isfinite(composite_rho) else None,
-        'thresholds': {
-            'domains_min': 4,
-            'eligible_papers_min': 8000,
-            'active_future_outcomes_min': 5,
-            'relaxed_control_tier_ratio_max': 0.25,
-            'reference_closure_coverage_min': 0.80,
-            'significant_expected_links_min': 4,
-            'mechanism_composite_rho_min': 0.20,
-        },
-    }
+    return build_fig2_quality_gates(
+        n_domains=int(paper_metrics['domain'].nunique()),
+        total_eligible_papers=int(len(paper_metrics)),
+        active_future_outcomes=active_independent['delta'].astype(str).tolist(),
+        relaxed_control_tier_ratio=relaxed_ratio,
+        reference_closure_measured_all_domains=bool(closure_measured_all),
+        min_reference_closure_coverage=min_closure,
+        significant_expected_links=int(sig_expected),
+        mechanism_composite_partial_spearman=float(composite_rho) if np.isfinite(composite_rho) else float('nan'),
+    )
 
 
 def build_strong_comp_from_tables(

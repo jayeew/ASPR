@@ -1,6 +1,0 @@
-canonical_term,use_in,avoid,note
-graph-perturbation analysis,Fig.1-Fig.7,knowledge shock score as a standalone unexplained synonym,Use for the measurement and validation method before ASPR is introduced.
-ASPR graph agent,Fig.8-Fig.10,"generic agent, graph bot",Use once the graph analysis is embedded into the ASPR system.
-ASPR-Qwen,Fig.8-Fig.10,"Qwen-only baseline, generic LLM reviewer",Name the domain review model trained from paper-review pairs.
-fusion/verifier,Fig.8-Fig.10,post-processing,"Use for the module that merges agent evidence and ASPR-Qwen text, then checks claims."
-pipeline-ready gap,Fig.6-Fig.10 captions and audit notes,failed figure,Use when a figure is useful but a strict headline or live checkpoint remains pending.

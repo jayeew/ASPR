@@ -2,12 +2,12 @@
 
 ## 一句话结论
 
-Fig. 9 的任务是展示 ASPR 的一个全流程运行实例：从输入论文开始，分别经过 graph-perturbation agent 和 ASPR-Qwen 两条路径，最终融合成 human-like 评审意见，并展示关键文字输出、证据来源、流程阶段和不确定性标记。
+Fig. 9 的任务是展示 ASPR 的一个全流程运行实例：从输入论文开始，分别经过 graph-perturbation agent 和 ASPR-Qwen 两条路径，最终融合成 evidence-grounded 评审意见，并展示关键文字输出、证据来源、流程阶段和不确定性标记。
 
 推荐标题：
 
 ```text
-Fig. 9 | End-to-end ASPR run generating a human-like review from agent evidence and ASPR-Qwen
+Fig. 9 | End-to-end ASPR run generating an evidence-grounded review from agent evidence and ASPR-Qwen
 ```
 
 ## 核心绘图模式
@@ -54,7 +54,7 @@ Fig. 9 回答：
 ```text
 ASPR 对一篇真实论文完整运行时长什么样？
 agent、ASPR-Qwen、fusion 和 verifier 各自输出什么？
-最终评审意见如何做到 human-like、可追踪、可审核？
+最终评审意见如何做到 evidence-grounded、可追踪、可审核？
 ```
 
 这张图允许文字实例和流程划分偏多，但要控制层级，避免变成长截图。
@@ -67,7 +67,7 @@ agent、ASPR-Qwen、fusion 和 verifier 各自输出什么？
 - 有 Nature 或相近 venue 的 peer review 对照；
 - graph-perturbation profile 有强项和弱项；
 - agent 与 ASPR-Qwen 的输出能互补；
-- fusion 后能生成较完整的 human-like review；
+- fusion 后能生成较完整的 evidence-grounded review；
 - verifier 至少触发 1-2 个低置信或证据不足提醒。
 
 允许的数据来源：
@@ -195,10 +195,10 @@ recommendation tendency
 画法重点：
 
 - 明确标注该输出来自 ASPR-Qwen；
-- 展示其 human-like 评审语言和关注点；
+- 展示其 review-style 评审语言和关注点；
 - 不要把它和 agent evidence 混在同一 panel 中。
 
-### 9e Fusion into final human-like review
+### 9e Fusion into final evidence-grounded review
 
 推荐图形：two-source fusion card。
 
@@ -206,7 +206,7 @@ recommendation tendency
 
 ```text
 agent evidence-backed novelty assessment
-ASPR-Qwen human-like review draft
+ASPR-Qwen review-style draft
 ```
 
 输出：
@@ -298,7 +298,7 @@ Keep text readable and grouped into cards.
 可以说：
 
 ```text
-This case illustrates how ASPR combines agent evidence and ASPR-Qwen to produce a traceable human-like review.
+This case illustrates how ASPR combines agent evidence and ASPR-Qwen to produce a traceable evidence-grounded review draft.
 ```
 
 不要说：
