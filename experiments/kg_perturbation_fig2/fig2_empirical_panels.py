@@ -45,6 +45,8 @@ import pandas as pd
 
 DEFAULT_FIG1_DATA_ROOT = PROJECT_ROOT / 'outputs' / 'kg_perturbation_fig1'
 DEFAULT_STRICT_FIG1_DATA_ROOT = PROJECT_ROOT / 'outputs' / 'kg_perturbation_fig1_strict_best4'
+DEFAULT_NATURE_FIG1_OUTPUT_ROOT = PROJECT_ROOT / 'outputs' / 'nature_final' / 'fig01_knowledge_perturbation'
+DEFAULT_NATURE_FIG2_OUTPUT_ROOT = PROJECT_ROOT / 'outputs' / 'nature_final' / 'fig02_empirical_validation'
 DEFAULT_CORPUS_ROOT = PROJECT_ROOT / 'data' / 'knowledge_corpus' / 'v1_strict'
 DEFAULT_CORPUS_FIG2_DATA_ROOT = DEFAULT_CORPUS_ROOT / 'views' / 'fig2'
 DEFAULT_OUTPUT_DIR = PROJECT_ROOT / 'outputs' / 'kg_perturbation_fig2'
@@ -135,7 +137,19 @@ PANEL_A_MAX_TOPICS = 9
 PANEL_A_MAX_REFERENCE_TOPICS = 4
 PANEL_A_MAX_BACKBONE_EDGES = 10
 PANEL_A_MAX_BEADS_PER_TOPIC = 6
-
+FIG1_MULTI_DOMAIN_IMAGE = 'fig1_multi_domain_real.png'
+FIG1_MULTI_DOMAIN_COLUMN_BOUNDS = (
+    (142 / 6126, 910 / 6126),
+    (1262 / 6126, 2030 / 6126),
+    (2381 / 6126, 3150 / 6126),
+    (3497 / 6126, 4275 / 6126),
+)
+FIG1_MULTI_DOMAIN_ROW_BOUNDS = (
+    (465 / 4271, 1305 / 4271),
+    (1395 / 4271, 2234 / 4271),
+    (2324 / 4271, 3164 / 4271),
+    (3252 / 4271, 4094 / 4271),
+)
 NORMAL_DIST = NormalDist()
 
 
@@ -273,6 +287,31 @@ def has_fig1_export_files(data_dir: Path) -> bool:
     return all((data_dir / name).exists() for name in FIG1_EXPORT_FILES)
 
 
+def find_fig1_multi_domain_image(path: Path) -> Optional[Path]:
+    """Locate a multi-domain Fig. 1 PNG for direct Panel a cropping."""
+    candidates: List[Path] = []
+    if path.suffix.lower() == '.png':
+        candidates.append(path)
+    candidates.extend([
+        path / FIG1_MULTI_DOMAIN_IMAGE,
+        path.parent / FIG1_MULTI_DOMAIN_IMAGE,
+        DEFAULT_NATURE_FIG1_OUTPUT_ROOT / FIG1_MULTI_DOMAIN_IMAGE,
+    ])
+    seen: set[str] = set()
+    for candidate in candidates:
+        key = str(candidate)
+        if key in seen:
+            continue
+        seen.add(key)
+        if candidate.exists() and candidate.is_file():
+            return candidate
+    return None
+
+
+def has_fig1_panel_a_source(data_dir: Path) -> bool:
+    return has_fig1_export_files(data_dir) or find_fig1_multi_domain_image(data_dir) is not None
+
+
 def resolve_panel_a_fig1_snapshot_dir(args: argparse.Namespace) -> Optional[Path]:
     """Find a Fig. 1 domain output directory whose snapshots can be reused."""
     domain = args.example_domain if args.evidence_mode == 'strong' else args.domain
@@ -285,6 +324,8 @@ def resolve_panel_a_fig1_snapshot_dir(args: argparse.Namespace) -> Optional[Path
             candidates.append(args.data_dir / domain)
     if domain:
         candidates.extend([
+            DEFAULT_NATURE_FIG1_OUTPUT_ROOT / domain,
+            DEFAULT_NATURE_FIG1_OUTPUT_ROOT,
             DEFAULT_STRICT_FIG1_DATA_ROOT / domain,
             DEFAULT_FIG1_DATA_ROOT / domain,
         ])
@@ -296,7 +337,7 @@ def resolve_panel_a_fig1_snapshot_dir(args: argparse.Namespace) -> Optional[Path
         if key in seen:
             continue
         seen.add(key)
-        if has_fig1_export_files(path):
+        if has_fig1_panel_a_source(path):
             return path
     return None
 
@@ -3012,6 +3053,142 @@ def _choose_fig1_panel_a_windows(
     return out[:3]
 
 
+def _fig1_multi_domain_manifest(image_path: Path) -> Dict[str, Any]:
+    manifest_path = image_path.parent / 'run_manifest.json'
+    if not manifest_path.exists():
+        return {}
+    try:
+        return json.loads(manifest_path.read_text(encoding='utf-8'))
+    except Exception:
+        return {}
+
+
+def _fig1_domain_for_crops(fig1_dir: Path, manifest: Mapping[str, Any]) -> str:
+    domains = [str(item) for item in manifest.get('domains') or []]
+    for candidate in (fig1_dir.name, fig1_dir.parent.name, DEFAULT_DOMAIN):
+        if candidate in domains:
+            return candidate
+    return domains[0] if domains else DEFAULT_DOMAIN
+
+
+def _fig1_window_diagnostics_for_domain(manifest: Mapping[str, Any], domain: str) -> Dict[str, Any]:
+    quality = manifest.get('quality_gates') if isinstance(manifest.get('quality_gates'), Mapping) else {}
+    diagnostics = quality.get('landmark_window_diagnostics') if isinstance(quality, Mapping) else []
+    for item in diagnostics or []:
+        if str(item.get('slug')) == str(domain):
+            return dict(item)
+    return {}
+
+
+def _choose_fig1_crop_columns(diagnostic: Mapping[str, Any]) -> List[int]:
+    windows = diagnostic.get('windows') or []
+    n_windows = len(windows) if windows else len(FIG1_MULTI_DOMAIN_COLUMN_BOUNDS)
+    final_idx = max(0, min(n_windows, len(FIG1_MULTI_DOMAIN_COLUMN_BOUNDS)) - 1)
+    landmark_idx = int(diagnostic.get('landmark_window', 1) or 1)
+    selected = [0, max(0, min(landmark_idx, final_idx)), final_idx]
+    out: List[int] = []
+    for idx in selected:
+        if idx not in out:
+            out.append(idx)
+    for idx in range(min(n_windows, len(FIG1_MULTI_DOMAIN_COLUMN_BOUNDS))):
+        if len(out) >= 3:
+            break
+        if idx not in out:
+            out.append(idx)
+    return out[:3]
+
+
+def _fig1_crop_caption(diagnostic: Mapping[str, Any], col_idx: int, position: int) -> Tuple[str, str]:
+    windows = diagnostic.get('windows') or []
+    if 0 <= int(col_idx) < len(windows):
+        start, end = windows[int(col_idx)]
+        if int(start) == int(end):
+            year_label = str(int(end))
+        else:
+            year_label = f'{int(start)}–{int(end)}'
+    else:
+        year_label = ['prior', 'landmark', 'late'][min(position, 2)]
+    landmark_idx = int(diagnostic.get('landmark_window', 1) or 1)
+    if int(col_idx) < landmark_idx:
+        return year_label, 'Prior map before landmark entry'
+    if int(col_idx) == landmark_idx:
+        return year_label, 'Landmark paper enters G0'
+    return year_label, 'Later field state after diffusion'
+
+
+def _crop_fig1_window(image: np.ndarray, row_idx: int, col_idx: int) -> np.ndarray:
+    height, width = image.shape[:2]
+    y0f, y1f = FIG1_MULTI_DOMAIN_ROW_BOUNDS[row_idx]
+    x0f, x1f = FIG1_MULTI_DOMAIN_COLUMN_BOUNDS[col_idx]
+    x0 = max(0, min(width - 1, int(round(x0f * width))))
+    x1 = max(x0 + 1, min(width, int(round(x1f * width))))
+    y0 = max(0, min(height - 1, int(round(y0f * height))))
+    y1 = max(y0 + 1, min(height, int(round(y1f * height))))
+    return image[y0:y1, x0:x1]
+
+
+def _draw_panel_a_from_fig1_image(ax, fig1_dir: Path, future_tau: Optional[int]) -> bool:
+    image_path = find_fig1_multi_domain_image(fig1_dir)
+    if image_path is None:
+        return False
+    manifest = _fig1_multi_domain_manifest(image_path)
+    domains = [str(item) for item in manifest.get('domains') or []]
+    domain = _fig1_domain_for_crops(fig1_dir, manifest)
+    if domain not in domains:
+        return False
+    row_idx = domains.index(domain)
+    if row_idx >= len(FIG1_MULTI_DOMAIN_ROW_BOUNDS):
+        return False
+    diagnostic = _fig1_window_diagnostics_for_domain(manifest, domain)
+    selected_cols = _choose_fig1_crop_columns(diagnostic)
+    if len(selected_cols) < 3:
+        return False
+
+    image = plt.imread(str(image_path))
+    boxes = [
+        (0.030, 0.180, 0.300, 0.680),
+        (0.350, 0.180, 0.300, 0.680),
+        (0.670, 0.180, 0.300, 0.680),
+    ]
+    caption_colors = ['#0B4FA3', '#DC2626', '#2E7D32']
+    for idx, (col_idx, box) in enumerate(zip(selected_cols, boxes)):
+        inset = ax.inset_axes(box)
+        inset.imshow(_crop_fig1_window(image, row_idx, col_idx))
+        inset.axis('off')
+        year_label, note = _fig1_crop_caption(diagnostic, int(col_idx), idx)
+        cap_x = box[0]
+        rounded_box(ax, cap_x, 0.064, box[2], 0.080, '#FFFFFF', '#E2E8F0', 0.55, 0.010)
+        ax.text(
+            cap_x + 0.018,
+            0.112,
+            year_label,
+            fontsize=6.4,
+            fontweight='bold',
+            color=caption_colors[min(idx, len(caption_colors) - 1)],
+            ha='left',
+            va='center',
+            transform=ax.transAxes,
+        )
+        ax.text(cap_x + 0.018, 0.086, note, fontsize=5.35, color=TEXT_MID, ha='left', va='center', transform=ax.transAxes)
+
+    draw_arrow(ax, (0.330, 0.545), (0.350, 0.545), color='#64748B', lw=1.45, ms=14)
+    draw_arrow(ax, (0.650, 0.545), (0.670, 0.545), color='#64748B', lw=1.45, ms=14)
+    anchor_year = diagnostic.get('first_anchor_year')
+    if anchor_year is not None:
+        ax.text(
+            0.500,
+            0.035,
+            f'Focused timepoints bracket the first landmark year ({int(anchor_year)}): prior graph, publication-window insertion, and late cumulative field state.',
+            fontsize=5.55,
+            color=TEXT_LIGHT,
+            ha='center',
+            va='center',
+            transform=ax.transAxes,
+        )
+
+    return True
+
+
 def _load_fig1_snapshot_cfg(fig1_dir: Path, windows: Sequence[Tuple[int, int]], works: pd.DataFrame) -> Dict[str, Any]:
     from experiments.kg_perturbation_fig1.fig1_knowledge_perturbation import DEFAULT_CONFIG, load_config  # pylint: disable=import-outside-toplevel
 
@@ -3118,6 +3295,8 @@ def _draw_panel_a_from_fig1_exports(
     focus_paper_id: Optional[str],
     future_tau: Optional[int],
 ) -> bool:
+    if _draw_panel_a_from_fig1_image(ax, fig1_dir, future_tau):
+        return True
     if not has_fig1_export_files(fig1_dir):
         return False
 
@@ -3298,61 +3477,184 @@ def draw_panel_a(
     ax.text(0.05, 0.042, f'Halo size ≈ papers. Curved backbone edge width ≈ citation links. Landmark references outside displayed topics: {outside_ref_count}.', fontsize=5.0, color=TEXT_LIGHT, ha='left', va='center')
 
 
-def draw_panel_b(ax, comp: Optional[ComputedData] = None) -> None:
-    comp = None
-    if comp is not None and comp.evidence_mode == 'strong':
-        panel_frame(ax, 'b', 'Multi-domain data construction and evidence audit')
-        audit = comp.input_audit.copy()
-        quality = comp.quality_gates or {}
-        closure = comp.reference_closure_report.copy()
-        active_future = comp.graph_delta_diagnostics.loc[
-            (comp.graph_delta_diagnostics['active'].astype(int) == 1)
-            & (~comp.graph_delta_diagnostics['delta'].astype(str).isin(DEFINITION_LINKED_DELTAS)),
-            'delta',
-        ].astype(str).tolist()
-        stages = [
-            ('Domains', int(audit['domain'].nunique()) if not audit.empty else 0, '#E8F1E3'),
-            ('Raw\npapers', int(audit['raw_papers'].sum()) if 'raw_papers' in audit else len(comp.paper_metrics), '#D9E6CF'),
-            ('Reference\nedges', int(audit['citation_edges'].sum()) if 'citation_edges' in audit else len(comp.graph_deltas), '#D6EAF8'),
-            ('Eligible\nfocal papers', int(len(comp.paper_metrics)), '#E6DCF4'),
-            ('Active future\noutcomes', int(len(active_future)), '#FDE2CF'),
-            ('Final\nindicators', 7, '#FDE7DF'),
-        ]
-        xs = np.linspace(0.11, 0.86, len(stages))
-        y = 0.73
-        for i, (label, count, color) in enumerate(stages):
-            rounded_box(ax, xs[i] - 0.06, y - 0.08, 0.12, 0.16, color, BORDER, 0.7, 0.018, zorder=2)
-            display_count = f'{count:,}' if count >= 1000 else str(count)
-            ax.text(xs[i], y + 0.028, display_count, ha='center', va='center', fontsize=13.5, fontweight='bold', transform=ax.transAxes)
-            ax.text(xs[i], y - 0.048, label, ha='center', va='center', fontsize=6.1, fontweight='bold', transform=ax.transAxes)
-            if i < len(stages) - 1:
-                draw_arrow(ax, (xs[i] + 0.063, y), (xs[i+1] - 0.063, y), color='#6B7280', lw=1.0, ms=11)
+def _format_panel_count(value: Any) -> str:
+    val = pd.to_numeric(pd.Series([value]), errors='coerce').iloc[0]
+    if pd.isna(val):
+        return 'n/e'
+    return f'{int(round(float(val))):,}'
 
-        min_closure = float(pd.to_numeric(closure.get('coverage_materialized', pd.Series(dtype=float)), errors='coerce').min()) if not closure.empty else np.nan
-        median_controls = float(pd.to_numeric(comp.matched_controls.get('n_controls', pd.Series(dtype=float)), errors='coerce').median()) if not comp.matched_controls.empty else np.nan
-        status = str(quality.get('status_label', 'multi-domain diagnostic evidence'))
-        table_rows = [
-            ('Corpus', f'{int(audit["domain"].nunique()) if not audit.empty else 0} domains; {int(audit["raw_papers"].sum()) if "raw_papers" in audit else 0:,} raw/background papers'),
-            ('Closure', f'min weighted reference coverage = {min_closure:.1%}' if np.isfinite(min_closure) else 'closure audit unavailable'),
-            ('Publication-day', f'{len(comp.paper_metrics):,} eligible papers; indicators use references and G− only'),
-            ('Future validation', f'τ={comp.future_tau}; {len(active_future)} independent future graph outcomes'),
-            ('Controls', f'median matched controls n≈{median_controls:.0f}' if np.isfinite(median_controls) else 'matched controls unavailable'),
-            ('Gate status', status),
+
+def _active_independent_future_outcomes(comp: ComputedData) -> List[str]:
+    quality_outcomes = [
+        str(item)
+        for item in (comp.quality_gates or {}).get('active_future_outcomes', [])
+        if str(item) not in DEFINITION_LINKED_DELTAS
+    ]
+    if quality_outcomes:
+        return [item for item in quality_outcomes if item in INDEPENDENT_FUTURE_DELTAS]
+    if not comp.graph_delta_diagnostics.empty:
+        active = comp.graph_delta_diagnostics[
+            (comp.graph_delta_diagnostics['active'].astype(int) == 1)
+            & (~comp.graph_delta_diagnostics['delta'].astype(str).isin(DEFINITION_LINKED_DELTAS))
+        ]['delta'].astype(str).tolist()
+        return [item for item in active if item in INDEPENDENT_FUTURE_DELTAS]
+    return [item for item in INDEPENDENT_FUTURE_DELTAS if item in comp.indicator_delta_corr.columns]
+
+
+def _significant_expected_link_count(comp: ComputedData) -> int:
+    quality_value = (comp.quality_gates or {}).get('significant_expected_links')
+    if quality_value is not None:
+        return int(pd.to_numeric(pd.Series([quality_value]), errors='coerce').fillna(0).iloc[0])
+    if not comp.evidence_support.empty and 'significant_expected_outcomes' in comp.evidence_support:
+        return int(pd.to_numeric(comp.evidence_support['significant_expected_outcomes'], errors='coerce').fillna(0).sum())
+    if comp.indicator_future_corr_bootstrap.empty:
+        return 0
+    sig = 0
+    for metric, outcomes in EXPECTED_FUTURE_LINKS.items():
+        sub = comp.indicator_future_corr_bootstrap[
+            (comp.indicator_future_corr_bootstrap['metric'].astype(str) == metric)
+            & (comp.indicator_future_corr_bootstrap['future_outcome'].astype(str).isin(outcomes))
         ]
-        x0, y0, w, h = 0.07, 0.22, 0.86, 0.36
-        rounded_box(ax, x0, y0, w, h, '#FFFFFF', '#E5E7EB', 0.6, 0.010)
-        for i, (k, v) in enumerate(table_rows):
-            yy = y0 + h - 0.048 - i * 0.052
-            if i:
-                ax.plot([x0 + 0.02, x0 + w - 0.02], [yy + 0.026, yy + 0.026], color='#EEF2F7', lw=0.7, transform=ax.transAxes)
-            ax.text(x0 + 0.035, yy, k, fontsize=6.0, fontweight='bold', ha='left', va='center', transform=ax.transAxes)
-            ax.text(x0 + 0.25, yy, v, fontsize=5.8, ha='left', va='center', color=TEXT_MID, transform=ax.transAxes)
-        x = 0.17
-        ax.text(0.50, 0.15, 'Seven publication-day perturbation indicators', ha='center', va='center', fontsize=6.8, fontweight='bold')
-        for key, label, color, _ in METRIC_SPECS:
-            width = 0.075 if len(label) <= 4 else 0.105
-            draw_pill(ax, x, 0.075, label, color, width, 0.043, fontsize=5.5)
-            x += width + 0.013
+        sig += int(((pd.to_numeric(sub['ci_low'], errors='coerce') > 0) & (pd.to_numeric(sub['rho'], errors='coerce') > 0)).sum())
+    return sig
+
+
+def _pretty_future_label(outcome: str) -> str:
+    pretty = {
+        'community_reach': 'Community\nreach',
+        'field_entropy': 'Field\nentropy',
+        'cross_community_adoption': 'Cross-\ncommunity',
+        'path_shortening': 'Path\nshortening',
+        'partition_change': 'Partition\nchange',
+        'boundary_mixing': 'Boundary\nmixing',
+        'hub_formation': 'Hub\nformation',
+        'modularity_shock': 'Modularity\nshock*',
+    }
+    return pretty.get(outcome, str(outcome).replace('_', '\n'))
+
+
+def _panel_b_design_payload(comp: ComputedData) -> Dict[str, Any]:
+    """Build the precise text/numeric payload for the mixed-rendered Panel b."""
+    _ = comp
+    screening_counts = {
+        'Candidates': 92,
+        'No future leakage': 67,
+        'Reference-only': 49,
+        'Graph perturbation': 29,
+        'Non-redundant': 12,
+        'Final basis': 7,
+    }
+    return {
+        'screening_counts': screening_counts,
+        'stage_notes': {
+            'Candidates': 'broad metric pool',
+            'No future leakage': 'publication-day only',
+            'Reference-only': 'refs + prior G−',
+            'Graph perturbation': 'mechanistic channel',
+            'Non-redundant': 'representative basis',
+            'Final basis': 'interpretable signals',
+        },
+        'rejection_bins': [
+            {
+                'category': 'Future-impact signals',
+                'examples': 'citations, FWCI, bursts, altmetrics',
+                'color': '#B91C1C',
+            },
+            {
+                'category': 'Prestige/context signals',
+                'examples': 'author, journal, institution',
+                'color': '#C2410C',
+            },
+            {
+                'category': 'Non-reference signals',
+                'examples': 'text/LLM score, abstract semantics',
+                'color': '#7C3AED',
+            },
+            {
+                'category': 'Generic graph controls',
+                'examples': 'raw reference count, mean age, popularity',
+                'color': '#0369A1',
+            },
+            {
+                'category': 'Redundant variants',
+                'examples': 'degree, PageRank, closeness, Simpson/variety, effective size',
+                'color': '#475569',
+            },
+        ],
+        'final_basis': [label for _, label, _, _ in METRIC_SPECS],
+    }
+
+
+def _draw_panel_b_screening_funnel(ax, payload: Mapping[str, Any]) -> None:
+    stages = list(payload['screening_counts'].items())
+    stage_notes = payload['stage_notes']
+    colors = ['#EAF5EC', '#EAF2FB', '#F0ECFA', '#FFF4DE', '#FCE9E8', '#EAF5EC']
+    edges = ['#6A8F68', '#7EA0CC', '#9B7BBF', '#E0A13A', '#D16A5F', '#6A8F68']
+    x0, node_w, y, node_h, gap = 0.052, 0.118, 0.705, 0.158, 0.033
+    for i, ((label, count), face, edge) in enumerate(zip(stages, colors, edges)):
+        x = x0 + i * (node_w + gap)
+        rounded_box(ax, x, y, node_w, node_h, face, edge, 0.72, 0.014, zorder=2)
+        ax.text(x + node_w / 2, y + 0.100, str(count), fontsize=14.8, fontweight='bold',
+                color=edge, ha='center', va='center', transform=ax.transAxes, zorder=3)
+        ax.text(x + node_w / 2, y + 0.061, label.replace(' ', '\n'), fontsize=5.25,
+                fontweight='bold', color=TEXT_DARK, ha='center', va='center',
+                linespacing=0.92, transform=ax.transAxes, zorder=3)
+        ax.text(x + node_w / 2, y + 0.022, wrap(stage_notes[label], 18), fontsize=4.7,
+                color=TEXT_MID, ha='center', va='center', linespacing=0.92,
+                transform=ax.transAxes, zorder=3)
+        if i < len(stages) - 1:
+            start = (x + node_w + 0.006, y + node_h * 0.50)
+            end = (x + node_w + gap - 0.006, y + node_h * 0.50)
+            draw_arrow(ax, start, end, color='#64748B', lw=1.05, ms=11)
+
+
+def _draw_panel_b_rejection_bins(ax, payload: Mapping[str, Any]) -> None:
+    ax.text(0.055, 0.625, 'Excluded signal families', fontsize=6.3, fontweight='bold',
+            color=TEXT_MID, ha='left', va='center', transform=ax.transAxes)
+    bins = payload['rejection_bins']
+    x0, y0, w, h = 0.050, 0.245, 0.610, 0.330
+    lane_h = h / len(bins)
+    rounded_box(ax, x0, y0, w, h, '#FFFFFF', '#E2E8F0', 0.55, 0.010, zorder=1)
+    for i, item in enumerate(bins):
+        yy = y0 + h - (i + 0.5) * lane_h
+        if i:
+            ax.plot([x0 + 0.012, x0 + w - 0.012], [yy + lane_h / 2, yy + lane_h / 2],
+                    color='#EEF2F7', lw=0.55, transform=ax.transAxes, zorder=2)
+        ax.plot([x0 + 0.014, x0 + 0.014], [yy - lane_h * 0.32, yy + lane_h * 0.32],
+                color=item['color'], lw=1.7, solid_capstyle='round', transform=ax.transAxes, zorder=3)
+        ax.text(x0 + 0.030, yy, item['category'], fontsize=5.8, fontweight='bold',
+                color=item['color'], ha='left', va='center', transform=ax.transAxes, zorder=3)
+        ax.text(x0 + 0.265, yy, item['examples'], fontsize=5.45, color=TEXT_MID,
+                ha='left', va='center', transform=ax.transAxes, zorder=3)
+
+
+def _draw_panel_b_final_basis(ax, payload: Mapping[str, Any]) -> None:
+    x0, y0, w, h = 0.690, 0.245, 0.260, 0.330
+    rounded_box(ax, x0, y0, w, h, '#F8FAFC', '#CBD5E1', 0.55, 0.012, zorder=1)
+    ax.text(x0 + 0.018, y0 + h - 0.040, 'Final basis', fontsize=6.3, fontweight='bold',
+            color=TEXT_MID, ha='left', va='center', transform=ax.transAxes, zorder=3)
+    color_map = {label: color for _, label, color, _ in METRIC_SPECS}
+    pill_widths = {'B': 0.040, 'RS': 0.044, 'ΔQ0': 0.056, 'Uzzi-style': 0.092, 'RTD': 0.052, 'Burt IP': 0.070, 'PDE': 0.052}
+    positions = [
+        (x0 + 0.018, y0 + 0.218),
+        (x0 + 0.068, y0 + 0.218),
+        (x0 + 0.122, y0 + 0.218),
+        (x0 + 0.018, y0 + 0.155),
+        (x0 + 0.118, y0 + 0.155),
+        (x0 + 0.178, y0 + 0.155),
+        (x0 + 0.018, y0 + 0.092),
+    ]
+    for label, (x, y) in zip(payload['final_basis'], positions):
+        draw_pill(ax, x, y, label, color_map[label], pill_widths[label], 0.033, fontsize=4.7, zorder=5)
+
+
+def draw_panel_b(ax, comp: Optional[ComputedData] = None) -> None:
+    if comp is not None and comp.evidence_mode == 'strong':
+        panel_frame(ax, 'b', 'Candidate screening defines a publication-day basis')
+        payload = _panel_b_design_payload(comp)
+        _draw_panel_b_screening_funnel(ax, payload)
+        _draw_panel_b_rejection_bins(ax, payload)
+        _draw_panel_b_final_basis(ax, payload)
         return
 
     panel_frame(ax, 'b', 'Curated screening from 92 candidates to seven indicators')
@@ -3400,64 +3702,80 @@ def draw_panel_b(ax, comp: Optional[ComputedData] = None) -> None:
         draw_pill(ax, x, 0.09, label, color, width, 0.043, fontsize=5.8)
         x += width + 0.015
 
-
 def draw_panel_c(ax, comp: Optional[ComputedData] = None) -> None:
-    comp = None
     title = 'Mechanism map with cross-domain empirical support' if comp is not None and comp.evidence_mode == 'strong' else 'Publication-day evidence channels covered by seven indicators'
     panel_frame(ax, 'c', title)
-    x_label = 0.16; x0 = 0.21; x1 = 0.90 if comp is not None and comp.evidence_mode == 'strong' else 0.97; y0 = 0.18; y1 = 0.82
+    x0 = 0.185
+    x1 = 0.590 if comp is not None and comp.evidence_mode == 'strong' else 0.94
+    y0 = 0.245
+    y1 = 0.785
     order = ['RS', 'PDE', 'B', 'RTD', 'BurtIP', 'DeltaQ0', 'Uzzi']
     spec_map = {key: (label, color, desc) for key, label, color, desc in METRIC_SPECS}
     nrows = len(order); ncols = len(EVIDENCE_CHANNELS)
     colw = (x1-x0)/ncols; rowh = (y1-y0)/nrows
 
-    for i, (title, color, _) in enumerate(EVIDENCE_CHANNELS):
+    ax.text(0.055, 0.825, 'Indicator', fontsize=5.9, color=TEXT_LIGHT, fontweight='bold', ha='left', transform=ax.transAxes)
+    for i, (channel_title, color, _) in enumerate(EVIDENCE_CHANNELS):
         hx = x0 + i*colw
-        rounded_box(ax, hx, 0.83, colw, 0.10, '#F8FAFC', '#E2E8F0', 0.5, 0.006)
-        ax.text(hx+colw/2, 0.885, title, ha='center', va='center', fontsize=7.4, color=color, fontweight='bold')
+        rounded_box(ax, hx, 0.805, colw, 0.095, '#F8FAFC', '#E2E8F0', 0.5, 0.006)
+        ax.text(hx+colw/2, 0.852, channel_title, ha='center', va='center', fontsize=5.8, color=color, fontweight='bold')
     for i in range(ncols+1):
         xx = x0 + i*colw
-        ax.plot([xx, xx], [y0, 0.93], color=GRID, lw=0.6, transform=ax.transAxes)
+        ax.plot([xx, xx], [y0, 0.90], color=GRID, lw=0.55, transform=ax.transAxes)
     for j in range(nrows+1):
         yy = y1 - j*rowh
-        ax.plot([0.08, x1], [yy, yy], color=GRID, lw=0.6, transform=ax.transAxes)
+        ax.plot([0.055, x1], [yy, yy], color=GRID, lw=0.55, transform=ax.transAxes)
     for r, key in enumerate(order):
         label, color, _ = spec_map[key]
         cy = y1 - (r+0.5)*rowh
-        ax.text(0.12, cy, label, ha='center', va='center', fontsize=6.6, color=color, fontweight='bold')
-        for c, (title, col, _) in enumerate(EVIDENCE_CHANNELS):
+        ax.text(0.095, cy, label, ha='center', va='center', fontsize=6.3, color=color, fontweight='bold')
+        for c, (channel_title, col, _) in enumerate(EVIDENCE_CHANNELS):
             cx = x0 + (c+0.5)*colw
-            status = EVIDENCE_MAP.get(key, {}).get(title, '')
+            status = EVIDENCE_MAP.get(key, {}).get(channel_title, '')
             if status == 'primary':
-                ax.scatter([cx], [cy], s=90, color=col, edgecolors='white', linewidths=0.5, transform=ax.transAxes)
+                ax.scatter([cx], [cy], s=78, color=col, edgecolors='white', linewidths=0.5, transform=ax.transAxes)
             elif status == 'secondary':
-                ax.scatter([cx], [cy], s=55, facecolors='white', edgecolors='#6B7280', linewidths=0.7, transform=ax.transAxes)
+                ax.scatter([cx], [cy], s=48, facecolors='white', edgecolors='#6B7280', linewidths=0.7, transform=ax.transAxes)
     if comp is not None and comp.evidence_mode == 'strong':
-        support = comp.evidence_support.set_index('metric') if not comp.evidence_support.empty else pd.DataFrame()
-        rounded_box(ax, 0.905, 0.83, 0.075, 0.10, '#F8FAFC', '#E2E8F0', 0.5, 0.006)
-        ax.text(0.942, 0.885, 'Empirical\nsupport', ha='center', va='center', fontsize=6.1, color=TEXT_MID, fontweight='bold')
-        ax.plot([0.905, 0.905], [y0, 0.93], color=GRID, lw=0.6, transform=ax.transAxes)
-        ax.plot([0.98, 0.98], [y0, 0.93], color=GRID, lw=0.6, transform=ax.transAxes)
-        for r, key in enumerate(order):
-            cy = y1 - (r+0.5)*rowh
-            if not support.empty and key in support.index:
-                got = int(support.loc[key, 'significant_expected_outcomes'])
-                tested = int(support.loc[key, 'tested_expected_outcomes'])
-                text = f'{got}/{tested}'
-                face = '#DCFCE7' if got else '#F8FAFC'
-                edge = '#22C55E' if got else '#CBD5E1'
-            else:
-                text = 'n/e'
-                face = '#F8FAFC'
-                edge = '#CBD5E1'
-            rounded_box(ax, 0.918, cy - 0.022, 0.052, 0.043, face, edge, 0.55, 0.010, zorder=3)
-            ax.text(0.944, cy, text, ha='center', va='center', fontsize=5.5, fontweight='bold', transform=ax.transAxes)
-    ax.scatter([0.20], [0.09], s=90, color='#4B5563', edgecolors='white', linewidths=0.5, transform=ax.transAxes)
-    ax.text(0.23, 0.09, 'Primary evidence', fontsize=5.8, va='center')
-    ax.scatter([0.45], [0.09], s=55, facecolors='white', edgecolors='#6B7280', linewidths=0.7, transform=ax.transAxes)
-    ax.text(0.48, 0.09, 'Secondary evidence', fontsize=5.8, va='center')
+        cols = [c for c in _active_independent_future_outcomes(comp) if c in comp.indicator_delta_corr.columns]
+        if cols:
+            corr = comp.indicator_delta_corr.copy().loc[order, cols]
+            heat_ax = ax.inset_axes([0.655, 0.285, 0.310, 0.500])
+            arr = corr.values.astype(float)
+            im = heat_ax.imshow(arr, cmap='RdBu_r', vmin=-1, vmax=1)
+            heat_ax.set_xticks(range(len(cols)))
+            heat_ax.set_yticks(range(len(order)))
+            heat_ax.set_xticklabels([_pretty_future_label(c) for c in cols], fontsize=4.5, rotation=34, ha='right', rotation_mode='anchor')
+            heat_ax.set_yticklabels([spec_map[k][0] for k in order], fontsize=5.1)
+            heat_ax.tick_params(length=0, pad=1)
+            for i, key in enumerate(order):
+                heat_ax.get_yticklabels()[i].set_color(spec_map[key][1])
+                heat_ax.get_yticklabels()[i].set_fontweight('bold')
+            for i, key in enumerate(order):
+                for j, outcome in enumerate(cols):
+                    val = arr[i, j]
+                    sig = comp.indicator_future_corr_bootstrap[
+                        (comp.indicator_future_corr_bootstrap['metric'].astype(str) == key)
+                        & (comp.indicator_future_corr_bootstrap['future_outcome'].astype(str) == outcome)
+                    ]
+                    mark = ''
+                    if not sig.empty and float(sig['ci_low'].iloc[0]) > 0 and float(sig['rho'].iloc[0]) > 0:
+                        mark = '+'
+                    color = 'white' if np.isfinite(val) and abs(float(val)) >= 0.42 else TEXT_DARK
+                    heat_ax.text(j, i, f'{val:.2f}{mark}' if np.isfinite(val) else 'n/e', ha='center', va='center', fontsize=4.15, color=color)
+            for s in heat_ax.spines.values():
+                s.set_visible(False)
+            ax.text(0.655, 0.835, 'Future graph-outcome association', fontsize=5.8, color=TEXT_MID, fontweight='bold', transform=ax.transAxes)
+            cax = ax.inset_axes([0.710, 0.148, 0.205, 0.020])
+            cb = plt.colorbar(im, cax=cax, orientation='horizontal')
+            cb.ax.tick_params(labelsize=4.8, pad=1)
+            cb.outline.set_linewidth(0.45)
+    ax.scatter([0.075], [0.125], s=78, color='#4B5563', edgecolors='white', linewidths=0.5, transform=ax.transAxes)
+    ax.text(0.100, 0.125, 'Primary', fontsize=5.5, va='center')
+    ax.scatter([0.205], [0.125], s=48, facecolors='white', edgecolors='#6B7280', linewidths=0.7, transform=ax.transAxes)
+    ax.text(0.230, 0.125, 'Secondary', fontsize=5.5, va='center')
     if comp is not None and comp.evidence_mode == 'strong':
-        ax.text(0.70, 0.09, 'Support = positive bootstrap-CI links among expected future outcomes', fontsize=5.2, va='center', color=TEXT_LIGHT)
+        ax.text(0.345, 0.112, '+ marks positive bootstrap CI in future graph-outcome associations', fontsize=4.65, va='center', color=TEXT_LIGHT)
 
 
 def plot_redundancy_heatmap(ax, comp: ComputedData, selected_only: bool = False) -> None:
@@ -3471,7 +3789,8 @@ def plot_redundancy_heatmap(ax, comp: ComputedData, selected_only: bool = False)
         cols = [c for c in desired if c in corr.columns]
         corr = corr.loc[cols, cols]
     else:
-        corr = corr.loc[selected_metrics, selected_metrics]
+        cols = [c for c in selected_metrics if c in corr.columns]
+        corr = corr.loc[cols, cols]
     if SCIPY_OK and corr.shape[0] > 2:
         dist = 1 - np.abs(corr.fillna(0).values)
         Z = linkage(squareform(dist, checks=False), method='average')
@@ -3483,6 +3802,8 @@ def plot_redundancy_heatmap(ax, comp: ComputedData, selected_only: bool = False)
     ax.set_xticklabels(corr.columns, rotation=90, fontsize=5)
     ax.set_yticklabels(corr.index, fontsize=5)
     ax.tick_params(length=0)
+    if selected_only:
+        ax.tick_params(axis='y', pad=9)
     for i, name in enumerate(corr.columns):
         if name in selected_metrics:
             ax.get_xticklabels()[i].set_color(color_map[name])
@@ -3491,7 +3812,9 @@ def plot_redundancy_heatmap(ax, comp: ComputedData, selected_only: bool = False)
         if name in selected_metrics:
             ax.get_yticklabels()[i].set_color(color_map[name])
             ax.get_yticklabels()[i].set_fontweight('bold')
-            ax.add_patch(mpatches.Rectangle((-0.95, i-0.45), 0.25, 0.90, facecolor=color_map[name],
+            strip_x = -0.72 if selected_only else -0.95
+            strip_w = 0.18 if selected_only else 0.25
+            ax.add_patch(mpatches.Rectangle((strip_x, i-0.45), strip_w, 0.90, facecolor=color_map[name],
                                             edgecolor='none', clip_on=False, zorder=4))
             ax.add_patch(mpatches.Rectangle((i-0.45, -0.95), 0.90, 0.25, facecolor=color_map[name],
                                             edgecolor='none', clip_on=False, zorder=4))
@@ -3500,85 +3823,101 @@ def plot_redundancy_heatmap(ax, comp: ComputedData, selected_only: bool = False)
 
 
 def draw_panel_d(ax, comp: ComputedData) -> None:
-    title = 'Multi-domain candidate redundancy and representative selection' if comp.evidence_mode == 'strong' else 'Candidate metric redundancy and representative selection'
+    title = 'Perturbation-profile distributions with redundancy audit' if comp.evidence_mode == 'strong' else 'Landmark profiles and candidate redundancy'
     panel_frame(ax, 'd', title)
-    subtitle = 'Partial Spearman after domain/year/reference controls' if comp.evidence_mode == 'strong' else 'Spearman correlation (rank-normalized papers)'
-    ax.text(0.05, 0.90, subtitle, fontsize=6.5, fontweight='bold')
-    # inset heatmap axes
-    hax = ax.inset_axes([0.06, 0.31, 0.60, 0.55])
-    im, corr = plot_redundancy_heatmap(hax, comp, selected_only=False)
-    cax = ax.inset_axes([0.69, 0.32, 0.03, 0.52])
-    cb = plt.colorbar(im, cax=cax)
-    cb.ax.tick_params(labelsize=5)
-    cb.outline.set_linewidth(0.5)
-    # Compact family cards keep panel d inside the right-side drawing area.
-    lx = 0.755
-    y = 0.835
-    available = set(corr.columns.astype(str))
-    name_map = {
-        'B': 'B',
-        'degree': 'Degree',
-        'pagerank': 'PageRank',
-        'closeness': 'Closeness',
-        'RS': 'RS',
-        'PDE': 'PDE',
-        'field_shannon': 'Field Shannon',
-        'field_simpson': 'Field Simpson',
-        'field_variety': 'Field variety',
-        'Uzzi': 'Uzzi-style',
-        'pair_surprisal': 'Pair surprisal proxy',
-        'BurtIP': 'Burt IP',
-        'effective_size': 'Effective size',
-        'constraint_inv': 'Constraint inverse',
-        'DeltaQ0': 'ΔQ0',
-        'conductance_delta': 'Conductance delta',
-        'RTD': 'RTD',
-        'community_simpson': 'Community Simpson',
-        'community_variety': 'Community variety',
-    }
-    family_defs = [
-        ('Bridge position', ['B', 'degree', 'pagerank', 'closeness'], '#0B4FA3'),
-        ('Breadth / diversity', ['RS', 'PDE', 'field_shannon', 'field_simpson', 'field_variety'], '#2E7D32'),
-        ('Atypical recombination', ['Uzzi', 'pair_surprisal'], '#7C3AED'),
-        ('Structural holes', ['BurtIP', 'effective_size', 'constraint_inv'], '#2563EB'),
-        ('Boundary / target', ['DeltaQ0', 'conductance_delta', 'RTD', 'community_simpson', 'community_variety'], '#F97316'),
-    ]
-    fam_lines = []
-    for title, keys, color in family_defs:
-        lines = [name_map[k] for k in keys if k in available]
-        if lines:
-            fam_lines.append((title, lines, color))
-    for title, lines, color in fam_lines:
-        card_h = 0.104
-        rounded_box(ax, lx, y - card_h, 0.205, card_h, '#FFFFFF', '#E2E8F0', 0.55, 0.012)
-        ax.plot([lx + 0.010, lx + 0.010], [y - card_h + 0.015, y - 0.015], color=color, lw=1.8, transform=ax.transAxes)
-        ax.text(
-            lx + 0.020,
-            y - 0.018,
-            title,
-            fontsize=5.1,
-            fontweight='bold',
-            color=color,
-            transform=ax.transAxes,
-            ha='left',
-            va='top',
-        )
-        wrapped = textwrap.wrap(", ".join(lines), width=28)[:2]
-        for i, line in enumerate(wrapped):
-            ax.text(
-                lx + 0.020,
-                y - 0.044 - i * 0.023,
-                line,
-                fontsize=4.6,
-                color=TEXT_DARK,
-                transform=ax.transAxes,
-                ha='left',
-                va='top',
-            )
-        y -= card_h + 0.018
-    rounded_box(ax, 0.03, 0.018, 0.94, 0.058, '#FFFFFF', '#E2E8F0', 0.6, 0.010)
-    ax.text(0.05, 0.047, 'Colored ticks mark selected indicators; selected indicators occupy distinct candidate-metric modules.', fontsize=5.2, va='center')
+    ax.text(
+        0.05,
+        0.900,
+        'Future-top-decile cases and landmarks are scored against tiered matched controls; right inset shows selected-indicator redundancy.',
+        fontsize=5.95,
+        fontweight='bold',
+        color=TEXT_MID,
+        transform=ax.transAxes,
+    )
+    order = [m[0] for m in METRIC_SPECS]
+    label_map = {m[0]: m[1] for m in METRIC_SPECS}
+    color_map = {m[0]: m[2] for m in METRIC_SPECS}
+    pdat = comp.percentile_long.copy()
+    if pdat.empty:
+        raise ValueError('Panel d requires percentile profiles from matched controls.')
 
+    plot_left, plot_right = 0.185, 0.625
+    y_positions = np.linspace(0.775, 0.215, len(order))
+    for t in range(0, 101, 25):
+        xx = plot_left + (t / 100) * (plot_right - plot_left)
+        ax.plot([xx, xx], [0.165, 0.825], color='#E5E7EB', lw=0.65, transform=ax.transAxes, zorder=0)
+        ax.text(xx, 0.142, f'{t}', fontsize=5.1, color=TEXT_LIGHT, ha='center', va='top', transform=ax.transAxes)
+    ax.text((plot_left + plot_right) / 2, 0.108, 'Percentile among matched controls', fontsize=5.8, fontweight='bold', ha='center', transform=ax.transAxes)
+
+    for row_idx, (y, metric) in enumerate(zip(y_positions, order)):
+        sub = pdat[pdat['metric'].astype(str) == metric].copy()
+        vals = pd.to_numeric(sub['percentile'], errors='coerce').dropna()
+        if vals.empty:
+            continue
+        future_vals = pd.to_numeric(
+            sub.loc[sub.get('profile_type', pd.Series(index=sub.index, dtype=str)).astype(str) == 'future_top_decile', 'percentile'],
+            errors='coerce',
+        ).dropna().values
+        landmark_vals = pd.to_numeric(
+            sub.loc[sub.get('profile_type', pd.Series(index=sub.index, dtype=str)).astype(str) == 'landmark', 'percentile'],
+            errors='coerce',
+        ).dropna().values
+        all_vals = vals.values
+        q10, q25, q50, q75, q90 = np.nanpercentile(all_vals, [10, 25, 50, 75, 90])
+        x10 = plot_left + (q10 / 100) * (plot_right - plot_left)
+        x25 = plot_left + (q25 / 100) * (plot_right - plot_left)
+        x50 = plot_left + (q50 / 100) * (plot_right - plot_left)
+        x75 = plot_left + (q75 / 100) * (plot_right - plot_left)
+        x90 = plot_left + (q90 / 100) * (plot_right - plot_left)
+        ax.plot([x10, x90], [y, y], color='#CBD5E1', lw=1.2, solid_capstyle='round', transform=ax.transAxes, zorder=1)
+        ax.plot([x25, x75], [y, y], color=color_map[metric], lw=3.0, alpha=0.50, solid_capstyle='round', transform=ax.transAxes, zorder=2)
+        ax.scatter([x50], [y], s=18, color=color_map[metric], edgecolors='white', linewidths=0.4, transform=ax.transAxes, zorder=4)
+
+        for idx, val in enumerate(future_vals):
+            xx = plot_left + (float(val) / 100) * (plot_right - plot_left)
+            jitter = ((stable_int_id(f'{metric}-{idx}', modulo=1000) / 999.0) - 0.5) * 0.050
+            ax.scatter([xx], [y + jitter], s=5.5, color='#64748B', alpha=0.20, linewidths=0, transform=ax.transAxes, zorder=2)
+        for val in landmark_vals:
+            xx = plot_left + (float(val) / 100) * (plot_right - plot_left)
+            ax.scatter([xx], [y + 0.035], s=28, facecolors='white', edgecolors=color_map[metric], linewidths=0.85, transform=ax.transAxes, zorder=5)
+        landmark_basis = landmark_vals if len(landmark_vals) else all_vals
+        med = float(np.nanmedian(landmark_basis))
+        xx = plot_left + (med / 100) * (plot_right - plot_left)
+        ax.scatter([xx], [y + 0.035], marker='*', s=110, color=color_map[metric], edgecolors='white', linewidths=0.55, transform=ax.transAxes, zorder=6)
+        ax.text(0.145, y, label_map[metric], fontsize=6.6, color=color_map[metric], fontweight='bold', ha='right', va='center', transform=ax.transAxes)
+        ax.text(0.642, y, f'{med:.0f}', fontsize=6.5, color=TEXT_DARK, fontweight='bold', ha='left', va='center', transform=ax.transAxes)
+        if row_idx:
+            row_gap = float(y_positions[row_idx - 1] - y)
+            sep_y = y + row_gap * 0.48
+            ax.plot([0.060, 0.670], [sep_y, sep_y], color='#F1F5F9', lw=0.55, transform=ax.transAxes, zorder=0)
+    ax.text(0.655, 0.828, 'Landmark\nmedian', fontsize=5.4, fontweight='bold', ha='center', va='center', transform=ax.transAxes)
+    ax.scatter([0.225], [0.865], s=20, color='#64748B', alpha=0.28, linewidths=0, transform=ax.transAxes)
+    ax.text(0.245, 0.865, 'Future top-decile paper', fontsize=5.25, va='center', color=TEXT_LIGHT, transform=ax.transAxes)
+    ax.scatter([0.410], [0.865], s=28, facecolors='white', edgecolors='#0B4FA3', linewidths=0.85, transform=ax.transAxes)
+    ax.scatter([0.410], [0.865], marker='*', s=85, color='#0B4FA3', edgecolors='white', linewidths=0.45, transform=ax.transAxes)
+    ax.text(0.435, 0.865, 'Landmark profile', fontsize=5.25, va='center', color=TEXT_LIGHT, transform=ax.transAxes)
+
+    ax.text(0.835, 0.835, 'Indicator redundancy', fontsize=5.8, color=TEXT_MID, fontweight='bold', ha='center', va='center', transform=ax.transAxes)
+    red_ax = ax.inset_axes([0.720, 0.520, 0.230, 0.285])
+    im, corr = plot_redundancy_heatmap(red_ax, comp, selected_only=True)
+    red_ax.set_xticklabels([])
+    red_ax.tick_params(axis='x', length=0)
+    cax = ax.inset_axes([0.755, 0.448, 0.160, 0.018])
+    cb = plt.colorbar(im, cax=cax, orientation='horizontal')
+    cb.ax.tick_params(labelsize=4.5, pad=1)
+    cb.outline.set_linewidth(0.45)
+
+    pair_defs = [('RS', 'PDE'), ('B', 'BurtIP'), ('DeltaQ0', 'RTD'), ('Uzzi', 'RS')]
+    pair_y = 0.354
+    ax.text(0.720, pair_y + 0.045, 'Representative relation checks', fontsize=5.8, color=TEXT_MID, fontweight='bold', transform=ax.transAxes)
+    for idx, (left, right) in enumerate(pair_defs):
+        yy = pair_y - idx * 0.055
+        if left in comp.redundancy_corr.index and right in comp.redundancy_corr.columns:
+            rho = float(comp.redundancy_corr.loc[left, right])
+            text = f'{label_map.get(left, left)} ↔ {label_map.get(right, right)}'
+            rounded_box(ax, 0.715, yy - 0.016, 0.230, 0.040, '#FFFFFF', '#E2E8F0', 0.50, 0.008)
+            ax.text(0.727, yy + 0.004, text, fontsize=4.85, color=TEXT_DARK, ha='left', va='center', transform=ax.transAxes)
+            ax.text(0.932, yy + 0.004, f'{rho:+.2f}', fontsize=5.35, color=TEXT_MID, fontweight='bold', ha='right', va='center', transform=ax.transAxes)
 
 def draw_panel_e(ax, comp: ComputedData) -> None:
     panel_frame(ax, 'e', 'Landmarks and high-future cases vs controls')
@@ -3623,22 +3962,9 @@ def draw_panel_e(ax, comp: ComputedData) -> None:
         xx = plot_left + (t/100)*(plot_right-plot_left)
         ax.text(xx, 0.155, f'{t}', fontsize=5.5, color=TEXT_LIGHT, ha='center', transform=ax.transAxes)
     ax.text((plot_left+plot_right)/2, 0.125, 'Percentile', fontsize=6.2, fontweight='bold', ha='center', transform=ax.transAxes)
-    rounded_box(ax, 0.03, 0.020, 0.94, 0.082, '#FFFFFF', '#E2E8F0', 0.6, 0.010)
-    ex_domain = f'{comp.paper_metrics["domain"].nunique()} domains' if comp.evidence_mode == 'strong' else (comp.paper_metrics.loc[comp.paper_metrics['is_landmark'] == 1, 'domain'].iloc[0] if (comp.paper_metrics['is_landmark'] == 1).any() else 'example domain')
-    n_controls = int(pdat['n_controls'].median()) if 'n_controls' in pdat else 0
-    if 'control_tier' in pdat:
-        tier_summary = ', '.join(pdat.drop_duplicates('paper_id')['control_tier'].astype(str).value_counts().head(2).index.tolist())
-    else:
-        tier_summary = 'matched controls'
-    if comp.evidence_mode == 'strong':
-        note = f'{ex_domain}: gray dots = future top-decile cases; open circles = landmarks; stars = landmark median. Median controls n≈{n_controls}; tiers: {tier_summary}.'
-    else:
-        note = f'{ex_domain}: gray dots = landmark percentiles; stars = median. Median controls n≈{n_controls}; tiers: {tier_summary}.'
-    ax.text(0.05, 0.061, wrap(note, 142), fontsize=5.0, va='center')
-
 
 def draw_panel_f(ax, comp: ComputedData) -> None:
-    title = 'Publication-day indicators predict future G+τ graph deltas' if comp.evidence_mode == 'strong' else 'Internal correspondence with direct graph-delta observables'
+    title = 'Publication-day indicators anticipate future G+τ graph deltas' if comp.evidence_mode == 'strong' else 'Internal correspondence with direct graph-delta observables'
     panel_frame(ax, 'f', title)
     control_text = 'Partial Spearman with domain/year/log-reference controls; cells marked + have positive bootstrap CI' if comp.evidence_mode == 'strong' else 'Partial Spearman correlation, controlling year and log reference count'
     ax.text(0.05, 0.90, control_text, fontsize=6.2, fontweight='bold')
@@ -3689,15 +4015,6 @@ def draw_panel_f(ax, comp: ComputedData) -> None:
     cb = plt.colorbar(im, cax=cax, orientation='horizontal')
     cb.ax.tick_params(labelsize=5)
     cb.set_label('', fontsize=0)
-    rounded_box(ax, 0.03, 0.04, 0.94, 0.08, '#FFFFFF', '#E2E8F0', 0.6, 0.012)
-    dropped = comp.graph_delta_diagnostics.loc[comp.graph_delta_diagnostics['active'].astype(int) == 0, 'delta'].astype(str).tolist()
-    dropped_note = f'Dropped zero-variance/non-estimable deltas: {", ".join(dropped[:2])}.' if dropped else 'All displayed deltas passed variance screening.'
-    if comp.evidence_mode == 'strong':
-        note = f'Red = stronger future alignment after controls. *Definition-linked internal check, not independent validation. {dropped_note}'
-    else:
-        note = f'Red = stronger alignment after controls. *Definition-linked internal check. {dropped_note}'
-    ax.text(0.05, 0.08, note, fontsize=5.2, va='center')
-
 
 # --------------------------
 # Full figure assembly
@@ -3712,12 +4029,12 @@ def assemble_figure(
     fig1_snapshot_dir: Optional[Path] = None,
 ) -> None:
     setup_style()
-    fig = plt.figure(figsize=(20, 13), dpi=300)
-    gs = GridSpec(2, 3, figure=fig, height_ratios=[1, 1.1], width_ratios=[1.1, 1.0, 1.0], hspace=0.12, wspace=0.04)
+    fig = plt.figure(figsize=(18, 12.2), dpi=300)
+    gs = GridSpec(2, 2, figure=fig, height_ratios=[0.95, 1.08], width_ratios=[1.02, 1.08], hspace=0.115, wspace=0.055)
     if comp.evidence_mode == 'strong':
         status = str((comp.quality_gates or {}).get('status_label', 'multi-domain diagnostic evidence'))
         if status == 'strong experimental evidence':
-            title = 'Fig. 2 | Publication-day graph perturbations predict future cross-community knowledge movement'
+            title = 'Fig. 2 | Publication-day graph perturbation signals anticipate future cross-domain knowledge movement'
         else:
             title = 'Fig. 2 diagnostic | Publication-day perturbations in multi-domain raw citation data'
         subtitle = 'Multi-domain evidence using raw citation corpora, reference-closure audits, matched controls, and future graph deltas'
@@ -3729,10 +4046,8 @@ def assemble_figure(
 
     axa = fig.add_subplot(gs[0, 0]); draw_panel_a(axa, raw, focus_paper_id, future_tau=future_tau, fig1_snapshot_dir=fig1_snapshot_dir)
     axb = fig.add_subplot(gs[0, 1]); draw_panel_b(axb, comp)
-    axc = fig.add_subplot(gs[0, 2]); draw_panel_c(axc, comp)
-    axd = fig.add_subplot(gs[1, 0]); draw_panel_d(axd, comp)
-    axe = fig.add_subplot(gs[1, 1]); draw_panel_e(axe, comp)
-    axf = fig.add_subplot(gs[1, 2]); draw_panel_f(axf, comp)
+    axc = fig.add_subplot(gs[1, 0]); draw_panel_c(axc, comp)
+    axd = fig.add_subplot(gs[1, 1]); draw_panel_d(axd, comp)
     fig.savefig(outpath)
     plt.close(fig)
 
@@ -3747,7 +4062,7 @@ def save_single_panel(
     fig1_snapshot_dir: Optional[Path] = None,
 ) -> None:
     setup_style()
-    size_map = {'a': (7.6, 6.0), 'b': (7.1, 6.0), 'c': (7.0, 6.0), 'd': (7.5, 6.8), 'e': (7.1, 6.8), 'f': (7.1, 6.8)}
+    size_map = {'a': (7.6, 6.0), 'b': (7.6, 6.0), 'c': (8.2, 6.8), 'd': (8.4, 6.8), 'e': (7.1, 6.8), 'f': (7.1, 6.8)}
     fig, ax = plt.subplots(figsize=size_map.get(panel, (7, 6)), dpi=300)
     if panel == 'a':
         draw_panel_a(ax, raw, focus_paper_id, future_tau=future_tau, fig1_snapshot_dir=fig1_snapshot_dir)

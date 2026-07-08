@@ -16,7 +16,7 @@ from experiments.kg_perturbation_fig1.fig1_knowledge_perturbation import (
     dominant_parameter_table,
     dominant_parameter_trajectories,
 )
-from experiments.kg_perturbation_fig2.fig2_empirical_panels import build_quality_gates
+from experiments.kg_perturbation_fig2.fig2_empirical_panels import ComputedData, _panel_b_design_payload, build_quality_gates
 
 
 def _toy_metrics() -> pd.DataFrame:
@@ -106,6 +106,66 @@ class FigureQualityGuardTests(unittest.TestCase):
         self.assertEqual(quality["checks"]["reference_closure_coverage_min80pct"], 0)
         self.assertEqual(quality["checks"]["relaxed_control_tier_ratio_max25pct"], 0)
         self.assertFalse(quality["overall_pass"])
+
+    def test_panel_b_payload_centers_screening_gates_not_secondary_data_flow(self) -> None:
+        comp = ComputedData(
+            paper_metrics=pd.DataFrame(
+                {
+                    "paper_id": [f"p{i}" for i in range(8)],
+                    "domain": ["a", "b"] * 4,
+                }
+            ),
+            candidate_metrics=pd.DataFrame(),
+            graph_deltas=pd.DataFrame(),
+            redundancy_corr=pd.DataFrame(),
+            indicator_delta_corr=pd.DataFrame(),
+            percentile_long=pd.DataFrame(),
+            landmark_summary=pd.DataFrame(),
+            metric_standardization_diagnostics=pd.DataFrame(),
+            graph_delta_diagnostics=pd.DataFrame(
+                {
+                    "delta": [
+                        "community_reach",
+                        "field_entropy",
+                        "cross_community_adoption",
+                        "path_shortening",
+                        "partition_change",
+                        "boundary_mixing",
+                        "hub_formation",
+                    ],
+                    "active": [1, 1, 1, 1, 1, 1, 1],
+                }
+            ),
+            input_audit=pd.DataFrame(
+                {
+                    "domain": ["a", "b"],
+                    "raw_papers": [10, 20],
+                    "citation_edges": [50, 70],
+                }
+            ),
+            reference_closure_report=pd.DataFrame({"coverage_materialized": [1.0, 1.0]}),
+            quality_gates={"significant_expected_links": 12},
+            evidence_mode="strong",
+        )
+
+        payload = _panel_b_design_payload(comp)
+
+        self.assertEqual([92, 67, 49, 29, 12, 7], list(payload["screening_counts"].values()))
+        self.assertEqual(
+            [
+                "Future-impact signals",
+                "Prestige/context signals",
+                "Non-reference signals",
+                "Generic graph controls",
+                "Redundant variants",
+            ],
+            [item["category"] for item in payload["rejection_bins"]],
+        )
+        self.assertEqual(["B", "RS", "ΔQ0", "Uzzi-style", "RTD", "Burt IP", "PDE"], payload["final_basis"])
+        self.assertNotIn("gate_rows", payload)
+        self.assertNotIn("indicator_groups", payload)
+        self.assertNotIn("audit_badges", payload)
+        self.assertNotIn("data_flow", payload)
 
 
 if __name__ == "__main__":
