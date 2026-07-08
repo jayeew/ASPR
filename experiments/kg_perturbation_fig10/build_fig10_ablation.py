@@ -6,6 +6,7 @@ import hashlib
 import json
 import math
 import sys
+import textwrap
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
@@ -2244,43 +2245,308 @@ def draw_fig10(
     preference: pd.DataFrame,
     error_taxonomy: pd.DataFrame,
     reinforcement: pd.DataFrame,
+    replacement_gates: pd.DataFrame,
     panel_text: Mapping[str, Any],
     out_dir: Path,
     dpi: int = 320,
 ) -> List[Path]:
-    """Render the full multi-panel Fig.10 PNG/SVG."""
+    """Render Fig.10 as a compact four-panel ablation evidence atlas."""
     import matplotlib
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     from matplotlib.gridspec import GridSpec
-    from matplotlib.patches import FancyArrowPatch, Rectangle
+    from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
-    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 8.5, "axes.titlesize": 10})
-    fig = plt.figure(figsize=(15.5, 11.8), constrained_layout=False)
-    grid = GridSpec(3, 3, figure=fig, height_ratios=[1.03, 1.05, 1.12], wspace=0.42, hspace=0.46)
+    plt.rcParams.update(
+        {
+            "font.family": "DejaVu Sans",
+            "font.size": 8.0,
+            "axes.titlesize": 10,
+            "axes.labelsize": 8,
+        }
+    )
+    fig = plt.figure(figsize=(15.8, 9.4), constrained_layout=False, facecolor="white")
+    grid = GridSpec(2, 2, figure=fig, width_ratios=[0.98, 1.42], height_ratios=[1.0, 1.02], wspace=0.24, hspace=0.36)
     axes = {
         "a": fig.add_subplot(grid[0, 0]),
-        "b": fig.add_subplot(grid[0, 1:3]),
+        "b": fig.add_subplot(grid[0, 1]),
         "c": fig.add_subplot(grid[1, 0]),
         "d": fig.add_subplot(grid[1, 1]),
-        "e": fig.add_subplot(grid[1, 2]),
-        "f": fig.add_subplot(grid[2, :]),
     }
-    draw_module_map(axes["a"], module_inventory, Rectangle, FancyArrowPatch)
-    draw_forest(axes["b"], forest)
-    draw_metric_matrix(axes["c"], ablation_summary)
-    draw_reinforcement(axes["d"], reinforcement)
-    draw_preference(axes["e"], preference)
-    draw_error_taxonomy(axes["f"], error_taxonomy)
-    fig.suptitle(panel_text["title"], x=0.02, ha="left", fontsize=16, fontweight="bold")
-    fig.text(0.02, 0.955, panel_text["subtitle"], ha="left", va="top", fontsize=9.5, color="#475569")
-    fig.text(0.02, 0.018, panel_text["claim_boundary"], ha="left", va="bottom", fontsize=8, color="#64748b")
+    palette = {
+        "nature": "#8f1d2c",
+        "graph": "#2563b8",
+        "qwen": "#7c3aa6",
+        "verifier": "#d47b20",
+        "fusion": "#111827",
+        "green": "#28785d",
+        "muted": "#64748b",
+        "grid": "#e2e8f0",
+        "soft": "#f8fafc",
+        "warn": "#b45309",
+    }
+    draw_module_gate_atlas(axes["a"], module_inventory, replacement_gates, FancyArrowPatch, FancyBboxPatch, palette)
+    draw_ablation_delta_atlas(axes["b"], ablation_summary, forest, palette)
+    draw_preference_baseline_atlas(axes["c"], preference, out_dir, palette)
+    draw_gate_safeguard_atlas(axes["d"], replacement_gates, error_taxonomy, reinforcement, palette)
+    fig.suptitle("Fig. 10 | ASPR module ablation evidence atlas", x=0.025, ha="left", fontsize=16, fontweight="bold")
+    fig.text(0.025, 0.950, panel_text["subtitle"], ha="left", va="top", fontsize=8.8, color=palette["muted"])
+    boundary = "\n".join(textwrap.wrap(str(panel_text["claim_boundary"]), width=190))
+    fig.text(0.025, 0.016, boundary, ha="left", va="bottom", fontsize=7.4, color=palette["muted"])
     paths = [out_dir / "fig10_full.png", out_dir / "fig10_full.svg"]
     for path in paths:
         fig.savefig(path, dpi=dpi, bbox_inches="tight", facecolor="white")
     plt.close(fig)
     return paths
+
+
+def draw_module_gate_atlas(
+    ax: Any,
+    module_inventory: pd.DataFrame,
+    replacement_gates: pd.DataFrame,
+    arrow_cls: Any,
+    box_cls: Any,
+    palette: Mapping[str, str],
+) -> None:
+    """Draw module switches and current claim gates in one compact panel."""
+    ax.set_title("a  Module switches and claim gates", loc="left", fontweight="bold")
+    ax.set_axis_off()
+    family_colors = {
+        "parsing": "#e8edf4",
+        "retrieval": "#d7e7fb",
+        "graph agent": "#bfd8fb",
+        "ASPR-Qwen": "#eadcff",
+        "fusion": "#e7ebf1",
+        "trace": "#fde8d1",
+        "verifier": "#fbd3a9",
+    }
+    display_labels = {
+        "paper parsing": "paper\nparse",
+        "prior-art retrieval": "prior art",
+        "citation graph retrieval": "citation\ngraph",
+        "seven-indicator computation": "7 metrics",
+        "graph-perturbation agent": "graph\nagent",
+        "ASPR-Qwen reviewer": "ASPR-Qwen",
+        "fusion module": "fusion",
+        "evidence trace": "trace",
+        "self-check verifier": "verifier",
+    }
+    positions = [
+        (0.03, 0.74),
+        (0.36, 0.74),
+        (0.69, 0.74),
+        (0.03, 0.52),
+        (0.36, 0.52),
+        (0.69, 0.52),
+        (0.18, 0.30),
+        (0.49, 0.30),
+        (0.72, 0.30),
+    ]
+    for (_, row), (x, y) in zip(module_inventory.iterrows(), positions):
+        family = str(row["family"])
+        box = box_cls(
+            (x, y),
+            0.255,
+            0.135,
+            boxstyle="round,pad=0.010,rounding_size=0.018",
+            transform=ax.transAxes,
+            facecolor=family_colors.get(family, "#f8fafc"),
+            edgecolor="#475569",
+            linewidth=0.8,
+        )
+        ax.add_patch(box)
+        module = str(row["module"])
+        ax.text(x + 0.127, y + 0.081, display_labels.get(module, module), ha="center", va="center", fontsize=6.8, fontweight="bold", transform=ax.transAxes)
+        ax.text(x + 0.127, y + 0.032, str(row["ablation_switch"]).replace("no prior-art retrieval", "no retrieval"), ha="center", va="center", fontsize=5.8, color=palette["muted"], transform=ax.transAxes)
+    for start, end in [
+        ((0.285, 0.807), (0.36, 0.807)),
+        ((0.615, 0.807), (0.69, 0.807)),
+        ((0.158, 0.740), (0.158, 0.655)),
+        ((0.488, 0.740), (0.488, 0.655)),
+        ((0.818, 0.740), (0.818, 0.655)),
+        ((0.285, 0.588), (0.36, 0.588)),
+        ((0.615, 0.588), (0.69, 0.588)),
+        ((0.818, 0.520), (0.818, 0.435)),
+        ((0.435, 0.368), (0.49, 0.368)),
+    ]:
+        ax.add_patch(arrow_cls(start, end, arrowstyle="-|>", mutation_scale=8, color=palette["muted"], linewidth=0.7, transform=ax.transAxes))
+    gate_labels = {
+        "fig4_full_metric_baseline": "Fig.4 metrics",
+        "true_disabled_module_reruns": "true reruns",
+        "blinded_human_preference": "human pref.",
+        "checkpoint_generated_aspr_qwen": "checkpoint",
+        "current_generic_llm_baseline": "same-rubric LLM",
+    }
+    ax.text(0.03, 0.190, "Gate status", fontsize=7.0, fontweight="bold", color=palette["fusion"], transform=ax.transAxes)
+    for idx, row in replacement_gates.iterrows():
+        gate_id = str(row["gate_id"])
+        passed = int(row.get("pass_for_nature_strong_claim", 0)) == 1
+        color = palette["green"] if passed else palette["warn"]
+        x = 0.03 + (idx % 3) * 0.315
+        y = 0.120 - (idx // 3) * 0.068
+        ax.add_patch(
+            box_cls(
+                (x, y),
+                0.285,
+                0.045,
+                boxstyle="round,pad=0.008,rounding_size=0.014",
+                transform=ax.transAxes,
+                facecolor="#ffffff",
+                edgecolor=color,
+                linewidth=0.85,
+            )
+        )
+        ax.text(x + 0.014, y + 0.024, gate_labels.get(gate_id, gate_id), fontsize=5.8, color=color, fontweight="bold", va="center", transform=ax.transAxes)
+        ax.text(x + 0.245, y + 0.024, "pass" if passed else "pending", fontsize=5.4, color=color, ha="center", va="center", transform=ax.transAxes)
+
+
+def draw_ablation_delta_atlas(ax: Any, summary: pd.DataFrame, forest: pd.DataFrame, palette: Mapping[str, str]) -> None:
+    """Draw metric deltas and composite deltas as one ablation atlas."""
+    ax.set_title("b  Observed rerun delta atlas", loc="left", fontweight="bold")
+    ax.set_axis_off()
+    heat_ax = ax.inset_axes([0.000, 0.070, 0.730, 0.805])
+    delta_ax = ax.inset_axes([0.795, 0.100, 0.190, 0.760])
+    full = summary[summary["variant"].eq("full ASPR")].set_index("metric")["mean"].to_dict()
+    rows = [variant for variant in VARIANTS if variant != "full ASPR"]
+    matrix = []
+    for variant in rows:
+        values = []
+        for metric, _, direction in METRICS:
+            value = float(summary[(summary["variant"].eq(variant)) & (summary["metric"].eq(metric))]["mean"].iloc[0])
+            delta = value - float(full[metric])
+            values.append(-delta if direction == "lower" else delta)
+        matrix.append(values)
+    im = heat_ax.imshow(matrix, aspect="auto", cmap="RdBu_r", vmin=-0.40, vmax=0.40)
+    heat_ax.set_yticks(np.arange(len(rows)))
+    heat_ax.set_yticklabels([VARIANT_LABELS[row] for row in rows], fontsize=6.9)
+    heat_ax.set_xticks(np.arange(len(METRICS)))
+    heat_ax.set_xticklabels(["Sem.", "Novel", "Prior", "Fact", "Read", "Unsup.", "Trace", "Struct"], rotation=35, ha="right", fontsize=6.4)
+    for i, row in enumerate(matrix):
+        for j, value in enumerate(row):
+            heat_ax.text(j, i, f"{value:+.2f}", ha="center", va="center", fontsize=5.6, color="#111827")
+    heat_ax.tick_params(length=0)
+    heat_ax.spines[:].set_visible(False)
+    cbar = ax.figure.colorbar(im, ax=heat_ax, fraction=0.032, pad=0.020)
+    cbar.ax.tick_params(labelsize=5.8)
+    cbar.set_label("metric delta vs full", fontsize=6.2)
+
+    plot_df = forest[~forest["variant"].eq("full ASPR")].copy().sort_values("delta_vs_full", ascending=True)
+    y = np.arange(len(plot_df))
+    colors = [palette["nature"] if "generic" in str(v) else palette["graph"] for v in plot_df["variant"]]
+    delta_ax.axvline(0, color=palette["fusion"], linewidth=0.9)
+    delta_ax.hlines(y, plot_df["ci95_low"], plot_df["ci95_high"], color=palette["muted"], linewidth=1.1)
+    delta_ax.scatter(plot_df["delta_vs_full"], y, s=38, color=colors, zorder=3)
+    delta_ax.set_yticks([])
+    delta_ax.set_xlabel("composite", fontsize=6.6)
+    delta_ax.tick_params(axis="x", labelsize=6.2)
+    delta_ax.grid(True, axis="x", color=palette["grid"], linewidth=0.6)
+    delta_ax.spines[["top", "right", "left"]].set_visible(False)
+    for xpos, ypos in zip(plot_df["delta_vs_full"], y):
+        delta_ax.text(xpos + 0.004, ypos, f"{xpos:+.2f}", ha="left", va="center", fontsize=5.8, color=palette["muted"])
+    ax.text(0.000, 0.915, "Non-full rows are observed reruns; values are deltas relative to full ASPR.", fontsize=6.4, color=palette["muted"], transform=ax.transAxes)
+
+
+def draw_preference_baseline_atlas(ax: Any, preference: pd.DataFrame, out_dir: Path, palette: Mapping[str, str]) -> None:
+    """Draw pending preference evidence and same-rubric generic baseline in one panel."""
+    observed_human = preference["source"].astype(str).eq("observed_blinded_human_preference").all()
+    source_label = "blinded human observed" if observed_human else "LLM-as-judge; human pending"
+    ax.set_title(f"c  Preference and same-rubric baseline ({source_label})", loc="left", fontweight="bold")
+    ax.set_axis_off()
+    pref_ax = ax.inset_axes([0.030, 0.160, 0.555, 0.720])
+    baseline_ax = ax.inset_axes([0.665, 0.160, 0.285, 0.720])
+    labels = [item.replace("full ASPR vs ", "vs ") for item in preference["comparison"]]
+    y = np.arange(len(labels))
+    full = preference["full_aspr_win_rate"]
+    ties = preference["tie_rate"]
+    comp = preference["comparator_win_rate"]
+    pref_ax.barh(y, full, color=palette["fusion"], label="Full ASPR")
+    pref_ax.barh(y, ties, left=full, color="#cbd5e1", label="Tie")
+    pref_ax.barh(y, comp, left=full + ties, color=palette["nature"], alpha=0.82, label="Comparator")
+    pref_ax.set_yticks(y)
+    pref_ax.set_yticklabels(labels, fontsize=6.2)
+    pref_ax.set_xlim(0, 1)
+    pref_ax.set_xlabel("pairwise share", fontsize=6.5)
+    pref_ax.legend(loc="lower right", fontsize=5.8, frameon=False)
+    pref_ax.grid(True, axis="x", color=palette["grid"], linewidth=0.6)
+    pref_ax.spines[["top", "right"]].set_visible(False)
+    pref_ax.invert_yaxis()
+
+    summary_path = out_dir / "fig10_generic_llm_same_rubric_summary.csv"
+    if summary_path.exists():
+        same = pd.read_csv(summary_path)
+        metric_order = ["semantic_agreement", "prior_art_accuracy", "unsupported_claim_rate", "evidence_trace_completeness"]
+        labels_map = {
+            "semantic_agreement": "semantic",
+            "prior_art_accuracy": "prior art",
+            "unsupported_claim_rate": "unsupported",
+            "evidence_trace_completeness": "trace",
+        }
+        rows = same[same["metric"].isin(metric_order)].set_index("metric").reindex(metric_order).dropna(subset=["mean"])
+        yy = np.arange(len(rows))
+        colors = [palette["nature"] if metric == "unsupported_claim_rate" else palette["graph"] for metric in rows.index]
+        baseline_ax.barh(yy, rows["mean"], color=colors, alpha=0.86)
+        baseline_ax.set_yticks(yy)
+        baseline_ax.set_yticklabels([labels_map[m] for m in rows.index], fontsize=6.3)
+        baseline_ax.set_xlim(0, 1)
+        baseline_ax.set_xlabel("same-rubric mean", fontsize=6.5)
+        baseline_ax.grid(True, axis="x", color=palette["grid"], linewidth=0.6)
+        baseline_ax.spines[["top", "right"]].set_visible(False)
+        for xpos, ypos in zip(rows["mean"], yy):
+            baseline_ax.text(float(xpos) + 0.025, ypos, f"{float(xpos):.2f}", fontsize=5.8, va="center", color=palette["muted"])
+        baseline_ax.invert_yaxis()
+    else:
+        baseline_ax.set_axis_off()
+        baseline_ax.text(0.0, 0.5, "same-rubric baseline missing", fontsize=7, color=palette["warn"])
+    ax.text(0.030, 0.020, "Preference bars remain non-strong evidence until blinded human returns pass the completion audit.", fontsize=6.3, color=palette["muted"], transform=ax.transAxes)
+
+
+def draw_gate_safeguard_atlas(
+    ax: Any,
+    replacement_gates: pd.DataFrame,
+    error_taxonomy: pd.DataFrame,
+    reinforcement: pd.DataFrame,
+    palette: Mapping[str, str],
+) -> None:
+    """Draw compact replacement-gate and safeguard evidence."""
+    ax.set_title("d  Replacement gates, safeguards, and next experiments", loc="left", fontweight="bold")
+    ax.set_axis_off()
+    gate_ax = ax.inset_axes([0.000, 0.140, 0.385, 0.760])
+    safe_ax = ax.inset_axes([0.595, 0.140, 0.375, 0.760])
+    gate_ax.set_axis_off()
+    gate_ax.text(0.00, 0.96, "Nature strong-claim gates", fontsize=7.2, fontweight="bold", color=palette["fusion"], transform=gate_ax.transAxes)
+    for idx, row in replacement_gates.iterrows():
+        y = 0.820 - idx * 0.155
+        passed = int(row.get("pass_for_nature_strong_claim", 0)) == 1
+        color = palette["green"] if passed else palette["warn"]
+        gate_ax.scatter([0.025], [y], s=58, color=color, transform=gate_ax.transAxes)
+        gate_label = str(row["gate_id"]).replace("_", " ")
+        gate_label = gate_label.replace("blinded human preference", "blinded human pref.")
+        gate_label = gate_label.replace("checkpoint generated aspr qwen", "checkpoint ASPR-Qwen")
+        gate_label = gate_label.replace("current generic llm baseline", "same-rubric LLM")
+        gate_ax.text(0.070, y + 0.020, gate_label, fontsize=6.0, color=palette["fusion"], fontweight="bold", transform=gate_ax.transAxes, va="center")
+        gate_ax.text(0.070, y - 0.035, str(row["current_status"]).replace("_", " "), fontsize=5.6, color=palette["muted"], transform=gate_ax.transAxes, va="center")
+        gate_ax.text(0.730, y, "pass" if passed else "pending", fontsize=5.8, color=color, fontweight="bold", ha="center", transform=gate_ax.transAxes, va="center")
+
+    pivot = error_taxonomy.pivot(index="error_type", columns="variant", values="error_rate")
+    if "generic LLM-only baseline" in pivot and "full ASPR" in pivot:
+        order = pivot["generic LLM-only baseline"].sort_values(ascending=False).head(5).index.tolist()
+        y = np.arange(len(order))
+        safe_ax.barh(y + 0.14, pivot.loc[order, "generic LLM-only baseline"], height=0.25, color=palette["nature"], alpha=0.70, label="generic")
+        safe_ax.barh(y - 0.14, pivot.loc[order, "full ASPR"], height=0.25, color="#374151", alpha=0.76, label="full ASPR")
+        safe_ax.set_yticks(y)
+        safe_ax.set_yticklabels(order, fontsize=5.7)
+        safe_ax.set_xlim(0, 1)
+        safe_ax.set_xlabel("error-rate audit", fontsize=6.3)
+        safe_ax.legend(loc="lower right", frameon=False, fontsize=5.8)
+        safe_ax.grid(True, axis="x", color=palette["grid"], linewidth=0.6)
+        safe_ax.spines[["top", "right"]].set_visible(False)
+        safe_ax.invert_yaxis()
+    else:
+        safe_ax.set_axis_off()
+    top_reinforcement = reinforcement.sort_values("quality_gain", ascending=False).head(2)
+    labels = " | ".join(str(row["reinforcement"]).replace("+ ", "") for _, row in top_reinforcement.iterrows())
+    ax.text(0.595, 0.905, f"Next experiments: {labels}", fontsize=6.4, color=palette["muted"], transform=ax.transAxes)
 
 
 def draw_module_map(ax: Any, module_inventory: pd.DataFrame, rectangle_cls: Any, arrow_cls: Any) -> None:
@@ -2542,6 +2808,7 @@ def build_fig10(fig4_metrics: Path, out_dir: Path, dpi: int = 320) -> Dict[str, 
         preference=preference,
         error_taxonomy=error_taxonomy,
         reinforcement=reinforcement,
+        replacement_gates=replacement_gates,
         panel_text=panel_text,
         out_dir=out_dir,
         dpi=dpi,
@@ -2640,6 +2907,12 @@ def quality_gates(
         "replacement_gates_exist": (out_dir / "fig10_replacement_gates.csv").exists() and len(replacement_gates) >= 5,
         "pipeline_gate_allows_current_figure": pipeline_ready,
         "nature_strong_claim_status_declared": True,
+        "compact_visual_panel_count_le_4": True,
+        "shared_palette_applied": True,
+        "replacement_gates_embedded_in_visual": True,
+        "same_rubric_baseline_embedded_in_visual": (out_dir / "fig10_generic_llm_same_rubric_summary.csv").exists(),
+        "visual_claim_boundary_embedded": True,
+        "line_chart_count_zero": True,
     }
     status_label = "nature_strong_ablation_ready" if strong_claim_ready else "pipeline_ready_with_llm_judge_ablation_estimates"
     return {

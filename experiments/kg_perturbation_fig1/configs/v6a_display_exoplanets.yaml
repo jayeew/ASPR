@@ -1,21 +1,22 @@
 domain_name: "Exoplanet discovery and characterization"
 slug: "exoplanets"
-search_query: '("exoplanet" OR "extrasolar planet" OR "planetary transit" OR "radial velocity planet" OR "hot Jupiter" OR "Kepler mission")'
-start_year: 1995
+search_query: '("exoplanet" OR "extrasolar planet" OR "planetary transit" OR "radial velocity planet" OR "hot Jupiter" OR "Kepler mission" OR "radial velocity" OR "planet search" OR "brown dwarf companion" OR "circumstellar disk")'
+start_year: 1990
 end_year: 2024
 window_size: 5
 custom_windows:
-  - [1995, 2005]
-  - [2006, 2010]
-  - [2011, 2015]
-  - [2016, 2020]
-  - [2021, 2024]
-snapshot_years: [2005, 2010, 2015, 2020, 2024]
+  - [1990, 1994]
+  - [1995, 2000]
+  - [2001, 2010]
+  - [2011, 2024]
+snapshot_years: [1994, 2000, 2010, 2024]
 language: "en"
 include_abstract: false
 max_works_per_window: 1600
 fetch_anchor_citers: true
 max_anchor_citers: 800
+fetch_anchor_references: true
+max_anchor_references: 60
 work_types: ["article", "preprint", "review"]
 anchors:
   - label: "Mayor/Queloz 1995"
@@ -26,6 +27,7 @@ anchors:
 relevance_filter:
   enabled: true
   keep_anchor_citers: true
+  keep_anchor_references: true
   strong_positive_keywords:
     - "exoplanet"
     - "extrasolar planet"
@@ -90,6 +92,8 @@ plot:
   event_topics_per_spec: 1
   event_max_topics: 5
   display_min_topic_size: 5
+  sparse_snapshot_paper_threshold: 90
+  sparse_snapshot_min_papers_per_topic: 1
   display_max_backbone_edges: 18
   display_extra_edges: 8
   cluster_radius_min: 0.135
@@ -120,13 +124,13 @@ plot:
       label: "Uzzi novelty (-p10)"
   parameter_callouts:
     - parameter: "B"
-      window: "1995-2005"
+      window: "1995-2000"
       text: "detection-method\nbridge"
       dx: 2.2
       dy: 0.35
       color: "#1D4ED8"
     - parameter: "RTD"
-      window: "2011-2015"
+      window: "2011-2024"
       text: "Kepler-era\npopulation expansion"
       dx: 1.8
       dy: 0.35
@@ -159,11 +163,10 @@ plot:
   parameter_box_linewidth: 0.75
   show_retrieval_date: false
   panel_captions:
-    - "Radial-velocity detection bridge"
-    - "Transit surveys expand the field"
+    - "Planet-search precursors"
+    - "51 Pegasi b detection bridge"
     - "Kepler population reconfiguration"
     - "Atmosphere and habitability branches"
-    - "Mature characterization hubs"
   event_topic_keywords:
     - name: "Radial\nvelocity"
       keywords: ["radial velocity", "doppler", "51 pegasi", "hot jupiter", "companion"]

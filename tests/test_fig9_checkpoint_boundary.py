@@ -96,8 +96,13 @@ class Fig9CheckpointBoundaryTests(unittest.TestCase):
 
         self.assertTrue(report["complete"])
         self.assertEqual("fig9", quality["figure"])
-        self.assertEqual("prototype_storyboard_checkpoint_placeholder", quality["status_label"])
+        self.assertEqual("prototype_run_instance_checkpoint_placeholder", quality["status_label"])
         self.assertEqual(0, quality["quality_gates"]["checkpoint_generated_aspr_qwen"])
+        self.assertEqual(1, quality["quality_gates"]["checks"]["large_run_instance_visual"])
+        self.assertEqual(1, quality["quality_gates"]["checks"]["manifest_bound_visual"])
+        self.assertEqual(1, quality["quality_gates"]["checks"]["visible_text_compacted"])
+        self.assertEqual(1, quality["quality_gates"]["checks"]["main_visual_panel_count_le_3"])
+        self.assertEqual(1, quality["quality_gates"]["checks"]["gpt_image_visual_layer_contract"])
         self.assertIn("assumed pipeline-ready placeholder", quality["aspr_qwen_boundary"])
         self.assertEqual("fig9", manifest["figure"])
         self.assertEqual("fig9_checkpoint_metadata.json", checkpoint_contract["checkpoint_metadata_path"])
@@ -148,7 +153,7 @@ class Fig9CheckpointBoundaryTests(unittest.TestCase):
 
         self.assertTrue(qwen["checkpoint_invoked"])
         self.assertEqual("sha256:abc", qwen["checkpoint_metadata"]["model_hash"])
-        self.assertEqual("checkpoint_case_storyboard_ready", quality["status_label"])
+        self.assertEqual("checkpoint_case_run_instance_ready", quality["status_label"])
         self.assertEqual(1, quality["quality_gates"]["checkpoint_generated_aspr_qwen"])
         self.assertEqual(1, quality["quality_gates"]["main_claim_ready"])
         self.assertFalse(fusion["provenance"]["aspr_qwen_assumed"])
@@ -198,7 +203,7 @@ class Fig9CheckpointBoundaryTests(unittest.TestCase):
 
         self.assertEqual("sha256:sidecar", qwen["checkpoint_metadata"]["model_hash"])
         self.assertEqual("sha256:sidecar", qwen["model_hash"])
-        self.assertEqual("checkpoint_case_storyboard_ready", quality["status_label"])
+        self.assertEqual("checkpoint_case_run_instance_ready", quality["status_label"])
         self.assertEqual(1, quality["quality_gates"]["checkpoint_generated_aspr_qwen"])
 
     def test_fig9_rejects_checkpoint_metadata_without_required_review_fields(self) -> None:
@@ -238,7 +243,7 @@ class Fig9CheckpointBoundaryTests(unittest.TestCase):
             quality = json.loads((out_dir / "figure_quality_report.json").read_text(encoding="utf-8"))
 
         self.assertFalse(qwen["checkpoint_invoked"])
-        self.assertEqual("prototype_storyboard_checkpoint_placeholder", quality["status_label"])
+        self.assertEqual("prototype_run_instance_checkpoint_placeholder", quality["status_label"])
         self.assertEqual(0, quality["quality_gates"]["checkpoint_generated_aspr_qwen"])
 
 

@@ -561,7 +561,7 @@ def run_fig1_pipeline_for_input(
     progress: bool,
 ) -> Path:
     progress_log(f'Running Fig. 1 pipeline to materialize source data: {fig1_config}', progress)
-    from experiments.kg_perturbation_fig1.fig1_knowledge_perturbation_v3 import (  # pylint: disable=import-outside-toplevel
+    from experiments.kg_perturbation_fig1.fig1_knowledge_perturbation import (  # pylint: disable=import-outside-toplevel
         OpenAlexClient,
         load_config,
         run_domain,
@@ -3013,7 +3013,7 @@ def _choose_fig1_panel_a_windows(
 
 
 def _load_fig1_snapshot_cfg(fig1_dir: Path, windows: Sequence[Tuple[int, int]], works: pd.DataFrame) -> Dict[str, Any]:
-    from experiments.kg_perturbation_fig1.fig1_knowledge_perturbation_v3 import DEFAULT_CONFIG, load_config  # pylint: disable=import-outside-toplevel
+    from experiments.kg_perturbation_fig1.fig1_knowledge_perturbation import DEFAULT_CONFIG, load_config  # pylint: disable=import-outside-toplevel
 
     config_path = _fig1_config_path_for_snapshot_dir(fig1_dir)
     if config_path is not None:
@@ -3037,7 +3037,7 @@ def _load_fig1_snapshot_cfg(fig1_dir: Path, windows: Sequence[Tuple[int, int]], 
 
 
 def _build_fig1_snapshot_graph(raw: RawData) -> Tuple[nx.Graph, Dict[str, int], Dict[int, str], Dict[int, np.ndarray], Dict[int, Any]]:
-    from experiments.kg_perturbation_fig1.fig1_knowledge_perturbation_v3 import community_color_map  # pylint: disable=import-outside-toplevel
+    from experiments.kg_perturbation_fig1.fig1_knowledge_perturbation import community_color_map  # pylint: disable=import-outside-toplevel
 
     works = raw.works.copy()
     graph = nx.Graph()
@@ -3121,7 +3121,7 @@ def _draw_panel_a_from_fig1_exports(
     if not has_fig1_export_files(fig1_dir):
         return False
 
-    from experiments.kg_perturbation_fig1.fig1_knowledge_perturbation_v3 import draw_snapshot, window_label  # pylint: disable=import-outside-toplevel
+    from experiments.kg_perturbation_fig1.fig1_knowledge_perturbation import draw_snapshot, window_label  # pylint: disable=import-outside-toplevel
 
     snapshot_raw = load_raw_data(fig1_dir, domain=None, direct_only=False, progress=False)
     works = snapshot_raw.works
@@ -3511,8 +3511,9 @@ def draw_panel_d(ax, comp: ComputedData) -> None:
     cb = plt.colorbar(im, cax=cax)
     cb.ax.tick_params(labelsize=5)
     cb.outline.set_linewidth(0.5)
-    # legend / families
-    lx = 0.76; y = 0.83
+    # Compact family cards keep panel d inside the right-side drawing area.
+    lx = 0.755
+    y = 0.835
     available = set(corr.columns.astype(str))
     name_map = {
         'B': 'B',
@@ -3548,11 +3549,33 @@ def draw_panel_d(ax, comp: ComputedData) -> None:
         if lines:
             fam_lines.append((title, lines, color))
     for title, lines, color in fam_lines:
-        ax.plot([lx, lx], [y-0.05, y+0.02], color=color, lw=1.5, transform=ax.transAxes)
-        ax.text(lx+0.015, y+0.015, title, fontsize=5.8, fontweight='bold', color=color, transform=ax.transAxes, ha='left', va='top')
-        for i, line in enumerate(lines):
-            ax.text(lx+0.015, y-0.01 - i*0.025, line, fontsize=5.0, color=TEXT_DARK, transform=ax.transAxes, ha='left', va='top')
-        y -= 0.13 + 0.022 * max(1, len(lines))
+        card_h = 0.104
+        rounded_box(ax, lx, y - card_h, 0.205, card_h, '#FFFFFF', '#E2E8F0', 0.55, 0.012)
+        ax.plot([lx + 0.010, lx + 0.010], [y - card_h + 0.015, y - 0.015], color=color, lw=1.8, transform=ax.transAxes)
+        ax.text(
+            lx + 0.020,
+            y - 0.018,
+            title,
+            fontsize=5.1,
+            fontweight='bold',
+            color=color,
+            transform=ax.transAxes,
+            ha='left',
+            va='top',
+        )
+        wrapped = textwrap.wrap(", ".join(lines), width=28)[:2]
+        for i, line in enumerate(wrapped):
+            ax.text(
+                lx + 0.020,
+                y - 0.044 - i * 0.023,
+                line,
+                fontsize=4.6,
+                color=TEXT_DARK,
+                transform=ax.transAxes,
+                ha='left',
+                va='top',
+            )
+        y -= card_h + 0.018
     rounded_box(ax, 0.03, 0.018, 0.94, 0.058, '#FFFFFF', '#E2E8F0', 0.6, 0.010)
     ax.text(0.05, 0.047, 'Colored ticks mark selected indicators; selected indicators occupy distinct candidate-metric modules.', fontsize=5.2, va='center')
 

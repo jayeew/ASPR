@@ -19,12 +19,12 @@ Typical usage
 -------------
 
     cp .env.example .env  # then set OPENALEX_API_KEY or OPENALEX_API_KEYS
-    python experiments/kg_perturbation_fig1/fig1_knowledge_perturbation_v3.py \
+    python experiments/kg_perturbation_fig1/fig1_knowledge_perturbation.py \
         --config experiments/kg_perturbation_fig1/configs/crispr.yaml
 
 For a four-domain Nature-style Fig. 1:
 
-    python experiments/kg_perturbation_fig1/fig1_knowledge_perturbation_v3.py \
+    python experiments/kg_perturbation_fig1/fig1_knowledge_perturbation.py \
         --config experiments/kg_perturbation_fig1/configs/crispr.yaml \
                  experiments/kg_perturbation_fig1/configs/graphene.yaml \
                  experiments/kg_perturbation_fig1/configs/ipsc.yaml \
@@ -156,6 +156,8 @@ DEFAULT_CONFIG: Dict[str, Any] = {
     "max_works_per_window": 1200,
     "max_anchor_citers": 500,
     "fetch_anchor_citers": True,
+    "max_anchor_references": 45,
+    "fetch_anchor_references": True,
     "anchors": [],
     "relevance_filter": {
         "enabled": False,
@@ -164,6 +166,7 @@ DEFAULT_CONFIG: Dict[str, Any] = {
         "negative_keywords": [],
         "negative_primary_topics": [],
         "keep_anchor_citers": True,
+        "keep_anchor_references": True,
     },
     "api": {
         "sleep_seconds": 0.10,
@@ -216,6 +219,13 @@ DEFAULT_CONFIG: Dict[str, Any] = {
         "cluster_radius_max": 0.24,
         "max_representative_papers": 7,
         "min_papers_per_display_topic": 3,
+        "sparse_snapshot_paper_threshold": 80,
+        "sparse_snapshot_min_papers_per_topic": 1,
+        "delta_emphasis": True,
+        "context_topic_alpha": 0.56,
+        "context_edge_alpha": 0.30,
+        "foreground_edge_alpha": 0.68,
+        "landmark_edge_alpha": 0.58,
         "show_internal_cluster_edges": True,
         "show_panel_captions": True,
         "panel_captions": [
@@ -459,6 +469,8 @@ def config_data_fingerprint(cfg: Mapping[str, Any]) -> str:
         "max_works_per_window",
         "max_anchor_citers",
         "fetch_anchor_citers",
+        "max_anchor_references",
+        "fetch_anchor_references",
         "work_types",
         "anchors",
         "relevance_filter",
@@ -839,6 +851,11 @@ def filter_topic_graph_for_display(TG: nx.Graph, end_year: int, pcfg: Mapping[st
     from a future module exists. This threshold makes expansion visually legible.
     """
     min_papers = int(pcfg.get("min_papers_per_display_topic", 1))
+    total_papers = sum(int(d.get("n_papers") or 0) for _, d in TG.nodes(data=True))
+    sparse_threshold = int(pcfg.get("sparse_snapshot_paper_threshold", 0) or 0)
+    if sparse_threshold > 0 and total_papers <= sparse_threshold:
+        sparse_min = int(pcfg.get("sparse_snapshot_min_papers_per_topic", 1))
+        min_papers = min(min_papers, max(1, sparse_min))
     if min_papers <= 1 or TG.number_of_nodes() == 0:
         return TG
     H = TG.copy()
@@ -1182,6 +1199,7 @@ def normalize_work(work: Mapping[str, Any], include_abstract: bool = False) -> D
         "anchor_label": "",
         "anchor_year": None,
         "anchor_citer": bool(work.get("_aspr_anchor_citer")),
+        "anchor_reference_prior": bool(work.get("_aspr_anchor_reference_prior")),
         "reference_stub": bool(work.get("_aspr_reference_stub")),
     }
 
@@ -1406,6 +1424,8 @@ def work_matches_relevance_filter(work: Mapping[str, Any], cfg: Mapping[str, Any
         return True
     if bool(fcfg.get("keep_anchor_citers", True)) and work.get("anchor_citer"):
         return True
+    if bool(fcfg.get("keep_anchor_references", True)) and work.get("anchor_reference_prior"):
+        return True
     text = normalize_text_key(
         " ".join(
             [
@@ -1433,6 +1453,51 @@ def apply_relevance_filter(works: Dict[str, Dict[str, Any]], cfg: Mapping[str, A
     if not (cfg.get("relevance_filter") or {}).get("enabled", False):
         return works
     return {wid: w for wid, w in works.items() if work_matches_relevance_filter(w, cfg)}
+
+
+def fetch_anchor_reference_priors(
+    cfg: Mapping[str, Any],
+    client: OpenAlexClient,
+    raw_by_id: Dict[str, Dict[str, Any]],
+    anchor_records: Sequence[Tuple[Mapping[str, Any], Mapping[str, Any]]],
+) -> int:
+    """Add real pre-landmark works cited by landmark papers.
+
+    These papers make the first snapshot a knowledge-prior graph instead of an
+    empty prehistory panel, while keeping the landmark papers themselves in the
+    next rolling window.
+    """
+    if not bool(cfg.get("fetch_anchor_references", True)) or not anchor_records:
+        return 0
+    max_refs = max(0, int(cfg.get("max_anchor_references", 45)))
+    if max_refs == 0:
+        return 0
+
+    added = 0
+    seen = set(raw_by_id.keys())
+    for anchor, anchor_rec in anchor_records:
+        anchor_year = year_int(anchor.get("year") or anchor_rec.get("publication_year"))
+        anchor_label = str(anchor.get("label") or anchor.get("title") or anchor_rec.get("display_name") or "landmark")
+        ref_ids = [normalize_openalex_id(ref) for ref in (anchor_rec.get("referenced_works") or [])]
+        ref_ids = [ref for ref in ref_ids if ref]
+        for ref_id in ref_ids[:max_refs]:
+            if ref_id in seen:
+                continue
+            rec = client.get_work_by_openalex_id(ref_id, include_abstract=False)
+            if not rec or not rec.get("id"):
+                continue
+            pub_year = year_int(rec.get("publication_year"))
+            if anchor_year is not None and pub_year is not None and pub_year >= anchor_year:
+                continue
+            rec["_aspr_anchor_reference_prior"] = True
+            rec["_aspr_anchor_reference_label"] = anchor_label
+            norm_id = normalize_openalex_id(rec.get("id"))
+            if not norm_id:
+                continue
+            raw_by_id[norm_id] = rec
+            seen.add(norm_id)
+            added += 1
+    return added
 
 
 def mark_anchors_legacy(works: Dict[str, Dict[str, Any]], anchors: Sequence[Mapping[str, Any]]) -> None:
@@ -1512,6 +1577,7 @@ def fetch_domain_works(
                     raw_by_id[wid] = r
 
     # Always add known landmark papers, even if the keyword query misses them.
+    anchor_records: List[Tuple[Mapping[str, Any], Dict[str, Any]]] = []
     for a in cfg.get("anchors") or []:
         label = a.get("label") or a.get("title") or a.get("doi") or a.get("openalex_id")
         print(f"[{slug}] Fetching anchor {label} ...")
@@ -1519,15 +1585,20 @@ def fetch_domain_works(
         if rec and rec.get("id"):
             rec["_aspr_anchor_seed"] = True
             raw_by_id[normalize_openalex_id(rec["id"])] = rec
+            anchor_records.append((a, rec))
+
+    added_priors = fetch_anchor_reference_priors(cfg, client, raw_by_id, anchor_records)
+    if added_priors:
+        print(f"[{slug}] Added {added_priors:,} pre-landmark works cited by anchors")
 
     # Optional: fetch citing papers of anchors to better capture downstream disturbance.
     if cfg.get("fetch_anchor_citers", True) and cfg.get("anchors"):
-        anchor_records: List[Dict[str, Any]] = []
-        for a in cfg.get("anchors") or []:
-            rec = fetch_anchor_work(client, a, include_abstract=False)
-            if rec and rec.get("id"):
-                anchor_records.append(rec)
-        for rec in anchor_records:
+        if not anchor_records:
+            for a in cfg.get("anchors") or []:
+                rec = fetch_anchor_work(client, a, include_abstract=False)
+                if rec and rec.get("id"):
+                    anchor_records.append((a, rec))
+        for _, rec in anchor_records:
             sid = short_openalex_id(rec.get("id"))
             if not sid:
                 continue
@@ -1797,6 +1868,7 @@ def build_hybrid_graph(
             anchor_label=w.get("anchor_label", ""),
             anchor_year=w.get("anchor_year"),
             anchor_citer=bool(w.get("anchor_citer")),
+            anchor_reference_prior=bool(w.get("anchor_reference_prior")),
             reference_stub=bool(w.get("reference_stub")),
         )
 
@@ -3008,6 +3080,7 @@ def compute_snapshot_delta_metrics(result: "DomainResult") -> pd.DataFrame:
         display_nodes = {n for n in active if n in result.display_comm_map}
         hidden_node_ratio = 1.0 - (len(display_nodes) / max(len(active), 1))
         TG = make_topic_graph(G, result.display_comm_map, result.display_labels, active_nodes=active)
+        TG = filter_topic_graph_for_display(TG, c1, result.cfg.get("plot", {}))
         display_topics = {int(n) for n in TG.nodes()}
         new_display_topics = display_topics - seen_display_topics
         possible_pairs = max(1, len(display_topics) * (len(display_topics) - 1) // 2)
@@ -3117,6 +3190,20 @@ def draw_snapshot(
 
     nodes = [int(n) for n in TG.nodes() if int(n) in pos]
     anchor_nodes = {int(n) for n in nodes if TG.nodes[n].get("anchor_labels") and (TG.nodes[n].get("anchor_year") is None or TG.nodes[n].get("anchor_year") <= end_year)}
+    anchor_order = sorted(anchor_nodes, key=lambda n: (float(pos.get(n, np.array([0.0, 0.0]))[1]), float(pos.get(n, np.array([0.0, 0.0]))[0])))
+    anchor_offsets = [(0.12, -0.16), (0.14, 0.18), (-0.24, -0.15), (-0.22, 0.16), (0.20, -0.02)]
+    pos_y_values = [float(pos[n][1]) for n in nodes if n in pos]
+    y_min = min(pos_y_values) if pos_y_values else -1.0
+    y_max = max(pos_y_values) if pos_y_values else 1.0
+    y_span = max(y_max - y_min, 1e-9)
+    delta_emphasis = bool(pcfg.get("delta_emphasis", True)) and prev_end_year is not None
+
+    def topic_is_new(n: int) -> bool:
+        first_year = TG.nodes[n].get("first_year")
+        return prev_end_year is None or n not in TGprev.nodes or (first_year is not None and first_year > prev_end_year)
+
+    def topic_is_context(n: int) -> bool:
+        return bool(delta_emphasis and n not in anchor_nodes and not topic_is_new(n))
 
     # Soft background halos, drawn before edges and beads.
     rmin = float(pcfg.get("cluster_radius_min", 0.13))
@@ -3126,20 +3213,36 @@ def draw_snapshot(
 
     for n in nodes:
         x, y = pos[n]
-        first_year = TG.nodes[n].get("first_year")
-        is_new_topic = prev_end_year is None or (first_year is not None and first_year > prev_end_year)
+        is_new_topic = topic_is_new(n)
+        is_context_topic = topic_is_context(n)
         has_anchor = n in anchor_nodes
         base_color = color_map.get(n, "#9CA3AF")
+        halo_lw = 1.6 if has_anchor else 1.15 if is_new_topic else 0.7
+        halo_alpha = 0.08 if not is_new_topic else 0.23
+        if is_context_topic:
+            halo_alpha = 0.075
         halo = mpatches.Circle(
             (x, y),
             radius=radii[n],
             facecolor=base_color,
             edgecolor=base_color,
-            lw=0.9 if not has_anchor else 1.6,
-            alpha=0.10 if not is_new_topic else 0.16,
+            lw=halo_lw,
+            alpha=halo_alpha,
             zorder=0,
         )
         ax.add_patch(halo)
+        if is_new_topic and not has_anchor:
+            ax.add_patch(
+                mpatches.Circle(
+                    (x, y),
+                    radius=radii[n] * 1.16,
+                    facecolor="none",
+                    edgecolor=base_color,
+                    lw=0.9,
+                    alpha=0.58,
+                    zorder=1,
+                )
+            )
         if has_anchor:
             ax.add_patch(
                 mpatches.Circle(
@@ -3164,8 +3267,26 @@ def draw_snapshot(
         w = float(d.get("weight", 1.0))
         lw = 0.45 + 1.35 * min(1.0, math.log1p(w) / 7.0)
         rad = (0.12 + 0.04 * (idx % 3)) * (-1 if idx % 2 else 1)
-        color = "#3F3F46" if is_new else "#9CA3AF"
-        alpha = 0.55 if is_new else 0.28
+        anchor_incident = u in anchor_nodes or v in anchor_nodes
+        if is_new:
+            color = "#3F3F46"
+            alpha = float(pcfg.get("foreground_edge_alpha", 0.68))
+            edge_zorder = 3
+            lw *= 1.15
+        elif anchor_incident:
+            color = "#52525B"
+            alpha = float(pcfg.get("landmark_edge_alpha", 0.58))
+            edge_zorder = 3
+            lw *= 1.05
+        elif delta_emphasis:
+            color = "#AEB6C2"
+            alpha = float(pcfg.get("context_edge_alpha", 0.30))
+            edge_zorder = 1
+            lw *= 0.82
+        else:
+            color = "#9CA3AF"
+            alpha = 0.28
+            edge_zorder = 1
         patch = FancyArrowPatch(
             (x0, y0),
             (x1, y1),
@@ -3174,7 +3295,7 @@ def draw_snapshot(
             linewidth=lw,
             color=color,
             alpha=alpha,
-            zorder=2 if is_new else 1,
+            zorder=edge_zorder,
             shrinkA=9,
             shrinkB=9,
         )
@@ -3185,6 +3306,8 @@ def draw_snapshot(
     for n in nodes:
         x, y = pos[n]
         base_color = color_map.get(n, "#9CA3AF")
+        is_new_topic = topic_is_new(n)
+        is_context_topic = topic_is_context(n)
         n_papers = int(TG.nodes[n].get("n_papers", 1) or 1)
         n_beads = int(np.clip(round(3 + math.log1p(n_papers)), 4, max_beads))
         pts = deterministic_disc_points(n, n_beads, radii[n] * 0.66)
@@ -3192,7 +3315,17 @@ def draw_snapshot(
             for j in range(1, len(pts)):
                 x0, y0 = x + pts[0, 0], y + pts[0, 1]
                 x1, y1 = x + pts[j, 0], y + pts[j, 1]
-                ax.plot([x0, x1], [y0, y1], color="#9CA3AF", lw=0.45, alpha=0.38, zorder=3)
+                ax.plot(
+                    [x0, x1],
+                    [y0, y1],
+                    color="#9CA3AF",
+                    lw=0.45,
+                    alpha=0.22 if is_context_topic else 0.38,
+                    zorder=3,
+                )
+        bead_alpha = 0.96 if (n in anchor_nodes or is_new_topic) else 0.74
+        if is_context_topic:
+            bead_alpha = float(pcfg.get("context_topic_alpha", 0.56))
         ax.scatter(
             x + pts[:, 0],
             y + pts[:, 1],
@@ -3200,22 +3333,29 @@ def draw_snapshot(
             color=base_color,
             edgecolors="white",
             linewidths=0.5,
-            alpha=0.94,
-            zorder=4,
+            alpha=bead_alpha,
+            zorder=5 if (n in anchor_nodes or is_new_topic) else 4,
         )
 
         # Anchor star and concise annotation.
         if n in anchor_nodes:
             ax.scatter([x], [y], s=210, marker="*", color="#DC2626", edgecolors="white", linewidths=0.7, zorder=7)
             short_anchor = clean_label(TG.nodes[n].get("anchor_labels", "landmark papers"), 32)
+            offset_idx = anchor_order.index(n) % len(anchor_offsets) if n in anchor_order else 0
+            dx, dy = anchor_offsets[offset_idx]
+            if y < y_min + 0.25 * y_span:
+                dy = abs(dy) + 0.10
+            elif y > y_max - 0.25 * y_span:
+                dy = -abs(dy) - 0.10
             ax.annotate(
                 short_anchor,
                 xy=(x, y),
-                xytext=(x + 0.12, y - 0.16),
+                xytext=(x + dx, y + dy),
                 textcoords="data",
                 fontsize=6.7,
                 color="#B91C1C",
                 fontweight="bold",
+                ha="left" if dx >= 0 else "right",
                 arrowprops=dict(arrowstyle="-", color="#B91C1C", lw=0.75, alpha=0.85),
                 zorder=8,
             )
@@ -3233,6 +3373,9 @@ def draw_snapshot(
     for n in label_candidates:
         x, y = pos[n]
         label = TG.nodes[n].get("display_label") or TG.nodes[n].get("label", f"Topic {n + 1}")
+        label_is_context = topic_is_context(n)
+        label_alpha = 0.70 if label_is_context else 0.92
+        label_color = "#4B5563" if label_is_context else "#2F2F36"
         # A little radial offset prevents text from sitting exactly on beads.
         offset_y = radii[n] * 0.74
         ax.text(
@@ -3242,9 +3385,15 @@ def draw_snapshot(
             fontsize=6.7,
             ha="center",
             va="bottom",
-            color="#2F2F36",
+            color=label_color,
+            alpha=label_alpha,
             zorder=9,
-            bbox=dict(boxstyle="round,pad=0.12", facecolor="white", edgecolor="none", alpha=0.70),
+            bbox=dict(
+                boxstyle="round,pad=0.12",
+                facecolor="white",
+                edgecolor="none",
+                alpha=0.48 if label_is_context else 0.70,
+            ),
         )
 
     # Optional panel caption below each snapshot.
@@ -3275,6 +3424,22 @@ def draw_snapshot(
         fontsize=6.8,
         color="#5B6472",
         ha="left",
+        va="bottom",
+    )
+    new_papers = len(active - prev_active) if prev_end_year else len(active)
+    new_topics = sum(
+        1
+        for n in TG.nodes()
+        if prev_end_year is None or (TG.nodes[n].get("first_year") is not None and TG.nodes[n].get("first_year") > prev_end_year)
+    )
+    ax.text(
+        0.98,
+        0.035,
+        ("prior graph" if prev_end_year is None else f"+{new_papers:,} papers\n+{new_topics} topics"),
+        transform=ax.transAxes,
+        fontsize=6.8,
+        color="#4B5563",
+        ha="right",
         va="bottom",
     )
 
@@ -3339,10 +3504,20 @@ def draw_metric_panel(
 
     ax.axhline(0.0, color="#4B5563", lw=0.8, alpha=0.75, zorder=1)
     ylim = pcfg.get("dominant_parameter_ylim")
+    vals = np.concatenate([np.asarray(t["values"], dtype=float) for t in trajectories]) if trajectories else np.array([0.0])
+    vals = vals[np.isfinite(vals)]
+    if len(vals) == 0:
+        vals = np.array([0.0])
     if isinstance(ylim, (list, tuple)) and len(ylim) == 2:
-        ax.set_ylim(float(ylim[0]), float(ylim[1]))
+        lo, hi = float(ylim[0]), float(ylim[1])
+        data_lo, data_hi = float(np.nanmin(vals)), float(np.nanmax(vals))
+        if bool(pcfg.get("expand_dominant_parameter_ylim", True)) and (data_lo < lo or data_hi > hi):
+            span = max(hi - lo, data_hi - data_lo, 1.0)
+            pad = max(0.18, 0.09 * span)
+            lo = min(lo, data_lo - pad)
+            hi = max(hi, data_hi + pad)
+        ax.set_ylim(lo, hi)
     else:
-        vals = np.concatenate([np.asarray(t["values"], dtype=float) for t in trajectories]) if trajectories else np.array([0.0])
         lo, hi = float(np.nanmin(vals)), float(np.nanmax(vals))
         pad = max(0.25, 0.16 * (hi - lo + 1e-9))
         ax.set_ylim(min(lo - pad, -0.2), max(hi + pad, 0.8))
@@ -3567,7 +3742,7 @@ def draw_multi_domain_figure(results: Sequence["DomainResult"], out_dir: Path) -
                 cfg_draw,
                 end_year=end,
                 prev_end_year=prev_end,
-                panel_label=window_label(cfg["start_year"], end, cfg["start_year"]) if r == 0 else "",
+                panel_label="",
                 show_ylabel=(i == 0),
             )
         for i in range(len(result.cumulative_windows), max_snapshots):
@@ -3695,8 +3870,30 @@ def effective_main_cumulative_horizon_years(cfg: Mapping[str, Any], cumulative_w
     return int(cumulative_windows[-1][1] - cumulative_windows[0][0] + 1)
 
 
+def build_landmark_window_diagnostics(result: DomainResult) -> Dict[str, Any]:
+    """Return whether Fig. 1 snapshots show pre-, during-, and post-landmark structure."""
+    cfg = result.cfg
+    windows = [tuple(int(value) for value in item) for item in (cfg.get("custom_windows") or result.rolling_windows)]
+    anchor_years = [year_int(anchor.get("year")) for anchor in cfg.get("anchors") or []]
+    anchor_years = [year for year in anchor_years if year is not None]
+    first_anchor = min(anchor_years) if anchor_years else None
+    pre = bool(first_anchor is not None and windows and windows[0][1] < first_anchor)
+    during = bool(first_anchor is not None and any(start <= first_anchor <= end for start, end in windows))
+    post = bool(first_anchor is not None and any(start > first_anchor for start, _ in windows))
+    return {
+        "slug": str(cfg.get("slug")),
+        "first_anchor_year": first_anchor,
+        "windows": [list(window) for window in windows],
+        "pre_landmark_window": int(pre),
+        "landmark_window": int(during),
+        "post_landmark_window": int(post),
+        "landmark_window_gate_pass": int(pre and during and post),
+    }
+
+
 def build_fig1_quality_gates(results: Sequence[DomainResult]) -> Dict[str, Any]:
     edge_reports = [build_edge_cap_diagnostics(result) for result in results]
+    landmark_reports = [build_landmark_window_diagnostics(result) for result in results]
     manual_counts = {str(result.cfg.get("slug")): count_manual_parameter_specs(result.cfg) for result in results}
     final_horizons = {
         str(result.cfg.get("slug")): effective_main_cumulative_horizon_years(result.cfg, result.cumulative_windows)
@@ -3708,6 +3905,9 @@ def build_fig1_quality_gates(results: Sequence[DomainResult]) -> Dict[str, Any]:
         "edge_cap_not_hit_all_domains": int(all(int(report["edge_cap_hit"]) == 0 for report in edge_reports)),
         "final_cumulative_horizon_consistent": int(len(set(final_horizons.values())) <= 1),
         "edge_sampling_manifest_present": int(sampling_manifest_present),
+        "landmark_pre_during_post_windows_present": int(
+            all(int(report["landmark_window_gate_pass"]) == 1 for report in landmark_reports)
+        ),
     }
     overall = bool(all(checks.values()))
     return {
@@ -3716,12 +3916,14 @@ def build_fig1_quality_gates(results: Sequence[DomainResult]) -> Dict[str, Any]:
         "checks": checks,
         "manual_trajectory_counts": manual_counts,
         "edge_cap_diagnostics": edge_reports,
+        "landmark_window_diagnostics": landmark_reports,
         "final_cumulative_horizon_years": final_horizons,
         "thresholds": {
             "manual_trajectories_allowed_in_main": 0,
             "edge_cap_hit_allowed": 0,
             "final_cumulative_horizon_unique_values": 1,
             "edge_sampling_manifest_required": 1,
+            "landmark_pre_during_post_windows_required": 1,
         },
     }
 
@@ -3748,6 +3950,7 @@ def export_tables(result: DomainResult, out_dir: Path) -> None:
                 "display_label": result.display_labels.get(result.display_comm_map.get(wid), "") if wid in result.display_comm_map else "",
                 "anchor_label": w.get("anchor_label"),
                 "anchor_citer": int(bool(w.get("anchor_citer"))),
+                "anchor_reference_prior": int(bool(w.get("anchor_reference_prior"))),
                 "reference_stub": int(bool(w.get("reference_stub"))),
             }
         )

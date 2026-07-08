@@ -61,7 +61,7 @@ ASPR/
 │   │   └── README.md             # kg_validator 详细说明
 │   │
 │   └── kg_perturbation_fig1/     # Fig. 1 风格知识图谱扰动实验
-│       ├── fig1_knowledge_perturbation_v3.py
+│       ├── fig1_knowledge_perturbation.py
 │       │                          # OpenAlex 元数据下载、图构建、扰动指标计算和绘图
 │       ├── configs/              # CRISPR、graphene、iPSC、transformer 等领域配置
 │       ├── run_crispr_example.sh # CRISPR 样例运行脚本

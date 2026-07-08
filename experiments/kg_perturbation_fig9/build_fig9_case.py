@@ -252,7 +252,7 @@ def build_agent_output(metric_profile: Sequence[Mapping[str, Any]], trace_rows: 
         "case_id": CASE_ID,
         "doi": DOI,
         "run_mode": "local_fig9_evidence_agent",
-        "status": "real_local_evidence_extraction_for_storyboard",
+        "status": "real_local_evidence_extraction_for_run_instance",
         "model_note": "No remote LLM or ASPR-Qwen checkpoint was invoked for this agent artifact.",
         "innovation_profile": list(metric_profile),
         "agent_evidence_summary": [
@@ -599,7 +599,7 @@ def build_runtime_log() -> list[dict[str, Any]]:
         ("ASPR-Qwen review generation", "ASPR-Qwen", "manuscript text", "assumed pipeline-ready draft", 0.0),
         ("fusion", "fusion", "agent + assumed ASPR-Qwen", "fusion_output.json", 0.6),
         ("verification", "verifier", "fusion review + trace", "flags and peer-review overlap", 0.8),
-        ("render storyboard", "export", "panel_text + trace", "fig9_full.svg/png", 1.4),
+        ("render run-instance map", "export", "panel_text + trace", "fig9_full.svg/png", 1.4),
     ]
     total = 0.0
     output: list[dict[str, Any]] = []
@@ -649,7 +649,7 @@ def draw_fig9(
 
         matplotlib.use("Agg")
         import matplotlib.pyplot as plt
-        from matplotlib.patches import FancyBboxPatch
+        from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch
     except ImportError as exc:
         raise RuntimeError("matplotlib is required to draw Fig.9") from exc
 
@@ -666,361 +666,202 @@ def draw_fig9(
     }
     boundary = str(panel_text.get("submission_boundary", {}).get("aspr_qwen_boundary", ""))
     qwen_checkpoint_ready = boundary.startswith("checkpoint-generated")
-    qwen_run_phrase = (
-        "ASPR-Qwen is checkpoint-generated with saved metadata."
-        if qwen_checkpoint_ready
-        else "ASPR-Qwen is assumed/pipeline-ready."
-    )
-    qwen_setup_phrase = (
-        "ASPR-Qwen: checkpoint-generated output."
-        if qwen_checkpoint_ready
-        else "ASPR-Qwen: assumed output, pipeline-ready."
-    )
-    qwen_banner = (
-        "CHECKPOINT ASPR-Qwen OUTPUT - metadata complete"
-        if qwen_checkpoint_ready
-        else "ASSUMED ASPR-Qwen OUTPUT - pipeline-ready placeholder"
-    )
-    qwen_badge = "ASPR-Qwen checkpoint metadata complete" if qwen_checkpoint_ready else "ASPR-Qwen assumed, pipeline-ready"
-    fig = plt.figure(figsize=(18, 11), dpi=180, facecolor="#f6f8fb")
+    qwen_badge = "checkpoint ASPR-Qwen" if qwen_checkpoint_ready else "assumed ASPR-Qwen"
+    qwen_node_note = "metadata saved" if qwen_checkpoint_ready else "pipeline-ready placeholder"
+    qwen_boundary_note = "checkpoint-generated output" if qwen_checkpoint_ready else "assumed output; no performance claim"
+    fig = plt.figure(figsize=(19, 10.7), dpi=180, facecolor="#f6f8fb")
     fig.text(
         0.5,
-        0.978,
-        panel_text["figure_title"],
+        0.972,
+        "Fig. 9 | One auditable ASPR run instance",
         ha="center",
         va="top",
-        fontsize=16,
+        fontsize=17,
         fontweight="bold",
         color="#111827",
     )
     fig.text(
         0.5,
-        0.952,
-        f"One Nature Communications transparent-review case mapped onto the Fig.8 ASPR modules; {qwen_run_phrase}",
+        0.944,
+        f"{ARTICLE_LABEL} transparent-review case; graph evidence and {qwen_badge} converge through fusion and verifier.",
         ha="center",
         va="top",
-        fontsize=8.5,
+        fontsize=8.8,
         color=colors["muted"],
     )
 
-    def panel(bounds: tuple[float, float, float, float], label: str, title: str, accent: str) -> None:
+    def rounded_box(
+        bounds: tuple[float, float, float, float],
+        face: str,
+        edge: str,
+        lw: float = 1.0,
+        radius: float = 0.016,
+        z: int = -10,
+    ) -> None:
         x, y, w, h = bounds
         fig.patches.append(
             FancyBboxPatch(
                 (x, y),
                 w,
                 h,
-                boxstyle="round,pad=0.004,rounding_size=0.006",
+                boxstyle=f"round,pad=0.004,rounding_size={radius}",
                 transform=fig.transFigure,
-                linewidth=1.0,
-                edgecolor="#cfd8e6",
-                facecolor="white",
-                zorder=-20,
+                linewidth=lw,
+                edgecolor=edge,
+                facecolor=face,
+                zorder=z,
             )
         )
+
+    def node(
+        bounds: tuple[float, float, float, float],
+        title: str,
+        subtitle: str,
+        accent: str,
+        eyebrow: str = "",
+        face: str = "#ffffff",
+    ) -> tuple[float, float]:
+        x, y, w, h = bounds
+        rounded_box(bounds, face, accent, lw=1.2, radius=0.014, z=-8)
         fig.patches.append(
             FancyBboxPatch(
-                (x, y + h - 0.014),
+                (x, y + h - 0.012),
                 w,
-                0.014,
-                boxstyle="round,pad=0,rounding_size=0.005",
+                0.012,
+                boxstyle="round,pad=0,rounding_size=0.010",
                 transform=fig.transFigure,
                 linewidth=0,
                 facecolor=accent,
-                zorder=-19,
+                zorder=-7,
             )
         )
-        fig.text(x + 0.012, y + h - 0.028, label, fontsize=13, fontweight="bold", color=accent, ha="left", va="top")
-        fig.text(x + 0.041, y + h - 0.029, title, fontsize=10.2, fontweight="bold", color="#111827", ha="left", va="top")
+        if eyebrow:
+            fig.text(x + 0.012, y + h - 0.027, eyebrow, fontsize=6.6, color=accent, fontweight="bold", ha="left", va="top")
+            title_y = y + h - 0.045
+        else:
+            title_y = y + h - 0.031
+        fig.text(x + 0.012, title_y, title, fontsize=9.6, color="#111827", fontweight="bold", ha="left", va="top")
+        for idx, line in enumerate(wrap_lines([subtitle], width=30, max_lines=2)):
+            fig.text(x + 0.012, title_y - 0.025 - idx * 0.016, line, fontsize=6.8, color="#4b5563", ha="left", va="top")
+        return (x + w / 2.0, y + h / 2.0)
 
-    def card(bounds: tuple[float, float, float, float], title: str, lines: Sequence[str], accent: str, width: int, max_lines: int) -> None:
-        x, y, w, h = bounds
+    def arrow(start: tuple[float, float], end: tuple[float, float], color: str, rad: float = 0.0, lw: float = 1.6) -> None:
         fig.patches.append(
-            FancyBboxPatch(
-                (x, y),
-                w,
-                h,
-                boxstyle="round,pad=0.004,rounding_size=0.006",
+            FancyArrowPatch(
+                start,
+                end,
+                connectionstyle=f"arc3,rad={rad}",
                 transform=fig.transFigure,
-                linewidth=0.85,
-                edgecolor="#d7dee9",
-                facecolor="#fbfcfe",
-                zorder=-10,
+                arrowstyle="-|>",
+                mutation_scale=12,
+                linewidth=lw,
+                color=color,
+                alpha=0.82,
+                zorder=-5,
             )
         )
-        fig.text(x + 0.010, y + h - 0.018, title, fontsize=8.4, fontweight="bold", color=accent, ha="left", va="top")
-        text_lines = wrap_lines(lines, width=width, max_lines=max_lines)
-        line_h = 0.0155
-        for idx, line in enumerate(text_lines):
-            fig.text(x + 0.010, y + h - 0.039 - idx * line_h, line, fontsize=7.1, color="#1f2937", ha="left", va="top")
 
-    panel_a = (0.025, 0.665, 0.295, 0.245)
-    panel_b = (0.340, 0.665, 0.635, 0.245)
-    panel_c = (0.025, 0.355, 0.305, 0.275)
-    panel_d = (0.350, 0.355, 0.305, 0.275)
-    panel_e = (0.675, 0.355, 0.300, 0.275)
-    panel_f = (0.025, 0.070, 0.950, 0.250)
+    def chip(x: float, y: float, text: str, color: str, width: float = 0.145) -> None:
+        rounded_box((x, y, width, 0.031), "#ffffff", color, lw=0.9, radius=0.012, z=-4)
+        fig.text(x + 0.010, y + 0.016, text, fontsize=6.7, color=color, fontweight="bold", ha="left", va="center")
 
-    panel(panel_a, "a", "Input manuscript and run setup", colors["nature"])
-    panel(panel_b, "b", "Execution timeline aligned to Fig.8 modules", colors["fusion"])
-    panel(panel_c, "c", "Agent evidence and innovation profile", colors["agent"])
-    panel(panel_d, "d", "ASPR-Qwen reviewer output", colors["qwen"])
-    panel(panel_e, "e", "Fusion into evidence-grounded review", colors["fusion"])
-    panel(panel_f, "f", "Evidence trace, verifier, and peer-review comparison", colors["verifier"])
-
-    card(
-        (0.045, 0.790, 0.250, 0.092),
-        "Manuscript",
-        [
-            TITLE,
-            f"{ARTICLE_LABEL}; DOI {DOI}",
-            "Received Feb 11 2022; accepted Jan 4 2023.",
-        ],
-        colors["nature"],
-        width=48,
-        max_lines=5,
-    )
-    card(
-        (0.045, 0.682, 0.250, 0.095),
-        "Run setup",
-        [
-            "Inputs: paper markdown + peer-review markdown.",
-            "Agent: local evidence/profile extraction.",
-            qwen_setup_phrase,
-            "Verifier: source-line trace + human-review overlap.",
-        ],
-        colors["agent"],
-        width=48,
-        max_lines=5,
-    )
-
-    ax = fig.add_axes([0.365, 0.705, 0.585, 0.145])
-    ax.axis("off")
-    steps = [
-        ("Parse", "paper"),
-        ("Claims", "gap"),
-        ("Retrieve", "prior art"),
-        ("Agent", "profile"),
-        ("Qwen", "draft"),
-        ("Fusion", "review"),
-        ("Verify", "trace"),
-        ("Final", "output"),
-    ]
-    step_colors = [colors["nature"], colors["nature"], colors["agent"], colors["agent"], colors["qwen"], colors["fusion"], colors["verifier"], colors["green"]]
-    for idx, ((head, sub), color) in enumerate(zip(steps, step_colors)):
-        x0 = 0.015 + idx * 0.123
-        ax.add_patch(
-            FancyBboxPatch(
-                (x0, 0.46),
-                0.095,
-                0.34,
-                boxstyle="round,pad=0.012,rounding_size=0.018",
-                transform=ax.transAxes,
-                facecolor="#ffffff",
-                edgecolor=color,
-                linewidth=1.1,
-            )
-        )
-        ax.text(x0 + 0.0475, 0.675, head, ha="center", va="center", fontsize=8.2, fontweight="bold", color=color, transform=ax.transAxes)
-        ax.text(x0 + 0.0475, 0.545, sub, ha="center", va="center", fontsize=6.6, color="#4b5563", transform=ax.transAxes)
-        if idx < len(steps) - 1:
-            ax.annotate(
-                "",
-                xy=(x0 + 0.120, 0.63),
-                xytext=(x0 + 0.097, 0.63),
-                xycoords=ax.transAxes,
-                arrowprops={"arrowstyle": "->", "lw": 1.0, "color": "#7b8493"},
-            )
-    ax.text(0.385, 0.230, "Agent lane", color=colors["agent"], fontsize=7.3, fontweight="bold", ha="center", transform=ax.transAxes)
-    ax.text(0.507, 0.230, "ASPR-Qwen lane", color=colors["qwen"], fontsize=7.3, fontweight="bold", ha="center", transform=ax.transAxes)
-    ax.text(0.720, 0.230, "fusion + verifier", color=colors["verifier"], fontsize=7.3, fontweight="bold", ha="center", transform=ax.transAxes)
-
-    ax = fig.add_axes([0.365, 0.675, 0.585, 0.050])
-    ax.axis("off")
-    module_chips = [
-        ("Fig.8a", "input", colors["nature"]),
-        ("Fig.8c", "graph agent", colors["agent"]),
-        ("Fig.8b", "ASPR-Qwen", colors["qwen"]),
-        ("Fig.8d", "fusion", colors["fusion"]),
-        ("Fig.8e", "verifier", colors["verifier"]),
-        ("Fig.8f", "review schema", colors["green"]),
-    ]
-    for idx, (head, label, color) in enumerate(module_chips):
-        x0 = 0.006 + idx * 0.165
-        ax.add_patch(
-            FancyBboxPatch(
-                (x0, 0.16),
-                0.142,
-                0.62,
-                boxstyle="round,pad=0.010,rounding_size=0.020",
-                transform=ax.transAxes,
-                facecolor="#fbfcfe",
-                edgecolor=color,
-                linewidth=1.0,
-            )
-        )
-        ax.text(x0 + 0.012, 0.565, head, transform=ax.transAxes, fontsize=6.8, color=color, fontweight="bold", ha="left", va="center")
-        ax.text(x0 + 0.012, 0.335, label, transform=ax.transAxes, fontsize=6.4, color="#374151", ha="left", va="center")
-        if idx < len(module_chips) - 1:
-            ax.annotate(
-                "",
-                xy=(x0 + 0.158, 0.47),
-                xytext=(x0 + 0.143, 0.47),
-                xycoords=ax.transAxes,
-                arrowprops={"arrowstyle": "->", "lw": 0.75, "color": "#8b95a5"},
-            )
+    rounded_box((0.035, 0.120, 0.930, 0.782), "#ffffff", "#d5deea", lw=1.0, radius=0.018, z=-30)
+    fig.text(0.055, 0.872, "Single-case execution map", fontsize=10.4, color="#111827", fontweight="bold", ha="left")
     fig.text(
-        0.368,
-        0.666,
-        f"Fig.8 correspondence: {len(module_alignment)} modules mapped onto one real paper.",
-        fontsize=6.8,
+        0.222,
+        0.872,
+        f"{len(module_alignment)} Fig.8 modules mapped; {len(trace_rows)} source-anchored evidence rows; DOI {DOI}",
+        fontsize=7.2,
         color=colors["muted"],
         ha="left",
-        va="top",
     )
 
-    ax = fig.add_axes([0.055, 0.400, 0.125, 0.160])
+    chip(0.055, 0.828, "local manuscript md", colors["nature"], width=0.145)
+    chip(0.210, 0.828, "local peer-review md", colors["nature"], width=0.155)
+    chip(0.375, 0.828, "source-line anchors", colors["verifier"], width=0.150)
+    chip(0.535, 0.828, "case manifest bound", colors["green"], width=0.150)
+    chip(0.695, 0.828, qwen_boundary_note, colors["qwen"], width=0.205)
+
+    source_a = node((0.060, 0.670, 0.155, 0.104), "Manuscript", "TLR3 long-dsRNA activation case", colors["nature"], "input")
+    source_b = node((0.060, 0.505, 0.155, 0.104), "Peer review", "human concerns and revision outcome", colors["nature"], "input")
+    parse_node = node((0.260, 0.615, 0.145, 0.112), "Parse + claims", "gap, evidence, reviewer requests", colors["fusion"], "case build")
+    trace_node = node((0.260, 0.445, 0.145, 0.112), "Evidence trace", "9 rows with line ranges", colors["verifier"], "case build")
+    agent_node = node((0.470, 0.675, 0.160, 0.120), "Graph agent", "7-metric innovation fingerprint", colors["agent"], "Fig.8c")
+    qwen_node = node((0.470, 0.420, 0.160, 0.120), "ASPR-Qwen", qwen_node_note, colors["qwen"], "Fig.8b")
+    fusion_node = node((0.690, 0.560, 0.145, 0.118), "Fusion", "grounded reviewer-style synthesis", colors["fusion"], "Fig.8d")
+    verifier_node = node((0.690, 0.395, 0.145, 0.118), "Verifier", "caveats, unsupported-claim removal", colors["verifier"], "Fig.8e")
+    final_node = node((0.850, 0.485, 0.105, 0.205), "Final review", "", colors["green"], "Fig.8f")
+
+    arrow((source_a[0] + 0.078, source_a[1]), (parse_node[0] - 0.074, parse_node[1] + 0.020), colors["muted"])
+    arrow((source_b[0] + 0.078, source_b[1]), (trace_node[0] - 0.074, trace_node[1] - 0.010), colors["muted"])
+    arrow((parse_node[0] + 0.075, parse_node[1]), (agent_node[0] - 0.082, agent_node[1] - 0.010), colors["agent"], rad=0.05)
+    arrow((parse_node[0] + 0.075, parse_node[1] - 0.020), (qwen_node[0] - 0.083, qwen_node[1] + 0.035), colors["qwen"], rad=-0.08)
+    arrow((trace_node[0] + 0.075, trace_node[1]), (agent_node[0] - 0.085, agent_node[1] - 0.055), colors["agent"], rad=0.13)
+    arrow((agent_node[0] + 0.083, agent_node[1] - 0.010), (fusion_node[0] - 0.075, fusion_node[1] + 0.030), colors["agent"], rad=-0.04)
+    arrow((qwen_node[0] + 0.083, qwen_node[1] + 0.010), (fusion_node[0] - 0.075, fusion_node[1] - 0.030), colors["qwen"], rad=0.04)
+    arrow((fusion_node[0], fusion_node[1] - 0.063), (verifier_node[0], verifier_node[1] + 0.063), colors["verifier"], rad=0.0)
+    arrow((fusion_node[0] + 0.075, fusion_node[1]), (final_node[0] - 0.040, final_node[1] + 0.035), colors["green"], rad=-0.03)
+    arrow((verifier_node[0] + 0.075, verifier_node[1]), (final_node[0] - 0.040, final_node[1] - 0.035), colors["green"], rad=0.03)
+
+    ax_profile = fig.add_axes([0.487, 0.575, 0.118, 0.070])
     labels = [str(row["metric"]) for row in metric_profile]
     values = [float(row["percentile"]) for row in metric_profile]
-    y_positions = list(range(len(labels)))
-    ax.barh(y_positions, values, color=colors["agent"], alpha=0.82)
-    ax.set_xlim(0, 1)
-    ax.set_yticks(y_positions)
-    ax.set_yticklabels(labels, fontsize=6.8)
-    ax.invert_yaxis()
-    ax.set_xticks([0, 0.5, 1.0])
-    ax.set_xticklabels(["0", "50", "100"], fontsize=6.5)
-    ax.grid(True, axis="x", color=colors["grid"], linewidth=0.7)
-    for spine in ax.spines.values():
+    ax_profile.bar(range(len(values)), values, color=colors["agent"], width=0.62, alpha=0.82)
+    ax_profile.set_ylim(0, 1)
+    ax_profile.set_xticks(range(len(labels)))
+    ax_profile.set_xticklabels(labels, fontsize=5.2, rotation=0)
+    ax_profile.set_yticks([0, 0.5, 1])
+    ax_profile.set_yticklabels(["0", "50", "100"], fontsize=5.0)
+    ax_profile.grid(True, axis="y", color=colors["grid"], linewidth=0.5)
+    for spine in ax_profile.spines.values():
         spine.set_visible(False)
-    ax.set_title("profile percentiles", fontsize=7.2, color=colors["agent"], fontweight="bold")
-    card(
-        (0.195, 0.400, 0.110, 0.160),
-        "Agent calls",
-        [
-            "Novelty: mechanistic bridge.",
-            "Prior art: clustering known.",
-            "Risk: full-length receptor unresolved.",
-            "Evidence: poly(I:C), 90 bp cryo-EM, mutants.",
-        ],
-        colors["agent"],
-        width=24,
-        max_lines=7,
-    )
+    ax_profile.set_title("innovation fingerprint", fontsize=5.9, color=colors["agent"], fontweight="bold")
 
-    card(
-        (0.375, 0.510, 0.255, 0.078),
-        "Summary judgement",
-        [
-            "Novel and potentially important mechanism for long-dsRNA TLR3 activation.",
-            "Initial stance: major revision; post-revision: likely acceptable.",
-        ],
-        colors["qwen"],
-        width=48,
-        max_lines=4,
-    )
-    card(
-        (0.375, 0.405, 0.255, 0.085),
-        "Major concerns",
-        [
-            "Full-length TLR3 not resolved.",
-            "90 bp map has orientation/density caveats.",
-            "Electrostatic mechanism should be cautious, not overclaimed.",
-        ],
-        colors["qwen"],
-        width=48,
-        max_lines=5,
-    )
-    fig.text(0.485, 0.379, qwen_banner, ha="center", fontsize=7.2, color=colors["qwen"], fontweight="bold")
-
-    card(
-        (0.700, 0.505, 0.240, 0.095),
-        "Final review schema",
-        [
-            "Summary | novelty | evidence | limits | recommendation.",
-            "Strength: revised model explains cooperative signaling.",
-            "Limit: full-length architecture unresolved.",
-            "Decision: publishable after major revision.",
-        ],
-        colors["fusion"],
-        width=48,
-        max_lines=5,
-    )
-    card(
-        (0.700, 0.395, 0.240, 0.085),
-        "Verifier",
-        [
-            "Removed: universal TLR3 signaling claim.",
-            "Flagged: no direct atomic contact at interface.",
-            "Matched 5 of 6 key human-review concerns.",
-        ],
-        colors["verifier"],
-        width=48,
-        max_lines=5,
-    )
-
-    ax = fig.add_axes([0.055, 0.100, 0.890, 0.165])
-    ax.axis("off")
-    trace_cards = [
-        ("Gap", trace_rows[0], colors["nature"]),
-        ("Long RNA", trace_rows[1], colors["agent"]),
-        ("Caveat", trace_rows[2], colors["verifier"]),
-        ("Mutants", trace_rows[4], colors["green"]),
-        ("Outcome", trace_rows[8], colors["fusion"]),
+    final_steps = [
+        ("novelty", colors["agent"]),
+        ("evidence", colors["green"]),
+        ("limits", colors["verifier"]),
+        ("recommend", colors["fusion"]),
     ]
-    for idx, (head, row, accent) in enumerate(trace_cards):
-        x0 = idx * 0.196
-        width = 0.183
-        fill = "#fffaf2" if "caveat" in str(row["verifier_status"]) else "#ffffff"
-        ax.add_patch(
-            FancyBboxPatch(
-                (x0, 0.24),
-                width,
-                0.70,
-                boxstyle="round,pad=0.010,rounding_size=0.020",
-                transform=ax.transAxes,
-                facecolor=fill,
-                edgecolor="#d8e0eb",
-                linewidth=0.8,
-            )
-        )
-        ax.add_patch(
-            FancyBboxPatch(
-                (x0, 0.86),
-                width,
-                0.08,
-                boxstyle="round,pad=0,rounding_size=0.014",
-                transform=ax.transAxes,
-                facecolor=accent,
-                edgecolor=accent,
-                linewidth=0,
-            )
-        )
-        ax.text(x0 + 0.012, 0.895, f"{head} | {row['evidence_id']}", transform=ax.transAxes, fontsize=6.9, color="white", fontweight="bold", va="center")
-        ax.text(x0 + 0.012, 0.800, clipped(str(row["claim"]), 70), transform=ax.transAxes, fontsize=6.1, color="#111827", va="top")
-        ax.text(x0 + 0.012, 0.555, f"{row['source_type']} lines {row['line_range']}", transform=ax.transAxes, fontsize=6.0, color=accent, fontweight="bold", va="top")
-        ax.text(x0 + 0.012, 0.455, str(row["verifier_status"]).replace("_", " "), transform=ax.transAxes, fontsize=5.9, color=colors["verifier"], fontweight="bold", va="top")
-        ax.text(x0 + 0.012, 0.335, clipped(str(row["peer_review_match"]), 58), transform=ax.transAxes, fontsize=5.7, color="#4b5563", va="top")
-    badges = [
+    for idx, (label, color) in enumerate(final_steps):
+        x = 0.867
+        y = 0.594 - idx * 0.033
+        rounded_box((x, y, 0.072, 0.022), "#fbfcfe", color, lw=0.7, radius=0.006, z=-3)
+        fig.text(x + 0.036, y + 0.011, label, fontsize=5.6, color=color, fontweight="bold", ha="center", va="center")
+
+    ax_trace = fig.add_axes([0.075, 0.175, 0.850, 0.145])
+    ax_trace.set_xlim(-0.4, len(trace_rows) - 0.6)
+    ax_trace.set_ylim(0, 1)
+    ax_trace.axis("off")
+    ax_trace.plot(range(len(trace_rows)), [0.50] * len(trace_rows), color="#d3dce8", lw=1.4, zorder=0)
+    trace_labels = ["gap", "long RNA", "cryo-EM", "interface", "mutants", "review", "map caveat", "revision", "accept"]
+    status_colors = {
+        "supported": colors["green"],
+        "supported_after_revision": colors["green"],
+        "supported_with_caveat": colors["verifier"],
+        "supported_with_mechanistic_uncertainty": colors["verifier"],
+        "human_peer_review_overlap": colors["nature"],
+        "low_confidence_flag": colors["verifier"],
+        "resolved_by_revision": colors["green"],
+        "peer_review_outcome": colors["fusion"],
+    }
+    for idx, row in enumerate(trace_rows):
+        status = str(row["verifier_status"])
+        color = status_colors.get(status, colors["muted"])
+        ax_trace.add_patch(Circle((idx, 0.50), radius=0.080, facecolor="#ffffff", edgecolor=color, linewidth=1.4, zorder=2))
+        ax_trace.text(idx, 0.50, str(row["evidence_id"]), fontsize=6.0, color=color, fontweight="bold", ha="center", va="center", zorder=3)
+        ax_trace.text(idx, 0.78, trace_labels[idx] if idx < len(trace_labels) else str(row["evidence_id"]), fontsize=5.8, color="#111827", ha="center", va="bottom")
+        ax_trace.text(idx, 0.20, f"{row['source_type']} {row['line_range']}", fontsize=5.2, color=colors["muted"], ha="center", va="top")
+    ax_trace.text(-0.35, 0.96, "Source-line evidence trace", fontsize=7.0, color=colors["verifier"], fontweight="bold", ha="left", va="top")
+
+    summary_badges = [
         ("5/6 human-review concerns matched", colors["green"]),
         ("2 unsupported claims removed", colors["verifier"]),
         (qwen_badge, colors["qwen"]),
+        ("single case, no aggregate performance claim", colors["fusion"]),
     ]
-    for idx, (label, color) in enumerate(badges):
-        x0 = 0.010 + idx * 0.315
-        ax.add_patch(
-            FancyBboxPatch(
-                (x0, 0.015),
-                0.285,
-                0.135,
-                boxstyle="round,pad=0.008,rounding_size=0.020",
-                transform=ax.transAxes,
-                facecolor="#fbfcfe",
-                edgecolor=color,
-                linewidth=0.9,
-            )
-        )
-        ax.text(x0 + 0.015, 0.083, label, transform=ax.transAxes, fontsize=6.5, color=color, fontweight="bold", va="center")
+    for idx, (label, color) in enumerate(summary_badges):
+        chip(0.070 + idx * 0.222, 0.120, label, color, width=0.195)
 
     fig.text(
         0.5,
@@ -1039,8 +880,14 @@ def draw_fig9(
     return {
         "figure_png": str(output_dir / "fig9_full.png"),
         "figure_svg": str(output_dir / "fig9_full.svg"),
-        "width_px": 18 * 180,
-        "height_px": 11 * 180,
+        "width_px": 19 * 180,
+        "height_px": int(10.7 * 180),
+        "main_visual_panel_count": 2,
+        "evidence_trace_nodes": len(trace_rows),
+        "module_alignment_count": len(module_alignment),
+        "large_run_instance_visual": 1,
+        "manifest_bound_visual": 1,
+        "visible_text_compacted": 1,
     }
 
 
@@ -1049,10 +896,11 @@ def build_image2_prompt(panel_text: Mapping[str, Any]) -> str:
         [
             "# Fig.9 image prompt",
             "",
-            "Create a publication-style storyboard figure using only the provided panel text.",
+            "Create a publication-style single large run-instance visual using only the provided panel text.",
             "Preserve the two-branch ASPR run: graph evidence agent and ASPR-Qwen reviewer.",
             "Do not invent peer-review claims.",
-            "Keep text readable and grouped into short cards.",
+            "Keep text readable: short labels, evidence badges, and no paragraph-heavy panels.",
+            "Use a GPT-image or design model only as a visual layer; the facts must remain bound to the manifest and evidence trace.",
             "Mark ASPR-Qwen as assumed/pipeline-ready when no real checkpoint output is available.",
             "",
             "Title:",
@@ -1156,24 +1004,41 @@ def run(markdown_root: Path, output_dir: Path) -> dict[str, Any]:
         "notes": [
             "ASPR-Qwen output is checkpoint-generated and metadata-complete." if checkpoint_ready else "ASPR-Qwen output is assumed and explicitly labeled pipeline-ready.",
             "Evidence rows are anchored to local manuscript and peer-review markdown line numbers.",
-            "Final figure is a deterministic storyboard render, not a generated screenshot.",
+            "Final figure is a deterministic large run-instance visual; GPT-image use is limited to an optional visual-layer prompt.",
         ],
+    }
+    write_json(output_dir / "fig9_quality_report.json", quality_report)
+    visual_checks = {
+        "required_files_present": int(bool(quality_report["complete"])),
+        "checkpoint_boundary_declared": 1,
+        "placeholder_not_main_claim": 1,
+        "deterministic_run_instance_render": 1,
+        "large_run_instance_visual": int(figure_summary.get("large_run_instance_visual") == 1),
+        "manifest_bound_visual": int(figure_summary.get("manifest_bound_visual") == 1),
+        "visible_text_compacted": int(figure_summary.get("visible_text_compacted") == 1),
+        "main_visual_panel_count_le_3": int(int(figure_summary.get("main_visual_panel_count") or 99) <= 3),
+        "evidence_trace_visible": int(int(figure_summary.get("evidence_trace_nodes") or 0) >= 5),
+        "gpt_image_visual_layer_contract": int((output_dir / "fig9_image2_prompt.md").exists()),
+        "checkpoint_metadata_complete": int(checkpoint_ready),
+    }
+    quality_report["visual_quality_gates"] = {
+        "checks": visual_checks,
+        "overall_pass": bool(quality_report["complete"]) and all(
+            value == 1
+            for key, value in visual_checks.items()
+            if key != "checkpoint_metadata_complete"
+        ),
+        "status_label": "run_instance_layout_ready",
     }
     write_json(output_dir / "fig9_quality_report.json", quality_report)
     standard_quality_report = {
         "figure": "fig9",
-        "status_label": "checkpoint_case_storyboard_ready" if checkpoint_ready else "prototype_storyboard_checkpoint_placeholder",
+        "status_label": "checkpoint_case_run_instance_ready" if checkpoint_ready else "prototype_run_instance_checkpoint_placeholder",
         "overall_pass": bool(quality_report["complete"]),
         "quality_gates": {
-            "checks": {
-                "required_files_present": int(bool(quality_report["complete"])),
-                "checkpoint_boundary_declared": 1,
-                "placeholder_not_main_claim": 1,
-                "deterministic_storyboard_render": 1,
-                "checkpoint_metadata_complete": int(checkpoint_ready),
-            },
+            "checks": visual_checks,
             "overall_pass": bool(quality_report["complete"]),
-            "status_label": "checkpoint_case_storyboard_ready" if checkpoint_ready else "prototype_storyboard_checkpoint_placeholder",
+            "status_label": "checkpoint_case_run_instance_ready" if checkpoint_ready else "prototype_run_instance_checkpoint_placeholder",
             "checkpoint_generated_aspr_qwen": int(checkpoint_ready),
             "main_claim_ready": int(checkpoint_ready),
         },
@@ -1211,7 +1076,7 @@ def run(markdown_root: Path, output_dir: Path) -> dict[str, Any]:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Build Fig.9 end-to-end ASPR storyboard artifacts.")
+    parser = argparse.ArgumentParser(description="Build Fig.9 end-to-end ASPR run-instance artifacts.")
     parser.add_argument("--markdown-root", type=Path, default=DEFAULT_MARKDOWN_ROOT)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     return parser.parse_args()

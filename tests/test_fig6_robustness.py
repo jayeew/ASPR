@@ -10,11 +10,11 @@ from unittest.mock import patch
 import numpy as np
 import pandas as pd
 
-
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+import experiments.kg_perturbation_fig6.build_fig6_robustness as fig6_module  # noqa: E402
 from experiments.kg_perturbation_fig6.build_fig6_robustness import (  # noqa: E402
     FULL_RERUN_INDICATOR_STABILITY,
     FULL_RERUN_MANIFEST,
@@ -22,6 +22,7 @@ from experiments.kg_perturbation_fig6.build_fig6_robustness import (  # noqa: E4
     FULL_RERUN_RANK_STABILITY,
     GRAPH_METRICS,
     build_cache_graph_perturbation_panel,
+    build_cross_domain_panel_from_score_table,
     build_fig6_quality_report,
     build_full_graph_rerun_artifacts,
     build_reference_closure_drift_diagnostic,
@@ -123,6 +124,31 @@ class Fig6RobustnessTests(unittest.TestCase):
         self.assertTrue(panel["rank_spearman_mean"].between(-1.0, 1.0).all())
         self.assertTrue(panel["topk_jaccard_mean"].between(0.0, 1.0).all())
         self.assertTrue(panel["target_spearman_mean"].between(-1.0, 1.0).all())
+
+    def test_cross_domain_panel_falls_back_to_current_fig3_score_table(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            score_path = Path(tmp) / "fig3_score_table.csv"
+            rows = []
+            for domain_idx, domain in enumerate(["domain_a", "domain_b", "domain_c"]):
+                for idx in range(20):
+                    score = idx / 20 + domain_idx * 0.03
+                    rows.append(
+                        {
+                            "domain": domain,
+                            "S_w": score,
+                            "S_w_oof": score + 0.01,
+                            "RGPM": score + (idx % 3) * 0.01,
+                        }
+                    )
+            pd.DataFrame(rows).to_csv(score_path, index=False)
+
+            with patch.object(fig6_module, "SCORE_TABLE", score_path):
+                panel = build_cross_domain_panel_from_score_table()
+
+        self.assertFalse(panel.empty)
+        self.assertTrue({"learned_oof_spearman", "graph_top10_mean", "score_coverage_norm", "n_papers"}.issubset(panel.columns))
+        self.assertTrue(panel["source_status"].str.contains("derived_from_fig3_score_table").all())
+        self.assertTrue(panel["learned_oof_spearman"].notna().all())
 
     def test_quality_report_blocks_strong_claim_until_full_graph_rerun(self) -> None:
         panel_review = pd.DataFrame(

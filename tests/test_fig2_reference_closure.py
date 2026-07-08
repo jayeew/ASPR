@@ -189,6 +189,11 @@ class Fig2ReferenceClosureTests(unittest.TestCase):
         self.assertEqual(3, report["materialized_closure_unique_references"])
         self.assertGreaterEqual(float(report["coverage_materialized"]), 0.8)
 
+    def test_makefile_fig2_uses_real_fig1_snapshot_dir(self) -> None:
+        makefile = Path("Makefile").read_text(encoding="utf-8")
+
+        self.assertIn("--fig1-snapshot-dir outputs/redraw_v6a_best_fig1/crispr", makefile)
+
 
 if __name__ == "__main__":
     unittest.main()

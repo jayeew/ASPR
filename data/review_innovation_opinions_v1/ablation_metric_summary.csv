@@ -1,0 +1,65 @@
+variant,variant_label,metric,metric_label,direction,source,mean,std,count,sem,ci95_low,ci95_high
+full ASPR,Full ASPR,semantic_agreement,Semantic agreement with peer review,higher,observed_true_module_rerun_full_aspr,0.8271428571428572,0.06046582098530922,50,0.0085511584097448,0.8103825866597574,0.843903127625957
+full ASPR,Full ASPR,novelty_coverage,Novelty coverage,higher,observed_true_module_rerun_full_aspr,0.0,0.0,50,0.0,0.0,0.0
+full ASPR,Full ASPR,prior_art_accuracy,Prior-art accuracy,higher,observed_true_module_rerun_full_aspr,0.0,0.0,50,0.0,0.0,0.0
+full ASPR,Full ASPR,factuality,Factuality,higher,observed_true_module_rerun_full_aspr,0.9790000000000001,0.08396427811873335,50,0.01187434208703792,0.9557262895094057,1.0
+full ASPR,Full ASPR,readability,Readability,higher,observed_true_module_rerun_full_aspr,0.7068455040167295,0.13207866823932576,50,0.018678744392423105,0.6702351650075802,0.7434558430258789
+full ASPR,Full ASPR,unsupported_claim_rate,Unsupported claim rate,lower,observed_true_module_rerun_full_aspr,0.5715,0.11153802621759543,50,0.015773858939724928,0.5405832364781391,0.6024167635218609
+full ASPR,Full ASPR,evidence_trace_completeness,Evidence trace completeness,higher,observed_true_module_rerun_full_aspr,0.009999999999999995,0.03998298958034919,50,0.005654448612875196,0.0,0.02108271928123538
+full ASPR,Full ASPR,review_structure_coverage,Human-like review structure coverage,higher,observed_true_module_rerun_full_aspr,0.006000000000000001,0.023989793748209528,50,0.00339266916772512,0.0,0.012649631568741236
+generic LLM-only baseline,Generic LLM only,semantic_agreement,Semantic agreement with peer review,higher,observed_true_module_rerun,0.7929999999999999,0.08018473568413563,50,0.011339834069980648,0.7707739252228378,0.815226074777162
+generic LLM-only baseline,Generic LLM only,novelty_coverage,Novelty coverage,higher,observed_true_module_rerun,0.73,0.12205719636167901,50,0.017261494247992244,0.6961674712739352,0.7638325287260648
+generic LLM-only baseline,Generic LLM only,prior_art_accuracy,Prior-art accuracy,higher,observed_true_module_rerun,0.535,0.1130513699381744,50,0.015987878061142425,0.5036637590001609,0.5663362409998391
+generic LLM-only baseline,Generic LLM only,factuality,Factuality,higher,observed_true_module_rerun,0.74,0.04948716593053939,50,0.006998542122237657,0.7262828574404142,0.7537171425595858
+generic LLM-only baseline,Generic LLM only,readability,Readability,higher,observed_true_module_rerun,0.9861,0.006646312465401782,50,0.0009399305228340562,0.9842577361752453,0.9879422638247547
+generic LLM-only baseline,Generic LLM only,unsupported_claim_rate,Unsupported claim rate,lower,observed_true_module_rerun,0.26,0.04948716593053938,50,0.006998542122237656,0.2462828574404142,0.2737171425595858
+generic LLM-only baseline,Generic LLM only,evidence_trace_completeness,Evidence trace completeness,higher,observed_true_module_rerun,0.25666666666666665,0.14368805971061532,50,0.020320560279382727,0.2168383685190765,0.2964949648142568
+generic LLM-only baseline,Generic LLM only,review_structure_coverage,Human-like review structure coverage,higher,observed_true_module_rerun,1.0,0.0,50,0.0,1.0,1.0
+no graph agent,- graph agent,semantic_agreement,Semantic agreement with peer review,higher,observed_true_module_rerun,0.82,0.09035079029052513,50,0.012777531299998798,0.7949560386520023,0.8450439613479976
+no graph agent,- graph agent,novelty_coverage,Novelty coverage,higher,observed_true_module_rerun,0.745,0.12867059667608444,50,0.01819677028979571,0.7093343302320004,0.7806656697679996
+no graph agent,- graph agent,prior_art_accuracy,Prior-art accuracy,higher,observed_true_module_rerun,0.47,0.11994896874104762,50,0.016963345838625597,0.4367518421562938,0.5032481578437061
+no graph agent,- graph agent,factuality,Factuality,higher,observed_true_module_rerun,0.62,0.1261680123761121,50,0.017842851423995425,0.585028011208969,0.654971988791031
+no graph agent,- graph agent,readability,Readability,higher,observed_true_module_rerun,0.9842,0.006006798869036754,50,0.0008494896427039145,0.9825350003003003,0.9858649996996997
+no graph agent,- graph agent,unsupported_claim_rate,Unsupported claim rate,lower,observed_true_module_rerun,0.38,0.12616801237611208,50,0.017842851423995422,0.345028011208969,0.41497198879103103
+no graph agent,- graph agent,evidence_trace_completeness,Evidence trace completeness,higher,observed_true_module_rerun,0.22333333333333327,0.1832250762625809,50,0.025911938781738652,0.1725459333211255,0.27412073334554105
+no graph agent,- graph agent,review_structure_coverage,Human-like review structure coverage,higher,observed_true_module_rerun,1.0,0.0,50,0.0,1.0,1.0
+no ASPR-Qwen,- ASPR-Qwen,semantic_agreement,Semantic agreement with peer review,higher,observed_true_module_rerun,0.82,0.08630747123996126,50,0.012205719636167905,0.7960767895131109,0.843923210486889
+no ASPR-Qwen,- ASPR-Qwen,novelty_coverage,Novelty coverage,higher,observed_true_module_rerun,0.73,0.09897433186107871,50,0.013997084244475303,0.7025657148808284,0.7574342851191715
+no ASPR-Qwen,- ASPR-Qwen,prior_art_accuracy,Prior-art accuracy,higher,observed_true_module_rerun,0.465,0.12382097016685512,50,0.01751092953161609,0.4306785781180325,0.49932142188196754
+no ASPR-Qwen,- ASPR-Qwen,factuality,Factuality,higher,observed_true_module_rerun,0.75,0.0,50,0.0,0.75,0.75
+no ASPR-Qwen,- ASPR-Qwen,readability,Readability,higher,observed_true_module_rerun,0.98958,0.0042237907338390735,50,0.0005973342140421025,0.9884092249404774,0.9907507750595226
+no ASPR-Qwen,- ASPR-Qwen,unsupported_claim_rate,Unsupported claim rate,lower,observed_true_module_rerun,0.25,0.0,50,0.0,0.25,0.25
+no ASPR-Qwen,- ASPR-Qwen,evidence_trace_completeness,Evidence trace completeness,higher,observed_true_module_rerun,0.22666666666666666,0.18057604977008135,50,0.025537309862460805,0.17661353933624346,0.27671979399708985
+no ASPR-Qwen,- ASPR-Qwen,review_structure_coverage,Human-like review structure coverage,higher,observed_true_module_rerun,1.0,0.0,50,0.0,1.0,1.0
+no prior-art retrieval,- retrieval,semantic_agreement,Semantic agreement with peer review,higher,observed_true_module_rerun,0.8240000000000001,0.11747340124470727,50,0.016613247725836146,0.7914380344573613,0.8565619655426389
+no prior-art retrieval,- retrieval,novelty_coverage,Novelty coverage,higher,observed_true_module_rerun,0.95,0.1129384878631564,50,0.015971914124998498,0.9186950483150029,0.981304951684997
+no prior-art retrieval,- retrieval,prior_art_accuracy,Prior-art accuracy,higher,observed_true_module_rerun,0.0,0.0,50,0.0,0.0,0.0
+no prior-art retrieval,- retrieval,factuality,Factuality,higher,observed_true_module_rerun,0.75,0.0,50,0.0,0.75,0.75
+no prior-art retrieval,- retrieval,readability,Readability,higher,observed_true_module_rerun,0.99318,0.0035782221101250357,50,0.00050603702373221,0.9921881674334848,0.9941718325665151
+no prior-art retrieval,- retrieval,unsupported_claim_rate,Unsupported claim rate,lower,observed_true_module_rerun,0.25,0.0,50,0.0,0.25,0.25
+no prior-art retrieval,- retrieval,evidence_trace_completeness,Evidence trace completeness,higher,observed_true_module_rerun,0.25999999999999995,0.1754811978351265,50,0.02481678899199121,0.21135909357569718,0.30864090642430275
+no prior-art retrieval,- retrieval,review_structure_coverage,Human-like review structure coverage,higher,observed_true_module_rerun,1.0,0.0,50,0.0,1.0,1.0
+no evidence trace,- evidence trace,semantic_agreement,Semantic agreement with peer review,higher,observed_true_module_rerun,0.8290000000000001,0.10550655265461582,50,0.014920879768338877,0.7997550756540559,0.8582449243459442
+no evidence trace,- evidence trace,novelty_coverage,Novelty coverage,higher,observed_true_module_rerun,0.835,0.15657364440559265,50,0.02214285714285714,0.7916,0.8784
+no evidence trace,- evidence trace,prior_art_accuracy,Prior-art accuracy,higher,observed_true_module_rerun,0.505,0.1555930065056569,50,0.02200417400107052,0.4618718189579018,0.5481281810420983
+no evidence trace,- evidence trace,factuality,Factuality,higher,observed_true_module_rerun,0.73,0.06851187890446743,50,0.009689042833036099,0.7110094760472492,0.7489905239527508
+no evidence trace,- evidence trace,readability,Readability,higher,observed_true_module_rerun,0.9903400000000001,0.00509745835026174,50,0.0007208894732572135,0.988927056632416,0.9917529433675842
+no evidence trace,- evidence trace,unsupported_claim_rate,Unsupported claim rate,lower,observed_true_module_rerun,0.27,0.06851187890446742,50,0.009689042833036097,0.25100947604724927,0.28899052395275077
+no evidence trace,- evidence trace,evidence_trace_completeness,Evidence trace completeness,higher,observed_true_module_rerun,0.0,0.0,50,0.0,0.0,0.0
+no evidence trace,- evidence trace,review_structure_coverage,Human-like review structure coverage,higher,observed_true_module_rerun,1.0,0.0,50,0.0,1.0,1.0
+no fusion,- fusion,semantic_agreement,Semantic agreement with peer review,higher,observed_true_module_rerun,0.8190000000000001,0.10967949597228595,50,0.015511023071825204,0.7885983947792227,0.8494016052207775
+no fusion,- fusion,novelty_coverage,Novelty coverage,higher,observed_true_module_rerun,0.89,0.15286381827880496,50,0.02161820850060222,0.8476283113388197,0.9323716886611804
+no fusion,- fusion,prior_art_accuracy,Prior-art accuracy,higher,observed_true_module_rerun,0.555,0.1770650750891506,50,0.025040783061368723,0.5059200651997173,0.6040799348002828
+no fusion,- fusion,factuality,Factuality,higher,observed_true_module_rerun,0.75,0.0,50,0.0,0.75,0.75
+no fusion,- fusion,readability,Readability,higher,observed_true_module_rerun,0.9915600000000001,0.0047257868365479455,50,0.0006683271837130349,0.9902500787199225,0.9928699212800777
+no fusion,- fusion,unsupported_claim_rate,Unsupported claim rate,lower,observed_true_module_rerun,0.25,0.0,50,0.0,0.25,0.25
+no fusion,- fusion,evidence_trace_completeness,Evidence trace completeness,higher,observed_true_module_rerun,0.22333333333333327,0.17040035557221797,50,0.024098249388342846,0.1761007645321813,0.2705659021344853
+no fusion,- fusion,review_structure_coverage,Human-like review structure coverage,higher,observed_true_module_rerun,1.0,0.0,50,0.0,1.0,1.0
+no verifier,- verifier,semantic_agreement,Semantic agreement with peer review,higher,observed_true_module_rerun,0.825,0.11123151073141026,50,0.015730511103960884,0.7941681982362366,0.8558318017637633
+no verifier,- verifier,novelty_coverage,Novelty coverage,higher,observed_true_module_rerun,0.89,0.15286381827880496,50,0.02161820850060222,0.8476283113388197,0.9323716886611804
+no verifier,- verifier,prior_art_accuracy,Prior-art accuracy,higher,observed_true_module_rerun,0.51,0.15939938288872424,50,0.02254247691151357,0.4658167452534334,0.5541832547465666
+no verifier,- verifier,factuality,Factuality,higher,observed_true_module_rerun,0.745,0.03535533905932738,50,0.005000000000000001,0.7352,0.7548
+no verifier,- verifier,readability,Readability,higher,observed_true_module_rerun,0.99308,0.00375711569789206,50,0.0005313363975363806,0.9920385806608286,0.9941214193391713
+no verifier,- verifier,unsupported_claim_rate,Unsupported claim rate,lower,observed_true_module_rerun,0.255,0.03535533905932738,50,0.005000000000000001,0.2452,0.2648
+no verifier,- verifier,evidence_trace_completeness,Evidence trace completeness,higher,observed_true_module_rerun,0.20999999999999996,0.13388491351913856,50,0.01893418604959147,0.1728889953428007,0.24711100465719923
+no verifier,- verifier,review_structure_coverage,Human-like review structure coverage,higher,observed_true_module_rerun,1.0,0.0,50,0.0,1.0,1.0

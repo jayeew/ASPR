@@ -11,7 +11,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from experiments.kg_perturbation_fig5.build_fig5_image2_handoff import build_handoff
+from experiments.kg_perturbation_fig5.build_fig5_image2_handoff import build_handoff, strict_ai_frontier_diagnostics
 from experiments.kg_perturbation_fig5.build_fig5_plot_data import (
     DEFAULT_FIG3_RUN_DIR,
     PROJECT_ROOT as FIG5_PROJECT_ROOT,
@@ -258,6 +258,31 @@ def test_build_handoff_can_write_strict_ai_filtered_theme_from_real_tables() -> 
         assert panel_text["panel_d"]["cards"][0]["representative_papers"] == '["p1"]'
         assert "AI-enabled scientific discovery" not in json.dumps(panel_text, ensure_ascii=False)
         assert panel_text["strict_filter"]["source_tables"]["panel_b"] == "derived/forecast_focus.csv"
+        assert panel_text["strict_filter"]["claim_gate"] == "blocked"
+        assert panel_text["strict_filter"]["data_diagnostics"]["source_backed_ai_frontier_ready"] == 0
+        assert "does not pass the source-backed AI frontier gate" in panel_text["take_home"]
+
+
+def test_strict_ai_frontier_diagnostics_pass_when_source_rows_are_dense() -> None:
+    """The source-backed AI gate requires dense AI evidence, not a single keyword hit."""
+    forecast_rows = []
+    for rank in range(1, 31):
+        is_ai = rank <= 20
+        forecast_rows.append(
+            {
+                "forecast_rank": rank,
+                "forecast_score": 1.0 - rank / 100.0,
+                "focus_label": f"{'Deep learning' if is_ai else 'Protein'} focus {rank}",
+            }
+        )
+    forecast_focus = pd.DataFrame(forecast_rows)
+    ai_focus = forecast_focus[forecast_focus["focus_label"].str.contains("Deep learning")].copy()
+
+    diagnostics = strict_ai_frontier_diagnostics(forecast_focus, ai_focus)
+
+    assert diagnostics["source_backed_ai_frontier_ready"] == 1
+    assert diagnostics["strict_ai_rows_in_top20_forecast"] == 20
+    assert diagnostics["strict_ai_positive_score_rows"] == 20
 
 
 def test_default_fig5_data_paths_prefer_local_redraw_v6a_best_fig3() -> None:
@@ -273,5 +298,6 @@ if __name__ == "__main__":
     test_build_handoff_writes_prompt_text_and_draft()
     test_build_handoff_can_write_ai_cross_domain_lens()
     test_build_handoff_can_write_strict_ai_filtered_theme_from_real_tables()
+    test_strict_ai_frontier_diagnostics_pass_when_source_rows_are_dense()
     test_default_fig5_data_paths_prefer_local_redraw_v6a_best_fig3()
     print("test_fig5_image2_handoff passed")

@@ -11,10 +11,11 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from experiments.kg_perturbation_fig1.fig1_knowledge_perturbation_v3 import (  # noqa: E402
+from experiments.kg_perturbation_fig1.fig1_knowledge_perturbation import (  # noqa: E402
     apply_deterministic_hybrid_edge_sampling,
     build_edge_sampling_manifest_row,
     effective_main_cumulative_horizon_years,
+    load_config,
 )
 
 
@@ -51,6 +52,25 @@ class Fig1SamplingHorizonTests(unittest.TestCase):
         cfg = {"metrics": {"common_cumulative_horizon_years": 15}}
         self.assertEqual(15, effective_main_cumulative_horizon_years(cfg, [(1995, 2005), (1995, 2024)]))
         self.assertEqual(30, effective_main_cumulative_horizon_years({}, [(1995, 2005), (1995, 2024)]))
+
+    def test_display_configs_include_pre_landmark_windows(self) -> None:
+        config_paths = [
+            PROJECT_ROOT / "experiments/kg_perturbation_fig1/configs/v6a_display_crispr.yaml",
+            PROJECT_ROOT / "experiments/kg_perturbation_fig1/configs/v6a_display_graphene.yaml",
+            PROJECT_ROOT / "experiments/kg_perturbation_fig1/configs/v6a_display_ipsc.yaml",
+            PROJECT_ROOT / "experiments/kg_perturbation_fig1/configs/v6a_display_exoplanets.yaml",
+        ]
+        for path in config_paths:
+            cfg = load_config(path)
+            windows = [tuple(window) for window in cfg["custom_windows"]]
+            anchor_years = [int(anchor["year"]) for anchor in cfg["anchors"]]
+            first_anchor = min(anchor_years)
+
+            with self.subTest(config=path.name):
+                self.assertLess(windows[0][1], first_anchor)
+                self.assertTrue(any(start <= first_anchor <= end for start, end in windows))
+                self.assertTrue(any(start > first_anchor for start, _ in windows))
+                self.assertEqual(len(windows), len(cfg["snapshot_years"]))
 
 
 if __name__ == "__main__":

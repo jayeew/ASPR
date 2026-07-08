@@ -1,5 +1,7 @@
 # Shortest Nature-Ready Fig1-Fig10 Implementation Plan
 
+> Status update 2026-07-08: this file remains a task library for concrete implementation steps. The active execution policy is now the six-round automatic protocol in `docs/superpowers/plans/2026-07-08-nature-auto-iteration-goal.md`: up to 6 main iterations plus one final patch, no mid-run user choice, hard blockers only.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Turn the current Fig1-Fig10 package into a defensible Nature submission evidence package centered on graph-perturbation innovation prediction, while demoting ASPR application figures to Extended Data unless their replacement gates pass.
@@ -43,7 +45,7 @@
 
 ### Main Evidence Figures
 
-- Modify: `experiments/kg_perturbation_fig1/fig1_knowledge_perturbation_v3.py`
+- Modify: `experiments/kg_perturbation_fig1/fig1_knowledge_perturbation.py`
 - Modify: `experiments/kg_perturbation_fig2/fig2_empirical_panels.py`
 - Create: `experiments/kg_perturbation_fig2/build_fig2_reference_closure.py`
 - Create: `experiments/kg_perturbation_fig2/build_fig2_strong_inputs.py`
@@ -177,7 +179,7 @@ Expected: pass.
 ## Task 2: Fig1 Finalize As Main Method Figure
 
 **Files:**
-- Modify: `experiments/kg_perturbation_fig1/fig1_knowledge_perturbation_v3.py`
+- Modify: `experiments/kg_perturbation_fig1/fig1_knowledge_perturbation.py`
 - Modify: `experiments/nature_ready_checks.py`
 - Test: `tests/test_fig1_sampling_horizon.py`
 
@@ -211,7 +213,7 @@ In `experiments/nature_ready_checks.py`, set the Fig1 row:
 Run:
 
 ```bash
-python3 experiments/kg_perturbation_fig1/fig1_knowledge_perturbation_v3.py \
+python3 experiments/kg_perturbation_fig1/fig1_knowledge_perturbation.py \
   --config experiments/kg_perturbation_fig1/configs/v6a_display_crispr.yaml \
            experiments/kg_perturbation_fig1/configs/v6a_display_graphene.yaml \
            experiments/kg_perturbation_fig1/configs/v6a_display_ipsc.yaml \
@@ -1273,4 +1275,3 @@ The gate names match the current code direction:
 - `true_disabled_module_reruns`
 - `blinded_human_preference`
 - `checkpoint_generated_aspr_qwen`
-

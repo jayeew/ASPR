@@ -232,7 +232,9 @@ def build_claim_ledger(project_root: Path = PROJECT_ROOT) -> pd.DataFrame:
     fig9_boundary = str(fig9_payload.get("aspr_qwen_boundary", "missing"))
     fig9_checkpoint_ready = "assumed" not in fig9_boundary.lower() and fig9_boundary != "missing"
     fig5_report = project_root / "outputs" / "kg_perturbation_fig5" / "figure_quality_report.json"
+    fig5_ai_report = project_root / "outputs" / "kg_perturbation_fig5" / "ai_frontier" / "ai_frontier_quality_report.json"
     fig5_payload = read_json(fig5_report)
+    fig5_ai_payload = read_json(fig5_ai_report)
     fig5_gate = quality_gate(fig5_report)
     fig5_checks = fig5_gate.get("checks", {})
     fig5_beats_baseline = bool(
@@ -240,13 +242,15 @@ def build_claim_ledger(project_root: Path = PROJECT_ROOT) -> pd.DataFrame:
         and fig5_checks.get("mean_precision_delta_nonnegative")
         and fig5_checks.get("mean_ndcg_delta_positive")
     )
+    fig5_ai_ready = bool(fig5_ai_payload.get("overall_pass"))
     fig7_gate = quality_gate(reports["Fig.7"])
     fig7_checks = fig7_gate.get("checks", {})
     fig7_point_estimate_supported = bool(fig7_gate.get("headline_point_estimate_supported")) or bool(
         isinstance(fig7_checks, Mapping) and fig7_checks.get("nature_rank")
     )
     fig7_strict_supported = bool(fig7_gate.get("strict_claim_supported"))
-    fig8_path = project_root / "experiments" / "kg_perturbation_fig8" / "render_fig8.py"
+    fig8_report = project_root / "outputs" / "kg_perturbation_fig8" / "figure_quality_report.json"
+    fig8_gate = quality_gate(fig8_report)
 
     rows: List[Dict[str, Any]] = [
         {
@@ -301,23 +305,36 @@ def build_claim_ledger(project_root: Path = PROJECT_ROOT) -> pd.DataFrame:
         },
         {
             "figure": "Fig.5",
-            "claim_id": "fig5_forecast_backtest",
-            "main_text_role": "extended-data forecast backtest",
-            "current_status": fig5_payload.get("status_label")
-            or quality_gate(fig5_report).get("status_label", "missing_forecast_backtest"),
-            "quality_gate_path": str(fig5_report),
-            "quality_gate_pass": int(gate_passed(fig5_report)),
+            "claim_id": "fig5_ai_frontier" if fig5_ai_ready else "fig5_forecast_backtest",
+            "main_text_role": "source-backed AI frontier handoff" if fig5_ai_ready else "extended-data forecast backtest",
+            "current_status": fig5_ai_payload.get("status_label")
+            if fig5_ai_ready
+            else fig5_payload.get("status_label") or quality_gate(fig5_report).get("status_label", "missing_forecast_backtest"),
+            "quality_gate_path": str(fig5_ai_report if fig5_ai_ready else fig5_report),
+            "quality_gate_pass": int(fig5_ai_ready or gate_passed(fig5_report)),
             "allowed_claim": (
+                "Fig.5 provides a source-backed 2024-2026 AI/AI-enabled science frontier data contract for a dense point-cloud visual; OpenAlex/local evidence rows, AI terms, themes, query reports, and manifest are auditable."
+                if fig5_ai_ready
+                else (
                 "Fig.5 supports a no-leakage retrospective forecast/backtest claim in Extended Data: graph-score forecasts beat historical-growth/citation baselines on mean precision@10 and NDCG@10."
                 if fig5_beats_baseline
                 else "Fig.5 forecast/backtest claims are traceable to CSV tables, but performance claims require beating no-leakage historical baselines."
+                )
             ),
-            "forbidden_claim": "Do not use image handoff, layout draft, or future-informed baselines as evidence for forecast accuracy.",
+            "forbidden_claim": (
+                "Do not describe unverified buzzwords as current AI hotspots; do not use the legacy backtest image or an image-model rendering as evidence for forecast accuracy."
+                if fig5_ai_ready
+                else "Do not use image handoff, layout draft, or future-informed baselines as evidence for forecast accuracy."
+            ),
             "required_action": failed_checks(fig5_report)
             or (
+                "Redraw Fig.5 from ai_frontier_point_cloud.csv; remove low-value panels and take-home footer; keep retrospective backtest as supporting audit."
+                if fig5_ai_ready
+                else (
                 "Freeze no-leakage backtest metrics and keep Fig.5 in Extended Data unless promoted by manuscript space."
                 if fig5_beats_baseline
                 else "Use only if graph-score backtests beat baseline ranking methods."
+                )
             ),
         },
         {
@@ -352,12 +369,12 @@ def build_claim_ledger(project_root: Path = PROJECT_ROOT) -> pd.DataFrame:
             "figure": "Fig.8",
             "claim_id": "fig8_architecture",
             "main_text_role": "architecture overview",
-            "current_status": "source_renderer_present" if fig8_path.exists() else "renderer_missing_from_source",
-            "quality_gate_path": str(fig8_path),
-            "quality_gate_pass": int(fig8_path.exists()),
+            "current_status": fig8_gate.get("status_label", "fig8_handoff_missing"),
+            "quality_gate_path": str(fig8_report),
+            "quality_gate_pass": int(gate_passed(fig8_report)),
             "allowed_claim": "Fig.8 describes the ASPR application architecture, not statistical performance.",
-            "forbidden_claim": "Do not use generative AI image output as a publication figure.",
-            "required_action": "Render Fig.8 from source-controlled matplotlib/SVG code.",
+            "forbidden_claim": "Do not use Fig.8 as performance evidence or imply ASPR-Qwen is validated by the architecture diagram alone.",
+            "required_action": failed_checks(fig8_report) or "Keep GPT-image handoff manifest, prompt, and quality report bound to Fig.9/Fig.10 evidence gates.",
         },
         {
             "figure": "Fig.9",

@@ -179,9 +179,9 @@ class NatureReadyClaimTests(unittest.TestCase):
         self.assertEqual("fig6_full_rerun_robustness", fig6["required_gate"])
 
         fig5 = ledger[ledger["figure"].eq("Fig.5")].iloc[0]
-        self.assertEqual("extended-data forecast backtest", fig5["main_text_role"])
-        self.assertIn("no-leakage", fig5["allowed_claim"])
-        self.assertIn("future-informed baselines", fig5["forbidden_claim"])
+        self.assertEqual("source-backed AI frontier handoff", fig5["main_text_role"])
+        self.assertIn("2024-2026 AI/AI-enabled science frontier", fig5["allowed_claim"])
+        self.assertIn("unverified buzzwords", fig5["forbidden_claim"])
 
         fig7 = ledger[ledger["figure"].eq("Fig.7")].iloc[0]
         self.assertEqual(1, int(fig7["quality_gate_pass"]))

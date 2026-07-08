@@ -1,4 +1,4 @@
-# `fig1_knowledge_perturbation_v3.py` 代码架构说明
+# `fig1_knowledge_perturbation.py` 代码架构说明
 
 这份文档只讲代码。图怎么读、每个面板表达什么，请看同目录下的 `README.md`。
 
@@ -7,7 +7,7 @@
 源码位置：
 
 ```text
-experiments/kg_perturbation_fig1/fig1_knowledge_perturbation_v3.py
+experiments/kg_perturbation_fig1/fig1_knowledge_perturbation.py
 ```
 
 ## 1. 运行入口
@@ -16,14 +16,14 @@ experiments/kg_perturbation_fig1/fig1_knowledge_perturbation_v3.py
 
 ```bash
 cp .env.example .env  # fill OPENALEX_API_KEY or OPENALEX_API_KEYS
-python experiments/kg_perturbation_fig1/fig1_knowledge_perturbation_v3.py \
+python experiments/kg_perturbation_fig1/fig1_knowledge_perturbation.py \
   --config experiments/kg_perturbation_fig1/configs/crispr.yaml
 ```
 
 多领域运行：
 
 ```bash
-python experiments/kg_perturbation_fig1/fig1_knowledge_perturbation_v3.py \
+python experiments/kg_perturbation_fig1/fig1_knowledge_perturbation.py \
   --config experiments/kg_perturbation_fig1/configs/crispr.yaml \
            experiments/kg_perturbation_fig1/configs/graphene.yaml \
            experiments/kg_perturbation_fig1/configs/ipsc.yaml \

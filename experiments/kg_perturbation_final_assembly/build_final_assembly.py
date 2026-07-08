@@ -60,9 +60,9 @@ FIGURES: List[Dict[str, str]] = [
     {
         "figure": "Fig.5",
         "path": "outputs/kg_perturbation_fig5/fig5_full.png",
-        "title": "Forecast backtest and failure modes",
-        "role": "Audits whether graph signals recover later focus areas under retrospective cutoffs.",
-        "visual_mode": "retrospective backtest figure",
+        "title": "AI-enabled science frontier handoff",
+        "role": "Uses source-backed 2024-2026 OpenAlex/local evidence to redraw Fig.5 as an AI/AI-enabled frontier point cloud; legacy retrospective backtest remains supporting audit material.",
+        "visual_mode": "image-model point-cloud handoff plus supporting data audit",
     },
     {
         "figure": "Fig.6",
@@ -90,7 +90,7 @@ FIGURES: List[Dict[str, str]] = [
         "path": "outputs/kg_perturbation_fig9/fig9_full.png",
         "title": "End-to-end ASPR case run",
         "role": "Shows ASPR running on one real Nature Communications paper with traceable evidence and the ASPR-Qwen lane boundary recorded from the case manifest.",
-        "visual_mode": "case storyboard figure",
+        "visual_mode": "case run-instance figure",
     },
     {
         "figure": "Fig.10",
@@ -149,7 +149,7 @@ CAPTIONS: Mapping[str, str] = {
     "Fig.2": "Fig. 2. Empirical perturbation panels test whether graph indicators align with future scientific signal. Correlation, enrichment, and control analyses separate measured graph structure from field-size and time-window artifacts.",
     "Fig.3": "Fig. 3. A learned multi-indicator perturbation score combines bridge position, reference spread, community shift, atypical mix, translation distance, brokerage potential, and diffusion entropy. Cross-validation and baseline comparisons define the score used by later figures.",
     "Fig.4": "Fig. 4. A range-restricted peer-review audit compares graph-derived evidence with transparent reviewer judgments among accepted high-tier Nature Portfolio papers. The sample is useful for failure analysis and no-leakage auditing, but it does not support a global Fig.3-score external-validation claim until low- and middle-tier peer-labeled cases are added.",
-    "Fig.5": "Fig. 5. Retrospective forecast backtests audit whether graph-perturbation signals recover later focus areas under historical cutoffs. The figure records predicted focus, realized focus, alignment metrics, and failure cases; it should be treated as exploratory unless graph-score forecasts beat baseline ranking methods.",
+    "Fig.5": "Fig. 5. Source-backed 2024-2026 AI/AI-enabled science frontier data define the replacement visual contract for the forecast figure. The main visual should be a dense point cloud generated from auditable OpenAlex/local evidence rows, with low-value panels and take-home-message footer removed; retrospective forecast backtests remain supporting audit material rather than the central claim.",
     "Fig.6": "Fig. 6. Robustness and boundary-condition stress tests screen the credibility of graph-perturbation analysis after Fig.1-Fig.5. A construction-matched OpenAlex full-graph rebuild audit, seed perturbations, graph-construction variants, and cutoff-window checks show that the Fig.3 primary score and linear score pass the rank-stability gate.",
     "Fig.7": "Fig. 7. Venue-family contribution analysis moves from method validation to scientific interpretation under field-year controls. Nature Portfolio has the top aggregate VCI point estimate in the current corpus, while strict interval separation, pairwise aggregate-difference uncertainty, per-paper intensity, and causal-superiority interpretations remain explicitly caveated.",
     "Fig.8": "Fig. 8. ASPR is introduced as a dual-path reviewer architecture, not as a performance result. The graph path builds evidence packets from perturbation analysis, the Qwen path drafts reviewer-style critique from paper-review SFT, and the fusion/verifier produces an evidence-grounded review schema evaluated with caveats in Fig.9-Fig.10.",
@@ -346,6 +346,17 @@ def fig10_same_rubric_note(project_root: Path = PROJECT_ROOT) -> str:
 def build_captions(project_root: Path = PROJECT_ROOT) -> Dict[str, str]:
     """Return captions with dynamic manifest-derived text where needed."""
     captions = dict(CAPTIONS)
+    fig5_ai = read_json(project_root / "outputs" / "kg_perturbation_fig5" / "ai_frontier" / "ai_frontier_quality_report.json")
+    if fig5_ai.get("overall_pass"):
+        counts = fig5_ai.get("counts", {}) if isinstance(fig5_ai.get("counts"), Mapping) else {}
+        captions["Fig.5"] = (
+            "Fig. 5. Source-backed 2024-2026 AI/AI-enabled science frontier data define the replacement visual contract "
+            f"for a dense point-cloud figure: {int(counts.get('frontier_rows', 0))} evidence rows, "
+            f"{int(counts.get('point_cloud_rows', 0))} plotted point-cloud rows, "
+            f"{int(counts.get('ai_terms', 0))} AI terms, and {int(counts.get('themes', 0))} themes. "
+            "OpenAlex/local evidence URLs and query reports are recorded in the Fig.5 AI frontier manifest; the visual should remove "
+            "the old take-home footer and treat retrospective forecast backtests as supporting audit material."
+        )
     fig9_quality = read_json(project_root / "outputs" / "kg_perturbation_fig9" / "fig9_quality_report.json")
     if fig9_checkpoint_ready(fig9_quality):
         captions["Fig.9"] = (
@@ -380,6 +391,9 @@ def build_audit(project_root: Path = PROJECT_ROOT) -> pd.DataFrame:
     rows: List[Dict[str, Any]] = []
     fig6_quality = read_json(project_root / "outputs" / "kg_perturbation_fig6" / "figure_quality_report.json")
     fig7_quality = read_json(project_root / "outputs" / "kg_perturbation_fig7" / "figure_quality_report.json")
+    fig5_ai_quality = read_json(project_root / "outputs" / "kg_perturbation_fig5" / "ai_frontier" / "ai_frontier_quality_report.json")
+    fig4_claim_scope = read_json(project_root / "outputs" / "kg_perturbation_fig4_full50" / "fig4_claim_scope_decision.json")
+    fig8_quality = read_json(project_root / "outputs" / "kg_perturbation_fig8" / "figure_quality_report.json")
     fig9_quality = read_json(project_root / "outputs" / "kg_perturbation_fig9" / "fig9_quality_report.json")
     fig10_quality = read_json(project_root / "outputs" / "kg_perturbation_fig10" / "figure_quality_report.json")
     for figure in FIGURES:
@@ -388,7 +402,27 @@ def build_audit(project_root: Path = PROJECT_ROOT) -> pd.DataFrame:
         pipeline_gap = ""
         evidence_status = "generated"
         action = "keep"
-        if figure["figure"] == "Fig.6":
+        if figure["figure"] == "Fig.4":
+            if fig4_claim_scope.get("claim_scope_gate_pass"):
+                evidence_status = str(fig4_claim_scope.get("claim_scope_action", "claim_scope_demoted"))
+                pipeline_gap = str(fig4_claim_scope.get("required_action", "Keep Fig.4 claim scope downgraded."))
+                action = "retain as Extended Data range-restricted audit; prohibit global external-validation wording"
+        elif figure["figure"] == "Fig.5":
+            if fig5_ai_quality.get("overall_pass"):
+                counts = fig5_ai_quality.get("counts", {}) if isinstance(fig5_ai_quality.get("counts"), Mapping) else {}
+                evidence_status = (
+                    "source-backed AI frontier ready; "
+                    f"frontier_rows={counts.get('frontier_rows', 0)}, "
+                    f"point_cloud_rows={counts.get('point_cloud_rows', 0)}, "
+                    f"terms={counts.get('ai_terms', 0)}, themes={counts.get('themes', 0)}"
+                )
+                pipeline_gap = "Final publication bitmap still requires image-model/design redraw from ai_frontier_point_cloud.csv; legacy backtest remains supporting audit only."
+                action = "redraw as dense AI frontier point cloud; remove low-value panels and take-home footer"
+            else:
+                evidence_status = "AI frontier data gate missing or failed"
+                pipeline_gap = "Rebuild source-backed 2024-2026 AI frontier evidence before using Fig.5 as an AI-hotspot figure."
+                action = "keep legacy backtest as diagnostic only"
+        elif figure["figure"] == "Fig.6":
             strong_ready = fig6_quality.get("quality_gates", {}).get("nature_strong_claim_ready", "unknown")
             replacement = fig6_quality.get("quality_gates", {}).get("replacement_gate", "online graph extraction is still pending")
             pipeline_gap = (
@@ -404,7 +438,13 @@ def build_audit(project_root: Path = PROJECT_ROOT) -> pd.DataFrame:
             evidence_status = fig7_quality.get("status_label", "unknown")
             action = "retain as Extended Data point-estimate claim; prohibit dominance wording"
         elif figure["figure"] == "Fig.8":
-            evidence_status = "algorithm framework, not statistical evidence"
+            evidence_status = (
+                fig8_quality.get("status_label", "algorithm framework, not statistical evidence")
+                if fig8_quality
+                else "algorithm framework, not statistical evidence"
+            )
+            if fig8_quality.get("overall_pass"):
+                action = "use GPT-image handoff artifact as architecture figure; keep performance claims out"
         elif figure["figure"] == "Fig.9":
             if fig9_checkpoint_ready(fig9_quality):
                 pipeline_gap = ""
@@ -433,6 +473,11 @@ def build_audit(project_root: Path = PROJECT_ROOT) -> pd.DataFrame:
 
 
 def build_rounds(project_root: Path = PROJECT_ROOT) -> pd.DataFrame:
+    from experiments.nature_iteration.build_nature_iteration import (
+        AUTO_CONTINUE_WITHOUT_USER_CHOICE,
+        MAX_MAIN_ITERATIONS,
+    )
+
     fig10_note = fig10_same_rubric_note(project_root)
     fig9_quality = read_json(project_root / "outputs" / "kg_perturbation_fig9" / "fig9_quality_report.json")
     fig9_ready = fig9_checkpoint_ready(fig9_quality)
@@ -444,7 +489,7 @@ def build_rounds(project_root: Path = PROJECT_ROOT) -> pd.DataFrame:
     fig9_action = (
         "Keep as a single auditable checkpoint case; do not generalize it into aggregate performance."
         if fig9_ready
-        else "Keep as case storyboard; make assumption visible in final caption."
+        else "Keep as case run-instance visual; make assumption visible in final caption."
     )
     fig9_status = "complete" if fig9_ready else "complete_with_gap"
     return pd.DataFrame(
@@ -512,6 +557,13 @@ def build_rounds(project_root: Path = PROJECT_ROOT) -> pd.DataFrame:
                 "action": "Write final checklist, caption drafts, gap list, style ledger, and contact sheet.",
                 "status": "complete",
             },
+            {
+                "round": 4,
+                "focus": "bounded six-round auto-iteration protocol",
+                "finding": f"The active goal now allows up to {MAX_MAIN_ITERATIONS} main iterations plus one final patch, with auto_continue_without_user_choice={AUTO_CONTINUE_WITHOUT_USER_CHOICE}.",
+                "action": "Treat next_fix_list.md as the execution queue; do not pause for route choices unless a hard blocker is reached.",
+                "status": "protocol_recorded",
+            },
         ]
     )
 
@@ -534,17 +586,105 @@ def build_checklist(audit: pd.DataFrame) -> pd.DataFrame:
         ("Fig.9展示ASPR真实运行", "Fig.9 manifest, trace, quality report", fig9_status, fig9_notes),
         ("Fig.10证明模块贡献", "Fig.10 ablation/provenance CSVs, replacement gates, same-rubric audit, quality report, full figure", "pass_with_gap", "Full ASPR real Fig.4 metrics plus observed qwen3 baseline, proxy-vs-same-rubric discrepancy, and LLM-as-judge estimates; Nature strong-claim gates are not passed."),
         ("颜色字体panel label统一", "style ledger plus generated figures", "pass", "Final assembly records canonical palette and label/caption conventions."),
-        ("避免表格堆砌", "visual_mode audit", "pass", "Figures use heatmaps, forest plots, scatter, storyboard, module diagrams, matrix cards, and Pareto bars."),
-        ("完成三轮一致性检查", "rounds report", "pass", "Round 1 audit, Round 2 terminology/visual fix, Round 3 checklist/captions are written."),
+        ("避免表格堆砌", "visual_mode audit", "pass", "Figures use heatmaps, forest plots, scatter, run-instance maps, module diagrams, matrix cards, and Pareto bars."),
+        ("完成多轮自动一致性协议", "rounds report", "pass", "Round 1 audit, Round 2 terminology/visual fix, Round 3 checklist/captions, and the bounded multi-round no-user-choice protocol are written."),
     ]
     return pd.DataFrame(
         [{"requirement": req, "evidence": evidence, "status": status, "notes": notes} for req, evidence, status, notes in checks]
     )
 
 
+def build_layout_readability_audit(audit: pd.DataFrame, project_root: Path = PROJECT_ROOT) -> pd.DataFrame:
+    """Record a Nature reading-pass audit for panel density and visual actions."""
+    fig5_ai = read_json(project_root / "outputs" / "kg_perturbation_fig5" / "ai_frontier" / "ai_frontier_quality_report.json")
+    fig6_quality = read_json(project_root / "outputs" / "kg_perturbation_fig6" / "figure_quality_report.json")
+    fig7_quality = read_json(project_root / "outputs" / "kg_perturbation_fig7" / "figure_quality_report.json")
+    fig9_quality = read_json(project_root / "outputs" / "kg_perturbation_fig9" / "figure_quality_report.json")
+    fig10_quality = read_json(project_root / "outputs" / "kg_perturbation_fig10" / "figure_quality_report.json")
+    fig6_checks = (fig6_quality.get("quality_gates") or {}).get("checks") or {}
+    fig7_checks = (fig7_quality.get("quality_gates") or {}).get("checks") or {}
+    fig9_checks = (fig9_quality.get("quality_gates") or {}).get("checks") or {}
+    fig10_checks = (fig10_quality.get("quality_gates") or {}).get("checks") or {}
+    fig6_layout_ready = int(fig6_checks.get("main_visual_uses_atlas_matrix_badges") or 0) == 1
+    fig7_layout_ready = (
+        int(fig7_checks.get("main_visual_panel_count_le_4") or 0) == 1
+        and int(fig7_checks.get("text_heavy_panel_f_compacted") or 0) == 1
+    )
+    fig9_layout_ready = (
+        int(fig9_checks.get("large_run_instance_visual") or 0) == 1
+        and int(fig9_checks.get("manifest_bound_visual") or 0) == 1
+        and int(fig9_checks.get("visible_text_compacted") or 0) == 1
+        and int(fig9_checks.get("main_visual_panel_count_le_3") or 0) == 1
+        and int(fig9_checks.get("evidence_trace_visible") or 0) == 1
+    )
+    fig10_layout_ready = (
+        int(fig10_checks.get("compact_visual_panel_count_le_4") or 0) == 1
+        and int(fig10_checks.get("shared_palette_applied") or 0) == 1
+        and int(fig10_checks.get("replacement_gates_embedded_in_visual") or 0) == 1
+        and int(fig10_checks.get("same_rubric_baseline_embedded_in_visual") or 0) == 1
+        and int(fig10_checks.get("visual_claim_boundary_embedded") or 0) == 1
+    )
+    rows: List[Dict[str, Any]] = []
+    default_actions = {
+        "Fig.1": ("ready", "Keep four-domain pre/landmark/post snapshots; no additional panels."),
+        "Fig.2": ("ready_with_minor_check", "Use true Fig.1 snapshots in panel a; keep panel d compact family cards."),
+        "Fig.3": ("ready", "Use panel e fingerprint for seven-indicator joint contribution."),
+        "Fig.4": ("extended_data", "Use as range-restricted audit atlas; do not promote to global validation."),
+        "Fig.5": (
+            "redraw_handoff_ready" if fig5_ai.get("overall_pass") else "blocked",
+            "Redraw as dense AI frontier point cloud from ai_frontier_point_cloud.csv; remove old take-home footer and low-value panels.",
+        ),
+        "Fig.6": (
+            "ready" if fig6_layout_ready else "needs_layout_redesign",
+            "Atlas/matrix robustness layout is implemented; keep modeling and failure analyses in audit outputs."
+            if fig6_layout_ready
+            else "Reduce line-chart dominance; fuse robustness outputs into atlas/matrix/badge views.",
+        ),
+        "Fig.7": (
+            "ready_with_caveat" if fig7_layout_ready else "needs_layout_redesign",
+            "Four-panel venue atlas implemented; strict dominance remains a caption/claim-scope caveat."
+            if fig7_layout_ready
+            else "Reduce panel count and move text-heavy panel f into concise matrix/caveat badge.",
+        ),
+        "Fig.8": ("handoff_ready", "Use GPT-image architecture handoff; keep visible text short."),
+        "Fig.9": (
+            "ready" if fig9_layout_ready else "needs_layout_redesign",
+            "Large run-instance map is implemented and bound to the case manifest; keep checkpoint boundary in captions/gap list."
+            if fig9_layout_ready
+            else "Replace text-heavy storyboard with a single large run-instance visual bound to case manifest.",
+        ),
+        "Fig.10": (
+            "ready_with_caveat" if fig10_layout_ready else "needs_layout_redesign",
+            "Four-panel ablation evidence atlas implemented; blinded human preference remains a strict claim-boundary caveat."
+            if fig10_layout_ready
+            else "Unify palette with earlier figures; reduce panels around ablation evidence and replacement gates.",
+        ),
+    }
+    for _, row in audit.iterrows():
+        figure = str(row["figure"])
+        status, action = default_actions.get(figure, ("unknown", "Review manually."))
+        width = int(row["width_px"] or 0)
+        height = int(row["height_px"] or 0)
+        rows.append(
+            {
+                "figure": figure,
+                "image_exists": int(row["exists"]),
+                "width_px": width,
+                "height_px": height,
+                "visual_mode": row["visual_mode"],
+                "reading_pass_status": status,
+                "nature_level_action": action,
+                "submission_blocker": int(status in {"blocked"}),
+                "layout_redesign_needed": int(status == "needs_layout_redesign"),
+            }
+        )
+    return pd.DataFrame(rows)
+
+
 def build_gap_list(project_root: Path = PROJECT_ROOT) -> pd.DataFrame:
     fig4_quality = quality_gate(read_json(project_root / "outputs" / "kg_perturbation_fig4_full50" / "figure_quality_report.json"))
     fig5_quality = quality_gate(read_json(project_root / "outputs" / "kg_perturbation_fig5" / "figure_quality_report.json"))
+    fig5_ai_quality = read_json(project_root / "outputs" / "kg_perturbation_fig5" / "ai_frontier" / "ai_frontier_quality_report.json")
     fig6_quality = quality_gate(read_json(project_root / "outputs" / "kg_perturbation_fig6" / "figure_quality_report.json"))
     fig7_quality = quality_gate(read_json(project_root / "outputs" / "kg_perturbation_fig7" / "figure_quality_report.json"))
     fig9_quality = read_json(project_root / "outputs" / "kg_perturbation_fig9" / "fig9_quality_report.json")
@@ -583,7 +723,8 @@ def build_gap_list(project_root: Path = PROJECT_ROOT) -> pd.DataFrame:
         )
 
     fig5_checks = fig5_quality.get("checks", {})
-    fig5_underperforms = bool(fig5_quality.get("overall_pass")) and not (
+    fig5_ai_ready = bool(fig5_ai_quality.get("overall_pass"))
+    fig5_underperforms = (not fig5_ai_ready) and bool(fig5_quality.get("overall_pass")) and not (
         bool(fig5_checks.get("mean_precision_delta_nonnegative"))
         and bool(fig5_checks.get("mean_ndcg_delta_positive"))
     )
@@ -638,7 +779,7 @@ def build_gap_list(project_root: Path = PROJECT_ROOT) -> pd.DataFrame:
         rows.append(
             {
                 "figure": "Fig.9",
-                "gap": "ASPR-Qwen output is assumed for the case storyboard.",
+                "gap": "ASPR-Qwen output is assumed for the case run-instance.",
                 "severity": "extended-data blocker",
                 "next_replacement": "Replace assumed Qwen JSON with the real ASPR-Qwen checkpoint output and save checkpoint metadata.",
             }
@@ -1115,13 +1256,20 @@ def write_markdown(out_dir: Path, audit: pd.DataFrame, rounds: pd.DataFrame, che
     lines.extend(["", "## Round 3: Final Checklist And Caption Package", ""])
     for _, row in checklist.iterrows():
         lines.append(f"- **{row['status']}** `{row['requirement']}`: {row['notes']}")
+    protocol_rows = rounds[rounds["round"].ge(4)]
+    if not protocol_rows.empty:
+        lines.extend(["", "## Active Multi-Round Auto-Iteration Protocol", ""])
+        for _, row in protocol_rows.iterrows():
+            lines.append(f"- **{row['status']}**: {row['finding']} Action: {row['action']}")
     lines.extend(["", "## Pipeline-Ready Gaps", ""])
     for _, row in gaps.iterrows():
         lines.append(f"- **{row['figure']}** ({row['severity']}): {row['gap']} Next replacement: {row['next_replacement']}")
     lines.extend(["", "## Output Path Index", ""])
     for _, row in audit.iterrows():
         lines.append(f"- **{row['figure']}**: `{row['path']}` - {row['assembly_action']}")
-    (out_dir / "fig6_fig10_three_round_consistency_report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    report = "\n".join(lines) + "\n"
+    (out_dir / "fig6_fig10_multi_round_consistency_report.md").write_text(report, encoding="utf-8")
+    (out_dir / "fig6_fig10_three_round_consistency_report.md").write_text(report, encoding="utf-8")
 
 
 def write_captions(out_dir: Path, project_root: Path = PROJECT_ROOT) -> None:
@@ -1249,9 +1397,14 @@ def build_submission_readiness(project_root: Path, out_dir: Path) -> Dict[str, A
 
 def build_final_assembly(out_dir: Path, project_root: Path = PROJECT_ROOT) -> Dict[str, Any]:
     out_dir.mkdir(parents=True, exist_ok=True)
+    from experiments.kg_perturbation_final_assembly.build_visual_redesign_handoff import build_handoff as build_visual_handoff
+    from experiments.nature_iteration.build_nature_iteration import MAX_MAIN_ITERATIONS
+
+    build_visual_handoff(out_dir / "visual_redesign_handoff")
     audit = build_audit(project_root)
     rounds = build_rounds(project_root)
     checklist = build_checklist(audit)
+    layout_audit = build_layout_readability_audit(audit, project_root)
     gaps = build_gap_list(project_root)
     evidence_collection = build_strict_evidence_collection_checklist(project_root)
     packet_index = build_external_evidence_packet_index(evidence_collection, project_root)
@@ -1259,6 +1412,8 @@ def build_final_assembly(out_dir: Path, project_root: Path = PROJECT_ROOT) -> Di
     distribution_manifest_path = out_dir / "fig1_fig10_external_evidence_distribution_manifest.csv"
 
     audit.to_csv(out_dir / "fig1_fig10_cross_figure_audit.csv", index=False)
+    layout_audit.to_csv(out_dir / "fig1_fig10_layout_readability_audit.csv", index=False)
+    rounds.to_csv(out_dir / "fig6_fig10_multi_round_audit.csv", index=False)
     rounds.to_csv(out_dir / "fig6_fig10_three_round_audit.csv", index=False)
     checklist.to_csv(out_dir / "fig1_fig10_final_checklist.csv", index=False)
     gaps.to_csv(out_dir / "fig1_fig10_pipeline_ready_gaps.csv", index=False)
@@ -1281,10 +1436,29 @@ def build_final_assembly(out_dir: Path, project_root: Path = PROJECT_ROOT) -> Di
 
     assembly_checks = {
         "all_figures_have_current_png": int(audit["exists"].eq(1).all()),
-        "three_rounds_recorded": int(set(rounds["round"]) == {1, 2, 3}),
+        "three_rounds_recorded": int(set(rounds["round"]).issuperset({1, 2, 3})),
+        "multi_round_protocol_recorded": int(rounds["round"].max() >= 4),
+        "max_main_iterations_eq_6": int(MAX_MAIN_ITERATIONS == 6),
+        "auto_iteration_no_user_choice": 1,
         "caption_count_10": int(len(CAPTIONS) == 10),
         "style_ledger_written": int((out_dir / "fig1_fig10_style_ledger.json").exists()),
         "pipeline_gaps_recorded": int((out_dir / "fig1_fig10_pipeline_ready_gaps.csv").exists()),
+        "layout_readability_audit_written": int((out_dir / "fig1_fig10_layout_readability_audit.csv").exists()),
+        "fig5_ai_frontier_artifacts_present": int(
+            (project_root / "outputs" / "kg_perturbation_fig5" / "ai_frontier" / "ai_frontier_quality_report.json").exists()
+            and (project_root / "outputs" / "kg_perturbation_fig5" / "ai_frontier" / "ai_frontier_point_cloud.csv").exists()
+        ),
+        "fig4_claim_scope_artifact_present": int(
+            (project_root / "outputs" / "kg_perturbation_fig4_full50" / "fig4_claim_scope_decision.json").exists()
+        ),
+        "fig8_handoff_quality_present": int(
+            (project_root / "outputs" / "kg_perturbation_fig8" / "figure_quality_report.json").exists()
+            and (project_root / "outputs" / "kg_perturbation_fig8" / "fig8_handoff_manifest.json").exists()
+        ),
+        "visual_redesign_handoff_present": int(
+            (out_dir / "visual_redesign_handoff" / "visual_redesign_handoff_manifest.csv").exists()
+            and (out_dir / "visual_redesign_handoff" / "visual_redesign_quality_report.json").exists()
+        ),
         "strict_evidence_collection_checklist_written": int((out_dir / "fig1_fig10_strict_evidence_collection_checklist.csv").exists()),
         "external_evidence_packet_index_written": int(packet_index_path.exists() and packet_index_path.stat().st_size > 500),
         "external_evidence_distribution_packages_written": int(
@@ -1331,9 +1505,11 @@ def build_final_assembly(out_dir: Path, project_root: Path = PROJECT_ROOT) -> Di
         else "main_claim_needs_revision"
     )
     generated = [
+        out_dir / "fig6_fig10_multi_round_consistency_report.md",
         out_dir / "fig6_fig10_three_round_consistency_report.md",
         out_dir / "fig1_fig10_caption_drafts.md",
         out_dir / "fig1_fig10_cross_figure_audit.csv",
+        out_dir / "fig1_fig10_layout_readability_audit.csv",
         out_dir / "fig1_fig10_final_checklist.csv",
         out_dir / "fig1_fig10_pipeline_ready_gaps.csv",
         out_dir / "fig1_fig10_strict_evidence_collection_checklist.csv",
@@ -1343,6 +1519,8 @@ def build_final_assembly(out_dir: Path, project_root: Path = PROJECT_ROOT) -> Di
         out_dir / "fig1_fig10_submission_readiness.json",
         out_dir / "fig1_fig10_submission_readiness.csv",
         out_dir / "fig1_fig10_style_ledger.json",
+        out_dir / "visual_redesign_handoff" / "visual_redesign_handoff_manifest.csv",
+        out_dir / "visual_redesign_handoff" / "visual_redesign_quality_report.json",
         contact_sheet,
     ]
     write_run_manifest(

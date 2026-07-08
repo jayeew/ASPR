@@ -257,7 +257,7 @@ def write_upgrade_protocol(path: Path, backlog: Sequence[Mapping[str, Any]]) -> 
         "1. 先替换 pipeline-ready gap，不把估计结果包装成完成实验。",
         "2. 再处理 caption caveat，确保主文 claim 与证据强度匹配。",
         "3. 最后做视觉 polish、DPI、panel 排序和 supplement 搬运。",
-        "4. 整个长期循环最多约 10 轮；每轮必须减少风险、替换证据或明确降级，不能无限重做。",
+        "4. 整个长期循环最多 6 轮主迭代 + 1 轮最终小修；每轮必须减少风险、替换证据或明确降级，不能无限重做。",
         "",
         "## Pipeline-ready gap 队列",
         "",
@@ -270,7 +270,7 @@ def write_upgrade_protocol(path: Path, backlog: Sequence[Mapping[str, Any]]) -> 
             "## 完成门槛",
             "",
             "- 每个 pipeline-ready gap 必须被真实实验替换、降级到 caption caveat、移至 supplement，或继续保留并写明不能支持强 claim。",
-            "- 若接近第 10 轮仍未解决，必须固定为 supplement 或 pipeline-ready limitation，不得继续无限循环。",
+            "- 若接近第 6 轮仍未解决，必须固定为 supplement 或 pipeline-ready limitation，不得继续无限循环。",
             "- 重跑 `experiments/nature_submission_audit/build_nature_submission_audit.py --iteration-id latest`。",
             "- 重跑本优化脚本并确认 `verification_log.md` 总体通过。",
         ]

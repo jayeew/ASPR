@@ -128,6 +128,10 @@ class Fig10AblationTests(unittest.TestCase):
                 "fig10_replacement_gates.csv",
             ]:
                 (out_dir / name).write_text("ok\n", encoding="utf-8")
+            (out_dir / "fig10_generic_llm_same_rubric_summary.csv").write_text(
+                "metric,mean\nsemantic_agreement,0.25\n",
+                encoding="utf-8",
+            )
             figure = out_dir / "fig10_full.png"
             figure.write_bytes(b"0" * 10001)
             ablation_summary = pd.DataFrame(
@@ -193,6 +197,10 @@ class Fig10AblationTests(unittest.TestCase):
             )
 
             self.assertEqual(1, gates["checks"]["provenance_audit_exists"])
+            self.assertEqual(1, gates["checks"]["compact_visual_panel_count_le_4"])
+            self.assertEqual(1, gates["checks"]["shared_palette_applied"])
+            self.assertEqual(1, gates["checks"]["replacement_gates_embedded_in_visual"])
+            self.assertEqual(1, gates["checks"]["same_rubric_baseline_embedded_in_visual"])
             self.assertEqual(0, gates["nature_strong_claim_ready"])
 
     def test_observed_generic_baseline_replaces_pipeline_estimate_when_complete(self) -> None:

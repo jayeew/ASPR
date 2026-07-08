@@ -1269,8 +1269,8 @@ def default_fig1_config_for_domain(domain: Optional[str]) -> Optional[Path]:
 
 
 def load_fig1_module() -> Any:
-    module_path = PROJECT_ROOT / "experiments" / "kg_perturbation_fig1" / "fig1_knowledge_perturbation_v3.py"
-    spec = importlib.util.spec_from_file_location("fig1_knowledge_perturbation_v3", module_path)
+    module_path = PROJECT_ROOT / "experiments" / "kg_perturbation_fig1" / "fig1_knowledge_perturbation.py"
+    spec = importlib.util.spec_from_file_location("fig1_knowledge_perturbation", module_path)
     if spec is None or spec.loader is None:
         raise ImportError(f"Cannot load Fig. 1 module from {module_path}")
     module = importlib.util.module_from_spec(spec)
@@ -3112,21 +3112,58 @@ def draw_panel_e(ax: plt.Axes, comp: ComputedData) -> None:
         s.set_linewidth(0.5)
     plot_ax.legend(frameon=True, fontsize=5.3, loc="upper right")
 
-    freq_ax = ax.inset_axes([0.070, 0.105, 0.830, 0.125])
-    if len(top) > 0:
-        top_max = top[weight_cols].idxmax(axis=1).str.replace("w_", "", regex=False)
-        freq = pd.Series(METRIC_KEYS).map(lambda k: float((top_max == k).mean())).to_numpy(dtype=float)
+    fp_ax = ax.inset_axes([0.070, 0.080, 0.830, 0.175])
+    top_mean = top[weight_cols].mean(axis=0).to_numpy(dtype=float) if len(top) else np.zeros(len(METRIC_KEYS), dtype=float)
+    if fold_weight_cols:
+        fold_median = comp.fold_weights[weight_cols].median(axis=0).to_numpy(dtype=float)
     else:
-        freq = np.zeros(len(METRIC_KEYS), dtype=float)
-    freq_ax.bar(x, freq, color=[METRIC_COLORS[k] for k in METRIC_KEYS], alpha=0.75)
-    freq_ax.set_ylim(0, 1)
-    freq_ax.set_xticks(x)
-    freq_ax.set_xticklabels([METRIC_LABELS[k] for k in METRIC_KEYS], fontsize=5.2)
-    freq_ax.set_ylabel("Top-weight\nfrequency", fontsize=5.2)
-    freq_ax.tick_params(labelsize=5, length=2)
-    freq_ax.grid(True, axis="y", color="#E5E7EB", lw=0.45)
-    for s in freq_ax.spines.values():
-        s.set_linewidth(0.5)
+        fold_median = best_vals.copy()
+    fingerprint = np.vstack([best_vals, top_mean, fold_median])
+    row_labels = ["Final", "Top 1% mean", "Fold median"]
+    fp_ax.set_xlim(0, len(METRIC_KEYS))
+    fp_ax.set_ylim(0, len(row_labels))
+    fp_ax.invert_yaxis()
+    for row_idx, row_vals in enumerate(fingerprint):
+        row_max = max(float(np.nanmax(row_vals)), 1e-9)
+        for col_idx, (key, value) in enumerate(zip(METRIC_KEYS, row_vals)):
+            alpha = 0.16 + 0.72 * min(max(float(value) / row_max, 0.0), 1.0)
+            rect = mpatches.Rectangle(
+                (col_idx + 0.04, row_idx + 0.12),
+                0.92,
+                0.76,
+                facecolor=METRIC_COLORS[key],
+                edgecolor="#FFFFFF",
+                linewidth=0.6,
+                alpha=alpha,
+            )
+            fp_ax.add_patch(rect)
+            label_color = "#FFFFFF" if alpha > 0.55 else TEXT_DARK
+            fp_ax.text(
+                col_idx + 0.50,
+                row_idx + 0.50,
+                f"{float(value):.2f}",
+                ha="center",
+                va="center",
+                fontsize=5.2,
+                color=label_color,
+                fontweight="bold" if float(value) >= 0.05 else "normal",
+            )
+    fp_ax.set_xticks(np.arange(len(METRIC_KEYS)) + 0.5)
+    fp_ax.set_xticklabels([METRIC_LABELS[k] for k in METRIC_KEYS], fontsize=5.3)
+    fp_ax.set_yticks(np.arange(len(row_labels)) + 0.5)
+    fp_ax.set_yticklabels(row_labels, fontsize=5.4)
+    fp_ax.tick_params(length=0)
+    for s in fp_ax.spines.values():
+        s.set_visible(False)
+    ax.text(
+        0.485,
+        0.038,
+        "Fingerprint reports all seven indicators; near-zero final weights are retained instead of hidden.",
+        ha="center",
+        va="center",
+        fontsize=5.4,
+        color=TEXT_MID,
+    )
 
 
 def minmax01(values: np.ndarray) -> np.ndarray:

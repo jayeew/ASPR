@@ -1,4 +1,4 @@
-.PHONY: figures-current figures-main-nature figures-extended figures-evidence-packets figures-external-evidence-intake fig4-merge-blinded-labels fig9-checkpoint-run fig10-disabled-reruns fig10-merge-blinded-preferences figures-nature-check figures-all-nature-check figures-strict-evidence-check fig8-current final-assembly test-nature-ready
+.PHONY: figures-current figures-main-nature figures-extended fig4-claim-scope fig5-ai-frontier visual-redesign-handoff nature-iter-audit figures-evidence-packets figures-external-evidence-intake fig4-merge-blinded-labels fig9-checkpoint-run fig10-disabled-reruns fig10-merge-blinded-preferences figures-nature-check figures-all-nature-check figures-strict-evidence-check fig8-current final-assembly test-nature-ready
 
 PYTHON ?= python3
 MPLCONFIGDIR ?= /tmp/aspr_mplconfig
@@ -37,11 +37,32 @@ FIG9_TEMPERATURE ?= 0.2
 FIG9_TOP_P ?= 0.9
 FIG9_SEED ?= 20260701
 FIG9_MAX_INPUT_CHARS ?= 8000
+NATURE_ITER_ROUND ?= 0
+FIG5_AI_END_DATE ?= 2026-07-08
+FIG5_AI_PER_QUERY ?= 30
 
-figures-current: figures-main-nature figures-extended final-assembly
+figures-current: figures-main-nature fig5-ai-frontier figures-extended fig4-claim-scope visual-redesign-handoff final-assembly
+
+nature-iter-audit:
+	$(PYTHON) experiments/nature_iteration/build_nature_iteration.py --round $(NATURE_ITER_ROUND)
+
+fig5-ai-frontier:
+	$(PYTHON) experiments/kg_perturbation_fig5/build_fig5_ai_frontier.py \
+		--local-papers outputs/kg_perturbation_fig5/plot_data/base/papers_master.csv \
+		--out-dir outputs/kg_perturbation_fig5/ai_frontier \
+		--start-date 2024-01-01 --end-date $(FIG5_AI_END_DATE) \
+		--per-query $(FIG5_AI_PER_QUERY)
+
+fig4-claim-scope:
+	$(PYTHON) experiments/kg_perturbation_fig4/build_fig4_claim_scope.py \
+		--fig4-dir outputs/kg_perturbation_fig4_full50
+
+visual-redesign-handoff:
+	$(PYTHON) experiments/kg_perturbation_final_assembly/build_visual_redesign_handoff.py \
+		--out-dir outputs/kg_perturbation_final_assembly/visual_redesign_handoff
 
 figures-main-nature:
-	$(PYTHON) experiments/kg_perturbation_fig1/fig1_knowledge_perturbation_v3.py \
+	$(PYTHON) experiments/kg_perturbation_fig1/fig1_knowledge_perturbation.py \
 		--config experiments/kg_perturbation_fig1/configs/v6a_display_crispr.yaml \
 		         experiments/kg_perturbation_fig1/configs/v6a_display_graphene.yaml \
 		         experiments/kg_perturbation_fig1/configs/v6a_display_ipsc.yaml \
@@ -63,6 +84,7 @@ figures-main-nature:
 		--evidence-mode strong \
 		--domains crispr,exoplanets,gamma_ray_bursts_and_supernovae,genetics_aging_and_longevity_in_model_organisms,graphene_2d_materials,ipsc_reprogramming,microbiome_metagenomics,perovskite_solar_cells,topological_insulators,ubiquitin_and_proteasome_pathways \
 		--panel all --export-tables \
+		--fig1-snapshot-dir outputs/redraw_v6a_best_fig1/crispr \
 		--future-tau $(FIG2_FUTURE_TAU) \
 		--min-refs $(FIG2_MIN_REFS) \
 		--min-controls $(FIG2_MIN_CONTROLS) \
@@ -199,7 +221,7 @@ fig10-disabled-reruns:
 	$(PYTHON) experiments/kg_perturbation_final_assembly/build_final_assembly.py
 
 fig8-current:
-	$(PYTHON) -m experiments.kg_perturbation_fig8.render_fig8 \
+	$(PYTHON) experiments/kg_perturbation_fig8/build_fig8_handoff.py \
 		--out-dir outputs/kg_perturbation_fig8
 
 final-assembly:

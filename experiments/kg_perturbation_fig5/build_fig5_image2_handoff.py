@@ -334,6 +334,44 @@ def filter_strict_ai_foci(forecast_focus: pd.DataFrame) -> pd.DataFrame:
     return sort_strict_ai_foci(matched)
 
 
+def strict_ai_frontier_diagnostics(forecast_focus: pd.DataFrame, ai_focus: pd.DataFrame) -> Dict[str, Any]:
+    """Return whether the real forecast table can support an AI-frontier claim."""
+    focus = forecast_focus.copy()
+    if focus.empty:
+        return {
+            "forecast_focus_rows": 0,
+            "strict_ai_focus_rows": int(len(ai_focus)),
+            "strict_ai_positive_score_rows": 0,
+            "strict_ai_rows_in_top20_forecast": 0,
+            "best_strict_ai_forecast_rank": "",
+            "source_backed_ai_frontier_ready": 0,
+        }
+
+    def numeric_column(frame: pd.DataFrame, column: str, fallback: float) -> pd.Series:
+        if column not in frame.columns:
+            return pd.Series([fallback] * len(frame), index=frame.index)
+        return pd.to_numeric(frame[column], errors="coerce").fillna(fallback)
+
+    rank_series = numeric_column(focus, "forecast_rank", 1e9)
+    focus = focus.assign(_rank_sort=rank_series)
+    top20_index = set(focus.sort_values("_rank_sort").head(20).index)
+    positive_scores = numeric_column(ai_focus, "forecast_score", 0.0)
+    ai_ranks = pd.to_numeric(ai_focus["forecast_rank"], errors="coerce").dropna() if "forecast_rank" in ai_focus.columns else pd.Series(dtype=float)
+    top20_ai = int(sum(index in top20_index for index in ai_focus.index))
+    positive_ai = int((positive_scores > 0.0).sum())
+    best_rank = int(ai_ranks.min()) if not ai_ranks.empty else ""
+    ready = int(top20_ai >= 6 and positive_ai >= 20)
+    return {
+        "forecast_focus_rows": int(len(forecast_focus)),
+        "strict_ai_focus_rows": int(len(ai_focus)),
+        "strict_ai_positive_score_rows": positive_ai,
+        "strict_ai_rows_in_top20_forecast": top20_ai,
+        "best_strict_ai_forecast_rank": best_rank,
+        "source_backed_ai_frontier_ready": ready,
+        "readiness_rule": "pass requires at least 6 strict-AI rows in top20 forecast and at least 20 strict-AI rows with positive forecast_score",
+    }
+
+
 def strict_ai_display_rank(row: pd.Series, fallback_rank: int) -> int:
     """Use the real forecast rank when present, otherwise a local fallback rank."""
     rank = pd.to_numeric(pd.Series([row.get("forecast_rank")]), errors="coerce").iloc[0]
@@ -873,6 +911,15 @@ def apply_strict_ai_filtered_lens(panel_text: Dict[str, Any], plot_data_dir: Pat
         },
         "sort_order": "forecast_score desc, forecast_rank asc, focus_label asc",
     }
+    out["strict_filter"]["data_diagnostics"] = strict_ai_frontier_diagnostics(forecast_focus, ai_focus)
+    if not out["strict_filter"]["data_diagnostics"]["source_backed_ai_frontier_ready"]:
+        out["strict_filter"]["claim_gate"] = "blocked"
+        out["strict_filter"]["required_action"] = (
+            "Rebuild Fig. 5 with a 2024-2026 AI/AI-enabled frontier evidence table; "
+            "do not present the current strict-filtered rows as this year's empirical hot topics."
+        )
+    else:
+        out["strict_filter"]["claim_gate"] = "source_backed_ai_frontier_ready"
 
     out["panel_a"]["historical_heading"] = "Historical multi-domain knowledge graph"
     out["panel_a"]["future_heading"] = "Strict AI/ML-filtered future window"
@@ -905,14 +952,21 @@ def apply_strict_ai_filtered_lens(panel_text: Dict[str, Any], plot_data_dir: Pat
     out["panel_d"]["source_tables"] = ["derived/forecast_innovations.csv", "base/papers_master.csv"]
 
     leading = ", ".join(item["short_label"] for item in focus_records[:3])
-    out["take_home"] = (
-        f"Under a strict AI/ML term filter, the real forecast tables surface {leading}; "
-        "every displayed focus and seed card is traceable to source CSV rows."
-    )
+    if out["strict_filter"]["claim_gate"] == "blocked":
+        out["take_home"] = (
+            "Strict filtering finds traceable AI/ML rows, but the current forecast table does not pass the "
+            "source-backed AI frontier gate; rebuild the data before making a 2024-2026 AI-hotspot claim."
+        )
+    else:
+        out["take_home"] = (
+            f"Under a strict AI/ML term filter, the real forecast tables surface {leading}; "
+            "every displayed focus and seed card is traceable to source CSV rows."
+        )
     out["image2_constraints"].extend(
         [
             "For strict_ai_filtered mode, panels b/c/d must use only the supplied source-backed JSON rows.",
             "Do not add hand-authored AI lens concepts that are absent from the strict-filtered tables.",
+            "If strict_filter.claim_gate is blocked, visually label Fig. 5 as a data gap or rebuild target, not as a completed AI-hotspot forecast.",
         ]
     )
     return out

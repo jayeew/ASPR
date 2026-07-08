@@ -1111,7 +1111,7 @@ def _interp_color(value: float, vmin: float, vmax: float) -> Tuple[int, int, int
 
 def draw_mechanism_heatmap(mechanism: pd.DataFrame, path: Path) -> None:
     image, draw = _new_panel(
-        "d  Mechanism signature heatmap",
+        "c  Mechanism signature heatmap",
         "Venue-family mean of controlled mechanism z-scores; red cells indicate stronger publication-day graph perturbation signatures.",
     )
     nature = mechanism.loc[mechanism["venue_family"].eq("Nature Portfolio")]
@@ -1234,12 +1234,108 @@ def draw_audit_summary(
     image.save(path, dpi=(180, 180))
 
 
-def compose_full_figure(panel_paths: Sequence[Path], path: Path, headline_supported: bool, strict_claim: bool) -> None:
-    panel_images = [Image.open(p).convert("RGB") for p in panel_paths]
+def draw_compact_audit_badge(
+    audit: pd.DataFrame,
+    portfolio: pd.DataFrame,
+    path: Path,
+    headline_supported: bool,
+    strict_claim: bool,
+    size: Tuple[int, int] = (1400, 920),
+) -> None:
+    """Draw a compact claim-scope badge panel for the main Fig.7 layout."""
+    image, draw = _new_panel(
+        "d  Claim-scope and control badges",
+        "Strict dominance is not inferred unless interval and pairwise gates pass; dense control details remain in the audit table.",
+        size=size,
+    )
+    if strict_claim:
+        headline = "Strict Nature headline supported"
+        color = NATURE_RED
+        fill = "#FFF5F5"
+    elif headline_supported:
+        headline = "Nature ranks #1 by aggregate VCI; caveats remain"
+        color = NATURE_RED
+        fill = "#FFF7F2"
+    else:
+        headline = "Pipeline-ready venue claim"
+        color = ORANGE
+        fill = "#FFF8ED"
+    draw.rounded_rectangle((58, 168, size[0] - 58, 260), radius=18, fill=_hex(fill), outline=_hex(color), width=3)
+    draw.text((86, 198), headline, font=_font(28, bold=True), fill=_hex(color))
+
+    top_rows = portfolio.sort_values("vci", ascending=False).head(3)
+    draw.text((64, 305), "Top aggregate VCI families", font=_font(22, bold=True), fill=_hex(INK))
+    y = 346
+    for _, row in top_rows.iterrows():
+        family = str(row["venue_family"])
+        draw.ellipse((72, y + 5, 94, y + 27), fill=_hex(_family_color(family)), outline=_hex(NEUTRAL_DARK))
+        draw.text(
+            (110, y),
+            f"{int(row['vci_rank'])}. {family}: {float(row['vci']):+.2f}  n={int(row['n_papers'])}",
+            font=_font(19, bold=family == "Nature Portfolio"),
+            fill=_hex(INK),
+        )
+        y += 38
+
+    preferred = [
+        "nature_rank",
+        "strict_interval_separation",
+        "pairwise_aggregate_difference",
+        "per_paper_signal_intensity_rank",
+        "field_year_normalization",
+        "reference_count_control",
+        "metadata_coverage",
+        "team_size_and_oa_control",
+    ]
+    audit_rows = audit.copy()
+    audit_rows["_order"] = audit_rows["audit_item"].map({name: idx for idx, name in enumerate(preferred)}).fillna(999)
+    audit_rows = audit_rows.sort_values(["_order", "audit_item"]).head(8)
+    draw.text((64, y + 24), "Evidence gates", font=_font(22, bold=True), fill=_hex(INK))
+    y += 66
+    badge_w = (size[0] - 150) // 2
+    for idx, (_, row) in enumerate(audit_rows.iterrows()):
+        col = idx % 2
+        row_pos = idx // 2
+        x = 64 + col * (badge_w + 24)
+        yy = y + row_pos * 82
+        status = str(row.get("status", ""))
+        passed = status in {"pass", "measured"}
+        badge_color = OLIVE if passed else ORANGE
+        badge_fill = "#F3FAEC" if passed else "#FFF8ED"
+        draw.rounded_rectangle((x, yy, x + badge_w, yy + 64), radius=12, fill=_hex(badge_fill), outline=_hex(badge_color), width=2)
+        draw.rectangle((x + 14, yy + 20, x + 30, yy + 36), fill=_hex(badge_color), outline=_hex(NEUTRAL_DARK))
+        label = str(row.get("audit_item", "")).replace("_", " ")
+        value = str(row.get("value", ""))
+        draw.text((x + 42, yy + 12), textwrap.shorten(label, width=34, placeholder="..."), font=_font(16, bold=True), fill=_hex(INK))
+        draw.text((x + 42, yy + 36), textwrap.shorten(value, width=42, placeholder="..."), font=_font(14), fill=_hex(MUTED))
+    draw.text(
+        (64, size[1] - 55),
+        "Full control notes, journal-level detail, top-K enrichment, and pre/post curves are exported as source panels and CSVs.",
+        font=_font(15),
+        fill=_hex(MUTED),
+    )
+    image.save(path, dpi=(180, 180))
+
+
+def compose_full_figure(
+    panel_paths: Sequence[Path],
+    path: Path,
+    headline_supported: bool,
+    strict_claim: bool,
+    audit: Optional[pd.DataFrame] = None,
+    portfolio: Optional[pd.DataFrame] = None,
+) -> None:
+    main_paths = [panel_paths[0], panel_paths[1], panel_paths[3]]
+    compact_path = path.with_name("fig7_panel_compact_audit.png")
+    if audit is not None and portfolio is not None:
+        draw_compact_audit_badge(audit, portfolio, compact_path, headline_supported, strict_claim)
+    else:
+        compact_path = panel_paths[-1]
+    panel_images = [Image.open(p).convert("RGB") for p in [*main_paths, compact_path]]
     w, h = panel_images[0].size
     margin = 34
     header_h = 130
-    canvas = Image.new("RGB", (3 * w + 4 * margin, 2 * h + 3 * margin + header_h), _hex(SURFACE))
+    canvas = Image.new("RGB", (2 * w + 3 * margin, 2 * h + 3 * margin + header_h), _hex(SURFACE))
     draw = ImageDraw.Draw(canvas)
     title = "Fig. 7 | Venue-family contribution under field-year controls"
     if not headline_supported:
@@ -1265,10 +1361,8 @@ def compose_full_figure(panel_paths: Sequence[Path], path: Path, headline_suppor
     positions = [
         (margin, header_h + margin),
         (2 * margin + w, header_h + margin),
-        (3 * margin + 2 * w, header_h + margin),
         (margin, header_h + 2 * margin + h),
         (2 * margin + w, header_h + 2 * margin + h),
-        (3 * margin + 2 * w, header_h + 2 * margin + h),
     ]
     for img, pos in zip(panel_images, positions):
         canvas.paste(img, pos)
@@ -1367,6 +1461,9 @@ def build_fig7(
         "pairwise_difference_supported": pairwise_supported,
         "min_family_n": min_family_n,
     }
+    quality_gates["checks"]["main_visual_panel_count_le_4"] = 1
+    quality_gates["checks"]["text_heavy_panel_f_compacted"] = 1
+    quality_gates["main_visual_panel_count"] = 4
 
     df.to_csv(out_dir / "fig7_paper_level_metrics.csv", index=False)
     meta.to_csv(out_dir / "fig7_openalex_metadata_flat.csv", index=False)
@@ -1395,7 +1492,9 @@ def build_fig7(
     draw_mechanism_heatmap(mechanism, panel_paths[3])
     draw_prepost(prepost, panel_paths[4])
     draw_audit_summary(audit, portfolio, panel_paths[5], headline_supported, strict_claim)
-    compose_full_figure(panel_paths, out_dir / "fig7_full.png", headline_supported, strict_claim)
+    compact_audit_path = out_dir / "fig7_panel_compact_audit.png"
+    draw_compact_audit_badge(audit, portfolio, compact_audit_path, headline_supported, strict_claim)
+    compose_full_figure(panel_paths, out_dir / "fig7_full.png", headline_supported, strict_claim, audit, portfolio)
     gaps = write_methods_and_gaps(out_dir, audit, portfolio, metadata_source, headline_supported, strict_claim)
 
     write_json(
@@ -1404,9 +1503,10 @@ def build_fig7(
             "panel_a": "venue portfolio map: publication-day signal intensity vs aggregate future contribution by venue family",
             "panel_b": "aggregate VCI dot-and-interval ranking by venue family",
             "panel_c": "top 5% future graph-impact enrichment by venue family",
-            "panel_d": "controlled mechanism signature heatmap",
+            "panel_d": "controlled mechanism signature heatmap, promoted as panel c in the compact main figure",
             "panel_e": "publication-day signal vs future impact binned relationship",
             "panel_f": "control/audit summary and strict headline status",
+            "main_figure_panel_d": "compact claim-scope and control badges, replacing the former text-heavy panel f in the main figure",
         },
     )
     write_run_manifest(
@@ -1426,12 +1526,14 @@ def build_fig7(
     write_figure_quality_report(
         out_dir,
         figure="fig7",
-        generated_files=panel_paths + [out_dir / "fig7_full.png"],
+        generated_files=panel_paths + [compact_audit_path, out_dir / "fig7_full.png"],
         quality_gates=quality_gates,
         visual_checks={
             "palette": "Nature Portfolio deep red; other families low-saturation auxiliary colors",
             "main_layer": "venue_family",
             "supplement_layer": "journal",
+            "main_visual_panel_count": 4,
+            "text_heavy_panel_f": "compacted_to_claim_scope_badges",
         },
         extra={"metadata_source": metadata_source, "pairwise_tests": str(out_dir / "fig7_pairwise_contribution_tests.csv")},
     )

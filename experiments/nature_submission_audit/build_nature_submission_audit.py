@@ -957,7 +957,7 @@ def write_aggregate_outputs(out_dir: Path, aggregate: Mapping[str, List[Dict[str
     ]
     (out_dir / "audit_iteration_report.md").write_text("\n".join(report_lines) + "\n", encoding="utf-8")
 
-    next_goal = """运行下一轮 Fig.1-Fig.10 Nature 投稿审计，优先处理本轮 `iteration_decision_board.csv` 中的 P1_major 问题：Fig.2 future-outcome/citation-bias caveat、Fig.3 fold stability、Fig.4 semantic matching strictness、Fig.5 visual synthesis overclaim、Fig.6 proxy robustness、Fig.7 interval separation caveat、Fig.9 assumed ASPR-Qwen、Fig.10 LLM-as-judge ablations、真实模块重跑与 qwen3 proxy-vs-same-rubric discrepancy。停止条件：所有 P1 已修复、降级、转 supplement 或记录为 pipeline-ready gap，并重新生成 caption edits 和 reviewer response matrix。整个长期循环最多约 10 轮，不能无限重做同一类审计。
+    next_goal = """运行下一轮 Fig.1-Fig.10 Nature 投稿审计，优先处理本轮 `iteration_decision_board.csv` 中的 P1_major 问题：Fig.2 future-outcome/citation-bias caveat、Fig.3 fold stability、Fig.4 semantic matching strictness、Fig.5 visual synthesis overclaim、Fig.6 proxy robustness、Fig.7 interval separation caveat、Fig.9 assumed ASPR-Qwen、Fig.10 LLM-as-judge ablations、真实模块重跑与 qwen3 proxy-vs-same-rubric discrepancy。执行方式：最多 6 轮主迭代 + 1 轮最终小修；每轮都按 build -> audit -> reflect -> fix-list -> auto-continue 执行。中途不暂停让用户选择路线，除缺关键数据、外部接口不可用且无本地替代、生成结果无法复现、或强 claim 被数据否定这类硬 blocker 外，一律按可信度优先、美观第二、panel 数量第三自动决策。停止条件：所有 P1 已修复、降级、转 supplement 或记录为 pipeline-ready gap，并重新生成 caption edits、reviewer response matrix、claim ledger 和下一轮 fix-list。第 6 轮仍未解决的项目必须输出 blocker/gap 清单，不能无限重做同一类审计。
 """
     (out_dir / "next_iteration_goal.md").write_text(next_goal, encoding="utf-8")
 
@@ -1007,7 +1007,7 @@ def write_reproducibility_outputs(out_dir: Path) -> None:
 
 def generation_hint(fig_id: str) -> str:
     hints = {
-        "fig1": "experiments/kg_perturbation_fig1/fig1_knowledge_perturbation_v3.py",
+        "fig1": "experiments/kg_perturbation_fig1/fig1_knowledge_perturbation.py",
         "fig2": "experiments/kg_perturbation_fig2/fig2_empirical_panels.py",
         "fig3": "experiments/kg_perturbation_fig3/fig3_empirical_weight_learning.py",
         "fig4": "experiments/kg_perturbation_fig4/main_fig4.py",

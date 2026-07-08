@@ -1,6 +1,6 @@
 # Fig.1-Fig.10 Nature 投稿级持续优化计划
 
-> 本文件是可反复执行的中文任务规划，用于把当前 Fig.1-Fig.10 从“已生成图组”推进为 Nature 投稿级实验包。它不是一次性 TODO，而是可以作为长期 `/goal` 的迭代协议。每一轮都必须留下可复查输出：数据取证、视觉审计、claim-to-evidence、caption 修订、reviewer response matrix、replacement gates 和 verification log。为避免无限循环，默认最多约 10 轮；第 10 轮必须收敛为完成、降级、转 supplement 或明确 pipeline-ready gap。
+> 本文件是可反复执行的中文任务规划，用于把当前 Fig.1-Fig.10 从“已生成图组”推进为 Nature 投稿级实验包。它不是一次性 TODO，而是可以作为长期 `/goal` 的迭代协议。每一轮都必须留下可复查输出：数据取证、视觉审计、claim-to-evidence、caption 修订、reviewer response matrix、replacement gates 和 verification log。为避免无限循环，默认最多 6 轮主迭代 + 1 轮最终小修；第 6 轮必须收敛为完成、降级、转 supplement 或明确 pipeline-ready gap。中途不暂停让用户选择路线；所有软性取舍按“可信度优先，其次美观，其次 panel 数量”的默认规则自动执行。
 
 ## 0. 总目标
 
@@ -30,7 +30,7 @@
 - `outputs/kg_perturbation_final_assembly/fig1_fig10_cross_figure_audit.csv`
 - `outputs/kg_perturbation_final_assembly/fig1_fig10_final_checklist.csv`
 - `outputs/kg_perturbation_final_assembly/fig1_fig10_pipeline_ready_gaps.csv`
-- `outputs/kg_perturbation_final_assembly/fig6_fig10_three_round_consistency_report.md`
+- `outputs/kg_perturbation_final_assembly/fig6_fig10_multi_round_consistency_report.md`
 
 ### 1.3 Nature 审计与优化包
 
@@ -62,9 +62,23 @@
 3. 因果 claim 默认禁止：除非有实验设计或强可识别性证据，否则 venue、module、graph signal 都只能写 association/contribution/diagnosis。
 4. 不无限重做：每个问题必须落到 fixed、caption caveat、supplement、pipeline-ready gap 四类之一。
 5. Fig.6-Fig.10 是投稿风险最高区域，每轮必须优先复查。
-6. 迭代轮数默认最多约 10 轮；每一轮必须减少未决风险或明确降级，不能重复生成同类报告来代替实验进展。
+6. 迭代轮数默认最多 6 轮主迭代 + 1 轮最终小修；每一轮必须减少未决风险或明确降级，不能重复生成同类报告来代替实验进展。
+7. 不向用户索要中途选择：除硬 blocker 外，route、panel 融合、claim 降级、Extended Data 转移、旧图删除和下一轮优先级都由脚本与质量门自动决定。
 
-## 3. 每轮执行顺序
+## 3. 自动迭代轮次
+
+每一轮都执行 `build -> audit -> reflect -> fix-list -> auto-continue`。输出目录使用 `outputs/nature_iter/r0/` 到 `outputs/nature_iter/r6/`；一轮通过后删除上一轮旧 PNG/SVG/PDF，只保留 CSV、JSON、manifest、quality report、review notes 和 fix-list。
+
+- Round 0 baseline audit：冻结当前 Fig.1-Fig.10 问题清单、数据来源、claim scope、style ledger。
+- Round 1 data/claim repair：优先修 Fig.1 landmark 时间窗、Fig.2 真实 Fig.1 裁图接线、Fig.5 AI 热点数据门、Fig.4/Fig.10 claim 降级门。
+- Round 2 layout redesign：压缩低密度 panel，修重叠越界，统一 Fig.1-Fig.10 色调、字号和 caption 语气。
+- Round 3 evidence strengthening：核查 landmark、AI 热点、peer-review claims；无法核查的强表述自动降级。
+- Round 4 density pass：以 5-10 秒可读性、panel 负载、信息密度和跨图叙事顺序重排主图。
+- Round 5 targeted repair：只修 Round 4 未通过项，不重动已通过图。
+- Round 6 final assembly and convergence：生成最终图集、caption draft、claim ledger、strict evidence report、submission readiness checklist；未完成项必须完成、降级、转 supplement 或列为 pipeline-ready gap。
+- Final patch：只修 typo、轻微 label overlap、导出路径和 manifest 不一致，不再重构数据或设计。
+
+## 4. 每轮执行顺序
 
 ### Round A：证据盘点
 
@@ -111,7 +125,7 @@
 
 输出：`iteration_decision_board.csv`、`updated_gaps.csv`、`caption_edits.md`、`experiment_upgrade_protocol.md`。
 
-## 4. 逐图优化任务
+## 5. 逐图优化任务
 
 ### Fig.1：graph-perturbation 现象定义
 
@@ -255,7 +269,7 @@ python3 -m unittest tests.test_fig6_robustness tests.test_fig7_venue_contributio
 
 ## 8. 每轮停止条件
 
-一轮可以停止，但不能宣称总目标完成，只有当以下条件满足；同时整个长期循环最多约 10 轮：
+一轮可以停止，但不能宣称总目标完成，只有当以下条件满足；同时整个长期循环最多 6 轮：
 
 - 10 张图的图片、关键中间数据、claim、caption 都已审计；
 - 所有 P0/P1 都进入 fixed、caption caveat、supplement 或 pipeline-ready gap；
@@ -276,5 +290,5 @@ python3 -m unittest tests.test_fig6_robustness tests.test_fig7_venue_contributio
 ## 9. 推荐长期 `/goal`
 
 ```text
-/goal 根据最新审计结果，以发表 Nature 论文为最终目标，持续迭代优化 Fig.1-Fig.10，特别是 Fig.6-Fig.10；不要无限循环，最多约 10 轮。每轮必须检查图片结果和相关中间数据，定位数据、逻辑、可信性、复现性、claim-to-evidence、caption、视觉排版和审稿风险问题；能修复则修复，不能修复则降级 claim、转 supplement 或记录为 pipeline-ready gap。停止条件：完成本轮审计输出、重建相关图和报告、运行 focused tests 与 git diff --check，并给出下一轮优先级。
+/goal 根据最新审计结果，以发表 Nature 论文为最终目标，持续迭代优化 Fig.1-Fig.10，特别是 Fig.6-Fig.10；不要无限循环，最多 6 轮主迭代 + 1 轮最终小修。每轮必须检查图片结果和相关中间数据，定位数据、逻辑、可信性、复现性、claim-to-evidence、caption、视觉排版和审稿风险问题；能修复则修复，不能修复则降级 claim、转 supplement 或记录为 pipeline-ready gap。中途不暂停让用户选择路线，除硬 blocker 外一路按默认动作执行。停止条件：完成本轮审计输出、重建相关图和报告、运行 focused tests 与 git diff --check，并给出下一轮优先级。
 ```
