@@ -4,6 +4,7 @@ import argparse
 import json
 import re
 import sys
+import threading
 import time
 import urllib.error
 import urllib.parse
@@ -103,12 +104,14 @@ class OpenAlexClient:
         self.timeout_seconds = int(timeout_seconds)
         self.max_retries = int(max_retries)
         self._api_key_index = 0
+        self._api_key_lock = threading.Lock()
 
     def next_api_key(self) -> Optional[str]:
         if not self.api_keys:
             return None
-        key = self.api_keys[self._api_key_index % len(self.api_keys)]
-        self._api_key_index += 1
+        with self._api_key_lock:
+            key = self.api_keys[self._api_key_index % len(self.api_keys)]
+            self._api_key_index += 1
         return key
 
     def get_json(self, endpoint: str, params: Optional[Mapping[str, Any]] = None) -> Dict[str, Any]:
@@ -175,7 +178,7 @@ class OpenAlexClient:
             rows.extend(results[: int(max_records) - len(rows)])
             if progress and (page == 1 or page % 5 == 0 or len(rows) >= int(max_records)):
                 label = progress_label or "OpenAlex works"
-                print(f"{label}: fetched {len(rows):,}/{int(max_records):,} rows", flush=True)
+                print(f"{label}：已拉取 {len(rows):,}/{int(max_records):,} 行", flush=True)
             next_cursor = (payload.get("meta") or {}).get("next_cursor")
             if not next_cursor or len(results) < int(params["per-page"]):
                 break

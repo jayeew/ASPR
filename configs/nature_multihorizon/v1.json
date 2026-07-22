@@ -1,0 +1,120 @@
+{
+  "schema_version": "1.0.0",
+  "primary_horizon": 5,
+  "observation_end_year": 2025,
+  "horizons": [
+    {"tau": 3, "complete_publication_end_year": 2022, "development_end_year": 2018, "sealed_test_start_year": 2019, "sealed_test_end_year": 2022, "min_future_citers": 10, "target_name": "RGPM-D3"},
+    {"tau": 5, "complete_publication_end_year": 2020, "development_end_year": 2016, "sealed_test_start_year": 2017, "sealed_test_end_year": 2020, "min_future_citers": 10, "target_name": "RGPM-D5"},
+    {"tau": 8, "complete_publication_end_year": 2017, "development_end_year": 2013, "sealed_test_start_year": 2014, "sealed_test_end_year": 2017, "min_future_citers": 10, "target_name": "RGPM-D8"}
+  ],
+  "source": {
+    "v5_output_dir": "outputs/nature_portfolio_v5",
+    "future_multihorizon_dir": "future_multihorizon",
+    "v5_corpus_dir": "data/knowledge_corpus/v5_nature_portfolio_full",
+    "openalex_snapshot_dir": "/mnt/d/FabCitationData/openalex-snapshot"
+  },
+  "storage": {
+    "external_root": "/mnt/d/aspr_nature_multihorizon_v1",
+    "dataset_root": "data/knowledge_corpus/nature_multihorizon_v1",
+    "analysis_root": "outputs/nature_multihorizon_v1"
+  },
+  "domains": [
+    "life_molecular",
+    "ecology_evolution_microbiology",
+    "neuroscience",
+    "clinical_health",
+    "chemistry",
+    "physics",
+    "astronomy_space",
+    "earth_climate_environment",
+    "materials_nanoscience",
+    "engineering_energy",
+    "mathematics_statistics",
+    "computer_science_ai"
+  ],
+  "features": {
+    "core8": [
+      "delta_q0_shock",
+      "rtd_simpson",
+      "field_log_variety",
+      "field_evenness",
+      "field_disparity",
+      "pair_atypicality_tail",
+      "pair_conventionality_median",
+      "burt_efficiency"
+    ],
+    "aux10": [
+      "log_reference_count",
+      "reference_age_median",
+      "reference_age_iqr",
+      "recent_reference_share_5y",
+      "classic_reference_share_20y",
+      "prior_graph_degree_median",
+      "prior_graph_degree_p90",
+      "prior_obscure_reference_share",
+      "prior_component_size_log",
+      "reference_induced_density"
+    ]
+  },
+  "mechanisms": {
+    "boundary_perturbation": ["delta_q0_shock"],
+    "community_diffusion": ["rtd_simpson"],
+    "interdisciplinarity": ["field_log_variety", "field_evenness", "field_disparity"],
+    "knowledge_recombination": ["pair_atypicality_tail", "pair_conventionality_median"],
+    "knowledge_brokerage": ["burt_efficiency"]
+  },
+  "case_studies": [
+    {
+      "case_id": "s41467-023-35844-2",
+      "doi": "10.1038/s41467-023-35844-2",
+      "selection_policy": "preexisting_fixed_case_audit",
+      "outcome_eligibility": "unknown_recent_paper"
+    }
+  ],
+  "venue_families": [
+    "nature_flagship",
+    "nature_specialist_research",
+    "nature_communications",
+    "scientific_reports",
+    "communications_series",
+    "npj_series"
+  ],
+  "graph": {
+    "snapshot_interval_years": 5,
+    "max_reference_pairs_per_paper": 10000,
+    "seed": 20260710
+  },
+  "cv": {
+    "outer_folds": 5,
+    "inner_folds": 4,
+    "year_bin_size": 5,
+    "bootstrap_repetitions": 2000,
+    "run_strict_label_availability_test": true,
+    "seed": 20260710
+  },
+  "quality": {
+    "min_global_reference_coverage": 0.7,
+    "high_quality_reference_coverage": 0.8,
+    "min_paper_reference_coverage": 0.6,
+    "min_valid_references": 10,
+    "min_valid_pairs": 20,
+    "min_domain_mapping_coverage": 0.95,
+    "min_field_hierarchy_domain_coverage": 0.9,
+    "min_feature_finite_coverage": 0.95,
+    "min_future_fetch_success": 0.99,
+    "max_prebuilt_missing_checkpoints": 5,
+    "max_cap_hit_rate_in_cohort": 0.02,
+    "max_uncapped_oof_rho_delta": 0.02,
+    "min_future_taxonomy_coverage": 0.8,
+    "min_target_valid_coverage": 0.95,
+    "min_common_candidate_tau5_oof": 0.0,
+    "min_cohort_rows": 5000,
+    "min_reportable_domain_rows": 200,
+    "min_structural_rows": 2000,
+    "min_structural_domains": 6
+  },
+  "release": {
+    "allow_legacy_columns": false,
+    "require_explicit_release": true
+  }
+}

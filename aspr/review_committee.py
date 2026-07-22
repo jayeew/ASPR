@@ -21,13 +21,11 @@ OVERCLAIM_TERMS = [
 ]
 
 MECHANISM_MAP = {
-    "DeltaQ0": "社区边界扰动 / boundary perturbation",
-    "Uzzi": "非典型组合 / atypical recombination",
-    "RS": "跨学科知识广度 / interdisciplinary breadth",
-    "PDE": "潜在扩散广度 / prospective diffusion",
-    "B": "跨社区桥接 / bridge position",
-    "RTD": "参考目标社区多样性 / reference target diversity",
-    "BurtIP": "结构洞潜力 / structural-hole potential",
+    "boundary_perturbation": "边界扰动 / boundary perturbation",
+    "community_diffusion": "社群扩散 / community diffusion",
+    "interdisciplinarity": "跨学科性 / interdisciplinarity",
+    "knowledge_recombination": "知识重组 / knowledge recombination",
+    "knowledge_brokerage": "知识桥接 / knowledge brokerage",
 }
 
 
@@ -240,7 +238,11 @@ class GraphAnalyst:
                 card.uncertainty = "medium"
                 card.counterarguments.append("图谱证据置信度偏低，结构性创新解释需保守。")
         score = min(10.0, 2.0 + 8.0 * confidence)
-        if any(key in {"DeltaQ0", "Uzzi"} and float(value or 0.0) >= 0.35 for key, value in top_metrics):
+        if any(
+            key in {"boundary_perturbation", "knowledge_recombination"}
+            and float(value or 0.0) >= 0.65
+            for key, value in top_metrics
+        ):
             strengths = ["图谱信号支持讨论边界扰动或非典型组合。"]
         elif top_metrics:
             strengths = ["图谱信号可作为创新性判断的辅助证据。"]
@@ -257,14 +259,14 @@ class GraphAnalyst:
 
     def _mechanism_text(self, top_metrics: List[tuple[str, float]], confidence: float) -> str:
         if not top_metrics:
-            return "七维图谱指标不可用，不能提供结构性支持。"
+            return "五机制图谱证据不可用，不能提供结构性支持。"
         parts = [
             f"{key}={float(value or 0.0):.2f} 对应 {MECHANISM_MAP.get(key, key)}"
             for key, value in top_metrics
             if float(value or 0.0) >= 0.10
         ]
         if not parts:
-            return "七维指标整体较弱，图谱证据不支持强创新性表述。"
+            return "五机制信号整体较弱，图谱证据不支持强创新性表述。"
         prefix = "图谱证据较可靠" if confidence >= 0.60 else "图谱证据需保守使用"
         return f"{prefix}；主要机制为：" + "；".join(parts) + "。"
 

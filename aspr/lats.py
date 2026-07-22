@@ -7,6 +7,7 @@ import math
 import re
 import sys
 from collections import deque
+from functools import lru_cache
 from pathlib import Path
 from typing import Optional, Literal, List, Dict, Any
 try:
@@ -79,6 +80,23 @@ llm = ChatOpenAI(
 def env_bool(name: str, default: str = "0") -> bool:
     """Read a boolean-like environment flag."""
     return os.getenv(name, default).strip().lower() in {"1", "true", "yes", "y"}
+
+
+@lru_cache(maxsize=8)
+def _cached_frozen_release_scorer(
+    release_root: str,
+    horizon: int,
+    manifest_identity: str,
+) -> Any:
+    """Fully audit a frozen release once per immutable process-local identity."""
+
+    del manifest_identity  # It is intentionally part of the cache key.
+    if __package__ in {None, ""}:
+        from aspr.nature_multihorizon.scoring import FrozenReleaseScorer
+    else:
+        from .nature_multihorizon.scoring import FrozenReleaseScorer
+
+    return FrozenReleaseScorer(Path(release_root), horizon=int(horizon))
 
 
 # ============================================================================
@@ -343,7 +361,7 @@ class TreeState(TypedDict):
     paper_context: str
     related_papers: List[PaperInfo]  # 相关论文列表
     max_iterations: int              # LATS 扩展轮数上限
-    graph_metric_evidence: str       # 七指标图谱证据块
+    graph_metric_evidence: str       # 五机制双分数图谱证据块
     committee_evidence: str          # 审稿委员会结构化证据块
     committee_disagreement_score: float
     recommended_tone: str
@@ -961,14 +979,149 @@ def build_graph_metric_evidence(
     paper_abstract: str,
     related_papers_data: List[Dict[str, Any]],
     max_related_papers: int = 10,
+    *,
+    paper_id: Optional[str] = None,
+    doi: Optional[str] = None,
+    score_packet: Optional[Any] = None,
+    release_path: Optional[str] = None,
+    horizon: int = 5,
 ) -> tuple[str, Dict[str, Any]]:
-    """Compute seven-indicator graph evidence for prompt grounding."""
-    evidence = GraphInnovationScorer().score(
-        paper_title=paper_title,
-        paper_abstract=paper_abstract,
-        retrieved_papers=related_papers_data[:max_related_papers],
+    """Load the V1 dual-score Evidence Packet for graph-agent grounding.
+
+    The legacy seven-indicator scorer is disabled by default. It remains behind
+    an explicit compatibility flag for old, non-V2 experiments only.
+    """
+    if __package__ in {None, ""}:
+        from aspr.nature_multihorizon.contracts import ScorePacket
+    else:
+        from .nature_multihorizon.contracts import ScorePacket
+
+    packet: Optional[ScorePacket]
+    if score_packet is not None:
+        packet = (
+            score_packet
+            if isinstance(score_packet, ScorePacket)
+            else ScorePacket.model_validate(score_packet)
+        )
+    else:
+        configured_release = release_path or os.getenv(
+            "ASPR_NATURE_MULTIHORIZON_RELEASE"
+        )
+        if configured_release and (paper_id or doi):
+            configured_path = Path(configured_release).expanduser().resolve()
+            release_root = (
+                configured_path.parent
+                if configured_path.name == "release.json"
+                else configured_path
+            )
+            marker_path = release_root / "_SUCCESS"
+            if not marker_path.is_file():
+                raise FileNotFoundError(
+                    f"Frozen release success marker is missing: {marker_path}"
+                )
+            scorer = _cached_frozen_release_scorer(
+                str(release_root),
+                int(horizon),
+                marker_path.read_text(encoding="ascii").strip(),
+            )
+            packet = scorer.lookup(paper_id=paper_id, doi=doi)
+        elif env_bool("ASPR_ENABLE_LEGACY_GRAPH_SCORER", "0"):
+            evidence = GraphInnovationScorer().score(
+                paper_title=paper_title,
+                paper_abstract=paper_abstract,
+                retrieved_papers=related_papers_data[:max_related_papers],
+            )
+            legacy = evidence.to_dict()
+            legacy["contract"] = "legacy_explicit_compatibility_only"
+            return evidence.to_prompt_block(), legacy
+        else:
+            packet = None
+
+    if packet is None:
+        unavailable = {
+            "contract": "nature_multihorizon_v1_score_packet",
+            "status": "unavailable",
+            "metrics": {},
+            "weighted_score": 0.0,
+            "confidence": 0.0,
+            "quality_flags": ["missing_frozen_release_or_paper_identifier"],
+            "claim_scope": (
+                "No structural claim: a frozen release plus paper_id/doi is required"
+            ),
+        }
+        return (
+            "【双分数图谱证据 / Dual-score Graph Evidence】\n"
+            "状态：不可用。未提供冻结 Nature Multi-Horizon release 与论文标识；"
+            "本次不会回退到旧七指标。",
+            unavailable,
+        )
+
+    packet_payload = packet.model_dump(mode="json")
+    flags = list(packet.quality_flags)
+    confidence = max(0.0, min(1.0, 0.95 - 0.08 * len(flags)))
+    metrics = {
+        str(name): float(value)
+        for name, value in packet.mechanism_channels.items()
+    }
+    score_values = {
+        "score_mechanism": packet.score_mechanism,
+        "score_performance_raw": packet.score_performance_raw,
+        "score_performance_calibrated": packet.score_performance_calibrated,
+        "score_performance_percentile": packet.score_performance_percentile,
+    }
+    missing_scores = [name for name, value in score_values.items() if value is None]
+    if missing_scores:
+        unavailable_flag = "unavailable_scores:" + ",".join(missing_scores)
+        if unavailable_flag not in flags:
+            flags.append(unavailable_flag)
+        result = {
+            **packet_payload,
+            "contract": "nature_multihorizon_v1_score_packet",
+            "status": "unavailable",
+            "metrics": metrics,
+            # Keep missing evidence null. Downstream committee code already
+            # treats null/zero confidence as unavailable; emitting a numeric
+            # zero here would incorrectly turn missingness into a low score.
+            "weighted_score": None,
+            "confidence": 0.0,
+            "quality_flags": flags,
+        }
+        mechanism_lines = "\n".join(
+            f"- {name}: {value:.3f}" for name, value in metrics.items()
+        )
+        prompt = (
+            "【双分数图谱证据 / Dual-score Graph Evidence】\n"
+            f"论文：{packet.paper_id}；窗口：τ={packet.horizon}\n"
+            "状态：不可用于性能判断；冻结 release 中缺少完整双分数。\n"
+            f"缺失字段：{', '.join(missing_scores)}\n"
+            f"可用的五机制通道仅作描述：\n{mechanism_lines}\n"
+            f"适用范围：{packet.claim_scope}\n"
+            f"质量标记：{'; '.join(flags)}"
+        )
+        return prompt, result
+
+    result = {
+        **packet_payload,
+        "contract": "nature_multihorizon_v1_score_packet",
+        "status": "available",
+        "metrics": metrics,
+        "weighted_score": float(packet.score_performance_calibrated),
+        "confidence": confidence,
+    }
+    mechanism_lines = "\n".join(
+        f"- {name}: {value:.3f}" for name, value in metrics.items()
     )
-    return evidence.to_prompt_block(), evidence.to_dict()
+    prompt = (
+        "【双分数图谱证据 / Dual-score Graph Evidence】\n"
+        f"论文：{packet.paper_id}；窗口：τ={packet.horizon}\n"
+        f"机制解释分数：{packet.score_mechanism:.3f}\n"
+        f"性能校准分数：{packet.score_performance_calibrated:.3f}；"
+        f"百分位：{packet.score_performance_percentile:.3f}\n"
+        f"五机制通道：\n{mechanism_lines}\n"
+        f"适用范围：{packet.claim_scope}\n"
+        f"质量标记：{'; '.join(flags) if flags else 'none'}"
+    )
+    return prompt, result
 
 
 def build_committee_evidence(
@@ -1017,6 +1170,10 @@ def run_innovation_evaluation(
     committee_disagreement_score: float = 0.0,
     recommended_tone: str = "balanced",
     use_committee: bool = True,
+    target_paper_id: Optional[str] = None,
+    target_doi: Optional[str] = None,
+    nature_release_path: Optional[str] = None,
+    score_packet: Optional[Any] = None,
 ) -> tuple[str, list, Dict[str, Any], float, str]:
     """
     运行创新性评价树搜索
@@ -1040,6 +1197,10 @@ def run_innovation_evaluation(
             paper_abstract=paper_abstract,
             related_papers_data=related_papers_data,
             max_related_papers=max_related_papers,
+            paper_id=target_paper_id,
+            doi=target_doi,
+            release_path=nature_release_path,
+            score_packet=score_packet,
         )
     if committee_evidence is None or committee_report_result is None:
         (
@@ -1078,7 +1239,7 @@ def run_innovation_evaluation(
     lats_logging(f"开始创新性评价树搜索")
     lats_logging(f"论文标题: {paper_title}")
     lats_logging(f"相关论文数量: {len(related_papers)}")
-    lats_logging("已载入七指标图谱证据")
+    lats_logging("已载入五机制双分数图谱证据")
     lats_logging(f"已载入审稿委员会证据: tone={recommended_tone}, disagreement={committee_disagreement_score:.3f}")
 
     if env_bool("ASPR_LATS_SINGLE_PASS", "0"):
@@ -1167,6 +1328,10 @@ def evaluate_paper_innovation(
     graph_metric_evidence: Optional[str] = None,
     graph_metric_result: Optional[Any] = None,
     use_committee: bool = True,
+    paper_id: Optional[str] = None,
+    doi: Optional[str] = None,
+    nature_release_path: Optional[str] = None,
+    score_packet: Optional[Any] = None,
 ) -> Dict[str, Any]:
     """
     评价论文学术创新性（用于与 open_scholar 集成）
@@ -1184,6 +1349,10 @@ def evaluate_paper_innovation(
             paper_title=paper_title,
             paper_abstract=paper_abstract,
             related_papers_data=retrieved_papers,
+            paper_id=paper_id,
+            doi=doi,
+            release_path=nature_release_path,
+            score_packet=score_packet,
         )
     (
         committee_evidence,
@@ -1210,6 +1379,10 @@ def evaluate_paper_innovation(
         recommended_tone=recommended_tone,
         max_iterations=max_iterations,
         use_committee=use_committee,
+        target_paper_id=paper_id,
+        target_doi=doi,
+        nature_release_path=nature_release_path,
+        score_packet=score_packet,
     )
     
     return {

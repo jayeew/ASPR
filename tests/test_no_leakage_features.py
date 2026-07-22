@@ -23,6 +23,8 @@ class NoLeakageFeatureTests(unittest.TestCase):
                 "future_citations": [99],
                 "RGPM": [1.2],
                 "venue_future_impact": [0.4],
+                "cited_by_count": [300],
+                "n_future_citers": [12],
             }
         )
 
@@ -31,6 +33,8 @@ class NoLeakageFeatureTests(unittest.TestCase):
         self.assertIn("future_citations", violations)
         self.assertIn("RGPM", violations)
         self.assertIn("venue_future_impact", violations)
+        self.assertIn("cited_by_count", violations)
+        self.assertIn("n_future_citers", violations)
         self.assertNotIn("B_z", violations)
         self.assertNotIn("reference_count", violations)
 

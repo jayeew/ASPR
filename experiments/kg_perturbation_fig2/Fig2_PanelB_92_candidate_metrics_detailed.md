@@ -394,29 +394,72 @@ We first constructed a dictionary of 92 candidate metrics from bibliometrics, ne
 Reference Target Diversity (RTD) and Prospective Diffusion Entropy (PDE) are reference-only cold-start metrics introduced in this study. RTD adapts Gini-Simpson diversity to the graph-community labels of cited references, whereas PDE adapts Shannon entropy to the disciplinary distribution of cited references. Their novelty lies not in the diversity formula itself, but in moving established diversity and entropy measures to the publication-day reference side as proxies for future knowledge-graph perturbation potential.
 ```
 
+更稳妥、可用于回应审稿人的版本：
+
+```text
+The 92 metrics were not intended to be an exhaustive census of all possible bibliometric, semantic, or graph-theoretic quantities. They define a scoped, literature-derived candidate dictionary that spans the major metric families used to quantify scientific impact, novelty, interdisciplinarity, recombination, network brokerage, community structure, and semantic distance. This dictionary served as a transparent design space from which we selected a compact publication-day basis. Metrics were excluded when they required post-publication information, non-reference metadata, full-text or model-specific semantic judgments, or when they were mechanistically redundant with a more interpretable representative.
+```
+
+中文表述：
+
+```text
+我们并不声称这 92 个指标穷尽了所有可能的科学计量、语义或图论指标。相反，它们构成了一个有边界、可复核的文献驱动候选指标词典，用于覆盖科学影响、新颖性、跨学科性、知识重组、网络中介、社区结构和语义距离等主要指标家族。该词典的作用是定义可比较的设计空间；最终七个指标则是在发表日可计算、无未来泄漏、仅依赖参考文献、机制互补、非冗余和可验证等约束下得到的紧凑基底。
+```
+
 ---
 
-## 六、参考文献与来源线索
+## 六、92 个候选指标池的选型依据
+
+92 个候选指标的说服力不来自“数量足够大”，而来自它覆盖了主流文献中的主要指标家族。建议在论文正文写简短说明，把完整 92 表放入 Supplementary Table。
+
+| 指标家族 | 为什么纳入候选池 | 代表性文献依据 | 对本文筛选的作用 |
+|---|---|---|---|
+| Science-of-science 总体框架 | 说明论文、引用、合作、学科、知识网络可被作为科学结构与演化的观测对象 | Fortunato et al. 2018；Azoulay et al. 2018 | 支撑将指标池设计成跨 citation、metadata、network、semantic 的候选空间 |
+| Citation impact / bibliometrics | 引用、领域归一化引用、百分位、高被引、引用速度等是最常见的影响力指标 | Garfield；Waltman 2016；Hicks et al. 2015 | 纳入候选，但因未来泄漏或声望混淆，多数作为 outcome 或 control |
+| Novelty / recombination | 创新常被操作化为不寻常的参考文献组合、期刊组合或知识组合 | Uzzi et al. 2013；Wang et al. 2017；Bornmann et al. 2019；Zhao & Zhang 2025 | 支撑 Uzzi-style atypical combination，并把同类变体归入候选替代 |
+| Interdisciplinarity / diversity | 跨学科性通常用 variety、balance、disparity、Rao-Stirling、Shannon/Gini 多样性衡量 | Stirling 2007；Porter & Rafols 2009；Leydesdorff & Rafols 2011 | 支撑 RS、PDE 和相关多样性候选指标 |
+| Network centrality / brokerage | 中介中心性、参与系数、PageRank、结构洞等用于度量节点在网络中的桥接与经纪位置 | Freeman 1977；Page et al. 1999；Guimera & Amaral 2005；Burt 1992 | 支撑 B 与 Burt IP，并解释为何 degree/PageRank/closeness 等作为冗余或声望型候选 |
+| Community structure / reconfiguration | 社区发现、模块度、partition change、conductance 等用于描述图谱边界和模块结构变化 | Newman & Girvan 2004 | 支撑 ΔQ0 作为 publication-day modularity perturbation |
+| Disruption / future graph outcomes | CD index、未来引用、扩散熵、睡美人系数等常用于验证科学影响或颠覆性 | Funk & Owen-Smith 2017；Ke et al. 2015；Wu et al. 2019；Park et al. 2023 | 纳入候选池以说明覆盖 outcome 指标，但从七指标中排除以避免未来泄漏 |
+| Semantic / text / embedding novelty | 文本、主题模型、embedding distance、LLM novelty score 可衡量语义偏离 | Zhao & Zhang 2025；语义新颖性与文本表示相关文献 | 纳入候选池，但因 full-text/embedding/model 依赖，不进入 reference-only 主七指标 |
+
+建议答审稿人的核心句：
+
+```text
+The candidate pool was intentionally scoped rather than exhaustive. It was designed to cover the dominant metric families repeatedly used in bibliometrics, science-of-science, novelty measurement, interdisciplinarity studies, and network science. Additional indicators proposed by reviewers can be mapped to one of these families and would be retained only if they satisfy the same publication-day, reference-only, non-leakage, mechanistic, and non-redundancy criteria.
+```
+
+---
+
+## 七、参考文献与来源线索
 
 以下为本表中主要指标的来源或理论基础。正式论文中建议替换为 DOI / 原文格式。
 
-1. Garfield, E. Citation indexing and citation analysis.
-2. Freeman, L. C. (1977). A set of measures of centrality based on betweenness.
-3. Rao, C. R. (1982). Diversity and dissimilarity coefficients.
-4. Stirling, A. (2007). A general framework for analysing diversity in science, technology and society.
-5. Newman, M. E. J. & Girvan, M. (2004). Finding and evaluating community structure in networks.
-6. Uzzi, B. et al. (2013). Atypical combinations and scientific impact.
-7. Burt, R. S. (1992). Structural Holes: The Social Structure of Competition.
-8. Shannon, C. E. (1948). A Mathematical Theory of Communication.
-9. Simpson, E. H. (1949). Measurement of diversity.
-10. Guimerà, R. & Amaral, L. A. N. (2005). Functional cartography of complex metabolic networks.
-11. Funk, R. J. & Owen-Smith, J. Dynamic network measures of technological change.
-12. Ke, Q. et al. (2015). Defining and identifying sleeping beauties in science.
-13. Leydesdorff, L. & Rafols, I. Indicators of interdisciplinarity.
-14. Leydesdorff, L., Wagner, C. S. & Bornmann, L. Rao-Stirling Diversity, Relative Variety, and the Gini coefficient.
-15. Page, L. et al. PageRank.
-16. Katz, L. (1953). A new status index derived from sociometric analysis.
-17. Kleinberg, J. HITS and burst detection.
-18. Hicks, D. et al. The Leiden Manifesto for research metrics.
-19. OpenAlex documentation and OpenAlex work-object metadata.
-20. User-supplied RTD/PDE methodological note in the present project.
+1. Garfield, E. Citation indexing and citation analysis. Source basis for citation-count and citation-indexing indicators.
+2. Fortunato, S. et al. (2018). Science of science. *Science*, 359, eaao0185. https://doi.org/10.1126/science.aao0185
+3. Azoulay, P., Graff Zivin, J. S., Uzzi, B., Wang, D., et al. (2018). Toward a more scientific science. *Science*, 361, 1194-1197. https://doi.org/10.1126/science.aav2484
+4. Waltman, L. (2016). A review of the literature on citation impact indicators. *Journal of Informetrics*, 10, 365-391. https://doi.org/10.1016/j.joi.2016.02.007
+5. Hicks, D. et al. (2015). Bibliometrics: The Leiden Manifesto for research metrics. *Nature*, 520, 429-431. https://doi.org/10.1038/520429a
+6. Freeman, L. C. (1977). A set of measures of centrality based on betweenness. *Sociometry*, 40, 35-41. https://doi.org/10.2307/3033543
+7. Rao, C. R. (1982). Diversity and dissimilarity coefficients: A unified approach. *Theoretical Population Biology*, 21, 24-43. https://doi.org/10.1016/0040-5809(82)90004-1
+8. Stirling, A. (2007). A general framework for analysing diversity in science, technology and society. *Journal of the Royal Society Interface*, 4, 707-719. https://doi.org/10.1098/rsif.2007.0213
+9. Porter, A. L. & Rafols, I. (2009). Is science becoming more interdisciplinary? *Scientometrics*, 81, 719-745. https://doi.org/10.1007/s11192-008-2197-2
+10. Leydesdorff, L. & Rafols, I. (2011). Indicators of the interdisciplinarity of journals. *Journal of Informetrics*, 5, 87-100. https://doi.org/10.1016/j.joi.2010.09.002
+11. Newman, M. E. J. & Girvan, M. (2004). Finding and evaluating community structure in networks. *Physical Review E*, 69, 026113. https://doi.org/10.1103/PhysRevE.69.026113
+12. Uzzi, B., Mukherjee, S., Stringer, M. & Jones, B. (2013). Atypical combinations and scientific impact. *Science*, 342, 468-472. https://doi.org/10.1126/science.1240474
+13. Wang, J., Veugelers, R. & Stephan, P. (2017). Bias against novelty in science: A cautionary tale for users of bibliometric indicators. *Research Policy*, 46, 1416-1436. https://doi.org/10.1016/j.respol.2017.06.006
+14. Bornmann, L. et al. (2019). Do we measure novelty when we analyze unusual combinations of cited references? *Journal of Informetrics*, 13, 100979. https://doi.org/10.1016/j.joi.2019.100979
+15. Zhao, Z. & Zhang, L. (2025). A review on the novelty measurements of academic papers. *Scientometrics*. https://doi.org/10.1007/s11192-025-05234-0
+16. Burt, R. S. (1992). *Structural Holes: The Social Structure of Competition*. Harvard University Press. https://www.hup.harvard.edu/books/9780674843714
+17. Shannon, C. E. (1948). A mathematical theory of communication. *Bell System Technical Journal*, 27, 379-423 and 623-656. https://doi.org/10.1002/j.1538-7305.1948.tb01338.x
+18. Simpson, E. H. (1949). Measurement of diversity. *Nature*, 163, 688. https://doi.org/10.1038/163688a0
+19. Guimera, R. & Amaral, L. A. N. (2005). Functional cartography of complex metabolic networks. *Nature*, 433, 895-900. https://doi.org/10.1038/nature03288
+20. Funk, R. J. & Owen-Smith, J. (2017). A dynamic network measure of technological change. *Management Science*, 63, 791-817. https://doi.org/10.1287/mnsc.2015.2366
+21. Ke, Q. et al. (2015). Defining and identifying Sleeping Beauties in science. *PNAS*, 112, 7426-7431. https://doi.org/10.1073/pnas.1424329112
+22. Wu, L., Wang, D. & Evans, J. A. (2019). Large teams develop and small teams disrupt science and technology. *Nature*, 566, 378-382. https://doi.org/10.1038/s41586-019-0941-9
+23. Park, M., Leahey, E. & Funk, R. J. (2023). Papers and patents are becoming less disruptive over time. *Nature*, 613, 138-144. https://doi.org/10.1038/s41586-022-05543-x
+24. Page, L., Brin, S., Motwani, R. & Winograd, T. (1999). The PageRank Citation Ranking: Bringing Order to the Web. Stanford InfoLab technical report. http://ilpubs.stanford.edu:8090/422/
+25. Katz, L. (1953). A new status index derived from sociometric analysis. *Psychometrika*, 18, 39-43. https://doi.org/10.1007/BF02289026
+26. Kleinberg, J. M. (1999). Authoritative sources in a hyperlinked environment. *Journal of the ACM*, 46, 604-632. https://doi.org/10.1145/324133.324140
+27. OpenAlex documentation and OpenAlex work-object metadata.
+28. User-supplied RTD/PDE methodological note in the present project.

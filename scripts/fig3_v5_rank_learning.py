@@ -318,7 +318,7 @@ def choose_model_for_outer_fold(
             score = safe_spearman(model.predict(feature_matrix(inner_valid, feature_cols)), inner_valid[target_col])
             if not math.isfinite(score):
                 score = -float("inf")
-            if score > best_score:
+            if best_model is None or score > best_score:
                 best_score = score
                 best_model = FittedLinearModel(
                     model_kind=model.model_kind,
