@@ -98,7 +98,7 @@ class HorizonSpec(FrozenContract):
     development_end_year: int = Field(ge=1900, le=2200)
     sealed_test_start_year: int = Field(ge=1900, le=2200)
     sealed_test_end_year: int = Field(ge=1900, le=2200)
-    min_future_citers: int = Field(default=10, ge=1)
+    min_future_citers: int = Field(default=10, ge=0)
     target_name: str = Field(min_length=1)
     incremental_source: Optional[str] = None
 
@@ -200,12 +200,15 @@ class CohortSpec(FrozenContract):
 
     horizons: Tuple[int, ...] = (3, 5, 8)
     primary_horizon: int = 5
-    min_future_citers: int = Field(default=10, ge=1)
-    min_valid_references: int = Field(default=10, ge=1)
+    min_future_citers: int = Field(default=10, ge=0)
+    min_valid_references: int = Field(default=10, ge=0)
     min_reference_metadata_coverage: float = Field(default=0.60, ge=0.0, le=1.0)
     high_quality_reference_coverage: float = Field(default=0.80, ge=0.0, le=1.0)
     require_future_fetch_success: bool = True
     allowed_work_types: Tuple[str, ...] = ("article",)
+    require_all_features_finite: bool = True
+    require_reference_quality_for_cohort: bool = True
+    require_target_quality_for_cohort: bool = True
 
     @model_validator(mode="after")
     def validate_cohort(self) -> "CohortSpec":

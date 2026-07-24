@@ -13,6 +13,7 @@ from aspr.corpus import normalize_openalex_id
 
 
 TARGET_DEFINITION_VERSION = "nature-multihorizon-target-v1"
+ZERO_INCLUSIVE_TARGET_DEFINITION_VERSION = "evidence-governed-influence-target-v6"
 SUCCESS_STATUSES = frozenset({"success", "fetched", "checkpoint", "zero_success"})
 DIFFUSION_TARGET_COMPONENTS = (
     "future_field_reach",
@@ -202,15 +203,16 @@ def build_diffusion_targets(
     min_taxonomy_coverage: float = 0.80,
     output_path: Path | None = None,
 ) -> pd.DataFrame:
-    """Build RGPM-D3/D5/D8 on the locked future-adoption cohort.
+    """Build RGPM-D3/D5/D8, including observed zero-uptake papers when requested.
 
-    Component ranks are fitted only among papers meeting the outcome-side
-    ``future_citers >= min_future_citers`` rule. Missing OpenAlex taxonomy is
-    represented as missing target evidence, never as zero reach/evenness.
+    Setting ``min_future_citers=0`` is the v6 confirmatory protocol: an
+    explicit successful request with no future citers is a valid observed
+    zero. Missing OpenAlex taxonomy or a failed request remains missing and is
+    never converted to zero.
     """
 
-    if min_future_citers < 1:
-        raise ValueError("min_future_citers must be positive")
+    if min_future_citers < 0:
+        raise ValueError("min_future_citers cannot be negative")
     if not 0.0 <= float(min_taxonomy_coverage) <= 1.0:
         raise ValueError("min_taxonomy_coverage must be in [0, 1]")
 
@@ -377,6 +379,17 @@ def build_diffusion_targets(
     targets["rgpm_d_evenness"] = targets[evenness_components].mean(axis=1)
     targets["rgpm_d_raw"] = 0.5 * targets["rgpm_d_breadth"] + 0.5 * targets["rgpm_d_evenness"]
     targets.loc[~valid, ["rgpm_d_breadth", "rgpm_d_evenness", "rgpm_d_raw"]] = np.nan
+    observed_future = targets["fetch_valid"].eq(1) & targets["n_future_citers"].notna()
+    targets["future_uptake"] = np.nan
+    targets.loc[observed_future, "future_uptake"] = (
+        targets.loc[observed_future, "n_future_citers"].gt(0).astype(float)
+    )
+    targets["log1p_future_citers"] = np.nan
+    targets.loc[observed_future, "log1p_future_citers"] = np.log1p(
+        pd.to_numeric(
+            targets.loc[observed_future, "n_future_citers"], errors="coerce"
+        )
+    )
     targets["rgpm_d_adjusted_full_descriptive"] = np.nan
     targets["rgpm_d_adjusted_domain_year_sensitivity"] = np.nan
     for _, horizon_rows in targets.groupby("horizon", sort=True):
@@ -390,7 +403,11 @@ def build_diffusion_targets(
             ).to_numpy(float)
         )
     targets["target_name"] = targets["horizon"].map(lambda value: f"RGPM-D{int(value)}")
-    targets["definition_version"] = TARGET_DEFINITION_VERSION
+    targets["definition_version"] = (
+        ZERO_INCLUSIVE_TARGET_DEFINITION_VERSION
+        if int(min_future_citers) == 0
+        else TARGET_DEFINITION_VERSION
+    )
     targets["minimum_future_citers_definition"] = int(min_future_citers)
     targets["minimum_taxonomy_coverage_definition"] = float(min_taxonomy_coverage)
     targets = targets.drop(
@@ -422,6 +439,9 @@ def build_diffusion_targets_from_deltas(
     those components avoids loading the large citer bibliography table into
     memory while retaining the same horizon-global target definition.
     """
+
+    if min_future_citers < 0:
+        raise ValueError("min_future_citers cannot be negative")
 
     required = {
         "paper_id",
@@ -525,6 +545,15 @@ def build_diffusion_targets_from_deltas(
     targets.loc[
         ~valid, ["rgpm_d_breadth", "rgpm_d_evenness", "rgpm_d_raw"]
     ] = np.nan
+    observed_future = fetch_valid & n_future.notna()
+    targets["future_uptake"] = np.nan
+    targets.loc[observed_future, "future_uptake"] = (
+        n_future.loc[observed_future].gt(0).astype(float)
+    )
+    targets["log1p_future_citers"] = np.nan
+    targets.loc[observed_future, "log1p_future_citers"] = np.log1p(
+        n_future.loc[observed_future]
+    )
     targets["rgpm_d_adjusted_full_descriptive"] = np.nan
     targets["rgpm_d_adjusted_domain_year_sensitivity"] = np.nan
     for _, horizon_rows in targets.groupby("horizon", sort=True):
@@ -540,7 +569,11 @@ def build_diffusion_targets_from_deltas(
     targets["target_name"] = targets["horizon"].map(
         lambda value: f"RGPM-D{int(value)}"
     )
-    targets["definition_version"] = TARGET_DEFINITION_VERSION
+    targets["definition_version"] = (
+        ZERO_INCLUSIVE_TARGET_DEFINITION_VERSION
+        if int(min_future_citers) == 0
+        else TARGET_DEFINITION_VERSION
+    )
     targets["minimum_future_citers_definition"] = int(min_future_citers)
     targets["minimum_taxonomy_coverage_definition"] = float(
         min_taxonomy_coverage

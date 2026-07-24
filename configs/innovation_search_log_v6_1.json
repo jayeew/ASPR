@@ -1,0 +1,330 @@
+{
+  "schema_version": "1.0.0",
+  "review_type": "multi-source systematic scoping evidence map",
+  "cutoff_date": "2026-07-24",
+  "language_scope": ["English", "Chinese"],
+  "claim_boundary": "This log documents a reproducible multi-source scoping search and citation chase. It does not claim exhaustive coverage of the internet and is not a formal meta-analysis.",
+  "provenance_note": "The v6.1 extension was requested after v6 results were known. This machine-readable log was assembled from the query history and verified source records during implementation; unlogged search-result snippets are not assigned invented counts.",
+  "experimental_data_boundary": "Literature discovery used network access. No network result is an experimental observation or feature value; v6.1 feature construction uses frozen local data only.",
+  "search_records": [
+    {
+      "search_id": "S01",
+      "database": "Crossref REST API",
+      "query": "scientific novelty indicator; bibliometric novelty combinations",
+      "date": "2026-07-24",
+      "page_or_sort": "rows=20, relevance",
+      "result_titles_screened": [
+        "Atypical Combinations and Scientific Impact",
+        "Creativity in scientific teams: Unpacking novelty and impact",
+        "Bias against novelty in science: A cautionary tale for users of bibliometric indicators",
+        "Do we measure novelty when we analyze unusual combinations of cited references?"
+      ],
+      "result_dois_screened": [
+        "10.1126/science.1240474",
+        "10.1016/j.respol.2014.10.007",
+        "10.1016/j.respol.2017.06.006",
+        "10.1016/j.joi.2019.100979"
+      ],
+      "deduplication": "DOI",
+      "decision": "Retain original formula papers and independent validation; reviews used only for candidate discovery."
+    },
+    {
+      "search_id": "S02",
+      "database": "OpenAlex literature index REST API",
+      "query": "scientific novelty indicator; atypical combinations; interdisciplinary diversity indicator",
+      "date": "2026-07-24",
+      "page_or_sort": "per-page=25, relevance",
+      "result_titles_screened": [
+        "New and atypical combinations: An assessment of novelty and interdisciplinarity",
+        "Introducing a novelty indicator for scientific research: validating the knowledge-based combinatorial approach",
+        "Measuring novelty in science with word embedding",
+        "Diversity and network coherence as indicators of interdisciplinarity"
+      ],
+      "result_dois_screened": [
+        "10.1016/j.respol.2020.104063",
+        "10.1007/s11192-021-04049-z",
+        "10.1371/journal.pone.0254034",
+        "10.1007/s11192-009-0041-y"
+      ],
+      "deduplication": "DOI then normalized title",
+      "decision": "Retain peer-reviewed paper-level applications; do not use OpenAlex result metadata as experimental data."
+    },
+    {
+      "search_id": "S03",
+      "database": "PubMed E-utilities",
+      "query": "(scientific novelty OR atypical combinations) AND (bibliometric OR cited references)",
+      "date": "2026-07-24",
+      "page_or_sort": "retmax=100, best match",
+      "result_titles_screened": [
+        "Atypical combinations and scientific impact",
+        "Gender-diverse teams produce more novel and higher-impact scientific ideas"
+      ],
+      "result_dois_screened": [
+        "10.1126/science.1240474",
+        null
+      ],
+      "deduplication": "PMID and DOI",
+      "decision": "Use peer-reviewed records to verify bibliographic identity and paper-level use."
+    },
+    {
+      "search_id": "S04",
+      "database": "PubMed Central and publisher full-text pages",
+      "query": "interdisciplinarity variety balance disparity Rao Stirling reference list",
+      "date": "2026-07-24",
+      "page_or_sort": "full-text relevance",
+      "result_titles_screened": [
+        "Interdisciplinarity and Impact: Distinct Effects of Variety, Balance, and Disparity",
+        "How Multidisciplinary Are the Multidisciplinary Journals Science and Nature?",
+        "The role of mainstreamness and interdisciplinarity for the relevance of scientific papers"
+      ],
+      "result_dois_screened": [
+        "10.1371/journal.pone.0127298",
+        null,
+        null
+      ],
+      "deduplication": "DOI",
+      "decision": "Retain formula-bearing paper-level studies; contextual studies do not independently define indicators."
+    },
+    {
+      "search_id": "S05",
+      "database": "Publisher pages: Science, Elsevier, Springer Nature, PLOS, Wiley, SAGE",
+      "query": "exact titles and DOI landing pages for all provisionally retained sources",
+      "date": "2026-07-24",
+      "page_or_sort": "direct DOI lookup",
+      "result_titles_screened": [
+        "Atypical Combinations and Scientific Impact",
+        "New and atypical combinations: An assessment of novelty and interdisciplinarity",
+        "Measuring researcher interdisciplinarity",
+        "Measuring diversity: the importance of species similarity",
+        "Tradition and Innovation in Scientists' Research Strategies"
+      ],
+      "result_dois_screened": [
+        "10.1126/science.1240474",
+        "10.1016/j.respol.2020.104063",
+        "10.1007/s11192-007-1700-5",
+        "10.1890/10-2402.1",
+        "10.1177/0003122415601618"
+      ],
+      "deduplication": "DOI",
+      "decision": "Use publisher records as the authoritative bibliographic locator."
+    },
+    {
+      "search_id": "S06",
+      "database": "Google Scholar",
+      "query": "\"Atypical Combinations and Scientific Impact\"; \"Rao-Stirling\" novelty; \"Measuring novelty in science with word embedding\"",
+      "date": "2026-07-24",
+      "page_or_sort": "attempted title and cited-by search",
+      "result_titles_screened": [],
+      "result_dois_screened": [],
+      "deduplication": "not applicable",
+      "decision": "Automated access was unavailable in this environment. No Scholar-only record was asserted; Crossref, OpenAlex, PubMed/PMC, publisher pages, and forward/backward reference lists supplied the auditable records.",
+      "access_limitation": true
+    },
+    {
+      "search_id": "S07",
+      "database": "General academic web search",
+      "query": "novelty U commonness PMI surprise low frequency pair share first combinations reference overlap novelty",
+      "date": "2026-07-24",
+      "page_or_sort": "relevance-ranked results; only candidate-bearing records logged",
+      "result_titles_screened": [
+        "Novelpy: A Python package to measure novelty and disruptiveness of bibliometric and patent data",
+        "A review on the novelty measurements of academic papers",
+        "The impact of a paper's new combinations and new components on its citation"
+      ],
+      "result_dois_screened": [
+        null,
+        "10.1007/s11192-025-05234-0",
+        "10.1007/s11192-019-03314-6"
+      ],
+      "deduplication": "DOI, arXiv ID, normalized title",
+      "decision": "Novelpy and reviews are discovery aids only; every admitted formula is traced to a peer-reviewed original or paper-level application."
+    },
+    {
+      "search_id": "S08",
+      "database": "General academic web search",
+      "query": "paper interdisciplinarity category count 1-Gini Shannon Pielou Simpson HHI Hill number mean distance Rao Stirling DIV DIV* 2DS Leinster Cobbold",
+      "date": "2026-07-24",
+      "page_or_sort": "relevance-ranked results; only candidate-bearing records logged",
+      "result_titles_screened": [
+        "A general framework for analysing diversity in science, technology and society",
+        "Interdisciplinarity and Impact: Distinct Effects of Variety, Balance, and Disparity",
+        "Interdisciplinarity as diversity in citation patterns among journals",
+        "Diversity measurement: Steps towards the measurement of interdisciplinarity?",
+        "Diversity of references as an indicator of the interdisciplinarity of journals"
+      ],
+      "result_dois_screened": [
+        "10.1098/rsif.2007.0213",
+        "10.1371/journal.pone.0127298",
+        "10.1016/j.joi.2018.12.006",
+        "10.1016/j.joi.2019.03.016",
+        "10.1002/asi.23487"
+      ],
+      "deduplication": "DOI",
+      "decision": "Register all mathematical families; designate monotone transforms and parameter variants as sensitivity candidates rather than independent primary inputs."
+    },
+    {
+      "search_id": "S09",
+      "database": "Chinese-language general academic web search",
+      "query": "论文 创新性 指标 非典型组合 首次组合 知识多样性 认知距离 Rao-Stirling",
+      "date": "2026-07-24",
+      "page_or_sort": "relevance-ranked results; only candidate-bearing records logged",
+      "result_titles_screened": [],
+      "result_dois_screened": [],
+      "deduplication": "DOI and normalized title",
+      "decision": "No additional formula family with a traceable peer-reviewed original source was found beyond the English-language source chain."
+    },
+    {
+      "search_id": "S10",
+      "database": "Publisher and general academic web search",
+      "query": "\"hypergeometric distribution\" novelty co-occurrence z score Uzzi",
+      "date": "2026-07-24",
+      "page_or_sort": "formula-focused search prompted by the original-null fidelity audit",
+      "result_titles_screened": [
+        "Atypical Combinations and Scientific Impact",
+        "Technological novelty profile and invention's future impact",
+        "Is novel research worth doing? Evidence from peer review at 49 journals"
+      ],
+      "result_dois_screened": [
+        "10.1126/science.1240474",
+        "10.1140/epjds/s13688-016-0069-1",
+        "10.1073/pnas.2118046119"
+      ],
+      "deduplication": "DOI",
+      "decision": "The existing hypergeometric code is not the original Uzzi degree-preserving Monte Carlo null. Register the exact hypergeometric equation as a separately named source-adapted candidate and force the two Uzzi-named approximations out of primary competition unless an edge-swap fidelity study is later added."
+    },
+    {
+      "search_id": "S11",
+      "database": "Scientometrics review reference list, publisher pages, and general academic web search",
+      "query": "review novelty measurements academic papers conceptual novelty new components research-question method combination content-context surprise fastText LOF topic cloud model token loss semantic gain",
+      "date": "2026-07-24",
+      "page_or_sort": "formula-family audit of the 2025 review and peer-reviewed forward sources; relevance-ranked",
+      "result_titles_screened": [
+        "A review on the novelty measurements of academic papers",
+        "Quantifying conceptual novelty in the biomedical literature",
+        "The impact of a paper's new combinations and new components on its citation",
+        "Combination of research questions and methods: A new measurement of scientific novelty",
+        "Surprising combinations of research contents and contexts are related to impact and emerge with scientific outsiders from distant disciplines",
+        "Measuring the novelty of scientific publications: A fastText and local outlier factor approach",
+        "An effective framework for measuring the novelty of scientific articles through integrated topic modeling and cloud model",
+        "Automated novelty evaluation of academic paper: A collaborative approach integrating human and large language model knowledge",
+        "AI-based metric for the scientific text novelty",
+        "Domain agnostic features for robust novelty assessment of scientific publication"
+      ],
+      "result_dois_screened": [
+        "10.1007/s11192-025-05234-0",
+        "10.1045/september2016-mishra",
+        "10.1007/s11192-019-03314-6",
+        "10.1016/j.joi.2022.101282",
+        "10.1038/s41467-023-36741-4",
+        "10.1016/j.joi.2023.101450",
+        "10.1016/j.joi.2024.101587",
+        "10.1002/asi.24979",
+        "10.1007/978-3-032-08851-2_24",
+        "10.1007/s11192-026-05687-x"
+      ],
+      "deduplication": "DOI then normalized title",
+      "decision": "Register source-backed conceptual, semantic, topic and language-model families as explicit candidates. They remain excluded from v6.1 when they require abstracts, controlled vocabularies, trained language models, human labels, or a construct outside the five frozen reference-based angles. The search changes the candidate census, not the experimental raw data."
+    },
+    {
+      "search_id": "S12",
+      "database": "PubMed and publisher full text",
+      "query": "\"A probabilistic model for co-occurrence analysis in bibliometrics\" hypergeometric",
+      "date": "2026-07-24",
+      "page_or_sort": "exact-title and DOI verification",
+      "result_titles_screened": [
+        "A probabilistic model for co-occurrence analysis in bibliometrics"
+      ],
+      "result_dois_screened": [
+        "10.1016/j.jbi.2022.104047"
+      ],
+      "deduplication": "PMID and DOI",
+      "decision": "Retain as peer-reviewed bibliometric support for the exact fixed-marginal hypergeometric co-occurrence family. It does not turn the source-adapted P10/median aggregation into the original Uzzi edge-swap null, and that distinction remains explicit."
+    },
+    {
+      "search_id": "S13",
+      "database": "Springer publisher full text and NISTEP author manuscript",
+      "query": "\"Introducing a novelty indicator for scientific research\" Jaccard mean reference window co-citing window",
+      "date": "2026-07-24",
+      "page_or_sort": "exact-title, formula, parameter, and DOI verification",
+      "result_titles_screened": [
+        "Introducing a novelty indicator for scientific research"
+      ],
+      "result_dois_screened": [
+        "10.1007/s11192-021-04049-z"
+      ],
+      "deduplication": "DOI then normalized title; duplicate source retained as a formula-verification event, not a new source",
+      "decision": "Correct the registered formula to one minus the mean Jaccard similarity between the focal reference set and prior same-domain papers that share at least one reference. Freeze the source-recommended ten-year reference window and three-year co-citing-paper window. The local implementation adapts the source's field-identification step to the frozen OpenAlex primary-field taxonomy and limits the comparison universe to the complete locally frozen Nature v5 background corpus; both taxonomy and corpus-scope adaptations are disclosed."
+    },
+    {
+      "search_id": "S14",
+      "database": "NISTEP author manuscript and Springer peer-reviewed version",
+      "query": "\"Introducing a novelty indicator for scientific research\" four citation-window patterns all references all co-citing papers",
+      "date": "2026-07-24",
+      "page_or_sort": "full-text methods and Table 2.1 verification after the outcome-blind R3 coverage failure",
+      "result_titles_screened": [
+        "A validation study of knowledge combinatorial novelty",
+        "Introducing a novelty indicator for scientific research: validating the knowledge-based combinatorial approach"
+      ],
+      "result_dois_screened": [
+        "10.15108/dp190",
+        "10.1007/s11192-021-04049-z"
+      ],
+      "deduplication": "The discussion paper and journal article are linked versions of the same study; this is a parameter-verification event, not a new mathematical family.",
+      "decision": "The source evaluates four prespecified window patterns: all/3 years, all/all, 10 years/3 years, and 10 years/all. R3's source-recommended 10/3 implementation passed overall eligible coverage but failed the fixed 50% per-domain gate in mathematics/statistics. Before any label or OOF access, R4 selects the source-published all-reference/all-prior-co-citing variant as the last source-defined window alternative. Formula, same-domain conditions, corpus, focal cohort, thresholds, folds, labels and model are unchanged; the failed R2 and R3 artifacts remain immutable."
+    }
+  ],
+  "citation_chasing": [
+    {
+      "round": 1,
+      "seed_sources": [
+        "10.1126/science.1240474",
+        "10.1016/j.respol.2014.10.007",
+        "10.1016/j.respol.2017.06.006",
+        "10.1098/rsif.2007.0213",
+        "10.1371/journal.pone.0127298",
+        "10.1007/s11192-009-0041-y"
+      ],
+      "documented_seed_and_chase_source_count": 11,
+      "new_mathematical_families": [
+        "reference-overlap novelty",
+        "inter-community bridge share",
+        "semantic distance among cited references",
+        "DIV and effective-diversity transforms",
+        "network coherence"
+      ],
+      "decision": "Register every new family and trace it to its original or peer-reviewed paper-level source."
+    },
+    {
+      "round": 2,
+      "seed_sources": [
+        "10.1007/s11192-021-04049-z",
+        "10.1177/0003122415601618",
+        "10.1371/journal.pone.0254034",
+        "10.1016/j.joi.2018.12.006",
+        "10.1002/asi.23487"
+      ],
+      "documented_seed_and_chase_source_count": 9,
+      "new_mathematical_families": [],
+      "decision": "No new family; continue for the predeclared second empty round."
+    },
+    {
+      "round": 3,
+      "seed_sources": [
+        "10.1890/10-2402.1",
+        "10.1007/s11192-007-1700-5",
+        "10.1002/asi.23487",
+        "10.1108/00220411211200310"
+      ],
+      "documented_seed_and_chase_source_count": 7,
+      "new_mathematical_families": [],
+      "decision": "Second consecutive empty family-discovery round within the five-angle reference-based scope; stop criterion reached for that scope. The later broad review audit S11 separately registers text/model families outside the frozen experimental data scope as explicit exclusions."
+    }
+  ],
+  "deduplication_summary": {
+    "database_query_records": 14,
+    "documented_unique_sources_screened": 38,
+    "sources_retained_in_candidate_registry": 34,
+    "reviews_or_software_catalogs_used_only_for_discovery": 4,
+    "unlogged_result_snippets_counted": false
+  }
+}

@@ -1,0 +1,143 @@
+{
+  "schema_version": "6.1.0",
+  "protocol_id": "aspr-nature-v6.1-simple-fixed-medium-initial-r0-2026-07-24",
+  "disclosure": "Post-v6, result-known, versioned extension. Candidate evidence and outcome-blind measurement gates are frozen before every v6.1 OOF label is read.",
+  "network_policy_for_experiment": "forbidden",
+  "raw_data_policy": "local_frozen_only",
+    "paths": {
+        "candidate_catalog": "configs/innovation_candidate_catalog_v6_1.json",
+        "candidate_registry": "configs/innovation_candidate_registry_v6_1.json",
+    "search_log": "configs/innovation_search_log_v6_1.json",
+    "v6_dataset": "data/knowledge_corpus/nature_multihorizon_v6_local",
+    "v6_1_dataset": "data/knowledge_corpus/nature_multihorizon_v6_1_local",
+    "v6_1_analysis": "outputs/nature_multihorizon_v6_1_local",
+    "openalex_snapshot": "/mnt/d/FabCitationData/openalex-snapshot",
+    "target_works": "outputs/nature_portfolio_v5/nature_target_works.csv",
+    "reference_edges": "outputs/nature_portfolio_v5/nature_reference_edges.csv"
+  },
+  "screening": {
+    "reference_subsample_fraction": 0.8,
+        "reference_subsample_repetitions": 20,
+        "max_papers_per_domain_5y_stratum": 100,
+        "selection_hash_salt": "aspr-v6.1-stability-20260724",
+        "coverage_denominator_policy": "all_papers",
+        "relative_error_denominator_policy": "absolute_value_epsilon",
+        "outcomes_used": false
+  },
+  "k0_controls": [
+    "publication_year",
+    "domain12",
+    "venue_family",
+    "log_reference_count",
+    "reference_age_median"
+  ],
+  "k1_controls": [
+    "publication_year",
+    "domain12",
+    "openalex_primary_subfield",
+    "venue_family",
+    "log_reference_count",
+    "reference_age_median",
+    "reference_age_iqr",
+    "title_word_count",
+    "log_author_count",
+    "log_institution_count",
+    "log_country_count"
+  ],
+  "k2_additional_controls": [
+    "log_team_prior_output_max",
+    "log_prior_reference_popularity_median",
+    "bc_degree_per_reference_t0",
+    "bc_shared_reference_strength_t0",
+    "bc_component_share_t0"
+  ],
+  "categorical_features": [
+    "domain12",
+    "openalex_primary_subfield",
+    "venue_family"
+  ],
+  "temporal_folds": [
+    {
+      "fold_id": 1,
+      "train_year_max": 1985,
+      "test_year_min": 1986,
+      "test_year_max": 1999
+    },
+    {
+      "fold_id": 2,
+      "train_year_max": 1999,
+      "test_year_min": 2000,
+      "test_year_max": 2004
+    },
+    {
+      "fold_id": 3,
+      "train_year_max": 2004,
+      "test_year_min": 2005,
+      "test_year_max": 2009
+    },
+    {
+      "fold_id": 4,
+      "train_year_max": 2009,
+      "test_year_min": 2010,
+      "test_year_max": 2012
+    },
+    {
+      "fold_id": 5,
+      "train_year_max": 2012,
+      "test_year_min": 2013,
+      "test_year_max": 2013
+    },
+    {
+      "fold_id": 6,
+      "train_year_max": 2013,
+      "test_year_min": 2014,
+      "test_year_max": 2017
+    }
+  ],
+  "model": {
+    "parameter_id": "medium",
+    "max_leaf_nodes": 31,
+    "max_depth": 4,
+    "min_samples_leaf": 50,
+    "learning_rate": 0.05,
+    "max_iter": 200,
+    "l2_regularization": 10.0,
+    "inner_temporal_folds": 4,
+    "seed": 20260724
+  },
+  "main_horizon": 5,
+  "supplementary_horizons": [
+    3,
+    8
+  ],
+  "main_model_ids": [
+    "k0_controls",
+    "k1_controls",
+    "b0_v6_primary_plus_k0",
+    "provisional_core8_plus_k1",
+    "final_innovation_plus_k1"
+  ],
+  "supplementary_model_ids": [
+    "k1_controls",
+    "final_innovation_plus_k1"
+  ],
+  "sensitivity_model_ids": [
+    "k2_controls",
+    "final_innovation_plus_k2"
+  ],
+  "evaluation": {
+    "bootstrap_iterations": 2000,
+    "bootstrap_seed": 20260724,
+    "minimum_domain_rows": 200,
+    "headline_metric": "D5 all-period temporal OOF Spearman",
+    "conditional_spearman_reported": false
+  },
+  "acceptance": {
+    "d5_spearman_target": 0.75,
+    "d5_spearman_hard_minimum": 0.74,
+    "paired_noninferiority_margin_vs_b0": -0.005,
+    "gain_vs_k1_ci_lower_must_exceed": 0.0,
+    "d3_d8_gain_direction_must_be_positive": true,
+    "outcome_dependent_domain_deletion_forbidden": true
+  }
+}

@@ -18,6 +18,7 @@ def build_cohort_membership(
     targets: pd.DataFrame,
     *,
     spec: CohortSpec | None = None,
+    required_feature_names: Sequence[str] | None = None,
     complete_end_year: int = 2025,
     output_path: Path | None = None,
 ) -> pd.DataFrame:
@@ -28,6 +29,11 @@ def build_cohort_membership(
     """
 
     cohort_spec = spec or CohortSpec()
+    registered_features = tuple(required_feature_names or CORE_FEATURES)
+    if not registered_features or len(registered_features) != len(
+        set(registered_features)
+    ):
+        raise ValueError("required_feature_names must be non-empty and unique")
     paper_columns = ["paper_id", "publication_year"]
     for optional in ("domain12", "work_type", "document_type", "venue_family"):
         if optional in papers:
@@ -37,7 +43,7 @@ def build_cohort_membership(
         "paper_id",
         "valid_reference_count",
         "reference_metadata_coverage",
-        *CORE_FEATURES,
+        *registered_features,
     ]
     missing_features = set(feature_columns) - set(features)
     if missing_features:
@@ -49,6 +55,7 @@ def build_cohort_membership(
         "target_valid",
         "cap_hit",
         "n_future_citers",
+        "future_uptake",
         "rgpm_d_raw",
     ]
     missing_targets = set(target_columns) - set(targets)
@@ -88,9 +95,14 @@ def build_cohort_membership(
         pd.to_numeric(joined["reference_metadata_coverage"], errors="coerce")
         >= float(cohort_spec.high_quality_reference_coverage)
     ).astype(int)
-    joined["core8_finite"] = np.isfinite(
-        joined[list(CORE_FEATURES)].apply(pd.to_numeric, errors="coerce").to_numpy(dtype=float)
+    joined["publication_feature_finite"] = np.isfinite(
+        joined[list(registered_features)]
+        .apply(pd.to_numeric, errors="coerce")
+        .to_numpy(dtype=float)
     ).all(axis=1).astype(int)
+    # Compatibility alias for v1 figures; v6 gates use the semantically named
+    # field above and record the actual feature registry in the definition.
+    joined["core8_finite"] = joined["publication_feature_finite"]
     joined["natural_science_scope"] = joined.get("domain12", "unmapped").isin(
         [
             "life_molecular",
@@ -115,16 +127,28 @@ def build_cohort_membership(
         "complete_window",
         "future_fetch_success",
         "future_citer_gate",
-        "target_quality_gate",
-        "reference_count_gate",
-        "reference_coverage_gate",
-        "core8_finite",
         "natural_science_scope",
         "work_type_gate",
     ]
+    if cohort_spec.require_target_quality_for_cohort:
+        gates.append("target_quality_gate")
+    if cohort_spec.require_reference_quality_for_cohort:
+        gates.extend(["reference_count_gate", "reference_coverage_gate"])
+    if cohort_spec.require_all_features_finite:
+        gates.append("publication_feature_finite")
     joined["cohort_member"] = joined[gates].all(axis=1).astype(int)
-    joined["high_quality_cohort_member"] = (
+    joined["reference_evidence_eligible"] = (
         joined["cohort_member"].eq(1)
+        & joined["reference_count_gate"].eq(1)
+        & joined["reference_coverage_gate"].eq(1)
+    ).astype(int)
+    joined["conditional_diffusion_member"] = (
+        joined["cohort_member"].eq(1)
+        & pd.to_numeric(joined["future_uptake"], errors="coerce").eq(1)
+        & joined["target_quality_gate"].eq(1)
+    ).astype(int)
+    joined["high_quality_cohort_member"] = (
+        joined["reference_evidence_eligible"].eq(1)
         & joined["high_quality_reference_coverage"].eq(1)
     ).astype(int)
     joined["uncapped_cohort_member"] = (
@@ -140,13 +164,27 @@ def build_cohort_membership(
         common_counts[common_counts.eq(len(cohort_spec.horizons))].index.astype(str)
     )
     joined["common_cohort_member"] = joined["paper_id"].astype(str).isin(common_ids).astype(int)
+    joined["observed_zero_future_citers"] = (
+        joined["future_fetch_success"].eq(1)
+        & joined["n_future_citers"].eq(0)
+    ).astype(int)
 
     def exclusion_reasons(row: pd.Series) -> str:
         reasons = [column for column in gates if int(row[column]) == 0]
         return json.dumps(reasons, ensure_ascii=False)
 
     joined["exclusion_reasons"] = joined.apply(exclusion_reasons, axis=1)
-    joined["cohort_definition"] = "future_citers>=10; complete horizon; article; prior-graph quality v1"
+    joined["cohort_definition"] = (
+        f"future_citers>={cohort_spec.min_future_citers}; complete horizon; "
+        f"work_type in {list(cohort_spec.allowed_work_types)}; "
+        f"require_all_features_finite={cohort_spec.require_all_features_finite}; "
+        f"require_reference_quality_for_cohort="
+        f"{cohort_spec.require_reference_quality_for_cohort}; "
+        f"require_target_quality_for_cohort="
+        f"{cohort_spec.require_target_quality_for_cohort}; "
+        f"publication_feature_registry={list(registered_features)}; "
+        "failed fetches remain missing"
+    )
     if output_path is not None:
         Path(output_path).parent.mkdir(parents=True, exist_ok=True)
         joined.to_parquet(output_path, index=False)
@@ -195,7 +233,7 @@ def select_structural_subset(
     eligible = frame[
         (frame["cohort_member"] == 1)
         & (frame["cap_hit"] == 0)
-        & (frame["n_future_citers"].between(10, 999, inclusive="both"))
+        & (frame["n_future_citers"].between(0, 999, inclusive="both"))
         & (
             pd.to_numeric(frame["future_citer_reference_coverage"], errors="coerce")
             >= float(min_future_reference_coverage)

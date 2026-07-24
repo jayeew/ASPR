@@ -1,0 +1,289 @@
+{
+  "schema_version": "6.0.0",
+  "protocol_id": "aspr-nature-v6-local-frozen-2026-07-23",
+  "network_policy": "forbidden",
+  "raw_data_policy": "local_frozen_only",
+  "evidence_registry_path": "configs/innovation_registry_v6_local.json",
+  "prediction_registry_path": "configs/prediction_registry_v6_local.json",
+  "evidence_selection_protocol_path": "configs/evidence_selection_protocol_v6.json",
+  "sources": [
+    {
+      "asset_id": "nature_v5_openalex_outputs",
+      "path": "outputs/nature_portfolio_v5",
+      "role": "Nature Portfolio v5 target papers, reference lists, reference closure, source roster, and closure manifests",
+      "required": true,
+      "required_files": [
+        "nature_target_works.csv",
+        "nature_reference_edges.csv",
+        "nature_reference_works.csv",
+        "nature_source_roster.csv",
+        "nature_target_works_manifest.json",
+        "reference_closure_snapshot_manifest.json"
+      ],
+      "identity_files": [
+        "nature_source_roster.csv",
+        "nature_target_works_manifest.json",
+        "reference_closure_snapshot_manifest.json"
+      ],
+      "allow_symlink": true
+    },
+    {
+      "asset_id": "nature_v5_future_multihorizon",
+      "path": "outputs/nature_portfolio_v5/future_multihorizon",
+      "role": "Frozen D3/D5/D8 future citer layer and precomputed diffusion components",
+      "required": true,
+      "required_files": [
+        "future_citers.parquet",
+        "future_fetch_status.parquet",
+        "future_request_manifest.parquet",
+        "future_graph_deltas_multihorizon.parquet",
+        "future_multihorizon_manifest.json",
+        "data_quality_report.json"
+      ],
+      "identity_files": [
+        "future_multihorizon_manifest.json",
+        "data_quality_report.json"
+      ],
+      "allow_symlink": true
+    },
+    {
+      "asset_id": "local_openalex_snapshot",
+      "path": "/mnt/d/FabCitationData/openalex-snapshot",
+      "role": "Frozen local-only enrichment source for missing source metadata, abstracts, and strictly prior graph views",
+      "required": true,
+      "required_directories": ["data/works"],
+      "identity_files": [],
+      "allow_symlink": true
+    },
+    {
+      "asset_id": "nature_v5_materialized_corpus",
+      "path": "data/knowledge_corpus/v5_nature_portfolio_full",
+      "role": "Existing v5 materialized corpus reused for cross-checks only",
+      "required": false,
+      "required_files": [
+        "works.csv",
+        "citations.csv",
+        "v5_nature_portfolio_full_manifest.json",
+        "data_quality_report.json"
+      ],
+      "identity_files": [
+        "v5_nature_portfolio_full_manifest.json",
+        "data_quality_report.json"
+      ],
+      "allow_symlink": true
+    },
+    {
+      "asset_id": "review_silver_v1",
+      "path": "data/review_innovation_opinions_v1",
+      "role": "Range-restricted silver construct-validity evidence; never a gold label or primary prediction target",
+      "required": false,
+      "required_files": ["manifest.json", "papers.csv", "innovation_aspect_scores.csv"],
+      "identity_files": ["manifest.json", "source_inventory.csv"],
+      "allow_symlink": false
+    },
+    {
+      "asset_id": "landmark_v4",
+      "path": "data/knowledge_corpus/v4_final_graph_bio_methods_phys10",
+      "role": "Existing landmark registry for secondary known-group validity only",
+      "required": false,
+      "required_files": ["manifest.json", "landmarks.csv", "quality_report.json"],
+      "identity_files": ["manifest.json", "quality_report.json", "landmarks.csv"],
+      "allow_symlink": false
+    }
+  ],
+  "storage": {
+    "derived_dataset_root": "data/knowledge_corpus/nature_multihorizon_v6_local",
+    "analysis_root": "outputs/nature_multihorizon_v6_local",
+    "source_audit_path": "outputs/nature_multihorizon_v6_local/source_audit.json"
+  },
+  "cohort_protocol": {
+    "scope": "common_tau8_complete_publication_year_le_2017",
+    "rationale": "The frozen local future layer contains the same 131777 target papers at D3, D5, and D8 through publication year 2017. A common cohort preserves zero-uptake papers, allows direct horizon comparison, and avoids any network acquisition or horizon-dependent sample expansion.",
+    "development_publication_year_max": 2013,
+    "sealed_publication_year_min": 2014,
+    "sealed_publication_year_max": 2017,
+    "primary_work_types": ["article"],
+    "review_role": "predeclared_negative_control_and_sensitivity_only",
+    "min_valid_references": 10,
+    "min_reference_metadata_coverage": 0.6,
+    "require_reference_quality_for_cohort": false,
+    "require_future_taxonomy_quality_for_uptake_cohort": false,
+    "require_all_primary_features_finite": false,
+    "feature_missingness_policy": "retain every future-fetch-valid natural-science article in uptake; reference-quality gates define a measurement-complete sensitivity subset only; impute inside each training fold and add missingness indicators",
+    "horizon_specific_recent_expansion": "not_available_in_frozen_local_sources_and_not_permitted_for_v6_local"
+  },
+  "horizons": [
+    {
+      "tau": 3,
+      "complete_publication_end_year": 2017,
+      "development_end_year": 2013,
+      "sealed_test_start_year": 2014,
+      "sealed_test_end_year": 2017,
+      "min_future_citers": 0,
+      "target_name": "Influence-D3-v6"
+    },
+    {
+      "tau": 5,
+      "complete_publication_end_year": 2017,
+      "development_end_year": 2013,
+      "sealed_test_start_year": 2014,
+      "sealed_test_end_year": 2017,
+      "min_future_citers": 0,
+      "target_name": "Influence-D5-v6"
+    },
+    {
+      "tau": 8,
+      "complete_publication_end_year": 2017,
+      "development_end_year": 2013,
+      "sealed_test_start_year": 2014,
+      "sealed_test_end_year": 2017,
+      "min_future_citers": 0,
+      "target_name": "Influence-D8-v6"
+    }
+  ],
+  "feature_protocol": {
+    "source_max_year_rule": "source_max_year < publication_year",
+    "graph_snapshot_interval_years": 1,
+    "field_profile_window_years": 5,
+    "fold_local_imputation": true,
+    "fold_local_scaling": true,
+    "missing_indicators": true,
+    "text_extension_enabled": false,
+    "legacy_proxy_role": "frozen_sensitivity_baseline_only"
+  },
+  "outcome_protocol": {
+    "retain_observed_zero_future_citers": true,
+    "failed_fetch_is_missing_not_zero": true,
+    "primary_model": "two_part_uptake_plus_conditional_diffusion",
+    "primary_feature_model_id": "innovation_plus_controls",
+    "fixed_diffusion_components": [
+      "future_field_reach",
+      "future_subfield_reach",
+      "future_topic_reach",
+      "future_field_simpson",
+      "future_topic_simpson"
+    ],
+    "fixed_breadth_weight": 0.5,
+    "fixed_evenness_weight": 0.5,
+    "structural_outcomes_secondary": true
+  },
+  "validation_protocol": {
+    "outer_folds": 5,
+    "inner_folds": 4,
+    "ordered_temporal_folds": true,
+    "bootstrap_iterations": 2000,
+    "bootstrap_cluster": "paper_id",
+    "seed": 20260723,
+    "sealed_holdout_unlocks": 1,
+    "all_preprocessing_fold_local": true,
+    "required_comparisons": [
+      "controls_only",
+      "each_dimension_plus_controls",
+      "all_innovation_plus_controls",
+      "opportunity_only_plus_controls",
+      "innovation_plus_opportunity_plus_controls",
+      "leave_one_dimension_out"
+    ],
+    "excluded_comparisons": [
+      {
+        "model_id": "legacy_v1_core8_plus_aux10",
+        "decision": "not_a_required_v6_comparison",
+        "reason": "The frozen v6 views do not contain an exact, strict-prior implementation of all legacy core8/aux10 variables, and several legacy structural proxies fail the v6 construct/evidence admission rules. Relabelling partial v6 variables as the legacy block would be an invalid comparison. The exact legacy model may be reported only as a separately labelled sensitivity analysis if its original frozen feature artifact becomes available; no new raw-data acquisition is authorized."
+      }
+    ]
+  },
+  "quality_protocol": {
+    "min_reference_closure_coverage": 0.95,
+    "min_domain_mapping_coverage": 0.95,
+    "min_future_fetch_success": 0.99,
+    "max_missing_future_checkpoints": 5,
+    "feature_stability_spearman": 0.9,
+    "feature_stability_median_relative_error": 0.1,
+    "approximation_exact_spearman": 0.95,
+    "approximation_exact_median_relative_error": 0.05,
+    "min_reportable_domain_rows": 200,
+    "domain_exclusion_by_oof_forbidden": true
+  },
+  "construct_validation_protocol": {
+    "reference_subsampling": {
+      "fraction": 0.8,
+      "repetitions": 20,
+      "max_papers_per_domain_5y_stratum": 100,
+      "selection_hash_salt": "aspr-v6-reference-stability-20260723",
+      "min_valid_references": 10,
+      "min_field_mapping_coverage": 0.9,
+      "spearman_min": 0.9,
+      "median_relative_error_max": 0.1,
+      "outcomes_used": false
+    },
+    "discriminant_redundancy": {
+      "absolute_spearman_collinearity_flag": 0.9,
+      "source_defined_multifacet_metrics_may_be_correlated": true,
+      "merge_rule": "Merge dimensions when the literature defines them as components of one construct and the preregistered discriminant audit does not support a separate construct claim; retain the individual metrics and disclose redundancy."
+    },
+    "review_silver_validation": {
+      "role": "supportive_only_never_gold",
+      "minimum_matched_papers_for_confirmatory_use": 30,
+      "minimum_label_confidence_for_confirmatory_use": 0.7,
+      "current_labels_are_heuristic": true
+    }
+  },
+  "acceptance_gates": {
+    "primary_horizon": 5,
+    "nested_oof_spearman_min": 0.45,
+    "temporal_holdout_spearman_min": 0.3,
+    "domain_macro_spearman_min": 0.25,
+    "gain_over_strong_controls_min": 0.05,
+    "confidence_interval_lower_bound_must_be_positive": true,
+    "d3_d8_direction_consistency_required": true,
+    "calibration_required": true,
+    "uptake_ece_10_max": 0.05,
+    "uptake_brier_skill_score_min": 0.0,
+    "prediction_interval_coverage_required": true,
+    "realized_interval_coverage_90_min": 0.87,
+    "realized_interval_mean_width_max": 0.75
+  },
+  "reflection_protocol": {
+    "trigger": "any_acceptance_gate_failure",
+    "diagnostic_order": [
+      "data_quality_and_coverage",
+      "temporal_or_target_leakage",
+      "target_noise_and_zero_process",
+      "domain_and_era_heterogeneity",
+      "indicator_redundancy_and_missingness",
+      "model_capacity_and_calibration",
+      "dimension_and_leave_one_out_ablations"
+    ],
+    "allowed_revisions": [
+      "source-backed metric role",
+      "source-faithful operationalization",
+      "outcome decomposition",
+      "model family or capacity",
+      "fold-local calibration"
+    ],
+    "forbidden_revisions": [
+      "OOF-dependent sample inclusion or domain exclusion",
+      "future feature information",
+      "dropping observed zero or low impact papers",
+      "repeated sealed holdout unlock",
+      "lowering quality or performance gates"
+    ]
+  },
+  "release_protocol": {
+    "promotion_must_precede_sealed_unlock": true,
+    "primary_model_id": "innovation_plus_controls",
+    "control_model_id": "controls_only",
+    "final_parameter_selection_rule": "Use the parameter_id selected in the majority of outer development folds; ties choose the lower registered complexity. No sealed-label tuning.",
+    "final_preprocessing": "Fit once on all publication_year <= 2013 rows; numeric imputation and missing indicators plus categorical encoding are training-only.",
+    "final_calibration": "Fit uptake and conditional calibrators only from development nested-OOF predictions, then fit the two-part estimator on all development rows.",
+    "final_interval": "Use development nested-OOF absolute residuals for the finite-sample 90% conformal radius; do not update from sealed residuals.",
+    "sealed_unlock_count": 1,
+    "sealed_publication_years": [2014, 2015, 2016, 2017],
+    "sealed_models": [
+      "controls_only",
+      "innovation_plus_controls"
+    ],
+    "sealed_tuning_forbidden": true,
+    "sealed_failure_does_not_authorize_reunlock": true
+  }
+}

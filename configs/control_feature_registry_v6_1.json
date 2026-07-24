@@ -1,0 +1,170 @@
+{
+  "schema_version": "6.1.0",
+  "registry_version": "aspr-v6.1-control-features-2026-07-24",
+  "literature_cutoff": "2026-07-24",
+  "role_boundary": "Controls represent publication-time citation opportunity, exposure, team scale, or measurement opportunity. They are auxiliary prediction features and must never be interpreted as paper-innovation indicators.",
+  "inclusion_rule": "A control is admitted only when citation-determinant or bibliographic-network literature supports its nuisance/opportunity role, it is known no later than publication, it is locally reproducible, and its missingness is preserved for fold-local imputation.",
+  "exclusion_rule": "Exclude current journal impact factors, post-publication open-access changes, future citations, post-publication author prestige, and any quality or retrieval flag used as a substantive predictor.",
+  "sources": {
+    "BORNMANN_DANIEL2008": {
+      "citation": "Bornmann L, Daniel H-D (2008). What do citation counts measure? A review of studies on citing behavior. Journal of Documentation 64:45-80.",
+      "doi": "10.1108/00220410810844150",
+      "role": "Citation counts are multidimensional influence signals and require careful opportunity controls."
+    },
+    "TAHAMTAN2016": {
+      "citation": "Tahamtan I, Safipour Afshar A, Ahamdzadeh K (2016). Factors affecting number of citations: a comprehensive review of the literature. Scientometrics 107:1195-1225.",
+      "doi": "10.1007/s11192-016-1889-2",
+      "role": "Review evidence for field, age, title, reference-list, journal, collaboration, country, institution, author-count and productivity covariates."
+    },
+    "TAHAMTAN_BORNMANN2020": {
+      "citation": "Tahamtan I, Bornmann L (2019). What do citation counts measure? An updated review of studies on citations in scientific documents published between 2006 and 2018. Scientometrics 121:1635-1684.",
+      "doi": "10.1007/s11192-019-03243-4",
+      "role": "Updated citation-determinant evidence and interpretation limits."
+    },
+    "WANG2015": {
+      "citation": "Wang J, Thijs B, Glanzel W (2015). Interdisciplinarity and Impact: Distinct Effects of Variety, Balance, and Disparity. PLOS ONE 10:e0127298.",
+      "doi": "10.1371/journal.pone.0127298",
+      "role": "Paper-level use of journal, author, country and reference-count controls alongside diversity indicators."
+    },
+    "BISCARO2014": {
+      "citation": "Biscaro C, Giupponi C (2014). Co-Authorship and Bibliographic Coupling Network Effects on Citations. PLOS ONE 9:e99502.",
+      "doi": "10.1371/journal.pone.0099502",
+      "role": "Bibliographic-coupling position as a publication-time citation-opportunity predictor."
+    },
+    "GUAN2017": {
+      "citation": "Guan J, Yan Y, Zhang JJ (2017). The impact of collaboration and knowledge networks on citations. Journal of Informetrics 11:407-422.",
+      "doi": "10.1016/j.joi.2017.02.007",
+      "role": "Collaboration and knowledge-network position as citation predictors."
+    }
+  },
+  "features": {
+    "publication_year": {
+      "sets": ["K0", "K1"],
+      "formula": "calendar publication year",
+      "meaning": "Controls exposure era and secular changes in citation practices.",
+      "source_ids": ["BORNMANN_DANIEL2008", "TAHAMTAN2016"],
+      "maximum_information_time": "publication",
+      "missing_rule": "Missing year excludes the paper before modeling."
+    },
+    "domain12": {
+      "sets": ["K0", "K1"],
+      "formula": "frozen twelve-domain category",
+      "meaning": "Controls broad field differences in citation and diffusion opportunity.",
+      "source_ids": ["TAHAMTAN2016", "TAHAMTAN_BORNMANN2020"],
+      "maximum_information_time": "publication",
+      "missing_rule": "Out-of-scope or missing domain is not silently reassigned."
+    },
+    "openalex_primary_subfield": {
+      "sets": ["K1"],
+      "formula": "frozen OpenAlex primary subfield label",
+      "meaning": "Controls finer field heterogeneity remaining inside domain12.",
+      "source_ids": ["TAHAMTAN2016", "TAHAMTAN_BORNMANN2020"],
+      "maximum_information_time": "frozen snapshot metadata for the publication record",
+      "missing_rule": "Missing label becomes an explicit training-fold unknown category."
+    },
+    "venue_family": {
+      "sets": ["K0", "K1"],
+      "formula": "frozen local Nature venue-family identifier",
+      "meaning": "Controls venue-format and exposure differences without using a current prestige score.",
+      "source_ids": ["TAHAMTAN2016", "WANG2015"],
+      "maximum_information_time": "publication",
+      "missing_rule": "Missing venue becomes an explicit training-fold unknown category."
+    },
+    "log_reference_count": {
+      "sets": ["K0", "K1"],
+      "formula": "ln(1 + number of distinct declared references)",
+      "meaning": "Controls citation opportunity and the mechanical number of possible reference combinations.",
+      "source_ids": ["TAHAMTAN2016", "WANG2015"],
+      "maximum_information_time": "publication",
+      "missing_rule": "Unretrieved lists are missing; a verified empty list is zero."
+    },
+    "reference_age_median": {
+      "sets": ["K0", "K1"],
+      "formula": "median(publication_year - strictly-prior reference_year)",
+      "meaning": "Controls the central recency of the cited knowledge base.",
+      "source_ids": ["TAHAMTAN2016", "TAHAMTAN_BORNMANN2020"],
+      "maximum_information_time": "publication_year-1",
+      "missing_rule": "No dated prior reference is null."
+    },
+    "reference_age_iqr": {
+      "sets": ["K1"],
+      "formula": "Q0.75(reference age) - Q0.25(reference age)",
+      "meaning": "Controls dispersion in the ages of cited knowledge.",
+      "source_ids": ["TAHAMTAN2016", "TAHAMTAN_BORNMANN2020"],
+      "maximum_information_time": "publication_year-1",
+      "missing_rule": "Insufficient dated prior references are null."
+    },
+    "title_word_count": {
+      "sets": ["K1"],
+      "formula": "count of regex word tokens in the frozen title",
+      "meaning": "Controls a documented article-presentation correlate of citations.",
+      "source_ids": ["TAHAMTAN2016"],
+      "maximum_information_time": "publication",
+      "missing_rule": "Empty or unavailable title is null."
+    },
+    "log_author_count": {
+      "sets": ["K1"],
+      "formula": "ln(1 + distinct authors)",
+      "meaning": "Controls team scale and associated visibility/collaboration opportunity.",
+      "source_ids": ["TAHAMTAN2016", "WANG2015"],
+      "maximum_information_time": "publication authorship record",
+      "missing_rule": "Missing frozen OpenAlex authorship metadata is null."
+    },
+    "log_institution_count": {
+      "sets": ["K1"],
+      "formula": "ln(1 + distinct affiliated institutions)",
+      "meaning": "Controls organizational collaboration scale.",
+      "source_ids": ["TAHAMTAN2016"],
+      "maximum_information_time": "publication authorship record",
+      "missing_rule": "Missing frozen OpenAlex affiliation metadata is null."
+    },
+    "log_country_count": {
+      "sets": ["K1"],
+      "formula": "ln(1 + distinct affiliation countries)",
+      "meaning": "Controls international collaboration and geographic exposure.",
+      "source_ids": ["TAHAMTAN2016", "WANG2015"],
+      "maximum_information_time": "publication authorship record",
+      "missing_rule": "Missing frozen OpenAlex country metadata is null."
+    },
+    "log_team_prior_nature_output_max": {
+      "sets": ["K2"],
+      "formula": "ln(1 + maximum strictly-prior Nature-cohort paper count across focal authors)",
+      "meaning": "Strong sensitivity control for prior team productivity; it is not all-OpenAlex career output.",
+      "source_ids": ["TAHAMTAN2016", "TAHAMTAN_BORNMANN2020"],
+      "maximum_information_time": "publication_year-1",
+      "missing_rule": "No locally matched author IDs is null."
+    },
+    "log_prior_reference_popularity_median": {
+      "sets": ["K2"],
+      "formula": "median over focal references of ln(1 + strictly-prior Nature citation count)",
+      "meaning": "Controls prior popularity of the knowledge base selected by the paper.",
+      "source_ids": ["TAHAMTAN2016", "TAHAMTAN_BORNMANN2020"],
+      "maximum_information_time": "publication_year-1",
+      "missing_rule": "No valid prior references is null."
+    },
+    "bc_degree_per_reference_t0": {
+      "sets": ["K2"],
+      "formula": "number of strictly-prior papers sharing at least one reference with focal / max(1, valid_reference_count)",
+      "meaning": "Controls local bibliographic-coupling reach.",
+      "source_ids": ["BISCARO2014", "GUAN2017"],
+      "maximum_information_time": "publication_year-1",
+      "missing_rule": "Unavailable prior coupling view is null; a verified isolate is zero."
+    },
+    "bc_shared_reference_strength_t0": {
+      "sets": ["K2"],
+      "formula": "sum over strictly-prior neighbor papers of references shared with the focal paper",
+      "meaning": "Controls the strength of pre-existing bibliographic similarity.",
+      "source_ids": ["BISCARO2014"],
+      "maximum_information_time": "publication_year-1",
+      "missing_rule": "Unavailable prior coupling view is null; verified no overlap is zero."
+    },
+    "bc_component_share_t0": {
+      "sets": ["K2"],
+      "formula": "size of focal augmented coupling component / number of eligible strictly-prior papers",
+      "meaning": "Controls breadth of the pre-existing connected opportunity neighborhood.",
+      "source_ids": ["BISCARO2014"],
+      "maximum_information_time": "publication_year-1",
+      "missing_rule": "Unavailable prior coupling view is null."
+    }
+  }
+}

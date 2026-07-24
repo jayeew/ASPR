@@ -1,0 +1,3520 @@
+{
+  "candidates": {
+    "A1.CONCEPT_VOLUME_RARITY": {
+      "angle_id": "A1_COMBINATION_RARITY",
+      "candidate_id": "A1.CONCEPT_VOLUME_RARITY",
+      "code_name": "concept_pair_volume_novelty",
+      "decision_reason": "A valid conceptual-novelty family, but it uses controlled textual concepts rather than co-cited knowledge sources and the frozen Nature view has no cross-domain controlled-vocabulary history.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "nan",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.0,
+        "nondegenerate_test_pass": false,
+        "overall_coverage": 0.0,
+        "raw_minimum_domain_coverage": 0.0,
+        "raw_overall_coverage": 0.0,
+        "relative_error_denominator_policy": "absolute_value_epsilon",
+        "relative_error_scale_floor": null,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": null,
+        "stability_spearman": null,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": false
+      },
+      "final_role": "excluded",
+      "formula": "paper aggregation of inverse prior occurrence volume for concepts and concept pairs",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": false,
+        "I3": true,
+        "I4": false,
+        "I5": true,
+        "I6": false,
+        "I7": false,
+        "I8": false,
+        "I9": false
+      },
+      "implementation_name": null,
+      "knowledge_unit": "controlled concept or concept pair in a paper",
+      "local_computability": "F3_external_required",
+      "mathematical_family": "controlled_term_pair_volume_novelty",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null without publication-time controlled concepts and complete prior concept-pair history.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "MISHRA2016"
+      ],
+      "paper_application_source_ids": [
+        "MISHRA2016"
+      ],
+      "parameters": {
+        "vocabulary": "MeSH in the source application"
+      },
+      "redundancy_group": "textual_concept_rarity",
+      "required_data": [
+        "paper concepts or MeSH terms",
+        "strictly prior concept history"
+      ],
+      "validation_source_ids": [
+        "DOMAINAGNOSTIC2026"
+      ]
+    },
+    "A1.CONTENT_CONTEXT_SURPRISE": {
+      "angle_id": "A1_COMBINATION_RARITY",
+      "candidate_id": "A1.CONTENT_CONTEXT_SURPRISE",
+      "code_name": "content_context_combination_surprise",
+      "decision_reason": "The construct is source-backed but is not the frozen co-cited-source rarity angle and requires external text/context representations.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "nan",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.0,
+        "nondegenerate_test_pass": false,
+        "overall_coverage": 0.0,
+        "raw_minimum_domain_coverage": 0.0,
+        "raw_overall_coverage": 0.0,
+        "relative_error_denominator_policy": "absolute_value_epsilon",
+        "relative_error_scale_floor": null,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": null,
+        "stability_spearman": null,
+        "temporal_test_pass": false,
+        "total_n": 118059,
+        "toy_test_pass": false
+      },
+      "final_role": "excluded",
+      "formula": "surprise of observed content-context association relative to a historical expectation model",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": false,
+        "I3": false,
+        "I4": false,
+        "I5": true,
+        "I6": false,
+        "I7": false,
+        "I8": false,
+        "I9": false
+      },
+      "implementation_name": null,
+      "knowledge_unit": "paper content-context combination",
+      "local_computability": "F3_external_required",
+      "mathematical_family": "content_context_surprise",
+      "maximum_information_time": "all fitted representations must stop before publication",
+      "missing_definition": "Null without source-faithful content and context representations trained only on prior material.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "SHI2023"
+      ],
+      "paper_application_source_ids": [
+        "SHI2023"
+      ],
+      "parameters": {
+        "content_and_context_models": "source-defined learned representations"
+      },
+      "redundancy_group": "textual_context_surprise",
+      "required_data": [
+        "paper text",
+        "author and disciplinary context",
+        "historical representation model"
+      ],
+      "validation_source_ids": []
+    },
+    "A1.HUMAN_LLM_NOVELTY": {
+      "angle_id": "A1_COMBINATION_RARITY",
+      "candidate_id": "A1.HUMAN_LLM_NOVELTY",
+      "code_name": "human_llm_collaborative_novelty",
+      "decision_reason": "This is a dynamic judgment system rather than a frozen mathematical feature and violates the local-data and fully reproducible formula rules.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "nan",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.0,
+        "nondegenerate_test_pass": false,
+        "overall_coverage": 0.0,
+        "raw_minimum_domain_coverage": 0.0,
+        "raw_overall_coverage": 0.0,
+        "relative_error_denominator_policy": "absolute_value_epsilon",
+        "relative_error_scale_floor": null,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": null,
+        "stability_spearman": null,
+        "temporal_test_pass": false,
+        "total_n": 118059,
+        "toy_test_pass": false
+      },
+      "final_role": "excluded",
+      "formula": "source-defined aggregation of human knowledge and LLM novelty judgments",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": false,
+        "I3": false,
+        "I4": false,
+        "I5": false,
+        "I6": false,
+        "I7": false,
+        "I8": false,
+        "I9": false
+      },
+      "implementation_name": null,
+      "knowledge_unit": "whole paper and retrieved comparison literature",
+      "local_computability": "F3_external_required",
+      "mathematical_family": "human_llm_novelty_judgment",
+      "maximum_information_time": "retrieval corpus and model knowledge must be publication-time bounded",
+      "missing_definition": "Null without source paper text, comparison corpus, prompts, model weights and human knowledge inputs.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "WU2025"
+      ],
+      "paper_application_source_ids": [
+        "WU2025"
+      ],
+      "parameters": {
+        "model_and_prompts": "source-defined dynamic system"
+      },
+      "redundancy_group": "llm_judgment_systems",
+      "required_data": [
+        "paper full text",
+        "retrieval corpus",
+        "LLM",
+        "human judgments"
+      ],
+      "validation_source_ids": [
+        "WU2025"
+      ]
+    },
+    "A1.LLM_TOKEN_NLL": {
+      "angle_id": "A1_COMBINATION_RARITY",
+      "candidate_id": "A1.LLM_TOKEN_NLL",
+      "code_name": "abstract_token_nll_mean",
+      "decision_reason": "The source-backed textual-surprise family cannot be derived from the frozen citation/OpenAlex views and is not equivalent to cited-source combination rarity.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "nan",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.0,
+        "nondegenerate_test_pass": false,
+        "overall_coverage": 0.0,
+        "raw_minimum_domain_coverage": 0.0,
+        "raw_overall_coverage": 0.0,
+        "relative_error_denominator_policy": "absolute_value_epsilon",
+        "relative_error_scale_floor": null,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": null,
+        "stability_spearman": null,
+        "temporal_test_pass": false,
+        "total_n": 118059,
+        "toy_test_pass": false
+      },
+      "final_role": "excluded",
+      "formula": "mean_t[-log P_model(token_t | token_<t)]",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": false,
+        "I3": false,
+        "I4": false,
+        "I5": true,
+        "I6": false,
+        "I7": false,
+        "I8": false,
+        "I9": false
+      },
+      "implementation_name": null,
+      "knowledge_unit": "tokens in a paper abstract",
+      "local_computability": "F3_external_required",
+      "mathematical_family": "language_model_token_surprise",
+      "maximum_information_time": "model-training corpus end must precede publication",
+      "missing_definition": "Null without an abstract and a versioned model trained exclusively on information available before the paper.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "KRUZEN2026"
+      ],
+      "paper_application_source_ids": [
+        "DOMAINAGNOSTIC2026"
+      ],
+      "parameters": {
+        "model": "historically fine-tuned GPT-family language model"
+      },
+      "redundancy_group": "language_model_surprise",
+      "required_data": [
+        "paper abstracts",
+        "frozen tokenizer",
+        "year-specific language models"
+      ],
+      "validation_source_ids": [
+        "DOMAINAGNOSTIC2026"
+      ]
+    },
+    "A1.LOW_FREQUENCY_SHARE": {
+      "angle_id": "A1_COMBINATION_RARITY",
+      "candidate_id": "A1.LOW_FREQUENCY_SHARE",
+      "code_name": "low_frequency_source_pair_share",
+      "decision_reason": "The count threshold is a project choice rather than a uniquely source-defined paper-level formula.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.998989898989899,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 0.999950943720183,
+        "raw_minimum_domain_coverage": 0.4007421150278293,
+        "raw_overall_coverage": 0.7633979620359311,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 0.2527472527472527,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0637366099558916,
+        "stability_spearman": 0.963535286949279,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "exploratory",
+      "formula": "mean(1[O_ij<=k])",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": false,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6_1.low_frequency_pair_share",
+      "knowledge_unit": "unordered cited-source pair",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "thresholded_pair_rarity",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null with fewer than two mapped sources.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "LEE2015"
+      ],
+      "paper_application_source_ids": [
+        "FONTANA2020"
+      ],
+      "parameters": {
+        "maximum_prior_count": 1
+      },
+      "redundancy_group": "rarity_threshold_variants",
+      "required_data": [
+        "strictly prior source-pair counts"
+      ],
+      "validation_source_ids": [
+        "FONTANA2020"
+      ]
+    },
+    "A1.MEAN_SURPRISAL": {
+      "angle_id": "A1_COMBINATION_RARITY",
+      "candidate_id": "A1.MEAN_SURPRISAL",
+      "code_name": "source_pair_mean_surprisal",
+      "decision_reason": "The arithmetic mean of transformed commonness is a transparent project-defined distribution summary, but Lee et al. define the lower-tail Novelty U rather than this mean. It therefore lacks a peer-reviewed original formula and paper-level application as this exact statistic and cannot enter the primary or sensitivity model.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.943295019157088,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 0.9860312243221035,
+        "raw_minimum_domain_coverage": 0.3896103896103896,
+        "raw_overall_coverage": 0.7485579244276167,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 1.376146136015799,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.059031569618399,
+        "stability_spearman": 0.9638375998549784,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "exploratory",
+      "formula": "mean(-ln(O_ij*N/(N_i*N_j)))",
+      "gate_checks": {
+        "I1": false,
+        "I10": true,
+        "I2": false,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6_1.source_pair_mean_surprisal",
+      "knowledge_unit": "unordered cited-source pair",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "commonness_mean",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null without valid historical pair commonness values.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [],
+      "paper_application_source_ids": [],
+      "parameters": {
+        "zero_pair_smoothing": 0.5
+      },
+      "redundancy_group": "u_commonness_distribution",
+      "required_data": [
+        "strictly prior paper-source incidence"
+      ],
+      "validation_source_ids": [
+        "FONTANA2020"
+      ]
+    },
+    "A1.NOVELTY_U": {
+      "angle_id": "A1_COMBINATION_RARITY",
+      "candidate_id": "A1.NOVELTY_U",
+      "code_name": "novelty_u_t0_source",
+      "decision_reason": "Implemented candidate retained for sensitivity; it either failed a primary gate or lost a frozen redundancy-family competition.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": 0.0,
+        "approximation_spearman": 1.0,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.943295019157088,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 0.9860312243221035,
+        "raw_minimum_domain_coverage": 0.3896103896103896,
+        "raw_overall_coverage": 0.7485579244276167,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 0.116506844859807,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.1763186175255416,
+        "stability_spearman": 0.8776076572520445,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "sensitivity",
+      "formula": "-ln(Q0.10((O_ij+zero_rule)*N/(N_i*N_j)))",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": false,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6.novelty_u",
+      "knowledge_unit": "unordered cited-source pair",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "commonness_lower_tail",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null with fewer than two mapped sources or without a historical denominator.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "LEE2015"
+      ],
+      "paper_application_source_ids": [
+        "LEE2015",
+        "BORNMANN2019"
+      ],
+      "parameters": {
+        "quantile": 0.1,
+        "zero_pair_smoothing": 0.5
+      },
+      "redundancy_group": "u_commonness_tail",
+      "required_data": [
+        "strictly prior paper-source incidence"
+      ],
+      "validation_source_ids": [
+        "BORNMANN2019",
+        "FONTANA2020"
+      ]
+    },
+    "A1.REFERENCE_OVERLAP": {
+      "angle_id": "A1_COMBINATION_RARITY",
+      "candidate_id": "A1.REFERENCE_OVERLAP",
+      "code_name": "reference_overlap_novelty_t0",
+      "decision_reason": "First outcome-blind eligible representative in the frozen A1_REFERENCE_OVERLAP priority order.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 0.54375,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 0.935651576830644,
+        "raw_minimum_domain_coverage": 0.1743970315398886,
+        "raw_overall_coverage": 0.6876477015729423,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 0.9763116221345208,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.002489318867625,
+        "stability_spearman": 0.9507885942473684,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "primary",
+      "formula": "1-mean_j(|R_i intersection R_j|/|R_i union R_j|)",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6_1.reference_overlap_novelty",
+      "knowledge_unit": "focal reference set versus prior same-domain papers sharing at least one reference",
+      "local_computability": "F2_local_snapshot",
+      "mathematical_family": "prior_reference_overlap_mean",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null without a valid strictly prior bibliography or an eligible prior same-field Nature-background comparison record.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "MATSUMOTO2021"
+      ],
+      "paper_application_source_ids": [
+        "MATSUMOTO2021"
+      ],
+      "parameters": {
+        "cociting_window_years": "all_prior",
+        "comparison_scope": "strictly prior records in the complete frozen Nature v5 background sharing at least one reference and the same frozen OpenAlex primary field",
+        "corpus_scope_adaptation": "Matsumoto comparison universe restricted to the complete locally frozen Nature v5 target background",
+        "published_window_variant": "Matsumoto et al. (2021) all-reference/all-co-citing pattern",
+        "reference_window_years": "all_prior",
+        "taxonomy_adaptation": "Matsumoto exact subject-category matching implemented with the frozen OpenAlex primary-field taxonomy"
+      },
+      "redundancy_group": "reference_overlap_scope",
+      "required_data": [
+        "strictly prior same-domain Nature-background reference lists"
+      ],
+      "validation_source_ids": [
+        "MATSUMOTO2021"
+      ]
+    },
+    "A1.TOPIC_CLOUD_NOVELTY": {
+      "angle_id": "A1_COMBINATION_RARITY",
+      "candidate_id": "A1.TOPIC_CLOUD_NOVELTY",
+      "code_name": "topic_cloud_model_novelty",
+      "decision_reason": "The topic/cloud family is outside the frozen reference-based operational angle and requires unavailable text plus trained models.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "nan",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.0,
+        "nondegenerate_test_pass": false,
+        "overall_coverage": 0.0,
+        "raw_minimum_domain_coverage": 0.0,
+        "raw_overall_coverage": 0.0,
+        "relative_error_denominator_policy": "absolute_value_epsilon",
+        "relative_error_scale_floor": null,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": null,
+        "stability_spearman": null,
+        "temporal_test_pass": false,
+        "total_n": 118059,
+        "toy_test_pass": false
+      },
+      "final_role": "excluded",
+      "formula": "source-defined topic-model features aggregated by a fuzzy cloud novelty model",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": false,
+        "I3": false,
+        "I4": false,
+        "I5": true,
+        "I6": false,
+        "I7": false,
+        "I8": false,
+        "I9": false
+      },
+      "implementation_name": null,
+      "knowledge_unit": "paper topic distribution",
+      "local_computability": "F3_external_required",
+      "mathematical_family": "topic_cloud_novelty",
+      "maximum_information_time": "all fitted models must stop before publication",
+      "missing_definition": "Null without paper text and a completely frozen historical topic/cloud model.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "WANG2024"
+      ],
+      "paper_application_source_ids": [
+        "WANG2024"
+      ],
+      "parameters": {
+        "topic_and_cloud_models": "source-defined"
+      },
+      "redundancy_group": "textual_topic_novelty",
+      "required_data": [
+        "paper text",
+        "historical topic model",
+        "cloud-model parameters"
+      ],
+      "validation_source_ids": []
+    },
+    "A2.FIELD_YEAR_PERCENTILE": {
+      "angle_id": "A2_ATYPICALITY_CONVENTIONALITY",
+      "candidate_id": "A2.FIELD_YEAR_PERCENTILE",
+      "code_name": "uzzi_p10_field_year_percentile",
+      "decision_reason": "Same-year percentile is a retrospective standardization and not a distinct mathematical signal.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "nan",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.0,
+        "nondegenerate_test_pass": false,
+        "overall_coverage": 0.0,
+        "raw_minimum_domain_coverage": 0.0,
+        "raw_overall_coverage": 0.0,
+        "relative_error_denominator_policy": "absolute_value_epsilon",
+        "relative_error_scale_floor": null,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": null,
+        "stability_spearman": null,
+        "temporal_test_pass": false,
+        "total_n": 118059,
+        "toy_test_pass": false
+      },
+      "final_role": "excluded",
+      "formula": "within-field-year empirical percentile of -P10 z",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": false,
+        "I5": true,
+        "I6": false,
+        "I7": false,
+        "I8": false,
+        "I9": false
+      },
+      "implementation_name": null,
+      "knowledge_unit": "paper",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "z_distribution_left_tail",
+      "maximum_information_time": "publication year cohort; retrospective normalization",
+      "missing_definition": "Null when source score or reference group is unavailable.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "TEPLITSKIY2022"
+      ],
+      "paper_application_source_ids": [
+        "TEPLITSKIY2022"
+      ],
+      "parameters": {
+        "reference_group": "domain12-year"
+      },
+      "redundancy_group": "uzzi_left_tail_quantiles",
+      "required_data": [
+        "same-year cohort source score"
+      ],
+      "validation_source_ids": []
+    },
+    "A2.HYPERGEOM_MEDIAN": {
+      "angle_id": "A2_ATYPICALITY_CONVENTIONALITY",
+      "candidate_id": "A2.HYPERGEOM_MEDIAN",
+      "code_name": "hypergeom_conventionality_median_t0",
+      "decision_reason": "First outcome-blind eligible representative in the frozen A2_CENTRE priority order.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": 0.0,
+        "approximation_spearman": 0.9999999997967338,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.943295019157088,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 0.9860312243221035,
+        "raw_minimum_domain_coverage": 0.3896103896103896,
+        "raw_overall_coverage": 0.7485579244276167,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 3.34345683330364,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0935282116377212,
+        "stability_spearman": 0.945357255793975,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "primary",
+      "formula": "Q0.50((O_ij-N_i*N_j/N)/sqrt(N_j*(N_i/N)*(1-N_i/N)*(N-N_j)/(N-1)))",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6_1.hypergeometric_pair_z_scores",
+      "knowledge_unit": "unordered cited-source pair across strictly prior papers",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "exact_hypergeometric_z_centre",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null without at least two mapped sources, positive source marginals, and a nondegenerate exact hypergeometric variance.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "YAN2016"
+      ],
+      "paper_application_source_ids": [
+        "UZZI2013",
+        "TEPLITSKIY2022"
+      ],
+      "parameters": {
+        "aggregation_origin": "Uzzi median aggregation",
+        "null": "exact fixed-marginal hypergeometric",
+        "quantile": 0.5
+      },
+      "redundancy_group": "hypergeometric_centre_statistics",
+      "required_data": [
+        "strictly prior paper-source incidence"
+      ],
+      "validation_source_ids": [
+        "FONTANA2020",
+        "ZHOU2022"
+      ]
+    },
+    "A2.HYPERGEOM_P10": {
+      "angle_id": "A2_ATYPICALITY_CONVENTIONALITY",
+      "candidate_id": "A2.HYPERGEOM_P10",
+      "code_name": "hypergeom_atypicality_p10_t0",
+      "decision_reason": "Implemented candidate retained for sensitivity; it either failed a primary gate or lost a frozen redundancy-family competition.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": 0.0,
+        "approximation_spearman": 0.9999999999872958,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.943295019157088,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 0.9860312243221035,
+        "raw_minimum_domain_coverage": 0.3896103896103896,
+        "raw_overall_coverage": 0.7485579244276167,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 0.6809452885293741,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.1204669833358825,
+        "stability_spearman": 0.8851914960430508,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "sensitivity",
+      "formula": "-Q0.10((O_ij-N_i*N_j/N)/sqrt(N_j*(N_i/N)*(1-N_i/N)*(N-N_j)/(N-1)))",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": false,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6_1.hypergeometric_pair_z_scores",
+      "knowledge_unit": "unordered cited-source pair across strictly prior papers",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "exact_hypergeometric_z_left_tail",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null without at least two mapped sources, positive source marginals, and a nondegenerate exact hypergeometric variance.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "YAN2016"
+      ],
+      "paper_application_source_ids": [
+        "UZZI2013",
+        "TEPLITSKIY2022"
+      ],
+      "parameters": {
+        "aggregation_origin": "Uzzi left-tail aggregation",
+        "null": "exact fixed-marginal hypergeometric",
+        "quantile": 0.1
+      },
+      "redundancy_group": "hypergeometric_left_tail_quantiles",
+      "required_data": [
+        "strictly prior paper-source incidence"
+      ],
+      "validation_source_ids": [
+        "FONTANA2020",
+        "ZHOU2022"
+      ]
+    },
+    "A2.UZZI_MEAN": {
+      "angle_id": "A2_ATYPICALITY_CONVENTIONALITY",
+      "candidate_id": "A2.UZZI_MEAN",
+      "code_name": "uzzi_z_mean_t0",
+      "decision_reason": "The source defines median conventionality, not mean; the mean is a non-source-defined centre variant.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "nan",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.0,
+        "nondegenerate_test_pass": false,
+        "overall_coverage": 0.0,
+        "raw_minimum_domain_coverage": 0.0,
+        "raw_overall_coverage": 0.0,
+        "relative_error_denominator_policy": "absolute_value_epsilon",
+        "relative_error_scale_floor": null,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": null,
+        "stability_spearman": null,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": false
+      },
+      "final_role": "excluded",
+      "formula": "mean((O_ij-E_ij)/SD_ij)",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": false,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": false,
+        "I7": false,
+        "I8": false,
+        "I9": false
+      },
+      "implementation_name": null,
+      "knowledge_unit": "unordered cited-source pair",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "z_distribution_centre",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null without valid z scores.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "UZZI2013"
+      ],
+      "paper_application_source_ids": [
+        "FONTANA2020"
+      ],
+      "parameters": {},
+      "redundancy_group": "uzzi_centre_statistics",
+      "required_data": [
+        "strictly prior paper-source incidence"
+      ],
+      "validation_source_ids": [
+        "FONTANA2020"
+      ]
+    },
+    "A2.UZZI_MEDIAN": {
+      "angle_id": "A2_ATYPICALITY_CONVENTIONALITY",
+      "candidate_id": "A2.UZZI_MEDIAN",
+      "code_name": "uzzi_conventionality_median_t0",
+      "decision_reason": "Implemented candidate retained for sensitivity; it either failed a primary gate or lost a frozen redundancy-family competition.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.943295019157088,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 0.9860312243221035,
+        "raw_minimum_domain_coverage": 0.3896103896103896,
+        "raw_overall_coverage": 0.7485579244276167,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 3.34345683330364,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0935282116377212,
+        "stability_spearman": 0.945357255793975,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "sensitivity",
+      "formula": "Q0.50((O_ij-E_ij)/SD_ij)",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": false,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6.uzzi_conventionality_from_marginals",
+      "knowledge_unit": "unordered cited-source pair",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "z_distribution_centre",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null without a nondegenerate source-pair z distribution.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "UZZI2013"
+      ],
+      "paper_application_source_ids": [
+        "UZZI2013",
+        "TEPLITSKIY2022"
+      ],
+      "parameters": {
+        "null": "fixed-marginal hypergeometric approximation",
+        "quantile": 0.5
+      },
+      "redundancy_group": "uzzi_centre_statistics",
+      "required_data": [
+        "strictly prior paper-source incidence"
+      ],
+      "validation_source_ids": [
+        "FONTANA2020"
+      ]
+    },
+    "A2.UZZI_P01": {
+      "angle_id": "A2_ATYPICALITY_CONVENTIONALITY",
+      "candidate_id": "A2.UZZI_P01",
+      "code_name": "uzzi_atypicality_p01_t0",
+      "decision_reason": "Published quantile variant; cannot add a primary degree of freedom beside source-defined P10.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "nan",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.0,
+        "nondegenerate_test_pass": false,
+        "overall_coverage": 0.0,
+        "raw_minimum_domain_coverage": 0.0,
+        "raw_overall_coverage": 0.0,
+        "relative_error_denominator_policy": "absolute_value_epsilon",
+        "relative_error_scale_floor": null,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": null,
+        "stability_spearman": null,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": false
+      },
+      "final_role": "sensitivity",
+      "formula": "-Q0.01(z_ij)",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": false,
+        "I7": false,
+        "I8": false,
+        "I9": false
+      },
+      "implementation_name": null,
+      "knowledge_unit": "unordered cited-source pair",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "z_distribution_left_tail",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null without valid z scores.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "UZZI2013"
+      ],
+      "paper_application_source_ids": [
+        "SHIBAYAMA2021"
+      ],
+      "parameters": {
+        "quantile": 0.01
+      },
+      "redundancy_group": "uzzi_left_tail_quantiles",
+      "required_data": [
+        "strictly prior paper-source incidence"
+      ],
+      "validation_source_ids": []
+    },
+    "A2.UZZI_P10": {
+      "angle_id": "A2_ATYPICALITY_CONVENTIONALITY",
+      "candidate_id": "A2.UZZI_P10",
+      "code_name": "uzzi_atypicality_p10_t0",
+      "decision_reason": "Implemented candidate retained for sensitivity; it either failed a primary gate or lost a frozen redundancy-family competition.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.943295019157088,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 0.9860312243221035,
+        "raw_minimum_domain_coverage": 0.3896103896103896,
+        "raw_overall_coverage": 0.7485579244276167,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 0.6809452885293741,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.1204669833358825,
+        "stability_spearman": 0.8851914960430508,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "sensitivity",
+      "formula": "-Q0.10((O_ij-E_ij)/SD_ij)",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": false,
+        "I8": false,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6.uzzi_atypicality_from_marginals",
+      "knowledge_unit": "unordered cited-source pair",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "z_distribution_left_tail",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null without a nondegenerate source-pair z distribution.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "UZZI2013"
+      ],
+      "paper_application_source_ids": [
+        "UZZI2013",
+        "TEPLITSKIY2022"
+      ],
+      "parameters": {
+        "null": "fixed-marginal hypergeometric approximation",
+        "quantile": 0.1
+      },
+      "redundancy_group": "uzzi_left_tail_quantiles",
+      "required_data": [
+        "strictly prior paper-source incidence"
+      ],
+      "validation_source_ids": [
+        "FONTANA2020"
+      ]
+    },
+    "A3.CONCEPT_TIME_NOVELTY": {
+      "angle_id": "A3_FIRST_TIME_COMBINATION",
+      "candidate_id": "A3.CONCEPT_TIME_NOVELTY",
+      "code_name": "concept_pair_time_novelty",
+      "decision_reason": "It measures first use of controlled textual concepts rather than first co-citation of frozen knowledge sources, and no cross-domain concept history is locally frozen.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "nan",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.0,
+        "nondegenerate_test_pass": false,
+        "overall_coverage": 0.0,
+        "raw_minimum_domain_coverage": 0.0,
+        "raw_overall_coverage": 0.0,
+        "relative_error_denominator_policy": "absolute_value_epsilon",
+        "relative_error_scale_floor": null,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": null,
+        "stability_spearman": null,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": false
+      },
+      "final_role": "excluded",
+      "formula": "paper aggregation of the age or first-observed year of concepts and concept pairs",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": false,
+        "I3": true,
+        "I4": false,
+        "I5": true,
+        "I6": false,
+        "I7": false,
+        "I8": false,
+        "I9": false
+      },
+      "implementation_name": null,
+      "knowledge_unit": "controlled concept or concept pair in a paper",
+      "local_computability": "F3_external_required",
+      "mathematical_family": "controlled_term_pair_time_novelty",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null without complete controlled concepts and history predating the focal paper.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "MISHRA2016"
+      ],
+      "paper_application_source_ids": [
+        "MISHRA2016"
+      ],
+      "parameters": {
+        "vocabulary": "MeSH in the source application"
+      },
+      "redundancy_group": "first_concept_occurrence",
+      "required_data": [
+        "paper concepts or MeSH terms",
+        "strictly prior concept history"
+      ],
+      "validation_source_ids": [
+        "DOMAINAGNOSTIC2026"
+      ]
+    },
+    "A3.FIRST_ANY": {
+      "angle_id": "A3_FIRST_TIME_COMBINATION",
+      "candidate_id": "A3.FIRST_ANY",
+      "code_name": "first_time_source_pair_any",
+      "decision_reason": "Implemented candidate retained for sensitivity; it either failed a primary gate or lost a frozen redundancy-family competition.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.998989898989899,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 0.999950943720183,
+        "raw_minimum_domain_coverage": 0.4007421150278293,
+        "raw_overall_coverage": 0.7633979620359311,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 1.0,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0,
+        "stability_spearman": 0.8295856379620876,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "sensitivity",
+      "formula": "1[sum 1(O_ij,<T0=0)>0]",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": false,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6_1.first_time_pair_any",
+      "knowledge_unit": "unordered cited-source pair",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "first_pair_incidence",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null with fewer than two mapped sources.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "WANG2017"
+      ],
+      "paper_application_source_ids": [
+        "WANG2017"
+      ],
+      "parameters": {},
+      "redundancy_group": "first_pair_incidence_aggregation",
+      "required_data": [
+        "strictly prior source-pair counts"
+      ],
+      "validation_source_ids": [
+        "BORNMANN2019",
+        "FONTANA2020"
+      ]
+    },
+    "A3.FIRST_COUNT": {
+      "angle_id": "A3_FIRST_TIME_COMBINATION",
+      "candidate_id": "A3.FIRST_COUNT",
+      "code_name": "first_time_source_pair_count",
+      "decision_reason": "Implemented candidate retained for sensitivity; it either failed a primary gate or lost a frozen redundancy-family competition.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.998989898989899,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 0.999950943720183,
+        "raw_minimum_domain_coverage": 0.4007421150278293,
+        "raw_overall_coverage": 0.7633979620359311,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 19.0,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.197452229299363,
+        "stability_spearman": 0.9670600993432296,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "sensitivity",
+      "formula": "sum 1[O_ij,<T0=0]",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": false,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6_1.first_time_pair_count",
+      "knowledge_unit": "unordered cited-source pair",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "first_pair_incidence",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null with fewer than two mapped sources.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "WANG2017"
+      ],
+      "paper_application_source_ids": [
+        "WANG2017"
+      ],
+      "parameters": {},
+      "redundancy_group": "first_pair_incidence_aggregation",
+      "required_data": [
+        "strictly prior source-pair counts"
+      ],
+      "validation_source_ids": [
+        "FONTANA2020"
+      ]
+    },
+    "A3.FIRST_DISTANCE_MEAN": {
+      "angle_id": "A3_FIRST_TIME_COMBINATION",
+      "candidate_id": "A3.FIRST_DISTANCE_MEAN",
+      "code_name": "first_time_source_pair_distance_mean",
+      "decision_reason": "Known v6 technical debt: v6.1 derives the source-distance values without imputation, but this candidate remains excluded unless it passes the fixed overall and each-domain coverage gates.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.0013613674179397,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 0.0021707403819031,
+        "raw_minimum_domain_coverage": 0.000896860986547,
+        "raw_overall_coverage": 0.0015161910570138,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 0.8283347370506604,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0,
+        "stability_spearman": 0.942857142857143,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "excluded",
+      "formula": "mean(d_ij|O_ij,<T0=0)",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": false,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6.first_time_source_pair_distance_mean",
+      "knowledge_unit": "first-time cited-source pair",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "distance_weighted_first_pairs",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null when no first-time pair has a defined prior distance.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "WANG2017"
+      ],
+      "paper_application_source_ids": [
+        "WANG2017"
+      ],
+      "parameters": {
+        "distance": "1-cosine prior source-to-field citation profiles",
+        "profile_window_years": 5
+      },
+      "redundancy_group": "first_pair_distance_aggregation",
+      "required_data": [
+        "strictly prior source pair counts",
+        "strictly prior source citation profiles"
+      ],
+      "validation_source_ids": [
+        "FONTANA2020"
+      ]
+    },
+    "A3.FIRST_DISTANCE_SUM": {
+      "angle_id": "A3_FIRST_TIME_COMBINATION",
+      "candidate_id": "A3.FIRST_DISTANCE_SUM",
+      "code_name": "first_time_source_pair_distance_sum",
+      "decision_reason": "Candidate-specific technical-debt rule: the distance-weighted family remains excluded unless the locally derived historical source distances pass the fixed overall and each-domain coverage gates; no missing value may be imputed to obtain eligibility.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.0013613674179397,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 0.0021707403819031,
+        "raw_minimum_domain_coverage": 0.000896860986547,
+        "raw_overall_coverage": 0.0015161910570138,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 0.8283347370506604,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0,
+        "stability_spearman": 0.8285714285714287,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "excluded",
+      "formula": "sum d_ij*1[O_ij,<T0=0]",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": false,
+        "I7": false,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6_1.first_time_pair_distance_sum",
+      "knowledge_unit": "first-time cited-source pair",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "distance_weighted_first_pairs",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null when no first-time pair has a defined prior distance.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "WANG2017"
+      ],
+      "paper_application_source_ids": [
+        "WANG2017"
+      ],
+      "parameters": {
+        "distance": "1-cosine prior source-to-field citation profiles",
+        "profile_window_years": 5
+      },
+      "redundancy_group": "first_pair_distance_aggregation",
+      "required_data": [
+        "strictly prior source pair counts",
+        "strictly prior source citation profiles"
+      ],
+      "validation_source_ids": [
+        "FONTANA2020"
+      ]
+    },
+    "A3.FIRST_SHARE": {
+      "angle_id": "A3_FIRST_TIME_COMBINATION",
+      "candidate_id": "A3.FIRST_SHARE",
+      "code_name": "first_time_source_pair_share",
+      "decision_reason": "First outcome-blind eligible representative in the frozen A3_FIRST_INCIDENCE priority order.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.998989898989899,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 0.999950943720183,
+        "raw_minimum_domain_coverage": 0.4007421150278293,
+        "raw_overall_coverage": 0.7633979620359311,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 0.169229055258467,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0669151357660531,
+        "stability_spearman": 0.9575744198332984,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "primary",
+      "formula": "sum 1[O_ij,<T0=0]/number_valid_pairs",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6.first_time_source_pair_share",
+      "knowledge_unit": "unordered cited-source pair",
+      "local_computability": "F0_existing",
+      "mathematical_family": "first_pair_incidence",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null with fewer than two mapped sources.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "WANG2017"
+      ],
+      "paper_application_source_ids": [
+        "WANG2017"
+      ],
+      "parameters": {},
+      "redundancy_group": "first_pair_incidence_aggregation",
+      "required_data": [
+        "strictly prior source-pair counts"
+      ],
+      "validation_source_ids": [
+        "BORNMANN2019",
+        "FONTANA2020"
+      ]
+    },
+    "A3.FUTURE_REUSED": {
+      "angle_id": "A3_FIRST_TIME_COMBINATION",
+      "candidate_id": "A3.FUTURE_REUSED",
+      "code_name": "future_reused_first_time_pair_share",
+      "decision_reason": "Uses future reuse and therefore violates the zero-leakage publication-time rule.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "nan",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.0,
+        "nondegenerate_test_pass": false,
+        "overall_coverage": 0.0,
+        "raw_minimum_domain_coverage": 0.0,
+        "raw_overall_coverage": 0.0,
+        "relative_error_denominator_policy": "absolute_value_epsilon",
+        "relative_error_scale_floor": null,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": null,
+        "stability_spearman": null,
+        "temporal_test_pass": false,
+        "total_n": 118059,
+        "toy_test_pass": false
+      },
+      "final_role": "excluded",
+      "formula": "share of first-time pairs reused in future years",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": false,
+        "I4": false,
+        "I5": true,
+        "I6": false,
+        "I7": false,
+        "I8": true,
+        "I9": false
+      },
+      "implementation_name": null,
+      "knowledge_unit": "first-time cited-source pair",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "future_confirmed_first_pairs",
+      "maximum_information_time": "after publication",
+      "missing_definition": "Not applicable to publication-time evidence.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "WANG2017"
+      ],
+      "paper_application_source_ids": [
+        "WANG2017"
+      ],
+      "parameters": {},
+      "redundancy_group": "future_confirmed_first_pairs",
+      "required_data": [
+        "post-publication pair reuse"
+      ],
+      "validation_source_ids": [
+        "BORNMANN2019"
+      ]
+    },
+    "A3.NEW_COMPONENT_SHARE": {
+      "angle_id": "A3_FIRST_TIME_COMBINATION",
+      "candidate_id": "A3.NEW_COMPONENT_SHARE",
+      "code_name": "new_knowledge_component_share",
+      "decision_reason": "The frozen data contain cited sources and fields but not a source-faithful, cross-domain historical keyword/component view.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "nan",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.0,
+        "nondegenerate_test_pass": false,
+        "overall_coverage": 0.0,
+        "raw_minimum_domain_coverage": 0.0,
+        "raw_overall_coverage": 0.0,
+        "relative_error_denominator_policy": "absolute_value_epsilon",
+        "relative_error_scale_floor": null,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": null,
+        "stability_spearman": null,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": false
+      },
+      "final_role": "excluded",
+      "formula": "number of components absent from prior literature divided by focal component count",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": false,
+        "I3": true,
+        "I4": false,
+        "I5": true,
+        "I6": false,
+        "I7": false,
+        "I8": false,
+        "I9": false
+      },
+      "implementation_name": null,
+      "knowledge_unit": "paper keyword or knowledge component",
+      "local_computability": "F3_external_required",
+      "mathematical_family": "new_component_incidence",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null without consistently extracted components and complete prior history.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "YAN2020"
+      ],
+      "paper_application_source_ids": [
+        "YAN2020"
+      ],
+      "parameters": {
+        "component_definition": "source-defined keywords"
+      },
+      "redundancy_group": "first_component_occurrence",
+      "required_data": [
+        "paper keywords or components",
+        "strictly prior component history"
+      ],
+      "validation_source_ids": []
+    },
+    "A3.QUESTION_METHOD_COMBINATION": {
+      "angle_id": "A3_FIRST_TIME_COMBINATION",
+      "candidate_id": "A3.QUESTION_METHOD_COMBINATION",
+      "code_name": "research_question_method_novelty",
+      "decision_reason": "This is a valid semantic combination family but is not computable from the frozen citation/OpenAlex tables and is not the cited-source first-combination construct.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "nan",
+        "eligible_n": 81539,
+        "minimum_domain_coverage": 0.0,
+        "nondegenerate_test_pass": false,
+        "overall_coverage": 0.0,
+        "raw_minimum_domain_coverage": 0.0,
+        "raw_overall_coverage": 0.0,
+        "relative_error_denominator_policy": "absolute_value_epsilon",
+        "relative_error_scale_floor": null,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": null,
+        "stability_spearman": null,
+        "temporal_test_pass": false,
+        "total_n": 118059,
+        "toy_test_pass": false
+      },
+      "final_role": "excluded",
+      "formula": "source-defined semantic atypicality of the focal question-method combination against prior papers",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": false,
+        "I3": false,
+        "I4": false,
+        "I5": true,
+        "I6": false,
+        "I7": false,
+        "I8": false,
+        "I9": false
+      },
+      "implementation_name": null,
+      "knowledge_unit": "research-question and method representation",
+      "local_computability": "F3_external_required",
+      "mathematical_family": "question_method_semantic_combination",
+      "maximum_information_time": "all comparison papers and fitted representations must predate publication",
+      "missing_definition": "Null without full text, question/method extraction and a historically frozen semantic reference set.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "LUO2022"
+      ],
+      "paper_application_source_ids": [
+        "LUO2022"
+      ],
+      "parameters": {
+        "extraction_and_embedding": "source-defined"
+      },
+      "redundancy_group": "semantic_component_combination",
+      "required_data": [
+        "paper text",
+        "question and method extraction",
+        "historical embeddings"
+      ],
+      "validation_source_ids": []
+    },
+    "A4.GINI_BALANCE": {
+      "angle_id": "A4_KNOWLEDGE_BREADTH_BALANCE",
+      "candidate_id": "A4.GINI_BALANCE",
+      "code_name": "field_gini_balance",
+      "decision_reason": "First outcome-blind eligible representative in the frozen A4_BALANCE priority order.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 1.0,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 1.0,
+        "raw_minimum_domain_coverage": 0.4526901669758812,
+        "raw_overall_coverage": 0.7831169161182121,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 0.5333333333333333,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0562218890554718,
+        "stability_spearman": 0.9048352365676576,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "primary",
+      "formula": "1-Gini(p_1,...,p_V) over occupied categories",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_gini_balance",
+      "knowledge_unit": "reference-field share distribution",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "category_balance",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null with no valid field; one occupied field has within-support balance one.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "STIRLING2007"
+      ],
+      "paper_application_source_ids": [
+        "WANG2015",
+        "LEYDESDORFF2019"
+      ],
+      "parameters": {
+        "support": "occupied categories"
+      },
+      "redundancy_group": "balance_indices",
+      "required_data": [
+        "strictly prior reference fields"
+      ],
+      "validation_source_ids": [
+        "WANG2015"
+      ]
+    },
+    "A4.GINI_SIMPSON": {
+      "angle_id": "A4_KNOWLEDGE_BREADTH_BALANCE",
+      "candidate_id": "A4.GINI_SIMPSON",
+      "code_name": "field_gini_simpson",
+      "decision_reason": "Implemented candidate retained for sensitivity; it either failed a primary gate or lost a frozen redundancy-family competition.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 1.0,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 1.0,
+        "raw_minimum_domain_coverage": 0.4526901669758812,
+        "raw_overall_coverage": 0.7831169161182121,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 0.5185185185185185,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0450981482511259,
+        "stability_spearman": 0.9721088468777218,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "sensitivity",
+      "formula": "1-sum p_k^2",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_gini_simpson",
+      "knowledge_unit": "reference-field share distribution",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "category_balance",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null with no valid field.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "STIRLING2007"
+      ],
+      "paper_application_source_ids": [
+        "WANG2015"
+      ],
+      "parameters": {},
+      "redundancy_group": "balance_indices",
+      "required_data": [
+        "strictly prior reference fields"
+      ],
+      "validation_source_ids": [
+        "WANG2015"
+      ]
+    },
+    "A4.HHI": {
+      "angle_id": "A4_KNOWLEDGE_BREADTH_BALANCE",
+      "candidate_id": "A4.HHI",
+      "code_name": "field_hhi",
+      "decision_reason": "Exact affine complement of Gini-Simpson and therefore cannot be an independent feature.",
+      "direction": "lower_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 1.0,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 1.0,
+        "raw_minimum_domain_coverage": 0.4526901669758812,
+        "raw_overall_coverage": 0.7831169161182121,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 0.4814814814814815,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0455840455840457,
+        "stability_spearman": 0.9721088468777218,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "excluded",
+      "formula": "sum p_k^2",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_hhi",
+      "knowledge_unit": "reference-field share distribution",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "category_balance",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null with no valid field.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "STIRLING2007"
+      ],
+      "paper_application_source_ids": [
+        "WANG2015"
+      ],
+      "parameters": {},
+      "redundancy_group": "balance_indices",
+      "required_data": [
+        "strictly prior reference fields"
+      ],
+      "validation_source_ids": []
+    },
+    "A4.HILL_Q0": {
+      "angle_id": "A4_KNOWLEDGE_BREADTH_BALANCE",
+      "candidate_id": "A4.HILL_Q0",
+      "code_name": "field_hill_q0",
+      "decision_reason": "Exactly identical to category variety.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 1.0,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 1.0,
+        "raw_minimum_domain_coverage": 0.4526901669758812,
+        "raw_overall_coverage": 0.7831169161182121,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 4.0,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0,
+        "stability_spearman": 0.9442428099122956,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "excluded",
+      "formula": "V",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_hill_number",
+      "knowledge_unit": "reference-field share distribution",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "hill_effective_categories",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null with no valid field.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "HILL1973"
+      ],
+      "paper_application_source_ids": [
+        "ZHANG2016"
+      ],
+      "parameters": {
+        "order": 0
+      },
+      "redundancy_group": "hill_orders",
+      "required_data": [
+        "strictly prior reference fields"
+      ],
+      "validation_source_ids": []
+    },
+    "A4.HILL_Q1": {
+      "angle_id": "A4_KNOWLEDGE_BREADTH_BALANCE",
+      "candidate_id": "A4.HILL_Q1",
+      "code_name": "field_hill_q1",
+      "decision_reason": "Implemented candidate retained for sensitivity; it either failed a primary gate or lost a frozen redundancy-family competition.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 1.0,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 1.0,
+        "raw_minimum_domain_coverage": 0.4526901669758812,
+        "raw_overall_coverage": 0.7831169161182121,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 2.539770918625216,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0482352724870333,
+        "stability_spearman": 0.9682990241749424,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "sensitivity",
+      "formula": "exp(Shannon)",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_hill_number",
+      "knowledge_unit": "reference-field share distribution",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "hill_effective_categories",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null with no valid field.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "HILL1973"
+      ],
+      "paper_application_source_ids": [
+        "ZHANG2016"
+      ],
+      "parameters": {
+        "order": 1
+      },
+      "redundancy_group": "hill_orders",
+      "required_data": [
+        "strictly prior reference fields"
+      ],
+      "validation_source_ids": []
+    },
+    "A4.HILL_Q2": {
+      "angle_id": "A4_KNOWLEDGE_BREADTH_BALANCE",
+      "candidate_id": "A4.HILL_Q2",
+      "code_name": "field_hill_q2",
+      "decision_reason": "Implemented candidate retained for sensitivity; it either failed a primary gate or lost a frozen redundancy-family competition.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 1.0,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 1.0,
+        "raw_minimum_domain_coverage": 0.4526901669758812,
+        "raw_overall_coverage": 0.7831169161182121,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 2.0769230769230766,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0454189916823223,
+        "stability_spearman": 0.9721121835932304,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "sensitivity",
+      "formula": "1/sum p_k^2",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_hill_number",
+      "knowledge_unit": "reference-field share distribution",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "hill_effective_categories",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null with no valid field.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "HILL1973"
+      ],
+      "paper_application_source_ids": [
+        "ZHANG2016"
+      ],
+      "parameters": {
+        "order": 2
+      },
+      "redundancy_group": "hill_orders",
+      "required_data": [
+        "strictly prior reference fields"
+      ],
+      "validation_source_ids": []
+    },
+    "A4.OTHER_FIELD_SHARE": {
+      "angle_id": "A4_KNOWLEDGE_BREADTH_BALANCE",
+      "candidate_id": "A4.OTHER_FIELD_SHARE",
+      "code_name": "reference_other_field_share",
+      "decision_reason": "First outcome-blind eligible representative in the frozen A4_FOCAL_BREADTH priority order.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 1.0,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 1.0,
+        "raw_minimum_domain_coverage": 0.4526901669758812,
+        "raw_overall_coverage": 0.7831169161182121,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 0.4090909090909091,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0525686977299881,
+        "stability_spearman": 0.9853635726735278,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "primary",
+      "formula": "mean(1[field_ref != field_focal])",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_other_field_share",
+      "knowledge_unit": "reference field relative to focal field",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "focal_field_breadth",
+      "maximum_information_time": "publication time",
+      "missing_definition": "Null without a focal field or valid reference fields.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "WANG2015"
+      ],
+      "paper_application_source_ids": [
+        "WANG2015"
+      ],
+      "parameters": {
+        "taxonomy": "frozen OpenAlex primary field"
+      },
+      "redundancy_group": "focal_field_breadth",
+      "required_data": [
+        "focal primary field",
+        "strictly prior reference fields"
+      ],
+      "validation_source_ids": [
+        "WANG2015"
+      ]
+    },
+    "A4.PIELOU": {
+      "angle_id": "A4_KNOWLEDGE_BREADTH_BALANCE",
+      "candidate_id": "A4.PIELOU",
+      "code_name": "field_pielou_evenness",
+      "decision_reason": "Implemented candidate retained for sensitivity; it either failed a primary gate or lost a frozen redundancy-family competition.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 0.8684009181331293,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 0.9762494482318896,
+        "raw_minimum_domain_coverage": 0.3896103896103896,
+        "raw_overall_coverage": 0.7307278564107776,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 0.6908140210976048,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0502463480043704,
+        "stability_spearman": 0.9433218426173616,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "sensitivity",
+      "formula": "Shannon entropy / ln(V)",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6.field_pielou_evenness",
+      "knowledge_unit": "reference-field share distribution",
+      "local_computability": "F0_existing",
+      "mathematical_family": "category_balance",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Structurally null when V<2.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "PIELOU1966"
+      ],
+      "paper_application_source_ids": [
+        "RAFOLS2010"
+      ],
+      "parameters": {
+        "support": "occupied categories"
+      },
+      "redundancy_group": "balance_indices",
+      "required_data": [
+        "strictly prior reference fields"
+      ],
+      "validation_source_ids": [
+        "WANG2015"
+      ]
+    },
+    "A4.RELATIVE_VARIETY": {
+      "angle_id": "A4_KNOWLEDGE_BREADTH_BALANCE",
+      "candidate_id": "A4.RELATIVE_VARIETY",
+      "code_name": "field_relative_variety",
+      "decision_reason": "Implemented candidate retained for sensitivity; it either failed a primary gate or lost a frozen redundancy-family competition.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 1.0,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 1.0,
+        "raw_minimum_domain_coverage": 0.4526901669758812,
+        "raw_overall_coverage": 0.7831169161182121,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 0.1538461538461538,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0,
+        "stability_spearman": 0.9442428099122956,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "sensitivity",
+      "formula": "occupied categories / 26 frozen categories",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_relative_variety",
+      "knowledge_unit": "reference field",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "category_variety",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null when no valid reference field exists.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "LEYDESDORFF2019"
+      ],
+      "paper_application_source_ids": [
+        "LEYDESDORFF2019"
+      ],
+      "parameters": {
+        "total_categories": 26
+      },
+      "redundancy_group": "variety_rescalings",
+      "required_data": [
+        "strictly prior reference fields"
+      ],
+      "validation_source_ids": []
+    },
+    "A4.SHANNON": {
+      "angle_id": "A4_KNOWLEDGE_BREADTH_BALANCE",
+      "candidate_id": "A4.SHANNON",
+      "code_name": "field_shannon_entropy",
+      "decision_reason": "Implemented candidate retained for sensitivity; it either failed a primary gate or lost a frozen redundancy-family competition.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 1.0,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 1.0,
+        "raw_minimum_domain_coverage": 0.4526901669758812,
+        "raw_overall_coverage": 0.7831169161182121,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 0.9320738874454946,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0547284388641604,
+        "stability_spearman": 0.9683000520319834,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "sensitivity",
+      "formula": "-sum p_k ln p_k",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_shannon_entropy",
+      "knowledge_unit": "reference-field share distribution",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "category_balance",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null with no valid field.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "STIRLING2007"
+      ],
+      "paper_application_source_ids": [
+        "WANG2015",
+        "RAFOLS2010"
+      ],
+      "parameters": {
+        "log_base": "e"
+      },
+      "redundancy_group": "balance_indices",
+      "required_data": [
+        "strictly prior reference fields"
+      ],
+      "validation_source_ids": [
+        "WANG2015"
+      ]
+    },
+    "A4.VARIETY": {
+      "angle_id": "A4_KNOWLEDGE_BREADTH_BALANCE",
+      "candidate_id": "A4.VARIETY",
+      "code_name": "field_variety",
+      "decision_reason": "First outcome-blind eligible representative in the frozen A4_VARIETY priority order.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 1.0,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 1.0,
+        "raw_minimum_domain_coverage": 0.4526901669758812,
+        "raw_overall_coverage": 0.7831169161182121,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 4.0,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0,
+        "stability_spearman": 0.9442428099122956,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "primary",
+      "formula": "number of occupied reference-field categories",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6.field_variety",
+      "knowledge_unit": "reference field",
+      "local_computability": "F0_existing",
+      "mathematical_family": "category_variety",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null when no valid reference field exists.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "STIRLING2007"
+      ],
+      "paper_application_source_ids": [
+        "WANG2015",
+        "RAFOLS2010"
+      ],
+      "parameters": {
+        "taxonomy": "frozen OpenAlex primary field"
+      },
+      "redundancy_group": "variety_rescalings",
+      "required_data": [
+        "strictly prior reference fields"
+      ],
+      "validation_source_ids": [
+        "WANG2015"
+      ]
+    },
+    "A5.BRIDGE_SHARE": {
+      "angle_id": "A5_COGNITIVE_DISTANCE_INTEGRATION",
+      "candidate_id": "A5.BRIDGE_SHARE",
+      "code_name": "intercommunity_bridge_reference_share",
+      "decision_reason": "The biomedical chemical-network unit and community procedure do not map source-faithfully to the current all-domain compact view.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "nan",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 0.0,
+        "nondegenerate_test_pass": false,
+        "overall_coverage": 0.0,
+        "raw_minimum_domain_coverage": 0.0,
+        "raw_overall_coverage": 0.0,
+        "relative_error_denominator_policy": "absolute_value_epsilon",
+        "relative_error_scale_floor": null,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": null,
+        "stability_spearman": null,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": false
+      },
+      "final_role": "exploratory",
+      "formula": "share of focal relations bridging distinct historical communities",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": false,
+        "I4": true,
+        "I5": true,
+        "I6": false,
+        "I7": false,
+        "I8": false,
+        "I9": false
+      },
+      "implementation_name": null,
+      "knowledge_unit": "knowledge-network edge or reference relation",
+      "local_computability": "F2_local_snapshot",
+      "mathematical_family": "historical_community_bridging",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null without a reproducible strictly prior community partition.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "FOSTER2015"
+      ],
+      "paper_application_source_ids": [
+        "FOSTER2015"
+      ],
+      "parameters": {
+        "community_method": "must be frozen"
+      },
+      "redundancy_group": "network_integration",
+      "required_data": [
+        "strictly prior knowledge network",
+        "historical community partition"
+      ],
+      "validation_source_ids": []
+    },
+    "A5.DIV": {
+      "angle_id": "A5_COGNITIVE_DISTANCE_INTEGRATION",
+      "candidate_id": "A5.DIV",
+      "code_name": "field_div_index",
+      "decision_reason": "Implemented candidate retained for sensitivity; it either failed a primary gate or lost a frozen redundancy-family competition.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 0.8102524866105585,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 0.946404924223846,
+        "raw_minimum_domain_coverage": 0.3710575139146567,
+        "raw_overall_coverage": 0.705952108691417,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 0.0499458518484357,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0477790764707286,
+        "stability_spearman": 0.9585261273312506,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "sensitivity",
+      "formula": "relative_variety*(1-Gini)*mean_disparity",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6_1.div_index",
+      "knowledge_unit": "reference-field distribution and distance",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "multiplicative_div_composite",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null when a component is undefined.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "LEYDESDORFF2019"
+      ],
+      "paper_application_source_ids": [
+        "LEYDESDORFF2019"
+      ],
+      "parameters": {
+        "total_categories": 26
+      },
+      "redundancy_group": "integration_composites",
+      "required_data": [
+        "strictly prior reference fields",
+        "strictly prior field distances"
+      ],
+      "validation_source_ids": [
+        "LEYDESDORFF2019B"
+      ]
+    },
+    "A5.DIV_STAR": {
+      "angle_id": "A5_COGNITIVE_DISTANCE_INTEGRATION",
+      "candidate_id": "A5.DIV_STAR",
+      "code_name": "field_div_star",
+      "decision_reason": "Constant positive rescaling of DIV under the frozen 26-field taxonomy.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "nan",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 0.0,
+        "nondegenerate_test_pass": false,
+        "overall_coverage": 0.0,
+        "raw_minimum_domain_coverage": 0.0,
+        "raw_overall_coverage": 0.0,
+        "relative_error_denominator_policy": "absolute_value_epsilon",
+        "relative_error_scale_floor": null,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": null,
+        "stability_spearman": null,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "excluded",
+      "formula": "N*DIV",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": false,
+        "I7": false,
+        "I8": true,
+        "I9": false
+      },
+      "implementation_name": null,
+      "knowledge_unit": "reference-field distribution and distance",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "multiplicative_div_composite",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null when DIV is undefined.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "LEYDESDORFF2019B"
+      ],
+      "paper_application_source_ids": [
+        "LEYDESDORFF2019B"
+      ],
+      "parameters": {
+        "N": "taxonomy size"
+      },
+      "redundancy_group": "integration_composites",
+      "required_data": [
+        "DIV components"
+      ],
+      "validation_source_ids": []
+    },
+    "A5.FASTTEXT_LOF_SEMANTIC": {
+      "angle_id": "A5_COGNITIVE_DISTANCE_INTEGRATION",
+      "candidate_id": "A5.FASTTEXT_LOF_SEMANTIC",
+      "code_name": "fasttext_lof_semantic_novelty",
+      "decision_reason": "Document-level semantic outlier status is not reference-field integration, and the required text/model artifacts are not locally frozen.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "nan",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 0.0,
+        "nondegenerate_test_pass": false,
+        "overall_coverage": 0.0,
+        "raw_minimum_domain_coverage": 0.0,
+        "raw_overall_coverage": 0.0,
+        "relative_error_denominator_policy": "absolute_value_epsilon",
+        "relative_error_scale_floor": null,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": null,
+        "stability_spearman": null,
+        "temporal_test_pass": false,
+        "total_n": 118059,
+        "toy_test_pass": false
+      },
+      "final_role": "excluded",
+      "formula": "local outlier factor of a paper embedding in the source-defined historical semantic space",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": false,
+        "I3": false,
+        "I4": false,
+        "I5": true,
+        "I6": false,
+        "I7": false,
+        "I8": false,
+        "I9": false
+      },
+      "implementation_name": null,
+      "knowledge_unit": "paper text embedding relative to neighboring papers",
+      "local_computability": "F3_external_required",
+      "mathematical_family": "semantic_local_outlier",
+      "maximum_information_time": "comparison set and fitted model must predate publication",
+      "missing_definition": "Null without paper text, historical embeddings, neighbor count and a publication-time reference set.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "JEON2023"
+      ],
+      "paper_application_source_ids": [
+        "JEON2023"
+      ],
+      "parameters": {
+        "embedding": "fastText",
+        "outlier_model": "LOF"
+      },
+      "redundancy_group": "semantic_document_outlier",
+      "required_data": [
+        "paper text",
+        "frozen embedding model",
+        "strictly prior comparison papers"
+      ],
+      "validation_source_ids": []
+    },
+    "A5.LEINSTER_COBBOLD": {
+      "angle_id": "A5_COGNITIVE_DISTANCE_INTEGRATION",
+      "candidate_id": "A5.LEINSTER_COBBOLD",
+      "code_name": "leinster_cobbold_q2",
+      "decision_reason": "At q=2 with Z=1-d it is algebraically equivalent to the registered true-Rao transform.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "nan",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 0.0,
+        "nondegenerate_test_pass": false,
+        "overall_coverage": 0.0,
+        "raw_minimum_domain_coverage": 0.0,
+        "raw_overall_coverage": 0.0,
+        "relative_error_denominator_policy": "absolute_value_epsilon",
+        "relative_error_scale_floor": null,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": null,
+        "stability_spearman": null,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "sensitivity",
+      "formula": "1/sum_i p_i*(Zp)_i for q=2 and Z=1-d",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": false,
+        "I7": false,
+        "I8": true,
+        "I9": false
+      },
+      "implementation_name": null,
+      "knowledge_unit": "reference-field share and similarity",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "effective_similarity_diversity",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null without complete similarities.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "LEINSTER2012"
+      ],
+      "paper_application_source_ids": [
+        "ZHANG2016"
+      ],
+      "parameters": {
+        "order": 2,
+        "similarity": "1-distance"
+      },
+      "redundancy_group": "rao_monotone_transforms",
+      "required_data": [
+        "strictly prior reference fields",
+        "strictly prior field similarities"
+      ],
+      "validation_source_ids": []
+    },
+    "A5.LLM_SEMANTIC_GAIN": {
+      "angle_id": "A5_COGNITIVE_DISTANCE_INTEGRATION",
+      "candidate_id": "A5.LLM_SEMANTIC_GAIN",
+      "code_name": "abstract_token_semantic_gain",
+      "decision_reason": "The metric is source-backed but is a language-model representation shift, not reference-field cognitive integration, and requires unfrozen external text models.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "nan",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 0.0,
+        "nondegenerate_test_pass": false,
+        "overall_coverage": 0.0,
+        "raw_minimum_domain_coverage": 0.0,
+        "raw_overall_coverage": 0.0,
+        "relative_error_denominator_policy": "absolute_value_epsilon",
+        "relative_error_scale_floor": null,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": null,
+        "stability_spearman": null,
+        "temporal_test_pass": false,
+        "total_n": 118059,
+        "toy_test_pass": false
+      },
+      "final_role": "excluded",
+      "formula": "mean_t[1-cosine(embedding_model1(token_t),embedding_model2(token_t))]",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": false,
+        "I3": false,
+        "I4": false,
+        "I5": true,
+        "I6": false,
+        "I7": false,
+        "I8": false,
+        "I9": false
+      },
+      "implementation_name": null,
+      "knowledge_unit": "matched tokens encoded by two historical language models",
+      "local_computability": "F3_external_required",
+      "mathematical_family": "contextual_embedding_semantic_gain",
+      "maximum_information_time": "both model-training corpora must be publication-time bounded",
+      "missing_definition": "Null without abstracts, aligned tokenization and both versioned historical encoders.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "KRUZEN2026"
+      ],
+      "paper_application_source_ids": [
+        "DOMAINAGNOSTIC2026"
+      ],
+      "parameters": {
+        "models": "two source-defined dBERT models with different historical context"
+      },
+      "redundancy_group": "semantic_model_distance",
+      "required_data": [
+        "paper abstracts",
+        "two frozen historical language models"
+      ],
+      "validation_source_ids": [
+        "DOMAINAGNOSTIC2026"
+      ]
+    },
+    "A5.MAX_DISTANCE": {
+      "angle_id": "A5_COGNITIVE_DISTANCE_INTEGRATION",
+      "candidate_id": "A5.MAX_DISTANCE",
+      "code_name": "field_disparity_cosine_max",
+      "decision_reason": "Implemented candidate retained for sensitivity; it either failed a primary gate or lost a frozen redundancy-family competition.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 0.8102524866105585,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 0.946404924223846,
+        "raw_minimum_domain_coverage": 0.3710575139146567,
+        "raw_overall_coverage": 0.705952108691417,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 0.851562695755445,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0,
+        "stability_spearman": 0.9388540511583032,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "sensitivity",
+      "formula": "max d_kl",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_distance_quantile",
+      "knowledge_unit": "distinct occupied reference-field pair",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "unweighted_field_distance",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null with fewer than two occupied fields.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "STIRLING2007"
+      ],
+      "paper_application_source_ids": [
+        "SHIBAYAMA2021"
+      ],
+      "parameters": {
+        "quantile": 1.0
+      },
+      "redundancy_group": "distance_aggregation",
+      "required_data": [
+        "strictly prior field citation profiles"
+      ],
+      "validation_source_ids": []
+    },
+    "A5.MEAN_DISTANCE": {
+      "angle_id": "A5_COGNITIVE_DISTANCE_INTEGRATION",
+      "candidate_id": "A5.MEAN_DISTANCE",
+      "code_name": "field_disparity_cosine_mean",
+      "decision_reason": "First outcome-blind eligible representative in the frozen A5_UNWEIGHTED_DISTANCE priority order.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 0.8102524866105585,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 0.946404924223846,
+        "raw_minimum_domain_coverage": 0.3710575139146567,
+        "raw_overall_coverage": 0.705952108691417,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 0.6543042237631396,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0,
+        "stability_spearman": 0.9573134696467084,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "primary",
+      "formula": "mean(1-cosine(profile_k,profile_l))",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6.field_disparity_mean",
+      "knowledge_unit": "distinct occupied reference-field pair",
+      "local_computability": "F0_existing",
+      "mathematical_family": "unweighted_field_distance",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null with fewer than two occupied fields or incomplete distance coverage.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "STIRLING2007"
+      ],
+      "paper_application_source_ids": [
+        "WANG2015",
+        "LEYDESDORFF2019"
+      ],
+      "parameters": {
+        "profile_window_years": 5
+      },
+      "redundancy_group": "distance_aggregation",
+      "required_data": [
+        "strictly prior field citation profiles"
+      ],
+      "validation_source_ids": [
+        "WANG2015"
+      ]
+    },
+    "A5.NETWORK_COHERENCE": {
+      "angle_id": "A5_COGNITIVE_DISTANCE_INTEGRATION",
+      "candidate_id": "A5.NETWORK_COHERENCE",
+      "code_name": "reference_network_coherence",
+      "decision_reason": "Published as a two-component network construct; a single source-faithful, scalable paper-level implementation is not yet frozen.",
+      "direction": "two_axis",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "nan",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 0.0,
+        "nondegenerate_test_pass": false,
+        "overall_coverage": 0.0,
+        "raw_minimum_domain_coverage": 0.0,
+        "raw_overall_coverage": 0.0,
+        "relative_error_denominator_policy": "absolute_value_epsilon",
+        "relative_error_scale_floor": null,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": null,
+        "stability_spearman": null,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": false
+      },
+      "final_role": "exploratory",
+      "formula": "mean linkage strength and mean path length among focal knowledge elements",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": false,
+        "I4": true,
+        "I5": true,
+        "I6": false,
+        "I7": false,
+        "I8": false,
+        "I9": false
+      },
+      "implementation_name": null,
+      "knowledge_unit": "similarity network among references",
+      "local_computability": "F2_local_snapshot",
+      "mathematical_family": "network_coherence",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null without a connected and sufficiently covered reference similarity network.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "RAFOLS2010"
+      ],
+      "paper_application_source_ids": [
+        "RAFOLS2010"
+      ],
+      "parameters": {
+        "similarity": "must be frozen"
+      },
+      "redundancy_group": "network_integration",
+      "required_data": [
+        "reference similarity network"
+      ],
+      "validation_source_ids": []
+    },
+    "A5.P90_DISTANCE": {
+      "angle_id": "A5_COGNITIVE_DISTANCE_INTEGRATION",
+      "candidate_id": "A5.P90_DISTANCE",
+      "code_name": "field_disparity_cosine_p90",
+      "decision_reason": "Implemented candidate retained for sensitivity; it either failed a primary gate or lost a frozen redundancy-family competition.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 0.8102524866105585,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 0.946404924223846,
+        "raw_minimum_domain_coverage": 0.3710575139146567,
+        "raw_overall_coverage": 0.705952108691417,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 0.8146946228124305,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0,
+        "stability_spearman": 0.9415004317719574,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "sensitivity",
+      "formula": "Q0.90(d_kl)",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_distance_quantile",
+      "knowledge_unit": "distinct occupied reference-field pair",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "unweighted_field_distance",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null with fewer than two occupied fields.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "STIRLING2007"
+      ],
+      "paper_application_source_ids": [
+        "SHIBAYAMA2021"
+      ],
+      "parameters": {
+        "quantile": 0.9
+      },
+      "redundancy_group": "distance_aggregation",
+      "required_data": [
+        "strictly prior field citation profiles"
+      ],
+      "validation_source_ids": []
+    },
+    "A5.PORTER_INTEGRATION": {
+      "angle_id": "A5_COGNITIVE_DISTANCE_INTEGRATION",
+      "candidate_id": "A5.PORTER_INTEGRATION",
+      "code_name": "porter_integration",
+      "decision_reason": "Algebraically identical to the registered Rao-Stirling implementation.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "nan",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 0.0,
+        "nondegenerate_test_pass": false,
+        "overall_coverage": 0.0,
+        "raw_minimum_domain_coverage": 0.0,
+        "raw_overall_coverage": 0.0,
+        "relative_error_denominator_policy": "absolute_value_epsilon",
+        "relative_error_scale_floor": null,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": null,
+        "stability_spearman": null,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "excluded",
+      "formula": "sum_i sum_j p_i p_j d_ij",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": false,
+        "I7": false,
+        "I8": true,
+        "I9": false
+      },
+      "implementation_name": null,
+      "knowledge_unit": "reference-field share and pair distance",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "share_weighted_integration_composite",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Same as Rao-Stirling.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "PORTER2007"
+      ],
+      "paper_application_source_ids": [
+        "PORTER2007"
+      ],
+      "parameters": {},
+      "redundancy_group": "integration_composites",
+      "required_data": [
+        "strictly prior reference fields",
+        "strictly prior field distances"
+      ],
+      "validation_source_ids": [
+        "STIRLING2007"
+      ]
+    },
+    "A5.RAO_STIRLING": {
+      "angle_id": "A5_COGNITIVE_DISTANCE_INTEGRATION",
+      "candidate_id": "A5.RAO_STIRLING",
+      "code_name": "rao_stirling_integration",
+      "decision_reason": "First outcome-blind eligible representative in the frozen A5_COMPREHENSIVE_INDEX priority order.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 0.9418515684774292,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 0.9701554759919564,
+        "raw_minimum_domain_coverage": 0.4341372912801484,
+        "raw_overall_coverage": 0.7583411683988515,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 0.2710059704195436,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.053674578168678,
+        "stability_spearman": 0.9743273272194624,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "primary",
+      "formula": "sum_k sum_l p_k p_l d_kl",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6.rao_stirling_integration",
+      "knowledge_unit": "reference-field share and pair distance",
+      "local_computability": "F0_existing",
+      "mathematical_family": "share_weighted_integration_composite",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null without valid reference fields or complete required distances; one field is mathematically zero.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "RAO1982",
+        "STIRLING2007"
+      ],
+      "paper_application_source_ids": [
+        "PORTER2007",
+        "WANG2015",
+        "RAFOLS2010"
+      ],
+      "parameters": {
+        "profile_window_years": 5
+      },
+      "redundancy_group": "integration_composites",
+      "required_data": [
+        "strictly prior reference fields",
+        "strictly prior field citation profiles"
+      ],
+      "validation_source_ids": [
+        "WANG2015"
+      ]
+    },
+    "A5.SEMANTIC_DISTANCE": {
+      "angle_id": "A5_COGNITIVE_DISTANCE_INTEGRATION",
+      "candidate_id": "A5.SEMANTIC_DISTANCE",
+      "code_name": "reference_semantic_distance",
+      "decision_reason": "Would require an unfrozen external text model and the source model is biomedical rather than validated across all 12 natural-science domains.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "nan",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 0.0,
+        "nondegenerate_test_pass": false,
+        "overall_coverage": 0.0,
+        "raw_minimum_domain_coverage": 0.0,
+        "raw_overall_coverage": 0.0,
+        "relative_error_denominator_policy": "absolute_value_epsilon",
+        "relative_error_scale_floor": null,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": null,
+        "stability_spearman": null,
+        "temporal_test_pass": false,
+        "total_n": 118059,
+        "toy_test_pass": false
+      },
+      "final_role": "excluded",
+      "formula": "registered quantile of cosine distances among cited-reference embeddings",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": false,
+        "I4": false,
+        "I5": true,
+        "I6": false,
+        "I7": false,
+        "I8": false,
+        "I9": false
+      },
+      "implementation_name": null,
+      "knowledge_unit": "pair of cited paper texts",
+      "local_computability": "F3_external_required",
+      "mathematical_family": "semantic_reference_distance",
+      "maximum_information_time": "model and text must predate focal paper",
+      "missing_definition": "Null without title/abstract and a frozen source-faithful embedding model.",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "SHIBAYAMA2021"
+      ],
+      "paper_application_source_ids": [
+        "SHIBAYAMA2021"
+      ],
+      "parameters": {
+        "embedding_model": "source biomedical model unavailable as frozen cross-domain artifact"
+      },
+      "redundancy_group": "semantic_distance_quantiles",
+      "required_data": [
+        "cited paper text",
+        "frozen pretrained embedding model"
+      ],
+      "validation_source_ids": [
+        "SHIBAYAMA2021"
+      ]
+    },
+    "A5.TRUE_RS_2DS": {
+      "angle_id": "A5_COGNITIVE_DISTANCE_INTEGRATION",
+      "candidate_id": "A5.TRUE_RS_2DS",
+      "code_name": "rao_true_diversity_q2",
+      "decision_reason": "Implemented candidate retained for sensitivity; it either failed a primary gate or lost a frozen redundancy-family competition.",
+      "direction": "higher_more",
+      "empirical_screen": {
+        "approximation_median_relative_error": null,
+        "approximation_spearman": null,
+        "coverage_denominator_policy": "eligible_by_metric_family",
+        "eligible_n": 81556,
+        "minimum_domain_coverage": 0.9418515684774292,
+        "nondegenerate_test_pass": true,
+        "overall_coverage": 0.9701554759919564,
+        "raw_minimum_domain_coverage": 0.4341372912801484,
+        "raw_overall_coverage": 0.7583411683988515,
+        "relative_error_denominator_policy": "median_absolute_floor",
+        "relative_error_scale_floor": 1.371753346972554,
+        "screening_artifact_id": "sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a",
+        "stability_median_relative_error": 0.0232603144677923,
+        "stability_spearman": 0.9743273272194624,
+        "temporal_test_pass": true,
+        "total_n": 118059,
+        "toy_test_pass": true
+      },
+      "final_role": "sensitivity",
+      "formula": "1/(1-Rao-Stirling)",
+      "gate_checks": {
+        "I1": true,
+        "I10": true,
+        "I2": true,
+        "I3": true,
+        "I4": true,
+        "I5": true,
+        "I6": true,
+        "I7": true,
+        "I8": true,
+        "I9": true
+      },
+      "implementation_name": "aspr.nature_multihorizon.features_v6_1.true_diversity_from_rao",
+      "knowledge_unit": "reference-field share and similarity",
+      "local_computability": "F1_existing_tables",
+      "mathematical_family": "effective_similarity_diversity",
+      "maximum_information_time": "publication_year-1",
+      "missing_definition": "Null when Rao is missing or outside [0,1).",
+      "oof_used_for_selection": false,
+      "original_source_ids": [
+        "ZHANG2016",
+        "LEINSTER2012"
+      ],
+      "paper_application_source_ids": [
+        "ZHANG2016"
+      ],
+      "parameters": {
+        "order": 2
+      },
+      "redundancy_group": "rao_monotone_transforms",
+      "required_data": [
+        "Rao-Stirling"
+      ],
+      "validation_source_ids": []
+    }
+  },
+  "disclosure": "This is a post-v6, result-known, versioned multi-source systematic scoping evidence map. It is not a prospective preregistration, an exhaustive internet census, or a meta-analysis. R5 is a compliance-only role correction made after the R4 OOF: the explicitly predeclared distance-technical-debt rule is enforced without using labels or predictions to change any primary indicator, model, fold, threshold, or parameter. The corrected registry is frozen before the complete R5 OOF rerun. Final roles were generated from outcome-blind screening artifact sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a; no target label or OOF prediction was read.",
+  "literature_search_cutoff": "2026-07-24",
+  "network_policy_for_experiment": "forbidden",
+  "observation_angles": {
+    "A1_COMBINATION_RARITY": {
+      "angle_id": "A1_COMBINATION_RARITY",
+      "exclusion_rule": "Exclude threshold-only variants, monotone transforms, and any similarity reference set that is not frozen before publication.",
+      "inclusion_rule": "Include a paper-level rarity statistic with an explicit observed/expected or prior-overlap formula, T0 history, and independent application or validation.",
+      "label_zh": "组合稀有性",
+      "meaning": "The observed rarity or surprise of co-cited knowledge-source pairs relative to their strictly prior marginal prevalence.",
+      "source_ids": [
+        "LEE2015",
+        "BORNMANN2019",
+        "FONTANA2020",
+        "MATSUMOTO2021"
+      ]
+    },
+    "A2_ATYPICALITY_CONVENTIONALITY": {
+      "angle_id": "A2_ATYPICALITY_CONVENTIONALITY",
+      "exclusion_rule": "Exclude arbitrary quantiles, duplicate standardizations, and null models without convergence or exact-reference checks.",
+      "inclusion_rule": "Include the source-defined P10 novelty and median conventionality facets when the frozen null approximation matches its exact reference implementation.",
+      "label_zh": "非典型性与常规性",
+      "meaning": "The unusual left tail and conventional centre of the focal paper's distribution of source-pair null-model z scores.",
+      "source_ids": [
+        "UZZI2013",
+        "TEPLITSKIY2022",
+        "FONTANA2020",
+        "YAN2016",
+        "ZHOU2022"
+      ]
+    },
+    "A3_FIRST_TIME_COMBINATION": {
+      "angle_id": "A3_FIRST_TIME_COMBINATION",
+      "exclusion_rule": "Exclude future-confirmed reuse from T0, reference-count-dominated duplicates, and distance statistics below coverage/stability thresholds.",
+      "inclusion_rule": "Include ex-ante first-occurrence statistics whose denominator and history are explicit and contain no future reuse.",
+      "label_zh": "首次组合",
+      "meaning": "Whether and how strongly a paper joins knowledge-source pairs absent from the strictly prior literature.",
+      "source_ids": [
+        "WANG2017",
+        "BORNMANN2019",
+        "FONTANA2020"
+      ]
+    },
+    "A4_KNOWLEDGE_BREADTH_BALANCE": {
+      "angle_id": "A4_KNOWLEDGE_BREADTH_BALANCE",
+      "exclusion_rule": "Exclude strict monotone rescalings, algebraic complements, and multiple Hill orders as separate primary degrees of freedom.",
+      "inclusion_rule": "Retain theoretically distinct variety and balance families with paper-level scientometric use; choose one interpretable and stable representative within each family.",
+      "label_zh": "知识广度与均衡性",
+      "meaning": "The number, relative spread, and balance of scientific categories represented in a paper's strictly prior references.",
+      "source_ids": [
+        "STIRLING2007",
+        "WANG2015",
+        "RAFOLS2010",
+        "HILL1973"
+      ]
+    },
+    "A5_COGNITIVE_DISTANCE_INTEGRATION": {
+      "angle_id": "A5_COGNITIVE_DISTANCE_INTEGRATION",
+      "exclusion_rule": "Exclude duplicate composites, future-trained semantic spaces, and graph measures lacking scalable formula fidelity or local coverage.",
+      "inclusion_rule": "Retain an unweighted distance component and at most one share-weighted composite; require frozen pre-publication distance profiles.",
+      "label_zh": "认知距离与整合",
+      "meaning": "The cognitive disparity among referenced fields and the degree to which disparate fields are jointly integrated.",
+      "source_ids": [
+        "STIRLING2007",
+        "RAO1982",
+        "PORTER2007",
+        "RAFOLS2010",
+        "LEYDESDORFF2019",
+        "ZHANG2016",
+        "LEINSTER2012",
+        "SHIBAYAMA2021",
+        "FOSTER2015"
+      ]
+    }
+  },
+  "raw_data_policy": "local_frozen_only",
+  "registry_stage": "posthoc_versioned_extension_frozen_before_oof",
+  "registry_version": "6.1-screened-frozen-before-oof-2026-07-24",
+  "schema_version": "6.1.0",
+  "search_log_path": "configs/innovation_search_log_v6_1.json",
+  "search_log_sha256": "sha256:c05a5c1a6ddbb362174b7f08dc7d704e493aebb57ae6e0d60530ab59d5866934",
+  "selection_principle": "Admit every source-backed, publication-time, locally reproducible, sufficiently covered and reference-subsampling-stable mathematical family; retain only one primary implementation per family and choose without OOF. Close variants may enter sensitivity analysis only when their candidate-specific protocol does not require exclusion; the first-time source-pair distance technical debt remains excluded unless it passes the fixed coverage gates.",
+  "sources": {
+    "BORNMANN2019": {
+      "citation": "Bornmann L, Tekles A, Zhang HH, Ye FY (2019). Do we measure novelty when we analyze unusual combinations of cited references? Journal of Informetrics 13:100979.",
+      "doi": "10.1016/j.joi.2019.100979",
+      "peer_reviewed": true,
+      "source_id": "BORNMANN2019",
+      "source_role": "Independent convergent-validity comparison of Novelty U and W.",
+      "url": null
+    },
+    "DOMAINAGNOSTIC2026": {
+      "citation": "Kruzenshtern A, Dodonov V, Chechurin L (2026). Domain agnostic features for robust novelty assessment of scientific publication. Scientometrics.",
+      "doi": "10.1007/s11192-026-05687-x",
+      "peer_reviewed": true,
+      "source_id": "DOMAINAGNOSTIC2026",
+      "source_role": "Paper-level cross-domain application and stability analysis of token-loss and semantic-gain distributions.",
+      "url": null
+    },
+    "FONTANA2020": {
+      "citation": "Fontana M, Iori M, Montobbio F, Sinatra R (2020). New and atypical combinations. Research Policy 49:104063.",
+      "doi": "10.1016/j.respol.2020.104063",
+      "peer_reviewed": true,
+      "source_id": "FONTANA2020",
+      "source_role": "Independent construct and aggregation-level critique.",
+      "url": null
+    },
+    "FOSTER2015": {
+      "citation": "Foster JG, Rzhetsky A, Evans JA (2015). Tradition and Innovation in Scientists' Research Strategies. American Sociological Review 80:875-908.",
+      "doi": "10.1177/0003122415601618",
+      "peer_reviewed": true,
+      "source_id": "FOSTER2015",
+      "source_role": "Original network community consolidation and bridging strategies.",
+      "url": null
+    },
+    "HILL1973": {
+      "citation": "Hill MO (1973). Diversity and evenness: a unifying notation and its consequences. Ecology 54:427-432.",
+      "doi": "10.2307/1934352",
+      "peer_reviewed": true,
+      "source_id": "HILL1973",
+      "source_role": "Original Hill effective-number family.",
+      "url": null
+    },
+    "JEON2023": {
+      "citation": "Jeon D, Lee J, Ahn JM, Lee C (2023). Measuring the novelty of scientific publications: A fastText and local outlier factor approach. Journal of Informetrics 17:101450.",
+      "doi": "10.1016/j.joi.2023.101450",
+      "peer_reviewed": true,
+      "source_id": "JEON2023",
+      "source_role": "Paper-level semantic outlier novelty using text embeddings and local outlier factor.",
+      "url": null
+    },
+    "KRUZEN2026": {
+      "citation": "Kruzenshtern A, Dodonov V, Chechurin L (2026). AI-based metric for the scientific text novelty. World Conference of AI-Powered Innovation and TRIZ Methodology:367-378.",
+      "doi": "10.1007/978-3-032-08851-2_24",
+      "peer_reviewed": true,
+      "source_id": "KRUZEN2026",
+      "source_role": "Original average token negative-log-likelihood and contextual semantic-gain metrics.",
+      "url": null
+    },
+    "LEE2015": {
+      "citation": "Lee Y-N, Walsh JP, Wang J (2015). Creativity in scientific teams: Unpacking novelty and impact. Research Policy 44:684-697.",
+      "doi": "10.1016/j.respol.2014.10.007",
+      "peer_reviewed": true,
+      "source_id": "LEE2015",
+      "source_role": "Original paper-level Novelty U/commonness operationalization.",
+      "url": null
+    },
+    "LEINSTER2012": {
+      "citation": "Leinster T, Cobbold CA (2012). Measuring diversity: the importance of species similarity. Ecology 93:477-489.",
+      "doi": "10.1890/10-2402.1",
+      "peer_reviewed": true,
+      "source_id": "LEINSTER2012",
+      "source_role": "Foundational similarity-sensitive effective diversity family.",
+      "url": null
+    },
+    "LEYDESDORFF2019": {
+      "citation": "Leydesdorff L, Wagner CS, Bornmann L (2019). Interdisciplinarity as diversity in citation patterns among journals. Journal of Informetrics 13:255-269.",
+      "doi": "10.1016/j.joi.2018.12.006",
+      "peer_reviewed": true,
+      "source_id": "LEYDESDORFF2019",
+      "source_role": "DIV and citation-profile cosine disparity.",
+      "url": null
+    },
+    "LEYDESDORFF2019B": {
+      "citation": "Leydesdorff L, Wagner CS, Bornmann L (2019). Diversity measurement: Steps towards the measurement of interdisciplinarity? Journal of Informetrics 13:904-905.",
+      "doi": "10.1016/j.joi.2019.03.016",
+      "peer_reviewed": true,
+      "source_id": "LEYDESDORFF2019B",
+      "source_role": "DIV* effective-number refinement discussion.",
+      "url": null
+    },
+    "LUO2022": {
+      "citation": "Luo Z, Lu W, He J, Wang Y (2022). Combination of research questions and methods: A new measurement of scientific novelty. Journal of Informetrics 16:101282.",
+      "doi": "10.1016/j.joi.2022.101282",
+      "peer_reviewed": true,
+      "source_id": "LUO2022",
+      "source_role": "Paper-level semantic novelty of research-question and method combinations.",
+      "url": null
+    },
+    "MATSUMOTO2021": {
+      "citation": "Matsumoto K, Shibayama S, Kang B, Igami M (2021). Introducing a novelty indicator for scientific research. Scientometrics 126:6891-6915.",
+      "doi": "10.1007/s11192-021-04049-z",
+      "peer_reviewed": true,
+      "source_id": "MATSUMOTO2021",
+      "source_role": "Paper-level reference-overlap novelty with researcher validation.",
+      "url": null
+    },
+    "MISHRA2016": {
+      "citation": "Mishra S, Torvik VI (2016). Quantifying conceptual novelty in the biomedical literature. D-Lib Magazine 22(9/10).",
+      "doi": "10.1045/september2016-mishra",
+      "peer_reviewed": true,
+      "source_id": "MISHRA2016",
+      "source_role": "Paper-level time and volume novelty of controlled biomedical concepts and concept pairs.",
+      "url": null
+    },
+    "NOVELPY2022": {
+      "citation": "Pelletier P, Wirtz K (2022). Novelpy: A Python package to measure novelty and disruptiveness of bibliometric and patent data.",
+      "doi": null,
+      "peer_reviewed": false,
+      "source_id": "NOVELPY2022",
+      "source_role": "Discovery-only software catalog; never final formula evidence.",
+      "url": "https://arxiv.org/abs/2211.10346"
+    },
+    "PIELOU1966": {
+      "citation": "Pielou EC (1966). Shannon's formula as a measure of specific diversity: its use and misuse. American Naturalist 100:463-465.",
+      "doi": "10.1086/282439",
+      "peer_reviewed": true,
+      "source_id": "PIELOU1966",
+      "source_role": "Established normalized Shannon evenness.",
+      "url": null
+    },
+    "PORTER2007": {
+      "citation": "Porter AL, Cohen AS, Roessner JD, Perreault M (2007). Measuring researcher interdisciplinarity. Scientometrics 72:117-147.",
+      "doi": "10.1007/s11192-007-1700-5",
+      "peer_reviewed": true,
+      "source_id": "PORTER2007",
+      "source_role": "Paper-level integration score equivalent to Rao-Stirling.",
+      "url": null
+    },
+    "RAFOLS2010": {
+      "citation": "Rafols I, Meyer M (2010). Diversity and network coherence as indicators of interdisciplinarity. Scientometrics 82:263-287.",
+      "doi": "10.1007/s11192-009-0041-y",
+      "peer_reviewed": true,
+      "source_id": "RAFOLS2010",
+      "source_role": "Paper-level diversity, integration, and network coherence.",
+      "url": null
+    },
+    "RAFOLS2012": {
+      "citation": "Rafols I, Porter AL, Leydesdorff L (2012). Science overlay maps: a new tool for research policy and library management. Journal of the American Society for Information Science and Technology 61:1871-1887.",
+      "doi": "10.1002/asi.21368",
+      "peer_reviewed": true,
+      "source_id": "RAFOLS2012",
+      "source_role": "Paper-level/portfolio integration mapping application.",
+      "url": null
+    },
+    "RAO1982": {
+      "citation": "Rao CR (1982). Diversity and dissimilarity coefficients: A unified approach. Theoretical Population Biology 21:24-43.",
+      "doi": "10.1016/0040-5809(82)90004-1",
+      "peer_reviewed": true,
+      "source_id": "RAO1982",
+      "source_role": "Original quadratic entropy.",
+      "url": null
+    },
+    "SHI2023": {
+      "citation": "Shi F, Evans J (2023). Surprising combinations of research contents and contexts are related to impact and emerge with scientific outsiders from distant disciplines. Nature Communications 14:1641.",
+      "doi": "10.1038/s41467-023-36741-4",
+      "peer_reviewed": true,
+      "source_id": "SHI2023",
+      "source_role": "Paper-level surprise of content-context combinations.",
+      "url": null
+    },
+    "SHIBAYAMA2021": {
+      "citation": "Shibayama S, Yin D, Matsumoto K (2021). Measuring novelty in science with word embedding. PLOS ONE 16:e0254034.",
+      "doi": "10.1371/journal.pone.0254034",
+      "peer_reviewed": true,
+      "source_id": "SHIBAYAMA2021",
+      "source_role": "Original semantic distance among cited references.",
+      "url": null
+    },
+    "STIRLING2007": {
+      "citation": "Stirling A (2007). A general framework for analysing diversity in science, technology and society. Journal of the Royal Society Interface 4:707-719.",
+      "doi": "10.1098/rsif.2007.0213",
+      "peer_reviewed": true,
+      "source_id": "STIRLING2007",
+      "source_role": "Foundational variety-balance-disparity framework.",
+      "url": null
+    },
+    "TEPLITSKIY2022": {
+      "citation": "Teplitskiy M, Peng H, Blasco A, Lakhani KR (2022). Is novel research worth doing? PNAS 119:e2118046119.",
+      "doi": "10.1073/pnas.2118046119",
+      "peer_reviewed": true,
+      "source_id": "TEPLITSKIY2022",
+      "source_role": "Independent paper-level use of Uzzi novelty and conventionality.",
+      "url": null
+    },
+    "UZZI2013": {
+      "citation": "Uzzi B, Mukherjee S, Stringer M, Jones B (2013). Atypical Combinations and Scientific Impact. Science 342:468-472.",
+      "doi": "10.1126/science.1240474",
+      "peer_reviewed": true,
+      "source_id": "UZZI2013",
+      "source_role": "Original paper-level atypicality and conventionality formulas.",
+      "url": null
+    },
+    "WANG2015": {
+      "citation": "Wang J, Thijs B, Glänzel W (2015). Interdisciplinarity and Impact: Distinct Effects of Variety, Balance, and Disparity. PLOS ONE 10:e0127298.",
+      "doi": "10.1371/journal.pone.0127298",
+      "peer_reviewed": true,
+      "source_id": "WANG2015",
+      "source_role": "Paper-level category count, other-field share, 1-Gini, Shannon, Simpson, mean distance and Rao-Stirling.",
+      "url": null
+    },
+    "WANG2017": {
+      "citation": "Wang J, Veugelers R, Stephan P (2017). Bias against novelty in science. Research Policy 46:1416-1436.",
+      "doi": "10.1016/j.respol.2017.06.006",
+      "peer_reviewed": true,
+      "source_id": "WANG2017",
+      "source_role": "Original new-combination incidence and distance operationalization.",
+      "url": null
+    },
+    "WANG2024": {
+      "citation": "Wang Z, Zhang H, Chen J, Chen H (2024). An effective framework for measuring the novelty of scientific articles through integrated topic modeling and cloud model. Journal of Informetrics 18:101587.",
+      "doi": "10.1016/j.joi.2024.101587",
+      "peer_reviewed": true,
+      "source_id": "WANG2024",
+      "source_role": "Paper-level topic-model and cloud-model novelty framework.",
+      "url": null
+    },
+    "WU2025": {
+      "citation": "Wu W, Zhang C, Zhao Y (2025). Automated novelty evaluation of academic paper: A collaborative approach integrating human and large language model knowledge. JASIST 76:1452-1469.",
+      "doi": "10.1002/asi.24979",
+      "peer_reviewed": true,
+      "source_id": "WU2025",
+      "source_role": "Paper-level human/LLM collaborative novelty evaluation.",
+      "url": null
+    },
+    "YAN2016": {
+      "citation": "Yan B, Luo J (2016). Technological novelty profile and invention's future impact. EPJ Data Science 5:2.",
+      "doi": "10.1140/epjds/s13688-016-0069-1",
+      "peer_reviewed": true,
+      "source_id": "YAN2016",
+      "source_role": "Peer-reviewed exact fixed-marginal hypergeometric co-occurrence null and z-score equations used to distinguish the source-adapted analytical null from the original Uzzi edge-swap Monte Carlo null.",
+      "url": null
+    },
+    "YAN2020": {
+      "citation": "Yan Y, Tian S, Zhang J (2020). The impact of a paper's new combinations and new components on its citation. Scientometrics 122:1415-1437.",
+      "doi": "10.1007/s11192-019-03314-6",
+      "peer_reviewed": true,
+      "source_id": "YAN2020",
+      "source_role": "Paper-level distinction between new knowledge components and new component combinations.",
+      "url": null
+    },
+    "ZHANG2016": {
+      "citation": "Zhang L, Rousseau R, Glänzel W (2016). Diversity of references as an indicator of the interdisciplinarity of journals. JASIST 67:1257-1265.",
+      "doi": "10.1002/asi.23487",
+      "peer_reviewed": true,
+      "source_id": "ZHANG2016",
+      "source_role": "Hill-type true diversity / 2D3 application to reference fields.",
+      "url": null
+    },
+    "ZHAO2025": {
+      "citation": "Zhao Y, Zhang C (2025). A review on the novelty measurements of academic papers. Scientometrics 130:727-753.",
+      "doi": "10.1007/s11192-025-05234-0",
+      "peer_reviewed": true,
+      "source_id": "ZHAO2025",
+      "source_role": "Discovery and taxonomy review only; not used as the sole formula authority for any admitted metric.",
+      "url": null
+    },
+    "ZHOU2022": {
+      "citation": "Zhou X, Zhou M, Huang D, Cui L (2022). A probabilistic model for co-occurrence analysis in bibliometrics. Journal of Biomedical Informatics 128:104047.",
+      "doi": "10.1016/j.jbi.2022.104047",
+      "peer_reviewed": true,
+      "source_id": "ZHOU2022",
+      "source_role": "Independent bibliometric application and simulation study of an exact fixed-marginal hypergeometric co-occurrence model.",
+      "url": null
+    }
+  },
+  "thresholds": {
+    "approximation_median_relative_error_max": 0.05,
+    "approximation_spearman_min": 0.95,
+    "each_domain_coverage_min": 0.5,
+    "overall_coverage_min": 0.7,
+    "stability_median_relative_error_max": 0.1,
+    "stability_spearman_min": 0.9
+  }
+}
