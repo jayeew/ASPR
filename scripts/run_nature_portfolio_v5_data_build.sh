@@ -15,7 +15,7 @@ MIGRATE_EXISTING="${MIGRATE_EXISTING:-0}"
 NATURE_MARKDOWN_LINK="${NATURE_MARKDOWN_LINK:-data/nature_markdown}"
 NATURE_MARKDOWN_DIR="${NATURE_MARKDOWN_DIR:-/mnt/d/aspr_nature_markdown}"
 
-OUT_DIR="${OUT_DIR:-outputs/nature_portfolio_v5}"
+OUT_DIR="${OUT_DIR:-outputs/common/new/data/nature_portfolio_v5}"
 CORPUS_DIR="${CORPUS_DIR:-data/knowledge_corpus/v5_nature_portfolio_full}"
 LOG_DIR="${LOG_DIR:-$OUT_DIR/logs}"
 

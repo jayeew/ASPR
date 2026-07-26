@@ -1,0 +1,13 @@
+{
+  "base_suite_config": "configs/aspr_v6_1_nature_figures.json",
+  "output_dir": "outputs/fig09/new",
+  "dpi": 220,
+  "formats": ["png", "svg", "pdf"],
+  "overrides": {
+    "fig9": {
+      "publication_cutoff_year": 2023,
+      "allow_indicator_imputation": false,
+      "checkpoint_path": "/home/jayee/workspace/checkpoint/qwen-0.6b-review"
+    }
+  }
+}

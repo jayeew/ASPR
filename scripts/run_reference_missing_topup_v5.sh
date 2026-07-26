@@ -5,7 +5,7 @@ PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$PROJECT_ROOT"
 
 PYTHON_BIN="${PYTHON_BIN:-python}"
-OUT_DIR="${OUT_DIR:-outputs/nature_portfolio_v5}"
+OUT_DIR="${OUT_DIR:-outputs/common/new/data/nature_portfolio_v5}"
 OPENALEX_WORKERS="${OPENALEX_WORKERS:-2}"
 SLEEP_SECONDS="${SLEEP_SECONDS:-0.1}"
 TIMEOUT_SECONDS="${TIMEOUT_SECONDS:-60}"

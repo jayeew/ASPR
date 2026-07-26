@@ -8,17 +8,17 @@ from pathlib import Path
 
 import pandas as pd
 
-from experiments.kg_perturbation_fig10.build_fig10_ablation import METRICS
-from experiments.kg_perturbation_fig10.build_fig10_ablation import (
+from experiments.fig10.old.build_fig10_ablation import METRICS
+from experiments.fig10.old.build_fig10_ablation import (
     build_fig10_true_rerun_completion_audit,
     import_observed_disabled_module_rerun_sidecar,
 )
-from experiments.kg_perturbation_fig10.build_fig10_disabled_reruns import (
+from experiments.fig10.old.build_fig10_disabled_reruns import (
     build_disabled_variant_prompt,
     run_disabled_module_reruns,
     score_disabled_response,
 )
-import experiments.kg_perturbation_fig10.build_fig10_disabled_reruns as disabled_reruns
+import experiments.fig10.old.build_fig10_disabled_reruns as disabled_reruns
 
 
 def _toy_paper() -> pd.Series:

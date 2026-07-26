@@ -202,8 +202,8 @@ class NatureReadyClaimTests(unittest.TestCase):
 
     def test_source_controlled_figure_docs_avoid_human_like_performance_wording(self) -> None:
         doc_paths = [
-            PROJECT_ROOT / "experiments" / "kg_perturbation_fig8" / "README.md",
-            PROJECT_ROOT / "experiments" / "kg_perturbation_fig9" / "README.md",
+            PROJECT_ROOT / "experiments" / "fig08/old" / "README.md",
+            PROJECT_ROOT / "experiments" / "fig09/old" / "README.md",
         ]
         docs = "\n".join(path.read_text(encoding="utf-8") for path in doc_paths)
 
@@ -304,10 +304,10 @@ class NatureReadyClaimTests(unittest.TestCase):
     def test_strict_evidence_check_passes_when_required_artifacts_and_templates_exist(self) -> None:
         with tempfile.TemporaryDirectory(prefix="aspr_strict_evidence_root_") as tmp:
             root = Path(tmp)
-            out_dir = root / "outputs" / "kg_perturbation_final_assembly"
-            fig4_dir = root / "outputs" / "kg_perturbation_fig4_full50"
-            fig9_dir = root / "outputs" / "kg_perturbation_fig9"
-            fig10_dir = root / "outputs" / "kg_perturbation_fig10"
+            out_dir = root / "outputs" / "common" / "old" / "final_assembly"
+            fig4_dir = root / "outputs" / "fig04" / "old"
+            fig9_dir = root / "outputs" / "fig09" / "old"
+            fig10_dir = root / "outputs" / "fig10" / "old"
             fig4_dir.mkdir(parents=True)
             fig9_dir.mkdir(parents=True)
             fig10_dir.mkdir(parents=True)
@@ -409,24 +409,24 @@ class NatureReadyClaimTests(unittest.TestCase):
     def test_strict_evidence_check_rejects_placeholder_external_artifacts(self) -> None:
         with tempfile.TemporaryDirectory(prefix="aspr_strict_evidence_bad_") as tmp:
             root = Path(tmp)
-            out_dir = root / "outputs" / "kg_perturbation_final_assembly"
+            out_dir = root / "outputs" / "common" / "old" / "final_assembly"
             for rel_path in [
-                "outputs/kg_perturbation_fig4_full50/fig4_completed_blinded_labels.csv",
-                "outputs/kg_perturbation_fig4_full50/fig4_blinded_labeling_packet.csv",
-                "outputs/kg_perturbation_fig4_full50/fig4_completed_blinded_labels_template.csv",
-                "outputs/kg_perturbation_fig4_full50/fig4_blinded_labeling_answer_key.csv",
-                "outputs/kg_perturbation_fig4_full50/fig4_external_validation_replacement_manifest.csv",
-                "outputs/kg_perturbation_fig9/fig9_aspr_qwen_output.json",
-                "outputs/kg_perturbation_fig9/fig9_checkpoint_metadata.json",
-                "outputs/kg_perturbation_fig9/fig9_checkpoint_metadata_template.json",
-                "outputs/kg_perturbation_fig9/fig9_checkpoint_run_contract.json",
-                "outputs/kg_perturbation_fig10/fig10_true_module_rerun_results.csv",
-                "outputs/kg_perturbation_fig10/fig10_true_module_rerun_results_template.csv",
-                "outputs/kg_perturbation_fig10/fig10_true_module_rerun_contract.csv",
-                "outputs/kg_perturbation_fig10/fig10_completed_blinded_preferences.csv",
-                "outputs/kg_perturbation_fig10/fig10_blinded_preference_packet.csv",
-                "outputs/kg_perturbation_fig10/fig10_blinded_preference_answer_key.csv",
-                "outputs/kg_perturbation_fig10/fig10_blinded_preference_protocol.md",
+                "outputs/fig04/old/fig4_completed_blinded_labels.csv",
+                "outputs/fig04/old/fig4_blinded_labeling_packet.csv",
+                "outputs/fig04/old/fig4_completed_blinded_labels_template.csv",
+                "outputs/fig04/old/fig4_blinded_labeling_answer_key.csv",
+                "outputs/fig04/old/fig4_external_validation_replacement_manifest.csv",
+                "outputs/fig09/old/fig9_aspr_qwen_output.json",
+                "outputs/fig09/old/fig9_checkpoint_metadata.json",
+                "outputs/fig09/old/fig9_checkpoint_metadata_template.json",
+                "outputs/fig09/old/fig9_checkpoint_run_contract.json",
+                "outputs/fig10/old/fig10_true_module_rerun_results.csv",
+                "outputs/fig10/old/fig10_true_module_rerun_results_template.csv",
+                "outputs/fig10/old/fig10_true_module_rerun_contract.csv",
+                "outputs/fig10/old/fig10_completed_blinded_preferences.csv",
+                "outputs/fig10/old/fig10_blinded_preference_packet.csv",
+                "outputs/fig10/old/fig10_blinded_preference_answer_key.csv",
+                "outputs/fig10/old/fig10_blinded_preference_protocol.md",
             ]:
                 path = root / rel_path
                 path.parent.mkdir(parents=True, exist_ok=True)
@@ -442,7 +442,7 @@ class NatureReadyClaimTests(unittest.TestCase):
     def test_strict_fig4_rejects_complete_labels_without_positive_external_validation(self) -> None:
         with tempfile.TemporaryDirectory(prefix="aspr_strict_fig4_labels_") as tmp:
             root = Path(tmp)
-            fig4_dir = root / "outputs" / "kg_perturbation_fig4_full50"
+            fig4_dir = root / "outputs" / "fig04/old"
             fig4_dir.mkdir(parents=True)
             packet_rows = []
             key_rows = []
@@ -486,7 +486,7 @@ class NatureReadyClaimTests(unittest.TestCase):
     def test_strict_fig4_rejects_nonhuman_or_synthetic_label_sources(self) -> None:
         with tempfile.TemporaryDirectory(prefix="aspr_strict_fig4_label_source_") as tmp:
             root = Path(tmp)
-            fig4_dir = root / "outputs" / "kg_perturbation_fig4_full50"
+            fig4_dir = root / "outputs" / "fig04/old"
             fig4_dir.mkdir(parents=True)
             packet_rows = []
             key_rows = []
@@ -530,8 +530,8 @@ class NatureReadyClaimTests(unittest.TestCase):
     def test_strict_fig10_true_reruns_must_match_fig4_frozen_case_ids(self) -> None:
         with tempfile.TemporaryDirectory(prefix="aspr_strict_fig10_cases_") as tmp:
             root = Path(tmp)
-            fig4_dir = root / "outputs" / "kg_perturbation_fig4_full50"
-            fig10_dir = root / "outputs" / "kg_perturbation_fig10"
+            fig4_dir = root / "outputs" / "fig04/old"
+            fig10_dir = root / "outputs" / "fig10/old"
             fig4_dir.mkdir(parents=True)
             fig10_dir.mkdir(parents=True)
             pd.DataFrame({"paper_id": [f"expected-{idx + 1:02d}" for idx in range(50)]}).to_csv(
@@ -548,7 +548,7 @@ class NatureReadyClaimTests(unittest.TestCase):
     def test_strict_fig10_blinded_preferences_must_support_full_aspr_on_key_dimensions(self) -> None:
         with tempfile.TemporaryDirectory(prefix="aspr_strict_fig10_preference_") as tmp:
             root = Path(tmp)
-            fig10_dir = root / "outputs" / "kg_perturbation_fig10"
+            fig10_dir = root / "outputs" / "fig10/old"
             fig10_dir.mkdir(parents=True)
             write_fig10_completed_preferences(fig10_dir, preferred_system="system_b")
 
@@ -560,7 +560,7 @@ class NatureReadyClaimTests(unittest.TestCase):
     def test_strict_fig10_blinded_preferences_require_human_provenance(self) -> None:
         with tempfile.TemporaryDirectory(prefix="aspr_strict_fig10_preference_source_") as tmp:
             root = Path(tmp)
-            fig10_dir = root / "outputs" / "kg_perturbation_fig10"
+            fig10_dir = root / "outputs" / "fig10/old"
             fig10_dir.mkdir(parents=True)
             write_fig10_completed_preferences(
                 fig10_dir,
@@ -577,7 +577,7 @@ class NatureReadyClaimTests(unittest.TestCase):
     def test_fig4_status_honors_quality_report_when_metric_coverage_is_nonzero(self) -> None:
         with tempfile.TemporaryDirectory(prefix="aspr_fig4_status_") as tmp:
             root = Path(tmp)
-            fig4_dir = root / "outputs" / "kg_perturbation_fig4_full50"
+            fig4_dir = root / "outputs" / "fig04/old"
             fig4_dir.mkdir(parents=True)
             (fig4_dir / "fig4_metrics_summary.csv").write_text(
                 "\n".join(

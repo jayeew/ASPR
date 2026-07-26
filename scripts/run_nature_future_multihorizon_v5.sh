@@ -7,7 +7,7 @@ cd "$PROJECT_ROOT"
 export PYTHONPATH="$PROJECT_ROOT:${PYTHONPATH:-}"
 
 PYTHON_BIN="${PYTHON_BIN:-python}"
-SOURCE_DIR="${SOURCE_DIR:-outputs/nature_portfolio_v5}"
+SOURCE_DIR="${SOURCE_DIR:-outputs/common/new/data/nature_portfolio_v5}"
 TARGET_WORKS="${TARGET_WORKS:-$SOURCE_DIR/nature_target_works.csv}"
 CHECKPOINT_DIR="${CHECKPOINT_DIR:-$SOURCE_DIR/checkpoints/future_citers_tau8}"
 OUTPUT_DIR="${OUTPUT_DIR:-$SOURCE_DIR/future_multihorizon}"

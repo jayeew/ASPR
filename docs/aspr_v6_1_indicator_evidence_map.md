@@ -256,7 +256,7 @@ D5 配对比较：
 
 总体判定：**全部通过**。
 
-12 大类均保留。领域结果只作异质性报告，不允许因某个领域分数低而删除该领域。完整领域表位于结果制品的 `/home/jayee/workspace/ASPR/outputs/nature_multihorizon_v6_1_r5_local/oof_d361264b867c/oof_domain_metrics.csv`。
+12 大类均保留。领域结果只作异质性报告，不允许因某个领域分数低而删除该领域。完整领域表位于结果制品的 `/home/jayee/workspace/ASPR/outputs/common/new/model/v6_1_r5/oof_d361264b867c/oof_domain_metrics.csv`。
 
 ## 12. 能说什么、不能说什么
 
@@ -296,14 +296,14 @@ python3 scripts/render_v6_1_evidence_map.py
 | 检索日志 | /home/jayee/workspace/ASPR/configs/innovation_search_log_v6_1.json | sha256:c05a5c1a6ddbb362174b7f08dc7d704e493aebb57ae6e0d60530ab59d5866934 |
 | 最终指标注册表 | /home/jayee/workspace/ASPR/configs/innovation_candidate_registry_v6_1.json | sha256:126202f72519a4eb1657f49b8daa06bdcd9fccb37fe66cd6e4a8ec8471762611 |
 | 控制注册表 | /home/jayee/workspace/ASPR/configs/control_feature_registry_v6_1.json | sha256:06907b954d140ea9b9c119eb5b2c56f5969bfcd8214ad37fe8e0efda503806f6 |
-| 筛选 | /home/jayee/workspace/ASPR/outputs/nature_multihorizon_v6_1_r5_local | sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a |
+| 筛选 | /home/jayee/workspace/ASPR/outputs/common/new/model/v6_1_r5 | sha256:7d3a30898710101c86b6e1d6cf523c0c96e9f1bf82fedf7966812cfb7d17ec3a |
 | 数据物化 | /home/jayee/workspace/ASPR/data/knowledge_corpus/nature_multihorizon_v6_1_local | sha256:88050770c4cbb1b7190175b1b3265ab3e3a439f09349ab8805ada173dd32680e |
-| 数据审计 | /home/jayee/workspace/ASPR/outputs/nature_multihorizon_v6_1_r5_local/data_quality_report.json | sha256:95df1582c8f5fdbfcd1643261d7adcbb912f33680a1bac78411e60a68b6fb6ac |
-| 复现性核验 | /home/jayee/workspace/ASPR/outputs/nature_multihorizon_v6_1_r5_local/reproducibility_report.json | sha256:2a21a86de4ff3c9efbded883274ca3cbdceeed58c6ce9bc28250575e58a1b2ea |
-| 原计划完成审计 | /home/jayee/workspace/ASPR/outputs/nature_multihorizon_v6_1_r5_local/completion_audit.json | sha256:f99621525dee66a136e6cb8c76e52aef697212d2be1aca7d40426fb7566adb02 |
-| 最终验证摘要 | /home/jayee/workspace/ASPR/outputs/nature_multihorizon_v6_1_r5_local/validation_summary.json | sha256:28942c9c8d9c7c77d762d136536e3332610f656880f198d6f4e50978a5341f43 |
-| 纯创新指标补充模型 | /home/jayee/workspace/ASPR/outputs/nature_multihorizon_v6_1_r5_local/supplement_innovation_only_3b387272d53d/innovation_only_manifest.json | sha256:ea96f8c33163ae43f0811e4338e9599bf6819014a208b13f0d219f3c4881031a |
-| OOF | /home/jayee/workspace/ASPR/outputs/nature_multihorizon_v6_1_r5_local | sha256:1ae922413b008225c42061e7de50eeee10d20ae14233c637b3f3975da5a23cc0 |
+| 数据审计 | /home/jayee/workspace/ASPR/outputs/common/new/model/v6_1_r5/data_quality_report.json | sha256:95df1582c8f5fdbfcd1643261d7adcbb912f33680a1bac78411e60a68b6fb6ac |
+| 复现性核验 | /home/jayee/workspace/ASPR/outputs/common/new/model/v6_1_r5/reproducibility_report.json | sha256:2a21a86de4ff3c9efbded883274ca3cbdceeed58c6ce9bc28250575e58a1b2ea |
+| 原计划完成审计 | /home/jayee/workspace/ASPR/outputs/common/new/model/v6_1_r5/completion_audit.json | sha256:f99621525dee66a136e6cb8c76e52aef697212d2be1aca7d40426fb7566adb02 |
+| 最终验证摘要 | /home/jayee/workspace/ASPR/outputs/common/new/model/v6_1_r5/validation_summary.json | sha256:28942c9c8d9c7c77d762d136536e3332610f656880f198d6f4e50978a5341f43 |
+| 纯创新指标补充模型 | /home/jayee/workspace/ASPR/outputs/common/new/model/v6_1_r5/supplement_innovation_only_3b387272d53d/innovation_only_manifest.json | sha256:ea96f8c33163ae43f0811e4338e9599bf6819014a208b13f0d219f3c4881031a |
+| OOF | /home/jayee/workspace/ASPR/outputs/common/new/model/v6_1_r5 | sha256:1ae922413b008225c42061e7de50eeee10d20ae14233c637b3f3975da5a23cc0 |
 
 ## 14. 候选指标来源表
 

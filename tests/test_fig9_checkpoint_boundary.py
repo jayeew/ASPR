@@ -11,8 +11,8 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from experiments.kg_perturbation_fig9.build_fig9_case import CASE_ID, run  # noqa: E402
-from experiments.kg_perturbation_fig9.run_fig9_checkpoint_inference import (  # noqa: E402
+from experiments.fig09.old.build_fig9_case import CASE_ID, run  # noqa: E402
+from experiments.fig09.old.run_fig9_checkpoint_inference import (  # noqa: E402
     build_checkpoint_metadata,
     normalize_checkpoint_review_payload,
     parse_checkpoint_json,

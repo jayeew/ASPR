@@ -1,0 +1,14 @@
+{
+  "base_suite_config": "configs/aspr_v6_1_nature_figures.json",
+  "output_dir": "outputs/fig03/new",
+  "dpi": 220,
+  "formats": ["png", "svg", "pdf"],
+  "overrides": {
+    "fig3": {
+      "horizon": 5,
+      "hexbin_gridsize": 55,
+      "raincloud_sample_per_decile": 1200,
+      "seed": 20260725
+    }
+  }
+}

@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from experiments.nature_submission_audit.build_nature_submission_audit import FIGURES, build_audit
+from experiments.common.old.submission_audit.build_nature_submission_audit import FIGURES, build_audit
 
 
 def read_rows(path: Path) -> list[dict[str, str]]:

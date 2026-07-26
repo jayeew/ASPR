@@ -240,7 +240,7 @@ def _hash_dirty_diff() -> str:
         "aspr/nature_multihorizon",
         "scripts/run_nature_multihorizon.py",
         "configs/nature_multihorizon",
-        "experiments/kg_perturbation_v2",
+        "experiments/common/old/kg_perturbation_v2",
     ]
     try:
         status = subprocess.run(

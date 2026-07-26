@@ -13,7 +13,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from experiments.kg_perturbation_fig7.build_fig7_venue_contribution import (
+from experiments.fig07.old.build_fig7_venue_contribution import (
     build_pairwise_contribution_tests,
     build_portfolio_tables,
     compose_full_figure,

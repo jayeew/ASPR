@@ -3,7 +3,7 @@ from __future__ import annotations
 import os
 import unittest
 
-from experiments.kg_perturbation_fig10.build_fig10_same_rubric_baseline import (
+from experiments.fig10.old.build_fig10_same_rubric_baseline import (
     classify_evaluable_cases,
     generic_response_to_fig4_label,
     match_paper_same_rubric,

@@ -1,0 +1,132 @@
+{
+  "schema_version": "2.0.0",
+  "suite_id": "aspr-v6.1-nature-fig1-fig10-r2",
+  "source_policy": "local_frozen_only",
+  "network_policy": "forbidden_for_numeric_evidence",
+  "paths": {
+    "v6_1_dataset": "data/knowledge_corpus/nature_multihorizon_v6_1_local",
+    "v6_1_analysis": "outputs/common/new/model/v6_1_r5",
+    "v6_1_figure_baseline": "outputs/common/new/baseline_suite_r1",
+    "candidate_registry": "configs/innovation_candidate_registry_v6_1.json",
+    "source_config": "configs/nature_multihorizon/v6_1_simple.json",
+    "target_works": "outputs/common/new/data/nature_portfolio_v5/nature_target_works.csv",
+    "graph_view_root": "data/knowledge_corpus/v2_publication_v6a_locked_candidate/views/fig1",
+    "legacy_final_root": "outputs/common/old/final_suite",
+    "fig4_root": "outputs/fig04/old",
+    "fig5_root": "outputs/fig05/old",
+    "fig6_root": "outputs/fig06/old",
+    "fig7_root": "outputs/fig07/old",
+    "fig9_root": "outputs/fig09/old",
+    "fig10_root": "outputs/fig10/old",
+    "fig8_image_base": "experiments/common/new/base/assets/fig08_framework_base_gpt_image2.png",
+    "fig9_image_base": "experiments/common/new/base/assets/fig09_storyboard_base_gpt_image2.png",
+    "fig10_image_base": "experiments/common/new/base/assets/fig10_switchboard_base_gpt_image2.png"
+  },
+  "graph_domains": [
+    {
+      "slug": "crispr",
+      "label": "CRISPR–Cas",
+      "landmark_year": 2012,
+      "anchor_label": "Jinek 2012"
+    },
+    {
+      "slug": "graphene_2d_materials",
+      "label": "Graphene",
+      "landmark_year": 2004,
+      "anchor_label": "Novoselov 2004"
+    },
+    {
+      "slug": "ipsc_reprogramming",
+      "label": "iPSC",
+      "landmark_year": 2006,
+      "anchor_label": "Takahashi/Yamanaka 2006"
+    },
+    {
+      "slug": "exoplanets",
+      "label": "Exoplanets",
+      "landmark_year": 1995,
+      "anchor_label": "Mayor/Queloz 1995"
+    }
+  ],
+  "fig1": {
+    "top_communities": 12,
+    "event_bin_width_years": 2,
+    "pseudo_event_draws": 1000,
+    "seed": 20260725
+  },
+  "fig2": {
+    "distribution_sample_per_indicator": 1200,
+    "pair_sample": 700,
+    "bootstrap_iterations": 500,
+    "seed": 20260725
+  },
+  "fig3": {
+    "horizon": 5,
+    "hexbin_gridsize": 55,
+    "raincloud_sample_per_decile": 1200,
+    "seed": 20260725
+  },
+  "fig5": {
+    "cutoffs": [
+      2005,
+      2010,
+      2013
+    ],
+    "seed_window_years": 3,
+    "validation_window_years": 4,
+    "top_n": 10,
+    "minimum_topic_seed_papers": 5,
+    "minimum_topic_validation_papers": 3,
+    "bootstrap_iterations": 500,
+    "seed": 20260725
+  },
+  "fig6": {
+    "reference_retention_levels": [
+      1.0,
+      0.8
+    ],
+    "registered_resampling_repetitions": 20,
+    "reliability_min_references": 10,
+    "reliability_min_coverage": 0.8
+  },
+  "fig7": {
+    "bootstrap_iterations": 500,
+    "minimum_venue_papers": 500,
+    "top_venue_count": 5,
+    "seed": 20260725
+  },
+  "fig10": {
+    "primary_metrics": [
+      "semantic_agreement",
+      "novelty_coverage",
+      "prior_art_accuracy",
+      "factuality",
+      "unsupported_claim_rate",
+      "evidence_trace_completeness"
+    ],
+    "bootstrap_iterations": 1000,
+    "seed": 20260725
+  },
+  "render": {
+    "dpi": 220,
+    "formats": [
+      "png",
+      "svg",
+      "pdf"
+    ],
+    "language": "en",
+    "contact_sheet_columns": 2
+  },
+  "claim_boundaries": {
+    "fig1": "Matched pseudo-events and event alignment are descriptive structural controls, not causal identification.",
+    "fig2": "Known-group separation supports construct plausibility but does not make future diffusion a complete innovation truth.",
+    "fig3": "Temporal OOF Spearman is predictive ranking validity, not proof that the score measures every form of innovation.",
+    "fig4": "External construct validity remains blocked until all 90 blinded labels are complete.",
+    "fig5": "Historical backtests use only fold-valid publication-time OOF scores; the 2024-2026 frontier is descriptive deployment output only.",
+    "fig6": "Legacy graph-construction diagnostics are visually separated from current v6.1 registered robustness evidence.",
+    "fig7": "Venue comparisons use innovation-only, venue-excluded scores and do not imply that venues cause innovation.",
+    "fig8": "Architecture figure; no performance claim.",
+    "fig9": "Single auditable case; no population-level performance claim. The locked 2023 case is outside the 1980-2017 v6.1 scoring cohort.",
+    "fig10": "Human preference remains blocked; current full-ASPR and disabled variants have a generation-path comparability limitation."
+  }
+}

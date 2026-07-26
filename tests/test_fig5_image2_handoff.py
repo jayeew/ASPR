@@ -11,8 +11,8 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from experiments.kg_perturbation_fig5.build_fig5_image2_handoff import build_handoff, strict_ai_frontier_diagnostics
-from experiments.kg_perturbation_fig5.build_fig5_plot_data import (
+from experiments.fig05.old.build_fig5_image2_handoff import build_handoff, strict_ai_frontier_diagnostics
+from experiments.fig05.old.build_fig5_plot_data import (
     DEFAULT_FIG3_RUN_DIR,
     PROJECT_ROOT as FIG5_PROJECT_ROOT,
     resolve_default_input_dir,
@@ -287,8 +287,8 @@ def test_strict_ai_frontier_diagnostics_pass_when_source_rows_are_dense() -> Non
 
 def test_default_fig5_data_paths_prefer_local_redraw_v6a_best_fig3() -> None:
     """Default Fig. 5 data inputs prefer the local validated Fig. 3 redraw run."""
-    expected_run = FIG5_PROJECT_ROOT / "outputs" / "redraw_v6a_best_fig3" / "multi_domain"
-    expected_input = FIG5_PROJECT_ROOT / "outputs" / "redraw_v6a_best_fig3" / "fig3_input" / "multi_domain"
+    expected_run = FIG5_PROJECT_ROOT / "outputs" / "fig03/old" / "multi_domain"
+    expected_input = FIG5_PROJECT_ROOT / "outputs" / "fig03/old" / "fig3_input" / "multi_domain"
     if expected_run.exists() and expected_input.exists() and not DEFAULT_FIG3_RUN_DIR.exists():
         assert resolve_default_run_dir() == expected_run
         assert resolve_default_input_dir(expected_run) == expected_input

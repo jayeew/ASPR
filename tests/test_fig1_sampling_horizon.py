@@ -11,7 +11,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from experiments.kg_perturbation_fig1.fig1_knowledge_perturbation import (  # noqa: E402
+from experiments.fig01.old.fig1_knowledge_perturbation import (  # noqa: E402
     apply_deterministic_hybrid_edge_sampling,
     build_edge_sampling_manifest_row,
     effective_main_cumulative_horizon_years,
@@ -55,10 +55,10 @@ class Fig1SamplingHorizonTests(unittest.TestCase):
 
     def test_display_configs_include_pre_landmark_windows(self) -> None:
         config_paths = [
-            PROJECT_ROOT / "experiments/kg_perturbation_fig1/configs/v6a_display_crispr.yaml",
-            PROJECT_ROOT / "experiments/kg_perturbation_fig1/configs/v6a_display_graphene.yaml",
-            PROJECT_ROOT / "experiments/kg_perturbation_fig1/configs/v6a_display_ipsc.yaml",
-            PROJECT_ROOT / "experiments/kg_perturbation_fig1/configs/v6a_display_exoplanets.yaml",
+            PROJECT_ROOT / "experiments/fig01/old/configs/v6a_display_crispr.yaml",
+            PROJECT_ROOT / "experiments/fig01/old/configs/v6a_display_graphene.yaml",
+            PROJECT_ROOT / "experiments/fig01/old/configs/v6a_display_ipsc.yaml",
+            PROJECT_ROOT / "experiments/fig01/old/configs/v6a_display_exoplanets.yaml",
         ]
         for path in config_paths:
             cfg = load_config(path)

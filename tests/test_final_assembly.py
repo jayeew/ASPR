@@ -15,7 +15,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from experiments.kg_perturbation_final_assembly.build_final_assembly import (  # noqa: E402
+from experiments.common.old.final_assembly.build_final_assembly import (  # noqa: E402
     CAPTIONS,
     build_gap_list,
     build_final_assembly,
@@ -140,30 +140,30 @@ class FinalAssemblyTests(unittest.TestCase):
                 }.issubset(packet_index.columns)
             )
             fig4_template = packet_index[
-                packet_index["artifact_path"].eq("outputs/kg_perturbation_fig4_full50/fig4_completed_blinded_labels_template.csv")
+                packet_index["artifact_path"].eq("outputs/fig04/old/fig4_completed_blinded_labels_template.csv")
             ].iloc[0]
             self.assertEqual("return_template", fig4_template["artifact_role"])
             self.assertEqual("human_labeler", fig4_template["recipient"])
             self.assertEqual(1, int(fig4_template["blinded"]))
             self.assertEqual(0, int(fig4_template["contains_answer_key_or_unblinded_mapping"]))
             fig4_labeler_1 = packet_index[
-                packet_index["artifact_path"].eq("outputs/kg_perturbation_fig4_full50/fig4_completed_blinded_labels_labeler_1.csv")
+                packet_index["artifact_path"].eq("outputs/fig04/old/fig4_completed_blinded_labels_labeler_1.csv")
             ].iloc[0]
             self.assertEqual("return_template", fig4_labeler_1["artifact_role"])
             self.assertEqual("human_labeler", fig4_labeler_1["recipient"])
             self.assertEqual(1, int(fig4_labeler_1["blinded"]))
             fig4_answer_key = packet_index[
-                packet_index["artifact_path"].eq("outputs/kg_perturbation_fig4_full50/fig4_blinded_labeling_answer_key.csv")
+                packet_index["artifact_path"].eq("outputs/fig04/old/fig4_blinded_labeling_answer_key.csv")
             ].iloc[0]
             self.assertEqual("coordinator", fig4_answer_key["recipient"])
             self.assertEqual(1, int(fig4_answer_key["contains_answer_key_or_unblinded_mapping"]))
             fig9_output = packet_index[
-                packet_index["artifact_path"].eq("outputs/kg_perturbation_fig9/fig9_aspr_qwen_output.json")
+                packet_index["artifact_path"].eq("outputs/fig09/old/fig9_aspr_qwen_output.json")
             ].iloc[0]
             self.assertEqual("checkpoint_runner", fig9_output["recipient"])
             self.assertEqual("required_return", fig9_output["artifact_role"])
             fig10_return = packet_index[
-                packet_index["artifact_path"].eq("outputs/kg_perturbation_fig10/fig10_completed_blinded_preferences.csv")
+                packet_index["artifact_path"].eq("outputs/fig10/old/fig10_completed_blinded_preferences.csv")
             ].iloc[0]
             self.assertEqual("required_return", fig10_return["artifact_role"])
             self.assertEqual("human_preference_panel", fig10_return["recipient"])
@@ -241,8 +241,8 @@ class FinalAssemblyTests(unittest.TestCase):
     def test_checkpoint_ready_fig9_removes_assumed_storyboard_language(self) -> None:
         with tempfile.TemporaryDirectory(prefix="aspr_final_fig9_ready_") as tmp:
             root = Path(tmp)
-            fig9_dir = root / "outputs" / "kg_perturbation_fig9"
-            fig10_dir = root / "outputs" / "kg_perturbation_fig10"
+            fig9_dir = root / "outputs" / "fig09/old"
+            fig10_dir = root / "outputs" / "fig10/old"
             fig9_dir.mkdir(parents=True)
             fig10_dir.mkdir(parents=True)
             (fig9_dir / "fig9_quality_report.json").write_text(
@@ -289,7 +289,7 @@ class FinalAssemblyTests(unittest.TestCase):
     def test_fig10_same_rubric_note_uses_manifest_counts(self) -> None:
         with tempfile.TemporaryDirectory(prefix="aspr_fig10_manifest_") as tmp:
             root = Path(tmp)
-            manifest = root / "outputs" / "kg_perturbation_fig10" / "fig10_generic_llm_same_rubric_manifest.json"
+            manifest = root / "outputs" / "fig10/old" / "fig10_generic_llm_same_rubric_manifest.json"
             manifest.parent.mkdir(parents=True)
             manifest.write_text(
                 (
@@ -304,7 +304,7 @@ class FinalAssemblyTests(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
-            summary = root / "outputs" / "kg_perturbation_fig10" / "fig10_generic_llm_same_rubric_summary.csv"
+            summary = root / "outputs" / "fig10/old" / "fig10_generic_llm_same_rubric_summary.csv"
             summary.write_text(
                 "\n".join(
                     [
@@ -330,14 +330,14 @@ class FinalAssemblyTests(unittest.TestCase):
     def test_gap_list_is_derived_from_current_quality_gates(self) -> None:
         with tempfile.TemporaryDirectory(prefix="aspr_gap_root_") as tmp:
             root = Path(tmp)
-            (root / "outputs" / "kg_perturbation_fig4_full50").mkdir(parents=True)
-            (root / "outputs" / "kg_perturbation_fig5").mkdir(parents=True)
-            (root / "outputs" / "kg_perturbation_fig6").mkdir(parents=True)
-            (root / "outputs" / "kg_perturbation_fig7").mkdir(parents=True)
-            (root / "outputs" / "kg_perturbation_fig9").mkdir(parents=True)
-            (root / "outputs" / "kg_perturbation_fig10").mkdir(parents=True)
+            (root / "outputs" / "fig04/old").mkdir(parents=True)
+            (root / "outputs" / "fig05/old").mkdir(parents=True)
+            (root / "outputs" / "fig06/old").mkdir(parents=True)
+            (root / "outputs" / "fig07/old").mkdir(parents=True)
+            (root / "outputs" / "fig09/old").mkdir(parents=True)
+            (root / "outputs" / "fig10/old").mkdir(parents=True)
 
-            (root / "outputs" / "kg_perturbation_fig4_full50" / "figure_quality_report.json").write_text(
+            (root / "outputs" / "fig04/old" / "figure_quality_report.json").write_text(
                 json.dumps(
                     {
                         "overall_pass": False,
@@ -345,14 +345,14 @@ class FinalAssemblyTests(unittest.TestCase):
                             "additional_fixed_cases_needed": {"low": 10, "middle": 10, "high": 0}
                         },
                         "external_validation_replacement_manifest": {
-                            "manifest_path": "outputs/kg_perturbation_fig4_full50/fig4_external_validation_replacement_manifest.csv",
+                            "manifest_path": "outputs/fig04/old/work/full50/fig4_external_validation_replacement_manifest.csv",
                             "additional_ready_labels_needed": {"low": 10, "middle": 10, "high": 10},
                         },
                     }
                 ),
                 encoding="utf-8",
             )
-            (root / "outputs" / "kg_perturbation_fig5" / "figure_quality_report.json").write_text(
+            (root / "outputs" / "fig05/old" / "figure_quality_report.json").write_text(
                 json.dumps(
                     {
                         "overall_pass": True,
@@ -371,7 +371,7 @@ class FinalAssemblyTests(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
-            (root / "outputs" / "kg_perturbation_fig5" / "fig5_alignment_metrics.csv").write_text(
+            (root / "outputs" / "fig05/old" / "fig5_alignment_metrics.csv").write_text(
                 "metric_group,metric,value,denominator\n"
                 "retrospective_backtest,precision_at_10,0.175,12\n"
                 "retrospective_backtest,baseline_precision_at_10,0.367,3\n"
@@ -379,11 +379,11 @@ class FinalAssemblyTests(unittest.TestCase):
                 "retrospective_backtest,baseline_ndcg_at_10,0.364,3\n",
                 encoding="utf-8",
             )
-            (root / "outputs" / "kg_perturbation_fig6" / "figure_quality_report.json").write_text(
+            (root / "outputs" / "fig06/old" / "figure_quality_report.json").write_text(
                 json.dumps({"quality_gates": {"nature_strong_claim_ready": 1}}),
                 encoding="utf-8",
             )
-            (root / "outputs" / "kg_perturbation_fig7" / "figure_quality_report.json").write_text(
+            (root / "outputs" / "fig07/old" / "figure_quality_report.json").write_text(
                 json.dumps(
                     {
                         "quality_gates": {
@@ -395,15 +395,15 @@ class FinalAssemblyTests(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
-            (root / "outputs" / "kg_perturbation_fig9" / "fig9_quality_report.json").write_text(
+            (root / "outputs" / "fig09/old" / "fig9_quality_report.json").write_text(
                 json.dumps({"aspr_qwen_boundary": "assumed pipeline-ready placeholder"}),
                 encoding="utf-8",
             )
-            (root / "outputs" / "kg_perturbation_fig10" / "figure_quality_report.json").write_text(
+            (root / "outputs" / "fig10/old" / "figure_quality_report.json").write_text(
                 json.dumps({"quality_gates": {"nature_strong_claim_ready": 0}}),
                 encoding="utf-8",
             )
-            (root / "outputs" / "kg_perturbation_fig10" / "fig10_generic_llm_same_rubric_manifest.json").write_text(
+            (root / "outputs" / "fig10/old" / "fig10_generic_llm_same_rubric_manifest.json").write_text(
                 json.dumps(
                     {
                         "status": "observed_generic_llm_run_same_rubric",

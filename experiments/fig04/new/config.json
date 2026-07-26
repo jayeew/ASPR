@@ -1,0 +1,13 @@
+{
+  "base_suite_config": "configs/aspr_v6_1_nature_figures.json",
+  "output_dir": "outputs/fig04/new",
+  "dpi": 220,
+  "formats": ["png", "svg", "pdf"],
+  "overrides": {
+    "fig4": {
+      "blind_sample_per_stratum": 10,
+      "labeler_count": 3,
+      "seed": 20260725
+    }
+  }
+}

@@ -13,7 +13,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from experiments.kg_perturbation_fig10.build_fig10_ablation import (  # noqa: E402
+from experiments.fig10.old.build_fig10_ablation import (  # noqa: E402
     METRICS,
     PREFERENCE_DIMENSIONS,
     VARIANTS,
@@ -91,8 +91,8 @@ class Fig10AblationTests(unittest.TestCase):
 
     def test_provenance_and_replacement_gates_block_strong_claims(self) -> None:
         provenance = build_evidence_provenance(
-            fig4_metrics=PROJECT_ROOT / "outputs/kg_perturbation_fig4_full50/fig4_metrics_summary.csv",
-            out_dir=PROJECT_ROOT / "outputs/kg_perturbation_fig10",
+            fig4_metrics=PROJECT_ROOT / "outputs/fig04/old/fig4_metrics_summary.csv",
+            out_dir=PROJECT_ROOT / "outputs/fig10/old",
         )
         gates = build_replacement_gates(provenance)
 
@@ -271,7 +271,7 @@ class Fig10AblationTests(unittest.TestCase):
             ).to_csv(out_dir / "fig10_generic_llm_same_rubric_results.csv", index=False)
 
             provenance = build_evidence_provenance(
-                fig4_metrics=PROJECT_ROOT / "outputs/kg_perturbation_fig4_full50/fig4_metrics_summary.csv",
+                fig4_metrics=PROJECT_ROOT / "outputs/fig04/old/fig4_metrics_summary.csv",
                 out_dir=out_dir,
             )
             gates = build_replacement_gates(provenance)
@@ -307,7 +307,7 @@ class Fig10AblationTests(unittest.TestCase):
             ).to_csv(out_dir / "fig10_generic_llm_same_rubric_results.csv", index=False)
 
             provenance = build_evidence_provenance(
-                fig4_metrics=PROJECT_ROOT / "outputs/kg_perturbation_fig4_full50/fig4_metrics_summary.csv",
+                fig4_metrics=PROJECT_ROOT / "outputs/fig04/old/fig4_metrics_summary.csv",
                 out_dir=out_dir,
             )
             gates = build_replacement_gates(provenance)
@@ -376,8 +376,8 @@ class Fig10AblationTests(unittest.TestCase):
                 out_dir / "fig10_generic_llm_same_rubric_results.csv",
                 index=False,
             )
-            fig9_dir = out_dir.parent / "kg_perturbation_fig9"
-            fig9_dir.mkdir(exist_ok=True)
+            fig9_dir = out_dir.parent / "fig09/old"
+            fig9_dir.mkdir(parents=True, exist_ok=True)
             (fig9_dir / "fig9_aspr_qwen_output.json").write_text(
                 json.dumps(
                     {

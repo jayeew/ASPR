@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from experiments.kg_perturbation_fig4.build_fig4_claim_scope import build_claim_scope_decision
+from experiments.fig04.old.build_fig4_claim_scope import build_claim_scope_decision
 
 
 class Fig4ClaimScopeTests(unittest.TestCase):

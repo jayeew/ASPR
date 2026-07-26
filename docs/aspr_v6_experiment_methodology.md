@@ -105,7 +105,7 @@ source_max_year < focal publication_year
 | 既有 landmark 资产 | 已知组验证候选 | 当前无充分重叠，不作确认依据 |
 
 来源审计见
-[`source_audit.json`](../outputs/nature_multihorizon_v6_local/source_audit.json)。
+[`source_audit.json`](../outputs/common/old/model/v6/source_audit.json)。
 本地 OpenAlex 快照包含 2,128 个 works 分片，目录清单约 639 GB；本实验没有复制或
 创建新的原始快照，只对选中的派生行和物化视图建立哈希。
 
@@ -264,7 +264,7 @@ Stirling 的理论并不支持将其宣称为两个独立构念，开发期判�
 - 没有访问封存标签。
 
 修订记录见
-[`protocol_amendment_001_dimension_merge.json`](../outputs/nature_multihorizon_v6_local/protocol_amendment_001_dimension_merge.json)。
+[`protocol_amendment_001_dimension_merge.json`](../outputs/common/old/model/v6/protocol_amendment_001_dimension_merge.json)。
 
 ### 5.3 S1：结构变异
 
@@ -902,19 +902,19 @@ C1 指标最大两两绝对 Spearman 为 0.6751，低于 0.90 冗余预警线。
 ### 17.3 主要结果
 
 - 构念稳定性：
-  [`construct_validation_manifest.json`](../outputs/nature_multihorizon_v6_local/construct_validation_e4656f236bd2/construct_validation_manifest.json)
+  [`construct_validation_manifest.json`](../outputs/common/old/model/v6/construct_validation_e4656f236bd2/construct_validation_manifest.json)
 - D3：
-  [`development_run_manifest.json`](../outputs/nature_multihorizon_v6_local/development_D3_1890a1060654/development_run_manifest.json)
+  [`development_run_manifest.json`](../outputs/common/old/model/v6/development_D3_1890a1060654/development_run_manifest.json)
 - D5：
-  [`development_run_manifest.json`](../outputs/nature_multihorizon_v6_local/development_D5_675206972abc/development_run_manifest.json)
+  [`development_run_manifest.json`](../outputs/common/old/model/v6/development_D5_675206972abc/development_run_manifest.json)
 - D8：
-  [`development_run_manifest.json`](../outputs/nature_multihorizon_v6_local/development_D8_e8274531e230/development_run_manifest.json)
+  [`development_run_manifest.json`](../outputs/common/old/model/v6/development_D8_e8274531e230/development_run_manifest.json)
 - 封存前晋级：
-  [`promotion_report.json`](../outputs/nature_multihorizon_v6_local/release_candidate_f23973ca98ab/promotion_report.json)
+  [`promotion_report.json`](../outputs/common/old/model/v6/release_candidate_f23973ca98ab/promotion_report.json)
 - 唯一一次封存：
-  [`sealed_evaluation_manifest.json`](../outputs/nature_multihorizon_v6_local/sealed_D5_cb8888f2ed23/sealed_evaluation_manifest.json)
+  [`sealed_evaluation_manifest.json`](../outputs/common/old/model/v6/sealed_D5_cb8888f2ed23/sealed_evaluation_manifest.json)
 - 最终冻结清单：
-  [`final_release_manifest.json`](../outputs/nature_multihorizon_v6_local/final_release_manifest.json)
+  [`final_release_manifest.json`](../outputs/common/old/model/v6/final_release_manifest.json)
 
 现有封存解锁已经消耗 `1/1`。在当前冻结工作区中不应再次运行或模拟封存解锁；
 后续模型修改必须产生新的协议版本和新的外部验证数据，而不能复用该封存结果调参。

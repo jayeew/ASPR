@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from experiments.kg_perturbation_v2.materialize_wave_evidence import (
+from experiments.common.old.kg_perturbation_v2.materialize_wave_evidence import (
     ABLATION_IDS,
     package_table,
 )

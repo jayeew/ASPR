@@ -12,11 +12,11 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from experiments.figure_quality import normalize_reference_closure_report, strict_main_figure_failed
-from experiments.kg_perturbation_fig1.fig1_knowledge_perturbation import (
+from experiments.fig01.old.fig1_knowledge_perturbation import (
     dominant_parameter_table,
     dominant_parameter_trajectories,
 )
-from experiments.kg_perturbation_fig2.fig2_empirical_panels import ComputedData, _panel_b_design_payload, build_quality_gates
+from experiments.fig02.old.fig2_empirical_panels import ComputedData, _panel_b_design_payload, build_quality_gates
 
 
 def _toy_metrics() -> pd.DataFrame:

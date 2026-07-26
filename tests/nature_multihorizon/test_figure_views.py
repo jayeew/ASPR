@@ -18,10 +18,10 @@ from aspr.nature_multihorizon.figure_views import (
     export_figure_views,
 )
 from aspr.nature_multihorizon.release import build_release_manifest, publish_release
-from experiments.kg_perturbation_v2.run_figure import validate_figure_view
-from experiments.kg_perturbation_v2.renderers import _tables, render_figure
-from experiments.kg_perturbation_v2.render_all_figures import render_all
-from experiments.kg_perturbation_v2.build_final_assembly import (
+from experiments.common.old.kg_perturbation_v2.run_figure import validate_figure_view
+from experiments.common.old.kg_perturbation_v2.renderers import _tables, render_figure
+from experiments.common.old.kg_perturbation_v2.render_all_figures import render_all
+from experiments.common.old.kg_perturbation_v2.build_final_assembly import (
     build_final_assembly,
 )
 
@@ -653,7 +653,7 @@ class FigureViewTests(unittest.TestCase):
                 return output
 
             with patch(
-                "experiments.kg_perturbation_v2.render_all_figures.render_figure",
+                "experiments.common.old.kg_perturbation_v2.render_all_figures.render_figure",
                 side_effect=write_draft_image,
             ):
                 draft_bundle = render_all(

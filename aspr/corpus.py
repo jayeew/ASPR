@@ -21,8 +21,8 @@ OUTPUTS_DIR = PROJECT_ROOT / "outputs"
 DEFAULT_STRICT_CORPUS_DIR = DATA_DIR / "knowledge_corpus" / "v1_strict"
 DEFAULT_BUILD_CORPUS_DIR = DATA_DIR / "knowledge_corpus" / "v1_large"
 DEFAULT_CORPUS_DIR = DEFAULT_STRICT_CORPUS_DIR
-DEFAULT_FIG1_ROOT = OUTPUTS_DIR / "kg_perturbation_fig1"
-DEFAULT_FIG3_AUTO_ROOT = OUTPUTS_DIR / "kg_perturbation_fig3_auto"
+DEFAULT_FIG1_ROOT = OUTPUTS_DIR / "fig01/old"
+DEFAULT_FIG3_AUTO_ROOT = OUTPUTS_DIR / "fig03/old/work/auto"
 DEFAULT_COMPLETE_END_YEAR = 2025
 
 CORE_DOMAINS = [
@@ -916,7 +916,7 @@ def build_offline_corpus(args: argparse.Namespace) -> SourceTables:
 
 
 def _db_domain_seed(row: Mapping[str, Any]) -> Any:
-    from experiments.kg_perturbation_fig3 import dataset_builder as db  # pylint: disable=import-outside-toplevel
+    from experiments.fig03.old import dataset_builder as db  # pylint: disable=import-outside-toplevel
 
     return db.DomainSeed(
         slug=slugify(row.get("slug")),
@@ -930,7 +930,7 @@ def _db_domain_seed(row: Mapping[str, Any]) -> Any:
 
 
 def _resolved_manual_landmarks(domain: str, openalex: Any, max_candidates: int, quiet: bool = False) -> pd.DataFrame:
-    from experiments.kg_perturbation_fig3 import dataset_builder as db  # pylint: disable=import-outside-toplevel
+    from experiments.fig03.old import dataset_builder as db  # pylint: disable=import-outside-toplevel
 
     rows: List[Dict[str, Any]] = []
     manual = manual_landmarks()
@@ -992,7 +992,7 @@ def fetch_online_missing_sources(args: argparse.Namespace, seeds: pd.DataFrame, 
     if args.offline:
         return []
     try:
-        from experiments.kg_perturbation_fig3 import dataset_builder as db  # pylint: disable=import-outside-toplevel
+        from experiments.fig03.old import dataset_builder as db  # pylint: disable=import-outside-toplevel
     except Exception as exc:
         raise RuntimeError(f"Cannot import Fig. 3 dataset builder for OpenAlex fetch: {exc}") from exc
 

@@ -24,9 +24,9 @@ make figures-nature-check
 
 `figures-nature-check` writes:
 
-- `outputs/kg_perturbation_final_assembly/fig1_fig10_claim_ledger.csv`
-- `outputs/kg_perturbation_final_assembly/fig1_fig10_nature_check_summary.csv`
-- `outputs/kg_perturbation_final_assembly/fig1_fig10_nature_check_report.json`
+- `outputs/common/old/final_assembly_work/fig1_fig10_claim_ledger.csv`
+- `outputs/common/old/final_assembly_work/fig1_fig10_nature_check_summary.csv`
+- `outputs/common/old/final_assembly_work/fig1_fig10_nature_check_report.json`
 
 The check intentionally exits nonzero while Nature strong-claim gates remain unresolved.
 
@@ -37,8 +37,8 @@ with:
 make figures-external-evidence-intake
 ```
 
-This target reads `outputs/kg_perturbation_fig4_full50/fig4_completed_blinded_labels.csv`
-and `outputs/kg_perturbation_fig10/fig10_completed_blinded_preferences.csv`, rebuilds the
+This target reads `outputs/fig04/old/work/full50/fig4_completed_blinded_labels.csv`
+and `outputs/fig10/old/work/kg_perturbation/fig10_completed_blinded_preferences.csv`, rebuilds the
 Fig.4 external-validation report, rebuilds the Fig.10 ablation/preference report,
 regenerates the final assembly, and runs the strict external-evidence check. A nonzero
 exit means at least one required human-evidence artifact is missing, synthetic/non-human,

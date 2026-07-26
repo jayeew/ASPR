@@ -164,7 +164,7 @@ def ledger_row(
 
 def fig4_peer_review_alignment_status(project_root: Path) -> Dict[str, Any]:
     """Summarize whether current Fig.4 can support peer-review alignment claims."""
-    fig4_dir = project_root / "outputs" / "kg_perturbation_fig4_full50"
+    fig4_dir = project_root / "outputs" / "fig04/old"
     report_path = fig4_dir / "figure_quality_report.json"
     report = read_json(report_path)
     if report:
@@ -205,7 +205,7 @@ def fig4_peer_review_alignment_status(project_root: Path) -> Dict[str, Any]:
 
 def fig10_replacement_gate_status(project_root: Path) -> Dict[str, Any]:
     """Summarize Fig.10 replacement gates."""
-    path = project_root / "outputs" / "kg_perturbation_fig10" / "fig10_replacement_gates.csv"
+    path = project_root / "outputs" / "fig10/old" / "fig10_replacement_gates.csv"
     if not path.exists():
         return {"status": "missing_replacement_gates", "claim_ready": False, "details": "fig10_replacement_gates.csv missing"}
     try:
@@ -223,21 +223,21 @@ def fig10_replacement_gate_status(project_root: Path) -> Dict[str, Any]:
 def build_claim_ledger(project_root: Path = PROJECT_ROOT) -> pd.DataFrame:
     """Build a machine-readable ledger of allowed and forbidden Fig.1-Fig.10 claims."""
     reports = {
-        "Fig.1": project_root / "outputs" / "redraw_v6a_best_fig1" / "figure_quality_report.json",
-        "Fig.2": project_root / "outputs" / "redraw_v6a_best_fig2" / "fig2_quality_gates.json",
-        "Fig.3": project_root / "outputs" / "redraw_v6a_best_fig3" / "figure_quality_report.json",
-        "Fig.6": project_root / "outputs" / "kg_perturbation_fig6" / "figure_quality_report.json",
-        "Fig.7": project_root / "outputs" / "kg_perturbation_fig7" / "figure_quality_report.json",
-        "Fig.9": project_root / "outputs" / "kg_perturbation_fig9" / "fig9_quality_report.json",
-        "Fig.10": project_root / "outputs" / "kg_perturbation_fig10" / "figure_quality_report.json",
+        "Fig.1": project_root / "outputs" / "fig01/old" / "figure_quality_report.json",
+        "Fig.2": project_root / "outputs" / "fig02/old" / "fig2_quality_gates.json",
+        "Fig.3": project_root / "outputs" / "fig03/old" / "figure_quality_report.json",
+        "Fig.6": project_root / "outputs" / "fig06/old" / "figure_quality_report.json",
+        "Fig.7": project_root / "outputs" / "fig07/old" / "figure_quality_report.json",
+        "Fig.9": project_root / "outputs" / "fig09/old" / "fig9_quality_report.json",
+        "Fig.10": project_root / "outputs" / "fig10/old" / "figure_quality_report.json",
     }
     fig4 = fig4_peer_review_alignment_status(project_root)
     fig10 = fig10_replacement_gate_status(project_root)
     fig9_payload = read_json(reports["Fig.9"])
     fig9_boundary = str(fig9_payload.get("aspr_qwen_boundary", "missing"))
     fig9_checkpoint_ready = "assumed" not in fig9_boundary.lower() and fig9_boundary != "missing"
-    fig5_report = project_root / "outputs" / "kg_perturbation_fig5" / "figure_quality_report.json"
-    fig5_ai_report = project_root / "outputs" / "kg_perturbation_fig5" / "ai_frontier" / "ai_frontier_quality_report.json"
+    fig5_report = project_root / "outputs" / "fig05/old" / "figure_quality_report.json"
+    fig5_ai_report = project_root / "outputs" / "fig05/old" / "ai_frontier" / "ai_frontier_quality_report.json"
     fig5_payload = read_json(fig5_report)
     fig5_ai_payload = read_json(fig5_ai_report)
     fig5_gate = quality_gate(fig5_report)
@@ -254,7 +254,7 @@ def build_claim_ledger(project_root: Path = PROJECT_ROOT) -> pd.DataFrame:
         isinstance(fig7_checks, Mapping) and fig7_checks.get("nature_rank")
     )
     fig7_strict_supported = bool(fig7_gate.get("strict_claim_supported"))
-    fig8_report = project_root / "outputs" / "kg_perturbation_fig8" / "figure_quality_report.json"
+    fig8_report = project_root / "outputs" / "fig08/old" / "figure_quality_report.json"
     fig8_gate = quality_gate(fig8_report)
 
     rows: List[Dict[str, Any]] = [
@@ -302,7 +302,7 @@ def build_claim_ledger(project_root: Path = PROJECT_ROOT) -> pd.DataFrame:
             "claim_id": "fig4_external_validation",
             "main_text_role": "extended range-restricted peer-review audit" if not fig4["claim_ready"] else "main validation",
             "current_status": fig4["status"],
-            "quality_gate_path": str(project_root / "outputs" / "kg_perturbation_fig4_full50" / "figure_quality_report.json"),
+            "quality_gate_path": str(project_root / "outputs" / "fig04/old" / "figure_quality_report.json"),
             "quality_gate_pass": int(bool(fig4["claim_ready"])),
             "allowed_claim": "Fig.4 is a range-restricted peer-review audit among accepted high-tier Nature Portfolio papers; it is not the main external validation claim unless alignment gates pass.",
             "forbidden_claim": "Do not claim global external validation, peer-review equivalence, reviewer replacement, or Fig3-score novelty alignment while Fig4 lacks low/middle global Fig3 tiers.",
@@ -405,7 +405,7 @@ def build_claim_ledger(project_root: Path = PROJECT_ROOT) -> pd.DataFrame:
             "claim_id": "fig10_module_ablation",
             "main_text_role": "pipeline audit" if not fig10["claim_ready"] else "main ablation evidence",
             "current_status": fig10["status"],
-            "quality_gate_path": str(project_root / "outputs" / "kg_perturbation_fig10" / "fig10_replacement_gates.csv"),
+            "quality_gate_path": str(project_root / "outputs" / "fig10/old" / "fig10_replacement_gates.csv"),
             "quality_gate_pass": int(bool(fig10["claim_ready"])),
             "allowed_claim": "Fig.10 is a pipeline audit with observed full-ASPR metrics and same-rubric generic baseline.",
             "forbidden_claim": "Do not claim completed causal module reruns, human preference, or ASPR-Qwen checkpoint performance while replacement gates fail.",
@@ -432,7 +432,7 @@ def build_claim_ledger(project_root: Path = PROJECT_ROOT) -> pd.DataFrame:
         "Fig.5": "fig5_backtest_focus.csv; fig5_alignment_metrics.csv; fig5_failure_cases.csv; figure_quality_report.json",
         "Fig.6": "fig6_full_rerun_manifest.csv; fig6_indicator_stability.csv; fig6_rank_stability.csv; figure_quality_report.json",
         "Fig.7": "fig7_metric_sensitivity.csv; fig7_pairwise_contribution_tests.csv; figure_quality_report.json",
-        "Fig.8": "experiments/kg_perturbation_fig8/render_fig8.py; fig8_full.png; fig8_full.svg",
+        "Fig.8": "experiments/fig08/old/render_fig8.py; fig8_full.png; fig8_full.svg",
         "Fig.9": "fig9_aspr_qwen_output.json; fig9_checkpoint_metadata.json; fig9_quality_report.json",
         "Fig.10": "fig10_true_module_rerun_results.csv; fig10_human_preference.csv; fig10_replacement_gates.csv",
     }
@@ -447,11 +447,11 @@ def build_claim_ledger(project_root: Path = PROJECT_ROOT) -> pd.DataFrame:
 def build_nature_check_rows(project_root: Path = PROJECT_ROOT) -> List[Dict[str, Any]]:
     """Build high-level readiness checks from current outputs."""
     reports = {
-        "fig1": project_root / "outputs" / "redraw_v6a_best_fig1" / "figure_quality_report.json",
-        "fig2": project_root / "outputs" / "redraw_v6a_best_fig2" / "fig2_quality_gates.json",
-        "fig3": project_root / "outputs" / "redraw_v6a_best_fig3" / "figure_quality_report.json",
-        "fig6": project_root / "outputs" / "kg_perturbation_fig6" / "figure_quality_report.json",
-        "fig7": project_root / "outputs" / "kg_perturbation_fig7" / "figure_quality_report.json",
+        "fig1": project_root / "outputs" / "fig01/old" / "figure_quality_report.json",
+        "fig2": project_root / "outputs" / "fig02/old" / "fig2_quality_gates.json",
+        "fig3": project_root / "outputs" / "fig03/old" / "figure_quality_report.json",
+        "fig6": project_root / "outputs" / "fig06/old" / "figure_quality_report.json",
+        "fig7": project_root / "outputs" / "fig07/old" / "figure_quality_report.json",
     }
     fig4 = fig4_peer_review_alignment_status(project_root)
     fig10 = fig10_replacement_gate_status(project_root)
@@ -551,7 +551,7 @@ def build_nature_check_report(
     require_all_figures: bool = False,
 ) -> Dict[str, Any]:
     """Write and return the Nature-readiness claim ledger and summary."""
-    destination = out_dir or project_root / "outputs" / "kg_perturbation_final_assembly"
+    destination = out_dir or project_root / "outputs" / "common/old/final_assembly"
     destination.mkdir(parents=True, exist_ok=True)
     ledger = build_claim_ledger(project_root)
     checks = build_nature_check_rows(project_root)
@@ -602,13 +602,13 @@ def build_nature_check_report(
 
 def _strict_fig4_blinded_labels_ready(project_root: Path) -> Dict[str, Any]:
     """Validate returned Fig.4 blinded labels for all primary tier slots."""
-    from experiments.kg_perturbation_fig4.main_fig4 import (
+    from experiments.fig04.old.main_fig4 import (
         FIG4_BLINDED_LABEL_COLUMNS,
         build_fig4_blinded_external_validation_gates,
         import_completed_fig4_blinded_label_sidecar,
     )
 
-    fig4_dir = project_root / "outputs" / "kg_perturbation_fig4_full50"
+    fig4_dir = project_root / "outputs" / "fig04/old"
     labels_path = fig4_dir / "fig4_completed_blinded_labels.csv"
     key_path = fig4_dir / "fig4_blinded_labeling_answer_key.csv"
     try:
@@ -664,7 +664,7 @@ def _strict_fig4_blinded_labels_ready(project_root: Path) -> Dict[str, Any]:
         )
         return {"passed": False, "detail": detail}
     with tempfile.TemporaryDirectory(prefix="aspr_fig4_strict_evidence_") as tmp:
-        tmp_fig4_dir = Path(tmp) / "kg_perturbation_fig4_full50"
+        tmp_fig4_dir = Path(tmp) / "fig04/old"
         shutil.copytree(fig4_dir, tmp_fig4_dir, dirs_exist_ok=True)
         try:
             packet = pd.read_csv(tmp_fig4_dir / "fig4_blinded_labeling_packet.csv")
@@ -694,9 +694,9 @@ def _strict_fig4_blinded_labels_ready(project_root: Path) -> Dict[str, Any]:
 
 def _strict_fig9_checkpoint_ready(project_root: Path) -> Dict[str, Any]:
     """Validate that Fig.9 uses a checkpoint-generated ASPR-Qwen output."""
-    from experiments.kg_perturbation_fig9.build_fig9_case import checkpoint_qwen_metadata_complete
+    from experiments.fig09.old.build_fig9_case import checkpoint_qwen_metadata_complete
 
-    fig9_dir = project_root / "outputs" / "kg_perturbation_fig9"
+    fig9_dir = project_root / "outputs" / "fig09/old"
     output = read_json(fig9_dir / "fig9_aspr_qwen_output.json")
     metadata = read_json(fig9_dir / "fig9_checkpoint_metadata.json")
     if metadata and not isinstance(output.get("checkpoint_metadata"), Mapping):
@@ -711,14 +711,14 @@ def _strict_fig9_checkpoint_ready(project_root: Path) -> Dict[str, Any]:
 
 def _strict_fig10_true_reruns_ready(project_root: Path) -> Dict[str, Any]:
     """Validate Fig.10 true disabled-module rerun rows and artifact links."""
-    from experiments.kg_perturbation_fig10.build_fig10_ablation import (
+    from experiments.fig10.old.build_fig10_ablation import (
         VARIANTS,
         expected_case_ids,
         true_module_rerun_status,
     )
 
-    path = project_root / "outputs" / "kg_perturbation_fig10" / "fig10_true_module_rerun_results.csv"
-    fig4_metrics = project_root / "outputs" / "kg_perturbation_fig4_full50" / "fig4_metrics_summary.csv"
+    path = project_root / "outputs" / "fig10/old" / "fig10_true_module_rerun_results.csv"
+    fig4_metrics = project_root / "outputs" / "fig04/old" / "fig4_metrics_summary.csv"
     try:
         table = pd.read_csv(path)
     except (OSError, pd.errors.EmptyDataError, pd.errors.ParserError) as exc:
@@ -745,12 +745,12 @@ def _strict_fig10_true_reruns_ready(project_root: Path) -> Dict[str, Any]:
 
 def _strict_fig10_blinded_preferences_ready(project_root: Path) -> Dict[str, Any]:
     """Validate Fig.10 completed blinded preference collection."""
-    from experiments.kg_perturbation_fig10.build_fig10_ablation import (
+    from experiments.fig10.old.build_fig10_ablation import (
         build_fig10_blinded_preference_completion_audit,
         load_human_preference_results,
     )
 
-    fig10_dir = project_root / "outputs" / "kg_perturbation_fig10"
+    fig10_dir = project_root / "outputs" / "fig10/old"
     audit = build_fig10_blinded_preference_completion_audit(fig10_dir, write=False)
     overall = audit[audit["audit_item"].astype(str).eq("overall_blinded_preference_ready")]
     if overall.empty:
@@ -857,11 +857,11 @@ def build_strict_evidence_check_report(
     out_dir: Optional[Path] = None,
 ) -> Dict[str, Any]:
     """Write and return the strict external-evidence artifact check."""
-    from experiments.kg_perturbation_final_assembly.build_final_assembly import (
+    from experiments.common.old.final_assembly.build_final_assembly import (
         build_strict_evidence_collection_checklist,
     )
 
-    destination = out_dir or project_root / "outputs" / "kg_perturbation_final_assembly"
+    destination = out_dir or project_root / "outputs" / "common/old/final_assembly"
     destination.mkdir(parents=True, exist_ok=True)
     checklist = build_strict_evidence_collection_checklist(project_root)
     checks: List[Dict[str, Any]] = []
@@ -924,7 +924,7 @@ def build_strict_evidence_check_report(
 def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project-root", type=Path, default=PROJECT_ROOT)
-    parser.add_argument("--out-dir", type=Path, default=PROJECT_ROOT / "outputs" / "kg_perturbation_final_assembly")
+    parser.add_argument("--out-dir", type=Path, default=PROJECT_ROOT / "outputs" / "common/old/final_assembly")
     parser.add_argument("--require-all-figures", action="store_true",
                         help="Require every Fig.1-Fig.10 claim gate, including Extended Data replacement gates, to pass.")
     parser.add_argument("--strict-evidence-check", action="store_true",

@@ -12,10 +12,10 @@
     "control_registry": "configs/control_feature_registry_v6_1.json",
     "v6_dataset": "data/knowledge_corpus/nature_multihorizon_v6_local",
     "v6_1_dataset": "data/knowledge_corpus/nature_multihorizon_v6_1_local",
-    "v6_1_analysis": "outputs/nature_multihorizon_v6_1_r4_local",
+    "v6_1_analysis": "outputs/common/old/model/v6_1_r4",
     "openalex_snapshot": "/mnt/d/FabCitationData/openalex-snapshot",
-    "target_works": "outputs/nature_portfolio_v5/nature_target_works.csv",
-    "reference_edges": "outputs/nature_portfolio_v5/nature_reference_edges.csv"
+    "target_works": "outputs/common/new/data/nature_portfolio_v5/nature_target_works.csv",
+    "reference_edges": "outputs/common/new/data/nature_portfolio_v5/nature_reference_edges.csv"
   },
   "screening": {
     "reference_subsample_fraction": 0.8,

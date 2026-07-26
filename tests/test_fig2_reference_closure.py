@@ -7,9 +7,9 @@ from pathlib import Path
 
 import pandas as pd
 
-from experiments.kg_perturbation_fig2.fig2_empirical_panels import add_reference_closure_nodes, build_fig2_quality_gates
-from experiments.kg_perturbation_fig2.build_fig2_reference_closure import build_reference_closure
-from experiments.kg_perturbation_fig2.build_fig2_strong_inputs import (
+from experiments.fig02.old.fig2_empirical_panels import add_reference_closure_nodes, build_fig2_quality_gates
+from experiments.fig02.old.build_fig2_reference_closure import build_reference_closure
+from experiments.fig02.old.build_fig2_strong_inputs import (
     add_matching_columns,
     build_strong_inputs,
     compute_control_tier_count_maps,
@@ -192,7 +192,7 @@ class Fig2ReferenceClosureTests(unittest.TestCase):
     def test_makefile_fig2_uses_real_fig1_snapshot_dir(self) -> None:
         makefile = Path("Makefile").read_text(encoding="utf-8")
 
-        self.assertIn("--fig1-snapshot-dir outputs/redraw_v6a_best_fig1/crispr", makefile)
+        self.assertIn("--fig1-snapshot-dir outputs/fig01/old/work/redraw_v6a_best/crispr", makefile)
 
 
 if __name__ == "__main__":

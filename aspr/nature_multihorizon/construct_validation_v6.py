@@ -583,7 +583,7 @@ def run_construct_validation(
     correlations["collinearity_flag"] = correlations["spearman"].abs().ge(
         collinearity_threshold
     )
-    target_root = project_root / "outputs/nature_portfolio_v5"
+    target_root = project_root / "outputs/common/new/data/nature_portfolio_v5"
     review_features, review_correlations, review_summary = (
         review_silver_validation(
             target_works_path=target_root / "nature_target_works.csv",

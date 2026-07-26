@@ -1,0 +1,14 @@
+{
+  "base_suite_config": "configs/aspr_v6_1_nature_figures.json",
+  "output_dir": "outputs/fig10/new",
+  "dpi": 220,
+  "formats": ["png", "svg", "pdf"],
+  "overrides": {
+    "fig10": {
+      "bootstrap_iterations": 1000,
+      "require_same_path_rerun": true,
+      "require_human_preference_rows": 750,
+      "seed": 20260725
+    }
+  }
+}

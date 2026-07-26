@@ -13,7 +13,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from experiments.kg_perturbation_fig4.main_fig4 import (  # noqa: E402
+from experiments.fig04.old.main_fig4 import (  # noqa: E402
     Fig4ArgsForAgent,
     audit_markdown_inputs,
     build_fig3_weighted_prior_rows,
@@ -39,7 +39,7 @@ from experiments.kg_perturbation_fig4.main_fig4 import (  # noqa: E402
     write_json,
     write_jsonl,
 )
-from experiments.kg_perturbation_fig4.draw_fig4_publication_summary import (  # noqa: E402
+from experiments.fig04.old.draw_fig4_publication_summary import (  # noqa: E402
     draw_figure as draw_publication_summary,
 )
 
@@ -511,7 +511,7 @@ def test_fig3_weighted_prior_uses_z_style_scores_not_raw_product() -> None:
 
 
 def test_graph_prior_prompt_hides_individual_metric_values() -> None:
-    from experiments.kg_perturbation_fig4.main_fig4 import graph_metric_prompt_block
+    from experiments.fig04.old.main_fig4 import graph_metric_prompt_block
 
     prompt = graph_metric_prompt_block(
         {

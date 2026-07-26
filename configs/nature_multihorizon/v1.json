@@ -8,7 +8,7 @@
     {"tau": 8, "complete_publication_end_year": 2017, "development_end_year": 2013, "sealed_test_start_year": 2014, "sealed_test_end_year": 2017, "min_future_citers": 10, "target_name": "RGPM-D8"}
   ],
   "source": {
-    "v5_output_dir": "outputs/nature_portfolio_v5",
+    "v5_output_dir": "outputs/common/new/data/nature_portfolio_v5",
     "future_multihorizon_dir": "future_multihorizon",
     "v5_corpus_dir": "data/knowledge_corpus/v5_nature_portfolio_full",
     "openalex_snapshot_dir": "/mnt/d/FabCitationData/openalex-snapshot"

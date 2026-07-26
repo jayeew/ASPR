@@ -1,0 +1,16 @@
+{
+  "base_suite_config": "configs/aspr_v6_1_nature_figures.json",
+  "output_dir": "outputs/fig05/new",
+  "dpi": 220,
+  "formats": ["png", "svg", "pdf"],
+  "overrides": {
+    "fig5": {
+      "cutoffs": [2002, 2007, 2012],
+      "seed_window_years": 3,
+      "validation_window_years": 4,
+      "top_n": 10,
+      "bootstrap_iterations": 500,
+      "seed": 20260725
+    }
+  }
+}

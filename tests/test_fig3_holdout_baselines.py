@@ -11,7 +11,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from experiments.kg_perturbation_fig3.fig3_empirical_weight_learning import (  # noqa: E402
+from experiments.fig03.old.fig3_empirical_weight_learning import (  # noqa: E402
     compute_leave_domain_out_validation,
     compute_nonlinear_challenger_diagnostics,
     compute_temporal_holdout_validation,

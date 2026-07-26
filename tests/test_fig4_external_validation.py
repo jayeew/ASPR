@@ -13,7 +13,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from experiments.kg_perturbation_fig4.main_fig4 import (  # noqa: E402
+from experiments.fig04.old.main_fig4 import (  # noqa: E402
     build_fig4_candidate_screen,
     build_fig4_external_validation_target_audit,
     build_fig4_external_validation_gates,
@@ -1324,7 +1324,7 @@ class Fig4ExternalValidationTests(unittest.TestCase):
         self.assertLessEqual(len(extract_row_keywords(row, limit=3)), 3)
 
     def test_renderer_uses_matplotlib_orientation_keyword(self) -> None:
-        source = (PROJECT_ROOT / "experiments/kg_perturbation_fig4/main_fig4.py").read_text(encoding="utf-8")
+        source = (PROJECT_ROOT / "experiments/fig04/old/main_fig4.py").read_text(encoding="utf-8")
 
         self.assertNotIn("vert=", source)
         self.assertIn('orientation="horizontal"', source)

@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from experiments.kg_perturbation_final_assembly.build_visual_redesign_handoff import build_handoff
+from experiments.common.old.final_assembly.build_visual_redesign_handoff import build_handoff
 
 
 class VisualRedesignHandoffTests(unittest.TestCase):

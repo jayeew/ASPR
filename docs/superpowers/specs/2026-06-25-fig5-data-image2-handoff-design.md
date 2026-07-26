@@ -13,17 +13,17 @@ The Python code should prioritize auditable result data over deterministic final
 
 Default inputs come from the existing Fig. 3 run:
 
-- `outputs/redraw_v6a_best_fig3/multi_domain/fig3_score_table.csv`
-- `outputs/redraw_v6a_best_fig3/fig3_input/multi_domain/works.csv`
-- `outputs/redraw_v6a_best_fig3/fig3_input/multi_domain/topics.csv`
-- `outputs/redraw_v6a_best_fig3/fig3_input/multi_domain/topic_edges.csv`
-- `outputs/redraw_v6a_best_fig3/fig3_input/multi_domain/citations.csv`
+- `outputs/fig03/old/work/redraw_v6a_best/multi_domain/fig3_score_table.csv`
+- `outputs/fig03/old/work/redraw_v6a_best/fig3_input/multi_domain/works.csv`
+- `outputs/fig03/old/work/redraw_v6a_best/fig3_input/multi_domain/topics.csv`
+- `outputs/fig03/old/work/redraw_v6a_best/fig3_input/multi_domain/topic_edges.csv`
+- `outputs/fig03/old/work/redraw_v6a_best/fig3_input/multi_domain/citations.csv`
 
 The script must still accept explicit `--fig3-run-dir`, `--fig3-input-dir`, `--out-dir`, and optional domain filters.
 
 ## Outputs
 
-The data package remains under `outputs/kg_perturbation_fig5/plot_data/`:
+The data package remains under `outputs/fig05/old/work/kg_perturbation/plot_data/`:
 
 - `base/papers_master.csv`
 - `base/citation_edges.csv`
@@ -38,7 +38,7 @@ The data package remains under `outputs/kg_perturbation_fig5/plot_data/`:
 - `derived/fig5_panel_a_meta.json`
 - `config/fig5_config.json`
 
-The image-2 handoff package is written under `outputs/kg_perturbation_fig5/image2_handoff/`:
+The image-2 handoff package is written under `outputs/fig05/old/work/kg_perturbation/image2_handoff/`:
 
 - `fig5_image2_prompt.md`: complete model prompt for the final figure.
 - `fig5_panel_text.json`: exact title, subtitle, panel labels, focus rankings, scores, card copy, and take-home text.

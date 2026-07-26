@@ -7,9 +7,9 @@ from pathlib import Path
 
 import pandas as pd
 
-from experiments.kg_perturbation_fig10.build_fig10_ablation import METRICS
-import experiments.kg_perturbation_fig10.build_fig10_generic_baseline as generic_baseline
-from experiments.kg_perturbation_fig10.build_fig10_generic_baseline import (
+from experiments.fig10.old.build_fig10_ablation import METRICS
+import experiments.fig10.old.build_fig10_generic_baseline as generic_baseline
+from experiments.fig10.old.build_fig10_generic_baseline import (
     build_generic_prompt,
     parse_json_response,
     run_generic_baseline,

@@ -14,7 +14,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from scripts.screen_corpus_candidates import (  # noqa: E402
+from experiments.fig03.old.screen_corpus_candidates import (  # noqa: E402
     annotate_citations,
     annotate_reliable_anchors,
     complete_works,
@@ -167,7 +167,7 @@ def test_proxy_cli_writes_nonempty_outputs() -> None:
         subprocess.run(
             [
                 sys.executable,
-                "scripts/screen_corpus_candidates.py",
+                "experiments/fig03/old/screen_corpus_candidates.py",
                 "--stage",
                 "proxy",
                 "--corpus-dir",

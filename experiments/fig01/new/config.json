@@ -1,0 +1,116 @@
+{
+  "snapshot_renderer_source": "experiments/fig01/old/fig1_knowledge_perturbation.py",
+  "frozen_graph_root": "data/knowledge_corpus/v2_publication_v6a_locked_candidate/views/fig1",
+  "current_feature_dataset": "data/knowledge_corpus/nature_multihorizon_v6_1_local/innovation_candidate_features.parquet",
+  "current_paper_dataset": "data/knowledge_corpus/nature_multihorizon_v6_1_local/papers_primary_articles.parquet",
+  "candidate_registry": "configs/innovation_candidate_registry_v6_1.json",
+  "output_dir": "outputs/fig01/new",
+  "formats": [
+    "png",
+    "svg",
+    "pdf"
+  ],
+  "dpi": 300,
+  "figure_width": 29.0,
+  "row_height": 4.15,
+  "domain_figure_width": 20.0,
+  "domain_figure_height": 10.2,
+  "title": "Knowledge-graph reconfiguration and publication-time innovation signals",
+  "subtitle": "Seven-topic cumulative graph views (left) and locally selected high-change v6.1 indicators (right); all windows end by 2017.",
+  "minimum_indicator_sample": 10,
+  "minimum_selected_indicators": 4,
+  "maximum_selected_indicators": 5,
+  "maximum_display_topics": 7,
+  "feature_horizon_end": 2017,
+  "case_replacements": [
+    {
+      "excluded": "exoplanets",
+      "replacement": "microbiome_metagenomics",
+      "reason": "The frozen 1990–2004 astronomy slice has too few papers with calculable publication-time reference indicators; no values are imputed."
+    }
+  ],
+  "domains": [
+    {
+      "slug": "crispr",
+      "config": "experiments/fig01/old/configs/v6a_display_crispr.yaml",
+      "graph_windows": [
+        [2005, 2011],
+        [2012, 2014],
+        [2015, 2016],
+        [2017, 2017]
+      ],
+      "panel_captions": [
+        "CRISPR immunity prior",
+        "Programmable Cas9 shock",
+        "Early genome-editing diffusion",
+        "Diversification by 2017"
+      ],
+      "feature_domain12": "life_molecular",
+      "feature_subfields": [
+        "Molecular Biology",
+        "Genetics"
+      ]
+    },
+    {
+      "slug": "graphene_2d_materials",
+      "config": "experiments/fig01/old/configs/v6a_display_graphene.yaml",
+      "graph_windows": [
+        [2004, 2004],
+        [2005, 2007],
+        [2008, 2012],
+        [2013, 2017]
+      ],
+      "panel_captions": [
+        "Graphene isolation",
+        "Electronic transport expansion",
+        "Devices and synthesis branching",
+        "2D-material families by 2017"
+      ],
+      "feature_domain12": "materials_nanoscience",
+      "feature_subfields": [
+        "Materials Chemistry",
+        "Electronic, Optical and Magnetic Materials",
+        "Condensed Matter Physics"
+      ]
+    },
+    {
+      "slug": "ipsc_reprogramming",
+      "config": "experiments/fig01/old/configs/v6a_display_ipsc.yaml",
+      "graph_windows": [
+        [1998, 2005],
+        [2006, 2008],
+        [2009, 2013],
+        [2014, 2017]
+      ],
+      "panel_captions": [
+        "Stem-cell and cloning prior",
+        "iPSC platform shock",
+        "Disease-model reconfiguration",
+        "Differentiation by 2017"
+      ],
+      "feature_domain12": "life_molecular",
+      "feature_subfields": [
+        "Cell Biology",
+        "Developmental Biology"
+      ]
+    },
+    {
+      "slug": "microbiome_metagenomics",
+      "config": "experiments/fig01/new/configs/microbiome_metagenomics.yaml",
+      "graph_windows": [
+        [2005, 2009],
+        [2010, 2012],
+        [2013, 2015],
+        [2016, 2017]
+      ],
+      "panel_captions": [
+        "Metagenomic sequencing prior",
+        "Gut catalogue and HMP",
+        "Community-function expansion",
+        "Host–microbiome diversification"
+      ],
+      "feature_domain12": "ecology_evolution_microbiology",
+      "feature_subfields": []
+    }
+  ]
+}

@@ -390,7 +390,7 @@ python scripts/run_fig3_nature_full_v5.py \\
   --works {source_dir / 'nature_target_works.csv'} \\
   --reference-works {source_dir / 'nature_reference_works.csv'} \\
   --future-graph-deltas {output_dir / 'horizons/tau5/nature_future_graph_deltas.csv'} \\
-  --out-dir outputs/nature_portfolio_v5/fig3_nature_full_v5_tau5
+  --out-dir outputs/common/new/data/nature_portfolio_v5/fig3_nature_full_v5_tau5
 ```
 
 Replace `tau5` with `tau3` or `tau8` for the other windows.

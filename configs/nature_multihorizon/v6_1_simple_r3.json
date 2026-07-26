@@ -2,7 +2,7 @@
   "schema_version": "6.1.0",
   "protocol_id": "aspr-nature-v6.1-simple-fixed-medium-r3-2026-07-24",
   "revision_parent_config": "configs/nature_multihorizon/v6_1_simple_r2.json",
-  "revision_reason": "R3 is an outcome-blind measurement revision triggered because the R2 reference-overlap implementation passed overall eligible coverage (0.8754) but failed the preregistered each-domain threshold in mathematics/statistics (0.3750 < 0.50). R3 keeps the 118,059-paper focal cohort, source formula, ten-year reference window, three-year co-citing window, thresholds, labels, folds and fixed medium model unchanged, but uses all locally frozen Nature v5 records with valid prior bibliographies and OpenAlex primary fields as the background comparison universe. R2 artifacts and hashes are retained under outputs/nature_multihorizon_v6_1_r2_local/measurement_revision_r2_primary_scope. No future-influence label or OOF prediction was read.",
+  "revision_reason": "R3 is an outcome-blind measurement revision triggered because the R2 reference-overlap implementation passed overall eligible coverage (0.8754) but failed the preregistered each-domain threshold in mathematics/statistics (0.3750 < 0.50). R3 keeps the 118,059-paper focal cohort, source formula, ten-year reference window, three-year co-citing window, thresholds, labels, folds and fixed medium model unchanged, but uses all locally frozen Nature v5 records with valid prior bibliographies and OpenAlex primary fields as the background comparison universe. R2 artifacts and hashes are retained under outputs/common/old/model/v6_1_r2/measurement_revision_r2_primary_scope. No future-influence label or OOF prediction was read.",
   "disclosure": "Post-v6, result-known, versioned extension. Candidate evidence and outcome-blind measurement gates are frozen before every v6.1 OOF label is read.",
   "network_policy_for_experiment": "forbidden",
   "raw_data_policy": "local_frozen_only",
@@ -12,10 +12,10 @@
     "control_registry": "configs/control_feature_registry_v6_1.json",
     "v6_dataset": "data/knowledge_corpus/nature_multihorizon_v6_local",
     "v6_1_dataset": "data/knowledge_corpus/nature_multihorizon_v6_1_local",
-    "v6_1_analysis": "outputs/nature_multihorizon_v6_1_r3_local",
+    "v6_1_analysis": "outputs/common/old/model/v6_1_r3",
     "openalex_snapshot": "/mnt/d/FabCitationData/openalex-snapshot",
-    "target_works": "outputs/nature_portfolio_v5/nature_target_works.csv",
-    "reference_edges": "outputs/nature_portfolio_v5/nature_reference_edges.csv"
+    "target_works": "outputs/common/new/data/nature_portfolio_v5/nature_target_works.csv",
+    "reference_edges": "outputs/common/new/data/nature_portfolio_v5/nature_reference_edges.csv"
   },
   "screening": {
     "reference_subsample_fraction": 0.8,

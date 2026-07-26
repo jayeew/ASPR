@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from experiments.kg_perturbation_fig5.build_fig5_ai_frontier import (
+from experiments.fig05.old.build_fig5_ai_frontier import (
     add_scores_and_positions,
     build_quality_gates,
     build_term_table,

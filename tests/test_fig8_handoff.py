@@ -6,7 +6,7 @@ from pathlib import Path
 
 from PIL import Image
 
-from experiments.kg_perturbation_fig8.build_fig8_handoff import build_handoff
+from experiments.fig08.old.build_fig8_handoff import build_handoff
 
 
 PROMPT_TEXT = """
@@ -40,8 +40,8 @@ class Fig8HandoffTests(unittest.TestCase):
     def test_makefile_uses_fig8_handoff_builder(self) -> None:
         makefile = Path("Makefile").read_text(encoding="utf-8")
 
-        self.assertIn("experiments/kg_perturbation_fig8/build_fig8_handoff.py", makefile)
-        self.assertNotIn("experiments.kg_perturbation_fig8.render_fig8", makefile)
+        self.assertIn("experiments/fig08/old/build_fig8_handoff.py", makefile)
+        self.assertNotIn("experiments.fig08.old.render_fig8", makefile)
 
 
 if __name__ == "__main__":

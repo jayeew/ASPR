@@ -1,0 +1,17 @@
+{
+  "base_suite_config": "configs/aspr_v6_1_nature_figures.json",
+  "output_dir": "outputs/fig06/new",
+  "dpi": 220,
+  "formats": ["png", "svg", "pdf"],
+  "overrides": {
+    "fig6": {
+      "audit_papers_per_domain": 200,
+      "dose_repetitions": 20,
+      "execute_reference_doses": true,
+      "dose_cache": "outputs/common/new/cache/fig6_reference_doses_stratified_v3.parquet",
+      "reliability_min_references": 10,
+      "reliability_min_coverage": 0.8,
+      "seed": 20260725
+    }
+  }
+}

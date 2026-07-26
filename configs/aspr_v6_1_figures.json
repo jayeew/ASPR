@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0.0",
+  "suite_id": "aspr-v6.1-fig1-fig10-redesign-r1",
+  "source_config": "configs/nature_multihorizon/v6_1_simple.json",
+  "analysis_root": "outputs/common/new/model/v6_1_r5",
+  "dataset_root": "data/knowledge_corpus/nature_multihorizon_v6_1_local",
+  "candidate_registry": "configs/innovation_candidate_registry_v6_1.json",
+  "bootstrap": {
+    "iterations": 500,
+    "seed": 20260724
+  },
+  "render": {
+    "dpi": 300,
+    "formats": [
+      "png",
+      "svg"
+    ]
+  },
+  "ablation": {
+    "horizon": 5,
+    "model_parameter_id": "medium",
+    "model_families": [
+      "k1_plus_one_angle",
+      "final_minus_one_angle"
+    ],
+    "outcome_dependent_selection_forbidden": true
+  },
+  "claim_boundary": "The suite evaluates publication-time innovation signals as ranking predictors of future diffusion. Angle and feature ablations are post-hoc interpretation analyses and must not be used for outcome-dependent indicator selection or causal claims."
+}

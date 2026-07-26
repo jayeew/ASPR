@@ -225,24 +225,39 @@ outputs/logs/kg_validator.log
 experiments/kg_validator/README.md
 ```
 
-### kg_perturbation_fig1：知识图谱扰动 Fig. 1 实验
+### 当前 Fig.01–Fig.10 实验布局
+
+当前共享实现位于 `experiments/common/new/base`，各图的轻量入口位于
+`experiments/figXX/new`；历史代码统一位于相同 Fig 目录的 `old`。
+
+```bash
+python3 -m experiments.common.new.run_all \
+  --figs 1,2,3,4,5,6,7,9,10 \
+  --stage all
+```
+
+详细目录、保留与清理规则见
+`docs/experiment_output_layout.md` 和
+`docs/experiment_output_cleanup_audit.md`。
+
+### 历史 Fig.1 知识图谱扰动实验
 
 运行 CRISPR 示例：
 
 ```bash
-bash experiments/kg_perturbation_fig1/run_crispr_example.sh
+bash experiments/fig01/old/run_crispr_example.sh
 ```
 
 默认输出路径：
 
 ```text
-outputs/kg_perturbation_fig1/
+outputs/fig01/old/work/kg_perturbation/
 ```
 
 配置文件位于：
 
 ```text
-experiments/kg_perturbation_fig1/configs/
+experiments/fig01/old/configs/
 ```
 
 ## 数据与生成物约定
@@ -250,7 +265,7 @@ experiments/kg_perturbation_fig1/configs/
 - `data/`：相对稳定的数据、缓存和本地数据集，可以作为后续流程输入。
 - `outputs/`：运行时生成的图表、日志、下载文件、checkpoint、GraphRAG 索引。
 - `outputs/downloads/`、`outputs/checkpoints/`、`outputs/graphrag/`、`outputs/logs/` 默认在 `.gitignore` 中忽略。
-- 已经存在的演示图表和实验历史结果保留在 `outputs/demo/`、`outputs/kg_validator/`、`outputs/kg_perturbation_fig1/`。
+- 已经存在的演示图表和实验历史结果保留在 `outputs/demo/`、`outputs/kg_validator/`、`outputs/fig01/old/work/kg_perturbation/`。
 
 ### 统一论文图谱数据层
 
@@ -286,7 +301,7 @@ python -m aspr.corpus audit
 python -m aspr.corpus make-views
 ```
 
-Fig2/Fig3/Fig5 的默认输入会优先使用该 corpus view；没有生成时仍回退到旧的 `outputs/kg_perturbation_fig1/` 或 Fig3 输出目录。Fig1 可通过 `--corpus-dir data/knowledge_corpus/v1_large` 先 materialize 兼容缓存再绘图。
+Fig2/Fig3/Fig5 的默认输入会优先使用该 corpus view；没有生成时仍回退到旧的 `outputs/fig01/old/work/kg_perturbation/` 或 Fig3 输出目录。Fig1 可通过 `--corpus-dir data/knowledge_corpus/v1_large` 先 materialize 兼容缓存再绘图。
 
 ## 依赖说明
 
@@ -316,7 +331,7 @@ tqdm
 pyyaml
 ```
 
-不同子模块依赖不同。只运行主评审流程时，不一定需要安装所有实验依赖；运行 `experiments/kg_validator` 或 `experiments/kg_perturbation_fig1` 时需要额外安装图计算和绘图相关包。
+不同子模块依赖不同。只运行主评审流程时，不一定需要安装所有实验依赖；运行 `experiments/kg_validator` 或 `experiments/fig01/old` 时需要额外安装图计算和绘图相关包。
 
 ## 远程资源
 

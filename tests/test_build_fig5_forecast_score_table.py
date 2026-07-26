@@ -5,7 +5,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from scripts import build_fig5_forecast_score_table as scorer
+from experiments.fig05.old import build_fig5_forecast_score_table as scorer
 
 
 def test_load_weights_handles_fig3_unnamed_metric_column(tmp_path: Path) -> None:

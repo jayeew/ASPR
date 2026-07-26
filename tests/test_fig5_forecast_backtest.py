@@ -13,7 +13,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from experiments.kg_perturbation_fig5.fig5_forecast_outcomes import (  # noqa: E402
+from experiments.fig05.old.fig5_forecast_outcomes import (  # noqa: E402
     Fig5Tables,
     add_focus_scores,
     add_backtest_baseline_columns,

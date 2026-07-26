@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from experiments.nature_submission_optimization.build_nature_optimization import build_optimization
+from experiments.common.old.submission_optimization.build_nature_optimization import build_optimization
 
 
 def read_rows(path: Path) -> list[dict[str, str]]:

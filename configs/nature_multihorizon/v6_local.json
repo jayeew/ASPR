@@ -9,7 +9,7 @@
   "sources": [
     {
       "asset_id": "nature_v5_openalex_outputs",
-      "path": "outputs/nature_portfolio_v5",
+      "path": "outputs/common/new/data/nature_portfolio_v5",
       "role": "Nature Portfolio v5 target papers, reference lists, reference closure, source roster, and closure manifests",
       "required": true,
       "required_files": [
@@ -29,7 +29,7 @@
     },
     {
       "asset_id": "nature_v5_future_multihorizon",
-      "path": "outputs/nature_portfolio_v5/future_multihorizon",
+      "path": "outputs/common/new/data/nature_portfolio_v5/future_multihorizon",
       "role": "Frozen D3/D5/D8 future citer layer and precomputed diffusion components",
       "required": true,
       "required_files": [
@@ -93,8 +93,8 @@
   ],
   "storage": {
     "derived_dataset_root": "data/knowledge_corpus/nature_multihorizon_v6_local",
-    "analysis_root": "outputs/nature_multihorizon_v6_local",
-    "source_audit_path": "outputs/nature_multihorizon_v6_local/source_audit.json"
+    "analysis_root": "outputs/common/old/model/v6",
+    "source_audit_path": "outputs/common/old/model/v6/source_audit.json"
   },
   "cohort_protocol": {
     "scope": "common_tau8_complete_publication_year_le_2017",

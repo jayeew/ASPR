@@ -65,7 +65,7 @@ class ReproducibilityManifestTests(unittest.TestCase):
         makefile = PROJECT_ROOT / "Makefile"
         self.assertTrue(makefile.exists())
         text = makefile.read_text(encoding="utf-8")
-        self.assertIn("--data-dir outputs/redraw_v6a_best_fig2/fig2_strong_input", text)
+        self.assertIn("--data-dir outputs/fig02/old/work/redraw_v6a_best/fig2_strong_input", text)
         self.assertIn("--tau $(FIG2_FUTURE_TAU)", text)
         self.assertIn("FIG3_MIN_CONTROLS ?= 50", text)
         self.assertIn("--min-controls $(FIG3_MIN_CONTROLS)", text)
@@ -103,9 +103,9 @@ class ReproducibilityManifestTests(unittest.TestCase):
         self.assertIn("fig10_completed_blinded_preferences.csv", text)
         self.assertIn("fig10-merge-blinded-preferences:", text)
         self.assertIn("merge_fig10_evaluator_preference_returns", text)
-        self.assertIn("experiments/kg_perturbation_fig4/main_fig4.py", text)
-        self.assertIn("experiments/kg_perturbation_fig10/build_fig10_ablation.py", text)
-        self.assertIn("experiments/kg_perturbation_final_assembly/build_final_assembly.py", text)
+        self.assertIn("experiments/fig04/old/main_fig4.py", text)
+        self.assertIn("experiments/fig10/old/build_fig10_ablation.py", text)
+        self.assertIn("experiments/common/old/final_assembly/build_final_assembly.py", text)
         self.assertIn("--strict-evidence-check", text)
 
     def test_makefile_exposes_fig9_checkpoint_rerun_target(self) -> None:

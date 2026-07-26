@@ -14,8 +14,8 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-import experiments.kg_perturbation_fig6.build_fig6_robustness as fig6_module  # noqa: E402
-from experiments.kg_perturbation_fig6.build_fig6_robustness import (  # noqa: E402
+import experiments.fig06.old.build_fig6_robustness as fig6_module  # noqa: E402
+from experiments.fig06.old.build_fig6_robustness import (  # noqa: E402
     FULL_RERUN_INDICATOR_STABILITY,
     FULL_RERUN_MANIFEST,
     FULL_RERUN_PRIMARY_MODEL_STABILITY,
@@ -37,7 +37,7 @@ from experiments.kg_perturbation_fig6.build_fig6_robustness import (  # noqa: E4
     write_full_rerun_failure_cases,
     write_reference_stable_subset_diagnostic,
 )
-from experiments.kg_perturbation_fig3.fig3_empirical_weight_learning import (  # noqa: E402
+from experiments.fig03.old.fig3_empirical_weight_learning import (  # noqa: E402
     RawData,
     compute_indicator_and_delta_tables,
 )
@@ -642,7 +642,7 @@ class Fig6RobustnessTests(unittest.TestCase):
                 return frame
 
             with patch(
-                "experiments.kg_perturbation_fig6.build_fig6_robustness.recompute_formal_fig3_indicators",
+                "experiments.fig06.old.build_fig6_robustness.recompute_formal_fig3_indicators",
                 side_effect=fake_recompute,
             ):
                 _manifest, _indicator, rank = build_full_graph_rerun_artifacts(
@@ -800,7 +800,7 @@ class Fig6RobustnessTests(unittest.TestCase):
                 },
             )
 
-        with patch("experiments.kg_perturbation_fig6.build_fig6_robustness.requests.get", side_effect=fake_get):
+        with patch("experiments.fig06.old.build_fig6_robustness.requests.get", side_effect=fake_get):
             citations, fetched, status = fetch_openalex_references_for_sample(works, sample_ids, batch_size=2)
 
         self.assertEqual("success", status)

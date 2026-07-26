@@ -12,14 +12,14 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from experiments.kg_perturbation_fig3.fig3_empirical_weight_learning import (  # noqa: E402
+from experiments.fig03.old.fig3_empirical_weight_learning import (  # noqa: E402
     fig3_existing_selected_outputs_reuse_ready,
 )
 
 
 def _args(out_dir: Path, n_weight_samples: int = 5000) -> argparse.Namespace:
     return argparse.Namespace(
-        data_dir=Path("outputs/redraw_v6a_best_fig2/fig2_strong_input"),
+        data_dir=Path("outputs/fig02/old/work/redraw_v6a_best/fig2_strong_input"),
         out_dir=out_dir,
         run_mode="multi_domain",
         panel="all",
@@ -65,7 +65,7 @@ def _write_reusable_fixture(out_dir: Path, domains: list[str]) -> None:
                 "figure": "fig3",
                 "domains": domains,
                 "inputs": {
-                    "data_dir": "outputs/redraw_v6a_best_fig2/fig2_strong_input",
+                    "data_dir": "outputs/fig02/old/work/redraw_v6a_best/fig2_strong_input",
                     "run_mode": "multi_domain",
                     "panel": "all",
                     "tau": 8,
@@ -79,7 +79,7 @@ def _write_reusable_fixture(out_dir: Path, domains: list[str]) -> None:
                 "command_argv": [
                     "fig3_empirical_weight_learning.py",
                     "--data-dir",
-                    "outputs/redraw_v6a_best_fig2/fig2_strong_input",
+                    "outputs/fig02/old/work/redraw_v6a_best/fig2_strong_input",
                     "--run-mode",
                     "multi_domain",
                     "--panel",
