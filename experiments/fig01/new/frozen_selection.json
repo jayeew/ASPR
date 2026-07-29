@@ -1,0 +1,54 @@
+{
+  "selection_version": "fig1-old-spacious-selection-v6-4-20260727",
+  "selection_status": "versioned_descriptive_replacement_after_landmark_evidence_data_sufficiency_and_recency_audit",
+  "domain_selection_rule": "retain the first three established high-change cases and replace the manual-only immune-checkpoint anchor with the DOI-validated 2007 Wellcome Trust Case Control Consortium genome-wide association study; the original Nature article, an independent peer-reviewed contemporaneous editorial, and later peer-reviewed field histories identify the study as a landmark or field-scale starting point; the local frozen corpus supplies complete graph transitions, and three of its four frozen change-ranked indicators pass the shared absolute late-minus-pre display threshold of 0.09; no D5, OOF, citation outcome, current citation count, or future-impact variable was used",
+  "indicator_selection_rule": "retain the existing field-specific four-window change ranking; for the GWAS replacement freeze the top four eligible indicators before rerendering, then apply the shared display-only late-minus-pre gate",
+  "cases": [
+    {
+      "selection_rank": 1,
+      "episode_id": "crispr_2012_2013",
+      "domain": "crispr",
+      "features": [
+        "field_variety",
+        "field_disparity_cosine_mean",
+        "field_gini_balance",
+        "hypergeom_conventionality_median_t0"
+      ]
+    },
+    {
+      "selection_rank": 2,
+      "episode_id": "graphene_2004",
+      "domain": "graphene_2d_materials",
+      "features": [
+        "hypergeom_conventionality_median_t0",
+        "field_variety",
+        "reference_overlap_novelty_t0",
+        "first_time_source_pair_share",
+        "field_gini_balance"
+      ]
+    },
+    {
+      "selection_rank": 3,
+      "episode_id": "click_chemistry_2002",
+      "domain": "click_chemistry_cuaac",
+      "features": [
+        "field_disparity_cosine_mean",
+        "rao_stirling_integration",
+        "field_variety",
+        "hypergeom_conventionality_median_t0",
+        "first_time_source_pair_share"
+      ]
+    },
+    {
+      "selection_rank": 4,
+      "episode_id": "gwas_2007",
+      "domain": "genome_wide_association_studies",
+      "features": [
+        "field_disparity_cosine_mean",
+        "rao_stirling_integration",
+        "hypergeom_conventionality_median_t0",
+        "field_variety"
+      ]
+    }
+  ]
+}

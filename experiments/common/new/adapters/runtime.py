@@ -8,6 +8,7 @@ import json
 import platform
 import sys
 from datetime import datetime, timezone
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any, Dict, Mapping, Sequence, Tuple
 
@@ -25,6 +26,9 @@ from experiments.common.new.adapters.io import (
     sha256_file,
     write_json,
     write_tables,
+)
+from experiments.common.new.adapters.fig2_evidence import (
+    clean_fig2_obsolete_artifacts,
 )
 from experiments.common.new.adapters.renderers import render_new_figure
 
@@ -95,6 +99,28 @@ def _output_records(output_dir: Path) -> Dict[str, Any]:
     return records
 
 
+def _software_versions() -> Dict[str, str]:
+    """Return exact versions for the numerical and figure toolchain."""
+    packages = (
+        "numpy",
+        "pandas",
+        "matplotlib",
+        "Pillow",
+        "scipy",
+        "pycirclize",
+        "biopython",
+        "adjustText",
+        "colorspacious",
+    )
+    output: Dict[str, str] = {}
+    for package in packages:
+        try:
+            output[package] = version(package)
+        except PackageNotFoundError:
+            output[package] = "not-installed"
+    return output
+
+
 def run_figure(
     figure_id: int,
     figure_config_path: Path,
@@ -112,6 +138,8 @@ def run_figure(
     bundle = build_new_bundle(figure_id, config, paths)
     panel_records: Dict[str, Any] = {}
     if stage in {"prepare", "run", "plot", "all"}:
+        if figure_id == 2:
+            clean_fig2_obsolete_artifacts(output_dir)
         panel_records = write_tables(bundle.tables, output_dir / "panel_data")
         write_json(output_dir / "panel_text.json", bundle.panel_text)
         write_json(output_dir / "chart_contract.json", bundle.chart_contract)
@@ -162,6 +190,7 @@ def run_figure(
             "created_at_utc": datetime.now(timezone.utc).isoformat(),
             "python": sys.version,
             "platform": platform.platform(),
+            "packages": _software_versions(),
         },
         "reproduction": (
             f"python3 -m experiments.fig{figure_id:02d}.new.run --stage all"

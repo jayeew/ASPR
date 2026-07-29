@@ -1,0 +1,1520 @@
+{
+  "schema_version": "1.0.0",
+  "registry_unit": "mathematical_measurement_family",
+  "variant_policy": "Parameter choices, alternative quantiles, constant rescalings, and monotone transforms are listed as variants and do not inflate the family count.",
+  "metrics": [
+    {
+      "metric_id": "M001_CONCEPT_TIME_NOVELTY",
+      "label_zh": "概念时间新颖性",
+      "construct_ids": [
+        "D1_ELEMENT_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "concept_temporal_newness",
+      "variants": [
+        "mean concept age",
+        "minimum concept age",
+        "source-defined time-novelty aggregation"
+      ],
+      "selected_variant": "source-defined time-novelty aggregation",
+      "formula": "Aggregate the elapsed years between focal publication and first prior appearance of each controlled concept; shorter history indicates greater novelty.",
+      "data_modality": "controlled_concepts",
+      "source_ids": [
+        "MISHRA2016"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "limited",
+      "fatal_validity_concern": false,
+      "selection_priority": 20,
+      "empirical_audit": null,
+      "notes": "Requires a cross-domain controlled-concept history not frozen locally."
+    },
+    {
+      "metric_id": "M002_CONCEPT_VOLUME_NOVELTY",
+      "label_zh": "概念使用量新颖性",
+      "construct_ids": [
+        "D1_ELEMENT_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "concept_frequency_newness",
+      "variants": [
+        "prior article count",
+        "inverse prior article count",
+        "source-defined volume-novelty aggregation"
+      ],
+      "selected_variant": "source-defined volume-novelty aggregation",
+      "formula": "Aggregate the number of strictly prior articles containing each controlled concept; lower prior volume indicates greater novelty.",
+      "data_modality": "controlled_concepts",
+      "source_ids": [
+        "MISHRA2016"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "limited",
+      "fatal_validity_concern": false,
+      "selection_priority": 20,
+      "empirical_audit": null,
+      "notes": "Requires a controlled vocabulary and complete prior usage history."
+    },
+    {
+      "metric_id": "M003_NEW_COMPONENT_INCIDENCE",
+      "label_zh": "新知识成分占比",
+      "construct_ids": [
+        "D1_ELEMENT_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "new_component_incidence",
+      "variants": [
+        "any new component",
+        "new component count",
+        "new component share"
+      ],
+      "selected_variant": "new component share",
+      "formula": "Number of focal knowledge components never observed in the relevant prior corpus divided by the number of focal components.",
+      "data_modality": "keywords_or_entities",
+      "source_ids": [
+        "YAN2020"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "limited",
+      "fatal_validity_concern": false,
+      "selection_priority": 10,
+      "empirical_audit": null,
+      "notes": "The local data do not contain a source-faithful cross-domain keyword/entity history."
+    },
+    {
+      "metric_id": "M004_NEW_WORD_OR_NGRAM_INCIDENCE",
+      "label_zh": "新词或新短语出现率",
+      "construct_ids": [
+        "D1_ELEMENT_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "new_text_unit_incidence",
+      "variants": [
+        "any new word",
+        "new n-gram share",
+        "youngest idea phrase age"
+      ],
+      "selected_variant": "new n-gram share",
+      "formula": "Share of focal words or n-grams absent from a frozen burn-in vocabulary and all strictly prior documents.",
+      "data_modality": "title_abstract_or_full_text",
+      "source_ids": [
+        "PACKALEN2019",
+        "SHIBAYAMA2023"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "mixed",
+      "fatal_validity_concern": false,
+      "selection_priority": 20,
+      "empirical_audit": null,
+      "notes": "Sensitive to spelling and synonyms; Shibayama et al. report weak overall survey correlations for a new-word dummy."
+    },
+    {
+      "metric_id": "M005_SEMANTIC_ELEMENT_DISTANCE",
+      "label_zh": "语义元素距离新颖性",
+      "construct_ids": [
+        "D1_ELEMENT_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "semantic_element_distance",
+      "variants": [
+        "minimum distance to prior documents",
+        "lower-tail distance quantiles",
+        "maximum distance"
+      ],
+      "selected_variant": "10th percentile cosine distance to strictly prior documents",
+      "formula": "Q0.10_j[1-cosine(embedding(focal), embedding(prior_j))] over strictly prior documents.",
+      "data_modality": "title_and_abstract_embeddings",
+      "source_ids": [
+        "SHIBAYAMA2023"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "moderate",
+      "fatal_validity_concern": false,
+      "selection_priority": 5,
+      "empirical_audit": null,
+      "notes": "Validated against an author survey, but the required historically frozen cross-domain embedding space is not available locally."
+    },
+    {
+      "metric_id": "M006_SEMANTIC_DOCUMENT_LOF",
+      "label_zh": "语义局部离群新颖性",
+      "construct_ids": [
+        "D1_ELEMENT_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "semantic_local_outlier",
+      "variants": [
+        "fastText plus local outlier factor"
+      ],
+      "selected_variant": "fastText plus local outlier factor",
+      "formula": "Local Outlier Factor of a focal document in a source-defined historical semantic vector space.",
+      "data_modality": "publication_text_embeddings",
+      "source_ids": [
+        "JEON2023"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "limited",
+      "fatal_validity_concern": false,
+      "selection_priority": 20,
+      "empirical_audit": null,
+      "notes": "Needs frozen text, embedding, neighborhood size, and comparison universe."
+    },
+    {
+      "metric_id": "M007_SEMANTIC_NETWORK_ORIGINALITY",
+      "label_zh": "语义网络知识单元原创性",
+      "construct_ids": [
+        "D1_ELEMENT_NOVELTY",
+        "D2_RECOMBINATIONAL_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "semantic_network_originality",
+      "variants": [
+        "source-defined knowledge-unit semantic-network score"
+      ],
+      "selected_variant": "source-defined knowledge-unit semantic-network score",
+      "formula": "Source-defined aggregation of novelty of knowledge units and their positions or links in a historical semantic network.",
+      "data_modality": "publication_text_semantic_network",
+      "source_ids": [
+        "HOU2022"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "limited",
+      "fatal_validity_concern": false,
+      "selection_priority": 20,
+      "empirical_audit": null,
+      "notes": "Required text-derived knowledge units and semantic network are not frozen locally."
+    },
+    {
+      "metric_id": "M008_NOVEL_IDEA_TEXT_ORIGIN",
+      "label_zh": "文本新思想起源指标",
+      "construct_ids": [
+        "D1_ELEMENT_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "novel_idea_text_origin",
+      "variants": [
+        "new idea phrase origin",
+        "textual intellectual-neighbor distance"
+      ],
+      "selected_variant": "new idea phrase origin",
+      "formula": "Identify textual ideas absent from strictly prior publications and aggregate their focal-paper origin strength.",
+      "data_modality": "publication_text",
+      "source_ids": [
+        "ARTS2025"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "moderate",
+      "fatal_validity_concern": false,
+      "selection_priority": 10,
+      "empirical_audit": null,
+      "notes": "Only the origin component is T0; later reuse and impact components remain outcomes."
+    },
+    {
+      "metric_id": "M009_TOPIC_CLOUD_NOVELTY",
+      "label_zh": "主题—云模型新颖性",
+      "construct_ids": [
+        "D1_ELEMENT_NOVELTY",
+        "D2_RECOMBINATIONAL_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "topic_cloud_novelty",
+      "variants": [
+        "integrated topic-model and cloud-model score"
+      ],
+      "selected_variant": "integrated topic-model and cloud-model score",
+      "formula": "Source-defined cloud-model aggregation of focal topic features and topic reorganization novelty.",
+      "data_modality": "publication_text_topic_model",
+      "source_ids": [
+        "WANG2024"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "limited",
+      "fatal_validity_concern": false,
+      "selection_priority": 30,
+      "empirical_audit": null,
+      "notes": "Requires a source-faithful, time-bounded topic model and cloud parameters."
+    },
+    {
+      "metric_id": "M010_LANGUAGE_MODEL_TEXT_NOVELTY",
+      "label_zh": "语言模型文本新颖性",
+      "construct_ids": [
+        "D1_ELEMENT_NOVELTY",
+        "D2_RECOMBINATIONAL_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "language_model_text_novelty",
+      "variants": [
+        "mean token negative log likelihood",
+        "semantic gain between historical encoders"
+      ],
+      "selected_variant": "mean token negative log likelihood",
+      "formula": "Mean_t[-log P_historical_model(token_t | token_<t)] or a source-defined semantic-representation gain.",
+      "data_modality": "publication_text_historical_language_model",
+      "source_ids": [
+        "KRUZEN2026",
+        "DOMAINAGNOSTIC2026"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "limited",
+      "fatal_validity_concern": false,
+      "selection_priority": 30,
+      "empirical_audit": null,
+      "notes": "No historically bounded model series is frozen for the target corpus."
+    },
+    {
+      "metric_id": "M011_HUMAN_LLM_NOVELTY_JUDGMENT",
+      "label_zh": "人类—大模型协同新颖性判断",
+      "construct_ids": [
+        "D1_ELEMENT_NOVELTY",
+        "D2_RECOMBINATIONAL_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "dynamic_novelty_judgment",
+      "variants": [
+        "human and LLM collaborative judgment"
+      ],
+      "selected_variant": "human and LLM collaborative judgment",
+      "formula": "Source-defined aggregation of human knowledge and LLM novelty judgments.",
+      "data_modality": "full_text_retrieval_llm_human",
+      "source_ids": [
+        "WU2025"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "judgment",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": false,
+      "source_fidelity": "unverified_approximation",
+      "t0_computable": false,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "limited",
+      "fatal_validity_concern": false,
+      "selection_priority": 50,
+      "empirical_audit": null,
+      "notes": "Not deterministic without a frozen model, prompts, retrieval corpus, annotators, and aggregation protocol."
+    },
+    {
+      "metric_id": "M012_NOVELTY_U_COMMONNESS_TAIL",
+      "label_zh": "Novelty U 组合常见度下尾",
+      "construct_ids": [
+        "D2_RECOMBINATIONAL_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "pair_commonness_lower_tail",
+      "variants": [
+        "10th percentile commonness",
+        "alternative zero-pair smoothing"
+      ],
+      "selected_variant": "negative log 10th-percentile commonness with frozen zero rule",
+      "formula": "-ln(Q0.10[(O_ij+zero_rule)N/(N_i N_j)]) over focal cited-source pairs.",
+      "data_modality": "reference_pair_history",
+      "source_ids": [
+        "LEE2015",
+        "BORNMANN2019",
+        "FONTANA2020",
+        "ASPR_V61"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "documented_adaptation",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "audited_available",
+      "validation_grade": "mixed",
+      "fatal_validity_concern": false,
+      "selection_priority": 5,
+      "empirical_audit": {
+        "overall_coverage": 0.9860312243221035,
+        "minimum_domain_coverage": 0.943295019157088,
+        "stability_spearman": 0.8776076572520445,
+        "stability_median_relative_error": 0.1763186175255416,
+        "temporal_test_pass": true,
+        "toy_test_pass": true
+      },
+      "notes": "Conceptual evidence is meaningful, but this local implementation misses both frozen stability thresholds."
+    },
+    {
+      "metric_id": "M013_ATYPICALITY_Z_TAIL",
+      "label_zh": "组合异常度分布下尾",
+      "construct_ids": [
+        "D2_RECOMBINATIONAL_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "pair_null_model_left_tail",
+      "variants": [
+        "Uzzi Monte Carlo P01",
+        "Uzzi Monte Carlo P10",
+        "exact-hypergeometric P10"
+      ],
+      "selected_variant": "negative exact-hypergeometric P10 z-score",
+      "formula": "-Q0.10[(O_ij-E_ij)/sqrt(Var_ij)] over focal cited-source pairs under a fixed-marginal hypergeometric null.",
+      "data_modality": "reference_pair_history",
+      "source_ids": [
+        "UZZI2013",
+        "YAN2016",
+        "ZHOU2022",
+        "FONTANA2020",
+        "TEPLITSKIY2022",
+        "ASPR_V61"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "documented_adaptation",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "audited_available",
+      "validation_grade": "mixed",
+      "fatal_validity_concern": false,
+      "selection_priority": 10,
+      "empirical_audit": {
+        "overall_coverage": 0.9860312243221035,
+        "minimum_domain_coverage": 0.943295019157088,
+        "stability_spearman": 0.8851914960430508,
+        "stability_median_relative_error": 0.1204669833358825,
+        "temporal_test_pass": true,
+        "toy_test_pass": true
+      },
+      "notes": "The analytical null is explicitly an adaptation; the local tail statistic fails both stability gates."
+    },
+    {
+      "metric_id": "M014_CONVENTIONALITY_Z_CENTER",
+      "label_zh": "组合常规性分布中心",
+      "construct_ids": [
+        "D2_RECOMBINATIONAL_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "pair_null_model_centre",
+      "variants": [
+        "Uzzi median z-score",
+        "Uzzi mean z-score",
+        "exact-hypergeometric median z-score"
+      ],
+      "selected_variant": "exact-hypergeometric median z-score",
+      "formula": "Q0.50[(O_ij-E_ij)/sqrt(Var_ij)] over focal cited-source pairs under a fixed-marginal hypergeometric null.",
+      "data_modality": "reference_pair_history",
+      "source_ids": [
+        "UZZI2013",
+        "YAN2016",
+        "ZHOU2022",
+        "TEPLITSKIY2022",
+        "ASPR_V61"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "companion",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "documented_adaptation",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "audited_available",
+      "validation_grade": "mixed",
+      "fatal_validity_concern": false,
+      "selection_priority": 10,
+      "empirical_audit": {
+        "overall_coverage": 0.9860312243221035,
+        "minimum_domain_coverage": 0.943295019157088,
+        "stability_spearman": 0.945357255793975,
+        "stability_median_relative_error": 0.0935282116377212,
+        "temporal_test_pass": true,
+        "toy_test_pass": true
+      },
+      "notes": "This is the conventional backbone companion in the Uzzi profile, not a standalone novelty signal."
+    },
+    {
+      "metric_id": "M015_FIRST_TIME_PAIR_INCIDENCE",
+      "label_zh": "首次知识源组合占比",
+      "construct_ids": [
+        "D2_RECOMBINATIONAL_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "first_pair_incidence",
+      "variants": [
+        "any first-time pair",
+        "first-time pair count",
+        "first-time pair share"
+      ],
+      "selected_variant": "first-time pair share",
+      "formula": "Number of focal unordered cited-source pairs absent from all strictly prior papers divided by the number of valid focal pairs.",
+      "data_modality": "reference_pair_history",
+      "source_ids": [
+        "WANG2017",
+        "BORNMANN2019",
+        "FONTANA2020",
+        "ASPR_V61"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "audited_available",
+      "validation_grade": "mixed",
+      "fatal_validity_concern": false,
+      "selection_priority": 5,
+      "empirical_audit": {
+        "overall_coverage": 0.999950943720183,
+        "minimum_domain_coverage": 0.998989898989899,
+        "stability_spearman": 0.9575744198332984,
+        "stability_median_relative_error": 0.0669151357660531,
+        "temporal_test_pass": true,
+        "toy_test_pass": true
+      },
+      "notes": "Mixed validation is retained transparently; the scale-free share variant passes all prespecified local gates."
+    },
+    {
+      "metric_id": "M016_DISTANCE_WEIGHTED_FIRST_PAIRS",
+      "label_zh": "距离加权首次组合",
+      "construct_ids": [
+        "D2_RECOMBINATIONAL_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "distance_weighted_first_pairs",
+      "variants": [
+        "mean distance of first-time pairs",
+        "sum distance of first-time pairs"
+      ],
+      "selected_variant": "mean distance of first-time pairs",
+      "formula": "Mean historical cognitive distance among focal cited-source pairs that have never co-occurred before.",
+      "data_modality": "reference_pair_history_and_source_distance",
+      "source_ids": [
+        "WANG2017",
+        "ASPR_V61"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "documented_adaptation",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "audited_available",
+      "validation_grade": "mixed",
+      "fatal_validity_concern": false,
+      "selection_priority": 20,
+      "empirical_audit": {
+        "overall_coverage": 0.0021707403819031,
+        "minimum_domain_coverage": 0.0013613674179397,
+        "stability_spearman": 0.942857142857143,
+        "stability_median_relative_error": 0.0,
+        "temporal_test_pass": true,
+        "toy_test_pass": true
+      },
+      "notes": "Fails coverage catastrophically in the current data."
+    },
+    {
+      "metric_id": "M017_REFERENCE_OVERLAP_NOVELTY",
+      "label_zh": "参考文献集合重叠新颖性",
+      "construct_ids": [
+        "D2_RECOMBINATIONAL_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "reference_set_overlap_novelty",
+      "variants": [
+        "bounded reference and co-citing windows",
+        "all-reference and all-prior comparison window"
+      ],
+      "selected_variant": "all-reference and all-prior same-field comparison",
+      "formula": "1 - mean_j |R_focal ∩ R_j| / |R_focal ∪ R_j| over strictly prior same-field comparison papers sharing at least one reference.",
+      "data_modality": "reference_sets",
+      "source_ids": [
+        "MATSUMOTO2021",
+        "ASPR_V61"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "documented_adaptation",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "audited_available",
+      "validation_grade": "moderate",
+      "fatal_validity_concern": false,
+      "selection_priority": 1,
+      "empirical_audit": {
+        "overall_coverage": 0.935651576830644,
+        "minimum_domain_coverage": 0.54375,
+        "stability_spearman": 0.9507885942473684,
+        "stability_median_relative_error": 0.002489318867625,
+        "temporal_test_pass": true,
+        "toy_test_pass": true
+      },
+      "notes": "Passes every frozen gate; corpus and taxonomy adaptations are explicit."
+    },
+    {
+      "metric_id": "M018_CITED_REFERENCE_SEMANTIC_DISTANCE",
+      "label_zh": "被引文献语义重组距离",
+      "construct_ids": [
+        "D2_RECOMBINATIONAL_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "semantic_reference_pair_distance",
+      "variants": [
+        "maximum pair distance",
+        "upper-tail pair distance quantiles"
+      ],
+      "selected_variant": "maximum cosine distance among cited-reference text embeddings",
+      "formula": "max_{j,k in references}[1-cosine(embedding(j), embedding(k))].",
+      "data_modality": "cited_reference_text_embeddings",
+      "source_ids": [
+        "SHIBAYAMA2021",
+        "SHIBAYAMA2023"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "moderate",
+      "fatal_validity_concern": false,
+      "selection_priority": 5,
+      "empirical_audit": null,
+      "notes": "Strong conceptual candidate, but cited-reference text and a frozen cross-domain embedding model are unavailable."
+    },
+    {
+      "metric_id": "M019_CONCEPT_PAIR_TIME_NOVELTY",
+      "label_zh": "概念组合时间新颖性",
+      "construct_ids": [
+        "D2_RECOMBINATIONAL_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "concept_pair_temporal_newness",
+      "variants": [
+        "age since first pair occurrence",
+        "source-defined pair time novelty"
+      ],
+      "selected_variant": "source-defined pair time novelty",
+      "formula": "Aggregate elapsed years since the first prior occurrence of each focal controlled-concept pair.",
+      "data_modality": "controlled_concept_pair_history",
+      "source_ids": [
+        "MISHRA2016"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "limited",
+      "fatal_validity_concern": false,
+      "selection_priority": 20,
+      "empirical_audit": null,
+      "notes": "No cross-domain controlled-concept pair history is frozen locally."
+    },
+    {
+      "metric_id": "M020_CONCEPT_PAIR_VOLUME_NOVELTY",
+      "label_zh": "概念组合使用量新颖性",
+      "construct_ids": [
+        "D2_RECOMBINATIONAL_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "concept_pair_frequency_newness",
+      "variants": [
+        "prior pair article count",
+        "inverse prior pair volume"
+      ],
+      "selected_variant": "inverse prior pair volume",
+      "formula": "Aggregate inverse strictly prior article counts for focal controlled-concept pairs.",
+      "data_modality": "controlled_concept_pair_history",
+      "source_ids": [
+        "MISHRA2016"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "limited",
+      "fatal_validity_concern": false,
+      "selection_priority": 20,
+      "empirical_audit": null,
+      "notes": "No cross-domain controlled-concept pair history is frozen locally."
+    },
+    {
+      "metric_id": "M021_QUESTION_METHOD_LIFE_INDEX",
+      "label_zh": "问题—方法生命指数新颖性",
+      "construct_ids": [
+        "D1_ELEMENT_NOVELTY",
+        "D2_RECOMBINATIONAL_NOVELTY"
+      ],
+      "contribution_locus": "question_or_problem_and_method",
+      "family_id": "question_method_temporal_frequency",
+      "variants": [
+        "question-term life index",
+        "method-term life index",
+        "question-method pair life index"
+      ],
+      "selected_variant": "question-method pair life index",
+      "formula": "Source-defined combination of age and accumulated frequency for extracted question terms, method terms, and their pairs.",
+      "data_modality": "abstract_rhetorical_entity_extraction",
+      "source_ids": [
+        "LUO2022"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "limited",
+      "fatal_validity_concern": false,
+      "selection_priority": 10,
+      "empirical_audit": null,
+      "notes": "Requires validated question/method extraction across all target domains."
+    },
+    {
+      "metric_id": "M022_QUESTION_METHOD_SEMANTIC_NOVELTY",
+      "label_zh": "问题—方法语义组合新颖性",
+      "construct_ids": [
+        "D1_ELEMENT_NOVELTY",
+        "D2_RECOMBINATIONAL_NOVELTY"
+      ],
+      "contribution_locus": "question_or_problem_and_method",
+      "family_id": "question_method_semantic_distance",
+      "variants": [
+        "question semantic novelty",
+        "method semantic novelty",
+        "question-method combination semantic novelty"
+      ],
+      "selected_variant": "question-method combination semantic novelty",
+      "formula": "Source-defined semantic distance of extracted focal question-method combinations from historical combinations.",
+      "data_modality": "abstract_rhetorical_entity_embeddings",
+      "source_ids": [
+        "LUO2022"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "limited",
+      "fatal_validity_concern": false,
+      "selection_priority": 10,
+      "empirical_audit": null,
+      "notes": "No frozen extraction model or historical semantic space is available locally."
+    },
+    {
+      "metric_id": "M023_CONTENT_CONTEXT_SURPRISE",
+      "label_zh": "研究内容—情境组合惊异度",
+      "construct_ids": [
+        "D2_RECOMBINATIONAL_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "content_context_expectation_violation",
+      "variants": [
+        "source-defined content-context surprise"
+      ],
+      "selected_variant": "source-defined content-context surprise",
+      "formula": "Surprise of observed content-context association relative to a historically fitted expectation model.",
+      "data_modality": "publication_text_and_researcher_context",
+      "source_ids": [
+        "SHI2023"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "limited",
+      "fatal_validity_concern": false,
+      "selection_priority": 20,
+      "empirical_audit": null,
+      "notes": "Requires frozen content and researcher-context representations."
+    },
+    {
+      "metric_id": "M024_TOPIC_COMBINATION_NOVELTY",
+      "label_zh": "主题组合新颖性",
+      "construct_ids": [
+        "D2_RECOMBINATIONAL_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "topic_combination_newness",
+      "variants": [
+        "first-time topic pairs",
+        "rare topic pairs",
+        "topic-model recombination score"
+      ],
+      "selected_variant": "topic-model recombination score",
+      "formula": "Aggregate historical rarity or first occurrence of focal topic pairs under a frozen topic model.",
+      "data_modality": "publication_text_topic_history",
+      "source_ids": [
+        "WANG2024"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "limited",
+      "fatal_validity_concern": false,
+      "selection_priority": 20,
+      "empirical_audit": null,
+      "notes": "Requires a historically fitted topic model and complete text history."
+    },
+    {
+      "metric_id": "M025_NETWORK_LINK_SURPRISE",
+      "label_zh": "知识网络连边惊异度",
+      "construct_ids": [
+        "D2_RECOMBINATIONAL_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "network_link_expectation_violation",
+      "variants": [
+        "link-prediction improbability",
+        "semantic-network unexpected edge score"
+      ],
+      "selected_variant": "link-prediction improbability",
+      "formula": "Aggregate negative predicted probabilities or unexpectedness of focal knowledge-unit links under a strictly prior network.",
+      "data_modality": "historical_knowledge_network",
+      "source_ids": [
+        "AMPLAYO2018",
+        "HOU2022"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "limited",
+      "fatal_validity_concern": false,
+      "selection_priority": 20,
+      "empirical_audit": null,
+      "notes": "No source-faithful historical semantic or knowledge network is frozen locally."
+    },
+    {
+      "metric_id": "M026_COMMUNITY_BRIDGING_STRATEGY",
+      "label_zh": "历史知识社群桥接策略",
+      "construct_ids": [
+        "X1_KNOWLEDGE_DIVERSITY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "historical_community_bridging",
+      "variants": [
+        "bridge-link share",
+        "community consolidation and bridging profile"
+      ],
+      "selected_variant": "bridge-link share",
+      "formula": "Share of focal knowledge links connecting different communities in a strictly prior knowledge network.",
+      "data_modality": "historical_knowledge_network",
+      "source_ids": [
+        "FOSTER2015"
+      ],
+      "scope_role": "adjacent_context",
+      "signal_role": "adjacent",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "unverified_approximation",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "limited",
+      "fatal_validity_concern": false,
+      "selection_priority": 40,
+      "empirical_audit": null,
+      "notes": "A strategy/context construct, not automatically a direct novelty measure."
+    },
+    {
+      "metric_id": "M027_LOW_FREQUENCY_PAIR_SHARE",
+      "label_zh": "低频知识源组合占比",
+      "construct_ids": [
+        "D2_RECOMBINATIONAL_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "thresholded_pair_rarity",
+      "variants": [
+        "prior count at most 1",
+        "alternative count thresholds"
+      ],
+      "selected_variant": "prior count at most 1",
+      "formula": "Mean over focal cited-source pairs of 1[prior pair count <= k], with k fixed by the project.",
+      "data_modality": "reference_pair_history",
+      "source_ids": [
+        "LEE2015",
+        "ASPR_V61"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": false,
+      "formula_reproducible": true,
+      "source_fidelity": "project_defined",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "audited_available",
+      "validation_grade": "limited",
+      "fatal_validity_concern": false,
+      "selection_priority": 50,
+      "empirical_audit": {
+        "overall_coverage": 0.999950943720183,
+        "minimum_domain_coverage": 0.998989898989899,
+        "stability_spearman": 0.963535286949279,
+        "stability_median_relative_error": 0.0637366099558916,
+        "temporal_test_pass": true,
+        "toy_test_pass": true
+      },
+      "notes": "Empirically stable but the thresholded paper-level formula is a project choice, not the cited source's exact indicator."
+    },
+    {
+      "metric_id": "M028_MEAN_PAIR_SURPRISAL",
+      "label_zh": "知识源组合平均惊异度",
+      "construct_ids": [
+        "D2_RECOMBINATIONAL_NOVELTY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "mean_pair_surprisal",
+      "variants": [
+        "arithmetic mean negative log commonness"
+      ],
+      "selected_variant": "arithmetic mean negative log commonness",
+      "formula": "Mean[-ln((O_ij+zero_rule)N/(N_i N_j))] over focal cited-source pairs.",
+      "data_modality": "reference_pair_history",
+      "source_ids": [
+        "ASPR_V61"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "novelty",
+      "article_level": true,
+      "peer_reviewed_formula": false,
+      "formula_reproducible": true,
+      "source_fidelity": "project_defined",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "audited_available",
+      "validation_grade": "none",
+      "fatal_validity_concern": true,
+      "selection_priority": 60,
+      "empirical_audit": {
+        "overall_coverage": 0.9860312243221035,
+        "minimum_domain_coverage": 0.943295019157088,
+        "stability_spearman": 0.9638375998549784,
+        "stability_median_relative_error": 0.059031569618399,
+        "temporal_test_pass": true,
+        "toy_test_pass": true
+      },
+      "notes": "It is not Novelty U and has no peer-reviewed original or exact paper-level application."
+    },
+    {
+      "metric_id": "M029_METHOD_NOVELTY_LABEL",
+      "label_zh": "新方法贡献标签",
+      "construct_ids": [
+        "D1_ELEMENT_NOVELTY"
+      ],
+      "contribution_locus": "method",
+      "family_id": "human_contribution_type_label",
+      "variants": [
+        "author-essay coding",
+        "expert coding"
+      ],
+      "selected_variant": "author-essay coding",
+      "formula": "Binary or ordinal human coding that a paper introduces a new method.",
+      "data_modality": "author_essay_or_expert_annotation",
+      "source_ids": [
+        "DIRK1999",
+        "GUETZKOW2004",
+        "LEAHEY2023"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "judgment",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "moderate",
+      "fatal_validity_concern": false,
+      "selection_priority": 30,
+      "empirical_audit": null,
+      "notes": "Useful validation label, but not an automatically computable indicator in the current corpus."
+    },
+    {
+      "metric_id": "M030_THEORY_NOVELTY_LABEL",
+      "label_zh": "新理论或解释贡献标签",
+      "construct_ids": [
+        "D1_ELEMENT_NOVELTY"
+      ],
+      "contribution_locus": "theory_or_explanation",
+      "family_id": "human_contribution_type_label",
+      "variants": [
+        "author-essay coding",
+        "expert coding"
+      ],
+      "selected_variant": "author-essay coding",
+      "formula": "Binary or ordinal human coding that a paper introduces a new theory or explanation.",
+      "data_modality": "author_essay_or_expert_annotation",
+      "source_ids": [
+        "GUETZKOW2004",
+        "LEAHEY2023",
+        "SHIBAYAMA2023"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "judgment",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "moderate",
+      "fatal_validity_concern": false,
+      "selection_priority": 30,
+      "empirical_audit": null,
+      "notes": "Contribution-locus label, not a reference-only metric."
+    },
+    {
+      "metric_id": "M031_RESULT_NOVELTY_LABEL",
+      "label_zh": "新结果或发现贡献标签",
+      "construct_ids": [
+        "D1_ELEMENT_NOVELTY"
+      ],
+      "contribution_locus": "result_or_discovery",
+      "family_id": "human_contribution_type_label",
+      "variants": [
+        "author-essay coding",
+        "expert coding"
+      ],
+      "selected_variant": "author-essay coding",
+      "formula": "Binary or ordinal human coding that a paper reports a new result or discovery.",
+      "data_modality": "author_essay_or_expert_annotation",
+      "source_ids": [
+        "DIRK1999",
+        "LEAHEY2023",
+        "SHIBAYAMA2023"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "judgment",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "moderate",
+      "fatal_validity_concern": false,
+      "selection_priority": 30,
+      "empirical_audit": null,
+      "notes": "Contribution-locus label, not a reference-only metric."
+    },
+    {
+      "metric_id": "M032_QUESTION_NOVELTY_LABEL",
+      "label_zh": "新问题或假设贡献标签",
+      "construct_ids": [
+        "D1_ELEMENT_NOVELTY"
+      ],
+      "contribution_locus": "question_or_problem",
+      "family_id": "human_contribution_type_label",
+      "variants": [
+        "hypothesis novelty coding",
+        "new topic or problem coding"
+      ],
+      "selected_variant": "hypothesis novelty coding",
+      "formula": "Binary or ordinal human coding that a paper poses a new question, problem, or hypothesis.",
+      "data_modality": "author_essay_or_expert_annotation",
+      "source_ids": [
+        "DIRK1999",
+        "GUETZKOW2004",
+        "BARLOSIUS2019"
+      ],
+      "scope_role": "direct_novelty",
+      "signal_role": "judgment",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "moderate",
+      "fatal_validity_concern": false,
+      "selection_priority": 30,
+      "empirical_audit": null,
+      "notes": "Contribution-locus label, not a reference-only metric."
+    },
+    {
+      "metric_id": "M033_FIELD_VARIETY",
+      "label_zh": "知识领域丰富度",
+      "construct_ids": [
+        "X1_KNOWLEDGE_DIVERSITY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "category_variety",
+      "variants": [
+        "occupied field count",
+        "relative variety",
+        "Hill q=0"
+      ],
+      "selected_variant": "occupied field count",
+      "formula": "Number of distinct fields represented by valid focal references.",
+      "data_modality": "reference_field_distribution",
+      "source_ids": [
+        "STIRLING2007",
+        "WANG2015",
+        "HILL1973",
+        "ASPR_V61"
+      ],
+      "scope_role": "adjacent_context",
+      "signal_role": "adjacent",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "audited_available",
+      "validation_grade": "high",
+      "fatal_validity_concern": false,
+      "selection_priority": 10,
+      "empirical_audit": {
+        "overall_coverage": 1.0,
+        "minimum_domain_coverage": 1.0,
+        "stability_spearman": 0.9442428099122956,
+        "stability_median_relative_error": 0.0,
+        "temporal_test_pass": true,
+        "toy_test_pass": true
+      },
+      "notes": "A valid diversity component, deliberately excluded from direct novelty."
+    },
+    {
+      "metric_id": "M034_FIELD_BALANCE",
+      "label_zh": "知识领域均衡度",
+      "construct_ids": [
+        "X1_KNOWLEDGE_DIVERSITY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "category_balance",
+      "variants": [
+        "one minus Gini",
+        "Gini-Simpson",
+        "Shannon entropy",
+        "Pielou evenness",
+        "Hill q=1 or q=2"
+      ],
+      "selected_variant": "one minus Gini",
+      "formula": "1 - Gini(reference-field shares).",
+      "data_modality": "reference_field_distribution",
+      "source_ids": [
+        "STIRLING2007",
+        "WANG2015",
+        "HILL1973",
+        "PIELOU1966",
+        "ASPR_V61"
+      ],
+      "scope_role": "adjacent_context",
+      "signal_role": "adjacent",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "audited_available",
+      "validation_grade": "high",
+      "fatal_validity_concern": false,
+      "selection_priority": 10,
+      "empirical_audit": {
+        "overall_coverage": 1.0,
+        "minimum_domain_coverage": 1.0,
+        "stability_spearman": 0.9048352365676576,
+        "stability_median_relative_error": 0.0562218890554718,
+        "temporal_test_pass": true,
+        "toy_test_pass": true
+      },
+      "notes": "A diversity component, not direct evidence that anything is new."
+    },
+    {
+      "metric_id": "M035_FIELD_DISPARITY",
+      "label_zh": "知识领域认知差异",
+      "construct_ids": [
+        "X1_KNOWLEDGE_DIVERSITY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "category_disparity",
+      "variants": [
+        "mean occupied-field distance",
+        "90th-percentile distance",
+        "maximum distance"
+      ],
+      "selected_variant": "mean occupied-field cosine distance",
+      "formula": "Mean_{k<l occupied}[1-cosine(historical_profile_k, historical_profile_l)].",
+      "data_modality": "reference_field_distribution_and_profiles",
+      "source_ids": [
+        "STIRLING2007",
+        "WANG2015",
+        "LEYDESDORFF2019",
+        "ASPR_V61"
+      ],
+      "scope_role": "adjacent_context",
+      "signal_role": "adjacent",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "audited_available",
+      "validation_grade": "high",
+      "fatal_validity_concern": false,
+      "selection_priority": 10,
+      "empirical_audit": {
+        "overall_coverage": 0.946404924223846,
+        "minimum_domain_coverage": 0.8102524866105585,
+        "stability_spearman": 0.9573134696467084,
+        "stability_median_relative_error": 0.0,
+        "temporal_test_pass": true,
+        "toy_test_pass": true
+      },
+      "notes": "Cognitive disparity belongs to diversity/interdisciplinarity unless historical newness is separately established."
+    },
+    {
+      "metric_id": "M036_RAO_STIRLING_INTEGRATION",
+      "label_zh": "Rao–Stirling 知识整合度",
+      "construct_ids": [
+        "X1_KNOWLEDGE_DIVERSITY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "share_weighted_diversity",
+      "variants": [
+        "Rao quadratic entropy",
+        "Porter integration",
+        "true-diversity monotone transform"
+      ],
+      "selected_variant": "Rao-Stirling quadratic entropy",
+      "formula": "Sum_{k,l} p_k p_l d_kl.",
+      "data_modality": "reference_field_distribution_and_profiles",
+      "source_ids": [
+        "RAO1982",
+        "STIRLING2007",
+        "PORTER2007",
+        "WANG2015",
+        "ASPR_V61"
+      ],
+      "scope_role": "adjacent_context",
+      "signal_role": "adjacent",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "audited_available",
+      "validation_grade": "high",
+      "fatal_validity_concern": false,
+      "selection_priority": 10,
+      "empirical_audit": {
+        "overall_coverage": 0.9701554759919564,
+        "minimum_domain_coverage": 0.9418515684774292,
+        "stability_spearman": 0.9743273272194624,
+        "stability_median_relative_error": 0.053674578168678,
+        "temporal_test_pass": true,
+        "toy_test_pass": true
+      },
+      "notes": "A strong diversity/integration measure but not a direct novelty indicator."
+    },
+    {
+      "metric_id": "M037_OTHER_FIELD_SHARE",
+      "label_zh": "非本领域参考占比",
+      "construct_ids": [
+        "X1_KNOWLEDGE_DIVERSITY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "focal_field_breadth",
+      "variants": [
+        "other-field reference share"
+      ],
+      "selected_variant": "other-field reference share",
+      "formula": "Number of valid focal references outside the focal paper's primary field divided by valid focal references.",
+      "data_modality": "reference_field_distribution",
+      "source_ids": [
+        "WANG2015",
+        "ASPR_V61"
+      ],
+      "scope_role": "adjacent_context",
+      "signal_role": "adjacent",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "audited_available",
+      "validation_grade": "high",
+      "fatal_validity_concern": false,
+      "selection_priority": 10,
+      "empirical_audit": {
+        "overall_coverage": 1.0,
+        "minimum_domain_coverage": 1.0,
+        "stability_spearman": 0.9853635726735278,
+        "stability_median_relative_error": 0.0525686977299881,
+        "temporal_test_pass": true,
+        "toy_test_pass": true
+      },
+      "notes": "Measures breadth relative to a focal field, not historical newness."
+    },
+    {
+      "metric_id": "M038_NETWORK_COHERENCE",
+      "label_zh": "知识网络连贯性",
+      "construct_ids": [
+        "X1_KNOWLEDGE_DIVERSITY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "network_coherence",
+      "variants": [
+        "mean linkage strength",
+        "mean path length",
+        "two-component coherence profile"
+      ],
+      "selected_variant": "two-component coherence profile",
+      "formula": "Source-defined linkage-strength and path-length statistics among focal knowledge elements.",
+      "data_modality": "reference_similarity_network",
+      "source_ids": [
+        "RAFOLS2010"
+      ],
+      "scope_role": "adjacent_context",
+      "signal_role": "adjacent",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "unavailable",
+      "validation_grade": "moderate",
+      "fatal_validity_concern": false,
+      "selection_priority": 20,
+      "empirical_audit": null,
+      "notes": "Interdisciplinarity/coherence construct and not frozen locally."
+    },
+    {
+      "metric_id": "M039_DIV_MULTIPLICATIVE_DIVERSITY",
+      "label_zh": "DIV 乘法多样性",
+      "construct_ids": [
+        "X1_KNOWLEDGE_DIVERSITY"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "multiplicative_diversity",
+      "variants": [
+        "DIV",
+        "DIV star constant rescaling"
+      ],
+      "selected_variant": "DIV",
+      "formula": "Relative variety multiplied by balance multiplied by mean disparity.",
+      "data_modality": "reference_field_distribution_and_profiles",
+      "source_ids": [
+        "LEYDESDORFF2019",
+        "ASPR_V61"
+      ],
+      "scope_role": "adjacent_context",
+      "signal_role": "adjacent",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": true,
+      "requires_future": false,
+      "local_data_status": "audited_available",
+      "validation_grade": "moderate",
+      "fatal_validity_concern": false,
+      "selection_priority": 20,
+      "empirical_audit": {
+        "overall_coverage": 0.946404924223846,
+        "minimum_domain_coverage": 0.8102524866105585,
+        "stability_spearman": 0.9585261273312506,
+        "stability_median_relative_error": 0.0477790764707286,
+        "temporal_test_pass": true,
+        "toy_test_pass": true
+      },
+      "notes": "A composite interdisciplinarity measure, not novelty."
+    },
+    {
+      "metric_id": "M040_DISRUPTION_INDEX",
+      "label_zh": "发表后颠覆性指数",
+      "construct_ids": [
+        "X2_POSTPUBLICATION_CHANGE"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "future_citation_disruption",
+      "variants": [
+        "CD index",
+        "normalized disruption variants"
+      ],
+      "selected_variant": "CD index",
+      "formula": "Future-citation-network contrast between later papers citing the focal paper, its references, or both.",
+      "data_modality": "future_citation_network",
+      "source_ids": [
+        "FUNK2017"
+      ],
+      "scope_role": "outcome",
+      "signal_role": "outcome",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": false,
+      "requires_future": true,
+      "local_data_status": "future_only",
+      "validation_grade": "high",
+      "fatal_validity_concern": false,
+      "selection_priority": 100,
+      "empirical_audit": null,
+      "notes": "Explicitly excluded because it is a post-publication outcome."
+    },
+    {
+      "metric_id": "M041_FUTURE_CONFIRMED_FIRST_PAIR",
+      "label_zh": "后续复用确认的首次组合",
+      "construct_ids": [
+        "X2_POSTPUBLICATION_CHANGE"
+      ],
+      "contribution_locus": "unspecified",
+      "family_id": "future_confirmed_recombination",
+      "variants": [
+        "future-reused first pair share"
+      ],
+      "selected_variant": "future-reused first pair share",
+      "formula": "Share of focal first-time pairs that are reused by later publications.",
+      "data_modality": "future_reference_pair_history",
+      "source_ids": [
+        "WANG2017"
+      ],
+      "scope_role": "outcome",
+      "signal_role": "outcome",
+      "article_level": true,
+      "peer_reviewed_formula": true,
+      "formula_reproducible": true,
+      "source_fidelity": "exact",
+      "t0_computable": false,
+      "requires_future": true,
+      "local_data_status": "future_only",
+      "validation_grade": "mixed",
+      "fatal_validity_concern": false,
+      "selection_priority": 100,
+      "empirical_audit": null,
+      "notes": "A later confirmation or impact signal, not publication-time novelty."
+    }
+  ]
+}

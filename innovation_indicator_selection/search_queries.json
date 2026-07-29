@@ -1,0 +1,56 @@
+{
+  "schema_version": "1.0.0",
+  "cutoff_date": "2026-07-28",
+  "queries": [
+    {
+      "query_id": "Q01",
+      "query": "\"scientific novelty\" measurement indicator paper",
+      "purpose": "broad article-level novelty measurement"
+    },
+    {
+      "query_id": "Q02",
+      "query": "\"recombinational novelty\" cited references combinations",
+      "purpose": "reference and citation recombination"
+    },
+    {
+      "query_id": "Q03",
+      "query": "\"element novelty\" scientific papers word embedding",
+      "purpose": "new-element and semantic-distance measures"
+    },
+    {
+      "query_id": "Q04",
+      "query": "\"new components\" \"new combinations\" scientific papers",
+      "purpose": "component-versus-combination distinction"
+    },
+    {
+      "query_id": "Q05",
+      "query": "\"research question\" method combination novelty",
+      "purpose": "contribution-locus and question-method measures"
+    },
+    {
+      "query_id": "Q06",
+      "query": "scientific novelty theory method result measurement",
+      "purpose": "theory, method, and result contribution types"
+    },
+    {
+      "query_id": "Q07",
+      "query": "scientific novelty indicator validation expert survey",
+      "purpose": "construct validation"
+    },
+    {
+      "query_id": "Q08",
+      "query": "novelty interdisciplinarity discriminant validity",
+      "purpose": "neighboring-construct and adverse evidence"
+    },
+    {
+      "query_id": "Q09",
+      "query": "semantic novelty scientific publication text embedding",
+      "purpose": "text and embedding operationalizations"
+    },
+    {
+      "query_id": "Q10",
+      "query": "review novelty measurements academic papers",
+      "purpose": "reviews used only for discovery and citation chaining"
+    }
+  ]
+}

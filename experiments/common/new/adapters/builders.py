@@ -32,18 +32,24 @@ from experiments.common.new.base.common import (
     FEATURE_LABELS,
     FigureBundle,
     SuitePaths,
+    bootstrap_mean_interval,
     grouped_percentile,
     safe_spearman,
+    stable_seed,
 )
 
 from experiments.common.new.adapters.contracts import (
     ANGLE_FEATURES,
+    FEATURE_DIRECTION,
     PRIMARY_FEATURES,
     STATUS_BLOCKED_COMPARABILITY,
     STATUS_DESCRIPTIVE,
     STATUS_DRAFT_LABELS,
 )
 from experiments.common.new.adapters.io import sha256_file, stable_hash
+from experiments.common.new.adapters.fig2_evidence import (
+    build_fig2_evidence_map,
+)
 
 
 BASE_BUILDERS = {
@@ -389,6 +395,326 @@ def _future_component_correlations(
     return pd.DataFrame(rows)
 
 
+def _fig2_selection_stages(decisions: pd.DataFrame) -> pd.DataFrame:
+    """Summarize the registered screening route without hard-coded counts."""
+    local = pd.to_numeric(
+        decisions["raw_overall_coverage"],
+        errors="coerce",
+    ).fillna(0).gt(0)
+    runtime = pd.to_numeric(
+        decisions["eligible_all_runtime_gates"],
+        errors="coerce",
+    ).fillna(0).eq(1)
+    nonredundant = runtime & ~decisions["proposed_final_role"].eq("excluded")
+    primary = decisions["proposed_final_role"].eq("primary")
+    rows = [
+        {
+            "stage_order": 1,
+            "stage": "Literature candidates",
+            "count": int(len(decisions)),
+            "criterion": "Multi-source evidence map",
+        },
+        {
+            "stage_order": 2,
+            "stage": "Locally computable",
+            "count": int(local.sum()),
+            "criterion": "Frozen Nature/OpenAlex tables",
+        },
+        {
+            "stage_order": 3,
+            "stage": "Runtime-gate pass",
+            "count": int(runtime.sum()),
+            "criterion": "Coverage · stability · fidelity",
+        },
+        {
+            "stage_order": 4,
+            "stage": "Non-redundant eligible",
+            "count": int(nonredundant.sum()),
+            "criterion": "Exact duplicates removed",
+        },
+        {
+            "stage_order": 5,
+            "stage": "Primary indicators",
+            "count": int(primary.sum()),
+            "criterion": "One frozen family representative",
+        },
+    ]
+    output = pd.DataFrame(rows)
+    output["removed_since_previous"] = (
+        output["count"].shift(1) - output["count"]
+    ).fillna(0).astype(int)
+    return output
+
+
+def _fig2_indicator_basis(bundle: FigureBundle) -> pd.DataFrame:
+    """Create one ordered, direction-aware five-angle/eight-indicator table."""
+    primary = bundle.tables["primary_indicator_map"].copy()
+    quality = bundle.tables["primary_quality_gates"].copy()
+    primary = primary.merge(
+        quality[
+            [
+                "code_name",
+                "coverage_pass",
+                "stability_pass",
+                "approximation_pass",
+            ]
+        ],
+        on="code_name",
+        how="left",
+    )
+    order = {feature: index + 1 for index, feature in enumerate(PRIMARY_FEATURES)}
+    primary["display_order"] = primary["code_name"].map(order).astype(int)
+    primary["direction"] = primary["code_name"].map(FEATURE_DIRECTION).astype(int)
+    primary["direction_label"] = np.where(
+        primary["direction"].eq(1),
+        "higher = stronger signal",
+        "lower = stronger signal",
+    )
+    primary["evidence_badge"] = primary.apply(
+        lambda row: (
+            f"F{int(row['original_source_count'])}"
+            f"·P{int(row['application_source_count'])}"
+            f"·V{int(row['validation_source_count'])}"
+        ),
+        axis=1,
+    )
+    primary["all_primary_gates_pass"] = (
+        primary[
+            ["coverage_pass", "stability_pass", "approximation_pass"]
+        ]
+        .fillna(0)
+        .eq(1)
+        .all(axis=1)
+    )
+    return primary.sort_values("display_order", kind="stable").reset_index(
+        drop=True
+    )
+
+
+def _fig2_indicator_relations(
+    correlations: pd.DataFrame,
+    basis: pd.DataFrame,
+    threshold: float,
+) -> Tuple[pd.DataFrame, pd.DataFrame]:
+    """Build a sparse, direction-aware relation network for the eight signals."""
+    nodes = basis[
+        [
+            "code_name",
+            "feature_label",
+            "angle_id",
+            "angle_label",
+            "display_order",
+            "direction",
+        ]
+    ].copy()
+    lookup = nodes.set_index("code_name")
+    order = lookup["display_order"].to_dict()
+    rows: List[Dict[str, Any]] = []
+    for row in correlations.itertuples(index=False):
+        left = str(row.feature_x)
+        right = str(row.feature_y)
+        if left not in order or right not in order or order[left] >= order[right]:
+            continue
+        raw = float(row.spearman)
+        oriented = (
+            raw
+            * int(lookup.loc[left, "direction"])
+            * int(lookup.loc[right, "direction"])
+        )
+        if abs(oriented) < float(threshold):
+            continue
+        rows.append(
+            {
+                "source": left,
+                "target": right,
+                "source_label": lookup.loc[left, "feature_label"],
+                "target_label": lookup.loc[right, "feature_label"],
+                "source_angle_id": lookup.loc[left, "angle_id"],
+                "target_angle_id": lookup.loc[right, "angle_id"],
+                "raw_spearman": raw,
+                "oriented_spearman": oriented,
+                "absolute_spearman": abs(oriented),
+                "cross_angle": bool(
+                    lookup.loc[left, "angle_id"]
+                    != lookup.loc[right, "angle_id"]
+                ),
+                "threshold": float(threshold),
+            }
+        )
+    return nodes, pd.DataFrame(rows)
+
+
+def _fig2_oriented_future_correlations(
+    future: pd.DataFrame,
+) -> pd.DataFrame:
+    """Apply the a-priori signal direction to prospective associations."""
+    output = future.copy()
+    output["direction"] = output["code_name"].map(FEATURE_DIRECTION).astype(int)
+    output["oriented_spearman"] = output["spearman"] * output["direction"]
+    positive = output["direction"].eq(1)
+    output["oriented_ci_low"] = np.where(
+        positive,
+        output["ci_low"],
+        -output["ci_high"],
+    )
+    output["oriented_ci_high"] = np.where(
+        positive,
+        output["ci_high"],
+        -output["ci_low"],
+    )
+    feature_order = {
+        feature: index + 1 for index, feature in enumerate(PRIMARY_FEATURES)
+    }
+    component_order = {
+        label: index + 1
+        for index, label in enumerate(
+            [
+                "Field reach",
+                "Subfield reach",
+                "Topic reach",
+                "Field evenness",
+                "Topic evenness",
+                "D5 composite",
+            ]
+        )
+    }
+    output["feature_order"] = output["code_name"].map(feature_order).astype(int)
+    output["component_order"] = output["future_component_label"].map(
+        component_order
+    ).astype(int)
+    output["ci_excludes_zero"] = (
+        output["oriented_ci_low"].gt(0)
+        | output["oriented_ci_high"].lt(0)
+    )
+    return output.sort_values(
+        ["feature_order", "component_order"],
+        kind="stable",
+    ).reset_index(drop=True)
+
+
+def _fig2_known_group_profiles(
+    paths: SuitePaths,
+    membership: pd.DataFrame,
+    effects: pd.DataFrame,
+    *,
+    sample_per_group: int,
+    seed: int,
+) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """Create oriented matched-control profiles for the old Fig.2 visual route."""
+    features = pd.read_parquet(
+        _dataset(paths, "innovation_candidate_features.parquet"),
+        columns=[
+            "paper_id",
+            "publication_year",
+            "domain12",
+            *PRIMARY_FEATURES,
+        ],
+    )
+    angle_lookup = {
+        feature: angle_id
+        for angle_id, angle_features in ANGLE_FEATURES.items()
+        for feature in angle_features
+    }
+    long_rows: List[pd.DataFrame] = []
+    for feature in PRIMARY_FEATURES:
+        values = features[
+            ["paper_id", "publication_year", "domain12", feature]
+        ].copy()
+        values["raw_percentile"] = grouped_percentile(
+            values,
+            feature,
+            ["domain12", "publication_year"],
+            id_column="paper_id",
+        )
+        direction = int(FEATURE_DIRECTION[feature])
+        values["oriented_percentile"] = np.where(
+            direction == 1,
+            values["raw_percentile"],
+            1.0 - values["raw_percentile"],
+        )
+        subset = membership[
+            ["pair_id", "paper_id", "group"]
+        ].merge(
+            values[
+                [
+                    "paper_id",
+                    "publication_year",
+                    "domain12",
+                    "raw_percentile",
+                    "oriented_percentile",
+                ]
+            ],
+            on="paper_id",
+            how="left",
+        )
+        subset["code_name"] = feature
+        subset["feature_label"] = FEATURE_LABELS[feature]
+        subset["angle_id"] = angle_lookup[feature]
+        subset["direction"] = direction
+        long_rows.append(subset)
+    long = pd.concat(long_rows, ignore_index=True).dropna(
+        subset=["oriented_percentile"]
+    )
+    summary = (
+        long.groupby(
+            ["code_name", "feature_label", "angle_id", "group"],
+            as_index=False,
+        )
+        .agg(
+            n=("paper_id", "size"),
+            mean=("oriented_percentile", "mean"),
+            q25=("oriented_percentile", lambda values: values.quantile(0.25)),
+            median=("oriented_percentile", "median"),
+            q75=("oriented_percentile", lambda values: values.quantile(0.75)),
+        )
+    )
+    samples: List[pd.DataFrame] = []
+    for (feature, group), subset in long.groupby(
+        ["code_name", "group"],
+        sort=True,
+    ):
+        n = min(int(sample_per_group), len(subset))
+        samples.append(
+            subset.sample(
+                n=n,
+                random_state=stable_seed(f"fig2-profile:{feature}:{group}", seed),
+            )
+        )
+    sample = pd.concat(samples, ignore_index=True)
+    oriented_effects = effects.copy()
+    oriented_effects["direction"] = oriented_effects["code_name"].map(
+        FEATURE_DIRECTION
+    ).astype(int)
+    negative = oriented_effects["direction"].eq(-1)
+    original_low = oriented_effects["ci_low"].copy()
+    original_high = oriented_effects["ci_high"].copy()
+    oriented_effects["oriented_difference"] = (
+        oriented_effects["mean_percentile_difference"]
+        * oriented_effects["direction"]
+    )
+    oriented_effects["oriented_ci_low"] = np.where(
+        negative,
+        -original_high,
+        original_low,
+    )
+    oriented_effects["oriented_ci_high"] = np.where(
+        negative,
+        -original_low,
+        original_high,
+    )
+    oriented_effects["angle_id"] = oriented_effects["code_name"].map(
+        angle_lookup
+    )
+    oriented_effects["display_order"] = oriented_effects["code_name"].map(
+        {feature: index + 1 for index, feature in enumerate(PRIMARY_FEATURES)}
+    )
+    return (
+        sample,
+        summary,
+        oriented_effects.sort_values("display_order", kind="stable"),
+    )
+
+
 def _enhance_fig2(
     bundle: FigureBundle,
     config: Mapping[str, Any],
@@ -403,29 +729,143 @@ def _enhance_fig2(
         int(config["fig2"].get("future_bootstrap_iterations", 300)),
         int(config["fig2"]["seed"]),
     )
+    selection = _fig2_selection_stages(bundle.tables["candidate_decisions"])
+    basis = _fig2_indicator_basis(bundle)
+    relation_nodes, relation_edges = _fig2_indicator_relations(
+        bundle.tables["indicator_correlations"],
+        basis,
+        float(config["fig2"].get("relation_abs_spearman_min", 0.40)),
+    )
+    oriented_future = _fig2_oriented_future_correlations(future)
+    profile_sample, profile_summary, oriented_effects = (
+        _fig2_known_group_profiles(
+            paths,
+            bundle.tables["known_group_membership"],
+            bundle.tables["known_group_effects"],
+            sample_per_group=int(
+                config["fig2"].get("profile_sample_per_group", 220)
+            ),
+            seed=int(config["fig2"]["seed"]),
+        )
+    )
     bundle.tables.update(
         {
             "measurement_scene_nodes": nodes,
             "measurement_scene_edges": edges,
             "measurement_scene_manifest": scene,
             "future_component_correlations": future,
+            "fig2_selection_stages": selection,
+            "fig2_indicator_basis": basis,
+            "fig2_relation_nodes": relation_nodes,
+            "fig2_relation_edges": relation_edges,
+            "fig2_oriented_future_correlations": oriented_future,
+            "fig2_known_group_profile_sample": profile_sample,
+            "fig2_known_group_profile_summary": profile_summary,
+            "fig2_known_group_oriented_effects": oriented_effects,
         }
     )
-    bundle.panel_text["measurement_scene"] = scene.iloc[0].to_dict()
-    bundle.panel_text["future_components"] = {
-        "definition": (
-            "Field-year normalized publication-time indicators versus frozen "
-            "D5 graph outcomes; never used for indicator selection."
+    bundle.panel_text = {
+        "a": {
+            **scene.iloc[0].to_dict(),
+            "message": (
+                "All eight signals are measured at G0 from the focal "
+                "references and the strictly prior graph; G+5 is validation only."
+            ),
+        },
+        "b": {
+            "selection_stages": selection.to_dict("records"),
+            "message": (
+                "The frozen primary basis is chosen by evidence, publication-time "
+                "feasibility, runtime gates, and within-family non-redundancy."
+            ),
+        },
+        "c": {
+            "relation_threshold": float(
+                config["fig2"].get("relation_abs_spearman_min", 0.40)
+            ),
+            "relation_edge_count": int(len(relation_edges)),
+            "future_validation_n_max": int(oriented_future["n"].max()),
+            "message": (
+                "Fixed-direction correlations describe complementarity; D5 "
+                "associations validate interpretation and never select indicators."
+            ),
+        },
+        "d": {
+            "matched_pairs_max": int(oriented_effects["n_pairs"].max()),
+            "message": (
+                "High-D5 papers are a known-group construct check, not a complete "
+                "ground truth for innovation."
+            ),
+        },
+    }
+    bundle.chart_contract = {
+        "figure_id": 2,
+        "scientific_route": (
+            "measurement boundary -> evidence-governed basis -> "
+            "mechanism relations and future signatures -> known-group audit"
         ),
-        "n_pairs": int(future["n"].max()),
+        "panels": {
+            "a": {
+                "mark": "fixed-layout G-/G0/G+5 network triptych",
+                "data": [
+                    "measurement_scene_nodes",
+                    "measurement_scene_edges",
+                    "measurement_scene_manifest",
+                ],
+            },
+            "b": {
+                "mark": "screening funnel plus five-angle indicator basis",
+                "data": [
+                    "fig2_selection_stages",
+                    "fig2_indicator_basis",
+                    "observation_angles",
+                ],
+            },
+            "c": {
+                "mark": (
+                    "sparse indicator-relation network plus prospective "
+                    "D5 dot matrix"
+                ),
+                "data": [
+                    "fig2_relation_nodes",
+                    "fig2_relation_edges",
+                    "fig2_oriented_future_correlations",
+                ],
+            },
+            "d": {
+                "mark": "matched-control percentile raincloud and paired effects",
+                "data": [
+                    "fig2_known_group_profile_sample",
+                    "fig2_known_group_profile_summary",
+                    "fig2_known_group_oriented_effects",
+                ],
+            },
+        },
+        "traditional_heatmap_count": 0,
+        "outcome_used_for_indicator_selection": False,
+        "indicator_direction_source": "frozen FEATURE_DIRECTION contract",
     }
-    bundle.chart_contract["panels"]["f"] = {
-        "mark": "G-/G0/G+5 measurement-scene network",
-        "data": ["measurement_scene_nodes", "measurement_scene_edges"],
-    }
-    bundle.chart_contract["panels"]["g"] = {
-        "mark": "indicator-to-future-component dot interval matrix",
-        "data": ["future_component_correlations"],
+    retained_tables = (
+        "candidate_decisions",
+        "observation_angles",
+        "source_map",
+        "primary_indicator_map",
+        "primary_quality_gates",
+        "measurement_scene_nodes",
+        "measurement_scene_edges",
+        "measurement_scene_manifest",
+        "fig2_selection_stages",
+        "fig2_indicator_basis",
+        "fig2_relation_nodes",
+        "fig2_relation_edges",
+        "fig2_oriented_future_correlations",
+        "fig2_known_group_profile_sample",
+        "fig2_known_group_profile_summary",
+        "fig2_known_group_oriented_effects",
+    )
+    bundle.tables = {
+        name: bundle.tables[name]
+        for name in retained_tables
     }
     bundle.source_paths.extend(
         [
@@ -434,9 +874,12 @@ def _enhance_fig2(
             _dataset(paths, "historical_paper_sources.parquet"),
             _dataset(paths, "historical_paper_references.parquet"),
             _dataset(paths, "targets_zero_inclusive.parquet"),
+            paths["target_works"],
         ]
     )
-    bundle.title = "Publication-time measurement yields five governed evidence angles"
+    bundle.title = (
+        "Publication-time reference signals organize observable graph change"
+    )
     return bundle
 
 
@@ -528,14 +971,35 @@ def _enhance_fig3(
         }
     )
     bundle.panel_text["target_construction"] = counts.iloc[0].to_dict()
-    bundle.chart_contract["panels"]["f"] = {
-        "mark": "D5 target construction flow",
-        "data": ["d5_target_construction", "d5_target_counts"],
+    bundle.chart_contract["panels"] = {
+        "a": {
+            "mark": "D5 target-construction flow",
+            "data": ["d5_target_construction", "d5_target_counts"],
+        },
+        "b": {
+            "mark": "two-part model and six expanding temporal folds",
+            "data": ["temporal_folds"],
+        },
+        "c": {
+            "mark": "model-performance estimation ladder",
+            "data": ["model_ladder", "paired_model_gains"],
+        },
+        "d": {
+            "mark": "OOF prediction-realization joint density",
+            "data": ["oof_joint_density"],
+        },
+        "e": {
+            "mark": "realized D5 raincloud by OOF prediction decile",
+            "data": ["prediction_decile_sample"],
+        },
+        "f": {
+            "mark": "five-angle add-delete effects and temporal stability",
+            "data": ["angle_add_delete", "angle_fold_stability"],
+        },
     }
-    bundle.chart_contract["panels"]["g"] = {
-        "mark": "six-fold angle add-delete stability",
-        "data": ["angle_fold_stability"],
-    }
+    bundle.title = (
+        "Publication-time signals rank future D5 diffusion under temporal OOF"
+    )
     bundle.source_paths.extend(
         [_dataset(paths, "targets_zero_inclusive.parquet"), fold_path]
     )
@@ -725,6 +1189,48 @@ def _enhance_fig4(
         )
         if column in peer_review
     ]
+    aspect_columns = [
+        ("novelty_alignment", "Novelty"),
+        ("significance_alignment", "Significance"),
+        ("prior_art_alignment", "Prior-art difference"),
+        ("evidence_rigor_alignment", "Evidence rigor"),
+        ("limitations_alignment", "Limitations"),
+        ("future_work_alignment", "Future work"),
+        ("claim_evidence_coverage", "Claim-evidence coverage"),
+    ]
+    aspect_rows: List[Dict[str, Any]] = []
+    for aspect_order, (column, label) in enumerate(aspect_columns, start=1):
+        values = pd.to_numeric(peer_review[column], errors="coerce").dropna()
+        estimate, low, high = bootstrap_mean_interval(
+            values.to_numpy(float),
+            iterations=2000,
+            seed=int(config["fig4"]["seed"]) + aspect_order,
+        )
+        aspect_rows.append(
+            {
+                "aspect_order": aspect_order,
+                "aspect": column,
+                "aspect_label": label,
+                "n_valid": int(len(values)),
+                "mean_alignment": estimate,
+                "ci_low": low,
+                "ci_high": high,
+                "cohort_role": (
+                    "range-restricted transparent-peer-review diagnostic"
+                ),
+            }
+        )
+    aspect_summary = pd.DataFrame(aspect_rows)
+    completion = labels[
+        ["blinded_case_id", "labeler_id"]
+    ].copy()
+    completion["complete"] = labels[
+        [
+            "label_novelty_1_5",
+            "label_significance_1_5",
+            "label_prior_art_1_5",
+        ]
+    ].notna().all(axis=1).astype(int)
     bundle.tables.update(
         {
             "validation_sample_coverage": answer,
@@ -733,8 +1239,24 @@ def _enhance_fig4(
             "v6_1_blinded_label_templates": labels,
             "v6_1_blinded_completion_audit": audit,
             "transparent_peer_review_cohort": peer_review[peer_columns],
+            "transparent_review_aspect_summary": aspect_summary,
+            "blinded_label_completion_matrix": completion,
         }
     )
+    retained_tables = (
+        "validation_sample_coverage",
+        "v6_1_blinded_answer_key",
+        "v6_1_blinded_packet",
+        "v6_1_blinded_label_templates",
+        "v6_1_blinded_completion_audit",
+        "transparent_peer_review_cohort",
+        "transparent_review_aspect_summary",
+        "blinded_label_completion_matrix",
+    )
+    bundle.tables = {
+        name: bundle.tables[name]
+        for name in retained_tables
+    }
     bundle.status = STATUS_DRAFT_LABELS
     bundle.panel_text["a"] = {
         "sampling": (
@@ -751,14 +1273,43 @@ def _enhance_fig4(
     bundle.chart_contract["current_score_sample"] = True
     bundle.chart_contract["legacy_30_paper_pack_used"] = False
     bundle.chart_contract["human_labels_invented"] = False
-    bundle.source_paths.extend(
-        [
-            _analysis(paths, "oof_d361264b867c/oof_predictions.parquet"),
-            _dataset(paths, "papers_primary_articles.parquet"),
-            paths["target_works"],
-            paths["fig4_root"] / "fig4_metrics_summary.csv",
-        ]
+    bundle.chart_contract["panels"] = {
+        "a": {
+            "mark": "two-cohort validation bridge",
+            "data": [
+                "v6_1_blinded_completion_audit",
+                "transparent_peer_review_cohort",
+            ],
+        },
+        "b": {
+            "mark": "current-score validation-frame dot distribution",
+            "data": ["validation_sample_coverage"],
+        },
+        "c": {
+            "mark": "transparent-peer-review aspect interval plot",
+            "data": ["transparent_review_aspect_summary"],
+        },
+        "d": {
+            "mark": "30-paper by three-labeler completion matrix",
+            "data": [
+                "blinded_label_completion_matrix",
+                "v6_1_blinded_completion_audit",
+            ],
+        },
+        "e": {
+            "mark": "blocked inferential endpoints",
+            "data": ["v6_1_blinded_completion_audit"],
+        },
+    }
+    bundle.title = (
+        "Blinded human and transparent-peer-review validation remains evidence-gated"
     )
+    bundle.source_paths = [
+        _analysis(paths, "oof_d361264b867c/oof_predictions.parquet"),
+        _dataset(paths, "papers_primary_articles.parquet"),
+        paths["target_works"],
+        paths["fig4_root"] / "fig4_metrics_summary.csv",
+    ]
     return bundle
 
 
@@ -830,14 +1381,25 @@ def _enhance_fig5(
         windows["training_end"].astype(int).to_numpy()
         < windows["prediction_start"].astype(int).to_numpy()
     ) & windows["score_window_within_registered_oof_fold"].to_numpy(bool)
+    windows["d5_label_maturity_embargo_pass"] = False
+    windows["evaluation_scope"] = (
+        "retrospective publication-year OOF; D5 label maturity not embargoed"
+    )
     bundle.tables["historical_windows"] = windows
     bundle.panel_text["a"] = {
         "forecast_origins": [1999, 2004, 2009],
         "all_temporal_contracts_pass": bool(
             windows["temporal_contract_pass"].all()
         ),
+        "d5_label_maturity_embargo_pass": False,
+        "claim_boundary": (
+            "The registered OOF artifacts separate papers by publication "
+            "year but do not enforce a five-year target-maturity embargo."
+        ),
     }
-    bundle.title = "Strict historical origins test subsequent research-frontier formation"
+    bundle.title = (
+        "Retrospective historical windows test subsequent frontier ranking"
+    )
     bundle.source_paths.append(fold_path)
     return bundle
 
@@ -1039,6 +1601,21 @@ def _enhance_fig6(
     bundle.tables["reference_dose_stability"] = doses
     bundle.tables["audit_sample"] = audit_sample
     bundle.tables["audit_sample_by_domain"] = sample_summary
+    domain_path = (
+        paths["v6_1_figure_baseline"]
+        / "experiment_07/data/domain_metrics.csv"
+    )
+    horizon_path = (
+        paths["v6_1_figure_baseline"]
+        / "experiment_05/data/horizon_metrics.csv"
+    )
+    fold_path = (
+        paths["v6_1_figure_baseline"]
+        / "experiment_06/data/fold_metrics.csv"
+    )
+    bundle.tables["registered_domain_metrics"] = pd.read_csv(domain_path)
+    bundle.tables["registered_horizon_metrics"] = pd.read_csv(horizon_path)
+    bundle.tables["registered_fold_metrics"] = pd.read_csv(fold_path)
     levels = sorted(
         float(value)
         for value in doses["reference_retention"].dropna().unique()
@@ -1056,13 +1633,38 @@ def _enhance_fig6(
             "registered exact implementation absent; no proxy values emitted"
         ),
     }
-    bundle.chart_contract["panels"]["b0"] = {
-        "mark": "multi-dose reference-deletion raincloud",
-        "data": [
-            "reference_dose_stability",
-            "audit_sample",
-            "audit_sample_by_domain",
-        ],
+    bundle.chart_contract["panels"] = {
+        "a": {
+            "mark": "paired 12-domain D5 performance plot",
+            "data": ["registered_domain_metrics"],
+        },
+        "b": {
+            "mark": "exact multi-dose reference-deletion small multiples",
+            "data": [
+                "reference_dose_stability",
+                "audit_sample",
+                "audit_sample_by_domain",
+            ],
+        },
+        "c": {
+            "mark": "registered horizon and temporal-fold stability",
+            "data": [
+                "registered_horizon_metrics",
+                "registered_fold_metrics",
+            ],
+        },
+        "d": {
+            "mark": "current-model specification curve",
+            "data": ["specification_curve", "specification_flags"],
+        },
+        "e": {
+            "mark": "reference-count and metadata-coverage reliability boundary",
+            "data": ["reliability_units", "reliability_boundary"],
+        },
+        "f": {
+            "mark": "heuristic failure cases and safeguards",
+            "data": ["failure_modes", "failure_cases"],
+        },
     }
     complete_levels = {0.1, 0.25, 0.5, 0.75, 1.0}.issubset(
         set(levels)
@@ -1072,6 +1674,9 @@ def _enhance_fig6(
     bundle.source_paths.extend(
         [
             cache,
+            domain_path,
+            horizon_path,
+            fold_path,
             _analysis(paths, "screening_ceec00f0809b/stability_sample.parquet"),
             _dataset(paths, "innovation_candidate_features.parquet"),
             _dataset(paths, "paper_references.parquet"),
@@ -1214,13 +1819,36 @@ def _enhance_fig7(
     )
     bundle.tables["venue_within_association"] = associations
     bundle.tables["venue_common_support_audit"] = balance
-    bundle.chart_contract["panels"]["f"] = {
-        "mark": "within-venue innovation-D5 interval plot",
-        "data": ["venue_within_association"],
-    }
-    bundle.chart_contract["panels"]["g"] = {
-        "mark": "common-support audit dot table",
-        "data": ["venue_common_support_audit"],
+    institution_count_integrity_pass = not np.allclose(
+        balance["log_author_mean"].to_numpy(float),
+        balance["log_institution_mean"].to_numpy(float),
+        equal_nan=True,
+    )
+    bundle.chart_contract["panels"] = {
+        "a": {
+            "mark": "venue innovation-D5 portfolio map",
+            "data": ["venue_portfolio"],
+        },
+        "b": {
+            "mark": "paper-bootstrap venue rank distributions",
+            "data": ["venue_bootstrap_ranks"],
+        },
+        "c": {
+            "mark": "top-1/5-percent enrichment interval plot",
+            "data": ["venue_enrichment"],
+        },
+        "d": {
+            "mark": "five-angle venue profile small multiples",
+            "data": ["venue_angle_profiles"],
+        },
+        "e": {
+            "mark": "within-venue innovation-D5 interval plot",
+            "data": ["venue_within_association"],
+        },
+        "f": {
+            "mark": "common-support audit dot table",
+            "data": ["venue_common_support_audit"],
+        },
     }
     bundle.panel_text["f"] = (
         "Within-venue association between publication-time innovation-only "
@@ -1229,6 +1857,24 @@ def _enhance_fig7(
     bundle.panel_text["g"] = (
         "Association-only audit of field, year, reference-volume and team-size support."
     )
+    bundle.panel_text["support_audit"] = {
+        "common_support_established": False,
+        "institution_count_integrity_pass": (
+            institution_count_integrity_pass
+        ),
+        "warning": (
+            ""
+            if institution_count_integrity_pass
+            else (
+                "Frozen author and institution counts are identical; "
+                "institution count is withheld from interpretation."
+            )
+        ),
+    }
+    bundle.chart_contract["common_support_established"] = False
+    bundle.chart_contract[
+        "institution_count_integrity_pass"
+    ] = institution_count_integrity_pass
     bundle.source_paths.append(
         _dataset(paths, "control_features_v6_1.parquet")
     )
@@ -1389,13 +2035,13 @@ def build_new_bundle(
     paths: SuitePaths,
 ) -> FigureBundle:
     """Build one new figure bundle using current artifacts and strict adapters."""
+    if figure_id == 2:
+        return build_fig2_evidence_map(config, paths)
     if figure_id == 5:
         return _enhance_fig5(config, paths)
     bundle = BASE_BUILDERS[figure_id](config, paths)
     if figure_id == 1:
         bundle.status = STATUS_DESCRIPTIVE
-    elif figure_id == 2:
-        bundle = _enhance_fig2(bundle, config, paths)
     elif figure_id == 3:
         bundle = _enhance_fig3(bundle, paths)
     elif figure_id == 4:

@@ -1,0 +1,7 @@
+# Optional, pinned dependencies for publication-grade static figures.
+# In the managed WSL Python used here:
+# python3 -m pip install --user --break-system-packages -r requirements-figures.txt
+pycirclize==1.10.1
+biopython==1.87
+adjustText==1.4.0
+colorspacious==1.1.2

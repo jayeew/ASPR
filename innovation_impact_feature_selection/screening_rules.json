@@ -1,0 +1,192 @@
+{
+  "schema_version": "1.0.0",
+  "hard_gates": {
+    "G01_IN_SCOPE_ROLE": {
+      "field": "scope_role",
+      "allowed": [
+        "direct_innovation",
+        "t0_substantive",
+        "t0_opportunity",
+        "context_control"
+      ],
+      "description": "The feature must belong to the frozen innovation, T0 potential, opportunity, or context scope."
+    },
+    "G02_ARTICLE_LEVEL": {
+      "field": "article_level",
+      "equals": true,
+      "description": "The feature must return one value or category per focal paper."
+    },
+    "G03_PEER_REVIEWED_EVIDENCE": {
+      "field": "peer_reviewed_evidence",
+      "equals": true,
+      "description": "At least one peer-reviewed primary study or foundational mathematical source must support the family."
+    },
+    "G04_REPRODUCIBLE_DEFINITION": {
+      "field": "formula_reproducible",
+      "equals": true,
+      "description": "Formula, units, parameters, direction, missingness, and time boundary must be explicit."
+    },
+    "G05_PUBLICATION_TIME": {
+      "field": "t0_computable",
+      "equals": true,
+      "description": "The feature must be computable no later than publication."
+    },
+    "G06_NO_FUTURE_INFORMATION": {
+      "field": "requires_future",
+      "equals": false,
+      "description": "No post-publication citation, attention, reuse, diffusion, or prestige may enter."
+    },
+    "G07_LOCAL_DATA_READY": {
+      "field": "data_status",
+      "allowed": [
+        "materialized_audited",
+        "derivable_from_audited_inputs"
+      ],
+      "description": "Required local inputs must be frozen and audited, even if a standalone derivation remains to be implemented."
+    },
+    "G08_BIAS_GUARDRAIL": {
+      "field": "bias_policy",
+      "allowed": [
+        "allowed_core",
+        "allowed_opportunity",
+        "allowed_context",
+        "sensitivity_only"
+      ],
+      "description": "Protected attributes, status prestige, and positive-result citation-bias features are forbidden."
+    },
+    "G09_NO_FATAL_VALIDITY_CONCERN": {
+      "field": "fatal_validity_concern",
+      "equals": false,
+      "description": "Mixed evidence is retained, but a demonstrated construct mismatch or invalid cross-domain proxy is fatal."
+    },
+    "G10_OUTCOME_BLIND_SELECTION": {
+      "field": "uses_outcome_for_selection",
+      "equals": false,
+      "description": "Future outcomes and prediction scores cannot determine admission."
+    },
+    "G11_QUALITY_AUDIT": {
+      "field": "quality_audit_status",
+      "allowed": [
+        "pass",
+        "derivable_inputs_pass",
+        "not_applicable"
+      ],
+      "description": "Materialized numerical features must pass their existing outcome-blind audit; derivable features require complete frozen inputs."
+    },
+    "G12_NONINVARIANT": {
+      "field": "noninvariant",
+      "equals": true,
+      "description": "A feature constant in the eligible corpus cannot train a model."
+    }
+  },
+  "evidence_grade_order": [
+    "high",
+    "moderate",
+    "mixed",
+    "limited",
+    "none"
+  ],
+  "readiness_order": [
+    "materialized_audited",
+    "derivable_from_audited_inputs",
+    "unavailable",
+    "future_only"
+  ],
+  "family_deduplication": {
+    "one_default_per_redundancy_family": true,
+    "sort_order": [
+      "selection_priority_ascending",
+      "evidence_grade_descending",
+      "readiness_descending",
+      "feature_id_ascending"
+    ],
+    "duplicate_role": "excluded_redundant",
+    "no_per_dimension_quota": true
+  },
+  "role_assignment": {
+    "sensitivity_bias_policy": [
+      "sensitivity_only"
+    ],
+    "extended_data_status": [
+      "derivable_from_audited_inputs"
+    ],
+    "primary_evidence_grades": [
+      "high",
+      "moderate"
+    ],
+    "supporting_evidence_grades": [
+      "mixed",
+      "limited"
+    ]
+  },
+  "training_sets": {
+    "innovation_core": {
+      "blocks": [
+        "innovation_evidence"
+      ],
+      "roles": [
+        "primary",
+        "supporting"
+      ]
+    },
+    "substantive_t0": {
+      "blocks": [
+        "innovation_evidence",
+        "substantive_potential"
+      ],
+      "roles": [
+        "primary",
+        "supporting"
+      ]
+    },
+    "opportunity_only": {
+      "blocks": [
+        "opportunity_visibility",
+        "context_control"
+      ],
+      "roles": [
+        "primary",
+        "supporting"
+      ]
+    },
+    "full_t0_default": {
+      "blocks": [
+        "innovation_evidence",
+        "substantive_potential",
+        "opportunity_visibility",
+        "context_control"
+      ],
+      "roles": [
+        "primary",
+        "supporting"
+      ]
+    },
+    "full_t0_extended": {
+      "blocks": [
+        "innovation_evidence",
+        "substantive_potential",
+        "opportunity_visibility",
+        "context_control"
+      ],
+      "roles": [
+        "primary",
+        "supporting",
+        "extended"
+      ]
+    },
+    "full_t0_with_sensitivity": {
+      "blocks": [
+        "innovation_evidence",
+        "substantive_potential",
+        "opportunity_visibility",
+        "context_control"
+      ],
+      "roles": [
+        "primary",
+        "supporting",
+        "extended",
+        "sensitivity"
+      ]
+    }
+  }
+}

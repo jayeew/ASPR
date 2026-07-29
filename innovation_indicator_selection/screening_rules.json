@@ -1,0 +1,122 @@
+{
+  "schema_version": "1.0.0",
+  "hard_gates": {
+    "G01_DIRECT_NOVELTY": {
+      "field": "scope_role",
+      "allowed": [
+        "direct_novelty"
+      ],
+      "description": "The metric must measure novelty itself, not interdisciplinarity, impact, disruption, quality, or exposure."
+    },
+    "G02_NOVELTY_SIGNAL": {
+      "field": "signal_role",
+      "allowed": [
+        "novelty"
+      ],
+      "description": "Companion conventionality statistics and human labels are not counted as standalone computational novelty indicators."
+    },
+    "G03_ARTICLE_LEVEL": {
+      "field": "article_level",
+      "equals": true,
+      "description": "The operationalization must return an article-level value."
+    },
+    "G04_PEER_REVIEWED_FORMULA": {
+      "field": "peer_reviewed_formula",
+      "equals": true,
+      "description": "At least one peer-reviewed original or paper-level application must support the formula family."
+    },
+    "G05_REPRODUCIBLE_FORMULA": {
+      "field": "formula_reproducible",
+      "equals": true,
+      "description": "The formula, aggregation, direction, time boundary, and missing-value rule must be explicit."
+    },
+    "G06_SOURCE_FIDELITY": {
+      "field": "source_fidelity",
+      "allowed": [
+        "exact",
+        "documented_adaptation"
+      ],
+      "description": "Unverified approximations and project-defined summaries cannot become final indicators."
+    },
+    "G07_PUBLICATION_TIME": {
+      "field": "t0_computable",
+      "equals": true,
+      "description": "The indicator must be computable at publication without later behavior."
+    },
+    "G08_NO_FUTURE_INFORMATION": {
+      "field": "requires_future",
+      "equals": false,
+      "description": "Any dependence on future citations, reuse, diffusion, or future-trained representations is excluded."
+    },
+    "G09_AUDITED_LOCAL_DATA": {
+      "field": "local_data_status",
+      "allowed": [
+        "audited_available"
+      ],
+      "description": "All required inputs must already exist in the frozen local data boundary."
+    },
+    "G10_NO_FATAL_VALIDITY_CONCERN": {
+      "field": "fatal_validity_concern",
+      "equals": false,
+      "description": "Mixed evidence is reported, but a demonstrated construct mismatch is fatal."
+    },
+    "G11_OVERALL_COVERAGE": {
+      "audit_field": "overall_coverage",
+      "minimum": 0.7,
+      "description": "At least 70% of metric-eligible papers must receive a value."
+    },
+    "G12_MINIMUM_DOMAIN_COVERAGE": {
+      "audit_field": "minimum_domain_coverage",
+      "minimum": 0.5,
+      "description": "Coverage must be at least 50% in every frozen broad domain."
+    },
+    "G13_STABILITY_RHO": {
+      "audit_field": "stability_spearman",
+      "minimum": 0.9,
+      "description": "Reference-resampling rank stability must reach Spearman rho 0.90."
+    },
+    "G14_STABILITY_ERROR": {
+      "audit_field": "stability_median_relative_error",
+      "maximum": 0.1,
+      "description": "Median relative resampling error must not exceed 0.10."
+    },
+    "G15_TEMPORAL_TEST": {
+      "audit_field": "temporal_test_pass",
+      "equals": true,
+      "description": "Automated time-direction checks must pass."
+    },
+    "G16_TOY_TEST": {
+      "audit_field": "toy_test_pass",
+      "equals": true,
+      "description": "Hand-checkable toy formula tests must pass."
+    }
+  },
+  "family_deduplication": {
+    "one_final_indicator_per_redundancy_family": true,
+    "sort_order": [
+      "selection_priority_ascending",
+      "validation_grade_descending",
+      "minimum_domain_coverage_descending",
+      "stability_spearman_descending",
+      "metric_id_ascending"
+    ],
+    "validation_grade_order": [
+      "high",
+      "moderate",
+      "mixed",
+      "limited",
+      "none"
+    ],
+    "no_per_dimension_quota": true
+  },
+  "role_assignment": {
+    "primary_validation_grades": [
+      "high",
+      "moderate"
+    ],
+    "supporting_validation_grades": [
+      "mixed",
+      "limited"
+    ]
+  }
+}

@@ -1,116 +1,219 @@
 {
-  "snapshot_renderer_source": "experiments/fig01/old/fig1_knowledge_perturbation.py",
-  "frozen_graph_root": "data/knowledge_corpus/v2_publication_v6a_locked_candidate/views/fig1",
-  "current_feature_dataset": "data/knowledge_corpus/nature_multihorizon_v6_1_local/innovation_candidate_features.parquet",
-  "current_paper_dataset": "data/knowledge_corpus/nature_multihorizon_v6_1_local/papers_primary_articles.parquet",
-  "candidate_registry": "configs/innovation_candidate_registry_v6_1.json",
+  "design_version": "fig1-old-spacious-transition-v6.4",
+  "retrieval_freeze_date": "2026-07-27",
   "output_dir": "outputs/fig01/new",
-  "formats": [
-    "png",
-    "svg",
-    "pdf"
+  "data_dir": "data/knowledge_corpus/fig1_quasicausal_v1",
+  "candidate_registry": "configs/innovation_candidate_registry_v6_1.json",
+  "frozen_selection_file": "experiments/fig01/new/frozen_selection.json",
+  "frozen_selection_sha256": "9d5e96856c47a152192d84919b3b25ce756d1a6094d910d6bdec6359c271c0cd",
+  "topic_short_labels_file": "experiments/fig01/new/topic_short_labels.json",
+  "topic_short_labels_sha256": "5a0b4c09123f54829347592db7763bc8dba0133bdae5e60732be3da2037e9076",
+  "data": {
+    "focal_works_file": "focal_works.parquet",
+    "indicator_features_file": "indicator_features_v6_1.parquet",
+    "source_description": "Frozen balanced OpenAlex field-year corpus and publication-time v6.1 indicator formulas; no external experimental dataset or post-publication outcome is used"
+  },
+  "main_domains": [
+    "crispr",
+    "graphene_2d_materials",
+    "ipsc_reprogramming",
+    "exoplanets",
+    "microbiome_metagenomics",
+    "click_chemistry_cuaac",
+    "genome_wide_association_studies",
+    "immune_checkpoint_therapy",
+    "organoids",
+    "topological_insulators"
   ],
-  "dpi": 300,
-  "figure_width": 29.0,
-  "row_height": 4.15,
-  "domain_figure_width": 20.0,
-  "domain_figure_height": 10.2,
-  "title": "Knowledge-graph reconfiguration and publication-time innovation signals",
-  "subtitle": "Seven-topic cumulative graph views (left) and locally selected high-change v6.1 indicators (right); all windows end by 2017.",
-  "minimum_indicator_sample": 10,
-  "minimum_selected_indicators": 4,
-  "maximum_selected_indicators": 5,
-  "maximum_display_topics": 7,
-  "feature_horizon_end": 2017,
-  "case_replacements": [
+  "episodes": [
     {
-      "excluded": "exoplanets",
-      "replacement": "microbiome_metagenomics",
-      "reason": "The frozen 1990–2004 astronomy slice has too few papers with calculable publication-time reference indicators; no values are imputed."
+      "episode_id": "crispr_2012_2013",
+      "domain": "crispr",
+      "label": "CRISPR–Cas landmark papers · 2012–13",
+      "start_year": 2012,
+      "end_year": 2013
+    },
+    {
+      "episode_id": "graphene_2004",
+      "domain": "graphene_2d_materials",
+      "label": "Graphene isolation · 2004",
+      "start_year": 2004,
+      "end_year": 2004
+    },
+    {
+      "episode_id": "ipsc_2006_2007",
+      "domain": "ipsc_reprogramming",
+      "label": "iPSC reprogramming · 2006–07",
+      "start_year": 2006,
+      "end_year": 2007
+    },
+    {
+      "episode_id": "exoplanets_1995",
+      "domain": "exoplanets",
+      "label": "51 Pegasi b · 1995",
+      "start_year": 1995,
+      "end_year": 1995
+    },
+    {
+      "episode_id": "microbiome_2010_2012",
+      "domain": "microbiome_metagenomics",
+      "label": "Human microbiome catalogues · 2010–12",
+      "start_year": 2010,
+      "end_year": 2012
+    },
+    {
+      "episode_id": "click_chemistry_2002",
+      "domain": "click_chemistry_cuaac",
+      "label": "CuAAC click chemistry · 2002",
+      "start_year": 2002,
+      "end_year": 2002
+    },
+    {
+      "episode_id": "gwas_2007",
+      "domain": "genome_wide_association_studies",
+      "label": "Large-scale GWAS · 2007",
+      "start_year": 2007,
+      "end_year": 2007
+    },
+    {
+      "episode_id": "immune_checkpoint_2010",
+      "domain": "immune_checkpoint_therapy",
+      "label": "Ipilimumab survival trial · 2010",
+      "start_year": 2010,
+      "end_year": 2010
+    },
+    {
+      "episode_id": "organoids_2009",
+      "domain": "organoids",
+      "label": "Intestinal organoids · 2009",
+      "start_year": 2009,
+      "end_year": 2009
+    },
+    {
+      "episode_id": "organoids_2013",
+      "domain": "organoids",
+      "label": "Cerebral organoids · 2013",
+      "start_year": 2013,
+      "end_year": 2013
+    },
+    {
+      "episode_id": "topological_2005_2006",
+      "domain": "topological_insulators",
+      "label": "Quantum spin Hall effect · 2005–06",
+      "start_year": 2005,
+      "end_year": 2006
     }
   ],
-  "domains": [
-    {
-      "slug": "crispr",
-      "config": "experiments/fig01/old/configs/v6a_display_crispr.yaml",
-      "graph_windows": [
-        [2005, 2011],
-        [2012, 2014],
-        [2015, 2016],
-        [2017, 2017]
-      ],
-      "panel_captions": [
-        "CRISPR immunity prior",
-        "Programmable Cas9 shock",
-        "Early genome-editing diffusion",
-        "Diversification by 2017"
-      ],
-      "feature_domain12": "life_molecular",
-      "feature_subfields": [
-        "Molecular Biology",
-        "Genetics"
-      ]
-    },
-    {
-      "slug": "graphene_2d_materials",
-      "config": "experiments/fig01/old/configs/v6a_display_graphene.yaml",
-      "graph_windows": [
-        [2004, 2004],
-        [2005, 2007],
-        [2008, 2012],
-        [2013, 2017]
-      ],
-      "panel_captions": [
-        "Graphene isolation",
-        "Electronic transport expansion",
-        "Devices and synthesis branching",
-        "2D-material families by 2017"
-      ],
-      "feature_domain12": "materials_nanoscience",
-      "feature_subfields": [
-        "Materials Chemistry",
-        "Electronic, Optical and Magnetic Materials",
-        "Condensed Matter Physics"
-      ]
-    },
-    {
-      "slug": "ipsc_reprogramming",
-      "config": "experiments/fig01/old/configs/v6a_display_ipsc.yaml",
-      "graph_windows": [
-        [1998, 2005],
-        [2006, 2008],
-        [2009, 2013],
-        [2014, 2017]
-      ],
-      "panel_captions": [
-        "Stem-cell and cloning prior",
-        "iPSC platform shock",
-        "Disease-model reconfiguration",
-        "Differentiation by 2017"
-      ],
-      "feature_domain12": "life_molecular",
-      "feature_subfields": [
-        "Cell Biology",
-        "Developmental Biology"
-      ]
-    },
-    {
-      "slug": "microbiome_metagenomics",
-      "config": "experiments/fig01/new/configs/microbiome_metagenomics.yaml",
-      "graph_windows": [
-        [2005, 2009],
-        [2010, 2012],
-        [2013, 2015],
-        [2016, 2017]
-      ],
-      "panel_captions": [
-        "Metagenomic sequencing prior",
-        "Gut catalogue and HMP",
-        "Community-function expansion",
-        "Host–microbiome diversification"
-      ],
-      "feature_domain12": "ecology_evolution_microbiology",
-      "feature_subfields": []
+  "windows": {
+    "years_per_stage": 3,
+    "start_offsets": {
+      "pre": -3,
+      "landmark": 0,
+      "early_post": 3,
+      "late_post": 6
     }
-  ]
+  },
+  "selection": {
+    "display_domain_count": 4,
+    "refresh_episode_id": "gwas_2007",
+    "minimum_refresh_top_four_effect_count": 3,
+    "minimum_papers_per_window": 80,
+    "minimum_graph_nodes": 8,
+    "minimum_graph_edges": 3,
+    "domain_score_weights": {
+      "pre_late_edge_turnover": 0.3,
+      "mean_successive_edge_turnover": 0.1,
+      "pre_late_topic_turnover": 0.2,
+      "absolute_log_edge_count_change": 0.25,
+      "absolute_log_effective_topic_change": 0.15
+    }
+  },
+  "graph": {
+    "minimum_shared_references": 2,
+    "cumulative_snapshots": true,
+    "history_start_offset": -6,
+    "minimum_baseline_snapshot_papers": 400,
+    "minimum_final_snapshot_papers": 1000,
+    "main_maximum_display_nodes": 8,
+    "main_maximum_active_edges_per_snapshot": 16,
+    "detail_maximum_display_nodes": 12,
+    "detail_maximum_active_edges_per_snapshot": 24,
+    "minimum_active_display_edges": 4,
+    "maximum_representative_papers_per_topic": 5,
+    "main_maximum_labels_per_snapshot": 3,
+    "detail_maximum_labels_per_snapshot": 5,
+    "show_internal_cluster_spokes": true,
+    "show_stage_progression_arrows": true,
+    "layout_spring_k_scale": 2.0,
+    "main_layout_minimum_separation": 0.42,
+    "detail_layout_minimum_separation": 0.30,
+    "main_layout_target_x_extent": 0.82,
+    "main_layout_target_y_extent": 0.76,
+    "detail_layout_target_x_extent": 0.86,
+    "detail_layout_target_y_extent": 0.78,
+    "layout_collision_iterations": 800,
+    "layout_iterations": 900,
+    "layout_seed": 20260727
+  },
+  "indicators": {
+    "normalization": "oriented_percentile_within_publication_year_across_ten_candidate_domains",
+    "minimum_valid_per_window": 20,
+    "minimum_coverage_per_window": 0.2,
+    "minimum_selected": 4,
+    "maximum_selected": 5,
+    "fifth_to_fourth_minimum_ratio": 0.75,
+    "range_weight": 0.65,
+    "adjacent_change_weight": 0.35,
+    "annual_start_offset": -6,
+    "annual_end_offset": 8,
+    "minimum_annual_valid": 15,
+    "trajectory_display_scale": {
+      "mode": "feature_specific_symmetric_zoom",
+      "render_scope": "domain_shared_maximum_of_feature_limits",
+      "minimum_limit": 0.2,
+      "maximum_limit": 0.7,
+      "round_to": 0.05,
+      "iqr_absolute_quantile": 0.9,
+      "median_headroom": 0.05,
+      "unit": "percentile_fraction",
+      "shared_effect_limit": 0.7
+    }
+  },
+  "indicator_display": {
+    "role": "display_only_not_feature_selection",
+    "paired_panels_require_late_pre_effect": true,
+    "minimum_absolute_late_pre_effect": 0.09,
+    "minimum_annual_peak_to_peak": 0.35,
+    "minimum_per_domain": 3,
+    "maximum_per_domain": 4
+  },
+  "bootstrap": {
+    "draws": 2000,
+    "seed": 20260727,
+    "confidence_level": 0.95,
+    "year_stratified": true,
+    "window_year_aggregation": "equal_weight_mean_of_year_specific_medians"
+  },
+  "plot": {
+    "main_width_mm": 183,
+    "main_height_mm": 168,
+    "domain_width_mm": 183,
+    "domain_height_mm": 128,
+    "dpi": 600,
+    "font_family": "DejaVu Sans",
+    "body_font_pt": 6.0,
+    "minimum_font_pt": 5.5,
+    "panel_label_pt": 8.0,
+    "formats": [
+      "png",
+      "svg",
+      "pdf"
+    ]
+  },
+  "archive": {
+    "predecessor_archive": "outputs/fig01/new/archive_mass_spec_v6_2_20260727",
+    "exclude_directories": [
+      "design_schematic"
+    ]
+  }
 }

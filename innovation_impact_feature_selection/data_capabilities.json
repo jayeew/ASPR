@@ -1,0 +1,270 @@
+{
+  "schema_version": "1.0.0",
+  "audit_date": "2026-07-28",
+  "corpus": {
+    "eligible_primary_articles": 118059,
+    "broad_domains": 12,
+    "publication_years": 38,
+    "note": "Counts describe the frozen local ASPR Nature primary-article corpus and are used only for data readiness, coverage, and invariance checks."
+  },
+  "source_files": {
+    "control_features": {
+      "path": "../data/knowledge_corpus/nature_multihorizon_v6_1_local/control_features_v6_1.parquet",
+      "sha256": "0844e9904fa864249ce0ff2e4aa5c7bb7ce9a1d68e43d5288ef2ce819d78a2dc"
+    },
+    "innovation_features": {
+      "path": "../data/knowledge_corpus/nature_multihorizon_v6_1_local/innovation_candidate_features.parquet",
+      "sha256": "9cd598cb6912acb306a1dbfee457b97922607a557f3d9c60ec4a199747311d0e"
+    },
+    "opportunity_features": {
+      "path": "../data/knowledge_corpus/nature_multihorizon_v6_1_local/opportunity_features.parquet",
+      "sha256": "756bae638647c3b358e7a88040dadbdaf3a692c8133690f0ed14b5a094a67a70"
+    },
+    "primary_papers": {
+      "path": "../data/knowledge_corpus/nature_multihorizon_v6_1_local/papers_primary_articles.parquet",
+      "sha256": "0fb24745bbf9d8b2aa2cf377459563bb388fbcb52c7bfe5030a29035973a431c"
+    },
+    "all_papers": {
+      "path": "../data/knowledge_corpus/nature_multihorizon_v6_1_local/papers_common_all.parquet",
+      "sha256": "6fc1db87e35b317bec52456208c2d03485bc3ea1845035cc75ab01320c2e2ae2"
+    },
+    "paper_references": {
+      "path": "../data/knowledge_corpus/nature_multihorizon_v6_1_local/paper_references.parquet",
+      "sha256": "d87d28fce8317050a6838fa7484f71e46837ff530617e8b6d5701ab684c46694"
+    },
+    "reference_metadata": {
+      "path": "../data/knowledge_corpus/nature_multihorizon_v6_1_local/reference_metadata.parquet",
+      "sha256": "2af20b13148ce1cc2cf227a0e3737c62bf4a62aebec981b1ffdc8dba9127aab9"
+    },
+    "target_openalex_metadata": {
+      "path": "../data/knowledge_corpus/nature_multihorizon_v6_1_local/target_openalex_metadata.parquet",
+      "sha256": "9bb567bab8704dc0354c474f3572c2cdf712f89529e1dcb352859ca72726a10a"
+    }
+  },
+  "materialized_columns": {
+    "publication_year": {
+      "source": "control_features",
+      "raw_coverage": 1.0,
+      "noninvariant": true
+    },
+    "domain12": {
+      "source": "control_features",
+      "raw_coverage": 1.0,
+      "noninvariant": true
+    },
+    "openalex_primary_subfield": {
+      "source": "control_features",
+      "raw_coverage": 0.9896746542,
+      "noninvariant": true
+    },
+    "venue_family": {
+      "source": "control_features",
+      "raw_coverage": 1.0,
+      "noninvariant": true
+    },
+    "log_reference_count": {
+      "source": "control_features",
+      "raw_coverage": 1.0,
+      "noninvariant": true
+    },
+    "reference_age_median": {
+      "source": "control_features",
+      "raw_coverage": 0.7832,
+      "noninvariant": true
+    },
+    "reference_age_iqr": {
+      "source": "control_features",
+      "raw_coverage": 0.7832,
+      "noninvariant": true
+    },
+    "title_word_count": {
+      "source": "control_features",
+      "raw_coverage": 1.0,
+      "noninvariant": true
+    },
+    "log_author_count": {
+      "source": "control_features",
+      "raw_coverage": 1.0,
+      "noninvariant": true
+    },
+    "log_institution_count": {
+      "source": "control_features",
+      "raw_coverage": 1.0,
+      "noninvariant": true
+    },
+    "log_country_count": {
+      "source": "control_features",
+      "raw_coverage": 1.0,
+      "noninvariant": true
+    },
+    "log_team_prior_nature_output_max": {
+      "source": "control_features",
+      "raw_coverage": 0.9443,
+      "noninvariant": true
+    },
+    "log_prior_reference_popularity_median": {
+      "source": "control_features",
+      "raw_coverage": 0.7832,
+      "noninvariant": true
+    },
+    "reference_overlap_novelty_t0": {
+      "source": "innovation_features",
+      "raw_coverage": 0.6876477016,
+      "eligible_coverage": 0.9356515768,
+      "minimum_eligible_domain_coverage": 0.54375,
+      "stability_spearman": 0.9507885942,
+      "stability_median_relative_error": 0.0024893189,
+      "noninvariant": true
+    },
+    "first_time_source_pair_share": {
+      "source": "innovation_features",
+      "raw_coverage": 0.763397962,
+      "eligible_coverage": 0.9999509437,
+      "minimum_eligible_domain_coverage": 0.998989899,
+      "stability_spearman": 0.9575744198,
+      "stability_median_relative_error": 0.0669151358,
+      "noninvariant": true
+    },
+    "hypergeom_conventionality_median_t0": {
+      "source": "innovation_features",
+      "raw_coverage": 0.7485579244,
+      "eligible_coverage": 0.9860312243,
+      "minimum_eligible_domain_coverage": 0.9432950192,
+      "stability_spearman": 0.9453572558,
+      "stability_median_relative_error": 0.0935282116,
+      "noninvariant": true
+    },
+    "hypergeom_atypicality_p10_t0": {
+      "source": "innovation_features",
+      "raw_coverage": 0.7485579244,
+      "eligible_coverage": 0.9860312243,
+      "minimum_eligible_domain_coverage": 0.9432950192,
+      "stability_spearman": 0.885191496,
+      "stability_median_relative_error": 0.1204669833,
+      "noninvariant": true
+    },
+    "field_variety": {
+      "source": "innovation_features",
+      "raw_coverage": 0.7831169161,
+      "eligible_coverage": 1.0,
+      "minimum_eligible_domain_coverage": 1.0,
+      "stability_spearman": 0.9442428099,
+      "stability_median_relative_error": 0.0,
+      "noninvariant": true
+    },
+    "field_gini_balance": {
+      "source": "innovation_features",
+      "raw_coverage": 0.7831169161,
+      "eligible_coverage": 1.0,
+      "minimum_eligible_domain_coverage": 1.0,
+      "stability_spearman": 0.9048352366,
+      "stability_median_relative_error": 0.0562218891,
+      "noninvariant": true
+    },
+    "field_disparity_cosine_mean": {
+      "source": "innovation_features",
+      "raw_coverage": 0.7059521087,
+      "eligible_coverage": 0.9464049242,
+      "minimum_eligible_domain_coverage": 0.8102524866,
+      "stability_spearman": 0.9573134696,
+      "stability_median_relative_error": 0.0,
+      "noninvariant": true
+    },
+    "reference_other_field_share": {
+      "source": "innovation_features",
+      "raw_coverage": 0.7831169161,
+      "eligible_coverage": 1.0,
+      "minimum_eligible_domain_coverage": 1.0,
+      "stability_spearman": 0.9853635727,
+      "stability_median_relative_error": 0.0525686977,
+      "noninvariant": true
+    },
+    "rao_stirling_integration": {
+      "source": "innovation_features",
+      "raw_coverage": 0.7583411684,
+      "eligible_coverage": 0.970155476,
+      "minimum_eligible_domain_coverage": 0.9418515685,
+      "stability_spearman": 0.9743273272,
+      "stability_median_relative_error": 0.0536745782,
+      "noninvariant": true
+    },
+    "bc_degree_per_reference_t0": {
+      "source": "opportunity_features",
+      "raw_coverage": 0.7672,
+      "noninvariant": true
+    },
+    "bc_shared_reference_strength_t0": {
+      "source": "opportunity_features",
+      "raw_coverage": 0.7672,
+      "noninvariant": true
+    },
+    "bc_component_share_t0": {
+      "source": "opportunity_features",
+      "raw_coverage": 0.9758,
+      "noninvariant": true
+    },
+    "bc_local_clustering_t0": {
+      "source": "opportunity_features",
+      "raw_coverage": 0.0,
+      "noninvariant": false
+    },
+    "bc_harmonic_closeness_t0": {
+      "source": "opportunity_features",
+      "raw_coverage": 0.0,
+      "noninvariant": false
+    },
+    "document_type": {
+      "source": "primary_papers",
+      "raw_coverage": 1.0,
+      "unique_values": 1,
+      "noninvariant": false
+    }
+  },
+  "derivable_features": {
+    "reference_age_mean": {
+      "required_sources": [
+        "paper_references",
+        "reference_metadata",
+        "primary_papers"
+      ],
+      "input_coverage": 0.7832,
+      "temporal_rule": "reference_year < publication_year"
+    },
+    "reference_age_cv": {
+      "required_sources": [
+        "paper_references",
+        "reference_metadata",
+        "primary_papers"
+      ],
+      "input_coverage": 0.7832,
+      "temporal_rule": "reference_year < publication_year and positive mean age"
+    },
+    "topic_publication_volume_prior_3y": {
+      "required_sources": [
+        "all_papers",
+        "primary_papers"
+      ],
+      "topic_label_coverage": 1.0,
+      "topic_unique_values": 2546,
+      "temporal_rule": "count only years t-3 through t-1 under the frozen topic taxonomy"
+    },
+    "topic_growth_slope_prior_5y": {
+      "required_sources": [
+        "all_papers",
+        "primary_papers"
+      ],
+      "topic_label_coverage": 1.0,
+      "topic_unique_values": 2546,
+      "temporal_rule": "fit only annual counts from t-5 through t-1 under the frozen topic taxonomy"
+    }
+  },
+  "unavailable_modalities": [
+    "historically versioned open-access status at publication",
+    "preprint-before-publication linkage for the full corpus",
+    "structured data-repository and code-repository links at publication",
+    "complete frozen abstracts and abstract readability features",
+    "cross-domain method/evidence-level labels",
+    "exact pre-publication coauthorship centrality for all authors",
+    "exact bibliographic-coupling clustering and closeness for the full corpus"
+  ]
+}

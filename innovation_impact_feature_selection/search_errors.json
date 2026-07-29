@@ -1,0 +1,6 @@
+{
+  "schema_version": "1.0.0",
+  "cutoff_date": "2026-07-28",
+  "limit_per_provider": 25,
+  "errors": []
+}

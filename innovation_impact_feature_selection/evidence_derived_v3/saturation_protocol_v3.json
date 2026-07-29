@@ -1,0 +1,124 @@
+{
+  "schema_version": "3.1.0",
+  "protocol_id": "aspr-evidence-saturation-v3-2026-07-29",
+  "purpose": "Discover English search terminology and publication-time innovation or potential-impact indicators without an arbitrary Top-K cutoff.",
+  "design": "deterministic sequential stratified sampling with dual novelty saturation",
+  "snapshot": {
+    "root": "/home/jayee/workspace/FabCitation/openalex-snapshot",
+    "works_manifest": "/home/jayee/workspace/FabCitation/openalex-snapshot/data/works/manifest",
+    "works_id_index": "/home/jayee/workspace/FabCitation/openalex_snapshot_reference_check_results/analysis_state.db",
+    "manifest_part_count": 2127,
+    "manifest_record_count": 492361307,
+    "manifest_content_length_bytes": 639189333248,
+    "observed_max_updated_date": "2026-03-30",
+    "role": "historical coverage, provenance freeze, local seed/indexability checks, and optional offline verification"
+  },
+  "api": {
+    "key_source": "OPENALEX_API_KEYS or OPENALEX_API_KEY environment variables",
+    "secrets_persisted": false,
+    "scheduler": "round-robin across keys with remaining daily credit; continue on the other key when one is exhausted",
+    "per_page": 100,
+    "concurrency": 6,
+    "seed_recall_doi_batch_size": 40,
+    "citation_backward_id_batch_size": 100,
+    "citation_forward_source_batch_size": 50,
+    "citation_execution": "cursor-paged OpenAlex filters with resumable checkpoints; reuse backward-reference records already present in the local evidence database",
+    "stop_before_remaining_usd": 0.001,
+    "resume_after_utc_reset": true
+  },
+  "sampling": {
+    "random_seed_namespace": "ASPR_EVIDENCE_SATURATION_V3_20260729",
+    "maximum_openalex_sample_per_query": 10000,
+    "base_sample_per_stratum": 4000,
+    "target_oversample_per_stratum": 2500,
+    "evidence_oversample_per_stratum": 1500,
+    "development_evidence_formula_oversample_per_stratum": 500,
+    "development_evidence_formula_source": "../expanded_review_v2/outputs/literature_evidence_v2.json",
+    "records_per_stratum_per_review_round": 10,
+    "records_per_stratum_by_role": {
+      "base_year_type": 10,
+      "target_oversample": 10,
+      "evidence_oversample": 10,
+      "development_formula_oversample": 5,
+      "development_citation_network": 10,
+      "citation_tracking_network": 10,
+      "formal_search_family": 10
+    },
+    "selection_order": "sha256(random_seed_namespace, discovery_query_id, record_key)",
+    "formal_pool_selection_order": "OpenAlex seeded sample rank plus a frozen phase offset; this permits deterministic lazy pagination without reranking already reviewed records.",
+    "publication_year_bands": [
+      {
+        "label": "before_1990",
+        "from_year": null,
+        "to_year": 1989
+      },
+      {
+        "label": "1990_1999",
+        "from_year": 1990,
+        "to_year": 1999
+      },
+      {
+        "label": "2000_2009",
+        "from_year": 2000,
+        "to_year": 2009
+      },
+      {
+        "label": "2010_2014",
+        "from_year": 2010,
+        "to_year": 2014
+      },
+      {
+        "label": "2015_2019",
+        "from_year": 2015,
+        "to_year": 2019
+      },
+      {
+        "label": "2020_2022",
+        "from_year": 2020,
+        "to_year": 2022
+      },
+      {
+        "label": "2023_cutoff",
+        "from_year": 2023,
+        "to_year": 2026
+      }
+    ],
+    "work_types": [
+      "article",
+      "review"
+    ],
+    "base_strata": "publication-year band by work type",
+    "target_oversampling": "one stratum for each frozen bootstrap target term",
+    "evidence_oversampling": "one stratum for each frozen bootstrap evidence-role term",
+    "field_or_domain_stratification": false,
+    "reason_no_field_strata": "Search concept domains must emerge from evidence and therefore cannot be sampling strata."
+  },
+  "sequential_review": {
+    "round_unit": "the next deterministic batch from every still-active discovery stratum",
+    "phases": [
+      "search_frame_discovery",
+      "formal_indicator_discovery"
+    ],
+    "phase_reset_rule": "After the search-frame phase freezes and formal query pools are registered, the consecutive dual-zero counter resets; both phases require an independent H2-approved freeze.",
+    "minimum_consecutive_zero_novelty_rounds": 3,
+    "novelty_endpoints": [
+      "new non-redundant English canonical search-term family",
+      "new canonical indicator family"
+    ],
+    "automatic_stop_allowed": false,
+    "required_stop_approver": "H2",
+    "additional_stop_gates": [
+      "all eligible indexable development seeds recalled",
+      "all eligible indexable hidden validation seeds recalled",
+      "PRESS has no unresolved issue",
+      "all AI-H1 disagreements in reviewed batches adjudicated",
+      "forward and backward citation tracking of included reviews and indicator definition or validation studies produces no new endpoint in the required consecutive rounds"
+    ]
+  },
+  "claim_boundary": {
+    "allowed": "systematic evidence mapping continued to preregistered terminology-and-indicator saturation",
+    "not_allowed": "exhaustive census of every bibliographic record matching the broad bootstrap expression",
+    "prevalence_estimation": false,
+    "language_bias_statement_required": true
+  }
+}

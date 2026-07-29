@@ -1,0 +1,102 @@
+{
+  "schema_version": "1.0.0",
+  "protocol_id": "aspr-standalone-innovation-dimension-indicator-selection-2026-07-28",
+  "status": "prospectively_frozen_for_this_standalone_selection",
+  "cutoff_date": "2026-07-28",
+  "objective": "Identify literature-supported dimensions of article-level scientific novelty and select publication-time indicators that are reproducible with the currently audited ASPR reference data.",
+  "claim_boundary": {
+    "included": [
+      "Article-level scientific novelty observable at publication time.",
+      "Element novelty and recombinational novelty measured from references, concepts, keywords, entities, or publication text.",
+      "Contribution-locus labels such as question, method, theory, and result novelty, recorded as subtypes rather than parallel computational mechanisms.",
+      "Independent validation and adverse evidence about novelty indicators."
+    ],
+    "excluded_from_final_dimensions": [
+      "Future citation impact, disruption, diffusion, or later reuse.",
+      "Interdisciplinarity and knowledge-base diversity when they are not independently shown to measure novelty.",
+      "Author, institution, venue prestige, attention, acceptance, quality, and feasibility.",
+      "Dynamic LLM judgments without a frozen model, prompt, retrieval corpus, and deterministic aggregation rule."
+    ],
+    "interpretation": "The output is a publication-time novelty-evidence profile, not a complete judgment of scientific worth, correctness, importance, or future impact."
+  },
+  "review_design": {
+    "type": "reproducible_scoping_evidence_census",
+    "not_claimed_as": [
+      "PRISMA systematic review",
+      "meta-analysis",
+      "retrospective preregistration"
+    ],
+    "discovery_anchors": [
+      "Zhao and Zhang (2025) review of academic-paper novelty measurement",
+      "Shibayama et al. (2021) taxonomy of citation/text and element/recombination approaches",
+      "Shibayama et al. (2023) explicit distinction between element and recombinant novelty"
+    ],
+    "search_channels": [
+      "Crossref",
+      "OpenAlex",
+      "publisher landing pages",
+      "backward and forward citation chaining"
+    ],
+    "languages": [
+      "English"
+    ],
+    "screening_unit": "A peer-reviewed article, or a foundational mathematical source, that defines, operationalizes, validates, or critiques an article-level novelty measure.",
+    "metric_extraction_unit": "A mathematical measurement family. Pure parameter choices and monotone transformations are stored as variants, not counted as new indicator families."
+  },
+  "source_inclusion_rules": [
+    "The source has a DOI or stable version-of-record URL.",
+    "The source defines, applies, validates, or directly critiques an article-level novelty construct or a neighboring construct needed for discriminant screening.",
+    "An original or paper-level application source is required for a metric family; a review alone cannot authorize a formula.",
+    "Adverse and null evidence is retained.",
+    "Post-publication measures may enter the census only as explicit exclusions."
+  ],
+  "dimension_rules": {
+    "minimum_independent_peer_reviewed_groups": 2,
+    "minimum_operationalization_groups": 1,
+    "must_be_direct_novelty_construct": true,
+    "must_have_at_least_one_selected_indicator": true,
+    "no_required_dimension_count": true,
+    "note": "Research group, rather than paper count, is used to reduce double-counting of closely related publications."
+  },
+  "indicator_rules_path": "screening_rules.json",
+  "data_boundary": {
+    "maximum_information_time": "publication_year-1 for historical comparison data; focal references and focal metadata may be observed at publication",
+    "audited_local_modalities": [
+      "focal reference lists",
+      "strictly prior reference histories",
+      "strictly prior cited-source pair histories",
+      "strictly prior same-field comparison-paper reference sets"
+    ],
+    "not_audited_or_not_frozen_for_selection": [
+      "complete title-and-abstract histories with a frozen cross-domain embedding model",
+      "full-text rhetorical-role extraction",
+      "question, method, theory, and result entity extraction",
+      "author essays or expert novelty labels for the full target corpus"
+    ],
+    "local_audit_provenance": {
+      "path": "../configs/innovation_candidate_registry_v6_1.json",
+      "sha256": "126202f72519a4eb1657f49b8daa06bdcd9fccb37fe66cd6e4a8ec8471762611",
+      "reuse_boundary": "Only outcome-blind coverage, stability, temporal, toy, and formula-equivalence fields were transcribed. Existing angle labels and final roles were not reused."
+    }
+  },
+  "outcome_blinding": {
+    "future_citations_used": false,
+    "future_diffusion_used": false,
+    "prediction_oof_used": false,
+    "allowed_empirical_checks": [
+      "coverage",
+      "minimum-domain coverage",
+      "temporal leakage test",
+      "toy formula test",
+      "reference-resampling stability",
+      "formula-equivalence audit"
+    ]
+  },
+  "reproducibility": {
+    "all_input_files_are_hashed": true,
+    "all_failures_receive_machine_readable_reason_codes": true,
+    "family_deduplication_is_deterministic": true,
+    "ties_are_broken_by_metric_id": true,
+    "selection_has_no_dimension_or_indicator_quota": true
+  }
+}

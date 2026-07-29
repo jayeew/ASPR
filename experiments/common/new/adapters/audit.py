@@ -2,10 +2,12 @@
 
 from __future__ import annotations
 
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any, Dict, Mapping, Sequence
 
 import pandas as pd
+from PIL import Image
 
 from experiments.common.new.base.common import FigureBundle, SuitePaths
 
@@ -79,21 +81,220 @@ def audit_bundle(
         f"rows_with_source_max_year>=publication_year={leakage}",
     )
     if figure_id == 2:
-        scene = bundle.tables["measurement_scene_manifest"]
-        _check(
-            checks,
-            "measurement_scene_outcome_blind",
-            scene["selection_rule"].str.contains("no outcome used").all(),
-            str(scene.iloc[0]["selection_rule"]),
+        forbidden_tokens = ("oof", "future", "known_group", "measurement_scene")
+        forbidden_tables = sorted(
+            table
+            for table in bundle.tables
+            if any(token in table.lower() for token in forbidden_tokens)
         )
         _check(
             checks,
-            "future_association_not_selection",
-            bundle.chart_contract.get(
+            "outcome_free_fig2_data_path",
+            not forbidden_tables
+            and bundle.chart_contract.get("future_data_used") is False
+            and bundle.chart_contract.get("oof_data_used") is False
+            and bundle.chart_contract.get(
                 "outcome_used_for_indicator_selection"
             )
             is False,
-            "future-component associations are construct checks only",
+            f"forbidden_tables={forbidden_tables}",
+        )
+        stages = bundle.tables["fig2_selection_stages"].sort_values(
+            "stage_order"
+        )
+        _check(
+            checks,
+            "selection_stage_counts_exact",
+            stages["count"].astype(int).tolist() == [50, 30, 20, 18, 8]
+            and stages["removed_since_previous"].astype(int).tolist()
+            == [0, 20, 10, 2, 10],
+            stages[["stage", "count"]].to_dict("records"),
+        )
+        flows = bundle.tables["fig2_candidate_role_flows"]
+        observed_flow = {
+            str(row.angle_code): {
+                str(role): int(
+                    flows.loc[
+                        flows["angle_code"].eq(row.angle_code)
+                        & flows["role"].eq(role),
+                        "candidate_count",
+                    ].iloc[0]
+                )
+                for role in ("primary", "sensitivity", "exploratory", "excluded")
+            }
+            for row in flows.drop_duplicates("angle_code").itertuples(
+                index=False
+            )
+        }
+        expected_flow = {
+            "A1": {"primary": 1, "sensitivity": 1, "exploratory": 2, "excluded": 5},
+            "A2": {"primary": 1, "sensitivity": 4, "exploratory": 0, "excluded": 2},
+            "A3": {"primary": 1, "sensitivity": 2, "exploratory": 0, "excluded": 6},
+            "A4": {"primary": 3, "sensitivity": 6, "exploratory": 0, "excluded": 2},
+            "A5": {"primary": 2, "sensitivity": 5, "exploratory": 2, "excluded": 5},
+        }
+        role_totals = (
+            flows.groupby("role")["candidate_count"].sum().astype(int).to_dict()
+        )
+        _check(
+            checks,
+            "candidate_role_flow_conservation",
+            observed_flow == expected_flow
+            and role_totals
+            == {
+                "primary": 8,
+                "sensitivity": 18,
+                "exploratory": 4,
+                "excluded": 20,
+            }
+            and int(flows["candidate_count"].sum()) == 50,
+            {"flow": observed_flow, "role_totals": role_totals},
+        )
+        ledger = bundle.tables["fig2_indicator_ledger"].sort_values(
+            "display_order"
+        )
+        _check(
+            checks,
+            "five_dimensions_eight_primary_indicators",
+            len(ledger) == 8
+            and ledger["angle_id"].nunique() == 5
+            and bool(ledger["all_primary_gates_pass"].all())
+            and ledger["display_formula"].notna().all(),
+            {
+                "rows": int(len(ledger)),
+                "dimensions": int(ledger["angle_id"].nunique()),
+                "all_gates_pass": bool(ledger["all_primary_gates_pass"].all()),
+            },
+        )
+        i2 = ledger.loc[ledger["indicator_id"].eq("I2")].iloc[0]
+        _check(
+            checks,
+            "i2_direction_and_approximation_unique",
+            int(i2["direction"]) == -1
+            and bool(i2["approximation_applicable"])
+            and int(ledger["direction"].eq(-1).sum()) == 1
+            and int(ledger["approximation_applicable"].sum()) == 1
+            and float(i2["approximation_spearman"]) >= 0.95
+            and float(i2["approximation_median_relative_error"]) <= 0.05,
+            {
+                "direction": int(i2["direction"]),
+                "approximation_spearman": float(
+                    i2["approximation_spearman"]
+                ),
+                "approximation_mre": float(
+                    i2["approximation_median_relative_error"]
+                ),
+            },
+        )
+        relations = bundle.tables["fig2_relation_edges"]
+        observed_relations = {
+            (str(row.source_id), str(row.target_id)): round(
+                float(row.oriented_spearman), 3
+            )
+            for row in relations.itertuples(index=False)
+        }
+        expected_relations = {
+            ("I2", "I3"): 0.681,
+            ("I4", "I6"): -0.638,
+            ("I5", "I6"): 0.422,
+            ("I6", "I7"): 0.464,
+            ("I5", "I8"): 0.703,
+            ("I6", "I8"): 0.686,
+            ("I7", "I8"): 0.484,
+        }
+        _check(
+            checks,
+            "seven_frozen_relations_only",
+            len(relations) == 7
+            and observed_relations == expected_relations
+            and (
+                relations["absolute_spearman"]
+                >= relations["threshold"] - 1e-12
+            ).all(),
+            {
+                "edges": int(len(relations)),
+                "relations": observed_relations,
+            },
+        )
+        incident_ids = set(relations["source_id"]) | set(relations["target_id"])
+        _check(
+            checks,
+            "i1_isolated_at_registered_threshold",
+            "I1" not in incident_ids,
+            f"incident_ids={sorted(incident_ids)}",
+        )
+        provenance = bundle.tables["fig2_dimension_provenance"]
+        source_rows = bundle.tables["fig2_dimension_key_sources"]
+        _check(
+            checks,
+            "dimension_sources_and_boundaries_complete",
+            len(provenance) == 5
+            and provenance[
+                ["meaning", "include", "exclude", "key_sources"]
+            ]
+            .notna()
+            .all()
+            .all()
+            and source_rows.groupby("angle_code").size().eq(3).all(),
+            {
+                "dimensions": int(len(provenance)),
+                "key_sources_by_dimension": source_rows.groupby(
+                    "angle_code"
+                ).size().to_dict(),
+            },
+        )
+        required_versions = bundle.chart_contract["required_plot_packages"]
+        observed_versions = {}
+        for package in required_versions:
+            try:
+                observed_versions[package] = version(package)
+            except PackageNotFoundError:
+                observed_versions[package] = "not-installed"
+        _check(
+            checks,
+            "fixed_figure_dependencies",
+            observed_versions == required_versions,
+            {"expected": required_versions, "observed": observed_versions},
+        )
+        png_path = output_dir / "figure_full.png"
+        expected_size = tuple(
+            bundle.chart_contract["render_config"].get(
+                "canvas_px", [6400, 5200]
+            )
+        )
+        observed_size = (
+            Image.open(png_path).size if png_path.is_file() else None
+        )
+        _check(
+            checks,
+            "master_canvas_exact",
+            observed_size == expected_size,
+            f"expected={expected_size}; observed={observed_size}",
+        )
+        qa_paths = [
+            output_dir / "qa" / "figure_full_grayscale.png",
+            output_dir / "qa" / "figure_full_deuteranopia.png",
+            output_dir / "qa" / "figure_full_protanopia.png",
+            output_dir / "qa" / "visual_accessibility.json",
+        ]
+        _check(
+            checks,
+            "accessibility_previews_complete",
+            all(path.is_file() and path.stat().st_size > 0 for path in qa_paths),
+            [str(path) for path in qa_paths],
+        )
+        panel_pdf_paths = [
+            output_dir / "panels" / f"fig02_{panel}.pdf"
+            for panel in ("a", "b", "c", "d")
+        ]
+        _check(
+            checks,
+            "fig2_panel_pdf_exports",
+            all(
+                path.is_file() and path.stat().st_size > 0
+                for path in panel_pdf_paths
+            ),
+            [str(path) for path in panel_pdf_paths],
         )
     elif figure_id == 3:
         rho = float(bundle.panel_text["b"]["main_oof_spearman"])

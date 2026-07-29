@@ -1,0 +1,191 @@
+{
+  "schema_version": "2.0.0",
+  "cutoff_date": "2026-07-28",
+  "from_date": "1900-01-01",
+  "work_types": [
+    "article",
+    "review"
+  ],
+  "crossref_types": [
+    "journal-article",
+    "proceedings-article"
+  ],
+  "query_compilation": {
+    "template": "(CONCEPT_TERMS) AND (CONTEXT_TERMS)",
+    "concept_operator": "OR",
+    "context_operator": "OR",
+    "phrase_matching": "Terms containing spaces are double-quoted.",
+    "queries_per_domain": 6,
+    "expected_compiled_queries": 72
+  },
+  "domains": [
+    {
+      "domain_id": "S01_RECOMBINATIONAL_NOVELTY",
+      "dimension_ids": ["D01_RECOMBINATIONAL_NOVELTY"],
+      "tier": "construct",
+      "context_terms": ["scientific paper", "research article", "bibliometric", "citation impact"],
+      "concepts": [
+        {"concept_id": "new_knowledge_combination", "terms": ["new knowledge combination", "novel knowledge combination"]},
+        {"concept_id": "first_time_combination", "terms": ["first-time combination", "new journal combination", "new reference combination"]},
+        {"concept_id": "combinatorial_novelty", "terms": ["combinatorial novelty", "recombinational novelty"]},
+        {"concept_id": "semantic_novelty", "terms": ["semantic novelty", "textual novelty", "embedding novelty"]},
+        {"concept_id": "reference_overlap_novelty", "terms": ["reference overlap novelty", "bibliography novelty", "reference set novelty"]},
+        {"concept_id": "knowledge_distance_novelty", "terms": ["knowledge distance novelty", "technological distance novelty", "scientific novelty indicator"]}
+      ]
+    },
+    {
+      "domain_id": "S02_COMBINATION_PROFILE",
+      "dimension_ids": ["D02_COMBINATION_PROFILE"],
+      "tier": "construct",
+      "context_terms": ["scientific paper", "research article", "scientific impact", "citation impact"],
+      "concepts": [
+        {"concept_id": "atypical_combinations", "terms": ["atypical combinations", "unusual combinations"]},
+        {"concept_id": "conventionality_atypicality", "terms": ["conventionality atypicality", "conventional core atypical tail"]},
+        {"concept_id": "cooccurrence_zscore", "terms": ["co-occurrence z score", "journal pair z score", "reference pair z score"]},
+        {"concept_id": "rare_combination_tail", "terms": ["rare combination tail", "lower-tail novelty", "atypicality percentile"]},
+        {"concept_id": "novelty_profile", "terms": ["novelty profile", "combination profile"]},
+        {"concept_id": "atypicality_validation", "terms": ["atypical combination validation", "unusual combination validity"]}
+      ]
+    },
+    {
+      "domain_id": "S03_KNOWLEDGE_DIVERSITY",
+      "dimension_ids": ["D03_KNOWLEDGE_DIVERSITY"],
+      "tier": "construct",
+      "context_terms": ["scientific paper", "research article", "citation impact", "research impact"],
+      "concepts": [
+        {"concept_id": "interdisciplinarity", "terms": ["interdisciplinarity", "interdisciplinary research"]},
+        {"concept_id": "rao_stirling", "terms": ["Rao-Stirling diversity", "integration score"]},
+        {"concept_id": "variety_balance_disparity", "terms": ["variety balance disparity", "knowledge diversity components"]},
+        {"concept_id": "disciplinary_diversity", "terms": ["disciplinary diversity", "field diversity", "subject category diversity"]},
+        {"concept_id": "reference_diversity", "terms": ["reference diversity", "bibliographic diversity", "knowledge base diversity"]},
+        {"concept_id": "topic_diversity", "terms": ["topic diversity", "semantic diversity", "effective topic diversity"]}
+      ]
+    },
+    {
+      "domain_id": "S04_PRIOR_KNOWLEDGE_SEARCH",
+      "dimension_ids": ["D04_PRIOR_KNOWLEDGE_SEARCH"],
+      "tier": "predictor",
+      "context_terms": ["scientific paper", "research article", "citation impact", "highly cited"],
+      "concepts": [
+        {"concept_id": "reference_age", "terms": ["reference age", "citation age", "age of references"]},
+        {"concept_id": "price_index", "terms": ["Price index references", "recent reference share"]},
+        {"concept_id": "reference_count", "terms": ["number of references", "reference count", "bibliography length"]},
+        {"concept_id": "reference_impact", "terms": ["cited reference impact", "reference citation impact", "highly cited references"]},
+        {"concept_id": "reference_temporal_distribution", "terms": ["reference age distribution", "citation age distribution", "old references"]},
+        {"concept_id": "reference_search_breadth", "terms": ["literature search breadth", "knowledge search breadth", "citation breadth"]}
+      ]
+    },
+    {
+      "domain_id": "S05_TOPIC_MOMENTUM",
+      "dimension_ids": ["D05_TOPIC_MOMENTUM"],
+      "tier": "predictor",
+      "context_terms": ["scientific paper", "research article", "citation impact", "impact prediction"],
+      "concepts": [
+        {"concept_id": "topic_popularity", "terms": ["topic popularity", "popular research topic"]},
+        {"concept_id": "topic_growth", "terms": ["topic growth", "growing research topic", "research field growth"]},
+        {"concept_id": "research_front", "terms": ["research front", "emerging research front", "scientific frontier"]},
+        {"concept_id": "topic_burst", "terms": ["topic burst", "keyword burst", "citation burst"]},
+        {"concept_id": "topic_lifecycle", "terms": ["topic life cycle", "topic lifecycle", "research topic stage"]},
+        {"concept_id": "topic_hotness", "terms": ["topic hotness", "hot topic", "topic prominence"]}
+      ]
+    },
+    {
+      "domain_id": "S06_TEAM_REACH",
+      "dimension_ids": ["D06_TEAM_REACH"],
+      "tier": "predictor",
+      "context_terms": ["scientific paper", "research article", "citation impact", "research impact"],
+      "concepts": [
+        {"concept_id": "team_size", "terms": ["team size", "number of authors"]},
+        {"concept_id": "international_collaboration", "terms": ["international collaboration", "international coauthorship"]},
+        {"concept_id": "institutional_collaboration", "terms": ["institutional collaboration", "multi-institution collaboration"]},
+        {"concept_id": "prior_author_productivity", "terms": ["author prior productivity", "author publication history"]},
+        {"concept_id": "prior_author_impact", "terms": ["author prior impact", "author citation history", "author h-index"]},
+        {"concept_id": "team_freshness_network", "terms": ["team freshness", "repeat collaboration", "coauthor network centrality"]}
+      ]
+    },
+    {
+      "domain_id": "S07_KNOWLEDGE_NETWORK",
+      "dimension_ids": ["D07_KNOWLEDGE_NETWORK_POSITION"],
+      "tier": "predictor",
+      "context_terms": ["scientific paper", "research article", "citation impact", "impact prediction"],
+      "concepts": [
+        {"concept_id": "bibliographic_coupling", "terms": ["bibliographic coupling", "reference coupling network"]},
+        {"concept_id": "citation_network_position", "terms": ["citation network position", "citation network centrality"]},
+        {"concept_id": "network_betweenness", "terms": ["betweenness centrality", "network brokerage"]},
+        {"concept_id": "network_closeness", "terms": ["closeness centrality", "knowledge network closeness"]},
+        {"concept_id": "network_pagerank", "terms": ["PageRank scientific paper", "eigenvector centrality publication"]},
+        {"concept_id": "community_bridge", "terms": ["community bridge scientific paper", "structural hole publication", "network constraint citation"]}
+      ]
+    },
+    {
+      "domain_id": "S08_PUBLICATION_VISIBILITY",
+      "dimension_ids": ["D08_PUBLICATION_VISIBILITY"],
+      "tier": "predictor",
+      "context_terms": ["scientific paper", "research article", "citation impact", "highly cited"],
+      "concepts": [
+        {"concept_id": "title_characteristics", "terms": ["title length", "title characteristics", "question title", "colon title"]},
+        {"concept_id": "abstract_characteristics", "terms": ["abstract length", "abstract readability", "abstract characteristics"]},
+        {"concept_id": "article_length", "terms": ["article length", "page length", "paper length"]},
+        {"concept_id": "lexical_features", "terms": ["lexical diversity", "lexical complexity", "word commonness"]},
+        {"concept_id": "keywords_discoverability", "terms": ["keyword count", "title keyword overlap", "keyword discoverability"]},
+        {"concept_id": "venue_document_features", "terms": ["journal article features", "document type", "publication month", "venue impact"]}
+      ]
+    },
+    {
+      "domain_id": "S09_OPEN_REPRODUCIBILITY",
+      "dimension_ids": ["X01_OPEN_REPRODUCIBILITY"],
+      "tier": "predictor",
+      "context_terms": ["scientific paper", "research article", "citation impact", "research impact"],
+      "concepts": [
+        {"concept_id": "open_access", "terms": ["open access citation advantage", "open access impact"]},
+        {"concept_id": "data_sharing", "terms": ["data sharing citation", "open data citation"]},
+        {"concept_id": "code_sharing", "terms": ["code sharing citation", "open source code research impact"]},
+        {"concept_id": "preprint", "terms": ["preprint citation advantage", "preprint impact"]},
+        {"concept_id": "preregistration", "terms": ["preregistration impact", "registered report citation"]},
+        {"concept_id": "materials_protocol", "terms": ["open materials citation", "protocol availability impact", "reproducibility indicator"]}
+      ]
+    },
+    {
+      "domain_id": "S10_METHOD_EVIDENCE",
+      "dimension_ids": ["X02_METHOD_EVIDENCE_STRENGTH"],
+      "tier": "predictor",
+      "context_terms": ["scientific paper", "research article", "citation impact", "research impact"],
+      "concepts": [
+        {"concept_id": "sample_size", "terms": ["sample size citation", "statistical power citation"]},
+        {"concept_id": "study_design", "terms": ["study design citation impact", "randomized trial citation"]},
+        {"concept_id": "positive_results_bias", "terms": ["positive results citation bias", "statistical significance citation"]},
+        {"concept_id": "reporting_quality", "terms": ["reporting quality citation", "methodological quality citation"]},
+        {"concept_id": "replication_multisite", "terms": ["replication study citation", "multi-site study impact"]},
+        {"concept_id": "effect_robustness", "terms": ["effect size citation", "robustness checks citation", "evidence strength impact"]}
+      ]
+    },
+    {
+      "domain_id": "S11_IMPACT_PREDICTION_REVIEWS",
+      "dimension_ids": ["D04_PRIOR_KNOWLEDGE_SEARCH", "D05_TOPIC_MOMENTUM", "D06_TEAM_REACH", "D07_KNOWLEDGE_NETWORK_POSITION", "D08_PUBLICATION_VISIBILITY"],
+      "tier": "review",
+      "context_terms": ["scientific paper", "research article", "scholarly article"],
+      "concepts": [
+        {"concept_id": "impact_prediction_review", "terms": ["scientific impact prediction review", "citation prediction review"]},
+        {"concept_id": "citation_feature_review", "terms": ["citation prediction features", "citation count predictors"]},
+        {"concept_id": "high_impact_prediction", "terms": ["high-impact research prediction", "highly cited paper prediction"]},
+        {"concept_id": "early_impact_prediction", "terms": ["early citation prediction", "publication-time impact prediction", "instant citation prediction"]},
+        {"concept_id": "quality_impact_factors", "terms": ["article quality predictors", "factors associated with citations"]},
+        {"concept_id": "machine_learning_impact", "terms": ["machine learning citation prediction", "deep learning citation prediction"]}
+      ]
+    },
+    {
+      "domain_id": "S12_VALIDITY_AND_BIAS",
+      "dimension_ids": ["D01_RECOMBINATIONAL_NOVELTY", "D03_KNOWLEDGE_DIVERSITY", "C01_FIELD_TIME_CONTEXT", "X02_METHOD_EVIDENCE_STRENGTH"],
+      "tier": "validity",
+      "context_terms": ["bibliometric indicator", "citation indicator", "scientific paper", "research evaluation"],
+      "concepts": [
+        {"concept_id": "novelty_validity", "terms": ["novelty indicator validity", "bibliometric novelty validation"]},
+        {"concept_id": "interdisciplinarity_validity", "terms": ["interdisciplinarity indicator validity", "diversity indicator validity"]},
+        {"concept_id": "citation_bias", "terms": ["citation bias", "determinants of citations"]},
+        {"concept_id": "field_normalization", "terms": ["field normalized citation", "citation normalization"]},
+        {"concept_id": "predictor_causality", "terms": ["citation predictor causality", "citation association not quality"]},
+        {"concept_id": "database_coverage_bias", "terms": ["bibliometric database coverage bias", "citation database bias"]}
+      ]
+    }
+  ]
+}

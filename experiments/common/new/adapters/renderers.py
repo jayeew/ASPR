@@ -12,18 +12,29 @@ import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from matplotlib import colors as mcolors
+from matplotlib.patches import (
+    Circle,
+    FancyArrowPatch,
+    FancyBboxPatch,
+)
 from matplotlib.transforms import Bbox
 
 from experiments.common.new.base.common import (
     ANGLE_COLORS,
+    ANGLE_LABELS,
+    ANGLE_ORDER,
     ANGLE_SHORT,
     BLUE,
     GRAY,
     INK,
     LIGHT_BLUE,
     LIGHT_GRAY,
+    MID_GRAY,
+    OLIVE,
     ORANGE,
     PALE_GRAY,
+    PINK,
     PURPLE,
     VERMILLION,
     WHITE,
@@ -37,7 +48,6 @@ from experiments.common.new.base.common import (
 )
 from experiments.common.new.base.renderers_1_5 import (
     render_fig1,
-    render_fig2,
     render_fig3,
     render_fig5,
 )
@@ -47,11 +57,13 @@ from experiments.common.new.base.renderers_6_10 import (
     render_fig9,
     render_fig10,
 )
+from experiments.common.new.adapters.renderers_fig3_7 import (
+    render_fig3_to_fig7,
+)
 
 
 BASE_RENDERERS = {
     1: render_fig1,
-    2: render_fig2,
     3: render_fig3,
     5: render_fig5,
     6: render_fig6,
@@ -94,170 +106,943 @@ def _export_axis_groups(
     return outputs
 
 
-def _draw_measurement_scene(ax: plt.Axes, bundle: FigureBundle) -> None:
+def _fig2_blend(color: str, amount: float = 0.88) -> str:
+    """Blend one palette root with white for quiet publication fills."""
+    rgb = np.asarray(mcolors.to_rgb(color), dtype=float)
+    blended = rgb * (1.0 - amount) + np.ones(3, dtype=float) * amount
+    return mcolors.to_hex(blended)
+
+
+def _fig2_panel_frame(
+    ax: plt.Axes,
+    panel: str,
+    title: str,
+    subtitle: str,
+) -> None:
+    """Create one restrained, old-route panel container."""
+    ax.set_axis_off()
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.add_patch(
+        FancyBboxPatch(
+            (0.002, 0.002),
+            0.996,
+            0.996,
+            boxstyle="round,pad=0.006,rounding_size=0.022",
+            transform=ax.transAxes,
+            facecolor=WHITE,
+            edgecolor=LIGHT_GRAY,
+            linewidth=0.8,
+            clip_on=False,
+            zorder=0,
+        )
+    )
+    ax.text(
+        0.022,
+        0.965,
+        panel,
+        transform=ax.transAxes,
+        ha="left",
+        va="top",
+        fontsize=15,
+        fontweight="bold",
+        color=INK,
+    )
+    ax.text(
+        0.080,
+        0.960,
+        title,
+        transform=ax.transAxes,
+        ha="left",
+        va="top",
+        fontsize=9.6,
+        fontweight="bold",
+        color=INK,
+    )
+    ax.text(
+        0.080,
+        0.913,
+        subtitle,
+        transform=ax.transAxes,
+        ha="left",
+        va="top",
+        fontsize=6.4,
+        color=GRAY,
+    )
+
+
+def _fig2_short_feature(label: str) -> str:
+    replacements = {
+        "Reference-overlap novelty": "Overlap\nnovelty",
+        "Median conventionality": "Median\nconventionality ↓",
+        "First-pair share": "First-pair\nshare",
+        "Field balance": "Field\nbalance",
+        "Outside-field references": "Outside-field\nreferences",
+        "Field variety": "Field\nvariety",
+        "Mean cognitive distance": "Mean cognitive\ndistance",
+        "Rao–Stirling integration": "Rao–Stirling\nintegration",
+    }
+    return replacements.get(str(label), textwrap.fill(str(label), 15))
+
+
+def _draw_fig2_route_a(
+    ax: plt.Axes,
+    bundle: FigureBundle,
+) -> Sequence[plt.Axes]:
+    """Draw the publication-time measurement boundary as a compact triptych."""
+    _fig2_panel_frame(
+        ax,
+        "a",
+        "From observable graph change to a publication-time measurement scene",
+        "Fig.1 motivates the change; the eight signals are measured only when the focal paper enters G0.",
+    )
     nodes = bundle.tables["measurement_scene_nodes"]
     edges = bundle.tables["measurement_scene_edges"]
     manifest = bundle.tables["measurement_scene_manifest"].iloc[0]
-    ax.set_axis_off()
-    panel_title(ax, "f", "Publication-time G− / G0 / G+5 measurement scene")
-    stages = ["G−", "G0", "G+5"]
-    stage_labels = {
-        "G−": "Strictly prior graph",
-        "G0": "Focal paper enters",
-        "G+5": "Future spread (validation only)",
-    }
-    for stage_index, stage in enumerate(stages):
-        left = 0.01 + stage_index * 0.33
-        inset = ax.inset_axes([left, 0.13, 0.30, 0.72])
+    stages = ("G−", "G0", "G+5")
+    titles = (
+        ("G−", "strictly prior source graph"),
+        ("G0", "focal paper + references"),
+        ("G+5", "later uptake · validation only"),
+    )
+    child_axes: list[plt.Axes] = [ax]
+    lefts = (0.045, 0.365, 0.685)
+    for stage_index, (stage, (headline, caption)) in enumerate(
+        zip(stages, titles)
+    ):
+        inset = ax.inset_axes([lefts[stage_index], 0.235, 0.270, 0.535])
+        child_axes.append(inset)
         inset.set_axis_off()
+        inset.set_facecolor("#FBFCFD")
         stage_nodes = nodes.loc[nodes["stage"].eq(stage)].copy()
         lookup = stage_nodes.set_index("node_id")[["x", "y"]].to_dict("index")
-        stage_edges = edges.loc[edges["stage"].eq(stage)]
+        stage_edges = edges.loc[edges["stage"].eq(stage)].copy()
+        prior = (
+            stage_edges.loc[
+                stage_edges["edge_type"].eq("strictly_prior_cocitation")
+            ]
+            .sort_values("weight", ascending=False, kind="stable")
+            .head(18)
+        )
+        other = stage_edges.loc[
+            ~stage_edges["edge_type"].eq("strictly_prior_cocitation")
+        ]
+        stage_edges = pd.concat([prior, other], ignore_index=True)
         for row in stage_edges.itertuples(index=False):
             if row.source not in lookup or row.target not in lookup:
                 continue
             source = lookup[row.source]
             target = lookup[row.target]
-            color = (
-                ORANGE
-                if row.edge_type == "future_citation"
-                else BLUE
-                if row.edge_type == "focal_reference"
-                else LIGHT_GRAY
-            )
-            width = 0.35 + 0.12 * math.log1p(float(row.weight))
+            if row.edge_type == "future_citation":
+                color, alpha, width = ORANGE, 0.72, 0.75
+            elif row.edge_type == "focal_reference":
+                color, alpha, width = BLUE, 0.50, 0.65
+            else:
+                color, alpha = LIGHT_GRAY, 0.70
+                width = 0.35 + 0.11 * math.log1p(float(row.weight))
             inset.plot(
                 [source["x"], target["x"]],
                 [source["y"], target["y"]],
                 color=color,
                 linewidth=width,
-                alpha=0.65,
+                alpha=alpha,
                 zorder=1,
             )
-        styles = {
-            "reference_source": (LIGHT_BLUE, 24, "o"),
-            "focal_paper": (ORANGE, 80, "*"),
-            "future_citer": (WHITE, 34, "s"),
-        }
-        for node_type, group in stage_nodes.groupby("node_type"):
-            color, size, marker = styles[node_type]
+        source_nodes = stage_nodes.loc[
+            stage_nodes["node_type"].eq("reference_source")
+        ]
+        inset.scatter(
+            source_nodes["x"],
+            source_nodes["y"],
+            s=22,
+            facecolor=_fig2_blend(BLUE, 0.58),
+            edgecolor=WHITE,
+            linewidth=0.55,
+            zorder=3,
+        )
+        focal = stage_nodes.loc[stage_nodes["node_type"].eq("focal_paper")]
+        if not focal.empty:
             inset.scatter(
-                group["x"],
-                group["y"],
-                s=size,
-                marker=marker,
-                facecolor=color,
-                edgecolor=INK if node_type == "future_citer" else WHITE,
-                linewidth=0.6,
-                zorder=3,
+                focal["x"],
+                focal["y"],
+                s=105,
+                marker="*",
+                facecolor=ORANGE,
+                edgecolor=WHITE,
+                linewidth=0.75,
+                zorder=5,
+            )
+        citers = stage_nodes.loc[stage_nodes["node_type"].eq("future_citer")]
+        if not citers.empty:
+            inset.scatter(
+                citers["x"],
+                citers["y"],
+                s=27,
+                marker="s",
+                facecolor=WHITE,
+                edgecolor=INK,
+                linewidth=0.65,
+                zorder=4,
             )
         inset.set_xlim(-1.65, 1.65)
         inset.set_ylim(-1.65, 1.65)
         inset.set_title(
-            f"{stage}\n{stage_labels[stage]}",
-            fontsize=6.4,
+            f"{headline}\n{caption}",
+            fontsize=6.6,
             color=INK,
             pad=2,
+            fontweight="bold" if stage == "G0" else "normal",
+        )
+        ax.add_patch(
+            FancyBboxPatch(
+                (lefts[stage_index] + 0.012, 0.125),
+                0.246,
+                0.070,
+                boxstyle="round,pad=0.005,rounding_size=0.010",
+                transform=ax.transAxes,
+                facecolor=(
+                    _fig2_blend(BLUE, 0.90)
+                    if stage == "G0"
+                    else PALE_GRAY
+                ),
+                edgecolor=(
+                    LIGHT_BLUE if stage == "G0" else LIGHT_GRAY
+                ),
+                linewidth=0.65,
+            )
+        )
+        stage_note = {
+            "G−": "History is frozen before publication",
+            "G0": "Compute five angles · eight signals",
+            "G+5": "Observe D5 reach and evenness",
+        }[stage]
+        ax.text(
+            lefts[stage_index] + 0.135,
+            0.160,
+            stage_note,
+            transform=ax.transAxes,
+            ha="center",
+            va="center",
+            fontsize=5.9,
+            color=BLUE if stage == "G0" else GRAY,
+            fontweight="bold" if stage == "G0" else "normal",
+        )
+    for start, end in ((0.318, 0.355), (0.638, 0.675)):
+        ax.add_patch(
+            FancyArrowPatch(
+                (start, 0.505),
+                (end, 0.505),
+                transform=ax.transAxes,
+                arrowstyle="-|>",
+                mutation_scale=10,
+                linewidth=0.9,
+                color=MID_GRAY,
+            )
         )
     ax.text(
-        0.01,
-        0.02,
-        textwrap.shorten(str(manifest["title"]), width=95)
+        0.045,
+        0.050,
+        textwrap.shorten(str(manifest["title"]), width=82)
         + f" · {int(manifest['publication_year'])} · "
-        f"{int(manifest['valid_reference_count'])} valid references\n"
-        "Selection used publication-time eligibility and stable hash only.",
+        f"{int(manifest['valid_reference_count'])} valid references",
         transform=ax.transAxes,
         ha="left",
         va="bottom",
-        fontsize=6.2,
+        fontsize=5.8,
         color=GRAY,
     )
-
-
-def _draw_future_correlations(ax: plt.Axes, bundle: FigureBundle) -> None:
-    data = bundle.tables["future_component_correlations"].copy()
-    ax.set_axis_off()
-    panel_title(ax, "g", "Indicators versus five-year graph outcomes")
-    components = data["future_component_label"].drop_duplicates().tolist()
-    features = data["feature_label"].drop_duplicates().tolist()
-    for index, component in enumerate(components):
-        inset = ax.inset_axes(
-            [0.01 + index * 0.164, 0.10, 0.15, 0.78]
-        )
-        group = data.loc[
-            data["future_component_label"].eq(component)
-        ].set_index("feature_label").reindex(features)
-        y = np.arange(len(group))[::-1]
-        inset.axvline(0, color=LIGHT_GRAY, linewidth=0.7)
-        inset.hlines(
-            y,
-            group["ci_low"],
-            group["ci_high"],
-            color=LIGHT_BLUE,
-            linewidth=1.0,
-        )
-        inset.scatter(
-            group["spearman"],
-            y,
-            s=16,
-            color=BLUE,
-            edgecolor=WHITE,
-            linewidth=0.4,
-        )
-        inset.set_title(component, fontsize=5.8, color=INK)
-        inset.set_xlim(-0.28, 0.58)
-        inset.set_ylim(-0.7, len(features) - 0.3)
-        inset.set_yticks(
-            y,
-            [
-                textwrap.fill(value, 17) if index == 0 else ""
-                for value in features
-            ],
-            fontsize=4.7,
-        )
-        inset.tick_params(axis="x", labelsize=4.7)
-        clean_axes(inset, grid_axis="x")
     ax.text(
-        0.99,
-        0.01,
-        "Field-year percentiles; whiskers are fixed-rank domain-year cluster bootstrap intervals.\n"
-        "Outcome association never changes indicator inclusion.",
+        0.955,
+        0.050,
+        "stable-hash illustration · no outcome used to select the paper",
         transform=ax.transAxes,
         ha="right",
         va="bottom",
-        fontsize=5.7,
+        fontsize=5.6,
         color=VERMILLION,
     )
+    return child_axes
 
 
-def _render_fig2_extension(
+def _draw_fig2_route_b(
+    ax: plt.Axes,
+    bundle: FigureBundle,
+) -> Sequence[plt.Axes]:
+    """Draw the registered screen and the five-angle/eight-indicator basis."""
+    _fig2_panel_frame(
+        ax,
+        "b",
+        "Evidence governance yields five mechanisms and eight primary signals",
+        "Counts, sources, directions and gate status come directly from the frozen v6.1 registry.",
+    )
+    stages = bundle.tables["fig2_selection_stages"].sort_values("stage_order")
+    basis = bundle.tables["fig2_indicator_basis"].sort_values("display_order")
+    angles = bundle.tables["observation_angles"].set_index("angle_id")
+    centres = np.linspace(0.105, 0.895, len(stages))
+    for index, (x_value, row) in enumerate(
+        zip(centres, stages.itertuples(index=False))
+    ):
+        final = index == len(stages) - 1
+        ax.add_patch(
+            FancyBboxPatch(
+                (x_value - 0.071, 0.725),
+                0.142,
+                0.126,
+                boxstyle="round,pad=0.006,rounding_size=0.014",
+                transform=ax.transAxes,
+                facecolor=_fig2_blend(BLUE, 0.80 if final else 0.92),
+                edgecolor=BLUE if final else LIGHT_BLUE,
+                linewidth=1.0 if final else 0.7,
+            )
+        )
+        ax.text(
+            x_value,
+            0.811,
+            f"{int(row.count)}",
+            transform=ax.transAxes,
+            ha="center",
+            va="center",
+            fontsize=13,
+            fontweight="bold",
+            color=BLUE,
+        )
+        ax.text(
+            x_value,
+            0.754,
+            textwrap.fill(str(row.stage), 16),
+            transform=ax.transAxes,
+            ha="center",
+            va="center",
+            fontsize=5.7,
+            color=INK,
+            fontweight="bold",
+            linespacing=0.95,
+        )
+        ax.text(
+            x_value,
+            0.700,
+            textwrap.fill(str(row.criterion), 20),
+            transform=ax.transAxes,
+            ha="center",
+            va="top",
+            fontsize=4.7,
+            color=GRAY,
+            linespacing=0.95,
+        )
+        if index < len(stages) - 1:
+            ax.add_patch(
+                FancyArrowPatch(
+                    (x_value + 0.074, 0.787),
+                    (centres[index + 1] - 0.074, 0.787),
+                    transform=ax.transAxes,
+                    arrowstyle="-|>",
+                    mutation_scale=9,
+                    linewidth=0.8,
+                    color=MID_GRAY,
+                )
+            )
+            removed = int(stages.iloc[index + 1]["removed_since_previous"])
+            ax.text(
+                (x_value + centres[index + 1]) / 2,
+                0.812,
+                f"−{removed}",
+                transform=ax.transAxes,
+                ha="center",
+                va="bottom",
+                fontsize=4.8,
+                color=VERMILLION,
+            )
+    ax.text(
+        0.035,
+        0.630,
+        "Peer-reviewed formula + paper use  ·  publication-time only  ·  "
+        "local frozen data  ·  coverage/stability/fidelity  ·  OOF-blind family representative",
+        transform=ax.transAxes,
+        ha="left",
+        va="center",
+        fontsize=5.6,
+        color=GRAY,
+    )
+
+    angle_layout = {
+        "A1_COMBINATION_RARITY": (0.035, 0.448, 0.445, 0.135),
+        "A2_ATYPICALITY_CONVENTIONALITY": (0.035, 0.285, 0.445, 0.135),
+        "A3_FIRST_TIME_COMBINATION": (0.035, 0.122, 0.445, 0.135),
+        "A4_KNOWLEDGE_BREADTH_BALANCE": (0.515, 0.330, 0.450, 0.253),
+        "A5_COGNITIVE_DISTANCE_INTEGRATION": (0.515, 0.122, 0.450, 0.178),
+    }
+    for angle_id in ANGLE_ORDER:
+        x_value, y_value, width, height = angle_layout[angle_id]
+        color = ANGLE_COLORS[angle_id]
+        source_values = angles.loc[angle_id, "source_ids"]
+        source_count = (
+            len(source_values)
+            if isinstance(source_values, (list, tuple, set))
+            else len(str(source_values).split("|"))
+        )
+        ax.add_patch(
+            FancyBboxPatch(
+                (x_value, y_value),
+                width,
+                height,
+                boxstyle="round,pad=0.007,rounding_size=0.014",
+                transform=ax.transAxes,
+                facecolor=_fig2_blend(color, 0.93),
+                edgecolor=_fig2_blend(color, 0.35),
+                linewidth=0.9,
+            )
+        )
+        ax.text(
+            x_value + 0.014,
+            y_value + height - 0.026,
+            ANGLE_LABELS[angle_id],
+            transform=ax.transAxes,
+            ha="left",
+            va="top",
+            fontsize=6.3,
+            color=color,
+            fontweight="bold",
+        )
+        ax.text(
+            x_value + width - 0.014,
+            y_value + height - 0.026,
+            f"{source_count} classification sources",
+            transform=ax.transAxes,
+            ha="right",
+            va="top",
+            fontsize=4.7,
+            color=GRAY,
+        )
+        members = basis.loc[basis["angle_id"].eq(angle_id)]
+        available = height - 0.052
+        row_height = available / max(len(members), 1)
+        for member_index, row in enumerate(members.itertuples(index=False)):
+            y_row = y_value + height - 0.053 - (member_index + 0.5) * row_height
+            direction = "↓" if int(row.direction) == -1 else "↑"
+            gate = "✓" if bool(row.all_primary_gates_pass) else "!"
+            ax.text(
+                x_value + 0.016,
+                y_row,
+                f"{int(row.display_order)}  {row.feature_label} {direction}",
+                transform=ax.transAxes,
+                ha="left",
+                va="center",
+                fontsize=5.3,
+                color=INK,
+                fontweight="bold",
+            )
+            ax.text(
+                x_value + width - 0.016,
+                y_row,
+                f"{row.evidence_badge} · {gate}",
+                transform=ax.transAxes,
+                ha="right",
+                va="center",
+                fontsize=4.8,
+                color=color,
+            )
+    ax.text(
+        0.965,
+        0.042,
+        "F/P/V = formula / paper-level application / validation sources · ✓ = all primary runtime gates passed",
+        transform=ax.transAxes,
+        ha="right",
+        va="bottom",
+        fontsize=5.0,
+        color=GRAY,
+    )
+    return [ax]
+
+
+def _draw_fig2_route_c(
+    ax: plt.Axes,
+    bundle: FigureBundle,
+) -> Sequence[plt.Axes]:
+    """Draw sparse signal relations and prospective D5 mechanism signatures."""
+    _fig2_panel_frame(
+        ax,
+        "c",
+        "The mechanisms are related, but their prospective graph signatures differ",
+        "Direction is frozen a priori; sparse relations describe complementarity, not outcome-based feature selection.",
+    )
+    relation_ax = ax.inset_axes([0.035, 0.125, 0.435, 0.740])
+    matrix_ax = ax.inset_axes([0.525, 0.165, 0.440, 0.655])
+    relation_ax.set_axis_off()
+    nodes = bundle.tables["fig2_relation_nodes"].sort_values("display_order")
+    edges = bundle.tables["fig2_relation_edges"]
+    x_values = dict(zip(ANGLE_ORDER, np.linspace(0.09, 0.91, 5)))
+    positions: Dict[str, tuple[float, float]] = {}
+    for angle_id in ANGLE_ORDER:
+        members = nodes.loc[nodes["angle_id"].eq(angle_id)]
+        y_options = {
+            1: [0.50],
+            2: [0.64, 0.36],
+            3: [0.73, 0.50, 0.27],
+        }.get(len(members), np.linspace(0.75, 0.25, max(len(members), 1)))
+        for y_value, row in zip(y_options, members.itertuples(index=False)):
+            positions[str(row.code_name)] = (x_values[angle_id], float(y_value))
+    for row in edges.sort_values(
+        ["absolute_spearman", "source", "target"],
+        ascending=[True, True, True],
+    ).itertuples(index=False):
+        source = positions[str(row.source)]
+        target = positions[str(row.target)]
+        positive = float(row.oriented_spearman) >= 0
+        same_angle = row.source_angle_id == row.target_angle_id
+        curvature = 0.28 if same_angle else 0.12
+        if source[1] > target[1]:
+            curvature *= -1
+        relation_ax.add_patch(
+            FancyArrowPatch(
+                source,
+                target,
+                transform=relation_ax.transAxes,
+                arrowstyle="-",
+                connectionstyle=f"arc3,rad={curvature}",
+                linewidth=0.75
+                + 2.0 * max(float(row.absolute_spearman) - 0.40, 0),
+                linestyle="-" if positive else "--",
+                color=BLUE if positive else ORANGE,
+                alpha=0.68,
+                zorder=1,
+            )
+        )
+        midpoint = (
+            (source[0] + target[0]) / 2,
+            (source[1] + target[1]) / 2 + (0.035 if positive else -0.035),
+        )
+        relation_ax.text(
+            midpoint[0],
+            midpoint[1],
+            f"{float(row.oriented_spearman):+.2f}",
+            transform=relation_ax.transAxes,
+            ha="center",
+            va="center",
+            fontsize=4.5,
+            color=BLUE if positive else ORANGE,
+            bbox={
+                "boxstyle": "round,pad=0.12",
+                "facecolor": WHITE,
+                "edgecolor": "none",
+                "alpha": 0.88,
+            },
+            zorder=2,
+        )
+    for angle_id in ANGLE_ORDER:
+        x_value = x_values[angle_id]
+        color = ANGLE_COLORS[angle_id]
+        short_angle = {
+            "A1_COMBINATION_RARITY": "Combination\nrarity",
+            "A2_ATYPICALITY_CONVENTIONALITY": (
+                "Atypicality &\nconventionality"
+            ),
+            "A3_FIRST_TIME_COMBINATION": "First-time\ncombinations",
+            "A4_KNOWLEDGE_BREADTH_BALANCE": "Breadth &\nbalance",
+            "A5_COGNITIVE_DISTANCE_INTEGRATION": (
+                "Distance &\nintegration"
+            ),
+        }[angle_id]
+        relation_ax.text(
+            x_value,
+            0.94,
+            short_angle,
+            transform=relation_ax.transAxes,
+            ha="center",
+            va="top",
+            fontsize=5.2,
+            color=color,
+            fontweight="bold",
+        )
+    for row in nodes.itertuples(index=False):
+        x_value, y_value = positions[str(row.code_name)]
+        color = ANGLE_COLORS[str(row.angle_id)]
+        relation_ax.add_patch(
+            FancyBboxPatch(
+                (x_value - 0.076, y_value - 0.052),
+                0.152,
+                0.104,
+                boxstyle="round,pad=0.004,rounding_size=0.014",
+                transform=relation_ax.transAxes,
+                facecolor=WHITE,
+                edgecolor=color,
+                linewidth=0.9,
+                zorder=3,
+            )
+        )
+        relation_ax.text(
+            x_value - 0.060,
+            y_value,
+            str(int(row.display_order)),
+            transform=relation_ax.transAxes,
+            ha="center",
+            va="center",
+            fontsize=5.5,
+            color=color,
+            fontweight="bold",
+            zorder=4,
+        )
+        relation_ax.text(
+            x_value + 0.010,
+            y_value,
+            _fig2_short_feature(str(row.feature_label)),
+            transform=relation_ax.transAxes,
+            ha="center",
+            va="center",
+            fontsize=4.6,
+            color=INK,
+            linespacing=0.92,
+            zorder=4,
+        )
+    threshold = float(edges["threshold"].iloc[0]) if not edges.empty else 0.40
+    relation_ax.text(
+        0.00,
+        0.01,
+        f"Edges shown only when |oriented Spearman| ≥ {threshold:.2f}  ·  "
+        "solid = positive, dashed = negative",
+        transform=relation_ax.transAxes,
+        ha="left",
+        va="bottom",
+        fontsize=4.8,
+        color=GRAY,
+    )
+    relation_ax.set_title(
+        "Signal relation network",
+        loc="left",
+        fontsize=7.0,
+        color=INK,
+        pad=2,
+        fontweight="bold",
+    )
+
+    future = bundle.tables["fig2_oriented_future_correlations"].copy()
+    component_labels = (
+        future.sort_values("component_order")
+        ["future_component_label"]
+        .drop_duplicates()
+        .tolist()
+    )
+    feature_codes = (
+        future.sort_values("feature_order")["code_name"].drop_duplicates().tolist()
+    )
+    feature_order = {feature: index for index, feature in enumerate(feature_codes)}
+    component_order = {
+        component: index for index, component in enumerate(component_labels)
+    }
+    for row in future.itertuples(index=False):
+        x_value = component_order[str(row.future_component_label)]
+        y_value = len(feature_codes) - 1 - feature_order[str(row.code_name)]
+        value = float(row.oriented_spearman)
+        color = BLUE if value >= 0 else ORANGE
+        filled = bool(row.ci_excludes_zero)
+        matrix_ax.scatter(
+            [x_value],
+            [y_value],
+            s=24 + 210 * abs(value),
+            facecolor=color if filled else WHITE,
+            edgecolor=color,
+            linewidth=0.9,
+            alpha=0.88,
+            zorder=3,
+        )
+        if abs(value) >= 0.30:
+            matrix_ax.text(
+                x_value,
+                y_value,
+                f"{value:+.2f}",
+                ha="center",
+                va="center",
+                fontsize=4.2,
+                color=WHITE if filled else color,
+                fontweight="bold",
+                zorder=4,
+            )
+    matrix_ax.set_xticks(
+        range(len(component_labels)),
+        [textwrap.fill(value, 11) for value in component_labels],
+        fontsize=5.2,
+    )
+    matrix_ax.set_yticks(
+        range(len(feature_codes)),
+        [str(index) for index in range(len(feature_codes), 0, -1)],
+        fontsize=5.4,
+    )
+    matrix_ax.set_xlim(-0.55, len(component_labels) - 0.45)
+    matrix_ax.set_ylim(-0.55, len(feature_codes) - 0.45)
+    matrix_ax.grid(color=PALE_GRAY, linewidth=0.65)
+    matrix_ax.set_axisbelow(True)
+    matrix_ax.spines[:].set_visible(False)
+    matrix_ax.tick_params(length=0)
+    matrix_ax.set_title(
+        "Publication-time signals versus five-year graph outcomes",
+        loc="left",
+        fontsize=7.0,
+        color=INK,
+        pad=6,
+        fontweight="bold",
+    )
+    matrix_ax.text(
+        0.0,
+        -0.13,
+        "Dot area = |ρ| · filled = 95% cluster-bootstrap interval excludes 0 · "
+        f"n up to {int(future['n'].max()):,}\n"
+        "D5 validates interpretation only; it never changes metric inclusion.",
+        transform=matrix_ax.transAxes,
+        ha="left",
+        va="top",
+        fontsize=4.7,
+        color=GRAY,
+        linespacing=1.25,
+    )
+    return [ax, relation_ax, matrix_ax]
+
+
+def _draw_fig2_route_d(
+    ax: plt.Axes,
+    bundle: FigureBundle,
+) -> Sequence[plt.Axes]:
+    """Draw matched-control percentile profiles with paired effects."""
+    _fig2_panel_frame(
+        ax,
+        "d",
+        "High-D5 papers exhibit stronger publication-time signal profiles",
+        "Every row uses the same field-year percentile axis and matched domain/year/reference-volume controls.",
+    )
+    profile_ax = ax.inset_axes([0.205, 0.145, 0.615, 0.705])
+    effect_ax = ax.inset_axes([0.835, 0.145, 0.145, 0.705])
+    sample = bundle.tables["fig2_known_group_profile_sample"].copy()
+    summary = bundle.tables["fig2_known_group_profile_summary"].copy()
+    effects = bundle.tables["fig2_known_group_oriented_effects"].sort_values(
+        "display_order"
+    )
+    feature_codes = effects["code_name"].tolist()
+    y_lookup = {
+        feature: len(feature_codes) - 1 - index
+        for index, feature in enumerate(feature_codes)
+    }
+    rng = np.random.default_rng(20260725)
+    for row in effects.itertuples(index=False):
+        feature = str(row.code_name)
+        y_value = y_lookup[feature]
+        color = ANGLE_COLORS[str(row.angle_id)]
+        for group, offset, point_color, marker in (
+            ("Matched control", -0.105, MID_GRAY, "o"),
+            ("High future diffusion", 0.105, color, "o"),
+        ):
+            points = sample.loc[
+                sample["code_name"].eq(feature)
+                & sample["group"].eq(group),
+                "oriented_percentile",
+            ].to_numpy(float)
+            jitter = rng.uniform(-0.055, 0.055, len(points))
+            profile_ax.scatter(
+                points * 100,
+                y_value + offset + jitter,
+                s=4.0,
+                marker=marker,
+                facecolor=point_color,
+                edgecolor="none",
+                alpha=0.18 if group == "Matched control" else 0.22,
+                rasterized=True,
+                zorder=1,
+            )
+            stat = summary.loc[
+                summary["code_name"].eq(feature)
+                & summary["group"].eq(group)
+            ]
+            if stat.empty:
+                continue
+            stat_row = stat.iloc[0]
+            profile_ax.plot(
+                [float(stat_row["q25"]) * 100, float(stat_row["q75"]) * 100],
+                [y_value + offset, y_value + offset],
+                color=point_color,
+                linewidth=2.8,
+                solid_capstyle="round",
+                zorder=3,
+            )
+            profile_ax.scatter(
+                [float(stat_row["median"]) * 100],
+                [y_value + offset],
+                s=27,
+                facecolor=WHITE if group == "Matched control" else point_color,
+                edgecolor=point_color if group == "Matched control" else WHITE,
+                linewidth=0.7,
+                zorder=4,
+            )
+    profile_ax.axvline(50, color=LIGHT_GRAY, linewidth=0.9, zorder=0)
+    profile_ax.set_xlim(0, 100)
+    profile_ax.set_ylim(-0.65, len(feature_codes) - 0.35)
+    profile_ax.set_xticks([0, 25, 50, 75, 100])
+    profile_ax.set_yticks(
+        [y_lookup[feature] for feature in feature_codes],
+        [
+            f"{int(row.display_order)}  {_fig2_short_feature(str(row.feature_label)).replace(chr(10), ' ')}"
+            for row in effects.itertuples(index=False)
+        ],
+        fontsize=5.5,
+    )
+    for tick, row in zip(
+        profile_ax.get_yticklabels(),
+        effects.itertuples(index=False),
+    ):
+        tick.set_color(ANGLE_COLORS[str(row.angle_id)])
+        tick.set_fontweight("bold")
+    profile_ax.set_xlabel(
+        "Field-year percentile in the a-priori innovation-oriented direction"
+    )
+    profile_ax.grid(axis="x", color=PALE_GRAY, linewidth=0.65)
+    profile_ax.set_axisbelow(True)
+    profile_ax.spines[["top", "right", "left"]].set_visible(False)
+    profile_ax.tick_params(axis="y", length=0)
+    profile_ax.scatter(
+        [],
+        [],
+        s=20,
+        color=MID_GRAY,
+        alpha=0.45,
+        label="Matched control",
+    )
+    profile_ax.scatter(
+        [],
+        [],
+        s=20,
+        color=BLUE,
+        alpha=0.65,
+        label="High D5 diffusion",
+    )
+    profile_ax.legend(
+        frameon=False,
+        loc="upper left",
+        bbox_to_anchor=(0.0, 1.08),
+        ncol=2,
+        fontsize=5.5,
+        handletextpad=0.4,
+        columnspacing=1.1,
+    )
+
+    effect_ax.set_axis_off()
+    effect_ax.text(
+        0.02,
+        1.02,
+        "Paired Δ (95% CI)",
+        transform=effect_ax.transAxes,
+        ha="left",
+        va="bottom",
+        fontsize=5.7,
+        color=INK,
+        fontweight="bold",
+    )
+    for row in effects.itertuples(index=False):
+        y_value = (y_lookup[str(row.code_name)] + 0.5) / len(feature_codes)
+        effect_ax.text(
+            0.02,
+            y_value,
+            (
+                f"{float(row.oriented_difference) * 100:+.1f} pp\n"
+                f"[{float(row.oriented_ci_low) * 100:+.1f}, "
+                f"{float(row.oriented_ci_high) * 100:+.1f}]"
+            ),
+            transform=effect_ax.transAxes,
+            ha="left",
+            va="center",
+            fontsize=5.1,
+            color=ANGLE_COLORS[str(row.angle_id)],
+            fontweight="bold",
+            linespacing=1.05,
+        )
+    ax.text(
+        0.030,
+        0.055,
+        "Known-group plausibility ≠ complete innovation truth. "
+        "The fixed direction reverses median conventionality only.",
+        transform=ax.transAxes,
+        ha="left",
+        va="bottom",
+        fontsize=5.1,
+        color=VERMILLION,
+    )
+    return [ax, profile_ax, effect_ax]
+
+
+def _clear_fig2_obsolete_artifacts(
+    figure_dir: Path,
+    bundle: FigureBundle,
+) -> None:
+    """Remove only obsolete, reproducible Fig.2 new renderer artifacts."""
+    for stem in ("fig02_full", "fig02_legacy_route_extension"):
+        for extension in ("png", "svg", "pdf"):
+            (figure_dir / f"{stem}.{extension}").unlink(missing_ok=True)
+    panel_dir = figure_dir / "panels"
+    if panel_dir.exists():
+        for path in panel_dir.glob("fig02_*"):
+            if path.is_file():
+                path.unlink()
+    data_dir = figure_dir / "panel_data"
+    if data_dir.exists():
+        allowed = set(bundle.tables)
+        for path in data_dir.iterdir():
+            if (
+                path.is_file()
+                and path.suffix in {".csv", ".parquet"}
+                and path.stem not in allowed
+            ):
+                path.unlink()
+
+
+def _render_fig2_current_route(
     bundle: FigureBundle,
     figure_dir: Path,
     formats: Sequence[str],
     dpi: int,
 ) -> Dict[str, Path]:
+    """Render one coherent, vector-native four-panel Fig.2."""
     configure_style()
-    fig = plt.figure(figsize=(16.5, 7.2))
-    grid = fig.add_gridspec(1, 2, width_ratios=[0.92, 1.08], wspace=0.30)
-    scene_axis = fig.add_subplot(grid[0, 0])
-    future_axis = fig.add_subplot(grid[0, 1])
-    _draw_measurement_scene(scene_axis, bundle)
-    _draw_future_correlations(future_axis, bundle)
+    _clear_fig2_obsolete_artifacts(figure_dir, bundle)
+    fig = plt.figure(figsize=(19.2, 13.0))
+    grid = fig.add_gridspec(
+        2,
+        2,
+        left=0.024,
+        right=0.988,
+        bottom=0.035,
+        top=0.905,
+        wspace=0.090,
+        hspace=0.135,
+    )
+    axes = {
+        "a": fig.add_subplot(grid[0, 0]),
+        "b": fig.add_subplot(grid[0, 1]),
+        "c": fig.add_subplot(grid[1, 0]),
+        "d": fig.add_subplot(grid[1, 1]),
+    }
+    drawers = {
+        "a": _draw_fig2_route_a,
+        "b": _draw_fig2_route_b,
+        "c": _draw_fig2_route_c,
+        "d": _draw_fig2_route_d,
+    }
+    groups: Dict[str, Sequence[plt.Axes]] = {}
+    for panel, panel_ax in axes.items():
+        groups[panel] = drawers[panel](panel_ax, bundle)
     figure_title(
         fig,
-        "Fig. 2f–g | Legacy-route measurement extensions",
-        "The left panel makes the publication-time measurement boundary explicit; the right panel checks prospective graph outcomes.",
+        "Fig. 2 | Publication-time reference signals organize observable graph change",
+        "50 literature candidates → five source-backed mechanisms → eight frozen indicators; "
+        "prospective D5 evidence validates interpretation but never selects features.",
     )
-    outputs = export_figure(
-        fig,
-        figure_dir / "fig02_legacy_route_extension",
-        formats=formats,
-        dpi=dpi,
-    )
+    outputs = {
+        f"figure_{key}": value
+        for key, value in export_figure(
+            fig,
+            figure_dir / "figure_full",
+            formats=formats,
+            dpi=dpi,
+        ).items()
+    }
     outputs.update(
         _export_axis_groups(
             fig,
-            {"f": [scene_axis], "g": [future_axis]},
+            groups,
             figure_dir,
             prefix="fig02",
             formats=formats,
@@ -265,7 +1050,7 @@ def _render_fig2_extension(
         )
     )
     plt.close(fig)
-    return {f"extension_{key}": value for key, value in outputs.items()}
+    return outputs
 
 
 def _draw_target_flow(ax: plt.Axes, bundle: FigureBundle) -> None:
@@ -937,8 +1722,25 @@ def render_new_figure(
     # jitter even when their row samples are fixed. Reset it at every render
     # so identical panel data produce pixel-identical PNGs.
     np.random.seed(20260725)
-    if figure_id == 4:
-        return _render_fig4_current(bundle, figure_dir, formats, dpi)
+    if figure_id == 2:
+        from experiments.common.new.adapters.fig2_renderer import (
+            render_fig2_evidence_map,
+        )
+
+        return render_fig2_evidence_map(
+            bundle,
+            figure_dir,
+            formats=formats,
+            dpi=dpi,
+        )
+    if 3 <= figure_id <= 7:
+        return render_fig3_to_fig7(
+            figure_id,
+            bundle,
+            figure_dir,
+            formats,
+            dpi,
+        )
     if figure_id == 10:
         return _render_fig10_blocked(bundle, figure_dir, formats, dpi)
     outputs = BASE_RENDERERS[figure_id](
@@ -947,19 +1749,7 @@ def render_new_figure(
         formats=formats,
         dpi=dpi,
     )
-    if figure_id == 2:
-        extra = _render_fig2_extension(bundle, figure_dir, formats, dpi)
-        outputs.update(extra)
-        outputs.update(
-            _compose_vertical(
-                figure_id,
-                figure_dir,
-                figure_dir / "fig02_legacy_route_extension.png",
-                formats,
-                dpi,
-            )
-        )
-    elif figure_id == 3:
+    if figure_id == 3:
         extra = _render_fig3_extension(bundle, figure_dir, formats, dpi)
         outputs.update(extra)
         outputs.update(

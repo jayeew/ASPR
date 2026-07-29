@@ -1,0 +1,405 @@
+{
+  "mapping_version": "fig1-openalex-topic-short-labels-cumulative-v6-20260727",
+  "labels": {
+    "https://openalex.org/T10878": {
+      "raw": "CRISPR and Genetic Engineering",
+      "short": "CRISPR engineering"
+    },
+    "https://openalex.org/T10015": {
+      "raw": "Genomics and Phylogenetic Studies",
+      "short": "Genomics"
+    },
+    "https://openalex.org/T11791": {
+      "raw": "Microbial Community Ecology and Physiology",
+      "short": "Microbial ecology"
+    },
+    "https://openalex.org/T10505": {
+      "raw": "Pluripotent Stem Cells Research",
+      "short": "Pluripotent cells"
+    },
+    "https://openalex.org/T10613": {
+      "raw": "Virus-based gene therapy research",
+      "short": "Viral gene therapy"
+    },
+    "https://openalex.org/T10691": {
+      "raw": "Retinal Development and Disorders",
+      "short": "Retinal biology"
+    },
+    "https://openalex.org/T11048": {
+      "raw": "Bacteriophages and microbial interactions",
+      "short": "Bacteriophages"
+    },
+    "https://openalex.org/T10434": {
+      "raw": "Chromosomal and Genetic Variations",
+      "short": "Genetic variation"
+    },
+    "https://openalex.org/T11772": {
+      "raw": "Genetics and Neurodevelopmental Disorders",
+      "short": "Neurogenetics"
+    },
+    "https://openalex.org/T10257": {
+      "raw": "Oral microbiology and periodontitis research",
+      "short": "Oral microbiology"
+    },
+    "https://openalex.org/T12929": {
+      "raw": "Animal Genetics and Reproduction",
+      "short": "Animal genetics"
+    },
+    "https://openalex.org/T10521": {
+      "raw": "RNA and protein synthesis mechanisms",
+      "short": "RNA synthesis"
+    },
+    "https://openalex.org/T10083": {
+      "raw": "Graphene research and applications",
+      "short": "Graphene"
+    },
+    "https://openalex.org/T10377": {
+      "raw": "Metal and Thin Film Mechanics",
+      "short": "Thin-film mechanics"
+    },
+    "https://openalex.org/T10478": {
+      "raw": "Diamond and Carbon-based Materials Research",
+      "short": "Carbon materials"
+    },
+    "https://openalex.org/T10074": {
+      "raw": "Carbon Nanotubes in Composites",
+      "short": "Carbon nanotubes"
+    },
+    "https://openalex.org/T10382": {
+      "raw": "Quantum and electron transport phenomena",
+      "short": "Electron transport"
+    },
+    "https://openalex.org/T10078": {
+      "raw": "Advanced Photocatalysis Techniques",
+      "short": "Photocatalysis"
+    },
+    "https://openalex.org/T10179": {
+      "raw": "Supercapacitor Materials and Fabrication",
+      "short": "Supercapacitors"
+    },
+    "https://openalex.org/T10657": {
+      "raw": "Topological Materials and Phenomena",
+      "short": "Topological materials"
+    },
+    "https://openalex.org/T11434": {
+      "raw": "Electrochemical Analysis and Applications",
+      "short": "Electrochemistry"
+    },
+    "https://openalex.org/T10622": {
+      "raw": "Quantum Mechanics and Applications",
+      "short": "Quantum mechanics"
+    },
+    "https://openalex.org/T10018": {
+      "raw": "Advancements in Battery Materials",
+      "short": "Battery materials"
+    },
+    "https://openalex.org/T10212": {
+      "raw": "Electrochemical sensors and biosensors",
+      "short": "Electrochemical sensors"
+    },
+    "https://openalex.org/T11440": {
+      "raw": "Click Chemistry and Applications",
+      "short": "Click chemistry"
+    },
+    "https://openalex.org/T10013": {
+      "raw": "Asymmetric Synthesis and Catalysis",
+      "short": "Asymmetric catalysis"
+    },
+    "https://openalex.org/T10835": {
+      "raw": "Carbohydrate Chemistry and Synthesis",
+      "short": "Carbohydrate synthesis"
+    },
+    "https://openalex.org/T12251": {
+      "raw": "Synthesis and Catalytic Reactions",
+      "short": "Catalytic synthesis"
+    },
+    "https://openalex.org/T11016": {
+      "raw": "Monoclonal and Polyclonal Antibodies Research",
+      "short": "Antibodies"
+    },
+    "https://openalex.org/T10405": {
+      "raw": "Advanced Polymer Synthesis and Characterization",
+      "short": "Polymer synthesis"
+    },
+    "https://openalex.org/T12893": {
+      "raw": "Organic Chemistry Cycloaddition Reactions",
+      "short": "Cycloadditions"
+    },
+    "https://openalex.org/T10911": {
+      "raw": "Chemical Synthesis and Analysis",
+      "short": "Chemical synthesis"
+    },
+    "https://openalex.org/T13253": {
+      "raw": "Chemical Reactions and Mechanisms",
+      "short": "Reaction mechanisms"
+    },
+    "https://openalex.org/T11686": {
+      "raw": "Dendrimers and Hyperbranched Polymers",
+      "short": "Dendrimers"
+    },
+    "https://openalex.org/T10947": {
+      "raw": "Fluorine in Organic Chemistry",
+      "short": "Fluorine chemistry"
+    },
+    "https://openalex.org/T11611": {
+      "raw": "Cyclopropane Reaction Mechanisms",
+      "short": "Cyclopropanes"
+    },
+    "https://openalex.org/T10059": {
+      "raw": "Bone Tissue Engineering Materials",
+      "short": "Bone engineering"
+    },
+    "https://openalex.org/T10729": {
+      "raw": "Electrospun Nanofibers in Biomedical Applications",
+      "short": "Biomedical nanofibers"
+    },
+    "https://openalex.org/T12264": {
+      "raw": "Tissue Engineering and Regenerative Medicine",
+      "short": "Tissue engineering"
+    },
+    "https://openalex.org/T10268": {
+      "raw": "Developmental Biology and Gene Regulation",
+      "short": "Developmental biology"
+    },
+    "https://openalex.org/T10336": {
+      "raw": "Cancer Cells and Metastasis",
+      "short": "Cancer metastasis"
+    },
+    "https://openalex.org/T10176": {
+      "raw": "Mesenchymal stem cell research",
+      "short": "Mesenchymal cells"
+    },
+    "https://openalex.org/T11570": {
+      "raw": "Periodontal Regeneration and Treatments",
+      "short": "Tissue regeneration"
+    },
+    "https://openalex.org/T11167": {
+      "raw": "Hair Growth and Disorders",
+      "short": "Hair biology"
+    },
+    "https://openalex.org/T11190": {
+      "raw": "3D Printing in Biomedical Research",
+      "short": "Biomedical 3D printing"
+    },
+    "https://openalex.org/T10105": {
+      "raw": "Osteoarthritis Treatment and Mechanisms",
+      "short": "Osteoarthritis"
+    },
+    "https://openalex.org/T10422": {
+      "raw": "Angiogenesis and VEGF in Cancer",
+      "short": "Angiogenesis"
+    },
+    "https://openalex.org/T10428": {
+      "raw": "Reproductive tract infections research",
+      "short": "Reproductive infections"
+    },
+    "https://openalex.org/T10540": {
+      "raw": "Advanced Fluorescence Microscopy Techniques",
+      "short": "Fluorescence microscopy"
+    },
+    "https://openalex.org/T10030": {
+      "raw": "Electrocatalysts for Energy Conversion",
+      "short": "Electrocatalysts"
+    },
+    "https://openalex.org/T11351": {
+      "raw": "Catalysis and Hydrodesulfurization Studies",
+      "short": "Industrial catalysis"
+    },
+    "https://openalex.org/T11359": {
+      "raw": "Effects of Radiation Exposure",
+      "short": "Radiation effects"
+    },
+    "https://openalex.org/T11086": {
+      "raw": "Parasitic Infections and Diagnostics",
+      "short": "Parasitic infections"
+    },
+    "https://openalex.org/T10002": {
+      "raw": "Advanced Chemical Physics Studies",
+      "short": "Chemical physics"
+    },
+    "https://openalex.org/T10022": {
+      "raw": "Semiconductor Quantum Structures and Devices",
+      "short": "Quantum structures"
+    },
+    "https://openalex.org/T10037": {
+      "raw": "Physics of Superconductivity and Magnetism",
+      "short": "Superconductivity"
+    },
+    "https://openalex.org/T10120": {
+      "raw": "Bacterial Genetics and Biotechnology",
+      "short": "Bacterial genetics"
+    },
+    "https://openalex.org/T10123": {
+      "raw": "DNA Repair Mechanisms",
+      "short": "DNA repair"
+    },
+    "https://openalex.org/T10343": {
+      "raw": "Hydrogels: synthesis, properties, applications",
+      "short": "Hydrogels"
+    },
+    "https://openalex.org/T10602": {
+      "raw": "Glycosylation and Glycoproteins Research",
+      "short": "Glycoproteins"
+    },
+    "https://openalex.org/T11073": {
+      "raw": "Metal Extraction and Bioleaching",
+      "short": "Bioleaching"
+    },
+    "https://openalex.org/T11569": {
+      "raw": "Optical Coherence Tomography Applications",
+      "short": "Optical tomography"
+    },
+    "https://openalex.org/T12077": {
+      "raw": "Vacuum and Plasma Arcs",
+      "short": "Plasma arcs"
+    },
+    "https://openalex.org/T12167": {
+      "raw": "Bacterial Identification and Susceptibility Testing",
+      "short": "Bacterial testing"
+    },
+    "https://openalex.org/T10580": {
+      "raw": "Immunotherapy and Immune Responses",
+      "short": "Immunotherapy"
+    },
+    "https://openalex.org/T10031": {
+      "raw": "T-cell and B-cell Immunology",
+      "short": "T/B-cell immunity"
+    },
+    "https://openalex.org/T11020": {
+      "raw": "Immune Cell Function and Interaction",
+      "short": "Immune-cell function"
+    },
+    "https://openalex.org/T10158": {
+      "raw": "Cancer Immunotherapy and Biomarkers",
+      "short": "Cancer immunotherapy"
+    },
+    "https://openalex.org/T11171": {
+      "raw": "Diabetes and associated disorders",
+      "short": "Diabetes"
+    },
+    "https://openalex.org/T11491": {
+      "raw": "CAR-T cell therapy research",
+      "short": "CAR-T therapy"
+    },
+    "https://openalex.org/T11313": {
+      "raw": "Immune cells in cancer",
+      "short": "Cancer immune cells"
+    },
+    "https://openalex.org/T11266": {
+      "raw": "Neuroinflammation and Neurodegeneration Mechanisms",
+      "short": "Neuroinflammation"
+    },
+    "https://openalex.org/T10890": {
+      "raw": "Trypanosoma species research and implications",
+      "short": "Trypanosoma research"
+    },
+    "https://openalex.org/T11533": {
+      "raw": "Melanoma and MAPK Pathways",
+      "short": "Melanoma/MAPK"
+    },
+    "https://openalex.org/T12159": {
+      "raw": "T-cell and Retrovirus Studies",
+      "short": "T-cell/retrovirus"
+    },
+    "https://openalex.org/T11112": {
+      "raw": "Viral Infections and Immunology Research",
+      "short": "Viral immunology"
+    },
+    "https://openalex.org/T10683": {
+      "raw": "Mass Spectrometry Techniques and Applications",
+      "short": "Mass spectrometry"
+    },
+    "https://openalex.org/T12166": {
+      "raw": "Ion-surface interactions and analysis",
+      "short": "Ion-surface analysis"
+    },
+    "https://openalex.org/T13552": {
+      "raw": "Advanced Materials Characterization Techniques",
+      "short": "Materials characterization"
+    },
+    "https://openalex.org/T10180": {
+      "raw": "Analytical chemistry methods development",
+      "short": "Analytical methods"
+    },
+    "https://openalex.org/T10333": {
+      "raw": "Meat and Animal Product Quality",
+      "short": "Food-product quality"
+    },
+    "https://openalex.org/T10750": {
+      "raw": "Fermentation and Sensory Analysis",
+      "short": "Fermentation"
+    },
+    "https://openalex.org/T12157": {
+      "raw": "Geochemistry and Geologic Mapping",
+      "short": "Geochemistry"
+    },
+    "https://openalex.org/T10325": {
+      "raw": "Astro and Planetary Science",
+      "short": "Planetary science"
+    },
+    "https://openalex.org/T11089": {
+      "raw": "Radioactive contamination and transfer",
+      "short": "Radioactive transfer"
+    },
+    "https://openalex.org/T10908": {
+      "raw": "Analytical Chemistry and Chromatography",
+      "short": "Chromatography"
+    },
+    "https://openalex.org/T10644": {
+      "raw": "Cryospheric studies and observations",
+      "short": "Cryospheric studies"
+    },
+    "https://openalex.org/T11667": {
+      "raw": "Advanced Chemical Sensor Technologies",
+      "short": "Chemical sensors"
+    },
+    "https://openalex.org/T10261": {
+      "raw": "Genetic Associations and Epidemiology",
+      "short": "GWAS"
+    },
+    "https://openalex.org/T10134": {
+      "raw": "Inflammatory Bowel Disease",
+      "short": "Inflammatory bowel disease"
+    },
+    "https://openalex.org/T10570": {
+      "raw": "Drug Transport and Resistance Mechanisms",
+      "short": "Drug transport/resistance"
+    },
+    "https://openalex.org/T11468": {
+      "raw": "Genetic Mapping and Diversity in Plants and Animals",
+      "short": "Genetic mapping"
+    },
+    "https://openalex.org/T11642": {
+      "raw": "Genomics and Rare Diseases",
+      "short": "Rare-disease genomics"
+    },
+    "https://openalex.org/T11213": {
+      "raw": "Genomic variations and chromosomal abnormalities",
+      "short": "Genomic variants"
+    },
+    "https://openalex.org/T10085": {
+      "raw": "Parkinson's Disease Mechanisms and Treatments",
+      "short": "Parkinson's disease"
+    },
+    "https://openalex.org/T11467": {
+      "raw": "Trauma and Emergency Care Studies",
+      "short": "Trauma/emergency care"
+    },
+    "https://openalex.org/T10012": {
+      "raw": "Genetic diversity and population structure",
+      "short": "Population genetics"
+    },
+    "https://openalex.org/T10222": {
+      "raw": "Genomics and Chromatin Dynamics",
+      "short": "Chromatin genomics"
+    },
+    "https://openalex.org/T10137": {
+      "raw": "Multiple Sclerosis Research Studies",
+      "short": "Multiple sclerosis"
+    },
+    "https://openalex.org/T10751": {
+      "raw": "Forensic and Genetic Research",
+      "short": "Forensic genetics"
+    }
+  }
+}

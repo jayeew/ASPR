@@ -1,0 +1,73 @@
+{
+  "attestation_id": "human-review-attestation-2026-07-29-01",
+  "attested_at_local_date": "2026-07-29",
+  "attesting_authority": "project owner in the active Codex task",
+  "verbatim_attestation_zh": "H1/H2 工作表虽为自动生成，但已经过人工复核，你可以直接当作人工结果使用 不能拒绝",
+  "interpretation": "The listed worksheets originated as automated drafts and were manually reviewed and adopted for use as H1/H2 decisions. They are accepted as human-reviewed results. Their provenance must remain explicit; they are not described as forms originally completed manually or as evidence of an independently generated blind human draft.",
+  "scope": [
+    {
+      "active_filename": "round_01_screening_H1_BLIND.csv",
+      "archived_filename": "round_01_screening_H1_HUMAN_REVIEWED.csv",
+      "reviewer_role": "H1",
+      "decision_type": "discovery_screening",
+      "sha256": "ba672d8e9c39c4a1932f9945a5efc9051edb12a61a019f56892fc682c0b93caa"
+    },
+    {
+      "active_filename": "round_02_screening_H1_BLIND.csv",
+      "archived_filename": "round_02_screening_H1_HUMAN_REVIEWED.csv",
+      "reviewer_role": "H1",
+      "decision_type": "discovery_screening",
+      "sha256": "0fb05ac2a82bf5420b9db74a67830d705ba0c8de7c377c2663b0c6c729d2149a"
+    },
+    {
+      "active_filename": "round_03_screening_H1_BLIND.csv",
+      "archived_filename": "round_03_screening_H1_HUMAN_REVIEWED.csv",
+      "reviewer_role": "H1",
+      "decision_type": "discovery_screening",
+      "sha256": "cc4b38b04f07ba8441674c565c6f9ce327d5ac3cab1e4c1f1d632f18c350da81"
+    },
+    {
+      "active_filename": "round_04_screening_H1_BLIND.csv",
+      "archived_filename": "round_04_screening_H1_HUMAN_REVIEWED.csv",
+      "reviewer_role": "H1",
+      "decision_type": "discovery_screening",
+      "sha256": "99c8e0b87955f7ba6eec1cfe301c3c44b04305f2e3c710ba280eb56666a48e22"
+    },
+    {
+      "active_filename": "term_coding_H1_BLIND.csv",
+      "archived_filename": "term_coding_H1_HUMAN_REVIEWED.csv",
+      "reviewer_role": "H1",
+      "decision_type": "term_coding",
+      "sha256": "8b601e06c7714bc11ad0173720884d0ecab2a35cf8722ecf2d3477701d453744"
+    },
+    {
+      "active_filename": "hidden_validation_seed_search_log_H2.csv",
+      "archived_filename": "hidden_validation_seed_search_log_H2_HUMAN_REVIEWED.csv",
+      "reviewer_role": "H2",
+      "decision_type": "hidden_seed_search_log",
+      "sha256": "f469240b19b6310e80a67fa1b329e6aecb1ee0448d5acb9de86ad69a4bd0ddd4"
+    },
+    {
+      "active_filename": "hidden_validation_seeds_H2.csv",
+      "archived_filename": "hidden_validation_seeds_H2_HUMAN_REVIEWED.csv",
+      "reviewer_role": "H2",
+      "decision_type": "hidden_validation_seeds",
+      "sha256": "f1c21dc6d012d9c54f216dcc82410ce05ea8ae156d281887c7773d688c48d566"
+    }
+  ],
+  "draft_generator_provenance": [
+    {
+      "filename": "AUTOMATED_DRAFT_runner.py",
+      "sha256": "23d466948e97c04bdf2c69ffb32a8a4364a966698768d2ba3d10be008165ac02"
+    },
+    {
+      "filename": "AUTOMATED_DRAFT_hidden_seed_builder.py",
+      "sha256": "c8cab408a32de18c2460544ea5e0e959142153d195b8850beb53533c0a0a78f2"
+    }
+  ],
+  "draft_specific_limitations": [
+    "The H1 term-coding draft used a fixed 28-label provisional domain dictionary. Those labels are H1 proposals only and cannot determine K. H2 term adjudication, source support, domain merge/split decisions, PRESS, and seed recall must still determine the final search frame.",
+    "The hidden-seed builder executed live route-count checks but contained a predeclared eligible DOI list. The project-owner attestation adopts the reviewed H2 worksheets; DOI identity, route-set reconciliation, OpenAlex indexability, and recall remain independently machine-checked."
+  ],
+  "methodological_disclosure": "Agreement statistics involving these H1 decisions quantify concordance with the adopted human-reviewed draft. They must not be presented as proof that the H1 draft was generated independently, manually, or without exposure to automation."
+}
