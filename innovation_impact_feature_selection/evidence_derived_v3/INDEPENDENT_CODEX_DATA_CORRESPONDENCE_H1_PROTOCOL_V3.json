@@ -1,0 +1,31 @@
+{
+  "protocol_id": "independent-codex-data-correspondence-h1-v3",
+  "reviewer_role": "H1",
+  "scope": "Blind independent correspondence review of every canonical indicator family against the frozen local T0 input inventory.",
+  "blindness": [
+    "Do not view primary-AI or H2 correspondence files or decisions.",
+    "Do not view candidate dimensions, final indicators, feature counts, targets, model outcomes, or prediction performance.",
+    "Do not use v2 final selection decisions; v2 may not determine a match.",
+    "Do not use Qwen, Ollama, repository model runners, or local/external LLM APIs."
+  ],
+  "instructions": [
+    "Review every row and preserve protected evidence, row order, and reviewer_role=H1.",
+    "Names alone never establish equivalence. Compare object, formula/algorithm, unit, T0 boundary, required inputs, and construct role.",
+    "Use exact_materialized only for an identical frozen value and exact_derivable only for a fully deterministic identical derivation.",
+    "Use candidate_formula_completion when the inventory may support the family but exact literature definition must first be recovered from English primary/foundational full text.",
+    "Use construct_mismatch for a different graph, population, aggregation level, statistic, window, or causal role even if labels overlap.",
+    "For positive or completion-candidate rows, provide exact inventory source IDs, source_id:column values, derivation, equivalence notes, and a reason.",
+    "Provide a reason for every negative row; do not leave any family undecided."
+  ],
+  "allowed_decisions": [
+    "exact_materialized",
+    "exact_derivable",
+    "candidate_formula_completion",
+    "no_match",
+    "construct_mismatch",
+    "future_only",
+    "insufficient_evidence"
+  ],
+  "target_count_influence": false,
+  "model_outcomes_used": false
+}

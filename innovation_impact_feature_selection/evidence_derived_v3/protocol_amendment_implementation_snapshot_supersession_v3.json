@@ -1,0 +1,27 @@
+{
+  "protocol_id": "implementation_snapshot_supersession_v3_20260730",
+  "status": "active",
+  "scope": "evidence_derived_v3 implementation and verification files only",
+  "purpose": "Preserve the original registered implementation hashes while separately freezing the final post-search implementation used for downstream coding, operationalization, selection, and audit.",
+  "authorized_old_source_ids": [
+    "code_coding",
+    "code_database",
+    "code_indicators",
+    "code_pipeline",
+    "code_providers",
+    "code_reporting",
+    "code_tests_v3"
+  ],
+  "constraints": [
+    "The original source_snapshots row and original SHA-256 must never be overwritten or deleted.",
+    "The final bytes must be copied to a content-addressed immutable path and registered under a new versioned source ID.",
+    "The observed mutable-path hash must equal the registered final immutable snapshot hash at audit time.",
+    "The supersession must be exported in the deterministic audit payload and evidence tables.",
+    "No frozen literature, term, search-frame, screening, indicator-evidence, or reviewer-decision input is authorized to change.",
+    "Any further change to a superseded mutable path invalidates completion until a new explicit version is created."
+  ],
+  "rationale": "The v3 workflow continued to add downstream validation, independent-review import guards, round-12 reporting disclosure, deterministic feature materialization, and audit checks after the first implementation snapshots had been registered. Treating those legitimate downstream implementation versions as silent rebases would be false; retaining both hashes with an explicit version edge is auditable.",
+  "retrospective": true,
+  "scientific_decision_inputs_changed": false,
+  "original_hashes_retained": true
+}

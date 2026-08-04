@@ -1,0 +1,39 @@
+{
+  "protocol_id": "INDEPENDENT_CODEX_SCREENING_H1_PROTOCOL_V3_20260729",
+  "purpose": "Freeze the complete blind H1 screening instructions, including the exact database vocabulary that the narrative brief previously described but did not enumerate.",
+  "components": [
+    {
+      "path": "INDEPENDENT_CODEX_SCREENING_H1_BRIEF_V3.md",
+      "sha256": "21fe6a8e7cbade90cf9289bb434a18ddfd9ad1e24c168e30848c1dbf1d5f0a61",
+      "role": "blind_h1_screening_brief"
+    },
+    {
+      "path": "INDEPENDENT_CODEX_REVIEW_LANGUAGE_ADDENDUM_V3.md",
+      "sha256": "774af0a6e5ec4e4e3003169e78a5f5a666ac6b89c3603eafdefb37db89d6bcd1",
+      "role": "english_only_language_clarification"
+    }
+  ],
+  "decision_vocabulary": [
+    "include",
+    "exclude",
+    "uncertain"
+  ],
+  "language_vocabulary": [
+    "en",
+    "non_en",
+    "uncertain"
+  ],
+  "exclusion_reason_vocabulary": {
+    "E_LANGUAGE_NON_ENGLISH": "The original title, abstract, full text, or explicit source-language metadata is non-English.",
+    "E_NOT_PAPER_LEVEL_INNOVATION_OR_POTENTIAL_IMPACT": "The record does not study scientific-paper novelty, innovation, or publication-time potential scholarly impact.",
+    "E_FUTURE_OUTCOME_ONLY": "The record discusses only a post-publication outcome and supplies no relevant construct, validation design, or T0 predictor.",
+    "E_NOT_ARTICLE_LEVEL": "The analytical unit is an author, journal, institution, country, field, corpus, or other aggregate rather than an individual scientific paper.",
+    "E_NOT_INDICATOR_PREDICTOR_VALIDATION": "The record supplies no relevant measure, indicator, feature, predictor, determinant, validation design, or evidence-synthesis role.",
+    "E_DUPLICATE": "The record is a duplicate of an already assigned screening unit.",
+    "E_INSUFFICIENT_METADATA": "The supplied title and abstract are insufficient to determine eligibility; use only after the available text has been examined."
+  },
+  "mapping_rule": "Use exactly one listed exclusion code for every exclude decision and no exclusion code for include or uncertain. Do not invent aliases, longer variants, or suffixes.",
+  "evidence_rule": "Except when both title and abstract are genuinely absent and E_INSUFFICIENT_METADATA is used, language_evidence and evidence_span must be exact nonblank title or abstract substrings.",
+  "provenance_rule": "For artifacts governed by this composite protocol, row-level independent_ai_prompt_sha256 and manifest prompt_sha256 must equal the SHA-256 of this JSON file.",
+  "local_models_forbidden": true
+}

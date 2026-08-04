@@ -13,6 +13,8 @@ from common import (
     write_csv_iter,
 )
 from database import (
+    assisted_review_file,
+    assert_registered_review_attestation,
     invalidate_stages,
     log_event,
     require_complete,
@@ -55,33 +57,9 @@ def _formal_record_rows(
 ) -> Iterable[sqlite3.Row]:
     return connection.execute(
         """
-        WITH review_set AS (
-            SELECT DISTINCT h.record_key
-            FROM discovery_hits h
-            WHERE h.review_round > 0
-            UNION
-            SELECT DISTINCT q.record_key
-            FROM query_hits q
-            WHERE q.run_role = 'formal'
-              AND NOT EXISTS (
-                  SELECT 1 FROM discovery_queries d
-                  WHERE d.query_role = 'formal_search_family'
-                    AND d.status = 'active'
-              )
-            UNION
-            SELECT record_key FROM records
-            WHERE retrieval_route LIKE '%manual%supplement%'
-               OR (
-                   retrieval_route LIKE '%citation%'
-                   AND NOT EXISTS (
-                       SELECT 1 FROM discovery_queries d
-                       WHERE d.status IN ('active', 'network')
-                   )
-               )
-        )
         SELECT r.*
         FROM records r
-        JOIN review_set s USING(record_key)
+        JOIN formal_review_records s USING(record_key)
         ORDER BY r.record_key
         """
     )
@@ -91,30 +69,7 @@ def _formal_record_count(connection: sqlite3.Connection) -> int:
     return int(
         connection.execute(
             """
-            SELECT COUNT(*) FROM (
-                SELECT DISTINCT h.record_key
-                FROM discovery_hits h
-                WHERE h.review_round > 0
-                UNION
-                SELECT DISTINCT q.record_key
-                FROM query_hits q
-                WHERE q.run_role = 'formal'
-                  AND NOT EXISTS (
-                      SELECT 1 FROM discovery_queries d
-                      WHERE d.query_role = 'formal_search_family'
-                        AND d.status = 'active'
-                  )
-                UNION
-                SELECT record_key FROM records
-                WHERE retrieval_route LIKE '%manual%supplement%'
-                   OR (
-                       retrieval_route LIKE '%citation%'
-                       AND NOT EXISTS (
-                           SELECT 1 FROM discovery_queries d
-                           WHERE d.status IN ('active', 'network')
-                       )
-                   )
-            )
+            SELECT COUNT(*) FROM formal_review_records
             """
         ).fetchone()[0]
     )
@@ -126,32 +81,8 @@ def _missing_primary_screening_count(
     return int(
         connection.execute(
             """
-            WITH formal_records AS (
-                SELECT DISTINCT h.record_key
-                FROM discovery_hits h
-                WHERE h.review_round > 0
-                UNION
-                SELECT DISTINCT q.record_key
-                FROM query_hits q
-                WHERE q.run_role = 'formal'
-                  AND NOT EXISTS (
-                      SELECT 1 FROM discovery_queries d
-                      WHERE d.query_role = 'formal_search_family'
-                        AND d.status = 'active'
-                  )
-                UNION
-                SELECT record_key FROM records
-                WHERE retrieval_route LIKE '%manual%supplement%'
-                   OR (
-                       retrieval_route LIKE '%citation%'
-                       AND NOT EXISTS (
-                           SELECT 1 FROM discovery_queries d
-                           WHERE d.status IN ('active', 'network')
-                       )
-                   )
-            )
             SELECT COUNT(*)
-            FROM formal_records f
+            FROM formal_review_records f
             WHERE NOT EXISTS (
                 SELECT 1 FROM screening_decisions d
                 WHERE d.record_key = f.record_key
@@ -188,10 +119,36 @@ def export_screening(
                 "H2 adjudication cannot be exported until AI and H1 have "
                 f"screened all records; missing={missing_primary}"
             )
+    fields = list(SCREENING_FIELDS)
+    if reviewer_role == "H2":
+        fields.extend(
+            [
+                "h2_review_reason",
+                "ai_language_judgment",
+                "ai_decision",
+                "ai_exclusion_reason",
+                "ai_evidence_span",
+                "ai_notes",
+                "h1_language_judgment",
+                "h1_decision",
+                "h1_exclusion_reason",
+                "h1_evidence_span",
+                "h1_notes",
+            ]
+        )
 
     def iter_rows() -> Iterable[Dict[str, Any]]:
         for record in _formal_record_rows(connection):
             for role in roles:
+                existing = connection.execute(
+                    """
+                    SELECT 1 FROM screening_decisions
+                    WHERE record_key = ? AND reviewer_role = ?
+                    """,
+                    (record["record_key"], role),
+                ).fetchone()
+                if existing is not None:
+                    continue
                 if role == "H2":
                     codes = {
                         str(row["reviewer_role"]): row
@@ -204,14 +161,14 @@ def export_screening(
                             (record["record_key"],),
                         )
                     }
-                    required, _ = _h2_requirement(
+                    required, h2_reason = _h2_requirement(
                         record,
                         codes["AI"],
                         codes["H1"],
                     )
                     if not required:
                         continue
-                yield {
+                output: Dict[str, Any] = {
                     "record_key": record["record_key"],
                     "doi": record["doi"],
                     "title": record["title"],
@@ -227,8 +184,35 @@ def export_screening(
                     "evidence_span": "",
                     "notes": "",
                 }
+                if role == "H2":
+                    ai = codes["AI"]
+                    h1 = codes["H1"]
+                    output.update(
+                        {
+                            "h2_review_reason": h2_reason,
+                            "ai_language_judgment": ai[
+                                "language_judgment"
+                            ],
+                            "ai_decision": ai["decision"],
+                            "ai_exclusion_reason": ai[
+                                "exclusion_reason"
+                            ],
+                            "ai_evidence_span": ai["evidence_span"],
+                            "ai_notes": ai["notes"],
+                            "h1_language_judgment": h1[
+                                "language_judgment"
+                            ],
+                            "h1_decision": h1["decision"],
+                            "h1_exclusion_reason": h1[
+                                "exclusion_reason"
+                            ],
+                            "h1_evidence_span": h1["evidence_span"],
+                            "h1_notes": h1["notes"],
+                        }
+                    )
+                yield output
 
-    return write_csv_iter(output_path, iter_rows(), SCREENING_FIELDS)
+    return write_csv_iter(output_path, iter_rows(), fields)
 
 
 def import_screening(
@@ -236,6 +220,22 @@ def import_screening(
     input_path: Path,
 ) -> int:
     """Import reviewer decisions with explicit English evidence."""
+    if assisted_review_file(input_path):
+        assisted_rows = list(iter_csv(input_path))
+        assisted_roles = {
+            str(row.get("reviewer_role") or "").strip().upper()
+            for row in assisted_rows
+            if str(row.get("reviewer_role") or "").strip()
+        }
+        if len(assisted_roles) != 1:
+            raise ValueError(
+                "One assisted screening import must declare one role"
+            )
+        assert_registered_review_attestation(
+            connection,
+            input_path,
+            next(iter(assisted_roles)),
+        )
     snapshot_path = snapshot_import_file(
         connection,
         input_path,
@@ -305,11 +305,20 @@ def import_screening(
                 f"{role} screening is frozen after H2 adjudication: "
                 f"{record_key}"
             )
-        if not language_evidence:
+        metadata_absent = not (
+            str(record["title"]).strip()
+            or str(record["abstract"]).strip()
+        )
+        documented_metadata_exclusion = (
+            metadata_absent
+            and decision == "exclude"
+            and reason == "E_INSUFFICIENT_METADATA"
+        )
+        if not language_evidence and not documented_metadata_exclusion:
             raise ValueError(
                 f"Language evidence is required: {record_key}/{role}"
             )
-        if not evidence:
+        if not evidence and not documented_metadata_exclusion:
             raise ValueError(
                 f"Screening requires a title/abstract evidence span: "
                 f"{record_key}"
@@ -317,12 +326,12 @@ def import_screening(
         source_text = "\n".join(
             (str(record["title"]), str(record["abstract"]))
         )
-        if language_evidence not in source_text:
+        if language_evidence and language_evidence not in source_text:
             raise ValueError(
                 "Language evidence is not an exact title/abstract span: "
                 f"{record_key}/{role}"
             )
-        if evidence not in source_text:
+        if evidence and evidence not in source_text:
             raise ValueError(
                 f"Screening evidence is not an exact title/abstract span: "
                 f"{record_key}/{role}"

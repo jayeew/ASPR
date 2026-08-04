@@ -1,0 +1,46 @@
+{
+  "protocol_id": "INDEPENDENT_CODEX_TERM_CROSS_DOMAIN_CORRECTION_PROTOCOL_V3_20260730",
+  "purpose": "Independently resolve one legacy structural contradiction detected by search-frame derivation without changing the underlying inclusion, construct, role, T0 boundary, term family, or query family.",
+  "issue": {
+    "term_id": "TERM_AFF4CC32ECF44366",
+    "field_conflict": "search_domain_label contains two non-empty domain labels while cross_domain is false",
+    "detected_by": "coding.derive_search_frame",
+    "source_round": 6
+  },
+  "authorized_input": {
+    "path": "outputs/independent_codex_review_v3/round_06_term_coding_H2_REVIEWED.csv",
+    "sha256": "2ad5b7262684178da5d140399b9d1e3b83a6ea5e2126730285471451527fea85"
+  },
+  "authorized_reference": {
+    "path": "outputs/codebook_references/rounds_01_11_h2_term_codebook.csv",
+    "sha256": "458bab7c6ee6d3cf7e8526add0efdf766b5991815ed86b6c3a9f7c0c38dbe8f0",
+    "manifest_path": "outputs/codebook_references/rounds_01_11_h2_codebooks.manifest.json",
+    "manifest_sha256": "bd84621c06a23b58f1f6d8d9c5e59f6e1a1201810a25ef8d4ea7a31633101f68"
+  },
+  "review_rule": "H2 must inspect the cited row and its frozen exact family/domain/query assignment. If both domain labels are intentional, set cross_domain=true. If only one is intended, retain the exact historically supported single-domain assignment. Explain the resolution.",
+  "protected_judgments": [
+    "decision",
+    "canonical_term",
+    "term_family_label",
+    "term_relation",
+    "search_domain_definition",
+    "query_family_label",
+    "proposed_role",
+    "source_evidence_span"
+  ],
+  "forbidden_actions": [
+    "change inclusion or validation/T0 boundary",
+    "create or delete a term family",
+    "change a query family",
+    "change any round-12 novelty count",
+    "use Qwen, Ollama, a local model, or an external LLM API"
+  ],
+  "required_output": {
+    "rows": 1,
+    "coder_role": "H2",
+    "reviewer_role": "H2",
+    "registration_manifest_required": true,
+    "prompt_sha256_must_equal_this_protocol": true,
+    "correction_must_be_explicitly_labelled": true
+  }
+}

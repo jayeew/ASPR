@@ -1,0 +1,27 @@
+{
+  "protocol_id": "INDEPENDENT_CODEX_OPERATIONALIZATION_H2_PROTOCOL_V3_20260730",
+  "purpose": "Independent H2 adjudication of every eligible literature-to-data operationalization after separate AI and H1 reviews.",
+  "scope": {
+    "allowed_inputs": "The H2 comparison worksheet, AI and H1 payloads, cited frozen English formula evidence, frozen input schema and snapshots, exact implementation files, and deterministic edge-case tests.",
+    "forbidden_inputs": "Candidate dimensions, selected features, target counts, prediction outcomes, model performance, Qwen/Ollama, local model output, and external LLM APIs.",
+    "review_every_exported_family": true,
+    "no_target_indicator_or_dimension_count": true
+  },
+  "rules": [
+    "Reopen the literature formula evidence and independently inspect the implementation, input snapshot, and edge-case tests.",
+    "Preserve protected literature evidence and keep source-reported and project-specified missing rules separate.",
+    "Approve only when the literature formula layer is eligible and every project operationalization field is complete, deterministic, source-compatible, T0-safe, outcome-blind, and hash-verified.",
+    "A disagreement is resolved by evidence and executable boundary behavior, never by a desired number of retained features.",
+    "An approved project operationalization cannot create missing English formula evidence or make a future outcome into a T0 feature."
+  ],
+  "decisions": [
+    "approve",
+    "exclude"
+  ],
+  "provenance": {
+    "reviewer_role": "H2",
+    "row_level_independent_ai_provenance_required": true,
+    "registration_manifest_required": true,
+    "prompt_sha256_must_equal_this_protocol": true
+  }
+}

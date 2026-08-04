@@ -1,0 +1,35 @@
+{
+  "protocol_id": "INDEPENDENT_CODEX_FULLTEXT_INDICATOR_H2_PROTOCOL_V3_20260730",
+  "purpose": "Independent H2 verification and adjudication of every H1 source disposition and full-text indicator mention before canonical-family construction.",
+  "scope": {
+    "allowed_evidence": "H1 extraction fields, supplied source title/abstract, lawfully acquired hashed English full text, and exact formula/evidence locations.",
+    "forbidden_inputs": "Model performance, target counts, provisional dimensions, selected features, Qwen/Ollama, local model output, and external LLM APIs.",
+    "review_every_exported_source_and_mention": true,
+    "no_target_indicator_or_dimension_count": true
+  },
+  "adjudication_rules": [
+    "Reopen the cited full-text location and independently verify every formula, parameter, unit, direction, missing rule, required-data element, role, and T0 boundary.",
+    "Approve a candidate only when the source disposition and mention status are internally consistent and the cited English evidence supports them.",
+    "Set h2_approved=true exactly when status=candidate; set h2_approved=false exactly when status=excluded.",
+    "Retain verified_by=H1|H2 and a substantive adjudication note for every mention.",
+    "A missing or non-English full text cannot authorize a final formula, even when a review or abstract names the indicator.",
+    "Reviews authorize discovery only; original application, original definition, or mathematical foundation evidence is required for final formula provenance.",
+    "Record negative, mixed, and null evidence and reject fatal construct-validity problems.",
+    "Do not use future outcomes or downstream model performance to decide inclusion.",
+    "Do not merge opportunity/control variables into substantive innovation dimensions."
+  ],
+  "source_dispositions": [
+    "extracted",
+    "no_indicator",
+    "candidate_fulltext_missing",
+    "excluded_after_fulltext"
+  ],
+  "provenance": {
+    "reviewer_role": "H2",
+    "disposition_decided_by": "H1|H2",
+    "verified_by": "H1|H2",
+    "row_level_independent_ai_provenance_required": true,
+    "registration_manifest_required": true,
+    "prompt_sha256_must_equal_this_protocol": true
+  }
+}

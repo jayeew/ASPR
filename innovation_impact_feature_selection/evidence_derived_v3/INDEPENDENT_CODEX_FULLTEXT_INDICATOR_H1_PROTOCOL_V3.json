@@ -1,0 +1,65 @@
+{
+  "protocol_id": "INDEPENDENT_CODEX_FULLTEXT_INDICATOR_H1_PROTOCOL_V3_20260730",
+  "purpose": "Blind H1 census of article-level innovation and publication-time potential-impact indicators, formulas, validation evidence, and source dispositions from English full text.",
+  "scope": {
+    "eligible_sources": "Finally included English paper-level indicator definition, application, validation, prediction, or review-discovery records.",
+    "allowed_evidence": "The supplied English title/abstract, lawfully acquired local English full text, and source-linked prior title/abstract indicator hints.",
+    "forbidden_inputs": "H2 decisions, model performance, selected dimensions, final feature counts, Qwen/Ollama, local model output, and external LLM APIs.",
+    "no_target_indicator_or_dimension_count": true
+  },
+  "source_dispositions": {
+    "extracted": "At least one indicator mention is extracted from sufficient English evidence.",
+    "no_indicator": "The complete available English source contains no in-scope article-level indicator or predictor.",
+    "candidate_fulltext_missing": "A title/abstract names a candidate, but sufficient English full text is unavailable to approve formula or T0 details.",
+    "excluded_after_fulltext": "Full text shows that the source or candidate is outside the paper-level/T0 scope."
+  },
+  "source_roles": [
+    "original_definition",
+    "original_application",
+    "validation",
+    "review_discovery",
+    "mathematical_foundation"
+  ],
+  "scope_roles": [
+    "direct_innovation",
+    "t0_substantive",
+    "t0_opportunity",
+    "context_control",
+    "outcome_only",
+    "out_of_scope"
+  ],
+  "evidence_directions": [
+    "positive",
+    "mixed",
+    "null",
+    "negative",
+    "definition_only"
+  ],
+  "extraction_requirements": [
+    "Extract every distinct named indicator and retain raw name, canonical English name, Chinese label, aliases through repeated mentions, source identity, and independent research-group evidence.",
+    "Record an exact English evidence span and exact page, table, equation, appendix, or section location.",
+    "Record formula, units, parameters, direction, missing-data rule, required input data, and maximum information time.",
+    "Record positive, mixed, null, and negative validation evidence; do not retain only favorable findings.",
+    "A review may discover a name but cannot authorize a formula or primary/foundational evidence.",
+    "english_fulltext_verified and formula_reproducible may be true only when the local file hash and exact location are supplied.",
+    "t0_computable=true requires maximum_information_time=T0 and requires_future=false.",
+    "Publication-time opportunity and context variables remain separately labelled and are never relabelled substantive innovation.",
+    "Future citation, attention, diffusion, disruption, acceptance, and model-output variables are outcome_only and cannot become T0 features.",
+    "Do not infer data availability, nonconstancy, stability, or construct validity merely from a name; state the evidence basis."
+  ],
+  "h1_integrity": {
+    "disposition_decided_by": "H1",
+    "extracted_by": "H1 or AI|H1",
+    "verified_by": "H1",
+    "h2_approved": false,
+    "adjudication_notes_blank": true,
+    "preserve_input_source_fields": true,
+    "one_consistent_source_disposition_across_duplicate_indicator_rows": true
+  },
+  "provenance": {
+    "reviewer_role": "H1",
+    "row_level_independent_ai_provenance_required": true,
+    "registration_manifest_required": true,
+    "prompt_sha256_must_equal_this_protocol": true
+  }
+}

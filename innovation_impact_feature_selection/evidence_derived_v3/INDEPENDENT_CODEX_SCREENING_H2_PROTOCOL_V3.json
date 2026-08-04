@@ -1,0 +1,40 @@
+{
+  "protocol_id": "INDEPENDENT_CODEX_SCREENING_H2_PROTOCOL_V3_20260729",
+  "purpose": "Freeze the complete H2 screening-adjudication instructions with the English-only boundary and exact database decision vocabulary.",
+  "components": [
+    {
+      "path": "INDEPENDENT_CODEX_SCREENING_PROTOCOL_V3.json",
+      "sha256": "c737d64dd3feb74707ae4b7c3094df11d52c156b224c85709bd1ca2c617f2bf5",
+      "role": "base_h2_screening_and_language_protocol"
+    },
+    {
+      "path": "INDEPENDENT_CODEX_SCREENING_H1_PROTOCOL_V3.json",
+      "sha256": "0b6450d4187b82347b72ab24097ff525f831cbe349ace11159339277a0e75d3f",
+      "role": "shared_decision_and_exclusion_vocabulary"
+    }
+  ],
+  "adjudication_rule": "Review every supplied H2 row using its source title/abstract and the two primary decisions. Enter a fresh H2 judgment; do not mechanically copy either primary stream.",
+  "decision_vocabulary": [
+    "include",
+    "exclude",
+    "uncertain"
+  ],
+  "language_vocabulary": [
+    "en",
+    "non_en",
+    "uncertain"
+  ],
+  "exclusion_reason_vocabulary": [
+    "E_LANGUAGE_NON_ENGLISH",
+    "E_NOT_PAPER_LEVEL_INNOVATION_OR_POTENTIAL_IMPACT",
+    "E_FUTURE_OUTCOME_ONLY",
+    "E_NOT_ARTICLE_LEVEL",
+    "E_NOT_INDICATOR_PREDICTOR_VALIDATION",
+    "E_DUPLICATE",
+    "E_INSUFFICIENT_METADATA"
+  ],
+  "mapping_rule": "Use exactly one listed exclusion code for every exclude decision and no exclusion code for include or uncertain.",
+  "evidence_rule": "Except when both title and abstract are genuinely absent and E_INSUFFICIENT_METADATA is used, language_evidence and evidence_span must be exact nonblank title or abstract substrings.",
+  "provenance_rule": "For artifacts governed by this composite protocol, row-level independent_ai_prompt_sha256 and manifest prompt_sha256 must equal the SHA-256 of this JSON file.",
+  "local_models_forbidden": true
+}

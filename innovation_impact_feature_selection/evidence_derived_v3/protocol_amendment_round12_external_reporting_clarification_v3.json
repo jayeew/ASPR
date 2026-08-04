@@ -1,0 +1,33 @@
+{
+  "schema_version": "3.0.0",
+  "clarification_id": "aspr-v3-round12-external-reporting-20260730",
+  "status": "approved",
+  "approved_at": "2026-07-30T17:41:51+08:00",
+  "approved_by": "project_owner",
+  "scope": "external_reporting_after_search_frame_freeze",
+  "terminal_iteration": 12,
+  "owner_instruction": "Treat round 12 as the final round because the marginal information gain of further rounds is too small. Use a post-freeze dual-zero external summary.",
+  "external_headline": "After the round-12 freeze, newly admitted non-redundant English term families = 0 and newly admitted canonical indicator families = 0.",
+  "external_short_label": "post-freeze expansion 0/0",
+  "metric_definition": {
+    "start": "the recorded round-12 search-frame freeze",
+    "end": "the final evidence-derived-v3 audit",
+    "new_nonredundant_english_term_families_admitted": 0,
+    "new_canonical_indicator_families_admitted": 0,
+    "later_saturation_rounds_started": 0
+  },
+  "interpretation": "The 0/0 values describe admissions after the freeze. They do not relabel the within-round-12 adjudicated novelty endpoints.",
+  "mandatory_method_disclosure": {
+    "round12_actual_new_nonredundant_english_term_families": 10,
+    "round12_actual_new_canonical_indicator_families": 9,
+    "round12_stop_basis": "retrospective_owner_pragmatic_stop",
+    "original_three_consecutive_dual_zero_rule_satisfied": false
+  },
+  "integrity_guards": {
+    "round12_database_counts_must_not_be_changed": true,
+    "post_freeze_scope_must_be_named_when_using_0_0": true,
+    "no_round13_or_later_saturation_round_may_be_created": true,
+    "method_and_audit_outputs_must_disclose_round12_10_9": true,
+    "external_short_label_must_not_be_described_as_the_original_stop_rule": true
+  }
+}

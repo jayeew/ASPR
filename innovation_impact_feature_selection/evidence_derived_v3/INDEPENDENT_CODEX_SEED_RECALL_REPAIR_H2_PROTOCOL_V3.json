@@ -1,0 +1,19 @@
+{
+  "protocol_id": "INDEPENDENT_CODEX_SEED_RECALL_REPAIR_H2_PROTOCOL_V3_20260730",
+  "purpose": "Adjudicate AI and blind-H1 seed-recall term repairs and perform a focused PRESS check before a new search-frame version is executed.",
+  "allowed_inputs": [
+    "The named H2 repair-adjudication worksheet",
+    "The registered AI candidate JSON",
+    "The registered blind H1 artifact",
+    "This protocol"
+  ],
+  "rules": [
+    "Select only English additions supported by an exact supplied title, abstract, or citation span.",
+    "Resolve AI/H1 differences independently; do not mechanically copy either stream.",
+    "Retain the existing logical-query construct and family whenever additions are synonyms or retrieval wording.",
+    "Verify concept completeness, Boolean logic, spelling, phrase handling, justified limits, and absence of an unsupported construct expansion.",
+    "Final decision must be pass or reject; pass requires all PRESS checks true.",
+    "Do not use target K/Q/P, model outcomes, or desired final indicator counts."
+  ],
+  "local_models_forbidden": true
+}

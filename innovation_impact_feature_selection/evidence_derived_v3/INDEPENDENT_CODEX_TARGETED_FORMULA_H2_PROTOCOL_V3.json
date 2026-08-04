@@ -1,0 +1,40 @@
+{
+  "schema_version": "independent_codex_targeted_formula_h2_protocol_v3",
+  "reviewer_role": "H2",
+  "review_scope": "Independent adjudication of H1 targeted-formula extraction against frozen English full texts and the frozen local T0 inventory.",
+  "allowed_decisions": [
+    "approve_formula",
+    "reject_construct",
+    "reject_formula_missing",
+    "reject_data_mismatch",
+    "reject_future_information"
+  ],
+  "requirements": [
+    "read the frozen full text rather than relying on H1's summary",
+    "verify the exact evidence and research-group spans",
+    "verify formula, units, parameters, direction, required data, and T0 boundary",
+    "verify construct equivalence to every selected local column",
+    "record a reason for every decision",
+    "approve only existing canonical families and only the exact source-defined operationalization",
+    "do not use model outcomes or final-count preferences"
+  ],
+  "fixed_defaults": {
+    "uses_outcome_for_selection": false,
+    "creates_new_search_records": false,
+    "creates_new_term_families": false,
+    "creates_new_indicator_families": false,
+    "round_13": false
+  },
+  "output_requirements": {
+    "preserve_every_protected_field_byte_for_byte": true,
+    "preserve_h1_payload": true,
+    "preserve_row_count_and_order": true,
+    "reviewer_role": "H2",
+    "row_level_provenance_required": true,
+    "manifest_required": true,
+    "qwen_or_ollama_prohibited": true,
+    "local_or_external_llm_api_prohibited": true,
+    "database_writes_prohibited": true,
+    "business_code_writes_prohibited": true
+  }
+}

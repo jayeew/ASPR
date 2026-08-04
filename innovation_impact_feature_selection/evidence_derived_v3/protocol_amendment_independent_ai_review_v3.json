@@ -1,0 +1,35 @@
+{
+  "amendment_id": "V3_AMENDMENT_INDEPENDENT_AI_REVIEW_20260729",
+  "effective_date": "2026-07-29",
+  "reason": "The project owner explicitly authorized every remaining human-review gate to be completed by a separate AI reviewer so the evidence-saturation workflow can finish within the execution window.",
+  "scope": {
+    "applies_to": [
+      "H1 or H2 screening not already covered by a frozen human attestation",
+      "term extraction and coding review",
+      "search-domain merge/split adjudication",
+      "PRESS-equivalent query review",
+      "Crossref conflict resolution",
+      "indicator extraction and family adjudication",
+      "candidate-dimension coding and merge/split adjudication",
+      "hard-gate review and saturation decisions"
+    ],
+    "does_not_reclassify": "The seven previously human-reviewed and adopted H1/H2 artifacts remain recorded as human-attested automated drafts.",
+    "labeling_rule": "Every substituted decision must be labelled independent_ai and must never be described as a human judgment."
+  },
+  "independence_controls": {
+    "separate_codex_task": true,
+    "review_task_id": "019fabc1-0c6d-7771-92e4-4501e5bee18b",
+    "fresh_role_prompt": true,
+    "local_ollama_and_qwen_forbidden": true,
+    "invalidated_local_qwen_outputs_forbidden": true,
+    "input_and_output_sha256_required": true,
+    "model_name_and_digest_required": true,
+    "prompt_sha256_required": true,
+    "run_id_and_parameters_required": true,
+    "row_level_evidence_required": true,
+    "primary_decision_blinding_when_methodologically_possible": true
+  },
+  "known_limitation": "The substitute reviewer is a separate Codex task rather than a human reviewer. Its task-level isolation, frozen brief, file hashes, and provenance manifest provide process separation, but the review remains AI-based and must be reported as such.",
+  "rejected_method": "A partial local qwen3:8b attempt was stopped and invalidated at the project owner's instruction. Its progress files are quarantined and cannot be imported or used in any count.",
+  "authorization_source": "Direct project-owner instruction in the active Codex task on 2026-07-29."
+}

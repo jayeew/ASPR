@@ -1,0 +1,26 @@
+{
+  "protocol_id": "PRIMARY_CODEX_OPERATIONALIZATION_PROTOCOL_V3_20260730",
+  "purpose": "Outcome-blind primary-AI drafting of reproducible project operationalizations for H2-approved English literature formula evidence.",
+  "scope": {
+    "allowed_inputs": "The exported AI worksheet, its cited frozen English formula evidence, frozen local input schema and snapshots, the exact implementation file, and deterministic edge-case tests.",
+    "forbidden_inputs": "H1 or H2 operationalization decisions, candidate dimensions, selected features, target counts, prediction outcomes, model performance, Qwen/Ollama, local model output, and external LLM APIs.",
+    "no_target_indicator_or_dimension_count": true
+  },
+  "rules": [
+    "Do not alter any protected literature-evidence field or attribute a project rule to a source.",
+    "Approve only when formula identity, input columns, project missing rule, zero/empty/coverage behavior, transform and units, implementation, test artifact, and frozen input snapshot are all exact and hashable.",
+    "A project operationalization cannot rescue an incomplete, review-only, future-dependent, non-article-level, or non-English literature formula.",
+    "Distinguish absent input, mathematically undefined values, observed empty sets, structural non-applicability, and valid zero values.",
+    "Use no outcome, label, downstream model result, or desired feature count."
+  ],
+  "decisions": [
+    "approve",
+    "exclude"
+  ],
+  "provenance": {
+    "reviewer_role": "AI",
+    "row_level_independent_ai_provenance_required": true,
+    "registration_manifest_required": true,
+    "prompt_sha256_must_equal_this_protocol": true
+  }
+}

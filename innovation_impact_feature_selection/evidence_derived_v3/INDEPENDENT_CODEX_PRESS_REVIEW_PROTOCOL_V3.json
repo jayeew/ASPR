@@ -1,0 +1,79 @@
+{
+  "protocol_id": "INDEPENDENT_CODEX_PRESS_REVIEW_PROTOCOL_V3_20260730_FRAME1",
+  "purpose": "Independent PRESS-equivalent review of every evidence-derived logical search family before seed-recall validation and search-frame freezing.",
+  "frame": {
+    "frame_version": 1,
+    "frame_sha256": "113ad6e90321358367571dede260c090deab683910a49ebbad25798a2f5c92f4",
+    "K": 42,
+    "Q": 381,
+    "P": 398,
+    "counts_are_outputs_not_quotas": true
+  },
+  "authorized_input": {
+    "path": "outputs/human_tasks/press_review_H2_v1.csv",
+    "sha256": "dcf61a4349b42bd49617b7df8543406c1afcbc72fb42820c54af3d19f19423e8",
+    "rows": 381,
+    "unique_key": "logical_query_id"
+  },
+  "review_scope": {
+    "concepts_complete": "The family-specific evidence terms, paper-object block, and measurement, prediction, or validation context jointly retrieve the intended construct and evidence role without an evident source-supported omission.",
+    "boolean_logic_valid": "Parentheses, OR blocks, AND relationships, and logical scope are valid and preserve the intended three-block structure.",
+    "spelling_valid": "Terms contain no accidental spelling error. A source-attested historical spelling is not an error and must be explained if retained.",
+    "phrases_valid": "Multiword phrases and variants are quoted or grouped appropriately, without changing the source-supported construct.",
+    "limits_justified": "The common publication-date and eligible-work-type filters match the frozen protocol; English eligibility is applied during screening rather than retrieval so non-English records remain in the denominator.",
+    "evidence_check": "Use term_evidence_json to verify that every logical family has direct English source support and that pilot-only hints do not independently authorize a family.",
+    "redundancy_check": "Archive only if another logical query completely covers the same semantics, the current family has no independent construct or evidence role, and logical coverage is explicit. Result-set subset coverage is subsequently recomputed by the pipeline."
+  },
+  "decision_vocabulary": [
+    "pass",
+    "revise",
+    "archive_redundant"
+  ],
+  "decision_rules": {
+    "pass": "All five PRESS checklist fields are true; covered_by_logical_query_id is blank; independent_construct_role is true; notes identify the construct/evidence role and any material ambiguity checked.",
+    "revise": "At least one checklist field is false or a source-supported concept/term is missing; notes state the exact defect and proposed correction.",
+    "archive_redundant": "covered_by_logical_query_id names a different active logical query; logical_coverage_verified is true; independent_construct_role is false; notes explain complete semantic coverage. result_set_coverage_verified remains false until pipeline validation."
+  },
+  "independence_and_integrity": {
+    "reviewer_role": "H2",
+    "review_each_row_individually": true,
+    "no_target_count_or_quota": true,
+    "do_not_change_K_Q_P_to_reach_a_preferred_count": true,
+    "do_not_read_downstream_dimensions_features_or_model_results": true,
+    "forbid_qwen_ollama_local_models_and_external_llm_apis": true,
+    "preserve_all_input_fields_and_row_order": true
+  },
+  "required_provenance_fields": [
+    "draft_method",
+    "independent_ai_review_status",
+    "independent_ai_reviewer_id",
+    "independent_ai_reviewed_at",
+    "independent_ai_review_action",
+    "independent_ai_review_note",
+    "independent_ai_run_id",
+    "independent_ai_model",
+    "independent_ai_prompt_sha256"
+  ],
+  "registration_manifest_schema": {
+    "required_top_level_fields": [
+      "run_id",
+      "artifact_path",
+      "artifact_sha256",
+      "input_path",
+      "input_sha256",
+      "reviewer_role",
+      "reviewer_id",
+      "model",
+      "model_digest",
+      "prompt_sha256",
+      "parameters",
+      "item_count",
+      "completed_at",
+      "status"
+    ],
+    "reviewer_role": "H2",
+    "item_count": 381,
+    "status": "complete",
+    "prompt_sha256_must_equal_this_protocol": true
+  }
+}

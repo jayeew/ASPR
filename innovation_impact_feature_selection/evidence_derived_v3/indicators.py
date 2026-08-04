@@ -28,6 +28,8 @@ from common import (
     write_json,
 )
 from database import (
+    assisted_review_file,
+    assert_registered_review_attestation,
     invalidate_stages,
     log_event,
     require_complete,
@@ -40,6 +42,12 @@ from screening import included_record_keys
 
 RULES_PATH = ROOT / "screening_rules_v3.json"
 SATURATION_PROTOCOL_PATH = ROOT / "saturation_protocol_v3.json"
+TERMINAL_FORMAL_COHORT_AMENDMENT_PATH = (
+    ROOT / "protocol_amendment_round12_terminal_formal_cohort_v3.json"
+)
+FORMULA_OPERATIONALIZATION_AMENDMENT_PATH = (
+    ROOT / "protocol_amendment_formula_operationalization_separation_v3.json"
+)
 OUTPUT_DIR = ROOT / "outputs"
 INDICATOR_DISPOSITIONS = {
     "extracted",
@@ -168,6 +176,31 @@ DIMENSION_H2_FIELDS = (
         )
     ),
 )
+DIMENSION_PROTECTED_FIELDS = (
+    "feature_id",
+    "canonical_name_en",
+    "coder_role",
+    "formula",
+    "required_data",
+    "maximum_information_time_evidence",
+    "scope_role_evidence",
+    "research_groups_evidence",
+    "mention_ids_evidence",
+)
+DIMENSION_COMPARISON_FIELDS = tuple(
+    f"{role}_{field}"
+    for role in ("ai", "h1")
+    for field in (
+        "dimension_label",
+        "dimension_definition",
+        "construct_role",
+        "information_source",
+        "t0_boundary",
+        "bias_risk",
+        "decision",
+        "reason",
+    )
+)
 DATA_AUDIT_FIELDS = (
     "feature_id",
     "canonical_name_en",
@@ -183,6 +216,57 @@ DATA_AUDIT_FIELDS = (
     "audit_status",
     "reviewer",
     "notes",
+)
+OPERATIONALIZATION_FIELDS = (
+    "feature_id",
+    "canonical_name_en",
+    "reviewer_role",
+    "formula_mention_id",
+    "source_role",
+    "literature_formula_location",
+    "literature_evidence_span",
+    "literature_formula",
+    "literature_units",
+    "literature_parameters",
+    "literature_direction",
+    "source_reported_missing_rule",
+    "literature_required_data",
+    "literature_maximum_information_time",
+    "fulltext_source_url",
+    "fulltext_sha256",
+    "protocol_missing_rule",
+    "denominator_zero_rule",
+    "observed_empty_set_rule",
+    "incomplete_coverage_rule",
+    "transform_and_unit_rule",
+    "input_columns_json",
+    "implementation_path",
+    "implementation_sha256",
+    "test_artifact_path",
+    "test_artifact_sha256",
+    "input_snapshot_path",
+    "input_snapshot_sha256",
+    "decision",
+    "reason",
+)
+OPERATIONALIZATION_H2_FIELDS = (
+    *OPERATIONALIZATION_FIELDS,
+    "ai_payload_json",
+    "h1_payload_json",
+)
+OPERATIONALIZATION_PAYLOAD_FIELDS = (
+    "protocol_missing_rule",
+    "denominator_zero_rule",
+    "observed_empty_set_rule",
+    "incomplete_coverage_rule",
+    "transform_and_unit_rule",
+    "input_columns_json",
+    "implementation_path",
+    "implementation_sha256",
+    "test_artifact_path",
+    "test_artifact_sha256",
+    "input_snapshot_path",
+    "input_snapshot_sha256",
 )
 _FULLTEXT_TEXT_CACHE: Dict[tuple[str, str], str] = {}
 
@@ -925,7 +1009,8 @@ def _store_source_review(
         raise ValueError(f"Invalid indicator source reviewer: {reviewer_role}")
     h1 = connection.execute(
         """
-        SELECT 1 FROM indicator_source_reviews
+        SELECT disposition, english_fulltext_status, notes
+        FROM indicator_source_reviews
         WHERE record_key = ? AND reviewer_role = 'H1'
         """,
         (record_key,),
@@ -943,6 +1028,22 @@ def _store_source_review(
             f"review: {record_key}"
         )
     if reviewer_role == "H1" and h2 is not None:
+        repeated_payload = (
+            disposition,
+            fulltext_status,
+            notes,
+        )
+        frozen_payload = (
+            str(h1["disposition"]) if h1 is not None else "",
+            (
+                str(h1["english_fulltext_status"])
+                if h1 is not None
+                else ""
+            ),
+            str(h1["notes"]) if h1 is not None else "",
+        )
+        if repeated_payload == frozen_payload:
+            return
         raise ValueError(
             "H1 source review is frozen after H2 adjudication; create a "
             f"new correction record instead of overwriting it: {record_key}"
@@ -1188,19 +1289,43 @@ def import_indicators(
             record_key,
         )
         identity = f"{record_key}/{canonical_name}"
-        research_group = _required_text(
-            row,
-            "research_group",
-            identity,
+        research_group = str(row.get("research_group") or "").strip()
+        research_group_id_raw = str(
+            row.get("research_group_id") or ""
+        ).strip()
+        research_group_evidence = str(
+            row.get("research_group_evidence") or ""
+        ).strip()
+        group_fields_present = tuple(
+            bool(value)
+            for value in (
+                research_group,
+                research_group_id_raw,
+                research_group_evidence,
+            )
         )
-        research_group_id = normalize_term(
-            _required_text(row, "research_group_id", identity)
+        english_fulltext_claimed = parse_bool(
+            row.get("english_fulltext_verified"),
+            "english_fulltext_verified",
         )
-        research_group_evidence = _required_text(
-            row,
-            "research_group_evidence",
-            identity,
-        )
+        if any(group_fields_present) and not all(group_fields_present):
+            raise ValueError(
+                "Research-group name, ID, and evidence must be supplied "
+                f"together: {identity}"
+            )
+        if not any(group_fields_present):
+            if english_fulltext_claimed:
+                raise ValueError(
+                    "Verified full-text evidence requires a research group: "
+                    f"{identity}"
+                )
+            research_group = "Unknown (unverified English full text)"
+            research_group_id_raw = f"unverified_source_{record_key}"
+            research_group_evidence = (
+                "Not established because verified English full text was "
+                "unavailable."
+            )
+        research_group_id = normalize_term(research_group_id_raw)
         if not research_group_id:
             raise ValueError(f"Invalid research_group_id: {identity}")
         source_role = _required_text(row, "source_role", identity).casefold()
@@ -1626,7 +1751,13 @@ def import_indicators(
     family_count = build_indicator_families(connection)
     invalidate_stages(
         connection,
-        ("dimensions_derived", "features_selected", "audit_complete"),
+        (
+            "data_correspondence_reviewed",
+            "operationalizations_reviewed",
+            "dimensions_derived",
+            "features_selected",
+            "audit_complete",
+        ),
         "indicator evidence changed",
     )
     source_review_roles: Dict[str, set[str]] = defaultdict(set)
@@ -1762,19 +1893,77 @@ def _evidence_rank(value: str) -> int:
 def _representative_mention(
     rows: Sequence[sqlite3.Row],
 ) -> sqlite3.Row:
-    return sorted(
-        rows,
-        key=lambda row: (
-            int(row["selection_priority"]),
-            -int(row["english_fulltext_verified"]),
-            -int(row["formula_reproducible"]),
-            -int(row["h2_approved"]),
-            -_evidence_rank(str(row["evidence_strength"])),
-            -float(row["stability_score"]),
-            str(row["source_id"]),
-            str(row["mention_id"]),
-        ),
-    )[0]
+    return sorted(rows, key=_mention_rank)[0]
+
+
+def _mention_rank(row: Mapping[str, Any]) -> tuple[Any, ...]:
+    """Rank equivalent source mentions by frozen evidence strength."""
+    return (
+        int(row["selection_priority"]),
+        -int(row["english_fulltext_verified"]),
+        -int(row["formula_reproducible"]),
+        -int(row["h2_approved"]),
+        -_evidence_rank(str(row["evidence_strength"])),
+        -float(row["stability_score"]),
+        str(row["source_id"]),
+        str(row["mention_id"]),
+    )
+
+
+def _is_reported_formula_value(value: Any) -> bool:
+    """Reject explicit extraction placeholders as formula evidence."""
+    normalized = normalize_term(str(value or ""))
+    return normalized not in {
+        "",
+        "not reported",
+        "not available without verified full text",
+        "not explicitly reported for this mention in the verified evidence",
+        "direction not explicitly reported in the extracted evidence",
+    }
+
+
+def _literature_formula_complete_except_missing_rule(
+    row: Mapping[str, Any],
+) -> bool:
+    """Check the source-evidence layer without inventing a missing rule."""
+    try:
+        required_data = json.loads(str(row["required_data_json"]))
+    except (json.JSONDecodeError, TypeError):
+        return False
+    return bool(
+        row["english_fulltext_verified"]
+        and row["h2_approved"]
+        and row["article_level"]
+        and row["primary_or_foundational_evidence"]
+        and row["t0_computable"]
+        and not row["requires_future"]
+        and str(row["source_role"])
+        in {
+            "original_definition",
+            "original_application",
+            "mathematical_foundation",
+        }
+        and str(row["scope_role"])
+        in {
+            "direct_innovation",
+            "t0_substantive",
+            "t0_opportunity",
+            "context_control",
+        }
+        and _is_reported_formula_value(row["formula_location"])
+        and _is_reported_formula_value(row["evidence_span"])
+        and _is_reported_formula_value(row["formula"])
+        and _is_reported_formula_value(row["units"])
+        and _is_reported_formula_value(row["parameters"])
+        and _is_reported_formula_value(row["direction"])
+        and isinstance(required_data, list)
+        and any(str(value).strip() for value in required_data)
+        and str(row["maximum_information_time"]).strip().casefold() == "t0"
+        and str(row["fulltext_source_url"]).strip()
+        and str(row["fulltext_local_path"]).strip()
+        and str(row["fulltext_sha256"]).strip()
+        and str(row["fulltext_license"]).strip()
+    )
 
 
 def build_indicator_families(connection: sqlite3.Connection) -> int:
@@ -1799,6 +1988,8 @@ def build_indicator_families(connection: sqlite3.Connection) -> int:
     connection.execute("DELETE FROM feature_decisions")
     connection.execute("DELETE FROM dimension_decisions")
     connection.execute("DELETE FROM feature_data_audit")
+    connection.execute("DELETE FROM feature_data_correspondence_reviews")
+    connection.execute("DELETE FROM feature_operationalization_reviews")
     connection.execute("DELETE FROM indicator_families")
     for index, key in enumerate(sorted(grouped), start=1):
         rows = grouped[key]
@@ -1819,21 +2010,20 @@ def build_indicator_families(connection: sqlite3.Connection) -> int:
                 and str(row["research_group_evidence"]).strip()
             }
         )
-        formula_evidence = [
+        literature_formula_evidence = [
             row
             for row in rows
+            if _literature_formula_complete_except_missing_rule(row)
+        ]
+        formula_evidence = [
+            row
+            for row in literature_formula_evidence
             if row["formula_reproducible"]
-            and row["english_fulltext_verified"]
-            and row["h2_approved"]
-            and str(row["formula"]).strip()
-            and str(row["fulltext_source_url"]).strip()
-            and str(row["fulltext_local_path"]).strip()
-            and str(row["fulltext_sha256"]).strip()
-            and str(row["fulltext_license"]).strip()
+            and _is_reported_formula_value(row["missing_rule"])
         ]
         formula_representative = (
-            _representative_mention(formula_evidence)
-            if formula_evidence
+            _representative_mention(literature_formula_evidence)
+            if literature_formula_evidence
             else representative
         )
         primary_evidence = any(
@@ -1883,8 +2073,8 @@ def build_indicator_families(connection: sqlite3.Connection) -> int:
                 int(any(row["uses_outcome_for_selection"] for row in rows)),
                 formula_representative["quality_audit_status"],
                 int(formula_representative["nonconstant"]),
-                int(bool(formula_evidence)),
-                int(bool(formula_evidence)),
+                int(bool(literature_formula_evidence)),
+                int(bool(literature_formula_evidence)),
                 max(
                     (str(row["evidence_strength"]) for row in rows),
                     key=_evidence_rank,
@@ -2142,6 +2332,481 @@ def import_feature_data_audit(
     return imported
 
 
+def _eligible_formula_mentions(
+    connection: sqlite3.Connection,
+    feature_id: str,
+) -> List[sqlite3.Row]:
+    """Return H2-approved source-formula mentions eligible for layer two."""
+    family = connection.execute(
+        """
+        SELECT mention_ids_json FROM indicator_families
+        WHERE feature_id = ?
+        """,
+        (feature_id,),
+    ).fetchone()
+    if family is None:
+        return []
+    mention_ids = json.loads(str(family["mention_ids_json"]))
+    if not mention_ids:
+        return []
+    placeholders = ",".join("?" for _ in mention_ids)
+    rows = connection.execute(
+        f"""
+        SELECT * FROM indicator_mentions
+        WHERE mention_id IN ({placeholders})
+          AND status != 'excluded'
+        ORDER BY selection_priority, source_id, mention_id
+        """,
+        tuple(mention_ids),
+    ).fetchall()
+    eligible = [
+        row
+        for row in rows
+        if _literature_formula_complete_except_missing_rule(row)
+    ]
+    return sorted(eligible, key=_mention_rank)
+
+
+def _operationalization_evidence(
+    family: sqlite3.Row,
+    mention: sqlite3.Row,
+    reviewer_role: str,
+) -> Dict[str, Any]:
+    """Build a protected source-evidence row for operationalization review."""
+    return {
+        "feature_id": family["feature_id"],
+        "canonical_name_en": family["canonical_name_en"],
+        "reviewer_role": reviewer_role,
+        "formula_mention_id": mention["mention_id"],
+        "source_role": mention["source_role"],
+        "literature_formula_location": mention["formula_location"],
+        "literature_evidence_span": mention["evidence_span"],
+        "literature_formula": mention["formula"],
+        "literature_units": mention["units"],
+        "literature_parameters": mention["parameters"],
+        "literature_direction": mention["direction"],
+        "source_reported_missing_rule": mention["missing_rule"],
+        "literature_required_data": mention["required_data_json"],
+        "literature_maximum_information_time": mention[
+            "maximum_information_time"
+        ],
+        "fulltext_source_url": mention["fulltext_source_url"],
+        "fulltext_sha256": mention["fulltext_sha256"],
+        **{field: "" for field in OPERATIONALIZATION_PAYLOAD_FIELDS},
+        "decision": "",
+        "reason": "",
+    }
+
+
+def export_feature_operationalization(
+    connection: sqlite3.Connection,
+    output_path: Path,
+    reviewer_role: str,
+) -> int:
+    """Export independent formula-to-data operationalization review rows."""
+    require_complete(connection, ["indicators_extracted"])
+    role = reviewer_role.strip().upper()
+    if role not in {"AI", "H1", "H2"}:
+        raise ValueError("Operationalization reviewer must be AI, H1, or H2")
+    rows: List[Dict[str, Any]] = []
+    for family in connection.execute(
+        """
+        SELECT * FROM indicator_families
+        WHERE status = 'candidate'
+        ORDER BY feature_id
+        """
+    ):
+        mentions = _eligible_formula_mentions(
+            connection,
+            str(family["feature_id"]),
+        )
+        if not mentions:
+            continue
+        row = _operationalization_evidence(family, mentions[0], role)
+        if role == "H2":
+            reviews = {
+                str(review["reviewer_role"]): review
+                for review in connection.execute(
+                    """
+                    SELECT * FROM feature_operationalization_reviews
+                    WHERE feature_id = ?
+                      AND reviewer_role IN ('AI', 'H1')
+                    """,
+                    (family["feature_id"],),
+                )
+            }
+            if not {"AI", "H1"}.issubset(reviews):
+                raise RuntimeError(
+                    "H2 operationalization export requires independent AI "
+                    f"and H1 reviews: {family['feature_id']}"
+                )
+            row["ai_payload_json"] = reviews["AI"]["payload_json"]
+            row["h1_payload_json"] = reviews["H1"]["payload_json"]
+        rows.append(row)
+    write_csv(
+        output_path,
+        rows,
+        (
+            OPERATIONALIZATION_H2_FIELDS
+            if role == "H2"
+            else OPERATIONALIZATION_FIELDS
+        ),
+    )
+    return len(rows)
+
+
+def _json_string_list(value: Any, field: str, feature_id: str) -> List[str]:
+    """Parse a nonempty JSON list of strings."""
+    try:
+        parsed = json.loads(str(value or ""))
+    except json.JSONDecodeError as error:
+        raise ValueError(
+            f"{field} must be valid JSON for {feature_id}"
+        ) from error
+    if not isinstance(parsed, list):
+        raise ValueError(f"{field} must be a JSON array for {feature_id}")
+    values = sorted(
+        {str(item).strip() for item in parsed if str(item).strip()}
+    )
+    if not values:
+        raise ValueError(f"{field} must not be empty for {feature_id}")
+    return values
+
+
+def _verify_operationalization_file(
+    row: Mapping[str, Any],
+    feature_id: str,
+    path_field: str,
+    hash_field: str,
+) -> tuple[str, str]:
+    """Verify one implementation, test, or input artifact without mutation."""
+    path = Path(_required_text(row, path_field, feature_id)).resolve()
+    if not path.is_file():
+        raise FileNotFoundError(f"{path_field} is missing: {path}")
+    digest = sha256_file(path)
+    claimed = _required_text(row, hash_field, feature_id).casefold()
+    if claimed != digest:
+        raise ValueError(f"{hash_field} mismatch for {feature_id}")
+    return str(path), digest
+
+
+def _operationalization_payload(
+    row: Mapping[str, Any],
+    feature_id: str,
+    require_complete_payload: bool,
+) -> Dict[str, Any]:
+    """Validate and normalize one project operationalization payload."""
+    payload = {
+        field: str(row.get(field) or "").strip()
+        for field in OPERATIONALIZATION_PAYLOAD_FIELDS
+    }
+    if not require_complete_payload:
+        return payload
+    for field in (
+        "protocol_missing_rule",
+        "denominator_zero_rule",
+        "observed_empty_set_rule",
+        "incomplete_coverage_rule",
+        "transform_and_unit_rule",
+    ):
+        value = payload[field]
+        if not _is_reported_formula_value(value):
+            raise ValueError(
+                f"Approved operationalization requires {field}: "
+                f"{feature_id}"
+            )
+    payload["input_columns_json"] = json.dumps(
+        _json_string_list(
+            payload["input_columns_json"],
+            "input_columns_json",
+            feature_id,
+        ),
+        ensure_ascii=False,
+    )
+    for path_field, hash_field in (
+        ("implementation_path", "implementation_sha256"),
+        ("test_artifact_path", "test_artifact_sha256"),
+        ("input_snapshot_path", "input_snapshot_sha256"),
+    ):
+        path, digest = _verify_operationalization_file(
+            payload,
+            feature_id,
+            path_field,
+            hash_field,
+        )
+        payload[path_field] = path
+        payload[hash_field] = digest
+    return payload
+
+
+def _assert_operationalization_evidence(
+    row: Mapping[str, Any],
+    family: sqlite3.Row,
+    mention: sqlite3.Row,
+) -> None:
+    """Ensure reviewers cannot silently rewrite the literature layer."""
+    expected = _operationalization_evidence(
+        family,
+        mention,
+        str(row.get("reviewer_role") or ""),
+    )
+    protected = (
+        "feature_id",
+        "canonical_name_en",
+        "formula_mention_id",
+        "source_role",
+        "literature_formula_location",
+        "literature_evidence_span",
+        "literature_formula",
+        "literature_units",
+        "literature_parameters",
+        "literature_direction",
+        "source_reported_missing_rule",
+        "literature_required_data",
+        "literature_maximum_information_time",
+        "fulltext_source_url",
+        "fulltext_sha256",
+    )
+    for field in protected:
+        if str(row.get(field) or "") != str(expected[field] or ""):
+            raise ValueError(
+                "Operationalization review changed protected literature "
+                f"evidence {field}: {family['feature_id']}"
+            )
+
+
+def import_feature_operationalization(
+    connection: sqlite3.Connection,
+    input_path: Path,
+) -> Dict[str, Any]:
+    """Import independent AI/H1 reviews or the final H2 adjudication."""
+    require_complete(connection, ["indicators_extracted"])
+    review_rows = list(iter_csv(input_path))
+    assisted_roles = {
+        str(row.get("reviewer_role") or "").strip().upper()
+        for row in review_rows
+        if str(row.get("reviewer_role") or "").strip()
+    }
+    if len(assisted_roles) != 1:
+        raise ValueError(
+            "One operationalization import must declare exactly one "
+            "reviewer role"
+        )
+    reviewer_role = next(iter(assisted_roles))
+    if assisted_review_file(input_path):
+        assert_registered_review_attestation(
+            connection,
+            input_path,
+            reviewer_role,
+        )
+    _require_registered_formal_review(
+        connection,
+        input_path,
+        reviewer_role,
+    )
+    snapshot_path = snapshot_import_file(
+        connection,
+        input_path,
+        "feature_operationalization",
+    )
+    rows = iter_csv(snapshot_path)
+    imported = 0
+    submission_role = ""
+    approved = 0
+    for row in rows:
+        feature_id = str(row.get("feature_id") or "").strip()
+        decision = str(row.get("decision") or "").strip().casefold()
+        if not feature_id or not decision:
+            continue
+        role = str(row.get("reviewer_role") or "").strip().upper()
+        if role not in {"AI", "H1", "H2"}:
+            raise ValueError(f"Invalid operationalization reviewer: {role}")
+        if submission_role and role != submission_role:
+            raise ValueError(
+                "One operationalization import cannot mix reviewer roles"
+            )
+        submission_role = role
+        if role == "H1" and any(
+            str(field).casefold().startswith(("ai_", "h2_"))
+            for field in row
+        ):
+            raise ValueError(
+                "Blind H1 operationalization import refuses comparison "
+                "columns"
+            )
+        if decision not in {"approve", "exclude"}:
+            raise ValueError(
+                f"Invalid operationalization decision: {decision}"
+            )
+        family = connection.execute(
+            "SELECT * FROM indicator_families WHERE feature_id = ?",
+            (feature_id,),
+        ).fetchone()
+        if family is None:
+            raise ValueError(
+                f"Unknown operationalization feature: {feature_id}"
+            )
+        eligible = {
+            str(mention["mention_id"]): mention
+            for mention in _eligible_formula_mentions(
+                connection,
+                feature_id,
+            )
+        }
+        mention_id = str(row.get("formula_mention_id") or "").strip()
+        mention = eligible.get(mention_id)
+        if mention is None:
+            raise ValueError(
+                "Operationalization lacks an eligible H2-approved "
+                f"literature formula mention: {feature_id}/{mention_id}"
+            )
+        _assert_operationalization_evidence(row, family, mention)
+        prior_roles = {
+            str(value[0])
+            for value in connection.execute(
+                """
+                SELECT reviewer_role
+                FROM feature_operationalization_reviews
+                WHERE feature_id = ?
+                """,
+                (feature_id,),
+            )
+        }
+        if role == "H2" and not {"AI", "H1"}.issubset(prior_roles):
+            raise ValueError(
+                "H2 operationalization requires earlier independent AI "
+                f"and H1 reviews: {feature_id}"
+            )
+        if role in {"AI", "H1"} and "H2" in prior_roles:
+            raise ValueError(
+                f"{role} operationalization is frozen after H2: "
+                f"{feature_id}"
+            )
+        reason = _required_text(row, "reason", feature_id)
+        payload = _operationalization_payload(
+            row,
+            feature_id,
+            decision == "approve",
+        )
+        payload.update(
+            {
+                "canonical_name_en": family["canonical_name_en"],
+                "formula_mention_id": mention_id,
+                "decision": decision,
+                "reason": reason,
+            }
+        )
+        if role == "H2" and decision == "approve":
+            for path_field, hash_field, source_role in (
+                (
+                    "implementation_path",
+                    "implementation_sha256",
+                    "feature_operationalization_implementation",
+                ),
+                (
+                    "test_artifact_path",
+                    "test_artifact_sha256",
+                    "feature_operationalization_test",
+                ),
+                (
+                    "input_snapshot_path",
+                    "input_snapshot_sha256",
+                    "feature_operationalization_input",
+                ),
+            ):
+                connection.execute(
+                    """
+                    INSERT INTO source_snapshots(
+                        source_id, path, sha256, role, imported_at
+                    ) VALUES (?, ?, ?, ?, ?)
+                    ON CONFLICT(source_id) DO UPDATE SET
+                        path = excluded.path,
+                        sha256 = excluded.sha256,
+                        role = excluded.role,
+                        imported_at = excluded.imported_at
+                    """,
+                    (
+                        f"{source_role}_{feature_id}",
+                        payload[path_field],
+                        payload[hash_field],
+                        source_role,
+                        utc_now(),
+                    ),
+                )
+            approved += 1
+        connection.execute(
+            """
+            INSERT INTO feature_operationalization_reviews(
+                feature_id, reviewer_role, decision,
+                formula_mention_id, payload_json, reason, reviewed_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(feature_id, reviewer_role) DO UPDATE SET
+                decision = excluded.decision,
+                formula_mention_id = excluded.formula_mention_id,
+                payload_json = excluded.payload_json,
+                reason = excluded.reason,
+                reviewed_at = excluded.reviewed_at
+            """,
+            (
+                feature_id,
+                role,
+                decision,
+                mention_id,
+                json.dumps(payload, ensure_ascii=False, sort_keys=True),
+                reason,
+                utc_now(),
+            ),
+        )
+        imported += 1
+    eligible_ids = {
+        str(family["feature_id"])
+        for family in connection.execute(
+            "SELECT feature_id FROM indicator_families"
+        )
+        if _eligible_formula_mentions(
+            connection,
+            str(family["feature_id"]),
+        )
+    }
+    reviewed_by_role = {
+        str(row["feature_id"])
+        for row in connection.execute(
+            """
+            SELECT feature_id FROM feature_operationalization_reviews
+            WHERE reviewer_role = ?
+            """,
+            (submission_role,),
+        )
+    }
+    missing = sorted(eligible_ids - reviewed_by_role)
+    if submission_role == "H2":
+        set_stage(
+            connection,
+            "operationalizations_reviewed",
+            "complete" if not missing else "ready",
+            {
+                "eligible_literature_formula_families": len(eligible_ids),
+                "h2_reviewed": len(reviewed_by_role & eligible_ids),
+                "h2_approved": approved,
+                "missing_h2_reviews": missing,
+            },
+        )
+    if imported:
+        invalidate_stages(
+            connection,
+            ("features_selected", "audit_complete"),
+            "feature operationalization review changed",
+        )
+    connection.commit()
+    return {
+        "reviewer_role": submission_role,
+        "imported": imported,
+        "approved": approved,
+        "eligible_literature_formula_families": len(eligible_ids),
+        "missing_reviews": missing,
+    }
+
+
 def export_dimension_coding(
     connection: sqlite3.Connection,
     output_path: Path,
@@ -2161,62 +2826,11 @@ def export_dimension_coding(
         """
         SELECT *
         FROM indicator_families
-        WHERE status = 'candidate'
         ORDER BY feature_id
         """
     ):
         for role in roles:
-            row = {
-                "feature_id": family["feature_id"],
-                "canonical_name_en": family["canonical_name_en"],
-                "coder_role": role,
-                "dimension_label": "",
-                "dimension_definition": "",
-                "construct_role": "",
-                "information_source": "",
-                "t0_boundary": "",
-                "bias_risk": "",
-                "decision": "",
-                "reason": "",
-                "formula": family["formula"],
-                "required_data": family["required_data_json"],
-                "maximum_information_time_evidence": family[
-                    "maximum_information_time"
-                ],
-                "scope_role_evidence": family["scope_role"],
-                "research_groups_evidence": family[
-                    "research_groups_json"
-                ],
-                "mention_ids_evidence": family["mention_ids_json"],
-            }
-            if role == "H2":
-                codes = {
-                    str(item["coder_role"]): item
-                    for item in connection.execute(
-                        """
-                        SELECT * FROM dimension_coding
-                        WHERE feature_id = ?
-                          AND coder_role IN ('AI', 'H1')
-                        """,
-                        (family["feature_id"],),
-                    )
-                }
-                for source_role in ("AI", "H1"):
-                    code = codes.get(source_role)
-                    for field in (
-                        "dimension_label",
-                        "dimension_definition",
-                        "construct_role",
-                        "information_source",
-                        "t0_boundary",
-                        "bias_risk",
-                        "decision",
-                        "reason",
-                    ):
-                        row[f"{source_role.casefold()}_{field}"] = (
-                            code[field] if code is not None else ""
-                        )
-            rows.append(row)
+            rows.append(_dimension_evidence_row(connection, family, role))
     write_csv(
         output_path,
         rows,
@@ -2227,11 +2841,145 @@ def export_dimension_coding(
     return len(rows)
 
 
+def _dimension_evidence_row(
+    connection: sqlite3.Connection,
+    family: sqlite3.Row,
+    role: str,
+) -> Dict[str, Any]:
+    row = {
+        "feature_id": family["feature_id"],
+        "canonical_name_en": family["canonical_name_en"],
+        "coder_role": role,
+        "dimension_label": "",
+        "dimension_definition": "",
+        "construct_role": "",
+        "information_source": "",
+        "t0_boundary": "",
+        "bias_risk": "",
+        "decision": "",
+        "reason": "",
+        "formula": family["formula"],
+        "required_data": family["required_data_json"],
+        "maximum_information_time_evidence": family[
+            "maximum_information_time"
+        ],
+        "scope_role_evidence": family["scope_role"],
+        "research_groups_evidence": family["research_groups_json"],
+        "mention_ids_evidence": family["mention_ids_json"],
+    }
+    if role != "H2":
+        return row
+    codes = {
+        str(item["coder_role"]): item
+        for item in connection.execute(
+            """
+            SELECT * FROM dimension_coding
+            WHERE feature_id = ? AND coder_role IN ('AI', 'H1')
+            """,
+            (family["feature_id"],),
+        )
+    }
+    for source_role in ("AI", "H1"):
+        code = codes.get(source_role)
+        for field in (
+            "dimension_label",
+            "dimension_definition",
+            "construct_role",
+            "information_source",
+            "t0_boundary",
+            "bias_risk",
+            "decision",
+            "reason",
+        ):
+            row[f"{source_role.casefold()}_{field}"] = (
+                code[field] if code is not None else ""
+            )
+    return row
+
+
+def _assert_dimension_evidence(
+    connection: sqlite3.Connection,
+    row: Mapping[str, Any],
+    family: sqlite3.Row,
+    role: str,
+) -> None:
+    expected = _dimension_evidence_row(connection, family, role)
+    protected = (
+        *DIMENSION_PROTECTED_FIELDS,
+        *(DIMENSION_COMPARISON_FIELDS if role == "H2" else ()),
+    )
+    for field in protected:
+        if field not in row:
+            continue
+        if str(row.get(field) or "") != str(expected.get(field) or ""):
+            raise ValueError(
+                "Dimension coding changed protected evidence "
+                f"{field}: {family['feature_id']}/{role}"
+            )
+
+
+def _require_registered_formal_review(
+    connection: sqlite3.Connection,
+    input_path: Path,
+    reviewer_role: str,
+) -> None:
+    """Block unregistered AI/human review files in the frozen workflow."""
+    formal_mode = connection.execute(
+        """
+        SELECT 1 FROM source_snapshots
+        WHERE source_id = 'protocol_amendment_independent_ai_review_v3'
+        """
+    ).fetchone()
+    if formal_mode is None:
+        return
+    digest = sha256_file(input_path)
+    registered = connection.execute(
+        """
+        SELECT 1 FROM human_review_attestations
+        WHERE artifact_sha256 = ? AND reviewer_role = ?
+          AND status = 'accepted'
+        UNION ALL
+        SELECT 1 FROM independent_ai_review_runs
+        WHERE artifact_sha256 = ? AND reviewer_role = ?
+          AND status = 'complete'
+        LIMIT 1
+        """,
+        (digest, reviewer_role, digest, reviewer_role),
+    ).fetchone()
+    if registered is None:
+        raise RuntimeError(
+            "Frozen formal review requires an exact registered artifact "
+            f"for role {reviewer_role}: {input_path}"
+        )
+
+
 def import_dimension_coding(
     connection: sqlite3.Connection,
     input_path: Path,
 ) -> int:
     """Import AI/H1 construct coding and H2 dimension adjudication."""
+    review_rows = list(iter_csv(input_path))
+    assisted_roles = {
+        str(row.get("coder_role") or "").strip().upper()
+        for row in review_rows
+        if str(row.get("coder_role") or "").strip()
+    }
+    if len(assisted_roles) != 1:
+        raise ValueError(
+            "One dimension import must declare exactly one coder role"
+        )
+    reviewer_role = next(iter(assisted_roles))
+    if assisted_review_file(input_path):
+        assert_registered_review_attestation(
+            connection,
+            input_path,
+            reviewer_role,
+        )
+    _require_registered_formal_review(
+        connection,
+        input_path,
+        reviewer_role,
+    )
     snapshot_path = snapshot_import_file(
         connection,
         input_path,
@@ -2262,12 +3010,13 @@ def import_dimension_coding(
             )
         if decision not in {"include", "exclude"}:
             raise ValueError(f"Invalid dimension decision: {decision}")
-        exists = connection.execute(
-            "SELECT 1 FROM indicator_families WHERE feature_id = ?",
+        family = connection.execute(
+            "SELECT * FROM indicator_families WHERE feature_id = ?",
             (feature_id,),
         ).fetchone()
-        if exists is None:
+        if family is None:
             raise ValueError(f"Unknown feature family: {feature_id}")
+        _assert_dimension_evidence(connection, row, family, role)
         existing_roles = {
             str(value[0])
             for value in connection.execute(
@@ -2403,6 +3152,26 @@ def _require_formal_indicator_saturation(
     ).fetchone()[0]
     if not formal_pools:
         return
+    terminal_amendment = connection.execute(
+        """
+        SELECT 1 FROM source_snapshots
+        WHERE source_id =
+              'protocol_amendment_round12_terminal_formal_cohort_v3'
+          AND sha256 = ?
+        """,
+        (sha256_file(TERMINAL_FORMAL_COHORT_AMENDMENT_PATH),),
+    ).fetchone()
+    terminal_round = connection.execute(
+        """
+        SELECT 1 FROM discovery_review_rounds
+        WHERE iteration = 12
+          AND decision = 'freeze'
+          AND fully_reviewed = 1
+          AND stop_basis = 'retrospective_owner_pragmatic_stop'
+        """
+    ).fetchone()
+    if terminal_amendment is not None and terminal_round is not None:
+        return
     required = int(
         read_json(SATURATION_PROTOCOL_PATH)["sequential_review"][
             "minimum_consecutive_zero_novelty_rounds"
@@ -2430,7 +3199,8 @@ def _require_formal_indicator_saturation(
     if row is None:
         raise RuntimeError(
             "Candidate dimensions require an H2-approved formal "
-            "indicator-discovery saturation freeze"
+            "indicator-discovery saturation freeze or the registered "
+            "round-12 terminal fixed-cohort amendment"
         )
 
 
@@ -2443,7 +3213,6 @@ def derive_dimensions(
     families = connection.execute(
         """
         SELECT * FROM indicator_families
-        WHERE status = 'candidate'
         ORDER BY feature_id
         """
     ).fetchall()
@@ -2453,6 +3222,17 @@ def derive_dimensions(
     missing: List[str] = []
     left: List[str] = []
     right: List[str] = []
+    field_values: Dict[str, tuple[List[str], List[str]]] = {
+        field: ([], [])
+        for field in (
+            "decision",
+            "dimension_label",
+            "construct_role",
+            "information_source",
+            "t0_boundary",
+            "bias_risk",
+        )
+    }
     for family in families:
         codes = {
             str(row["coder_role"]): row
@@ -2466,6 +3246,13 @@ def derive_dimensions(
             continue
         left.append(_dimension_signature(codes["AI"]))
         right.append(_dimension_signature(codes["H1"]))
+        for field, (ai_values, h1_values) in field_values.items():
+            ai_values.append(
+                normalize_term(str(codes["AI"][field]))
+            )
+            h1_values.append(
+                normalize_term(str(codes["H1"][field]))
+            )
         resolved.append((family, codes["H2"]))
     if missing:
         raise RuntimeError(
@@ -2532,6 +3319,19 @@ def derive_dimensions(
         "raw_agreement": raw_agreement(left, right),
         "cohen_kappa": cohen_kappa(left, right),
         "gwet_ac1": gwet_ac1(left, right),
+        "interpretation": (
+            "Strict composite exact match across decision, free-text label, "
+            "definition, role, information source, T0 boundary, and bias "
+            "risk; field-level results are reported separately."
+        ),
+        "field_level": {
+            field: {
+                "raw_agreement": raw_agreement(ai_values, h1_values),
+                "cohen_kappa": cohen_kappa(ai_values, h1_values),
+                "gwet_ac1": gwet_ac1(ai_values, h1_values),
+            }
+            for field, (ai_values, h1_values) in field_values.items()
+        },
     }
     details = {"M": len(grouped), "agreement": agreement}
     set_stage(connection, "dimensions_derived", "complete", details)
@@ -2593,11 +3393,43 @@ def _dimension_role(construct_role: str) -> str:
     }[construct_role]
 
 
+def _formula_operationalization_required(
+    connection: sqlite3.Connection,
+) -> bool:
+    """Activate the composed gate only after its amendment is registered."""
+    row = connection.execute(
+        """
+        SELECT 1 FROM source_snapshots
+        WHERE source_id =
+              'protocol_amendment_formula_operationalization_separation_v3'
+          AND sha256 = ?
+        """,
+        (sha256_file(FORMULA_OPERATIONALIZATION_AMENDMENT_PATH),),
+    ).fetchone()
+    return row is not None
+
+
 def select_indicators(
     connection: sqlite3.Connection,
 ) -> Dict[str, Any]:
     """Apply frozen gates, redundancy rules, then dimension retention."""
     require_complete(connection, ["dimensions_derived"])
+    operationalization_required = _formula_operationalization_required(
+        connection
+    )
+    eligible_formula_family_count = sum(
+        bool(
+            _eligible_formula_mentions(
+                connection,
+                str(family["feature_id"]),
+            )
+        )
+        for family in connection.execute(
+            "SELECT feature_id FROM indicator_families"
+        )
+    )
+    if operationalization_required and eligible_formula_family_count:
+        require_complete(connection, ["operationalizations_reviewed"])
     rules = read_json(RULES_PATH)
     gates = rules["hard_gates"]
     families = connection.execute(
@@ -2610,6 +3442,19 @@ def select_indicators(
     audited_data_statuses: Dict[str, str] = {}
     for family in families:
         family_values = dict(family)
+        if operationalization_required:
+            operationalization = connection.execute(
+                """
+                SELECT decision
+                FROM feature_operationalization_reviews
+                WHERE feature_id = ? AND reviewer_role = 'H2'
+                """,
+                (family["feature_id"],),
+            ).fetchone()
+            family_values["formula_reproducible"] = int(
+                operationalization is not None
+                and operationalization["decision"] == "approve"
+            )
         data_audit = connection.execute(
             """
             SELECT * FROM feature_data_audit WHERE feature_id = ?
@@ -2675,21 +3520,7 @@ def select_indicators(
     for dimension in dimensions:
         members = json.loads(dimension["feature_ids_json"])
         selected_features = sorted(set(members) & winner_ids)
-        groups = sorted(
-            {
-                group
-                for feature_id in selected_features
-                for group in json.loads(
-                    connection.execute(
-                        """
-                        SELECT research_groups_json
-                        FROM indicator_families WHERE feature_id = ?
-                        """,
-                        (feature_id,),
-                    ).fetchone()[0]
-                )
-            }
-        )
+        groups = sorted(set(json.loads(dimension["research_groups_json"])))
         role = _dimension_role(str(dimension["construct_role"]))
         reasons: List[str] = []
         if not selected_features:
@@ -2798,6 +3629,12 @@ def select_indicators(
         },
         "retained_dimensions": dimension_counts,
         "no_quota_applied": True,
+        "formula_operationalization_amendment_active": (
+            operationalization_required
+        ),
+        "eligible_literature_formula_families": (
+            eligible_formula_family_count
+        ),
     }
     set_stage(connection, "features_selected", "complete", summary)
     invalidate_stages(

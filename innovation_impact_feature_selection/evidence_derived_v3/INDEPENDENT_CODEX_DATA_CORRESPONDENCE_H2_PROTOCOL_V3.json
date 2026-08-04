@@ -1,0 +1,30 @@
+{
+  "protocol_id": "independent-codex-data-correspondence-h2-v3",
+  "reviewer_role": "H2",
+  "scope": "Independent adjudication of all AI/H1 family-to-local-input correspondence codes.",
+  "required_inputs": [
+    "H2 worksheet containing protected family evidence and the registered AI/H1 payloads",
+    "local_t0_input_inventory_v3.json",
+    "protocol_amendment_targeted_formula_completion_v3.json"
+  ],
+  "instructions": [
+    "Adjudicate every row; no quota, target count, sampling, or outcome information is allowed.",
+    "Check source IDs and source_id:column entries against the frozen inventory.",
+    "Approve exact_materialized or exact_derivable only when object, statistic, formula/algorithm, unit, aggregation level, T0 boundary, and construct role are identical.",
+    "Use candidate_formula_completion when a plausible exact mapping cannot yet be approved solely because source formula evidence is incomplete; this status authorizes targeted formula verification only.",
+    "Downgrade similarly named mappings with a different graph, node type, statistic, time window, population, or role to construct_mismatch.",
+    "Preserve all negative and uncertain decisions in the audit trail and disclose AI/H1 agreement.",
+    "Do not view targets, model outcomes, final dimensions/features, desired counts, Qwen/Ollama, or any model API."
+  ],
+  "allowed_decisions": [
+    "exact_materialized",
+    "exact_derivable",
+    "candidate_formula_completion",
+    "no_match",
+    "construct_mismatch",
+    "future_only",
+    "insufficient_evidence"
+  ],
+  "target_count_influence": false,
+  "model_outcomes_used": false
+}

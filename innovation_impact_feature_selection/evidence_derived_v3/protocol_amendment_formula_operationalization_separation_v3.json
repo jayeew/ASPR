@@ -1,0 +1,67 @@
+{
+  "amendment_id": "aspr-v3-formula-operationalization-separation-20260730",
+  "status": "frozen_before_h2_indicator_adjudication_completion",
+  "frozen_at": "2026-07-30T07:40:00+00:00",
+  "scope": "Independent evidence-derived v3 indicator evidence and final hard-gate evaluation only.",
+  "does_not_change": [
+    "The frozen K/Q/P search frame or its hashes.",
+    "The round-12 terminal stopping decision or its actual nonzero novelty endpoints.",
+    "Any H1 or H2 source quotation, source-reported formula field, or source disposition.",
+    "The requirement for lawful hashed English primary or foundational full text.",
+    "The requirement for article-level T0 computability, no future information, audited local data, nonconstancy, bias safeguards, and outcome-blind selection.",
+    "The prohibition on a review article authorizing a final formula.",
+    "The absence of a target indicator or dimension count."
+  ],
+  "trigger": {
+    "artifact_path": "outputs/independent_codex_review_v3/formal_terminal_indicator_extraction_H1_REVIEWED_v3.csv",
+    "artifact_sha256": "892dedb21592f91ecde4217f99cb29fa848deeca950f1c9dcd5c6ac0624ce4c8",
+    "observation": "Before H2 adjudication, the blind H1 census contained 27 mentions with a non-placeholder formula or algorithm description. All 27 explicitly recorded that the source did not report a missing-data rule; seven were provisionally T0-computable. Treating a literal 'Not reported' placeholder as a complete formula would be false provenance, while treating source non-reporting alone as a fatal mathematical defect would confound reporting completeness with reproducible project operationalization.",
+    "decision_timing": "This amendment was frozen before H2 produced any final indicator decisions, before candidate dimensions were derived, before local feature audits were imported, and before model outcomes or performance were inspected."
+  },
+  "two_layer_definition": {
+    "layer_1_literature_formula_evidence": {
+      "purpose": "Establish what the indicator is and what the English source actually reports.",
+      "requirements": [
+        "An H2-approved original definition, original application, or mathematical-foundation mention.",
+        "A lawful frozen English full-text file with a verified SHA-256.",
+        "An exact auditable page, table, equation, appendix, or section location and English evidence span.",
+        "A source-supported formula or deterministic algorithm, units or scale, parameters, direction, required inputs, and maximum information time.",
+        "No review-discovery mention may authorize this layer.",
+        "Any source-reported missing-data rule is retained verbatim; an absent rule remains explicitly 'not reported' and is never inferred as a source claim."
+      ]
+    },
+    "layer_2_project_operationalization": {
+      "purpose": "Specify how the verified literature definition is computed reproducibly on the frozen local data without pretending that project choices were reported by the source.",
+      "requirements": [
+        "A deterministic derivation specification linked to one eligible layer-1 mention.",
+        "A project missing-data rule that distinguishes absent input, mathematically undefined values, observed empty sets, structural non-applicability, and valid zero values.",
+        "Explicit denominator-zero, empty-set, incomplete-coverage, parameter, transform, unit, direction, and data-type behavior where applicable.",
+        "Exact frozen input columns and snapshot hashes, implementation path and hash, and deterministic tests for edge cases.",
+        "No imputation from outcomes, no use of model performance, and no feature- or dimension-count target.",
+        "Independent H1 review followed by independent H2 adjudication of every retained operationalization."
+      ]
+    }
+  },
+  "hard_gate_interpretation": {
+    "G04_REPRODUCIBLE_DEFINITION": "Passes only when both layers are complete and H2 approved. An incomplete source formula cannot be rescued by a project operationalization. A source-complete formula with an unreviewed project missing rule also fails.",
+    "G13_ENGLISH_FULLTEXT_FORMULA_EVIDENCE": "Still requires the eligible layer-1 English full-text evidence and cannot be satisfied by local code, a review, metadata, an abstract, or the operationalization layer.",
+    "source_reported_missing_rule": "Stored separately from the project operationalization and may remain 'not reported'.",
+    "protocol_missing_rule": "Stored only in the operationalization record with its rationale, implementation, tests, reviewers, and hashes.",
+    "selection_rule": "The composed gate is applied uniformly to every canonical indicator family before redundancy resolution and without consulting prediction outcomes."
+  },
+  "review_roles": {
+    "primary_ai": "May prepare a source-linked operationalization draft but cannot approve it.",
+    "H1": "Independently reviews the literature-to-implementation correspondence, missing and boundary behavior, frozen inputs, and tests without seeing H2 decisions or model outcomes.",
+    "H2": "Adjudicates every H1 operationalization and may approve, revise, or reject it; approval cannot create missing layer-1 formula evidence."
+  },
+  "audit_outputs": [
+    "A field-level provenance table separating source-reported and project-specified values.",
+    "The H1 and H2 operationalization worksheets and immutable manifests.",
+    "The exact derivation/input/test hashes used by each passing feature.",
+    "A hard-gate report showing the literature layer and operationalization layer separately.",
+    "A protocol-deviation disclosure explaining why this separation was introduced."
+  ],
+  "target_count_influence": false,
+  "model_outcomes_used": false,
+  "future_information_allowed": false
+}

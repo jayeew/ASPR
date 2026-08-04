@@ -6,6 +6,8 @@ import sqlite3
 from pathlib import Path
 from typing import Any, Dict, List, Mapping, Sequence
 
+import pandas as pd
+
 from common import (
     OUTPUT_DIR,
     ROOT,
@@ -21,6 +23,31 @@ from common import (
 )
 from database import set_stage
 from screening import screening_exclusion_counts
+
+
+DISCOVERY_STOP_AMENDMENT_PATH = (
+    ROOT / "protocol_amendment_round12_pragmatic_stop_v3.json"
+)
+ROUND12_EXTERNAL_REPORTING_CLARIFICATION_PATH = (
+    ROOT
+    / "protocol_amendment_round12_external_reporting_clarification_v3.json"
+)
+TERMINAL_FORMAL_COHORT_AMENDMENT_PATH = (
+    ROOT / "protocol_amendment_round12_terminal_formal_cohort_v3.json"
+)
+FORMULA_OPERATIONALIZATION_AMENDMENT_PATH = (
+    ROOT / "protocol_amendment_formula_operationalization_separation_v3.json"
+)
+TARGETED_FORMULA_COMPLETION_AMENDMENT_PATH = (
+    ROOT / "protocol_amendment_targeted_formula_completion_v3.json"
+)
+FINAL_TRAINING_FEATURE_DIR = OUTPUT_DIR / "final_training_features_v3"
+FINAL_TRAINING_MATRIX_PATH = (
+    FINAL_TRAINING_FEATURE_DIR / "final_training_features_v3.parquet"
+)
+FINAL_TRAINING_SCHEMA_PATH = (
+    FINAL_TRAINING_FEATURE_DIR / "final_training_features_schema_v3.json"
+)
 
 
 def _rows(
@@ -169,6 +196,24 @@ def _prisma(connection: sqlite3.Connection) -> Dict[str, Any]:
             """
         ).fetchone()[0]
     )
+    terminal_cohort_links = int(
+        connection.execute(
+            """
+            SELECT COUNT(*) FROM query_hits
+            WHERE provider = 'OpenAlex' AND run_role = 'formal'
+              AND rank BETWEEN 1 AND 10
+            """
+        ).fetchone()[0]
+    )
+    terminal_cohort_unique = int(
+        connection.execute(
+            """
+            SELECT COUNT(DISTINCT record_key) FROM query_hits
+            WHERE provider = 'OpenAlex' AND run_role = 'formal'
+              AND rank BETWEEN 1 AND 10
+            """
+        ).fetchone()[0]
+    )
     citation_unique = int(
         connection.execute(
             """
@@ -193,6 +238,15 @@ def _prisma(connection: sqlite3.Connection) -> Dict[str, Any]:
     return {
         "openalex_formal_query_record_links": query_links,
         "openalex_unique_formal_query_records": query_unique,
+        "fixed_formal_cohort_query_record_links": (
+            terminal_cohort_links
+        ),
+        "fixed_formal_cohort_unique_records": terminal_cohort_unique,
+        "total_unique_records_in_screening_scope": int(
+            connection.execute(
+                "SELECT COUNT(*) FROM formal_review_records"
+            ).fetchone()[0]
+        ),
         "duplicate_query_links_removed": query_links - query_unique,
         "unique_citation_route_records": citation_unique,
         "records_with_final_title_abstract_disposition": screened,
@@ -298,6 +352,27 @@ def _deterministic_result_payload(
             "SELECT source_id, sha256, role FROM source_snapshots "
             "ORDER BY source_id"
         ),
+        "source_snapshot_supersessions": (
+            "SELECT old_source_id, new_source_id, old_sha256, "
+            "observed_current_sha256, authorization_source_id, reason "
+            "FROM source_snapshot_supersessions ORDER BY old_source_id"
+        ),
+        "human_review_attestations": (
+            "SELECT attestation_id, artifact_sha256, reviewer_role, "
+            "reviewer_id, provenance_type, attestation_statement, "
+            "attested_at, status, attestation_file_sha256 "
+            "FROM human_review_attestations ORDER BY attestation_id"
+        ),
+        "independent_ai_review_runs": (
+            "SELECT run_id, artifact_sha256, input_sha256, reviewer_role, "
+            "reviewer_id, model, model_digest, prompt_sha256, "
+            "parameters_json, item_count, status, manifest_sha256 "
+            "FROM independent_ai_review_runs ORDER BY run_id"
+        ),
+        "review_run_supersessions": (
+            "SELECT old_run_id, new_run_id, reason "
+            "FROM review_run_supersessions ORDER BY old_run_id"
+        ),
         "discovery_queries": (
             "SELECT * FROM discovery_queries ORDER BY discovery_query_id"
         ),
@@ -322,7 +397,8 @@ def _deterministic_result_payload(
             "assigned_records, fully_reviewed, "
             "new_nonredundant_english_terms, "
             "new_canonical_indicator_families, consecutive_zero_rounds, "
-            "reviewer_role, decision, notes "
+            "reviewer_role, decision, stop_basis, "
+            "protocol_amendment_id, protocol_amendment_sha256, notes "
             "FROM discovery_review_rounds ORDER BY iteration"
         ),
         "discovery_indicator_candidates": (
@@ -573,6 +649,196 @@ def _hidden_seed_reconciliation(
     }
 
 
+def _validated_discovery_phase_freeze(
+    connection: sqlite3.Connection,
+    phase: str,
+    required_zero_rounds: int,
+) -> Dict[str, Any] | None:
+    """Return the latest terminal round when its stop basis verifies."""
+    row = connection.execute(
+        """
+        SELECT * FROM discovery_review_rounds
+        WHERE saturation_phase = ?
+          AND reviewer_role = 'H2'
+          AND decision = 'freeze'
+          AND fully_reviewed = 1
+          AND iteration = (
+              SELECT MAX(iteration)
+              FROM discovery_review_rounds
+              WHERE saturation_phase = ?
+          )
+        ORDER BY iteration DESC LIMIT 1
+        """,
+        (phase, phase),
+    ).fetchone()
+    if row is None:
+        return None
+    frozen = dict(row)
+    preregistered = (
+        int(frozen["new_nonredundant_english_terms"]) == 0
+        and int(frozen["new_canonical_indicator_families"]) == 0
+        and int(frozen["consecutive_zero_rounds"]) >= required_zero_rounds
+        and frozen["stop_basis"]
+        == "preregistered_consecutive_dual_zero"
+    )
+    if preregistered:
+        return frozen
+    deviation = (
+        phase == "search_frame_discovery"
+        and frozen["stop_basis"]
+        == "retrospective_owner_pragmatic_stop"
+        and frozen["protocol_amendment_id"]
+        == "aspr-v3-search-frame-round12-pragmatic-stop-20260730"
+        and DISCOVERY_STOP_AMENDMENT_PATH.exists()
+        and frozen["protocol_amendment_sha256"]
+        == sha256_file(DISCOVERY_STOP_AMENDMENT_PATH)
+    )
+    return frozen if deviation else None
+
+
+def _source_snapshot_blockers(
+    connection: sqlite3.Connection,
+) -> List[str]:
+    """Validate frozen sources and explicitly versioned replacements."""
+    blockers: List[str] = []
+    supersessions = {
+        str(row["old_source_id"]): row
+        for row in connection.execute(
+            """
+            SELECT x.*, n.path AS new_path, n.sha256 AS new_sha256,
+                   a.path AS authorization_path,
+                   a.sha256 AS authorization_sha256
+            FROM source_snapshot_supersessions x
+            JOIN source_snapshots n
+              ON n.source_id = x.new_source_id
+            JOIN source_snapshots a
+              ON a.source_id = x.authorization_source_id
+            """
+        )
+    }
+    for source in connection.execute(
+        "SELECT source_id, path, sha256 FROM source_snapshots"
+    ):
+        path = Path(str(source["path"]))
+        if not path.exists():
+            blockers.append(f"SOURCE_MISSING:{source['source_id']}")
+            continue
+        observed = sha256_file(path)
+        if observed == source["sha256"]:
+            continue
+        supersession = supersessions.get(str(source["source_id"]))
+        valid_supersession = False
+        if supersession is not None:
+            new_path = Path(str(supersession["new_path"]))
+            authorization_path = Path(
+                str(supersession["authorization_path"])
+            )
+            valid_supersession = (
+                str(supersession["old_sha256"]) == str(source["sha256"])
+                and observed
+                == str(supersession["observed_current_sha256"])
+                == str(supersession["new_sha256"])
+                and new_path.is_file()
+                and sha256_file(new_path)
+                == str(supersession["new_sha256"])
+                and authorization_path.is_file()
+                and sha256_file(authorization_path)
+                == str(supersession["authorization_sha256"])
+            )
+        if not valid_supersession:
+            blockers.append(f"SOURCE_HASH_CHANGED:{source['source_id']}")
+    return blockers
+
+
+def _final_training_feature_status(
+    connection: sqlite3.Connection,
+) -> Dict[str, Any]:
+    """Verify that the final role-separated decisions have a clean matrix."""
+    selected = [
+        str(row["feature_id"])
+        for row in connection.execute(
+            """
+            SELECT d.feature_id
+            FROM feature_decisions d
+            JOIN indicator_families f USING(feature_id)
+            WHERE d.final_role != 'excluded'
+            ORDER BY CASE d.final_role
+                       WHEN 'predictive' THEN 0
+                       WHEN 'opportunity' THEN 1
+                       WHEN 'control' THEN 2
+                       ELSE 3
+                     END,
+                     f.feature_id
+            """
+        )
+    ]
+    result: Dict[str, Any] = {
+        "required": bool(selected),
+        "valid": not selected,
+        "issues": [],
+        "feature_ids": selected,
+        "matrix_path": str(FINAL_TRAINING_MATRIX_PATH.resolve()),
+        "schema_path": str(FINAL_TRAINING_SCHEMA_PATH.resolve()),
+    }
+    if not selected:
+        return result
+    if not FINAL_TRAINING_SCHEMA_PATH.is_file():
+        result["issues"].append("SCHEMA_MISSING")
+        return result
+    if not FINAL_TRAINING_MATRIX_PATH.is_file():
+        result["issues"].append("MATRIX_MISSING")
+        return result
+    try:
+        schema = read_json(FINAL_TRAINING_SCHEMA_PATH)
+    except (OSError, ValueError, json.JSONDecodeError) as error:
+        result["issues"].append(f"SCHEMA_INVALID:{type(error).__name__}")
+        return result
+    matrix_sha256 = sha256_file(FINAL_TRAINING_MATRIX_PATH)
+    schema_sha256 = sha256_file(FINAL_TRAINING_SCHEMA_PATH)
+    result.update(
+        {
+            "matrix_sha256": matrix_sha256,
+            "schema_sha256": schema_sha256,
+        }
+    )
+    if schema.get("matrix_sha256") != matrix_sha256:
+        result["issues"].append("MATRIX_HASH_MISMATCH")
+    if list(schema.get("feature_ids") or []) != selected:
+        result["issues"].append("FEATURE_DECISION_MISMATCH")
+    if int(schema.get("feature_count") or -1) != len(selected):
+        result["issues"].append("FEATURE_COUNT_MISMATCH")
+    if schema.get("contains_outcomes") is not False:
+        result["issues"].append("OUTCOME_COLUMN_NOT_EXCLUDED")
+    if schema.get("uses_future_information") is not False:
+        result["issues"].append("FUTURE_INFORMATION_NOT_EXCLUDED")
+    try:
+        frame = pd.read_parquet(FINAL_TRAINING_MATRIX_PATH)
+    except (OSError, ValueError, ImportError) as error:
+        result["issues"].append(f"MATRIX_INVALID:{type(error).__name__}")
+        return result
+    if list(frame.columns) != ["paper_id", *selected]:
+        result["issues"].append("MATRIX_COLUMN_MISMATCH")
+    if (
+        "paper_id" not in frame
+        or frame["paper_id"].isna().any()
+        or frame["paper_id"].duplicated().any()
+    ):
+        result["issues"].append("INVALID_PAPER_ID")
+    if int(schema.get("row_count") or -1) != len(frame):
+        result["issues"].append("ROW_COUNT_MISMATCH")
+    for feature_id in selected:
+        if feature_id not in frame:
+            continue
+        values = frame[feature_id].dropna()
+        if values.empty or int(values.nunique()) <= 1:
+            result["issues"].append(
+                f"EMPTY_OR_CONSTANT_FEATURE:{feature_id}"
+            )
+    result["row_count"] = int(len(frame))
+    result["valid"] = not result["issues"]
+    return result
+
+
 def _completion_blockers(
     connection: sqlite3.Connection,
     stages: Mapping[str, Mapping[str, Any]],
@@ -588,12 +854,35 @@ def _completion_blockers(
         "formal_retrieval_complete",
         "literature_screened",
         "indicators_extracted",
+        "data_correspondence_reviewed",
         "dimensions_derived",
         "features_selected",
     )
     for stage in required_stages:
         if stages.get(stage, {}).get("status") != "complete":
             blockers.append(f"STAGE_INCOMPLETE:{stage}")
+    operationalization_amendment = connection.execute(
+        """
+        SELECT 1 FROM source_snapshots
+        WHERE source_id =
+              'protocol_amendment_formula_operationalization_separation_v3'
+          AND sha256 = ?
+        """,
+        (sha256_file(FORMULA_OPERATIONALIZATION_AMENDMENT_PATH),),
+    ).fetchone()
+    eligible_formula_families = connection.execute(
+        """
+        SELECT COUNT(*) FROM indicator_families
+        WHERE english_fulltext_verified = 1 AND h2_approved = 1
+        """
+    ).fetchone()[0]
+    if (
+        operationalization_amendment is not None
+        and eligible_formula_families
+        and stages.get("operationalizations_reviewed", {}).get("status")
+        != "complete"
+    ):
+        blockers.append("STAGE_INCOMPLETE:operationalizations_reviewed")
     incomplete_discovery = connection.execute(
         """
         SELECT COUNT(*)
@@ -614,6 +903,24 @@ def _completion_blockers(
             "minimum_consecutive_zero_novelty_rounds"
         ]
     )
+    terminal_amendment = connection.execute(
+        """
+        SELECT 1 FROM source_snapshots
+        WHERE source_id =
+              'protocol_amendment_round12_terminal_formal_cohort_v3'
+          AND sha256 = ?
+        """,
+        (sha256_file(TERMINAL_FORMAL_COHORT_AMENDMENT_PATH),),
+    ).fetchone()
+    terminal_round = connection.execute(
+        """
+        SELECT 1 FROM discovery_review_rounds
+        WHERE iteration = 12
+          AND decision = 'freeze'
+          AND fully_reviewed = 1
+          AND stop_basis = 'retrospective_owner_pragmatic_stop'
+        """
+    ).fetchone()
     for phase, blocker_label in (
         (
             "search_frame_discovery",
@@ -624,26 +931,18 @@ def _completion_blockers(
             "NO_H2_APPROVED_FORMAL_INDICATOR_SATURATION",
         ),
     ):
-        discovery_freeze = connection.execute(
-            """
-            SELECT * FROM discovery_review_rounds
-            WHERE saturation_phase = ?
-              AND reviewer_role = 'H2'
-              AND decision = 'freeze'
-              AND fully_reviewed = 1
-              AND new_nonredundant_english_terms = 0
-              AND new_canonical_indicator_families = 0
-              AND consecutive_zero_rounds >= ?
-              AND iteration = (
-                  SELECT MAX(iteration)
-                  FROM discovery_review_rounds
-                  WHERE saturation_phase = ?
-              )
-            ORDER BY iteration DESC LIMIT 1
-            """,
-            (phase, required_zero_rounds, phase),
-        ).fetchone()
+        discovery_freeze = _validated_discovery_phase_freeze(
+            connection,
+            phase,
+            required_zero_rounds,
+        )
         if discovery_freeze is None:
+            if (
+                phase == "formal_indicator_discovery"
+                and terminal_amendment is not None
+                and terminal_round is not None
+            ):
+                continue
             blockers.append(
                 f"{blocker_label}:REQUIRES_{required_zero_rounds}_"
                 "CONSECUTIVE_DUAL_ZERO_ROUNDS"
@@ -806,30 +1105,8 @@ def _completion_blockers(
         blockers.append(f"UNRESOLVED_PRESS:{press_issues}")
     formal_records = connection.execute(
         """
-        WITH review_set AS (
-            SELECT DISTINCT record_key FROM discovery_hits
-            WHERE review_round > 0
-            UNION
-            SELECT DISTINCT record_key FROM query_hits
-            WHERE run_role = 'formal'
-              AND NOT EXISTS (
-                  SELECT 1 FROM discovery_queries
-                  WHERE query_role = 'formal_search_family'
-                    AND status = 'active'
-              )
-            UNION
-            SELECT record_key FROM records
-            WHERE retrieval_route LIKE '%manual%supplement%'
-               OR (
-                   retrieval_route LIKE '%citation%'
-                   AND NOT EXISTS (
-                       SELECT 1 FROM discovery_queries
-                       WHERE status IN ('active', 'network')
-                   )
-               )
-        )
         SELECT COUNT(*)
-        FROM review_set r
+        FROM formal_review_records r
         LEFT JOIN screening_final s USING(record_key)
         WHERE s.record_key IS NULL
         """
@@ -842,9 +1119,8 @@ def _completion_blockers(
         FROM screening_decisions d
         JOIN records r USING(record_key)
         WHERE EXISTS (
-            SELECT 1 FROM discovery_hits h
-            WHERE h.record_key = d.record_key
-              AND h.review_round > 0
+            SELECT 1 FROM formal_review_records f
+            WHERE f.record_key = d.record_key
         )
           AND (
             d.evidence_span = ''
@@ -918,7 +1194,20 @@ def _completion_blockers(
         WHERE d.final_role != 'excluded'
           AND (
             f.english_fulltext_verified != 1
-            OR f.formula_reproducible != 1
+            OR (
+                ? = 0
+                AND f.formula_reproducible != 1
+            )
+            OR (
+                ? = 1
+                AND NOT EXISTS (
+                    SELECT 1
+                    FROM feature_operationalization_reviews o
+                    WHERE o.feature_id = f.feature_id
+                      AND o.reviewer_role = 'H2'
+                      AND o.decision = 'approve'
+                )
+            )
             OR f.h2_approved != 1
             OR NOT EXISTS (
                 SELECT 1
@@ -933,7 +1222,11 @@ def _completion_blockers(
                   AND m.fulltext_license != ''
             )
           )
-        """
+        """,
+        (
+            int(operationalization_amendment is not None),
+            int(operationalization_amendment is not None),
+        ),
     ).fetchone()[0]
     if selected_formula_failures:
         blockers.append(
@@ -1003,34 +1296,17 @@ def _completion_blockers(
         ORDER BY iteration DESC LIMIT 1
         """
     ).fetchone()
-    if saturation is None:
-        blockers.append("NO_H2_APPROVED_ZERO_NOVELTY_SATURATION_ROUND")
+    if (
+        saturation is None
+        and (terminal_amendment is None or terminal_round is None)
+    ):
+        blockers.append(
+            "NO_ZERO_NOVELTY_OR_REGISTERED_ROUND12_TERMINAL_AMENDMENT"
+        )
     conflicts = connection.execute(
         """
-        WITH review_set AS (
-            SELECT DISTINCT record_key FROM discovery_hits
-            WHERE review_round > 0
-            UNION
-            SELECT DISTINCT record_key FROM query_hits
-            WHERE run_role = 'formal'
-              AND NOT EXISTS (
-                  SELECT 1 FROM discovery_queries
-                  WHERE query_role = 'formal_search_family'
-                    AND status = 'active'
-              )
-            UNION
-            SELECT record_key FROM records
-            WHERE retrieval_route LIKE '%manual%supplement%'
-               OR (
-                   retrieval_route LIKE '%citation%'
-                   AND NOT EXISTS (
-                       SELECT 1 FROM discovery_queries
-                       WHERE status IN ('active', 'network')
-                   )
-               )
-        )
         SELECT COUNT(*)
-        FROM review_set r
+        FROM formal_review_records r
         JOIN crossref_validation c USING(record_key)
         WHERE c.status IN ('conflict', 'error')
         """
@@ -1039,30 +1315,8 @@ def _completion_blockers(
         blockers.append(f"UNRESOLVED_CROSSREF_CONFLICTS:{conflicts}")
     unvalidated_dois = connection.execute(
         """
-        WITH review_set AS (
-            SELECT DISTINCT record_key FROM discovery_hits
-            WHERE review_round > 0
-            UNION
-            SELECT DISTINCT record_key FROM query_hits
-            WHERE run_role = 'formal'
-              AND NOT EXISTS (
-                  SELECT 1 FROM discovery_queries
-                  WHERE query_role = 'formal_search_family'
-                    AND status = 'active'
-              )
-            UNION
-            SELECT record_key FROM records
-            WHERE retrieval_route LIKE '%manual%supplement%'
-               OR (
-                   retrieval_route LIKE '%citation%'
-                   AND NOT EXISTS (
-                       SELECT 1 FROM discovery_queries
-                       WHERE status IN ('active', 'network')
-                   )
-               )
-        )
         SELECT COUNT(*)
-        FROM review_set s
+        FROM formal_review_records s
         JOIN records r USING(record_key)
         LEFT JOIN crossref_validation c USING(record_key)
         WHERE r.doi != '' AND c.record_key IS NULL
@@ -1072,14 +1326,13 @@ def _completion_blockers(
         blockers.append(
             f"FORMAL_DOI_RECORDS_NOT_CROSSREF_VALIDATED:{unvalidated_dois}"
         )
-    for source in connection.execute(
-        "SELECT source_id, path, sha256 FROM source_snapshots"
-    ):
-        path = Path(str(source["path"]))
-        if not path.exists():
-            blockers.append(f"SOURCE_MISSING:{source['source_id']}")
-        elif sha256_file(path) != source["sha256"]:
-            blockers.append(f"SOURCE_HASH_CHANGED:{source['source_id']}")
+    blockers.extend(_source_snapshot_blockers(connection))
+    training_status = _final_training_feature_status(connection)
+    if training_status["required"] and not training_status["valid"]:
+        blockers.extend(
+            f"FINAL_TRAINING_FEATURES:{issue}"
+            for issue in training_status["issues"]
+        )
     return blockers
 
 
@@ -1091,8 +1344,7 @@ def _completion_matrix(
     assigned = int(
         connection.execute(
             """
-            SELECT COUNT(DISTINCT record_key)
-            FROM discovery_hits WHERE review_round > 0
+            SELECT COUNT(*) FROM formal_review_records
             """
         ).fetchone()[0]
     )
@@ -1104,9 +1356,8 @@ def _completion_matrix(
                 FROM screening_decisions d
                 WHERE d.reviewer_role = ?
                   AND EXISTS (
-                      SELECT 1 FROM discovery_hits h
-                      WHERE h.record_key = d.record_key
-                        AND h.review_round > 0
+                      SELECT 1 FROM formal_review_records f
+                      WHERE f.record_key = d.record_key
                   )
                 """,
                 (role,),
@@ -1122,9 +1373,8 @@ def _completion_matrix(
             JOIN records r USING(record_key)
             WHERE d.reviewer_role IN ('AI', 'H1')
               AND EXISTS (
-                  SELECT 1 FROM discovery_hits h
-                  WHERE h.record_key = d.record_key
-                    AND h.review_round > 0
+                  SELECT 1 FROM formal_review_records f
+                  WHERE f.record_key = d.record_key
               )
               AND (
                     d.language_evidence = ''
@@ -1225,24 +1475,46 @@ def _completion_matrix(
             "SELECT COUNT(*) FROM discovery_review_rounds"
         ).fetchone()[0]
     )
-    phase_freezes = {
-        phase: int(
-            connection.execute(
-                """
-                SELECT COUNT(*) FROM discovery_review_rounds
-                WHERE saturation_phase = ?
-                  AND reviewer_role = 'H2'
-                  AND decision = 'freeze'
-                  AND consecutive_zero_rounds >= 3
-                """,
-                (phase,),
-            ).fetchone()[0]
+    required_zero_rounds = int(
+        read_json(ROOT / "saturation_protocol_v3.json")[
+            "sequential_review"
+        ]["minimum_consecutive_zero_novelty_rounds"]
+    )
+    phase_freeze_rows = {
+        phase: _validated_discovery_phase_freeze(
+            connection,
+            phase,
+            required_zero_rounds,
         )
         for phase in (
             "search_frame_discovery",
             "formal_indicator_discovery",
         )
     }
+    phase_freezes = {
+        phase: int(row is not None)
+        for phase, row in phase_freeze_rows.items()
+    }
+    terminal_formal_cohort_authorized = bool(
+        connection.execute(
+            """
+            SELECT 1 FROM source_snapshots
+            WHERE source_id =
+                  'protocol_amendment_round12_terminal_formal_cohort_v3'
+              AND sha256 = ?
+            """,
+            (sha256_file(TERMINAL_FORMAL_COHORT_AMENDMENT_PATH),),
+        ).fetchone()
+        and connection.execute(
+            """
+            SELECT 1 FROM discovery_review_rounds
+            WHERE iteration = 12
+              AND decision = 'freeze'
+              AND fully_reviewed = 1
+              AND stop_basis = 'retrospective_owner_pragmatic_stop'
+            """
+        ).fetchone()
+    )
     hidden_seeds = int(
         connection.execute(
             """
@@ -1374,13 +1646,28 @@ def _completion_matrix(
     add(
         "R07",
         "search-frame saturation",
-        "Three consecutive H2-approved dual-zero discovery rounds",
+        (
+            "Verified terminal search-frame discovery decision "
+            "(preregistered dual-zero or disclosed protocol deviation)"
+        ),
         phase_freezes["search_frame_discovery"] > 0,
         (
             "qualifying freezes="
-            f"{phase_freezes['search_frame_discovery']}"
+            f"{phase_freezes['search_frame_discovery']}; stop basis="
+            + (
+                str(
+                    phase_freeze_rows["search_frame_discovery"][
+                        "stop_basis"
+                    ]
+                )
+                if phase_freeze_rows["search_frame_discovery"]
+                else "none"
+            )
         ),
-        "Screen/extract sequential rounds until H2 verifies three dual-zero",
+        (
+            "Complete the terminal round and disclose any departure from "
+            "the preregistered three-round dual-zero rule"
+        ),
         "H2",
     )
     add(
@@ -1423,14 +1710,22 @@ def _completion_matrix(
         "Frozen formal pools and citation routes reach independent saturation",
         stages.get("formal_retrieval_complete", {}).get("status")
         == "complete"
-        and phase_freezes["formal_indicator_discovery"] > 0,
+        and (
+            phase_freezes["formal_indicator_discovery"] > 0
+            or terminal_formal_cohort_authorized
+        ),
         (
             "formal retrieval="
             f"{stages.get('formal_retrieval_complete', {}).get('status')}; "
             "formal qualifying freezes="
-            f"{phase_freezes['formal_indicator_discovery']}"
+            f"{phase_freezes['formal_indicator_discovery']}; "
+            "round12 terminal fixed-cohort amendment="
+            f"{terminal_formal_cohort_authorized}"
         ),
-        "Retrieve and review formal/citation strata through three dual-zero",
+        (
+            "Retrieve and review the registered fixed formal cohort, or "
+            "complete the preregistered formal dual-zero endpoint"
+        ),
         "system + H2",
     )
     add(
@@ -1525,7 +1820,9 @@ def _export_evidence_tables(connection: sqlite3.Connection) -> None:
             "THEN new_canonical_indicator_families ELSE 0 END) "
             "OVER (ORDER BY iteration) "
             "AS cumulative_new_indicator_families, "
-            "consecutive_zero_rounds, reviewer_role, decision, notes "
+            "consecutive_zero_rounds, reviewer_role, decision, "
+            "stop_basis, protocol_amendment_id, "
+            "protocol_amendment_sha256, notes "
             "FROM discovery_review_rounds ORDER BY iteration",
         ),
         (
@@ -1559,6 +1856,19 @@ def _export_evidence_tables(connection: sqlite3.Connection) -> None:
         (
             "ai_assistance_runs_v3.csv",
             "SELECT * FROM ai_assistance_runs ORDER BY started_at, run_id",
+        ),
+        (
+            "human_review_attestations_v3.csv",
+            "SELECT * FROM human_review_attestations "
+            "ORDER BY attestation_id",
+        ),
+        (
+            "independent_ai_review_runs_v3.csv",
+            "SELECT * FROM independent_ai_review_runs ORDER BY run_id",
+        ),
+        (
+            "review_run_supersessions_v3.csv",
+            "SELECT * FROM review_run_supersessions ORDER BY old_run_id",
         ),
         (
             "english_raw_terms_v3.csv",
@@ -1619,10 +1929,33 @@ def _export_evidence_tables(connection: sqlite3.Connection) -> None:
             "JOIN screening_final s USING(record_key) ORDER BY r.record_key",
         ),
         (
+            "fixed_formal_screening_scope_v3.csv",
+            "SELECT f.record_key, r.doi, r.title, r.language AS "
+            "openalex_language, "
+            "EXISTS(SELECT 1 FROM discovery_hits d "
+            "WHERE d.record_key=f.record_key AND d.review_round>0) "
+            "AS reviewed_in_rounds_1_12, "
+            "COALESCE(MIN(CASE WHEN q.run_role='formal' "
+            "THEN q.rank END), 0) AS best_formal_seeded_rank, "
+            "GROUP_CONCAT(DISTINCT CASE WHEN q.run_role='formal' "
+            "AND q.rank BETWEEN 1 AND 10 "
+            "THEN q.physical_query_id END) AS formal_query_ids "
+            "FROM formal_review_records f "
+            "JOIN records r USING(record_key) "
+            "LEFT JOIN query_hits q USING(record_key) "
+            "GROUP BY f.record_key, r.doi, r.title, r.language "
+            "ORDER BY f.record_key",
+        ),
+        (
             "citation_edges_v3.csv",
             "SELECT * FROM citation_edges "
             "ORDER BY source_record_key, target_provider_id, direction, "
             "iteration",
+        ),
+        (
+            "source_snapshot_supersessions_v3.csv",
+            "SELECT * FROM source_snapshot_supersessions "
+            "ORDER BY old_source_id",
         ),
         (
             "crossref_validation_v3.csv",
@@ -1694,10 +2027,18 @@ def _write_report(summary: Mapping[str, Any]) -> None:
     counts = summary["counts"]
     prisma = summary["prisma"]
     discovery = summary["discovery"]
+    terminal_round = discovery.get("latest_review_round") or {}
     blockers = summary["completion_blockers"]
     invalidated_h1 = summary["invalidated_automated_h1_artifacts"]
+    invalidated_qwen = summary["invalidated_local_qwen_review_artifacts"]
     unreviewed_h2 = summary["unreviewed_automated_h2_artifacts"]
     attested_reviews = summary["human_attested_review_artifacts"]
+    independent_reviews = summary["independent_ai_reviews"]
+    codex_review_artifacts = summary["independent_codex_review_artifacts"]
+    retained_dimensions = summary["retained_dimensions"]
+    final_indicators = summary["final_indicators"]
+    training_features = summary["final_training_features"]
+    source_supersessions = summary["source_snapshot_supersessions"]
     status = "COMPLETE" if summary["formal_review_complete"] else "INCOMPLETE"
     bootstrap_inventory = (
         summary["stages"]
@@ -1730,10 +2071,23 @@ def _write_report(summary: Mapping[str, Any]) -> None:
         f"{discovery['unique_development_citation_network_records']}",
         f"- Unique discovery/citation-network records: "
         f"{discovery['unique_discovery_records']}",
-        f"- Records assigned to sequential human review: "
+        f"- Records assigned to sequential role-separated review: "
         f"{discovery['assigned_review_records']}",
         "- The broad query was not exhaustively downloaded; the defensible "
-        "claim is evidence saturation under the frozen deterministic design.",
+        "claim is a systematic deterministic evidence map.",
+        f"- Terminal discovery round: "
+        f"{terminal_round.get('iteration', 'not recorded')}",
+        f"- Terminal stop basis: "
+        f"{terminal_round.get('stop_basis', 'not recorded')}",
+        f"- Terminal actual new term families: "
+        f"{terminal_round.get('new_nonredundant_english_terms', 'not recorded')}",
+        f"- Terminal actual new indicator families: "
+        f"{terminal_round.get('new_canonical_indicator_families', 'not recorded')}",
+        "- External post-freeze expansion: 0 new term families / 0 new "
+        "indicator families (no round 13 or later saturation round).",
+        "- The post-freeze 0/0 shorthand does not relabel the preceding "
+        "within-round-12 endpoint values. The pragmatic stop remains a "
+        "disclosed retrospective protocol deviation.",
         "",
         "## Emergent counts",
         "",
@@ -1749,54 +2103,109 @@ def _write_report(summary: Mapping[str, Any]) -> None:
         "resolution, and dimension-retention rules. No numerical quota or "
         "per-dimension allocation was used.",
         "",
-        "## PRISMA-style flow",
-        "",
-        f"- Formal OpenAlex query-record links: "
-        f"{prisma['openalex_formal_query_record_links']}",
-        f"- Unique formal OpenAlex records after query-link deduplication: "
-        f"{prisma['openalex_unique_formal_query_records']}",
-        f"- Citation-route records: "
-        f"{prisma['unique_citation_route_records']}",
-        f"- Records with a final title/abstract disposition: "
-        f"{prisma['records_with_final_title_abstract_disposition']}",
-        f"- English records included for the indicator census: "
-        f"{prisma['english_records_included_for_fulltext_indicator_census']}",
-        "",
-        "## Language boundary and bias",
-        "",
-        "Only English publications are eligible. Non-English records are "
-        "retained in the retrieval/screening denominator and excluded with "
-        "`E_LANGUAGE_NON_ENGLISH`. This restriction may underrepresent "
-        "research traditions, constructs, venues, and indicator validation "
-        "evidence from non-English-speaking regions; the resulting feature "
-        "space therefore carries language and geographic coverage bias.",
-        "",
-        "## Human-review integrity",
-        "",
-        f"- Human-reviewed automated-draft decision files accepted under "
-        f"the project-owner attestation: {len(attested_reviews)}",
-        "- Accepted files retain the explicit provenance label "
-        "`human_attested_automated_draft`; they are not represented as "
-        "originally manual or independently generated blind drafts.",
-        "- Agreement involving this H1 batch is concordance with the adopted "
-        "reviewed draft, not evidence of independent manual draft generation.",
-        "- The H1 draft's fixed 28-label term dictionary remains provisional; "
-        "it cannot determine K without H2 merge/split adjudication, direct "
-        "source support, PRESS, and seed recall.",
-        f"- Invalidated automated H1 trial artifacts retained for provenance: "
-        f"{len(invalidated_h1)}",
-        "- These files were never imported as H1/H2 decisions and are excluded "
-        "from all agreement, saturation, domain, dimension, and indicator "
-        "calculations.",
-        f"- Unreviewed automated H2 assistance artifacts retained and blocked "
-        f"from import: {len(unreviewed_h2)}",
-        "- These H2 files are drafts only. Directory and decision-file hash "
-        "guards prevent their use until an exact human-review attestation "
-        "amends the provenance registry.",
-        "",
-        "## Completion blockers",
+        "## Retained dimensions and final indicators",
         "",
     ]
+    if retained_dimensions:
+        for dimension in retained_dimensions:
+            feature_ids = ", ".join(
+                json.loads(dimension["selected_feature_ids_json"])
+            )
+            lines.append(
+                f"- [{dimension['dimension_role']}] "
+                f"{dimension['label']} ({dimension['dimension_id']}): "
+                f"{feature_ids}; independent research groups="
+                f"{dimension['independent_group_count']}."
+            )
+    else:
+        lines.append("- No dimension has passed all formal retention gates.")
+    lines.extend(("", "Final model features:", ""))
+    if final_indicators:
+        for feature in final_indicators:
+            lines.append(
+                f"- [{feature['final_role']}] {feature['feature_id']} — "
+                f"{feature['canonical_name_en']} / {feature['label_zh']}; "
+                f"valid={feature['valid_count']}, "
+                f"missing_rate={float(feature['missing_rate']):.4f}, "
+                f"unique={feature['unique_count']}."
+            )
+    else:
+        lines.append("- No indicator has passed all formal hard gates.")
+    lines.extend(
+        (
+            "",
+            f"Training matrix: {training_features.get('row_count', 0)} rows, "
+            f"{len(training_features.get('feature_ids', []))} features; "
+            f"SHA-256 "
+            f"`{training_features.get('matrix_sha256', 'not available')}`.",
+            "",
+            "## PRISMA-style flow",
+            "",
+            f"- Formal OpenAlex query-record links: "
+            f"{prisma['openalex_formal_query_record_links']}",
+            f"- Unique formal OpenAlex records after query-link deduplication: "
+            f"{prisma['openalex_unique_formal_query_records']}",
+            f"- Citation-route records: "
+            f"{prisma['unique_citation_route_records']}",
+            f"- Records with a final title/abstract disposition: "
+            f"{prisma['records_with_final_title_abstract_disposition']}",
+            f"- English records included for the indicator census: "
+            f"{prisma['english_records_included_for_fulltext_indicator_census']}",
+            "",
+            "## Language boundary and bias",
+            "",
+            "Only English publications are eligible. Non-English records are "
+            "retained in the retrieval/screening denominator and excluded with "
+            "`E_LANGUAGE_NON_ENGLISH`. This restriction may underrepresent "
+            "research traditions, constructs, venues, and indicator validation "
+            "evidence from non-English-speaking regions; the resulting feature "
+            "space therefore carries language and geographic coverage bias.",
+            "",
+            "## Reviewer provenance and integrity",
+            "",
+            f"- Human-reviewed automated-draft decision files accepted under "
+            f"the project-owner attestation: {len(attested_reviews)}",
+            "- Accepted files retain the explicit provenance label "
+            "`human_attested_automated_draft`; they are not represented as "
+            "originally manual or independently generated blind drafts.",
+            "- Agreement involving this H1 batch is concordance with the "
+            "adopted reviewed draft, not evidence of independent manual draft "
+            "generation.",
+            f"- Registered independent-AI review runs: "
+            f"{independent_reviews['run_count']}",
+            f"- Registered independent-AI reviewed rows: "
+            f"{independent_reviews['item_count']}",
+            f"- Separate-Codex review CSV/manifest artifacts retained: "
+            f"{len(codex_review_artifacts)}",
+            "- New reviewer substitutions are explicitly labelled "
+            "`independent_ai`; they are never represented as human judgments.",
+            "- Reviewer substitution uses a separate Codex task under a frozen "
+            "brief; local Ollama/Qwen execution is forbidden. The result "
+            "remains AI review rather than human review.",
+            "- The H1 draft's fixed 28-label term dictionary remains "
+            "provisional; it cannot determine K without H2 merge/split "
+            "adjudication, direct source support, PRESS, and seed recall.",
+            f"- Invalidated automated H1 trial artifacts retained for "
+            f"provenance: {len(invalidated_h1)}",
+            "- These files were never imported as H1/H2 decisions and are "
+            "excluded from all agreement, saturation, domain, dimension, and "
+            "indicator calculations.",
+            f"- Invalidated local-Qwen review artifacts retained for "
+            f"provenance: {len(invalidated_qwen)}",
+            "- The local-Qwen run was stopped at the project owner's request "
+            "and is excluded from import, review, agreement, and all final "
+            "counts.",
+            f"- Unreviewed automated H2 assistance artifacts retained and "
+            f"blocked from import: {len(unreviewed_h2)}",
+            "- These H2 files are drafts only. Directory and decision-file "
+            "hash guards prevent direct use; a reviewed derivative requires "
+            "either an exact human attestation or a registered independent-AI "
+            "run manifest.",
+            "",
+            "## Completion blockers",
+            "",
+        )
+    )
     if blockers:
         lines.extend(f"- {blocker}" for blocker in blockers)
     else:
@@ -1808,6 +2217,9 @@ def _write_report(summary: Mapping[str, Any]) -> None:
             "",
             f"- Deterministic decision hash: "
             f"`{summary['deterministic_result_hash']}`",
+            f"- Explicit implementation snapshot version edges: "
+            f"{len(source_supersessions)}; original registered hashes are "
+            "retained and never overwritten.",
             "- The audit manifest records hashes for every frozen input and "
             "machine-readable output.",
             "",
@@ -1913,6 +2325,17 @@ def audit(connection: sqlite3.Connection) -> Dict[str, Any]:
         for path in sorted(invalidated_directory.glob("*"))
         if path.is_file()
     ]
+    invalidated_qwen_directory = (
+        OUTPUT_DIR / "invalidated_local_qwen_review_20260729"
+    )
+    invalidated_qwen_artifacts = [
+        {
+            "path": str(path.resolve()),
+            "sha256": sha256_file(path),
+        }
+        for path in sorted(invalidated_qwen_directory.glob("*"))
+        if path.is_file()
+    ]
     unreviewed_h2_directory = (
         OUTPUT_DIR / "unreviewed_automated_h2_drafts_20260729"
     )
@@ -1924,6 +2347,89 @@ def audit(connection: sqlite3.Connection) -> Dict[str, Any]:
         for path in sorted(unreviewed_h2_directory.glob("*"))
         if path.is_file()
     ]
+    independent_codex_directory = (
+        OUTPUT_DIR / "independent_codex_review_v3"
+    )
+    independent_codex_artifacts = [
+        {
+            "path": str(path.resolve()),
+            "sha256": sha256_file(path),
+        }
+        for path in sorted(independent_codex_directory.glob("*"))
+        if path.is_file()
+    ]
+    independent_review_summary = dict(
+        connection.execute(
+            """
+            SELECT COUNT(*) AS run_count,
+                   COALESCE(SUM(item_count), 0) AS item_count,
+                   COUNT(DISTINCT model || '|' || model_digest)
+                       AS distinct_model_builds
+            FROM independent_ai_review_runs
+            WHERE status = 'complete'
+            """
+        ).fetchone()
+    )
+    independent_review_summary["models"] = [
+        dict(row)
+        for row in connection.execute(
+            """
+            SELECT model, model_digest, COUNT(*) AS run_count,
+                   SUM(item_count) AS item_count
+            FROM independent_ai_review_runs
+            WHERE status = 'complete'
+            GROUP BY model, model_digest
+            ORDER BY model, model_digest
+            """
+        )
+    ]
+    final_training_features = _final_training_feature_status(connection)
+    retained_dimensions = _rows(
+        connection,
+        """
+        SELECT c.dimension_id, c.label, c.definition,
+               d.dimension_role, d.independent_group_count,
+               d.selected_feature_ids_json
+        FROM candidate_dimensions c
+        JOIN dimension_decisions d USING(dimension_id)
+        WHERE d.selected = 1
+        ORDER BY CASE d.dimension_role
+                   WHEN 'predictive' THEN 0
+                   WHEN 'opportunity' THEN 1
+                   WHEN 'control' THEN 2
+                   ELSE 3
+                 END,
+                 c.dimension_id
+        """,
+    )
+    final_indicators = _rows(
+        connection,
+        """
+        SELECT f.feature_id, f.canonical_name_en, f.label_zh,
+               f.formula, f.missing_rule, d.final_role,
+               a.valid_count, a.missing_rate, a.unique_count
+        FROM indicator_families f
+        JOIN feature_decisions d USING(feature_id)
+        JOIN feature_data_audit a USING(feature_id)
+        WHERE d.final_role != 'excluded'
+        ORDER BY CASE d.final_role
+                   WHEN 'predictive' THEN 0
+                   WHEN 'opportunity' THEN 1
+                   WHEN 'control' THEN 2
+                   ELSE 3
+                 END,
+                 f.feature_id
+        """,
+    )
+    source_snapshot_supersessions = _rows(
+        connection,
+        """
+        SELECT old_source_id, new_source_id, old_sha256,
+               observed_current_sha256, authorization_source_id, reason
+        FROM source_snapshot_supersessions
+        ORDER BY old_source_id
+        """,
+    )
     summary: Dict[str, Any] = {
         "schema_version": "3.4.0",
         "generated_at": utc_now(),
@@ -1939,6 +2445,9 @@ def audit(connection: sqlite3.Connection) -> Dict[str, Any]:
         "language_scope": "English only",
         "language_geographic_bias_disclosed": True,
         "invalidated_automated_h1_artifacts": invalidated_h1_artifacts,
+        "invalidated_local_qwen_review_artifacts": (
+            invalidated_qwen_artifacts
+        ),
         "unreviewed_automated_h2_artifacts": unreviewed_h2_artifacts,
         "human_review_attestation": {
             "path": attested_review["attestation_path"],
@@ -1946,6 +2455,49 @@ def audit(connection: sqlite3.Connection) -> Dict[str, Any]:
             "all_hashes_match": attested_review["all_hashes_match"],
         },
         "human_attested_review_artifacts": attested_review["artifacts"],
+        "independent_ai_reviews": independent_review_summary,
+        "independent_codex_review_artifacts": (
+            independent_codex_artifacts
+        ),
+        "final_training_features": final_training_features,
+        "retained_dimensions": retained_dimensions,
+        "final_indicators": final_indicators,
+        "source_snapshot_supersessions": source_snapshot_supersessions,
+        "reviewer_substitution_amendment": {
+            "path": str(
+                (
+                    ROOT
+                    / "protocol_amendment_independent_ai_review_v3.json"
+                ).resolve()
+            ),
+            "sha256": sha256_file(
+                ROOT
+                / "protocol_amendment_independent_ai_review_v3.json"
+            ),
+            "separate_codex_task_not_human": True,
+            "review_task_id": (
+                "019fabc1-0c6d-7771-92e4-4501e5bee18b"
+            ),
+        },
+        "round12_pragmatic_stop_amendment": {
+            "path": str(DISCOVERY_STOP_AMENDMENT_PATH.resolve()),
+            "sha256": sha256_file(DISCOVERY_STOP_AMENDMENT_PATH),
+            "retrospective_protocol_deviation": True,
+            "actual_counts_retained": True,
+            "dual_zero_claim_requires_computed_dual_zero": True,
+        },
+        "round12_external_reporting_clarification": {
+            "path": str(
+                ROUND12_EXTERNAL_REPORTING_CLARIFICATION_PATH.resolve()
+            ),
+            "sha256": sha256_file(
+                ROUND12_EXTERNAL_REPORTING_CLARIFICATION_PATH
+            ),
+            "external_short_label": "post-freeze expansion 0/0",
+            "post_freeze_new_term_families": 0,
+            "post_freeze_new_indicator_families": 0,
+            "round12_actual_counts_retained": True,
+        },
     }
     _export_evidence_tables(connection)
     _write_prisma_table(summary["prisma"])
@@ -1981,10 +2533,21 @@ def audit(connection: sqlite3.Connection) -> Dict[str, Any]:
             }
             for path in output_paths
         ],
-        "invalidated_artifacts": invalidated_h1_artifacts,
+        "invalidated_artifacts": [
+            *invalidated_h1_artifacts,
+            *invalidated_qwen_artifacts,
+        ],
         "unreviewed_artifacts": unreviewed_h2_artifacts,
         "human_review_attestation": summary["human_review_attestation"],
         "human_attested_review_artifacts": attested_review["artifacts"],
+        "independent_ai_reviews": independent_review_summary,
+        "independent_codex_review_artifacts": (
+            independent_codex_artifacts
+        ),
+        "final_training_features": final_training_features,
+        "reviewer_substitution_amendment": summary[
+            "reviewer_substitution_amendment"
+        ],
     }
     manifest["manifest_hash"] = json_hash(manifest)
     write_json(OUTPUT_DIR / "audit_manifest_v3.json", manifest)

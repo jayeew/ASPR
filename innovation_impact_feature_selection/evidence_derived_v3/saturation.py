@@ -26,7 +26,14 @@ from common import (
     utc_now,
     write_csv_iter,
 )
-from database import invalidate_stages, log_event, set_stage, snapshot_import_file
+from database import (
+    assert_registered_review_attestation,
+    connect,
+    invalidate_stages,
+    log_event,
+    set_stage,
+    snapshot_import_file,
+)
 from providers import (
     OPENALEX_BASE_URL,
     fetch_json,
@@ -40,6 +47,9 @@ from providers import (
 
 
 SATURATION_PROTOCOL_PATH = ROOT / "saturation_protocol_v3.json"
+DISCOVERY_STOP_AMENDMENT_PATH = (
+    ROOT / "protocol_amendment_round12_pragmatic_stop_v3.json"
+)
 BOOTSTRAP_PATH = ROOT / "bootstrap_query_v3.json"
 PROTOCOL_PATH = ROOT / "protocol_v3.json"
 DISCOVERY_EXTRACTION_FIELDS = (
@@ -80,6 +90,14 @@ DISCOVERY_INDICATOR_ADJUDICATION_FIELDS = (
     "canonical_family_label",
     "adjudication_notes",
 )
+DISCOVERY_PROPOSED_ROLES = {
+    "construct",
+    "indicator_or_measure",
+    "t0_predictor",
+    "opportunity_or_context",
+    "control",
+    "validation_outcome",
+}
 
 
 class DailyBudgetExhausted(RuntimeError):
@@ -1620,15 +1638,66 @@ def ensure_formal_review_capacity(
         }
     scheduler = OpenAlexBudgetScheduler(connection)
     concurrency = int(protocol["api"]["concurrency"])
-    for row in needs:
-        _retrieve_one_discovery_query(
-            connection,
-            row,
-            scheduler,
-            per_page,
-            concurrency,
-            maximum_page=target_page,
+    database_path = Path(
+        str(
+            connection.execute(
+                "PRAGMA database_list"
+            ).fetchone()["file"]
         )
+    )
+
+    def extend_query(discovery_query_id: str) -> Dict[str, Any]:
+        worker_connection = connect(database_path)
+        try:
+            worker_row = worker_connection.execute(
+                """
+                SELECT q.*, COALESCE(r.pages, 0) AS loaded_pages
+                FROM discovery_queries q
+                LEFT JOIN discovery_query_runs r
+                  USING(discovery_query_id)
+                WHERE q.discovery_query_id = ?
+                """,
+                (discovery_query_id,),
+            ).fetchone()
+            if worker_row is None:
+                raise RuntimeError(
+                    f"Missing formal pool: {discovery_query_id}"
+                )
+            return _retrieve_one_discovery_query(
+                worker_connection,
+                worker_row,
+                scheduler,
+                per_page,
+                concurrency,
+                maximum_page=target_page,
+            )
+        finally:
+            worker_connection.close()
+
+    first_error: Exception | None = None
+    worker_count = min(
+        concurrency,
+        len(scheduler.keys),
+        len(needs),
+    )
+    with ThreadPoolExecutor(
+        max_workers=worker_count
+    ) as executor:
+        futures = {
+            executor.submit(
+                extend_query,
+                str(row["discovery_query_id"]),
+            ): str(row["discovery_query_id"])
+            for row in needs
+        }
+        for future in as_completed(futures):
+            try:
+                future.result()
+            except Exception as error:
+                if first_error is None:
+                    first_error = error
+    if first_error is not None:
+        raise first_error
     for row in rows:
         discovery_id = str(row["discovery_query_id"])
         if not discovery_id.startswith("FS_"):
@@ -1752,6 +1821,23 @@ def assign_discovery_round(
         is not None
         else "search_frame_discovery"
     )
+    frozen_phase = connection.execute(
+        """
+        SELECT iteration, stop_basis FROM discovery_review_rounds
+        WHERE saturation_phase = ?
+          AND decision = 'freeze'
+        ORDER BY iteration DESC LIMIT 1
+        """,
+        (saturation_phase,),
+    ).fetchone()
+    if frozen_phase is not None and iteration > int(
+        frozen_phase["iteration"]
+    ):
+        raise RuntimeError(
+            f"{saturation_phase} already froze at iteration "
+            f"{frozen_phase['iteration']} with stop basis "
+            f"{frozen_phase['stop_basis']}; a later round cannot be assigned"
+        )
     protocol = read_json(SATURATION_PROTOCOL_PATH)
     default_width = int(
         protocol["sampling"]["records_per_stratum_per_review_round"]
@@ -2085,6 +2171,25 @@ def import_discovery_extraction(
     input_path: Path,
 ) -> Dict[str, int]:
     """Import exact English term spans and provisional indicator names."""
+    extraction_rows = list(iter_csv(input_path))
+    assisted_roles = {
+        str(row.get("extractor_role") or "").strip().upper()
+        for row in extraction_rows
+        if str(row.get("extractor_role") or "").strip()
+    }
+    if any(
+        str(row.get("draft_method") or "").strip()
+        for row in extraction_rows
+    ):
+        if len(assisted_roles) != 1:
+            raise ValueError(
+                "One assisted discovery extraction must declare one role"
+            )
+        assert_registered_review_attestation(
+            connection,
+            input_path,
+            next(iter(assisted_roles)),
+        )
     snapshot_path = snapshot_import_file(
         connection,
         input_path,
@@ -2097,6 +2202,7 @@ def import_discovery_extraction(
     }
     review_keys: set[tuple[str, int, str]] = set()
     review_no_item_states: Dict[tuple[str, int, str], bool] = {}
+    extracted_item_keys: set[tuple[str, int, str, str, str]] = set()
     submission_role = ""
     for row in iter_csv(snapshot_path):
         name = str(row.get("verbatim_name") or "").strip()
@@ -2109,9 +2215,32 @@ def import_discovery_extraction(
         ).fetchone()
         if record is None:
             raise ValueError(f"Unknown discovery record: {record_key}")
-        if str(record["language"]).casefold() != "en":
+        for source_field in ("doi", "title", "abstract"):
+            supplied = str(row.get(source_field) or "")
+            stored = str(record[source_field] or "")
+            if supplied and supplied != stored:
+                raise ValueError(
+                    "Discovery extraction must preserve the frozen source "
+                    f"{source_field}: {record_key}"
+                )
+        record_language = str(
+            record["language"] or "unknown"
+        ).strip().casefold()
+        h2_language_approval = connection.execute(
+            """
+            SELECT 1 FROM screening_decisions
+            WHERE record_key = ? AND reviewer_role = 'H2'
+              AND language_judgment = 'en' AND decision = 'include'
+            """,
+            (record_key,),
+        ).fetchone()
+        if record_language != "en" and not (
+            record_language in {"", "unknown"}
+            and h2_language_approval is not None
+        ):
             raise ValueError(
-                f"Active discovery extraction requires English: {record_key}"
+                "Active discovery extraction requires OpenAlex English or "
+                f"H2-confirmed English when language is unknown: {record_key}"
             )
         iteration = int(row.get("review_round") or 0)
         included = connection.execute(
@@ -2176,6 +2305,16 @@ def import_discovery_extraction(
                 "A completed blank extraction row must set "
                 f"no_relevant_items=true: {record_key}"
             )
+        status = str(row.get("status") or "").strip().casefold()
+        if status != "active":
+            raise ValueError(
+                f"Completed discovery extraction must be active: {record_key}"
+            )
+        if str(row.get("exclusion_reason") or "").strip():
+            raise ValueError(
+                "Completed active discovery extraction cannot have an "
+                f"exclusion reason: {record_key}"
+            )
         review_key = (record_key, iteration, extractor_role)
         prior_no_items = review_no_item_states.get(review_key)
         if (
@@ -2214,6 +2353,11 @@ def import_discovery_extraction(
         evidence_span = str(row.get("evidence_span") or "").strip()
         if not evidence_span:
             raise ValueError(f"Evidence span is required for {name!r}")
+        if name.casefold() not in evidence_span.casefold():
+            raise ValueError(
+                "Evidence span must contain the verbatim name: "
+                f"{record_key}/{name}"
+            )
         item_type = str(row.get("item_type") or "").strip().casefold()
         location = str(row.get("location") or "").strip().casefold()
         if location not in {"title", "abstract"}:
@@ -2232,6 +2376,25 @@ def import_discovery_extraction(
                 f"Verbatim name is not present in the {location}: "
                 f"{record_key}/{name}"
             )
+        proposed_role = str(
+            row.get("proposed_role") or ""
+        ).strip().casefold()
+        if proposed_role not in DISCOVERY_PROPOSED_ROLES:
+            raise ValueError(
+                f"Invalid discovery proposed_role: {proposed_role!r}"
+            )
+        item_key = (
+            record_key,
+            iteration,
+            item_type,
+            name.casefold(),
+            location,
+        )
+        if item_key in extracted_item_keys:
+            raise ValueError(
+                f"Duplicate discovery extraction item: {record_key}/{name}"
+            )
+        extracted_item_keys.add(item_key)
         if item_type == "term":
             coding._assert_not_frozen(connection)
             term_id = "TERM_" + sha256_bytes(
@@ -2276,13 +2439,21 @@ def import_discovery_extraction(
                     term_id,
                     record_key,
                     record["doi"] or record["provider_id"],
-                    f"OpenAlex language=en; {location} evidence verified",
+                    (
+                        f"OpenAlex language={record_language}; "
+                        + (
+                            "H2 language=en; "
+                            if record_language != "en"
+                            else ""
+                        )
+                        + f"{location} evidence verified"
+                    ),
                     name,
                     normalized,
                     term_match_key(name),
                     location,
                     evidence_span,
-                    str(row.get("proposed_role") or "").strip(),
+                    proposed_role,
                 ),
             )
             counts["terms"] += 1
@@ -2346,7 +2517,7 @@ def import_discovery_extraction(
                     normalize_term(name),
                     location,
                     evidence_span,
-                    str(row.get("proposed_role") or "").strip(),
+                    proposed_role,
                     extractor_role,
                     h1_decision,
                     h2_decision,
@@ -2445,6 +2616,16 @@ def import_discovery_indicator_adjudication(
     input_path: Path,
 ) -> int:
     """Import H2 decisions without allowing an unlabelled included family."""
+    adjudication_rows = list(iter_csv(input_path))
+    if any(
+        str(row.get("draft_method") or "").strip()
+        for row in adjudication_rows
+    ):
+        assert_registered_review_attestation(
+            connection,
+            input_path,
+            "H2",
+        )
     snapshot_path = snapshot_import_file(
         connection,
         input_path,
@@ -2675,8 +2856,9 @@ def record_discovery_saturation(
     decision: str,
     notes: str,
     reviewer_role: str = "H2",
+    protocol_deviation_amendment: Path | None = None,
 ) -> Dict[str, Any]:
-    """Record H2's preregistered consecutive dual-zero decision."""
+    """Record H2's evidence-preserving discovery stop decision."""
     role = reviewer_role.upper()
     if role != "H2":
         raise ValueError("Only H2 may approve discovery saturation")
@@ -2719,20 +2901,74 @@ def record_discovery_saturation(
             "minimum_consecutive_zero_novelty_rounds"
         ]
     )
-    if decision == "freeze" and consecutive < required:
-        raise ValueError(
-            f"Freeze requires {required} consecutive dual-zero rounds; "
-            f"current={consecutive}"
-        )
+    stop_basis = "not_applicable"
+    amendment_id = ""
+    amendment_sha256 = ""
+    if decision == "freeze":
+        if consecutive >= required:
+            stop_basis = "preregistered_consecutive_dual_zero"
+            if protocol_deviation_amendment is not None:
+                raise ValueError(
+                    "A protocol-deviation amendment is not permitted when "
+                    "the preregistered dual-zero rule is satisfied"
+                )
+        else:
+            if protocol_deviation_amendment is None:
+                raise ValueError(
+                    f"Freeze requires {required} consecutive dual-zero "
+                    f"rounds; current={consecutive}. An explicit audited "
+                    "protocol-deviation amendment is required to stop early."
+                )
+            supplied_path = protocol_deviation_amendment.resolve()
+            expected_path = DISCOVERY_STOP_AMENDMENT_PATH.resolve()
+            if supplied_path != expected_path:
+                raise ValueError(
+                    "Only the frozen round-12 pragmatic-stop amendment may "
+                    "authorize this protocol deviation"
+                )
+            amendment = read_json(supplied_path)
+            guards = amendment.get("integrity_guards", {})
+            required_guards = (
+                "actual_endpoint_counts_must_be_retained",
+                "dual_zero_claim_requires_computed_dual_zero",
+                "protocol_deviation_must_be_disclosed",
+                "round12_decisions_must_not_be_changed_to_create_zero",
+                "later_search_frame_discovery_rounds_must_not_be_started",
+            )
+            if (
+                amendment.get("status") != "approved"
+                or amendment.get("approved_by") != "project_owner"
+                or amendment.get("scope") != row["saturation_phase"]
+                or int(amendment.get("terminal_iteration", -1)) != iteration
+                or amendment.get("replacement_stop_basis")
+                != "retrospective_owner_pragmatic_stop"
+                or not all(guards.get(key) is True for key in required_guards)
+            ):
+                raise ValueError(
+                    "The protocol-deviation amendment is incomplete or does "
+                    "not authorize this phase and iteration"
+                )
+            stop_basis = "retrospective_owner_pragmatic_stop"
+            amendment_id = str(amendment["amendment_id"])
+            amendment_sha256 = sha256_bytes(supplied_path.read_bytes())
     if not notes.strip():
         raise ValueError("H2 saturation notes are required")
+    stored_notes = notes.strip()
+    if stop_basis == "retrospective_owner_pragmatic_stop":
+        stored_notes = (
+            f"{stored_notes} [PROTOCOL_DEVIATION:{amendment_id}; "
+            f"actual_new_terms={new_terms}; "
+            "actual_new_indicator_families="
+            f"{new_indicator_families}; dual_zero={str(is_zero).lower()}]"
+        )
     connection.execute(
         """
         UPDATE discovery_review_rounds
         SET new_nonredundant_english_terms = ?,
             new_canonical_indicator_families = ?,
             consecutive_zero_rounds = ?, reviewer_role = 'H2',
-            decision = ?, notes = ?, reviewed_at = ?
+            decision = ?, stop_basis = ?, protocol_amendment_id = ?,
+            protocol_amendment_sha256 = ?, notes = ?, reviewed_at = ?
         WHERE iteration = ?
         """,
         (
@@ -2740,7 +2976,10 @@ def record_discovery_saturation(
             new_indicator_families,
             consecutive,
             decision,
-            notes.strip(),
+            stop_basis,
+            amendment_id,
+            amendment_sha256,
+            stored_notes,
             utc_now(),
             iteration,
         ),
@@ -2754,6 +2993,9 @@ def record_discovery_saturation(
         "consecutive_zero_rounds": consecutive,
         "required_zero_rounds": required,
         "decision": decision,
+        "stop_basis": stop_basis,
+        "protocol_amendment_id": amendment_id,
+        "protocol_amendment_sha256": amendment_sha256,
         "new_term_family_labels": computed["new_term_family_labels"],
         "new_indicator_family_labels": computed[
             "new_indicator_family_labels"

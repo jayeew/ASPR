@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import hashlib
 import json
 import shutil
 import sqlite3
@@ -9,19 +10,40 @@ import urllib.parse
 from pathlib import Path
 from typing import Any, Dict, List
 
+import build_saturation_alignment_protocols
 import coding
+import export_saturation_codebook_reference
 import handoff
 import human_review_cli
 import indicators
 import local_ai
+import materialize_targeted_operationalizations_v3
 import pipeline
+import primary_codex_high_recall_screening
+import primary_codex_term_coder
 import providers
 import reporting
 import retrieval
 import saturation
 import screening
-from common import deterministic_ten_percent, sha256_file, write_csv
-from database import initialize, set_stage, snapshot_import_file
+import targeted_formula_review
+import validate_press_revisions
+import validate_saturation_alignment
+from common import (
+    deterministic_ten_percent,
+    sha256_file,
+    write_csv,
+    write_json,
+)
+from database import (
+    assert_registered_review_attestation,
+    initialize,
+    register_independent_ai_review_manifest,
+    set_stage,
+    snapshot_import_file,
+    supersede_independent_ai_review_run,
+    supersede_source_snapshot,
+)
 
 
 ROOT = Path(__file__).resolve().parent
@@ -319,6 +341,129 @@ def _insert_term_codes(
                 "2026-07-28T00:00:00+00:00",
             ),
         )
+
+
+def test_term_coding_export_can_limit_to_missing_role_rows() -> None:
+    """Blind incremental coding exports omit terms already coded by a role."""
+    with tempfile.TemporaryDirectory() as temporary:
+        connection = initialize(Path(temporary) / "missing_codes.sqlite3")
+        set_stage(connection, "bootstrap_retrieval_complete", "complete")
+        for term_id, term in (("T1", "novelty"), ("T2", "semantic distance")):
+            connection.execute(
+                """
+                INSERT INTO raw_terms(
+                    term_id, source_record_key, source_id, source_type,
+                    source_language_status, source_language_evidence,
+                    verbatim_term, normalized_term, match_key, location,
+                    evidence_span, proposed_role, status, exclusion_reason
+                ) VALUES (?, ?, ?, 'bootstrap_literature', 'en',
+                          'English abstract verified', ?, ?, ?, 'abstract',
+                          ?, 'construct', 'active', '')
+                """,
+                (
+                    term_id,
+                    f"doi:10.2000/{term_id.casefold()}",
+                    term_id,
+                    term,
+                    term,
+                    term,
+                    term,
+                ),
+            )
+        connection.execute(
+            """
+            INSERT INTO term_coding(
+                term_id, coder_role, canonical_term, term_family_label,
+                term_relation, search_domain_label,
+                search_domain_definition, query_family_label,
+                cross_domain, decision, reason, coded_at
+            ) VALUES (
+                'T1', 'H1', 'novelty', 'novelty', 'canonical',
+                'Novelty', 'Paper-level novelty constructs',
+                'novelty measurement', 0, 'include',
+                'Direct construct term', '2026-07-29T00:00:00+00:00'
+            )
+            """
+        )
+        connection.commit()
+        output = Path(temporary) / "h1_missing.csv"
+        count = coding.export_term_coding(
+            connection,
+            output,
+            "H1",
+            only_missing=True,
+        )
+        with output.open(encoding="utf-8", newline="") as handle:
+            rows = list(csv.DictReader(handle))
+        assert count == 1
+        assert [row["term_id"] for row in rows] == ["T2"]
+        assert rows[0]["coder_role"] == "H1"
+        connection.close()
+
+
+def test_excluded_term_may_leave_cross_domain_blank() -> None:
+    """An excluded construct has no cross-domain assignment to encode."""
+    with tempfile.TemporaryDirectory() as temporary:
+        connection = initialize(Path(temporary) / "excluded_term.sqlite3")
+        connection.execute(
+            """
+            INSERT INTO raw_terms(
+                term_id, source_record_key, source_id, source_type,
+                source_language_status, source_language_evidence,
+                verbatim_term, normalized_term, match_key, location,
+                evidence_span, proposed_role, status, exclusion_reason
+            ) VALUES (
+                'T_EXCLUDE', 'doi:10.2000/exclude', 'S1',
+                'bootstrap_literature', 'en', 'English abstract verified',
+                'generic prose', 'generic prose', 'generic prose',
+                'abstract', 'generic prose', 'construct', 'active', ''
+            )
+            """
+        )
+        for role in ("AI", "H1"):
+            connection.execute(
+                """
+                INSERT INTO term_coding(
+                    term_id, coder_role, canonical_term,
+                    term_family_label, term_relation,
+                    search_domain_label, search_domain_definition,
+                    query_family_label, cross_domain, decision, reason,
+                    coded_at
+                ) VALUES (
+                    'T_EXCLUDE', ?, '', '', '', '', '', '', 0, 'exclude',
+                    'Generic prose is not a retrieval construct.',
+                    '2026-07-29T00:00:00+00:00'
+                )
+                """,
+                (role,),
+            )
+        connection.commit()
+        row = {
+            "term_id": "T_EXCLUDE",
+            "verbatim_term": "generic prose",
+            "source_type": "bootstrap_literature",
+            "coder_role": "H2",
+            "canonical_term": "",
+            "term_family_label": "",
+            "term_relation": "",
+            "search_domain_label": "",
+            "search_domain_definition": "",
+            "query_family_label": "",
+            "cross_domain": "",
+            "decision": "exclude",
+            "reason": "Generic prose is not a retrieval construct.",
+        }
+        path = Path(temporary) / "h2_exclude.csv"
+        write_csv(path, [row], coding.TERM_CODING_FIELDS)
+        assert coding.import_term_coding(connection, path) == 1
+        stored = connection.execute(
+            """
+            SELECT cross_domain, decision FROM term_coding
+            WHERE term_id = 'T_EXCLUDE' AND coder_role = 'H2'
+            """
+        ).fetchone()
+        assert tuple(stored) == (0, "exclude")
+        connection.close()
 
 
 def test_hidden_seed_search_log_requires_all_independent_routes() -> None:
@@ -866,6 +1011,13 @@ def test_screening_requires_h2_and_retains_language_exclusion() -> None:
         assert screening.screening_exclusion_counts(connection)[
             "E_LANGUAGE_NON_ENGLISH"
         ] == 1
+        for role in ("AI", "H1"):
+            incremental = Path(temporary) / f"incremental_{role}.csv"
+            assert screening.export_screening(
+                connection,
+                incremental,
+                role,
+            ) == 0
         connection.close()
 
 
@@ -1219,6 +1371,374 @@ def _h1_indicator_row(row: Dict[str, Any]) -> Dict[str, Any]:
         }
     )
     return result
+
+
+def test_unverified_indicator_candidate_keeps_unknown_group_explicit() -> None:
+    """Missing full text must not force H1 to invent a research team."""
+    with tempfile.TemporaryDirectory() as temporary:
+        temporary_path = Path(temporary)
+        connection = initialize(temporary_path / "unknown_group.sqlite3")
+        set_stage(connection, "literature_screened", "complete")
+        record = _record("W_UNKNOWN", "10.5000/unknown-group")
+        _insert_record(connection, record)
+        connection.execute(
+            """
+            INSERT INTO screening_final(
+                record_key, final_language, final_decision,
+                exclusion_reason, h2_required, h2_completed,
+                adjudication_reason, finalized_at
+            ) VALUES (?, 'en', 'include', '', 1, 1, 'H2', ?)
+            """,
+            (record["record_key"], "2026-07-28T00:00:00+00:00"),
+        )
+        connection.commit()
+        row = _h1_indicator_row(
+            _indicator_row(
+                record,
+                "Abstract-named candidate",
+                "PlaceholderTeam",
+                0,
+                "abstract_named_candidate",
+                temporary_path / "not_used.txt",
+                formula_reproducible=False,
+            )
+        )
+        row.update(
+            {
+                "source_disposition": "candidate_fulltext_missing",
+                "english_fulltext_status": "unavailable",
+                "disposition_notes": (
+                    "The title or abstract names a candidate, but verified "
+                    "English full text is unavailable."
+                ),
+                "research_group": "",
+                "research_group_id": "",
+                "research_group_evidence": "",
+                "fulltext_source_url": "",
+                "fulltext_local_path": "",
+                "fulltext_sha256": "",
+                "fulltext_license": "",
+                "english_fulltext_verified": "false",
+                "primary_or_foundational_evidence": "false",
+                "formula_reproducible": "false",
+                "t0_computable": "false",
+                "maximum_information_time": "unverified_without_fulltext",
+                "nonconstant": "false",
+                "quality_audit_status": "pending_system_audit",
+                "data_status": "unassessed_pending_system_audit",
+            }
+        )
+        input_path = temporary_path / "unknown_group.csv"
+        write_csv(input_path, [row], indicators.INDICATOR_FIELDS)
+        result = indicators.import_indicators(connection, input_path)
+        assert result["canonical_indicator_families"] == 1
+        mention = connection.execute(
+            """
+            SELECT research_group, research_group_id,
+                   research_group_evidence
+            FROM indicator_mentions
+            """
+        ).fetchone()
+        assert mention["research_group"] == (
+            "Unknown (unverified English full text)"
+        )
+        assert mention["research_group_id"].startswith(
+            "unverified_source_"
+        )
+        family = connection.execute(
+            "SELECT research_groups_json FROM indicator_families"
+        ).fetchone()
+        assert json.loads(family["research_groups_json"]) == []
+        connection.close()
+
+
+def test_h1_source_review_allows_only_exact_post_h2_replay() -> None:
+    """Formula supplements may replay, but never mutate, a frozen H1 review."""
+    with tempfile.TemporaryDirectory() as temporary:
+        connection = initialize(
+            Path(temporary) / "source_review_replay.sqlite3"
+        )
+        record = _record("W_REPLAY", "10.5000/source-review-replay")
+        _insert_record(connection, record)
+        payload = (
+            "extracted",
+            "verified",
+            "English full text and formula locations were reviewed.",
+        )
+        indicators._store_source_review(
+            connection,
+            record["record_key"],
+            "H1",
+            *payload,
+        )
+        indicators._store_source_review(
+            connection,
+            record["record_key"],
+            "H2",
+            *payload,
+        )
+        reviewed_at = connection.execute(
+            """
+            SELECT reviewed_at FROM indicator_source_reviews
+            WHERE record_key = ? AND reviewer_role = 'H1'
+            """,
+            (record["record_key"],),
+        ).fetchone()["reviewed_at"]
+        indicators._store_source_review(
+            connection,
+            record["record_key"],
+            "H1",
+            *payload,
+        )
+        replayed_at = connection.execute(
+            """
+            SELECT reviewed_at FROM indicator_source_reviews
+            WHERE record_key = ? AND reviewer_role = 'H1'
+            """,
+            (record["record_key"],),
+        ).fetchone()["reviewed_at"]
+        assert replayed_at == reviewed_at
+        try:
+            indicators._store_source_review(
+                connection,
+                record["record_key"],
+                "H1",
+                payload[0],
+                payload[1],
+                "Changed notes are not an idempotent replay.",
+            )
+        except ValueError as error:
+            assert "frozen after H2" in str(error)
+        else:
+            raise AssertionError(
+                "A changed H1 source review overwrote frozen H2 evidence"
+            )
+        connection.close()
+
+
+def test_operationalization_separates_source_and_project_missing_rules() -> None:
+    """A project rule may complete G04 without rewriting the source claim."""
+    with tempfile.TemporaryDirectory() as temporary:
+        temporary_path = Path(temporary)
+        connection = initialize(temporary_path / "operationalization.sqlite3")
+        set_stage(connection, "literature_screened", "complete")
+        record = _record("W_OP", "10.5000/operationalization")
+        _insert_record(connection, record)
+        connection.execute(
+            """
+            INSERT INTO screening_final(
+                record_key, final_language, final_decision,
+                exclusion_reason, h2_required, h2_completed,
+                adjudication_reason, finalized_at
+            ) VALUES (?, 'en', 'include', '', 1, 1, 'H2', ?)
+            """,
+            (record["record_key"], "2026-07-28T00:00:00+00:00"),
+        )
+        fulltext_path = temporary_path / "formula.txt"
+        fulltext_path.write_text(
+            "The indicator is defined by Equation 1.\n"
+            "Corresponding-author and affiliation cluster: TeamOp\n",
+            encoding="utf-8",
+        )
+        h2_row = _indicator_row(
+            record,
+            "Source-defined metric",
+            "TeamOp",
+            0,
+            "source_defined_metric",
+            fulltext_path,
+        )
+        h2_row.update(
+            {
+                "missing_rule": "Not reported.",
+                "formula_reproducible": "false",
+                "primary_or_foundational_evidence": "true",
+            }
+        )
+        h1_path = temporary_path / "formula_h1.csv"
+        write_csv(
+            h1_path,
+            [_h1_indicator_row(h2_row)],
+            indicators.INDICATOR_FIELDS,
+        )
+        indicators.import_indicators(connection, h1_path)
+        h2_path = temporary_path / "formula_h2.csv"
+        write_csv(h2_path, [h2_row], indicators.INDICATOR_FIELDS)
+        indicators.import_indicators(connection, h2_path)
+        family = connection.execute(
+            "SELECT * FROM indicator_families"
+        ).fetchone()
+        assert family["formula_reproducible"] == 0
+        assert family["english_fulltext_verified"] == 1
+
+        implementation_path = temporary_path / "implementation.py"
+        implementation_path.write_text(
+            "def metric(numerator, denominator):\n"
+            "    return numerator / denominator\n",
+            encoding="utf-8",
+        )
+        test_artifact_path = temporary_path / "tests.json"
+        write_json(
+            test_artifact_path,
+            {
+                "denominator_zero": "missing",
+                "observed_empty_set": 0,
+                "status": "pass",
+            },
+        )
+        input_snapshot_path = temporary_path / "inputs.csv"
+        input_snapshot_path.write_text(
+            "numerator,denominator\n1,2\n",
+            encoding="utf-8",
+        )
+
+        def complete_row(row: Dict[str, Any]) -> Dict[str, Any]:
+            result = dict(row)
+            result.update(
+                {
+                    "protocol_missing_rule": (
+                        "Missing when either required input is absent; "
+                        "observed zeros remain zero."
+                    ),
+                    "denominator_zero_rule": (
+                        "Return missing when denominator equals zero."
+                    ),
+                    "observed_empty_set_rule": (
+                        "Return zero only for a fully observed empty set."
+                    ),
+                    "incomplete_coverage_rule": (
+                        "Return missing when required coverage is incomplete."
+                    ),
+                    "transform_and_unit_rule": (
+                        "Compute the untransformed dimensionless share."
+                    ),
+                    "input_columns_json": json.dumps(
+                        ["numerator", "denominator"]
+                    ),
+                    "implementation_path": str(implementation_path),
+                    "implementation_sha256": sha256_file(
+                        implementation_path
+                    ),
+                    "test_artifact_path": str(test_artifact_path),
+                    "test_artifact_sha256": sha256_file(
+                        test_artifact_path
+                    ),
+                    "input_snapshot_path": str(input_snapshot_path),
+                    "input_snapshot_sha256": sha256_file(
+                        input_snapshot_path
+                    ),
+                    "decision": "approve",
+                    "reason": (
+                        "The project rule completes reproducibility without "
+                        "attributing it to the source."
+                    ),
+                }
+            )
+            return result
+
+        for role in ("AI", "H1"):
+            review_path = temporary_path / f"op_{role.casefold()}.csv"
+            exported_path = temporary_path / f"op_{role.casefold()}_blank.csv"
+            assert indicators.export_feature_operationalization(
+                connection,
+                exported_path,
+                role,
+            ) == 1
+            with exported_path.open(
+                encoding="utf-8",
+                newline="",
+            ) as handle:
+                review_row = complete_row(next(csv.DictReader(handle)))
+            write_csv(
+                review_path,
+                [review_row],
+                indicators.OPERATIONALIZATION_FIELDS,
+            )
+            indicators.import_feature_operationalization(
+                connection,
+                review_path,
+            )
+        h2_blank = temporary_path / "op_h2_blank.csv"
+        assert indicators.export_feature_operationalization(
+            connection,
+            h2_blank,
+            "H2",
+        ) == 1
+        with h2_blank.open(encoding="utf-8", newline="") as handle:
+            h2_operation = complete_row(next(csv.DictReader(handle)))
+        h2_operation_path = temporary_path / "op_h2.csv"
+        write_csv(
+            h2_operation_path,
+            [h2_operation],
+            indicators.OPERATIONALIZATION_H2_FIELDS,
+        )
+        result = indicators.import_feature_operationalization(
+            connection,
+            h2_operation_path,
+        )
+        assert result["approved"] == 1
+        assert result["missing_reviews"] == []
+
+        amendment_path = (
+            ROOT
+            / "protocol_amendment_formula_operationalization_separation_v3.json"
+        )
+        connection.execute(
+            """
+            INSERT INTO source_snapshots(
+                source_id, path, sha256, role, imported_at
+            ) VALUES (?, ?, ?, 'protocol_deviation', ?)
+            """,
+            (
+                "protocol_amendment_formula_operationalization_separation_v3",
+                str(amendment_path),
+                sha256_file(amendment_path),
+                "2026-07-30T00:00:00+00:00",
+            ),
+        )
+        connection.execute(
+            """
+            INSERT INTO candidate_dimensions(
+                dimension_id, label, definition, construct_role,
+                feature_ids_json, research_groups_json, h2_approved,
+                status, decision_reason
+            ) VALUES (
+                'CD001', 'Source-defined construct',
+                'Test construct.', 'substantive_innovation',
+                ?, ?, 1, 'candidate', 'H2 test approval'
+            )
+            """,
+            (
+                json.dumps([family["feature_id"]]),
+                family["research_groups_json"],
+            ),
+        )
+        set_stage(connection, "dimensions_derived", "complete")
+        connection.commit()
+        indicators.select_indicators(connection)
+        checks = json.loads(
+            connection.execute(
+                """
+                SELECT gate_checks_json FROM feature_decisions
+                WHERE feature_id = ?
+                """,
+                (family["feature_id"],),
+            ).fetchone()[0]
+        )
+        assert checks["G04_REPRODUCIBLE_DEFINITION"] is True
+        stored = json.loads(
+            connection.execute(
+                """
+                SELECT payload_json
+                FROM feature_operationalization_reviews
+                WHERE feature_id = ? AND reviewer_role = 'H2'
+                """,
+                (family["feature_id"],),
+            ).fetchone()[0]
+        )
+        assert family["missing_rule"] == "Not reported."
+        assert stored["protocol_missing_rule"].startswith("Missing when")
+        connection.close()
 
 
 def test_open_fulltext_acquisition_is_lawful_hashed_and_resumable() -> None:
@@ -1851,8 +2371,12 @@ def test_indicator_gates_redundancy_and_dimension_retention() -> None:
         indicators.OUTPUT_DIR = temporary_path / "outputs"
         try:
             selected = indicators.select_indicators(connection)
+            repeated_derived = indicators.derive_dimensions(connection)
+            repeated_selected = indicators.select_indicators(connection)
         finally:
             indicators.OUTPUT_DIR = original_output
+        assert repeated_derived == derived
+        assert repeated_selected == selected
         assert selected["D"] == 1
         assert selected["F"] == 1
         assert selected["no_quota_applied"] is True
@@ -2029,6 +2553,73 @@ def test_discovery_freeze_requires_three_consecutive_dual_zero_rounds() -> None:
         connection.close()
 
 
+def test_round12_protocol_deviation_is_explicit_and_hash_bound() -> None:
+    """A pragmatic stop is allowed only through the frozen amendment."""
+    with tempfile.TemporaryDirectory() as temporary:
+        connection = initialize(Path(temporary) / "deviation.sqlite3")
+        connection.execute(
+            """
+            INSERT INTO discovery_review_rounds(
+                iteration, saturation_phase, batch_first_rank,
+                batch_last_rank, assigned_records, fully_reviewed,
+                new_nonredundant_english_terms,
+                new_canonical_indicator_families,
+                consecutive_zero_rounds, reviewer_role, decision,
+                notes, reviewed_at
+            ) VALUES (
+                12, 'search_frame_discovery', 56, 120, 503, 1,
+                -1, -1, 0, 'SYSTEM', 'pending', '',
+                '2026-07-30T01:17:03+00:00'
+            )
+            """
+        )
+        try:
+            saturation.record_discovery_saturation(
+                connection,
+                12,
+                new_terms=0,
+                new_indicator_families=0,
+                decision="freeze",
+                notes="Owner-directed pragmatic stop after round 12",
+            )
+        except ValueError as error:
+            assert "protocol-deviation amendment is required" in str(error)
+        else:
+            raise AssertionError("An undeclared early freeze must fail")
+        result = saturation.record_discovery_saturation(
+            connection,
+            12,
+            new_terms=0,
+            new_indicator_families=0,
+            decision="freeze",
+            notes="Owner-directed pragmatic stop after round 12",
+            protocol_deviation_amendment=(
+                saturation.DISCOVERY_STOP_AMENDMENT_PATH
+            ),
+        )
+        assert result["consecutive_zero_rounds"] == 1
+        assert result["stop_basis"] == (
+            "retrospective_owner_pragmatic_stop"
+        )
+        assert result["protocol_amendment_sha256"]
+        stored = connection.execute(
+            """
+            SELECT * FROM discovery_review_rounds WHERE iteration = 12
+            """
+        ).fetchone()
+        assert stored["protocol_amendment_id"] == (
+            "aspr-v3-search-frame-round12-pragmatic-stop-20260730"
+        )
+        assert "dual_zero=true" in stored["notes"]
+        try:
+            saturation.assign_discovery_round(connection, 13)
+        except RuntimeError as error:
+            assert "already froze at iteration 12" in str(error)
+        else:
+            raise AssertionError("A post-freeze round must not be assigned")
+        connection.close()
+
+
 def test_h1_blinding_and_h2_comparison_export() -> None:
     """H1 never sees AI codes; H2 sees both only after independent coding."""
     with tempfile.TemporaryDirectory() as temporary:
@@ -2110,8 +2701,28 @@ def test_discovery_extraction_requires_explicit_no_item_disposition() -> None:
     with tempfile.TemporaryDirectory() as temporary:
         temporary_path = Path(temporary)
         connection = initialize(temporary_path / "extract.sqlite3")
-        record = _record("WEXTRACT", "10.4000/extract")
+        record = _record(
+            "WEXTRACT",
+            "10.4000/extract",
+            language="unknown",
+        )
         _insert_record(connection, record)
+        connection.execute(
+            """
+            INSERT INTO screening_decisions(
+                record_key, reviewer_role, language_judgment,
+                language_evidence, decision, exclusion_reason,
+                evidence_span, notes, decided_at
+            ) VALUES (?, 'H2', 'en', ?, 'include', '', ?,
+                      'H2 confirmed English title and abstract.', ?)
+            """,
+            (
+                record["record_key"],
+                record["title"],
+                record["title"],
+                "2026-07-29T00:00:00+00:00",
+            ),
+        )
         connection.execute(
             """
             INSERT INTO discovery_queries(
@@ -2151,7 +2762,11 @@ def test_discovery_extraction_requires_explicit_no_item_disposition() -> None:
         blank_row.update(
             {
                 "record_key": record["record_key"],
+                "doi": record["doi"],
+                "title": record["title"],
+                "abstract": record["abstract"],
                 "review_round": 1,
+                "status": "active",
                 "extractor_role": "H1",
                 "record_extraction_complete": "true",
                 "no_relevant_items": "false",
@@ -2230,12 +2845,16 @@ def test_frozen_frame_separates_new_terms_from_indicator_names() -> None:
         indicator_row.update(
             {
                 "record_key": record["record_key"],
+                "doi": record["doi"],
+                "title": record["title"],
+                "abstract": record["abstract"],
                 "review_round": "1",
                 "item_type": "indicator_candidate",
                 "verbatim_name": "novelty metric",
                 "location": "abstract",
                 "evidence_span": "article-level novelty metric",
                 "proposed_role": "indicator_or_measure",
+                "status": "active",
                 "extractor_role": "H1",
                 "h1_decision": "include",
                 "h2_decision": "pending",
@@ -2267,7 +2886,7 @@ def test_frozen_frame_separates_new_terms_from_indicator_names() -> None:
                 "item_type": "term",
                 "verbatim_name": "article-level novelty",
                 "evidence_span": "article-level novelty metric",
-                "proposed_role": "construct_term",
+                "proposed_role": "construct",
             }
         )
         term_path = temporary_path / "new_term.csv"
@@ -2492,6 +3111,42 @@ def test_formal_phase_uses_offset_ranks_without_refetching() -> None:
             50,
         ]
         assert result["unique_records"] == 10
+        connection.close()
+
+
+def test_round12_terminal_formal_cohort_is_not_round13() -> None:
+    """Only seeded ranks 1-10 enter the fixed cohort without a new round."""
+    with tempfile.TemporaryDirectory() as temporary:
+        connection = initialize(
+            Path(temporary) / "terminal_formal_cohort.sqlite3"
+        )
+        for index in range(1, 12):
+            record = _record(
+                f"WTERMINAL{index}",
+                f"10.4000/terminal-formal-{index}",
+                route="formal_saturation:test",
+            )
+            _insert_record(connection, record)
+            connection.execute(
+                """
+                INSERT INTO query_hits(
+                    provider, physical_query_id, run_role, record_key, rank
+                ) VALUES ('OpenAlex', 'L0001__P001', 'formal', ?, ?)
+                """,
+                (record["record_key"], index),
+            )
+        expected = {
+            f"doi:10.4000/terminal-formal-{index}"
+            for index in range(1, 11)
+        }
+        assert screening._formal_record_count(connection) == 10
+        assert set(pipeline._formal_record_keys(connection)) == expected
+        assert (
+            connection.execute(
+                "SELECT COUNT(*) FROM discovery_review_rounds"
+            ).fetchone()[0]
+            == 0
+        )
         connection.close()
 
 
@@ -3042,6 +3697,482 @@ def test_citation_tracking_covers_reviews_and_indicator_sources() -> None:
         connection.close()
 
 
+def test_independent_ai_review_requires_exact_registered_manifest() -> None:
+    """Assisted AI adjudication is importable only under its exact hash."""
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary)
+        input_path = root / "h2_draft.csv"
+        artifact_path = root / "h2_reviewed.csv"
+        fields = [
+            "record_key",
+            "doi",
+            "title",
+            "abstract",
+            "reviewer_role",
+            "language_judgment",
+            "language_evidence",
+            "decision",
+            "exclusion_reason",
+            "evidence_span",
+            "notes",
+            "draft_method",
+            "independent_ai_review_status",
+            "independent_ai_reviewer_id",
+            "independent_ai_reviewed_at",
+            "independent_ai_review_action",
+            "independent_ai_review_note",
+            "independent_ai_run_id",
+            "independent_ai_model",
+            "independent_ai_prompt_sha256",
+        ]
+        source_row = {field: "" for field in fields}
+        source_row.update(
+            {
+                "record_key": "doi:10.4000/ai-review",
+                "doi": "10.4000/ai-review",
+                "title": "Article-level novelty metric",
+                "abstract": "We validate a publication-time indicator.",
+                "reviewer_role": "H2",
+                "draft_method": "seed_for_independent_review",
+            }
+        )
+        write_csv(input_path, [source_row], fields)
+        prompt_sha = "a" * 64
+        run_id = "IAI_H2_TEST"
+        reviewed_row = {
+            **source_row,
+            "language_judgment": "en",
+            "language_evidence": "Article-level novelty metric",
+            "decision": "include",
+            "evidence_span": "Article-level novelty metric",
+            "notes": "Independent second-AI evidence review.",
+            "independent_ai_review_status": "complete",
+            "independent_ai_reviewer_id": "independent_ai_h2_test",
+            "independent_ai_reviewed_at": (
+                "2026-07-29T00:00:00+00:00"
+            ),
+            "independent_ai_review_action": "blind_model_adjudication",
+            "independent_ai_review_note": "Eligible metric evidence.",
+            "independent_ai_run_id": run_id,
+            "independent_ai_model": "test-model",
+            "independent_ai_prompt_sha256": prompt_sha,
+        }
+        write_csv(artifact_path, [reviewed_row], fields)
+        manifest_path = root / "review.manifest.json"
+        manifest = {
+            "run_id": run_id,
+            "artifact_path": str(artifact_path),
+            "artifact_sha256": sha256_file(artifact_path),
+            "input_path": str(input_path),
+            "input_sha256": sha256_file(input_path),
+            "reviewer_role": "H2",
+            "reviewer_id": "independent_ai_h2_test",
+            "model": "test-model",
+            "model_digest": "test-model-digest",
+            "prompt_sha256": prompt_sha,
+            "parameters": {"temperature": 0, "seed": 1},
+            "item_count": 1,
+            "completed_at": "2026-07-29T00:00:00+00:00",
+            "status": "complete",
+        }
+        write_json(manifest_path, manifest)
+        connection = initialize(root / "review.sqlite3")
+        try:
+            assert_registered_review_attestation(
+                connection,
+                artifact_path,
+                "H2",
+            )
+        except RuntimeError as error:
+            assert "neither an accepted human" in str(error)
+        else:
+            raise AssertionError(
+                "Unregistered independent-AI artifact was accepted"
+            )
+        registered = register_independent_ai_review_manifest(
+            connection,
+            manifest_path,
+        )
+        assert registered["item_count"] == 1
+        provenance = assert_registered_review_attestation(
+            connection,
+            artifact_path,
+            "H2",
+        )
+        assert provenance is not None
+        assert provenance["reviewer_type"] == "independent_ai"
+        snapshot_import_file(connection, artifact_path, "screening_H2")
+        role = connection.execute(
+            """
+            SELECT role FROM source_snapshots WHERE sha256 = ?
+            """,
+            (sha256_file(artifact_path),),
+        ).fetchone()[0]
+        assert role == (
+            "review_import_independent_ai_adjudication:screening_H2"
+        )
+        altered = dict(reviewed_row)
+        altered["notes"] = "Changed after registration."
+        write_csv(artifact_path, [altered], fields)
+        try:
+            assert_registered_review_attestation(
+                connection,
+                artifact_path,
+                "H2",
+            )
+        except RuntimeError as error:
+            assert "neither an accepted human" in str(error)
+        else:
+            raise AssertionError(
+                "Post-registration artifact mutation was accepted"
+            )
+        connection.close()
+
+
+def test_primary_codex_ai_coding_manifest_accepts_ai_role() -> None:
+    """A frozen Codex AI-coder artifact has the same exact-hash protection."""
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary)
+        prompt_path = root / "ai_coding_protocol.md"
+        prompt_path.write_text(
+            "Frozen blind primary Codex term-coding protocol.",
+            encoding="utf-8",
+        )
+        prompt_sha = sha256_file(prompt_path)
+        input_path = root / "term_ai_input.csv"
+        artifact_path = root / "term_ai_reviewed.csv"
+        fields = [
+            "term_id",
+            "coder_role",
+            "decision",
+            "reason",
+            "draft_method",
+            "independent_ai_review_status",
+            "independent_ai_reviewer_id",
+            "independent_ai_reviewed_at",
+            "independent_ai_review_action",
+            "independent_ai_review_note",
+            "independent_ai_run_id",
+            "independent_ai_model",
+            "independent_ai_prompt_sha256",
+        ]
+        source_row = {field: "" for field in fields}
+        source_row.update({"term_id": "TERM_TEST", "coder_role": "AI"})
+        write_csv(input_path, [source_row], fields)
+        run_id = "PRIMARY_CODEX_AI_TERM_TEST"
+        reviewed_row = {
+            **source_row,
+            "decision": "exclude",
+            "reason": "Generic prose outside the construct boundary.",
+            "draft_method": "primary_codex_session_coding",
+            "independent_ai_review_status": "complete",
+            "independent_ai_reviewer_id": "primary_codex_ai_term_v3",
+            "independent_ai_reviewed_at": (
+                "2026-07-29T00:00:00+00:00"
+            ),
+            "independent_ai_review_action": "blind_term_coding",
+            "independent_ai_review_note": "Blind primary-AI decision.",
+            "independent_ai_run_id": run_id,
+            "independent_ai_model": "codex_configured_default",
+            "independent_ai_prompt_sha256": prompt_sha,
+        }
+        write_csv(artifact_path, [reviewed_row], fields)
+        manifest_path = root / "term_ai.manifest.json"
+        write_json(
+            manifest_path,
+            {
+                "run_id": run_id,
+                "artifact_path": str(artifact_path),
+                "artifact_sha256": sha256_file(artifact_path),
+                "input_path": str(input_path),
+                "input_sha256": sha256_file(input_path),
+                "reviewer_role": "AI",
+                "reviewer_id": "primary_codex_ai_term_v3",
+                "model": "codex_configured_default",
+                "model_digest": "codex-thread:test-primary",
+                "prompt_sha256": prompt_sha,
+                "parameters": {"review_method": "blind_primary_codex"},
+                "item_count": 1,
+                "completed_at": "2026-07-29T00:00:00+00:00",
+                "status": "complete",
+            },
+        )
+        connection = initialize(root / "term_ai.sqlite3")
+        coding._register_snapshot(
+            connection,
+            "test_primary_codex_ai_protocol",
+            prompt_path,
+            "independent_review_protocol",
+        )
+        registered = register_independent_ai_review_manifest(
+            connection,
+            manifest_path,
+        )
+        assert registered["reviewer_role"] == "AI"
+        provenance = assert_registered_review_attestation(
+            connection,
+            artifact_path,
+            "AI",
+        )
+        assert provenance is not None
+        assert provenance["reviewer_type"] == "independent_ai"
+        connection.close()
+
+
+def test_primary_codex_term_codebook_preserves_t0_outcome_boundary() -> None:
+    """The frozen primary codebook separates T0 constructs from outcomes."""
+    novelty = primary_codex_term_coder.code_row(
+        {
+            "term_id": "T_NOVELTY",
+            "verbatim_term": "scientific novelty",
+            "proposed_role": "construct",
+        }
+    )
+    assert novelty["decision"] == "include"
+    assert novelty["search_domain_label"] == (
+        "Novelty and transformative potential"
+    )
+    citation = primary_codex_term_coder.code_row(
+        {
+            "term_id": "T_CITATION",
+            "verbatim_term": "citation counts",
+            "proposed_role": "validation_outcome",
+        }
+    )
+    assert citation["decision"] == "include"
+    assert citation["search_domain_label"] == (
+        "Scholarly impact validation outcomes"
+    )
+    clinical = primary_codex_term_coder.code_row(
+        {
+            "term_id": "T_CLINICAL",
+            "verbatim_term": "visual analogue scale (VAS) for pain",
+            "proposed_role": "indicator_or_measure",
+        }
+    )
+    assert clinical["decision"] == "exclude"
+    assert clinical["term_family_label"] == ""
+
+
+def test_primary_codex_high_recall_screening_routes_boundaries() -> None:
+    """High-recall routing preserves language and missing-data boundaries."""
+    english = primary_codex_high_recall_screening.route_row(
+        {
+            "title": "Article-level novelty prediction",
+            "abstract": "",
+            "openalex_language": "en",
+        }
+    )
+    assert english["decision"] == "include"
+    assert english["language_judgment"] == "en"
+    assert english["evidence_span"] == "Article-level novelty prediction"
+
+    unknown = primary_codex_high_recall_screening.route_row(
+        {
+            "title": "Potential impact indicators",
+            "abstract": "",
+            "openalex_language": "unknown",
+        }
+    )
+    assert unknown["decision"] == "include"
+
+    non_english = primary_codex_high_recall_screening.route_row(
+        {
+            "title": "Indicadores de impacto",
+            "abstract": "",
+            "openalex_language": "es",
+        }
+    )
+    assert non_english["decision"] == "exclude"
+    assert non_english["exclusion_reason"] == "E_LANGUAGE_NON_ENGLISH"
+
+    missing = primary_codex_high_recall_screening.route_row(
+        {"title": "", "abstract": "", "openalex_language": "unknown"}
+    )
+    assert missing["decision"] == "exclude"
+    assert missing["exclusion_reason"] == "E_INSUFFICIENT_METADATA"
+    assert missing["evidence_span"] == ""
+
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary)
+        connection = initialize(root / "missing.sqlite3")
+        record = _record("W_MISSING", "10.1000/missing")
+        record["title"] = ""
+        record["abstract"] = ""
+        record["language"] = "unknown"
+        _insert_record(connection, record)
+        connection.commit()
+        worksheet = root / "missing_metadata_screening.csv"
+        write_csv(
+            worksheet,
+            [
+                {
+                    "record_key": record["record_key"],
+                    "doi": record["doi"],
+                    "title": "",
+                    "abstract": "",
+                    "openalex_language": "unknown",
+                    "publication_year": "2020",
+                    "work_type": "article",
+                    "reviewer_role": "AI",
+                    "language_judgment": "uncertain",
+                    "language_evidence": "",
+                    "decision": "exclude",
+                    "exclusion_reason": "E_INSUFFICIENT_METADATA",
+                    "evidence_span": "",
+                    "notes": "No title or abstract is available.",
+                }
+            ],
+            screening.SCREENING_FIELDS,
+        )
+        assert screening.import_screening(connection, worksheet) == 1
+        connection.close()
+
+
+def test_independent_screening_protocol_vocabularies_match_importer() -> None:
+    """Frozen reviewer protocols and the importer share one closed vocabulary."""
+    h1_path = ROOT / "INDEPENDENT_CODEX_SCREENING_H1_PROTOCOL_V3.json"
+    h2_path = ROOT / "INDEPENDENT_CODEX_SCREENING_H2_PROTOCOL_V3.json"
+    h1 = json.loads(h1_path.read_text(encoding="utf-8"))
+    h2 = json.loads(h2_path.read_text(encoding="utf-8"))
+    assert set(h1["exclusion_reason_vocabulary"]) == (
+        screening.EXCLUSION_REASONS
+    )
+    assert set(h2["exclusion_reason_vocabulary"]) == (
+        screening.EXCLUSION_REASONS
+    )
+    for protocol in (h1, h2):
+        for component in protocol["components"]:
+            component_path = ROOT / component["path"]
+            assert sha256_file(component_path) == component["sha256"]
+    indicator = json.loads(
+        (
+            ROOT
+            / "INDEPENDENT_CODEX_INDICATOR_ADJUDICATION_PROTOCOL_V3.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert indicator["required_row_role"] == {
+        "field": "reviewer_role",
+        "value": "H2",
+    }
+    for component in indicator["components"]:
+        assert sha256_file(ROOT / component["path"]) == component["sha256"]
+    indicator_alignment = json.loads(
+        (
+            ROOT / "INDEPENDENT_CODEX_INDICATOR_ALIGNMENT_PROTOCOL_V3.json"
+        ).read_text(encoding="utf-8")
+    )
+    indicator_reference = indicator_alignment["prior_round_reference"]
+    assert (
+        sha256_file(ROOT / indicator_reference["path"])
+        == indicator_reference["sha256"]
+    )
+    assert (
+        sha256_file(ROOT / indicator_reference["export_manifest_path"])
+        == indicator_reference["export_manifest_sha256"]
+    )
+    for component in indicator_alignment["components"]:
+        assert sha256_file(ROOT / component["path"]) == component["sha256"]
+    term_adjudication = json.loads(
+        (
+            ROOT / "INDEPENDENT_CODEX_TERM_ADJUDICATION_PROTOCOL_V3.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert term_adjudication["required_row_roles"] == [
+        {"field": "coder_role", "value": "H2"},
+        {"field": "reviewer_role", "value": "H2"},
+    ]
+    reference = term_adjudication["prior_round_reference"]
+    assert sha256_file(ROOT / reference["path"]) == reference["sha256"]
+    assert (
+        sha256_file(ROOT / reference["export_manifest_path"])
+        == reference["export_manifest_sha256"]
+    )
+    for component in term_adjudication["components"]:
+        assert sha256_file(ROOT / component["path"]) == component["sha256"]
+
+
+def test_review_supersession_verifies_shared_rows_before_superset() -> None:
+    """Expanded review scope may supersede only unchanged shared decisions."""
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary)
+        fields = [
+            "term_id",
+            "decision",
+            "canonical_term",
+            "term_family_label",
+            "term_relation",
+            "search_domain_label",
+            "search_domain_definition",
+            "query_family_label",
+            "cross_domain",
+        ]
+        shared = {
+            "term_id": "T1",
+            "decision": "include",
+            "canonical_term": "novelty",
+            "term_family_label": "Scientific novelty",
+            "term_relation": "canonical",
+            "search_domain_label": "Novelty",
+            "search_domain_definition": "Paper novelty",
+            "query_family_label": "novelty measurement",
+            "cross_domain": "false",
+        }
+        extra = {**shared, "term_id": "T2"}
+        old_path = root / "old.csv"
+        new_path = root / "new.csv"
+        write_csv(old_path, [shared], fields)
+        write_csv(new_path, [shared, extra], fields)
+        connection = initialize(root / "superset.sqlite3")
+        for run_id, path, count in (
+            ("OLD", old_path, 1),
+            ("NEW", new_path, 2),
+        ):
+            connection.execute(
+                """
+                INSERT INTO independent_ai_review_runs(
+                    run_id, artifact_sha256, artifact_path,
+                    input_sha256, input_path, reviewer_role, reviewer_id,
+                    model, model_digest, prompt_sha256, parameters_json,
+                    item_count, completed_at, status, manifest_sha256,
+                    registered_at
+                ) VALUES (?, ?, ?, ?, ?, 'AI', 'primary_codex_ai_term_v3',
+                          'test', 'codex-thread:test', ?, '{}', ?, ?,
+                          'complete', ?, ?)
+                """,
+                (
+                    run_id,
+                    sha256_file(path),
+                    str(path),
+                    hashlib.sha256(f"input-{run_id}".encode()).hexdigest(),
+                    str(root / f"{run_id}.input.csv"),
+                    "a" * 64,
+                    count,
+                    "2026-07-29T00:00:00+00:00",
+                    hashlib.sha256(
+                        f"manifest-{run_id}".encode()
+                    ).hexdigest(),
+                    "2026-07-29T00:00:00+00:00",
+                ),
+            )
+        connection.commit()
+        result = supersede_independent_ai_review_run(
+            connection,
+            "OLD",
+            "NEW",
+            "Expanded coding covers every unchanged direct term.",
+            allow_superset=True,
+        )
+        assert result["scope_mode"] == "verified_superset_coverage"
+        assert connection.execute(
+            """
+            SELECT status FROM independent_ai_review_runs
+            WHERE run_id = 'OLD'
+            """
+        ).fetchone()[0] == "superseded"
+        connection.close()
+
+
 def test_registered_source_hash_cannot_be_rebased_after_freeze() -> None:
     """Rerunning init cannot hide a post-freeze protocol/code mutation."""
     with tempfile.TemporaryDirectory() as temporary:
@@ -3088,10 +4219,725 @@ def test_registered_source_hash_cannot_be_rebased_after_freeze() -> None:
         connection.close()
 
 
+def test_changed_source_requires_explicit_versioned_supersession() -> None:
+    """A changed code path is allowed only through a hashed version edge."""
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary)
+        connection = initialize(root / "supersession.sqlite3")
+        source = root / "implementation.py"
+        source.write_text("VERSION = 1\n", encoding="utf-8")
+        coding._register_snapshot(
+            connection,
+            "code_test_original",
+            source,
+            "implementation",
+        )
+        original_sha256 = sha256_file(source)
+        source.write_text("VERSION = 2\n", encoding="utf-8")
+        authorization = root / "amendment.json"
+        authorization.write_text(
+            '{"authorized_old_source_ids":["code_test_original"],'
+            '"original_hashes_retained":true}\n',
+            encoding="utf-8",
+        )
+        result = supersede_source_snapshot(
+            connection,
+            "code_test_original",
+            "code_test_final_v2",
+            source,
+            authorization,
+            "Test-only downstream implementation version.",
+        )
+        assert result["old_sha256"] == original_sha256
+        assert connection.execute(
+            """
+            SELECT sha256 FROM source_snapshots
+            WHERE source_id = 'code_test_original'
+            """
+        ).fetchone()[0] == original_sha256
+        assert reporting._source_snapshot_blockers(connection) == []
+        coding._register_snapshot(
+            connection,
+            "code_test_original",
+            source,
+            "implementation",
+        )
+        assert connection.execute(
+            """
+            SELECT sha256 FROM source_snapshots
+            WHERE source_id = 'code_test_original'
+            """
+        ).fetchone()[0] == original_sha256
+        source.write_text("VERSION = 3\n", encoding="utf-8")
+        assert reporting._source_snapshot_blockers(connection) == [
+            "SOURCE_HASH_CHANGED:code_test_original"
+        ]
+        connection.close()
+
+
+def test_prior_round_codebook_includes_seed_terms_but_not_future_rounds() -> None:
+    """The alignment reference includes fixed seeds and only prior rounds."""
+    connection = sqlite3.connect(":memory:")
+    connection.row_factory = sqlite3.Row
+    connection.executescript(
+        """
+        CREATE TABLE raw_terms(
+            term_id TEXT PRIMARY KEY,
+            source_record_key TEXT NOT NULL,
+            source_type TEXT NOT NULL,
+            verbatim_term TEXT NOT NULL,
+            proposed_role TEXT NOT NULL
+        );
+        CREATE TABLE term_coding(
+            term_id TEXT NOT NULL,
+            coder_role TEXT NOT NULL,
+            decision TEXT NOT NULL,
+            canonical_term TEXT NOT NULL,
+            term_family_label TEXT NOT NULL,
+            term_relation TEXT NOT NULL,
+            search_domain_label TEXT NOT NULL,
+            search_domain_definition TEXT NOT NULL,
+            query_family_label TEXT NOT NULL,
+            cross_domain INTEGER NOT NULL
+        );
+        CREATE TABLE discovery_hits(
+            record_key TEXT NOT NULL,
+            review_round INTEGER NOT NULL
+        );
+        CREATE TABLE discovery_indicator_candidates(
+            candidate_id TEXT PRIMARY KEY,
+            review_round INTEGER NOT NULL,
+            raw_name_en TEXT NOT NULL,
+            proposed_role TEXT NOT NULL,
+            canonical_family_label TEXT NOT NULL,
+            evidence_span TEXT NOT NULL,
+            h2_decision TEXT NOT NULL
+        );
+        """
+    )
+    raw_rows = [
+        (
+            "D",
+            "seed:1",
+            "development_seed_hint",
+            "seed novelty",
+            "construct",
+        ),
+        ("P", "", "pilot_v2_indicator", "pilot novelty", "construct"),
+        (
+            "R1",
+            "work:1",
+            "bootstrap_literature",
+            "round one novelty",
+            "t0_predictor",
+        ),
+        (
+            "R5",
+            "work:5",
+            "bootstrap_literature",
+            "round five novelty",
+            "t0_predictor",
+        ),
+    ]
+    connection.executemany(
+        "INSERT INTO raw_terms VALUES (?, ?, ?, ?, ?)",
+        raw_rows,
+    )
+    connection.executemany(
+        """
+        INSERT INTO term_coding VALUES (
+            ?, 'H2', 'include', ?, ?, 'canonical', ?, ?, ?, 0
+        )
+        """,
+        [
+            (term_id, verbatim, term_id, "Novelty", "Novelty at T0", term_id)
+            for term_id, _, _, verbatim, _ in raw_rows
+        ],
+    )
+    connection.executemany(
+        "INSERT INTO discovery_hits VALUES (?, ?)",
+        [("work:1", 1), ("work:5", 5)],
+    )
+    connection.executemany(
+        "INSERT INTO discovery_indicator_candidates VALUES (?, ?, ?, ?, ?, ?, ?)",
+        [
+            ("I1", 1, "novelty", "indicator_or_measure", "Novelty", "x", "include"),
+            ("I5", 5, "new", "indicator_or_measure", "New", "y", "include"),
+        ],
+    )
+    rows = export_saturation_codebook_reference.term_rows(connection, 4)
+    assert {row["term_id"] for row in rows} == {"D", "P", "R1"}
+    origins = {row["term_id"]: row["origin_round"] for row in rows}
+    assert origins == {"D": 0, "P": 0, "R1": 1}
+    with tempfile.TemporaryDirectory() as temporary:
+        output_root = Path(temporary)
+        term_output = output_root / "terms.csv"
+        indicator_output = output_root / "indicators.csv"
+        manifest_path = output_root / "manifest.json"
+        first = export_saturation_codebook_reference.export_codebook_reference(
+            connection,
+            4,
+            term_output,
+            indicator_output,
+            manifest_path,
+        )
+        first_hash = sha256_file(manifest_path)
+        second = export_saturation_codebook_reference.export_codebook_reference(
+            connection,
+            4,
+            term_output,
+            indicator_output,
+            manifest_path,
+        )
+        assert first_hash == sha256_file(manifest_path)
+        assert first == second
+        assert first["indicator_rows"] == 1
+        assert "created_at" not in first
+        protocol_root = output_root / "protocols"
+        built_first = (
+            build_saturation_alignment_protocols.build_alignment_protocols(
+                5,
+                manifest_path,
+                protocol_root,
+            )
+        )
+        indicator_protocol_hash = built_first[
+            "indicator_protocol_sha256"
+        ]
+        term_protocol_hash = built_first["term_protocol_sha256"]
+        built_second = (
+            build_saturation_alignment_protocols.build_alignment_protocols(
+                5,
+                manifest_path,
+                protocol_root,
+            )
+        )
+        assert built_first == built_second
+        assert (
+            indicator_protocol_hash
+            == built_second["indicator_protocol_sha256"]
+        )
+        assert term_protocol_hash == built_second["term_protocol_sha256"]
+    connection.close()
+
+
+def test_round5_indicator_alignment_artifact_is_reproducible() -> None:
+    """The sealed round-5 H2 indicator alignment passes deterministic QA."""
+    result = validate_saturation_alignment.validate_alignment(
+        "indicator",
+        ROOT
+        / "outputs"
+        / "human_tasks"
+        / "round_05_discovery_indicator_adjudication_H2.csv",
+        ROOT
+        / "outputs"
+        / "independent_codex_review_v3"
+        / "round_05_discovery_indicator_adjudication_H2_REVIEWED.csv",
+        ROOT / "INDEPENDENT_CODEX_INDICATOR_ALIGNMENT_PROTOCOL_V3.json",
+        ROOT
+        / "outputs"
+        / "independent_codex_review_v3"
+        / "round_05_discovery_indicator_adjudication_H2_REVIEWED.manifest.json",
+    )
+    assert result["status"] == "pass"
+    assert result["mapped_to_existing_family_count"] == 17
+    assert result["genuinely_new_family_count"] == 92
+
+
+def test_press_revision_vocabulary_matches_conservative_inflections() -> None:
+    """A source-attested plural supports its singular, but not a new concept."""
+    row = {
+        "search_domain_label": "Transformative validation",
+        "search_domain_definition": "Article-level impact validation.",
+        "family_label": "HITS impact breadth",
+        "press_notes": "Qualify the type without adding a new construct.",
+        "old_domain_terms_json": '["wide impact"]',
+        "term_evidence_json": json.dumps(
+            [
+                {
+                    "evidence_span": "The eleven metrics include Wide Impact.",
+                    "canonical_term": "breadth of impact",
+                    "term_family_label": "Impact breadth",
+                }
+            ]
+        ),
+    }
+    vocabulary = validate_press_revisions._source_vocabulary(row)
+    assert "metric" in vocabulary
+    assert "metrics" in vocabulary
+    assert "framework" not in vocabulary
+
+
+def test_targeted_formula_h2_worklist_preserves_blind_h1_payload() -> None:
+    """H2 receives frozen provenance plus H1 payload, not mutable evidence."""
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary)
+        blank_path = root / "h1_blank.csv"
+        h1_path = root / "h1_reviewed.csv"
+        h1_manifest_path = h1_path.with_suffix(".manifest.json")
+        h2_path = root / "h2_worklist.csv"
+        blank = {
+            field: "" for field in targeted_formula_review.H1_FIELDS
+        }
+        blank.update(
+            {
+                "target_id": "TFC_TEST",
+                "feature_id": "EF0001",
+                "canonical_name_en": "Test metric",
+                "record_key": "doi:10.1000/test",
+                "doi": "10.1000/test",
+                "source_title": "Test source",
+                "source_scope": "formal_included_source",
+                "fulltext_source_url": "https://example.org/test.pdf",
+                "fulltext_local_path": "/tmp/test.pdf",
+                "fulltext_sha256": "a" * 64,
+                "fulltext_license": "Open",
+                "original_h1_source_disposition": "extracted",
+                "original_h1_fulltext_status": "available",
+                "original_h1_source_notes": "Frozen.",
+                "local_source_ids_json": '["papers_common"]',
+                "local_columns_json": '["papers_common:publication_year"]',
+                "verification_question": "Is the formula exact?",
+                "target_definition_sha256": "b" * 64,
+                "local_inventory_sha256": "c" * 64,
+                "reviewer_role": "H1",
+            }
+        )
+        write_csv(
+            blank_path,
+            [blank],
+            targeted_formula_review.H1_FIELDS,
+        )
+        reviewed = dict(blank)
+        reviewed.update(
+            {
+                "decision": "reject_formula_missing",
+                "review_reason": "The source does not define the formula.",
+                "reviewer_provenance": "Independent Codex H1.",
+            }
+        )
+        write_csv(
+            h1_path,
+            [reviewed],
+            targeted_formula_review.H1_FIELDS,
+        )
+        write_json(
+            h1_manifest_path,
+            {
+                "run_id": "targeted_formula_test_h1",
+                "artifact_path": str(h1_path),
+                "artifact_sha256": sha256_file(h1_path),
+                "input_path": str(blank_path),
+                "input_sha256": sha256_file(blank_path),
+                "reviewer_role": "H1",
+                "reviewer_id": "independent_codex_h1_test",
+                "model": "codex_configured_default",
+                "model_digest": "codex-thread:test",
+                "prompt_sha256": sha256_file(
+                    targeted_formula_review.H1_PROTOCOL
+                ),
+                "parameters": {},
+                "item_count": 1,
+                "completed_at": "2026-07-30T00:00:00+00:00",
+                "status": "complete",
+            },
+        )
+        result = targeted_formula_review.build_h2_worklist(
+            blank_path,
+            h1_path,
+            h1_manifest_path,
+            h2_path,
+        )
+        assert result["rows"] == 1
+        with h2_path.open(encoding="utf-8", newline="") as handle:
+            h2_row = next(csv.DictReader(handle))
+        payload = json.loads(h2_row["h1_payload_json"])
+        assert payload["decision"] == "reject_formula_missing"
+        assert h2_row["reviewer_role"] == "H2"
+        assert h2_row["decision"] == ""
+        assert h2_row["target_definition_sha256"] == "b" * 64
+
+
+def test_targeted_formula_application_updates_existing_family_only() -> None:
+    """Approved H2 evidence adds a mention without creating a new family."""
+    with tempfile.TemporaryDirectory() as temporary:
+        root = Path(temporary)
+        fulltext = root / "formula.txt"
+        fulltext.write_text(
+            "Alice Example and Bob Example, Evidence Institute.\n"
+            "The paper metric equals publication year minus reference year.\n",
+            encoding="utf-8",
+        )
+        blank_path = root / "h1_blank.csv"
+        h1_path = root / "h1_reviewed.csv"
+        h1_manifest_path = h1_path.with_suffix(".manifest.json")
+        h2_worklist_path = root / "h2_worklist.csv"
+        h2_path = root / "h2_reviewed.csv"
+        h2_manifest_path = h2_path.with_suffix(".manifest.json")
+        report_path = root / "application.json"
+        blank = {
+            field: "" for field in targeted_formula_review.H1_FIELDS
+        }
+        blank.update(
+            {
+                "target_id": "TFC_TEST",
+                "feature_id": "EF0001",
+                "canonical_name_en": "Test metric",
+                "record_key": "doi:10.1000/test",
+                "doi": "10.1000/test",
+                "source_title": "Test source",
+                "source_scope": "formal_included_source",
+                "fulltext_source_url": "https://example.org/test.txt",
+                "fulltext_local_path": str(fulltext),
+                "fulltext_sha256": sha256_file(fulltext),
+                "fulltext_license": "Open",
+                "original_h1_source_disposition": "extracted",
+                "original_h1_fulltext_status": "available",
+                "original_h1_source_notes": "Frozen.",
+                "local_source_ids_json": '["papers_common"]',
+                "local_columns_json": '["papers_common:publication_year"]',
+                "verification_question": "Is the formula exact?",
+                "target_definition_sha256": "b" * 64,
+                "local_inventory_sha256": "c" * 64,
+                "reviewer_role": "H1",
+            }
+        )
+        review_values = {
+            "decision": "approve_formula",
+            "raw_name_en": "Paper age",
+            "label_zh": "论文年龄",
+            "research_group": "Example team",
+            "research_group_id": "example_team",
+            "research_group_evidence": (
+                "Alice Example and Bob Example, Evidence Institute."
+            ),
+            "source_role": "original_definition",
+            "formula_location": "p. 1, Eq. 1",
+            "evidence_span": (
+                "The paper metric equals publication year minus reference "
+                "year."
+            ),
+            "formula": "publication_year - reference_year",
+            "units": "years",
+            "parameters": "None",
+            "direction": "Higher means older references.",
+            "source_reported_missing_rule": "Not reported",
+            "required_data_json": '["publication year","reference year"]',
+            "maximum_information_time": "T0",
+            "scope_role": "t0_substantive",
+            "validation_summary": "Original mathematical definition.",
+            "evidence_direction": "definition_only",
+            "negative_evidence": "None reported.",
+            "article_level": "true",
+            "primary_or_foundational_evidence": "true",
+            "formula_reproducible": "true",
+            "t0_computable": "true",
+            "requires_future": "false",
+            "fatal_validity_concern": "false",
+            "evidence_strength": "moderate",
+            "stability_score": "0",
+            "stability_basis": "No quantitative stability test reported.",
+            "selection_priority": "0",
+            "redundancy_family": "paper_age",
+            "review_reason": "The source and local fields match exactly.",
+            "reviewer_provenance": "Independent Codex review.",
+        }
+        h1 = dict(blank)
+        h1.update(review_values)
+        write_csv(
+            blank_path,
+            [blank],
+            targeted_formula_review.H1_FIELDS,
+        )
+        write_csv(
+            h1_path,
+            [h1],
+            targeted_formula_review.H1_FIELDS,
+        )
+        write_json(
+            h1_manifest_path,
+            {
+                "run_id": "targeted_formula_apply_h1",
+                "artifact_path": str(h1_path),
+                "artifact_sha256": sha256_file(h1_path),
+                "input_path": str(blank_path),
+                "input_sha256": sha256_file(blank_path),
+                "reviewer_role": "H1",
+                "reviewer_id": "independent_codex_h1_test",
+                "model": "codex_configured_default",
+                "model_digest": "codex-thread:h1-test",
+                "prompt_sha256": sha256_file(
+                    targeted_formula_review.H1_PROTOCOL
+                ),
+                "parameters": {},
+                "item_count": 1,
+                "completed_at": "2026-07-30T00:00:00+00:00",
+                "status": "complete",
+            },
+        )
+        targeted_formula_review.build_h2_worklist(
+            blank_path,
+            h1_path,
+            h1_manifest_path,
+            h2_worklist_path,
+        )
+        with h2_worklist_path.open(
+            encoding="utf-8",
+            newline="",
+        ) as handle:
+            h2 = dict(next(csv.DictReader(handle)))
+        h2.update(review_values)
+        h2["reviewer_role"] = "H2"
+        h2_prompt_sha = sha256_file(targeted_formula_review.H2_PROTOCOL)
+        for field in targeted_formula_review.INDEPENDENT_PROVENANCE_FIELDS:
+            h2[field] = "complete"
+        h2["independent_ai_prompt_sha256"] = h2_prompt_sha
+        write_csv(
+            h2_path,
+            [h2],
+            targeted_formula_review.H2_FIELDS,
+        )
+        write_json(
+            h2_manifest_path,
+            {
+                "run_id": "targeted_formula_apply_h2",
+                "artifact_path": str(h2_path),
+                "artifact_sha256": sha256_file(h2_path),
+                "input_path": str(h2_worklist_path),
+                "input_sha256": sha256_file(h2_worklist_path),
+                "reviewer_role": "H2",
+                "reviewer_id": "independent_codex_h2_test",
+                "model": "codex_configured_default",
+                "model_digest": "codex-thread:h2-test",
+                "prompt_sha256": h2_prompt_sha,
+                "parameters": {},
+                "item_count": 1,
+                "completed_at": "2026-07-30T00:00:00+00:00",
+                "status": "complete",
+            },
+        )
+        connection = initialize(root / "test.sqlite3")
+        record = _record("W_TEST", "10.1000/test")
+        _insert_record(connection, record)
+        connection.execute(
+            """
+            INSERT INTO indicator_families(
+                feature_id, canonical_name_en, label_zh,
+                alias_names_json, mention_ids_json, formula, units,
+                parameters, direction, missing_rule, required_data_json,
+                maximum_information_time, scope_role, article_level,
+                primary_or_foundational_evidence, formula_reproducible,
+                t0_computable, requires_future, data_status, bias_policy,
+                fatal_validity_concern, uses_outcome_for_selection,
+                quality_audit_status, nonconstant,
+                english_fulltext_verified, h2_approved,
+                evidence_strength, stability_score, stability_basis,
+                selection_priority, redundancy_family,
+                research_groups_json, status
+            ) VALUES (
+                'EF0001', 'Test metric', '测试指标', '[]', '[]', '',
+                '', '', '', '', '[]', 'unknown', 'out_of_scope', 0, 0,
+                0, 0, 0, 'unassessed', 'sensitivity_only', 0, 0,
+                'pending', 0, 0, 0, 'unknown', 0, 'No evidence.', 4,
+                'test_metric', '[]', 'candidate'
+            )
+            """
+        )
+        connection.commit()
+        result = targeted_formula_review.apply_reviews(
+            connection,
+            blank_path,
+            h1_path,
+            h1_manifest_path,
+            h2_worklist_path,
+            h2_path,
+            h2_manifest_path,
+            report_path,
+        )
+        assert result["affected_existing_family_count"] == 1
+        assert result["new_indicator_family_count"] == 0
+        assert (
+            connection.execute(
+                "SELECT COUNT(*) FROM indicator_families"
+            ).fetchone()[0]
+            == 1
+        )
+        family = connection.execute(
+            "SELECT * FROM indicator_families WHERE feature_id = 'EF0001'"
+        ).fetchone()
+        assert family["formula"] == "publication_year - reference_year"
+        assert family["english_fulltext_verified"] == 1
+        assert family["formula_reproducible"] == 0
+        assert (
+            connection.execute(
+                "SELECT COUNT(*) FROM targeted_formula_decisions"
+            ).fetchone()[0]
+            == 1
+        )
+        connection.close()
+
+
+def test_assisted_indicator_reviews_require_registered_ai_runs() -> None:
+    """Operationalization and dimension imports reject unregistered AI CSVs."""
+    with tempfile.TemporaryDirectory() as temporary:
+        temporary_path = Path(temporary)
+        connection = initialize(temporary_path / "review.sqlite3")
+        set_stage(
+            connection,
+            "indicators_extracted",
+            "complete",
+            {"test": True},
+        )
+        provenance = {
+            "draft_method": "test_unregistered_ai_review",
+            "independent_ai_review_status": "complete",
+            "independent_ai_reviewer_id": "primary_codex_test",
+            "independent_ai_reviewed_at": "2026-07-30T00:00:00+00:00",
+            "independent_ai_review_action": "test",
+            "independent_ai_run_id": "unregistered_test_run",
+            "independent_ai_model": "codex_configured_default",
+            "independent_ai_prompt_sha256": "a" * 64,
+        }
+        dimension_path = temporary_path / "dimension.csv"
+        dimension_row = {
+            field: "" for field in indicators.DIMENSION_EVIDENCE_FIELDS
+        }
+        dimension_row.update(
+            {
+                "feature_id": "EF9999",
+                "canonical_name_en": "Test feature",
+                "coder_role": "AI",
+                "decision": "exclude",
+                "reason": "Test-only unregistered artifact.",
+                **provenance,
+            }
+        )
+        dimension_fields = (
+            *indicators.DIMENSION_EVIDENCE_FIELDS,
+            *provenance,
+        )
+        write_csv(dimension_path, [dimension_row], dimension_fields)
+        try:
+            indicators.import_dimension_coding(connection, dimension_path)
+        except RuntimeError as error:
+            assert "neither an accepted human attestation" in str(error)
+        else:
+            raise AssertionError(
+                "Unregistered assisted dimension coding was accepted"
+            )
+        operationalization_path = temporary_path / "operationalization.csv"
+        operationalization_row = {
+            field: "" for field in indicators.OPERATIONALIZATION_FIELDS
+        }
+        operationalization_row.update(
+            {
+                "feature_id": "EF9999",
+                "canonical_name_en": "Test feature",
+                "reviewer_role": "AI",
+                "decision": "exclude",
+                "reason": "Test-only unregistered artifact.",
+                **provenance,
+            }
+        )
+        operationalization_fields = (
+            *indicators.OPERATIONALIZATION_FIELDS,
+            *provenance,
+        )
+        write_csv(
+            operationalization_path,
+            [operationalization_row],
+            operationalization_fields,
+        )
+        try:
+            indicators.import_feature_operationalization(
+                connection,
+                operationalization_path,
+            )
+        except RuntimeError as error:
+            assert "neither an accepted human attestation" in str(error)
+        else:
+            raise AssertionError(
+                "Unregistered assisted operationalization was accepted"
+            )
+        coding._register_snapshot(
+            connection,
+            "protocol_amendment_independent_ai_review_v3",
+            ROOT / "protocol_amendment_independent_ai_review_v3.json",
+            "protocol_amendment",
+        )
+        plain_path = temporary_path / "plain_dimension.csv"
+        plain_row = {
+            field: "" for field in indicators.DIMENSION_EVIDENCE_FIELDS
+        }
+        plain_row.update(
+            {
+                "feature_id": "EF9999",
+                "canonical_name_en": "Test feature",
+                "coder_role": "H2",
+                "decision": "exclude",
+                "reason": "Plain unregistered formal artifact.",
+            }
+        )
+        write_csv(
+            plain_path,
+            [plain_row],
+            indicators.DIMENSION_EVIDENCE_FIELDS,
+        )
+        try:
+            indicators.import_dimension_coding(connection, plain_path)
+        except RuntimeError as error:
+            assert "Frozen formal review requires" in str(error)
+        else:
+            raise AssertionError(
+                "Unregistered plain formal dimension coding was accepted"
+            )
+        connection.close()
+
+
+def test_targeted_operationalization_covers_declared_boundaries() -> None:
+    """Every materializable target exercises all five boundary classes."""
+    feature_ids = {
+        "EF0038",
+        "EF0052",
+        "EF0186",
+        "EF0188",
+        "EF0197",
+        "EF0238",
+        "EF0307",
+        "EF0309",
+        "EF0312",
+        "EF0314",
+        "EF0315",
+        "EF0318",
+    }
+    expected_boundaries = {
+        "protocol_missing_rule",
+        "denominator_zero_rule",
+        "observed_empty_set_rule",
+        "incomplete_coverage_rule",
+        "transform_and_unit_rule",
+    }
+    for feature_id in sorted(feature_ids):
+        result = (
+            materialize_targeted_operationalizations_v3._formula_test(
+                feature_id
+            )
+        )
+        assert result["passed"]
+        assert set(result["covered_protocol_fields"]) == expected_boundaries
+        assert all(result["boundary_assertions"].values())
+        upstream, _ = (
+            materialize_targeted_operationalizations_v3
+            .UPSTREAM_IMPLEMENTATIONS[feature_id]
+        )
+        assert upstream.is_file()
+
+
 def main() -> None:
     """Run all lightweight offline v3 checks."""
     test_init_is_independent_and_v2_read_only()
     test_openalex_cursor_resume_and_deduplication()
+    test_excluded_term_may_leave_cross_domain_blank()
     test_hidden_seed_search_log_requires_all_independent_routes()
     test_pilot_terms_cannot_create_a_logical_query_family()
     test_k_q_p_are_derived_and_seed_recall_is_validated()
@@ -3101,6 +4947,9 @@ def main() -> None:
     test_crossref_conflicts_require_h2_resolution()
     test_open_fulltext_acquisition_is_lawful_hashed_and_resumable()
     test_indicator_gates_redundancy_and_dimension_retention()
+    test_unverified_indicator_candidate_keeps_unknown_group_explicit()
+    test_h1_source_review_allows_only_exact_post_h2_replay()
+    test_operationalization_separates_source_and_project_missing_rules()
     test_audit_always_discloses_english_language_bias()
     test_saturation_frame_is_deterministic_and_domain_free()
     test_two_key_scheduler_rotates_and_skips_failed_slot()
@@ -3110,11 +4959,26 @@ def main() -> None:
     test_frozen_frame_separates_new_terms_from_indicator_names()
     test_formal_queries_register_deterministic_saturation_pools()
     test_formal_phase_uses_offset_ranks_without_refetching()
+    test_round12_terminal_formal_cohort_is_not_round13()
     test_discovery_paper_is_never_assigned_to_multiple_rounds()
     test_citation_network_is_a_pool_not_an_automatic_screening_census()
     test_h1_review_helper_is_blind_and_validates_exact_spans()
+    test_independent_ai_review_requires_exact_registered_manifest()
+    test_primary_codex_ai_coding_manifest_accepts_ai_role()
+    test_primary_codex_term_codebook_preserves_t0_outcome_boundary()
+    test_primary_codex_high_recall_screening_routes_boundaries()
+    test_independent_screening_protocol_vocabularies_match_importer()
+    test_review_supersession_verifies_shared_rows_before_superset()
     test_citation_tracking_covers_reviews_and_indicator_sources()
     test_registered_source_hash_cannot_be_rebased_after_freeze()
+    test_changed_source_requires_explicit_versioned_supersession()
+    test_prior_round_codebook_includes_seed_terms_but_not_future_rounds()
+    test_round5_indicator_alignment_artifact_is_reproducible()
+    test_press_revision_vocabulary_matches_conservative_inflections()
+    test_targeted_formula_h2_worklist_preserves_blind_h1_payload()
+    test_targeted_formula_application_updates_existing_family_only()
+    test_assisted_indicator_reviews_require_registered_ai_runs()
+    test_targeted_operationalization_covers_declared_boundaries()
     print("All evidence-derived v3 tests passed.")
 
 

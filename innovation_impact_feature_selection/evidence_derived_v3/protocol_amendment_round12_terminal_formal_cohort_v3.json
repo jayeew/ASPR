@@ -1,0 +1,34 @@
+{
+  "schema_version": "3.0.0",
+  "protocol_amendment_id": "aspr-v3-round12-terminal-fixed-formal-cohort-20260730",
+  "amendment_type": "retrospective_project_owner_pragmatic_stop",
+  "effective_date": "2026-07-30",
+  "owner_instruction": "Treat discovery round 12 as the final saturation round because additional marginal yield is not worth another sequential round.",
+  "scope": {
+    "last_saturation_round": 12,
+    "additional_saturation_rounds_allowed": 0,
+    "formal_search_still_required": true,
+    "indicator_extraction_dimension_derivation_and_fixed_gate_selection_still_required": true
+  },
+  "fixed_formal_cohort": {
+    "selection_unit": "active frozen OpenAlex physical query",
+    "selection_rule": "first 10 records by the frozen OpenAlex seeded-sample rank for each physical query",
+    "records_per_physical_query": 10,
+    "deduplication": "union by canonical record_key across queries and with the already reviewed rounds 1-12",
+    "language_and_eligibility": "unchanged title/abstract screening rules; English-only eligibility remains explicit",
+    "selection_independent_of_model_results": true,
+    "selection_independent_of_indicator_or_dimension_counts": true,
+    "not_a_saturation_round": true
+  },
+  "observed_round_12_endpoints": {
+    "new_nonredundant_english_term_families": 10,
+    "new_canonical_indicator_families": 9,
+    "dual_zero": false
+  },
+  "reporting_requirements": [
+    "Disclose that round 12 stopped on pragmatic marginal-yield grounds, not the preregistered consecutive dual-zero rule.",
+    "Do not label the fixed formal cohort as round 13.",
+    "Retain every formal query ID, seeded-sample rank, record identity, and screening disposition.",
+    "Do not claim exhaustive retrieval or a true dual-zero endpoint."
+  ]
+}

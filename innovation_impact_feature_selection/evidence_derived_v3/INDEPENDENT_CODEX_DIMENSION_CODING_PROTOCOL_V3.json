@@ -1,0 +1,54 @@
+{
+  "protocol_id": "INDEPENDENT_CODEX_DIMENSION_CODING_PROTOCOL_V3_20260730",
+  "purpose": "Derive candidate model dimensions from H2-approved canonical indicator families without a preset dimension count.",
+  "coding_sequence": [
+    "AI and H1 independently code each canonical indicator family.",
+    "H2 reviews every disagreement, merge, split, cross-label, and unclassified family.",
+    "Only after H2 adjudication are candidate dimensions constructed.",
+    "Formal dimensions are retained only after indicator hard-gate selection."
+  ],
+  "required_codes": [
+    "measured construct",
+    "explanatory or causal role",
+    "information source",
+    "maximum T0 boundary",
+    "primary bias risk",
+    "dimension label",
+    "dimension definition",
+    "include or exclude decision",
+    "source-based reason"
+  ],
+  "construct_roles": [
+    "substantive_innovation",
+    "t0_potential",
+    "opportunity",
+    "context_control",
+    "sensitivity"
+  ],
+  "merge_split_rules": [
+    "Merge indicators that measure the same theoretical object and have the same explanatory role.",
+    "A data source, parameter, threshold, transform, or time-window difference alone does not create a new dimension.",
+    "Split substantive paper content, publication opportunity, and background control roles.",
+    "Split when construct definition or the T0 boundary is substantively different.",
+    "Allow temporary multi-label coding only when the evidence genuinely spans constructs; H2 must resolve the formal mapping.",
+    "Embedding or clustering output may flag possible errors but cannot create, merge, or approve a dimension."
+  ],
+  "retention_boundary": [
+    "No target M, D, or F is allowed.",
+    "A formal predictive dimension needs at least one indicator passing every hard gate.",
+    "A formal dimension needs support from at least two independent research groups.",
+    "Opportunity and context-control dimensions remain separate from substantive innovation dimensions.",
+    "A candidate dimension with no surviving indicator is deleted with its reason retained."
+  ],
+  "provenance": {
+    "reviewer_roles": [
+      "AI",
+      "H1",
+      "H2"
+    ],
+    "separate_role_artifacts_required": true,
+    "registration_manifest_required_for_assisted_reviews": true,
+    "prompt_sha256_must_equal_this_protocol": true,
+    "local_models_forbidden": true
+  }
+}

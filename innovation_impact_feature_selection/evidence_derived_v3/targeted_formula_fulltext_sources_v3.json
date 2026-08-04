@@ -1,0 +1,26 @@
+{
+  "schema_version": "targeted_formula_fulltext_sources_v3",
+  "frozen_at": "2026-07-30T09:10:00+00:00",
+  "scope": "Lawful English full text for already-included sources needed only to complete formula provenance for canonical families fixed after terminal round 12.",
+  "sources": [
+    {
+      "record_key": "doi:10.1371/journal.pone.0127298",
+      "doi": "10.1371/journal.pone.0127298",
+      "title": "Interdisciplinarity and Impact: Distinct Effects of Variety, Balance, and Disparity",
+      "url": "https://journals.plos.org/plosone/article/file?id=10.1371%2Fjournal.pone.0127298&type=printable",
+      "access_statement": "Publisher-hosted PLOS ONE open-access PDF; the article states a Creative Commons Attribution licence.",
+      "license": "CC-BY",
+      "expected_text": [
+        "Interdisciplinarity and Impact",
+        "Variety",
+        "Balance",
+        "Disparity",
+        "10.1371/journal.pone.0127298"
+      ],
+      "completion_route": "acquire_missing_open_fulltext_for_included_source"
+    }
+  ],
+  "creates_new_search_records": false,
+  "creates_new_indicator_families": false,
+  "round_13": false
+}

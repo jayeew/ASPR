@@ -3,7 +3,9 @@ from __future__ import annotations
 import json
 import re
 import sqlite3
+import threading
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Sequence
@@ -31,6 +33,8 @@ from common import (
 )
 from database import (
     HUMAN_ATTESTED_AUTOMATED_DRAFT_HASHES,
+    assisted_review_file,
+    assert_registered_review_attestation,
     invalidate_stages,
     log_event,
     require_complete,
@@ -43,12 +47,16 @@ from providers import (
     openalex_api_keys,
     query_definition_hash,
     retrieve_physical_query,
+    safe_provider_error,
 )
 
 
 PROTOCOL_PATH = ROOT / "protocol_v3.json"
 BOOTSTRAP_PATH = ROOT / "bootstrap_query_v3.json"
 SATURATION_PROTOCOL_PATH = ROOT / "saturation_protocol_v3.json"
+DISCOVERY_STOP_AMENDMENT_PATH = (
+    ROOT / "protocol_amendment_round12_pragmatic_stop_v3.json"
+)
 RULES_PATH = ROOT / "screening_rules_v3.json"
 V2_ROOT = ROOT.parent / "expanded_review_v2"
 V2_EVIDENCE_PATH = V2_ROOT / "outputs" / "literature_evidence_v2.json"
@@ -66,6 +74,8 @@ SEARCH_FRAME_DOWNSTREAM_STAGES = (
     "formal_retrieval_complete",
     "literature_screened",
     "indicators_extracted",
+    "data_correspondence_reviewed",
+    "operationalizations_reviewed",
     "dimensions_derived",
     "features_selected",
     "audit_complete",
@@ -117,8 +127,20 @@ NONAUTHORIZING_TERM_SOURCE_TYPES = {
 PRESS_FIELDS = (
     "logical_query_id",
     "search_domain_id",
+    "search_domain_label",
+    "search_domain_definition",
     "family_label",
     "logical_expression",
+    "domain_terms_json",
+    "object_terms_json",
+    "context_terms_json",
+    "physical_filter_expressions_json",
+    "term_evidence_count",
+    "term_evidence_json",
+    "prior_press_decision",
+    "prior_press_notes",
+    "press_revision_decision",
+    "press_revision_rationale",
     "reviewer_role",
     "concepts_complete",
     "boolean_logic_valid",
@@ -131,6 +153,44 @@ PRESS_FIELDS = (
     "independent_construct_role",
     "decision",
     "notes",
+    "draft_method",
+    "independent_ai_review_status",
+    "independent_ai_reviewer_id",
+    "independent_ai_reviewed_at",
+    "independent_ai_review_action",
+    "independent_ai_review_note",
+    "independent_ai_run_id",
+    "independent_ai_model",
+    "independent_ai_prompt_sha256",
+)
+PRESS_REVISION_FIELDS = (
+    "logical_query_id",
+    "source_frame_version",
+    "search_domain_id",
+    "search_domain_label",
+    "search_domain_definition",
+    "family_label",
+    "old_domain_terms_json",
+    "object_terms_json",
+    "context_terms_json",
+    "current_logical_expression",
+    "physical_filter_expressions_json",
+    "term_evidence_count",
+    "term_evidence_json",
+    "press_notes",
+    "revision_decision",
+    "revised_domain_terms_json",
+    "revision_rationale",
+    "reviewer_role",
+    "draft_method",
+    "independent_ai_review_status",
+    "independent_ai_reviewer_id",
+    "independent_ai_reviewed_at",
+    "independent_ai_review_action",
+    "independent_ai_review_note",
+    "independent_ai_run_id",
+    "independent_ai_model",
+    "independent_ai_prompt_sha256",
 )
 SEED_FIELDS = (
     "seed_id",
@@ -209,6 +269,35 @@ def _register_snapshot(
         WHERE key = 'search_frame_frozen_hash'
         """
     ).fetchone()
+    if (
+        existing is not None
+        and str(existing["sha256"]) == digest
+        and str(existing["role"]) == role
+    ):
+        return
+    supersession = None
+    if existing is not None:
+        supersession = connection.execute(
+            """
+            SELECT x.observed_current_sha256, n.path, n.sha256, n.role
+            FROM source_snapshot_supersessions x
+            JOIN source_snapshots n
+              ON n.source_id = x.new_source_id
+            WHERE x.old_source_id = ?
+            """,
+            (source_id,),
+        ).fetchone()
+    if supersession is not None:
+        immutable_path = Path(str(supersession["path"]))
+        if (
+            digest == str(supersession["observed_current_sha256"])
+            == str(supersession["sha256"])
+            and role == str(supersession["role"])
+            and immutable_path.is_file()
+            and sha256_file(immutable_path)
+            == str(supersession["sha256"])
+        ):
+            return
     if (
         existing is not None
         and frozen is not None
@@ -292,11 +381,181 @@ def initialize_project(connection: sqlite3.Connection) -> Dict[str, Any]:
             HUMAN_REVIEW_ATTESTATION_PATH,
             "human_review_attestation",
         ),
+        (
+            "protocol_amendment_independent_ai_review_v3",
+            ROOT / "protocol_amendment_independent_ai_review_v3.json",
+            "protocol_amendment",
+        ),
+        (
+            "protocol_amendment_round12_pragmatic_stop_v3",
+            DISCOVERY_STOP_AMENDMENT_PATH,
+            "protocol_deviation",
+        ),
+        (
+            "protocol_amendment_round12_external_reporting_clarification_v3",
+            ROOT
+            / "protocol_amendment_round12_external_reporting_clarification_v3.json",
+            "owner_reporting_clarification",
+        ),
+        (
+            "protocol_amendment_round12_terminal_formal_cohort_v3",
+            ROOT
+            / "protocol_amendment_round12_terminal_formal_cohort_v3.json",
+            "protocol_deviation",
+        ),
+        (
+            "protocol_amendment_formula_operationalization_separation_v3",
+            ROOT
+            / "protocol_amendment_formula_operationalization_separation_v3.json",
+            "protocol_deviation",
+        ),
+        (
+            "protocol_amendment_targeted_formula_completion_v3",
+            ROOT / "protocol_amendment_targeted_formula_completion_v3.json",
+            "protocol_deviation",
+        ),
+        (
+            "independent_codex_term_cross_domain_correction_protocol_v3",
+            ROOT
+            / "INDEPENDENT_CODEX_TERM_CROSS_DOMAIN_CORRECTION_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_press_review_protocol_v3",
+            ROOT / "INDEPENDENT_CODEX_PRESS_REVIEW_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_press_revision_protocol_v3",
+            ROOT / "INDEPENDENT_CODEX_PRESS_REVISION_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_press_review_v2_protocol_v3",
+            ROOT / "INDEPENDENT_CODEX_PRESS_REVIEW_V2_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_press_revision_v2_protocol_v3",
+            ROOT / "INDEPENDENT_CODEX_PRESS_REVISION_V2_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_press_review_v3_protocol_v3",
+            ROOT / "INDEPENDENT_CODEX_PRESS_REVIEW_V3_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_fulltext_indicator_h1_protocol_v3",
+            ROOT
+            / "INDEPENDENT_CODEX_FULLTEXT_INDICATOR_H1_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_fulltext_indicator_h2_protocol_v3",
+            ROOT
+            / "INDEPENDENT_CODEX_FULLTEXT_INDICATOR_H2_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "primary_codex_operationalization_protocol_v3",
+            ROOT / "PRIMARY_CODEX_OPERATIONALIZATION_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_operationalization_h1_protocol_v3",
+            ROOT
+            / "INDEPENDENT_CODEX_OPERATIONALIZATION_H1_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_operationalization_h2_protocol_v3",
+            ROOT
+            / "INDEPENDENT_CODEX_OPERATIONALIZATION_H2_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "primary_codex_data_correspondence_protocol_v3",
+            ROOT / "PRIMARY_CODEX_DATA_CORRESPONDENCE_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_data_correspondence_h1_protocol_v3",
+            ROOT
+            / "INDEPENDENT_CODEX_DATA_CORRESPONDENCE_H1_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_data_correspondence_h2_protocol_v3",
+            ROOT
+            / "INDEPENDENT_CODEX_DATA_CORRESPONDENCE_H2_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_targeted_formula_h1_protocol_v3",
+            ROOT
+            / "INDEPENDENT_CODEX_TARGETED_FORMULA_H1_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_targeted_formula_h2_protocol_v3",
+            ROOT
+            / "INDEPENDENT_CODEX_TARGETED_FORMULA_H2_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "targeted_formula_completion_targets_v3",
+            ROOT / "targeted_formula_completion_targets_v3.json",
+            "targeted_formula_verification_queue",
+        ),
+        (
+            "targeted_formula_local_derivation_addendum_v3",
+            ROOT / "targeted_formula_local_derivation_addendum_v3.json",
+            "independent_review_protocol_component",
+        ),
+        (
+            "protocol_amendment_implementation_snapshot_supersession_v3",
+            ROOT
+            / "protocol_amendment_implementation_snapshot_supersession_v3.json",
+            "implementation_versioning_protocol",
+        ),
+        (
+            "independent_codex_dimension_coding_protocol_v3",
+            ROOT / "INDEPENDENT_CODEX_DIMENSION_CODING_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_seed_recall_repair_h1_protocol_v3",
+            ROOT
+            / "INDEPENDENT_CODEX_SEED_RECALL_REPAIR_H1_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_seed_recall_repair_h2_protocol_v3",
+            ROOT
+            / "INDEPENDENT_CODEX_SEED_RECALL_REPAIR_H2_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "seed_recall_repair_candidates_v3",
+            ROOT / "seed_recall_repair_candidates_v3.json",
+            "seed_recall_repair_candidates",
+        ),
         ("bootstrap_query_v3", BOOTSTRAP_PATH, "bootstrap_definition"),
         (
             "saturation_protocol_v3",
             SATURATION_PROTOCOL_PATH,
             "frozen_saturation_protocol",
+        ),
+        (
+            "provider_physical_split_overrides_v3",
+            ROOT / "provider_physical_split_overrides_v3.json",
+            "provider_request_packaging_amendment",
+        ),
+        (
+            "provider_physical_split_overrides_v4_l0024",
+            ROOT / "provider_physical_split_overrides_v4_l0024.json",
+            "provider_request_packaging_amendment",
         ),
         ("screening_rules_v3", RULES_PATH, "frozen_selection_rules"),
         ("v2_evidence_53", V2_EVIDENCE_PATH, "development_seed_source"),
@@ -306,11 +565,61 @@ def initialize_project(connection: sqlite3.Connection) -> Dict[str, Any]:
         ("code_database", ROOT / "database.py", "implementation"),
         ("code_providers", ROOT / "providers.py", "implementation"),
         ("code_coding", ROOT / "coding.py", "implementation"),
+        (
+            "code_apply_provider_physical_split_overrides",
+            ROOT / "apply_provider_physical_split_overrides.py",
+            "implementation",
+        ),
+        (
+            "code_build_feature_data_audits",
+            ROOT / "build_feature_data_audits.py",
+            "implementation",
+        ),
+        (
+            "code_seed_recall_repair",
+            ROOT / "seed_recall_repair.py",
+            "implementation",
+        ),
         ("code_screening", ROOT / "screening.py", "implementation"),
         ("code_indicators", ROOT / "indicators.py", "implementation"),
         ("code_retrieval", ROOT / "retrieval.py", "implementation"),
         ("code_saturation", ROOT / "saturation.py", "implementation"),
         ("code_local_ai", ROOT / "local_ai.py", "implementation"),
+        (
+            "code_primary_codex_term_coder",
+            ROOT / "primary_codex_term_coder.py",
+            "review_assistance_implementation",
+        ),
+        (
+            "code_primary_codex_high_recall_screening",
+            ROOT / "primary_codex_high_recall_screening.py",
+            "review_assistance_implementation",
+        ),
+        (
+            "code_export_saturation_codebook_reference",
+            ROOT / "export_saturation_codebook_reference.py",
+            "implementation",
+        ),
+        (
+            "code_build_saturation_alignment_protocols",
+            ROOT / "build_saturation_alignment_protocols.py",
+            "implementation",
+        ),
+        (
+            "code_validate_saturation_alignment",
+            ROOT / "validate_saturation_alignment.py",
+            "verification",
+        ),
+        (
+            "code_validate_press_review",
+            ROOT / "validate_press_review.py",
+            "verification",
+        ),
+        (
+            "code_validate_press_revisions",
+            ROOT / "validate_press_revisions.py",
+            "verification",
+        ),
         ("code_handoff", ROOT / "handoff.py", "implementation"),
         (
             "code_draft_h2_assistance",
@@ -322,8 +631,148 @@ def initialize_project(connection: sqlite3.Connection) -> Dict[str, Any]:
             ROOT / "human_review_cli.py",
             "implementation",
         ),
+        (
+            "code_h2_review_cli",
+            ROOT / "h2_review_cli.py",
+            "implementation",
+        ),
+        (
+            "independent_codex_review_brief_v3",
+            ROOT / "INDEPENDENT_CODEX_REVIEW_BRIEF_V3.md",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_review_language_addendum_v3",
+            ROOT / "INDEPENDENT_CODEX_REVIEW_LANGUAGE_ADDENDUM_V3.md",
+            "independent_review_protocol_component",
+        ),
+        (
+            "independent_codex_screening_protocol_v3",
+            ROOT / "INDEPENDENT_CODEX_SCREENING_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_screening_h2_protocol_v3",
+            ROOT / "INDEPENDENT_CODEX_SCREENING_H2_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_extraction_brief_v3",
+            ROOT / "INDEPENDENT_CODEX_EXTRACTION_BRIEF_V3.md",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_indicator_adjudication_brief_v3",
+            ROOT
+            / "INDEPENDENT_CODEX_INDICATOR_ADJUDICATION_BRIEF_V3.md",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_indicator_adjudication_protocol_v3",
+            ROOT
+            / "INDEPENDENT_CODEX_INDICATOR_ADJUDICATION_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_indicator_alignment_protocol_v3",
+            ROOT
+            / "INDEPENDENT_CODEX_INDICATOR_ALIGNMENT_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_term_coding_brief_v3",
+            ROOT / "INDEPENDENT_CODEX_TERM_CODING_BRIEF_V3.md",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_term_adjudication_protocol_v3",
+            ROOT / "INDEPENDENT_CODEX_TERM_ADJUDICATION_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "rounds_01_04_h2_term_codebook",
+            ROOT
+            / "outputs"
+            / "codebook_references"
+            / "rounds_01_04_h2_term_codebook.csv",
+            "prior_round_codebook_reference",
+        ),
+        (
+            "rounds_01_04_h2_indicator_codebook",
+            ROOT
+            / "outputs"
+            / "codebook_references"
+            / "rounds_01_04_h2_indicator_codebook.csv",
+            "prior_round_codebook_reference",
+        ),
+        (
+            "rounds_01_04_h2_codebook_manifest",
+            ROOT
+            / "outputs"
+            / "codebook_references"
+            / "rounds_01_04_h2_codebooks.manifest.json",
+            "prior_round_codebook_manifest",
+        ),
+        (
+            "primary_codex_term_coding_brief_v3",
+            ROOT / "PRIMARY_CODEX_TERM_CODING_BRIEF_V3.md",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_screening_h1_brief_v3",
+            ROOT / "INDEPENDENT_CODEX_SCREENING_H1_BRIEF_V3.md",
+            "independent_review_protocol",
+        ),
+        (
+            "independent_codex_screening_h1_protocol_v3",
+            ROOT / "INDEPENDENT_CODEX_SCREENING_H1_PROTOCOL_V3.json",
+            "independent_review_protocol",
+        ),
+        (
+            "primary_codex_high_recall_screening_protocol_v3",
+            ROOT / "PRIMARY_CODEX_HIGH_RECALL_SCREENING_PROTOCOL_V3.md",
+            "independent_review_protocol",
+        ),
+        (
+            "code_independent_ai_reviewer",
+            ROOT
+            / "outputs"
+            / "invalidated_local_qwen_review_20260729"
+            / "README_INVALIDATED.md",
+            "invalidated_local_qwen_method_record",
+        ),
         ("code_reporting", ROOT / "reporting.py", "implementation"),
         ("code_pipeline", ROOT / "pipeline.py", "implementation"),
+        (
+            "code_targeted_formula_review_v3",
+            ROOT / "targeted_formula_review.py",
+            "implementation",
+        ),
+        (
+            "code_materialize_candidate_t0_features_v3",
+            ROOT / "materialize_candidate_t0_features_v3.py",
+            "implementation",
+        ),
+        (
+            "code_materialize_targeted_operationalizations_edge_tests_v2",
+            ROOT / "materialize_targeted_operationalizations_v3.py",
+            "implementation",
+        ),
+        (
+            "code_primary_codex_targeted_operationalization_review_v3",
+            ROOT / "primary_codex_targeted_operationalization_review_v3.py",
+            "independent_ai_review_implementation",
+        ),
+        (
+            "code_primary_codex_dimension_coding_v3",
+            ROOT / "primary_codex_dimension_coding_v3.py",
+            "independent_ai_review_implementation",
+        ),
+        (
+            "code_materialize_final_training_features_v3",
+            ROOT / "materialize_final_training_features_v3.py",
+            "implementation",
+        ),
         ("code_tests_v3", ROOT / "tests_v3.py", "verification"),
     ):
         _register_snapshot(connection, source_id, path, role)
@@ -1023,6 +1472,7 @@ def export_term_coding(
     connection: sqlite3.Connection,
     output_path: Path,
     reviewer_role: str | None = None,
+    only_missing: bool = False,
 ) -> int:
     """Export independent AI/H1 or adjudicating H2 term-coding rows."""
     require_complete(connection, ["bootstrap_retrieval_complete"])
@@ -1074,6 +1524,14 @@ def export_term_coding(
     ).fetchall()
     for term in terms:
         for role in roles:
+            if only_missing and connection.execute(
+                """
+                SELECT 1 FROM term_coding
+                WHERE term_id = ? AND coder_role = ?
+                """,
+                (term["term_id"], role),
+            ).fetchone() is not None:
+                continue
             codes: Dict[str, sqlite3.Row] = {}
             if role == "H2":
                 codes = {
@@ -1159,6 +1617,22 @@ def import_term_coding(
 ) -> int:
     """Import term classifications without inferring missing human codes."""
     _assert_not_frozen(connection)
+    if assisted_review_file(input_path):
+        assisted_rows = list(iter_csv(input_path))
+        assisted_roles = {
+            str(row.get("coder_role") or "").strip().upper()
+            for row in assisted_rows
+            if str(row.get("coder_role") or "").strip()
+        }
+        if len(assisted_roles) != 1:
+            raise ValueError(
+                "One assisted term-coding import must declare one role"
+            )
+        assert_registered_review_attestation(
+            connection,
+            input_path,
+            next(iter(assisted_roles)),
+        )
     snapshot_path = snapshot_import_file(
         connection,
         input_path,
@@ -1241,6 +1715,13 @@ def import_term_coding(
             raise ValueError(f"Invalid term_relation: {term_relation}")
         if not reason:
             raise ValueError(f"Coding {term_id}/{role} requires a reason")
+        cross_domain_raw = str(row.get("cross_domain") or "").strip()
+        if decision == "exclude" and not cross_domain_raw:
+            cross_domain_value = 0
+        else:
+            cross_domain_value = int(
+                parse_bool(cross_domain_raw, "cross_domain")
+            )
         connection.execute(
             """
             INSERT INTO term_coding(
@@ -1270,7 +1751,7 @@ def import_term_coding(
                 domain,
                 definition,
                 family,
-                int(parse_bool(row.get("cross_domain"), "cross_domain")),
+                cross_domain_value,
                 decision,
                 reason,
                 utc_now(),
@@ -1569,14 +2050,11 @@ def derive_search_frame(
         )
         frozen = connection.execute(
             """
-            SELECT 1 FROM discovery_review_rounds
+            SELECT * FROM discovery_review_rounds
             WHERE saturation_phase = 'search_frame_discovery'
               AND reviewer_role = 'H2'
               AND decision = 'freeze'
               AND fully_reviewed = 1
-              AND consecutive_zero_rounds >= ?
-              AND new_nonredundant_english_terms = 0
-              AND new_canonical_indicator_families = 0
               AND iteration = (
                   SELECT MAX(iteration)
                   FROM discovery_review_rounds
@@ -1584,13 +2062,37 @@ def derive_search_frame(
               )
             LIMIT 1
             """,
-            (required_zero,),
         ).fetchone()
         if frozen is None:
             raise RuntimeError(
-                "Search-frame derivation requires H2-approved "
-                f"{required_zero}-round dual-zero discovery saturation"
+                "Search-frame derivation requires an H2-approved terminal "
+                "search-frame discovery round"
             )
+        preregistered_stop = (
+            int(frozen["consecutive_zero_rounds"]) >= required_zero
+            and int(frozen["new_nonredundant_english_terms"]) == 0
+            and int(frozen["new_canonical_indicator_families"]) == 0
+            and frozen["stop_basis"]
+            == "preregistered_consecutive_dual_zero"
+        )
+        deviation_stop = (
+            frozen["stop_basis"]
+            == "retrospective_owner_pragmatic_stop"
+            and frozen["protocol_amendment_id"]
+            == "aspr-v3-search-frame-round12-pragmatic-stop-20260730"
+            and DISCOVERY_STOP_AMENDMENT_PATH.exists()
+            and frozen["protocol_amendment_sha256"]
+            == sha256_file(DISCOVERY_STOP_AMENDMENT_PATH)
+        )
+        if not preregistered_stop and not deviation_stop:
+            raise RuntimeError(
+                "Search-frame discovery stop is neither a verified "
+                f"{required_zero}-round dual-zero freeze nor a hash-verified "
+                "protocol deviation"
+            )
+        discovery_stop = dict(frozen)
+    else:
+        discovery_stop = {}
     resolved, metrics = _resolved_term_codes(connection)
     included = [row for row in resolved if row["decision"] == "include"]
     if not included:
@@ -1852,6 +2354,7 @@ def derive_search_frame(
     ).fetchone()[0]
     frame_body = {
         "frame_version": frame_version,
+        "search_frame_discovery_stop": discovery_stop,
         "input_terms": [
             {
                 key: row[key]
@@ -1979,25 +2482,130 @@ def derive_search_frame(
     }
 
 
+def _press_evidence_by_assignment(
+    connection: sqlite3.Connection,
+    resolved: Sequence[Mapping[str, Any]],
+) -> Dict[tuple[str, str], List[Dict[str, Any]]]:
+    """Attach auditable record titles to term-level PRESS evidence."""
+    evidence_by_assignment: Dict[
+        tuple[str, str],
+        List[Dict[str, Any]],
+    ] = defaultdict(list)
+    title_cache: Dict[str, str] = {}
+    for term in resolved:
+        if term["decision"] != "include":
+            continue
+        source_record_key = str(term["source_record_key"] or "")
+        if source_record_key not in title_cache:
+            record = connection.execute(
+                """
+                SELECT title FROM records WHERE record_key = ?
+                """,
+                (source_record_key,),
+            ).fetchone()
+            title_cache[source_record_key] = (
+                str(record["title"]) if record is not None else ""
+            )
+        for domain_label in _domain_labels(term["search_domain_label"]):
+            key = (
+                normalize_term(domain_label),
+                normalize_term(term["query_family_label"]),
+            )
+            item = {
+                field: term[field]
+                for field in (
+                    "term_id",
+                    "source_record_key",
+                    "source_id",
+                    "source_type",
+                    "evidence_span",
+                    "canonical_term",
+                    "term_family_label",
+                )
+            }
+            item["source_title"] = title_cache[source_record_key]
+            evidence_by_assignment[key].append(item)
+    return evidence_by_assignment
+
+
 def export_press(
     connection: sqlite3.Connection,
     output_path: Path,
+    only_pending: bool = False,
 ) -> int:
     """Export active logical queries for independent PRESS review."""
     require_complete(connection, ["search_frame_derived"])
+    resolved, _ = _resolved_term_codes(connection)
+    evidence_by_assignment = _press_evidence_by_assignment(
+        connection,
+        resolved,
+    )
     rows: List[Dict[str, Any]] = []
     for row in connection.execute(
         """
-        SELECT logical_query_id, search_domain_id, family_label,
-               logical_expression
-        FROM logical_queries
-        WHERE status = 'active' AND logical_query_id LIKE 'L%'
-        ORDER BY logical_query_id
-        """
+        SELECT l.logical_query_id, l.search_domain_id,
+               d.label AS search_domain_label,
+               d.definition AS search_domain_definition,
+               l.family_label, l.logical_expression,
+               l.domain_terms_json, l.object_terms_json,
+               l.context_terms_json,
+               COALESCE(pr.decision, '') AS prior_press_decision,
+               COALESCE(pr.notes, '') AS prior_press_notes,
+               COALESCE(rv.revision_decision, '')
+                   AS press_revision_decision,
+               COALESCE(rv.revision_rationale, '')
+                   AS press_revision_rationale
+        FROM logical_queries l
+        JOIN search_domains d USING(search_domain_id)
+        LEFT JOIN press_reviews pr USING(logical_query_id)
+        LEFT JOIN press_query_revisions rv USING(logical_query_id)
+        WHERE l.status = 'active' AND l.logical_query_id LIKE 'L%'
+          AND (? = 0 OR l.press_status != 'pass')
+        ORDER BY l.logical_query_id
+        """,
+        (int(only_pending),),
     ):
+        evidence = evidence_by_assignment.get(
+            (
+                normalize_term(row["search_domain_label"]),
+                normalize_term(row["family_label"]),
+            ),
+            [],
+        )
+        filters = sorted(
+            {
+                str(value[0])
+                for value in connection.execute(
+                    """
+                    SELECT filter_expression FROM physical_queries
+                    WHERE logical_query_id = ?
+                    """,
+                    (row["logical_query_id"],),
+                )
+            }
+        )
         rows.append(
             {
                 **dict(row),
+                "physical_filter_expressions_json": json.dumps(
+                    filters,
+                    ensure_ascii=False,
+                ),
+                "term_evidence_count": len(evidence),
+                "term_evidence_json": json.dumps(
+                    evidence,
+                    ensure_ascii=False,
+                    separators=(",", ":"),
+                    sort_keys=True,
+                ),
+                "prior_press_decision": row["prior_press_decision"],
+                "prior_press_notes": row["prior_press_notes"],
+                "press_revision_decision": (
+                    row["press_revision_decision"]
+                ),
+                "press_revision_rationale": (
+                    row["press_revision_rationale"]
+                ),
                 "reviewer_role": "H2",
                 "concepts_complete": "",
                 "boolean_logic_valid": "",
@@ -2022,6 +2630,12 @@ def import_press(
 ) -> Dict[str, int]:
     """Import PRESS decisions and archive reviewed redundancies."""
     _assert_not_frozen(connection)
+    if assisted_review_file(input_path):
+        assert_registered_review_attestation(
+            connection,
+            input_path,
+            "H2",
+        )
     snapshot_path = snapshot_import_file(
         connection,
         input_path,
@@ -2191,6 +2805,602 @@ def import_press(
         )
     connection.commit()
     return counts
+
+
+def export_press_revisions(
+    connection: sqlite3.Connection,
+    output_path: Path,
+) -> int:
+    """Export every PRESS-revise family with evidence and frozen terms."""
+    require_complete(connection, ["search_frame_derived"])
+    current = connection.execute(
+        """
+        SELECT frame_version FROM search_frame_versions
+        WHERE status = 'current'
+        ORDER BY frame_version DESC LIMIT 1
+        """
+    ).fetchone()
+    if current is None:
+        raise RuntimeError("No current search-frame version exists")
+    resolved, _ = _resolved_term_codes(connection)
+    evidence_by_assignment = _press_evidence_by_assignment(
+        connection,
+        resolved,
+    )
+    rows: List[Dict[str, Any]] = []
+    for row in connection.execute(
+        """
+        SELECT l.logical_query_id, l.search_domain_id,
+               d.label AS search_domain_label,
+               d.definition AS search_domain_definition,
+               l.family_label,
+               l.domain_terms_json AS old_domain_terms_json,
+               l.object_terms_json, l.context_terms_json,
+               l.logical_expression AS current_logical_expression,
+               pr.notes AS press_notes
+        FROM press_reviews pr
+        JOIN logical_queries l USING(logical_query_id)
+        JOIN search_domains d USING(search_domain_id)
+        WHERE pr.decision = 'revise' AND l.status = 'active'
+        ORDER BY l.logical_query_id
+        """
+    ):
+        evidence = evidence_by_assignment.get(
+            (
+                normalize_term(row["search_domain_label"]),
+                normalize_term(row["family_label"]),
+            ),
+            [],
+        )
+        filters = sorted(
+            {
+                str(value[0])
+                for value in connection.execute(
+                    """
+                    SELECT filter_expression FROM physical_queries
+                    WHERE logical_query_id = ?
+                    """,
+                    (row["logical_query_id"],),
+                )
+            }
+        )
+        rows.append(
+            {
+                **dict(row),
+                "source_frame_version": int(current["frame_version"]),
+                "physical_filter_expressions_json": json.dumps(
+                    filters,
+                    ensure_ascii=False,
+                ),
+                "term_evidence_count": len(evidence),
+                "term_evidence_json": json.dumps(
+                    evidence,
+                    ensure_ascii=False,
+                    separators=(",", ":"),
+                    sort_keys=True,
+                ),
+                "revision_decision": "",
+                "revised_domain_terms_json": "",
+                "revision_rationale": "",
+                "reviewer_role": "H2",
+            }
+        )
+    write_csv(output_path, rows, PRESS_REVISION_FIELDS)
+    return len(rows)
+
+
+def import_press_revisions(
+    connection: sqlite3.Connection,
+    input_path: Path,
+) -> Dict[str, int]:
+    """Import independently reviewed query-surface revisions."""
+    _assert_not_frozen(connection)
+    if assisted_review_file(input_path):
+        assert_registered_review_attestation(
+            connection,
+            input_path,
+            "H2",
+        )
+    snapshot_path = snapshot_import_file(
+        connection,
+        input_path,
+        "press_query_revisions",
+    )
+    artifact_sha = sha256_file(snapshot_path)
+    current = connection.execute(
+        """
+        SELECT frame_version FROM search_frame_versions
+        WHERE status = 'current'
+        ORDER BY frame_version DESC LIMIT 1
+        """
+    ).fetchone()
+    if current is None:
+        raise RuntimeError("No current search frame exists")
+    counts = {"replace_terms": 0, "archive_unsupported": 0}
+    prompt_hashes: set[str] = set()
+    for row in read_csv(snapshot_path):
+        logical_id = str(row.get("logical_query_id") or "").strip()
+        decision = str(
+            row.get("revision_decision") or ""
+        ).strip().casefold()
+        if not logical_id or not decision:
+            continue
+        if decision not in counts:
+            raise ValueError(f"Invalid PRESS revision decision: {decision}")
+        if str(row.get("reviewer_role") or "").strip().upper() != "H2":
+            raise ValueError("PRESS revisions require reviewer_role=H2")
+        if int(row.get("source_frame_version") or -1) != int(
+            current["frame_version"]
+        ):
+            raise ValueError(
+                f"Revision frame version is stale: {logical_id}"
+            )
+        stored = connection.execute(
+            """
+            SELECT domain_terms_json FROM logical_queries
+            WHERE logical_query_id = ? AND status = 'active'
+            """,
+            (logical_id,),
+        ).fetchone()
+        if stored is None:
+            raise ValueError(
+                f"Unknown active logical query revision: {logical_id}"
+            )
+        if str(row.get("old_domain_terms_json") or "") != str(
+            stored["domain_terms_json"]
+        ):
+            raise ValueError(f"Frozen old terms changed: {logical_id}")
+        rationale = str(
+            row.get("revision_rationale") or ""
+        ).strip()
+        if not rationale:
+            raise ValueError(f"Revision lacks rationale: {logical_id}")
+        revised_raw = str(
+            row.get("revised_domain_terms_json") or ""
+        ).strip()
+        revised_terms: List[str] = []
+        if revised_raw:
+            value = json.loads(revised_raw)
+            if not isinstance(value, list):
+                raise ValueError(
+                    f"Revised terms must be a JSON list: {logical_id}"
+                )
+            revised_terms = sorted(
+                {
+                    str(term).strip()
+                    for term in value
+                    if str(term).strip()
+                },
+                key=normalize_term,
+            )
+        if decision == "replace_terms":
+            if not revised_terms:
+                raise ValueError(
+                    f"Replacement revision has no terms: {logical_id}"
+                )
+            artifact_tokens = {"t0", "amp", "lt", "gt"}
+            for term in revised_terms:
+                tokens = set(normalize_term(term).split())
+                if tokens & artifact_tokens:
+                    raise ValueError(
+                        f"Revised term retains an internal/HTML token: "
+                        f"{logical_id}/{term}"
+                    )
+                if len(term) > 240:
+                    raise ValueError(
+                        f"Revised term is unbounded: {logical_id}"
+                    )
+        elif revised_terms:
+            raise ValueError(
+                f"Archived query must not retain terms: {logical_id}"
+            )
+        prompt_hash = str(
+            row.get("independent_ai_prompt_sha256") or ""
+        ).strip().casefold()
+        if not prompt_hash:
+            raise ValueError(
+                f"Revision lacks prompt provenance: {logical_id}"
+            )
+        prompt_hashes.add(prompt_hash)
+        connection.execute(
+            """
+            INSERT INTO press_query_revisions(
+                logical_query_id, source_frame_version,
+                old_domain_terms_json, revised_domain_terms_json,
+                revision_decision, revision_rationale, reviewer_role,
+                review_artifact_sha256, review_prompt_sha256, reviewed_at
+            ) VALUES (?, ?, ?, ?, ?, ?, 'H2', ?, ?, ?)
+            ON CONFLICT(logical_query_id) DO UPDATE SET
+                source_frame_version = excluded.source_frame_version,
+                old_domain_terms_json = excluded.old_domain_terms_json,
+                revised_domain_terms_json =
+                    excluded.revised_domain_terms_json,
+                revision_decision = excluded.revision_decision,
+                revision_rationale = excluded.revision_rationale,
+                reviewer_role = 'H2',
+                review_artifact_sha256 =
+                    excluded.review_artifact_sha256,
+                review_prompt_sha256 = excluded.review_prompt_sha256,
+                reviewed_at = excluded.reviewed_at
+            """,
+            (
+                logical_id,
+                int(current["frame_version"]),
+                stored["domain_terms_json"],
+                json.dumps(revised_terms, ensure_ascii=False),
+                decision,
+                rationale,
+                artifact_sha,
+                prompt_hash,
+                utc_now(),
+            ),
+        )
+        counts[decision] += 1
+    if len(prompt_hashes) > 1:
+        raise ValueError("One PRESS-revision file cannot mix prompt hashes")
+    connection.commit()
+    return counts
+
+
+def _replace_logical_query_terms(
+    connection: sqlite3.Connection,
+    logical_id: str,
+    terms: Sequence[str],
+) -> None:
+    """Regenerate one logical family's provider requests deterministically."""
+    logical = connection.execute(
+        """
+        SELECT * FROM logical_queries WHERE logical_query_id = ?
+        """,
+        (logical_id,),
+    ).fetchone()
+    if logical is None:
+        raise ValueError(f"Unknown logical query: {logical_id}")
+    object_terms = json.loads(logical["object_terms_json"])
+    context_terms = json.loads(logical["context_terms_json"])
+    filters = [
+        str(row[0])
+        for row in connection.execute(
+            """
+            SELECT DISTINCT filter_expression FROM physical_queries
+            WHERE logical_query_id = ?
+            ORDER BY filter_expression
+            """,
+            (logical_id,),
+        )
+    ]
+    if len(filters) != 1:
+        raise RuntimeError(
+            f"Logical query lacks one frozen provider filter: {logical_id}"
+        )
+    physical_ids = [
+        str(row[0])
+        for row in connection.execute(
+            """
+            SELECT physical_query_id FROM physical_queries
+            WHERE logical_query_id = ?
+            """,
+            (logical_id,),
+        )
+    ]
+    if physical_ids:
+        placeholders = ",".join("?" for _ in physical_ids)
+        connection.execute(
+            f"DELETE FROM seed_recall_query_checks "
+            f"WHERE physical_query_id IN ({placeholders})",
+            tuple(physical_ids),
+        )
+        connection.execute(
+            f"DELETE FROM query_hits WHERE physical_query_id "
+            f"IN ({placeholders})",
+            tuple(physical_ids),
+        )
+        connection.execute(
+            f"DELETE FROM query_runs WHERE physical_query_id "
+            f"IN ({placeholders})",
+            tuple(physical_ids),
+        )
+    connection.execute(
+        "DELETE FROM physical_queries WHERE logical_query_id = ?",
+        (logical_id,),
+    )
+    expression = " AND ".join(
+        (or_block(terms), or_block(object_terms), or_block(context_terms))
+    )
+    logical_hash = json_hash(
+        {
+            "logical_query_id": logical_id,
+            "domain": connection.execute(
+                """
+                SELECT label FROM search_domains
+                WHERE search_domain_id = ?
+                """,
+                (logical["search_domain_id"],),
+            ).fetchone()[0],
+            "family": logical["family_label"],
+            "expression": expression,
+        }
+    )
+    connection.execute(
+        """
+        UPDATE logical_queries
+        SET logical_expression = ?, domain_terms_json = ?,
+            press_status = 'pending_revision_review',
+            press_notes = press_notes || ' | H2 terms revised',
+            query_hash = ?
+        WHERE logical_query_id = ?
+        """,
+        (
+            expression,
+            json.dumps(list(terms), ensure_ascii=False),
+            logical_hash,
+            logical_id,
+        ),
+    )
+    for part_index, chunk in enumerate(
+        _split_term_block(terms, object_terms, context_terms),
+        start=1,
+    ):
+        physical_id = f"{logical_id}__P{part_index:03d}"
+        physical_expression = " AND ".join(
+            (
+                or_block(chunk),
+                or_block(object_terms),
+                or_block(context_terms),
+            )
+        )
+        connection.execute(
+            """
+            INSERT INTO physical_queries(
+                physical_query_id, logical_query_id, provider,
+                expression, filter_expression, status, query_hash
+            ) VALUES (?, ?, 'OpenAlex', ?, ?, 'active', ?)
+            """,
+            (
+                physical_id,
+                logical_id,
+                physical_expression,
+                filters[0],
+                query_definition_hash(physical_expression, filters[0]),
+            ),
+        )
+
+
+def apply_press_revisions(
+    connection: sqlite3.Connection,
+) -> Dict[str, Any]:
+    """Apply every independently reviewed PRESS revision as frame v+1."""
+    _assert_not_frozen(connection)
+    pending_ids = {
+        str(row[0])
+        for row in connection.execute(
+            """
+            SELECT l.logical_query_id
+            FROM press_reviews pr
+            JOIN logical_queries l USING(logical_query_id)
+            WHERE pr.decision = 'revise' AND l.status = 'active'
+            """
+        )
+    }
+    revisions = {
+        str(row["logical_query_id"]): row
+        for row in connection.execute(
+            """
+            SELECT * FROM press_query_revisions
+            WHERE logical_query_id IN (
+                SELECT l.logical_query_id
+                FROM press_reviews pr
+                JOIN logical_queries l USING(logical_query_id)
+                WHERE pr.decision = 'revise' AND l.status = 'active'
+            )
+            ORDER BY logical_query_id
+            """
+        )
+    }
+    missing = sorted(pending_ids - set(revisions))
+    if missing:
+        raise RuntimeError(
+            "PRESS revisions are incomplete: " + ", ".join(missing)
+        )
+    counts = {"replace_terms": 0, "archive_unsupported": 0}
+    for logical_id in sorted(revisions):
+        revision = revisions[logical_id]
+        decision = str(revision["revision_decision"])
+        if decision == "replace_terms":
+            _replace_logical_query_terms(
+                connection,
+                logical_id,
+                json.loads(revision["revised_domain_terms_json"]),
+            )
+        elif decision == "archive_unsupported":
+            connection.execute(
+                """
+                UPDATE logical_queries
+                SET status = 'archived',
+                    archive_reason = 'R_PRESS_UNSUPPORTED',
+                    press_status = 'archived_unsupported',
+                    press_notes = press_notes || ?
+                WHERE logical_query_id = ?
+                """,
+                (
+                    " | " + str(revision["revision_rationale"]),
+                    logical_id,
+                ),
+            )
+            connection.execute(
+                """
+                UPDATE physical_queries SET status = 'archived'
+                WHERE logical_query_id = ?
+                """,
+                (logical_id,),
+            )
+        else:
+            raise RuntimeError(
+                f"Unknown imported PRESS revision: {decision}"
+            )
+        counts[decision] += 1
+    _refresh_search_domain_status(connection)
+    previous = connection.execute(
+        """
+        SELECT * FROM search_frame_versions
+        WHERE status = 'current'
+        ORDER BY frame_version DESC LIMIT 1
+        """
+    ).fetchone()
+    if previous is None:
+        raise RuntimeError("No current frame exists for PRESS revision")
+    previous_body = json.loads(previous["frame_json"])
+    frame_version = int(previous["frame_version"]) + 1
+    connection.execute(
+        """
+        UPDATE logical_queries SET query_version = ?
+        WHERE logical_query_id LIKE 'L%'
+        """,
+        (frame_version,),
+    )
+    active_k = int(
+        connection.execute(
+            """
+            SELECT COUNT(*) FROM search_domains WHERE status = 'active'
+            """
+        ).fetchone()[0]
+    )
+    active_q = int(
+        connection.execute(
+            """
+            SELECT COUNT(*) FROM logical_queries
+            WHERE status = 'active' AND logical_query_id LIKE 'L%'
+            """
+        ).fetchone()[0]
+    )
+    active_p = int(
+        connection.execute(
+            """
+            SELECT COUNT(*) FROM physical_queries
+            WHERE status = 'active' AND logical_query_id LIKE 'L%'
+            """
+        ).fetchone()[0]
+    )
+    frame_body = {
+        "frame_version": frame_version,
+        "search_frame_discovery_stop": previous_body.get(
+            "search_frame_discovery_stop",
+            {},
+        ),
+        "input_terms": previous_body["input_terms"],
+        "press_query_revisions": [
+            dict(row)
+            for row in connection.execute(
+                """
+                SELECT * FROM press_query_revisions
+                ORDER BY logical_query_id
+                """
+            )
+        ],
+        "domains": [
+            dict(row)
+            for row in connection.execute(
+                "SELECT * FROM search_domains ORDER BY search_domain_id"
+            )
+        ],
+        "logical_queries": [
+            dict(row)
+            for row in connection.execute(
+                """
+                SELECT * FROM logical_queries
+                WHERE logical_query_id LIKE 'L%'
+                ORDER BY logical_query_id
+                """
+            )
+        ],
+        "physical_queries": [
+            dict(row)
+            for row in connection.execute(
+                """
+                SELECT * FROM physical_queries
+                WHERE logical_query_id LIKE 'L%'
+                ORDER BY physical_query_id
+                """
+            )
+        ],
+    }
+    frame_hash = json_hash(frame_body)
+    connection.execute(
+        """
+        UPDATE search_frame_versions
+        SET status = 'superseded_by_press_revision'
+        WHERE status = 'current'
+        """
+    )
+    connection.execute(
+        """
+        INSERT INTO search_frame_versions(
+            frame_version, input_term_hash, frame_hash, counts_json,
+            frame_json, status, derived_at
+        ) VALUES (?, ?, ?, ?, ?, 'current', ?)
+        """,
+        (
+            frame_version,
+            previous["input_term_hash"],
+            frame_hash,
+            json.dumps(
+                {"K": active_k, "Q": active_q, "P": active_p},
+                sort_keys=True,
+            ),
+            json.dumps(
+                frame_body,
+                ensure_ascii=False,
+                separators=(",", ":"),
+                sort_keys=True,
+            ),
+            utc_now(),
+        ),
+    )
+    set_stage(
+        connection,
+        "search_frame_derived",
+        "complete",
+        {
+            "frame_version": frame_version,
+            "K": active_k,
+            "Q": active_q,
+            "P": active_p,
+            "frame_hash": frame_hash,
+            "press_revision_counts": counts,
+        },
+    )
+    invalidate_stages(
+        connection,
+        (
+            "search_frame_validated",
+            "search_frame_frozen",
+            "formal_retrieval_complete",
+            "literature_screened",
+            "indicators_extracted",
+            "dimensions_derived",
+            "features_selected",
+            "audit_complete",
+        ),
+        "PRESS-reviewed query terms changed",
+    )
+    connection.commit()
+    return {
+        "frame_version": frame_version,
+        "K": active_k,
+        "Q": active_q,
+        "P": active_p,
+        "frame_hash": frame_hash,
+        **counts,
+    }
+
+
+def resolve_press_redundancy(
+    connection: sqlite3.Connection,
+) -> Dict[str, Any]:
+    """Resolve H2 redundancy claims, using exact request identity first."""
+    archived = _resolve_redundancy_reviews(connection)
+    connection.commit()
+    return {"archived": archived, "count": len(archived)}
 
 
 def import_hidden_seeds(
@@ -2787,37 +3997,63 @@ def _resolve_redundancy_reviews(
                 f"Redundancy pair lacks active physical queries: "
                 f"{candidate_id}/{covering_id}"
             )
-        for physical_id in sorted(
-            set(candidate_physical + covering_physical)
-        ):
-            kwargs: Dict[str, Any] = {}
-            if fetcher is not None:
-                kwargs["fetcher"] = fetcher
-            retrieve_physical_query(
-                connection,
-                physical_id,
-                "redundancy_validation",
-                **kwargs,
+        def request_definitions(
+            physical_ids: Sequence[str],
+        ) -> set[tuple[str, str]]:
+            placeholders = ",".join("?" for _ in physical_ids)
+            return {
+                (str(row["expression"]), str(row["filter_expression"]))
+                for row in connection.execute(
+                    f"""
+                    SELECT expression, filter_expression
+                    FROM physical_queries
+                    WHERE physical_query_id IN ({placeholders})
+                    """,
+                    tuple(physical_ids),
+                )
+            }
+
+        identical_requests = request_definitions(
+            candidate_physical
+        ) == request_definitions(covering_physical)
+        if identical_requests:
+            uncovered = None
+            verification_note = (
+                "exact physical expression/filter identity verified"
             )
-        candidate_placeholders = ",".join(
-            "?" for _ in candidate_physical
-        )
-        covering_placeholders = ",".join(
-            "?" for _ in covering_physical
-        )
-        uncovered = connection.execute(
-            f"""
-            SELECT record_key FROM query_hits
-            WHERE run_role = 'redundancy_validation'
-              AND physical_query_id IN ({candidate_placeholders})
-            EXCEPT
-            SELECT record_key FROM query_hits
-            WHERE run_role = 'redundancy_validation'
-              AND physical_query_id IN ({covering_placeholders})
-            LIMIT 1
-            """,
-            tuple(candidate_physical + covering_physical),
-        ).fetchone()
+        else:
+            for physical_id in sorted(
+                set(candidate_physical + covering_physical)
+            ):
+                kwargs: Dict[str, Any] = {}
+                if fetcher is not None:
+                    kwargs["fetcher"] = fetcher
+                retrieve_physical_query(
+                    connection,
+                    physical_id,
+                    "redundancy_validation",
+                    **kwargs,
+                )
+            candidate_placeholders = ",".join(
+                "?" for _ in candidate_physical
+            )
+            covering_placeholders = ",".join(
+                "?" for _ in covering_physical
+            )
+            uncovered = connection.execute(
+                f"""
+                SELECT record_key FROM query_hits
+                WHERE run_role = 'redundancy_validation'
+                  AND physical_query_id IN ({candidate_placeholders})
+                EXCEPT
+                SELECT record_key FROM query_hits
+                WHERE run_role = 'redundancy_validation'
+                  AND physical_query_id IN ({covering_placeholders})
+                LIMIT 1
+                """,
+                tuple(candidate_physical + covering_physical),
+            ).fetchone()
+            verification_note = "complete result-set subset verified"
         if uncovered is not None:
             connection.execute(
                 """
@@ -2837,10 +4073,10 @@ def _resolve_redundancy_reviews(
             """
             UPDATE press_reviews
             SET result_set_coverage_verified = 1,
-                notes = notes || ' | complete result-set subset verified'
+                notes = notes || ?
             WHERE logical_query_id = ?
             """,
-            (candidate_id,),
+            (f" | {verification_note}", candidate_id),
         )
         connection.execute(
             """
@@ -2969,6 +4205,23 @@ def validate_search_frame(
         connection,
         fetcher=fetcher,
     )
+    active_logical = connection.execute(
+        """
+        SELECT logical_query_id, press_status FROM logical_queries
+        WHERE status = 'active' AND logical_query_id LIKE 'L%'
+        ORDER BY logical_query_id
+        """
+    ).fetchall()
+    failed_press = [
+        str(row["logical_query_id"])
+        for row in active_logical
+        if row["press_status"] != "pass"
+    ]
+    if failed_press:
+        raise RuntimeError(
+            "Active logical queries lack PRESS pass: "
+            + ", ".join(failed_press)
+        )
     active_queries = [
         str(row[0])
         for row in connection.execute(
@@ -2990,32 +4243,16 @@ def validate_search_frame(
         **inventory_kwargs,
     )
     archived_zero = _archive_zero_hit_families(connection, totals)
-    active_logical = connection.execute(
-        """
-        SELECT logical_query_id, press_status FROM logical_queries
-        WHERE status = 'active' AND logical_query_id LIKE 'L%'
-        ORDER BY logical_query_id
-        """
-    ).fetchall()
-    failed_press = [
-        str(row["logical_query_id"])
-        for row in active_logical
-        if row["press_status"] != "pass"
-    ]
-    if failed_press:
-        raise RuntimeError(
-            "Active logical queries lack PRESS pass: "
-            + ", ".join(failed_press)
-        )
     physical = connection.execute(
         """
-        SELECT physical_query_id, expression
+        SELECT physical_query_id, expression, query_hash
         FROM physical_queries
         WHERE status = 'active' AND logical_query_id LIKE 'L%'
         ORDER BY physical_query_id
         """
     ).fetchall()
     keys = openalex_api_keys()
+    key_locks = [threading.Lock() for _ in keys]
     check = fetcher or None
     seeds = connection.execute(
         """
@@ -3071,11 +4308,12 @@ def validate_search_frame(
     def batch_matches(
         doi_batch: Sequence[str],
         expression: str = "",
+        api_key_offset: int = 0,
     ) -> set[str]:
         nonlocal request_count
         kwargs: Dict[str, Any] = {
             "api_key": (
-                keys[request_count % len(keys)] if keys else ""
+                keys[api_key_offset % len(keys)] if keys else ""
             )
         }
         if check is not None:
@@ -3087,7 +4325,22 @@ def validate_search_frame(
             **kwargs,
         )
 
-    indexed_dois: set[str] = set()
+    indexed_dois: set[str] = {
+        normalize_doi(seed["doi"])
+        for seed in eligible_english
+        if normalize_doi(seed["doi"])
+        and str(seed["indexability_status"]) in {
+            "indexable",
+            "snapshot_and_api",
+            "api_only",
+        }
+    }
+    known_missing_dois = {
+        normalize_doi(seed["doi"])
+        for seed in eligible_english
+        if normalize_doi(seed["doi"])
+        and str(seed["indexability_status"]) == "provider_missing"
+    }
     unique_dois = sorted(
         {
             normalize_doi(seed["doi"])
@@ -3095,29 +4348,286 @@ def validate_search_frame(
             if normalize_doi(seed["doi"])
         }
     )
-    for start in range(0, len(unique_dois), seed_batch_size):
+    unchecked_dois = [
+        doi
+        for doi in unique_dois
+        if doi not in indexed_dois and doi not in known_missing_dois
+    ]
+    for batch_index, start in enumerate(
+        range(0, len(unchecked_dois), seed_batch_size)
+    ):
         indexed_dois.update(
-            batch_matches(unique_dois[start : start + seed_batch_size])
+            batch_matches(
+                unchecked_dois[start : start + seed_batch_size],
+                api_key_offset=batch_index,
+            )
         )
+    for seed in eligible_english:
+        doi = normalize_doi(seed["doi"])
+        if not doi:
+            continue
+        if doi in indexed_dois:
+            connection.execute(
+                """
+                UPDATE evidence_seeds
+                SET indexability_status = CASE
+                    WHEN indexability_status IN (
+                        'snapshot_and_api', 'api_only'
+                    ) THEN indexability_status
+                    ELSE 'indexable'
+                END
+                WHERE seed_id = ?
+                """,
+                (seed["seed_id"],),
+            )
+        elif str(seed["indexability_status"]) not in {
+            "provider_missing",
+        }:
+            connection.execute(
+                """
+                UPDATE evidence_seeds
+                SET indexability_status = 'provider_missing',
+                    recall_status = 'supplement_required',
+                    nonrecall_reason = CASE
+                        WHEN nonrecall_reason = ''
+                        THEN 'OPENALEX_NOT_INDEXABLE'
+                        ELSE nonrecall_reason
+                    END
+                WHERE seed_id = ?
+                """,
+                (seed["seed_id"],),
+            )
+    connection.commit()
 
     matches_by_doi: Dict[str, List[str]] = {
         doi: [] for doi in indexed_dois
     }
     indexed_list = sorted(indexed_dois)
-    for query in physical:
-        query_matches: set[str] = set()
-        for start in range(0, len(indexed_list), seed_batch_size):
-            query_matches.update(
-                batch_matches(
-                    indexed_list[start : start + seed_batch_size],
-                    str(query["expression"]),
-                )
-            )
-        for doi in sorted(query_matches):
+    current_frame = connection.execute(
+        """
+        SELECT frame_version FROM search_frame_versions
+        WHERE status = 'current'
+        ORDER BY frame_version DESC LIMIT 1
+        """
+    ).fetchone()
+    if current_frame is None:
+        raise RuntimeError("No current frame for seed recall validation")
+    frame_version = int(current_frame["frame_version"])
+    seed_set_hash = json_hash({"indexed_dois": indexed_list})
+    cached_queries: set[str] = set()
+    reused_prior_frame_queries = 0
+    cache_rows = connection.execute(
+        """
+        SELECT c.frame_version, c.physical_query_id,
+               c.matched_dois_json, c.request_count
+        FROM seed_recall_query_checks c
+        JOIN physical_queries p USING(physical_query_id)
+        JOIN logical_queries l USING(logical_query_id)
+        WHERE c.seed_set_hash = ?
+          AND c.query_hash = p.query_hash
+          AND c.complete = 1
+          AND p.status = 'active'
+          AND l.status = 'active'
+        ORDER BY c.physical_query_id, c.frame_version DESC
+        """,
+        (seed_set_hash,),
+    ).fetchall()
+    for row in cache_rows:
+        physical_id = str(row["physical_query_id"])
+        if physical_id in cached_queries:
+            continue
+        cached_queries.add(physical_id)
+        for doi in json.loads(row["matched_dois_json"]):
             if doi in matches_by_doi:
-                matches_by_doi[doi].append(
-                    str(query["physical_query_id"])
+                matches_by_doi[doi].append(physical_id)
+        if int(row["frame_version"]) != frame_version:
+            connection.execute(
+                """
+                INSERT INTO seed_recall_query_checks(
+                    frame_version, physical_query_id, query_hash,
+                    seed_set_hash, matched_dois_json, request_count,
+                    complete, error, checked_at
                 )
+                SELECT ?, physical_query_id, query_hash, seed_set_hash,
+                       matched_dois_json, 0, 1, '', ?
+                FROM seed_recall_query_checks
+                WHERE frame_version = ? AND physical_query_id = ?
+                  AND seed_set_hash = ?
+                ON CONFLICT(
+                    frame_version, physical_query_id, seed_set_hash
+                ) DO UPDATE SET
+                    query_hash = excluded.query_hash,
+                    matched_dois_json = excluded.matched_dois_json,
+                    request_count = 0,
+                    complete = 1,
+                    error = '',
+                    checked_at = excluded.checked_at
+                """,
+                (
+                    frame_version,
+                    utc_now(),
+                    int(row["frame_version"]),
+                    physical_id,
+                    seed_set_hash,
+                ),
+            )
+            reused_prior_frame_queries += 1
+    if reused_prior_frame_queries:
+        log_event(
+            connection,
+            "seed_recall_cache_reuse",
+            "search_frame_version",
+            str(frame_version),
+            {
+                "reused_prior_frame_queries": reused_prior_frame_queries,
+                "identity_rule": (
+                    "physical_query_id + query_hash + seed_set_hash"
+                ),
+            },
+        )
+        connection.commit()
+    pending_queries = [
+        (index, dict(query))
+        for index, query in enumerate(physical)
+        if str(query["physical_query_id"]) not in cached_queries
+    ]
+
+    def check_query(
+        item: tuple[int, Dict[str, Any]],
+    ) -> tuple[str, str, set[str], int]:
+        query_index, query = item
+        query_matches: set[str] = set()
+        query_requests = 0
+        for batch_index, start in enumerate(
+            range(0, len(indexed_list), seed_batch_size)
+        ):
+            slot = (
+                (query_index + batch_index) % len(keys)
+                if keys
+                else -1
+            )
+            kwargs: Dict[str, Any] = {
+                "api_key": keys[slot] if keys else ""
+            }
+            if check is not None:
+                kwargs["fetcher"] = check
+            if keys:
+                with key_locks[slot]:
+                    query_matches.update(
+                        batch_openalex_seed_matches(
+                            indexed_list[
+                                start : start + seed_batch_size
+                            ],
+                            str(query["expression"]),
+                            **kwargs,
+                        )
+                    )
+            else:
+                query_matches.update(
+                    batch_openalex_seed_matches(
+                        indexed_list[start : start + seed_batch_size],
+                        str(query["expression"]),
+                        **kwargs,
+                    )
+                )
+            query_requests += 1
+        return (
+            str(query["physical_query_id"]),
+            str(query["query_hash"]),
+            query_matches,
+            query_requests,
+        )
+
+    first_error: Exception | None = None
+    # The protocol permits up to six concurrent requests. Free key slots are
+    # more stable with at most one in-flight request per key.
+    provider_workers = len(keys) if keys else 1
+    workers = min(
+        provider_workers if fetcher is None else 1,
+        len(pending_queries),
+    )
+    if workers:
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            futures = {
+                executor.submit(check_query, item): item[1][
+                    "physical_query_id"
+                ]
+                for item in pending_queries
+            }
+            for future in as_completed(futures):
+                physical_id = str(futures[future])
+                try:
+                    (
+                        physical_id,
+                        query_hash,
+                        query_matches,
+                        query_requests,
+                    ) = future.result()
+                    request_count += query_requests
+                    connection.execute(
+                        """
+                        INSERT INTO seed_recall_query_checks(
+                            frame_version, physical_query_id, query_hash,
+                            seed_set_hash, matched_dois_json, request_count,
+                            complete, error, checked_at
+                        ) VALUES (?, ?, ?, ?, ?, ?, 1, '', ?)
+                        ON CONFLICT(
+                            frame_version, physical_query_id, seed_set_hash
+                        ) DO UPDATE SET
+                            query_hash = excluded.query_hash,
+                            matched_dois_json =
+                                excluded.matched_dois_json,
+                            request_count = excluded.request_count,
+                            complete = 1,
+                            error = '',
+                            checked_at = excluded.checked_at
+                        """,
+                        (
+                            frame_version,
+                            physical_id,
+                            query_hash,
+                            seed_set_hash,
+                            json.dumps(sorted(query_matches)),
+                            query_requests,
+                            utc_now(),
+                        ),
+                    )
+                    for doi in sorted(query_matches):
+                        if doi in matches_by_doi:
+                            matches_by_doi[doi].append(physical_id)
+                    connection.commit()
+                except Exception as error:
+                    connection.execute(
+                        """
+                        INSERT INTO seed_recall_query_checks(
+                            frame_version, physical_query_id, query_hash,
+                            seed_set_hash, matched_dois_json, request_count,
+                            complete, error, checked_at
+                        )
+                        SELECT ?, physical_query_id, query_hash, ?, '[]',
+                               0, 0, ?, ?
+                        FROM physical_queries
+                        WHERE physical_query_id = ?
+                        ON CONFLICT(
+                            frame_version, physical_query_id, seed_set_hash
+                        ) DO UPDATE SET
+                            complete = 0,
+                            error = excluded.error,
+                            checked_at = excluded.checked_at
+                        """,
+                        (
+                            frame_version,
+                            seed_set_hash,
+                            safe_provider_error(error),
+                            utc_now(),
+                            physical_id,
+                        ),
+                    )
+                    connection.commit()
+                    if first_error is None:
+                        first_error = error
+    if first_error is not None:
+        raise first_error
 
     for seed in eligible_english:
         doi = normalize_doi(seed["doi"])
@@ -3188,6 +4698,9 @@ def validate_search_frame(
         "provider_missing_seeds": provider_missing_count,
         "supplemented_provider_missing_seeds": supplemented_count,
         "seed_validation_api_requests": request_count,
+        "seed_recall_reused_prior_frame_queries": (
+            reused_prior_frame_queries
+        ),
         "missed_query_term_seeds": missed,
         "zero_hit_archived_queries": archived_zero,
         "result_set_redundancy_archived_queries": redundancy_archived,

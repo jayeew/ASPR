@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import csv
 import json
+import re
 import shutil
 import sqlite3
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Iterable, Mapping
 
@@ -20,6 +23,8 @@ STAGES = (
     "formal_retrieval_complete",
     "literature_screened",
     "indicators_extracted",
+    "data_correspondence_reviewed",
+    "operationalizations_reviewed",
     "dimensions_derived",
     "features_selected",
     "audit_complete",
@@ -79,6 +84,61 @@ CREATE TABLE IF NOT EXISTS source_snapshots (
     sha256 TEXT NOT NULL,
     role TEXT NOT NULL,
     imported_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS source_snapshot_supersessions (
+    old_source_id TEXT PRIMARY KEY,
+    new_source_id TEXT NOT NULL UNIQUE,
+    old_sha256 TEXT NOT NULL,
+    observed_current_sha256 TEXT NOT NULL,
+    authorization_source_id TEXT NOT NULL,
+    reason TEXT NOT NULL,
+    superseded_at TEXT NOT NULL,
+    FOREIGN KEY(old_source_id) REFERENCES source_snapshots(source_id),
+    FOREIGN KEY(new_source_id) REFERENCES source_snapshots(source_id),
+    FOREIGN KEY(authorization_source_id)
+        REFERENCES source_snapshots(source_id),
+    CHECK(old_source_id != new_source_id)
+);
+
+CREATE TABLE IF NOT EXISTS human_review_attestations (
+    attestation_id TEXT PRIMARY KEY,
+    artifact_sha256 TEXT NOT NULL UNIQUE,
+    artifact_path TEXT NOT NULL,
+    reviewer_role TEXT NOT NULL,
+    reviewer_id TEXT NOT NULL,
+    provenance_type TEXT NOT NULL,
+    attestation_statement TEXT NOT NULL,
+    attested_at TEXT NOT NULL,
+    status TEXT NOT NULL,
+    attestation_file_sha256 TEXT NOT NULL,
+    registered_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS independent_ai_review_runs (
+    run_id TEXT PRIMARY KEY,
+    artifact_sha256 TEXT NOT NULL UNIQUE,
+    artifact_path TEXT NOT NULL,
+    input_sha256 TEXT NOT NULL,
+    input_path TEXT NOT NULL,
+    reviewer_role TEXT NOT NULL,
+    reviewer_id TEXT NOT NULL,
+    model TEXT NOT NULL,
+    model_digest TEXT NOT NULL,
+    prompt_sha256 TEXT NOT NULL,
+    parameters_json TEXT NOT NULL,
+    item_count INTEGER NOT NULL,
+    completed_at TEXT NOT NULL,
+    status TEXT NOT NULL,
+    manifest_sha256 TEXT NOT NULL,
+    registered_at TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS review_run_supersessions (
+    old_run_id TEXT PRIMARY KEY,
+    new_run_id TEXT NOT NULL,
+    reason TEXT NOT NULL,
+    recorded_at TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS evidence_seeds (
@@ -284,6 +344,9 @@ CREATE TABLE IF NOT EXISTS discovery_review_rounds (
     consecutive_zero_rounds INTEGER NOT NULL DEFAULT 0,
     reviewer_role TEXT NOT NULL DEFAULT 'SYSTEM',
     decision TEXT NOT NULL DEFAULT 'pending',
+    stop_basis TEXT NOT NULL DEFAULT 'not_applicable',
+    protocol_amendment_id TEXT NOT NULL DEFAULT '',
+    protocol_amendment_sha256 TEXT NOT NULL DEFAULT '',
     notes TEXT NOT NULL DEFAULT '',
     reviewed_at TEXT NOT NULL
 );
@@ -466,6 +529,36 @@ CREATE TABLE IF NOT EXISTS press_reviews (
         REFERENCES logical_queries(logical_query_id)
 );
 
+CREATE TABLE IF NOT EXISTS press_query_revisions (
+    logical_query_id TEXT PRIMARY KEY,
+    source_frame_version INTEGER NOT NULL,
+    old_domain_terms_json TEXT NOT NULL,
+    revised_domain_terms_json TEXT NOT NULL,
+    revision_decision TEXT NOT NULL,
+    revision_rationale TEXT NOT NULL,
+    reviewer_role TEXT NOT NULL,
+    review_artifact_sha256 TEXT NOT NULL,
+    review_prompt_sha256 TEXT NOT NULL,
+    reviewed_at TEXT NOT NULL,
+    FOREIGN KEY(logical_query_id)
+        REFERENCES logical_queries(logical_query_id)
+);
+
+CREATE TABLE IF NOT EXISTS seed_recall_query_checks (
+    frame_version INTEGER NOT NULL,
+    physical_query_id TEXT NOT NULL,
+    query_hash TEXT NOT NULL,
+    seed_set_hash TEXT NOT NULL,
+    matched_dois_json TEXT NOT NULL,
+    request_count INTEGER NOT NULL,
+    complete INTEGER NOT NULL,
+    error TEXT NOT NULL,
+    checked_at TEXT NOT NULL,
+    PRIMARY KEY(frame_version, physical_query_id, seed_set_hash),
+    FOREIGN KEY(physical_query_id)
+        REFERENCES physical_queries(physical_query_id)
+);
+
 CREATE TABLE IF NOT EXISTS screening_decisions (
     record_key TEXT NOT NULL,
     reviewer_role TEXT NOT NULL,
@@ -574,6 +667,31 @@ CREATE TABLE IF NOT EXISTS indicator_mention_reviews (
     FOREIGN KEY(mention_id) REFERENCES indicator_mentions(mention_id)
 );
 
+CREATE TABLE IF NOT EXISTS targeted_formula_reviews (
+    target_id TEXT NOT NULL,
+    feature_id TEXT NOT NULL,
+    record_key TEXT NOT NULL,
+    reviewer_role TEXT NOT NULL,
+    decision TEXT NOT NULL,
+    payload_json TEXT NOT NULL,
+    reason TEXT NOT NULL,
+    artifact_sha256 TEXT NOT NULL,
+    reviewed_at TEXT NOT NULL,
+    PRIMARY KEY(target_id, reviewer_role)
+);
+
+CREATE TABLE IF NOT EXISTS targeted_formula_decisions (
+    target_id TEXT PRIMARY KEY,
+    feature_id TEXT NOT NULL,
+    record_key TEXT NOT NULL,
+    final_decision TEXT NOT NULL,
+    mention_id TEXT NOT NULL,
+    reason TEXT NOT NULL,
+    h1_artifact_sha256 TEXT NOT NULL,
+    h2_artifact_sha256 TEXT NOT NULL,
+    decided_at TEXT NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS fulltext_acquisitions (
     record_key TEXT PRIMARY KEY,
     candidate_url TEXT NOT NULL,
@@ -652,6 +770,31 @@ CREATE TABLE IF NOT EXISTS feature_data_audit (
     FOREIGN KEY(feature_id) REFERENCES indicator_families(feature_id)
 );
 
+CREATE TABLE IF NOT EXISTS feature_data_correspondence_reviews (
+    feature_id TEXT NOT NULL,
+    reviewer_role TEXT NOT NULL,
+    decision TEXT NOT NULL,
+    payload_json TEXT NOT NULL,
+    reason TEXT NOT NULL,
+    reviewed_at TEXT NOT NULL,
+    PRIMARY KEY(feature_id, reviewer_role),
+    FOREIGN KEY(feature_id) REFERENCES indicator_families(feature_id)
+);
+
+CREATE TABLE IF NOT EXISTS feature_operationalization_reviews (
+    feature_id TEXT NOT NULL,
+    reviewer_role TEXT NOT NULL,
+    decision TEXT NOT NULL,
+    formula_mention_id TEXT NOT NULL,
+    payload_json TEXT NOT NULL,
+    reason TEXT NOT NULL,
+    reviewed_at TEXT NOT NULL,
+    PRIMARY KEY(feature_id, reviewer_role),
+    FOREIGN KEY(feature_id) REFERENCES indicator_families(feature_id),
+    FOREIGN KEY(formula_mention_id)
+        REFERENCES indicator_mentions(mention_id)
+);
+
 CREATE TABLE IF NOT EXISTS dimension_coding (
     feature_id TEXT NOT NULL,
     coder_role TEXT NOT NULL,
@@ -706,6 +849,26 @@ CREATE TABLE IF NOT EXISTS event_log (
     details_json TEXT NOT NULL,
     created_at TEXT NOT NULL
 );
+
+CREATE VIEW IF NOT EXISTS formal_review_records AS
+    SELECT DISTINCT record_key
+    FROM discovery_hits
+    WHERE review_round > 0
+    UNION
+    SELECT DISTINCT record_key
+    FROM query_hits
+    WHERE run_role = 'formal' AND rank BETWEEN 1 AND 10
+    UNION
+    SELECT record_key
+    FROM records
+    WHERE retrieval_route LIKE '%manual%supplement%'
+       OR (
+           retrieval_route LIKE '%citation%'
+           AND NOT EXISTS (
+               SELECT 1 FROM discovery_queries
+               WHERE status IN ('active', 'network')
+           )
+       );
 
 CREATE INDEX IF NOT EXISTS idx_records_doi
     ON records(provider, doi);
@@ -796,6 +959,19 @@ def initialize(path: Path = DATABASE_PATH) -> sqlite3.Connection:
                 DEFAULT 'search_frame_discovery'
             """
         )
+    for column_name, default_value in (
+        ("stop_basis", "not_applicable"),
+        ("protocol_amendment_id", ""),
+        ("protocol_amendment_sha256", ""),
+    ):
+        if column_name not in review_round_columns:
+            connection.execute(
+                f"""
+                ALTER TABLE discovery_review_rounds
+                ADD COLUMN {column_name} TEXT NOT NULL
+                    DEFAULT '{default_value}'
+                """
+            )
     if "adjudication_notes" not in indicator_candidate_columns:
         connection.execute(
             """
@@ -970,10 +1146,25 @@ def snapshot_import_file(
     """Copy an imported review file into an immutable hashed audit path."""
     resolved = input_path.resolve()
     digest = sha256_file(resolved)
+    registered_attestation = connection.execute(
+        """
+        SELECT attestation_id FROM human_review_attestations
+        WHERE artifact_sha256 = ? AND status = 'accepted'
+        """,
+        (digest,),
+    ).fetchone()
+    registered_ai_review = connection.execute(
+        """
+        SELECT run_id FROM independent_ai_review_runs
+        WHERE artifact_sha256 = ? AND status = 'complete'
+        """,
+        (digest,),
+    ).fetchone()
     if any(
         part.startswith(
             (
                 "invalidated_automated_h1_trial",
+                "invalidated_local_qwen_review",
                 "unreviewed_automated_h2_drafts",
             )
         )
@@ -988,7 +1179,10 @@ def snapshot_import_file(
             "This file hash belongs to an invalidated automated H1/H2 "
             "artifact and cannot be imported"
         )
-    if digest in UNREVIEWED_AUTOMATED_H2_HASHES:
+    if (
+        digest in UNREVIEWED_AUTOMATED_H2_HASHES
+        and registered_attestation is None
+    ):
         raise RuntimeError(
             "This file hash belongs to an unreviewed automated H2 draft. "
             "It cannot be imported until human review is explicitly "
@@ -1011,7 +1205,15 @@ def snapshot_import_file(
     snapshot_role = (
         f"review_import_human_attested_automated_draft:{role}"
         if digest in HUMAN_ATTESTED_AUTOMATED_DRAFT_HASHES
-        else f"review_import:{role}"
+        else (
+            f"review_import_human_attested_assisted_draft:{role}"
+            if registered_attestation is not None
+            else (
+                f"review_import_independent_ai_adjudication:{role}"
+                if registered_ai_review is not None
+                else f"review_import:{role}"
+            )
+        )
     )
     connection.execute(
         """
@@ -1028,6 +1230,1062 @@ def snapshot_import_file(
         ),
     )
     return destination
+
+
+def supersede_source_snapshot(
+    connection: sqlite3.Connection,
+    old_source_id: str,
+    new_source_id: str,
+    current_path: Path,
+    authorization_path: Path,
+    reason: str,
+) -> Dict[str, str]:
+    """Version a changed source without overwriting its frozen baseline.
+
+    The current bytes and the authorizing protocol are copied to immutable,
+    content-addressed paths. The original source row and hash remain intact.
+    """
+    old = connection.execute(
+        """
+        SELECT source_id, path, sha256, role
+        FROM source_snapshots WHERE source_id = ?
+        """,
+        (old_source_id,),
+    ).fetchone()
+    if old is None:
+        raise ValueError(f"Unknown frozen source snapshot: {old_source_id}")
+    if not re.fullmatch(r"[A-Za-z0-9_.:-]+", new_source_id):
+        raise ValueError(f"Invalid new source ID: {new_source_id}")
+    if old_source_id == new_source_id:
+        raise ValueError("A source supersession requires a new source ID")
+    reason = reason.strip()
+    if not reason:
+        raise ValueError("A source supersession requires a reason")
+    resolved = current_path.resolve()
+    authorization = authorization_path.resolve()
+    if not resolved.is_file():
+        raise FileNotFoundError(resolved)
+    if not authorization.is_file():
+        raise FileNotFoundError(authorization)
+    try:
+        authorization_payload = json.loads(
+            authorization.read_text(encoding="utf-8")
+        )
+    except (OSError, json.JSONDecodeError) as error:
+        raise ValueError(
+            "Source supersession authorization must be valid JSON"
+        ) from error
+    authorized_ids = authorization_payload.get(
+        "authorized_old_source_ids"
+    )
+    if (
+        not isinstance(authorized_ids, list)
+        or old_source_id not in {str(value) for value in authorized_ids}
+    ):
+        raise ValueError(
+            "Source supersession is not authorized for "
+            f"{old_source_id}"
+        )
+    if authorization_payload.get("original_hashes_retained") is not True:
+        raise ValueError(
+            "Source supersession authorization must retain original hashes"
+        )
+    current_sha256 = sha256_file(resolved)
+    if current_sha256 == str(old["sha256"]):
+        raise ValueError(
+            f"Source has not changed and needs no supersession: {old_source_id}"
+        )
+    database_file = Path(
+        str(connection.execute("PRAGMA database_list").fetchone()["file"])
+    )
+    snapshot_dir = database_file.parent / "source_snapshots"
+    snapshot_dir.mkdir(parents=True, exist_ok=True)
+
+    def immutable_copy(path: Path, source_id: str, digest: str) -> Path:
+        suffix = path.suffix.casefold() or ".dat"
+        destination = snapshot_dir / f"{source_id}_{digest}{suffix}"
+        if not destination.exists():
+            shutil.copyfile(path, destination)
+        if sha256_file(destination) != digest:
+            raise RuntimeError(
+                f"Immutable source copy failed verification: {destination}"
+            )
+        return destination
+
+    current_snapshot = immutable_copy(
+        resolved,
+        new_source_id,
+        current_sha256,
+    )
+    authorization_sha256 = sha256_file(authorization)
+    authorization_source_id = (
+        "protocol_amendment_implementation_snapshot_supersession_v3"
+    )
+    authorization_snapshot = immutable_copy(
+        authorization,
+        authorization_source_id,
+        authorization_sha256,
+    )
+    existing_new = connection.execute(
+        """
+        SELECT path, sha256, role FROM source_snapshots
+        WHERE source_id = ?
+        """,
+        (new_source_id,),
+    ).fetchone()
+    if existing_new is not None and (
+        str(existing_new["sha256"]) != current_sha256
+        or str(existing_new["role"]) != str(old["role"])
+    ):
+        raise RuntimeError(
+            f"New source ID is already bound to other bytes: {new_source_id}"
+        )
+    connection.execute(
+        """
+        INSERT OR IGNORE INTO source_snapshots(
+            source_id, path, sha256, role, imported_at
+        ) VALUES (?, ?, ?, ?, ?)
+        """,
+        (
+            new_source_id,
+            str(current_snapshot.resolve()),
+            current_sha256,
+            str(old["role"]),
+            utc_now(),
+        ),
+    )
+    connection.execute(
+        """
+        INSERT OR IGNORE INTO source_snapshots(
+            source_id, path, sha256, role, imported_at
+        ) VALUES (?, ?, ?, 'implementation_versioning_protocol', ?)
+        """,
+        (
+            authorization_source_id,
+            str(authorization_snapshot.resolve()),
+            authorization_sha256,
+            utc_now(),
+        ),
+    )
+    existing = connection.execute(
+        """
+        SELECT * FROM source_snapshot_supersessions
+        WHERE old_source_id = ?
+        """,
+        (old_source_id,),
+    ).fetchone()
+    expected = {
+        "new_source_id": new_source_id,
+        "old_sha256": str(old["sha256"]),
+        "observed_current_sha256": current_sha256,
+        "authorization_source_id": authorization_source_id,
+        "reason": reason,
+    }
+    if existing is not None and any(
+        str(existing[key]) != value for key, value in expected.items()
+    ):
+        raise RuntimeError(
+            f"Conflicting source supersession: {old_source_id}"
+        )
+    connection.execute(
+        """
+        INSERT OR IGNORE INTO source_snapshot_supersessions(
+            old_source_id, new_source_id, old_sha256,
+            observed_current_sha256, authorization_source_id,
+            reason, superseded_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        """,
+        (
+            old_source_id,
+            new_source_id,
+            str(old["sha256"]),
+            current_sha256,
+            authorization_source_id,
+            reason,
+            utc_now(),
+        ),
+    )
+    log_event(
+        connection,
+        "source_snapshot_superseded",
+        "source_snapshot",
+        old_source_id,
+        expected,
+    )
+    connection.commit()
+    return {
+        "old_source_id": old_source_id,
+        **expected,
+        "snapshot_path": str(current_snapshot.resolve()),
+        "authorization_path": str(authorization_snapshot.resolve()),
+    }
+
+
+def _read_assisted_review_rows(
+    input_path: Path,
+) -> tuple[list[str], list[Dict[str, str]]]:
+    """Read an assisted-review CSV and return its header and rows."""
+    with input_path.open(
+        "r",
+        encoding="utf-8-sig",
+        newline="",
+    ) as handle:
+        reader = csv.DictReader(handle)
+        fields = list(reader.fieldnames or [])
+        rows = [dict(row) for row in reader]
+    return fields, rows
+
+
+def assisted_review_file(input_path: Path) -> bool:
+    """Return whether a CSV declares automated-draft provenance."""
+    if input_path.suffix.casefold() != ".csv" or not input_path.is_file():
+        return False
+    fields, rows = _read_assisted_review_rows(input_path)
+    return "draft_method" in fields and any(
+        str(row.get("draft_method") or "").strip() for row in rows
+    )
+
+
+def _validate_reviewed_assisted_rows(
+    input_path: Path,
+    expected_role: str,
+    expected_reviewer_id: str = "",
+) -> Dict[str, Any]:
+    """Validate row-level human review metadata before attestation/import."""
+    fields, rows = _read_assisted_review_rows(input_path)
+    if not rows:
+        raise ValueError("Assisted human-review artifact has no rows")
+    required = {
+        "draft_method",
+        "human_review_status",
+        "human_reviewer_id",
+        "human_reviewed_at",
+        "human_review_action",
+    }
+    missing = sorted(required - set(fields))
+    if missing:
+        raise ValueError(
+            "Assisted human-review artifact lacks fields: "
+            + ", ".join(missing)
+        )
+    role = expected_role.strip().upper()
+    if role not in {"H1", "H2"}:
+        raise ValueError("Expected assisted-review role must be H1 or H2")
+    role_field = next(
+        (
+            candidate
+            for candidate in (
+                "reviewer_role",
+                "coder_role",
+                "extractor_role",
+            )
+            if candidate in fields
+        ),
+        "",
+    )
+    if not role_field:
+        raise ValueError(
+            "Assisted human-review artifact lacks reviewer_role/coder_role"
+        )
+    reviewer_ids: set[str] = set()
+    for line_number, row in enumerate(rows, start=2):
+        if not str(row.get("draft_method") or "").strip():
+            raise ValueError(
+                f"Assisted-review line {line_number} lacks draft_method"
+            )
+        if (
+            str(row.get("human_review_status") or "").strip().casefold()
+            != "reviewed"
+        ):
+            raise ValueError(
+                "Every assisted-draft row must have "
+                "human_review_status=reviewed; "
+                f"first bad line {line_number}"
+            )
+        observed_role = str(row.get(role_field) or "").strip().upper()
+        if observed_role != role:
+            raise ValueError(
+                "Assisted-review role mismatch at line "
+                f"{line_number}: expected {role}, found {observed_role!r}"
+            )
+        reviewer_id = str(
+            row.get("human_reviewer_id") or ""
+        ).strip()
+        if not reviewer_id:
+            raise ValueError(
+                f"Assisted-review line {line_number} lacks human_reviewer_id"
+            )
+        reviewer_ids.add(reviewer_id)
+        reviewed_at_raw = str(
+            row.get("human_reviewed_at") or ""
+        ).strip()
+        try:
+            reviewed_at = datetime.fromisoformat(
+                reviewed_at_raw.replace("Z", "+00:00")
+            )
+        except ValueError as error:
+            raise ValueError(
+                "Assisted-review human_reviewed_at must be ISO-8601; "
+                f"bad line {line_number}"
+            ) from error
+        if reviewed_at.tzinfo is None:
+            raise ValueError(
+                "Assisted-review human_reviewed_at requires a UTC offset; "
+                f"bad line {line_number}"
+            )
+        if not str(row.get("human_review_action") or "").strip():
+            raise ValueError(
+                f"Assisted-review line {line_number} lacks "
+                "human_review_action"
+            )
+    if len(reviewer_ids) != 1:
+        raise ValueError(
+            "One assisted-review artifact must use exactly one reviewer ID"
+        )
+    reviewer_id = next(iter(reviewer_ids))
+    if expected_reviewer_id and reviewer_id != expected_reviewer_id:
+        raise ValueError(
+            "Assisted-review row reviewer ID does not match attestation"
+        )
+    return {
+        "rows": len(rows),
+        "reviewer_role": role,
+        "reviewer_id": reviewer_id,
+    }
+
+
+def _validate_independent_ai_review_rows(
+    input_path: Path,
+    expected_role: str,
+    expected_reviewer_id: str = "",
+    expected_run_id: str = "",
+) -> Dict[str, Any]:
+    """Validate row provenance for an independently executed AI review."""
+    fields, rows = _read_assisted_review_rows(input_path)
+    if not rows:
+        raise ValueError("Independent-AI review artifact has no rows")
+    required = {
+        "draft_method",
+        "independent_ai_review_status",
+        "independent_ai_reviewer_id",
+        "independent_ai_reviewed_at",
+        "independent_ai_review_action",
+        "independent_ai_run_id",
+        "independent_ai_model",
+        "independent_ai_prompt_sha256",
+    }
+    missing = sorted(required - set(fields))
+    if missing:
+        raise ValueError(
+            "Independent-AI review artifact lacks fields: "
+            + ", ".join(missing)
+        )
+    role = expected_role.strip().upper()
+    if role not in {"AI", "H1", "H2"}:
+        raise ValueError(
+            "Expected independent-AI role must be AI, H1, or H2"
+        )
+    role_field = next(
+        (
+            candidate
+            for candidate in (
+                "reviewer_role",
+                "coder_role",
+                "extractor_role",
+            )
+            if candidate in fields
+        ),
+        "",
+    )
+    if not role_field:
+        raise ValueError(
+            "Independent-AI review lacks reviewer_role/coder_role"
+        )
+    reviewer_ids: set[str] = set()
+    run_ids: set[str] = set()
+    models: set[str] = set()
+    prompt_hashes: set[str] = set()
+    for line_number, row in enumerate(rows, start=2):
+        if (
+            str(
+                row.get("independent_ai_review_status") or ""
+            ).strip().casefold()
+            != "complete"
+        ):
+            raise ValueError(
+                "Every independent-AI row must be complete; "
+                f"first bad line {line_number}"
+            )
+        if str(row.get(role_field) or "").strip().upper() != role:
+            raise ValueError(
+                f"Independent-AI role mismatch at line {line_number}"
+            )
+        reviewer_id = str(
+            row.get("independent_ai_reviewer_id") or ""
+        ).strip()
+        run_id = str(row.get("independent_ai_run_id") or "").strip()
+        model = str(row.get("independent_ai_model") or "").strip()
+        prompt_hash = str(
+            row.get("independent_ai_prompt_sha256") or ""
+        ).strip().casefold()
+        if not reviewer_id or not run_id or not model:
+            raise ValueError(
+                "Independent-AI row lacks reviewer/run/model metadata; "
+                f"bad line {line_number}"
+            )
+        if not re.fullmatch(r"[0-9a-f]{64}", prompt_hash):
+            raise ValueError(
+                "Independent-AI prompt SHA-256 is invalid; "
+                f"bad line {line_number}"
+            )
+        reviewed_at_raw = str(
+            row.get("independent_ai_reviewed_at") or ""
+        ).strip()
+        try:
+            reviewed_at = datetime.fromisoformat(
+                reviewed_at_raw.replace("Z", "+00:00")
+            )
+        except ValueError as error:
+            raise ValueError(
+                "Independent-AI review time must be ISO-8601; "
+                f"bad line {line_number}"
+            ) from error
+        if reviewed_at.tzinfo is None:
+            raise ValueError(
+                "Independent-AI review time requires a UTC offset; "
+                f"bad line {line_number}"
+            )
+        if not str(
+            row.get("independent_ai_review_action") or ""
+        ).strip():
+            raise ValueError(
+                "Independent-AI row lacks review action; "
+                f"bad line {line_number}"
+            )
+        reviewer_ids.add(reviewer_id)
+        run_ids.add(run_id)
+        models.add(model)
+        prompt_hashes.add(prompt_hash)
+    for label, values in (
+        ("reviewer ID", reviewer_ids),
+        ("run ID", run_ids),
+        ("model", models),
+        ("prompt hash", prompt_hashes),
+    ):
+        if len(values) != 1:
+            raise ValueError(
+                f"One independent-AI artifact must use one {label}"
+            )
+    reviewer_id = next(iter(reviewer_ids))
+    run_id = next(iter(run_ids))
+    if expected_reviewer_id and reviewer_id != expected_reviewer_id:
+        raise ValueError(
+            "Independent-AI row reviewer ID does not match manifest"
+        )
+    if expected_run_id and run_id != expected_run_id:
+        raise ValueError(
+            "Independent-AI row run ID does not match manifest"
+        )
+    return {
+        "rows": len(rows),
+        "reviewer_role": role,
+        "reviewer_id": reviewer_id,
+        "run_id": run_id,
+        "model": next(iter(models)),
+        "prompt_sha256": next(iter(prompt_hashes)),
+    }
+
+
+def assert_registered_review_attestation(
+    connection: sqlite3.Connection,
+    input_path: Path,
+    expected_role: str,
+) -> Dict[str, Any] | None:
+    """Require an exact accepted attestation for an assisted-review CSV."""
+    resolved = input_path.resolve()
+    if not assisted_review_file(resolved):
+        return None
+    digest = sha256_file(resolved)
+    attestation = connection.execute(
+        """
+        SELECT * FROM human_review_attestations
+        WHERE artifact_sha256 = ? AND status = 'accepted'
+        """,
+        (digest,),
+    ).fetchone()
+    if attestation is not None:
+        row_metadata = _validate_reviewed_assisted_rows(
+            resolved,
+            expected_role,
+        )
+        result = dict(attestation)
+        if (
+            str(result["reviewer_role"]).strip().upper()
+            != expected_role.upper()
+        ):
+            raise ValueError(
+                "Registered attestation role does not match import role"
+            )
+        if str(result["reviewer_id"]) != row_metadata["reviewer_id"]:
+            raise ValueError(
+                "Registered attestation reviewer ID does not match rows"
+            )
+        result["review_rows"] = row_metadata["rows"]
+        result["reviewer_type"] = "human"
+        return result
+    ai_review = connection.execute(
+        """
+        SELECT * FROM independent_ai_review_runs
+        WHERE artifact_sha256 = ? AND status = 'complete'
+        """,
+        (digest,),
+    ).fetchone()
+    if ai_review is None:
+        raise RuntimeError(
+            "Assisted-review artifact has neither an accepted human "
+            "attestation nor a registered independent-AI review run for "
+            f"its exact SHA-256: {digest}"
+        )
+    ai_result = dict(ai_review)
+    row_metadata = _validate_independent_ai_review_rows(
+        resolved,
+        expected_role,
+        str(ai_result["reviewer_id"]),
+        str(ai_result["run_id"]),
+    )
+    if (
+        str(ai_result["reviewer_role"]).strip().upper()
+        != expected_role.upper()
+    ):
+        raise ValueError(
+            "Registered independent-AI role does not match import role"
+        )
+    if str(ai_result["model"]) != row_metadata["model"]:
+        raise ValueError(
+            "Registered independent-AI model does not match review rows"
+        )
+    if (
+        str(ai_result["prompt_sha256"]).casefold()
+        != row_metadata["prompt_sha256"]
+    ):
+        raise ValueError(
+            "Registered independent-AI prompt hash does not match rows"
+        )
+    ai_result["review_rows"] = row_metadata["rows"]
+    ai_result["reviewer_type"] = "independent_ai"
+    return ai_result
+
+
+def register_human_review_attestation(
+    connection: sqlite3.Connection,
+    input_path: Path,
+) -> Dict[str, Any]:
+    """Register one human adoption statement for an exact assisted draft."""
+    snapshot_path = snapshot_import_file(
+        connection,
+        input_path,
+        "human_review_attestation",
+    )
+    payload = json.loads(snapshot_path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise ValueError("Human-review attestation must be a JSON object")
+    required = (
+        "attestation_id",
+        "artifact_path",
+        "artifact_sha256",
+        "reviewer_role",
+        "reviewer_id",
+        "provenance_type",
+        "attestation_statement",
+        "attested_at",
+        "status",
+    )
+    missing = [
+        field for field in required if not str(payload.get(field) or "").strip()
+    ]
+    if missing:
+        raise ValueError(
+            "Human-review attestation lacks: " + ", ".join(missing)
+        )
+    role = str(payload["reviewer_role"]).strip().upper()
+    if role not in {"H1", "H2"}:
+        raise ValueError("Attestation reviewer_role must be H1 or H2")
+    provenance = str(payload["provenance_type"]).strip()
+    if provenance != "human_reviewed_automated_draft":
+        raise ValueError(
+            "Attestation provenance_type must be "
+            "human_reviewed_automated_draft"
+        )
+    if str(payload["status"]).strip().casefold() != "accepted":
+        raise ValueError("Attestation status must be accepted")
+    statement = str(payload["attestation_statement"]).strip()
+    normalized_statement = statement.casefold()
+    if not (
+        any(token in normalized_statement for token in ("review", "复核"))
+        and any(
+            token in normalized_statement
+            for token in ("adopt", "accept", "采纳", "采用")
+        )
+    ):
+        raise ValueError(
+            "Attestation statement must explicitly state human review and "
+            "adoption/acceptance"
+        )
+    try:
+        attested_at = datetime.fromisoformat(
+            str(payload["attested_at"]).replace("Z", "+00:00")
+        )
+    except ValueError as error:
+        raise ValueError("Attestation attested_at must be ISO-8601") from error
+    if attested_at.tzinfo is None:
+        raise ValueError("Attestation attested_at requires a UTC offset")
+    artifact_sha256 = str(payload["artifact_sha256"]).strip().casefold()
+    if not re.fullmatch(r"[0-9a-f]{64}", artifact_sha256):
+        raise ValueError("Attestation artifact_sha256 is invalid")
+    artifact_path = Path(str(payload["artifact_path"]))
+    if not artifact_path.is_absolute():
+        artifact_path = input_path.resolve().parent / artifact_path
+    artifact_path = artifact_path.resolve()
+    if not artifact_path.is_file():
+        raise FileNotFoundError(artifact_path)
+    if sha256_file(artifact_path) != artifact_sha256:
+        raise ValueError("Attested artifact SHA-256 does not match its file")
+    if artifact_path.suffix.casefold() != ".csv":
+        raise ValueError("Assisted human-review artifacts must be CSV files")
+    attestation_id = str(payload["attestation_id"]).strip()
+    reviewer_id = str(payload["reviewer_id"]).strip()
+    reviewed_metadata = _validate_reviewed_assisted_rows(
+        artifact_path,
+        role,
+        reviewer_id,
+    )
+    attestation_digest = sha256_file(snapshot_path)
+    connection.execute(
+        """
+        INSERT INTO human_review_attestations(
+            attestation_id, artifact_sha256, artifact_path,
+            reviewer_role, reviewer_id, provenance_type,
+            attestation_statement, attested_at, status,
+            attestation_file_sha256, registered_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'accepted', ?, ?)
+        ON CONFLICT(attestation_id) DO UPDATE SET
+            artifact_sha256 = excluded.artifact_sha256,
+            artifact_path = excluded.artifact_path,
+            reviewer_role = excluded.reviewer_role,
+            reviewer_id = excluded.reviewer_id,
+            provenance_type = excluded.provenance_type,
+            attestation_statement = excluded.attestation_statement,
+            attested_at = excluded.attested_at,
+            status = excluded.status,
+            attestation_file_sha256 = excluded.attestation_file_sha256,
+            registered_at = excluded.registered_at
+        """,
+        (
+            attestation_id,
+            artifact_sha256,
+            str(artifact_path),
+            role,
+            reviewer_id,
+            provenance,
+            statement,
+            str(payload["attested_at"]),
+            attestation_digest,
+            utc_now(),
+        ),
+    )
+    log_event(
+        connection,
+        "human_review_attestation_registered",
+        "attestation",
+        attestation_id,
+        {
+            "artifact_sha256": artifact_sha256,
+            "reviewer_role": role,
+            "reviewer_id": reviewer_id,
+            "provenance_type": provenance,
+        },
+    )
+    connection.commit()
+    return {
+        "attestation_id": attestation_id,
+        "artifact_sha256": artifact_sha256,
+        "reviewer_role": role,
+        "reviewer_id": reviewer_id,
+        "review_rows": reviewed_metadata["rows"],
+        "status": "accepted",
+    }
+
+
+def register_independent_ai_review_manifest(
+    connection: sqlite3.Connection,
+    input_path: Path,
+) -> Dict[str, Any]:
+    """Register one completed, exact-hash independent-AI review artifact."""
+    snapshot_path = snapshot_import_file(
+        connection,
+        input_path,
+        "independent_ai_review_manifest",
+    )
+    payload = json.loads(snapshot_path.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        raise ValueError("Independent-AI review manifest must be an object")
+    required = (
+        "run_id",
+        "artifact_path",
+        "artifact_sha256",
+        "input_path",
+        "input_sha256",
+        "reviewer_role",
+        "reviewer_id",
+        "model",
+        "model_digest",
+        "prompt_sha256",
+        "parameters",
+        "item_count",
+        "completed_at",
+        "status",
+    )
+    missing = [
+        field
+        for field in required
+        if payload.get(field) is None
+        or (
+            field != "parameters"
+            and not str(payload.get(field) or "").strip()
+        )
+    ]
+    if missing:
+        raise ValueError(
+            "Independent-AI review manifest lacks: "
+            + ", ".join(missing)
+        )
+    if str(payload["status"]).strip().casefold() != "complete":
+        raise ValueError("Independent-AI review status must be complete")
+    role = str(payload["reviewer_role"]).strip().upper()
+    if role not in {"AI", "H1", "H2"}:
+        raise ValueError(
+            "Independent-AI reviewer_role must be AI, H1, or H2"
+        )
+    run_id = str(payload["run_id"]).strip()
+    reviewer_id = str(payload["reviewer_id"]).strip()
+    model = str(payload["model"]).strip()
+    model_digest = str(payload["model_digest"]).strip()
+    forbidden_model_tokens = ("qwen", "ollama")
+    model_identity = f"{model} {model_digest}".casefold()
+    if any(token in model_identity for token in forbidden_model_tokens):
+        raise ValueError(
+            "Local Qwen/Ollama reviews are forbidden by the reviewer "
+            "substitution amendment"
+        )
+    artifact_digest = str(
+        payload["artifact_sha256"]
+    ).strip().casefold()
+    source_digest = str(payload["input_sha256"]).strip().casefold()
+    prompt_digest = str(payload["prompt_sha256"]).strip().casefold()
+    for label, digest in (
+        ("artifact_sha256", artifact_digest),
+        ("input_sha256", source_digest),
+        ("prompt_sha256", prompt_digest),
+    ):
+        if not re.fullmatch(r"[0-9a-f]{64}", digest):
+            raise ValueError(f"Independent-AI {label} is invalid")
+    if reviewer_id.startswith(("independent_codex_", "primary_codex_")):
+        protocol_source = connection.execute(
+            """
+            SELECT source_id FROM source_snapshots
+            WHERE role = 'independent_review_protocol' AND sha256 = ?
+            """,
+            (prompt_digest,),
+        ).fetchone()
+        if protocol_source is None:
+            raise ValueError(
+                "Independent Codex review prompt hash is not a registered "
+                "frozen review protocol"
+            )
+        if not model_digest.startswith("codex-thread:"):
+            raise ValueError(
+                "Independent Codex review requires its task/thread ID in "
+                "model_digest"
+            )
+    completed_at_raw = str(payload["completed_at"]).strip()
+    try:
+        completed_at = datetime.fromisoformat(
+            completed_at_raw.replace("Z", "+00:00")
+        )
+    except ValueError as error:
+        raise ValueError(
+            "Independent-AI completed_at must be ISO-8601"
+        ) from error
+    if completed_at.tzinfo is None:
+        raise ValueError(
+            "Independent-AI completed_at requires a UTC offset"
+        )
+
+    def resolve_manifest_path(value: Any) -> Path:
+        path = Path(str(value))
+        if not path.is_absolute():
+            path = input_path.resolve().parent / path
+        return path.resolve()
+
+    artifact_path = resolve_manifest_path(payload["artifact_path"])
+    source_path = resolve_manifest_path(payload["input_path"])
+    for label, path, expected_digest in (
+        ("artifact", artifact_path, artifact_digest),
+        ("input", source_path, source_digest),
+    ):
+        if not path.is_file():
+            raise FileNotFoundError(path)
+        if sha256_file(path) != expected_digest:
+            raise ValueError(
+                f"Independent-AI {label} SHA-256 does not match its file"
+            )
+    metadata = _validate_independent_ai_review_rows(
+        artifact_path,
+        role,
+        reviewer_id,
+        run_id,
+    )
+    if metadata["model"] != model:
+        raise ValueError(
+            "Independent-AI model differs between rows and manifest"
+        )
+    if metadata["prompt_sha256"] != prompt_digest:
+        raise ValueError(
+            "Independent-AI prompt hash differs between rows and manifest"
+        )
+    item_count = int(payload["item_count"])
+    if item_count != metadata["rows"]:
+        raise ValueError(
+            "Independent-AI item_count differs from artifact row count"
+        )
+    parameters = payload["parameters"]
+    if not isinstance(parameters, dict):
+        raise ValueError("Independent-AI parameters must be an object")
+    manifest_digest = sha256_file(snapshot_path)
+    connection.execute(
+        """
+        INSERT INTO independent_ai_review_runs(
+            run_id, artifact_sha256, artifact_path,
+            input_sha256, input_path, reviewer_role, reviewer_id,
+            model, model_digest, prompt_sha256, parameters_json,
+            item_count, completed_at, status, manifest_sha256,
+            registered_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'complete', ?, ?)
+        ON CONFLICT(run_id) DO UPDATE SET
+            artifact_sha256 = excluded.artifact_sha256,
+            artifact_path = excluded.artifact_path,
+            input_sha256 = excluded.input_sha256,
+            input_path = excluded.input_path,
+            reviewer_role = excluded.reviewer_role,
+            reviewer_id = excluded.reviewer_id,
+            model = excluded.model,
+            model_digest = excluded.model_digest,
+            prompt_sha256 = excluded.prompt_sha256,
+            parameters_json = excluded.parameters_json,
+            item_count = excluded.item_count,
+            completed_at = excluded.completed_at,
+            status = excluded.status,
+            manifest_sha256 = excluded.manifest_sha256,
+            registered_at = excluded.registered_at
+        """,
+        (
+            run_id,
+            artifact_digest,
+            str(artifact_path),
+            source_digest,
+            str(source_path),
+            role,
+            reviewer_id,
+            model,
+            model_digest,
+            prompt_digest,
+            json.dumps(
+                parameters,
+                ensure_ascii=False,
+                separators=(",", ":"),
+                sort_keys=True,
+            ),
+            item_count,
+            completed_at_raw,
+            manifest_digest,
+            utc_now(),
+        ),
+    )
+    log_event(
+        connection,
+        "independent_ai_review_registered",
+        "review_run",
+        run_id,
+        {
+            "artifact_sha256": artifact_digest,
+            "input_sha256": source_digest,
+            "reviewer_role": role,
+            "reviewer_id": reviewer_id,
+            "model": model,
+            "model_digest": model_digest,
+            "prompt_sha256": prompt_digest,
+            "item_count": item_count,
+        },
+    )
+    connection.commit()
+    return {
+        "run_id": run_id,
+        "artifact_sha256": artifact_digest,
+        "reviewer_role": role,
+        "reviewer_id": reviewer_id,
+        "model": model,
+        "item_count": item_count,
+        "status": "complete",
+    }
+
+
+def supersede_independent_ai_review_run(
+    connection: sqlite3.Connection,
+    old_run_id: str,
+    new_run_id: str,
+    reason: str,
+    allow_superset: bool = False,
+) -> Dict[str, Any]:
+    """Mark one completed review run as audit-retained but nonfinal."""
+    old_id = old_run_id.strip()
+    new_id = new_run_id.strip()
+    if not old_id or not new_id or old_id == new_id:
+        raise ValueError("Supersession requires two distinct run IDs")
+    if not reason.strip():
+        raise ValueError("Supersession requires a reason")
+    old = connection.execute(
+        "SELECT * FROM independent_ai_review_runs WHERE run_id = ?",
+        (old_id,),
+    ).fetchone()
+    new = connection.execute(
+        """
+        SELECT * FROM independent_ai_review_runs
+        WHERE run_id = ? AND status = 'complete'
+        """,
+        (new_id,),
+    ).fetchone()
+    if old is None or new is None:
+        raise ValueError(
+            "Both the old run and a complete new run must be registered"
+        )
+    if str(old["reviewer_role"]) != str(new["reviewer_role"]):
+        raise ValueError("Superseding review runs must use the same role")
+    old_count = int(old["item_count"])
+    new_count = int(new["item_count"])
+    scope_mode = "same_scope_correction"
+    if old_count != new_count and not allow_superset:
+        raise ValueError(
+            "Superseding review runs must cover the same item count"
+        )
+    if old_count != new_count:
+        if new_count <= old_count:
+            raise ValueError(
+                "A superset supersession requires a larger new artifact"
+            )
+        old_fields, old_rows = _read_assisted_review_rows(
+            Path(str(old["artifact_path"]))
+        )
+        new_fields, new_rows = _read_assisted_review_rows(
+            Path(str(new["artifact_path"]))
+        )
+        key_field = next(
+            (
+                field
+                for field in ("term_id", "candidate_id", "record_key")
+                if field in old_fields and field in new_fields
+            ),
+            "",
+        )
+        if not key_field:
+            raise ValueError(
+                "Superset supersession requires a stable artifact key"
+            )
+        old_by_key = {
+            str(row.get(key_field) or "").strip(): row for row in old_rows
+        }
+        new_by_key = {
+            str(row.get(key_field) or "").strip(): row for row in new_rows
+        }
+        if (
+            "" in old_by_key
+            or "" in new_by_key
+            or len(old_by_key) != old_count
+            or len(new_by_key) != new_count
+        ):
+            raise ValueError(
+                "Superset supersession requires unique nonblank keys"
+            )
+        if not set(old_by_key).issubset(new_by_key):
+            raise ValueError(
+                "The new review artifact does not cover every old key"
+            )
+        comparison_fields = (
+            "decision",
+            "canonical_term",
+            "term_family_label",
+            "term_relation",
+            "search_domain_label",
+            "search_domain_definition",
+            "query_family_label",
+            "cross_domain",
+        )
+        changed = [
+            key
+            for key, old_row in old_by_key.items()
+            if any(
+                str(old_row.get(field) or "")
+                != str(new_by_key[key].get(field) or "")
+                for field in comparison_fields
+                if field in old_fields and field in new_fields
+            )
+        ]
+        if changed:
+            raise ValueError(
+                "Superset supersession changed shared review decisions: "
+                + ", ".join(changed[:10])
+            )
+        scope_mode = "verified_superset_coverage"
+    connection.execute(
+        """
+        INSERT INTO review_run_supersessions(
+            old_run_id, new_run_id, reason, recorded_at
+        ) VALUES (?, ?, ?, ?)
+        ON CONFLICT(old_run_id) DO UPDATE SET
+            new_run_id = excluded.new_run_id,
+            reason = excluded.reason,
+            recorded_at = excluded.recorded_at
+        """,
+        (old_id, new_id, reason.strip(), utc_now()),
+    )
+    connection.execute(
+        """
+        UPDATE independent_ai_review_runs
+        SET status = 'superseded'
+        WHERE run_id = ?
+        """,
+        (old_id,),
+    )
+    log_event(
+        connection,
+        "independent_ai_review_superseded",
+        "review_run",
+        old_id,
+        {
+            "superseded_by": new_id,
+            "reason": reason.strip(),
+            "scope_mode": scope_mode,
+            "old_item_count": old_count,
+            "new_item_count": new_count,
+        },
+    )
+    connection.commit()
+    return {
+        "old_run_id": old_id,
+        "new_run_id": new_id,
+        "status": "superseded",
+        "reason": reason.strip(),
+        "scope_mode": scope_mode,
+    }
 
 
 def log_event(

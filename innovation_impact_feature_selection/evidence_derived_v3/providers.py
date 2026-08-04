@@ -3,14 +3,17 @@ from __future__ import annotations
 import json
 import re
 import sqlite3
+import threading
 import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from difflib import SequenceMatcher
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Sequence
+
+import requests
 
 from common import (
     json_hash,
@@ -22,7 +25,12 @@ from common import (
     utc_now,
     write_csv,
 )
-from database import invalidate_stages, log_event, snapshot_import_file
+from database import (
+    assert_registered_review_attestation,
+    invalidate_stages,
+    log_event,
+    snapshot_import_file,
+)
 
 
 OPENALEX_BASE_URL = "https://api.openalex.org"
@@ -31,6 +39,104 @@ USER_AGENT = (
     "ASPR-evidence-derived-v3/3.0 "
     "(systematic evidence-saturation map; contact via repository owner)"
 )
+_CROSSREF_RATE_LOCK = threading.Lock()
+_crossref_next_request_at = 0.0
+_CROSSREF_SESSION_LOCAL = threading.local()
+
+
+def _crossref_pool_limits() -> tuple[float, int]:
+    """Return conservative official single-record rate/concurrency limits."""
+    mailto = local_environment_value("CROSSREF_MAILTO").strip()
+    return (10.0, 3) if mailto and "@" in mailto else (5.0, 1)
+
+
+def _wait_for_crossref_request_slot() -> None:
+    """Serialize request starts to the active Crossref pool's rate."""
+    global _crossref_next_request_at
+    rate, _ = _crossref_pool_limits()
+    interval = 1.0 / rate
+    with _CROSSREF_RATE_LOCK:
+        now = time.monotonic()
+        wait_seconds = max(0.0, _crossref_next_request_at - now)
+        if wait_seconds:
+            time.sleep(wait_seconds)
+        started_at = time.monotonic()
+        _crossref_next_request_at = started_at + interval
+
+
+def _crossref_session() -> requests.Session:
+    """Reuse TLS connections while keeping one session per worker thread."""
+    session = getattr(_CROSSREF_SESSION_LOCAL, "session", None)
+    if session is None:
+        session = requests.Session()
+        session.headers.update(
+            {"User-Agent": USER_AGENT, "Accept": "application/json"}
+        )
+        _CROSSREF_SESSION_LOCAL.session = session
+    return session
+
+
+def fetch_crossref_json(
+    url: str,
+    retries: int = 6,
+    timeout_seconds: int = 60,
+) -> Dict[str, Any]:
+    """Fetch Crossref JSON with keep-alive, pacing, and bounded retry."""
+    last_error: Exception | None = None
+    for attempt in range(retries):
+        _wait_for_crossref_request_slot()
+        response: requests.Response | None = None
+        try:
+            response = _crossref_session().get(
+                url,
+                timeout=timeout_seconds,
+            )
+            response.raise_for_status()
+            value = response.json()
+            if not isinstance(value, dict):
+                raise ValueError(
+                    "Provider response is not a JSON object"
+                )
+            return value
+        except (
+            requests.RequestException,
+            json.JSONDecodeError,
+            ValueError,
+        ) as error:
+            last_error = error
+            status = (
+                int(response.status_code)
+                if response is not None
+                else 0
+            )
+            if status in {400, 401, 403, 404, 410, 422}:
+                last_error = RuntimeError(f"HTTPError status={status}")
+                break
+            if attempt + 1 >= retries:
+                if status:
+                    last_error = RuntimeError(
+                        f"HTTPError status={status}"
+                    )
+                break
+            retry_after = 0.0
+            if response is not None:
+                try:
+                    retry_after = float(
+                        response.headers.get("Retry-After", "0")
+                    )
+                except ValueError:
+                    retry_after = 0.0
+            time.sleep(
+                min(max(retry_after, float(2**attempt)), 45.0)
+            )
+    if last_error is None:
+        raise RuntimeError(
+            "Crossref request failed without an error object"
+        )
+    raise RuntimeError(
+        "Provider request failed after retries: "
+        + safe_provider_error(last_error)
+    )
 
 
 def safe_provider_error(error: Exception) -> str:
@@ -385,9 +491,11 @@ def inventory_physical_queries(
     run_role: str,
     fetcher: Any = fetch_json,
 ) -> Dict[str, int]:
-    """Inventory physical queries and persist zero-hit evidence."""
+    """Inventory physical queries with resumable, bounded concurrency."""
     keys = openalex_api_keys()
+    key_locks = [threading.Lock() for _ in keys]
     totals: Dict[str, int] = {}
+    pending: List[tuple[int, str, Dict[str, Any]]] = []
     for index, query_id in enumerate(query_ids):
         row = connection.execute(
             """
@@ -399,35 +507,97 @@ def inventory_physical_queries(
         ).fetchone()
         if row is None:
             raise ValueError(f"Unknown active physical query: {query_id}")
-        api_key = keys[index % len(keys)] if keys else ""
-        total = query_inventory(
-            str(row["expression"]),
-            str(row["filter_expression"]),
-            api_key,
-            fetcher,
-        )
-        totals[query_id] = total
-        connection.execute(
+        completed = connection.execute(
             """
-            INSERT INTO query_runs(
-                provider, physical_query_id, run_role, query_hash,
-                reported_total, retrieved_rows, unique_hits, pages,
-                next_cursor, complete, stopped_reason, error, updated_at
-            ) VALUES (
-                'OpenAlex', ?, ?, ?, ?, 0, 0, 0, '*', 1,
-                'inventory_only', '', ?
-            )
-            ON CONFLICT(provider, physical_query_id, run_role) DO UPDATE SET
-                query_hash = excluded.query_hash,
-                reported_total = excluded.reported_total,
-                complete = 1,
-                stopped_reason = 'inventory_only',
-                error = '',
-                updated_at = excluded.updated_at
+            SELECT reported_total FROM query_runs
+            WHERE provider = 'OpenAlex'
+              AND physical_query_id = ?
+              AND run_role = ?
+              AND query_hash = ?
+              AND complete = 1
             """,
-            (query_id, run_role, row["query_hash"], total, utc_now()),
-        )
-        connection.commit()
+            (query_id, run_role, row["query_hash"]),
+        ).fetchone()
+        if completed is not None and completed["reported_total"] is not None:
+            totals[query_id] = int(completed["reported_total"])
+            continue
+        pending.append((index, query_id, dict(row)))
+
+    def inventory_one(
+        item: tuple[int, str, Dict[str, Any]],
+    ) -> tuple[str, str, int]:
+        index, query_id, row = item
+        if keys:
+            slot = index % len(keys)
+            with key_locks[slot]:
+                total = query_inventory(
+                    str(row["expression"]),
+                    str(row["filter_expression"]),
+                    keys[slot],
+                    fetcher,
+                )
+        else:
+            total = query_inventory(
+                str(row["expression"]),
+                str(row["filter_expression"]),
+                "",
+                fetcher,
+            )
+        return query_id, str(row["query_hash"]), total
+
+    first_error: Exception | None = None
+    # The protocol permits up to six concurrent requests. Free key slots are
+    # more stable with at most one in-flight request per key.
+    provider_workers = len(keys) if keys else 1
+    workers = min(
+        provider_workers if fetcher is fetch_json else 1,
+        len(pending),
+    )
+    if workers:
+        with ThreadPoolExecutor(max_workers=workers) as executor:
+            futures = {
+                executor.submit(inventory_one, item): item[1]
+                for item in pending
+            }
+            for future in as_completed(futures):
+                try:
+                    query_id, query_hash, total = future.result()
+                    totals[query_id] = total
+                    connection.execute(
+                        """
+                        INSERT INTO query_runs(
+                            provider, physical_query_id, run_role, query_hash,
+                            reported_total, retrieved_rows, unique_hits, pages,
+                            next_cursor, complete, stopped_reason, error,
+                            updated_at
+                        ) VALUES (
+                            'OpenAlex', ?, ?, ?, ?, 0, 0, 0, '*', 1,
+                            'inventory_only', '', ?
+                        )
+                        ON CONFLICT(
+                            provider, physical_query_id, run_role
+                        ) DO UPDATE SET
+                            query_hash = excluded.query_hash,
+                            reported_total = excluded.reported_total,
+                            complete = 1,
+                            stopped_reason = 'inventory_only',
+                            error = '',
+                            updated_at = excluded.updated_at
+                        """,
+                        (
+                            query_id,
+                            run_role,
+                            query_hash,
+                            total,
+                            utc_now(),
+                        ),
+                    )
+                    connection.commit()
+                except Exception as error:
+                    if first_error is None:
+                        first_error = error
+    if first_error is not None:
+        raise first_error
     return totals
 
 
@@ -1032,8 +1202,11 @@ def validate_crossref_record(
         if mailto and "@" in mailto
         else ""
     )
-    payload = fetcher(
-        f"{CROSSREF_BASE_URL}/works/{encoded}{parameters}"
+    url = f"{CROSSREF_BASE_URL}/works/{encoded}{parameters}"
+    payload = (
+        fetch_crossref_json(url)
+        if fetcher is fetch_json
+        else fetcher(url)
     )
     message = payload.get("message")
     if not isinstance(message, dict):
@@ -1163,6 +1336,7 @@ def crossref_validate_scope(
     connection: sqlite3.Connection,
     record_keys: Iterable[str],
     fetcher: Any = fetch_json,
+    worker_count: int | None = None,
 ) -> Dict[str, int]:
     """Validate DOI-bearing records and queue metadata conflicts."""
     counts = {
@@ -1189,25 +1363,42 @@ def crossref_validate_scope(
             counts["missing_doi"] += 1
             continue
         records.append(dict(row))
-    worker_count = min(4, len(records)) if fetcher is fetch_json else 1
-    if worker_count > 1:
+    _, pool_concurrency = _crossref_pool_limits()
+    default_workers = pool_concurrency if fetcher is fetch_json else 1
+    requested_workers = (
+        default_workers if worker_count is None else int(worker_count)
+    )
+    if requested_workers < 1:
+        raise ValueError("Crossref worker_count must be at least one")
+    if (
+        fetcher is fetch_json
+        and requested_workers > pool_concurrency
+    ):
+        raise ValueError(
+            "Crossref worker_count exceeds the active pool concurrency "
+            f"limit ({pool_concurrency})"
+        )
+    active_workers = min(requested_workers, len(records))
+    if active_workers > 1:
         executor = ThreadPoolExecutor(
-            max_workers=worker_count,
+            max_workers=active_workers,
             thread_name_prefix="crossref",
         )
-        assessments = executor.map(
-            lambda item: _assess_crossref_record(item, fetcher),
-            records,
+        future_rows = {
+            executor.submit(_assess_crossref_record, row, fetcher): row
+            for row in records
+        }
+        row_assessments = (
+            (future_rows[future], future.result())
+            for future in as_completed(future_rows)
         )
     else:
         executor = None
-        assessments = (
-            _assess_crossref_record(item, fetcher) for item in records
+        row_assessments = (
+            (row, _assess_crossref_record(row, fetcher))
+            for row in records
         )
-    for index, (row, assessment) in enumerate(
-        zip(records, assessments),
-        start=1,
-    ):
+    for index, (row, assessment) in enumerate(row_assessments, start=1):
         _store_crossref_assessment(connection, row, assessment)
         counts[str(assessment["status"])] += 1
         connection.commit()
@@ -1393,6 +1584,11 @@ def import_crossref_resolutions(
     input_path: Path,
 ) -> int:
     """Record H2-reviewed resolution of OpenAlex/Crossref conflicts."""
+    assert_registered_review_attestation(
+        connection,
+        input_path,
+        "H2",
+    )
     snapshot_path = snapshot_import_file(
         connection,
         input_path,

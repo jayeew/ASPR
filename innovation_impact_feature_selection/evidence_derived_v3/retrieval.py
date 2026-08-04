@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Sequence
 
 import saturation
-from common import json_hash, read_json, utc_now
+from common import json_hash, read_json, sha256_file, utc_now
 from database import invalidate_stages, log_event, require_complete, set_stage
 from providers import (
     query_definition_hash,
@@ -18,6 +18,10 @@ from screening import included_record_keys
 
 
 PROTOCOL_PATH = Path(__file__).resolve().parent / "protocol_v3.json"
+TERMINAL_FORMAL_COHORT_AMENDMENT_PATH = (
+    Path(__file__).resolve().parent
+    / "protocol_amendment_round12_terminal_formal_cohort_v3.json"
+)
 
 
 def formal_query_ids(connection: sqlite3.Connection) -> List[str]:
@@ -337,6 +341,12 @@ def mark_formal_retrieval_stage(
         "P": len(query_ids),
         "retrieval_design": "deterministic_per_query_saturation_pools",
         "broad_query_results_exhaustive": False,
+        "last_saturation_round": 12,
+        "post_round12_saturation_rounds": 0,
+        "formal_terminal_cohort_records_per_physical_query": 10,
+        "formal_terminal_cohort_protocol_sha256": sha256_file(
+            TERMINAL_FORMAL_COHORT_AMENDMENT_PATH
+        ),
         "complete_queries": sum(int(row["complete"]) for row in rows),
         "reported_total_sum": sum(
             int(row["reported_total"] or 0) for row in rows
@@ -352,6 +362,20 @@ def mark_formal_retrieval_stage(
             """
             SELECT COUNT(DISTINCT record_key) FROM query_hits
             WHERE provider = 'OpenAlex' AND run_role = 'formal'
+            """
+        ).fetchone()[0],
+        "formal_terminal_cohort_query_record_links": connection.execute(
+            """
+            SELECT COUNT(*) FROM query_hits
+            WHERE provider = 'OpenAlex' AND run_role = 'formal'
+              AND rank BETWEEN 1 AND 10
+            """
+        ).fetchone()[0],
+        "formal_terminal_cohort_unique_records": connection.execute(
+            """
+            SELECT COUNT(DISTINCT record_key) FROM query_hits
+            WHERE provider = 'OpenAlex' AND run_role = 'formal'
+              AND rank BETWEEN 1 AND 10
             """
         ).fetchone()[0],
     }

@@ -1,0 +1,25 @@
+{
+  "protocol_id": "INDEPENDENT_CODEX_SEED_RECALL_REPAIR_H1_PROTOCOL_V3_20260730",
+  "purpose": "Blindly derive the minimum English source-supported term additions needed to repair missed development or hidden-seed recall without changing the target construct.",
+  "allowed_inputs": [
+    "The named blind H1 repair worksheet",
+    "This protocol"
+  ],
+  "prohibited_inputs": [
+    "AI repair proposals",
+    "AI or earlier H1 decisions",
+    "H2 decisions",
+    "Model outcomes",
+    "Target K/Q/P values",
+    "Local Ollama or Qwen output"
+  ],
+  "rules": [
+    "Use only exact English title, abstract, or citation substrings supplied in the worksheet.",
+    "Add a term only when it is needed for the missed seed and remains within the current logical-query construct and evidence role.",
+    "Synonyms and inflections remain in the existing logical family; do not propose a new logical query merely for wording.",
+    "Keep domain, paper-object, and measurement/prediction/validation context blocks distinct.",
+    "Decision must be accept, revise, or reject and must include a source-grounded reason.",
+    "Do not use anticipated K/Q/P or final indicator counts."
+  ],
+  "local_models_forbidden": true
+}

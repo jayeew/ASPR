@@ -1,0 +1,79 @@
+{
+  "protocol_id": "INDEPENDENT_CODEX_PRESS_REVIEW_PROTOCOL_V3_20260730_FRAME3_FINAL2",
+  "purpose": "Independent final PRESS-equivalent review of the two logical query families revised in frame 3.",
+  "frame": {
+    "frame_version": 3,
+    "frame_sha256": "eaffdd426d80e0eb1631f35b32026812140ca982d46b1ea41d2af602ee5a562a",
+    "K": 42,
+    "Q": 349,
+    "P": 366,
+    "counts_are_outputs_not_quotas": true
+  },
+  "authorized_input": {
+    "path": "outputs/human_tasks/press_review_H2_v3_final2.csv",
+    "sha256": "6743e34f47fb2d22673acd58bc5224d0a1e5bf9c1cd8c5c578cc35028dfc0de2",
+    "rows": 2,
+    "unique_key": "logical_query_id"
+  },
+  "review_scope": {
+    "concepts_complete": "Verify the revised domain-term surface against direct English evidence, source_title, prior PRESS notes, and revision rationale without treating the rationale as independent evidence.",
+    "boolean_logic_valid": "Verify the executable expression itself, including exact numeric meaning, parentheses, OR alternatives, and the three AND-connected blocks.",
+    "spelling_valid": "Terms contain no accidental spelling or entity-decoding error.",
+    "phrases_valid": "Quoted phrases preserve the supported construct and are usable OpenAlex search surfaces.",
+    "limits_justified": "Frozen publication-date and eligible-type filters remain justified; English eligibility remains a screening rule.",
+    "revision_check": "The previous defect must be fully resolved without a new overbreadth, threshold mutation, or unsupported qualifier.",
+    "redundancy_check": "Archive only with an explicit surviving covering logical query and complete semantic coverage; result-set coverage is subsequently verified by the pipeline."
+  },
+  "decision_vocabulary": [
+    "pass",
+    "revise",
+    "archive_redundant"
+  ],
+  "decision_rules": {
+    "pass": "All five PRESS checklist fields are true, the previous defect is resolved, and the query retains an independent construct role.",
+    "revise": "Any checklist field is false or the executable expression still changes the evidence-supported meaning; notes state the exact defect.",
+    "archive_redundant": "A named active logical query completely covers the same semantics and the current family has no independent role."
+  },
+  "independence_and_integrity": {
+    "reviewer_role": "H2",
+    "review_each_row_individually": true,
+    "no_target_count_or_quota": true,
+    "do_not_change_K_Q_P_to_reach_a_preferred_count": true,
+    "do_not_read_downstream_dimensions_features_or_model_results": true,
+    "forbid_qwen_ollama_local_models_and_external_llm_apis": true,
+    "preserve_all_input_fields_and_row_order": true
+  },
+  "required_provenance_fields": [
+    "draft_method",
+    "independent_ai_review_status",
+    "independent_ai_reviewer_id",
+    "independent_ai_reviewed_at",
+    "independent_ai_review_action",
+    "independent_ai_review_note",
+    "independent_ai_run_id",
+    "independent_ai_model",
+    "independent_ai_prompt_sha256"
+  ],
+  "registration_manifest_schema": {
+    "required_top_level_fields": [
+      "run_id",
+      "artifact_path",
+      "artifact_sha256",
+      "input_path",
+      "input_sha256",
+      "reviewer_role",
+      "reviewer_id",
+      "model",
+      "model_digest",
+      "prompt_sha256",
+      "parameters",
+      "item_count",
+      "completed_at",
+      "status"
+    ],
+    "reviewer_role": "H2",
+    "item_count": 2,
+    "status": "complete",
+    "prompt_sha256_must_equal_this_protocol": true
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "protocol_id": "INDEPENDENT_CODEX_PRESS_REVIEW_PROTOCOL_V3_20260730_FRAME2_REVISIONS",
+  "purpose": "Independent second-pass PRESS-equivalent review of the 37 evidence-derived logical search families whose term surfaces were revised after frame-1 PRESS review.",
+  "frame": {
+    "frame_version": 2,
+    "frame_sha256": "5ae6d5bf06861217260beec62566c3bd222b7a40539cc717dd16ab190347bec4",
+    "K": 42,
+    "Q": 354,
+    "P": 371,
+    "counts_are_outputs_not_quotas": true
+  },
+  "authorized_input": {
+    "path": "outputs/human_tasks/press_review_H2_v2_revisions.csv",
+    "sha256": "1b716448f3985cc85cbf48df852411b1958f6ead426bd205bcc9e56dfb60c7f5",
+    "rows": 37,
+    "unique_key": "logical_query_id"
+  },
+  "review_scope": {
+    "concepts_complete": "Judge the revised domain-term block against direct English term evidence, the search-domain definition, the family label, the prior PRESS defect, and the recorded revision rationale. The revised query must retrieve the intended construct and evidence role without a source-supported omission.",
+    "boolean_logic_valid": "Parentheses, OR blocks, AND relationships, and logical scope must preserve the intended three-block structure.",
+    "spelling_valid": "Terms must contain no accidental spelling error; source-attested historical spellings may remain only when explained.",
+    "phrases_valid": "Multiword phrases and variants must be quoted or grouped appropriately and must not change the source-supported construct.",
+    "limits_justified": "The common publication-date and eligible-work-type filters must match the frozen protocol; English eligibility remains a screening rule so excluded non-English records remain in the denominator.",
+    "evidence_check": "Use term_evidence_json as the authorizing evidence. prior_press_notes and press_revision_rationale explain the defect and repair but cannot independently introduce an unsupported construct.",
+    "revision_check": "Explicitly verify that the previous PRESS defect is resolved and that the repair did not create overbreadth, artificial syntax tokens, or unsupported qualifiers.",
+    "redundancy_check": "Archive only if another active logical query completely covers the same semantics, the current family has no independent construct/evidence role, and the covering query ID is explicit. Result-set subset coverage is recomputed by the pipeline."
+  },
+  "decision_vocabulary": [
+    "pass",
+    "revise",
+    "archive_redundant"
+  ],
+  "decision_rules": {
+    "pass": "All five PRESS checklist fields are true; the prior defect is resolved; covered_by_logical_query_id is blank; independent_construct_role is true; notes state what evidence and repair were checked.",
+    "revise": "At least one checklist field is false, the prior defect persists, or the repair adds an unsupported concept; notes state the exact remaining defect and an evidence-bounded correction.",
+    "archive_redundant": "covered_by_logical_query_id names a different active logical query; logical_coverage_verified is true; independent_construct_role is false; notes explain complete semantic coverage. result_set_coverage_verified remains false until pipeline validation."
+  },
+  "independence_and_integrity": {
+    "reviewer_role": "H2",
+    "review_each_row_individually": true,
+    "review_only_the_37_revised_rows": true,
+    "no_target_count_or_quota": true,
+    "do_not_change_K_Q_P_to_reach_a_preferred_count": true,
+    "do_not_read_downstream_dimensions_features_or_model_results": true,
+    "forbid_qwen_ollama_local_models_and_external_llm_apis": true,
+    "preserve_all_input_fields_and_row_order": true
+  },
+  "required_provenance_fields": [
+    "draft_method",
+    "independent_ai_review_status",
+    "independent_ai_reviewer_id",
+    "independent_ai_reviewed_at",
+    "independent_ai_review_action",
+    "independent_ai_review_note",
+    "independent_ai_run_id",
+    "independent_ai_model",
+    "independent_ai_prompt_sha256"
+  ],
+  "registration_manifest_schema": {
+    "required_top_level_fields": [
+      "run_id",
+      "artifact_path",
+      "artifact_sha256",
+      "input_path",
+      "input_sha256",
+      "reviewer_role",
+      "reviewer_id",
+      "model",
+      "model_digest",
+      "prompt_sha256",
+      "parameters",
+      "item_count",
+      "completed_at",
+      "status"
+    ],
+    "reviewer_role": "H2",
+    "item_count": 37,
+    "status": "complete",
+    "prompt_sha256_must_equal_this_protocol": true
+  }
+}

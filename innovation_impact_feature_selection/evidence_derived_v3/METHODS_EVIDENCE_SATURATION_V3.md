@@ -54,6 +54,34 @@ machine-checked after import.
 Task generation refused to overwrite any nonblank human worksheet. Known
 unreviewed trial files were quarantined, disclosed with hashes, and blocked
 from import by both path and SHA-256.
+
+### Reviewer-substitution amendment (2026-07-29)
+
+After the seven frozen human-attested worksheets above had been adopted, the
+project owner explicitly authorized every remaining H1/H2 review gate to be
+completed by a separate AI reviewer. The scope and controls are frozen in
+`protocol_amendment_independent_ai_review_v3.json`. New substituted decisions
+are therefore labelled `independent_ai`; they are not reported as human
+judgments and do not alter the provenance of the seven earlier
+human-attested files.
+
+Each independent-AI run uses the frozen
+`INDEPENDENT_CODEX_REVIEW_BRIEF_V3.md`, a separate Codex task, and a unique run
+ID. It retains exact input/output SHA-256 values, prompt SHA-256, task/model
+identity, parameters, row-level evidence, and a registration manifest. Local
+Ollama/Qwen execution is forbidden for this role. A partial local-qwen trial
+was stopped at the project owner's instruction, quarantined, and excluded
+from every count. Task isolation provides process separation, but the
+substitute review remains AI-based rather than human; this limitation is
+reported alongside the English-language restriction.
+
+An initial independent-Codex screening version treated an English translated
+abstract as sufficient for two records with non-English original titles. A
+frozen language addendum clarified that a clearly non-English original title,
+abstract, or publication remains ineligible. Corrected screening versions
+were issued under a composite protocol hash; earlier review runs and files
+were retained as superseded audit evidence rather than silently overwritten.
+
 Role-separated imports were enforced: Human-2 records were not accepted
 until both primary records existed, and a primary record could not be
 overwritten after adjudication.
@@ -79,6 +107,15 @@ zero-hit families were archived with reasons. Splits required solely by
 OpenAlex syntax or request length inherited their parent logical-query ID.
 Consequently, `Q` counts non-redundant logical semantics and `P` counts
 provider-executable requests; neither count was chosen in advance.
+
+During inventory validation, four long OpenAlex requests repeatedly returned
+provider HTTP 500 responses. They were mechanically re-split under two
+hash-registered packaging amendments. The implementation verified that each
+parent logical query retained the identical domain-term union, object block,
+context block, filter, logical-query hash, and PRESS pass. This operational
+versioning changed only `P`; it did not change `K`, `Q`, or the reviewed
+construct semantics. A later transient HTTP 429 was handled by resumable
+checkpoints and at most one in-flight validation request per free API key.
 
 For each frozen physical query, OpenAlex supplied a full inventory count and
 a seeded deterministic review pool of up to 10,000 records. These formal
@@ -136,6 +173,23 @@ database counted two endpoints:
 - newly introduced non-redundant English canonical search-term families;
 - newly introduced canonical indicator families.
 
+For every round after the first, finalized earlier-round H2 assignments were
+exported from read-only SQLite queries into deterministic term and indicator
+codebooks with source-row and file hashes. The adjudicator first determined
+eligibility, construct, explanatory or validation role, and T0 boundary from
+the current evidence. Only afterward was the earlier codebook consulted to
+reuse an existing label when theoretical object, role, and T0 boundary were
+identical. Acronyms, lexical variants, thresholds, transformations, data
+sources, parameters, and time windows alone could not create novelty.
+Creation of a new label required a reason why no earlier family applied.
+Composite, hash-registered protocols fixed this ordering and prevented the
+reference from changing inclusion or future-information decisions. Before
+database import, a separate deterministic validator re-read the current input,
+H2 output, composite protocol, prior codebook, and review manifest; it
+required identical record order and protected source fields, a same-role
+historical exemplar for every reused indicator label, consistent
+term/domain/query triples, and independently recomputed mapped/new counts.
+
 Human 2 could freeze discovery only after at least three consecutive fully
 reviewed rounds yielded zero for both endpoints, all mandatory
 adjudications were complete, hidden/development seed recall passed, PRESS had
@@ -143,12 +197,69 @@ no unresolved issue, and citation tracking produced no new endpoint. Thus,
 the stopping rule was evidence saturation rather than a target number of
 records, domains, or queries.
 
-Saturation was evaluated in two explicit phases. The first phase froze the
-terminology needed to derive and validate `K/Q/P`. After the resulting formal
-query pools were registered, the consecutive-zero counter reset and a second
-phase continued until formal-search and citation evidence yielded three new
-dual-zero rounds. An early terminology-phase freeze could therefore not be
-reused to claim final indicator saturation.
+### Retrospective search-frame stopping deviation (2026-07-30)
+
+After round 12 had been assigned and its screening/extraction review was in
+progress, the project owner designated it as the terminal search-frame
+discovery round because the expected marginal information gain from further
+deterministic batches was judged too small for the execution cost. This was a
+retrospective protocol deviation from the original requirement for three
+consecutive dual-zero rounds. The authorization, scope, terminal iteration,
+and integrity constraints are frozen in
+`protocol_amendment_round12_pragmatic_stop_v3.json`.
+
+The implementation still recomputed both round-12 novelty endpoints from
+adjudicated rows and rejected any submitted value that differed. It recorded
+the actual counts, the stop basis, amendment ID, and amendment SHA-256 in the
+same terminal-round row and included that row in the derived search-frame
+hash. No inclusion decision or canonical-family alignment was changed to
+manufacture zero novelty. Accordingly, the search-frame phase is described
+as an owner-directed pragmatic stop unless both stored endpoint counts are
+actually zero; it is not represented as satisfying the preregistered
+dual-zero rule.
+
+The original design specified two explicit saturation phases and a reset of
+the consecutive-zero counter after `K/Q/P` was frozen. The project owner's
+follow-up instruction instead made round 12 the last saturation round
+overall. This additional retrospective deviation is frozen in
+`protocol_amendment_round12_terminal_formal_cohort_v3.json`. Formal queries
+were still executed, but their screening set was fixed before inspection as
+the first 10 seeded-sample records from every active physical query and was
+deduplicated against the round-1-to-12 review set. It was treated as a formal
+cohort, not as round 13. Unselected pool records were retained in the audit
+frame and were not counted as screened exclusions. The report therefore does
+not claim that the originally planned second-phase dual-zero criterion was
+met.
+
+### Final search-frame recall validation
+
+Independent coding, term-family standardization, PRESS review, zero-hit
+archiving, and provider-only request splitting produced 42 active search
+concept domains and 336 active non-redundant logical query families. The
+OpenAlex request representation comprised 367 active physical queries;
+provider length splits did not create additional logical families. Thirteen
+logical families with verified zero OpenAlex hits were archived with reason
+`R_ZERO_HIT` and retained in the database and frozen manifest.
+
+The first complete recall test retrieved 51 of 62 eligible and indexable
+English development and hidden validation seeds. Each of the 11 misses was
+confirmed to be indexed by OpenAlex and was therefore classified as a
+query-term miss rather than provider absence. Ten existing logical families
+covered those misses because two seeds belonged to the same family. A blind
+H1 review and separate H2 focused-PRESS adjudication considered only English
+terms occurring in the supplied seed title, abstract, or citation evidence.
+All 10 minimal repairs passed the six PRESS checks for concept completeness,
+Boolean logic, spelling, phrases, limits, and unchanged construct. The
+repairs introduced no new search domain and no new logical query family.
+
+Before database application, the final repaired three-block expressions were
+tested directly against their 11 target DOIs and recalled all 11. Full
+version-6 validation then recalled all 62 of 62 eligible indexable seeds, with
+no provider-missing seed and no unresolved PRESS issue. The validation made
+42 new DOI-batch API requests for the changed physical queries and reused 346
+unchanged prior results only when physical-query ID, query hash, and seed-set
+hash were identical. Thus the final `K/Q/P = 42/336/367` counts arose from
+the evidence and provider representation, not from a preset target.
 
 ## How candidate dimensions and final indicators were determined
 
@@ -187,7 +298,7 @@ explanatory role, information source, T0 boundary, and bias risk. Human 2
 adjudicated all retained mappings and dimension merge/split decisions.
 Human 1's worksheet contained source evidence but no AI/H2 decisions. The
 Human-2 worksheet was generated only after both primary codes existed and
-showed them side by side. The local AI model digest, prompt hash, input hash,
+showed them side by side. The primary Codex task digest, prompt hash, input hash,
 and item-level failures were retained.
 Candidate dimensions (`M`) therefore emerged from indicator constructs, not
 from the search-domain taxonomy.

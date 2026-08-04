@@ -24,7 +24,7 @@ bootstrap inventory
 → deterministic saturation strata
 → sequential AI/H1 screening + H2 adjudication
 → source-preserving term/indicator extraction
-→ three consecutive H2-approved dual-zero rounds
+→ verified terminal discovery decision
 → code-terms
 → derive-search-frame
 → validate-search-frame
@@ -38,12 +38,38 @@ bootstrap inventory
 
 Every state has finer-grained export/import commands so AI, Human 1 (`H1`),
 and Human 2 (`H2`) decisions are stored separately.
-`H1` and `H2` are real-human roles: no model or automated helper may fill,
-copy, or backfill either worksheet. Local-model output is accepted only under
-the explicitly labelled `AI` role. Forced task regeneration refuses to
-overwrite a nonblank human worksheet, and import rejects both the invalidated
-artifact quarantine and the registered hashes of known automated H1/H2
-files.
+The original protocol reserved `H1` and `H2` for human reviewers. On
+2026-07-29 the project owner authorized all remaining review gates to be
+completed by a separate AI reviewer; see
+`protocol_amendment_independent_ai_review_v3.json`. The seven already
+human-reviewed worksheets remain human-attested. Every later substitution is
+explicitly labelled `independent_ai` and is never represented as human.
+Forced task regeneration still refuses to overwrite nonblank human work, and
+import rejects unregistered automated artifacts.
+On 2026-07-30 the project owner designated round 12 as the terminal
+search-frame discovery round on pragmatic marginal-yield grounds. This
+retrospective departure from the original three-consecutive-dual-zero rule is
+hash-bound in `protocol_amendment_round12_pragmatic_stop_v3.json`. It does
+not change adjudicated round decisions or counts, and reports may call the
+result dual-zero only if the database-computed endpoints are actually zero.
+The owner's follow-up instruction also makes round 12 the last saturation
+round overall. `protocol_amendment_round12_terminal_formal_cohort_v3.json`
+therefore replaces any post-round-12 sequential phase with a fixed formal
+screening cohort: the first 10 frozen seeded-sample records per active
+physical query, deduplicated by record identity. This cohort is not labelled
+round 13 and does not alter the actual round-12 endpoint counts.
+
+The independently reviewed and recall-validated search frame contains
+`K=42` active search concept domains, `Q=336` active non-redundant logical
+query families, and `P=367` active OpenAlex physical requests. Thirteen
+zero-hit logical families remain archived in the audit trail rather than
+being silently deleted. Initial validation recalled 51 of 62 eligible,
+indexable English development and hidden seeds. Ten source-grounded synonym
+repairs were independently reviewed by H1 and adjudicated with focused PRESS
+checks by H2; they changed no domain or logical-family count. The resulting
+version 6 frame recalled 62 of 62 seeds. Only 21 affected physical requests
+were revalidated against OpenAlex while 346 unchanged request results were
+reused by exact physical-query, query-hash, and seed-set-hash identity.
 
 ## Initial setup and domain-agnostic bootstrap
 
@@ -85,7 +111,20 @@ Keys are never persisted.
 
 ```bash
 python3 pipeline.py assign-discovery-round --iteration 1
-python3 pipeline.py ai-screen-discovery --iteration 1
+python3 pipeline.py export-discovery-screening \
+  --iteration 1 --reviewer AI \
+  --output outputs/primary_codex_ai/round_01_screening_AI_INPUT.csv
+python3 primary_codex_high_recall_screening.py \
+  --input outputs/primary_codex_ai/round_01_screening_AI_INPUT.csv \
+  --output outputs/primary_codex_ai/round_01_screening_AI_REVIEWED.csv \
+  --manifest outputs/primary_codex_ai/round_01_screening_AI_REVIEWED.manifest.json \
+  --prompt PRIMARY_CODEX_HIGH_RECALL_SCREENING_PROTOCOL_V3.md \
+  --run-id '<unique-run-id>' --reviewed-at '<ISO-8601 timestamp>' \
+  --thread-id '<primary-Codex-task-id>'
+python3 pipeline.py register-independent-ai-review \
+  --input outputs/primary_codex_ai/round_01_screening_AI_REVIEWED.manifest.json
+python3 pipeline.py import-screening \
+  --input outputs/primary_codex_ai/round_01_screening_AI_REVIEWED.csv
 python3 pipeline.py prepare-human-tasks
 ```
 
@@ -111,6 +150,25 @@ attests that a human reviewed and adopted the exact hashed file. The import
 then receives a distinct `human_attested_automated_draft` provenance label;
 it is not reported as an originally manual or independently generated blind
 draft. Unreviewed automated trial files remain quarantined and hash-blocked.
+
+Under the reviewer-substitution amendment, a completed independent Codex task
+artifact instead requires a registered run manifest. The separate task reads
+`INDEPENDENT_CODEX_REVIEW_BRIEF_V3.md`; local Ollama/Qwen is prohibited.
+
+```bash
+python3 pipeline.py register-independent-ai-review \
+  --input outputs/independent_codex_review_v3/round_01_screening_H2_REVIEWED.manifest.json
+python3 pipeline.py import-screening \
+  --input outputs/independent_codex_review_v3/round_01_screening_H2_REVIEWED.csv
+```
+
+Registration verifies the input and output hashes, model digest, prompt hash,
+run parameters, role, row count, and row-level completion metadata before the
+assisted file can enter the evidence database.
+A stopped local-`qwen3:8b` attempt is retained only under
+`outputs/invalidated_local_qwen_review_20260729/`; it cannot be registered,
+imported, or used in any result.
+
 Current worksheet types are:
 
 - `round_01_screening_H1_BLIND.csv` contains source records but no AI
@@ -187,10 +245,44 @@ novelty counts:
 python3 pipeline.py discovery-novelty-status --iteration 1
 ```
 
+Before an H2 round is sealed, the finalized earlier-round term and indicator
+assignments are exported as deterministic, read-only codebook references with
+`export-saturation-codebook-reference`. The next round's two composite
+protocols are then generated and hash-registered with
+`build-saturation-alignment-protocols`:
+
+```bash
+python3 pipeline.py export-saturation-codebook-reference \
+  --through-round 5
+python3 pipeline.py build-saturation-alignment-protocols \
+  --current-round 6 \
+  --codebook-manifest \
+  outputs/codebook_references/rounds_01_05_h2_codebooks.manifest.json
+python3 pipeline.py validate-saturation-alignment \
+  --kind indicator \
+  --input outputs/human_tasks/round_06_discovery_indicator_adjudication_H2.csv \
+  --output outputs/independent_codex_review_v3/round_06_discovery_indicator_adjudication_H2_REVIEWED.csv \
+  --protocol outputs/alignment_protocols/round_06_indicator_alignment_protocol_v3.json \
+  --manifest outputs/independent_codex_review_v3/round_06_discovery_indicator_adjudication_H2_REVIEWED.manifest.json
+```
+
+The export and protocol-build operations omit wall-clock values, so the same
+database state and paths produce identical CSV, manifest, protocol, and
+protocol hashes. The validator independently recomputes protected-field,
+role, label-reuse, and count invariants before import. H2 first makes
+the source-based
+construct, role, and T0 decision, then uses the reference only to align
+labels. An identical construct cannot become "new" merely because an acronym,
+parameter, data source, time window, or wording changed. A genuinely new
+family requires an explicit non-redundancy rationale. The composite term and
+indicator alignment protocols hash both the base adjudication rules and the
+exact earlier-round reference, so the novelty comparison is reproducible
+without exposing downstream dimensions or model results.
+
 H2 records those audited counts; a submitted count that differs from the
-adjudicated database evidence is rejected. A freeze request is also rejected
-unless the current and two immediately preceding fully reviewed rounds are
-all dual-zero:
+adjudicated database evidence is rejected. Under the original protocol, a
+freeze request is rejected unless the current and two immediately preceding
+fully reviewed rounds are all dual-zero:
 
 ```bash
 python3 pipeline.py record-discovery-saturation \
@@ -205,6 +297,23 @@ If either novelty endpoint is non-zero, assign the next deterministic rank
 slice, screen/extract it, update term coding, and continue. This stopping rule,
 not a target number of papers, domains, queries, dimensions, or indicators,
 determines the discovery volume.
+
+The round-12 owner-directed exception is invoked explicitly and leaves the
+true computed endpoints in the database and saturation-curve export:
+
+```bash
+python3 pipeline.py record-discovery-saturation \
+  --iteration 12 \
+  --new-terms ACTUAL_DATABASE_COUNT \
+  --new-indicator-families ACTUAL_DATABASE_COUNT \
+  --decision freeze \
+  --protocol-deviation-amendment \
+  protocol_amendment_round12_pragmatic_stop_v3.json \
+  --notes "Retrospective owner-directed pragmatic stop after round 12."
+```
+
+The command verifies the amendment path, content, phase, terminal iteration,
+and SHA-256. It cannot be used to override or relabel the endpoint counts.
 
 ## Term extraction, independent coding, and dynamic K/Q/P
 
@@ -262,6 +371,12 @@ Recall requests OR-batch up to 40 seed DOIs per physical query, while the
 database still records the matching physical-query IDs separately for every
 seed; this preserves the recall test while keeping free-API use proportional
 to `P × ceil(seeds/40)` instead of `P × seeds`.
+Repeated provider HTTP 500 responses on long requests trigger only a
+hash-registered physical re-split. The re-split validator requires the exact
+same parent logical term union, object/context blocks, filters, logical hash,
+and PRESS pass, so the operation may change `P` but cannot change `K` or `Q`.
+Validation uses resumable checkpoints and limits free-key concurrency to one
+in-flight request per key after a transient HTTP 429.
 When H2 proposes a redundant logical query, validation cursor-pages both the
 candidate and its asserted covering query and archives it only if the complete
 candidate result set is a subset and H2 has confirmed no independent
@@ -313,16 +428,13 @@ python3 pipeline.py import-crossref-resolutions \
 It registers one maximum-size (up to 10,000 records) seeded deterministic
 review pool for each physical query, records the provider's full inventory
 count, and adds those pools as `formal_search_family` strata. Pool pages are
-fetched lazily only when the next frozen review-rank slice needs them.
-Sequential
-`assign-discovery-round` review then continues across the original broad
-strata, formal query strata, and citation strata until the same dual-novelty
-stopping rule is met. Unreviewed pool members remain an auditable sampling
-frame and are not silently treated as screened exclusions.
-The consecutive-zero counter is phase-specific: the terminology-phase freeze
-that permits `K/Q/P` derivation cannot satisfy the later formal
-indicator-discovery freeze. The formal phase must independently accumulate
-three dual-zero rounds.
+fetched only far enough to materialize the fixed terminal cohort. The first
+10 seeded-sample ranks per physical query enter title/abstract screening and
+are deduplicated with records already reviewed in rounds 1-12. No round 13 is
+created. Unselected pool members remain an auditable sampling frame and are
+not silently treated as screened exclusions. This owner-directed terminal
+design is a disclosed departure from the original phase-reset and
+three-dual-zero formal-phase rule.
 
 If formal search or citation evidence introduces a genuinely new
 non-redundant English search-term family, H2 must authorize
@@ -425,11 +537,13 @@ Only teams attached to an H2-approved, English-full-text-verified mention are
 counted. The recorded author/affiliation evidence must itself occur as a
 normalized exact span in the frozen local full text; an unchecked team label
 cannot satisfy the two-team dimension gate.
-The local AI and H1 code dimensions independently from formula, T0,
+The primary Codex stream and separate Codex H1 stream code dimensions
+independently from formula, T0,
 required-data, source-team, and mention evidence. The H1 worksheet contains no
 AI/H2 comparison columns. Only after both are complete does the H2 worksheet
 expose their codes for merge/split, exclusion, and multi-label adjudication;
-the local AI model digest and prompt/input hashes remain in the audit trail.
+the primary Codex task digest and prompt/input hashes remain in the audit
+trail. Local Ollama/Qwen output is inadmissible under the active amendment.
 
 Redundancy selection is frozen before results are known. The numeric
 `selection_priority` is not freely chosen: it must equal the source-role map
@@ -473,10 +587,12 @@ python3 pipeline.py record-saturation-round \
   --notes "No new non-redundant English term or indicator family."
 ```
 
-A discovery-frame freeze requires three consecutive H2-approved dual-zero
-rounds. Later formal citation tracking must also finish with an H2-approved
-zero-novelty round; otherwise the run remains incomplete and a revised,
-newly frozen search-frame version is required.
+The original protocol required three consecutive H2-approved dual-zero
+rounds in each phase. The two hash-verified round-12 amendments supersede
+that stopping rule for this execution: round 12 is terminal, and any formal
+search or citation additions are handled as fixed auditable cohorts rather
+than new saturation rounds. The actual 10/9 round-12 endpoints remain
+reported and are not rewritten as dual-zero.
 
 ## Audit and outputs
 

@@ -1,0 +1,62 @@
+{
+  "schema_version": "independent_codex_targeted_formula_h1_protocol_v3",
+  "reviewer_role": "H1",
+  "review_scope": "Blind independent verification and extraction of source formulas or exact operational definitions for a frozen target queue of existing canonical indicator families.",
+  "independence": {
+    "may_view": [
+      "the H1 blind target worksheet",
+      "each frozen English full text named in the worksheet",
+      "the frozen local T0 inventory",
+      "the target verification question and local field names"
+    ],
+    "must_not_view_or_use": [
+      "primary AI proposed formulas or decisions",
+      "H2 decisions",
+      "model outcomes, citations used as training labels, prediction performance, or final feature counts",
+      "v2 final selections",
+      "any target-count preference"
+    ]
+  },
+  "allowed_decisions": [
+    "approve_formula",
+    "reject_construct",
+    "reject_formula_missing",
+    "reject_data_mismatch",
+    "reject_future_information",
+    "uncertain"
+  ],
+  "approval_requirements": [
+    "the exact English evidence span and research-group evidence occur in the frozen full text",
+    "formula_location identifies a page, equation, table, appendix, or section",
+    "formula or operational definition is complete enough to reproduce",
+    "units, parameters, direction, source-reported missing rule, required data, and maximum information time are explicitly recorded",
+    "if the source does not report a missing rule, write exactly 'Not reported' rather than inventing one",
+    "T0 claims use no information after focal publication",
+    "the named local columns are construct-equivalent, not merely correlated or similarly named",
+    "the target remains the existing canonical family; no new family may be created"
+  ],
+  "rejection_rules": [
+    "reject_data_mismatch when the formula is valid but frozen local data cannot implement it exactly",
+    "reject_construct when the source formula measures a different theoretical object",
+    "reject_formula_missing when the English full text does not provide a reproducible formula or operational definition",
+    "reject_future_information when the measure needs post-publication information"
+  ],
+  "fixed_defaults": {
+    "uses_outcome_for_selection": false,
+    "creates_new_search_records": false,
+    "creates_new_term_families": false,
+    "creates_new_indicator_families": false,
+    "round_13": false
+  },
+  "output_requirements": {
+    "preserve_every_protected_field_byte_for_byte": true,
+    "preserve_row_count_and_order": true,
+    "reviewer_role": "H1",
+    "row_level_provenance_required": true,
+    "manifest_required": true,
+    "qwen_or_ollama_prohibited": true,
+    "local_or_external_llm_api_prohibited": true,
+    "database_writes_prohibited": true,
+    "business_code_writes_prohibited": true
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "protocol_id": "primary-codex-data-correspondence-v3",
+  "reviewer_role": "AI",
+  "scope": "Outcome-blind correspondence review of every H2-retained canonical indicator family against the complete frozen local T0 input inventory.",
+  "required_inputs": [
+    "AI correspondence worksheet exported from the current database",
+    "local_t0_input_inventory_v3.json",
+    "protocol_amendment_targeted_formula_completion_v3.json"
+  ],
+  "instructions": [
+    "Review every row; do not sample and do not use a target feature count.",
+    "Treat names as leads only. Match only when the measured object, formula or deterministic algorithm, unit, information time, and construct role can be made identical.",
+    "Use exact_materialized when a frozen column already represents the same indicator; use exact_derivable when the same indicator can be deterministically calculated from inventoried columns.",
+    "Use candidate_formula_completion when local inputs appear sufficient but the current literature fields are too generic to establish exact equivalence; this sends the family to targeted source-formula completion and is not final approval.",
+    "Use construct_mismatch for similarly named but mathematically or causally different features, future_only when the required value is post-T0, no_match when inputs are absent, and insufficient_evidence when neither equivalence nor a focused completion route is supportable.",
+    "For every positive or formula-completion candidate, list exact source IDs and source_id:column entries from the inventory and explain the proposed derivation and equivalence risk.",
+    "Do not inspect target tables, model outcomes, dimensions, final selections, AI/H1/H2 decisions, v2 final feature decisions, Qwen, Ollama, or any model API."
+  ],
+  "allowed_decisions": [
+    "exact_materialized",
+    "exact_derivable",
+    "candidate_formula_completion",
+    "no_match",
+    "construct_mismatch",
+    "future_only",
+    "insufficient_evidence"
+  ],
+  "target_count_influence": false,
+  "model_outcomes_used": false
+}

@@ -7,7 +7,10 @@ from itertools import islice
 from pathlib import Path
 from typing import Any, Dict, Iterable
 
+import build_saturation_alignment_protocols
 import coding
+import data_correspondence
+import export_saturation_codebook_reference
 import handoff
 import indicators
 import local_ai
@@ -16,8 +19,17 @@ import reporting
 import retrieval
 import saturation
 import screening
+import validate_saturation_alignment
+import validate_press_review
+import validate_press_revisions
 from common import DATABASE_PATH, OUTPUT_DIR
-from database import initialize
+from database import (
+    initialize,
+    register_human_review_attestation,
+    register_independent_ai_review_manifest,
+    supersede_source_snapshot,
+    supersede_independent_ai_review_run,
+)
 
 
 def _print(value: Any) -> None:
@@ -33,29 +45,7 @@ def _formal_record_keys(
 ) -> Iterable[str]:
     for row in connection.execute(
         """
-        WITH review_set AS (
-            SELECT DISTINCT record_key FROM discovery_hits
-            WHERE review_round > 0
-            UNION
-            SELECT DISTINCT record_key FROM query_hits
-            WHERE run_role = 'formal'
-              AND NOT EXISTS (
-                  SELECT 1 FROM discovery_queries
-                  WHERE query_role = 'formal_search_family'
-                    AND status = 'active'
-              )
-            UNION
-            SELECT record_key FROM records
-            WHERE retrieval_route LIKE '%manual%supplement%'
-               OR (
-                   retrieval_route LIKE '%citation%'
-                   AND NOT EXISTS (
-                       SELECT 1 FROM discovery_queries
-                       WHERE status IN ('active', 'network')
-                   )
-               )
-        )
-        SELECT record_key FROM review_set ORDER BY record_key
+        SELECT record_key FROM formal_review_records ORDER BY record_key
         """
     ):
         yield str(row[0])
@@ -150,6 +140,128 @@ def command_assign_discovery_round(
     args: argparse.Namespace,
 ) -> Any:
     return saturation.assign_discovery_round(connection, args.iteration)
+
+
+def command_export_saturation_codebook_reference(
+    connection: sqlite3.Connection,
+    args: argparse.Namespace,
+) -> Any:
+    term_output = _path(
+        args.term_output,
+        (
+            "codebook_references/"
+            f"rounds_01_{args.through_round:02d}_h2_term_codebook.csv"
+        ),
+    )
+    indicator_output = _path(
+        args.indicator_output,
+        (
+            "codebook_references/"
+            f"rounds_01_{args.through_round:02d}_h2_indicator_codebook.csv"
+        ),
+    )
+    manifest = _path(
+        args.manifest,
+        (
+            "codebook_references/"
+            f"rounds_01_{args.through_round:02d}_h2_codebooks.manifest.json"
+        ),
+    )
+    result = export_saturation_codebook_reference.export_codebook_reference(
+        connection,
+        args.through_round,
+        term_output,
+        indicator_output,
+        manifest,
+    )
+    prefix = f"rounds_01_{args.through_round:02d}_h2"
+    for source_id, path, role in (
+        (
+            f"{prefix}_term_codebook",
+            term_output,
+            "prior_round_codebook_reference",
+        ),
+        (
+            f"{prefix}_indicator_codebook",
+            indicator_output,
+            "prior_round_codebook_reference",
+        ),
+        (
+            f"{prefix}_codebook_manifest",
+            manifest,
+            "prior_round_codebook_manifest",
+        ),
+    ):
+        coding._register_snapshot(connection, source_id, path, role)
+    connection.commit()
+    return result
+
+
+def command_build_saturation_alignment_protocols(
+    connection: sqlite3.Connection,
+    args: argparse.Namespace,
+) -> Any:
+    output_dir = (
+        Path(args.output_dir).resolve()
+        if args.output_dir
+        else OUTPUT_DIR / "alignment_protocols"
+    )
+    result = build_saturation_alignment_protocols.build_alignment_protocols(
+        args.current_round,
+        Path(args.codebook_manifest).resolve(),
+        output_dir,
+    )
+    coding._register_snapshot(
+        connection,
+        f"round_{args.current_round:02d}_indicator_alignment_protocol_v3",
+        Path(result["indicator_protocol"]),
+        "independent_review_protocol",
+    )
+    coding._register_snapshot(
+        connection,
+        f"round_{args.current_round:02d}_term_alignment_protocol_v3",
+        Path(result["term_protocol"]),
+        "independent_review_protocol",
+    )
+    connection.commit()
+    return result
+
+
+def command_validate_saturation_alignment(
+    _: sqlite3.Connection,
+    args: argparse.Namespace,
+) -> Any:
+    return validate_saturation_alignment.validate_alignment(
+        args.kind,
+        Path(args.input).resolve(),
+        Path(args.output).resolve(),
+        Path(args.protocol).resolve(),
+        Path(args.manifest).resolve(),
+    )
+
+
+def command_validate_press_review(
+    _: sqlite3.Connection,
+    args: argparse.Namespace,
+) -> Any:
+    return validate_press_review.validate_press_review(
+        Path(args.input).resolve(),
+        Path(args.output).resolve(),
+        Path(args.protocol).resolve(),
+        Path(args.manifest).resolve(),
+    )
+
+
+def command_validate_press_revisions(
+    _: sqlite3.Connection,
+    args: argparse.Namespace,
+) -> Any:
+    return validate_press_revisions.validate_press_revisions(
+        Path(args.input).resolve(),
+        Path(args.output).resolve(),
+        Path(args.protocol).resolve(),
+        Path(args.manifest).resolve(),
+    )
 
 
 def command_export_discovery_screening(
@@ -267,6 +379,11 @@ def command_record_discovery_saturation(
         new_indicator_families=args.new_indicator_families,
         decision=args.decision,
         notes=args.notes,
+        protocol_deviation_amendment=(
+            Path(args.protocol_deviation_amendment)
+            if args.protocol_deviation_amendment
+            else None
+        ),
     )
 
 
@@ -282,6 +399,53 @@ def command_prepare_human_tasks(
     args: argparse.Namespace,
 ) -> Any:
     return handoff.prepare_human_tasks(connection, force=args.force)
+
+
+def command_register_human_review_attestation(
+    connection: sqlite3.Connection,
+    args: argparse.Namespace,
+) -> Any:
+    return register_human_review_attestation(
+        connection,
+        Path(args.input).resolve(),
+    )
+
+
+def command_register_independent_ai_review(
+    connection: sqlite3.Connection,
+    args: argparse.Namespace,
+) -> Any:
+    return register_independent_ai_review_manifest(
+        connection,
+        Path(args.input).resolve(),
+    )
+
+
+def command_supersede_independent_ai_review(
+    connection: sqlite3.Connection,
+    args: argparse.Namespace,
+) -> Any:
+    return supersede_independent_ai_review_run(
+        connection,
+        args.old_run_id,
+        args.new_run_id,
+        args.reason,
+        allow_superset=args.allow_superset,
+    )
+
+
+def command_supersede_source_snapshot(
+    connection: sqlite3.Connection,
+    args: argparse.Namespace,
+) -> Any:
+    return supersede_source_snapshot(
+        connection,
+        args.old_source_id,
+        args.new_source_id,
+        Path(args.current_path).resolve(),
+        Path(args.authorization).resolve(),
+        args.reason,
+    )
 
 
 def command_ai_screen_discovery(
@@ -379,7 +543,12 @@ def command_export_term_coding(
     suffix = role.casefold() if role else "all_reviewers"
     path = _path(args.output, f"term_coding_{suffix}_v3.csv")
     return {
-        "rows": coding.export_term_coding(connection, path, role),
+        "rows": coding.export_term_coding(
+            connection,
+            path,
+            role,
+            only_missing=args.only_missing,
+        ),
         "output": str(path),
     }
 
@@ -426,7 +595,11 @@ def command_export_press(
 ) -> Any:
     path = _path(args.output, "press_review_template_v3.csv")
     return {
-        "rows": coding.export_press(connection, path),
+        "rows": coding.export_press(
+            connection,
+            path,
+            only_pending=args.only_pending,
+        ),
         "output": str(path),
     }
 
@@ -436,6 +609,41 @@ def command_import_press(
     args: argparse.Namespace,
 ) -> Any:
     return coding.import_press(connection, Path(args.input).resolve())
+
+
+def command_resolve_press_redundancy(
+    connection: sqlite3.Connection,
+    _: argparse.Namespace,
+) -> Any:
+    return coding.resolve_press_redundancy(connection)
+
+
+def command_export_press_revisions(
+    connection: sqlite3.Connection,
+    args: argparse.Namespace,
+) -> Any:
+    path = _path(args.output, "press_query_revisions_H2_v3.csv")
+    return {
+        "rows": coding.export_press_revisions(connection, path),
+        "output": str(path),
+    }
+
+
+def command_import_press_revisions(
+    connection: sqlite3.Connection,
+    args: argparse.Namespace,
+) -> Any:
+    return coding.import_press_revisions(
+        connection,
+        Path(args.input).resolve(),
+    )
+
+
+def command_apply_press_revisions(
+    connection: sqlite3.Connection,
+    _: argparse.Namespace,
+) -> Any:
+    return coding.apply_press_revisions(connection)
 
 
 def command_export_seed_template(
@@ -611,7 +819,11 @@ def command_crossref_validate(
             raise ValueError("--max-records must be at least one")
         keys = islice(keys, args.max_records)
     scoped_keys = list(keys)
-    result = providers.crossref_validate_scope(connection, scoped_keys)
+    result = providers.crossref_validate_scope(
+        connection,
+        scoped_keys,
+        worker_count=args.workers,
+    )
     result["not_found_reclassified"] = not_found_reclassified
     result["date_variants_reclassified"] = (
         providers.reclassify_crossref_date_variants(
@@ -748,6 +960,78 @@ def command_import_data_audit(
             Path(args.input).resolve(),
         )
     }
+
+
+def command_build_local_input_inventory(
+    _: sqlite3.Connection,
+    args: argparse.Namespace,
+) -> Any:
+    path = _path(args.output, "local_t0_input_inventory_v3.json")
+    return data_correspondence.build_local_t0_input_inventory(path)
+
+
+def command_export_data_correspondence(
+    connection: sqlite3.Connection,
+    args: argparse.Namespace,
+) -> Any:
+    role = str(args.reviewer).upper()
+    path = _path(
+        args.output,
+        f"feature_data_correspondence_{role.casefold()}_v3.csv",
+    )
+    inventory_path = (
+        Path(args.inventory).resolve()
+        if args.inventory
+        else data_correspondence.DEFAULT_INVENTORY_PATH
+    )
+    return {
+        "rows": data_correspondence.export_data_correspondence(
+            connection,
+            path,
+            role,
+            inventory_path,
+        ),
+        "output": str(path),
+    }
+
+
+def command_import_data_correspondence(
+    connection: sqlite3.Connection,
+    args: argparse.Namespace,
+) -> Any:
+    return data_correspondence.import_data_correspondence(
+        connection,
+        Path(args.input).resolve(),
+    )
+
+
+def command_export_operationalization(
+    connection: sqlite3.Connection,
+    args: argparse.Namespace,
+) -> Any:
+    role = str(args.reviewer).upper()
+    path = _path(
+        args.output,
+        f"feature_operationalization_{role.casefold()}_v3.csv",
+    )
+    return {
+        "rows": indicators.export_feature_operationalization(
+            connection,
+            path,
+            role,
+        ),
+        "output": str(path),
+    }
+
+
+def command_import_operationalization(
+    connection: sqlite3.Connection,
+    args: argparse.Namespace,
+) -> Any:
+    return indicators.import_feature_operationalization(
+        connection,
+        Path(args.input).resolve(),
+    )
 
 
 def command_import_dimension_coding(
@@ -897,6 +1181,75 @@ def build_parser() -> argparse.ArgumentParser:
     assign_discovery.add_argument("--iteration", type=int, required=True)
     assign_discovery.set_defaults(handler=command_assign_discovery_round)
 
+    export_codebook = subparsers.add_parser(
+        "export-saturation-codebook-reference"
+    )
+    export_codebook.add_argument(
+        "--through-round",
+        type=int,
+        required=True,
+    )
+    export_codebook.add_argument("--term-output")
+    export_codebook.add_argument("--indicator-output")
+    export_codebook.add_argument("--manifest")
+    export_codebook.set_defaults(
+        handler=command_export_saturation_codebook_reference
+    )
+
+    build_alignment = subparsers.add_parser(
+        "build-saturation-alignment-protocols"
+    )
+    build_alignment.add_argument(
+        "--current-round",
+        type=int,
+        required=True,
+    )
+    build_alignment.add_argument("--codebook-manifest", required=True)
+    build_alignment.add_argument("--output-dir")
+    build_alignment.set_defaults(
+        handler=command_build_saturation_alignment_protocols
+    )
+
+    validate_alignment = subparsers.add_parser(
+        "validate-saturation-alignment"
+    )
+    validate_alignment.add_argument(
+        "--kind",
+        choices=("indicator", "term"),
+        required=True,
+    )
+    validate_alignment.add_argument("--input", required=True)
+    validate_alignment.add_argument("--output", required=True)
+    validate_alignment.add_argument("--protocol", required=True)
+    validate_alignment.add_argument("--manifest", required=True)
+    validate_alignment.set_defaults(
+        handler=command_validate_saturation_alignment
+    )
+
+    validate_press = subparsers.add_parser("validate-press-review")
+    validate_press.add_argument("--input", required=True)
+    validate_press.add_argument("--output", required=True)
+    validate_press.add_argument("--protocol", required=True)
+    validate_press.add_argument("--manifest", required=True)
+    validate_press.set_defaults(handler=command_validate_press_review)
+
+    validate_press_revisions_parser = subparsers.add_parser(
+        "validate-press-revisions"
+    )
+    validate_press_revisions_parser.add_argument("--input", required=True)
+    validate_press_revisions_parser.add_argument("--output", required=True)
+    validate_press_revisions_parser.add_argument(
+        "--protocol",
+        required=True,
+    )
+    validate_press_revisions_parser.add_argument(
+        "--manifest",
+        required=True,
+    )
+    validate_press_revisions_parser.set_defaults(
+        handler=command_validate_press_revisions
+    )
+
     export_discovery_screen = subparsers.add_parser(
         "export-discovery-screening"
     )
@@ -998,6 +1351,13 @@ def build_parser() -> argparse.ArgumentParser:
         required=True,
     )
     record_discovery.add_argument("--notes", required=True)
+    record_discovery.add_argument(
+        "--protocol-deviation-amendment",
+        help=(
+            "Audited amendment authorizing a non-dual-zero freeze; actual "
+            "novelty counts remain mandatory and are never overwritten"
+        ),
+    )
     record_discovery.set_defaults(
         handler=command_record_discovery_saturation
     )
@@ -1013,6 +1373,52 @@ def build_parser() -> argparse.ArgumentParser:
         help="Overwrite blank worksheets; may destroy unimported edits",
     )
     prepare_human.set_defaults(handler=command_prepare_human_tasks)
+
+    register_human = subparsers.add_parser(
+        "register-human-review-attestation"
+    )
+    register_human.add_argument("--input", required=True)
+    register_human.set_defaults(
+        handler=command_register_human_review_attestation
+    )
+
+    register_independent_ai = subparsers.add_parser(
+        "register-independent-ai-review"
+    )
+    register_independent_ai.add_argument("--input", required=True)
+    register_independent_ai.set_defaults(
+        handler=command_register_independent_ai_review
+    )
+
+    supersede_independent_ai = subparsers.add_parser(
+        "supersede-independent-ai-review"
+    )
+    supersede_independent_ai.add_argument("--old-run-id", required=True)
+    supersede_independent_ai.add_argument("--new-run-id", required=True)
+    supersede_independent_ai.add_argument("--reason", required=True)
+    supersede_independent_ai.add_argument(
+        "--allow-superset",
+        action="store_true",
+        help=(
+            "Allow a larger new artifact only after exact shared-key "
+            "decision equivalence is verified."
+        ),
+    )
+    supersede_independent_ai.set_defaults(
+        handler=command_supersede_independent_ai_review
+    )
+
+    supersede_source = subparsers.add_parser(
+        "supersede-source-snapshot"
+    )
+    supersede_source.add_argument("--old-source-id", required=True)
+    supersede_source.add_argument("--new-source-id", required=True)
+    supersede_source.add_argument("--current-path", required=True)
+    supersede_source.add_argument("--authorization", required=True)
+    supersede_source.add_argument("--reason", required=True)
+    supersede_source.set_defaults(
+        handler=command_supersede_source_snapshot
+    )
 
     ai_discovery = subparsers.add_parser("ai-screen-discovery")
     ai_discovery.add_argument("--iteration", type=int, required=True)
@@ -1056,6 +1462,11 @@ def build_parser() -> argparse.ArgumentParser:
         choices=("AI", "H1", "H2"),
         required=True,
     )
+    export_coding.add_argument(
+        "--only-missing",
+        action="store_true",
+        help="Export only active terms lacking this reviewer's coding.",
+    )
     _add_output_argument(export_coding)
     export_coding.set_defaults(handler=command_export_term_coding)
 
@@ -1073,12 +1484,41 @@ def build_parser() -> argparse.ArgumentParser:
     )
 
     export_press = subparsers.add_parser("export-press")
+    export_press.add_argument(
+        "--only-pending",
+        action="store_true",
+        help="Export only active logical queries lacking a PRESS pass.",
+    )
     _add_output_argument(export_press)
     export_press.set_defaults(handler=command_export_press)
 
     import_press = subparsers.add_parser("import-press")
     import_press.add_argument("--input", required=True)
     import_press.set_defaults(handler=command_import_press)
+
+    subparsers.add_parser("resolve-press-redundancy").set_defaults(
+        handler=command_resolve_press_redundancy
+    )
+
+    export_press_revisions = subparsers.add_parser(
+        "export-press-revisions"
+    )
+    _add_output_argument(export_press_revisions)
+    export_press_revisions.set_defaults(
+        handler=command_export_press_revisions
+    )
+
+    import_press_revisions = subparsers.add_parser(
+        "import-press-revisions"
+    )
+    import_press_revisions.add_argument("--input", required=True)
+    import_press_revisions.set_defaults(
+        handler=command_import_press_revisions
+    )
+
+    subparsers.add_parser("apply-press-revisions").set_defaults(
+        handler=command_apply_press_revisions
+    )
 
     seed_template = subparsers.add_parser("export-seed-template")
     _add_output_argument(seed_template)
@@ -1161,6 +1601,14 @@ def build_parser() -> argparse.ArgumentParser:
         type=int,
         help="Process a bounded resumable batch.",
     )
+    crossref.add_argument(
+        "--workers",
+        type=int,
+        help=(
+            "Crossref concurrency; defaults to the active public/polite "
+            "pool limit and rejects larger values."
+        ),
+    )
     crossref.set_defaults(handler=command_crossref_validate)
 
     export_conflicts = subparsers.add_parser("export-crossref-conflicts")
@@ -1234,6 +1682,57 @@ def build_parser() -> argparse.ArgumentParser:
     import_data_audit = subparsers.add_parser("import-data-audit")
     import_data_audit.add_argument("--input", required=True)
     import_data_audit.set_defaults(handler=command_import_data_audit)
+
+    build_input_inventory = subparsers.add_parser(
+        "build-local-input-inventory"
+    )
+    _add_output_argument(build_input_inventory)
+    build_input_inventory.set_defaults(
+        handler=command_build_local_input_inventory
+    )
+
+    export_data_correspondence = subparsers.add_parser(
+        "export-data-correspondence"
+    )
+    export_data_correspondence.add_argument(
+        "--reviewer",
+        choices=("AI", "H1", "H2"),
+        required=True,
+    )
+    export_data_correspondence.add_argument("--inventory")
+    _add_output_argument(export_data_correspondence)
+    export_data_correspondence.set_defaults(
+        handler=command_export_data_correspondence
+    )
+
+    import_data_correspondence = subparsers.add_parser(
+        "import-data-correspondence"
+    )
+    import_data_correspondence.add_argument("--input", required=True)
+    import_data_correspondence.set_defaults(
+        handler=command_import_data_correspondence
+    )
+
+    export_operationalization = subparsers.add_parser(
+        "export-operationalization"
+    )
+    export_operationalization.add_argument(
+        "--reviewer",
+        choices=("AI", "H1", "H2"),
+        required=True,
+    )
+    _add_output_argument(export_operationalization)
+    export_operationalization.set_defaults(
+        handler=command_export_operationalization
+    )
+
+    import_operationalization = subparsers.add_parser(
+        "import-operationalization"
+    )
+    import_operationalization.add_argument("--input", required=True)
+    import_operationalization.set_defaults(
+        handler=command_import_operationalization
+    )
 
     export_dimensions = subparsers.add_parser("export-dimension-coding")
     export_dimensions.add_argument(
