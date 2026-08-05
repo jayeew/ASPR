@@ -1,234 +1,268 @@
 {
-  "schema_version": "fig2-evidence-map-v1",
-  "registry_version": "ASPR-v6.1",
-  "selection_stages_expected": [50, 30, 20, 18, 8],
-  "role_order": ["primary", "sensitivity", "exploratory", "excluded"],
-  "role_totals_expected": {
-    "primary": 8,
-    "sensitivity": 18,
-    "exploratory": 4,
-    "excluded": 20
+  "schema_version": "fig2-evidence-derived-v3-2",
+  "evidence_version": "evidence_derived_v3",
+  "expected_counts": {
+    "K": 42,
+    "Q": 336,
+    "P": 367,
+    "M": 66,
+    "D": 1,
+    "F": 7
   },
-  "role_flow_expected": {
-    "A1_COMBINATION_RARITY": {
-      "primary": 1,
-      "sensitivity": 1,
-      "exploratory": 2,
-      "excluded": 5
-    },
-    "A2_ATYPICALITY_CONVENTIONALITY": {
-      "primary": 1,
-      "sensitivity": 4,
-      "exploratory": 0,
-      "excluded": 2
-    },
-    "A3_FIRST_TIME_COMBINATION": {
-      "primary": 1,
-      "sensitivity": 2,
-      "exploratory": 0,
-      "excluded": 6
-    },
-    "A4_KNOWLEDGE_BREADTH_BALANCE": {
-      "primary": 3,
-      "sensitivity": 6,
-      "exploratory": 0,
-      "excluded": 2
-    },
-    "A5_COGNITIVE_DISTANCE_INTEGRATION": {
-      "primary": 2,
-      "sensitivity": 5,
-      "exploratory": 2,
-      "excluded": 5
-    }
-  },
-  "angle_order": [
-    "A1_COMBINATION_RARITY",
-    "A2_ATYPICALITY_CONVENTIONALITY",
-    "A3_FIRST_TIME_COMBINATION",
-    "A4_KNOWLEDGE_BREADTH_BALANCE",
-    "A5_COGNITIVE_DISTANCE_INTEGRATION"
-  ],
-  "angles": {
-    "A1_COMBINATION_RARITY": {
-      "code": "A1",
-      "label": "Combination rarity",
-      "ring_label": "Rarity",
-      "candidate_count_expected": 9,
-      "registered_source_count_expected": 4,
-      "family_summary": "Commonness/surprisal · reference overlap · thresholded rarity",
-      "family_short": "commonness · overlap · rarity",
-      "meaning": "Rarity or surprise of co-cited source pairs relative to strictly prior prevalence.",
-      "meaning_short": "Co-cited pair rarity relative to prior prevalence.",
-      "include": "Explicit observed/expected or prior-overlap statistic with T0-frozen history.",
-      "include_short": "Observed/expected or prior-overlap formula; T0-frozen history.",
-      "exclude": "Threshold-only or monotone variants; post-publication reference sets.",
-      "exclude_short": "Threshold/monotone variants; post-publication reference sets.",
-      "key_sources": [
-        {"source_id": "MATSUMOTO2021", "author_year": "Matsumoto et al., 2021"},
-        {"source_id": "LEE2015", "author_year": "Lee et al., 2015"},
-        {"source_id": "BORNMANN2019", "author_year": "Bornmann et al., 2019"}
-      ]
-    },
-    "A2_ATYPICALITY_CONVENTIONALITY": {
-      "code": "A2",
-      "label": "Atypicality & conventionality",
-      "ring_label": "Atypicality",
-      "candidate_count_expected": 7,
-      "registered_source_count_expected": 5,
-      "family_summary": "Null-model z-score centre and left-tail variants",
-      "family_short": "z-score centre and tail",
-      "meaning": "Left-tail atypicality and central conventionality of source-pair null-model z scores.",
-      "meaning_short": "Tail atypicality and centre conventionality of null-model z scores.",
-      "include": "Source-defined tail and centre facets whose approximation matches an exact reference.",
-      "include_short": "Source-defined tail/centre; exact-reference match.",
-      "exclude": "Arbitrary quantiles, duplicate standardizations and unvalidated null models.",
-      "exclude_short": "Arbitrary quantiles, duplicate scaling, unvalidated null models.",
-      "key_sources": [
-        {"source_id": "UZZI2013", "author_year": "Uzzi et al., 2013"},
-        {"source_id": "YAN2016", "author_year": "Yan & Luo, 2016"},
-        {"source_id": "TEPLITSKIY2022", "author_year": "Teplitskiy et al., 2022"}
-      ]
-    },
-    "A3_FIRST_TIME_COMBINATION": {
-      "code": "A3",
-      "label": "First-time combinations",
-      "ring_label": "First-time",
-      "candidate_count_expected": 9,
-      "registered_source_count_expected": 3,
-      "family_summary": "First-pair incidence · distance weighting · future-confirmed variants",
-      "family_short": "incidence · distance weighting",
-      "meaning": "Incidence or share of source pairs absent from the strictly prior literature.",
-      "meaning_short": "Share of source pairs absent from strictly prior literature.",
-      "include": "Explicit denominator and pre-T0 history; no future reuse in the T0 feature.",
-      "include_short": "Explicit denominator and pre-T0 history; no future reuse.",
-      "exclude": "Future-confirmed reuse, reference-count duplicates and unstable distance variants.",
-      "exclude_short": "Future-confirmed reuse, count duplicates, unstable distance variants.",
-      "key_sources": [
-        {"source_id": "WANG2017", "author_year": "Wang et al., 2017"},
-        {"source_id": "BORNMANN2019", "author_year": "Bornmann et al., 2019"},
-        {"source_id": "FONTANA2020", "author_year": "Fontana et al., 2020"}
-      ]
-    },
-    "A4_KNOWLEDGE_BREADTH_BALANCE": {
-      "code": "A4",
-      "label": "Knowledge breadth & balance",
-      "ring_label": "Breadth",
-      "candidate_count_expected": 11,
-      "registered_source_count_expected": 4,
-      "family_summary": "Category variety · focal-field breadth · balance · Hill categories",
-      "family_short": "variety · balance · Hill",
-      "meaning": "Variety, relative spread and balance of scientific categories represented in prior references.",
-      "meaning_short": "Variety, spread and balance of fields in prior references.",
-      "include": "Theoretically distinct variety and balance families with paper-level scientometric use.",
-      "include_short": "Distinct variety/balance; paper-level use.",
-      "exclude": "Monotone rescalings, algebraic complements and multiple Hill orders as separate primaries.",
-      "exclude_short": "Monotone/algebraic duplicates; multiple Hill orders as primaries.",
-      "key_sources": [
-        {"source_id": "STIRLING2007", "author_year": "Stirling, 2007"},
-        {"source_id": "WANG2015", "author_year": "Wang et al., 2015"},
-        {"source_id": "RAFOLS2010", "author_year": "Rafols & Meyer, 2010"}
-      ]
-    },
-    "A5_COGNITIVE_DISTANCE_INTEGRATION": {
-      "code": "A5",
-      "label": "Cognitive distance & integration",
-      "ring_label": "Distance",
-      "candidate_count_expected": 14,
-      "registered_source_count_expected": 9,
-      "family_summary": "Field distance · Rao–Stirling/Porter · DIV · bridging · semantic distance",
-      "family_short": "distance · composites · bridging",
-      "meaning": "Cognitive disparity among referenced fields and their share-weighted integration.",
-      "meaning_short": "Field disparity and share-weighted integration.",
-      "include": "One unweighted distance component and at most one weighted composite using prior profiles.",
-      "include_short": "One distance component and at most one weighted composite.",
-      "exclude": "Duplicate composites, future-trained spaces and unstable or unscalable graph measures.",
-      "exclude_short": "Duplicate composites, future spaces, unstable graph measures.",
-      "key_sources": [
-        {"source_id": "RAO1982", "author_year": "Rao, 1982"},
-        {"source_id": "STIRLING2007", "author_year": "Stirling, 2007"},
-        {"source_id": "WANG2015", "author_year": "Wang et al., 2015"}
-      ]
-    }
-  },
-  "selection_rules": [
+  "query_blocks": [
     {
-      "gate_id": "G1",
-      "label": "Evidence",
-      "display_text": "Peer-reviewed formula · paper-level application"
+      "label": "PAPER OBJECT",
+      "terms": "paper | article | publication | scientific work"
     },
     {
-      "gate_id": "G2",
-      "label": "Construct",
-      "display_text": "One dimension · no impact or prestige proxy"
+      "label": "TARGET CONSTRUCT",
+      "terms": "novelty | innovation | potential impact | citation impact | research quality | scientific influence"
     },
     {
-      "gate_id": "G3",
-      "label": "Time & data",
-      "display_text": "Publication-prior · frozen local data"
-    },
-    {
-      "gate_id": "G4",
-      "label": "Reproducibility",
-      "display_text": "Fixed formula · taxonomy · missingness"
-    },
-    {
-      "gate_id": "G5",
-      "label": "Quality",
-      "display_text": "Coverage · stability · fidelity · formula tests"
-    },
-    {
-      "gate_id": "G6",
-      "label": "Family governance",
-      "display_text": "One primary per family · no OOF selection"
+      "label": "EVIDENCE ROLE",
+      "terms": "measure | indicator | metric | feature | predictor | determinant | validation | review"
     }
   ],
-  "threshold_statement": "Primary gates: coverage ≥ .70 overall / .50 each field · resampling ρ ≥ .90, MRE ≤ .10 · approximation ρ ≥ .95, MRE ≤ .05",
-  "candidate_scope_note": "Candidate families describe the reviewed universe, including excluded options; future-confirmed and external-data variants are not publication-time primary indicators.",
-  "indicator_ids": {
-    "reference_overlap_novelty_t0": "I1",
-    "hypergeom_conventionality_median_t0": "I2",
-    "first_time_source_pair_share": "I3",
-    "field_gini_balance": "I4",
-    "reference_other_field_share": "I5",
-    "field_variety": "I6",
-    "field_disparity_cosine_mean": "I7",
-    "rao_stirling_integration": "I8"
-  },
-  "indicator_display_formulas": {
-    "reference_overlap_novelty_t0": "1 − mean_j[|R_i ∩ R_j| /\n|R_i ∪ R_j|]",
-    "hypergeom_conventionality_median_t0": "Q0.50[(O_ij − N_iN_j/N) /\n√[N_j(N_i/N)(1−N_i/N)(N−N_j)/(N−1)]]",
-    "first_time_source_pair_share": "Σ 1[O_ij,<T0 = 0] /\nN_valid pairs",
-    "field_gini_balance": "1 − Gini(p_1, …, p_V)\n(occupied categories only)",
-    "reference_other_field_share": "mean(1[field_ref ≠ field_focal])",
-    "field_variety": "number of occupied\nreference-field categories",
-    "field_disparity_cosine_mean": "mean(1 − cosine(profile_k, profile_l))",
-    "rao_stirling_integration": "Σ_k Σ_l p_k p_l d_kl"
-  },
-  "indicator_short_labels": {
-    "reference_overlap_novelty_t0": "Reference-overlap\\nnovelty",
-    "hypergeom_conventionality_median_t0": "Median\\nconventionality",
-    "first_time_source_pair_share": "First-pair\\nshare",
-    "field_gini_balance": "Field\\nbalance",
-    "reference_other_field_share": "Outside-field\\nreferences",
-    "field_variety": "Field\\nvariety",
-    "field_disparity_cosine_mean": "Mean cognitive\\ndistance",
-    "rao_stirling_integration": "Rao–Stirling\\nintegration"
-  },
-  "relations": [
-    {"source": "hypergeom_conventionality_median_t0", "target": "first_time_source_pair_share", "rho": 0.681},
-    {"source": "field_gini_balance", "target": "field_variety", "rho": -0.638},
-    {"source": "reference_other_field_share", "target": "field_variety", "rho": 0.422},
-    {"source": "field_variety", "target": "field_disparity_cosine_mean", "rho": 0.464},
-    {"source": "reference_other_field_share", "target": "rao_stirling_integration", "rho": 0.703},
-    {"source": "field_variety", "target": "rao_stirling_integration", "rho": 0.686},
-    {"source": "field_disparity_cosine_mean", "target": "rao_stirling_integration", "rho": 0.484}
+  "gates": [
+    {
+      "gate_id": "G02_ARTICLE_LEVEL",
+      "group": "Scope and time boundary",
+      "label": "Paper-level rather than person, institution or aggregate-level",
+      "short_label": "Paper level"
+    },
+    {
+      "gate_id": "G01_IN_SCOPE_ROLE",
+      "group": "Scope and time boundary",
+      "label": "Innovation / T0-potential / opportunity / permitted-control scope",
+      "short_label": "Allowed role scope"
+    },
+    {
+      "gate_id": "G05_PUBLICATION_TIME",
+      "group": "Scope and time boundary",
+      "label": "Computable no later than publication (T0)",
+      "short_label": "Publication-time computable"
+    },
+    {
+      "gate_id": "G06_NO_FUTURE_INFORMATION",
+      "group": "Scope and time boundary",
+      "label": "No future citations, diffusion, disruption or attention",
+      "short_label": "No future information"
+    },
+    {
+      "gate_id": "G08_BIAS_GUARDRAIL",
+      "group": "Bias and outcome isolation",
+      "label": "Does not violate protected-attribute or bias guardrails",
+      "short_label": "Bias / protected-attribute rules"
+    },
+    {
+      "gate_id": "G09_NO_FATAL_VALIDITY_CONCERN",
+      "group": "Bias and outcome isolation",
+      "label": "No fatal construct-validity concern",
+      "short_label": "No fatal construct-validity problem"
+    },
+    {
+      "gate_id": "G10_OUTCOME_BLIND_SELECTION",
+      "group": "Bias and outcome isolation",
+      "label": "Selected without model outcome or prediction-performance feedback",
+      "short_label": "Not chosen using prediction results"
+    },
+    {
+      "gate_id": "G03_PRIMARY_OR_FOUNDATIONAL_EVIDENCE",
+      "group": "Source and formula evidence",
+      "label": "Peer-reviewed original application or foundational mathematical source",
+      "short_label": "Primary / foundational evidence"
+    },
+    {
+      "gate_id": "G13_ENGLISH_FULLTEXT_FORMULA_EVIDENCE",
+      "group": "Source and formula evidence",
+      "label": "English key full text and formula evidence verified",
+      "short_label": "English full-text / formula evidence"
+    },
+    {
+      "gate_id": "G04_REPRODUCIBLE_DEFINITION",
+      "group": "Implementation and quality",
+      "label": "Formula, parameters, direction and missingness reproducible",
+      "short_label": "Reproducible definition"
+    },
+    {
+      "gate_id": "G07_LOCAL_DATA_READY",
+      "group": "Implementation and quality",
+      "label": "Current T0 data available or stably derivable from audited inputs",
+      "short_label": "Local data ready"
+    },
+    {
+      "gate_id": "G11_QUALITY_AUDIT",
+      "group": "Implementation and quality",
+      "label": "Passes implementation data-quality checks",
+      "short_label": "Quality audit"
+    },
+    {
+      "gate_id": "G12_NONCONSTANT",
+      "group": "Implementation and quality",
+      "label": "Nonconstant in the effective analytic sample",
+      "short_label": "Nonconstant"
+    },
+    {
+      "gate_id": "G14_SECOND_HUMAN_APPROVAL",
+      "group": "Independent review",
+      "label": "Independent H2 approval after role-separated review",
+      "short_label": "Independent H2 approval"
+    }
   ],
-  "relation_method": "Oriented Spearman · |ρ| ≥ .40",
+  "feature_set_criteria": {
+    "strict_7": [
+      "G01_IN_SCOPE_ROLE",
+      "G02_ARTICLE_LEVEL",
+      "G03_PRIMARY_OR_FOUNDATIONAL_EVIDENCE",
+      "G04_REPRODUCIBLE_DEFINITION",
+      "G05_PUBLICATION_TIME",
+      "G06_NO_FUTURE_INFORMATION",
+      "G07_LOCAL_DATA_READY",
+      "G08_BIAS_GUARDRAIL",
+      "G09_NO_FATAL_VALIDITY_CONCERN",
+      "G10_OUTCOME_BLIND_SELECTION",
+      "G11_QUALITY_AUDIT",
+      "G12_NONCONSTANT",
+      "G13_ENGLISH_FULLTEXT_FORMULA_EVIDENCE",
+      "G14_SECOND_HUMAN_APPROVAL"
+    ],
+    "fulltext_16": [
+      "G01_IN_SCOPE_ROLE",
+      "G02_ARTICLE_LEVEL",
+      "G05_PUBLICATION_TIME",
+      "G06_NO_FUTURE_INFORMATION",
+      "G08_BIAS_GUARDRAIL",
+      "G09_NO_FATAL_VALIDITY_CONCERN",
+      "G10_OUTCOME_BLIND_SELECTION",
+      "G03_PRIMARY_OR_FOUNDATIONAL_EVIDENCE",
+      "G13_ENGLISH_FULLTEXT_FORMULA_EVIDENCE"
+    ],
+    "source_154": [
+      "G01_IN_SCOPE_ROLE",
+      "G02_ARTICLE_LEVEL",
+      "G05_PUBLICATION_TIME",
+      "G06_NO_FUTURE_INFORMATION",
+      "G08_BIAS_GUARDRAIL",
+      "G09_NO_FATAL_VALIDITY_CONCERN",
+      "G10_OUTCOME_BLIND_SELECTION",
+      "G03_PRIMARY_OR_FOUNDATIONAL_EVIDENCE"
+    ],
+    "ultrarelaxed_221": [
+      "G01_IN_SCOPE_ROLE",
+      "G02_ARTICLE_LEVEL",
+      "G05_PUBLICATION_TIME",
+      "G06_NO_FUTURE_INFORMATION",
+      "G08_BIAS_GUARDRAIL",
+      "G09_NO_FATAL_VALIDITY_CONCERN",
+      "G10_OUTCOME_BLIND_SELECTION"
+    ]
+  },
+  "source_role_order": [
+    "direct_innovation",
+    "t0_substantive",
+    "t0_opportunity",
+    "context_control"
+  ],
+  "source_role_labels": {
+    "direct_innovation": "Direct innovation",
+    "t0_substantive": "T0 substantive potential",
+    "t0_opportunity": "T0 opportunity",
+    "context_control": "Context control"
+  },
+  "dimension_role_order": [
+    "substantive_innovation",
+    "t0_potential",
+    "opportunity",
+    "context_control",
+    "sensitivity",
+    "unassigned"
+  ],
+  "dimension_role_labels": {
+    "substantive_innovation": "Innovation content",
+    "t0_potential": "T0 impact potential",
+    "opportunity": "Opportunity context",
+    "context_control": "Background controls",
+    "sensitivity": "Sensitivity-only",
+    "unassigned": "Unassigned / pre-dimension rejection"
+  },
+  "exclusive_tier_order": [
+    "strict_core",
+    "fulltext_only",
+    "source_only",
+    "broad_t0_only",
+    "excluded"
+  ],
+  "exclusive_tier_labels": {
+    "strict_core": "Strict core",
+    "fulltext_only": "Full-text extension only",
+    "source_only": "Source-grounded extension only",
+    "broad_t0_only": "Broad T0 extension only",
+    "excluded": "Excluded"
+  },
+  "feature_set_order": [
+    "strict_7",
+    "fulltext_16",
+    "source_154",
+    "ultrarelaxed_221"
+  ],
+  "feature_set_labels": {
+    "strict_7": "Strict audited core",
+    "fulltext_16": "Full-text evidence set",
+    "source_154": "Source-grounded T0 expansion",
+    "ultrarelaxed_221": "Broad T0 sensitivity set"
+  },
+  "feature_set_rules": {
+    "strict_7": "All 14 hard gates",
+    "fulltext_16": "T0-safe + source + English full-text formula",
+    "source_154": "T0-safe + source evidence",
+    "ultrarelaxed_221": "T0-safe base gates"
+  },
+  "feature_set_meanings": {
+    "strict_7": "strict audited baseline",
+    "fulltext_16": "intermediate evidence tier",
+    "source_154": "primary scalable modeling set",
+    "ultrarelaxed_221": "broad sensitivity upper bound"
+  },
+  "operationalization_tier_order": [
+    "source_formula_existing",
+    "source_formula_local_surrogate",
+    "structured_construct_proxy",
+    "title_taxonomy_lexical_proxy"
+  ],
+  "operationalization_tier_labels": {
+    "source_formula_existing": "Source formula",
+    "source_formula_local_surrogate": "Local formula surrogate",
+    "structured_construct_proxy": "Structured construct proxy",
+    "title_taxonomy_lexical_proxy": "Title/taxonomy lexical proxy"
+  },
+  "feature_dimension_role_order": [
+    "substantive_innovation",
+    "t0_potential",
+    "opportunity",
+    "context_control",
+    "sensitivity"
+  ],
+  "feature_dimension_role_labels": {
+    "substantive_innovation": "I",
+    "t0_potential": "P",
+    "opportunity": "O",
+    "context_control": "C",
+    "sensitivity": "S"
+  },
+  "strict_display_order": [
+    "CD031",
+    "CD014",
+    "CD010",
+    "CD041"
+  ],
+  "strict_indicator_display_aliases": {
+    "International collaboration scale": "Country count"
+  },
   "titles": {
-    "a": "Candidate scope and evidence-governed selection",
-    "b": "Five observation dimensions and eight indicators",
-    "c": "Meaning, boundaries and key sources",
-    "d": "Formulas, direction and evidence quality"
+    "a": "Evidence-derived search and measurement pipeline",
+    "b": "Indicators precede dimensions",
+    "c": "Fixed hard-gate audit",
+    "d": "Nested outcome-blind sets"
   },
   "subtitles": {
     "a": "",
@@ -236,5 +270,8 @@
     "c": "",
     "d": ""
   },
-  "claim_boundary": "The figure supports source traceability, transparent candidate scope, reproducible selection and observable indicator relations; it does not prove innovation truth, independence of dimensions or causality."
+  "mapping_note": "The mapping is literature role → coded construct family → gate-defined eligibility tier. It contains no Spearman, chord or empirical model result.",
+  "gate_note": "Gate failures can overlap; row failures must not be summed.",
+  "set_note": "Membership frozen before outcome evaluation; predictive comparisons belong to Fig. 3.",
+  "claim_boundary": "This figure documents the provenance, coding order, fixed gates and operationalisation range of the measurement system. It does not establish causal mechanisms, universal literature coverage or predictive superiority."
 }

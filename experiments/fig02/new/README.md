@@ -1,83 +1,70 @@
-# Fig.2 — Evidence-governed five-dimension, eight-indicator system
+# Fig.2 — Evidence-derived dimensions and feature sets (v3)
 
-## Scientific question
+Fig.2 explains **what is measured and how that measurement set was fixed**. It
+does not show predictive performance, OOF correlations, future citations or the
+old v6.1 five-angle/eight-indicator system.
 
-Fig.2 explains why ASPR v6.1 observes paper innovation through five
-publication-time dimensions, why the final implementation contains these eight
-primary indicators, and how every decision can be traced to a registered
-candidate universe, explicit screening rules and sources.
+## Figure logic
 
-The active Fig.2 path is deliberately outcome-free. It does not read D5, OOF,
-future citations, known-group labels or the former `G−/G0/G+5` scene. Indicator
-selection is therefore not optimized against predictive performance.
+- **a — Evidence pipeline.** A domain-agnostic English bootstrap query is
+  expanded only with author-used terms. The panel records 12 discrete review
+  batches, AI–H1–H2 coverage, query/PRESS/seed validation and the full ordered
+  chain from terms to dimensions. Round 12 is explicitly labelled as a
+  pragmatic marginal-yield amendment (`Δterms=10`, `Δindicator families=9`),
+  not as a dual-zero saturation event.
+- **b — Classification map.** A quantity-conserving alluvial maps all 432
+  canonical indicator families from their extraction role to candidate
+  dimension role and then to their exclusive nested-set tier. It is a
+  classification map—not a correlation, causal, or importance diagram. The
+  inset lists the strict `7 metrics → 4 operational dimensions` mapping.
+- **c — Gates and retention.** Fourteen marginal gate-pass counts are shown
+  over the shared 432-family denominator. They are intentionally not a funnel:
+  an indicator may fail more than one gate. The panel separately shows the
+  formal dimension rule: a passing metric, two independent research teams, and
+  H2 non-alias confirmation.
+- **d — Operating sets.** The strict core, full-text expansion, source-grounded
+  scalable set and broad T0 sensitivity ceiling are nested and frozen before
+  outcome evaluation. Their implementation tiers are shown separately from
+  model roles: direct source formulae, transparent local formula surrogates,
+  structured construct proxies and title/taxonomy lexical proxies. In
+  particular, `source_154` is explicitly labelled as a source-grounded
+  expansion—not 154 formula replications.
 
-## Four panels
+## Inputs and guardrails
 
-- **a — Candidate scope and selection.** The upper chain conserves the frozen
-  screening counts `50 → 30 → 20 → 18 → 8`. The Alluvial accounts for all 50
-  candidates across five observation dimensions and four registered roles
-  (`8 primary / 18 sensitivity / 4 exploratory / 20 excluded`). G1–G6 and the
-  numerical coverage, stability and approximation gates state the selection
-  rules.
-- **b — Dimensions, indicators and relations.** Five equal-width outer sectors
-  encode observation dimensions; eight equal-width inner nodes encode the
-  primary indicators. Exactly seven frozen direction-oriented Spearman
-  relations with `|ρ| ≥ 0.40` are drawn. I1 remains isolated at this threshold.
-  Equal arc widths prevent the diagram from implying unequal theoretical
-  importance.
-- **c — Meaning, boundary and sources.** Five source strips give a concise
-  meaning, inclusion boundary, exclusion boundary, three key author–year
-  sources and the complete registered source count for each dimension. The
-  dimensions are evidence-backed observation lenses, not independent causal
-  mechanisms.
-- **d — Formula and quality ledger.** Eight rows report the registered display
-  formula, direction, formula/application/validation counts and four separate
-  quality axes. Thresholds are `overall coverage ≥ .70`, `weakest field ≥ .50`,
-  `resampling ρ ≥ .90`, and `MRE ≤ .10`. I2 is the only lower-is-stronger
-  indicator and the only approximation whose exact-reference agreement is
-  shown.
+The adapter reads only frozen files under
+`innovation_impact_feature_selection/evidence_derived_v3/`, the frozen process
+record in `docs/`, and two metadata-only files that define the four operational
+sets. It does **not** read OOF metrics, predictions, fold data, targets, future
+outcomes or the old v6.1 candidate registry. The source-of-truth result is
+checked against:
 
-Complete formulas, full dimension definitions, all candidate decisions and
-source records remain in `panel_data/`; the rendered panel uses concise display
-copy to avoid hiding the evidence structure.
+- `K=42`, `Q=336`, `P=367`, `M=66`, `D=1`, `F=7`;
+- `3,615 → 3,170 → 1,102 → 367` terms/families;
+- `1,685` census mentions (plus 13 targeted formula-completion records) and
+  `432` canonical indicator families;
+- nested set sizes `7 / 16 / 154 / 221` and dimensions `4 / 10 / 48 / 55`.
 
-## Rendering stack
+The Figure and its caption must retain three limitations: English-only evidence
+can create language/geographic bias; evidence-saturation retrieval is not an
+exhaustive database census; and H2 adjudication, rather than raw agreement,
+sets final coding labels. The audit ledger also distinguishes seven
+human-attested automated draft worksheets from 119 registered independent
+Codex-AI review runs; isolated local-Qwen artifacts are excluded from every
+reported final count.
 
-The figure is static and fully reproducible:
-
-```bash
-python3 -m pip install --user --break-system-packages \
-  -r requirements-figures.txt
-```
-
-- Matplotlib: layout, Alluvial, source strips, evidence ledger and export.
-- pyCirclize: equal-sector circular map and relation ribbons.
-- adjustText: relation-value collision avoidance only.
-- colorspacious and Pillow: color-vision-deficiency and grayscale QA previews.
-
-The canonical master is `6400 × 5200 px` at 600 dpi. SVG and PDF remain
-editable and can be scaled for a journal layout without rerasterization.
-
-## Commands
+## Reproduce
 
 ```bash
-python3 -m experiments.fig02.new.run --stage all
+python3 -m experiments.fig02.new.tests
 python3 -m experiments.fig02.new.tests --full
+python3 -m experiments.fig02.new.run --stage all
 ```
 
-Canonical outputs:
+The retained publication master is:
 
-```text
-outputs/fig02/new/figure_full.{png,svg,pdf}
-outputs/fig02/new/panels/fig02_{a,b,c,d}.{png,svg,pdf}
-outputs/fig02/new/panel_data/
-outputs/fig02/new/qa/
-outputs/fig02/new/{panel_text,chart_contract,run_manifest,audit_report}.json
-```
+- `outputs/fig02/new/Fig2_evidence_architecture.svg`
 
-## Claim boundary
-
-The figure supports source traceability, transparent candidate scope,
-reproducible selection and observable indicator relations. It does not prove
-innovation truth, independence of dimensions, causality or predictive
-validity.
+The command regenerates PNG/PDF copies, panel crops and audit files when needed
+for validation; they are intentionally not retained in the final Fig.2 output
+directory. The master is laid out for a 183-mm-wide full-page placement.

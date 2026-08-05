@@ -5,17 +5,11 @@
   "formats": ["png", "svg", "pdf"],
   "overrides": {
     "fig2": {
-      "relation_abs_spearman_min": 0.4,
       "seed": 20260725,
       "render": {
-        "canvas_px": [6400, 5200],
-        "width_ratios": [1.0, 1.06],
-        "height_ratios": [1.0, 1.0],
-        "min_font_pt": 5.5,
-        "outer_sector_space_deg": 4.0,
-        "indicator_arc_width": 26.0,
-        "indicator_arc_gap": 4.0,
-        "qa_preview_width": 1600
+        "canvas_px": [7200, 12000],
+        "min_font_pt": 5.0,
+        "qa_preview_width": 1800
       }
     }
   }
