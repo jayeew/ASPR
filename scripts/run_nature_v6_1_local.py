@@ -18,6 +18,9 @@ from aspr.nature_multihorizon.materialize_v6_1 import (
     materialize_reference_overlap_extension,
     materialize_v6_1_dataset,
 )
+from aspr.nature_multihorizon.active_dataset import (  # noqa: E402
+    load_active_dataset,
+)
 from aspr.nature_multihorizon.audit_v6_1 import audit_v6_1_dataset
 from aspr.nature_multihorizon.modeling_v6_1 import (
     freeze_registry_before_oof,
@@ -78,6 +81,11 @@ def materialize(args: argparse.Namespace) -> None:
         v6_dataset_dir=_resolve(config["paths"]["v6_dataset"]),
         output_dir=output,
         openalex_metadata_path=metadata if metadata.is_file() else None,
+        nature_v5_root=(
+            _resolve(config["paths"]["nature_v5_root"])
+            if config["paths"].get("nature_v5_root")
+            else None
+        ),
         resume=not args.rebuild,
     )
     _print(manifest)
@@ -89,6 +97,11 @@ def materialize_overlap(args: argparse.Namespace) -> None:
         project_root=PROJECT_ROOT,
         v6_dataset_dir=_resolve(config["paths"]["v6_dataset"]),
         output_dir=_resolve(config["paths"]["v6_1_dataset"]),
+        nature_v5_root=(
+            _resolve(config["paths"]["nature_v5_root"])
+            if config["paths"].get("nature_v5_root")
+            else None
+        ),
         resume=not args.rebuild,
     )
     _print(manifest)
@@ -159,6 +172,11 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=DEFAULT_CONFIG,
     )
+    parser.add_argument(
+        "--allow-legacy-dataset",
+        action="store_true",
+        help="Explicitly allow a frozen non-active dataset for reproduction.",
+    )
     commands = parser.add_subparsers(dest="command", required=True)
     scan = commands.add_parser(
         "scan-openalex",
@@ -205,6 +223,15 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> None:
     args = build_parser().parse_args(argv)
     args.config = args.config.resolve()
+    config = _load(args.config)
+    configured_v6 = _resolve(config["paths"]["v6_dataset"]).resolve()
+    active_v6 = load_active_dataset(PROJECT_ROOT)["dataset_dir"].resolve()
+    if configured_v6 != active_v6 and not args.allow_legacy_dataset:
+        raise ValueError(
+            "v6.1 config points to a frozen legacy dataset. Pass "
+            "--allow-legacy-dataset only for explicit reproduction, or use "
+            "an expanded-v1 v6.1 config."
+        )
     args.func(args)
 
 

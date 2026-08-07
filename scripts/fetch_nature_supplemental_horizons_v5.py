@@ -1,6 +1,12 @@
 from __future__ import annotations
 
 import argparse
+import gzip
+import hashlib
+import json
+import os
+import shutil
+import sys
 from collections import Counter, OrderedDict
 from concurrent.futures import (
     FIRST_COMPLETED,
@@ -8,19 +14,12 @@ from concurrent.futures import (
     ThreadPoolExecutor,
     wait,
 )
-import gzip
-import hashlib
-import json
-import os
 from pathlib import Path
-import shutil
-import sys
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 import pandas as pd
 import pyarrow as pa
 import pyarrow.parquet as pq
-
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
@@ -31,6 +30,9 @@ from aspr.nature_multihorizon.future_citers import _normalize_citer  # noqa: E40
 from scripts.build_openalex_v3_citation_graph import (  # noqa: E402
     OpenAlexClient,
     split_api_keys,
+)
+from scripts.fetch_openalex_uncapped_source_years import (  # noqa: E402
+    fetch_complete_partition,
 )
 from scripts.materialize_nature_future_multihorizon_v5 import (  # noqa: E402
     DELTA_COLUMNS,
@@ -47,11 +49,8 @@ from scripts.nature_portfolio_v5 import (  # noqa: E402
     utc_now,
 )
 
-
 DEFAULT_COMPLETE_END_YEAR = 2025
-DEFAULT_SNAPSHOT_DIR = Path(
-    "/mnt/d/FabCitationData/openalex-snapshot"
-)
+DEFAULT_SNAPSHOT_DIR = Path("/mnt/d/FabCitationData/openalex-snapshot")
 DEFAULT_SOURCE_DIR = (
     PROJECT_ROOT / "outputs" / "common" / "new" / "data" / "nature_portfolio_v5"
 )
@@ -108,9 +107,7 @@ def parse_cohort_specs(
             raise ValueError(f"Invalid cohort specification: {value!r}")
         year = int(year_text)
         horizons = {
-            int(item.strip())
-            for item in horizons_text.split(",")
-            if item.strip()
+            int(item.strip()) for item in horizons_text.split(",") if item.strip()
         }
         if not horizons or min(horizons) <= 0:
             raise ValueError(f"Cohort horizons must be positive: {value!r}")
@@ -122,10 +119,7 @@ def parse_cohort_specs(
         parsed.setdefault(year, set()).update(horizons)
     if not parsed:
         raise ValueError("At least one cohort specification is required")
-    return {
-        year: tuple(sorted(horizons))
-        for year, horizons in sorted(parsed.items())
-    }
+    return {year: tuple(sorted(horizons)) for year, horizons in sorted(parsed.items())}
 
 
 def read_cohort_targets(
@@ -139,10 +133,14 @@ def read_cohort_targets(
     year_column = "year" if "year" in header else "publication_year"
     required = {id_column, year_column}
     if not required.issubset(header):
-        raise ValueError(f"Target works is missing columns: {sorted(required - header)}")
+        raise ValueError(
+            f"Target works is missing columns: {sorted(required - header)}"
+        )
     usecols = [id_column, year_column]
     if "short_id" in header:
         usecols.append("short_id")
+    if "cited_by_count" in header:
+        usecols.append("cited_by_count")
     targets = pd.read_csv(path, usecols=usecols, low_memory=False)
     targets = targets.rename(
         columns={id_column: "paper_id", year_column: "publication_year"}
@@ -203,7 +201,9 @@ def _atomic_jsonl(path: Path, rows: Iterable[Mapping[str, Any]]) -> int:
     return count
 
 
-def _batches(rows: Sequence[Dict[str, Any]], size: int) -> Iterable[List[Dict[str, Any]]]:
+def _batches(
+    rows: Sequence[Dict[str, Any]], size: int
+) -> Iterable[List[Dict[str, Any]]]:
     for start in range(0, len(rows), int(size)):
         yield list(rows[start : start + int(size)])
 
@@ -211,7 +211,9 @@ def _batches(rows: Sequence[Dict[str, Any]], size: int) -> Iterable[List[Dict[st
 def _snapshot_files(snapshot_dir: Path, minimum_outcome_year: int) -> List[Path]:
     works_root = snapshot_dir / "data" / "works"
     if not works_root.is_dir():
-        raise FileNotFoundError(f"OpenAlex snapshot works directory not found: {works_root}")
+        raise FileNotFoundError(
+            f"OpenAlex snapshot works directory not found: {works_root}"
+        )
     minimum_partition = f"updated_date={int(minimum_outcome_year)}-01-01"
     return sorted(
         path
@@ -313,7 +315,8 @@ def _scan_snapshot_file(
                     continue
                 publication_year = target_years[paper_id]
                 if (
-                    publication_year < citer_year
+                    publication_year
+                    < citer_year
                     <= publication_year + target_max_horizons[paper_id]
                 ):
                     matched_ids.add(paper_id)
@@ -589,20 +592,17 @@ def _consolidate_snapshot_checkpoints(
                 (
                     marker,
                     {
-                    "artifact_kind": "nature_supplemental_snapshot_consolidation",
-                    "created_at": utc_now(),
-                    "source_state": str(state_path.resolve()),
-                    "source_spool": str(spool_path.resolve()),
-                    "appended_edges": local_edges,
+                        "artifact_kind": "nature_supplemental_snapshot_consolidation",
+                        "created_at": utc_now(),
+                        "source_state": str(state_path.resolve()),
+                        "source_spool": str(spool_path.resolve()),
+                        "appended_edges": local_edges,
                     },
                 )
             )
             consolidated_spools += 1
             appended_edges += local_edges
-            if (
-                len(pending_markers)
-                >= int(args.snapshot_consolidation_batch_size)
-            ):
+            if len(pending_markers) >= int(args.snapshot_consolidation_batch_size):
                 commit_pending_markers()
             if not args.quiet and (
                 consolidated_spools == 1
@@ -642,7 +642,7 @@ def _materialize_snapshot_edge_cache(
         manifest = _read_json_object(manifest_path)
         if (
             int(manifest.get("n_source_spools", -1)) == len(spool_paths)
-            and int(manifest.get("n_source_spools", -1)) == 2049
+            and len(spool_paths) > 0
         ):
             return manifest
     paper_lookup = {
@@ -731,9 +731,9 @@ def _materialize_snapshot_edge_cache(
     finally:
         writer.close()
     os.replace(temporary_edge, edge_path)
-    pd.DataFrame(
-        {"paper_id": sorted(covered_ids)}
-    ).to_parquet(coverage_path, index=False, compression="zstd")
+    pd.DataFrame({"paper_id": sorted(covered_ids)}).to_parquet(
+        coverage_path, index=False, compression="zstd"
+    )
     manifest = {
         "artifact_kind": "nature_supplemental_snapshot_edge_cache",
         "created_at": utc_now(),
@@ -757,9 +757,7 @@ def populate_snapshot_checkpoints(
     """Populate supplemental checkpoints from the local snapshot first."""
 
     scan = _scan_snapshot(targets, cohort_specs, args)
-    edge_cache = _materialize_snapshot_edge_cache(
-        targets, cohort_specs, args
-    )
+    edge_cache = _materialize_snapshot_edge_cache(targets, cohort_specs, args)
     result = {**scan, "edge_cache": edge_cache}
     manifest_path = args.checkpoint_dir / "_snapshot_state" / "manifest.json"
     _atomic_json(manifest_path, result)
@@ -789,17 +787,15 @@ def _fetch_batch(
         "is_retracted:false",
         "is_paratext:false",
     ]
-    works = openalex.list_works(
-        max_records=int(max_records_per_batch),
+    works, expected_count, pages = fetch_complete_partition(
+        openalex,
         filters=filters,
-        sort="publication_date:asc",
         per_page=int(per_page),
-        progress=False,
     )
-    if len(works) >= int(max_records_per_batch):
+    if int(max_records_per_batch) > 0 and len(works) >= int(max_records_per_batch):
         raise RuntimeError(
-            "Batch result reached max_records_per_batch; rerun with a smaller "
-            "batch or larger record cap"
+            "Complete batch exceeds the configured safety threshold; rerun "
+            "with a smaller target batch or set --max-records-per-batch 0"
         )
     matched: Dict[str, List[Dict[str, Any]]] = {
         paper_id: [] for paper_id in target_by_id
@@ -807,16 +803,15 @@ def _fetch_batch(
     target_ids = set(target_by_id)
     for work in works:
         references = {
-            normalize_openalex_id(item)
-            for item in (work.get("referenced_works") or [])
+            normalize_openalex_id(item) for item in (work.get("referenced_works") or [])
         }
         for paper_id in target_ids.intersection(references):
-            if len(matched[paper_id]) < int(max_citers_per_work):
+            if int(max_citers_per_work) <= 0 or len(matched[paper_id]) < int(
+                max_citers_per_work
+            ):
                 matched[paper_id].append(work)
     for paper_id, paper in target_by_id.items():
-        checkpoint = _checkpoint_path(
-            checkpoint_root, paper, requested_horizon
-        )
+        checkpoint = _checkpoint_path(checkpoint_root, paper, requested_horizon)
         _atomic_jsonl(
             checkpoint,
             ({"paper_id": paper_id, "work": work} for work in matched[paper_id]),
@@ -826,9 +821,82 @@ def _fetch_batch(
         "requested_horizon": int(requested_horizon),
         "n_targets": len(papers),
         "n_query_works": len(works),
+        "api_expected_count": expected_count,
+        "api_pages": pages,
         "n_checkpoint_rows": sum(len(items) for items in matched.values()),
         "n_zero_targets": sum(not items for items in matched.values()),
     }
+
+
+def materialize_reported_zero_checkpoints(
+    targets: pd.DataFrame,
+    cohort_specs: Mapping[int, Sequence[int]],
+    snapshot_covered_ids: set[str],
+    args: argparse.Namespace,
+) -> Tuple[Dict[str, Any], set[str]]:
+    """Freeze exact-zero provenance when the target's all-time count is zero."""
+
+    if "cited_by_count" not in targets.columns:
+        return (
+            {
+                "n_reported_zero_targets": 0,
+                "n_new_zero_checkpoints": 0,
+                "n_existing_zero_checkpoints": 0,
+                "n_nonempty_checkpoint_conflicts": 0,
+            },
+            set(),
+        )
+    rows: List[Dict[str, Any]] = []
+    reported_zero_ids: set[str] = set()
+    for paper in targets.to_dict("records"):
+        paper_id = str(paper["paper_id"])
+        if paper_id in snapshot_covered_ids:
+            continue
+        cited_by_count = pd.to_numeric(paper.get("cited_by_count"), errors="coerce")
+        if pd.isna(cited_by_count) or float(cited_by_count) != 0.0:
+            continue
+        publication_year = int(paper["publication_year"])
+        requested_horizon = max(cohort_specs[publication_year])
+        checkpoint = _checkpoint_path(args.checkpoint_dir, paper, requested_horizon)
+        reported_zero_ids.add(paper_id)
+        rows.append(
+            {
+                "paper_id": paper_id,
+                "publication_year": publication_year,
+                "requested_horizon": requested_horizon,
+                "reported_all_time_cited_by_count": 0,
+                "checkpoint": str(checkpoint.absolute()),
+            }
+        )
+    state_root = args.checkpoint_dir / "_snapshot_state"
+    state_root.mkdir(parents=True, exist_ok=True)
+    zero_path = state_root / "target_reported_zero_paper_ids.parquet"
+    zero_columns = [
+        "paper_id",
+        "publication_year",
+        "requested_horizon",
+        "reported_all_time_cited_by_count",
+        "checkpoint",
+    ]
+    pd.DataFrame(rows, columns=zero_columns).to_parquet(
+        zero_path, index=False, compression="zstd"
+    )
+    manifest = {
+        "artifact_kind": "nature_supplemental_target_reported_zero_checkpoints",
+        "created_at": utc_now(),
+        "n_reported_zero_targets": len(rows),
+        "n_new_zero_checkpoints": 0,
+        "n_existing_zero_checkpoints": 0,
+        "n_nonempty_checkpoint_conflicts": 0,
+        "zero_proof": (
+            "Frozen all-time cited_by_count equals zero, therefore every mature "
+            "D3/D5/D8 citation window is exactly zero."
+        ),
+        "target_works": str(args.target_works.resolve()),
+        "paper_ids_path": str(zero_path.resolve()),
+    }
+    _atomic_json(state_root / "target_reported_zero_manifest.json", manifest)
+    return manifest, reported_zero_ids
 
 
 def fetch_missing_checkpoints(
@@ -839,14 +907,20 @@ def fetch_missing_checkpoints(
     """Fetch missing outcome checkpoints with resumable batched OpenAlex queries."""
 
     coverage_path = (
-        args.checkpoint_dir
-        / "_snapshot_state"
-        / "snapshot_covered_paper_ids.parquet"
+        args.checkpoint_dir / "_snapshot_state" / "snapshot_covered_paper_ids.parquet"
     )
     snapshot_covered_ids = (
-        set(pd.read_parquet(coverage_path, columns=["paper_id"])["paper_id"].astype(str))
+        set(
+            pd.read_parquet(coverage_path, columns=["paper_id"])["paper_id"].astype(str)
+        )
         if coverage_path.is_file()
         else set()
+    )
+    zero_summary, reported_zero_ids = materialize_reported_zero_checkpoints(
+        targets,
+        cohort_specs,
+        snapshot_covered_ids,
+        args,
     )
     openalex = OpenAlexClient(
         api_key=args.openalex_api_key,
@@ -857,6 +931,16 @@ def fetch_missing_checkpoints(
         max_retries=args.max_retries,
     )
     diagnostics: Counter[str] = Counter()
+    diagnostics.update(
+        {
+            "target_reported_zero_checkpoints": int(
+                zero_summary["n_reported_zero_targets"]
+            ),
+            "target_reported_zero_conflicts": int(
+                zero_summary["n_nonempty_checkpoint_conflicts"]
+            ),
+        }
+    )
     failed_batches: List[Dict[str, Any]] = []
     for round_index in range(1, int(args.retry_rounds) + 1):
         pending_batches: List[Tuple[int, List[Dict[str, Any]]]] = []
@@ -867,6 +951,7 @@ def fetch_missing_checkpoints(
                 paper
                 for paper in cohort.to_dict("records")
                 if str(paper["paper_id"]) not in snapshot_covered_ids
+                and str(paper["paper_id"]) not in reported_zero_ids
                 and not _checkpoint_path(
                     args.checkpoint_dir, paper, requested_horizon
                 ).is_file()
@@ -923,9 +1008,7 @@ def fetch_missing_checkpoints(
                     except Exception as exc:
                         failed_batches.append(
                             {
-                                "publication_year": int(
-                                    batch[0]["publication_year"]
-                                ),
+                                "publication_year": int(batch[0]["publication_year"]),
                                 "requested_horizon": int(requested_horizon),
                                 "n_targets": len(batch),
                                 "error_type": type(exc).__name__,
@@ -935,9 +1018,7 @@ def fetch_missing_checkpoints(
                         diagnostics["failed_batches"] += 1
                     else:
                         diagnostics["successful_batches"] += 1
-                        diagnostics["query_works"] += int(
-                            result["n_query_works"]
-                        )
+                        diagnostics["query_works"] += int(result["n_query_works"])
                         diagnostics["checkpoint_rows"] += int(
                             result["n_checkpoint_rows"]
                         )
@@ -989,9 +1070,7 @@ def materialize_supplement(
             publication_year = int(paper["publication_year"])
             horizons = tuple(int(value) for value in cohort_specs[publication_year])
             requested_horizon = max(horizons)
-            checkpoint = _checkpoint_path(
-                args.checkpoint_dir, paper, requested_horizon
-            )
+            checkpoint = _checkpoint_path(args.checkpoint_dir, paper, requested_horizon)
             requests.append(
                 {
                     "paper_id": paper_id,
@@ -1031,15 +1110,16 @@ def materialize_supplement(
                 requested_horizon,
             )
             if invalid_count:
-                raise ValueError(
-                    f"Invalid citer rows in {checkpoint}: {invalid_count}"
-                )
+                raise ValueError(f"Invalid citer rows in {checkpoint}: {invalid_count}")
             last_year = (
                 max(int(row["citer_year"]) for row in normalized)
                 if normalized
                 else None
             )
-            cap_hit = raw_count >= int(args.max_citers_per_work)
+            cap_hit = bool(
+                int(args.max_citers_per_work) > 0
+                and raw_count >= int(args.max_citers_per_work)
+            )
             statuses.append(
                 {
                     "paper_id": paper_id,
@@ -1081,15 +1161,9 @@ def materialize_supplement(
                             "horizon": horizon,
                             "citer_id": row["citer_id"],
                             "citer_year": row["citer_year"],
-                            "citer_primary_field": row.get(
-                                "citer_primary_field"
-                            ),
-                            "citer_primary_subfield": row.get(
-                                "citer_primary_subfield"
-                            ),
-                            "citer_primary_topic": row.get(
-                                "citer_primary_topic"
-                            ),
+                            "citer_primary_field": row.get("citer_primary_field"),
+                            "citer_primary_subfield": row.get("citer_primary_subfield"),
+                            "citer_primary_topic": row.get("citer_primary_topic"),
                             "referenced_works": row.get("referenced_works"),
                         }
                     )
@@ -1126,16 +1200,13 @@ def materialize_supplement(
             int(targets["publication_year"].eq(year).sum()) * len(horizons)
             for year, horizons in cohort_specs.items()
         )
-        duplicate_keys = int(
-            delta_frame.duplicated(["paper_id", "horizon"]).sum()
-        )
+        duplicate_keys = int(delta_frame.duplicated(["paper_id", "horizon"]).sum())
         success_rate = float(status_frame["fetch_status"].eq("success").mean())
         quality = {
             "artifact_kind": "nature_portfolio_v5_supplemental_quality",
             "created_at": utc_now(),
             "cohort_horizons": {
-                str(year): list(horizons)
-                for year, horizons in cohort_specs.items()
+                str(year): list(horizons) for year, horizons in cohort_specs.items()
             },
             "n_target_papers": int(len(targets)),
             "expected_delta_rows": int(expected_delta_rows),
@@ -1259,10 +1330,7 @@ def _delta_from_aggregate(
 
     horizon_cap_hit = bool(
         requested_cap_hit
-        and (
-            last_citer_year is None
-            or last_citer_year <= publication_year + horizon
-        )
+        and (last_citer_year is None or last_citer_year <= publication_year + horizon)
     )
     return {
         "paper_id": paper_id,
@@ -1319,17 +1387,27 @@ def materialize_supplement_from_sources(
             f"Output already exists: {final_output}; pass --overwrite to rebuild"
         )
     temporary_output.mkdir(parents=True, exist_ok=False)
-    edge_path = (
-        args.checkpoint_dir / "_snapshot_state" / "snapshot_citer_edges.parquet"
-    )
+    edge_path = args.checkpoint_dir / "_snapshot_state" / "snapshot_citer_edges.parquet"
     coverage_path = (
-        args.checkpoint_dir
-        / "_snapshot_state"
-        / "snapshot_covered_paper_ids.parquet"
+        args.checkpoint_dir / "_snapshot_state" / "snapshot_covered_paper_ids.parquet"
     )
     covered_ids = (
         set(pd.read_parquet(coverage_path)["paper_id"].astype(str))
         if coverage_path.is_file()
+        else set()
+    )
+    reported_zero_path = (
+        args.checkpoint_dir
+        / "_snapshot_state"
+        / "target_reported_zero_paper_ids.parquet"
+    )
+    reported_zero_ids = (
+        set(
+            pd.read_parquet(reported_zero_path, columns=["paper_id"])[
+                "paper_id"
+            ].astype(str)
+        )
+        if reported_zero_path.is_file()
         else set()
     )
     target_records = {
@@ -1343,6 +1421,7 @@ def materialize_supplement_from_sources(
     cap_hits: Dict[str, bool] = {}
     last_years: Dict[str, Optional[int]] = {}
     missing: List[str] = []
+    synthetic_zero_ids: set[str] = set()
     duplicate_snapshot_edges = 0
     writer = FutureCiterParquetWriter(
         temporary_output / "future_citers.parquet", args.parquet_batch_size
@@ -1366,9 +1445,7 @@ def materialize_supplement_from_sources(
                     "citer_id": citer["citer_id"],
                     "citer_year": citer_year,
                     "citer_primary_field": citer.get("citer_primary_field"),
-                    "citer_primary_subfield": citer.get(
-                        "citer_primary_subfield"
-                    ),
+                    "citer_primary_subfield": citer.get("citer_primary_subfield"),
                     "citer_primary_topic": citer.get("citer_primary_topic"),
                     "referenced_works": citer.get("referenced_works"),
                 }
@@ -1401,10 +1478,14 @@ def materialize_supplement_from_sources(
             publication_year = int(paper["publication_year"])
             horizons = tuple(int(value) for value in cohort_specs[publication_year])
             requested_horizon = max(horizons)
-            checkpoint = _checkpoint_path(
-                args.checkpoint_dir, paper, requested_horizon
-            )
+            checkpoint = _checkpoint_path(args.checkpoint_dir, paper, requested_horizon)
             if not checkpoint.is_file():
+                if paper_id in reported_zero_ids:
+                    cap_hits[paper_id] = False
+                    returned_counts[paper_id] = 0
+                    last_years[paper_id] = None
+                    synthetic_zero_ids.add(paper_id)
+                    continue
                 missing.append(paper_id)
                 continue
             normalized, raw_count, invalid_count = _normalized_checkpoint_rows(
@@ -1414,10 +1495,11 @@ def materialize_supplement_from_sources(
                 requested_horizon,
             )
             if invalid_count:
-                raise ValueError(
-                    f"Invalid citer rows in {checkpoint}: {invalid_count}"
-                )
-            cap_hits[paper_id] = raw_count >= int(args.max_citers_per_work)
+                raise ValueError(f"Invalid citer rows in {checkpoint}: {invalid_count}")
+            cap_hits[paper_id] = bool(
+                int(args.max_citers_per_work) > 0
+                and raw_count >= int(args.max_citers_per_work)
+            )
             returned_counts[paper_id] = len(normalized)
             last_years[paper_id] = (
                 max(int(row["citer_year"]) for row in normalized)
@@ -1435,7 +1517,15 @@ def materialize_supplement_from_sources(
             horizons = tuple(int(value) for value in cohort_specs[publication_year])
             requested_horizon = max(horizons)
             failed = paper_id in missing
-            source = "snapshot" if paper_id in covered_ids else "openalex_api"
+            source = (
+                "snapshot"
+                if paper_id in covered_ids
+                else (
+                    "target_reported_all_time_zero"
+                    if paper_id in synthetic_zero_ids
+                    else "openalex_api"
+                )
+            )
             requests.append(
                 {
                     "paper_id": paper_id,
@@ -1461,15 +1551,19 @@ def materialize_supplement_from_sources(
                     "checkpoint_file": (
                         str(edge_path.resolve())
                         if source == "snapshot"
-                        else str(
-                            _checkpoint_path(
-                                args.checkpoint_dir,
-                                paper,
-                                requested_horizon,
-                            ).resolve()
+                        else (
+                            str(reported_zero_path.resolve())
+                            if source == "target_reported_all_time_zero"
+                            else str(
+                                _checkpoint_path(
+                                    args.checkpoint_dir,
+                                    paper,
+                                    requested_horizon,
+                                ).resolve()
+                            )
                         )
                     ),
-                    "request_batch": "supplemental_2018_2024_snapshot_then_online",
+                    "request_batch": source,
                 }
             )
             for horizon in horizons:
@@ -1516,9 +1610,7 @@ def materialize_supplement_from_sources(
             (request_frame, "future_request_manifest.parquet"),
             (delta_frame, "future_graph_deltas_multihorizon.parquet"),
         ):
-            frame.to_parquet(
-                temporary_output / name, index=False, compression="zstd"
-            )
+            frame.to_parquet(temporary_output / name, index=False, compression="zstd")
         delta_frame.to_csv(
             temporary_output / "future_graph_deltas_multihorizon.csv",
             index=False,
@@ -1527,15 +1619,12 @@ def materialize_supplement_from_sources(
             int(targets["publication_year"].eq(year).sum()) * len(horizons)
             for year, horizons in cohort_specs.items()
         )
-        delta_duplicates = int(
-            delta_frame.duplicated(["paper_id", "horizon"]).sum()
-        )
+        delta_duplicates = int(delta_frame.duplicated(["paper_id", "horizon"]).sum())
         quality = {
             "artifact_kind": "nature_portfolio_v5_supplemental_quality",
             "created_at": utc_now(),
             "cohort_horizons": {
-                str(year): list(horizons)
-                for year, horizons in cohort_specs.items()
+                str(year): list(horizons) for year, horizons in cohort_specs.items()
             },
             "n_target_papers": len(targets),
             "expected_delta_rows": expected_delta_rows,
@@ -1625,20 +1714,24 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     )
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--checkpoint-dir", type=Path, default=None)
-    parser.add_argument(
-        "--snapshot-dir", type=Path, default=DEFAULT_SNAPSHOT_DIR
-    )
+    parser.add_argument("--snapshot-dir", type=Path, default=DEFAULT_SNAPSHOT_DIR)
     parser.add_argument("--snapshot-workers", type=int, default=8)
     parser.add_argument("--snapshot-progress-every", type=int, default=10)
     parser.add_argument("--snapshot-open-files", type=int, default=512)
-    parser.add_argument(
-        "--snapshot-consolidation-batch-size", type=int, default=100
-    )
+    parser.add_argument("--snapshot-consolidation-batch-size", type=int, default=100)
     parser.add_argument("--snapshot-max-files", type=int, default=None)
     parser.add_argument("--batch-size", type=int, default=20)
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--max-citers-per-work", type=int, default=1000)
-    parser.add_argument("--max-records-per-batch", type=int, default=25_000)
+    parser.add_argument(
+        "--max-records-per-batch",
+        type=int,
+        default=0,
+        help=(
+            "Optional complete-result safety threshold; 0 disables the "
+            "threshold and never truncates the OpenAlex cursor."
+        ),
+    )
     parser.add_argument("--per-page", type=int, default=200)
     parser.add_argument("--sleep-seconds", type=float, default=0.1)
     parser.add_argument("--timeout-seconds", type=int, default=60)
@@ -1647,9 +1740,7 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser.add_argument("--progress-every", type=int, default=25)
     parser.add_argument("--parquet-batch-size", type=int, default=50_000)
     parser.add_argument("--openalex-api-key", default=getenv("OPENALEX_API_KEY"))
-    parser.add_argument(
-        "--openalex-api-keys", default=getenv("OPENALEX_API_KEYS")
-    )
+    parser.add_argument("--openalex-api-keys", default=getenv("OPENALEX_API_KEYS"))
     parser.add_argument("--openalex-email", default=getenv("OPENALEX_EMAIL"))
     parser.add_argument("--fetch-only", action="store_true")
     parser.add_argument("--snapshot-only", action="store_true")
@@ -1720,9 +1811,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         )
         return 0
     if not args.materialize_only:
-        online_summary = fetch_missing_checkpoints(
-            targets, cohort_specs, args
-        )
+        online_summary = fetch_missing_checkpoints(targets, cohort_specs, args)
         acquisition_summary.update(online_summary)
         acquisition_summary["mode"] = (
             "online_only" if args.skip_snapshot else "snapshot_then_online"

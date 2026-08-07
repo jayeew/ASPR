@@ -1,14 +1,30 @@
 from __future__ import annotations
 
 import argparse
-from concurrent.futures import FIRST_COMPLETED, ThreadPoolExecutor, wait
 import csv
 import gzip
 import json
 import sys
 import time
+from concurrent.futures import (
+    FIRST_COMPLETED,
+    Executor,
+    ProcessPoolExecutor,
+    ThreadPoolExecutor,
+    wait,
+)
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Set
+from typing import (
+    AbstractSet,
+    Any,
+    Callable,
+    Dict,
+    Iterable,
+    List,
+    Optional,
+    Sequence,
+    Set,
+)
 
 import pandas as pd
 
@@ -27,9 +43,11 @@ from scripts.nature_portfolio_v5 import (  # noqa: E402
     write_json,
 )
 
-
 DEFAULT_OPENALEX_SNAPSHOT_DIR = Path("/mnt/d/FabCitationData/openalex-snapshot")
-REFERENCE_WORK_FIELDS = list(reference_work_row({"id": "https://openalex.org/W0"}).keys())
+REFERENCE_WORK_FIELDS = list(
+    reference_work_row({"id": "https://openalex.org/W0"}).keys()
+)
+_PROCESS_REFERENCE_IDS: Set[str] = set()
 
 
 def iter_snapshot_work_files(snapshot_dir: Path) -> List[Path]:
@@ -52,7 +70,10 @@ def iter_work_records(path: Path) -> Iterable[Dict[str, Any]]:
             try:
                 payload = json.loads(line)
             except json.JSONDecodeError as exc:
-                print(f"[Snapshot reference closure] JSON 解析失败：{path}:{line_no}: {exc}", file=sys.stderr)
+                print(
+                    f"[Snapshot reference closure] JSON 解析失败：{path}:{line_no}: {exc}",
+                    file=sys.stderr,
+                )
                 continue
             if isinstance(payload, dict):
                 yield payload
@@ -73,7 +94,9 @@ def write_reference_edges_if_needed(args: argparse.Namespace) -> Path:
     return edge_path
 
 
-def collect_reference_ids(edge_path: Path, max_reference_ids: Optional[int] = None) -> Set[str]:
+def collect_reference_ids(
+    edge_path: Path, max_reference_ids: Optional[int] = None
+) -> Set[str]:
     reference_ids: Set[str] = set()
     with edge_path.open("r", encoding="utf-8", newline="") as handle:
         reader = csv.DictReader(handle)
@@ -83,7 +106,9 @@ def collect_reference_ids(edge_path: Path, max_reference_ids: Optional[int] = No
             rid = normalize_openalex_id(row.get("target"))
             if rid:
                 reference_ids.add(rid)
-                if max_reference_ids is not None and len(reference_ids) >= int(max_reference_ids):
+                if max_reference_ids is not None and len(reference_ids) >= int(
+                    max_reference_ids
+                ):
                     break
     return reference_ids
 
@@ -99,18 +124,50 @@ def iter_checkpoint_works(checkpoint_jsonl: Path) -> Iterable[Dict[str, Any]]:
             try:
                 payload = json.loads(line)
             except json.JSONDecodeError:
-                print(f"[Snapshot reference closure] 跳过 checkpoint 中的坏 JSON 行：{checkpoint_jsonl}:{line_no}", file=sys.stderr)
+                print(
+                    f"[Snapshot reference closure] 跳过 checkpoint 中的坏 JSON 行：{checkpoint_jsonl}:{line_no}",
+                    file=sys.stderr,
+                )
                 continue
             work = payload.get("work", payload) if isinstance(payload, dict) else None
             if isinstance(work, dict):
                 yield work
 
 
+def seed_reference_rows(
+    seed_csv: Optional[Path],
+    *,
+    reference_ids: Set[str],
+    found_ids: Set[str],
+    writer: csv.DictWriter,
+) -> int:
+    """Reuse an audited prior reference table before scanning the snapshot."""
+    if seed_csv is None:
+        return 0
+    if not seed_csv.is_file():
+        raise FileNotFoundError(f"Seed reference works not found: {seed_csv}")
+    added = 0
+    with seed_csv.open("r", encoding="utf-8", newline="") as handle:
+        reader = csv.DictReader(handle)
+        if "id" not in (reader.fieldnames or []):
+            raise ValueError(f"Seed reference table has no id column: {seed_csv}")
+        for row in reader:
+            wid = normalize_openalex_id(row.get("id"))
+            if not wid or wid not in reference_ids or wid in found_ids:
+                continue
+            normalized = {field: row.get(field, "") for field in REFERENCE_WORK_FIELDS}
+            normalized["id"] = wid
+            writer.writerow(normalized)
+            found_ids.add(wid)
+            added += 1
+    return added
+
+
 def write_checkpoint_record(handle: Any, work: Dict[str, Any]) -> None:
     handle.write(json.dumps({"work": work}, ensure_ascii=False, sort_keys=True) + "\n")
 
 
-def scan_snapshot_file(path: Path, reference_ids: Set[str]) -> Dict[str, Any]:
+def scan_snapshot_file(path: Path, reference_ids: AbstractSet[str]) -> Dict[str, Any]:
     matches: List[Dict[str, Any]] = []
     records_seen = 0
     for work in iter_work_records(path):
@@ -119,6 +176,17 @@ def scan_snapshot_file(path: Path, reference_ids: Set[str]) -> Dict[str, Any]:
         if wid and wid in reference_ids:
             matches.append(work)
     return {"path": str(path), "records_seen": records_seen, "matches": matches}
+
+
+def initialize_process_reference_ids(reference_ids: AbstractSet[str]) -> None:
+    """Initialize one process worker with the immutable lookup set."""
+    global _PROCESS_REFERENCE_IDS
+    _PROCESS_REFERENCE_IDS = set(reference_ids)
+
+
+def scan_snapshot_file_process(path: Path) -> Dict[str, Any]:
+    """Scan one snapshot shard using the process-local reference lookup."""
+    return scan_snapshot_file(path, _PROCESS_REFERENCE_IDS)
 
 
 def write_matched_work(
@@ -141,10 +209,14 @@ def write_matched_work(
 
 def snapshot_reference_closure(args: argparse.Namespace) -> Dict[str, Any]:
     args.out_dir.mkdir(parents=True, exist_ok=True)
-    checkpoint_jsonl = args.checkpoint_jsonl or (args.out_dir / "checkpoints" / "reference_works.jsonl")
+    checkpoint_jsonl = args.checkpoint_jsonl or (
+        args.out_dir / "checkpoints" / "reference_works.jsonl"
+    )
     checkpoint_jsonl.parent.mkdir(parents=True, exist_ok=True)
     edge_path = write_reference_edges_if_needed(args)
-    reference_ids = collect_reference_ids(edge_path, max_reference_ids=args.max_reference_ids)
+    reference_ids = collect_reference_ids(
+        edge_path, max_reference_ids=args.max_reference_ids
+    )
     if not reference_ids:
         raise ValueError(f"No reference IDs found from {edge_path}")
 
@@ -156,8 +228,16 @@ def snapshot_reference_closure(args: argparse.Namespace) -> Dict[str, Any]:
     tmp_reference_csv.parent.mkdir(parents=True, exist_ok=True)
 
     with tmp_reference_csv.open("w", encoding="utf-8", newline="") as ref_handle:
-        writer = csv.DictWriter(ref_handle, fieldnames=REFERENCE_WORK_FIELDS, extrasaction="ignore")
+        writer = csv.DictWriter(
+            ref_handle, fieldnames=REFERENCE_WORK_FIELDS, extrasaction="ignore"
+        )
         writer.writeheader()
+        seed_added = seed_reference_rows(
+            args.seed_reference_works,
+            reference_ids=reference_ids,
+            found_ids=found_ids,
+            writer=writer,
+        )
         for work in iter_checkpoint_works(checkpoint_jsonl):
             wid = normalize_openalex_id(work.get("id"))
             if wid and wid in reference_ids and wid not in found_ids:
@@ -219,10 +299,26 @@ def snapshot_reference_closure(args: argparse.Namespace) -> Dict[str, Any]:
                         break
             else:
                 if not args.quiet:
-                    print(f"[Snapshot reference closure] 启用本地并发扫描：workers={workers}", flush=True)
+                    print(
+                        f"[Snapshot reference closure] 启用本地并发扫描：workers={workers}",
+                        flush=True,
+                    )
                 scan_reference_ids = frozenset(remaining)
                 file_iter = iter(work_files)
-                executor = ThreadPoolExecutor(max_workers=workers)
+                executor: Executor
+                scan_callable: Callable[[Path], Dict[str, Any]]
+                if args.executor == "process":
+                    executor = ProcessPoolExecutor(
+                        max_workers=workers,
+                        initializer=initialize_process_reference_ids,  # type: ignore[arg-type]
+                        initargs=(scan_reference_ids,),  # type: ignore[arg-type]
+                    )
+                    scan_callable = scan_snapshot_file_process
+                else:
+                    executor = ThreadPoolExecutor(max_workers=workers)
+                    scan_callable = lambda path: scan_snapshot_file(
+                        path, scan_reference_ids
+                    )
                 pending: Dict[Any, Path] = {}
 
                 def submit_next_file() -> bool:
@@ -230,7 +326,7 @@ def snapshot_reference_closure(args: argparse.Namespace) -> Dict[str, Any]:
                         next_path = next(file_iter)
                     except StopIteration:
                         return False
-                    pending[executor.submit(scan_snapshot_file, next_path, scan_reference_ids)] = next_path
+                    pending[executor.submit(scan_callable, next_path)] = next_path
                     return True
 
                 for _ in range(max(1, workers * 2)):
@@ -259,7 +355,10 @@ def snapshot_reference_closure(args: argparse.Namespace) -> Dict[str, Any]:
                                     remaining.remove(wid)
                                     checkpoint_added += 1
                                     local_added += 1
-                            if local_added and checkpoint_added % int(args.flush_every) == 0:
+                            if (
+                                local_added
+                                and checkpoint_added % int(args.flush_every) == 0
+                            ):
                                 checkpoint_handle.flush()
                                 ref_handle.flush()
                             now = time.time()
@@ -294,7 +393,10 @@ def snapshot_reference_closure(args: argparse.Namespace) -> Dict[str, Any]:
 
     missing_path = args.out_dir / "nature_reference_closure_local_missing_ids.csv"
     retry_path = args.out_dir / "nature_reference_closure_api_retry_queue.csv"
-    missing_rows = [{"id": rid, "short_id": short_openalex_id(rid)} for rid in sorted(set(reference_ids) - found_ids)]
+    missing_rows = [
+        {"id": rid, "short_id": short_openalex_id(rid)}
+        for rid in sorted(set(reference_ids) - found_ids)
+    ]
     pd.DataFrame(missing_rows).to_csv(missing_path, index=False)
     pd.DataFrame(missing_rows).to_csv(retry_path, index=False)
 
@@ -306,6 +408,10 @@ def snapshot_reference_closure(args: argparse.Namespace) -> Dict[str, Any]:
         "reference_edges": str(edge_path),
         "reference_works": str(reference_csv),
         "checkpoint_jsonl": str(checkpoint_jsonl),
+        "seed_reference_works": (
+            str(args.seed_reference_works) if args.seed_reference_works else None
+        ),
+        "n_reference_works_seeded": int(seed_added),
         "local_missing_ids": str(missing_path),
         "api_retry_queue": str(retry_path),
         "n_unique_reference_ids": int(len(reference_ids)),
@@ -316,6 +422,7 @@ def snapshot_reference_closure(args: argparse.Namespace) -> Dict[str, Any]:
         "max_reference_ids": args.max_reference_ids,
         "max_snapshot_files": args.max_snapshot_files,
         "workers": int(args.workers),
+        "executor": str(args.executor),
     }
     write_json(args.out_dir / "reference_closure_snapshot_manifest.json", manifest)
     if not args.quiet:
@@ -329,12 +436,21 @@ def snapshot_reference_closure(args: argparse.Namespace) -> Dict[str, Any]:
 
 
 def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Build Nature Portfolio v5 reference closure from local OpenAlex snapshot.")
-    parser.add_argument("--target-works", type=Path, default=DEFAULT_V5_OUTPUT_DIR / "nature_target_works.csv")
+    parser = argparse.ArgumentParser(
+        description="Build Nature Portfolio v5 reference closure from local OpenAlex snapshot."
+    )
+    parser.add_argument(
+        "--target-works",
+        type=Path,
+        default=DEFAULT_V5_OUTPUT_DIR / "nature_target_works.csv",
+    )
     parser.add_argument("--reference-edges", type=Path, default=None)
     parser.add_argument("--out-dir", type=Path, default=DEFAULT_V5_OUTPUT_DIR)
-    parser.add_argument("--snapshot-dir", type=Path, default=DEFAULT_OPENALEX_SNAPSHOT_DIR)
+    parser.add_argument(
+        "--snapshot-dir", type=Path, default=DEFAULT_OPENALEX_SNAPSHOT_DIR
+    )
     parser.add_argument("--checkpoint-jsonl", type=Path, default=None)
+    parser.add_argument("--seed-reference-works", type=Path, default=None)
     parser.add_argument("--refresh-edges", action="store_true")
     parser.add_argument("--max-edges", type=int, default=None)
     parser.add_argument("--max-reference-ids", type=int, default=None)
@@ -343,6 +459,12 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser.add_argument("--progress-every-seconds", type=float, default=30.0)
     parser.add_argument("--flush-every", type=int, default=1000)
     parser.add_argument("--workers", type=int, default=1)
+    parser.add_argument(
+        "--executor",
+        choices=("thread", "process"),
+        default="thread",
+        help="Use process workers to parallelize gzip and JSON parsing.",
+    )
     parser.add_argument("--quiet", action="store_true")
     return parser.parse_args(argv)
 

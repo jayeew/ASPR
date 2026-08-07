@@ -81,6 +81,32 @@ def _resolve_source_path(path_value: str, project_root: Path) -> Path:
     return path if path.is_absolute() else (project_root / path).absolute()
 
 
+def _manifest_contract_blockers(relative: str, member: Path) -> list[str]:
+    """Apply completion gates to the uncapped-v2 identity manifests."""
+    if member.suffix != ".json":
+        return []
+    try:
+        payload = json.loads(member.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return [f"invalid_json_manifest:{relative}"]
+    if relative == "nature_target_works_manifest.json" and not payload.get(
+        "overall_pass"
+    ):
+        return ["uncapped_target_manifest_failed"]
+    if relative == "reference_snapshot_rescan_manifest.json" and not payload.get(
+        "local_snapshot_scan_complete"
+    ):
+        return ["reference_snapshot_rescan_incomplete"]
+    if relative == "reference_missing_online_manifest.json" and not payload.get(
+        "reference_closure_coverage_at_least_0_95"
+    ):
+        return ["reference_closure_below_0_95"]
+    if relative in {"expanded_future_manifest.json", "data_quality_report.json"}:
+        if not payload.get("overall_pass"):
+            return [f"future_manifest_failed:{relative}"]
+    return []
+
+
 def audit_local_source(
     spec: LocalSourceSpec,
     *,
@@ -114,6 +140,8 @@ def audit_local_source(
             )
             if not member_exists:
                 blockers.append(f"required_file_missing:{relative}")
+            elif member.suffix == ".json":
+                blockers.extend(_manifest_contract_blockers(relative, member))
         for relative in spec.required_directories:
             member = configured / relative
             member_exists = member.is_dir()
@@ -155,7 +183,9 @@ def audit_local_source(
                 inventory["relative_path"] = relative
                 directory_identity_rows.append(inventory)
 
-    status = "pass" if not blockers else ("blocked" if spec.required else "optional_missing")
+    status = (
+        "pass" if not blockers else ("blocked" if spec.required else "optional_missing")
+    )
     identity_payload = {
         "asset_id": spec.asset_id,
         "resolved_path": str(resolved),
@@ -174,9 +204,11 @@ def audit_local_source(
         "required_files": required_rows,
         "identity_files": identity_rows,
         "identity_directories": directory_identity_rows,
-        "source_identity": _canonical_hash(identity_payload)
-        if exists and (identity_rows or directory_identity_rows)
-        else None,
+        "source_identity": (
+            _canonical_hash(identity_payload)
+            if exists and (identity_rows or directory_identity_rows)
+            else None
+        ),
         "status": status,
         "blockers": sorted(set(blockers)),
     }

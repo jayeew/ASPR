@@ -1370,6 +1370,15 @@ def _copy_v6_artifacts(v6_dir: Path, output_dir: Path) -> None:
             target.hardlink_to(source.resolve())
         except OSError:
             shutil.copy2(source, target)
+    for name in (
+        "expanded_dataset_contract.json",
+        "materialized_data_quality_report.json",
+    ):
+        source = Path(v6_dir) / name
+        target = Path(output_dir) / name
+        if not source.is_file() or target.exists():
+            continue
+        shutil.copy2(source, target)
 
 
 def materialize_reference_overlap_extension(
@@ -1377,12 +1386,25 @@ def materialize_reference_overlap_extension(
     project_root: Path,
     v6_dataset_dir: Path,
     output_dir: Path,
+    nature_v5_root: Optional[Path] = None,
     resume: bool = True,
 ) -> Mapping[str, Any]:
     """Add the source-faithful overlap candidate without building controls."""
     project_root = Path(project_root).resolve()
     v6_root = Path(v6_dataset_dir).resolve()
     root = Path(output_dir).resolve()
+    source_root = (
+        Path(nature_v5_root).resolve()
+        if nature_v5_root is not None
+        else (
+            project_root
+            / "outputs"
+            / "common"
+            / "new"
+            / "data"
+            / "nature_portfolio_v5"
+        ).resolve()
+    )
     root.mkdir(parents=True, exist_ok=True)
     _copy_v6_artifacts(v6_root, root)
     candidate_path = root / "innovation_candidate_features.parquet"
@@ -1394,14 +1416,8 @@ def materialize_reference_overlap_extension(
     references = pd.read_parquet(root / "paper_references.parquet")
     metadata = pd.read_parquet(root / "reference_metadata.parquet")
     context = materialize_reference_overlap_context(
-        project_root
-        / "outputs"
-        / "nature_portfolio_v5"
-        / "nature_reference_edges.csv",
-        project_root
-        / "outputs"
-        / "nature_portfolio_v5"
-        / "nature_target_works.csv",
+        source_root / "nature_reference_edges.csv",
+        source_root / "nature_target_works.csv",
         None,
         metadata,
         root,
@@ -1481,12 +1497,25 @@ def materialize_v6_1_dataset(
     v6_dataset_dir: Path,
     output_dir: Path,
     openalex_metadata_path: Optional[Path] = None,
+    nature_v5_root: Optional[Path] = None,
     resume: bool = True,
 ) -> Mapping[str, Any]:
     """Create the independent v6.1 dataset without altering v6 artifacts."""
     project_root = Path(project_root).resolve()
     v6_root = Path(v6_dataset_dir).resolve()
     root = Path(output_dir).resolve()
+    source_root = (
+        Path(nature_v5_root).resolve()
+        if nature_v5_root is not None
+        else (
+            project_root
+            / "outputs"
+            / "common"
+            / "new"
+            / "data"
+            / "nature_portfolio_v5"
+        ).resolve()
+    )
     root.mkdir(parents=True, exist_ok=True)
     manifest_path = root / "v6_1_materialization_manifest.json"
     if resume and manifest_path.is_file():
@@ -1501,10 +1530,7 @@ def materialize_v6_1_dataset(
     v6_features = pd.read_parquet(v6_root / "innovation_features.parquet")
     v6_controls = pd.read_parquet(v6_root / "control_features.parquet")
     context_manifest = materialize_historical_source_context(
-        project_root
-        / "outputs"
-        / "nature_portfolio_v5"
-        / "nature_reference_edges.csv",
+        source_root / "nature_reference_edges.csv",
         metadata,
         root,
         resume=resume,
@@ -1534,6 +1560,7 @@ def materialize_v6_1_dataset(
         project_root=project_root,
         v6_dataset_dir=v6_root,
         output_dir=root,
+        nature_v5_root=source_root,
         resume=resume,
     )
     candidate_features = pd.read_parquet(candidate_path)
@@ -1543,18 +1570,28 @@ def materialize_v6_1_dataset(
         references,
         metadata,
         v6_controls,
-        target_works_path=project_root
-        / "outputs"
-        / "nature_portfolio_v5"
-        / "nature_target_works.csv",
+        target_works_path=source_root / "nature_target_works.csv",
         openalex_metadata_path=openalex_metadata_path,
         popularity_sqlite_path=root / "reference_prior_popularity.sqlite",
     )
     controls.to_parquet(controls_path, index=False)
+    metadata_manifest_path = root / "target_openalex_metadata_manifest.json"
+    metadata_manifest: Mapping[str, Any] = {}
+    if metadata_manifest_path.is_file():
+        metadata_manifest = json.loads(
+            metadata_manifest_path.read_text(encoding="utf-8")
+        )
     manifest = {
         "artifact_kind": "aspr_v6_1_local_dataset",
         "materialization_version": MATERIALIZATION_VERSION_V6_1,
         "network_used": False,
+        "network_used_during_materialization": False,
+        "upstream_metadata_network_used": bool(
+            metadata_manifest.get("network_used_during_data_build", False)
+        ),
+        "target_metadata_manifest": str(metadata_manifest_path)
+        if metadata_manifest_path.is_file()
+        else None,
         "v6_dataset_unchanged": True,
         "v6_dataset_dir": str(v6_root),
         "historical_source_context_artifact_id": context_manifest[

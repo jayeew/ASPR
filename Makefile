@@ -25,10 +25,6 @@ FIG2_MIN_REFS ?= 4
 FIG2_MIN_CONTROLS ?= 10
 FIG2_MAX_PAPERS ?= 8000
 FIG2_REFERENCE_COUNT_BINS ?= 4
-FIG3_MIN_CONTROLS ?= 50
-FIG3_N_WEIGHT_SAMPLES ?= 5000
-FIG3_REUSE_VALID ?= 1
-FIG3_REUSE_ARGS = $(if $(filter 1 true yes,$(FIG3_REUSE_VALID)),--reuse-valid-current,)
 FIG6_BUILD_FULL_RERUN ?= 1
 FIG6_FULL_RERUN_MAX_PAPERS ?= 300
 FIG9_CHECKPOINT_PATH ?= /home/jayee/workspace/checkpoint/qwen-0.6b-review
@@ -90,18 +86,7 @@ figures-main-nature:
 		--min-controls $(FIG2_MIN_CONTROLS) \
 		--max-papers $(FIG2_MAX_PAPERS) \
 		--quiet
-	$(PYTHON) experiments/fig03/old/fig3_empirical_weight_learning.py \
-		--data-dir outputs/fig02/old/work/redraw_v6a_best/fig2_strong_input \
-		--out-dir outputs/fig03/old/work/redraw_v6a_best \
-		--run-mode multi_domain \
-		--domains crispr exoplanets gamma_ray_bursts_and_supernovae genetics_aging_and_longevity_in_model_organisms graphene_2d_materials ipsc_reprogramming microbiome_metagenomics perovskite_solar_cells topological_insulators ubiquitin_and_proteasome_pathways \
-		--panel all --export-tables --diagnostics \
-		--tau $(FIG2_FUTURE_TAU) \
-		--min-refs $(FIG2_MIN_REFS) \
-		--min-controls $(FIG3_MIN_CONTROLS) \
-		--max-papers $(FIG2_MAX_PAPERS) \
-		--n-weight-samples $(FIG3_N_WEIGHT_SAMPLES) --skip-sensitivity --formats png svg --quiet \
-		$(FIG3_REUSE_ARGS)
+	$(PYTHON) -m experiments.fig03.new.run --stage all
 	FIG4_REUSE_RETRIEVAL_CACHE=1 FIG4_QUERY_KEYWORD_LIMIT=$(FIG4_QUERY_KEYWORD_LIMIT) ASPR_OPENALEX_PER_PAGE=$(FIG4_OPENALEX_PER_PAGE) ASPR_OPENALEX_FROM_YEAR=$(FIG4_OPENALEX_FROM_YEAR) ASPR_LATS_LLM_MODEL=$(FIG4_LATS_MODEL) ASPR_LATS_LLM_BASE_URL=$(FIG4_LATS_BASE_URL) ASPR_LATS_LLM_API_KEY=ollama FIG4_AGENT_MAX_ITERATIONS=$(FIG4_AGENT_MAX_ITERATIONS) ASPR_LATS_CANDIDATES=$(ASPR_LATS_CANDIDATES) ASPR_LATS_BEAM_WIDTH=$(ASPR_LATS_BEAM_WIDTH) ASPR_LATS_MAX_TOKENS=$(ASPR_LATS_MAX_TOKENS) ASPR_LATS_PROMPT_PREFIX=$(ASPR_LATS_PROMPT_PREFIX) ASPR_LATS_SINGLE_PASS=$(ASPR_LATS_SINGLE_PASS) $(PYTHON) experiments/fig04/old/main_fig4.py \
 		--markdown-root $(FIG4_MARKDOWN_ROOT) \
 		--output-dir outputs/fig04/old/work/full50 \

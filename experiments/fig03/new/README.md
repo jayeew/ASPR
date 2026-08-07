@@ -1,21 +1,79 @@
-# Fig.3 — Temporal OOF prediction of future D5 diffusion
+# Fig.3 — ASPR Score frozen-data Nature renderer
 
-**Question.** Can publication-time innovation signals rank future adoption
-and cross-field diffusion for papers that were not used in model fitting?
+This directory implements the final uncapped-data Fig.3 using the HGB model
+family exclusively.
 
-**Data/model.** The frozen D5 label, six expanding time folds, medium
-two-part model, eight innovation indicators, and K0/K1/K2 control sets.
-Preprocessing and calibration are fit within each training fold.
+## Figure question
 
-**Temporal boundary.** These are retrospective publication-year OOF folds.
-The current registered run does not impose an additional D5 label-maturity
-embargo, so the figure supports out-of-time ranking rather than a literal
-historical deployment claim.
+Can publication-time ASPR scores rank subsequent scientific uptake and
+cross-field diffusion across three outcome horizons, four frozen feature sets,
+twelve scientific domains, and continuous publication years?
 
-**Panels.** D5 construction; two-part model and temporal folds; model
-performance estimation ladder; OOF prediction/target hexbin; observed D5 by
-prediction decile with top-decile enrichment; and angle add/drop plus
-fold-stability diagnostics.
+The figure supports predictive association and screening. It does not claim
+that any indicator causes later impact or that ASPR is a direct novelty label.
 
-**Acceptance.** The main 8+K1 model must reproduce Spearman 0.767039879
-within 1e-6 on the registered result.
+The refined renderer uses a 220 × 220 mm surface and reads the frozen panel tables
+only. It does not refit models, rerun bootstrap draws, simulate values, or
+recompute any displayed statistic.
+
+## Panels
+
+- **a — Score construction.** Full-text 16 inputs enter the calibrated two-part
+  HGB. `raw_prediction_score` is expected five-year realized diffusion;
+  `aspr_score` is its 0–100 empirical percentile against the mature D5 reference.
+- **b — Multi-horizon, multi-set OOF enrichment.** A 3 × 4 small-multiple board
+  draws twelve separate full decile curves for every D3/D5/D8 × Strict 7/
+  Full-text 16/Primary 154/Broad T0 221 combination. Every curve includes frozen
+  95% year-block bootstrap intervals and an exact D10 share/lift callout.
+- **c — Performance landscape.** A 3-by-4 heatmap board shows three-year
+  trailing domain-level OOF Spearman across D3/D5/D8 and Strict 7, Full-text 16,
+  Primary 154, and Broad T0 221. The four heatmap columns use the full available
+  panel width; no separate overall-OOF summary matrix is displayed.
+- **d — Official-model terrain.** One continuous semi-transparent surface shows
+  the D5 Full-text 16 mature-year performance terrain. The surface is smoothed
+  only between each domain's first and last reliable observed year: internal
+  gaps may be linearly bridged for continuity, but endpoints are never
+  extrapolated. Exact, uninterpolated values remain in Panel c. The three
+  domains with the highest mean reliable D5 Full-text 16 Spearman are labelled
+  outside the mountain area with arrows to their peaks.
+- **e — D5 gain landscape.** Adjacent nested-set differences show that the main
+  local gain occurs from Strict 7 to Full-text 16. Expanding further produces
+  near-zero median gains and heterogeneous positive and negative cells.
+
+## Frozen inputs
+
+Numeric evidence comes only from the final uncapped-v2 HGB retraining output:
+
+- `oof_predictions.parquet`
+- `oof_metrics.csv`
+- `official_aspr_scores.parquet`
+
+The model configuration is read only to verify that every training cutoff is
+strictly earlier than its test interval. The source files contain only HGB
+predictions; no alternative score family is part of the final analysis.
+
+## Reproduction
+
+```bash
+python3 -m experiments.fig03.new.run --stage all
+python3 -m experiments.fig03.new.tests
+```
+
+Stages can also be run separately with `--stage render` or `--stage audit`.
+There is deliberately no data-building stage in the frozen v3 renderer.
+
+## Main outputs
+
+- `outputs/fig03/new/figure_full.{png,svg,pdf}`
+- `outputs/fig03/new/figure_full_grayscale.png`
+- `outputs/fig03/new/figure_full_deuteranopia.png`
+- `outputs/fig03/new/panel_data/decile_enrichment.csv`
+- `outputs/fig03/new/panel_data/performance_landscape.csv`
+- `outputs/fig03/new/panel_data/d5_gain_landscape.csv`
+- `outputs/fig03/new/panel_data/d5_gain_summary.csv`
+- `outputs/fig03/new/audit_report.json`
+- `outputs/fig03/new/run_manifest.json`
+
+Any OOF row without a finite realized-diffusion label remains disclosed in the
+model output but is excluded from target ranks, decile enrichment and local
+correlations. Landscape `n` therefore means valid prediction–label pairs.

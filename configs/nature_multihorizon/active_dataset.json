@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0.0",
+  "active_dataset_version": "nature-multihorizon-uncapped-v2",
+  "status": "active",
+  "activated_at": "2026-08-07",
+  "dataset_dir": "data/knowledge_corpus/nature_multihorizon_v6_uncapped_v2",
+  "feature_dataset_dir": "data/knowledge_corpus/nature_multihorizon_v6_1_uncapped_v2",
+  "indicator_matrix_dir": "innovation_impact_feature_selection/evidence_derived_v3/experiments/oof_feature_set_comparison_v3/outputs/uncapped_v2",
+  "future_label_dir": "/mnt/d/aspr_nature_portfolio_v5/openalex_outputs/uncapped_aspr_v2/future_multihorizon",
+  "target_works": "/mnt/d/aspr_nature_portfolio_v5/openalex_outputs/uncapped_aspr_v2/nature_target_works.csv",
+  "materialization_config": "configs/nature_multihorizon/v6_uncapped_v2.json",
+  "contract": "data/knowledge_corpus/nature_multihorizon_v6_uncapped_v2/expanded_dataset_contract.json",
+  "quality_report": "data/knowledge_corpus/nature_multihorizon_v6_uncapped_v2/materialized_data_quality_report.json",
+  "horizon_publication_year_max": {
+    "3": 2022,
+    "5": 2020,
+    "8": 2017
+  },
+  "legacy_datasets_are_frozen": true,
+  "policy": "New data reads, analyses, feature construction, and model training must resolve this active dataset unless a legacy reproduction is explicitly requested."
+}

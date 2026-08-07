@@ -1,14 +1,73 @@
 {
-  "base_suite_config": "configs/aspr_v6_1_nature_figures.json",
+  "schema_version": "1.0.0",
+  "figure_version": "fig3-aspr-performance-landscape-v15-uncapped-v2",
+  "baseline_svg_sha256": "02646f85c5190fbf9d8cde51c9ae0a364eb89808863fa2a6242410f8a7bd25d1",
+  "frozen_panel_sha256": {},
+  "source_dir": "innovation_impact_feature_selection/evidence_derived_v3/experiments/oof_feature_set_comparison_v3/outputs/hgb_uncapped_v2",
+  "model_config": "configs/nature_multihorizon/hgb_uncapped_v2.json",
   "output_dir": "outputs/fig03/new",
-  "dpi": 220,
-  "formats": ["png", "svg", "pdf"],
-  "overrides": {
-    "fig3": {
-      "horizon": 5,
-      "hexbin_gridsize": 55,
-      "raincloud_sample_per_decile": 1200,
-      "seed": 20260725
-    }
+  "primary_horizon": 5,
+  "primary_model_id": "fulltext_16",
+  "model_family": "hgb",
+  "horizons": [3, 5, 8],
+  "mature_year_max": {
+    "3": 2022,
+    "5": 2020,
+    "8": 2017
+  },
+  "landscape_year_min": 1988,
+  "landscape_year_max": 2022,
+  "rolling_window_years": 3,
+  "minimum_cell_n": 30,
+  "bootstrap_iterations": 2000,
+  "bootstrap_seed": 20260806,
+  "performance_color_min": 0.68,
+  "performance_color_max": 0.82,
+  "gain_color_limit": 0.08,
+  "ridgeline_z_min": 0.28,
+  "ridgeline_z_max": 0.90,
+  "minimum_font_size_pt": 6.5,
+  "model_sets": [
+    {"id": "strict_7", "label": "Strict 7"},
+    {"id": "fulltext_16", "label": "Full-text 16"},
+    {"id": "source_154", "label": "Primary 154"},
+    {"id": "ultrarelaxed_221", "label": "Broad T0 221"}
+  ],
+  "domain_order": [
+    {"id": "clinical_health", "label": "Clinical health"},
+    {"id": "chemistry", "label": "Chemistry"},
+    {"id": "mathematics_statistics", "label": "Mathematics & statistics"},
+    {"id": "computer_science_ai", "label": "Computer science & AI"},
+    {"id": "engineering_energy", "label": "Engineering & energy"},
+    {"id": "earth_climate_environment", "label": "Earth, climate & environment"},
+    {"id": "astronomy_space", "label": "Astronomy & space"},
+    {"id": "life_molecular", "label": "Life & molecular sciences"},
+    {"id": "physics", "label": "Physics"},
+    {"id": "ecology_evolution_microbiology", "label": "Ecology, evolution & microbiology"},
+    {"id": "materials_nanoscience", "label": "Materials & nanoscience"},
+    {"id": "neuroscience", "label": "Neuroscience"}
+  ],
+  "domain_display_order_method": "Descending mean reliable D5 Full-text 16 annual-window Spearman; display only; frozen values unchanged",
+  "domain_display_order": [
+    {"id": "chemistry", "label": "Chemistry"},
+    {"id": "earth_climate_environment", "label": "Earth, climate & environment"},
+    {"id": "astronomy_space", "label": "Astronomy & space"},
+    {"id": "life_molecular", "label": "Life & molecular sciences"},
+    {"id": "clinical_health", "label": "Clinical health"},
+    {"id": "materials_nanoscience", "label": "Materials & nanoscience"},
+    {"id": "physics", "label": "Physics"},
+    {"id": "engineering_energy", "label": "Engineering & energy"},
+    {"id": "ecology_evolution_microbiology", "label": "Ecology, evolution & microbiology"},
+    {"id": "mathematics_statistics", "label": "Mathematics & statistics"},
+    {"id": "computer_science_ai", "label": "Computer science & AI"},
+    {"id": "neuroscience", "label": "Neuroscience"}
+  ],
+  "render": {
+    "width_mm": 220.0,
+    "height_mm": 220.0,
+    "width_inches": 8.6614173228,
+    "height_inches": 8.6614173228,
+    "dpi": 600,
+    "formats": ["png", "svg", "pdf"]
   }
 }

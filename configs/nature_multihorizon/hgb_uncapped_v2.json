@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0.0",
+  "protocol_id": "aspr-uncapped-v2-hgb-final",
+  "dataset_version": "nature-multihorizon-uncapped-v2",
+  "official_horizon": 5,
+  "official_feature_set": "fulltext_16",
+  "supplementary_horizons": [3, 8],
+  "horizon_folds": {
+    "3": [
+      {"fold_id": 1, "train_year_max": 1985, "test_year_min": 1986, "test_year_max": 1999},
+      {"fold_id": 2, "train_year_max": 1999, "test_year_min": 2000, "test_year_max": 2004},
+      {"fold_id": 3, "train_year_max": 2004, "test_year_min": 2005, "test_year_max": 2009},
+      {"fold_id": 4, "train_year_max": 2009, "test_year_min": 2010, "test_year_max": 2012},
+      {"fold_id": 5, "train_year_max": 2012, "test_year_min": 2013, "test_year_max": 2013},
+      {"fold_id": 6, "train_year_max": 2013, "test_year_min": 2014, "test_year_max": 2017},
+      {"fold_id": 7, "train_year_max": 2017, "test_year_min": 2018, "test_year_max": 2020},
+      {"fold_id": 8, "train_year_max": 2020, "test_year_min": 2021, "test_year_max": 2022}
+    ],
+    "5": [
+      {"fold_id": 1, "train_year_max": 1985, "test_year_min": 1986, "test_year_max": 1999},
+      {"fold_id": 2, "train_year_max": 1999, "test_year_min": 2000, "test_year_max": 2004},
+      {"fold_id": 3, "train_year_max": 2004, "test_year_min": 2005, "test_year_max": 2009},
+      {"fold_id": 4, "train_year_max": 2009, "test_year_min": 2010, "test_year_max": 2012},
+      {"fold_id": 5, "train_year_max": 2012, "test_year_min": 2013, "test_year_max": 2013},
+      {"fold_id": 6, "train_year_max": 2013, "test_year_min": 2014, "test_year_max": 2017},
+      {"fold_id": 7, "train_year_max": 2017, "test_year_min": 2018, "test_year_max": 2020}
+    ],
+    "8": [
+      {"fold_id": 1, "train_year_max": 1985, "test_year_min": 1986, "test_year_max": 1999},
+      {"fold_id": 2, "train_year_max": 1999, "test_year_min": 2000, "test_year_max": 2004},
+      {"fold_id": 3, "train_year_max": 2004, "test_year_min": 2005, "test_year_max": 2009},
+      {"fold_id": 4, "train_year_max": 2009, "test_year_min": 2010, "test_year_max": 2012},
+      {"fold_id": 5, "train_year_max": 2012, "test_year_min": 2013, "test_year_max": 2013},
+      {"fold_id": 6, "train_year_max": 2013, "test_year_min": 2014, "test_year_max": 2017}
+    ]
+  },
+  "hgb": {
+    "parameter_id": "medium",
+    "max_leaf_nodes": 31,
+    "max_depth": 4,
+    "min_samples_leaf": 50,
+    "learning_rate": 0.05,
+    "max_iter": 200,
+    "l2_regularization": 10.0,
+    "inner_temporal_folds": 4,
+    "seed": 20260806
+  },
+  "network_policy_for_training": "forbidden"
+}

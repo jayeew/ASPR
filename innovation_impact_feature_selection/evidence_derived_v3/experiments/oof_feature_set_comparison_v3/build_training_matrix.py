@@ -8,37 +8,48 @@ import hashlib
 import json
 import math
 import re
+import sys
 from collections import defaultdict
 from itertools import combinations
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Mapping, Sequence, Tuple
+from typing import Any, Dict, List, Mapping, Sequence, Tuple
 
 import numpy as np
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-
 HERE = Path(__file__).resolve().parent
 PROJECT_ROOT = HERE.parents[3]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from aspr.nature_multihorizon.active_dataset import (  # noqa: E402
+    load_active_dataset,
+)
+
 EVIDENCE_ROOT = HERE.parents[1]
 EVIDENCE_OUTPUTS = EVIDENCE_ROOT / "outputs"
-DATA_ROOT = (
-    PROJECT_ROOT
-    / "data"
-    / "knowledge_corpus"
-    / "nature_multihorizon_v6_1_local"
+ACTIVE_DATASET = load_active_dataset(PROJECT_ROOT)
+BASE_DATA_ROOT = Path(ACTIVE_DATASET["dataset_dir"])
+DATA_ROOT = Path(ACTIVE_DATASET["feature_dataset_dir"])
+TARGET_WORKS = Path(
+    ACTIVE_DATASET.get(
+        "target_works",
+        PROJECT_ROOT
+        / "outputs"
+        / "common"
+        / "new"
+        / "data"
+        / "nature_portfolio_v5"
+        / "nature_target_works.csv",
+    )
 )
-TARGET_WORKS = (
-    PROJECT_ROOT
-    / "outputs"
-    / "common"
-    / "new"
-    / "data"
-    / "nature_portfolio_v5"
-    / "nature_target_works.csv"
-)
+if not TARGET_WORKS.is_absolute():
+    TARGET_WORKS = PROJECT_ROOT / TARGET_WORKS
 DEFAULT_OUTPUT = HERE / "outputs"
-DEFINITION_VERSION = "evidence_v3_four_set_t0_operationalization_1"
+DEFINITION_VERSION = "evidence_v3_four_set_t0_" + str(
+    ACTIVE_DATASET["active_dataset_version"]
+)
 EXPECTED_SET_COUNTS = {
     "strict_7": (7, 4),
     "fulltext_16": (16, 10),
@@ -90,9 +101,7 @@ FORMULA_SURROGATES = {
         "strictly prior-year Nature coauthorships.",
     ),
 }
-TEXT_TOKEN_PATTERN = re.compile(
-    r"[A-Za-z]+(?:'[A-Za-z]+)?|\d+(?:\.\d+)?"
-)
+TEXT_TOKEN_PATTERN = re.compile(r"[A-Za-z]+(?:'[A-Za-z]+)?|\d+(?:\.\d+)?")
 
 
 def sha256_file(path: Path) -> str:
@@ -108,8 +117,7 @@ def write_json(path: Path, payload: Mapping[str, Any]) -> None:
     """Write deterministic, human-readable JSON."""
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True)
-        + "\n",
+        json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
 
@@ -130,16 +138,12 @@ def load_feature_sets() -> Tuple[
     library_path = EVIDENCE_OUTPUTS / "complete_indicator_library_v3.csv"
     gates_path = EVIDENCE_OUTPUTS / "feature_gate_decisions_v3.csv"
     dimensions_path = EVIDENCE_OUTPUTS / "candidate_dimensions_v3.csv"
-    library = {
-        row["feature_id"]: row for row in read_csv_rows(library_path)
-    }
+    library = {row["feature_id"]: row for row in read_csv_rows(library_path)}
     checks = {
         row["feature_id"]: json.loads(row["gate_checks_json"])
         for row in read_csv_rows(gates_path)
     }
-    dimensions = {
-        row["dimension_id"]: row for row in read_csv_rows(dimensions_path)
-    }
+    dimensions = {row["dimension_id"]: row for row in read_csv_rows(dimensions_path)}
     feature_to_dimension: Dict[str, str] = {}
     for dimension_id, row in dimensions.items():
         for feature_id in json.loads(row["feature_ids_json"]):
@@ -152,9 +156,7 @@ def load_feature_sets() -> Tuple[
         return all(bool(checks[feature_id][gate]) for gate in required)
 
     feature_sets = {
-        "strict_7": sorted(
-            fid for fid, row in checks.items() if all(row.values())
-        ),
+        "strict_7": sorted(fid for fid, row in checks.items() if all(row.values())),
         "fulltext_16": sorted(
             fid
             for fid in library
@@ -171,9 +173,7 @@ def load_feature_sets() -> Tuple[
             for fid in library
             if passes(fid, ("G03_PRIMARY_OR_FOUNDATIONAL_EVIDENCE",))
         ),
-        "ultrarelaxed_221": sorted(
-            fid for fid in library if passes(fid, ())
-        ),
+        "ultrarelaxed_221": sorted(fid for fid in library if passes(fid, ())),
     }
     previous: set[str] = set()
     for model_id in EXPECTED_SET_COUNTS:
@@ -205,9 +205,7 @@ def merge_unique(
         raise ValueError(f"{label} contains duplicate paper IDs")
     duplicate = set(left.columns) & set(right.columns) - {"paper_id"}
     trimmed = right.drop(columns=sorted(duplicate), errors="ignore")
-    merged = left.merge(
-        trimmed, on="paper_id", how="left", validate="one_to_one"
-    )
+    merged = left.merge(trimmed, on="paper_id", how="left", validate="one_to_one")
     if len(merged) != len(left):
         raise ValueError(f"{label} changed the paper count")
     return merged
@@ -234,28 +232,72 @@ def load_base_frame() -> pd.DataFrame:
     for name in sources:
         view = pd.read_parquet(DATA_ROOT / name)
         frame = merge_unique(frame, view, label=name)
-    candidate = pd.read_parquet(
-        EVIDENCE_OUTPUTS
-        / "candidate_t0_feature_matrix_v3"
-        / "candidate_t0_feature_matrix_v3.parquet",
-        columns=[
-            "paper_id",
-            "backward_citation_age_mean",
-            "reference_count",
-        ],
+    frame = merge_unique(
+        frame,
+        backward_citation_age_mean(),
+        label="expanded backward-citation age",
     )
-    frame = merge_unique(frame, candidate, label="candidate T0 matrix")
-    targeted = pd.read_parquet(
-        EVIDENCE_OUTPUTS
-        / "targeted_operationalizations_v3"
-        / "targeted_operationalized_features_v3.parquet"
-    ).rename(
-        columns={column: feature_id for feature_id, column in TARGETED_COLUMNS.items()}
+    frame["EF0038"] = pd.to_numeric(
+        frame["openalex_author_count"], errors="coerce"
+    ).where(pd.to_numeric(frame["openalex_author_count"], errors="coerce").gt(0))
+    frame["EF0052"] = frame["backward_citation_age_mean"]
+    country_count = pd.to_numeric(frame["openalex_country_count"], errors="coerce")
+    frame["EF0186"] = country_count.gt(1).astype(float).where(country_count.notna())
+    frame["EF0188"] = country_count.where(country_count.gt(0))
+    source_id = frame["source_id"].astype("string")
+    frame["EF0197"] = source_id.where(source_id.notna() & source_id.str.strip().ne(""))
+    frame["EF0238"] = frame["bc_degree_per_reference_t0"]
+    frame["EF0307"] = frame["publication_year"]
+    frame["EF0309"] = frame["rao_stirling_integration"].where(
+        pd.to_numeric(frame["field_variety"], errors="coerce").ge(2)
     )
-    frame = merge_unique(frame, targeted, label="targeted formulas")
-    if len(frame) != 118_059 or frame["title"].isna().any():
+    frame["EF0312"] = frame["field_gini_balance"].where(
+        pd.to_numeric(frame["field_mapping_coverage"], errors="coerce").gt(0)
+    )
+    frame["EF0314"] = frame["valid_reference_count"]
+    frame["EF0315"] = frame["field_disparity_cosine_mean"].where(
+        pd.to_numeric(frame["field_variety"], errors="coerce").ge(2)
+    )
+    frame["EF0318"] = frame["field_variety"].where(
+        pd.to_numeric(frame["field_mapping_coverage"], errors="coerce").gt(0)
+    )
+    if len(frame) != len(papers) or frame["title"].isna().any():
         raise ValueError("unexpected cohort size or missing title")
     return frame
+
+
+def backward_citation_age_mean() -> pd.DataFrame:
+    """Compute mean age of valid non-future references for each paper."""
+    papers = pd.read_parquet(
+        BASE_DATA_ROOT / "papers_primary_articles.parquet",
+        columns=["paper_id", "publication_year"],
+    )
+    references = pd.read_parquet(
+        BASE_DATA_ROOT / "paper_references.parquet",
+        columns=["paper_id", "reference_id"],
+    )
+    metadata = pd.read_parquet(
+        BASE_DATA_ROOT / "reference_metadata.parquet",
+        columns=["reference_id", "reference_year"],
+    )
+    rows = references.merge(
+        metadata, on="reference_id", how="left", validate="many_to_one"
+    ).merge(papers, on="paper_id", how="left", validate="many_to_one")
+    rows["reference_year"] = pd.to_numeric(rows["reference_year"], errors="coerce")
+    rows["publication_year"] = pd.to_numeric(rows["publication_year"], errors="coerce")
+    rows = rows[
+        rows["reference_year"].notna()
+        & rows["reference_year"].le(rows["publication_year"])
+    ].copy()
+    rows["backward_citation_age_mean"] = (
+        rows["publication_year"] - rows["reference_year"]
+    )
+    means = rows.groupby("paper_id", as_index=False)[
+        "backward_citation_age_mean"
+    ].mean()
+    return papers[["paper_id"]].merge(
+        means, on="paper_id", how="left", validate="one_to_one"
+    )
 
 
 def _tokens(text: object) -> List[str]:
@@ -279,18 +321,18 @@ def title_features(frame: pd.DataFrame) -> pd.DataFrame:
             counts: Dict[str, int] = defaultdict(int)
             for token in words:
                 counts[token] += 1
-            probabilities = np.asarray(
-                list(counts.values()), dtype=float
+            probabilities = np.asarray(list(counts.values()), dtype=float)
+            probabilities = (
+                probabilities / probabilities.sum()
+                if len(probabilities)
+                else probabilities
             )
-            probabilities = probabilities / probabilities.sum() if len(
-                probabilities
-            ) else probabilities
-            entropy = float(
-                -(probabilities * np.log2(probabilities)).sum()
-            ) if len(probabilities) else 0.0
-            numeric = [
-                float(token) for token in tokens if token[0].isdigit()
-            ]
+            entropy = (
+                float(-(probabilities * np.log2(probabilities)).sum())
+                if len(probabilities)
+                else 0.0
+            )
+            numeric = [float(token) for token in tokens if token[0].isdigit()]
             title = titles[position]
             output["title_char_count"].append(float(len(title)))
             output["title_token_count_local"].append(float(len(tokens)))
@@ -299,9 +341,7 @@ def title_features(frame: pd.DataFrame) -> pd.DataFrame:
                 float(len(set(words)) / len(words)) if words else 0.0
             )
             output["title_mean_token_length"].append(
-                float(np.mean([len(token) for token in words]))
-                if words
-                else 0.0
+                float(np.mean([len(token) for token in words])) if words else 0.0
             )
             output["title_token_entropy"].append(entropy)
             output["title_punctuation_count"].append(
@@ -324,7 +364,9 @@ def title_features(frame: pd.DataFrame) -> pd.DataFrame:
                 else 0.0
             )
             output["title_covid19"].append(
-                float(bool(re.search(r"\bcovid(?:-?19)?\b|sars-cov-2", title.casefold())))
+                float(
+                    bool(re.search(r"\bcovid(?:-?19)?\b|sars-cov-2", title.casefold()))
+                )
             )
             year_tokens.append(words)
         for words in year_tokens:
@@ -372,14 +414,14 @@ def _team_graph_statistics(
             "prior_team_edge_strength": 0.0,
             "prior_team_giant_component_share": 1.0 if n_authors else np.nan,
             "prior_team_mean_clustering": 0.0 if n_authors else np.nan,
-            "prior_team_relative_algebraic_connectivity": 0.0
-            if n_authors
-            else np.nan,
-            "prior_author_degree_mean": float(
-                np.mean([len(adjacency.get(author, set())) for author in selected])
-            )
-            if selected
-            else np.nan,
+            "prior_team_relative_algebraic_connectivity": 0.0 if n_authors else np.nan,
+            "prior_author_degree_mean": (
+                float(
+                    np.mean([len(adjacency.get(author, set())) for author in selected])
+                )
+                if selected
+                else np.nan
+            ),
             "prior_team_graph_truncated": float(len(set(authors)) > 100),
         }
     matrix = np.zeros((n_authors, n_authors), dtype=np.float64)
@@ -407,9 +449,11 @@ def _team_graph_statistics(
     laplacian = np.diag(matrix.sum(axis=1)) - matrix
     eigenvalues = np.linalg.eigvalsh(laplacian)
     denominator = float(eigenvalues[-1]) if len(eigenvalues) else 0.0
-    relative = float(max(eigenvalues[1], 0.0) / denominator) if (
-        len(eigenvalues) > 1 and denominator > 0
-    ) else 0.0
+    relative = (
+        float(max(eigenvalues[1], 0.0) / denominator)
+        if (len(eigenvalues) > 1 and denominator > 0)
+        else 0.0
+    )
     return {
         "prior_team_edge_count": edge_count,
         "prior_team_edge_density": float(edge_count / possible),
@@ -512,41 +556,135 @@ def augment_base_frame(frame: pd.DataFrame, output_dir: Path) -> pd.DataFrame:
 
 
 PATTERN_RULES: Tuple[Tuple[str, str, str], ...] = (
-    (r"publication language", "english_language_constant", "English-only cohort constant"),
+    (
+        r"publication language",
+        "english_language_constant",
+        "English-only cohort constant",
+    ),
     (r"document type", "article_type_constant", "article-only cohort constant"),
     (r"covid", "title_covid19", "publication-title topic flag"),
     (r"title length", "title_token_count_local", "publication-title word count"),
-    (r"title punctuation", "title_punctuation_count", "publication-title punctuation count"),
+    (
+        r"title punctuation",
+        "title_punctuation_count",
+        "publication-title punctuation count",
+    ),
     (r"keyword count", "title_unique_token_count", "title unique-token count proxy"),
-    (r"abstract information entropy", "title_token_entropy", "title entropy proxy; abstract unavailable"),
-    (r"abstract length", "title_token_count_local", "title length proxy; abstract unavailable"),
-    (r"sample size", "title_log_max_numeric", "largest publication-title numeric token proxy"),
+    (
+        r"abstract information entropy",
+        "title_token_entropy",
+        "title entropy proxy; abstract unavailable",
+    ),
+    (
+        r"abstract length",
+        "title_token_count_local",
+        "title length proxy; abstract unavailable",
+    ),
+    (
+        r"sample size",
+        "title_log_max_numeric",
+        "largest publication-title numeric token proxy",
+    ),
     (r"publication recency|publication year", "publication_year", "publication year"),
-    (r"prior publication|publication history|h-index|career|expertise", "log_team_prior_nature_output_max", "prior team output proxy"),
+    (
+        r"prior publication|publication history|h-index|career|expertise",
+        "log_team_prior_nature_output_max",
+        "prior team output proxy",
+    ),
     (r"country|geograph", "EF0188", "author-country count proxy"),
-    (r"international collaboration|international-team|international study", "EF0186", "international-team indicator"),
-    (r"multi-institution|multicenter|institution|centre-of-excellence|firm affiliation", "log_institution_count", "institution-count proxy"),
+    (
+        r"international collaboration|international-team|international study",
+        "EF0186",
+        "international-team indicator",
+    ),
+    (
+        (
+            r"multi-institution|multicenter|institution|"
+            r"centre-of-excellence|firm affiliation"
+        ),
+        "log_institution_count",
+        "institution-count proxy",
+    ),
     (r"prior-coauthorship count", "prior_team_edge_count", "prior team edge count"),
-    (r"prior-coauthorship strength", "prior_team_edge_strength", "prior team edge-strength mean"),
-    (r"prior-collaboration continuity", "prior_team_edge_density", "prior team edge density"),
-    (r"giant-component", "prior_team_giant_component_share", "prior team giant-component share"),
-    (r"coauthorship-network centrality|eigenvector centrality", "prior_author_degree_mean", "prior author-degree proxy"),
-    (r"collaboration-network|co-authorship network|social-network", "prior_team_edge_density", "prior coauthorship graph proxy"),
-    (r"co-authorship|collaboration type|research collaboration", "international_collaboration_proxy", "team breadth proxy"),
-    (r"bibliographic|citation-network|knowledge-network|network centrality", "bc_degree_per_reference_t0", "prior bibliographic-coupling network proxy"),
+    (
+        r"prior-coauthorship strength",
+        "prior_team_edge_strength",
+        "prior team edge-strength mean",
+    ),
+    (
+        r"prior-collaboration continuity",
+        "prior_team_edge_density",
+        "prior team edge density",
+    ),
+    (
+        r"giant-component",
+        "prior_team_giant_component_share",
+        "prior team giant-component share",
+    ),
+    (
+        r"coauthorship-network centrality|eigenvector centrality",
+        "prior_author_degree_mean",
+        "prior author-degree proxy",
+    ),
+    (
+        r"collaboration-network|co-authorship network|social-network",
+        "prior_team_edge_density",
+        "prior coauthorship graph proxy",
+    ),
+    (
+        r"co-authorship|collaboration type|research collaboration",
+        "international_collaboration_proxy",
+        "team breadth proxy",
+    ),
+    (
+        r"bibliographic|citation-network|knowledge-network|network centrality",
+        "bc_degree_per_reference_t0",
+        "prior bibliographic-coupling network proxy",
+    ),
     (r"reference count", "EF0314", "reference count"),
-    (r"backward-citation age|reference.*recency", "EF0052", "mean backward-citation age"),
-    (r"reference accuracy|reference-list characteristics", "field_mapping_coverage", "reference metadata coverage proxy"),
+    (
+        r"backward-citation age|reference.*recency",
+        "EF0052",
+        "mean backward-citation age",
+    ),
+    (
+        r"reference accuracy|reference-list characteristics",
+        "field_mapping_coverage",
+        "reference metadata coverage proxy",
+    ),
     (r"rao-stirling", "EF0309", "Rao-Stirling reference diversity"),
     (r"\\bdiv interdisciplinarity", "field_div_index", "DIV reference-field index"),
     (r"balance component|reference balance", "EF0312", "reference-field balance"),
     (r"disparity component|reference disparity", "EF0315", "reference-field disparity"),
     (r"reference variety", "EF0318", "reference-field variety"),
-    (r"disciplinary diversity|interdisciplinarity|multidisciplinarity|topical diversity|reference diversity", "field_div_index", "reference-field integration proxy"),
-    (r"conventionality", "uzzi_conventionality_median_t0", "source-pair conventionality"),
-    (r"novelty|concept birth|research-pivot|topic redundancy|innovation inertia", "reference_overlap_novelty_t0", "reference-combination novelty proxy"),
-    (r"journal|venue prestige|journal quartile|journal-type", "venue_prior_volume", "strictly prior-year venue-volume proxy"),
-    (r"topic|field normalization|research-community-size", "field_prior_volume", "strictly prior-year field-volume proxy"),
+    (
+        (
+            r"disciplinary diversity|interdisciplinarity|multidisciplinarity|"
+            r"topical diversity|reference diversity"
+        ),
+        "field_div_index",
+        "reference-field integration proxy",
+    ),
+    (
+        r"conventionality",
+        "uzzi_conventionality_median_t0",
+        "source-pair conventionality",
+    ),
+    (
+        r"novelty|concept birth|research-pivot|topic redundancy|innovation inertia",
+        "reference_overlap_novelty_t0",
+        "reference-combination novelty proxy",
+    ),
+    (
+        r"journal|venue prestige|journal quartile|journal-type",
+        "venue_prior_volume",
+        "strictly prior-year venue-volume proxy",
+    ),
+    (
+        r"topic|field normalization|research-community-size",
+        "field_prior_volume",
+        "strictly prior-year field-volume proxy",
+    ),
     (r"author count|team composition", "EF0038", "author count"),
 )
 
@@ -587,7 +725,7 @@ def choose_operationalization(
         return {
             "tier": "source_formula_existing",
             "source_column": feature_id,
-            "notes": "Existing independently reviewed targeted v3 operationalization.",
+            "notes": ("Recomputed from active uncapped-v2 publication-time views."),
         }
     if feature_id in FORMULA_SURROGATES:
         source_column, notes = FORMULA_SURROGATES[feature_id]
@@ -723,8 +861,7 @@ def build_indicator_matrix(
         frame, text_ids, library, feature_to_dimension, dimensions
     )
     lexical_lookup = {
-        feature_id: lexical[:, index]
-        for index, feature_id in enumerate(text_ids)
+        feature_id: lexical[:, index] for index, feature_id in enumerate(text_ids)
     }
     matrix_columns: Dict[str, Any] = {
         "paper_id": frame["paper_id"].astype(str).to_numpy()
@@ -742,9 +879,7 @@ def build_indicator_matrix(
         if feature_id == "EF0197":
             column = values.astype("string").fillna("missing")
         else:
-            column = pd.to_numeric(
-                values, errors="coerce"
-            ).astype("float32")
+            column = pd.to_numeric(values, errors="coerce").astype("float32")
         matrix_columns[feature_id] = column.to_numpy()
         numeric = pd.to_numeric(column, errors="coerce")
         valid = int(column.notna().sum())
@@ -753,12 +888,12 @@ def build_indicator_matrix(
                 "feature_id": feature_id,
                 "canonical_name_en": library[feature_id]["canonical_name_en"],
                 "dimension_id": feature_to_dimension[feature_id],
-                "dimension_label": dimensions[
-                    feature_to_dimension[feature_id]
-                ]["label"],
-                "construct_role": dimensions[
-                    feature_to_dimension[feature_id]
-                ]["construct_role"],
+                "dimension_label": dimensions[feature_to_dimension[feature_id]][
+                    "label"
+                ],
+                "construct_role": dimensions[feature_to_dimension[feature_id]][
+                    "construct_role"
+                ],
                 **spec,
                 "row_count": len(frame),
                 "valid_count": valid,
@@ -821,12 +956,8 @@ def input_snapshot() -> Dict[str, Any]:
         "indicator_library": EVIDENCE_OUTPUTS / "complete_indicator_library_v3.csv",
         "gate_decisions": EVIDENCE_OUTPUTS / "feature_gate_decisions_v3.csv",
         "candidate_dimensions": EVIDENCE_OUTPUTS / "candidate_dimensions_v3.csv",
-        "targeted_matrix": EVIDENCE_OUTPUTS
-        / "targeted_operationalizations_v3"
-        / "targeted_operationalized_features_v3.parquet",
-        "candidate_t0_matrix": EVIDENCE_OUTPUTS
-        / "candidate_t0_feature_matrix_v3"
-        / "candidate_t0_feature_matrix_v3.parquet",
+        "active_dataset_registry": Path(ACTIVE_DATASET["registry_path"]),
+        "active_dataset_contract": Path(ACTIVE_DATASET["contract_path"]),
         "papers": DATA_ROOT / "papers_primary_articles.parquet",
         "innovation_features": DATA_ROOT / "innovation_candidate_features.parquet",
         "controls": DATA_ROOT / "control_features_v6_1.parquet",
@@ -844,13 +975,114 @@ def input_snapshot() -> Dict[str, Any]:
     }
 
 
+def audit_expanded_matrices(
+    matrix: pd.DataFrame,
+    matrix_paths: Mapping[str, Path],
+    feature_sets: Mapping[str, Sequence[str]],
+    audit: pd.DataFrame,
+    output_dir: Path,
+) -> Mapping[str, Any]:
+    """Audit grain, horizon coverage, sparsity shifts, and leakage guards."""
+    papers = pd.read_parquet(
+        BASE_DATA_ROOT / "papers_primary_articles.parquet",
+        columns=["paper_id", "publication_year", "domain12"],
+    )
+    cohort = pd.read_parquet(
+        BASE_DATA_ROOT / "cohort_membership.parquet",
+        columns=["paper_id", "publication_year", "horizon", "cohort_member"],
+    )
+    eligible = cohort[cohort["cohort_member"].eq(1)]
+    ids = set(matrix["paper_id"].astype(str))
+    physical = {
+        model_id: pd.read_parquet(path) for model_id, path in matrix_paths.items()
+    }
+    numeric = matrix.drop(columns=["paper_id", "EF0197"], errors="ignore")
+    finite_or_missing = (
+        np.isfinite(numeric.to_numpy(dtype=np.float64, na_value=np.nan))
+        | numeric.isna().to_numpy()
+    )
+    checks = {
+        "paper_id_unique": not matrix["paper_id"].duplicated().any(),
+        "paper_set_matches_active_dataset": ids == set(papers["paper_id"].astype(str)),
+        "all_horizon_cohorts_covered": set(eligible["paper_id"].astype(str)).issubset(
+            ids
+        ),
+        "four_exact_matrix_shapes": all(
+            physical[model_id].shape == (len(matrix), len(feature_sets[model_id]) + 1)
+            for model_id in matrix_paths
+        ),
+        "physical_matrix_columns_exact": all(
+            list(physical[model_id].columns) == ["paper_id", *feature_sets[model_id]]
+            for model_id in matrix_paths
+        ),
+        "physical_matrices_match_221_superset": all(
+            physical[model_id].equals(matrix[["paper_id", *feature_sets[model_id]]])
+            for model_id in matrix_paths
+        ),
+        "no_all_missing_features": not bool(audit["all_missing"].any()),
+        "numeric_values_finite_or_missing": bool(finite_or_missing.all()),
+        "journal_identifier_complete": not matrix["EF0197"].isna().any(),
+        "post_2017_papers_present": int(papers["publication_year"].max()) == 2022,
+        "future_outcome_columns_absent": not any(
+            column.startswith("future_")
+            or column in {"horizon", "cohort_member", "cap_hit"}
+            for column in matrix.columns
+        ),
+    }
+    joined = papers[["paper_id", "publication_year"]].merge(
+        matrix, on="paper_id", how="inner", validate="one_to_one"
+    )
+    pre = joined[joined["publication_year"].le(2017)]
+    recent = joined[joined["publication_year"].ge(2018)]
+    missingness = []
+    for feature_id in matrix.columns.drop("paper_id"):
+        pre_rate = float(pre[feature_id].isna().mean())
+        recent_rate = float(recent[feature_id].isna().mean())
+        missingness.append(
+            {
+                "feature_id": feature_id,
+                "missing_rate_all": float(joined[feature_id].isna().mean()),
+                "missing_rate_1980_2017": pre_rate,
+                "missing_rate_2018_2022": recent_rate,
+                "recent_minus_historical": recent_rate - pre_rate,
+            }
+        )
+    horizon_counts = {
+        str(int(horizon)): {
+            "eligible_rows": int(len(group)),
+            "publication_year_max": int(group["publication_year"].max()),
+            "matrix_join_coverage": float(
+                group["paper_id"].astype(str).isin(ids).mean()
+            ),
+        }
+        for horizon, group in eligible.groupby("horizon", observed=True)
+    }
+    report = {
+        "artifact_kind": "uncapped_v2_four_indicator_matrix_quality",
+        "dataset_version": ACTIVE_DATASET["active_dataset_version"],
+        "grain": ["paper_id"],
+        "row_count": int(len(matrix)),
+        "matrix_shapes": {
+            model_id: list(physical[model_id].shape) for model_id in matrix_paths
+        },
+        "horizon_training_coverage": horizon_counts,
+        "checks": checks,
+        "overall_pass": all(checks.values()),
+        "missingness_by_era": missingness,
+        "leakage_policy": (
+            "Only publication-time feature views are read; outcome and future "
+            "citation columns are excluded from matrix construction."
+        ),
+    }
+    write_json(output_dir / "matrix_quality_report.json", report)
+    return report
+
+
 def build(output_dir: Path) -> Mapping[str, Any]:
     """Build the matrix, membership registry, audit, and lineage manifest."""
     output_dir.mkdir(parents=True, exist_ok=True)
     feature_sets, library, feature_to_dimension, dimensions = load_feature_sets()
-    sets_payload = feature_set_payload(
-        feature_sets, feature_to_dimension, dimensions
-    )
+    sets_payload = feature_set_payload(feature_sets, feature_to_dimension, dimensions)
     frame = augment_base_frame(load_base_frame(), output_dir)
     matrix, audit = build_indicator_matrix(
         frame,
@@ -862,7 +1094,13 @@ def build(output_dir: Path) -> Mapping[str, Any]:
     if audit["all_missing"].any():
         missing = audit.loc[audit["all_missing"].eq(1), "feature_id"].tolist()
         raise ValueError(f"all-missing feature columns are forbidden: {missing}")
-    matrix_path = output_dir / "indicator_matrix_221.parquet"
+    matrix_paths: Dict[str, Path] = {}
+    for model_id, feature_ids in feature_sets.items():
+        feature_count = len(feature_ids)
+        path = output_dir / f"indicator_matrix_{feature_count}.parquet"
+        matrix[["paper_id", *feature_ids]].to_parquet(path, index=False)
+        matrix_paths[model_id] = path
+    matrix_path = matrix_paths["ultrarelaxed_221"]
     audit_path = output_dir / "operationalization_audit.csv"
     sets_path = output_dir / "feature_sets.json"
     snapshot_path = output_dir / "input_snapshot.json"
@@ -872,9 +1110,12 @@ def build(output_dir: Path) -> Mapping[str, Any]:
     write_json(snapshot_path, input_snapshot())
     tier_counts = audit["tier"].value_counts().sort_index().to_dict()
     self_test = {
-        "row_count_is_118059": len(matrix) == 118_059,
+        "row_count_matches_active_expanded_articles": len(matrix)
+        == len(pd.read_parquet(BASE_DATA_ROOT / "papers_primary_articles.parquet")),
         "paper_id_unique": not matrix["paper_id"].duplicated().any(),
         "matrix_has_221_features": len(matrix.columns) - 1 == 221,
+        "four_physical_matrices_written": len(matrix_paths) == 4
+        and all(path.is_file() for path in matrix_paths.values()),
         "no_all_missing_features": not bool(audit["all_missing"].any()),
         "feature_sets_nested": all(
             set(feature_sets[left]).issubset(feature_sets[right])
@@ -888,6 +1129,12 @@ def build(output_dir: Path) -> Mapping[str, Any]:
     }
     if not all(self_test.values()):
         raise ValueError(f"feature-matrix self-test failed: {self_test}")
+    quality = audit_expanded_matrices(
+        matrix, matrix_paths, feature_sets, audit, output_dir
+    )
+    if not quality["overall_pass"]:
+        failed = [key for key, value in quality["checks"].items() if not value]
+        raise ValueError(f"expanded matrix quality audit failed: {failed}")
     manifest = {
         "artifact_kind": "evidence_v3_four_set_t0_indicator_matrix",
         "definition_version": DEFINITION_VERSION,
@@ -901,11 +1148,21 @@ def build(output_dir: Path) -> Mapping[str, Any]:
         "outcomes_used": False,
         "future_information_used": False,
         "same_matrix_superset_for_all_models": True,
+        "active_dataset_version": ACTIVE_DATASET["active_dataset_version"],
         "row_count": len(matrix),
         "feature_count": len(matrix.columns) - 1,
         "tier_counts": tier_counts,
         "constant_feature_count": int(audit["is_constant"].sum()),
         "outputs": {
+            **{
+                f"matrix_{len(feature_sets[model_id])}": {
+                    "path": str(path.resolve()),
+                    "sha256": sha256_file(path),
+                    "model_id": model_id,
+                    "feature_count": len(feature_sets[model_id]),
+                }
+                for model_id, path in matrix_paths.items()
+            },
             "matrix": {
                 "path": str(matrix_path.resolve()),
                 "sha256": sha256_file(matrix_path),
@@ -917,6 +1174,10 @@ def build(output_dir: Path) -> Mapping[str, Any]:
             "feature_sets": {
                 "path": str(sets_path.resolve()),
                 "sha256": sha256_file(sets_path),
+            },
+            "quality_report": {
+                "path": str((output_dir / "matrix_quality_report.json").resolve()),
+                "sha256": sha256_file(output_dir / "matrix_quality_report.json"),
             },
             "input_snapshot": {
                 "path": str(snapshot_path.resolve()),

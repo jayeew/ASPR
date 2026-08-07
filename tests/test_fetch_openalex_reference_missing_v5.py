@@ -5,11 +5,45 @@ from pathlib import Path
 
 from scripts.fetch_openalex_reference_missing_v5 import (
     REFERENCE_WORK_FIELDS,
-    load_checkpoint_rows,
+    fetch_missing_references,
+    load_checkpoint_ids,
     load_reference_ids,
     merge_reference_works,
     write_final_missing,
 )
+
+
+def test_missing_reference_fetch_uses_complete_batches(
+    tmp_path: Path, monkeypatch: object
+) -> None:
+    """Batch lookup freezes successes and explicitly records absent IDs."""
+    import scripts.fetch_openalex_reference_missing_v5 as module
+
+    calls: list[list[str]] = []
+
+    def fake_fetch_complete(
+        openalex: object, *, filters: list[str], per_page: int
+    ) -> tuple[list[dict[str, object]], int, int]:
+        del openalex, per_page
+        calls.append(filters)
+        return ([{"id": "https://openalex.org/W1"}], 1, 1)
+
+    monkeypatch.setattr(module, "fetch_complete_partition", fake_fetch_complete)  # type: ignore[attr-defined]
+    checkpoint = tmp_path / "success.csv"
+    failures = tmp_path / "failures.csv"
+    rows, failed = fetch_missing_references(
+        ["https://openalex.org/W1", "https://openalex.org/W2"],
+        checkpoint_path=checkpoint,
+        failure_log_path=failures,
+        openalex=object(),  # type: ignore[arg-type]
+        workers=1,
+        progress_every=100,
+        batch_size=50,
+        quiet=True,
+    )
+    assert calls == [["openalex_id:W1|W2"]]
+    assert set(rows) == {"https://openalex.org/W1"}
+    assert failed == {"https://openalex.org/W2"}
 
 
 def _write_csv(path: Path, fields: list[str], rows: list[dict[str, object]]) -> None:
@@ -35,16 +69,20 @@ def test_queue_checkpoint_merge_and_final_missing(tmp_path: Path) -> None:
         ],
     )
     base_row = {field: "" for field in REFERENCE_WORK_FIELDS}
-    base_row.update({"id": "https://openalex.org/W0", "short_id": "W0", "title": "base"})
+    base_row.update(
+        {"id": "https://openalex.org/W0", "short_id": "W0", "title": "base"}
+    )
     success_row = {field: "" for field in REFERENCE_WORK_FIELDS}
-    success_row.update({"id": "https://openalex.org/W1", "short_id": "W1", "title": "topup"})
+    success_row.update(
+        {"id": "https://openalex.org/W1", "short_id": "W1", "title": "topup"}
+    )
     _write_csv(base, REFERENCE_WORK_FIELDS, [base_row])
     _write_csv(checkpoint, REFERENCE_WORK_FIELDS, [success_row])
 
     ids = load_reference_ids(queue)
-    checkpoint_rows = load_checkpoint_rows(checkpoint)
-    merged_count = merge_reference_works(base, checkpoint_rows, base)
-    remaining_count = write_final_missing(final_missing, ids, set(checkpoint_rows))
+    checkpoint_ids = load_checkpoint_ids(checkpoint)
+    merged_count = merge_reference_works(base, checkpoint, base)
+    remaining_count = write_final_missing(final_missing, ids, checkpoint_ids)
 
     assert ids == ["https://openalex.org/W1", "https://openalex.org/W2"]
     assert merged_count == 2

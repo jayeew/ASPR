@@ -1,0 +1,134 @@
+{
+  "schema_version": "6.2.0",
+  "protocol_id": "aspr-nature-uncapped-v2-2026-08-07",
+  "network_policy": "forbidden",
+  "raw_data_policy": "local_frozen_only",
+  "evidence_registry_path": "configs/innovation_registry_v6_local.json",
+  "prediction_registry_path": "configs/prediction_registry_v6_local.json",
+  "evidence_selection_protocol_path": "configs/evidence_selection_protocol_v6.json",
+  "sources": [
+    {
+      "asset_id": "nature_v5_openalex_outputs",
+      "path": "/mnt/d/aspr_nature_portfolio_v5/openalex_outputs/uncapped_aspr_v2",
+      "role": "Uncapped Nature Portfolio target papers and T0 reference closure",
+      "required": true,
+      "required_files": [
+        "nature_target_works.csv",
+        "nature_reference_edges.csv",
+        "nature_reference_works.csv",
+        "nature_source_roster.csv",
+        "nature_target_works_manifest.json",
+        "reference_closure_snapshot_manifest.json",
+        "reference_snapshot_rescan_manifest.json",
+        "reference_missing_online_manifest.json"
+      ],
+      "identity_files": [
+        "nature_source_roster.csv",
+        "nature_target_works_manifest.json",
+        "reference_closure_snapshot_manifest.json",
+        "reference_snapshot_rescan_manifest.json",
+        "reference_missing_online_manifest.json"
+      ],
+      "allow_symlink": true
+    },
+    {
+      "asset_id": "nature_v5_future_multihorizon",
+      "path": "/mnt/d/aspr_nature_portfolio_v5/openalex_outputs/uncapped_aspr_v2/future_multihorizon",
+      "role": "Complete uncapped mature D3/D5/D8 label layer",
+      "required": true,
+      "required_files": [
+        "future_fetch_status.parquet",
+        "future_request_manifest.parquet",
+        "future_graph_deltas_multihorizon.parquet",
+        "expanded_future_manifest.json",
+        "data_quality_report.json"
+      ],
+      "identity_files": [
+        "expanded_future_manifest.json",
+        "data_quality_report.json"
+      ],
+      "allow_symlink": false
+    },
+    {
+      "asset_id": "local_openalex_snapshot",
+      "path": "/mnt/d/FabCitationData/openalex-snapshot",
+      "role": "Frozen local T0 reference enrichment source",
+      "required": true,
+      "required_directories": ["data/works"],
+      "identity_files": [],
+      "allow_symlink": true
+    }
+  ],
+  "storage": {
+    "derived_dataset_root": "data/knowledge_corpus/nature_multihorizon_v6_uncapped_v2",
+    "analysis_root": "outputs/common/new/model/v6_uncapped_v2",
+    "source_audit_path": "outputs/common/new/model/v6_uncapped_v2/source_audit.json"
+  },
+  "cohort_protocol": {
+    "scope": "uncapped_horizon_specific_mature_windows_D3_2022_D5_2020_D8_2017",
+    "rationale": "Use every audited mature article label after removing legacy source caps, while preserving the fixed complete-outcome end year of 2025.",
+    "development_publication_year_max": 2013,
+    "sealed_publication_year_min": 2014,
+    "sealed_publication_year_max": 2017,
+    "primary_work_types": ["article"],
+    "review_role": "excluded_from_primary_training",
+    "min_valid_references": 10,
+    "min_reference_metadata_coverage": 0.6,
+    "require_reference_quality_for_cohort": false,
+    "require_future_taxonomy_quality_for_uptake_cohort": false,
+    "require_all_primary_features_finite": false,
+    "feature_missingness_policy": "fold-local median imputation plus missingness indicators",
+    "horizon_specific_recent_expansion": "D3<=2022; D5<=2020; D8<=2017"
+  },
+  "horizons": [
+    {
+      "tau": 3,
+      "complete_publication_end_year": 2022,
+      "min_future_citers": 0,
+      "target_name": "Influence-D3-uncapped-v2"
+    },
+    {
+      "tau": 5,
+      "complete_publication_end_year": 2020,
+      "min_future_citers": 0,
+      "target_name": "Influence-D5-uncapped-v2"
+    },
+    {
+      "tau": 8,
+      "complete_publication_end_year": 2017,
+      "min_future_citers": 0,
+      "target_name": "Influence-D8-uncapped-v2"
+    }
+  ],
+  "feature_protocol": {
+    "source_max_year_rule": "source_max_year < publication_year",
+    "graph_snapshot_interval_years": 1,
+    "field_profile_window_years": 5,
+    "fold_local_imputation": true,
+    "fold_local_scaling": true,
+    "missing_indicators": true,
+    "text_extension_enabled": true
+  },
+  "outcome_protocol": {
+    "retain_observed_zero_future_citers": true,
+    "failed_fetch_is_missing_not_zero": true,
+    "primary_model": "two_part_uptake_plus_conditional_diffusion",
+    "fixed_diffusion_components": [
+      "future_field_reach",
+      "future_subfield_reach",
+      "future_topic_reach",
+      "future_field_simpson",
+      "future_topic_simpson"
+    ],
+    "fixed_breadth_weight": 0.5,
+    "fixed_evenness_weight": 0.5
+  },
+  "quality_protocol": {
+    "min_reference_closure_coverage": 0.95,
+    "min_domain_mapping_coverage": 0.95,
+    "min_future_fetch_success": 0.99,
+    "max_missing_future_checkpoints": 0,
+    "min_reportable_domain_rows": 200,
+    "domain_exclusion_by_oof_forbidden": true
+  }
+}

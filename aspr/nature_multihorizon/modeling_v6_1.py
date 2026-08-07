@@ -342,7 +342,7 @@ def assemble_all_period_frame(
     *,
     horizon: int,
 ) -> pd.DataFrame:
-    """Assemble one common 1980-2017 cohort after registry freeze."""
+    """Assemble the complete mature cohort for one prediction horizon."""
     root = Path(dataset_dir)
     targets = pd.read_parquet(
         root / "targets_zero_inclusive.parquet",
@@ -390,8 +390,18 @@ def assemble_all_period_frame(
     if frame["future_uptake"].isna().any():
         raise ValueError("all-period uptake label is incomplete")
     years = set(frame["publication_year"].astype(int).unique())
-    if min(years) != 1980 or max(years) != 2017:
-        raise ValueError("all-period cohort must span 1980-2017")
+    if min(years) != 1980:
+        raise ValueError("all-period cohort must start in 1980")
+    contract_path = root / "expanded_dataset_contract.json"
+    if contract_path.is_file():
+        contract = json.loads(contract_path.read_text(encoding="utf-8"))
+        expected_max = int(
+            contract["horizon_publication_year_max"][str(int(horizon))]
+        )
+        if max(years) != expected_max:
+            raise ValueError(
+                f"D{int(horizon)} cohort must end in {expected_max}"
+            )
     return frame.sort_values(
         ["publication_year", "paper_id"], kind="stable"
     ).reset_index(drop=True)
@@ -430,7 +440,7 @@ def explicit_temporal_splits(
     frame: pd.DataFrame,
     fold_config: Sequence[Mapping[str, Any]],
 ) -> Tuple[Dict[str, Any], ...]:
-    """Resolve the six registered expanding-time folds to row positions."""
+    """Resolve registered expanding-time folds to row positions."""
     years = pd.to_numeric(frame["publication_year"], errors="coerce")
     if years.isna().any():
         raise ValueError("publication_year is required for temporal OOF")
@@ -462,9 +472,16 @@ def explicit_temporal_splits(
                 "n_test": len(test),
             }
         )
-    expected = set(np.flatnonzero(years.between(1986, 2017)).tolist())
+    test_year_min = min(int(item["test_year_min"]) for item in fold_config)
+    test_year_max = max(int(item["test_year_max"]) for item in fold_config)
+    expected = set(
+        np.flatnonzero(years.between(test_year_min, test_year_max)).tolist()
+    )
     if seen_test != expected:
-        raise ValueError("registered folds do not cover every 1986-2017 paper")
+        raise ValueError(
+            "registered folds do not cover every paper in the declared "
+            f"{test_year_min}-{test_year_max} OOF period"
+        )
     return tuple(rows)
 
 
@@ -634,8 +651,12 @@ def run_fixed_medium_oof(
     predictions = pd.concat(prediction_rows, ignore_index=True)
     if predictions.duplicated(["paper_id", "model_id"]).any():
         raise ValueError("OOF created duplicate paper/model predictions")
+    test_year_min = min(int(item["test_year_min"]) for item in fold_config)
+    test_year_max = max(int(item["test_year_max"]) for item in fold_config)
     expected_rows = len(
-        frame[frame["publication_year"].between(1986, 2017)]
+        frame[
+            frame["publication_year"].between(test_year_min, test_year_max)
+        ]
     )
     counts = predictions.groupby("model_id")["paper_id"].nunique()
     if not counts.eq(expected_rows).all():

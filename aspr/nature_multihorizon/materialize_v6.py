@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import gc
 import hashlib
 import json
 from pathlib import Path
@@ -30,7 +31,6 @@ from .prediction_registry_v6 import (
 from .source_audit_v6 import sha256_file
 from .targets import build_diffusion_targets_from_deltas
 from .taxonomy import DOMAIN_IDS, build_taxonomy_table
-
 
 MATERIALIZATION_VERSION = "aspr-v6-local-materialization-1"
 
@@ -65,11 +65,7 @@ def _parse_references(value: Any) -> list[str]:
     else:
         parsed = []
     return sorted(
-        {
-            normalized
-            for item in parsed
-            if (normalized := normalize_openalex_id(item))
-        }
+        {normalized for item in parsed if (normalized := normalize_openalex_id(item))}
     )
 
 
@@ -103,9 +99,7 @@ def _write_stage_manifest(
         "materialization_version": MATERIALIZATION_VERSION,
         "stage": stage,
         "network_policy": "forbidden",
-        "code_sha256": {
-            path.name: sha256_file(path) for path in code_paths
-        },
+        "code_sha256": {path.name: sha256_file(path) for path in code_paths},
         "inputs": dict(inputs),
         "outputs": output_rows,
         "counts": dict(counts),
@@ -147,16 +141,12 @@ def materialize_common_input_views(
         return json.loads(manifest_path.read_text(encoding="utf-8"))
 
     v5_root = _asset_path(config, "nature_v5_openalex_outputs", project_root)
-    future_root = _asset_path(
-        config, "nature_v5_future_multihorizon", project_root
-    )
+    future_root = _asset_path(config, "nature_v5_future_multihorizon", project_root)
     requested = pd.read_parquet(
         future_root / "future_request_manifest.parquet",
         columns=["paper_id"],
     )
-    requested_ids = set(
-        requested["paper_id"].map(normalize_openalex_id).astype(str)
-    )
+    requested_ids = set(requested["paper_id"].map(normalize_openalex_id).astype(str))
     paper_columns = [
         "id",
         "year",
@@ -180,39 +170,33 @@ def materialize_common_input_views(
     )
     papers["paper_id"] = papers["id"].map(normalize_openalex_id)
     papers = papers[papers["paper_id"].isin(requested_ids)].copy()
-    papers["publication_year"] = pd.to_numeric(
-        papers["year"], errors="coerce"
-    )
+    papers["publication_year"] = pd.to_numeric(papers["year"], errors="coerce")
     papers = papers[papers["publication_year"].notna()].copy()
     papers["publication_year"] = papers["publication_year"].astype(int)
     papers["work_type"] = papers["document_type"].fillna("").astype(str)
-    papers["venue_family"] = papers["journal_family"].fillna("unknown").astype(
-        str
-    )
-    papers["referenced_works"] = papers["referenced_works"].map(
-        _parse_references
-    )
+    papers["venue_family"] = papers["journal_family"].fillna("unknown").astype(str)
+    papers["referenced_works"] = papers["referenced_works"].map(_parse_references)
     papers, domain_coverage, domain_audit = build_taxonomy_table(papers)
     papers = papers.drop(columns=["id", "year"], errors="ignore")
     papers.to_parquet(papers_path, index=False)
     domain_coverage.to_parquet(coverage_path, index=False)
 
     primary = papers[
-        papers["domain12"].isin(DOMAIN_IDS)
-        & papers["work_type"].eq("article")
+        papers["domain12"].isin(DOMAIN_IDS) & papers["work_type"].eq("article")
     ].copy()
     primary.to_parquet(primary_path, index=False)
-    bibliography = primary[["paper_id", "referenced_works"]].explode(
-        "referenced_works"
-    )
-    bibliography = bibliography.rename(
-        columns={"referenced_works": "reference_id"}
-    )
+    bibliography = primary[["paper_id", "referenced_works"]].explode("referenced_works")
+    bibliography = bibliography.rename(columns={"referenced_works": "reference_id"})
     bibliography = bibliography[
         bibliography["reference_id"].notna()
         & bibliography["reference_id"].astype(str).ne("")
     ].drop_duplicates()
     bibliography.to_parquet(references_path, index=False)
+    n_common_papers = len(papers)
+    n_primary_articles = len(primary)
+    n_paper_reference_edges = len(bibliography)
+    del bibliography, papers, primary, requested, requested_ids
+    gc.collect()
 
     reference_columns = [
         "id",
@@ -229,9 +213,7 @@ def materialize_common_input_views(
         low_memory=False,
     )
     metadata["reference_id"] = metadata["id"].map(normalize_openalex_id)
-    metadata["reference_year"] = pd.to_numeric(
-        metadata["year"], errors="coerce"
-    )
+    metadata["reference_year"] = pd.to_numeric(metadata["year"], errors="coerce")
     metadata["field_id"] = (
         metadata["openalex_primary_field"]
         .fillna(metadata["primary_field"])
@@ -257,9 +239,7 @@ def materialize_common_input_views(
             "source_lineage_id": source_audit.get("source_lineage_id"),
             "v5_target_path": str(v5_root / "nature_target_works.csv"),
             "v5_reference_path": str(v5_root / "nature_reference_works.csv"),
-            "future_request_path": str(
-                future_root / "future_request_manifest.parquet"
-            ),
+            "future_request_path": str(future_root / "future_request_manifest.parquet"),
         },
         outputs={
             "papers_common_all": papers_path,
@@ -269,9 +249,9 @@ def materialize_common_input_views(
             "domain12_coverage": coverage_path,
         },
         counts={
-            "n_common_papers": len(papers),
-            "n_primary_natural_articles": len(primary),
-            "n_paper_reference_edges": len(bibliography),
+            "n_common_papers": n_common_papers,
+            "n_primary_natural_articles": n_primary_articles,
+            "n_paper_reference_edges": n_paper_reference_edges,
             "n_reference_metadata": len(metadata),
             "domain_audit": domain_audit,
         },
@@ -333,9 +313,7 @@ def materialize_publication_features(
     papers = pd.read_parquet(output_dir / "papers_primary_articles.parquet")
     bibliography = pd.read_parquet(output_dir / "paper_references.parquet")
     metadata = pd.read_parquet(output_dir / "reference_metadata.parquet")
-    events = pd.read_parquet(
-        output_dir / "field_citation_events_aggregated.parquet"
-    )
+    events = pd.read_parquet(output_dir / "field_citation_events_aggregated.parquet")
     work_view = metadata.rename(
         columns={
             "reference_id": "work_id",
@@ -352,9 +330,7 @@ def materialize_publication_features(
         ),
     )
     features.to_parquet(features_path, index=False)
-    controls = build_registered_control_features(
-        papers, bibliography, work_view
-    )
+    controls = build_registered_control_features(papers, bibliography, work_view)
     controls.to_parquet(controls_path, index=False)
     evidence_registry = load_evidence_registry(
         _resolve(project_root, config["evidence_registry_path"])
@@ -375,9 +351,7 @@ def materialize_publication_features(
             "n_feature_rows": len(features),
             "n_control_rows": len(controls),
             "strict_prior_violations": int(
-                features["source_max_year"]
-                .ge(features["publication_year"])
-                .sum()
+                features["source_max_year"].ge(features["publication_year"]).sum()
             ),
             "primary_feature_finite_rates": {
                 name: float(
@@ -405,9 +379,9 @@ def materialize_opportunity_features(
     papers = pd.read_parquet(output_dir / "papers_primary_articles.parquet")
     bibliography = pd.read_parquet(output_dir / "paper_references.parquet")
     metadata = pd.read_parquet(output_dir / "reference_metadata.parquet")
-    history = papers[
-        ["paper_id", "publication_year", "referenced_works"]
-    ].rename(columns={"paper_id": "work_id"})
+    history = papers[["paper_id", "publication_year", "referenced_works"]].rename(
+        columns={"paper_id": "work_id"}
+    )
     opportunity = build_bibliographic_opportunity_features(
         papers,
         bibliography,
@@ -434,15 +408,11 @@ def materialize_opportunity_features(
         counts={
             "n_rows": len(opportunity),
             "strict_prior_violations": int(
-                opportunity["source_max_year"]
-                .ge(opportunity["publication_year"])
-                .sum()
+                opportunity["source_max_year"].ge(opportunity["publication_year"]).sum()
             ),
             "finite_rates": {
                 name: float(
-                    pd.to_numeric(opportunity[name], errors="coerce")
-                    .notna()
-                    .mean()
+                    pd.to_numeric(opportunity[name], errors="coerce").notna().mean()
                 )
                 for name in prediction_registry.opportunity_feature_names
             },
@@ -469,12 +439,8 @@ def materialize_targets_and_cohort(
         return json.loads(manifest_path.read_text(encoding="utf-8"))
     papers = pd.read_parquet(output_dir / "papers_primary_articles.parquet")
     features = pd.read_parquet(output_dir / "innovation_features.parquet")
-    future_root = _asset_path(
-        config, "nature_v5_future_multihorizon", project_root
-    )
-    deltas = pd.read_parquet(
-        future_root / "future_graph_deltas_multihorizon.parquet"
-    )
+    future_root = _asset_path(config, "nature_v5_future_multihorizon", project_root)
+    deltas = pd.read_parquet(future_root / "future_graph_deltas_multihorizon.parquet")
     selected_ids = set(papers["paper_id"].astype(str))
     deltas = deltas[deltas["paper_id"].astype(str).isin(selected_ids)].copy()
     horizons = tuple(int(item["tau"]) for item in config["horizons"])
@@ -498,9 +464,7 @@ def materialize_targets_and_cohort(
             horizons=horizons,
             primary_horizon=5,
             min_future_citers=0,
-            min_valid_references=int(
-                cohort_config["min_valid_references"]
-            ),
+            min_valid_references=int(cohort_config["min_valid_references"]),
             min_reference_metadata_coverage=float(
                 cohort_config["min_reference_metadata_coverage"]
             ),
@@ -513,9 +477,7 @@ def materialize_targets_and_cohort(
                 cohort_config["require_reference_quality_for_cohort"]
             ),
             require_target_quality_for_cohort=bool(
-                cohort_config[
-                    "require_future_taxonomy_quality_for_uptake_cohort"
-                ]
+                cohort_config["require_future_taxonomy_quality_for_uptake_cohort"]
             ),
         ),
         required_feature_names=evidence_registry.primary_feature_names,
@@ -546,13 +508,9 @@ def materialize_targets_and_cohort(
             "n_target_rows": len(targets),
             "n_cohort_rows": len(cohort),
             "n_common_members": int(
-                cohort.loc[
-                    cohort["common_cohort_member"].eq(1), "paper_id"
-                ].nunique()
+                cohort.loc[cohort["common_cohort_member"].eq(1), "paper_id"].nunique()
             ),
-            "n_observed_zero_rows": int(
-                cohort["observed_zero_future_citers"].sum()
-            ),
+            "n_observed_zero_rows": int(cohort["observed_zero_future_citers"].sum()),
             "quality": quality,
         },
     )

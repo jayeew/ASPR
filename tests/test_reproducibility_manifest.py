@@ -61,15 +61,11 @@ class ReproducibilityManifestTests(unittest.TestCase):
         self.assertIn("--min-refs $(FIG2_MIN_REFS)", text)
         self.assertIn("--max-papers $(FIG2_MAX_PAPERS)", text)
 
-    def test_makefile_runs_fig3_from_strong_fig2_input(self) -> None:
+    def test_makefile_runs_final_hgb_fig3(self) -> None:
         makefile = PROJECT_ROOT / "Makefile"
         self.assertTrue(makefile.exists())
         text = makefile.read_text(encoding="utf-8")
-        self.assertIn("--data-dir outputs/fig02/old/work/redraw_v6a_best/fig2_strong_input", text)
-        self.assertIn("--tau $(FIG2_FUTURE_TAU)", text)
-        self.assertIn("FIG3_MIN_CONTROLS ?= 50", text)
-        self.assertIn("--min-controls $(FIG3_MIN_CONTROLS)", text)
-        self.assertIn("--skip-sensitivity", text)
+        self.assertIn("$(PYTHON) -m experiments.fig03.new.run --stage all", text)
 
     def test_makefile_runs_fig6_full_rerun_when_enabled(self) -> None:
         makefile = PROJECT_ROOT / "Makefile"

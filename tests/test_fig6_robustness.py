@@ -14,6 +14,9 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+if not (PROJECT_ROOT / "experiments/fig03/old").is_dir():
+    raise unittest.SkipTest("legacy Fig.6 depends on the removed legacy Fig.3")
+
 import experiments.fig06.old.build_fig6_robustness as fig6_module  # noqa: E402
 from experiments.fig06.old.build_fig6_robustness import (  # noqa: E402
     FULL_RERUN_INDICATOR_STABILITY,
