@@ -23,8 +23,14 @@ PROJECT_ROOT = HERE.parents[3]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from aspr.nature_multihorizon.active_dataset import (  # noqa: E402
+from gear.nature_multihorizon.active_dataset import (  # noqa: E402
     load_active_dataset,
+)
+from gear.nature_multihorizon.t0_runtime_v3 import (  # noqa: E402
+    compute_additive_entropy_diversity,
+    compute_backward_citation_age,
+    compute_prior_team_graph,
+    compute_title_novelty,
 )
 
 EVIDENCE_ROOT = HERE.parents[1]
@@ -289,12 +295,18 @@ def backward_citation_age_mean() -> pd.DataFrame:
         rows["reference_year"].notna()
         & rows["reference_year"].le(rows["publication_year"])
     ].copy()
-    rows["backward_citation_age_mean"] = (
-        rows["publication_year"] - rows["reference_year"]
+    grouped = rows.groupby("paper_id", as_index=False).agg(
+        publication_year=("publication_year", "first"),
+        reference_years=("reference_year", list),
     )
-    means = rows.groupby("paper_id", as_index=False)[
-        "backward_citation_age_mean"
-    ].mean()
+    grouped["backward_citation_age_mean"] = [
+        compute_backward_citation_age(int(publication_year), reference_years)
+        for publication_year, reference_years in zip(
+            grouped["publication_year"],
+            grouped["reference_years"],
+        )
+    ]
+    means = grouped[["paper_id", "backward_citation_age_mean"]]
     return papers[["paper_id"]].merge(
         means, on="paper_id", how="left", validate="one_to_one"
     )
@@ -317,7 +329,6 @@ def title_features(frame: pd.DataFrame) -> pd.DataFrame:
         for position in positions:
             tokens = _tokens(titles[position])
             words = [token for token in tokens if not token[0].isdigit()]
-            bigrams = list(zip(words[:-1], words[1:]))
             counts: Dict[str, int] = defaultdict(int)
             for token in words:
                 counts[token] += 1
@@ -359,9 +370,9 @@ def title_features(frame: pd.DataFrame) -> pd.DataFrame:
                 else 0.0
             )
             output["title_new_bigram_share"].append(
-                float(sum(item not in seen_bigrams for item in bigrams) / len(bigrams))
-                if bigrams
-                else 0.0
+                compute_title_novelty(title, seen_bigrams)[
+                    "title_new_bigram_share"
+                ]
             )
             output["title_covid19"].append(
                 float(
@@ -405,83 +416,7 @@ def _team_graph_statistics(
     adjacency: Mapping[str, set[str]],
     weights: Mapping[Tuple[str, str], int],
 ) -> Dict[str, float]:
-    selected = sorted(set(authors))[:100]
-    n_authors = len(selected)
-    if n_authors < 2:
-        return {
-            "prior_team_edge_count": 0.0,
-            "prior_team_edge_density": 0.0,
-            "prior_team_edge_strength": 0.0,
-            "prior_team_giant_component_share": 1.0 if n_authors else np.nan,
-            "prior_team_mean_clustering": 0.0 if n_authors else np.nan,
-            "prior_team_relative_algebraic_connectivity": 0.0 if n_authors else np.nan,
-            "prior_author_degree_mean": (
-                float(
-                    np.mean([len(adjacency.get(author, set())) for author in selected])
-                )
-                if selected
-                else np.nan
-            ),
-            "prior_team_graph_truncated": float(len(set(authors)) > 100),
-        }
-    matrix = np.zeros((n_authors, n_authors), dtype=np.float64)
-    edge_strength = 0.0
-    for left_index, right_index in combinations(range(n_authors), 2):
-        left, right = selected[left_index], selected[right_index]
-        key = (left, right) if left < right else (right, left)
-        weight = float(weights.get(key, 0))
-        if weight > 0:
-            matrix[left_index, right_index] = weight
-            matrix[right_index, left_index] = weight
-            edge_strength += weight
-    binary = (matrix > 0).astype(np.float64)
-    edge_count = float(binary.sum() / 2.0)
-    possible = n_authors * (n_authors - 1) / 2.0
-    degrees = binary.sum(axis=1)
-    triangles = np.diag(binary @ binary @ binary) / 2.0
-    local = np.divide(
-        2.0 * triangles,
-        degrees * (degrees - 1.0),
-        out=np.zeros_like(degrees),
-        where=degrees >= 2,
-    )
-    components = _component_sizes(binary)
-    laplacian = np.diag(matrix.sum(axis=1)) - matrix
-    eigenvalues = np.linalg.eigvalsh(laplacian)
-    denominator = float(eigenvalues[-1]) if len(eigenvalues) else 0.0
-    relative = (
-        float(max(eigenvalues[1], 0.0) / denominator)
-        if (len(eigenvalues) > 1 and denominator > 0)
-        else 0.0
-    )
-    return {
-        "prior_team_edge_count": edge_count,
-        "prior_team_edge_density": float(edge_count / possible),
-        "prior_team_edge_strength": float(edge_strength / possible),
-        "prior_team_giant_component_share": float(max(components) / n_authors),
-        "prior_team_mean_clustering": float(local.mean()),
-        "prior_team_relative_algebraic_connectivity": relative,
-        "prior_author_degree_mean": float(
-            np.mean([len(adjacency.get(author, set())) for author in selected])
-        ),
-        "prior_team_graph_truncated": float(len(set(authors)) > 100),
-    }
-
-
-def _component_sizes(binary: np.ndarray) -> List[int]:
-    remaining = set(range(len(binary)))
-    sizes: List[int] = []
-    while remaining:
-        stack = [remaining.pop()]
-        size = 0
-        while stack:
-            node = stack.pop()
-            size += 1
-            neighbors = set(np.flatnonzero(binary[node]).tolist()) & remaining
-            remaining.difference_update(neighbors)
-            stack.extend(neighbors)
-        sizes.append(size)
-    return sizes or [0]
+    return compute_prior_team_graph(authors, adjacency, weights)
 
 
 def _author_values(value: object) -> List[str]:
@@ -547,11 +482,14 @@ def augment_base_frame(frame: pd.DataFrame, output_dir: Path) -> pd.DataFrame:
     frame["international_collaboration_proxy"] = (
         pd.to_numeric(frame["EF0188"], errors="coerce").gt(1).astype(float)
     )
-    frame["additive_entropy_diversity_local"] = (
-        pd.to_numeric(frame["field_shannon_entropy"], errors="coerce")
-        + pd.to_numeric(frame["field_pielou_evenness"], errors="coerce")
-        - pd.to_numeric(frame["field_disparity_cosine_mean"], errors="coerce")
-    )
+    frame["additive_entropy_diversity_local"] = [
+        compute_additive_entropy_diversity(entropy, evenness, disparity)
+        for entropy, evenness, disparity in zip(
+            pd.to_numeric(frame["field_shannon_entropy"], errors="coerce"),
+            pd.to_numeric(frame["field_pielou_evenness"], errors="coerce"),
+            pd.to_numeric(frame["field_disparity_cosine_mean"], errors="coerce"),
+        )
+    ]
     return frame
 
 

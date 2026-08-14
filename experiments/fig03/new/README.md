@@ -3,6 +3,10 @@
 This directory implements the final uncapped-data Fig.3 using the HGB model
 family exclusively.
 
+数值输入通过 GEAR calibration release 注册表解析，不再依赖训练实验的深层
+`outputs/` 路径。当前配置使用 `prepublication_graph_v3:d5_fulltext16`；运行前可用
+`python3 -m gear show-calibration --verify` 验证本地 release。
+
 ## Figure question
 
 Can publication-time ASPR scores rank subsequent scientific uptake and

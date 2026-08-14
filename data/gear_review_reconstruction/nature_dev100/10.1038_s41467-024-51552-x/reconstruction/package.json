@@ -1,0 +1,1566 @@
+{
+  "author_response_spans": [
+    {
+      "char_end": 10312,
+      "char_start": 10296,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-35e0281dde7340e678ca",
+      "source_role": "author_response",
+      "text": "## **Response:**",
+      "text_sha256": "sha256:8e4cc530d4f9cb149889908139b6a642f8de8e802348607505629319d06d7f4b"
+    },
+    {
+      "char_end": 10830,
+      "char_start": 10315,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a8f71b275bcbdf67e88b",
+      "source_role": "author_response",
+      "text": "We thank the reviewer for this highly valuable advice. In theory, the MOF-based heterogeneous catalyst can be used indefinitely without calculating its TON value. However, in the actual experiment, the MOF-based heterogeneous catalyst cannot catalyze the reaction indefinitely due to the deactivation of the catalytic center. Therefore, the TON value of the reaction is an important index to evaluate its catalytic activity. The TON value was obtained from the ratio of moles of formed product to moles of catalyst.",
+      "text_sha256": "sha256:8bbe526bd8fc7378139d96ee1e4032b537e9823658eb26ba4338b1f551e8b224"
+    },
+    {
+      "char_end": 10851,
+      "char_start": 10833,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0061b40457db9efae95c",
+      "source_role": "author_response",
+      "text": "## **Question 2:**",
+      "text_sha256": "sha256:56762374f1dfce8ea2536d8d5f901dae4635f9531c3781e32f0bb5d85d490d41"
+    },
+    {
+      "char_end": 10978,
+      "char_start": 10854,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3a3d4a452d6d36c2548a",
+      "source_role": "author_response",
+      "text": "_From Fig. 3b and 3d, it is evident that the palladium atoms in the catalyst have agglomerated. How to explain this result?_",
+      "text_sha256": "sha256:1d8591e35d987d97d267572012fdf241b0958edf1b421e5a4fb3d255e9fc2e4a"
+    },
+    {
+      "char_end": 11085,
+      "char_start": 11000,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-185ef9e1641079d6e66f",
+      "source_role": "author_response",
+      "text": "We thank the reviewer for this highly valuable advice. There is zero-valent palladium",
+      "text_sha256": "sha256:b47e123d9fc955a21346b1664c3818b1f039c0f41c7cc3fa2b98d0677194e9b0"
+    },
+    {
+      "char_end": 11435,
+      "char_start": 11088,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5321e3eaaddb16f4c3cb",
+      "source_role": "author_response",
+      "text": "after Heck reaction, and Pd[0] atoms tends to agglomerate into nanoparticles. Therefore, agglomeration occurred in our catalyst after recycling. However, due to the coordination of APBA and Pd, the agglomeration of Pd was delayed, which was proved by the observation of the smaller size of the nanoparticles in Pd@MOF-APBA than that in Pd@MOF-808.",
+      "text_sha256": "sha256:567b8f5696f0334ee3144bd75cc9a79e95dbf3f75d449f6d9b9de4f6b87a9ba0"
+    },
+    {
+      "char_end": 11456,
+      "char_start": 11438,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-78a091cde59fd6182874",
+      "source_role": "author_response",
+      "text": "## **Question 3:**",
+      "text_sha256": "sha256:857e149f27da0c542e9dcb5ecefef63c6f88be12960207be5ca71923b356aec8"
+    },
+    {
+      "char_end": 11684,
+      "char_start": 11459,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d9b0ffabfdab15e3f6ea",
+      "source_role": "author_response",
+      "text": "_Can the authors provide a more intuitive representation of the spatial relationship between Pd(OAc)2 and APBA in Fig. 3e? It’s challenging to distinguish the differences between Fig. 3e and Fig. 3f as they currently appear._",
+      "text_sha256": "sha256:0dddf4230de7b0875201730f5de3e20124eb36c1d056015992e218703a1ce5c4"
+    },
+    {
+      "char_end": 11946,
+      "char_start": 11706,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b4eee6c6fe13064c2ef1",
+      "source_role": "author_response",
+      "text": "We thank the reviewer for this highly valuable advice. Fig.3e and 3f has been replaced with more intuitive graphs to expresses the spatial relationship between Pd(OAc)2 and ligand. We have highlighted the caption of figure 3e and 3f in red.",
+      "text_sha256": "sha256:4ec530af3f657e9d8aa1fbffe43089b6c29e84847d87ca4ce98ab4b1b790c8bb"
+    },
+    {
+      "char_end": 16074,
+      "char_start": 16058,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ad474e715a0922996157",
+      "source_role": "author_response",
+      "text": "## **Response:**",
+      "text_sha256": "sha256:8e4cc530d4f9cb149889908139b6a642f8de8e802348607505629319d06d7f4b"
+    },
+    {
+      "char_end": 16506,
+      "char_start": 16077,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1f468820a388426b32cd",
+      "source_role": "author_response",
+      "text": "We thank the reviewer for this highly valuable advice. The XPS characterization has been done for Pd@MOF-APBA after the reaction. In the manuscript, we described the result as follows: \"The Pd 3d5/2 peak at 337.9 eV was ascribed to Pd[II] , which was consistent with the binding energy of Pd 3d5/2 in fresh catalysts, suggesting that there was still intact ‘molecular’ Pd complexes anchored within the MOF\", and marked it in red.",
+      "text_sha256": "sha256:8ac53979e044c3635d2856c2b84013c9097094c9cdbf52d7ee7b180bf9cf6710"
+    },
+    {
+      "char_end": 16527,
+      "char_start": 16509,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3acaf66950925fc19eb1",
+      "source_role": "author_response",
+      "text": "## **Question 2:**",
+      "text_sha256": "sha256:56762374f1dfce8ea2536d8d5f901dae4635f9531c3781e32f0bb5d85d490d41"
+    },
+    {
+      "char_end": 16633,
+      "char_start": 16530,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d2773d9cd3ee3263ef1e",
+      "source_role": "author_response",
+      "text": "_Controls using only the MOF and a molecular version of the Pd complex using 2-(2aminophenyl)pyridine._",
+      "text_sha256": "sha256:c6731993265a1201a59d905229c331f369d39e7e14dec224166e5a1cadf362db"
+    },
+    {
+      "char_end": 17468,
+      "char_start": 16655,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-617d4f73072b9f3af0c8",
+      "source_role": "author_response",
+      "text": "We thank the reviewer for this highly valuable advice. Considering the multiple coordination sites of APBA, we synthesized methyl 3-amino-4-(pyridin-2-yl)benzoate (MAPB) by esterification of APBA to eliminate the interference of carboxyl group coordination and obtained the complex Pd-MAPB. Later, we applied MOF-808 and PdMAPB for control experiments. MOF-808 showed no catalytic activity, while the PdMAPB complex provided good catalytic activity but no recyclability. We have added the synthesis methods of MAPB and Pd-MAPB in the section of “5.3 Synthesis of MAPB and Pd-MAPB” in Supporting Information and marked them in red. We have also revised the “Catalytic evaluation of Pd@MOF-APBA” part of the manuscript and “5.4 Catalyst types and amount test” part of Supporting Information, and marked them in red.",
+      "text_sha256": "sha256:d1dbae4cb02cd141b4cd72451c2a7a2ec7fc7b661bcb9b22b42d15ea0310e2aa"
+    },
+    {
+      "char_end": 17489,
+      "char_start": 17471,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8fd983d1c199032057f3",
+      "source_role": "author_response",
+      "text": "## **Question 3:**",
+      "text_sha256": "sha256:857e149f27da0c542e9dcb5ecefef63c6f88be12960207be5ca71923b356aec8"
+    },
+    {
+      "char_end": 17562,
+      "char_start": 17492,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8bd316fb6d1cb5c3da90",
+      "source_role": "author_response",
+      "text": "_Calculate the TON for a number of repeat reactions and average this._",
+      "text_sha256": "sha256:685fe26d42ee194a1d0f44edc23f96fec9b519a92e548857cc6df8b212cecba5"
+    },
+    {
+      "char_end": 18186,
+      "char_start": 17584,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-288f4dc2b9dad14732ef",
+      "source_role": "author_response",
+      "text": "We thank the reviewer for this highly valuable advice. We have synthesized fresh catalysts, conducted a set of repeat reactions and provided the averaged TON value in the manuscript. The previous yield was obtained with the catalysts that had been stored for several months, and it was much lower than the ones provided by the fresh catalysts. Therefore, we deleted the previous data and retained the new sets of the yields. We have revised the “Catalytic evaluation of Pd@MOF-APBA” part of the manuscript and “5.4 Catalyst types and amount test” part of Supporting Information, and marked them in red.",
+      "text_sha256": "sha256:2c5b53c9c471cd2d32c58c54a9c1ec6f14afd89b85e1451c90b767cb4995006a"
+    },
+    {
+      "char_end": 18207,
+      "char_start": 18189,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c9be7dde0ba95264c748",
+      "source_role": "author_response",
+      "text": "## **Question 4:**",
+      "text_sha256": "sha256:13c73a1b79388529ca642f0c359d8359eb260b34fe4f47a430ae39b67c4db58f"
+    },
+    {
+      "char_end": 18306,
+      "char_start": 18210,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c4c4df6e0f0bc3831357",
+      "source_role": "author_response",
+      "text": "_Cite the original report for the pendant linker core (https://www.publish.csiro.au/ch/c96146)._",
+      "text_sha256": "sha256:9d8c43c4b86f7bd3aa4ca1af25cb0749a931448ee7dcd07bd0eb5979483caf79"
+    },
+    {
+      "char_end": 18524,
+      "char_start": 18328,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-009b9c5a14ee29f3dce8",
+      "source_role": "author_response",
+      "text": "We thank the reviewer for this highly valuable advice. We have cited the original report for the pendant linker core in ref. 47, revised the third paragraph of introduction and marked them in red.",
+      "text_sha256": "sha256:66b0291dfeafd3c182c609dc80dd0e6e299d00a0c1fd5d585e296fe735e45da9"
+    },
+    {
+      "char_end": 18545,
+      "char_start": 18527,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3b4cfd75e41b767433ec",
+      "source_role": "author_response",
+      "text": "## **Question 5:**",
+      "text_sha256": "sha256:dfe66e2909159e028fe0145e997f039f5d77daa419475273e5a2d6506ae845b1"
+    },
+    {
+      "char_end": 18795,
+      "char_start": 18548,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-783f0602031ad4571516",
+      "source_role": "author_response",
+      "text": "_Cite papers where flexible MOFs that can coordinate metal centres are studied (e.g. https://pubs.acs.org/doi/abs/10.1021/jacs.0c05286, https://pubs.rsc.org/en/content/articlehtml/2020/sc/d0sc00485e, https://pubs.acs.org/doi/10.1021/jacs.6b06239,_",
+      "text_sha256": "sha256:1d12a8c93234daced285e996d9ff5e3a48c8d83f0286efbe37444dfb4e6cb9ea"
+    },
+    {
+      "char_end": 18862,
+      "char_start": 18798,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7abb434f24aafa0701ab",
+      "source_role": "author_response",
+      "text": "## _https://onlinelibrary.wiley.com/doi/10.1002/anie.201802402,_",
+      "text_sha256": "sha256:6d09971b511b8581549e8ba9d8c6c4c7db9f53ffdfafcc0c77625eeb9cbda539"
+    },
+    {
+      "char_end": 18914,
+      "char_start": 18865,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0932b185ded7fcffa3ad",
+      "source_role": "author_response",
+      "text": "_https://pubs.acs.org/doi/10.1021/jacs.8b05644)._",
+      "text_sha256": "sha256:35550e17b25e909f3339a7daaff26d85c9e8221e6a04be64e1700ddc60024699"
+    },
+    {
+      "char_end": 19160,
+      "char_start": 18936,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-09bd0f9035d1855a0fdc",
+      "source_role": "author_response",
+      "text": "We thank the reviewer for this highly valuable advice. We have highlighted the importance of flexibility of MOF in the third paragraph of introduction, cited related papers in ref. 35 and refs. 43-46, and marked them in red.",
+      "text_sha256": "sha256:dfa70b592f3f3d3fc1b4cc0e92492200ffbb3ef403005e4c1f72a87ab8059930"
+    },
+    {
+      "char_end": 19181,
+      "char_start": 19163,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ce2001ca13c278c88eca",
+      "source_role": "author_response",
+      "text": "## **Question 6:**",
+      "text_sha256": "sha256:e66a82db5b0376c8755a5681673f62a506ea16964e353eb1ee6a444da9f56ff7"
+    },
+    {
+      "char_end": 19403,
+      "char_start": 19184,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5bd0dddf8432f9cd2f18",
+      "source_role": "author_response",
+      "text": "_One control used is MOF-808 appended with [2,2’-bipyridine]-5-carboxylic acid (BCA) but it should be noted that while the authors highlighted the Pd loading they did not provide data on the amount of BCA incorporated._",
+      "text_sha256": "sha256:64acd313e03cbbc2df515526ba7c4818d0d45773f04c91ddafbdf3643e9b9794"
+    },
+    {
+      "char_end": 19741,
+      "char_start": 19425,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b5e4bdb31566bdd76afd",
+      "source_role": "author_response",
+      "text": "We thank the reviewer for this highly valuable advice. We have done the test and calculation, and found that about 1.8 BCA were incorporated to each Zr6-cluster. The relevant results were provided in the manuscript as well as in the section of “5.5 Synthesis of MOF-BCA” in Supporting Information, and marked in red.",
+      "text_sha256": "sha256:10e1789fbe3c8da917fe14fb16a477a8dd922402b2b1d1393989f05d11006083"
+    },
+    {
+      "char_end": 22023,
+      "char_start": 21874,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b6b69de9787a5be6ad2c",
+      "source_role": "author_response",
+      "text": "We thank the reviewer for this highly valuable advice. We have reconfigured and revised the introduction section as required, and marked them in red.",
+      "text_sha256": "sha256:3026f47a646025e42e48415ad84a4c8a267d566ab37e807aa921a690c4fcf746"
+    },
+    {
+      "char_end": 22165,
+      "char_start": 22047,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-11cfedcc42a96610193d",
+      "source_role": "author_response",
+      "text": "_A few high impact and very closely related literature should also be included in the reference section. For example,_",
+      "text_sha256": "sha256:0ec2214651c3ef813ddda55382cbcc928dad288c4bb2d5b2bea3aa8948eca102"
+    },
+    {
+      "char_end": 22301,
+      "char_start": 22168,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4e46705dda534ee40bae",
+      "source_role": "author_response",
+      "text": "_Inorg. Chem. Front., 2021,8, 693-699, J. Am. Chem. Soc., 2021, 143, 9901. The reference section should also be checked accordingly._",
+      "text_sha256": "sha256:b955c52926d95b51916c16879cf82442ab50e33f737aee4e92ab5fb83f60d27d"
+    },
+    {
+      "char_end": 22479,
+      "char_start": 22323,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5ac84f65a62dafb0d921",
+      "source_role": "author_response",
+      "text": "We thank the reviewer for this highly valuable advice. The references have been cited as refs. 38 and 39 in our revision as required and marked them in red.",
+      "text_sha256": "sha256:170343dcdfe7f09c1429ea3a8e644366f5d851b9aa43656ad1dee8dcbf025e64"
+    },
+    {
+      "char_end": 22966,
+      "char_start": 22503,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-18366eccece26bbe75f9",
+      "source_role": "author_response",
+      "text": "_In the synthetic procedure section, an overall synthetic procedure for the preparation for the ligand APBA should be provided, and the amounts of the reactants in each procedure should be properly mentioned. Also, the conditions of the reactions performed, i.e., in air, or under any inert atmosphere, should be clearly mentioned for the sake of data reproducibility by others researchers working in this area. An ideal experimental detail should be as follows,_",
+      "text_sha256": "sha256:6fc8a99c514f36742c6d08bd840e2c3d694dfa0fd29da1663d98033019664c65"
+    },
+    {
+      "char_end": 23168,
+      "char_start": 22969,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7dd8a1a17e6ac826de86",
+      "source_role": "author_response",
+      "text": "_To a mixture of I (2.16g, 10.0 mmol, 1.0 equiv), B2Pin2 (3.81 g, 15.0 mmol, 1.5 equiv), Pd(dppf)Cl2 (435 mg, 0.6 mmol, 6 mol%) and AcOK (2.45 g, 25.0 mmol, 2.5 equiv) was added 1,4-dioxane (60 mL)._",
+      "text_sha256": "sha256:840ee2a7cfd9ebb776298a9b69d85d801b43cea4d81d42a60a4376e3eeb626b9"
+    },
+    {
+      "char_end": 23421,
+      "char_start": 23190,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a0876f0e0b40c1b31f19",
+      "source_role": "author_response",
+      "text": "We thank the reviewer for this highly valuable advice. We have modified the synthetic procedure in the part of “2.1 Synthesis of APBA” in Supporting Information, given detailed and clear reaction conditions, and marked them in red.",
+      "text_sha256": "sha256:7fc855f958daad2dfc006e7461f44d0c5cdba66ca2e289471876769016b3721f"
+    },
+    {
+      "char_end": 23442,
+      "char_start": 23424,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3532b2bfab6db12a0c5d",
+      "source_role": "author_response",
+      "text": "## **Question 4:**",
+      "text_sha256": "sha256:13c73a1b79388529ca642f0c359d8359eb260b34fe4f47a430ae39b67c4db58f"
+    },
+    {
+      "char_end": 23638,
+      "char_start": 23445,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b744d138c9df5b543e05",
+      "source_role": "author_response",
+      "text": "_1H NMR spectra should be given with all the protons being assigned. These assignments are to be included in the[1] H NMR spectra as well as the spectroscopic details in the synthetic details._",
+      "text_sha256": "sha256:4f388d22b295e9600966de5fb31b037fd01844412edc558ad6503ac9b12a059c"
+    },
+    {
+      "char_end": 23940,
+      "char_start": 23660,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e64c0446cc1cba5b7b24",
+      "source_role": "author_response",
+      "text": "We thank the reviewer for this highly valuable advice. We have assigned all the protons of new substances in the[1] H NMR spectra in the part of “2.1 Synthesis of APBA” in Supporting Information, provided the spectroscopic details in the synthetic details, and marked them in red.",
+      "text_sha256": "sha256:4fd1309bc4e3c4834538a079e626f28e3bc05573753159e425744346a41ba16e"
+    }
+  ],
+  "contract": "reconstruction_session_package",
+  "forbidden_conversation_hashes": [],
+  "input_sha256": "sha256:75682d2ffe0be06ab33b65b38f9f6405dbb2482966cd2a5474e262d21413eb08",
+  "instructions": "Reconstruct the final-state peer review for one paper.\nUse reviewer_report spans as the only source of review opinions. Author responses may\nonly determine whether an issue was resolved; they cannot create or rewrite a review\npoint. Remove greetings, publication/acceptance recommendations, editorial decisions,\nand generic praise. Merge duplicates, preserve real reviewer disagreement, and produce\nat most 24 atomic points in StructuredReviewV2. Include contribution summary, novelty\nsupport/limits, strengths, weaknesses, and questions. Bind every retained point to at\nleast one reviewer quote key and one final PaperIR P:S-* span. Put resolved issues only\nin ReferenceTraceV2/revision_ledger. Keep partially_resolved or persists issues only\nwhen the residual is independently supported by the final paper. Unverifiable items are\naudit-only. Do not use graph signals, GEAR output, old reconstructions, ratings,\ndecisions, recommendations, or accept/reject language. Return only the completed\nReconstructionSessionResponseV2 JSON file.",
+  "package_id": "RSP-30880a8c846d3fb72c83",
+  "paper_context": {
+    "claims": [
+      {
+        "claim_id": "C-a1cda997f7935271",
+        "claim_type": "significance_claim",
+        "evidence_key": "P:S-892f5e752da6dbee9c5d",
+        "schema_version": "aspr_gear",
+        "text": "## Article https://doi.org/10.1038/s41467-024-51552-x ## N, N’-bidentate ligand anchored palladium catalysts on MOFs for efficient Heck reaction Received: 5 April 2024 Accepted: 12 August 2024 Check for updates Xiao-Li Xu 1,2, Nian-Nian Wang 1,2, Yong-Hao Zou 1, Xiao Qin1, Peng Wang1, Xiang-Yu Lu[1] , Xiao-Yu Zhang[1] , Wei-Yin Sun[1] & Yi Lu 1 Metal-organic frameworks (MOFs), recognized as advanced catalyst carriers due to their adjustable porous, diverse structure and highly exposed active sites, have earned increasing attention for their potential to address the longevity of catalytic centers."
+      },
+      {
+        "claim_id": "C-74d5caa0589fd889",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-892f5e752da6dbee9c5d",
+        "schema_version": "aspr_gear",
+        "text": "This catalyst has exhibited recyclability for multiple runs without significant loss of reactivity for gram-scale reactions."
+      },
+      {
+        "claim_id": "C-566b4d97f9fe9330",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-38602bd5009734e2a5e5",
+        "schema_version": "aspr_gear",
+        "text": "However, this method often necessitates high-temperature synthesis and involves a cumbersome synthetic procedure[30] ."
+      },
+      {
+        "claim_id": "C-900a5fd81552ad7d",
+        "claim_type": "significance_claim",
+        "evidence_key": "P:S-7ee55fc9b0add215d64b",
+        "schema_version": "aspr_gear",
+        "text": "Therefore, the flexibility of the ligands’ anchors is important to the retention of crystallinity in the process of metalation and coordination with metal centers[35][,][43][–][46] ."
+      },
+      {
+        "claim_id": "C-dc8820af837c2c7f",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-01eeba5a34114f6f62d1",
+        "schema_version": "aspr_gear",
+        "text": "The emergence of new peaks ascribed to Pd–N revealed the coordination of APBA with Pd (Fig."
+      },
+      {
+        "claim_id": "C-c06056231461056b",
+        "claim_type": "significance_claim",
+        "evidence_key": "P:S-01eeba5a34114f6f62d1",
+        "schema_version": "aspr_gear",
+        "text": "Furthermore, Fourier transform-extended X-ray absorption fine structure (FT-EXAFS) analysis for Pd in both Pd@MOF-APBA and PdCl2@MOF-APBA indicated the absence of the Pd−Pd bonding, confirming that the Pd centers dispersed atomically in MOF-APBA (Fig."
+      },
+      {
+        "claim_id": "C-c8c24503d16959dc",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-01eeba5a34114f6f62d1",
+        "schema_version": "aspr_gear",
+        "text": "The peak around 1.60 Å of PdCl2@MOF-APBA originated from the Pd–N/Cl first coordination shell (Fig."
+      },
+      {
+        "claim_id": "C-2ae8847de62be97d",
+        "claim_type": "significance_claim",
+        "evidence_key": "P:S-b6a7e5376916ba235b7c",
+        "schema_version": "aspr_gear",
+        "text": "Moreover, the EXAFS wavelet transform (WT) analysis for Pd@MOF-APBA and PdCl2@MOF-APBA presented an intensity maximum at 4.53 and 4.79 Å[−][1] respectively, distinctly different from the Pd–O path (k = 5.19 Å[−][1] ) of PdO (Fig."
+      },
+      {
+        "claim_id": "C-0a5a8a845541c88c",
+        "claim_type": "causal_claim",
+        "evidence_key": "P:S-b6a7e5376916ba235b7c",
+        "schema_version": "aspr_gear",
+        "text": "It is demonstrated that the existence of Pd–N caused the obvious difference in k values among these materials."
+      },
+      {
+        "claim_id": "C-310979a696c95800",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-1341f6a05f4c34e69567",
+        "schema_version": "aspr_gear",
+        "text": "A reaction time of 8 h was imperative to ensure high yields, as evidenced by the noticeable decrease in yield when the reaction times – were shortened (Supplementary Table 3, entries 14 16)."
+      },
+      {
+        "claim_id": "C-14d976f08dd9181c",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-03e97fc14410896abc45",
+        "schema_version": "aspr_gear",
+        "text": "We proposed that the nanoparticles were formed by the agglomeration of Pd, which resulted in a decrease in the activity of catalysts[55] , but the chelation of ligands with Pd partly delayed the formation of larger size nanoparticles."
+      },
+      {
+        "claim_id": "C-6f7e261250fd3f95",
+        "claim_type": "causal_claim",
+        "evidence_key": "P:S-fbb19a486ae13ff7410f",
+        "schema_version": "aspr_gear",
+        "text": "For Pd-BCA, the rigidity of the ligand skeleton results in the formation of a deformed five-membered ring (Fig."
+      }
+    ],
+    "contract": "reconstruction_paper_context",
+    "paper_id": "10.1038/s41467-024-51552-x",
+    "paper_sha256": "sha256:f0c24bc1f470c11442f85cc96929d1bb6ac29e9bb6b8295c980d250fad565fd9",
+    "schema_version": "aspr_gear",
+    "spans": [
+      {
+        "evidence_key": "P:S-3bb09726aa9bf8f80ad1",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-3bb09726aa9bf8f80ad1",
+        "text": "**==> picture [523 x 31] intentionally omitted <==**",
+        "text_sha256": "sha256:c92503a235f2ff0ed9de0da37ee944558aded4066f9ed470ec7d939a03c1e11f"
+      },
+      {
+        "evidence_key": "P:S-892f5e752da6dbee9c5d",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-892f5e752da6dbee9c5d",
+        "text": "## Article \n\nhttps://doi.org/10.1038/s41467-024-51552-x \n\n## N, N’-bidentate ligand anchored palladium catalysts on MOFs for efficient Heck reaction \n\nReceived: 5 April 2024 Accepted: 12 August 2024 Check for updates \n\nXiao-Li Xu 1,2, Nian-Nian Wang 1,2, Yong-Hao Zou 1, Xiao Qin1, Peng Wang1, Xiang-Yu Lu[1] , Xiao-Yu Zhang[1] , Wei-Yin Sun[1] & Yi Lu 1 \n\nMetal-organic frameworks (MOFs), recognized as advanced catalyst carriers due to their adjustable porous, diverse structure and highly exposed active sites, have earned increasing attention for their potential to address the longevity of catalytic centers. In this manuscript, we have devised and synthesized a multifunctional amino-pyridine benzoic acid (APBA) ligand to replace the modulator ligand of the MOF-808 and disperse the palladium catalytic centers atomically on the MOF-APBA. The resulting single-site catalytic system, Pd@MOF-APBA, demonstrates preeminent efficiency and stability, as evidenced by a high average turnover number (95000) and a low metal residue (4.8 ppm) in the Heck reaction. This catalyst has exhibited recyclability for multiple runs without significant loss of reactivity for gram-scale reactions. The catalyst’s high activity and efficiency can be attributed to the suitable electrical properties and structures of the N, N’-bidentate ligand for the catalytic palladium ions, postponing their deactivations, including leaching and agglomeration. \n\nAmongst the most fundamental methods for constructing C–C bonds in organic synthetic chemistry and pharmaceutical industry[1][,][2] , the Heck reaction has proven to be a powerful one since Mizoroki and Heck successively reported the Pd-catalyzed cross-coupling reaction of iodobenzene and olefin in the 1970s[3][,][4] .",
+        "text_sha256": "sha256:18cded5affa25a3d9730c9f70d4967d102215b408668bde98cf86b7ebcf9387f"
+      },
+      {
+        "evidence_key": "P:S-38602bd5009734e2a5e5",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-38602bd5009734e2a5e5",
+        "text": "The resulting cinnamate esters serve as widespread food additives and crucial pharmaceutical intermediates for synthesizing the anticancer drug paclitaxel[5][,][6] . In the traditional Pd-catalyzed Heck reaction system, Pd(0) and Pd(II) are commonly used as catalysts[7][–][10] . However, homogeneous palladium catalysts consistently encounter challenges related to recycling, elevated costs, and environmental pollution[11] . Furthermore, the presence of metal residues in the end products hinders the application of transition-metal catalysts in the preparation of pharmaceutical intermediates[12] . Consequently, it is urgent to develop proper heterogeneous catalysts to address the above issues, safeguard the ecological environment, and facilitate the realization of green chemistry principles. \n\nSince the report by Fujita and colleagues on the cyanosilylation of aldehydes catalyzed by a coordination polymer [Cd(4,4’-bpy)2](NO3)2 in 1994, MOFs have been extensively studied and shown excellent performance in catalytic reactions[13][,][14] . Moreover, MOFs can be simply modified through post-synthetic modification, including covalent modifications on ligands[15] , ligand exchange[16][–][18] , coordination on unsaturated metal sites[19][,][20] , metal node exchange[21][,][22] and the exchange of guest molecules in the channel[23][,][24] . On the other hand, one prevalent approach for generating single-atom catalysts (SACs) is to disperse individual metal sites on heterogeneous supports, such as metals[25] , metal oxides[26][,][27] , carbon materials[28] , zeolites[29] , MOFs[30][–][32] and so on. However, this method often necessitates high-temperature synthesis and involves a cumbersome synthetic procedure[30] .",
+        "text_sha256": "sha256:6297241bdb4de7f364a043421fac14badb0144d7801b8bb5c5d660f39755ea65"
+      },
+      {
+        "evidence_key": "P:S-7ee55fc9b0add215d64b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-7ee55fc9b0add215d64b",
+        "text": "Additionally, the general loadings of the catalysts tend to be low[33] , and in some cases, not all catalytic centers are exposed for catalyzation within these materials[34] . On the contrary, SACs on the uniform and ordered MOFs can be readily prepared under mild conditions[35][–][37] . The periodic order \n\n> 1State Key Laboratory of Coordination Chemistry, School of Chemistry and Chemical Engineering, Nanjing National Laboratory of Microstructures, Collaborative Innovation Center of Advanced Microstructures, Nanjing University, 210023 Nanjing, PR China.[2] These authors contributed equally: Xiao-Li Xu, Nian-Nian Wang. e-mail: luyi@nju.edu.cn \n\nNature Communications | (2024) 15:7273 \n\n1 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-51552-x \n\nand site isolation of the catalytic centers within MOFs may prevent the agglomeration of the catalytic centers and extend their lifetime. \n\nOver the past few decades, researchers have conducted numerous studies on incorporating metal catalysts into MOFs to develop heterogeneous catalysts[38][,][39] . Notably, the coordination of catalytic centers with the 2,2’-bipyridine-based ligands to form a five-membered ring structure is popular[40][–][42] . However, the electrons of the two N atoms of bipyridine fused in a large π system, forming a rigid structure that posed challenges for optimal overlap with the electron clouds of palladium. Therefore, the flexibility of the ligands’ anchors is important to the retention of crystallinity in the process of metalation and coordination with metal centers[35][,][43][–][46] . \n\nIn this work, we have devised and synthesized a multifunctional ligand, 3-amino-4-(2-pyridyl) benzoic acid (APBA), derived from the 2- (2-aminophenyl) pyridine ligand[47] .",
+        "text_sha256": "sha256:69b79a03eb01f92a3f6c56a12e6a76431020ceb00f4fff88aa36a62c479f2ecd"
+      },
+      {
+        "evidence_key": "P:S-e41f9f6f8e06de187652",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-e41f9f6f8e06de187652",
+        "text": "In contrast to 2,2’-bipyridine, APBA is more flexible in coordination with palladium owing to the rotatable C–N bond of the amino group on APBA. Furthermore, we have implemented a building block replacement strategy to replace the modulator ligand on the chemically and thermally stable MOF-808 with APBA. The chelation of N, N’-bidentate ligands has successfully \n\nimmobilized the palladium catalytic centers in MOF-808 tightly to delay their leaching and agglomeration and properly maintain their reactivity. The ample pore size of MOF-808 can accommodate both APBA and palladium centers, and provide sufficient space for the catalytic reactions. Fortunately, the resulting Pd@MOF-APBA has demonstrated effective catalysis in the cross-coupling reaction of iodinated arenes and olefins with a high turnover number (TON) exceeding 95,000. Moreover, Pd@MOF-APBA can be recycled at least four times, maintaining, a yield of 100% and up to three times even on gram-scale reactions. \n\n## Results \n\n## Preparation and characterization of Pd@MOF-APBA \n\nThe synthetic process of Pd@MOF-APBA is depicted in Fig. 1a. We devised and synthesized the multifunctional ligand APBA with one carboxyl group linking to the metal nodes of MOF-808 according to the Hard–Soft-Acid–Base theory, and two N atoms from the amino group and pyridine group respectively. The structure of APBA was confirmed by[1] H NMR spectroscopy (Supplementary Figs. 1a-h) and single crystal X-ray diffraction (XRD) (Supplementary Fig. 1i and \n\n**==> picture [421 x 418] intentionally omitted <==**",
+        "text_sha256": "sha256:ca10c3e6af46caa97f1599d2935ae5a09bc0baa08db85996bf0974dc9b03af73"
+      },
+      {
+        "evidence_key": "P:S-eb5ada65397dab3943c0",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-eb5ada65397dab3943c0",
+        "text": "**----- Start of picture text -----**<br>\na<br>Pd(OAc)2<br>+<br>MOF-808<br>APBA MOF-APBA Pd@MOF-APBA<br>b c d<br>200 nm 200 nm 10 nm<br>e f g h i j<br>500 nm<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:a8a1501865cfe5766743a342955fc40653be2bac84e35d65ada404377f4a426b"
+      },
+      {
+        "evidence_key": "P:S-030f324de1ee28035220",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-030f324de1ee28035220",
+        "text": "Fig. 1 | Synthesis and characterization of materials. a Schematic illustration of the synthetic process of Pd@MOF-APBA. b TEM image of Pd@MOF-808. The red circles highlight PdO nanoparticles. c TEM image and d HRTEM image of Pd@MOF- \n\nAPBA. e HAADF-STEM image, f STEM–EDS overlap, and g–j element mapping images of Pd@MOF-APBA. \n\nNature Communications | (2024) 15:7273 \n\n2 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-51552-x \n\nSupplementary Table 1). We obtained MOF-APBA by employing a solvent-assisted ligand exchange strategy, replacing the non-bridging ligand acetic acid at Zr[4+] with APBA. The integral ratios of peak area in the[1] H NMR spectrum of trimesic acid to APBA indicated that each Zr6 cluster bound 1.5 APBA molecules with the optimal concentration of APBA (Supplementary Figs. 2 and 3). Subsequently, MOF-APBA was immersed in the Pd(OAc)2/DCM solution with different concentrations. \n\nThe loading of Pd was retained when the concentration of Pd(OAc)2 exceeded 0.012 M (measured by inductively coupled plasma optical emission spectrometer (ICP-OES), Supplementary Fig. 4), so we selected 0.012 M as the optimal concentration to synthesize Pd@MOFAPBA. According to the mass fraction of Pd (5.0 wt%) and the NMR spectrum of the digested sample, we found thateach Pd was combined with approximately two acetate ions (Supplementary Table 2), indicating that the amino group in the ligand did not undergo deprotonation upon coordination with Pd. An octahedral structure in the scanning electron microscopy (SEM) image implied that the introduction of APBA and Pd(OAc)2 did not alter the morphology and size of MOF-808 (Supplementary Fig. 10), and the crystal structure maintained (Supplementary Fig. 11).",
+        "text_sha256": "sha256:dca6da0e546c30a6afa1ad002580b16e08d650557925a45819a82f2878f73376"
+      },
+      {
+        "evidence_key": "P:S-aaf4901da393a2cebedb",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-aaf4901da393a2cebedb",
+        "text": "N2 adsorption–desorption isotherms presented a reduction in Brunauer–Emmett–Teller (BET) surface area from 1757 m[2] /g of MOF-808 to 1232 m[2] /g of MOF-APBA due to the grafting of APBA. Furthermore, the BET surface area declined to 1045 m[2] /g for Pd@MOF-APBA on account of the introduction of Pd[2+] ions (Supplementary Figs. 12 and 13). \n\nTo elucidate the role of APBA, we prepared Pd@MOF-808 simultaneously by directly immersing MOF-808 in Pd(OAc)2/DCM solution. The presence of PdO nanoparticles in Pd@MOF-808 was evident through transmission electron microscopy (TEM) and highresolution transmission electron microscopy (HRTEM) (Fig. 1b and Supplementary Fig. 14). In contrast, no Pd or PdO nanoparticles were observed in Pd@MOF-APBA by TEM or HRTEM (Fig. 1c, d), indicating that the N, N’-bidentate ligands effectively dispersed the catalytic centers in Pd@MOF-APBA, preventing their agglomeration into nanoparticles. The high-angle annular dark-field scanning transmission electron microscopy (HAADF-STEM) image and the corresponding energy-dispersive X-ray spectroscopy (EDS) elemental mappings (Fig. 1e–j) further verified the uniform dispersion of APBA and Pd species on Pd@MOF-APBA. \n\n## Structure analysis \n\nX-ray photoelectron spectroscopy (XPS) was implemented to identify chemical compositions and electronic states in MOF-808, MOF-APBA, and Pd@MOF-APBA. The presence of nitrogen in the XPS spectrum of MOF-APBA indicated a successful ligand exchange from acetic acid to APBA (Supplementary Fig. 15). The binding energies of Zr 3d of MOFAPBA and Pd@MOF-APBA dislocated from MOF-808 confirmed the successful grafting of APBA onto MOF-808 (Supplementary Fig. 16). The N 1s spectra of MOF-APBA and Pd@MOF-APBA were fitted by three peaks[48][–][50] and five peaks[51] respectively.",
+        "text_sha256": "sha256:c5d4558c2f0b0f0c4cda6c801e855a549de180efbd41180bcf447cc04e43e965"
+      },
+      {
+        "evidence_key": "P:S-01eeba5a34114f6f62d1",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-01eeba5a34114f6f62d1",
+        "text": "The emergence of new peaks ascribed to Pd–N revealed the coordination of APBA with Pd (Fig. 2a, b). The Pd 3d5/2 peaks of Pd@MOF-APBA and Pd@MOF-808 were located at 338.0 and 337.8 eV, manifesting the existence of divalent Pd[52] . For Pd@MOF-808, an additional Pd 3d5/2 peak at336.5 eV was assigned to PdO[53] (Fig. 2c, d), consistent with the HRTEM results. In summary, the XPS results provided convincing evidence for the successful grafting of APBA onto the zirconium cluster of MOF-808 and the coordination of APBA with Pd(OAc)2. \n\nTo further illustrate the coordinated condition between Pd and APBA in Pd@MOF-APBA, we prepared PdCl2@MOF-APBA simultaneously. Extended X-ray absorption fine structure (EXAFS) and X-ray absorption near edge structure (XANES) measurements were performed at the Pd K-edge to identify their chemical structures. The XANES spectra for the Pd K-edge of Pd@MOF-APBA and PdCl2@MOF- \n\nAPBA sat in the middle of PdO and Pd foil and approached PdO, indicating that the valence of Pd was between 0 and +2 and approximately represented a +2 oxidation state (Fig. 2e). Furthermore, Fourier transform-extended X-ray absorption fine structure (FT-EXAFS) analysis for Pd in both Pd@MOF-APBA and PdCl2@MOF-APBA indicated the absence of the Pd−Pd bonding, confirming that the Pd centers dispersed atomically in MOF-APBA (Fig. 2f). The peak around 1.60 Å of PdCl2@MOF-APBA originated from the Pd–N/Cl first coordination shell (Fig. 2f). The structural parameters by EXAFS fitting manifested that one Pd center was coordinated by two N atoms at a distance of 1.99 Å and two Cl atoms at a distance of 2.22 Å to form a N2–Pd–Cl2 moiety (Fig. 2g and Supplementary Table 7). In the FT-EXAFS spectrum – of Pd@MOF-APBA, the prominent peak at 1.54 Å was ascribed to Pd N/ O bonding (Fig.",
+        "text_sha256": "sha256:df830b5def207180a422a5746f216490405995e4a3b8a0140c6f49bb75ab6361"
+      },
+      {
+        "evidence_key": "P:S-b6a7e5376916ba235b7c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-b6a7e5376916ba235b7c",
+        "text": "2f). Notably, the only difference between PdCl2@MOFAPBA and Pd@MOF-APAB was the replacement of PdCl2 with Pd(OAc)2. Therefore, we assumed that the Pd center in Pd@MOF-APBA was coordinated with two N atoms just as in the coordination form in PdCl2@MOF-APBA, and the other two coordination sites were occupied by acetate ions. The EXAFS fitting further confirmed the O2–Pd–N2 moiety in Pd@MOF-APBA (Fig. 2h and Supplementary Table 7). In consequence, these results provided support for the coordination of one Pd center with the two nitrogen atoms of APBA and two acetate ions in Pd@MOF-APBA. \n\nMoreover, the EXAFS wavelet transform (WT) analysis for Pd@MOF-APBA and PdCl2@MOF-APBA presented an intensity maximum at 4.53 and 4.79 Å[−][1] respectively, distinctly different from the Pd–O path (k = 5.19 Å[−][1] ) of PdO (Fig. 2i–l and Supplementary Figs. 17, 18). It is demonstrated that the existence of Pd–N caused the obvious difference in k values among these materials. In contrast to Pd foil, the absence of a Pd–Pd metallic path for Pd@MOF-APBA and PdCl2@MOFAPBA further confirmed the atomic dispersion of Pd centers in both of these materials. In summary, the EXAFS and XANES results suggested that the Pd centers, with the assistance of the bidentate APBA ligand, were atomically dispersed in Pd@MOF-APBA. \n\n## Catalytic evaluation of Pd@MOF-APBA \n\nAs ethyl cinnamate serves as a crucial pharmaceutical intermediate, particularly as the precursor for the anticancer drug paclitaxel, we select the Heck reaction of iodobenzene(1a) and ethyl acrylate (2a) to assess the catalytic performance of Pd@MOF-APBA.",
+        "text_sha256": "sha256:a5f13bf8c48df552def97a7a19562953226809cce995c32bb573fa82b28f97cb"
+      },
+      {
+        "evidence_key": "P:S-1341f6a05f4c34e69567",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-1341f6a05f4c34e69567",
+        "text": "Initially, the target product 3aa was obtained with a yield of 17% using Pd@MOF-APBA as the catalyst, toluene as the solvent, and triethylamine as the base, conducted at 100 °C in an N2 atmosphere for 18 h (Supplementary Table 3, entry 1). Subsequently, the optimization of the Pd@MOF-APBA-catalyzed Heck reaction conditions was carried out. Solvent screening revealed that both NMP and acetonitrile could provide excellent yields (Supplementary Table 3, entries 7 and 8). To enhance cost-effectiveness and streamline the procedure, acetonitrile was selected as the solvent for subsequent condition screening. Notably, no product was observed in the absence of the catalyst, underscoring the crucial role of the catalyst for the reaction (Supplementary Table 3, entry 9). Different reaction temperatures were screened, revealing that 120 °C was the most favorable one, increasing the yield to 100% (Supplementary Table 3, entry 13). A reaction time of 8 h was imperative to ensure high yields, as evidenced by the noticeable decrease in yield when the reaction times – were shortened (Supplementary Table 3, entries 14 16). To our delight, the yield retained 100% when reducing the amount of Pd@MOF-APBA from 1.8 to 0.5 mol% (Supplementary Table 3, entry 18). To validate the heterogeneous nature of the catalyst, the catalyst was filtered after running the Heck reaction for 0.5 h with a yield of 56%. The filtrate was then subjected to continued heating and stirring, and no further conversion was observed (Supplementary Fig. 19). \n\nTo investigate the catalyst’s properties, different catalysts have been designed, synthesized and compared.",
+        "text_sha256": "sha256:c2d491338f133eab62243ac994dfe9ad7578e3665b70c461e3290d0ffaa80d58"
+      },
+      {
+        "evidence_key": "P:S-be4a94bb9357ea6a9eb4",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-be4a94bb9357ea6a9eb4",
+        "text": "Methyl 3-amino-4-(pyridin2-yl)benzoate (MAPB) was synthesized by esterification of APBA \n\nNature Communications | (2024) 15:7273 \n\n3 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-51552-x \n\n**==> picture [341 x 560] intentionally omitted <==**",
+        "text_sha256": "sha256:cda975aafb5ad10d35d1adabad6f961be3485d9dc27d59222efcc47da1d78201"
+      },
+      {
+        "evidence_key": "P:S-f241cf7c6bbf6342d8f5",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-f241cf7c6bbf6342d8f5",
+        "text": "**----- Start of picture text -----**<br>\na e i<br>b f j<br>c g k<br>d h l<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:879d35b1318b5480b294a2e30a2e2e1afb5ba836618328f5f43133b471d6dab8"
+      },
+      {
+        "evidence_key": "P:S-959d7d36d3f46f6fcfa5",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-959d7d36d3f46f6fcfa5",
+        "text": "**==> picture [138 x 557] intentionally omitted <==**",
+        "text_sha256": "sha256:6f94311d79d92722bffc92e0246eef8b5debab33de4934dbebb63d06b17c107c"
+      },
+      {
+        "evidence_key": "P:S-4d2be4199ac3ece40c5e",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-4d2be4199ac3ece40c5e",
+        "text": "Fig. 2 | Valance state and structure analysis. N 1s XPS spectra of a MOF-APBA and b Pd@MOF-APBA.Pd 3d XPS spectraof c Pd@MOF-APBAand d Pd@MOF-808. e Pd K-edge XANES and f FT-EXAFS spectra of Pd@MOF-APBA and PdCl2@MOF-APBA. \n\nPd K-edge EXAFS spectra fitting of g PdCl2@MOF-APBA and h Pd@MOF-APBA. WT plots for Pd element of i Pd foil, j PdO, k PdCl2@MOF-APBA, and l Pd@MOF-APBA. \n\n(Supplementary Figs. 5, 6) in case of the interference of carboxyl group coordination to obtain complex Pd-MAPB (Supplementary Figs. 7, 8). The reactivity of Pd@MOF-APBA, compared with Pd@MOF-808 and Pd-MAPB, was tested under the optimal condition of the Heckreaction. Pd@MOF-APBA could be easily recovered from the solution by centrifugation and be continuously recycled at least four times without any loss of yield (Fig. 3a and Supplementary Fig. 20). In contrast, the \n\nyields in the Pd@MOF-808 catalyzed reactions decreased as the number of cycles increased (Fig. 3a). When Pd-MAPB was applied asthe catalyst, excellent conversion was observed, however, Pd-MAPB could not be recycled because of its good solubility in the solvent (Fig. 3a). These results suggested high stability and recyclability of Pd@MOFAPBA, as well as a higher catalytic activity. The XPS spectra of Pd 3d in Pd@MOF-APBA after four cycles presented binding energies of 335.3 \n\nNature Communications | (2024) 15:7273 \n\n4 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-51552-x \n\n**==> picture [421 x 235] intentionally omitted <==**",
+        "text_sha256": "sha256:a1172e5619c1e2fb2b49e8ab53056fb7c1184b5764bf2bf31d6a63a0e9153928"
+      },
+      {
+        "evidence_key": "P:S-d793b4e355ecd1db21c0",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-d793b4e355ecd1db21c0",
+        "text": "**----- Start of picture text -----**<br>\na b c<br>200 nm 200 nm<br>d e f<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:7db17b4c90a47ab13b625a85e510b3727ec5843c8e86954425b350e664b0f67a"
+      },
+      {
+        "evidence_key": "P:S-03e97fc14410896abc45",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-03e97fc14410896abc45",
+        "text": "Fig. 3 | Materials characterization after reaction and DFT calculations. a The recyclability of Pd@MOF-APBA and Pd@MOF-808. TEM images of b Pd@MOFAPBA and c Pd@MOF-808 after recycles. d Grain diameter distribution map of \n\nPd@MOF-APBA and Pd@MOF-808 after recycles. Density functional theory optimized complex structures (B3LYP-D3/6-311 + G(d,p)//B3LYP-D3/6-31 G(d)) for e PdAPBA and f Pd-BCA. \n\nand 340.6 eV, assigned to Pd[0] 3d5/2 and Pd[0] 3d3/2, respectively (Supplementary Fig. 21), suggesting the reduction of Pd[II] to Pd[0] as the reaction proceeded[54] . Another peak at 336.3 eV was attributed to the Pd 3d5/2 of PdO[53] , indicating the oxidization of Pd[0] . The Pd 3d5/2 peak at 337.9 eV was ascribed to Pd[II] , which was consistent with the binding energy of Pd 3d5/2 in fresh catalysts, suggesting that there were still intact molecular Pd complexes anchored within the MOF. The morphology of the two catalysts maintained after the recycles, and the apparent nanoparticles were attached to their surfaces which were observed intuitively by SEM (Supplementary Fig. 22). TEM and HRTEM images showed the formation of Pd nanoparticles on Pd@MOF-808 and Pd@MOF-APBA after recycles (Fig. 3b, c and Supplementary Fig. 23). Gaussian function was used to fit the particle size distribution for these materials. The nanoparticles with an average size of 18.23 and 11.66 nm were observed in Pd@MOF-808 and Pd@MOF-APBA, respectively (Fig. 3d). We proposed that the nanoparticles were formed by the agglomeration of Pd, which resulted in a decrease in the activity of catalysts[55] , but the chelation of ligands with Pd partly delayed the formation of larger size nanoparticles.",
+        "text_sha256": "sha256:b0c9993f252951228a9da99f84956cc56b126475d5b99be027d363e7505d7c5c"
+      },
+      {
+        "evidence_key": "P:S-91cfab73328337c8482a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-91cfab73328337c8482a",
+        "text": "Additionally, slight \n\nTable 1 | Comparison of Pd@MOF-APBA with other previously reported MOF-based heterogeneous catalysts for Heck reaction from iodobenzene with acrylic ester \n\n|Entry|Catalyst|Yield(%)|TONa|Ref.|\n|---|---|---|---|---|\n|1|Pd@MOF-3|99|79.2|56|\n|2|Pd NPs@NHC@ZIF-8|94|1175|57|\n|3|UiO-67-Pd-NHDC|98|196|58|\n|4<br>5<br>6<br>7b|IRMOF-3-Pd<br>Pd-HoMOF<br>Fe3O4–NH2@MIL-101-NH2–Pd(OAc)2<br>Pd@MOF-APBA|100<br>99<br>99<br>100|606<br>247.5<br>1207<br>42,553|59<br>60<br>61<br>This work|\n|8c|Pd@MOF-APBA|90|95,744|This work|",
+        "text_sha256": "sha256:60590c6f3bae7dd6862c577237f195a4abc6f5c78bfd2da9113bad7bc2442cc0"
+      },
+      {
+        "evidence_key": "P:S-b189de35ba695978df42",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-b189de35ba695978df42",
+        "text": "aTurnover number (TON): ratio of moles of formed product to moles of catalyst. b0.00235 mol% of catalyst. c0.00094 mol% of catalyst and average results. \n\nleaching of palladium in the filtrate after the reaction was detected by ICP-OES. The leaching of palladium of Pd@MOF-APBA was less than not only Pd@MOF-808 but also the oral exposure to palladium prescribed in the drug (Guideline on the specification limits for residues of metal catalysts or metal reagents.) (Supplementary Table 4). \n\nTo further assess the catalytic activity of Pd@MOF-APBA, the TON value of this catalyst was determined (Supplementary Table 5). Notably, we conducted repeated experiments three times and when the Pd amount was reduced to 0.00094 mol%, the average TON of Pd@MOFAPBA was more than 95,000, much better than the homogeneous – catalyst Pd-MAPB (Supplementary Table 5, entries 3 8). Nevertheless, no product was detected when MOF-808 was added to the reaction system (Supplementary Table 5, entry 9). Compared with previously reported MOF-based heterogeneous catalysts in terms of the TON of the Heck reaction[56][–][61] (Table 1), Pd@MOF-APBA demonstrated better performance. We attributed this high activity to the utilization of APBA. \n\nTo compare our ligand APBA with traditional bipyridine ligands, we synthesized Pd@MOF-BCA with [2,2’-bipyridine]-5-carboxylic acid (BCA) as well, in which each Zr6-cluster bound about 1.8 BCA (Supplementary Fig. 9). The mass fraction of Pd in Pd@MOF-BCA was a mere 0.3%, considerably lower than the loading of Pd in Pd@MOFAPBA (5.0 wt%). This discrepancy implied that APBA has a greater capacity to stabilize Pd in comparison to BCA.",
+        "text_sha256": "sha256:cf665f0d3dce7ed02060cdb1fe275bc0fb6614617be8d0fa57bf8cf55cd51629"
+      },
+      {
+        "evidence_key": "P:S-fbb19a486ae13ff7410f",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-fbb19a486ae13ff7410f",
+        "text": "We further investigated the theoretical structure and binding energy of the complex formed by these two ligands and Pd(OAc)2 through density functional theory (DFT). The resulting energy is depicted in Table 2. The binding energy of Pd-APBA surpasses that of Pd-BCA by 19.8 kcal/mol due to the enhanced overlap between Pd orbitals and lone pair electrons of N atoms. For Pd-BCA, the rigidity of the ligand skeleton results in the formation of a deformed five-membered ring (Fig. 3e, f) which is unfavorable for the orbital overlap. Both the deformed ligand backbone and weak coordination are not conducive to stabilize Pd(OAc)2. However, the C–N (–NH2) bond in APBA allowed free rotation, enabling the electrons of the two N atoms in APBA to achieve a more extensive overlap with the electron clouds of palladium. Therefore, it can effectively stabilize Pd[2+] ions. In summary, APBA improved the catalytic \n\nNature Communications | (2024) 15:7273 \n\n5 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-51552-x \n\nactivity and stability of palladium catalytic centers, diminished the leaching, and decelerated the agglomeration. \n\nA gram-scale reaction was conducted to demonstrate the potential industrial application of Pd@MOF-APBA. As shown in Supplementary Table 6, the 1 mg catalyst successfully converted 5 mmol of iodobenzene into the target product with 99% yield and demonstrated recyclability over at least three times with the yield maintained. This result affirmed the stability and efficiency of the developed catalyst, positioning it as a promising candidate for industrial production.",
+        "text_sha256": "sha256:77c00420c7c2f2ef130fa2a6bc5a06483271e2be3d7fed52a5c9062c8cdd7f65"
+      },
+      {
+        "evidence_key": "P:S-8b329c87999d9127515a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8b329c87999d9127515a",
+        "text": "## Table 2 | Calculated energy of Pd complex, Pd(OAc)2 and ligands \n\n||E(complex)a,b|E(Pd(OAc)2)a,b|E(ligand)a,b|Binding energy<br>(kal/mol)|\n|---|---|---|---|---|\n|Pd-APBA|−1308.680557||−723.527928|−94.65|\n|||−585.00179|||\n|Pd-BCA|−1269.305247||−684.184168|−74.85|",
+        "text_sha256": "sha256:d21034ad3b1fe424d801357821842d05b1adc868918cc5c1410826b6acc10504"
+      },
+      {
+        "evidence_key": "P:S-5d684f4dfe6c6bee464c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-5d684f4dfe6c6bee464c",
+        "text": "aSingle point energies were conducted at the B3LYP-D3/6-311G+(d,p)-SDD level of theory. \n\nbThe value is measured in Hartree. \n\n## Substrate scope \n\nWith the optimal condition in hand, a series of substituted substrates were tested to evaluate the compatibility of the Pd@MOF-APBA catalytic system. As shown in Table 3, aryl iodides with electron-donating and electron-withdrawing substituents could react efficiently with ethyl acrylate and provide corresponding products (3aa-3ap) in moderate to high yields. It is worth noting that all the aryl iodides with substituents at meta- and para-positions provided high yields. The yields of aryl iodides with electron-donating ones were less than those with electron-withdrawing ones at ortho-, meta- and para-position (3ab–3am), indicating that the electric effect had a certain influence on the catalytic reaction. Moreover, the yields of aryl iodides with substituents at para-position were higher than their counterparts with the corresponding substitutions at meta- and ortho-positions, suggesting that the steric hindrance effect had a large influence on the reaction activity. When styrene served as the coupling partner in this catalytic system, moderate to excellent yields were achieved (Table 4, 3ba–3bk). Notably, the yields of aryl iodides with electronwithdrawing substituents were higher than those with electrondonating substituents. Intriguingly, when chlorine was used as a substituent, consistently high yields were obtained regardless of its position in the molecular structure. \n\n## Table 3 | Scope of substrates[a,b] \n\n**==> picture [523 x 391] intentionally omitted <==**",
+        "text_sha256": "sha256:5931632b9e5555977000b792b505c975ffe0f91bf32d9c51ba87c46dd48ea631"
+      },
+      {
+        "evidence_key": "P:S-a0315108809a86f13830",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a0315108809a86f13830",
+        "text": "**----- Start of picture text -----**<br>\nI H Pd@MOF-APBA (0.5 mol %) CO2Et<br>R1 + CO2Et NEt3, MeCN, 120  [o] C, 8 h R1<br>1a 2a 3a<br>Me OMe NO2<br>CO2Et CO2Et CO2Et CO2Et<br>3aa   99% 3ab   72% 3ac   69% 3ad   91%<br>Me OMe NO2<br>Cl<br>CO2Et CO2Et CO2Et CO2Et<br>3ae   87% 3af   88% 3ag   83% 3ah   93%<br>Cl<br>Me MeO O2N<br>CO2Et CO2Et CO2Et CO2Et<br>3ai   91% 3aj   91% 3ak   90% 3al   95%<br>Me<br>Cl NC O F3C<br>CO2Et CO2Et CO2Et CO2Et<br>3am   99% 3an   98% 3ao   80% 3ap   99%<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:7cc0981faf5da0dd37a3341d264e4eecaa26ec63c500bd6846803388aab8b822"
+      },
+      {
+        "evidence_key": "P:S-0caec6e001fb70a57518",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-0caec6e001fb70a57518",
+        "text": "aReaction conditions: 1 (0.1 mmol), 2a (0.25 mmol), NEt3 (0.13 mmol), and Pd@MOF-APBA (0.5 mol%) in MeCN (1 mL) at 120 °C for 8 h. bYields of isolated products. \n\nNature Communications | (2024) 15:7273 \n\n6 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-51552-x \n\n## Table 4 | Scope of substrates[a,b] \n\n**==> picture [523 x 375] intentionally omitted <==**",
+        "text_sha256": "sha256:6816d35a52612e13529bf291e226f4dd3bef3398f5d6b9aaa02b1dadc64e338d"
+      },
+      {
+        "evidence_key": "P:S-f6838cbe06e2a5f54eea",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-f6838cbe06e2a5f54eea",
+        "text": "aReaction conditions: 1 (0.1 mmol), 2b (0.25 mmol), NEt3 (0.13 mmol), and Pd@MOF-APBA (0.5 mol%) in MeCN (1 mL) at 120 °C for 8 h. bYields of isolated products. \n\n## Discussion \n\nIn summary, we successfully devised and synthesized an aminopyridine ligand APBA. The chelation of N, N’-bidentate ligand APBA allowed for the stable anchoring of Pd on the MOF-APBA, resulting in the formation of a single-site heterogeneous catalyst, Pd@MOF-APBA. The structure characterization of these site-isolated palladium catalytic centers was ascertained via EXAFS, XPS, and HRTEM analyses. Most importantly, we demonstrated that the utilization of APBA effectively detained the leaching and agglomeration of metals. The catalyst displayed excellent catalytic performance in the Heck reaction with a high TON exceeding 95,000. Furthermore, the catalyst exhibited good stability, being recyclable at least four times while maintaining a 100% yield and up to three times even on gram-scale reactions. Consequently, this catalyst emerges as a promising candidate for heterogeneous catalysis in the pharmaceutical industry. \n\n## Methods \n\nwashed three times with deionized water and ethanol, respectively. Finally, the material was dried overnight at 100 °C. \n\n## Synthesis of MOF-APBA \n\nMOF-808 (50 mg) was added to the solution of the ligand APBA in methanol (0.04 M, 2.5 mL) and stirred at room temperature for 17 h. The resulting yellow powder product was centrifuged at 8390 × g for 3 min and washed with methanol and ethanol until the physisorbed ligands were removed thoroughly. Finally, the material was dried overnight at 100 °C. \n\n## Synthesis of Pd@MOF-APBA \n\nMOF-APBA (100 mg) was added to the solution of Pd(OAc)2 in DCM (0.012 M, 5 mL) and then stirred at room temperature for 24 h.",
+        "text_sha256": "sha256:29a775b09a3b5b30c8389c2b206a7966788441ba7803f68d52d0a5001581809f"
+      },
+      {
+        "evidence_key": "P:S-f36ec73326ef6711605c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-f36ec73326ef6711605c",
+        "text": "The resulting product was separated by centrifugation at 8390 × g for 1 min, washed twice with 5 mL DCM, and dried in a vacuum oven at 40 °C. The Pd content of the catalyst was 5.0 wt%, as measured by ICP-OES. \n\n## Synthesis of MOF-808 \n\nMOF-808 was synthesized according to the method in the literature[62][,][63] with slight modifications. 1,3,5-Benzenetricarboxylic acid (0.605 mmol, 0.127 g) and zirconium oxychloride octahydrate (1.815 mmol, 0.585 g) were dissolved in deionized water (5 mL) and acetic acid (5 mL). The mixture was stirred at 100 °C for 24 h. The resulting white powder product was separated by centrifugation at 8390 × g for 5 min and \n\n## Synthesis of Pd@MOF-808 \n\nMOF-808 (100 mg) was added to the solution of Pd(OAc)2 (0.012 M) in DCM (5 mL) and then stirred at room temperature for 24 h. The resulting product was separated by centrifugation at 8390 × g for 1 min, washed twice with 5 mL DCM, and dried in a vacuum oven at 40 °C. The Pd content of the catalyst was 5.3 wt%, as measured by ICP-OES. \n\nNature Communications | (2024) 15:7273 \n\n7 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-51552-x \n\n## Synthesis of PdCl2@MOF-APBA \n\nPdCl2 (5.3 mg) was added to methanol (15 mL) and stirred at 50 °C until thoroughly dissolved. After cooling to room temperature, MOF-APBA (120 mg) was added to the methane solution and stirred at 25 °C for 24 h. The resulting product was separated by centrifugation at 8390 × g for 1 min, washed twice with 5 mL methanol and 5 mL dichloromethane, and then dried in a vacuum oven at 40 °C. The Pd content of the catalyst was 2.4 wt%, as measured by ICP-OES. \n\n## Synthesis of MOF-BCA \n\nMOF-808 (50 mg) was added to the solution of the ligand BCA in DMSO (0.04 M, 2.5 mL) and stirred at room temperature for 17 h.",
+        "text_sha256": "sha256:3e9710ae3f27e555f522cca11d01eec4d15e81d7851ffab312b5de143224d256"
+      },
+      {
+        "evidence_key": "P:S-3cf285b11d9169e24487",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-3cf285b11d9169e24487",
+        "text": "The resulting pale yellow powder product was centrifuged at 8390 × g for 3 min and washed three times with DMSO and methanol, respectively. Finally, the material was dried overnight at 100 °C. \n\n## Synthesis of Pd@MOF-BCA \n\nMOF-BCA (100 mg) was added to the solution of Pd(OAc)2 in DCM (0.012 M, 5 mL) and then stirred at room temperature for 24 h. The resulting product was separated by centrifugation at 8390 × g for 1 min, washed twice with 5 mL DCM, and dried in a vacuum oven at 40 °C. The Pd content of the catalyst was 0.3 wt%, as measured by ICP-OES. \n\n## General procedure for the Heck reaction \n\nTo a 10 mL Schlenk-type sealable tube equipped with a magnetic stirring bar were added the catalyst (0.5 mol%), aryl halide (0.1 mmol), olefin (0.25 mmol), NEt3 (0.13 mmol), and acetonitrile (1 mL). The tube was capped and heated to 120 °C for 8 h. After cooling to room temperature, the catalyst was separated by centrifugation (6708 × g, 1 min), washed three times with DCM, and dried. The liquid supernatant was concentrated in vacuo to afford crude products, which were purified by flash column chromatography on silica gel to give the desired product. \n\n## General procedure for recycling experiment \n\nTo a 10 ml Schlenk-type sealable tube equipped with a magnetic stirring bar were added the catalyst (0.5 mol%), iodobenzene (0.1 mmol), ethyl acrylate (0.25 mmol), NEt3 (0.13 mmol), and acetonitrile (1 mL). The tube was capped and heated to 120 °C for 8 h. After cooling to room temperature, the catalyst was separated by centrifugation (6708 × g, 1 min), washed three times with DCM, and dried. The catalyst was added to the next reaction and the above procedure was repeated.",
+        "text_sha256": "sha256:4553aaf897e0feb5513754ecfafe8c5f15393c1848118e6d70645d3107dcf02e"
+      },
+      {
+        "evidence_key": "P:S-60efaaeafae956cfe8f2",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-60efaaeafae956cfe8f2",
+        "text": "## Data availability \n\nThe data that support the findings of this study are available within the paper and supplementary information files. The source data underlying Figs. 2a–d, 3a, d, Supplementary Figs. 2, 4, 11–13, 15, 16, 19–21, and the data of density functional theory calculation of materials are provided as a Source Data file. Source data are provided in this paper. The X-ray crystallographic coordinates for the structure reported in this study have been deposited at the Cambridge Crystallographic Data Centre (CCDC), under deposition number 2341053 (APBA). This data can be obtained free of charge via www.ccdc.cam.ac.uk/structures/. Source data are provided with this paper. \n\n## References \n\n1. Gu, Q., Jia, Q., Long, J. & Gao, Z. Heterogeneous photocatalyzed C −C cross‐coupling reactions under visible-light and near-infrared light irradiation. ChemCatChem 11, 669–683 (2018). \n\n2. Ren, T. Peripheral covalent modification of inorganic and organometallic compounds through C-C bond formation reactions. Chem. Rev. 108, 4185–4207 (2008). \n\n3. Mizoroki, T., Mori, K. & Ozaki, A. Arylation of olefin with aryl iodide catalyzed by palladium. Bull. Chem. Soc. Jpn. 44, 581 (1971). \n\n4. Heck, R. F. & Nolley, J. P. Palladium-catalyzed vinylic hydrogen substitution reactions with aryl, benzyl, and styryl halides. J. Org. Chem. 37, 2320–2322 (1972). \n\n5. Song, C. E., Oh, C. R., Roh, E. J., Lee, S.-G. & Choi, J. H. One-step synthesis of paclitaxel side-chain precursor: benzamide-based asymmetric aminohydroxylation of isopropyl trans-cinnamate. Tetrahedron Asymm. 10, 671–674 (1999). \n\n6. Jing, L., Jin, Y., Zhang, S. & Sun, X. Synthesis of anticancer drug docetaxel. Chin. J. Med. Chem. 16, 292–295 (2006). \n\n7. Matsuura, T., Overman, L. E. & Poon, D. J.",
+        "text_sha256": "sha256:03afebad99f274fe56eb77109c59ab11a4607d8845572b37fa5a12cfb028cf71"
+      },
+      {
+        "evidence_key": "P:S-df049da2d1e2980864f3",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-df049da2d1e2980864f3",
+        "text": "Catalytic asymmetric synthesis of either enantiomer of the calabaralkaloids physostigmine and physovenine. J. Am. Chem. Soc. 120, 6500–6503 (1998). \n\n8. Sato, Y., Sodeoka, M. & Shibasaki, M. Catalytic asymmetric carboncarbon bond formation: asymmetric synthesis of cis-decalin derivatives by palladium-catalyzed cyclization of prochiral alkenyl iodides. J. Org. Chem. 54, 4738–4739 (1989). \n\n9. Herrmann, W. A., Elison, M., Fischer, J., Köcher, C. & Artus, G. R. J. Metal complexes of N‐heterocyclic carbenes—a new structural principle for catalysts in homogeneous catalysis. Angew. Chem. Int. Ed. 34, 2371–2374 (1995). \n\n10. Tulloch, A. A. D. et al. Pyridine functionalised N-heterocyclic carbene complexes of palladium. Chem. Commun. 1247–1248, https:// doi.org/10.1039/b002645j (2000) \n\n11. Kampwerth, A., Terhorst, M., Kampling, N., Vogt, D. & Seidensticker, T. Synthesis of biobased amines via Pd-catalysed telomerisation of the renewable β-myrcene in a water/ethanol multiphase system: catalyst recycling enabled by a self-separating product phase. Green Chem. 25, 6345–6354 (2023). \n\n12. Chatzopoulou, M. et al. Pilot study to quantify palladium impurities in lead-like compounds following commonly used purification techniques. ACS Med. Chem. Lett. 13, 262–270 (2022). \n\n13. Wang, C., Xie, Z., deKrafft, K. E. & Lin, W. Doping metal-organic frameworks for water oxidation, carbon dioxide reduction, and organic photocatalysis. J. Am. Chem. Soc. 133, 13445–13454 (2011). \n\n14. Choe, K. et al. Fast and selective semihydrogenation of alkynes by – \n\npalladium nanoparticles sandwiched in metal organic frameworks. Angew. Chem. Int. Ed. 59, 3650–3657 (2020). \n\n15. Lim, J. et al. Amine-tagged fragmented ligand installation for \n\n   - covalent modification of MOF-74. Angew. Chem. Int. Ed.",
+        "text_sha256": "sha256:38b668db92509543d144e33a19c9fcbe002449adb618702e5de78b4770b5661c"
+      },
+      {
+        "evidence_key": "P:S-13d526b8a1aa2077fc67",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-13d526b8a1aa2077fc67",
+        "text": "60, 9296–9300 (2021). \n\n16. Martínez-Izquierdo, L., Téllez, C. & Coronas, J. Highly stable Pebax® Renew® thin-film nanocomposite membranes with metal organic framework ZIF-94 and ionic liquid [Bmim][BF4] for CO2 capture. J. Mater. Chem. A 10, 18822–18833 (2022). \n\n17. Tsai, M.-D., Chen, Y.-L., Chang, J.-W., Yang, S.-C. & Kung, C.-W. Sulfonate-functionalized two-dimensional metal-organic framework as a “dispersant” for polyaniline to boost its electrochemical capacitive performance. ACS Appl. Energy Mater. 6, 11268–11277 (2023). \n\n18. Deria, P. et al. Perfluoroalkane functionalization of NU-1000 via solvent-assisted ligand incorporation: Synthesis and CO2 adsorption. Stud. J. Am. Chem. Soc. 135, 16801–16804 (2013). \n\n19. Wang, Z. et al. Fluorinated strategy of node structure of Zr-based MOFMOF for construction of high-performance composite polymer electrolyte membranes. J. Membr. Sci. 645, 120193 (2022). \n\n20. Banerjee, M. et al. Postsynthetic modification switches an achiral framework to catalytically active homochiral metal-organic porous materials. J. Am. Chem. Soc. 131, 7524–7525 (2009). \n\n21. Lalonde, M. et al. Transmetalation: routes to metal exchange within metal–organic frameworks. J. Mater. Chem. A 1, 5453–5468 (2013). \n\n22. Das, S., Kim, H. & Kim, K. Metathesis in single crystal: complete and reversible exchange of metal ions constituting the frameworks of metal-organic frameworks. J. Am. Chem. Soc. 131, 3814–3815 (2009). \n\nNature Communications | (2024) 15:7273 \n\n8 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-51552-x \n\n23. Zhang, Z. et al. Post-synthetic modification of porphyrinencapsulating metal-organic materials by cooperative addition of inorganic salts to enhance CO2/CH4 selectivity. Angew. Chem. Int. Ed. 51, 9330–9334 (2012). \n\n24. Li, B. et al.",
+        "text_sha256": "sha256:99ae6be304e007243303267fc33c0aa8060b9077dad710a78b508775cb30b4c3"
+      },
+      {
+        "evidence_key": "P:S-ec101306881ccfad9057",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-ec101306881ccfad9057",
+        "text": "Metal-cation-directed de novo assembly of a functionalized guest molecule in the nanospace of a metal-organic framework. J. Am. Chem. Soc. 136, 1202–1205 (2014). \n\n25. Mao, J. et al. Isolated ni atoms dispersed on Ru nanosheets: highperformance electrocatalysts toward hydrogen oxidation reaction. Nano Lett. 20, 3442–3448 (2020). \n\n26. Wang, Z. et al. Titania-supported Cu-single-atom catalyst for electrochemical reduction of acetylene to ethylene at lowconcentrations with suppressed hydrogen evolution. Adv. Mater. 35, 2303818 (2023). \n\n27. Wang, Q. et al. Photoinduced metastable asymmetric Cu single atoms for photoreduction of CO2 toethylene. Adv. Energy Mater. 13, 2302692 (2023). \n\n28. Lin, J. et al. Macroporous carbon-nitride-supported transition-metal single-atom catalysts for photocatalytic hydrogen production from ammonia splitting. ACS Catal. 13, 11711–11722 (2023). \n\n29. Liu, H. et al. Pd–Mn/NC dual single-atomic sites with hollow mesopores for the highly efficient semihydrogenation of phenylacetylene. J. Am. Chem. Soc. 146, 2132–2140 (2024). \n\n30. Jiang, R. et al. Edge-site engineering of atomically dispersed Fe–N – \n\nby selective C N bond cleavage for enhanced oxygen reduction reaction activities. J. Am. Chem. Soc. 140, 11594–11598 (2018). \n\n31. Sui, J. et al. A general strategy to immobilize single-atom catalysts in metal-organic frameworks for enhanced photocatalysis. Adv. Mater. 34, e2109203 (2022). \n\n32. Wang, J. et al. Precise regulation of the coordination environment of single Co(II) sites in a metal-organic framework for boosting CO2 photoreduction. ACS Catal. 13, 8760–8769 (2023). \n\n33. Bai, S. et al. High-efficiency direct methane conversion to oxygenates on a cerium dioxide nanowires supported rhodium singleatom catalyst. Nat. Commun. 11, 954 (2020).",
+        "text_sha256": "sha256:aa1625e5649f0e8c550549cf8674abdb328c13b3a48adeb4904266b1ac4d3a91"
+      },
+      {
+        "evidence_key": "P:S-5c485d0d8b4b5d9e8c2f",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-5c485d0d8b4b5d9e8c2f",
+        "text": "34. Wei, H. et al. Feox-supported platinum single-atom and pseudosingle-atom catalysts for chemoselective hydrogenation of functionalized nitroarenes. Nat. Commun. 5, 5634 (2014). \n\n35. Peralta, R. A. et al. Highly active gas phase organometallic catalysis supported within metal-organic framework pores. J. Am. Chem. Soc. 142, 13533–13543 (2020). \n\n36. Manna, K. et al. Chemoselective single-site earth-abundant metal catalysts at metal-organic framework nodes. Nat. Commun. 7, 12610 (2016). \n\n37. Otake, K.-i. et al. Enhanced activity of heterogeneous Pd(II) catalysts on acid-functionalized metal-organic frameworks. ACS Catal. 9, 5383–5390 (2019). \n\n38. Parshamoni, S., Nasani, R., Paul, A. & Konar, S. Synthesis of a palladium based MOF via an effective post-synthetic modification approach and its catalytic activity towards Heck type coupling reactions. Inorg. Chem. Front. 8, 693–699 (2021). \n\n39. He, T. et al. A practice of reticular chemistry: construction of a robust mesoporous palladium metal-organic framework via metal metathesis. J. Am. Chem. Soc. 143, 9901–9911 (2021). \n\n40. Vahabi, A. H., Norouzi, F., Sheibani, E. & Rahimi-Nasrabadi, M. Functionalized Zr-UiO-67 metal-organic frameworks: structural landscape and application. Coord. Chem. Rev. 445, 214050 (2021). \n\n41. Chen, L., Rangan, S., Li, J., Jiang, H. & Li, Y. A molecular Pd(II) complex incorporated into a MOF as a highly active single-site heterogeneous catalyst for C–Cl bond activation. Green. Chem. 16, 3978–3985 (2014). \n\n42. Madrahimov, S. T. et al. Gas-phase dimerization of ethylene under mild conditions catalyzed by MOF materials containing (bpy)Ni[II] complexes. ACS Catal. 5, 6713–6718 (2015). \n\n43. Young, R. J. et al.",
+        "text_sha256": "sha256:43a86587874d1947c1e69c7289c66bf7ff9d507a7b381498c6f03863a72e1179"
+      },
+      {
+        "evidence_key": "P:S-b853ad4d85cbb7a5777c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-b853ad4d85cbb7a5777c",
+        "text": "Isolating reactive metal-based species in metalorganic frameworks—viable strategies and opportunities. Chem. Sci. 11, 4031–4050 (2020). \n\n44. Sawano, T. et al. Metal-organic frameworks stabilize – \n\nmono(phosphine) metal complexes for broad-scope catalytic reactions. J. Am. Chem. Soc. 138, 9783–9786 (2016). \n\n45. Dunning, S. G. et al. A metal-organic framework with cooperative ‐ \n\nphosphines that permit post synthetic installation of open metal sites. Angew. Chem. Int. Ed. 57, 9295–9299 (2018). \n\n46. Sikma, R. E. et al. Organoarsine metal-organic framework with cisdiarsine pockets for the installation of uniquely confined metal complexes. J. Am. Chem. Soc. 140, 9806–9809 (2018). \n\n47. Cargill Thompson, Alexander M. W., Batten, Stuart R., Jeffery, John C., Rees, Leigh H. & Ward, M. D. Some coordination chemistry of the bidentate nitrogen-donor ligand 2-(2-aminophenyl)pyridine. Aust. J. Chem. 50, 109–114 (1997). \n\n48. Durainatarajan, P., Prabakaran, M., Ramesh, S. & Periasamy, V. Selfassembly on copper surface by using imidazole derivative for corrosion protection. J. Adhes. Sci. Technol. 32, 1733–1749 (2018). \n\n49. Lee, J. E. et al. Role of CO-vapors in vapor deposition polymerization. Sci. Rep. 5, 8420 (2015). \n\n50. Cao, S.-W. et al. Solar-to-fuels conversion over In2O3/g-C3N4 hybrid photocatalysts. Appl. Catal. B: Environ. 147, 940–946 (2014). \n\n51. Jiang, G. et al. Surface ligand environment boosts the electrocatalytic hydrodechlorination reaction on palladium nanoparticles. ACS Appl. Mater. Interfaces 13, 4072–4083 (2021). \n\n52. Pisarevskaya, E. Y., Zolotarevskiy, V. I., Kazanskiy, L. P., Ovsyannikova, E. V. & Alpatova, N. M. Double-stage poly-o-phenylenediamine modification with palladium nanoparticles. Synth. Met. 159, 304–310 (2009). \n\n53. Mirkelamoglu, B.",
+        "text_sha256": "sha256:bb0c8b74e044878f7d2a0335859b190b9cada521bf474ea694a3b57b24bf705a"
+      },
+      {
+        "evidence_key": "P:S-c722ff74cc46119d7bf8",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-c722ff74cc46119d7bf8",
+        "text": "& Karakas, G. The role of alkali-metal promotion on CO oxidation over PdO/SnO2 catalysts. Appl. Catal. A: Gen. 299, 84–94 (2006). \n\n54. Militello, M. C. & Simko, S. J. Elemental palladium by XPS. Surf. Sci. Spectra 3, 387–394 (1994). \n\n55. Martín, A. J., Mitchell, S., Mondelli, C., Jaydev, S. & Pérez-Ramírez, J. Unifying views on catalyst deactivation. Nat. Catal. 5, 854–866 (2022). \n\n56. Gole, B., Sanyal, U., Banerjee, R. & Mukherjee, P. S. High loading of Pd nanoparticles by interior functionalization of MOFs for heterogeneous catalysis. Inorg. Chem. 55, 2345–2354 (2016). \n\n57. Azad, M., Rostamizadeh, S., Estiri, H. & Nouri, F. Ultra-small and highly dispersed Pd nanoparticles inside the pores of ZIF-8: sustainable approach to waste-minimized Mizoroki–Heck crosscoupling reaction based on reusable heterogeneous catalyst. Appl. Organomet. Chem. 33, e4952 (2019). \n\n58. Wei, Y.-L. et al. Pd(II)-nhdc-functionalized UiO-67 type MOF for catalyzing Heck cross-coupling and intermolecular benzyne–benzyne–alkene insertion reactions. Inorg. Chem. 57, 4379–4386 (2018). \n\n59. Nuri, A. et al. Pd supported MOFIRMOF-3: heterogeneous, efficient and reusable catalyst for Heck reaction. Catal. Lett. 149, 1941–1951 (2019). \n\n60. Dong, D. et al. Postsynthetic modification of single Pd sites into uncoordinated polypyridine groups of a MOF as the highly efficient catalyst for Heck and Suzuki reactions. N. J. Chem. 42, 9317–9323 (2018). \n\n61. Nuri, A. et al. Synthesis and characterization of palladium supported amino functionalized magnetic-MOFMOF-MIL-101 as an efficient and recoverable catalyst for Mizoroki–Heck cross-coupling. Catal. Lett. 150, 2617–2629 (2020). \n\n62. Furukawa, H. et al. Water adsorption in porous metal-organic frameworks and related materials. J. Am. Chem. Soc.",
+        "text_sha256": "sha256:df38cfe72850b0f5e33cb3ba981b7373d0d544588750b860d09b1bf03562cc4b"
+      },
+      {
+        "evidence_key": "P:S-03e59242e0bcf9270847",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-03e59242e0bcf9270847",
+        "text": "136, 4369–4381 (2014). \n\nNature Communications | (2024) 15:7273 \n\n9 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-51552-x \n\n63. Reinsch, H., Waitschat, S., Chavan, S. M., Lillerud, K. P. & Stock, N. A facile “green” route for scalable batch production and continuous synthesis of zirconium MOFs. Eur. J. Inorg. Chem. 2016, 4490–4498 (2016). \n\n## Acknowledgements \n\nWe gratefully acknowledge the National Natural Science Foundation of China (Grant No. 21671097) and the Fundamental Research Funds for the Central Universities for financial support. We thank Professor Shuai Yuan and Professor Yuanyuan Wang for their advice and help in our research work. \n\n## Author contributions \n\nY.L. conceived the original idea, supervised the project and provided guidance on the project. X.-L.X. and N.-N.W. designed the study, analyzed the experimental data, and contributed equally to this work. X.L.X., N.-N.W. and Y.-H.Z. performed the experiments. X.Q. conducted the DFT calculations. X.-L.X., N.-N.W., Y.-H.Z., P.W., X.-Y.L. and X.-Y.Z. contributed to the characterization of the catalyst. X.-L.X., N.-N.W., Y.H.Z., X.Q., W.-Y.S., and Y.L. wrote and revised the paper. \n\n## Competing interests \n\nThe authors declare no competing interests. \n\n## Additional information \n\nSupplementary information The online version contains supplementary material available at https://doi.org/10.1038/s41467-024-51552-x. \n\nCorrespondence and requests for materials should be addressed to Yi Lu. \n\nPeer review information Nature Communications thanks the anonymous reviewer(s) for their contribution to the peer review of this work. A peer review file is available.",
+        "text_sha256": "sha256:6bcd669cab0e929f536005a86c198e51fc348b6ea801a659240b584296d062f0"
+      },
+      {
+        "evidence_key": "P:S-393dd114c5c2a837c636",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-393dd114c5c2a837c636",
+        "text": "Reprints and permissions information is available at http://www.nature.com/reprints \n\nPublisher’s note Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations. \n\nOpen Access This article is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License, which permits any non-commercial use, sharing, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if you modified the licensed material. You do not have permission under this licence toshare adapted material derived from this article or parts of it. The images or other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http:// creativecommons.org/licenses/by-nc-nd/4.0/. \n\n© The Author(s) 2024 \n\nNature Communications | (2024) 15:7273 \n\n10",
+        "text_sha256": "sha256:12b3e0e52954aeac29e29140c9aa346bbe03e80ef717cb3b5bd55383b092bf36"
+      }
+    ]
+  },
+  "paper_id": "10.1038/s41467-024-51552-x",
+  "paper_sha256": "sha256:f0c24bc1f470c11442f85cc96929d1bb6ac29e9bb6b8295c980d250fad565fd9",
+  "parent_output_sha256s": [],
+  "parent_reviews": [],
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "review_source_sha256": "sha256:f622e1a5a17613e3d32acefa67d9984d44f33df333c12677f24c8fb7364e6f6c",
+  "reviewer_spans": [
+    {
+      "char_end": 1345,
+      "char_start": 1309,
+      "reviewer_id_hash": "REV-6dae3c6f341f06e3",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2c1990452da7f2ad2134",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #1 (Remarks to the Author):",
+      "text_sha256": "sha256:6ffd34d82a3d649fbc91e1dc65fd25e243f665d42d0f633ad65db9c0ce240058"
+    },
+    {
+      "char_end": 2248,
+      "char_start": 1348,
+      "reviewer_id_hash": "REV-6dae3c6f341f06e3",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-99c6b5cc9911b417a7b8",
+      "source_role": "reviewer_report",
+      "text": "The authors have developed a multifunctional ligand APBA to replace the modulator ligand in MOF808. This ligand effectively disperses the palladium catalytic centers atomically on the MOF, creating an efficient catalytic system termed Pd@MOF-APBA for the Heck transformation. It's intriguing that the catalyst's lifespan has been extended due to a more stable deformed sixmembered cycle, as supported by both DFT calculations and experimental results. This advancement could potentially reduce costs of the preparation procedures. It’s also impressive that the reduced leaching of the catalytic centers addresses the concerns about metal residue in pharmaceutical intermediates. I believe this manuscript would be of significant interest to the readership of Nature Communications. Whereas, there are still several issues that need to be addressed for the manuscript to be considered for publication:",
+      "text_sha256": "sha256:b45d7a3d0f7491f904cc0409b47d0fc7cbb5d2181267aba392edb430f2a2118c"
+    },
+    {
+      "char_end": 2466,
+      "char_start": 2251,
+      "reviewer_id_hash": "REV-6dae3c6f341f06e3",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-bb17d0b5304e1c64b380",
+      "source_role": "reviewer_report",
+      "text": "1.According to Table 1, the TONs of the reactions catalyzed by MOFs are provided. Typically, TONs are not calculated for heterogeneous catalysts like MOFs. How did the authors determine the TON values in this study?",
+      "text_sha256": "sha256:028e9d20f06357d69bb9df757a8344cb804b901f670e4e788179fd96f82362eb"
+    },
+    {
+      "char_end": 2593,
+      "char_start": 2469,
+      "reviewer_id_hash": "REV-6dae3c6f341f06e3",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a1edeae049d6e8dd64df",
+      "source_role": "reviewer_report",
+      "text": "2.From Fig. 3b and 3d, it is evident that the palladium atoms in the catalyst have agglomerated. How to explain this result?",
+      "text_sha256": "sha256:5b54a20036d8b2ff6c9828ef01d18c96cbd1cfdd93b8f4afd164338effa80968"
+    },
+    {
+      "char_end": 2822,
+      "char_start": 2596,
+      "reviewer_id_hash": "REV-6dae3c6f341f06e3",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-87f9096500ac06208d36",
+      "source_role": "reviewer_report",
+      "text": "3. Can the authors provide a more intuitive representation of the spatial relationship between Pd(OAc)2 and APBA in Fig. 3e? It’s challenging to distinguish the differences between Fig. 3e and Fig. 3f as they currently appear.",
+      "text_sha256": "sha256:1d3cd8a084dfd870bb8ae08b1d538c0d7efbd67dc95f5cda4745d779309e7376"
+    },
+    {
+      "char_end": 2861,
+      "char_start": 2825,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-cd90c62882b785a05bbf",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #2 (Remarks to the Author):",
+      "text_sha256": "sha256:44342433f6365a7f5949b5d3040f70d6f57a95f4a5f42f98700e18492093b116"
+    },
+    {
+      "char_end": 3664,
+      "char_start": 2864,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f51123d7a01ff418f9a7",
+      "source_role": "reviewer_report",
+      "text": "The manuscript reports the use of a metal-organic framework (MOF) to tether and heterogenize a known type of homogenous catalyst (a ligand supported Pd(II) complex) for the Heck reaction. MOFs have been applied in this area before, for many of the reasons outlined in the paper introduction, and . The noteworthy results in this case are the importance of designing a pendant linker that effectively binds the catalyst species, that this group has significant structural flexibility and is able to tolerate changing coordination environments around the catalytic centre. The authors demonstrate the importance of these points through some comparison experiments. While not ground-breaking results, there are sufficient new insights and learnings that advance the field and will inform future studies.",
+      "text_sha256": "sha256:54ec808e451752731b47a2dae414dd214ecd2d11e368a8654ff5da0db4df4e79"
+    },
+    {
+      "char_end": 4278,
+      "char_start": 3667,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4a7304372de86bca7b62",
+      "source_role": "reviewer_report",
+      "text": "The manuscript and the experimental sections are easy to follow. Sufficient characterisation is provided to elucidate a proposed structure for the MOF catalyst and the coordination environment of the added palladium complex. Quantification of the added linker sites and palladium is provided along with EXAFS/XANES data to support the coordination environment. Post-catalysis characterisation could be augmented, perhaps by repeating the EXAFS/XANES measurements, although the authors demonstrate leaching to form Pd nanoparticles albeit at a slightly slower rate than for the non-ligand functionalised variant.",
+      "text_sha256": "sha256:4aa72b173574cb31950bf9106553fd62373a26e41c25ed5ae198fe20d6cfcbee"
+    },
+    {
+      "char_end": 5175,
+      "char_start": 4281,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c2191023aceac744cea1",
+      "source_role": "reviewer_report",
+      "text": "The catalysis experiments are reasonably comprehensive and controls are employed. Additional controls should be MOF-808 and the molecular complex if we are looking to highlight the TON as a selling point for this work. Presumably the MOF should show no activity and the molecular complex reasonable activity but no recyclability. One control used is MOF-808 appended with [2,2′bipyridine]-5-carboxylic acid (BCA) but it should be noted that while the authors highlighted the Pd loading they did not provide data on the amount of BCA incorporated. The amount of pendant linker will affect the Pd loading as will the stability of the complex. I think the authors need to be a little cautious of their calculations of TON; there are very small amounts of catalyst being used and these large numbers are calculated off one reaction. I suggest measuring this multiple times are averaging the result.",
+      "text_sha256": "sha256:beb3d9e24e45520b873845fb2d97a86b3b516c192dc4bf7752f10b83169f708e"
+    },
+    {
+      "char_end": 5432,
+      "char_start": 5178,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-31dfaf823798d99cdaf0",
+      "source_role": "reviewer_report",
+      "text": "As noted above, this is an interesting ligand/linker choice and a nice addition to the literature. The pendant linker used, 3-amino-4-(2-pyridyl) benzoic acid (APBA), is based on a ligand that has previously been studied (2-(2-aminophenyl)pyridine) (see:",
+      "text_sha256": "sha256:2d7335e50eada9ee0977def07998b43b422c11723305be1314835719b35ed4d1"
+    },
+    {
+      "char_end": 5908,
+      "char_start": 5435,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0d570623c33e807371aa",
+      "source_role": "reviewer_report",
+      "text": "https://www.publish.csiro.au/ch/c96146). The authors should probably acknowledge this. The stability of the palladium seems an important part of the results here and should be highlighted to encourage people away from using simple 2,2'-bipyridien based ligands. The importance of flexibility in design of MOF catalysts has been highlighted by several groups (Sumby/Doonan, Humphries etc, where the linker is part of the MOF). The authors should highlight some of that work.",
+      "text_sha256": "sha256:14db271850eb8de2dbccaabab168e0e7d5e77b45e763ba36ef83bf5bb7018417"
+    },
+    {
+      "char_end": 5927,
+      "char_start": 5911,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-bbb6c60ee207e643e3c2",
+      "source_role": "reviewer_report",
+      "text": "Minor revisions:",
+      "text_sha256": "sha256:071b2573ee0e7912eb188f6b20caf1ffd7f1fd983e5ee12941e30f0bb9afb3f3"
+    },
+    {
+      "char_end": 5993,
+      "char_start": 5930,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9355938b3f8bd8a83250",
+      "source_role": "reviewer_report",
+      "text": "anchored within the MOF and it is not just small nanoparticles.",
+      "text_sha256": "sha256:54a6ac8473098dff9e6ccac610d45269b93f65d3d3655c05915a57f863681df7"
+    },
+    {
+      "char_end": 6100,
+      "char_start": 5996,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-599d82f71d338ceb8848",
+      "source_role": "reviewer_report",
+      "text": "2. Controls using only the MOF and a molecular version of the Pd complex using 2-(2aminophenyl)pyridine.",
+      "text_sha256": "sha256:471577625505e58ebd61e8c15316547a6c837ffab2ef94ea659e7f3ee240acfe"
+    },
+    {
+      "char_end": 6174,
+      "char_start": 6103,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-73d34e4ae0c16b846af5",
+      "source_role": "reviewer_report",
+      "text": "3. Calculate the TON for a number of repeat reactions and average this.",
+      "text_sha256": "sha256:9182267ead025b70c410a69ba065c5b6ed3dbe02951da43e1618644a3e19f154"
+    },
+    {
+      "char_end": 6273,
+      "char_start": 6177,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5ab2d0e30eae7b86e9f6",
+      "source_role": "reviewer_report",
+      "text": "4. Cite the original report for the pendant linker core (ttps://www.publish.csiro.au/ch/c96146).",
+      "text_sha256": "sha256:766e881057448b4b5cf878550eadbfa645c8d6d5dcb75744e390d8d918eb8255"
+    },
+    {
+      "char_end": 6545,
+      "char_start": 6276,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9a3acd2b6f94c06e0c53",
+      "source_role": "reviewer_report",
+      "text": "https://pubs.acs.org/doi/abs/10.1021/jacs.0c05286, https://pubs.rsc.org/en/content/articlehtml/2020/sc/d0sc00485e, https://pubs.acs.org/doi/10.1021/jacs.6b06239, https://onlinelibrary.wiley.com/doi/10.1002/anie.201802402, https://pubs.acs.org/doi/10.1021/jacs.8b05644).",
+      "text_sha256": "sha256:8728459ea158e17e09a2ebfd37294e443f2fb2bfe62830e646a7285433a0b616"
+    },
+    {
+      "char_end": 6584,
+      "char_start": 6548,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ccfef41f583f153bacad",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #3 (Remarks to the Author):",
+      "text_sha256": "sha256:8c17865a9cabc7f290ce7a58f02add361b84a8c4dd8a742bbb1b6a885882bbd0"
+    },
+    {
+      "char_end": 7165,
+      "char_start": 6587,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c640550b0c19d1f34e0a",
+      "source_role": "reviewer_report",
+      "text": "The paper entitled “N, N’-bidentate ligand anchored palladium catalysts on MOFs for efficient Heck reaction” deals with the building block replacement strategy to replace the modulator ligand on the chemically and thermally stable MOF-808 with APBA, and demonstrated effective heterogeneous catalysis in the cross-coupling reaction of iodinated arenes and olefins with an impressive turnover number (TON) exceeding 80,000. While the results look promising for the broad readership scope of the intended journal, there are a few specific points that the authors need to consider.",
+      "text_sha256": "sha256:1b62c7fb47f93f99c7ebef4a40a5e0be39454cf81e1a9fef49e9422b1ef57f59"
+    },
+    {
+      "char_end": 7336,
+      "char_start": 7168,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6627206d97a03afc4618",
+      "source_role": "reviewer_report",
+      "text": "1. The introduction section is exceedingly long, for a communication article, it should be more focused on the field of study, and should be reconfigured appropriately.",
+      "text_sha256": "sha256:9ed12867bd3061ea1fb6dd227ca5a139ab41226f552e0fa2bdb4dc06ffddf40f"
+    },
+    {
+      "char_end": 7458,
+      "char_start": 7339,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4d6e815a3b134567ada5",
+      "source_role": "reviewer_report",
+      "text": "2. A few high impact and very closely related literature should also be included in the reference section. For example,",
+      "text_sha256": "sha256:cfb26feafbbc0138cc85dea3832202a00375c0e3ac6e38a236860ad910e1d5f3"
+    },
+    {
+      "char_end": 7534,
+      "char_start": 7461,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-978ca087aa94178244e4",
+      "source_role": "reviewer_report",
+      "text": "Inorg. Chem. Front., 2021,8, 693-699, J. Am. Chem. Soc., 2021, 143, 9901.",
+      "text_sha256": "sha256:b0e72fbbe0ce24b63062db3a67ec31ffbb68e745e8d86beef02b4ba67b9ccddc"
+    },
+    {
+      "char_end": 7594,
+      "char_start": 7537,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-35d88a3f63e698eba743",
+      "source_role": "reviewer_report",
+      "text": "The reference section should also be checked accordingly.",
+      "text_sha256": "sha256:d20e311273fcf5128f93707d65de74c88af6ba4075ac574fb83d2d5345263851"
+    },
+    {
+      "char_end": 8010,
+      "char_start": 7597,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e6abf122fde9983ce340",
+      "source_role": "reviewer_report",
+      "text": "3. In the synthetic procedure section, an overall synthetic procedure for the preparation for the ligand APBA should be provided, and the amounts of the reactants in each procedure should be properly mentioned. Also, the conditions of the reactions performed, i.e., in air, or under any inert atmosphere, should be clearly mentioned for the sake of data reproducibility by others researchers working in this area.",
+      "text_sha256": "sha256:75b2bddf9b74960c88fae80728896d2d8a5b1481c1056c7b2e6453800d36b7ab"
+    },
+    {
+      "char_end": 8063,
+      "char_start": 8013,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e4e972a2562bbd69dce2",
+      "source_role": "reviewer_report",
+      "text": "An ideal experimental detail should be as follows,",
+      "text_sha256": "sha256:b3c12534dca6246ab20a957ffb09027a2c2003460b5ecce5e999f810cbd8d150"
+    },
+    {
+      "char_end": 8263,
+      "char_start": 8066,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b47c02022e58e013363b",
+      "source_role": "reviewer_report",
+      "text": "To a mixture of I (2.16g, 10.0 mmol, 1.0 equiv), B2Pin2 (3.81 g, 15.0 mmol, 1.5 equiv), Pd(dppf)Cl2 (435 mg, 0.6 mmol, 6 mol%) and AcOK (2.45 g, 25.0 mmol, 2.5 equiv) was added 1,4-dioxane (60 mL).",
+      "text_sha256": "sha256:94691f85035857989dbe626e967736039ad745efcaacbbde558d743a2743eec6"
+    },
+    {
+      "char_end": 8458,
+      "char_start": 8266,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-84fa255f127f85c16b6a",
+      "source_role": "reviewer_report",
+      "text": "4. 1H NMR spectra should be given with all the protons being assigned. These assignments are to be included in the 1H NMR spectra as well as the spectroscopic details in the synthetic details.",
+      "text_sha256": "sha256:2d4c58998797e9aaa48fa584be26918857dbe0dd0fb7a86242b5081ef915dc5b"
+    },
+    {
+      "char_end": 8508,
+      "char_start": 8461,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c96814867cc7f79cc383",
+      "source_role": "reviewer_report",
+      "text": "## **Detailed Responses to Referee’s Comments**",
+      "text_sha256": "sha256:d171b0289a597d1d551c343c435055a39608857e9bd123a78c34f93cd983b540"
+    },
+    {
+      "char_end": 8575,
+      "char_start": 8511,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6a7f3d0e89c4ba9df9c5",
+      "source_role": "reviewer_report",
+      "text": "## **Reviewers' comments: Reviewer #1 (Remarks to the Author):**",
+      "text_sha256": "sha256:c993cb330347407a9ac40f4a1d81131a1116fa3cd0e0fe9858c43d647eeede09"
+    },
+    {
+      "char_end": 9480,
+      "char_start": 8578,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-718241331ecf5469e480",
+      "source_role": "reviewer_report",
+      "text": "The authors have developed a multifunctional ligand APBA to replace the modulator ligand in MOF-808. This ligand effectively disperses the palladium catalytic centers atomically on the MOF, creating an efficient catalytic system termed Pd@MOF-APBA for the Heck transformation. It's intriguing that the catalyst's lifespan has been extended due to a more stable deformed six-membered cycle, as supported by both DFT calculations and experimental results. This advancement could potentially reduce costs of the preparation procedures. It’s also impressive that the reduced leaching of the catalytic centers addresses the concerns about metal residue in pharmaceutical intermediates. I believe this manuscript would be of significant interest to the readership of Nature Communications. Whereas, there are still several issues that need to be addressed for the manuscript to be considered for publication:",
+      "text_sha256": "sha256:c9a5f5176bbd3a2712efebf313a13e292d8e00647b58a76544724d73831e7843"
+    },
+    {
+      "char_end": 9698,
+      "char_start": 9483,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d952ce497d770ccd49ba",
+      "source_role": "reviewer_report",
+      "text": "1.According to Table 1, the TONs of the reactions catalyzed by MOFs are provided. Typically, TONs are not calculated for heterogeneous catalysts like MOFs. How did the authors determine the TON values in this study?",
+      "text_sha256": "sha256:028e9d20f06357d69bb9df757a8344cb804b901f670e4e788179fd96f82362eb"
+    },
+    {
+      "char_end": 9825,
+      "char_start": 9701,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3e8dcc560d2019c32478",
+      "source_role": "reviewer_report",
+      "text": "2.From Fig. 3b and 3d, it is evident that the palladium atoms in the catalyst have agglomerated. How to explain this result?",
+      "text_sha256": "sha256:5b54a20036d8b2ff6c9828ef01d18c96cbd1cfdd93b8f4afd164338effa80968"
+    },
+    {
+      "char_end": 10054,
+      "char_start": 9828,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7913804e158dd18b9b8d",
+      "source_role": "reviewer_report",
+      "text": "3. Can the authors provide a more intuitive representation of the spatial relationship between Pd(OAc)2 and APBA in Fig. 3e? It’s challenging to distinguish the differences between Fig. 3e and Fig. 3f as they currently appear.",
+      "text_sha256": "sha256:1d3cd8a084dfd870bb8ae08b1d538c0d7efbd67dc95f5cda4745d779309e7376"
+    },
+    {
+      "char_end": 10075,
+      "char_start": 10057,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0f474069346e31c4f1f7",
+      "source_role": "reviewer_report",
+      "text": "## **Question 1:**",
+      "text_sha256": "sha256:38c080cdf2e2ed7492ac9b59b7032df872a0f92353b51a5b2a2ec0cba9284c75"
+    },
+    {
+      "char_end": 10293,
+      "char_start": 10078,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e4840f271e9702feb650",
+      "source_role": "reviewer_report",
+      "text": "_According to Table 1, the TONs of the reactions catalyzed by MOFs are provided. Typically, TONs are not calculated for heterogeneous catalysts like MOFs. How did the authors determine the TON values in this study?_",
+      "text_sha256": "sha256:78dc0022823e24d7fc333a05d725333e58ee9b040aabdfaea459c05328eaa9ec"
+    },
+    {
+      "char_end": 11992,
+      "char_start": 11949,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-81b66bd89740b3bb753b",
+      "source_role": "reviewer_report",
+      "text": "## **Reviewer #2 (Remarks to the Author):**",
+      "text_sha256": "sha256:afb87c0d9db9643ccbd4542f3b95c2cacc5b3ad4916e8c67cf521300b70304c6"
+    },
+    {
+      "char_end": 12794,
+      "char_start": 11995,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a830254ff1c5871c9f6a",
+      "source_role": "reviewer_report",
+      "text": "The manuscript reports the use of a metal-organic framework (MOF) to tether and heterogenize a known type of homogenous catalyst (a ligand supported Pd(II) complex) for the Heck reaction. MOFs have been applied in this area before, for many of the reasons outlined in the paper introduction, and . The noteworthy results in this case are the importance of designing a pendant linker that effectively binds the catalyst species, that this group has significant structural flexibility and is able to tolerate changing coordination environments around the catalytic centre. The authors demonstrate the importance of these points through some comparison experiments. While not groundbreaking results, there are sufficient new insights and learnings that advance the field and will inform future studies.",
+      "text_sha256": "sha256:45d6e038d4540053dc923b5601c970c35ec9ef4dc74476b34b15fb88237fb1dd"
+    },
+    {
+      "char_end": 13828,
+      "char_start": 13411,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-34bd699f815273ac015a",
+      "source_role": "reviewer_report",
+      "text": "The catalysis experiments are reasonably comprehensive and controls are employed. Additional controls should be MOF-808 and the molecular complex if we are looking to highlight the TON as a selling point for this work. Presumably the MOF should show no activity and the molecular complex reasonable activity but no recyclability. One control used is MOF-808 appended with [2,2′-bipyridine]-5-carboxylic acid (BCA) but",
+      "text_sha256": "sha256:f8a89102d504f58e3603eba19a8926780381561f8789975ea61a485c1f580c75"
+    },
+    {
+      "char_end": 14308,
+      "char_start": 13831,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-26b10e979811f149295b",
+      "source_role": "reviewer_report",
+      "text": "it should be noted that while the authors highlighted the Pd loading they did not provide data on the amount of BCA incorporated. The amount of pendant linker will affect the Pd loading as will the stability of the complex. I think the authors need to be a little cautious of their calculations of TON; there are very small amounts of catalyst being used and these large numbers are calculated off one reaction. I suggest measuring this multiple times are averaging the result.",
+      "text_sha256": "sha256:1cac8e628e971fef50b2b1e5cbee1be1ab8594c194d488ae667b68e8cf5d68d2"
+    },
+    {
+      "char_end": 15039,
+      "char_start": 14311,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-23405d975374b031ab40",
+      "source_role": "reviewer_report",
+      "text": "As noted above, this is an interesting ligand/linker choice and a nice addition to the literature. The pendant linker used, 3-amino-4-(2-pyridyl) benzoic acid (APBA), is based on a ligand that has previously been studied (2-(2-aminophenyl)pyridine) (see: https://www.publish.csiro.au/ch/c96146). The authors should probably acknowledge this. The stability of the palladium seems an important part of the results here and should be highlighted to encourage people away from using simple 2,2'-bipyridien based ligands. The importance of flexibility in design of MOF catalysts has been highlighted by several groups (Sumby/Doonan, Humphries etc, where the linker is part of the MOF). The authors should highlight some of that work.",
+      "text_sha256": "sha256:4a403681111f2b1dfda8f906efe41a887bdd4b1460beec7219e5e4242a64cc2a"
+    },
+    {
+      "char_end": 15061,
+      "char_start": 15042,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ef0e8a449ccd80229f33",
+      "source_role": "reviewer_report",
+      "text": "## Minor revisions:",
+      "text_sha256": "sha256:141d7b6f1f6763a4d3a4bb8a3a949dcbf13524881160d69cbfbaa3703853c55f"
+    },
+    {
+      "char_end": 15227,
+      "char_start": 15064,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8060de87cf03bc47a0e3",
+      "source_role": "reviewer_report",
+      "text": "1. Better post-catalysis characterisation to confirm there is still intact \"molecular\" Pd complexes anchored within the MOF and it is not just small nanoparticles.",
+      "text_sha256": "sha256:1c1d4e8c5aeb3eabf7f1b25c65740e7ec3300b9c964282e4eaa9264ded49d4e1"
+    },
+    {
+      "char_end": 15508,
+      "char_start": 15411,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-738b1277899161736cb0",
+      "source_role": "reviewer_report",
+      "text": "4. Cite the original report for the pendant linker core (https://www.publish.csiro.au/ch/c96146).",
+      "text_sha256": "sha256:cbc53100fd9d67a0cf46776aaae2f9a8f87a02a24d66bfbf8b44a3bcf4a9f82e"
+    },
+    {
+      "char_end": 15648,
+      "char_start": 15511,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8f4f5567881153d9cb0a",
+      "source_role": "reviewer_report",
+      "text": "5. Cite papers where flexible MOFs that can coordinate metal centres are studied (e.g. https://pubs.acs.org/doi/abs/10.1021/jacs.0c05286,",
+      "text_sha256": "sha256:022451b770ada4a32c277c6c41816009a025215cb327f8a68dda652f3a8a29a7"
+    },
+    {
+      "char_end": 15869,
+      "char_start": 15651,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-52afb5ce23b5cd86282e",
+      "source_role": "reviewer_report",
+      "text": "https://pubs.rsc.org/en/content/articlehtml/2020/sc/d0sc00485e, https://pubs.acs.org/doi/10.1021/jacs.6b06239, https://onlinelibrary.wiley.com/doi/10.1002/anie.201802402, https://pubs.acs.org/doi/10.1021/jacs.8b05644).",
+      "text_sha256": "sha256:ea32afd580d22a1e47ec3dd9b185933b54a26f6580ee26a53fa7f26802e71142"
+    },
+    {
+      "char_end": 15890,
+      "char_start": 15872,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a284a20bf8ec6a66139a",
+      "source_role": "reviewer_report",
+      "text": "## **Question 1:**",
+      "text_sha256": "sha256:38c080cdf2e2ed7492ac9b59b7032df872a0f92353b51a5b2a2ec0cba9284c75"
+    },
+    {
+      "char_end": 16055,
+      "char_start": 15893,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c59edf0763135367d383",
+      "source_role": "reviewer_report",
+      "text": "_Better post-catalysis characterisation to confirm there is still intact \"molecular\" Pd complexes anchored within the MOF and it is not just small nanoparticles._",
+      "text_sha256": "sha256:08f374ac529ec9d52cd4d9a84d989901c122061e31513a8721749d3f4be965ff"
+    },
+    {
+      "char_end": 19787,
+      "char_start": 19744,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-11ed124c0b69bb66fefc",
+      "source_role": "reviewer_report",
+      "text": "## **Reviewer #3 (Remarks to the Author):**",
+      "text_sha256": "sha256:487a6cd6b311ca0a1d8662be67d067e2fb81a04f6371517fa6bef4f29fa09fa5"
+    },
+    {
+      "char_end": 20795,
+      "char_start": 20664,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4257e8f4ac4c779beec9",
+      "source_role": "reviewer_report",
+      "text": "Inorg. Chem. Front., 2021,8, 693-699, J. Am. Chem. Soc., 2021, 143, 9901. The reference section should also be checked accordingly.",
+      "text_sha256": "sha256:6c75cac8be2120f3054a3de59d0b92dc1997d1b4286b7cfb0bf2327b0babcda9"
+    },
+    {
+      "char_end": 21262,
+      "char_start": 20798,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-aa47defc6959453a18e6",
+      "source_role": "reviewer_report",
+      "text": "3. In the synthetic procedure section, an overall synthetic procedure for the preparation for the ligand APBA should be provided, and the amounts of the reactants in each procedure should be properly mentioned. Also, the conditions of the reactions performed, i.e., in air, or under any inert atmosphere, should be clearly mentioned for the sake of data reproducibility by others researchers working in this area. An ideal experimental detail should be as follows,",
+      "text_sha256": "sha256:0879bf26b3af2c49582de33b768f21fa841722c68c777a99f53250f88c299f28"
+    },
+    {
+      "char_end": 21661,
+      "char_start": 21465,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c67f0f1636f6d212350f",
+      "source_role": "reviewer_report",
+      "text": "4.[1] H NMR spectra should be given with all the protons being assigned. These assignments are to be included in the[1] H NMR spectra as well as the spectroscopic details in the synthetic details.",
+      "text_sha256": "sha256:09d2e73c7ca1155f714028b4ed0493b27c64e18cbc89cb4dca13bbbc351a4056"
+    },
+    {
+      "char_end": 21852,
+      "char_start": 21685,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6b71bb340e2d49377f4d",
+      "source_role": "reviewer_report",
+      "text": "_The introduction section is exceedingly long, for a communication article, it should be more focused on the field of study, and should be reconfigured appropriately._",
+      "text_sha256": "sha256:04bbd5f4830d01a934ae65a648dcb0389c161f1ffd152bc61cc5f6a1365817d2"
+    },
+    {
+      "char_end": 24001,
+      "char_start": 23965,
+      "reviewer_id_hash": "REV-6dae3c6f341f06e3",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-378dd81e45d4c5230484",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #1 (Remarks to the Author):",
+      "text_sha256": "sha256:6ffd34d82a3d649fbc91e1dc65fd25e243f665d42d0f633ad65db9c0ce240058"
+    },
+    {
+      "char_end": 24047,
+      "char_start": 24004,
+      "reviewer_id_hash": "REV-6dae3c6f341f06e3",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-328001e865661da3bf54",
+      "source_role": "reviewer_report",
+      "text": "The manuscript is now ready for acceptance.",
+      "text_sha256": "sha256:d6833d32f89377ff71042b35ee53ef98762cb2698db339669f4deab7dfe7d86a"
+    },
+    {
+      "char_end": 24086,
+      "char_start": 24050,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-99ce0819beb9658ef4ba",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #2 (Remarks to the Author):",
+      "text_sha256": "sha256:44342433f6365a7f5949b5d3040f70d6f57a95f4a5f42f98700e18492093b116"
+    },
+    {
+      "char_end": 24268,
+      "char_start": 24089,
+      "reviewer_id_hash": "REV-6a69e8aed8aac2e1",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3a94338d40564dcbfcea",
+      "source_role": "reviewer_report",
+      "text": "The authors have done an excellent job of revising the manuscript and attending to the referee comments. I am happy to recommend publication of the manuscript in its current form.",
+      "text_sha256": "sha256:1bb527045a6302844136a0fb2fc66f92c3019b51eba26d8d849bfbfa1c9a45e4"
+    },
+    {
+      "char_end": 24307,
+      "char_start": 24271,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d108ffcc568744fecdf0",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #3 (Remarks to the Author):",
+      "text_sha256": "sha256:8c17865a9cabc7f290ce7a58f02add361b84a8c4dd8a742bbb1b6a885882bbd0"
+    },
+    {
+      "char_end": 24346,
+      "char_start": 24310,
+      "reviewer_id_hash": "REV-1f70dda248786178",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b47299aeaef2bb3cd1dd",
+      "source_role": "reviewer_report",
+      "text": "manuscript and recommend acceptance.",
+      "text_sha256": "sha256:0f518037ee7dfe22e54bda7164989bde8a52f2b3a5f4407791cdf8f332ad2485"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

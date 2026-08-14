@@ -14,7 +14,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from scripts.materialize_nature_future_multihorizon_v5 import materialize_multihorizon
-from aspr.nature_multihorizon.targets import build_diffusion_targets
+from gear.nature_multihorizon.targets import build_diffusion_targets
 
 
 def _work(citer_id: str, year: int, topic_index: int) -> dict:

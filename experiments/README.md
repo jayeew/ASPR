@@ -1,10 +1,19 @@
-# Experiment layout
+# Figure experiment layout
 
-- `common/new/base`: current shared Fig.01–Fig.10 builders and renderers.
-- `common/new/adapters`: thin figure-specific extension runtime.
-- `figXX/new`: current per-figure configuration, runner, tests and README.
-- `figXX/old`: historical implementation and its figure-specific helpers.
-- `common/old`: historical cross-figure assembly, audit and earlier v6.1 suite.
+Each `figXX/new` directory owns its figure-specific configuration, runner,
+tests, output contract, and audit. `common/new/base` and `common/new/adapters`
+contain only reusable plotting and audit primitives; they do not own a figure's
+scientific inputs or outputs.
+
+Figure experiments consume only pinned dataset/calibration releases through the
+shared artifact protocol documented in `docs/module_architecture.md`. A figure
+must publish its tables, renders, and audit as its own immutable result release.
+
+- `common/new/base`: reusable numerical and rendering primitives.
+- `common/new/adapters`: reusable execution and audit adapters.
+- `fig01/new` … `fig10/new`: independent figure modules.
+- `fig08/new`: illustration handoff and its output contract rather than a
+  numerical plotting runner.
 
 Run all code-backed current figures (Fig.08 is intentionally excluded):
 

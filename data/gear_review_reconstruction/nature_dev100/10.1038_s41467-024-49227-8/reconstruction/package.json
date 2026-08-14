@@ -1,0 +1,2039 @@
+{
+  "author_response_spans": [
+    {
+      "char_end": 10281,
+      "char_start": 9809,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2c9cd3d23e8889ef5048",
+      "source_role": "author_response",
+      "text": "We thank the Reviewer for the positive assessment of our work, and we appreciate the constructive comments about the applications and the generality of the network growth model. We have made several major changes in response to the Referee’s suggestions, like adding a new section expanding the analysis of the fruit fly brain, re-writing the discussion section, and including additional real data sets and additional simulation results in a new Supplementary Information.",
+      "text_sha256": "sha256:ec3deb7befaf28c61566e283baa0c283bc7f83b13de743a39dc78908bf97a4d8"
+    },
+    {
+      "char_end": 10594,
+      "char_start": 10284,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ba3e882e008408951665",
+      "source_role": "author_response",
+      "text": "**1. Why this model? How can this model describe the growth of the brain network? The authors need to give some more examples or real-world data to demonstrate the rationality of this model. I believe the theoretical analysis is correct. However, I need more evidence to support why this is a suitable model.**",
+      "text_sha256": "sha256:a8a2f28fc030caa864ede1afc75f44c2a46b74496f5cc76b3d11bead50cd8ddd"
+    },
+    {
+      "char_end": 10991,
+      "char_start": 10597,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-50e3c452ac3b3a2300c6",
+      "source_role": "author_response",
+      "text": "The Reviewer raises an important question about our motivations; we now realize that we were not clear enough about the overarching objective of our work. The goal of the network-of-networks representation is not to model the growth of brain networks specifically but to provide a general and powerful mathematical representation of complex physical networks. Our key results are the following:",
+      "text_sha256": "sha256:682da355491620e7054be537ee911ac5ce20ca0bbe790b693b37c914428c2f0a"
+    },
+    {
+      "char_end": 11191,
+      "char_start": 10994,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-cb82adaa440d3a35e8c9",
+      "source_role": "author_response",
+      "text": "- We introduce a network-of-networks representation for physical networks, a flexible tool that allows both analytical and computationally efficient description of real and model physical networks.",
+      "text_sha256": "sha256:e625d5ec97918aca1f9536a1cd87bd228cad1039abbb678ad75accb282ac6ad3"
+    },
+    {
+      "char_end": 11404,
+      "char_start": 11194,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-aba2709346800e43eabe",
+      "source_role": "author_response",
+      "text": "- Leveraging on this representation, we study an analytically solvable model of physical networks, identifying volume-degree correlations as important emergent properties that can arise due to volume exclusion.",
+      "text_sha256": "sha256:2ee20d6255ce591bb74b36d516279e56c5164c8552d695c9e1e81fb6016391d0"
+    },
+    {
+      "char_end": 11628,
+      "char_start": 11407,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-370b592500f8300c77a5",
+      "source_role": "author_response",
+      "text": "- Building on results from multi-layer networks, we derive the physical Laplacian, which demonstrates that the volume-degree correlations not only affect the growth of networks, but also affect their dynamical properties.",
+      "text_sha256": "sha256:514318ccc365cc4e34a07a5197335304ebd1dd88ef10106b2efcd2302928ca53"
+    },
+    {
+      "char_end": 12254,
+      "char_start": 11631,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7c38e59347dbe63c2590",
+      "source_role": "author_response",
+      "text": "- Finally, we apply the network-of-networks representation to calculate volume-degree correlations and the physical Laplacian of a large, real physical network in the main text, and four more data sets in the new Supplementary Information. We find that the volume-degree correlations are prevalent in real physical networks and affect their Laplacian spectrum analog to the model networks. The fact that volume-degree correlations emerge in a minimal model while also prevalent in real systems suggests a general mechanism behind such correlations that does not depend on the complex details of the growth of real networks.",
+      "text_sha256": "sha256:1d7001d8892760decd4c0630501a7c5880166e9aadeef8bd45eeca0a2018c586"
+    },
+    {
+      "char_end": 12821,
+      "char_start": 12257,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-547bb3df1589b2aae8bd",
+      "source_role": "author_response",
+      "text": "We focus on a neural network as an example in the main text simply because among physical networks neural networks have the largest and most detailed three-dimensional maps available. Besides characterizing the fruit fly brain network, this application further highlights the computational efficiency of our methodology:  recent work [1-2] on physical networks, in fact, had to narrow down their applications to single brain regions of the fruit fly brain, due to computational limitations. In contrast, we analyze the entire network without any special resources.",
+      "text_sha256": "sha256:1ebf46cbfe12b5ff9573dc0034e6cd7387297c59d7c0c925b4d2da1fcebb5297"
+    },
+    {
+      "char_end": 13068,
+      "char_start": 12824,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f3635880a22152416400",
+      "source_role": "author_response",
+      "text": "To further strengthen the generality of our results, we now characterize in the SI four additional data sets, namely a neural network of a nematode, a network describing the cavities of a porous material, a river network and a vascular network.",
+      "text_sha256": "sha256:5c4692bc5020ea369ea2e31ad77399f5a089adadc00a36387fd050785124ffa4"
+    },
+    {
+      "char_end": 13149,
+      "char_start": 13071,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-086ff3696c1340ddd285",
+      "source_role": "author_response",
+      "text": "In summary, prompted by the Reviewer’s comment, we made the following changes:",
+      "text_sha256": "sha256:6e3e04a2c4afa8b5ff44ea51ab07fa21e2ff2b9160089914b885f346d1f28e1f"
+    },
+    {
+      "char_end": 13262,
+      "char_start": 13152,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-69a97288b7f7ce8c8fba",
+      "source_role": "author_response",
+      "text": "- (i) We re-titled the manuscript \"Physical networks as network-of-networks\" to better reflect its main focus.",
+      "text_sha256": "sha256:ec7d95e83c218f959c3a39d527f365bbb3c4a07144dbf112e44973c95dffca8a"
+    },
+    {
+      "char_end": 13392,
+      "char_start": 13265,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c8d8be8cdfb680a338f1",
+      "source_role": "author_response",
+      "text": "- (ii) We adjusted to the abstract and the introduction and we re-wrote the discussion to better explain the goals of our work.",
+      "text_sha256": "sha256:f0424ef523bdde2d90ef0d2da14db45229298ba381eef5cbbf0b3129fbbe618f"
+    },
+    {
+      "char_end": 13479,
+      "char_start": 13395,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-983db6fc04d902fc3c52",
+      "source_role": "author_response",
+      "text": "- (iii) We explain the rationale for focusing on the fruit fly brain as a test case.",
+      "text_sha256": "sha256:1c6a9f4a8494b18a5b422b312ecf1053b0c93982289462c57274f32cdf82fa68"
+    },
+    {
+      "char_end": 13612,
+      "char_start": 13482,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6cedd74edbe95e0fcc72",
+      "source_role": "author_response",
+      "text": "- (iv) We study additional real networks to demonstrate the wide applicability of our framework and the generality of our results.",
+      "text_sha256": "sha256:106f2b2150ffe9cd41fe1d93d10a15b52e64acea18ab569e94457dbe6985e39d"
+    },
+    {
+      "char_end": 13754,
+      "char_start": 13615,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1b480da49e6f3cc03d56",
+      "source_role": "author_response",
+      "text": "[1] Liu, Yanchen, Nima Dehmamy, and Albert-László Barabási. \"Isotopy and energy of physical networks.\" Nature Physics 17.2 (2021): 216-222.",
+      "text_sha256": "sha256:79dc3bdc736fa8e379e8d40fc1513dd45e745eea469124fcf289d9b6b01108e6"
+    },
+    {
+      "char_end": 13865,
+      "char_start": 13757,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-714bad6349a9f8b4bd58",
+      "source_role": "author_response",
+      "text": "[2] Pósfai, Márton, et al. \"Impact of physicality on network structure.\" Nature Physics 20.1 (2024): 142149.",
+      "text_sha256": "sha256:d9d5ee9c1462ebfc61369a541298a8907c76915ba6ff9fc7808724dc2c430f32"
+    },
+    {
+      "char_end": 14270,
+      "char_start": 13868,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ef56ac5c6e3ca44e6664",
+      "source_role": "author_response",
+      "text": "## **2. Related to my first comment, I think the results about the fruit fly brain network are significant. However, the authors should have produced more results about this dataset. The authors may consider putting this figure earlier and conducting more analysis about this dataset to support this research. It would be better if the authors could find more examples/datasets to support this model.**",
+      "text_sha256": "sha256:b0a298368a125f7fddd24534fdd8f9d54449011f36d69f09e36c7a66a29369d0"
+    },
+    {
+      "char_end": 14459,
+      "char_start": 14273,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-60bf03ba9f52563ef8c3",
+      "source_role": "author_response",
+      "text": "Prompted by the Reviewer’s suggestion, we dedicate a separate section for the fruit fly brain in the revised manuscript. We improve and expand the analysis of the data set in three ways:",
+      "text_sha256": "sha256:06431a155a2946f3c73ed983d4f0ee23183b8199b633c22295297ddadbd7d730"
+    },
+    {
+      "char_end": 14922,
+      "char_start": 14462,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f4a3c9a00a341313d3b0",
+      "source_role": "author_response",
+      "text": "- (i) Show the weighted degree distribution (number of synapses) in Fig. 4b and Fig.4c instead of the degree distribution (number of unique synaptic partners) we showed before. This is more in line with the Laplacian spectra of Fig. 4d, where link weights were included. By taking the weights into account we found that the degree exponent is <3 and the degree-volume correlations are close to linear, meaning that the empirical results better match the model.",
+      "text_sha256": "sha256:b1190aa2ef9ab302a6c1230a0cd6f4feb37354f11c2a087f65425d5981a7aac9"
+    },
+    {
+      "char_end": 15374,
+      "char_start": 14925,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0146c5d2335db51847dc",
+      "source_role": "author_response",
+      "text": "- (ii) We now also study the structure of the leading eigenvector of the combinatorial and physical Laplacian (Fig. 4e-g). We find that in both cases the eigenvectors are concentrated on a single node: for the combinatorial network, as expected, the central node is the largest hub; in contrast, for the physical Laplacian the central node is the node that has the highest degree-volume ratio, i.e., it balances the high degree with low node volume.",
+      "text_sha256": "sha256:c47d63353bccba0723f4a21e0bcf8fa8f0d9a8548289f0cce7e490d784ef953d"
+    },
+    {
+      "char_end": 15674,
+      "char_start": 15377,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-53de4f359a66d9a15940",
+      "source_role": "author_response",
+      "text": "- (iii) To further support the generality of our framework and results, we now include four additional real networks to the newly added Supplementary Information: a vascular network, a rock pore network, a river network and the neural network of the _C. elegans_ . In each case, we find a positive",
+      "text_sha256": "sha256:7143ea0d832fd4d67b5b2a70bf2faf786325b6457209dfcc9cfa932e647d1878"
+    },
+    {
+      "char_end": 15794,
+      "char_start": 15677,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-24bd338c2eae6169b9ca",
+      "source_role": "author_response",
+      "text": "degree-volume correlation, which affects the Laplacian spectrum analog to the model networks and the fruit fly brain.",
+      "text_sha256": "sha256:f85475715d8c7675816cbdc6fb439e0f05241e73b93c75c4b65db39d4ff4df1b"
+    },
+    {
+      "char_end": 16524,
+      "char_start": 15797,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8d155f2ba82b6ce29079",
+      "source_role": "author_response",
+      "text": "**3. The authors used LERWs to generate nodes. It needs to be clarified why using this approach. How do the random walk methods affect the results? Since the authors derived the theoretical results before the random walk method, indicating that the analysis will always hold regardless of random walk methods. Considering an extreme case that each agent only moves in one direction, the super network may be close to a chain-like network, far from Scale-Free networks as the authors predicted. Consequently, if each agent walks in one direction more than the other, the degree distribution should be more homogenous. It seems that the supernetwork may show different degree distributions depending on the random walk methods.**",
+      "text_sha256": "sha256:cea23b3489a89506ceb8a152e6c401c9c3c100e6a47856e1f5818cd1aeaefcb9"
+    },
+    {
+      "char_end": 18086,
+      "char_start": 16527,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4c4c9ed06f57cadd0396",
+      "source_role": "author_response",
+      "text": "Indeed, as the Reviewer points out, the analysis is not specific to LERWs and holds under some mild assumptions on the random walk (or more general randomly growing pieces). Besides the knowledge of the fractal dimension of the random walk, we need it to have the property that if the boxes around two random walk pieces intersect, then with uniformly positive probability the pieces also intersect (resulting in Eq. (1) in the manuscript). This holds for many examples but does not hold for extreme cases like a walk in 2 dimensions that only steps in the horizontal direction. More generally, we require a level of isotropy for the node growth: nodes don’t favor certain directions so much as to avoid each other.  If the above assumption is met, our model produces a degree distribution with a power law tail independent of the type of random walk used; the exponent of the power law, however, does depend on the fractal dimension of the random walk trajectories. Our choice to focus on LERWs as an example has two main reasons: first, LERWs are well-studied with known non-trivial fractal exponents, and second, LERWs provide a simple method to produce self-avoiding trajectories that do not trap themselves (for example, the kinetic version of the self-avoiding walk traps itself in 2 and 3 dimensions). In the newly added Supplementary Information, we provide additional simulations using various random trajectories (simple random walk, kinetic self-avoiding random walk, random jumps and random rays) to show the validity of our analysis beyond LERWs.",
+      "text_sha256": "sha256:389ee2859bc39c996387c77dee9cfd23a46e80814d64a961c598500e4f6d2feb"
+    },
+    {
+      "char_end": 18139,
+      "char_start": 18089,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9ce4d301b655c0f17f78",
+      "source_role": "author_response",
+      "text": "In summary, in response to the Reviewer’s comment:",
+      "text_sha256": "sha256:1af205a56e304fc666669f436b8da83bad333ffaa0e6b75297db44c08d927421"
+    },
+    {
+      "char_end": 18323,
+      "char_start": 18142,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-bffed3492bbb903e9174",
+      "source_role": "author_response",
+      "text": "- (i) We clarify the assumptions about the random walk in our analytical derivation. We use the example prosed by the Reviewer as an example for the necessity for these assumptions.",
+      "text_sha256": "sha256:f39696ff09eca440607d2c9a53b2107a5521745c19301d40e07addd299f74066"
+    },
+    {
+      "char_end": 18466,
+      "char_start": 18326,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a29a50b6cb7d673438e1",
+      "source_role": "author_response",
+      "text": "- (ii) We compare the analytical prediction to additional random walks in the Supplementary Information accompanying our revised manuscript.",
+      "text_sha256": "sha256:9891ce3fda093a3d3098d010a6b4b74454e1f138baaffdabaa32eb99312ae03c"
+    },
+    {
+      "char_end": 18554,
+      "char_start": 18469,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6507b772480299ca4c59",
+      "source_role": "author_response",
+      "text": "## **4. Like 3, how do the random walk methods affect the results of the Laplacian?**",
+      "text_sha256": "sha256:191716f0100f50b2d4f9651758ef6f4bcc146a99500dc1f2777538c4279632bf"
+    },
+    {
+      "char_end": 19070,
+      "char_start": 18557,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d5a2f4c069dafecde74a",
+      "source_role": "author_response",
+      "text": "The spectrum of the physical Laplacian is affected by the power law degree distribution of the supernetwork and the degree-volume correlations. Both features emerge independently of the type of random walk used (under the mild assumptions discussed above); therefore, the spectrum of the physical Laplacian is also affected similarly. We demonstrate the general emergence of positive degree-volume correlations through extensive simulations using various random walks in the newly added Supplementary Information.",
+      "text_sha256": "sha256:cd1eb25493ec3658b2e70e85ea55606382d70234f8a337db578d7f78539137ff"
+    },
+    {
+      "char_end": 20366,
+      "char_start": 19073,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b839b4968cd05c3bfc7e",
+      "source_role": "author_response",
+      "text": "In addition, we provide arguments why positive degree-volume correlations and the suppression of the tail of the Laplacian spectrum are expected to arise beyond our model, through any alternative network generation process that minimizes the total network volume. Any combinatorial network _G_ has many possible physical realizations _P_ , a minimum volume realization is a _P_ that minimizes the total volume of the network. Consider a node in _G_ with degree _k_ ; in any possible _P_ , the physical realization of the node must have volume at least proportional to _k_ , otherwise it is unable to support _k_ connections. This means that any physical network generation process that somehow minimizes total volume is characterized by positive degree-volume correlations. Volume minimization can happen either explicitly or as an emergent property, like in our model: either a node must be large because it needs to create many connections or has many because it is large. Because of these general correlations, we expect that for networks that at least to some extent minimize volume, no matter how complex the generation process is, the tail of the physical Laplacian is suppressed by the large volume of hubs. We now clarified this argument at the end of page 5 of the revised manuscript.",
+      "text_sha256": "sha256:3e3d1286cc7c0acd87466937743424d94a056b7ab4670eddd3c3599c5ce63d53"
+    },
+    {
+      "char_end": 20867,
+      "char_start": 20369,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8aad1d78a2a7222f1afd",
+      "source_role": "author_response",
+      "text": "The question of the Reviewer, however, also points towards a more general open question. The derivation of the physical Laplacian shows that physical networks with the same combinatorial graph, but different physical layout can have very different spectra. To what extent is the spectrum determined by the combinatorial graph? Can we design a physical layout for a given combinatorial network to control the spectrum? We now mention these open questions in the discussion of the revised manuscript.",
+      "text_sha256": "sha256:279927b80e85d46da0c6ef2510f4683800acac83b4c5c656dea90b9e89e7d038"
+    },
+    {
+      "char_end": 20888,
+      "char_start": 20870,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0c7c436e1b78b132da0a",
+      "source_role": "author_response",
+      "text": "## **Reviewer #2**",
+      "text_sha256": "sha256:d0320a9ff5a423e643e3c18edc22540a75f0181928a261922c764a0a93898eeb"
+    },
+    {
+      "char_end": 21309,
+      "char_start": 20891,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f695be3f711ac5fad1d6",
+      "source_role": "author_response",
+      "text": "**In this manuscript, Pete et al attempt to understand the effects of embedding a network into a finite dimensional space. This problem has been treated before, but the authors introduce a Network of Networks approach which is innovative. Within this approach, they are able to demonstrate that the physical structure of the underlying space has important constraints to the dynamics and functioning of the networks.**",
+      "text_sha256": "sha256:99332628324d8ba7653f40ffafda5f74d4da3c8ed0b16b5cc5fee8310dc99daf"
+    },
+    {
+      "char_end": 21415,
+      "char_start": 21312,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-51286b36388799409b8d",
+      "source_role": "author_response",
+      "text": "## **This includes a novel degree - volume correlation which have not been taken into account before.**",
+      "text_sha256": "sha256:8a57382dc86d201130ad72dba5eab6344c227d3ab772cb1d7120e0502156bac6"
+    },
+    {
+      "char_end": 21563,
+      "char_start": 21418,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c469388f367effe883c0",
+      "source_role": "author_response",
+      "text": "## **I like the modeling and predictive nature of the approach. I believe that the mathematical results of the paper are sound and interesting.**",
+      "text_sha256": "sha256:e85f6645548353e9841185018f2e39d06f4a3b26ccd3272d1c10bf6f555f9443"
+    },
+    {
+      "char_end": 21835,
+      "char_start": 21566,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-44a64a1fdc9e7aae227d",
+      "source_role": "author_response",
+      "text": "We appreciate that the Reviewer found our modelling and mathematical results compelling. We also thank the Reviewer for appreciating the novelty of our characterization of degree-volume correlations. We address in detail the constructive comments of the Reviewer below.",
+      "text_sha256": "sha256:d8443b486c9e2c932c06eb7d62549308b23b841a4107a3f3816159d53d87365e"
+    },
+    {
+      "char_end": 21938,
+      "char_start": 21838,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a05d36d756d88b690684",
+      "source_role": "author_response",
+      "text": "## **What I am not fully convinced is on the connection of the modeling with a real-world problem.**",
+      "text_sha256": "sha256:f91dfb120c9f4fcd196c775e045d30f604e3b4434cd3f6afb28f300ad069e008"
+    },
+    {
+      "char_end": 22572,
+      "char_start": 21941,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-da6be7a098654b046ecf",
+      "source_role": "author_response",
+      "text": "The Reviewer raises an important point about the applicability of the network-of-networks framework to real physical networks. We realize that in the manuscript we need to better describe the advantages of the framework with respect to previous approaches and to further illustrate the possibilities it affords. As mentioned above by the Reviewer, embedding networks that obey volume exclusion have been studied before, for example, in the recent Refs. [1-3], which provide great insights into the mechanisms shaping physical networks. Our work pertaining to real networks goes beyond the existing literature in two important ways:",
+      "text_sha256": "sha256:f3157883413882b3ffe9d939d6501437a1b74f7101dceba7497b7172c2db49a6"
+    },
+    {
+      "char_end": 22980,
+      "char_start": 22575,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ff67935cd4ff3a3d8047",
+      "source_role": "author_response",
+      "text": "- (i) In these references, simple models of generating physical networks are introduced that represent physical nodes as spheres and links as tubes. Such representation is a natural first step; however, it comes with severe limitations: it is unable to capture the complex shape of real nodes, one must limit the maximum degree of nodes or allow links to violate volume exclusion in the vicinity of nodes.",
+      "text_sha256": "sha256:9c6e2a824b821947d35515b9b6109f016fcf4ac7d20b95b2d342dea28c41f824"
+    },
+    {
+      "char_end": 23323,
+      "char_start": 22983,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-791529dafd3874df7477",
+      "source_role": "author_response",
+      "text": "Therefore to compare models to real networks, the models must rely on a representation that is able to describe arbitrary node shapes. One such representation is provided by the network-ofnetworks framework. This also connects the analysis of physical networks to the rich literature of multilayer networks, opening new avenues of research.",
+      "text_sha256": "sha256:7c92544511a79e7dfd45f686fd96536aa5a83740eafc94086a6026be9b3455fd"
+    },
+    {
+      "char_end": 24083,
+      "char_start": 23326,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3375de627d693d66e88a",
+      "source_role": "author_response",
+      "text": "- (ii) The methods introduced in Refs. [1-3] require the full shape of real physical networks as input, hence are computationally expensive to measure. For this reason, their applications are limited to real networks with a few hundred nodes or require extensive computational resources. On the other hand, in our work, we used to the network-of-networks representation and the network growth model to identify node degree-volume correlations and the physical Laplacian as important descriptors of the structure and dynamics on physical networks. Both of which, requiring only the combinatorial network and the node volumes as input, are cheap to compute. This is well illustrated by the case study of the fruit fly brain: Refs. [2] and [3] also analyze the",
+      "text_sha256": "sha256:4dafe119eaf90b69d90c9d750be2cb5194adf4bc3158542684aca21971f1cf4a"
+    },
+    {
+      "char_end": 24216,
+      "char_start": 24086,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-10c8e4e71c14140ccab7",
+      "source_role": "author_response",
+      "text": "same data set, however, they restrict their applications to single brain regions. In contrast, we characterize the entire network.",
+      "text_sha256": "sha256:d058ceace203eee56cc395d8b01f5976f3b3082624ba11a572b1495b0788959b"
+    },
+    {
+      "char_end": 24686,
+      "char_start": 24219,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1e7f8ae19a033bc84bcd",
+      "source_role": "author_response",
+      "text": "We also remark that the model of network growth introduced in the manuscript is not intended to model any specific real system. Our goal was to devise a minimal model that captures volume exclusion and complex node shapes. The fact that we observe volume-degree correlations in real systems and that it also emerges in a minimal model implies that these correlations do not depend on the specific details of the systems, rather there is a general mechanism behind it.",
+      "text_sha256": "sha256:306cb45c81a55aad6c7310b99675a8e17710b6ef70ede6b2bdfab0a1e090d695"
+    },
+    {
+      "char_end": 24776,
+      "char_start": 24689,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d7f125d87e08b77cf357",
+      "source_role": "author_response",
+      "text": "In response to the Reviewer’s comment, we made the following changes to the manuscript:",
+      "text_sha256": "sha256:53045a93ffd0814e0522226db92c6b8c8013afcabb6a07e32bf5fd8de96a2948"
+    },
+    {
+      "char_end": 25081,
+      "char_start": 24779,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7eaed9f84b904e2fbbbf",
+      "source_role": "author_response",
+      "text": "- (i) We now include several additional real networks (a vascular network, a rock pore network, a river network and the _C. elegans_ neural network) in the newly added Supplementary Information to demonstrate the wide applicability of our framework and to further support the generality of our results.",
+      "text_sha256": "sha256:3dd673201e976a80baf91d8f6779999111d5f8b0d7f35044f2ec6b5d21768885"
+    },
+    {
+      "char_end": 25323,
+      "char_start": 25084,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-42d0367b99c4b17a71af",
+      "source_role": "author_response",
+      "text": "- (ii) We extended the analysis of the fruit fly brain network in the revised manuscript: we now study the structure of the leading eigenvector of the physical Laplacian and the role of hubs (see details in our answer to the next comment).",
+      "text_sha256": "sha256:e0f5b21676e7918312f2cd34223b8ad20862b8dbbc9009f2cb758412bac164b9"
+    },
+    {
+      "char_end": 25488,
+      "char_start": 25326,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0b1ef402de2b9ca805b4",
+      "source_role": "author_response",
+      "text": "- (iii) We expand on the conceptual and computational advantages of the network-of-networks framework and our methods in the discussion of the revised manuscript.",
+      "text_sha256": "sha256:961c74e2747c5e0d323d5b10321eb0500977d5ca33c68199c8519ffb409bc391"
+    },
+    {
+      "char_end": 25639,
+      "char_start": 25491,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-70ba60d74dc19afae1ca",
+      "source_role": "author_response",
+      "text": "[1] Dehmamy, Nima, Soodabeh Milanlouei, and Albert-László Barabási. \"A structural transition in physical networks.\" Nature 563.7733 (2018): 676-680.",
+      "text_sha256": "sha256:7c8e728db69884cf012b9c7bfaa3b81a0615b6cb7a9c94d1405045961fbb3f54"
+    },
+    {
+      "char_end": 25781,
+      "char_start": 25642,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5c71e595cdec768ed991",
+      "source_role": "author_response",
+      "text": "[2] Liu, Yanchen, Nima Dehmamy, and Albert-László Barabási. \"Isotopy and energy of physical networks.\" Nature Physics 17.2 (2021): 216-222.",
+      "text_sha256": "sha256:7fedb198493e79d7851e36550fd6025d99991d8ed8e87bd10c22120e04e2e099"
+    },
+    {
+      "char_end": 25892,
+      "char_start": 25784,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-57c27eea5dbfcec88c0f",
+      "source_role": "author_response",
+      "text": "[3] Pósfai, Márton, et al. \"Impact of physicality on network structure.\" Nature Physics 20.1 (2024): 142149.",
+      "text_sha256": "sha256:c37697cb5546d082dbdba492502adaf790c0fb862dbbb54f3e86fe4ce578f65c"
+    },
+    {
+      "char_end": 26223,
+      "char_start": 25895,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1b3b9fd9b1a9ddd92b8a",
+      "source_role": "author_response",
+      "text": "**I think that the authors have not addressed in full detail the case study using the brain connectome of the fruit fly and its significance for the understanding of teh brain structure and functioning. Without a clear application of the proposed method, the appeal of the approach to a broader audience is somehow diminished.**",
+      "text_sha256": "sha256:39a9539b930d11c3e777d09e7d746d7825828955d2c23cf565f2b29350c8f730"
+    },
+    {
+      "char_end": 27346,
+      "char_start": 26226,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1b7ce5e0a104b8ae1628",
+      "source_role": "author_response",
+      "text": "We thank the Reviewer for pointing out this shortcoming in the original version of our manuscript. We used the case study of the fruit fly brain to demonstrate the applicability of our framework to large-scale real networks and that heterogeneous degree distributions and degree-volume correlations (as suggested by our network-of-networks model) are indeed present in real systems. We derived the physical Laplacian to show that these structural properties in turn strongly affect the dynamics unfolding on physical networks. At this point, we stopped, missing the chance to explore the consequences of our findings on the dynamics and to better explain the method's applications. To remedy this, we now compare the leading eigenvector of the physical Laplacian to that of the combinatorial Laplacian. We find that the leading eigenvector in the combinatorial network is concentrated on the hubs, meaning that the hubs have an outsized influence on early spreading. On the other hand, taking node volumes into account, the leading eigenvector of the physical Laplacian becomes localized on the node that has the maximum",
+      "text_sha256": "sha256:feee3e997139fbe32f95ce52701ebb5f70781f181a09dc3d36bc78e2043a58b1"
+    },
+    {
+      "char_end": 27692,
+      "char_start": 27349,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-732bdfce7f5f1ec26c3f",
+      "source_role": "author_response",
+      "text": "degree-volume ratio, balancing relatively high connectivity and low volume. (Specifically, it is the 159th largest degree node and is at the top 15 percentile of the volume distribution.) This indicates that the physical layout not only suppresses the tail of the Laplacian, but also changes the identity of the early spreaders in the network.",
+      "text_sha256": "sha256:e4b17273b09d5dae8fb11cd58408afd73fb58d558a34133cbc35388e27cecab7"
+    },
+    {
+      "char_end": 28080,
+      "char_start": 27695,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a54da136646571e2c322",
+      "source_role": "author_response",
+      "text": "Our initial explorations in this direction indicate that this is part of a more general phenomenon which can be investigated by systematically tuning the node volumes. We now discuss these relevant perspectives in the conclusion of our revised manuscript, whose detailed investigation is left for future work. We are grateful to the Reviewer for prompting us to explore this direction.",
+      "text_sha256": "sha256:7c0b184bec88e6b80021f34df31fb35f360dcc10b68cd58f8f7581987faad39e"
+    },
+    {
+      "char_end": 28266,
+      "char_start": 28083,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-34adc8573d7d61df3969",
+      "source_role": "author_response",
+      "text": "In addition to the expanded analysis of the fruit fly brain network, we now include the analysis of four further real networks in Sec. S2 of the newly added Supplementary Information.",
+      "text_sha256": "sha256:aa8f487c93c22c322b83cf1f72ecf3b516aa8baf5b5c97c10fb562776ebfd4b0"
+    },
+    {
+      "char_end": 28610,
+      "char_start": 28269,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ae1d1e9b183812c469b9",
+      "source_role": "author_response",
+      "text": "We thank the Reviewer for the valuable observations and criticisms which helped us identify and resolve crucial shortcomings in the presentation of our framework. We are confident that the additional descriptions and new results about other physical networks make now clear the broad applicability and relevance of our framework and results.",
+      "text_sha256": "sha256:182ba16084f470662eb9467c019ba99bb9b9b5b138ee45130137c99fecd58bf5"
+    },
+    {
+      "char_end": 28631,
+      "char_start": 28613,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1ae1882b54db102faef2",
+      "source_role": "author_response",
+      "text": "## **Reviewer #3**",
+      "text_sha256": "sha256:16ddac122b92f5f6132d31d11b9ea175825a9cbbdb9f4418944ee3c3e0cdf0e7"
+    },
+    {
+      "char_end": 28922,
+      "char_start": 28634,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2e732f05c8660c0acd2b",
+      "source_role": "author_response",
+      "text": "**In this paper, the authors propose a model for the growth of physical networks. This model is analytically tractable and has some interesting properties. Then they compare the model against the recently published reconstruction of the brain connectome of the larva of D. melanogaster.**",
+      "text_sha256": "sha256:c7872f2db8ef849bf76d2ec78e57d1bcf1d1d8442ff8059399204145379bfedb"
+    },
+    {
+      "char_end": 29321,
+      "char_start": 28925,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a3c76b0601a18b1a24a7",
+      "source_role": "author_response",
+      "text": "**I think that the manuscript, while of interest and of merit, is not above the bar for Nature Communications. The concern is not technical, it is the lack of explanatory power of the model which I think is a must for a journal of this level. As the authors point out, physical networks have received much attention in top journals in recent years, and the brain is a fantastic example of that.**",
+      "text_sha256": "sha256:9d6ceabc7ec6906bb34882d94c4c0ca0c7fe136662dad0681440ca2ae85fe450"
+    },
+    {
+      "char_end": 29827,
+      "char_start": 29324,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0b2df2dab412604d1225",
+      "source_role": "author_response",
+      "text": "We thank the Reviewer for the positive assessment of our model and analytical results, and we appreciate the constructive comments about applying our results to the fruit fly brain connectome. We made several major changes in response to the Reviewer’s suggestions, like expanding the analysis of the connectome, including additional real data sets, re-writing the discussion and changing the title of the manuscript. We also explored extensions of our model to incorporate additional growth mechanisms.",
+      "text_sha256": "sha256:3fdd1a3581b5b9ad7dcd4144c60b48d2d398d9a53c2b4d2452f84d8b3bf7718b"
+    },
+    {
+      "char_end": 30541,
+      "char_start": 29830,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e05de55b70040daf5e78",
+      "source_role": "author_response",
+      "text": "**However, the ‘physical’ mechanism by which the brain grows has nothing to do with the mechanism proposed in the manuscript. As the brain in D mel adds new neurons these are part of a ‘family’ of neurons that are basically programmed to make connections on a certain area of the brain, as a result they grow in bundles, that is, in a directed fashion guided by the expression of different receptors. That being said, it is true that there are many neuron families some of which only have one neuron. Because these neurons were in the brain from the start of development they are bigger and have more connections as a general rule, which is aligned with some of the ingredients of the authors’ physical model.**",
+      "text_sha256": "sha256:a6d7e9448350a5a33156c03f042e2f0c413a095ed8bbe3b4bfcadb8bec5df4d3"
+    },
+    {
+      "char_end": 30918,
+      "char_start": 30544,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b93fdfcb3028628dd473",
+      "source_role": "author_response",
+      "text": "**Nonetheless, the authors should note that initially the volume is small occupied with a small fraction of neurons and as more neurons are added, to make room for them the old neurons deform their shape to accommodate growth. So it is not quite the image of a space that is available and needs to be filled up, but a deformation process until it reaches the final volume.**",
+      "text_sha256": "sha256:3e08f566f8090787fa7528cddfd1dd078857756e390bfa549056639cc1513c0b"
+    },
+    {
+      "char_end": 31594,
+      "char_start": 30921,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-96e3aa010c2550dc6b45",
+      "source_role": "author_response",
+      "text": "**Obviously, I understand the need for models that can help us understand general mechanisms that account for the properties we see in physical networks, and this model is a nice first step in that direction. However, these models cannot exist detached from knowledge behind the processes by which these networks actually grow, which in the case of the larval brain has been studied. If we do not do this, we run the danger of associating properties to the wrong mechanism. I really encourage the authors to get a better understanding of known processes and their proposed mechanism and try to explain when one can be effectively mapped into the other and when it cannot.**",
+      "text_sha256": "sha256:c59ddf2195ec67b9d1559727ef5d771de0b7fe811a0ff9163f636c1f30f71479"
+    },
+    {
+      "char_end": 32043,
+      "char_start": 31597,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b9fc44b652abe224f857",
+      "source_role": "author_response",
+      "text": "We agree with the Referee on the model’s simplicity – and it is designed to be so on purpose. To develop a mathematical theory of physical networks, we must devise the simplest models that capture the essential features of physical networks: complex node shape and volume exclusion. We chose the _D. melanogaster_ connectome as a case study because it represents one of the largest and most detailed maps of physical networks currently available.",
+      "text_sha256": "sha256:51c9305ea3068fc13431e518a13f669f9ae27037827c3f460a9d3a3c8af62ae6"
+    },
+    {
+      "char_end": 32266,
+      "char_start": 32046,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5f37dd3e2f692d40e4bc",
+      "source_role": "author_response",
+      "text": "The first steps of modelling physical networks were developed in Refs. [1-2], both references represented physical nodes as spheres and links as tubes. In that respect, our work provides several significant advancements:",
+      "text_sha256": "sha256:7709770fdeab95fae14a2b1e0f97254f5c40429d13fefa59e26a9335632769a5"
+    },
+    {
+      "char_end": 32519,
+      "char_start": 32269,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0bcded6e1ba4cddb9ed4",
+      "source_role": "author_response",
+      "text": "- (i) We introduce a network-of-networks representation for physical networks to supersede the sphere-and-tube representation. This conceptual shift allows both analytical and computationally efficient description of real and model physical networks.",
+      "text_sha256": "sha256:bca39ac6ed30757936ae26468b94d7dceb6279a54de5274b2cf2349301641d08"
+    },
+    {
+      "char_end": 32782,
+      "char_start": 32522,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b2221925842d64358e67",
+      "source_role": "author_response",
+      "text": "- (ii) Leveraging on this representation, we study an analytically solvable model of physical networks. The model identifies volume-degree correlations as important emergent properties that naturally arise in even the simplest systems obeying volume exclusion.",
+      "text_sha256": "sha256:af2575e20f2852c3825f768e3f4b355c0b18fc0dbc35afb12508696ea9fe4f40"
+    },
+    {
+      "char_end": 32979,
+      "char_start": 32785,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f071f6de8cb71d9c8020",
+      "source_role": "author_response",
+      "text": "- (iii) Through the derivation of the physical Laplacian, we uncover a fundamental mechanism through which structural properties emerging due to physicality affect dynamics on physical networks.",
+      "text_sha256": "sha256:ce4248b02fb8d77dfa5af6f6e852322826950a06a16279a7ba853ec0cc1c26e2"
+    },
+    {
+      "char_end": 33442,
+      "char_start": 32982,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e87308758be8b152806b",
+      "source_role": "author_response",
+      "text": "The use of the connectome of the fruit fly brain as a case study allows us to demonstrate that the networkof-networks framework is useful to describe large-scale real physical networks. In doing so, we show that the emergent properties identified by the model as important are present in the connectome as well. We do not claim, however, that this is an effect of pure volume exclusion – which we now make explicitly clear in the new version of the manuscript.",
+      "text_sha256": "sha256:6c979928e369b7af2296b9d0bf341835791a6d01308c749d5f75e9708dfa2edb"
+    },
+    {
+      "char_end": 34267,
+      "char_start": 33445,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-92befdd9c9c87578ca8d",
+      "source_role": "author_response",
+      "text": "The mathematical know-how developed in our manuscript lays the groundwork for further explorations. Incorporating the mechanisms listed by the Reviewer into a network-of-networks model is conceptually straightforward, allowing numerical, and perhaps analytical, investigation of more complex models. Taking the suggestion of the Reviewer to heart, we explored several extensions to the growth model. For example, the figure below shows results for a version that incorporates additional attraction or repulsion between the random walks, guiding the growth of physical nodes. We find that repulsion increases the heterogeneity in the node degree, pushing the system towards a star-like topology, while attraction between physical nodes leaves the degree exponent unchanged. In both cases, volume-degree correlations emerge.",
+      "text_sha256": "sha256:83e728de7b55f75a67ac8a776c638229842f1bd60c3cf92e603eff6082c0ed6c"
+    },
+    {
+      "char_end": 34323,
+      "char_start": 34270,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b42f19f3a97f5c989850",
+      "source_role": "author_response",
+      "text": "**==> picture [469 x 140] intentionally omitted <==**",
+      "text_sha256": "sha256:26653e220c11e45ae7ac0b7cc0f338168db7056832c5d5a34d763c769b3b6d47"
+    },
+    {
+      "char_end": 35312,
+      "char_start": 34325,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4abbec90ccc3dc8bc281",
+      "source_role": "author_response",
+      "text": "**Network growth with attraction or repulsion.** In this version of the model, we grow nodes via LERWs except if a node trajectory is adjacent to an existing node, we bias the probability to hit the node and terminate the growth. Parameter value <1 corresponds to repulsion and >1 to attraction; while with parameter value 1 we recover the original model. **(a)** The average node volume as a function of attraction/repulsion. With strong repulsion, (dashed line) nodes avoid forming connections, increasing the average node size. **(b)** The degree distribution is power law in case of attraction, for repulsion (dashed line) the initial nodes gather outsized number of connections in a winner-takes-all type dynamics. Note that the lower maximum degree for repulsion is due to less, but larger nodes being added to the lattice. **(c)** In all cases, we observe strong volume-degree correlations. Each line corresponds to a single run on a three-dimensional lattice with side length 22.",
+      "text_sha256": "sha256:b4c127562d6206fde81e4b08f9f37d6da4a0a01999304ce48e239d145940757e"
+    },
+    {
+      "char_end": 35681,
+      "char_start": 35315,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-754f2305ca0d67a233ba",
+      "source_role": "author_response",
+      "text": "Ultimately, we decided to forego the above and other extensions in our current manuscript, as we feel it is out of scope and discussion of such specialized models would shift focus from our fundamental message: network-of-networks is a powerful framework to understand physical networks, providing a set of analytically tractable and computationally efficient tools.",
+      "text_sha256": "sha256:0a081805bd55f566d50b0b337ba41dc176cea1a250f1f22da7cef039887fc0e8"
+    },
+    {
+      "char_end": 36981,
+      "char_start": 35684,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-82ecaf6cafbc6f8ed11e",
+      "source_role": "author_response",
+      "text": "Lastly, we would like to remark that although our minimal model led us to discover the effect of positive degree-volume correlations on the Laplacian spectrum, we have strong arguments that such features arise under more complex physical network generation processes. Any combinatorial network _G_ has many possible physical realizations _P_ , a minimum volume realization is a _P_ that minimizes the total volume of the network. Consider a node in _G_ with degree _k_ ; in any possible _P_ , the physical realization of the node must have volume at least proportional to _k_ , otherwise it is unable to support _k_ connections. This means that any physical network generation process that somehow minimizes total volume is characterized by positive degree-volume correlations. Volume minimization can happen either explicitly or as an emergent property, like in our model: either a node must be large because it needs to create many connections or has many because it is large. Because of these general correlations, we expect that for networks that at least to some extent minimize volume, no matter how complex the generation process is, the tail of the physical Laplacian is suppressed by the large volume of hubs. We now clarified this argument at the end of page 5 of the revised manuscript.",
+      "text_sha256": "sha256:5d2412345a7923f08f5ca7f3e42531eb664b3877ef79f0803b3be381752701e0"
+    },
+    {
+      "char_end": 37137,
+      "char_start": 36984,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fd3c99ab3e8bb92d6893",
+      "source_role": "author_response",
+      "text": "We do realize that we did not fully explain the rationale of the framework. Prompted by the Referee's legitimate comments, we made the following changes:",
+      "text_sha256": "sha256:adb3cc7b91e932421f1ecd66c0d6c6da91c016817c69da67b5edee4aadfdb2c7"
+    },
+    {
+      "char_end": 37263,
+      "char_start": 37140,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-442dfd8a67dcd9add43f",
+      "source_role": "author_response",
+      "text": "- (i) To better explain our aims, we changed the title, extended the abstract and introduction, and rewrote the discussion.",
+      "text_sha256": "sha256:02f9b78db19ebb6c7e4eec29ac90a9c55ddfa71db4ef46f5fcfd2571855afcf4"
+    },
+    {
+      "char_end": 37384,
+      "char_start": 37266,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c69539bee42f8c218033",
+      "source_role": "author_response",
+      "text": "- (ii) We made explicit the scope of the growth model and the reasons for using the connectome as our main case study.",
+      "text_sha256": "sha256:98911f381ceaa58f14785cefb638e0790299a6a0664cfab14e49b7469ac9c67f"
+    },
+    {
+      "char_end": 37533,
+      "char_start": 37387,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-defba171e23a69366479",
+      "source_role": "author_response",
+      "text": "- (iii) We clarified our arguments about emergent degree-volume correlations under more complex network generation processes at the end of page 5.",
+      "text_sha256": "sha256:dd647d9242c4a71ebae89408dff27c846bb534b30bd9325d22eb9089776ed41c"
+    },
+    {
+      "char_end": 37627,
+      "char_start": 37536,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5269ab7644c7c8b1302d",
+      "source_role": "author_response",
+      "text": "- (iv) We discussed several possible generalizations of the growth model in the Discussion.",
+      "text_sha256": "sha256:acc0f84271a1d8f152dfd9de054cd54181325b15b4934a6d66de6fc578c549c0"
+    },
+    {
+      "char_end": 37887,
+      "char_start": 37630,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4e3d84ba68b97bdd20de",
+      "source_role": "author_response",
+      "text": "[1] Dehmamy, Nima, Soodabeh Milanlouei, and Albert-László Barabási. \"A structural transition in physical networks.\" Nature 563.7733 (2018): 676-680. [2] Pósfai, Márton, et al. \"Impact of physicality on network structure.\" Nature Physics 20.1 (2024): 142149.",
+      "text_sha256": "sha256:8f2376ce5ba4bcdcd7985aa6efffef7a9091a1de2e6e53acd77d57e37a61b203"
+    },
+    {
+      "char_end": 38400,
+      "char_start": 37890,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-03ce59424384a51258ab",
+      "source_role": "author_response",
+      "text": "**Also, it would have been nice to see if their findings are the same for other nervous systems for nematodes (not sure if they are too small for this analysis?), or the adult brain of D melanogaster (released end of June; also the hemibrain released a few years back).  It would also be nice to consider other physical networks that maybe fit better the physical model the authors propose. Also it would give us an idea of whether similar macro properties can be assigned to the same micro mechanism or not.**",
+      "text_sha256": "sha256:c5aa5ce91741e9222ec31c0062f7ba5de9c8837177bede7343607ee8c1f93826"
+    },
+    {
+      "char_end": 39130,
+      "char_start": 38403,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-cc7d61cb194691883894",
+      "source_role": "author_response",
+      "text": "Following the Reviewer’s suggestion, we now include several additional real systems to the Supplementary Information accompanying our revised manuscript, including a data set representing the nervous system of the _C. elegans_ . In all real systems, we find positive node degree-volume correlations. We also show that these correlations affect dynamics unfolding on the network in a similar way to the fruit fly connectome and the model networks: hubs have large volume, which counteracts the effect of their many connections. The fact that these properties are prevalent in real systems and also emerge in the simplest models suggests that they are caused by general mechanisms and do not depend on the details of the systems.",
+      "text_sha256": "sha256:9d66beda1937c191bc3ea3288f32165ed2794207a057a24ee609d6655bf10abb"
+    },
+    {
+      "char_end": 39387,
+      "char_start": 39133,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-57356584e0eec9118062",
+      "source_role": "author_response",
+      "text": "We further remark that the data for the connectome of the _D. melanogaster_ studied in the main text correspond to the Hemibrain data (not the recent release of the larvae and the adult connectome). We now explicitly state this in the revised manuscript.",
+      "text_sha256": "sha256:781991b43ff51e5ee409d7720741beb6c510571c500e3ef7ded92b2bd6cc6054"
+    },
+    {
+      "char_end": 39412,
+      "char_start": 39390,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-51866c51629b7411685d",
+      "source_role": "author_response",
+      "text": "## **Other comments:**",
+      "text_sha256": "sha256:c6864d49dd8936ab8cbdd9bf0ad4c7c4857227a521bfe3e232e026df6cd8b875"
+    },
+    {
+      "char_end": 39496,
+      "char_start": 39415,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0f364f4a3e1ec670fda4",
+      "source_role": "author_response",
+      "text": "## **Some parts of the description of the model would benefit from a rewriting:**",
+      "text_sha256": "sha256:93cb9d734bdf890f9ffe808c2a62bd5c6a7b298f2af7d7104278b56f2d020883"
+    },
+    {
+      "char_end": 39677,
+      "char_start": 39499,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d05a2059f96c60145092",
+      "source_role": "author_response",
+      "text": "**Page 2 - discussion on ‘As a consequence, for saturated networks, the physical layout P (...)’ - is confusing. I am not sure what is the point the authors are trying to make.**",
+      "text_sha256": "sha256:06eff5345ea174c9aba01d5d527b5bb7d44010f397f8c559c690bd3260834cbd"
+    },
+    {
+      "char_end": 40542,
+      "char_start": 39680,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-329d425acbd82dc55128",
+      "source_role": "author_response",
+      "text": "We understand that we were unclear about the optimality of the embeddings produced by the growth model. The point that we tried to make is that in any physical representation of a combinatorial network each node has a non-zero volume, which provides a somewhat trivial lower bound: the total volume of the network is at least ~N in the large network limit (where N is the number of physical nodes). This lower bound, however, is not always achievable: a fully connected network where all nodes are connected to all other nodes requires at least ~N^2 volume. Our statement is that the physical layouts produced by our model are in fact optimal in this sense, i.e., the average node volume remains constant in the large N limit. We find this noteworthy since the growth of the network and the nodes are both random without any optimization of the embedding volume.",
+      "text_sha256": "sha256:b795fd34b7e0bfd24bd05980ba2c3bda99f1c48e364a1ccdfe238711bebefb46"
+    },
+    {
+      "char_end": 40599,
+      "char_start": 40545,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-14515810a31ac55312b8",
+      "source_role": "author_response",
+      "text": "We clarify our statement in the revised manuscript as:",
+      "text_sha256": "sha256:e1dab1ff13baa3c422bb02282c0264d94ea6471a89a5e63335a21dd46f532cb7"
+    },
+    {
+      "char_end": 41148,
+      "char_start": 40602,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-98b366c5da40e8f58e0d",
+      "source_role": "author_response",
+      "text": "“Equation (3) predicts that $N_\\T{sat}$, the number of nodes when the network saturates, scales as $N_\\T{sat}\\sim L^d$, meaning that the average node volume $\\langle v\\rangle$ remains constant in the $L\\rightarrow \\infty$ large system limit. Therefore, the physical layout $\\set P$ is optimal in the sense that no physical representation of a combinatorial network of $N_\\T{sat}$ nodes can fit into a smaller volume than $\\sim N_\\T{sat}\\sim L^d$. It is noteworthy that the model achieves this bound despite the fact that the nodes grow randomly.”",
+      "text_sha256": "sha256:de2cb52ff88b66e5aa6ae4da2b4ecf5b1e48758f9d40fd040b6ca506bca0746a"
+    },
+    {
+      "char_end": 41496,
+      "char_start": 41151,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-877a2645b8f112c7b97b",
+      "source_role": "author_response",
+      "text": "**Page 2 (last par): ‘The time derivative of V_t shows that …’ -&gt; To obtain v_t the authors ‘take a continuous time approach’ and integrate eq for v_t. Therefore, it is not that the time derivative of V_t is v_t, this is the assumption they are making. - I would rewrite this part to make clear what is assumed by the model and what is not.**",
+      "text_sha256": "sha256:8c9dd5de49bb0f85d5156942fd1bdc4c27f9a1b39b1e8648d04039952886b414"
+    },
+    {
+      "char_end": 41567,
+      "char_start": 41499,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1a96a2bc88f397d2c9b3",
+      "source_role": "author_response",
+      "text": "We re-wrote the sentence in question to clarify the approximation as",
+      "text_sha256": "sha256:0959937147bdde244386d03fb26a481a015b894d9c51fac48cd2b8b8938532c5"
+    },
+    {
+      "char_end": 41747,
+      "char_start": 41570,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-529c033052b07d5a4806",
+      "source_role": "author_response",
+      "text": "“In the continuous time approximation, the volume of the newly added node $v_t$ is provided by the time derivative of $V_t$, i.e., $v_t \\sim \\left(t/L^d\\right)^{-d_{\\T{f}}/d}$.”",
+      "text_sha256": "sha256:3f45b9d3118c67858e3930a3bd284399d62b6a3635f28301534c91a3a26ac9b5"
+    },
+    {
+      "char_end": 42042,
+      "char_start": 41775,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-baf1c9b0342aa2e7f068",
+      "source_role": "author_response",
+      "text": "## **Do the authors consider the left hemisphere, the right hemisphere or both? The two hemispheres are supposed to be mirror copies of one another. i am not sure redundancy affects this analysis or not (I think it does not, but it is good to take it into account).**",
+      "text_sha256": "sha256:2d0ff11b7cbf378bf379c2c0ef01f61683f02f95bf730659a921dd31ab3d69e5"
+    },
+    {
+      "char_end": 42577,
+      "char_start": 42045,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3a65c45f0dd49102e0b3",
+      "source_role": "author_response",
+      "text": "In our manuscript we use the entire Hemibrain dataset, which does not contain both hemispheres completely, but there is some redundancy [1]. This does not affect most properties that we investigate: volume-degree correlations are local properties of the nodes, including the entire network would not significantly affect the observed correlations. The suppression of the tail of the Laplacian depends on the presence of strong degree-volume correlations; therefore, we do not expect a change in the overall behavior of the spectrum.",
+      "text_sha256": "sha256:7531d6675d9f82d86f7abf9889ab6d8b756e5f2c86efbe452d6e532d127c2def"
+    },
+    {
+      "char_end": 42987,
+      "char_start": 42580,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9c1c843d3c6d8b13cf21",
+      "source_role": "author_response",
+      "text": "In the revised manuscript, we extended the analysis of the connectome by studying the structure of the leading eigenvectors. Through this analysis, we identified the nodes that are the fastest spreaders in the network. Including the entire connectome might change the identitiy of these early spreaders; however, the nodes that we identify in the limited data set will remain one of the most important ones.",
+      "text_sha256": "sha256:65723e9b168150a7c1776de42c45c57e6c0abdc7e8a79594fcce3503f44e58f5"
+    },
+    {
+      "char_end": 43101,
+      "char_start": 42990,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f83abe65cf1b15c7c97c",
+      "source_role": "author_response",
+      "text": "We now include the following remark about the limitations of the data set in the Methods and materials section:",
+      "text_sha256": "sha256:ac60cd44d23f7b3fc45c9f942576d62d9719c9b093f6564fcf7f8525fa22cf34"
+    },
+    {
+      "char_end": 43380,
+      "char_start": 43104,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9fed0c40a198ddfdb484",
+      "source_role": "author_response",
+      "text": "“Note that the Hemibrain data set covers a large portion of, but not the entire, fruit fly brain. Since degree and volume are local properties of the nodes, we expect that the results presented here would not change significantly if the entire connectome would be considered.”",
+      "text_sha256": "sha256:81bb4952eb19dc04ba1f372d9ff2efa1d189e4064cf1f6fd41aa065e2437f648"
+    },
+    {
+      "char_end": 43441,
+      "char_start": 43383,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-388d57688b5c5a2a3420",
+      "source_role": "author_response",
+      "text": "- [1] https://www.janelia.org/project team/flyem/hemibrain",
+      "text_sha256": "sha256:f4fd6d3dcf32f596b640ebccaf627f3780b3204275bbe89220e9b44b69f917b5"
+    },
+    {
+      "char_end": 43703,
+      "char_start": 43444,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-184710fb98e48b4ab9c3",
+      "source_role": "author_response",
+      "text": "We thank the Reviewer for their valuable comments which have motivated us to delve deeper into crucial aspects of our work. We feel this has considerably improved the quality of our presentation, emphasizing the generality and the broad impact of our results.",
+      "text_sha256": "sha256:bbd263867250388539434c7a8917d449c910c10ee83b7d1e00a63d99906722b7"
+    }
+  ],
+  "contract": "reconstruction_session_package",
+  "forbidden_conversation_hashes": [],
+  "input_sha256": "sha256:062967fb4887667ed1e64d0b5b04625c4377f441877dcd46c6e923dd87bf9a4c",
+  "instructions": "Reconstruct the final-state peer review for one paper.\nUse reviewer_report spans as the only source of review opinions. Author responses may\nonly determine whether an issue was resolved; they cannot create or rewrite a review\npoint. Remove greetings, publication/acceptance recommendations, editorial decisions,\nand generic praise. Merge duplicates, preserve real reviewer disagreement, and produce\nat most 24 atomic points in StructuredReviewV2. Include contribution summary, novelty\nsupport/limits, strengths, weaknesses, and questions. Bind every retained point to at\nleast one reviewer quote key and one final PaperIR P:S-* span. Put resolved issues only\nin ReferenceTraceV2/revision_ledger. Keep partially_resolved or persists issues only\nwhen the residual is independently supported by the final paper. Unverifiable items are\naudit-only. Do not use graph signals, GEAR output, old reconstructions, ratings,\ndecisions, recommendations, or accept/reject language. Return only the completed\nReconstructionSessionResponseV2 JSON file.",
+  "package_id": "RSP-4d4a850f960e2435c707",
+  "paper_context": {
+    "claims": [
+      {
+        "claim_id": "C-b1da2d123730cd76",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-1f791a552636ae3df5a4",
+        "schema_version": "aspr_gear",
+        "text": "Here, we introduce a network-of-networks framework where we describe the shape of each extended physical node as a network embedded in space and these networks are bound together by physical links."
+      },
+      {
+        "claim_id": "C-f62b816b6c94b093",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-1f791a552636ae3df5a4",
+        "schema_version": "aspr_gear",
+        "text": "Relying on this representation, we introduce a minimal model of network growth and we show for a general class of physical networks that volume exclusion induces heterogeneity in both node volume and degree, with the two becoming correlated."
+      },
+      {
+        "claim_id": "C-483690fdc5079e3b",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-1f791a552636ae3df5a4",
+        "schema_version": "aspr_gear",
+        "text": "We apply the network-ofnetworks framework to describe several real systems and find properties analog to the minimal model networks."
+      },
+      {
+        "claim_id": "C-0d0d39ecc7b13c95",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-369d5eb1497871dd1a71",
+        "schema_version": "aspr_gear",
+        "text": "Yet, these works model nodes as localized spheres connected by extended tube-like links, an assumption that does not necessarily reflect the structure of most real-world physical networks."
+      },
+      {
+        "claim_id": "C-8b511e64736d7d99",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-369d5eb1497871dd1a71",
+        "schema_version": "aspr_gear",
+        "text": "Therefore, the spheretube paradigm often falls short of describing physical networks, calling for a more general framework to cope with the complex shape of nodes and links."
+      },
+      {
+        "claim_id": "C-f2e581b539ac126c",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-369d5eb1497871dd1a71",
+        "schema_version": "aspr_gear",
+        "text": "In this work, we develop a network-of-networks representation of physical networks that is able to capture arbitrary node shapes[10][,][11] and allows us to characterize both structural and dynamical properties of networks."
+      },
+      {
+        "claim_id": "C-584e3e726f70dfc5",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-369d5eb1497871dd1a71",
+        "schema_version": "aspr_gear",
+        "text": "Relying on the network-of-networks framework, we introduce a model that grows physical networks from fractal segments."
+      },
+      {
+        "claim_id": "C-ade615635f5126bb",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-369d5eb1497871dd1a71",
+        "schema_version": "aspr_gear",
+        "text": "Analytically solving the model, we show that physicality induces heterogeneity in both the physical and the network properties of the nodes and thatthe two become strongly correlated."
+      },
+      {
+        "claim_id": "C-8dc4d9d6569ad57f",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-59939ef347289da96d91",
+        "schema_version": "aspr_gear",
+        "text": "The usefulness of the mathematical tools we develop in this paper goes beyond the specifics of the model, and we demonstrate this by applying our framework to several real physical networks, including a recently collected data set describing more than ~ 20, 000 neurons of the adult fruit fly’s brain[15] ."
+      },
+      {
+        "claim_id": "C-c5548a83b69fac3e",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-59939ef347289da96d91",
+        "schema_version": "aspr_gear",
+        "text": "In doing so, we identify positive node degree-volume correlations similar to our minimal growth model, and we show that these have an analog effect on the Laplacian spectrum of the connectome."
+      },
+      {
+        "claim_id": "C-2283060dab898420",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-59939ef347289da96d91",
+        "schema_version": "aspr_gear",
+        "text": "e-mail: gabor.pete@renyi.hu; posfaim@ceu.edu Nature Communications | (2024) 15:4882 1 Article https://doi.org/10.1038/s41467-024-49227-8 volume correlations emerge in a minimal model while also prevalent in real systems suggests a general mechanism behind such correlations that does not depend on the complex details of the growth of real networks."
+      },
+      {
+        "claim_id": "C-368b9ec0edc95b67",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-926fc4c925f16301de9b",
+        "schema_version": "aspr_gear",
+        "text": "## Network growth To study the effect of physicality on network evolution, we define a model of network growth relying on the network-of-networks representation."
+      }
+    ],
+    "contract": "reconstruction_paper_context",
+    "paper_id": "10.1038/s41467-024-49227-8",
+    "paper_sha256": "sha256:212580182e2fb3134d7393205c133779f80d4e0a2d97b5acae5e7a966609c540",
+    "schema_version": "aspr_gear",
+    "spans": [
+      {
+        "evidence_key": "P:S-70ebd85dd5b0052b0874",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-70ebd85dd5b0052b0874",
+        "text": "**==> picture [523 x 31] intentionally omitted <==**",
+        "text_sha256": "sha256:c92503a235f2ff0ed9de0da37ee944558aded4066f9ed470ec7d939a03c1e11f"
+      },
+      {
+        "evidence_key": "P:S-1f791a552636ae3df5a4",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-1f791a552636ae3df5a4",
+        "text": "Article \n\nhttps://doi.org/10.1038/s41467-024-49227-8 \n\n## Physical networks as network-of-networks \n\nReceived: 14 June 2023 Accepted: 27 May 2024 Check for updates \n\nGábor Pete 1,2 , Ádám Timár[1,3] , Sigurdur Örn Stefánsson[3] , Ivan Bonamassa 4 & Márton Pósfai 4 \n\nPhysical networks are made of nodes and links that are physical objects embedded in a geometric space. Understanding how the mutual volume exclusion between these elements affects the structure and function of physical networks calls for a suitable generalization of network theory. Here, we introduce a network-of-networks framework where we describe the shape of each extended physical node as a network embedded in space and these networks are bound together by physical links. Relying on this representation, we introduce a minimal model of network growth and we show for a general class of physical networks that volume exclusion induces heterogeneity in both node volume and degree, with the two becoming correlated. These emergent properties strongly affect the dynamics on physical networks: by calculating their Laplacian spectrum as a function of the coupling strength between the nodes we show that degree-volume correlations suppress the role of hubs as early spreaders in diffusive dynamics. We apply the network-ofnetworks framework to describe several real systems and find properties analog to the minimal model networks. The prevalence of these properties points towards general growth mechanisms that do not depend on the specifics of the systems. \n\nThe building blocks of physical networks are extended objects that do not intersect each other, resulting in non-trivial geometric layouts[1] , link entanglement[2] and emergent correlations between physical and network structure[3] .",
+        "text_sha256": "sha256:0f795af312cca132d210ba20aab39f40952ff44e9ccdfe01ca13516f783b4dc1"
+      },
+      {
+        "evidence_key": "P:S-369d5eb1497871dd1a71",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-369d5eb1497871dd1a71",
+        "text": "Yet, these works model nodes as localized spheres connected by extended tube-like links, an assumption that does not necessarily reflect the structure of most real-world physical networks. In the connectome, for example, nodes represent neurons with nontrivial dendritic shapes, and links are point-like synapses[4] . A similar picture emerges for molecular networks such as the cytoskeleton, mitochondrial networks, or fiber materials, where nodes are extended molecular strands and bonds between them are localized[5][–][7] , as well as in the wood-wide-web, where extended tree roots and mycelia connect to form a complex underground network[8][,][9] . Therefore, the spheretube paradigm often falls short of describing physical networks, calling for a more general framework to cope with the complex shape of nodes and links. \n\nIn this work, we develop a network-of-networks representation of physical networks that is able to capture arbitrary node shapes[10][,][11] and \n\nallows us to characterize both structural and dynamical properties of networks. Relying on the network-of-networks framework, we introduce a model that grows physical networks from fractal segments. Analytically solving the model, we show that physicality induces heterogeneity in both the physical and the network properties of the nodes and thatthe two become strongly correlated. These correlations also affect the dynamics on the networks: generalizing the combinatorial Laplacian to physical networks[12][–][14] , we show that fast dynamical modes associated to hubs (and corresponding to the tail of the Laplacian spectra) are suppressed by the emergent correlations between node volume and degree.",
+        "text_sha256": "sha256:bb23b6d8fc7d72559f61fa5a8e79a9a47d04ba5fca20f9f374ab2dc436176d5f"
+      },
+      {
+        "evidence_key": "P:S-59939ef347289da96d91",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-59939ef347289da96d91",
+        "text": "The usefulness of the mathematical tools we develop in this paper goes beyond the specifics of the model, and we demonstrate this by applying our framework to several real physical networks, including a recently collected data set describing more than ~ 20, 000 neurons of the adult fruit fly’s brain[15] . In doing so, we identify positive node degree-volume correlations similar to our minimal growth model, and we show that these have an analog effect on the Laplacian spectrum of the connectome. The fact that degree- \n\n> 1HUN-REN Alfréd Rényi Institute of Mathematics, Budapest, Hungary. 2Department of Stochastics, Institute of Mathematics, Budapest University of Technology and Economics, Műegyetem rkp. 3., H-1111 Budapest, Hungary.[3] University of Iceland, Reykjavík, Iceland.[4] Department of Network and Data Science, Central European University, Vienna, Austria. e-mail: gabor.pete@renyi.hu; posfaim@ceu.edu \n\nNature Communications | (2024) 15:4882 \n\n1 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-49227-8 \n\nvolume correlations emerge in a minimal model while also prevalent in real systems suggests a general mechanism behind such correlations that does not depend on the complex details of the growth of real networks. \n\n## Results \n\n## Network-of-networks representation \n\nWe aim to describe physical networks embedded in some substrate or medium. In its most general form, the substrate is represented by a graph S, and each physical node i is an extended object occupying a subgraph Vi � S. To capture volume exclusion, we do not allow nodes to overlap, i.e., Vi \\ Vj = + for i ≠ j. Two nodes i and j may form a link (i, j) if they occupy adjacent sites in S.",
+        "text_sha256": "sha256:96847cc60f3e6bdfc1e4ccb3baec21a37022f704cd37804ce87895339acf0122"
+      },
+      {
+        "evidence_key": "P:S-926fc4c925f16301de9b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-926fc4c925f16301de9b",
+        "text": "The physical layout P of the network is a network-of-networks, i.e., it is the union of physical nodes, where each node is a network itself, together with the bonds forming the connections between the nodes (Fig. 1a). The layout P is a physical realization of the combinatorial network G, where node i of G corresponds to the physical node Vi, and nodes i and j are connected if there is a bond between Vi and Vj in P (Fig. 1b). Though the substrate S can represent any available space, here we focus on substrates that are d dimensional cubic lattices with linear size L and periodic boundary conditions. Note that network representations of this kind are employed in the graph drawing literature with the focus on algorithms that embed a given combinatorial network into S[16] . Here, we are interested in physical networks P growing in S, the emergent relation between P and G, and its consequences on the dynamics on the network. \n\n## Network growth \n\nTo study the effect of physicality on network evolution, we define a model of network growth relying on the network-of-networks representation. We start with an empty S and we place a single physical node V0 occupying a subset of the sites. We add the rest of the nodes iteratively: At time step t we add a new node Vt that is seeded at a random unoccupied site and grows until it hits an already existing node Vs and a link (t − s) is formed. The growth of node Vt is driven by some random or deterministic process; and we assume that the physical nodes are characterized by a fractal dimension df ∈ [1, d][17][,][18] . We add N physical nodes or until all of S is occupied; in the latter case we call the physical network saturated.",
+        "text_sha256": "sha256:699435f7677ac0a73e043307dd59dedba46bfffcd697dc17eb2351c5e92934fa"
+      },
+      {
+        "evidence_key": "P:S-97801f84c125e8eda57a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-97801f84c125e8eda57a",
+        "text": "Since the total volume of the network increases over time, later nodes hit the network at higher rates, and the typical size of nodes decreases. Hence, we expect that nodes added early have a higher degree than nodes added in the final stages of the network evolution, both because they are larger and they have more time to collect connections. This suggests that to analytically characterize the evolution \n\n**==> picture [88 x 93] intentionally omitted <==**",
+        "text_sha256": "sha256:0d91891a5884663477083054cf4d144eef176963efd7a4c3756abbcad4ce69b2"
+      },
+      {
+        "evidence_key": "P:S-10ff99f1adc6f64a3455",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-10ff99f1adc6f64a3455",
+        "text": "**==> picture [113 x 81] intentionally omitted <==**",
+        "text_sha256": "sha256:856af4a4b1de32db6beb7084c5426c099136e5b0bfb776de48664bebd62fd204"
+      },
+      {
+        "evidence_key": "P:S-599f736163957c3b768a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-599f736163957c3b768a",
+        "text": "Fig. 1 | Network-of-networks representation. a Each physical node Vi is a subgraph of the substrate S. Physical nodes cannot overlap, i.e., Vi \\ Vj = + for i ≠ j. The physical layout P (dashed area) is a network-of-networks: it is the union of physical nodes Vi together with the bonds connecting them. b The combinatorial network G is a coarse-grained representation of P capturing the connections between the nodes without the physical structure. \n\nof the physical network two ingredients have to be considered: (i) network growth, i.e., nodes are added sequentially to the system and (ii) externally limited node growth, i.e., the nodes grow until they hit the already existing network. We show that these two ingredients lead to the emergence of power law combinatorial networks with degree exponents γ≤3. \n\nWe start the analytical treatment of the model by estimating the probability pij that two randomly placed physical nodes Vi and Vj intersect. If the two boxes containing the physical nodes have side length li ≫ lj, respectively, and the larger node Vi intersects the box containing the smaller node Vj, then, by dimension count, the two nodes overlap with positive probability if df≥d/2. We can tile the lattice with ðL=ljÞ[d] boxes with side length lj, and the number of such boxes intersected by Vi is ∼ ðli=ljÞ[d][f] . Therefore the intersection probability is \n\n**==> picture [174 x 24] intentionally omitted <==**",
+        "text_sha256": "sha256:c21c786baa0d1b93d2ea24e73629ec2cb3cc0ab248699234aaac674173ae0cb2"
+      },
+      {
+        "evidence_key": "P:S-64d7b96f6d4cb66e21df",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-64d7b96f6d4cb66e21df",
+        "text": "where vi = jVij ∼ l[d] i[f] is the volume of node i. If, however, df < d/2 and lj≤li ≪ L, then the nodes avoid each other with high probability. In this case, the intersection probability will have the meanfield behavior, well-approximated by the probability of selecting the sites of Vi and Vj uniformly from S, i.e., p[MF] ij ∼ vivj=L[d] , which is independent of df and agrees with Eq. (1) for df = d/2. \n\nUsing the same box-counting argument that led to Eq. (1), the probability thata node added at time t intersects any existing node s < t is approximately given by[P] s<t[p] st[=][ v] t[d][=][d][f][�][1] V t�1=L[d] , where Vt−1 is the total volume of nodes s < t. A key observation is that the size of node t increases until it hits the existing network, meaning that vt increases until ∑s<tpst ≈ 1, allowing us to estimate the volume of node t as \n\n**==> picture [163 x 20] intentionally omitted <==**",
+        "text_sha256": "sha256:4fa9acfc43c272cdacbb9162a89b2ce8f7c8c331fe0f5eaa6bca151b63eb48dd"
+      },
+      {
+        "evidence_key": "P:S-938b22c88df99ea5ce0c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-938b22c88df99ea5ce0c",
+        "text": "Equation (2) allows us to express the evolution of the expected total volume via the recursion Vt+1 = vt+1 + Vt with initial condition V0 = v0. Using a continuous time approximation, we obtain \n\n**==> picture [199 x 25] intentionally omitted <==**",
+        "text_sha256": "sha256:82fa59931a9b52b8a464cf67a78e4e89f2052dbf3d8fc8edceeeb4b3f73f5bbd"
+      },
+      {
+        "evidence_key": "P:S-59fe18fd74b15a179217",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-59fe18fd74b15a179217",
+        "text": "where c is a constant depending on v0. A natural choice for the latter is that the first node spans the entire available space, i.e., v0 ∼ L[d][f] , in which case c is independent of L. Equation (3) predicts that Nsat, the number of nodes when the network saturates, scales as Nsat ~ L[d] , meaning that the average node volume 〈v〉 remains constant in the L → ∞ large system limit. Therefore, the physical layout P is optimal in the sense that no physical representation of a combinatorial network of Nsat nodes can fit into a smaller volume than ~ Nsat ~ L[d] . It is noteworthy that the model achieves this bound despite the fact that the nodes grow randomly. \n\nIn light of Eq. (3), we can now calculate the expected degree of the physical nodes in the combinatorial network G. In the continuous time approximation, the volume of the newly added node vt is provided by �df =d the time derivative of Vt, i.e., vt ∼ t=L[d] . Hence, following Eq. (1), � � the expected degree of node t after the addition of N nodes is \n\n**==> picture [205 x 24] intentionally omitted <==**",
+        "text_sha256": "sha256:56aac0d77b739b93e3a65998187e917cfc4447eafd3b51cfb0bfe77c1ba983e3"
+      },
+      {
+        "evidence_key": "P:S-4822a3a8c0ba3f0c6b2c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-4822a3a8c0ba3f0c6b2c",
+        "text": "where the proportionality is valid for t ≪ N. This means that the volume occupied by large nodes (i.e., nodes that were added early) in the physical layout is proportional to their degree in the combinatorial network. \n\nNature Communications | (2024) 15:4882 \n\n2 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-49227-8 \n\n**==> picture [234 x 109] intentionally omitted <==**",
+        "text_sha256": "sha256:f2c8f3e0398c5e1ea3af8956a7383b6bb7cceac7250d6b662a1420a464bec181"
+      },
+      {
+        "evidence_key": "P:S-0ca97b471fe60e001966",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-0ca97b471fe60e001966",
+        "text": "Fig. 2 | Evolution of LERW physical networks. a The temporal evolution of the total volume Vt of physical networks, dashed lines represent the theoretical prediction Eq. (3). Networks built from LERWs in dimensions d≥4 fall into the meanfield regime. b The number of physical nodes in the saturated networks is proportional to the volume of the substrate jSj irrespective of df and d. c Node degree is proportional to node volume independently from df and d. d The complementary cumulative degree distribution function (CCDF) of the physical \n\nWe finally calculate the complementary cumulative degree distribution PðkÞ = 1 � N1 PNt:kt ≥ k[1,][ fi][nding that][ P][(][k][) ~][ k][−][(][γ][−][1)][ with exponent] \n\n**==> picture [146 x 21] intentionally omitted <==**",
+        "text_sha256": "sha256:f5ce1201d708814ec0656369f4e656ea8305aa894c57ab656bbcd386d2365007"
+      },
+      {
+        "evidence_key": "P:S-134313395e1c9ace9e1c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-134313395e1c9ace9e1c",
+        "text": "For df≤d < 2df the degree exponent falls in the range 2≤γ < 3. In the mean-field regime, the degree exponent can be obtained by substituting d/df with 2, yielding γMF = 3. Note that the upper critical dimension of the physical network depends on the kinetic growth of the nodes. For example, growing nodes along a straight trajectory in a random direction generates nodes with df = 1; therefore, the networks fall in the mean-field regime df≤d/2 even for embedding dimension d = 2. \n\nIn the above model, each physical node grows starting from a random location following some growth process. We stress that our calculations hold for a general class of node growth algorithms, the crucial assumption being that if the boxes around two random walk pieces intersect, then with uniformly positive probability the trajectories also intersect, which implies a level of isotropy of node growth. As a counterexample, consider nodes thatalways grow in one direction along one of the axes. Such nodes will run parallel to each other, avoiding intersection, hence the resulting network will be a collection of disconnected chains. If, however, the nodes grow along straight lines but in random directions, thus restoring isotropy on average, then the resulting network has a power law degree distribution (SI Sec. S1.4). \n\n## Numerical simulations \n\nTo test our analytical predictions, we numerically generate physical networks where nodes grow according to random walk trajectories. Specifically, we generate nodes using loop-erased random walks (LERWs), i.e., a trajectory thatevolves asa simple random walk in which any loop is erased as soon as it is formed[19][–][22] .",
+        "text_sha256": "sha256:eaac2ff5d8db8a77082bfa028d2a128d3d92a1142d7566d9da0dadae40cde63b"
+      },
+      {
+        "evidence_key": "P:S-80975f69db75f101f10f",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-80975f69db75f101f10f",
+        "text": "Here, we focus on the LERW, as it represents a tractable model ofnon-self-intersecting random trajectories with well-understood non-trivial critical properties. Its critical properties are studied both in the mathematics and physics literature[23][–][26] ; for example, their fractal dimension in d = 2 is df = 5/4[22] , in d = 3 it is df ≃ 1.6236(4)[27][,][28] , while its upper critical dimension is du = 4 where df = 2 with a logarithmic correction[29] . (See “METHODS” for further details.) We remark that our predictions are not specific to LERWs, in Sec. S1 of the Supplementary Information, we study various alternative growth processes. \n\nKnowing the fractal dimensions of LERWs allows us to directly verify the predictions of Eqs. (3)–(5): \n\n**==> picture [211 x 94] intentionally omitted <==**",
+        "text_sha256": "sha256:b1f04f449bca1ee06e0546c95e5e580c2148f6f279ba11f72193689a91a0c781"
+      },
+      {
+        "evidence_key": "P:S-64213af38d534ea6f70d",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-64213af38d534ea6f70d",
+        "text": "networks. Dashed lines indicate the predicted degree exponent γ = 1 + d/df≤3, while the dotted line corresponds to the mean-field behaviour, γMF = 3. Plots (a), (c) and (d) represent measurements of single networks with initial condition v0 = L[d][f] and jSj = 10[6] . In (b) markers are an average of 10 independent networks, error bars represent the standard error of the mean. Lines corresponding to different slopes are shifted to increase readability. \n\nVolume evolution. Equation (3) predicts that the total volume of the physical network evolves as V t ∼ t[1][�][d][f][=][d] . Figure 2a shows the excellent agreement between the theoretical predictions and numerical simulations. Note that, as expected, in the mean-field regime d≥4 the network volume follows the classic diffusion growth Vt ~ t[1/2] . Figure 2b further corroborates the predicted scaling of the number of nodes at saturation, i.e., Nsat ~ L[d] . \n\nDegree-volume correlations. A second prediction is the emergence of degree-volume correlations, capturing the interplay between the physical layout P and the combinatorial network G. In particular, Eq. (4) predicts a linear proportionality between the node volume vi and degree ki, and we again find excellent agreement with simulations for all the tested dimensions (Fig. 2c). \n\nPower law emergence. As a final test, we verify the emergence of power law scaling in the degree distribution of the combinatorial networks G. As anticipated in Eq. (5), the degree exponent depends on both the dimensionality of the embedding substrate, d, and the fractal dimension of the nodes, df. Figure 2d shows that numerical simulations confirm the predicted degree exponent γ = 1 + d/df for dimensions d < 4, while the mean-field exponent γMF = 3 is found for d≥4.",
+        "text_sha256": "sha256:25dd245fcd2c7c7c2576b354af444c0f088eb95f859c2b5e865045ddea4e4d9c"
+      },
+      {
+        "evidence_key": "P:S-e20f8492b279183bfe90",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-e20f8492b279183bfe90",
+        "text": "In traditional models of combinatorial networks, heterogeneity typically arises from preferential attachment or some other optimization process. Our model is based on random growth without any explicit preference to create highly connected nodes; therefore, the uniform attachment tree may be considered as the non-physical counterpart of our model. Uniform attachment yields exponential degree distribution, hence the power law distribution observed here is a direct consequence of volume exclusion, which, together with the dynamic network growth, induces effective preferential attachment. \n\n## Physical network Laplacian \n\nThe layout P is a physical realization of the combinatorial network G. Traditional studies of dynamics on physical networks ignore the layout P and focus only on the role of G, thus prompting the question: does modeling dynamics on G accurately capture dynamics on physical networks? To explore this, we study the spectral properties of P and show that physical nodes emerge as functional units through timescale separation, yet even in this limit the structure of P continues to affect the dynamics. We focus on the Laplacian spectrum[12] since it influences the behavior of several dynamical processes on networks[30] including diffusion[31][,][32] , synchronization[33] and it underlies the definition of several information-theoretic tools to analyze the multiscale functioning of networks[10][,][14][,][34][–][37] . \n\nNature Communications | (2024) 15:4882 \n\n3 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-49227-8 \n\n**==> picture [360 x 157] intentionally omitted <==**",
+        "text_sha256": "sha256:88103a6a45935d19032dbf6a249b3644ddcb74aee36d24a45b28415d01a8a30c"
+      },
+      {
+        "evidence_key": "P:S-0656340ae38087c7ed1a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-0656340ae38087c7ed1a",
+        "text": "**==> picture [148 x 157] intentionally omitted <==**",
+        "text_sha256": "sha256:9a0c3ca7d7c383dd7d9582b17550b047065a578fe7d14569ec3c158711286c32"
+      },
+      {
+        "evidence_key": "P:S-7f67e3d77717dc71ef43",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-7f67e3d77717dc71ef43",
+        "text": "**==> picture [170 x 168] intentionally omitted <==**",
+        "text_sha256": "sha256:045da40c5c509deaaee46de9c457182ac34ab602f0e679ffe6dcf047edcd6b2b"
+      },
+      {
+        "evidence_key": "P:S-dceaef17454b8833b509",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-dceaef17454b8833b509",
+        "text": "Fig. 3 | Laplacian of LERW physical networks. a For decreasing weight w the eigenvalues of QP separate into two groups: eigenvalues corresponding to the zero eigenmodes of QP ðw = 0Þ decay as ~ w (blue), while the rest converge to a constant value (teal). (b–d) Comparing the spectrum of the physical Laplacian Qphys = V[�][1][=][2] QGV[�][1][=][2] , the randomized physical Laplacian Q[rand] phys[=][ V][�] rand[1][=][2][Q][G][V][�] rand[1][=][2][, and] the Laplacian of the combinatorial network QG. b, c The heterogeneous node \n\nvolume distribution and the correlation between node degree and volume significantly reduce the largest eigenvalues of the spectra. d Heterogeneous node volumes alone explain the reduction of the algebraic connectivity λ2. Eigenvalues are calculated for d = 2 and L = 10 in (a) and L = 100 in (b). In (c) and (d) markers are an average of 10 independent networks, error bars represent the standard error of the mean. \n\nWe study the problem by invoking, once again, the network-ofnetworks representation. In our setup, we assign a weight to each connection in P such that links within physical nodes have weight 1 and links connecting two physical nodes have weight w, capturing that in real physical networks bonds between nodes are often qualitatively different than those within nodes. The weighted Laplacian matrix of P occupying V sites is then QP = DP � AP, where AP is the V × V weighted adjacency matrix and DP is a diagonal matrix such that ½DP�ss =[P] u[½][A] P[�] su[is the sum of the weights of the links adjacent to site][ s] in P. If we now set w = 0, the network-of-networks falls apart and each physical node becomes a separate connected component, resulting in a block-diagonal Laplacian QPð0Þ = diagðQV1 ,QV2 , . . .",
+        "text_sha256": "sha256:4904f26fe90138a1237de498d1f995802bd47b8ffa85e29af4265461c3986672"
+      },
+      {
+        "evidence_key": "P:S-5b9e0e8a0ffdf8a39648",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-5b9e0e8a0ffdf8a39648",
+        "text": ",QVN Þ, where QVi is the Laplacian of the physical node Vi. The Laplacian QPð0Þ has N zero eigenvalues corresponding to the N blocks (i.e., the physical nodes), hence we can assign an eigenvector ui(w = 0) to the i-th node such that fi f ½uið0Þ�s = 1=pvi if site s is within node i, otherwise ½uið0Þ�s = 0, where vi = jVij is the volume of node i. Since linear combinations of these vectors are also eigenvectors, we can write the zero eigenvectors of QP as uð0Þ = Mu[~] , where M is the N × V membership matrix such that fi f ½M�si = 1=pvi if site s is part of node i, otherwise [M]si = 0, and u[~] is any normalized N dimensional vector. \n\nWe can gain insights about the spectral properties of QP by working in the weak coupling regime w ≪ 1 and relying on perturbation \n\ntheory. Following a treatment similar to the one adopted to study diffusion in multilayer networks[38][–][40] , we consider w a small perturbation and write QPðwÞ = QPð0Þ + wQ[0] P[, where][ Q][0] P[is the Laplacian matrix] of the subnetwork of P formed by the bonds between physical nodes. The characteristic equation, up to first order in w, becomes then \n\n**==> picture [170 x 24] intentionally omitted <==**",
+        "text_sha256": "sha256:6a5b8773310675364070d91ef087647b6ddbfade5797593ace96219c810620f7"
+      },
+      {
+        "evidence_key": "P:S-ea7714d98984ccca5570",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-ea7714d98984ccca5570",
+        "text": "Perturbations around λ(0) = 0 lead to N eigenvalues that are OðwÞ, while the rest of the eigenvalues are constant in leading order (Fig. 3a). This means that on the 1/w timescale, diffusion-like dynamics on the physical network are captured by the N slow eigenmodes. We obtain these from Eq. (6) (see “METHODS”), yielding \n\n**==> picture [166 x 12] intentionally omitted <==**",
+        "text_sha256": "sha256:ee81c3d1cb69e15621b19ed42c8bb162361f73d1cb3553ce2297431b4e482f81"
+      },
+      {
+        "evidence_key": "P:S-841b9270a6218198b298",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-841b9270a6218198b298",
+        "text": "where QG is the N × N Laplacian matrix of the combinatorial network G and V is an N × N diagonal matrix such that its diagonal elements are [V]ii = vi. We call the volume-normalized Laplacian the physical network Laplacian Qphys = V[�][1][=][2] QGV[�][1][=][2] . \n\nEquation (7) is a key relation for understanding the dynamics on physical networks since it allows to characterize the dynamics on P on \n\nNature Communications | (2024) 15:4882 \n\n4 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-49227-8 \n\nthe timescale 1/w in a coarse-grained way: after integrating out the fast modes corresponding to eigenvalues λ(w) ≫ w, the state of each physical node Vi is given by a single variable, while the coupling between the nodes is provided by the combinatorial network G. However, the combinatorial Laplacian QG is not sufficient to capture the dynamics, and we must normalize QG by the volume of the nodes, as shown in Eq. (7). This means that physical networks with the same combinatorial network but different layout can have drastically different dynamical properties. For example, if nodes have approximately the same size, i.e., vi ≈ V/N, then the physical layout only affects the overall timescale, otherwise the Laplacian spectrum is determined by QG. If, however, node sizes are heterogeneously distributed, normalizing by volume will also have a heterogeneous effect on the eigenvalues. \n\nApplication to the physical network growth model. We showed \n\nabove that physical networks generated by our network growth model are characterized by heterogeneous node-volume distribution and proportionality between the degree and the volume of nodes (Fig. 2).",
+        "text_sha256": "sha256:b4a062767de2504b2816dc0c7354cec04defb2c7cd52e7fe207c0332d5e0880c"
+      },
+      {
+        "evidence_key": "P:S-e9f819d4726324d1013b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-e9f819d4726324d1013b",
+        "text": "To probe the effect of this emergent correlation, we shuffle the volume of the nodes of a LERW physical network to remove the correlation between network and physical structure. We then compare the spectrum of the volume-normalized Laplacian Qphys = V[�][1][=][2] QGV[�][1][=][2] to its randomized version Q[rand] phys[=][ V][�] rand[1][=][2][Q][G][V][�] rand[1][=][2][and][to][the][Laplacian][spec-] trum of the combinatorial network QG. Figure 3b shows that the spectrum of QG has a heavy tail characterized by the same γ exponent of Eq. (5), as expected for combinatorial networks with power law degree distributions[12] . Adding heterogeneous but uncorrelated node sizes does not influence the tail while taking into account the degreevolume correlation of nodes removes the heavy tail and leads to a rapidly decaying spectrum. In power law networks, the eigenvector corresponding to the largest eigenvalue λN of QG is typically concentrated on the node with the largest degree[41][,][42] . In our model, the largest degree node also has the largest volume; therefore normalizing by node volume V[�][1][=][2] QGV[�][1][=][2] significantly lowers λN. Since node sizes are heterogeneously distributed, with high probability, we associate volume ~ 1 to the highest degree node after randomization. Hence, the eigenvalue λN of QG is largely unaffected by the randomized normalization (Fig. 3c). At the other end of the spectrum, controlling the longtime mixing of the dynamics, the eigenvector associated with the algebraic connectivity λ2 typically spans the entire network. Figure 3d shows that taking node volumes into account slows the dynamics down; however, degree-volume correlations do not significantly affect λ2.",
+        "text_sha256": "sha256:d5b3f6d053f2ddc82503b8d70349e64f198d0f9169c426341dd54aa6e6a6055e"
+      },
+      {
+        "evidence_key": "P:S-61c39971783345c38e6d",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-61c39971783345c38e6d",
+        "text": "Note that positive degree-volume correlations, responsible for the suppression of the tail of the Laplacian spectrum, naturally arise in minimum-volume physical realizations of combinatorial networks. Any combinatorial network G has many possible physical realizations P, a minimum volume realization is a P that minimizes the total volume of the network. Consider node i 2 G with degree ki; in any possible P, the physical realization of node i must have volume at least proportional to ki, otherwise it is unable to support ki connections. Therefore, we expect positive degree-volume correlations in minimum-volume physical layouts. This means that any physical network generation process that minimizes total volume – either explicitly or as an emergent property, like in our model – is characterized by positive degreevolume correlations and hence that the spectrum of Qphys is similarly affected by physicality as in our model. \n\n## Real physical networks \n\nWe identified the degree-volume correlations and the profile of the Laplacian spectrum as important features of physical networks that can emerge even in the simplest models. To measure these properties, we do not need a detailed description of the layout of a physical system – we only need the combinatorial network and a list of the node volumes, allowing us to describe very large and complex physical \n\nnetworks. As a case study, we investigate a recently published data set providing the three-dimensional layout of more than 20,000 neurons of the brain of an adult fruit fly and the location of more than 13 million synapses connecting them (Fig. 4a)[15] .",
+        "text_sha256": "sha256:7df5e70792245c53a7e41d5ad25ff76ec7ea57fa94825148cc7325835f1d1805"
+      },
+      {
+        "evidence_key": "P:S-c658fbb5aa80c836089b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-c658fbb5aa80c836089b",
+        "text": "Although our simple growth model does not attempt to capture the myriad of complex mechanisms shaping brain development, we find that the fruit fly brain is characterized by similar emergent properties as the model networks. Figure 4b shows, for example, that the multiplicity-weighted node degree, i.e., the number of synapses a neuron has, can be approximated by a power law γff ≈ 2.3, albeit with an exponential cutoff[43][,][44] . We also find a strong positive correlation between the weighted degree and the volume of the nodes (Fig. 4c). \n\nTo compare the spectrum of the combinatorial Laplacian QG and the physical network Laplacian Qphys = V[�][1][=][2] QGV[�][1][=][2] , we measure volume in units such that the mean node volume is unity, i.e., 〈v〉 = 1 (see “METHODS” for further details). Calculating the leading eigenvalues of QG and Qphys, we find that λ[G] N[=][λ][phys] N ≈32:7, indicating that degreevolume correlations greatly suppress the modes of the dynamics that spread the fastest, similarly to model networks. This is further supported by Fig. 4d, showing again that physicality suppresses the tail of the spectrum. \n\nTo further probe the role of degree-volume correlations, we calculate the leading eigenvectors u[~] N of QG and Qphys. Figure 4e, g show that, as expected for heterogeneous combinatorial networks, u[~][G] N[is] concentrated on the largest hub iG in the network, and the weight of the eigenvector decays exponentially as the geodesic distance from iG in G. This means that, without taking physicality into account, the largest degree node is also the earliest spreader of diffusive dynamics. For the physical Laplacian Qphys we find a different picture: u[~][phys] N is again concentrated on a single node iphys; this node, however, is not the largest hub.",
+        "text_sha256": "sha256:bba61bad0b131e5f361976b01eefe9449697255fb99fa552c1d8293c2e934100"
+      },
+      {
+        "evidence_key": "P:S-352d83b3dfcf80c30340",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-352d83b3dfcf80c30340",
+        "text": "The leading eigenvector instead is centered on a node that balances high degree and low volume: node iphys is the 159th largest degree node and is at the top 15 percentile of the volume distribution. In fact, node iphys is the node that maximizes the degreevolume ratio, i.e., iphys = argmaxiki/vi. This means that degree-volume correlations not only slow down spreading dynamics in physical networks, but also change the identity of the early spreaders. \n\nHere we chose to focus on the fruit fly brain network as it represents one of the largest and most detailed maps of physical networks available; however, our frameworkis not specific to neural networks. In the Sec. S2 of the Supplementary Information, we analyze four additional real systems: a network describing the cavities of a porous material, a neural network of a nematode, a river network, and a vascular network. In each case, we find positive degree-volume correlations and that these correlations suppress the tail of the Laplacian spectra. The fact that the physical and network properties of nodes become intertwined in such a diverse set of real networks, and also in the simplest models, indicates a general mechanism behind the emergence of degree-volume correlations that do not depend on the details of the individual networks. \n\n## Discussion \n\nPhysical networks are complex networks that have a complex threedimensional layout. The network-of-networks framework naturally lends itself to representing these systems: representing nodes as physically embedded networks allows us to capture arbitrary node shapes and complex wiring. Here, we relied on the network-ofnetworks framework to characterize both model and real physical networks.",
+        "text_sha256": "sha256:25d577abc38b3b2522ff8e88c7418062d7be4db5dcd7f258e295ce733c3c7495"
+      },
+      {
+        "evidence_key": "P:S-e34a8fb4a38036409b83",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-e34a8fb4a38036409b83",
+        "text": "We identified correlations between node degree and volume as a prevalent feature of physical networks: We analytically showed that degree-volume correlations emerge in a minimal network growth model, in fact, we provided arguments that such correlations naturally arise through any growth process that minimizes network volume. We also showed that positive degree-volume correlations are generally present in real systems. These correlations have important \n\nNature Communications | (2024) 15:4882 \n\n5 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-49227-8 \n\n**==> picture [117 x 91] intentionally omitted <==**",
+        "text_sha256": "sha256:37d647578318c2b9f0ab34735e587fd57f9a8073655fd6c56fbc1f3dd8bb6db2"
+      },
+      {
+        "evidence_key": "P:S-24dd90205ac111542ba3",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-24dd90205ac111542ba3",
+        "text": "**==> picture [212 x 91] intentionally omitted <==**",
+        "text_sha256": "sha256:abbc63211a98793c05aa7c9f168bfd307136e7eef98d5de22d3e7e17f1afd9ff"
+      },
+      {
+        "evidence_key": "P:S-49388b4061880688007d",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-49388b4061880688007d",
+        "text": "**==> picture [328 x 158] intentionally omitted <==**",
+        "text_sha256": "sha256:4eff794f300c72639863f57b8af2dc1eb38fb82658a6bd7d1ef07b9ceeb34ca1"
+      },
+      {
+        "evidence_key": "P:S-21ea52f2849eec98015d",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-21ea52f2849eec98015d",
+        "text": "**==> picture [89 x 102] intentionally omitted <==**",
+        "text_sha256": "sha256:dedb025c7939c1b1dfd8de6482bfb627d0a061a9415428d3efe2daf350eb575b"
+      },
+      {
+        "evidence_key": "P:S-ab425544b076ca16ff75",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-ab425544b076ca16ff75",
+        "text": "comparison of the tails of the distributions. e, f A visualization of the leading eigenvectors u[~] N of the combinatorial and physical Laplacians. The color of each node i corresponds to ju[~] N ðiÞj, the weight of the leading eigenvector at node i, and the size of the nodes is a linear function of their degree. (e) The eigenvector u[~][G] N[is] concentrated on the node with the highest degree iG. f Due to degree-volume correlations, the u[~][phys] N is concentrated on node iphys, which has the maximum degree-volume ratio in the network. g The weight of the leading eigenvectors ju[~][G] N[ð][i][Þj] and ju[~][phys] N ðiÞj decays exponentially as a function of the geodesic distance from iG and iphys, respectively. Error bars indicate the standard error of the mean and are typically smaller than the marker size. Node locations in (e) and (f) are generated based on G, and do not correspond to the actual physical locations. \n\nFig. 4 | Fruit fly brain network. a The neurons have complex three-dimensional shapes. Two intertwined neurons (teal and yellow) are connected by synapses (red circles). b The tail of the weighted degree distribution can be approximated with the power law with γff ≈ 2.3 with an exponential cutoff. c Similar to the network growth model, the volume of the nodes v is strongly correlated with their degree k. The markers indicate binned degree-volume averages, where the data points are binned based on node volume. The shading represents a kernel density estimate of the joint v-k distribution, the dashed line indicates the least squares fit of the power law scaling. d The effect of the node degree-volume correlation on the Laplacian spectrum in the brain network is analog to the effect of correlations in the network growth model.",
+        "text_sha256": "sha256:6053b2cc5f2aa7b48a6ef56451646895ca33547dbf397736bdd17c14b854b103"
+      },
+      {
+        "evidence_key": "P:S-7d1e9a69d82b5bb57722",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-7d1e9a69d82b5bb57722",
+        "text": "The spectra of Qphys and Q[rand] phys[are shifted to the right to allow direct] \n\nconsequences on dynamics unfolding on physical networks: the tail of the physical Laplacian spectrum is suppressed by the large volume of hubs. More broadly, these results vividly demonstrate that traditional methods of network science focusing on combinatorial networks cannot fully describe physical networks and that their threedimensional layout must be accounted for. \n\nOur work opens new avenues for physical network research in several ways. First, by establishing the connection between physical networks and network-of-networks, we allow future work to leverage the rich literature of multi-layer networks to characterize physical systems[10][,][11] . For example, multi-layer centrality measures can be used to quantify the importance of physical nodes[45][–][47] . Second, previous work on physical networks relies on methods that require a full description of their spatial layout and, therefore, are often limited to systems of a few hundred nodes[1][–][3] . In contrast, the quantities we studied can be measured relying on the combinatorial network and a list of node volumes, allowing the characterization of large-scale physical networks without the need of the full three-dimensional layout. For example, we can tune the volume of the nodes to systematically study how physical layout affects the Laplacian spectrum. Finally, the simple growth model and its analytical description can serve as the starting point for the exploration of additional growth mechanisms that characterize neural networks and other physical networks.",
+        "text_sha256": "sha256:f7e5f8022166f4f3229cdcf8dede81e60c85db449ebbe0473e2340d15cf262e2"
+      },
+      {
+        "evidence_key": "P:S-6c91ab6c4cc4e7cd3c4e",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-6c91ab6c4cc4e7cd3c4e",
+        "text": "For example, future work may study branched nodes, longrange interactions that guide the growth of physical nodes, or the expansion of available space by modeling the evolution of the underlying substrate. \n\n## Methods \n\n## Loop-erased random walks \n\nIn our network growth model, we can generate physical nodes with any stochastic or deterministic process that produces a growing fractal embedded in Z[d] . Standard self-avoiding walks are traditionally used to model polymers obeying volume exclusion and, therefore, represent a natural choice to model node growth[17] . However, the naïve kinetic version of the self-avoiding walk traps itself in two and three dimensions at finite length[21] , making it a poor candidate for constructing large physical networks. Instead, we focus on looperased random walks (LERW): a LERW evolves as a simple random walk, except when it intersects itself, we delete the loop that it created and continue the walk[20] . This guarantees that the final physical node does not intersect itself and that the walk never gets trapped. Alternatively, the LERW can be defined as a special case of Laplacianrandom walks, where transition probabilities are defined by a harmonic function[48][,][49] . This alternative construction does not require deleting loops, hence is more realistic as a growth model. The LERW has attractive mathematical properties making it amenable to analytical treatment. For example, Wilson’s algorithm uses iterative LERWs to construct a uniform spanning tree (UST) of any graph[24] . In fact, the physical network our algorithm constructs is a UST of the S substrate together with a partition identifying the nodes.",
+        "text_sha256": "sha256:19df14bb86d936e272414ab8db38b81de49739000e63c75cb348c4f4544ee01b"
+      },
+      {
+        "evidence_key": "P:S-0220ec0bf51e785408ba",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-0220ec0bf51e785408ba",
+        "text": "Future work may exploit this connection between USTs and LERW physical networks, together with known results in dimensions d = 2 and d > 4[22][,][50] , to rigorously prove some of the results presented here. \n\nNature Communications | (2024) 15:4882 \n\n6 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-49227-8 \n\n## Perturbation of the physical Laplacian \n\nTo obtain the slow eigenmodes, we match the first-order terms of Eq. (6) and substitute uð0Þ = Mu[~] , so that \n\n**==> picture [173 x 10] intentionally omitted <==**",
+        "text_sha256": "sha256:9be4fef90fd591100d895f2b716ff789c462163908efdbafb70669624fcb7483"
+      },
+      {
+        "evidence_key": "P:S-3fe49aa04705c8293a5c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-3fe49aa04705c8293a5c",
+        "text": "Multiplying from the left by the transpose of the membership matrix M we get \n\n**==> picture [191 x 12] intentionally omitted <==**",
+        "text_sha256": "sha256:2402c58f48ea8ffc538439c9450578b14cad2edac288a7d4839694478a24f644"
+      },
+      {
+        "evidence_key": "P:S-d7c8b5d6df5ea74da162",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-d7c8b5d6df5ea74da162",
+        "text": "The ith row of M[T] is the trivial eigenvector ui(w = 0) corresponding to physical node i; therefore M[T] QPð0Þ is all zeros and M[T] M is the N × N identity matrix, leading to Eq. (7) in the text. \n\n## The fruit fly connectome \n\nWe study the Hemibrain data set, which describes a portion of the central brain of the fruit fly, Drosophila melanogaster[15] . The physical layout of the connectome is provided by the detailed threedimensional shape of each neuron and the location of the synapses between them. The corresponding combinatorial network contains 21,662 nodes representing neurons and 13,603,750 links representing synapses. Synaptic partners are connected through approximately 5 synapses on average, and the maximum number of synapses between two neurons is 6039. In our calculations, we treat the combinatorial network as a weighted and undirected network, where the weight of the link (i, j) is equal to the number of synapses between neurons i and j. Note that we only require the combinatorial network and the volume of each node for our calculations; therefore, the detailed physical layout of the connectome is, in fact, not needed. \n\nNote that the Hemibrain data set covers a large portion of, but not the entire, fruit fly brain. Since degree and volume are local properties of the nodes, we expect that the results presented here would not change significantly if the entire connectome were to be considered. \n\nDegree distribution. We find that the weighted degree distribution has a heavy tail, which can be approximated by a power law with γff ≈ 2.3 for degrees ≥1058 with an exponential cutoff; the power law fit, however, cannot be distinguished from a lognormal fit on the same range[43][,][44] . \n\nLaplacian spectrum.",
+        "text_sha256": "sha256:0c069c6d349b252a8b5418ca091219cb813e20be8947c389ffb96990443f226b"
+      },
+      {
+        "evidence_key": "P:S-5f301f41a8af01f55ca9",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-5f301f41a8af01f55ca9",
+        "text": "Comparing the spectrum of the combinatorial Laplacian QG and the volume-normalized Laplacian Qphys = V[�][1][=][2] QG V[�][1][=][2] carries a level of ambiguity: QG does not depend on the node volumes, while changing the unit of volume multiplies the spectrum of Qphys by a constant. To meaningfully compare the two spectra, (i) we think of QG as a physical Laplacian where all nodes have unit volume, and (ii) we set the mean node volume in Qphys to unity, i.e., 〈v〉 = 1. With this choice of units, any difference in the eigenvalues is due to the heterogeneous distribution of node volumes in the physical network and not to a global shift caused by the choice of units. \n\n## Reporting summary \n\nFurther information on research design is available in the Nature Portfolio Reporting Summary linked to this article. \n\n## Data availability \n\nData to reproduce the figures is available at https://github.com/ posfaim/physnets_as_net-o-nets. \n\n## Code availability \n\nCode to generate random networks and reproduce the figures is available at https://github.com/posfaim/physnets_as_net-o-nets[51] . \n\n## References \n\n1. Dehmamy, N., Milanlouei, S. & Barabási, A.-L. A structural transition in physical networks. Nature 563, 676–680 (2018). \n\n2. Liu, Y., Dehmamy, N. & Barabási, A.-L. Isotopy and energy of physical networks. Nat. Phys. 17, 216–222 (2021). \n\n3. Pósfai, M. et al. Impact of physicality on network structure. Nat. Phys. 20, 142–149 (2024). \n\n4. Bullmore, E. & Sporns, O. Complex brain networks: graph theoretical analysis of structural and functional systems. Nat. Rev. Neurosci. 10, 186–198 (2009). \n\n5. Viana, M. P. et al. Mitochondrial fission and fusion dynamics generate efficient, robust, and evenly distributed network topologies in budding yeast cells. Cell Syst.",
+        "text_sha256": "sha256:305ccb32443e0d08f4adcf4225190e6f4d632d464c0b1dd7e77bd481c379fb49"
+      },
+      {
+        "evidence_key": "P:S-010316cb4ab71889267c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-010316cb4ab71889267c",
+        "text": "10, 287–297 (2020). \n\n6. Fletcher, D. A. & Mullins, R. D. Cell mechanics and the cytoskeleton. Nature 463, 485–492 (2010). \n\n7. Picu, C. R. Network Materials: Structure and Properties. (Cambridge University Press, Cambridge, 2022). \n\n8. Simard, S. W. et al. Net transfer of carbon between ectomycorrhizal tree species in the field. Nature 388, 579–582 (1997). \n\n9. Steidinger, B. S. et al. Climatic controls of decomposition drive the global biogeography of forest-tree symbioses. Nature 569, 404–408 (2019). \n\n10. De Domenico, M. et al. Mathematical formulation of multilayer networks. Phys. Rev. X 3, 041022 (2013). \n\n11. Bianconi, G. Multilayer Networks: Structure and Function. (Oxford University Press, Oxford, 2018). \n\n12. Van Mieghem, P. Graph Spectra for Complex Networks. (Cambridge University Press, Cambridge, 2010). \n\n13. Castellano, C. & Pastor-Satorras, R. Relating topological determinants of complex networks to their spectral properties: structural and dynamical effects. Phys. Rev. X 7, 041024 (2017). \n\n14. Villegas, P., Gili, T., Caldarelli, G., and Gabrielli, A. Laplacian renormalization group for heterogeneous networks. Nat. Phys.19, 445–450, (2023). \n\n15. Scheffer, L. K. et al. A connectome and analysis of the adult drosophila central brain. Elife 9, e57443 (2020). \n\n16. Tamassia, R. editor. Handbook of Graph Drawing and Visualization. (CRC Press, Boca Raton, Fl, (2013). \n\n17. Vicsek, T. Fractal Growth Phenomena. 2nd Edn (World Scientific, Singapore,1992). \n\n18. Bunde, A. and Havlin, S. (eds). Fractals and Disordered Systems. (Springer Berlin, Heidelberg (2012). \n\n19. de Gennes, P.-G. Exponents for the excluded volume problem as derived by the wilson method. Phys. Lett. A 38, 339–340 (1972). \n\n20. Lawler, G. F. A self-avoiding random walk. Duke Math. J.",
+        "text_sha256": "sha256:1adb286f8e44ff7a7a7027fedeac9d66ea64cfadf7cb674e38bcc129e0a5687b"
+      },
+      {
+        "evidence_key": "P:S-69929f6f4c572b3f8980",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-69929f6f4c572b3f8980",
+        "text": "47, 655–693 (1980). \n\n21. Pietronero, L. Survival probability for kinetic self-avoiding walks. Phys. Rev. Lett. 55, 2025 (1985). \n\n22. Schramm, O. Scaling limits of loop-erased random walks and uniform spanning trees. Isr. J. Math. 118, 221–288 (2000). \n\n23. Niemeyer, L., Pietronero, L. & Wiesmann, H. J. Fractal dimension of dielectric breakdown. Phys. Rev. Lett. 52, 1033 (1984). \n\n24. Wilson, D. B. Generating random spanning trees more quickly than the cover time. In Proceed of the 28th ACM Theory of computing, 296–303. https://doi.org/10.1145/237814.237880 (1996). \n\n25. Lawler, G. F., Schramm, O. & Werner, W. Conformal invariance of planar loop-erased random walks and uniform spanning trees. Ann. Probab. 32, 939–995 (2004). \n\n26. Wiese, K. & Fedorenko, A. A. Field theories for loop-erased random walks. Nucl. Phys. B 946, 114696 (2019). \n\n27. Agrawal, H. & Dhar, D. Distribution of sizes of erased loops of looperased random walks in two and three dimensions. Phys. Rev. E 63, 056115 (2001). \n\nNature Communications | (2024) 15:4882 \n\n7 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-49227-8 \n\n28. Grassberger, P. Scaling of loop-erased walks in 2 to 4 dimensions. J. Stat. Phys. 136, 399–404 (2009). \n\n29. Wilson, D. B. Dimension of the loop-erased random walk in three dimensions. Phys. Rev. E 82, 062102 (2010). \n\n30. Barrat, A., Barthelemy, M., and Vespignani, A. Dynamical Processes on Complex Networks. (Cambridge University Press, Cambridge, 2008). \n\n31. Masuda, N., Porter, M. A. & Lambiotte, R. Random walks and diffusion on networks. Phys. Rep. 716, 1–58 (2017). \n\n32. De Domenico, M. & Biamonte, J. Spectral entropies as informationtheoretic tools for complex network comparison. Phys. Rev. X 6, 041062 (2016). \n\n33. Arenas, A., Díaz-Guilera, A., Kurths, J., Moreno, Y.",
+        "text_sha256": "sha256:f7115287b8de998ffdd7eecf0f125dda351f838a7b6d86784107092a06c512cb"
+      },
+      {
+        "evidence_key": "P:S-bd70f57136a87a933fff",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-bd70f57136a87a933fff",
+        "text": "& Zhou, C. Synchronization in complex networks. Phys. Rep. 469, 93–153 (2008). \n\n34. Boguna, M. et al. Network geometry. Nat. Rev. Phys. 3, 114–135 (2021). \n\n35. Ghavasieh, A., Stella, M., Biamonte, J. & De Domenico, M. Unraveling the effects of multiscale network entanglement on empirical systems. Commun. Phys. 4, 129 (2021). \n\n36. Villegas, P., Gabrielli, A., Santucci, F., Caldarelli, G. & Gili, T. Laplacian paths in complex networks: Information core emerges from entropic transitions. Phys. Rev. Res. 4, 033196 (2022). \n\n37. Ghavasieh, A. & De Domenico, M. Generalized network density matrices for analysis of multiscale functional diversity. Phys. Rev. E 107, 044304 (2023). \n\n38. Gomez, S. et al. Diffusion dynamics on multiplex networks. Phys. Rev. Lett. 110, 028701 (2013). \n\n39. Sole-Ribalta, A. et al. Spectral properties of the laplacian of multiplex networks. Phys. Rev. E 88, 032807 (2013). \n\n40. Radicchi, F. & Arenas, A. Abrupt transition in the structural formation of interconnected networks. Nat. Phys. 9, 717–720 (2013). \n\n41. Pastor-Satorras, R. & Castellano, C. Distinct types of eigenvector localization in networks. Sci. Rep. 6, 18847 (2016). \n\n42. Hata, S. & Nakao, H. Localization of laplacian eigenvectors on random networks. Sci. Rep. 7, 1–11 (2017). \n\n43. Clauset, A., Shalizi, CosmaRohilla & Newman, MarkE. J. Power-law distributions in empirical data. SIAM Rev. 51, 661–703 (2009). \n\n44. Alstott, J., Bullmore, E. D. & Plenz, D. powerlaw: a python package for analysis of heavy-tailed distributions. PloS one 9, e85777 (2014). \n\n45. Halu, A., Mondragón, RaúlJ., Panzarasa, P. & Bianconi, G. Multiplex pagerank. PloS one 8, e78293 (2013). \n\n46. Solé-Ribalta, A., De Domenico, M., Gómez, S., and Arenas, A. Centrality rankings in multiplex networks.",
+        "text_sha256": "sha256:2f2f1e41e7c207e91868c42eb39abd217bfefe3abaf5bda80540043c30628242"
+      },
+      {
+        "evidence_key": "P:S-6d4cb5311b632e173af1",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-6d4cb5311b632e173af1",
+        "text": "In Proceedings of the 2014 ACM conference on Web science, 149–155. https://doi.org/10.1145/ 2615569.2615687 (2014). \n\n47. Iacovacci, J., Rahmede, C., Arenas, A. & Bianconi, G. Functional multiplex pagerank. Europhys. Lett. 116, 28004 (2016). \n\n48. Lyklema, J. W., Evertsz, C. & Pietronero, L. The Laplacian random walk. EPL (Europhys. Lett.) 2, 77 (1986). \n\n49. Lawler, G. F. Loop-erased self-avoiding random walk and the Laplacian random walk. J. Phys. A: Math. Gen. 20, 4565 (1987). \n\n50. Bhupatiraju, S., Hanson, J., and Járai, A. A. Inequalities for critical exponents in d-dimensional sandpiles. https://doi.org/10.48550/ arXiv.1602.06475 (2017). \n\n51. Pósfai, Márton posfaim/physnets_as_net-o-nets: physical networks as network-of-networks. https://doi.org/10.5281/zenodo.11140782, (2024). \n\n## Acknowledgements \n\nI.B., M.P., and Á.T. were funded by ERC grant No. 810115-DYNASNET. ÁT and SÖS acknowledge partial support from the Icelandic Research Fund, grant No. 239736-051. GP was funded by the ERC Consolidator Grant No. 772466-NOISE. \n\n## Author contributions \n\nM.P. developed and performed the numerical simulations. M.P. and I.B. performed the data analysis. G.P., Á.T., S.Ö.S., I.B., and M.P. contributed to the analytical results and the conceptual design of the study. M.P. was the lead writer of the manuscript. \n\n## Funding \n\nOpen access funding provided by HUN-REN Alfréd Rényi Institute of Mathematics. \n\n## Competing interests \n\nThe authors declare no competing interests. \n\n## Additional information \n\nSupplementary information The online version contains supplementary material available at https://doi.org/10.1038/s41467-024-49227-8. \n\nCorrespondence and requests for materials should be addressed to Gábor Pete or Márton Pósfai.",
+        "text_sha256": "sha256:bc9798e312147e018de41ea14f6442c0fd96220a7eca6753dcfe21d8ca1181e6"
+      },
+      {
+        "evidence_key": "P:S-e2448cfab5837a5b6b5e",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-e2448cfab5837a5b6b5e",
+        "text": "Peer review information Nature Communications thanks Jianxi Gao, and the other, anonymous, reviewer(s) for their contribution to the peer review of this work. A peer review file is available. \n\n## Reprints and permissions information is available at \n\nhttp://www.nature.com/reprints \n\nPublisher’s note Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations. \n\nOpen Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/ licenses/by/4.0/. \n\n© The Author(s) 2024, corrected publication 2024 \n\nNature Communications | (2024) 15:4882 \n\n8",
+        "text_sha256": "sha256:1d25663f0a06aa6198d7421eae96979d15ff624740f9b37a4fc17bf762e32425"
+      }
+    ]
+  },
+  "paper_id": "10.1038/s41467-024-49227-8",
+  "paper_sha256": "sha256:212580182e2fb3134d7393205c133779f80d4e0a2d97b5acae5e7a966609c540",
+  "parent_output_sha256s": [],
+  "parent_reviews": [],
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "review_source_sha256": "sha256:db6f2ef17f51bf55e19b1aba9b80aa6c8d26e4d85b03a5942347f81d116e6f82",
+  "reviewer_spans": [
+    {
+      "char_end": 1248,
+      "char_start": 1212,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-aeaf2a7989e59ab2bd94",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #1 (Remarks to the Author):",
+      "text_sha256": "sha256:6ffd34d82a3d649fbc91e1dc65fd25e243f665d42d0f633ad65db9c0ce240058"
+    },
+    {
+      "char_end": 2260,
+      "char_start": 1251,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d6f438a7015b21b67aa3",
+      "source_role": "reviewer_report",
+      "text": "I have reviewed the manuscript entitled “A network-of-networks model for physical networks,” written by Gabor Pete et al. This paper introduces a network-of-network framework to model the growth of physical networks whose nodes and links are usually embedded in a geometric space. Usually, the physical networks with space constraints show homogenous degree distributions, such as brain networks, road transportation networks, power grids, and many more. The authors developed a network-of-network representation of physics networks and found that the super network follows a power-law degree distribution. Furthermore, the authors derived the degree distribution and the volume of each subnetwork. Overall, the paper is well-written, and the research is novel. Yet, I have several concerns and comments on the current form of the manuscript regarding the models, methods, and results of this work. I am open to looking at a revised version if the author can satisfactorily address the issues discussed below:",
+      "text_sha256": "sha256:e71894b20b8632338f83fc8589dc88696f61b027d2218fc84f6b3bd2e46bf6f9"
+    },
+    {
+      "char_end": 2569,
+      "char_start": 2263,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-020de343934777512d9a",
+      "source_role": "reviewer_report",
+      "text": "1. Why this model? How can this model describe the growth of the brain network? The authors need to give some more examples or real-world data to demonstrate the rationality of this model. I believe the theoretical analysis is correct. However, I need more evidence to support why this is a suitable model.",
+      "text_sha256": "sha256:8febcd553c72243bd117df7e919976d8e42201796ac8c41eb92737fc525dc77f"
+    },
+    {
+      "char_end": 2967,
+      "char_start": 2572,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-badfc97c4e89eba82883",
+      "source_role": "reviewer_report",
+      "text": "2. Related to my first comment, I think the results about the fruit fly brain network are significant. However, the authors should have produced more results about this dataset. The authors may consider putting this figure earlier and conducting more analysis about this dataset to support this research. It would be better if the authors could find more examples/datasets to support this model.",
+      "text_sha256": "sha256:9d33698c7e745fc6ee16fcb53e4f824e25a5bd446e42888227f50bf657bf5bdb"
+    },
+    {
+      "char_end": 3693,
+      "char_start": 2970,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c5e8c1a6594cb6ab50ff",
+      "source_role": "reviewer_report",
+      "text": "3. The authors used LERWs to generate nodes. It needs to be clarified why using this approach. How do the random walk methods affect the results? Since the authors derived the theoretical results before the random walk method, indicating that the analysis will always hold regardless of random walk methods. Considering an extreme case that each agent only moves in one direction, the super network may be close to a chain-like network, far from Scale-Free networks as the authors predicted. Consequently, if each agent walks in one direction more than the other, the degree distribution should be more homogenous. It seems that the supernetwork may show different degree distributions depending on the random walk methods.",
+      "text_sha256": "sha256:680a2090e12db256b314b3c8c17870c818ba3de83300d738607bb953c3081965"
+    },
+    {
+      "char_end": 3774,
+      "char_start": 3696,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3d435aabb3f43431822a",
+      "source_role": "reviewer_report",
+      "text": "4. Like 3, how do the random walk methods affect the results of the Laplacian?",
+      "text_sha256": "sha256:b8744b7241a0c434884f30422824d68d6cead94a17416f61796d3d3fb0e94859"
+    },
+    {
+      "char_end": 3813,
+      "char_start": 3777,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-549e13f89570ad47d38a",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #2 (Remarks to the Author):",
+      "text_sha256": "sha256:44342433f6365a7f5949b5d3040f70d6f57a95f4a5f42f98700e18492093b116"
+    },
+    {
+      "char_end": 4230,
+      "char_start": 3816,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6d629a55e1600995d517",
+      "source_role": "reviewer_report",
+      "text": "In this manuscript, Pete et al attempt to understand the effects of embedding a network into a finite dimensional space. This problem has been treated before, but the authors introduce a Network of Networks approach which is innovative. Within this approach, they are able to demonstrate that the physical structure of the underlying space has important constraints to the dynamics and functioning of the networks.",
+      "text_sha256": "sha256:4a5deb4dda79dbf6a304de02a793e4c748c96514edac3f2b1978fecd762d4322"
+    },
+    {
+      "char_end": 4329,
+      "char_start": 4233,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2e89a5b5b0253b8524b3",
+      "source_role": "reviewer_report",
+      "text": "This includes a novel degree - volume correlation which have not been taken into account before.",
+      "text_sha256": "sha256:fb5ff06f747ddc8d643f46ab33e53e84f0c4a5c4bce12416753f0cf45cf810c6"
+    },
+    {
+      "char_end": 4889,
+      "char_start": 4332,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8bfedeffaca9214b95de",
+      "source_role": "reviewer_report",
+      "text": "I like the modeling and predictive nature of the approach. I believe that the mathematical results of the paper are sound and interesting. What I am not fully convinced is on the connection of the modeling with a real-world problem. I think that the authors have not addressed in full detail the case study using the brain connectome of the fruit fly and its significance for the understanding of teh brain structure and functioning. Without a clear application of the proposed method, the appeal of the approach to a broader audience is somehow diminished.",
+      "text_sha256": "sha256:aec89bf89eef91b20e38cea81db69a6eec796846212cfd1e47a6de278e0060dc"
+    },
+    {
+      "char_end": 4928,
+      "char_start": 4892,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4bf47b82c75e0482924e",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #3 (Remarks to the Author):",
+      "text_sha256": "sha256:8c17865a9cabc7f290ce7a58f02add361b84a8c4dd8a742bbb1b6a885882bbd0"
+    },
+    {
+      "char_end": 5213,
+      "char_start": 4931,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-660d95f95bd4ef4c448f",
+      "source_role": "reviewer_report",
+      "text": "In this paper, the authors propose a model for the growth of physical networks.This model is analytically tractable and has some interesting properties.Then they compare the model against the recently published reconstruction of the brain connectome of the larva of D. melanogaster.",
+      "text_sha256": "sha256:af4fa30c97be5888c8097ee1a76a04f818f7141ece68f6660943a14a63ff027b"
+    },
+    {
+      "char_end": 6193,
+      "char_start": 5216,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-64bb908f15cd23982c41",
+      "source_role": "reviewer_report",
+      "text": "I think that the manuscript, while of interest and of merit, is not above the bar for Nature Communications. The concern is not technical, it is the lack of explanatory power of the model which I think is a must for a journal of this level. As the authors point out, physical networks have received much attention in top journals in recent years, and the brain is a fantastic example of that. However, the ‘physical’ mechanism by which the brain grows has nothing to do with the mechanism proposed in the manuscript. As the brain in D mel adds new neurons these are part of a ‘family’ of neurons that are basically programmed to make connections on a certain area of the brain, as a result they grow in bundles, that is, in a directed fashion guided by the expression of different receptors. That being said, it is true that there are many neuron families some of which only have one neuron. Because these neurons were in the brain from the start of development they are bigger",
+      "text_sha256": "sha256:f20d9f1fbbbf1448f21a1544db8b7affd8d0680dd866ddb7ef729e0f62fba02a"
+    },
+    {
+      "char_end": 6318,
+      "char_start": 6196,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-48ce7fafbb4408cbc436",
+      "source_role": "reviewer_report",
+      "text": "and have more connections as a general rule, which is aligned with some of the ingredients of the authors’ physical model.",
+      "text_sha256": "sha256:a7b2ae84307dded59cccd36b11e0929bc747ab47e8a66ee025e3ebcf88d81571"
+    },
+    {
+      "char_end": 6691,
+      "char_start": 6321,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c92bcfa64fc8145cb333",
+      "source_role": "reviewer_report",
+      "text": "Nonetheless, the authors should note that initially the volume is small occupied with a small fraction of neurons and as more neurons are added, to make room for them the old neurons deform their shape to accommodate growth. So it is not quite the image of a space that is available and needs to be filled up, but a deformation process until it reaches the final volume.",
+      "text_sha256": "sha256:4d596aeb5378cf807ab428bd6f6c321bd99141179930e76ee24d5a9c443b20e1"
+    },
+    {
+      "char_end": 7363,
+      "char_start": 6694,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-159b7b9a846809cdca4f",
+      "source_role": "reviewer_report",
+      "text": "Obviously, I understand the need for models that can help us understand general mechanisms that account for the properties we see in physical networks, and this model is a nice first step in that direction. However, these models cannot exist detached from knowledge behind the processes by which these networks actually grow, which in the case of the larval brain has been studied. If we do not do this, we run the danger of associating properties to the wrong mechanism. I really encourage the authors to get a better understanding of known processes and their proposed mechanism and try to explain when one can be effectively mapped into the other and when it cannot.",
+      "text_sha256": "sha256:1961c2ac75b77f23065f3ae9a15bf0529385998f17066c1d94ab408e34bf2eb3"
+    },
+    {
+      "char_end": 7633,
+      "char_start": 7366,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4bcb068957b7239d7e41",
+      "source_role": "reviewer_report",
+      "text": "Also, it would have been nice to see if their findings are the same for other nervous systems for nematodes (not sure if they are too small for this analysis?), or the adult brain of D melanogaster (released end of June; also the hemibrain released a few years back).",
+      "text_sha256": "sha256:3effbb9700296fe981f0a35adcf3161f51c6b8343118a4a0ed6558a4b8523b16"
+    },
+    {
+      "char_end": 7873,
+      "char_start": 7636,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-788e80b3420c1658a92e",
+      "source_role": "reviewer_report",
+      "text": "It would also be nice to consider other physical networks that maybe fit better the physical model the authors propose. Also it would give us an idea of whether similar macro properties can be assigned to the same micro mechanism or not.",
+      "text_sha256": "sha256:f282a336c20ff7fd07c3947a309888e899ec3bef4b6c23acfd4de79992440d29"
+    },
+    {
+      "char_end": 7891,
+      "char_start": 7876,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c1da0838969af96dea4e",
+      "source_role": "reviewer_report",
+      "text": "Other comments:",
+      "text_sha256": "sha256:6417e219f681d7f2ea58243735f0243f18ced9db0cf1f75eb63566ff3fa54475"
+    },
+    {
+      "char_end": 7968,
+      "char_start": 7894,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a4183b81fce44e407608",
+      "source_role": "reviewer_report",
+      "text": "Some parts of the description of the model would benefit from a rewriting:",
+      "text_sha256": "sha256:d86699e675232d77869f4876e2ac2b9cf5cdb66c05c5ddc7f241f5bcfb6289b1"
+    },
+    {
+      "char_end": 8145,
+      "char_start": 7971,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-416f653f7206a98d5bb6",
+      "source_role": "reviewer_report",
+      "text": "Page 2 - discussion on ‘As a consequence, for saturated networks, the physical layout P (...)’ - is confusing. I am not sure what is the point the authors are trying to make.",
+      "text_sha256": "sha256:26d1682a00d3b47ce192d0830eb087c23eb6404e34366dd2152e7a9444d698e0"
+    },
+    {
+      "char_end": 8486,
+      "char_start": 8148,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-495af056b343d9ac8337",
+      "source_role": "reviewer_report",
+      "text": "Page 2 (last par): ‘The time derivative of V_t shows that …’ -> To obtain v_t the authors ‘take a continuous time approach’ and integrate eq for v_t. Therefore, it is not that the time derivative of V_t is v_t, this is the assumption they are making. - I would rewrite this part to make clear what is assumed by the model and what is not.",
+      "text_sha256": "sha256:af0394f81fe172fb624b8387c42ca0f9985a61f58e73fcb77b4007f54ce08cb0"
+    },
+    {
+      "char_end": 8507,
+      "char_start": 8489,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-751113c4b9bacc8e2600",
+      "source_role": "reviewer_report",
+      "text": "## Other comments:",
+      "text_sha256": "sha256:d3d53670f5cb67bf849c6ac1eb91f50c9e7ca39e80d6fe7caf24a79f48955c92"
+    },
+    {
+      "char_end": 8769,
+      "char_start": 8510,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b28eba9894ad016966d6",
+      "source_role": "reviewer_report",
+      "text": "Do the authors consider the left hemisphere, the right hemisphere or both? The two hemispheres are supposed to be mirror copies of one another.i am not sure redundancy affects this analysis or not (I think it does not, but it is good to take it into account).",
+      "text_sha256": "sha256:64c6c2680c9ff19d5b6077c4dc247ec1e451c9006d13a189d1e4fd760037b229"
+    },
+    {
+      "char_end": 8790,
+      "char_start": 8772,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ee5956f99537ec47654f",
+      "source_role": "reviewer_report",
+      "text": "## **Reviewer #1**",
+      "text_sha256": "sha256:7f0b37dcaa504bdf9ccfafa0c65cd801120d97e57a71ce74de485bcc2b340d45"
+    },
+    {
+      "char_end": 9806,
+      "char_start": 8793,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-118b07effc2239e46bda",
+      "source_role": "reviewer_report",
+      "text": "**I have reviewed the manuscript entitled “A network-of-networks model for physical networks,” written by Gabor Pete et al. This paper introduces a network-of-network framework to model the growth of physical networks whose nodes and links are usually embedded in a geometric space. Usually, the physical networks with space constraints show homogenous degree distributions, such as brain networks, road transportation networks, power grids, and many more. The authors developed a network-of-network representation of physics networks and found that the super network follows a power-law degree distribution. Furthermore, the authors derived the degree distribution and the volume of each subnetwork. Overall, the paper is well-written, and the research is novel. Yet, I have several concerns and comments on the current form of the manuscript regarding the models, methods, and results of this work. I am open to looking at a revised version if the author can satisfactorily address the issues discussed below:**",
+      "text_sha256": "sha256:8a9f9d62e215f7a064b38d6c6a60707aa1e5416a8f94169e9c70590c42101825"
+    },
+    {
+      "char_end": 43764,
+      "char_start": 43728,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-29aa8d28bbc71dd676ba",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #1 (Remarks to the Author):",
+      "text_sha256": "sha256:6ffd34d82a3d649fbc91e1dc65fd25e243f665d42d0f633ad65db9c0ce240058"
+    },
+    {
+      "char_end": 43895,
+      "char_start": 43767,
+      "reviewer_id_hash": "REV-76644d0dc802711e",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2031277ec681521b86bc",
+      "source_role": "reviewer_report",
+      "text": "The authors have addressed all my comments, and I would like to accept this manuscript for publication in Nature Communications.",
+      "text_sha256": "sha256:0896e98cea17eca46f8bb786009bf5872f774730863740df80bc9aabdd0d7981"
+    },
+    {
+      "char_end": 43934,
+      "char_start": 43898,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-14f62a97dd8e24e7de11",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #2 (Remarks to the Author):",
+      "text_sha256": "sha256:44342433f6365a7f5949b5d3040f70d6f57a95f4a5f42f98700e18492093b116"
+    },
+    {
+      "char_end": 43991,
+      "char_start": 43937,
+      "reviewer_id_hash": "REV-d853f0ab73f06e0c",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-647e700abaa7b6b8e20c",
+      "source_role": "reviewer_report",
+      "text": "The authors have satisfactorily addressed my concerns.",
+      "text_sha256": "sha256:f5a31b0b66931ce16b1fd52fd683ad76a23f6977fcc7229c75d6b4a6ba679b27"
+    },
+    {
+      "char_end": 44030,
+      "char_start": 43994,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-00d221a21c0348a17d1b",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #3 (Remarks to the Author):",
+      "text_sha256": "sha256:8c17865a9cabc7f290ce7a58f02add361b84a8c4dd8a742bbb1b6a885882bbd0"
+    },
+    {
+      "char_end": 44385,
+      "char_start": 44033,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c77c97eba2d4a71d0c05",
+      "source_role": "reviewer_report",
+      "text": "I think the authors have made a great effort to reformulate their manuscript in a way that is more general. They have addressed all of my comments (and I think those of the other reviewers) quite convincingly. I think that the degree-volume correlation is a very nice result, that seems to hold for several of the physical networks the authors look at.",
+      "text_sha256": "sha256:211256326547faf918eb4d37a4c8175caa4530eb03661c5879c1005d122d51fe"
+    },
+    {
+      "char_end": 44516,
+      "char_start": 44388,
+      "reviewer_id_hash": "REV-b5a46f984075fdc2",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-685dbba845a69eb40a89",
+      "source_role": "reviewer_report",
+      "text": "I congratulate them for their effort of making a new round of analysis and for providing careful answers to all of the comments.",
+      "text_sha256": "sha256:0f5da9d90d6b65c366cff975bde01d755801938ae76a375cd9f29c65167dcb0c"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

@@ -1,0 +1,13 @@
+{
+  "contract": "reconstruction_import_manifest",
+  "conversation_hash": "sha256:d56d9f860887b114974f976dd38ef9850e28ea16d0d71465fe48b1b483c70ea6",
+  "graph_blind": true,
+  "manifest_sha256": "sha256:fa6f230ce51d7cc920a23df01d330e458aea9439e248837c0f19d6b4acf47014",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:609292f23f4179fa67c6fd75dba19dfabbe4de646130b2222a62af6e77e8e126",
+  "package_sha256": "sha256:6e43b2245517fbad819cae7ce951f3c670a933ffc501b66425e410ed687ae25f",
+  "paper_id": "10.1038/s41467-025-61153-x",
+  "response_file_sha256": "sha256:2159a2dea91a0ec73e0a44e2b54f6e9c6b1170d73f51e6552aed4bf2e14ceb3b",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

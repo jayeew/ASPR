@@ -1,0 +1,611 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:1468bc15214eae4ad2191d985e7a393043a73b52884318e4acb606a88c3d7ea0",
+  "input_sha256": "sha256:340b0192c9cc808953759886c93b8d9be8dbafac55b6006e3e6094d55991e429",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:d3f8147bee9b2e3faa4673290579f9b88c887c701bf29c8e8dd24308060162c4",
+  "package_id": "RSP-e73a1bed6d0fc41d931e",
+  "paper_id": "10.1038/s41467-024-52700-z",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "point_id": "N-CONTRIB-01",
+      "rationale": "A reviewer characterized the phase II study as adding insight to second-line HCC treatment; the final paper identifies the prospective apatinib-plus-HAIC trial in the specified post–first-line, extrahepatic-metastasis population.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-cc1ad88c93248121"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c27cd18eb8435ca3e4d5"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-N-CONTRIB-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-c059e8f7ed5c2b6e113f"
+      ],
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "point_id": "N-LIMIT-01",
+      "rationale": "The reviewer questioned conclusions from a pilot single-arm study. The final paper acknowledges that the lack of a control arm prevents attribution of observed benefits solely to HAIC, so the contribution remains an uncontrolled efficacy signal.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-856087a931d75e64"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-fd07eca6016d03f2b702"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-N-LIMIT-01"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "point_id": "STR-POP-01",
+      "rationale": "The reviewer’s description identifies a multicenter Simon two-stage trial in the intended clinical population; the final paper documents the trial design, eligibility scope, and enrollment.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-ee68a71a05548f65"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e35cfe9bd1ef7812acbe"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-STR-POP-01"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "point_id": "STR-RESULTS-01",
+      "rationale": "The reviewer reported the RECIST response, PFS, OS, and adverse-event results; the final paper provides the corresponding prespecified endpoint results and response categories.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-ee68a71a05548f65"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e35cfe9bd1ef7812acbe"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-STR-RESULTS-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-4eccba7ab2eafaf6414b",
+        "RR:SRC-R-fc5d6874539d09b61674"
+      ],
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "point_id": "W-INTERPRET-01",
+      "rationale": "A reviewer identified the comparison with the AHELP monotherapy trial as speculative. Although the final paper notes that the studies were not head-to-head, it retains claims of better outcomes and potential synergy based on cross-trial comparisons.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-ee68a71a05548f65"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-1aaa29858c15afb1de78"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-W-INTERPRET-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-a78ec8fc3f313e8c6352"
+      ],
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "point_id": "Q-DEPENDENCE-01",
+      "rationale": "The authors renamed the outcomes as lesion-specific control periods, but the final statistical description still states that their medians were compared with a log-rank test without explaining how the shared patient-level data structure was handled.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-ee68a71a05548f65"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-2a95ea4c7986e5081d54"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-Q-DEPENDENCE-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-c64ec4a36a20bd23a477"
+      ],
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "point_id": "Q-IMAGING-01",
+      "rationale": "The response states that assessment was central, while the final paper specifies two independent radiologists without survival data but does not identify the assessment center or an adjudication process for discordant reads.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-cc1ad88c93248121"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-706fc5209ed07b935c20"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-Q-IMAGING-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-50fdd460cba21074b531"
+      ],
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "point_id": null,
+      "rationale": "The round-two correction to the Simon-design null and alternative hypotheses is present in the final statistical methods.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-ee68a71a05548f65"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-0d111b703e36a9c15f7a"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-AUDIT-SIMON-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-9fe60364f54e33bf5291"
+      ],
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "point_id": null,
+      "rationale": "The final endpoints section now states censoring rules for OS and PFS.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-ee68a71a05548f65"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e3fb7ccad5b996a47d20"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-AUDIT-CENSOR-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-830263674f9132135843"
+      ],
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "point_id": null,
+      "rationale": "The final safety section limits reporting to treatment-related adverse events and defines investigator attribution.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-ee68a71a05548f65"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-cb90eba4983ac1958bdc"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-AUDIT-SAFETY-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-800439a0c21df71f73cf"
+      ],
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "point_id": null,
+      "rationale": "The final introduction gives a pharmacologic and administration-based rationale for raltitrexed relative to fluorouracil.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-856087a931d75e64",
+        "REV-cc1ad88c93248121"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a27156e08ec6053bed38",
+        "RR:SRC-R-83fa1f4799aa8d1bc30c"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-AUDIT-RALTITREXED-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-bba10140ed593e2f59d1"
+      ],
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "point_id": null,
+      "rationale": "The final paper includes treatment-protocol exposure and response-duration figures.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-cc1ad88c93248121"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-afec99ccbf7f0c59e838"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-AUDIT-TIMELINE-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-0d10af473457b56daffb",
+        "RR:SRC-R-0ec9910e35dce38a977a"
+      ],
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "point_id": null,
+      "rationale": "The final discussion compares the study with TRIPLET and states that no participant received curative therapy after downstaging.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-cc1ad88c93248121"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-40633c97abc1fd160859",
+        "RR:SRC-R-fa12668eaa0a53205f01"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-AUDIT-COMPARISON-01"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-5522d2cc621411744ca2",
+            "P:S-6e9a2dfc6ed07dcac7d9"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-LIMIT-01",
+          "schema_version": "aspr_gear",
+          "severity": "major",
+          "suggested_action": "Frame the findings as an uncontrolled treatment signal rather than evidence for the incremental effect of HAIC.",
+          "text": "The clinical contribution is limited by the single-arm design: it cannot establish that HAIC, rather than apatinib or other differences between studies, produced the observed benefit."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "contribution",
+          "evidence_keys": [
+            "P:S-6f54342df392b848dacf",
+            "P:S-5522d2cc621411744ca2"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-CONTRIB-01",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "None.",
+          "text": "The study contributes prospective phase II evidence for apatinib plus oxaliplatin-raltitrexed HAIC in patients with extrahepatic-metastatic HCC whose intrahepatic disease progressed after first-line systemic therapy."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-024-52700-z",
+    "questions": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-c25020606cf28444b57b",
+          "P:S-655438cd2e362edd92e8"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-DEPENDENCE-01",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "State the estimand and analysis that accounts for the nonindependence of intrahepatic and extrahepatic control times measured in the same patients.",
+        "text": "How does the comparison of intrahepatic and extrahepatic control periods account for their nonindependence within each patient?"
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-758e3580f9bc0d5e7389"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-IMAGING-01",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Identify the assessment center and the procedure used to resolve discordant radiologist readings.",
+        "text": "Where was imaging response assessed, and how were disagreements between the two independent radiologists adjudicated?"
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "contribution",
+        "evidence_keys": [
+          "P:S-5522d2cc621411744ca2",
+          "P:S-e231711c5a54b9a3e72f"
+        ],
+        "external_verification_required": false,
+        "point_id": "STR-POP-01",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "None.",
+        "text": "The report specifies a multicenter, open-label, single-arm phase II design and a clinically defined post–first-line population with extrahepatic metastasis."
+      },
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-838bce1449c46ea0540e",
+          "P:S-a245a7c2fd12212a9531",
+          "P:S-c25020606cf28444b57b"
+        ],
+        "external_verification_required": false,
+        "point_id": "STR-RESULTS-01",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "None.",
+        "text": "The final report quantifies RECIST and mRECIST response, time-to-event outcomes, and treatment-related adverse events for all 39 enrolled patients."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-6f54342df392b848dacf",
+        "P:S-838bce1449c46ea0540e",
+        "P:S-5522d2cc621411744ca2"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "This multicenter single-arm phase II study evaluates apatinib plus oxaliplatin-raltitrexed HAIC after first-line systemic therapy for HCC with extrahepatic metastasis. It reports RECIST v1.1 ORR of 53.8%, median PFS of 6.2 months, median OS of 11.3 months, and treatment-related adverse events in 39 patients. The final paper clarifies several reporting details, but its uncontrolled design and retained cross-trial interpretation leave the incremental contribution of HAIC unresolved; the lesion-specific control-period analysis and imaging adjudication remain insufficiently specified."
+    },
+    "weaknesses": [
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-5522d2cc621411744ca2",
+          "P:S-6e9a2dfc6ed07dcac7d9"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-INTERPRET-01",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Restrict cross-trial comparisons to descriptive context and remove causal or efficacy-superiority inferences about HAIC plus apatinib.",
+        "text": "The discussion retains an overinterpretation of non-head-to-head comparisons, presenting better outcomes versus apatinib monotherapy and potential HAIC-apatinib synergy despite the absence of a concurrent control."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [],
+      "final_paper_evidence_keys": [
+        "P:S-6f54342df392b848dacf",
+        "P:S-5522d2cc621411744ca2"
+      ],
+      "ledger_id": "LEDGER-N-CONTRIB-01",
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "residual_summary": "The final paper continues to describe the specified prospective phase II contribution.",
+      "resolution_status": "persists",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c27cd18eb8435ca3e4d5"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-c059e8f7ed5c2b6e113f"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-5522d2cc621411744ca2",
+        "P:S-6e9a2dfc6ed07dcac7d9"
+      ],
+      "ledger_id": "LEDGER-N-LIMIT-01",
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "residual_summary": "The paper acknowledges the absence of a control arm, so the lack of causal attribution persists.",
+      "resolution_status": "persists",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-fd07eca6016d03f2b702"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [],
+      "final_paper_evidence_keys": [
+        "P:S-5522d2cc621411744ca2",
+        "P:S-e231711c5a54b9a3e72f"
+      ],
+      "ledger_id": "LEDGER-STR-POP-01",
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "residual_summary": "The final paper retains the reported study design and eligibility scope.",
+      "resolution_status": "persists",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e35cfe9bd1ef7812acbe"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [],
+      "final_paper_evidence_keys": [
+        "P:S-838bce1449c46ea0540e",
+        "P:S-a245a7c2fd12212a9531",
+        "P:S-c25020606cf28444b57b"
+      ],
+      "ledger_id": "LEDGER-STR-RESULTS-01",
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "residual_summary": "The final paper retains the reported efficacy and safety outcome detail.",
+      "resolution_status": "persists",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e35cfe9bd1ef7812acbe"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-4eccba7ab2eafaf6414b",
+        "RR:SRC-R-fc5d6874539d09b61674"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-5522d2cc621411744ca2",
+        "P:S-6e9a2dfc6ed07dcac7d9"
+      ],
+      "ledger_id": "LEDGER-W-INTERPRET-01",
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "residual_summary": "Caveats about non-head-to-head studies were added, but cross-trial claims of better outcomes and potential synergy remain.",
+      "resolution_status": "persists",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-1aaa29858c15afb1de78"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-a78ec8fc3f313e8c6352"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-c25020606cf28444b57b",
+        "P:S-655438cd2e362edd92e8"
+      ],
+      "ledger_id": "LEDGER-Q-DEPENDENCE-01",
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "residual_summary": "The terminology was changed to control periods, but the final analysis does not explain treatment of paired patient-level outcomes.",
+      "resolution_status": "persists",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-2a95ea4c7986e5081d54"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-c64ec4a36a20bd23a477"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-758e3580f9bc0d5e7389"
+      ],
+      "ledger_id": "LEDGER-Q-IMAGING-01",
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "residual_summary": "Independent radiologists are described, but the final paper does not document the assessment center or discordance adjudication.",
+      "resolution_status": "partially_resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-706fc5209ed07b935c20"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-50fdd460cba21074b531"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-655438cd2e362edd92e8"
+      ],
+      "ledger_id": "LEDGER-AUDIT-SIMON-01",
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "residual_summary": "The final methods give the corrected null hypothesis, alternative, and assumed response rate.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-0d111b703e36a9c15f7a"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-9fe60364f54e33bf5291"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-758e3580f9bc0d5e7389",
+        "P:S-655438cd2e362edd92e8"
+      ],
+      "ledger_id": "LEDGER-AUDIT-CENSOR-01",
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "residual_summary": "OS and PFS censoring rules are explicitly stated in the final paper.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e3fb7ccad5b996a47d20"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-830263674f9132135843"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-a245a7c2fd12212a9531"
+      ],
+      "ledger_id": "LEDGER-AUDIT-SAFETY-01",
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "residual_summary": "Treatment-related adverse events and their attribution definition are stated in the final safety section.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-cb90eba4983ac1958bdc"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-800439a0c21df71f73cf"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-6f54342df392b848dacf"
+      ],
+      "ledger_id": "LEDGER-AUDIT-RALTITREXED-01",
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "residual_summary": "The final introduction supplies the requested rationale for raltitrexed administration.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a27156e08ec6053bed38",
+        "RR:SRC-R-83fa1f4799aa8d1bc30c"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-bba10140ed593e2f59d1"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-c427ae620b016f2bd4ba",
+        "P:S-9faaa5f8ff01922a931d"
+      ],
+      "ledger_id": "LEDGER-AUDIT-TIMELINE-01",
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "residual_summary": "The final paper includes figures for treatment exposure and response duration.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-afec99ccbf7f0c59e838"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-0d10af473457b56daffb",
+        "RR:SRC-R-0ec9910e35dce38a977a"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-c427ae620b016f2bd4ba",
+        "P:S-d719b0ac4e413d844bb5"
+      ],
+      "ledger_id": "LEDGER-AUDIT-COMPARISON-01",
+      "paper_id": "10.1038/s41467-024-52700-z",
+      "residual_summary": "The final discussion includes comparative context and reports the absence of curative therapy after downstaging.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-40633c97abc1fd160859",
+        "RR:SRC-R-fa12668eaa0a53205f01"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

@@ -3,12 +3,12 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from aspr.nature_multihorizon.development_v6 import (
+from gear.nature_multihorizon.development_v6 import (
     audit_required_feature_sets,
     evaluate_development_gates,
     evaluate_directional_horizon_gates,
 )
-from aspr.nature_multihorizon.modeling_v6 import (
+from gear.nature_multihorizon.modeling_v6 import (
     evaluate_development_oof,
     evaluate_temporal_folds,
     fit_calibrated_final_model,

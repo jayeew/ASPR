@@ -1,0 +1,330 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:88ba6227b4f938a93173830af030a0016e101edc23ea797dee5c43d6f21c2124",
+  "input_sha256": "sha256:92d371ec3bbbf679985021f5257e62dffac6853cf638b596761d9ca7319c222c",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:ca9542e4bd295067394bcc8cc2441dbc483f14d967c11533e1a70b3abf59dc1c",
+  "package_id": "RSP-74ca3dbedb53695e0d24",
+  "paper_id": "10.1038/s41551-023-01010-8",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-8f4fe9e67dedde461cbe"
+      ],
+      "paper_id": "10.1038/s41551-023-01010-8",
+      "point_id": "S1",
+      "rationale": "The reviewer identified cross-institutional and cross-dataset evaluation as the translationally useful part of the contribution. The author response characterized this evidence as addressing deployment-relevant settings; the final paper reports evaluations across hospitals and procedures. The broader clinical benefit remains only partially resolved because no user study was presented.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-a88818bae97f5c60"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c0e1ed893f1b9edbb01a"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-5bbf95dfb8c6ae85ce2d"
+      ],
+      "paper_id": "10.1038/s41551-023-01010-8",
+      "point_id": "S2",
+      "rationale": "The reviewer described the use of the same network architecture across phase, gesture, and skill tasks. The response clarifies that distinct task-specific models are required, while the final paper documents one architecture independently decoding these activity elements. This clarification is partial because the practical trade-off remains unquantified.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-31fa3c3def99a703",
+        "REV-a88818bae97f5c60"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-399de89f8e63147273ac",
+        "RR:SRC-R-c0e1ed893f1b9edbb01a"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T2"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-5df36e6517165251cf17"
+      ],
+      "paper_id": "10.1038/s41551-023-01010-8",
+      "point_id": "N1",
+      "rationale": "Reviewers recognized application and translational merit. The author response identified cross-setting use as the primary benefit, and the final paper reports a unified system evaluated across hospitals, procedures, and surgeons. The novelty boundary is only partially resolved because reviewers continued to question the technical advance.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-31fa3c3def99a703",
+        "REV-a88818bae97f5c60"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-6548c6931389960064a5",
+        "RR:SRC-R-c0e1ed893f1b9edbb01a"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T3"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-5df36e6517165251cf17"
+      ],
+      "paper_id": "10.1038/s41551-023-01010-8",
+      "point_id": "N2",
+      "rationale": "The final reviewer maintained that the work lacked a substantial advance over the state of the art and that using one ViT architecture for several tasks did not itself establish novelty. The final paper documents a mainly application-oriented, multi-setting evaluation and mixed external benchmark evidence; the technical novelty limitation persists.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-31fa3c3def99a703",
+        "REV-a88818bae97f5c60"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-0475ca8c1342c1960115",
+        "RR:SRC-R-aa9abee2f48c47c6a00f",
+        "RR:SRC-R-93dc013fbf9be19b5ab7"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T4"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-91127c494076c3fc918b"
+      ],
+      "paper_id": "10.1038/s41551-023-01010-8",
+      "point_id": "W1",
+      "rationale": "The reviewer requested comparisons on consistent and public datasets to establish the technical contribution. The response added baseline and public-dataset comparisons, but the final paper reports an external setting in which SAIS accuracy is below the best-performing video-based method. Thus the evidence improves contextualization but does not establish a consistent technical performance advantage.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-477960ac5a589a6b",
+        "REV-a88818bae97f5c60"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-f8d281042b8802ed6da4",
+        "RR:SRC-R-7daf2507ae602cdb059b"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T5"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-5bbf95dfb8c6ae85ce2d"
+      ],
+      "paper_id": "10.1038/s41551-023-01010-8",
+      "point_id": "Q1",
+      "rationale": "The reviewer asked how using separate SAIS models compares with running existing task-specific models in parallel and requested computational requirements. The response confirms that three unique models are needed, while the final paper describes independent decoding tasks and model implementation but does not quantify the comparative resource requirement. The issue is partially resolved.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-31fa3c3def99a703"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-399de89f8e63147273ac"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T6"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-47f05f82df028b3e6244"
+      ],
+      "paper_id": "10.1038/s41551-023-01010-8",
+      "point_id": null,
+      "rationale": "The reviewer requested clarification of phase versus sub-phase recognition, the meaning of samples, and inference from entire videos. The response reports terminology and methodological clarification, and the reviewer subsequently stated that the questions were answered. This resolved item is retained only for audit.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-947a1c7934425e4a"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c7a939b100609c0952ed",
+        "RR:SRC-R-0b2ff18536446bf76498"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T7"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-91127c494076c3fc918b"
+      ],
+      "paper_id": "10.1038/s41551-023-01010-8",
+      "point_id": null,
+      "rationale": "The reviewer noted the absence of comparisons with established machine-learning models. The response added comparisons with I3D and public datasets, and the final paper contains those comparative results. This exact absence-of-comparison issue is resolved for audit, although the separate interpretation of technical novelty persists.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-477960ac5a589a6b"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-7daf2507ae602cdb059b"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T8"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-2cf6dff0d52b52ee67b9",
+            "P:S-f6396c0baad2ce251d15"
+          ],
+          "external_verification_required": true,
+          "point_id": "N2",
+          "schema_version": "aspr_gear",
+          "severity": "major",
+          "suggested_action": "Distinguish the translational contribution from the components claimed as a technical advance, with the comparison evidence stated directly.",
+          "text": "The distinctive contribution is primarily translational: evaluation of a common architecture across surgical settings. The technical advance beyond existing video-analysis and transformer-based approaches remains insufficiently established."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-2cf6dff0d52b52ee67b9",
+            "P:S-5503fe6e9107e0a26756"
+          ],
+          "external_verification_required": true,
+          "point_id": "N1",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "None.",
+          "text": "The paper's supported novelty lies in applying one surgical-video framework to multiple activity elements and evaluating it across hospitals, surgeons, and procedures."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41551-023-01010-8",
+    "questions": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-323e1d832159ea708108",
+          "P:S-3f4b06842e13a4420d51"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Provide task-level training and inference resource requirements alongside equivalent task-specific baselines.",
+        "text": "What are the training, inference, and deployment costs of using separate SAIS models for each decoding task relative to parallel task-specific baselines?"
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-5503fe6e9107e0a26756",
+          "P:S-3b6f833b646e4288936c"
+        ],
+        "external_verification_required": false,
+        "point_id": "S1",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "None.",
+        "text": "The evaluation tests generalization beyond a single local dataset, including unseen hospitals and a different surgical procedure."
+      },
+      {
+        "aspect": "contribution",
+        "evidence_keys": [
+          "P:S-323e1d832159ea708108",
+          "P:S-d5d9bbac191afcb16982"
+        ],
+        "external_verification_required": false,
+        "point_id": "S2",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "None.",
+        "text": "The study applies a shared architectural design to decode complementary elements of surgical activity, including subphases, gestures, and skill assessments."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-2cf6dff0d52b52ee67b9",
+        "P:S-323e1d832159ea708108",
+        "P:S-5503fe6e9107e0a26756",
+        "P:S-41de0542a7e5d5e38919",
+        "P:S-f6396c0baad2ce251d15"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "This study presents SAIS, a surgical-video framework that independently decodes subphases, gestures, and skill and is evaluated across hospitals and procedures. The multi-setting evaluation is the central contribution. Comparative analyses added in revision improve the evidence base, but the final record leaves the technical differentiation and the resource implications of separate task-specific models unresolved."
+    },
+    "weaknesses": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-41de0542a7e5d5e38919",
+          "P:S-f6396c0baad2ce251d15"
+        ],
+        "external_verification_required": false,
+        "point_id": "W1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Report comparable benchmark outcomes by task and identify the settings in which SAIS is superior, competitive, or inferior.",
+        "text": "The added comparisons do not demonstrate a uniform technical performance advantage: the final paper reports strong results against I3D for skill assessment but a lower accuracy than the best-performing video-based method on an external dataset."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-47f05f82df028b3e6244"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-5503fe6e9107e0a26756",
+        "P:S-78d4856161dd9d39f901"
+      ],
+      "ledger_id": "L1",
+      "paper_id": "10.1038/s41551-023-01010-8",
+      "residual_summary": "Terminology, sample description, and whole-video inference were clarified.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c7a939b100609c0952ed",
+        "RR:SRC-R-0b2ff18536446bf76498"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-91127c494076c3fc918b"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-41de0542a7e5d5e38919",
+        "P:S-f6396c0baad2ce251d15"
+      ],
+      "ledger_id": "L2",
+      "paper_id": "10.1038/s41551-023-01010-8",
+      "residual_summary": "Established-model and public-dataset comparisons were added; the remaining interpretation of technical novelty is represented separately as a retained point.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-7daf2507ae602cdb059b"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

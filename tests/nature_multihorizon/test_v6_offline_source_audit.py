@@ -5,12 +5,12 @@ from pathlib import Path
 
 import pytest
 
-from aspr.nature_multihorizon.offline import (
+from gear.nature_multihorizon.offline import (
     NetworkAccessForbidden,
     network_forbidden,
     validate_local_only_config,
 )
-from aspr.nature_multihorizon.source_audit_v6 import audit_local_sources
+from gear.nature_multihorizon.source_audit_v6 import audit_local_sources
 
 
 def _config(source_path: str, snapshot_path: str) -> dict:

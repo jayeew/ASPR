@@ -1,0 +1,528 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:2075e26ef2b8f826033f1b5307e5c62258f441485ec039ed9887fa350b3868ae",
+  "input_sha256": "sha256:68a31d0a9da63d801a190aaa18378f7ffe18f32e230293c68ed1d575ead81881",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:1fc0156f0ae0332049ce410789551e70e1e758df898b56eee6e6bae49891a99a",
+  "package_id": "RSP-d22c12bc04fca0018391",
+  "paper_id": "10.1038/s41467-024-53372-5",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-53372-5",
+      "point_id": "ST-01",
+      "rationale": "Reviewer 2 identified the new OMIEC-based THz device and its use on rigid and flexible substrates; the final paper documents the THz implementation and fully direct-written architecture in P:S-c143fbedb2c4768cf91c and P:S-0b3748ef1910545f7f5f.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-ca3861c426ede5a4"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-ec854e2aee026f7e53c1"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-ST-01"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-53372-5",
+      "point_id": "ST-02",
+      "rationale": "Reviewer 2 noted the accessible, low-temperature-compatible deposition approach; the final paper describes direct writing, low-temperature processing, and plastic-substrate compatibility in P:S-d2891937a6b639b7c914 and P:S-0b3748ef1910545f7f5f.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-ca3861c426ede5a4"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-ec854e2aee026f7e53c1"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-ST-02"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-53372-5",
+      "point_id": "N-01",
+      "rationale": "Reviewer 2 characterized the use of OMIECs for THz applications as a first; the final paper states that no THz metadevice based on organic electronic materials had been proposed and presents the OMIEC tuning-layer contribution in P:S-256e571c564113650ef4 and P:S-c143fbedb2c4768cf91c.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-ca3861c426ede5a4"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-ec854e2aee026f7e53c1"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-b5793b3aedaedbd30f2f",
+        "RR:SRC-R-7034b47f48429c9874ed"
+      ],
+      "paper_id": "10.1038/s41467-024-53372-5",
+      "point_id": "N-02",
+      "rationale": "Reviewer 2 questioned why a mixed conductor is needed or preferable to an organic semiconductor. The final paper supports a residual scope limit: it reports limited OMIEC mobility relative to inorganic and 2D materials and identifies fundamental transport questions as open in P:S-aedb3027520e6f882a22.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-ca3861c426ede5a4"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-dba91a744d138e719bb1"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-02"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-bce9ad54502ac4ee5e67"
+      ],
+      "paper_id": "10.1038/s41467-024-53372-5",
+      "point_id": "W-01",
+      "rationale": "Reviewer 1 requested a balanced lifecycle assessment behind environmental framing. The final paper adds process-level sustainability rationale in P:S-d2891937a6b639b7c914 and presents environmental improvements as prospective in P:S-aedb3027520e6f882a22, leaving lifecycle performance unquantified.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-94fdb1ca0677a098"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-107c854266f8d38960fc"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-d30bf0f348b8373cea1e"
+      ],
+      "paper_id": "10.1038/s41467-024-53372-5",
+      "point_id": "W-02",
+      "rationale": "Reviewer 1 raised mass-scale consistency and reliability concerns. The final paper describes the process as scalable in principle and its reliability advantages as potential in P:S-5bbf368dbd8f6b5b9f8e, rather than providing mass-scale reliability evidence.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-94fdb1ca0677a098"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e48497fb26b8720370df"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W-02"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-2ca265699f62c384a80a",
+        "RR:SRC-R-f15e7ee713b0f6b7da27"
+      ],
+      "paper_id": "10.1038/s41467-024-53372-5",
+      "point_id": "W-03",
+      "rationale": "Reviewer 2 found the presentation insufficiently general and accessible, and later noted that key response details had not entered the manuscript. The final paper retains high-level open transport and device-speed statements in P:S-aedb3027520e6f882a22 and P:S-6a3970b842bfdac50542, supporting a remaining accessibility limitation.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-ca3861c426ede5a4"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-222ca14a435e6b6f7d0b",
+        "RR:SRC-R-4c509419181d0be5936d"
+      ],
+      "round_ids": [
+        "round_1",
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W-03"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-0029394878eae012f77c",
+        "RR:SRC-R-739e665d829402195b08"
+      ],
+      "paper_id": "10.1038/s41467-024-53372-5",
+      "point_id": "Q-01",
+      "rationale": "Reviewer 1 asked about integration with existing high-frequency devices and systems. The final paper explicitly calls for characterization and optimization of modulation speed to establish relevance for wireless communications in P:S-6a3970b842bfdac50542.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-94fdb1ca0677a098"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-ec319759a858c2ef573b"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-bafb49d325362cdbae08",
+        "RR:SRC-R-c21ddd251491047e29ce"
+      ],
+      "paper_id": "10.1038/s41467-024-53372-5",
+      "point_id": "Q-02",
+      "rationale": "Reviewer 1 asked whether Drude-Smith can capture the diverse scattering and degradation processes in semiconducting polymers. The final paper states that the microscopic origin of the localization parameter and localized carriers remains open in P:S-c74740c9020b8512244a and P:S-aedb3027520e6f882a22.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-94fdb1ca0677a098"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-dea115667dafaed68188"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q-02"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-1cb9a3992cc5fec9a5a5"
+      ],
+      "paper_id": "10.1038/s41467-024-53372-5",
+      "point_id": null,
+      "rationale": "Reviewer 2 objected to an overly broad first-inkjet-printing formulation. The author response states that the wording was removed; the final paper describes p(g2T-TT) deposition by inkjet printing without that priority wording in P:S-a391a0e59ebf9788755a.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-ca3861c426ede5a4"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e4c6ca048ff97cec1f94"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AU-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-371939e2db25a3479f2b",
+        "RR:SRC-R-5b99f7b0552635aaf679"
+      ],
+      "paper_id": "10.1038/s41467-024-53372-5",
+      "point_id": null,
+      "rationale": "Reviewer 2 requested a more rigorous explanation of organic-material limitations at high frequency. The final paper attributes the limitation to carrier mobility, charge injection, and switching speed in P:S-a391a0e59ebf9788755a.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-ca3861c426ede5a4"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-dba91a744d138e719bb1"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AU-02"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-57705979661fb0145bbb",
+        "RR:SRC-R-b0b4d2959a9ec06ddfcd"
+      ],
+      "paper_id": "10.1038/s41467-024-53372-5",
+      "point_id": null,
+      "rationale": "Reviewer 2 identified an unlabeled feature in Fig. 2a and reiterated the clarity concern in round 2. The final Fig. 2 caption identifies the three-electrode device in P:S-2e9598497e4487feb1fc, and the figure text labels the impinging and transmitted THz beams in P:S-2b5f79438fd5f5b3ee9a.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-ca3861c426ede5a4"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-94ed0bbb47729482bbf1",
+        "RR:SRC-R-f2951c99c055c37d9fe6"
+      ],
+      "round_ids": [
+        "round_1",
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AU-03"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-e890000b2933946adeaf"
+      ],
+      "paper_id": "10.1038/s41467-024-53372-5",
+      "point_id": null,
+      "rationale": "Reviewer 2 requested clearer distinction between metastructure and metadevice terminology. The response reports terminology changes, while the final paper uses metadevice architecture and metasurface terminology in P:S-6b6700711d8cccbbf1d4 and P:S-2e9598497e4487feb1fc.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-ca3861c426ede5a4"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-176ee7009b5516b4618d"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AU-04"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-d40483049bca83c0726d"
+      ],
+      "paper_id": "10.1038/s41467-024-53372-5",
+      "point_id": null,
+      "rationale": "Reviewer 2 requested clarification of the three-electrode device, gate voltage, and diagram correspondence. The final text explains the OECT and two-electrode configurations and their respective conductivity measurements in P:S-2b6d70bba802e0450866.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-ca3861c426ede5a4"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-1e5abd919f0fc80ebf02"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AU-05"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-aedb3027520e6f882a22"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-02",
+          "schema_version": "aspr_gear",
+          "severity": "minor",
+          "suggested_action": "State more directly how OMIEC-specific volumetric charge modulation compares with conventional organic-semiconductor tuning under matched device conditions.",
+          "text": "The novelty is a proof-of-principle OMIEC integration; the final paper still identifies limited carrier mobility and unresolved transport questions, so its comparative advantage over other organic tuners remains incompletely established."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-256e571c564113650ef4",
+            "P:S-c143fbedb2c4768cf91c"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-01",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "None.",
+          "text": "The work extends organic mixed ion-electron conductors to electrically reconfigurable THz metadevices, a setting the paper identifies as previously lacking an organic-electronic implementation."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-024-53372-5",
+    "questions": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-6a3970b842bfdac50542"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-01",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Quantify switching speed and identify the device and materials parameters that govern integration into representative high-frequency systems.",
+        "text": "What modulation-speed limits and integration constraints govern use of these metadevices in existing high-frequency systems, particularly wireless applications?"
+      },
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-c74740c9020b8512244a",
+          "P:S-aedb3027520e6f882a22"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-02",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Test the transport interpretation with complementary structural, electrical, and spectroscopic measurements across materials and gating conditions.",
+        "text": "Which microscopic scattering, trapping, structural, and degradation processes determine the Drude-Smith localization parameter and the associated screening response?"
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "contribution",
+        "evidence_keys": [
+          "P:S-c143fbedb2c4768cf91c",
+          "P:S-0b3748ef1910545f7f5f"
+        ],
+        "external_verification_required": false,
+        "point_id": "ST-01",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "None.",
+        "text": "The paper demonstrates an OMIEC-tuned THz metadevice and carries the implementation through both conventional and fully direct-written devices on rigid and flexible substrates."
+      },
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-d2891937a6b639b7c914",
+          "P:S-0b3748ef1910545f7f5f"
+        ],
+        "external_verification_required": false,
+        "point_id": "ST-02",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "None.",
+        "text": "The direct-writing route combines inkjet printing and femtosecond laser ablation with low-temperature-compatible processing and plastic-substrate compatibility."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-c143fbedb2c4768cf91c",
+        "P:S-0b3748ef1910545f7f5f",
+        "P:S-aedb3027520e6f882a22"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "This study applies an organic mixed ion-electron conductor as an electrically controlled tuning layer for THz metasurfaces, including fully direct-written devices on rigid and flexible substrates. The contribution is specific and supported by measured modulation, while the final paper leaves transport interpretation, modulation-speed relevance, lifecycle claims, scale-up reliability, and some broader explanatory context as residual limits."
+    },
+    "weaknesses": [
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-d2891937a6b639b7c914",
+          "P:S-aedb3027520e6f882a22"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-01",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Separate demonstrated process attributes from lifecycle conclusions and provide, or explicitly delimit the absence of, lifecycle assessment.",
+        "text": "Environmental benefits are presented through process attributes and prospective recycling or solvent routes, without a balanced quantitative lifecycle assessment."
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-5bbf368dbd8f6b5b9f8e"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-02",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Add evidence or clearly bounded discussion of yield, uniformity, and reliability for larger-area or scaled manufacturing.",
+        "text": "Mass-manufacturing feasibility and process reliability are described as potential or in-principle outcomes rather than demonstrated under scaled production conditions."
+      },
+      {
+        "aspect": "presentation_reproducibility",
+        "evidence_keys": [
+          "P:S-aedb3027520e6f882a22",
+          "P:S-6a3970b842bfdac50542"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-03",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Bring the key practical and mechanistic explanations needed by non-specialists into the main text, with clear scope limits.",
+        "text": "The final manuscript retains high-level statements about open transport and speed questions, while key explanatory detail remains insufficiently developed for a broad audience."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-1cb9a3992cc5fec9a5a5"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-a391a0e59ebf9788755a"
+      ],
+      "ledger_id": "L-01",
+      "paper_id": "10.1038/s41467-024-53372-5",
+      "residual_summary": "The contested first-inkjet-printing priority wording is absent from the final text.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e4c6ca048ff97cec1f94"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-371939e2db25a3479f2b",
+        "RR:SRC-R-5b99f7b0552635aaf679"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-a391a0e59ebf9788755a"
+      ],
+      "ledger_id": "L-02",
+      "paper_id": "10.1038/s41467-024-53372-5",
+      "residual_summary": "The final introduction replaces the criticized preconception framing with a mobility, injection, and switching-speed explanation.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-dba91a744d138e719bb1"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-57705979661fb0145bbb",
+        "RR:SRC-R-b0b4d2959a9ec06ddfcd"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-2e9598497e4487feb1fc",
+        "P:S-2b5f79438fd5f5b3ee9a"
+      ],
+      "ledger_id": "L-03",
+      "paper_id": "10.1038/s41467-024-53372-5",
+      "residual_summary": "The Fig. 2 device and THz-beam annotations are identified in the final caption and figure text.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-94ed0bbb47729482bbf1",
+        "RR:SRC-R-f2951c99c055c37d9fe6"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-e890000b2933946adeaf"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-6b6700711d8cccbbf1d4",
+        "P:S-2e9598497e4487feb1fc"
+      ],
+      "ledger_id": "L-04",
+      "paper_id": "10.1038/s41467-024-53372-5",
+      "residual_summary": "The final manuscript uses metasurface and metadevice architecture terminology consistently enough to resolve the terminology request.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-176ee7009b5516b4618d"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-d40483049bca83c0726d"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-2b6d70bba802e0450866"
+      ],
+      "ledger_id": "L-05",
+      "paper_id": "10.1038/s41467-024-53372-5",
+      "residual_summary": "The final text explains the three-terminal OECT and grounded two-electrode configurations and connects them to the reported measurements.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-1e5abd919f0fc80ebf02"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

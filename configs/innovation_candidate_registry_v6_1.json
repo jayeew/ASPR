@@ -297,7 +297,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6_1.low_frequency_pair_share",
+      "implementation_name": "gear.nature_multihorizon.features_v6_1.low_frequency_pair_share",
       "knowledge_unit": "unordered cited-source pair",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "thresholded_pair_rarity",
@@ -360,7 +360,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6_1.source_pair_mean_surprisal",
+      "implementation_name": "gear.nature_multihorizon.features_v6_1.source_pair_mean_surprisal",
       "knowledge_unit": "unordered cited-source pair",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "commonness_mean",
@@ -419,7 +419,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6.novelty_u",
+      "implementation_name": "gear.nature_multihorizon.features_v6.novelty_u",
       "knowledge_unit": "unordered cited-source pair",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "commonness_lower_tail",
@@ -485,7 +485,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6_1.reference_overlap_novelty",
+      "implementation_name": "gear.nature_multihorizon.features_v6_1.reference_overlap_novelty",
       "knowledge_unit": "focal reference set versus prior same-domain papers sharing at least one reference",
       "local_computability": "F2_local_snapshot",
       "mathematical_family": "prior_reference_overlap_mean",
@@ -677,7 +677,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6_1.hypergeometric_pair_z_scores",
+      "implementation_name": "gear.nature_multihorizon.features_v6_1.hypergeometric_pair_z_scores",
       "knowledge_unit": "unordered cited-source pair across strictly prior papers",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "exact_hypergeometric_z_centre",
@@ -744,7 +744,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6_1.hypergeometric_pair_z_scores",
+      "implementation_name": "gear.nature_multihorizon.features_v6_1.hypergeometric_pair_z_scores",
       "knowledge_unit": "unordered cited-source pair across strictly prior papers",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "exact_hypergeometric_z_left_tail",
@@ -872,7 +872,7 @@
         "I8": false,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6.uzzi_conventionality_from_marginals",
+      "implementation_name": "gear.nature_multihorizon.features_v6.uzzi_conventionality_from_marginals",
       "knowledge_unit": "unordered cited-source pair",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "z_distribution_centre",
@@ -998,7 +998,7 @@
         "I8": false,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6.uzzi_atypicality_from_marginals",
+      "implementation_name": "gear.nature_multihorizon.features_v6.uzzi_atypicality_from_marginals",
       "knowledge_unit": "unordered cited-source pair",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "z_distribution_left_tail",
@@ -1127,7 +1127,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6_1.first_time_pair_any",
+      "implementation_name": "gear.nature_multihorizon.features_v6_1.first_time_pair_any",
       "knowledge_unit": "unordered cited-source pair",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "first_pair_incidence",
@@ -1189,7 +1189,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6_1.first_time_pair_count",
+      "implementation_name": "gear.nature_multihorizon.features_v6_1.first_time_pair_count",
       "knowledge_unit": "unordered cited-source pair",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "first_pair_incidence",
@@ -1250,7 +1250,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6.first_time_source_pair_distance_mean",
+      "implementation_name": "gear.nature_multihorizon.features_v6.first_time_source_pair_distance_mean",
       "knowledge_unit": "first-time cited-source pair",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "distance_weighted_first_pairs",
@@ -1315,7 +1315,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6_1.first_time_pair_distance_sum",
+      "implementation_name": "gear.nature_multihorizon.features_v6_1.first_time_pair_distance_sum",
       "knowledge_unit": "first-time cited-source pair",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "distance_weighted_first_pairs",
@@ -1380,7 +1380,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6.first_time_source_pair_share",
+      "implementation_name": "gear.nature_multihorizon.features_v6.first_time_source_pair_share",
       "knowledge_unit": "unordered cited-source pair",
       "local_computability": "F0_existing",
       "mathematical_family": "first_pair_incidence",
@@ -1628,7 +1628,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_gini_balance",
+      "implementation_name": "gear.nature_multihorizon.features_v6_1.field_gini_balance",
       "knowledge_unit": "reference-field share distribution",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "category_balance",
@@ -1692,7 +1692,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_gini_simpson",
+      "implementation_name": "gear.nature_multihorizon.features_v6_1.field_gini_simpson",
       "knowledge_unit": "reference-field share distribution",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "category_balance",
@@ -1753,7 +1753,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_hhi",
+      "implementation_name": "gear.nature_multihorizon.features_v6_1.field_hhi",
       "knowledge_unit": "reference-field share distribution",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "category_balance",
@@ -1812,7 +1812,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_hill_number",
+      "implementation_name": "gear.nature_multihorizon.features_v6_1.field_hill_number",
       "knowledge_unit": "reference-field share distribution",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "hill_effective_categories",
@@ -1873,7 +1873,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_hill_number",
+      "implementation_name": "gear.nature_multihorizon.features_v6_1.field_hill_number",
       "knowledge_unit": "reference-field share distribution",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "hill_effective_categories",
@@ -1934,7 +1934,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_hill_number",
+      "implementation_name": "gear.nature_multihorizon.features_v6_1.field_hill_number",
       "knowledge_unit": "reference-field share distribution",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "hill_effective_categories",
@@ -1995,7 +1995,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_other_field_share",
+      "implementation_name": "gear.nature_multihorizon.features_v6_1.field_other_field_share",
       "knowledge_unit": "reference field relative to focal field",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "focal_field_breadth",
@@ -2059,7 +2059,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6.field_pielou_evenness",
+      "implementation_name": "gear.nature_multihorizon.features_v6.field_pielou_evenness",
       "knowledge_unit": "reference-field share distribution",
       "local_computability": "F0_existing",
       "mathematical_family": "category_balance",
@@ -2122,7 +2122,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_relative_variety",
+      "implementation_name": "gear.nature_multihorizon.features_v6_1.field_relative_variety",
       "knowledge_unit": "reference field",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "category_variety",
@@ -2183,7 +2183,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_shannon_entropy",
+      "implementation_name": "gear.nature_multihorizon.features_v6_1.field_shannon_entropy",
       "knowledge_unit": "reference-field share distribution",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "category_balance",
@@ -2247,7 +2247,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6.field_variety",
+      "implementation_name": "gear.nature_multihorizon.features_v6.field_variety",
       "knowledge_unit": "reference field",
       "local_computability": "F0_existing",
       "mathematical_family": "category_variety",
@@ -2373,7 +2373,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6_1.div_index",
+      "implementation_name": "gear.nature_multihorizon.features_v6_1.div_index",
       "knowledge_unit": "reference-field distribution and distance",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "multiplicative_div_composite",
@@ -2689,7 +2689,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_distance_quantile",
+      "implementation_name": "gear.nature_multihorizon.features_v6_1.field_distance_quantile",
       "knowledge_unit": "distinct occupied reference-field pair",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "unweighted_field_distance",
@@ -2750,7 +2750,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6.field_disparity_mean",
+      "implementation_name": "gear.nature_multihorizon.features_v6.field_disparity_mean",
       "knowledge_unit": "distinct occupied reference-field pair",
       "local_computability": "F0_existing",
       "mathematical_family": "unweighted_field_distance",
@@ -2875,7 +2875,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6_1.field_distance_quantile",
+      "implementation_name": "gear.nature_multihorizon.features_v6_1.field_distance_quantile",
       "knowledge_unit": "distinct occupied reference-field pair",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "unweighted_field_distance",
@@ -2998,7 +2998,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6.rao_stirling_integration",
+      "implementation_name": "gear.nature_multihorizon.features_v6.rao_stirling_integration",
       "knowledge_unit": "reference-field share and pair distance",
       "local_computability": "F0_existing",
       "mathematical_family": "share_weighted_integration_composite",
@@ -3129,7 +3129,7 @@
         "I8": true,
         "I9": true
       },
-      "implementation_name": "aspr.nature_multihorizon.features_v6_1.true_diversity_from_rao",
+      "implementation_name": "gear.nature_multihorizon.features_v6_1.true_diversity_from_rao",
       "knowledge_unit": "reference-field share and similarity",
       "local_computability": "F1_existing_tables",
       "mathematical_family": "effective_similarity_diversity",

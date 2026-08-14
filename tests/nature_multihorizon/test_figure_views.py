@@ -8,16 +8,16 @@ from unittest.mock import patch
 
 import pandas as pd
 
-from aspr.nature_multihorizon.artifact_store import hash_json
-from aspr.nature_multihorizon.contracts import AUXILIARY_FEATURES, CORE_FEATURES
-from aspr.nature_multihorizon.figure_views import (
+from gear.nature_multihorizon.artifact_store import hash_json
+from gear.nature_multihorizon.contracts import AUXILIARY_FEATURES, CORE_FEATURES
+from gear.nature_multihorizon.figure_views import (
     MECHANISM_COLUMNS,
     _claim_readiness,
     _forecast_score_view,
     _venue_family_summary,
     export_figure_views,
 )
-from aspr.nature_multihorizon.release import build_release_manifest, publish_release
+from gear.nature_multihorizon.release import build_release_manifest, publish_release
 from experiments.common.old.kg_perturbation_v2.run_figure import validate_figure_view
 from experiments.common.old.kg_perturbation_v2.renderers import _tables, render_figure
 from experiments.common.old.kg_perturbation_v2.render_all_figures import render_all

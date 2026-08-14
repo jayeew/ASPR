@@ -1,0 +1,20 @@
+序号,论文,会议,优先级,核心机制,ASPR最值得借鉴,PDF文件
+1,"Beyond Not Novel Enough: Enriching Scholarly Critique with LLM-Assisted Feedback",EACL 2026,A,"内容提取→相关工作检索→结构化比较","创新性分支主基线；把多Reviewer收敛为结构化claim比较",01_Beyond_Not_Novel_Enough_EACL2026.pdf
+2,"ReviewGrounder: Improving Review Substantiveness with Rubric-Guided Tool-Integrated Agents",ACL 2026,A,"paper-specific rubric；drafting→grounding","动态评审rubric；ASPR-Qwen意见证据化；最终grounding",02_ReviewGrounder_ACL2026.pdf
+3,"Eigen-Agent: Adaptive Multi-Agent Scientific Reasoning with Monitor-Based RAG",ICLR 2026,A,"证据缺口监控；按需RAG","Evidence-Gap Monitor；证据不足才二次检索",03_Eigen-Agent_ICLR2026.pdf
+4,"FlowSearcher: Synthesizing Memory-Guided Agentic Workflows for Web Information Seeking",ICLR 2026,B,"子目标搜索；工作流合成；层级搜索记忆","Search Strategy Memory；不同claim类型采用不同搜索策略",04_FlowSearcher_ICLR2026.pdf
+5,"IterResearch: Rethinking Long-Horizon Agents with Interaction Scaling",ICLR 2026,A,"工作区重建；evolving report memory","Review State作为唯一工作状态；避免完整对话历史累积",05_IterResearch_ICLR2026_AuthorVersion.pdf
+6,"MEM1: Learning to Synergize Memory and Reasoning for Efficient Long-Horizon Agents",ICLR 2026,B,"compact shared internal state；memory consolidation","Review State紧凑化；只保留当前决策必要信息",06_MEM1_ICLR2026.pdf
+7,"Counterfactual Reasoning for Retrieval-Augmented Generation",ICLR 2026,A,"counterfactual query；evidence arbitration","对first/突破等强创新主张进行反事实先行研究检索",07_CF-RAG_ICLR2026.pdf
+8,"Stop Wasting Your Tokens: Towards Efficient Runtime Multi-Agent Systems",ICLR 2026,A,"SupervisorAgent；按需运行时干预","Evidence Supervisor作为唯一Controller；低风险步骤不调用昂贵Agent",08_SupervisorAgent_ICLR2026_AuthorVersion.pdf
+9,"SciNet: Evaluating AI Agents in Relation-Aware Scientific Literature Retrieval",ICML 2026,A,"关系感知科学文献检索","ANTECEDENT/PARTIAL_PRECEDENT/EXTENSION/CONFLICT等关系检索",09_SciNet_ICML2026_AuthorVersion.pdf
+10,"Agentic Confidence Calibration",ICML 2026,A,"Holistic Trajectory Calibration","根据检索覆盖、冲突、重搜、稳定性、Verifier等过程信号估计置信度",10_Agentic_Confidence_Calibration_ICML2026_AuthorVersion.pdf
+11,"When Planning Fails Despite Correct Execution: On Epistemic Calibration for LLM-Based Multi-Agent Systems",ICML 2026,A,"epistemic calibration；information consistency","Evidence Stability Test；判断系统是否真的有资格下结论",11_Epistemic_Calibration_ICML2026_AuthorVersion.pdf
+12,"Graph-of-Agents: A Graph-based Framework for Multi-Agent LLM Collaboration",ICLR 2026,B,"选择相关Agent；动态通信图","Selective Expert Escalation；只在必要时调用统计/引用/方法专家",12_Graph_of_Agents_ICLR2026.pdf
+13,"CARD: Towards Conditional Design of Multi-agent Topological Structures",ICLR 2026,C,"根据环境状态改变Agent拓扑","工具/全文/图谱可用性变化时走不同条件路径",13_CARD_ICLR2026_AuthorVersion.pdf
+14,"GraphPlanner: Graph Memory-Augmented Agentic Routing for Multi-Agent LLMs",ICLR 2026,C,"模型+角色联合路由；图记忆","未来多模型版本可做Model/Expert Router；当前规则路由即可",14_GraphPlanner_ICLR2026_AuthorVersion.pdf
+15,"Multi-Agent Design: Optimizing Agents with Better Prompts and Topologies",ICLR 2026,C,"prompt和topology联合自动优化","只用于离线搜索prompt、阈值和routing策略；正式评审冻结",15_MASS_ICLR2026.pdf
+16,"Agent Primitives: Reusable Latent Building Blocks for Multi-Agent Systems",ICML 2026,B,"角色Agent→可复用计算原语","把ASPR改成EXTRACT/RETRIEVE/COMPARE/CRITIQUE/VERIFY/COMPOSE原语系统",16_Agent_Primitives_ICML2026_AuthorVersion.pdf
+17,"Failure is Feedback: History-Aware Backtracking for Agentic Traversal in Multimodal Graphs",ICML 2026,B,"失败历史驱动回溯；成本感知升级","二次检索利用第一次失败原因而不是从零开始",17_Failure_is_Feedback_ICML2026_AuthorVersion.pdf
+18,"ResearchRubrics: A Benchmark of Prompts and Rubrics For Evaluating Deep Research Agents",ICLR 2026,B,"细粒度专家rubric评估","Paper-specific Review Rubric与Verifier检查表",18_ResearchRubrics_ICLR2026_AuthorVersion.pdf
+19,"HieraMAS: Optimizing Intra-Node LLM Mixtures and Inter-Node Topology for Multi-Agent Systems",ICML 2026,C,"supernode；heterogeneous LLM propose-synthesis","只对first/breakthrough等高风险claim启用双模型交叉确认",19_HieraMAS_ICML2026_AuthorVersion.pdf

@@ -19,14 +19,14 @@ PROJECT_ROOT = HERE.parents[3]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from aspr.nature_multihorizon.active_dataset import load_active_dataset
-from aspr.nature_multihorizon.modeling_v6 import (
+from gear.nature_multihorizon.active_dataset import load_active_dataset
+from gear.nature_multihorizon.modeling_v6 import (
     _fit_calibrators,
     _fit_two_part,
     _inner_oof_for_parameters,
     safe_spearman,
 )
-from aspr.nature_multihorizon.modeling_v6_1 import (
+from gear.nature_multihorizon.modeling_v6_1 import (
     assemble_all_period_frame,
     run_fixed_medium_oof,
 )

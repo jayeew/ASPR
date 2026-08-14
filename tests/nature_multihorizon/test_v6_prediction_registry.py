@@ -9,23 +9,23 @@ import pandas as pd
 import pytest
 from pydantic import ValidationError
 
-from aspr.nature_multihorizon.evidence_registry import load_evidence_registry
-from aspr.nature_multihorizon.evidence_selection_v6 import (
+from gear.nature_multihorizon.evidence_registry import load_evidence_registry
+from gear.nature_multihorizon.evidence_selection_v6 import (
     SelectionDecision,
     audit_registry_source_selection,
     load_evidence_selection_protocol,
 )
-from aspr.nature_multihorizon.prediction_features_v6 import (
+from gear.nature_multihorizon.prediction_features_v6 import (
     build_bibliographic_opportunity_features,
     build_registered_control_features,
 )
-from aspr.nature_multihorizon.prediction_registry_v6 import (
+from gear.nature_multihorizon.prediction_registry_v6 import (
     PredictionRegistry,
     PredictionRole,
     audit_prediction_registry_implementations,
     load_prediction_registry,
 )
-from aspr.nature_multihorizon.targets_v6 import (
+from gear.nature_multihorizon.targets_v6 import (
     FoldLocalDiffusionTargetTransformer,
 )
 

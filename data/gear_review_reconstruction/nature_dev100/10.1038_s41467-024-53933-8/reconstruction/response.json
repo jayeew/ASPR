@@ -1,0 +1,467 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:8385316f4d4b11dc7eecdbf8d793e5ffed17f7bb5ffa4be1b71b5e7e08eb6c80",
+  "input_sha256": "sha256:253d439723faa6fb6cce95c427f684d46b9d60c26cf45f31bb3179e0dd8edae9",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:e7441e627c7a8b6b5d58ffd81ad1d0049807e55a45caf9ceb43136fe778a76b7",
+  "package_id": "RSP-45f647744d5f1d03a994",
+  "paper_id": "10.1038/s41467-024-53933-8",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-53933-8",
+      "point_id": "ST-1",
+      "rationale": "Reviewer reports identify the integrated clinical-isolate, genetic, transcriptomic, oxidative-stress, DNA-damage, and metabolic analyses as the contribution; the final paper documents the corresponding mechanistic framework.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-bb024f684c6ad927",
+        "REV-e8c1676aea49b9a1"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8cfd48d619e09c98ca11",
+        "RR:SRC-R-d5da1b6dffbb4915ac5f"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-ST-1"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-53933-8",
+      "point_id": "ST-2",
+      "rationale": "Reviewer reports specifically connect enhanced ROS formation and oxidative cellular damage to the observed phenotype; the final paper provides the final experimental description and assay evidence.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-e8c1676aea49b9a1"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8cfd48d619e09c98ca11"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-ST-2"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-53933-8",
+      "point_id": "NOV-1",
+      "rationale": "Reviewer reports characterize the work as extending prior observations by connecting KatG deficiency with several mechanistic routes to BDQ susceptibility; the final paper presents that multi-mechanism contribution.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-e8c1676aea49b9a1"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-463129545f8d5ed14fe0",
+        "RR:SRC-R-58635fcfbb5c897e6570"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-NOV-1"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-53933-8",
+      "point_id": "NOV-2",
+      "rationale": "Reviewer 2 identified overlap between the initial susceptibility section and prior work. The final discussion acknowledges related preceding observations while framing the present work as a mechanistic investigation, leaving the novelty limit material.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-25561b4f788c3441"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-6baaf3d44ea9dbc676dc"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-NOV-2"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-2774b76fea8f41ce4868",
+        "RR:SRC-R-37b7f2605e48c777adb4"
+      ],
+      "paper_id": "10.1038/s41467-024-53933-8",
+      "point_id": "WK-1",
+      "rationale": "The revised paper explains random selection and adds clinical-strain data, but its final evidence still uses a small validation set and reports one biological replicate for most clinical strains; the clinical-effect and statistical concerns therefore remain partly unresolved.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-25561b4f788c3441",
+        "REV-bb024f684c6ad927"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-82f543b546d202bd074c",
+        "RR:SRC-R-1f16759e812a14fcfe28"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-WK-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f882aefadbe640dafec0",
+        "RR:SRC-R-93fc45436b0806b4fc68"
+      ],
+      "paper_id": "10.1038/s41467-024-53933-8",
+      "point_id": "WK-2",
+      "rationale": "The response added a discussion of lineage-associated resistance mutations, but the final paper explicitly states that non-KatG resistance and lineage-specific mechanisms were not directly studied. The causal generalization across clinical INH-resistant populations remains partial.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-25561b4f788c3441",
+        "REV-bb024f684c6ad927"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-3ed61627828de9bd1bd8",
+        "RR:SRC-R-16d2e21ee736a39e9226"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-WK-2"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-b385762bc617f4973613",
+        "RR:SRC-R-09e5c1273e5d78f5a9f7"
+      ],
+      "paper_id": "10.1038/s41467-024-53933-8",
+      "point_id": "WK-3",
+      "rationale": "The response clarifies that BacTiter-Glo and OD600 report different endpoints and narrows the transcription-factor claim. The final discussion nevertheless states that not all induced programs sensitized cells and treats the multicomponent mechanism as speculative, so individual causal contributions remain partly resolved.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-25561b4f788c3441",
+        "REV-bb024f684c6ad927"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-1383de145d780c254389",
+        "RR:SRC-R-859bcff0a12e7f314454",
+        "RR:SRC-R-de1d5619053e7760ab93"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-WK-3"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f882aefadbe640dafec0",
+        "RR:SRC-R-93fc45436b0806b4fc68"
+      ],
+      "paper_id": "10.1038/s41467-024-53933-8",
+      "point_id": "Q-1",
+      "rationale": "The reviewer asked whether lineage-specific INH-resistance mechanisms alter BDQ susceptibility. The final paper discusses the issue but states that those effects remain to be investigated.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-bb024f684c6ad927"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-16d2e21ee736a39e9226"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-Q-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-5c83216cf5ed7c22449b",
+        "RR:SRC-R-76431f0d20bb6fd7d953"
+      ],
+      "paper_id": "10.1038/s41467-024-53933-8",
+      "point_id": "Q-2",
+      "rationale": "The response offers saturation as a possible explanation for the lack of additional TMP–SMX sensitivity. The final paper retains this as a possibility and reports discordant MDR versus non-MDR antifolate results, leaving the mechanism unresolved.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-bb024f684c6ad927",
+        "REV-e8c1676aea49b9a1"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-123d68c65d173ff56257",
+        "RR:SRC-R-a0e3290b8528d179b148"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-Q-2"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-de2148bb3b54c5e2cae6"
+      ],
+      "paper_id": "10.1038/s41467-024-53933-8",
+      "point_id": null,
+      "rationale": "Figure-reference inaccuracies were reported in round 1 and stated to have been corrected in the response; this is retained solely as a resolved audit item.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-bb024f684c6ad927",
+        "REV-e8c1676aea49b9a1"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8a902b210eac89799764",
+        "RR:SRC-R-5b84ac632934807aaace"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-AUD-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-7fc43542dd099ff5b56e"
+      ],
+      "paper_id": "10.1038/s41467-024-53933-8",
+      "point_id": null,
+      "rationale": "The requested katG complementation experiment was added and the final paper reports complementation-based evidence; this is retained solely as a resolved audit item.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-e8c1676aea49b9a1"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-bded130478592bdc20a4"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-AUD-2"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-1e05b8a0721517421168",
+        "RR:SRC-R-9f0fbf3b54f0a59229dd"
+      ],
+      "paper_id": "10.1038/s41467-024-53933-8",
+      "point_id": null,
+      "rationale": "Concerns about the use of “synergy” were addressed by revising the terminology; this is retained solely as a resolved audit item.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-25561b4f788c3441",
+        "REV-e8c1676aea49b9a1"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-b36fb341b0c24cb3e37e",
+        "RR:SRC-R-ab5c38e7a3f1f7434d81"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-AUD-3"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-695ceb4b5d2ca032123d"
+          ],
+          "external_verification_required": true,
+          "point_id": "NOV-2",
+          "schema_version": "aspr_gear",
+          "severity": "minor",
+          "suggested_action": "Explicit delimitation of the mechanistic advance beyond prior susceptibility observations.",
+          "text": "The first clinical-susceptibility section has a novelty limit because related observations were already reported; the distinct contribution is the proposed mechanistic basis rather than the existence of the association alone."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-612da27c75d6387a0a4a",
+            "P:S-695ceb4b5d2ca032123d"
+          ],
+          "external_verification_required": true,
+          "point_id": "NOV-1",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "No action.",
+          "text": "The contribution links clinical BDQ susceptibility with catalase deficiency through multiple experimentally examined physiological mechanisms, including ROS, DNA damage, transcriptional remodeling, and folate metabolism."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-024-53933-8",
+    "questions": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-44ce354dcd51cd0a0b33",
+          "P:S-4ed2c3fada40d8ab3f9f"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Genotype- and lineage-stratified clinical-isolate analysis.",
+        "text": "How consistently does the BDQ-susceptibility association hold across inhA-associated resistance, katG variants, and Mtb lineages?"
+      },
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-695550efc6aa10f45cb1",
+          "P:S-25652969a2579c739926"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-2",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Direct testing of the proposed antifolate mechanism in MDR clinical strains.",
+        "text": "What mechanism explains the absence of additional TMP–SMX sensitization and the lack of TMP/SMX sensitization in MDR clinical strains despite the proposed folate-biosynthesis vulnerability?"
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "contribution",
+        "evidence_keys": [
+          "P:S-612da27c75d6387a0a4a",
+          "P:S-695ceb4b5d2ca032123d"
+        ],
+        "external_verification_required": false,
+        "point_id": "ST-1",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "No action.",
+        "text": "The study combines population-scale clinical-isolate observations with targeted genetic and systems-level experiments to examine why catalase-deficient, drug-resistant Mtb can be more susceptible to BDQ."
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-47fc50db69e470fc9b79",
+          "P:S-fb9fc58efc16c6252a00"
+        ],
+        "external_verification_required": false,
+        "point_id": "ST-2",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "No action.",
+        "text": "Orthogonal measurements of ROS-associated oxidative damage connect increased CellROX signal with protein carbonylation and deoxyguanosine oxidation in the catalase-deficient background."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-612da27c75d6387a0a4a",
+        "P:S-695ceb4b5d2ca032123d"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "The review identifies a mechanistic study of BDQ hyper-susceptibility in drug-resistant Mtb that integrates clinical-isolate patterns with catalase-deficiency models, oxidative-stress and DNA-damage measurements, transcriptional analyses, and folate-pathway experiments. The final paper supports a multi-factor explanation while retaining uncertainty about generalization across clinical resistance genotypes and the contribution of individual mechanisms."
+    },
+    "weaknesses": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-5f536058f1362f517009",
+          "P:S-47fc50db69e470fc9b79",
+          "P:S-4ed2c3fada40d8ab3f9f"
+        ],
+        "external_verification_required": false,
+        "point_id": "WK-1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Larger, independently replicated clinical-isolate validation with explicit outcome statistics.",
+        "text": "The clinical validation remains limited by the small TDR-TB comparison set and by single biological replicates for most clinical strains; the final paper also describes the population-level MIC shift as modest and its clinical impact as unclear."
+      },
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-44ce354dcd51cd0a0b33",
+          "P:S-4ed2c3fada40d8ab3f9f"
+        ],
+        "external_verification_required": false,
+        "point_id": "WK-2",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Direct testing across non-KatG resistance mechanisms and lineages.",
+        "text": "The central causal framing is narrower than the broad INH-resistant/MDR clinical interpretation: the final paper focuses on catalase-deficiency models and acknowledges that inhA-associated resistance and lineage-specific physiology were not directly resolved."
+      },
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-eddce74e36b3c3a6efe2",
+          "P:S-0887f1d79c006eb7551b"
+        ],
+        "external_verification_required": false,
+        "point_id": "WK-3",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Quantitative separation of the contributions from individual transcriptional and metabolic changes.",
+        "text": "The transcriptional mechanism remains associative. ATP-production and growth assays give non-identical results, and the final discussion notes that not all induced transcriptional programs increase BDQ sensitivity, supporting a multicomponent but incompletely resolved explanation."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-de2148bb3b54c5e2cae6"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-85db8c840d42cac3eef7"
+      ],
+      "ledger_id": "LED-1",
+      "paper_id": "10.1038/s41467-024-53933-8",
+      "residual_summary": "Figure-reference errors were reported as corrected; no retained final-state point.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8a902b210eac89799764",
+        "RR:SRC-R-5b84ac632934807aaace"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-7fc43542dd099ff5b56e"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-3c73e45b0229e42b6ac0",
+        "P:S-47fc50db69e470fc9b79"
+      ],
+      "ledger_id": "LED-2",
+      "paper_id": "10.1038/s41467-024-53933-8",
+      "residual_summary": "katG complementation was added and documented; no retained final-state point.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-bded130478592bdc20a4"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-1e05b8a0721517421168",
+        "RR:SRC-R-9f0fbf3b54f0a59229dd"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-ef1da9765b42b7327886"
+      ],
+      "ledger_id": "LED-3",
+      "paper_id": "10.1038/s41467-024-53933-8",
+      "residual_summary": "Terminology concerning synergy was revised; no retained final-state point.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-b36fb341b0c24cb3e37e",
+        "RR:SRC-R-ab5c38e7a3f1f7434d81"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

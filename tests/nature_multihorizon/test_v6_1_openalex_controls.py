@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from aspr.nature_multihorizon.openalex_controls_v6_1 import (
+from gear.nature_multihorizon.openalex_controls_v6_1 import (
     build_k1_team_controls,
     extract_target_metadata,
 )

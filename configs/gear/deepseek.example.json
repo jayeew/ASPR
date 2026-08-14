@@ -1,0 +1,9 @@
+{
+  "model_backend": "openai_compatible",
+  "openai_compatible": {
+    "base_url": "https://api.deepseek.com/v1",
+    "model": "deepseek-reasoner",
+    "api_key_env": "DEEPSEEK_API_KEY",
+    "timeout_seconds": 1800
+  }
+}

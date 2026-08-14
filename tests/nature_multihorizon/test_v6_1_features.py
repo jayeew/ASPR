@@ -8,16 +8,16 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from aspr.nature_multihorizon.candidate_registry_v6_1 import (
+from gear.nature_multihorizon.candidate_registry_v6_1 import (
     load_candidate_registry_v6_1,
 )
-from aspr.nature_multihorizon.features_v6 import canonical_pair
-from aspr.nature_multihorizon.materialize_v6_1 import (
+from gear.nature_multihorizon.features_v6 import canonical_pair
+from gear.nature_multihorizon.materialize_v6_1 import (
     FIELD_TAXONOMY_SIZE,
     build_reference_overlap_features,
     materialize_reference_overlap_context,
 )
-from aspr.nature_multihorizon.features_v6_1 import (
+from gear.nature_multihorizon.features_v6_1 import (
     div_index,
     field_distance_quantile,
     field_gini_balance,
@@ -36,7 +36,7 @@ from aspr.nature_multihorizon.features_v6_1 import (
     source_pair_mean_surprisal,
     true_diversity_from_rao,
 )
-from aspr.nature_multihorizon.screening_v6_1 import coverage_audit
+from gear.nature_multihorizon.screening_v6_1 import coverage_audit
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]

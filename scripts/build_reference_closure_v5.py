@@ -14,7 +14,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from aspr.env import getenv  # noqa: E402
+from gear.env import getenv  # noqa: E402
 from scripts.build_openalex_v3_citation_graph import OpenAlexClient, split_api_keys  # noqa: E402
 from scripts.nature_portfolio_v5 import (  # noqa: E402
     DEFAULT_V5_OUTPUT_DIR,

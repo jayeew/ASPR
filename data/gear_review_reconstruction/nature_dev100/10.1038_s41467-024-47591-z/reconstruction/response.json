@@ -1,0 +1,519 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:511136c6108e6c1648535c1ba731a7421f10ee40c26a1e8c7f33ee5838e323cf",
+  "input_sha256": "sha256:670aee09a06c8e2f2afdb0ebd03e5e96908d52453a76c8792b11ad7d86ecf676",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:9ef02ed1929e980d1c4e46b38b757fd61b084551415384ddd075fbf29df486b1",
+  "package_id": "RSP-558340cf4c782a07a3cb",
+  "paper_id": "10.1038/s41467-024-47591-z",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-47591-z",
+      "point_id": "N-1",
+      "rationale": "The reviewer identified the P-doped NiAl oxide system as novel; the final paper specifies the spatially separated P/O donor and Ni acceptor FLP configuration and its sulfur-free hydrotreating application.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-174c6a4845f8d5d6"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-23950266b56743281881"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-13463e02d3761e40fe99",
+        "RR:SRC-R-a4249e5ca0d69abc336e"
+      ],
+      "paper_id": "10.1038/s41467-024-47591-z",
+      "point_id": "N-2",
+      "rationale": "The reviewer questioned whether a P-containing alternative could avoid a P-maintenance problem. The final paper reports no obvious P loss during 500 h, but also documents formation of large Ni nanoparticles, leaving the longer-term practical distinction from replenished sulfided catalysts only partly established.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-0be8df4ad25ba73e"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-5aa9e7df0edf842381a8"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-2"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-47591-z",
+      "point_id": "S-1",
+      "rationale": "The reviewer highlighted sulfur-free, long time-on-stream testing and broad oil-substrate evaluation. The final paper reports stable 500 h methyl-laurate performance and 500 h soybean-oil conversion with high diesel-range selectivity.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-174c6a4845f8d5d6"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-23950266b56743281881"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-S-1"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-47591-z",
+      "point_id": "S-2",
+      "rationale": "The reviewer described a broad characterization suite supporting the proposed P–O–Ni frustrated Lewis-pair origin. The final paper reports phase-sensitive XRD/XPS/XAFS evidence and a DFT H2-activation pathway for the proposed site.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-174c6a4845f8d5d6"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-799484c31b88e9b77e69"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-S-2"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-47591-z",
+      "point_id": "S-3",
+      "rationale": "The final reviewer report specifically recognized that the revised templated-versus-bulk evidence supports superior templated-catalyst performance. The final paper reports lower bulk reaction rate alongside lower porosity and surface area despite similar reported chemical characteristics.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-174c6a4845f8d5d6"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d664330decb5a3f0a8ba"
+      ],
+      "round_ids": [
+        "round_3"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-S-3"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-50c647374114d5e8df0e",
+        "RR:SRC-R-63d18e79ef023ebffddb"
+      ],
+      "paper_id": "10.1038/s41467-024-47591-z",
+      "point_id": "W-1",
+      "rationale": "The reviewer raised scalability concerns about the maize-straw-templated material, high-temperature preparation, and phosphorus source. The final paper gives an 800 °C calcination and 350 °C phosphorization procedure and demonstrates kilogram-scale bulk catalyst preparation, but not equivalent scale-up of the templated route.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-0be8df4ad25ba73e"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-5aa9e7df0edf842381a8"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-35a9d86cd80508b100d5"
+      ],
+      "paper_id": "10.1038/s41467-024-47591-z",
+      "point_id": "W-2",
+      "rationale": "The reviewer requested site-density measurements and a turnover-frequency comparison to determine whether templating changes intrinsic activity rather than only accessible surface. The final paper compares bulk and templated reaction rates and attributes their difference to porosity, surface area, mass transfer, and site accessibility, without an active-site-normalized metric.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-0be8df4ad25ba73e"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c42f42b82452689d24a5"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W-2"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-13463e02d3761e40fe99",
+        "RR:SRC-R-a4249e5ca0d69abc336e"
+      ],
+      "paper_id": "10.1038/s41467-024-47591-z",
+      "point_id": "Q-1",
+      "rationale": "The reviewer linked observed phase evolution to possible phosphorus maintenance. The final paper reports stable P levels over 500 h and assigns large spent-catalyst particles primarily to Ni, but this leaves the identity and durability of the operative FLP population at still longer times as a residual question.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-0be8df4ad25ba73e"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-5aa9e7df0edf842381a8"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-0e2ab477b9b02505093a",
+        "RR:SRC-R-30264fd8009ad14dc932"
+      ],
+      "paper_id": "10.1038/s41467-024-47591-z",
+      "point_id": null,
+      "rationale": "The presentation concern about excessive, duplicative supplementary material was addressed through reorganization and consolidation; it is retained only as an audit record.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-174c6a4845f8d5d6"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-799484c31b88e9b77e69"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-de3ee774a343600fc8d0",
+        "RR:SRC-R-176cf38266669adbc6ea"
+      ],
+      "paper_id": "10.1038/s41467-024-47591-z",
+      "point_id": null,
+      "rationale": "The request for textural properties was answered with added surface-area, pore-volume, pore-width, and density information; it is retained only as an audit record.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-174c6a4845f8d5d6"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-5aa4432b76f531404bd0"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-2"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-c89110217b24bc6dd3cb",
+        "RR:SRC-R-0e09476bf6d21fb69afe",
+        "RR:SRC-R-a678b41fa6f9fc462093",
+        "RR:SRC-R-0708ab6d03bb82ad5de2",
+        "RR:SRC-R-045f0796ae8591c689c7"
+      ],
+      "paper_id": "10.1038/s41467-024-47591-z",
+      "point_id": null,
+      "rationale": "The requested direct electronic comparisons, DFT-model clarification, charge-transfer analysis, and FLP controls were addressed in revision; the subsequent reviewer report stated that the FLP conclusions were basically supported. These are retained only as audit records.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-d4bb511745c2b0cd"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d0ea5a08f46df35b62f9",
+        "RR:SRC-R-d1af842cf11bec00fa6f",
+        "RR:SRC-R-810cad2291f9a5b355c3",
+        "RR:SRC-R-20011d49602a6a6c734a",
+        "RR:SRC-R-c01d8abce3341ca5f0f7",
+        "RR:SRC-R-c0ff5647f9cdbb143f7c"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-3"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-26e097ac99724d4f454c",
+        "RR:SRC-R-b6a0634d7fb5c23b4e30"
+      ],
+      "paper_id": "10.1038/s41467-024-47591-z",
+      "point_id": null,
+      "rationale": "The apparent conversion inconsistency was explained as a misreading of an activity-retention axis and its definition was added; it is retained only as an audit record.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-d4bb511745c2b0cd"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-29db8ec28a937d9bab6f"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-4"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-8a82a9aea4c9d6625f79",
+        "RR:SRC-R-47346c9cca052ea6e120",
+        "RR:SRC-R-21022e5a77874ee67c00",
+        "RR:SRC-R-098429668df7554a53f2"
+      ],
+      "paper_id": "10.1038/s41467-024-47591-z",
+      "point_id": null,
+      "rationale": "The request for clearer templated-versus-bulk comparison across WHSV and with defined reaction-rate calculations was addressed; the final reviewer report described the pending comparison issue as addressed. It is retained only as an audit record.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-174c6a4845f8d5d6"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e5a60c623dfc7deef845",
+        "RR:SRC-R-13ed3c356bc380080662",
+        "RR:SRC-R-e25c4fc81a244d28a365"
+      ],
+      "round_ids": [
+        "round_2",
+        "round_3"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-5"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-030b04b27ea643181780",
+            "P:S-54ecd46fb280200a1f97"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-2",
+          "schema_version": "aspr_gear",
+          "severity": "major",
+          "suggested_action": "",
+          "text": "The sulfur-free FLP concept is practically delimited by the unresolved question of whether P-containing active structures remain durable without a maintenance burden: the final paper reports no obvious P loss over 500 h but also observes large Ni nanoparticles after that operation."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-1815d1af9f99ef32bd78",
+            "P:S-8625758d16e60b015618"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-1",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "",
+          "text": "The contribution is a P-doped NiAl-oxide hydrotreating catalyst that proposes spatially separated P/O donor and Ni acceptor frustrated Lewis pairs, rather than a nickel-phosphide phase, for sulfur-free green-diesel production."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-024-47591-z",
+    "questions": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-030b04b27ea643181780",
+          "P:S-13719a726d6f6e1296f3"
+        ],
+        "external_verification_required": true,
+        "point_id": "Q-1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "",
+        "text": "What evidence can establish that the operative FLP population remains intact beyond the reported 500 h window, given the spent-catalyst Ni nanoparticle formation and the original concern about P maintenance?"
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-1815d1af9f99ef32bd78",
+          "P:S-5e8dc96df7e88cdfaad1"
+        ],
+        "external_verification_required": false,
+        "point_id": "S-1",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "",
+        "text": "The final paper provides sustained catalytic evidence under sulfur-free conditions: 500 h methyl-laurate operation and 500 h soybean-oil conversion with diesel-range hydrocarbon selectivity above 90%, alongside tests of several renewable-oil feedstocks."
+      },
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-f19acc2f8e74889dcd9c",
+          "P:S-8625758d16e60b015618",
+          "P:S-240cae5535bf3737a102"
+        ],
+        "external_verification_required": false,
+        "point_id": "S-2",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "",
+        "text": "The mechanistic case is supported by complementary structural and electronic characterization distinguishing the P-doped oxide from Ni2P, together with a specified DFT pathway for heterolytic H2 activation at the proposed FLP."
+      },
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-4d78d520a12583c6052e"
+        ],
+        "external_verification_required": false,
+        "point_id": "S-3",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "",
+        "text": "The final comparison separates a durable, kilogram-scale bulk alternative from the higher-performing templated catalyst: the paper reports similar chemical characteristics but lower bulk reaction rate and links the difference to lower porosity, surface area, and active-site accessibility."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-1815d1af9f99ef32bd78",
+        "P:S-240cae5535bf3737a102",
+        "P:S-4d78d520a12583c6052e"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "This paper develops a P-doped NiAl-oxide catalyst with proposed Ni(-O-Al)···P frustrated Lewis pairs for sulfur-free hydrotreating of renewable oils to diesel-range hydrocarbons. The final paper combines extended feedstock and stability tests, structural characterization, DFT-based H2-activation analysis, and comparison to a bulk catalyst. The record supports the specific catalytic and mechanistic contribution while retaining limits around active-site-normalized performance, templated-route scalability, and the long-term practical implications of P and phase stability."
+    },
+    "weaknesses": [
+      {
+        "aspect": "presentation_reproducibility",
+        "evidence_keys": [
+          "P:S-54ecd46fb280200a1f97",
+          "P:S-4d78d520a12583c6052e"
+        ],
+        "external_verification_required": true,
+        "point_id": "W-1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "",
+        "text": "Industrial scalability of the templated catalyst remains only partly demonstrated. The final paper specifies 800 °C calcination and NaH2PO2 phosphorization for the templated route, whereas the kilogram-scale demonstration concerns the bulk catalyst rather than the maize-straw-templated material."
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-4d78d520a12583c6052e"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-2",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "",
+        "text": "The templated-versus-bulk performance comparison remains based on catalyst-mass-normalized reaction rates and physical-property differences. Without active-site densities and turnover frequencies, it cannot establish whether the observed advantage is intrinsic to the sites or arises entirely from accessible-site and transport effects."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-0e2ab477b9b02505093a",
+        "RR:SRC-R-30264fd8009ad14dc932"
+      ],
+      "final_paper_evidence_keys": [],
+      "ledger_id": "L-A-1",
+      "paper_id": "10.1038/s41467-024-47591-z",
+      "residual_summary": "Presentation reorganization was reported as completed; no retained review point remains.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-799484c31b88e9b77e69"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-de3ee774a343600fc8d0",
+        "RR:SRC-R-176cf38266669adbc6ea"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-4fbcd14ef0b3263e7e64"
+      ],
+      "ledger_id": "L-A-2",
+      "paper_id": "10.1038/s41467-024-47591-z",
+      "residual_summary": "Textural-property information was added; no retained review point remains.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-5aa4432b76f531404bd0"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-c89110217b24bc6dd3cb",
+        "RR:SRC-R-0e09476bf6d21fb69afe",
+        "RR:SRC-R-a678b41fa6f9fc462093",
+        "RR:SRC-R-0708ab6d03bb82ad5de2",
+        "RR:SRC-R-045f0796ae8591c689c7"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-f19acc2f8e74889dcd9c",
+        "P:S-240cae5535bf3737a102",
+        "P:S-5e8dc96df7e88cdfaad1"
+      ],
+      "ledger_id": "L-A-3",
+      "paper_id": "10.1038/s41467-024-47591-z",
+      "residual_summary": "Electronic, DFT-model, charge-transfer, and FLP-control issues were treated as resolved in the later reviewer report; no retained review point remains.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d0ea5a08f46df35b62f9",
+        "RR:SRC-R-d1af842cf11bec00fa6f",
+        "RR:SRC-R-810cad2291f9a5b355c3",
+        "RR:SRC-R-20011d49602a6a6c734a",
+        "RR:SRC-R-c01d8abce3341ca5f0f7",
+        "RR:SRC-R-c0ff5647f9cdbb143f7c",
+        "RR:SRC-R-c8f2dd761b9c1c367770"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-26e097ac99724d4f454c",
+        "RR:SRC-R-b6a0634d7fb5c23b4e30"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-67d67b0852b3384fb5c8"
+      ],
+      "ledger_id": "L-A-4",
+      "paper_id": "10.1038/s41467-024-47591-z",
+      "residual_summary": "The figure-axis interpretation was clarified; no retained review point remains.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-29db8ec28a937d9bab6f"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-8a82a9aea4c9d6625f79",
+        "RR:SRC-R-47346c9cca052ea6e120",
+        "RR:SRC-R-21022e5a77874ee67c00",
+        "RR:SRC-R-098429668df7554a53f2"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-4d78d520a12583c6052e"
+      ],
+      "ledger_id": "L-A-5",
+      "paper_id": "10.1038/s41467-024-47591-z",
+      "residual_summary": "The requested operating-condition and rate comparison was added and later described as addressed; no retained review point remains for that comparison request.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e5a60c623dfc7deef845",
+        "RR:SRC-R-13ed3c356bc380080662",
+        "RR:SRC-R-e25c4fc81a244d28a365"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

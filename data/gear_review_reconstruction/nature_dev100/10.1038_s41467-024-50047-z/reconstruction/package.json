@@ -1,0 +1,1642 @@
+{
+  "author_response_spans": [],
+  "contract": "reconstruction_session_package",
+  "forbidden_conversation_hashes": [],
+  "input_sha256": "sha256:efe485e1eb05c3e5dbbe97d5097c694eee7710cada39b5bc52157d67962129a9",
+  "instructions": "Reconstruct the final-state peer review for one paper.\nUse reviewer_report spans as the only source of review opinions. Author responses may\nonly determine whether an issue was resolved; they cannot create or rewrite a review\npoint. Remove greetings, publication/acceptance recommendations, editorial decisions,\nand generic praise. Merge duplicates, preserve real reviewer disagreement, and produce\nat most 24 atomic points in StructuredReviewV2. Include contribution summary, novelty\nsupport/limits, strengths, weaknesses, and questions. Bind every retained point to at\nleast one reviewer quote key and one final PaperIR P:S-* span. Put resolved issues only\nin ReferenceTraceV2/revision_ledger. Keep partially_resolved or persists issues only\nwhen the residual is independently supported by the final paper. Unverifiable items are\naudit-only. Do not use graph signals, GEAR output, old reconstructions, ratings,\ndecisions, recommendations, or accept/reject language. Return only the completed\nReconstructionSessionResponseV2 JSON file.",
+  "package_id": "RSP-ad94cb5a90918b2aaaa0",
+  "paper_context": {
+    "claims": [
+      {
+        "claim_id": "C-4f7a02f4b7cdf7c3",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-a898b207ed44c3327a4f",
+        "schema_version": "aspr_gear",
+        "text": "The assay is performed for several loci."
+      },
+      {
+        "claim_id": "C-397c2e3d6a75bce5",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-a898b207ed44c3327a4f",
+        "schema_version": "aspr_gear",
+        "text": "In conclusion, our data supports a model with DNA moving towards spatially confined replisomes at replication."
+      },
+      {
+        "claim_id": "C-f116d2812f0253bb",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-72bdb5ca8c8cc0892bf8",
+        "schema_version": "aspr_gear",
+        "text": "The ter locus was found to make rapid transitions between the old and new poles, depending on a set of polebound proteins, namely MatP, ZapA, ZapB, and FtsK[23] ."
+      },
+      {
+        "claim_id": "C-f5878975e1cfc54c",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-72bdb5ca8c8cc0892bf8",
+        "schema_version": "aspr_gear",
+        "text": "This finding was corroborated by Reyes-Lamothe et al.[25] who combined their newly developed locus-labeling method[15] with fluorescently labeled single-stranded > 1Dept."
+      },
+      {
+        "claim_id": "C-6f0d1fcb8868715b",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-42a0729ee9e574395343",
+        "schema_version": "aspr_gear",
+        "text": "We measured the short-time-scale movement of oriC over the cell cycle and observed a decrease at replication initiation."
+      },
+      {
+        "claim_id": "C-89129ec315f07c43",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-42a0729ee9e574395343",
+        "schema_version": "aspr_gear",
+        "text": "A similar behavior was observed for loci further away from oriC; the decrease in short-time-scale movement occurred when the loci were colocalized with the confined replisome."
+      },
+      {
+        "claim_id": "C-2290914bf24223b9",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-606af8d9298668a604ef",
+        "schema_version": "aspr_gear",
+        "text": "The appearance of new replisome foci in these positions has previously been shown to represent replication initiation[18][,][27][,][28] ."
+      },
+      {
+        "claim_id": "C-9cea2a5c83a35eb3",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-606af8d9298668a604ef",
+        "schema_version": "aspr_gear",
+        "text": "Note that after cell division, the old cell middle equals the new cell pole (Fig."
+      },
+      {
+        "claim_id": "C-f7bdd15f634ba7a4",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-92662f79a4c3066c1fe9",
+        "schema_version": "aspr_gear",
+        "text": "**----- Start of picture text -----**<br> a b<br>0.4<br>Dynamic Heterogeneity Static Heterogeneity Initiation near new pole,long axis<br>Initiation near new pole,short axis<br>0.35 Initiation near old pole,long axis<br>Initiation near old pole,short axis<br>√2 × Std.of location distribution,long axis: 0.27 μm<br>0.3 √2 × Std.of location distribution,short axis: 0.17 μm<br>0.25<br>+ + 0.2<br>0.15<br>0.1<br>+ + 0.05 0 5 10 15 20<br>Time relative to replication initiation (min)<br>c<br>0.7<br>Initiation near new pole,long axis<br>Initiation near new pole,short axis<br>0.6 Initiation near old pole,long axis<br>Initiation near old pole,short axis<br>= = √2 × Std.of location distribution,long axis: 0.36 μm<br>0.5 √2 × Std.of location distribution,short axis: 0.24 μm<br>0.4<br>0.3<br>0.2<br>0.1<br>Time Time<br>0 5 10 15 20<br>Time relative to replication initiation (min)<br>(μm)<br>displacement<br>squared<br>mean<br>Root<br>(μm)<br>displacement<br>squared<br>mean<br>RMSD RMSD<br>Root<br>**----- End of picture text -----**<br>"
+      },
+      {
+        "claim_id": "C-33b16eeecd7001a6",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-760485d89f7bb6362f77",
+        "schema_version": "aspr_gear",
+        "text": "## Replication of a locus coincides with a decrease in its short-timescale movement To further characterize the short-time-scale movement of the oriCproximal locus and the replisome, we extended the time-lapse imaging used in Fig."
+      },
+      {
+        "claim_id": "C-1bc8827cdd40ea96",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-a7f54e10b909dfa6a42c",
+        "schema_version": "aspr_gear",
+        "text": "Foci tracking was performed using the u-track[33] algorithm."
+      },
+      {
+        "claim_id": "C-a6436c199315b99e",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-a7f54e10b909dfa6a42c",
+        "schema_version": "aspr_gear",
+        "text": "If the decrease in oriC displacements and the replisome-oriC distance minimum are due to the replication fork passing the locus, we should see a corresponding pattern for other chromosomal loci at well-defined times after initiation."
+      }
+    ],
+    "contract": "reconstruction_paper_context",
+    "paper_id": "10.1038/s41467-024-50047-z",
+    "paper_sha256": "sha256:37e27aafa7ded44a62986d96d9fad52fe65194f0ed40bed5a0a6383cfd586712",
+    "schema_version": "aspr_gear",
+    "spans": [
+      {
+        "evidence_key": "P:S-46bcd6a5dd7350fbf823",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-46bcd6a5dd7350fbf823",
+        "text": "https://doi.org/10.1038/s41467-024-50047-z \n\n**==> picture [523 x 31] intentionally omitted <==**",
+        "text_sha256": "sha256:cdc4c5dafa77d9632d9deb763e21cad6be19ff229ff9f9080ed477495503c353"
+      },
+      {
+        "evidence_key": "P:S-a898b207ed44c3327a4f",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a898b207ed44c3327a4f",
+        "text": "## Article \n\n## The Escherichia coli chromosome moves to the replisome \n\nReceived: 21 September 2023 Konrad Gras[1] , David Fange 1 & Johan Elf 1 Accepted: 28 June 2024 In Escherichia coli, it is debated whether the two replisomes move independently along the two chromosome arms during replication or if they remain Check for updates spatially confined. Here, we use high-throughput fluorescence microscopy to simultaneously determine the location and short-time-scale (1 s) movement of the replisome and a chromosomal locus throughout the cell cycle. The assay is performed for several loci. We find that (i) the two replisomes are confined to a region of ~250 nm and ~120 nm along the cell’s long and short axis, respectively, (ii) the chromosomal loci move to and through this region sequentially based on their distance from the origin of replication, and (iii) when a locus is being replicated, its short time-scale movement slows down. This behavior is the same at different growth rates. In conclusion, our data supports a model with DNA moving towards spatially confined replisomes at replication. \n\nBacterial chromosome organization is influenced by various essential processes, including DNA replication, segregation, and gene expression. In Escherichia coli, the chromosome is compacted, with coiled loops extending from an axial core[1][,][2] , forming a bottle-brush-like structure[3] along the long axis of the cell. While being highly coiled to fit into the bacterial cell, chromosomal DNA has to be replicated and segregated before cell division to ensure propagation.",
+        "text_sha256": "sha256:3f88ce4cc468fa3e7ccda58fc4944d290ee3180847f8b1084d385b3b3b401a65"
+      },
+      {
+        "evidence_key": "P:S-71f64aceb327287b6a64",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-71f64aceb327287b6a64",
+        "text": "The protein complex responsible for replicating DNA, the replisome[4][,][5] , initiates replication at the origin of replication, oriC, and replicates the circular chromosome sequence bidirectionally towards the terminus region, ter. Contrary to the consensus view of the order in which the DNA sequence of the E. coli chromosome is replicated, the spatial aspects of this process have been debated for almost 30 years. The starting point is usually set to 1998, when Lemon & Grossman[6] observed that GFPlabeled subunits of the replisome in Bacillus subtilis were found in welldefined regions rather than shifting positions throughout the cell cycle. Based on this, they suggested that the bacterial chromosome is moving through the spatially confined replisomes while it is being replicated. Similar observations of spatially confined replisomes were later made in other bacteria using different replisome markers[7][,][8] . However, reports of rapidly segregating replisomes were also presented[9][,][10] . \n\nDuring the same time period, large efforts were made to characterize the E. coli chromosome dynamics. Initially, this primarily relied on FISH to different loci[11][–][13] in fixed cells. Later, methods using \n\nthe binding of fluorescent proteins to specific DNA sequences were developed[14][,][15] , which also allowed for the tracking of loci in living cells. The ter and oriC regions were mainly found at opposite cell poles[12] . The right and left arms were either found to be on opposite sides of the cell middle[16][,][17] , or with the two chromosome arms aligned next to each other from pole to pole[18] , possibly depending on the growth conditions[19][,][20] .",
+        "text_sha256": "sha256:e9a00a758d8d9115302747f29554c9f8b6a1a3ea35880118a26bef2acdd79e6e"
+      },
+      {
+        "evidence_key": "P:S-72bdb5ca8c8cc0892bf8",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-72bdb5ca8c8cc0892bf8",
+        "text": "Following initiation of replication, the two copies of the oriC locus were found to be spatially colocalized for extended periods[21] , a phenomenon coined sister chromosome cohesion. Cohesion was found to be dependent on Topoisomerase IV[22] and was also observed for other loci[12] . The ter locus was found to make rapid transitions between the old and new poles, depending on a set of polebound proteins, namely MatP, ZapA, ZapB, and FtsK[23] . The ter transition was also shown to be dependent on active replication[23] . Using protein-based locus markers, Javer et al.[24] characterized loci movement on the time scale of seconds and found that ter has a minimum in short-time-scale movement. \n\nUsing FISH-based loci localization together with immunofluorescently labeled replisome markers, Bates & Kleckner[12] made observations that contradict the idea of spatially confined replisomes[6] . In line with refs. 9,10, Bates & Kleckner[12] . instead found that replisomes separate after initiation, suggesting that it is the replisomes that are moving on more stationary chromosomes. This finding was corroborated by Reyes-Lamothe et al.[25] who combined their newly developed locus-labeling method[15] with fluorescently labeled single-stranded \n\n> 1Dept. of Cell and Molecular Biology, Science for Life Laboratory, Uppsala University, Uppsala, Sweden. johan.elf@icm.uu.se \n\ne-mail: david.fange@icm.uu.se; \n\nNature Communications | (2024) 15:6018 \n\n1 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-50047-z \n\nbinding protein (SSB). This study, where living E. coli cells carrying markers on chromosomal loci and replisomes in the same cells were imaged in a time-lapse manner, suggested that the replisomes move towards more stationary chromosome loci.",
+        "text_sha256": "sha256:ee01427c4b9f4af2ace9109ecf0ba8fa9fcc07f99730f0515a13caa6c32db941"
+      },
+      {
+        "evidence_key": "P:S-6f13e5e31a5367c9f72a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-6f13e5e31a5367c9f72a",
+        "text": "The view on the dynamics of the replisomes then shifted again with three publications[18][,][26][,][27] favoring Lemon & Grossman’s[6] suggestion of chromosomes moving through spatially confined replisomes. Using snapshot-based imaging with the parS/ParB system, Youngren et al.[18] found that chromosome loci split at well-defined intracellular regions. Using a strain carrying the replication fork marker SSB, they found that the replisomes form foci in the same regions where the loci split. These observations were corroborated by Cass et al.[26] who used time-lapse microscopy to track chromosome loci in single living cells over time. Also here, the chromosome loci move into a confined region in which loci splitting occurs. By tracking fluorescently labeled replisome subunits (DnaN), Mangiameli et al.[27] showed that also single replisomes stay confined within the region in which loci are expected to split. The two sister replisomes were detected either as a single fluorescent focus or occasionally split apart far enough to be observed as two fluorescent foci. Regions with confined replisomes with occasional splitting and subsequent merging of the replisome foci were also observed in refs. 28,29. \n\nThe latest publication reporting the results of simultaneous tracking of replisomes and chromosome imaging changes the perspective yet again. Using mutants with increased cell width, Japaridze et al.[30] showed that, following initiation, the two sister replisomes split into two fluorescent foci, which moved along the chromosome during replication. \n\nKnowing where replication occurs is crucial for understanding the growth-dependent organization of the E. coli chromosome. However, reconciling the different observations reviewed above is non-trivial.",
+        "text_sha256": "sha256:22ca03ff28aac6773cb5e5f975c26deb4eae61647367cac535e80c21f3a4c4b6"
+      },
+      {
+        "evidence_key": "P:S-8474a64aacbea586f018",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8474a64aacbea586f018",
+        "text": "The most direct observation of time-lapsed loci-replisome interdependent movement in wild-type-shaped cells was made by ReyesLamothe et al.[25] , with the conclusion that the replisomes trail along the DNA during replication. This was later backed up by Japaridze et al.[30] although in a cell shape very different from the wild type. At the same time, there are multiple observations that replisomes are spatially confined[27][–][29] , and chromosome loci studies[18][,][26] suggest a confined region of replication. These findings are, however, not based on the same set of cells, and differences in growth conditions between different publications make direct comparisons difficult. \n\nHere we revisited the question of how the localization of a locus is affected by replication. To do so, we performed experiments that combined (i) high-throughput cell cycle-scale time-lapse fluorescence microscopy of live E. coli cells kept in steady-state growth over long time scales[29] with (ii) dual labeling of replication and chromosome loci in the same cell[25] and (iii) short-time-scale imaging[24] . This way, we captured the movements of replisomes and chromosome loci on a short-time scale (seconds) as well as the cell-cycle time scale and measured replisome-loci distances in single cells. Since the cells were kept in steady-state growth over long periods, we could follow each cell from division to division to ensure that the distributions of locations, short-time-scale displacements, and distances were based on the same set of cells. \n\nInitially, we focused our efforts on the origin of replication, oriC, which by physical necessity colocalizes with the replisome at replication initiation.",
+        "text_sha256": "sha256:9c6e7f5d6c7582271a104a8cfc510d4c4e916ec887816e2761a5cac8cc5959a0"
+      },
+      {
+        "evidence_key": "P:S-42a0729ee9e574395343",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-42a0729ee9e574395343",
+        "text": "We measured the short-time-scale movement of oriC over the cell cycle and observed a decrease at replication initiation. A similar behavior was observed for loci further away from oriC; the decrease in short-time-scale movement occurred when the loci were colocalized with the confined replisome. Lastly, we show that the observed behavior is consistent at different growth rates. Our results strongly suggest that the chromosome moves in response to being replicated while the replisomes stay in a confined intracellular region during replication. \n\n## Results \n\n## An oriC-proximal chromosome locus shows more dynamics over the cell cycle as compared to the replisome \n\nTo investigate if the chromosome or the replisome, or both, relocate during the replication process, we constructed a strain with fluorescent labels of different colors on the replisome and an oriC-proximal chromosome locus. Initially, we focused on oriC since initiation occurs within a narrow range of cell sizes[29] , making interpretation more straightforward. We constructed an E. coli MG1655 strain with DnaN translationally fused with mCherry[31] and a YFP-based fluorescent repressor-operator system (FROS)[15] 34 kb from oriC. The FROS-based locus-labeling system included an array of 12 malO operators and constitutive expression of the gene encoding MalI-SYFP2. We grew the strain in a mother-machine-type microfluidic chip[32] , where we imaged the bacteria every minute over several hours. Cell outlines were estimated by segmentation of phase-contrast microscopy images and assembled into tracks of cell lineages. Fluorescence images of the replisome and oriC labels were acquired back-to-back (two 25-ms laser excitation pulses of different colors, <1 ms apart), every minute.",
+        "text_sha256": "sha256:ed5326105363c44cb76add3bedd334c43105075c561e1df91400b040bdac007c"
+      },
+      {
+        "evidence_key": "P:S-606af8d9298668a604ef",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-606af8d9298668a604ef",
+        "text": "The emitted fluorescence was split into different parts of a single camera chip. Replication initiation events were identified by tracking replisome foci positions using u-track[33] to find the start of a replisome trajectory[29] . \n\nTo visualize where the replisome and the oriC-proximal loci are positioned within the cells, each replisome and locus fluorescent focus was placed in a cell internal coordinate system defined by the cell outline captured using phase-contrast. The area enclosed by the cell outline is hereafter referred to as the cell area. The cells were binned based on cell area, and for each bin, we generated bi-variate distributions of the long- and short-axis intracellular positions of replisomes and oriC-proximal loci (Fig. 1). \n\nAt a cell area of ~2 µm[2] , two replisome distributions spawned around the ¼ and ¾ long-axis positions (Fig. 1, top). The appearance of new replisome foci in these positions has previously been shown to represent replication initiation[18][,][27][,][28] . Thus, each of the replisome distributions included the locations of a pair of replication forks replicating the chromosomal DNA sequence bidirectionally from oriC[25][,][28] . As expected, the average of the location distribution of the oriCproximal chromosome loci colocalized with the replisome distribution in the size span where initiation occurs (Fig. 1, bottom). During one generation, the replicated oriCs must segregate into the daughter cells. We found that the segregation of oriC spanned most of the time between two initiations. The replisome distributions, on the other hand, stayed localized at a similar average distance from the middle of the cell throughout the replication process. Note that after cell division, the old cell middle equals the new cell pole (Fig. 1).",
+        "text_sha256": "sha256:cbc1730b1ee0220cc351bd2262a93e149adc697696e69f534f5cc616704300d6"
+      },
+      {
+        "evidence_key": "P:S-43188e4c922d565e2368",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-43188e4c922d565e2368",
+        "text": "Although there were two replication forks in each of the two unimodal replisome distributions, the width, defined as the standard deviation of the location distributions, remained relatively constant along the cell-long-axis, while the width along the short axis was always smaller than that of the long-axis direction and decreased following initiation (Fig. 1, Figs. S1, S3b). This shows that the two replisomes moving bidirectionally on the chromosome stay within a volume smaller than ~125 × 125 × 200 nm ellipsoid (Figs. S1, S3b) throughout the replication process[27] . We will refer to this as the replisome region. \n\nThe size of the replisome region as seen in Fig. 1 could arise either as a result of stationary replisomes with cell-to-cell variability in replisome localization (Fig. 2a, right), or from replisomes moving around in the region (Fig. 2a, left), either individually or as pairs of bidirectionally moving replication forks. To discriminate between these two scenarios, we tracked the replisomes in individual cells for 20 minutes following the initiation event and recorded how the root mean squared displacement (RMSD) changed in time (Fig. 2b). Since the replisome distributions showed a minor net average movement away from the cell middle on the time-scale of 20 min (Fig. S4), this movement was subtracted before estimating the RMSD. We used \n\nNature Communications | (2024) 15:6018 \n\n2 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-50047-z \n\n## **a** \n\n## **Replisome (mCherry-DnaN)** \n\n**==> picture [360 x 416] intentionally omitted <==**",
+        "text_sha256": "sha256:bcb897bc080e29279e5e2f4cec9020678588fc206794827b5803283b1445b825"
+      },
+      {
+        "evidence_key": "P:S-27221acb9c10a07eb391",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-27221acb9c10a07eb391",
+        "text": "**----- Start of picture text -----**<br>\nMean Mean Mean division area<br>birth area initiation area 9<br>8<br>7<br>6<br>5<br>4<br>3<br>2<br>0.5 µm 1<br>0<br>1 1.5 2 2.5 3<br>Cell area (μm [2] )<br>1<br>0.5<br>0.5 µm<br>0<br>Birth Time Division<br>b<br>oriC -proximal locus ( malO /MalI-SYFP2)<br>Mean Mean Mean division area<br>birth area initiation area<br>10<br>9<br>8<br>7<br>6<br>5<br>4<br>3<br>2<br>1<br>1 1.5 2 2.5 3<br>Cell area (μm [2] )<br>1<br>0.5<br>0.5 µm<br>0<br>Birth Time Division<br>of foci per cell and bin × 1000<br>Nr.<br>Fluorescence intensity (a. u.)<br>of foci per cell and bin × 1000<br>Nr.<br>Fluorescence intensity (a. u.)<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:da890867565525f78040ba502451eadd8d6bc7eb8677b1251fb03158938d46ec"
+      },
+      {
+        "evidence_key": "P:S-497d5c3aa1e1453ca480",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-497d5c3aa1e1453ca480",
+        "text": "## **b** \n\n## _**oriC**_ **-proximal locus (** _**malO**_ **/MalI-SYFP2)** \n\nFig. 1 | OriC and replisome location distributions over the cell cycle. Twodimensional histograms of fluorescent foci positions along the long and short cell axis from an E. coli strain that simultaneously carries a replisome label (a mCherryDnaN) and an oriC-proximal chromosomal locus label (b malO/MalI-YFP system with an array of operator sequences introduced 34 kb from oriC). Below each twodimensional histogram is an example of a cell with the replisome and oriC labels tracked over one generation, where each image of the cell is separated by 1 minute. The color in each histogram heat map indicates the number of foci per cell and \n\nhistogram bin, where all the two-dimensional histograms use the same bin size and bin positions. The distributions of cell outlines detected in phase-contrast are shown in white. The old cell pole is always pointing up. White dashed lines indicate average birth and division sizes. Red dashed lines indicate the average replication initiation size. The average birth, division, and replication initiation sizes have been rounded to the nearest area bin edge. Magenta plus signs correspond to the mean position of the replisome distributions in the top panel. Statistics of the number of cells and fluorescent foci can be found in Supplementary Dataset 2. \n\nDnaN-YPet[29] as a replisome label for the RMSD estimation, due to its higher signal-to-background ratio compared to the mCherry-based label. The RMSDs plateau at ~0.25 µm in the cell-long-axis direction and ~0.12 µm in the cell short-axis direction.",
+        "text_sha256": "sha256:bd541ad1865768cf8736fd8ce1784ddc499162257df7d916784329b00144b3b5"
+      },
+      {
+        "evidence_key": "P:S-b30c32fe122af76e1180",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-b30c32fe122af76e1180",
+        "text": "The plateau values for both the short and long axis of the cell were similar to the expected average distance between two random positions in the replisome location distributions, suggesting that the dominating contributor to the width of the replisome region shown in Fig. 1 is replisome movements in individual cells and not cell-to-cell variation. RMSDs for the oriCproximal locus were larger as compared to the RMSDs for the replisome (Fig. 2c) as expected from the larger width of the location distributions in Fig. 1. \n\nTaken together, we find that the average position of the location distribution of the replisome moves far less over the cell cycle as compared to the average position of the location distribution of the oriC-proximal locus. Additionally, we find that the width of the location distribution is smaller for the replisome distribution than for the oriCproximal locus at all stages of the cell cycle. These localization patterns are indicative of confined replisomes and unrestrained chromosomal loci. However, they are inconclusive in terms of movements immediately before and after the initiation event, since small changes in the localization of the oriC-proximal locus are easily lost in the thermally induced short-time-scale movements of both the loci and the replisomes. \n\nNature Communications | (2024) 15:6018 \n\n3 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-50047-z \n\n**==> picture [481 x 415] intentionally omitted <==**",
+        "text_sha256": "sha256:32e943114a029c0f4f1a90bd521051f6d7350fbecc504a45fc1a636f2f88ff2b"
+      },
+      {
+        "evidence_key": "P:S-92662f79a4c3066c1fe9",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-92662f79a4c3066c1fe9",
+        "text": "**----- Start of picture text -----**<br>\na b<br>0.4<br>Dynamic Heterogeneity Static Heterogeneity Initiation near new pole,long axis<br>Initiation near new pole,short axis<br>0.35 Initiation near old pole,long axis<br>Initiation near old pole,short axis<br>√2 × Std.of location distribution,long axis: 0.27 μm<br>0.3 √2 × Std.of location distribution,short axis: 0.17 μm<br>0.25<br>+ + 0.2<br>0.15<br>0.1<br>+ + 0.05 0 5 10 15 20<br>Time relative to replication initiation (min)<br>c<br>0.7<br>Initiation near new pole,long axis<br>Initiation near new pole,short axis<br>0.6 Initiation near old pole,long axis<br>Initiation near old pole,short axis<br>= = √2 × Std.of location distribution,long axis: 0.36 μm<br>0.5 √2 × Std.of location distribution,short axis: 0.24 μm<br>0.4<br>0.3<br>0.2<br>0.1<br>Time Time<br>0 5 10 15 20<br>Time relative to replication initiation (min)<br>(μm)<br>displacement<br>squared<br>mean<br>Root<br>(μm)<br>displacement<br>squared<br>mean<br>RMSD RMSD<br>Root<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:dc418cf3d780e8f3dc572d0d91f7d00817737ad212934fe5128a51083b6cdfdf"
+      },
+      {
+        "evidence_key": "P:S-f558116ce07716843ac2",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-f558116ce07716843ac2",
+        "text": "Fig. 2 | Replisome and oriC-proximal locus RMSD following the replication initiation event. a Illustration of two scenarios that could generate the observed replisome region, either replisome movement within the region (dynamic heterogeneity) or cell-to-cell variability in replisome localization (static heterogeneity). b RMSD of the replisome label YPet-DnaN over 20 minutes relative to the replication initiation event. The trajectories were, prior to estimating the RMSD, adjusted to remove the effect of the net average movement of the replisomes (Supplementary Fig. S4). The replisome RMSD values are based on ≥457 trajectories. Blue and green dashed lines indicate √2 multiplied by the average of the standard deviations from 2D Normal distribution fitting of the replisome location distributions in area bins from 2 to 3 µm[2] in Supplementary Fig. S1. c As in (b) but for the \n\noriC-proximal locus over 20 minutes relative to the replication initiation event based on tracking of the mCherry-DnaN label in the same cells. The trajectories were, prior to estimating the RMSD, adjusted to remove the effect of the net average movement of the oriC-proximal locus. The oriC-proximal locus RMSD values are based on ≥ 20 trajectories. The blue and green dashed lines are based on 2D Normal distribution fitting of the oriC location distributions in area bins from 2 to 3 µm[2] in Supplementary Fig. S2. Error bars correspond to standard error of the mean. The experiment was performed twice. Replisome RMSD for a repeated experiment is shown in Supplementary Fig. S3. Statistics can be found in Supplementary Dataset 1.",
+        "text_sha256": "sha256:262bf904e133284a70473c349544dcf0be2cff8104325f4f8fc4de79b7b36bdc"
+      },
+      {
+        "evidence_key": "P:S-760485d89f7bb6362f77",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-760485d89f7bb6362f77",
+        "text": "## Replication of a locus coincides with a decrease in its short-timescale movement \n\nTo further characterize the short-time-scale movement of the oriCproximal locus and the replisome, we extended the time-lapse imaging used in Fig. 1 to include two oriC-replisome image pairs, acquired 1 second apart. The foci were tracked between the two frames and the 1-second displacements were estimated for both the oriC-proximal locus and the replisome. The displacements were binned based on cell size. The distributions of frame-to-frame displacement for each cell area bin for both oriC and replisomes are shown in Fig. 3a, b. Included in the figure panels are also the average cell sizes at initiation (red dashed lines) calculated as in Fig. 1. The movement that we measured as 1-second displacements will henceforth be referred to as short-time-scale \n\nmovement. We found that the short-time-scale movement of the oriCproximal locus decreased in the cell size window where initiation occurs (Fig. 3a, c). The average short-time-scale movement of the replisome, on the other hand, stayed constant throughout the cell cycle at a level that is, on average lower than that of oriC (Fig. 3b, c). Also, the difference in average short-time-scale movements between oriC and replisome was slightly larger due to the higher localization uncertainty for the replisome marker mCherry-DnaN as compared to the replisome marker YPetDnaN. See Fig. S5 for a comparison between mCherry-DnaN (used in Fig. 3) and YPet-DnaN. Measurements of two-dimensional (2D) Euclidean distances between replisomes and oriC-proximal loci in the same cells for different cell areas (Fig. 3d) also showed that the displacement minimum coincides with the minimal replisome-oriC distance.",
+        "text_sha256": "sha256:4a25673a9938222d02bcf50e40f8dae162dc1b02c237442df36d32d752269e45"
+      },
+      {
+        "evidence_key": "P:S-0217f5c2d4b75c5e9a0a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-0217f5c2d4b75c5e9a0a",
+        "text": "Nature Communications | (2024) 15:6018 \n\n4 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-50047-z \n\n**==> picture [482 x 393] intentionally omitted <==**",
+        "text_sha256": "sha256:283496c34af08f003ab60e18a3eba576e91c5cd24c14dbff135eb3eb50533a5a"
+      },
+      {
+        "evidence_key": "P:S-1df55a17fe84e3323960",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-1df55a17fe84e3323960",
+        "text": "**----- Start of picture text -----**<br>\na oriC -proximal locus b Replisome<br>250 250<br>12 16<br>14<br>200 10 200<br>12<br>8<br>150 150 10<br>6 8<br>100 100<br>6<br>4<br>4<br>50 50<br>2<br>2<br>0 0 0 0<br>1 1.5 2 2.5 3 1 1.5 2 2.5 3<br>Cell area (μm [2] ) Cell area (μm [2] )<br>c d Replisome- oriC  distances<br>20<br>oriC, area bin: 1.5 μm [2] 1500 3.5<br>oriC, area bin: 2.2 μm [2]<br>3<br>15 Replisome, area bin: 1.5 μm [2]<br>Replisome, area bin: 2.2 μm [2]<br>2.5<br>1000<br>2<br>10<br>1.5<br>500<br>5 1<br>0.5<br>0 0 0<br>0 50 100 150 200 250 1 1.5 2 2.5 3<br>Displacement (nm) Cell area (μm [2] )<br>) × 1000 ) × 1000<br>-1 -1<br>Displacement (nm) Displacement (nm)<br>Probability density (nm Probability density (nm<br>) × 1000<br>-1<br>) × 1000<br>Distance (nm) -1Probability density (nm<br>Probability density (nm<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:8d7e4475a69026e7d69ff00866dded9c06a020dc3578f543e7ace28c839e349b"
+      },
+      {
+        "evidence_key": "P:S-a7f54e10b909dfa6a42c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a7f54e10b909dfa6a42c",
+        "text": "Fig. 3 | OriC and replisome displacements at different cell areas. a, b Frame-toframe displacement of tracked fluorescent foci between two frames acquired 1 s apart. Foci tracking was performed using the u-track[33] algorithm. Displacements at different cell sizes estimated for (a) oriC-proximal chromosome loci and (b) replisomes. Heat map color shows the probability density for different displacements in each area bin. c Displacement distributions from (a, b) at specific cell sizes. d 2D \n\ndistances between the oriC-proximal locus and replisomes for different cell areas. Heat map grayscale shows the probability density for different distances in each area bin. a, b, d: Red dashed lines indicate average replication initiation size. The experiment was performed twice. Statistics can be found in Supplementary Dataset 1. \n\nIf the decrease in oriC displacements and the replisome-oriC distance minimum are due to the replication fork passing the locus, we should see a corresponding pattern for other chromosomal loci at well-defined times after initiation. To test this, we repeated the experiment for 11 strains with the YFP-based FROS labels at different distances from oriC. In all 11 strains, we observed displacement minima similar to that of the oriC-proximal locus at different cell sizes (Fig. 4). The minima of loci displacements occurred at the same cell area as the minima in replisome-locus distance. The timing of these events was consistent with a model where initiation occurs at a cell size of 2.05 µm[2] , replication takes 45 minutes to complete and is progressing at a constant rate, and the cells are exponentially growing with a doubling time of 50 minutes (see Methods for details).",
+        "text_sha256": "sha256:d17b0ece54e3a5a832a07c0abf71bbf6602d81b832b71549d37ab4538b1cdffb"
+      },
+      {
+        "evidence_key": "P:S-a5fad50b5053629e3ba7",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a5fad50b5053629e3ba7",
+        "text": "These results show that as loci are replicated, their short-time-scale movement decreases to a similar level as that of the replisome (Fig. 4). \n\n## Replication induces transient spatial repositioning of chromosomal loci \n\nUsing the 12 strains with FROS labels in different positions, we also quantified the short-time-scale movement of chromosomal loci at \n\ndifferent spatial positions inside each cell (Fig. 5). We note that minima occur where the location distributions of each locus and the replisome overlap, in agreement with the distance measurements in Fig. 4. For the oriC-proximal loci, we find an overall expected behavior, with a decrease in displacement at the cell size interval where initiation occurs (Fig. 3), but the short-time-scale movement does not seem to depend on the position of the locus in the cell’s coordinate system. However, for chromosomal loci L4 and R4, an interesting behavior emerged (L4 from Fig. 5b is highlighted in Fig. 5a). At cell sizes of ~1.6 µm[2] , these loci relocate from the new pole to the replisome region, where the loci’s short-time-scale movement becomes slower. Shortly after replication, the loci are segregated into their new positions and remain there until the next replication round. As the loci segregate, their short-time-scale movement returns to the pre-replication level. Examples of transient relocalization in single cells are shown in Fig. S11. These observations are consistent with the model in which the chromosome loci move towards a region of spatially confined replisomes, in which the loci replicate. This is then also inconsistent with the model where the replisomes move to the chromosome loci before their replication.",
+        "text_sha256": "sha256:f1790dd8789493dfd49ab97b217ee04757278c9bc7928d357cc5c04ec8b550ab"
+      },
+      {
+        "evidence_key": "P:S-082576b4a4f7936d5cdc",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-082576b4a4f7936d5cdc",
+        "text": "Nature Communications | (2024) 15:6018 \n\n5 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-50047-z \n\n**==> picture [461 x 526] intentionally omitted <==**",
+        "text_sha256": "sha256:ca13e80a278fd7a08446002fc77f3fb996326a86cdda897b50f3e07aa5b5ac5e"
+      },
+      {
+        "evidence_key": "P:S-1935d02bfba498972a6e",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-1935d02bfba498972a6e",
+        "text": "**----- Start of picture text -----**<br>\noriC<br>Locus displacement Replisome-locus distances<br>250 12 L1 Ori R1<br>Ori 200 10 1500 3.53 L2 R2<br>150100 86 1000 2.521.5 L3 R3<br>50 42 500 10.5 L4 L5 Ter R5 R4<br>01 1.5 2 2.5 3 0 01 1.5 2 2.5 3 0<br>Cell area (μm [2] ) Cell area (μm [2] )<br>250 12 250<br>L1 200 10 1500 3 R1 200 10 1500 3<br>150 86 1000 2.52 150 86 1000 2.52<br>100 4 500 1.51 100 4 500 1.51<br>50 2 0.5 50 2 0.5<br>0 0 0 0 0 0 0 0<br>250 250<br>L2 200 10 1500 2.5 R2 200 10 1500 2.5<br>8 2 8 2<br>150 6 1000 1.5 150 6 1000 1.5<br>100 4 500 1 100 4 500 1<br>50 2 0.5 50 2 0.5<br>0 0 0 0 0 0 0 0<br>250 10 1500 250 10 1500<br>L3 200 8 2 R3 200 8 2<br>150 6 1000 1.5 150 6 1000 1.5<br>100 4 1 100 4 1<br>500 500<br>50 2 0.5 50 2 0.5<br>0 0 0 0 0 0 0 0<br>L4 250 10 1500 R4 250 10 1500<br>200 200 8<br>8 1.5 1.5<br>150 6 1000 150 6 1000<br>1 1<br>100 4 100 4<br>500 500<br>50 2 0.5 50 2 0.5<br>0 0 0 0 0 0 0 0<br>L5 250200 10 1500 1.61.4 R5 250200 1210 1500 2<br>15010050 8642 1000500 1.210.80.60.4 15010050 8642 1000500 1.510.5<br>0.2<br>01 1.5 2 2.5 3 0 01 1.5 2 2.5 3 0 01 1.5 2 2.5 3 0 01 1.5 2 2.5 3 0<br>Cell area (μm [2] ) Cell area (μm [2] ) Cell area (μm [2] ) Cell area (μm [2] )<br>250<br>Ter 12 1500 2<br>200<br>10 1.5<br>150 8 1000<br>100 6 1<br>4 500<br>50 2 0.5<br>01 1.5 2 2.5 3 0 01 1.5 2 2.5 3 0<br>Cell area (μm [2] ) Cell area (μm [2] )<br>-1) × 1000 Distance (nm) -1) × 1000<br>Displacement (nm)<br>Probability density (nm Probability density (nm<br>-1) × 1000 Distance (nm) -1) × 1000 -1) × 1000 Distance (nm) -1) × 1000<br>Displacement (nm) Displacement (nm)<br>Probability density (nm Probability density (nm Probability density (nm Probability density (nm<br>-1) × 1000 Distance (nm) -1) × 1000 -1) × 1000 Distance (nm) -1) × 1000<br>Displacement (nm)",
+        "text_sha256": "sha256:9c34d3f556d6e2b85ccf2731752cba2fe068e9ead5c703434682491aef9118e1"
+      },
+      {
+        "evidence_key": "P:S-bb47e1ab5f3aa9f400ee",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-bb47e1ab5f3aa9f400ee",
+        "text": "Displacement (nm)<br>Probability density (nm Probability density (nm Probability density (nm Probability density (nm<br>-1) × 1000 Distance (nm) -1) × 1000 -1) × 1000 Distance (nm) -1) × 1000<br>Displacement (nm) Displacement (nm)<br>Probability density (nm Probability density (nm Probability density (nm Probability density (nm<br>Displacement (nm) -1) × 1000Probability density (nm Distance (nm) -1) × 1000Probability density (nm Displacement (nm) Probability density/nm × 1000 Distance (nm) -1) × 1000Probability density (nm<br>Displacement (nm) -1) × 1000 Distance (nm) -1) × 1000 Displacement (nm) -1) × 1000 Distance (nm) -1) × 1000<br>Probability density (nm Probability density (nm Probability density (nm Probability density (nm<br>-1) × 1000 Distance (nm) -1) × 1000<br>Displacement (nm)<br>Probability density (nm Probability density (nm<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:43fb8fe6176a0ba052c76ba99ba67644641e50971258e914b95f268700dbbacf"
+      },
+      {
+        "evidence_key": "P:S-a4876aec753028ed9cb0",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a4876aec753028ed9cb0",
+        "text": "Fig. 4 | Locus displacement minima coincide with replisome-locus colocalization. As Fig. 3a (locus displacement) and 3d (replisome-locus distance) but for chromosome locus labels at different chromosomal positions relative to oriC (L1L4, R1-R4, and Ter). Colors in heat-maps as in Fig. 3a, d. An overview of the chromosomal positions of the investigated loci is shown in the top right cartoon. The data for Ori is the same as in Fig. 3a, d. Cyan lines indicate the predicted cell size of replication based on the model where initiation occurs at 2.05 µm[2] , replication \n\nprogresses at a constant rate and takes 45 minutes to complete, and cells grow exponentially with a doubling time of 50 minutes. The experiments with locus IDs: Ori, Ter, R2-5, and L2-5 were performed twice, and the experiments with locus IDs: R1, L1, R5, and L5 were performed once. Repeated experiments with locus IDs: Ori, Ter, R2-5, and L2-5 are shown in Supplementary Fig. S6. Statistics can be found in Supplementary Dataset 1. \n\n## Replication-induced locus repositioning persists across different growth conditions \n\nThe only previous study using time-lapse microscopy to study the spatial interactions between different loci and the replisome in cells carrying both locus and replisome labels was done by Reyes-Lamothe et al.[25] . Their study was performed in growth conditions where the cells grow slower than in the conditions used in Figs. 1–5. Based on previous \n\nobservations[29] , the spatial organization of the replisome is kept at slower growth, but initiation occurs primarily on one instead of two oriCs. To test if the difference in growth condition affects the dynamic behavior of the chromosome in relation to the replisome, we imaged four selected strains in M9 glycerol (0.2%) minimal medium.",
+        "text_sha256": "sha256:4f9320ec72f54b9739c378587b55228f9508ce5b1f5e823c69fbd4b81b14f57b"
+      },
+      {
+        "evidence_key": "P:S-3b260892b9d6f5e41a48",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-3b260892b9d6f5e41a48",
+        "text": "In the slow-growth medium, the average generation time is ~130 min, as compared to 60 min in M9 succinate (0.4%) supplemented with amino \n\nNature Communications | (2024) 15:6018 \n\n6 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-50047-z \n\n**==> picture [230 x 426] intentionally omitted <==**",
+        "text_sha256": "sha256:8edf89b3a8e1223386b2453414fe7e4b040f1d44f82e593d47872244d97b9bed"
+      },
+      {
+        "evidence_key": "P:S-7d1275327e44df5979a4",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-7d1275327e44df5979a4",
+        "text": "**----- Start of picture text -----**<br>\na Locus moves from pole Locus segregation following<br>to middle of the cell replication<br>L4 14<br>12<br>10<br>8<br>6<br>4<br>0.5 µm Location 20<br>120<br>110<br>100<br>90<br>80<br>70<br>60<br>50<br>40<br>Displacement 30<br>1 1.5 2 2.5 3<br>Cell area (μm [2] )<br>Displacement minimum upon<br>colocalization with replisome<br>Replisome<br>Locus<br>Cell area<br>Ori 1614<br>b 12<br>10<br>8<br>6<br>4<br>0.5 µm 2<br>0120<br>110<br>100<br>90<br>80<br>70<br>60<br>50<br>L1 1 0.5 µm 1.5 Cell1210 area2 (μm [2] ) R1 2.5 3 4030 201816<br>8 1412<br>64 1086<br>0.5 µm 2 0.5 µm 42<br>0120 0120<br>110 110<br>100 100<br>90 90<br>80 80<br>70 70<br>60 60<br>50 50<br>1 0.5 µm 1.5 Cell area2 (μm [2] ) 2.5 3 4030 1 0.5 µm 1.5 Cell area2 (μm [2] ) 2.5 3 4030<br>of foci per cell and voxel × 1000<br>Nr.<br>Mean displacement (nm)<br>Cell long axis position<br>of foci per cell and voxel × 1000Nr.<br>Mean displacement (nm)<br>of foci per cell and voxel × 1000Nr. of foci per cell and voxel × 1000Nr.<br>Mean displacement (nm) Mean displacement (nm)<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:b7121c3e4d5f12373565729cae1e76d44e9e1384238bd1ea0d81d24d25f7199b"
+      },
+      {
+        "evidence_key": "P:S-8a547f6a319f0415f867",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8a547f6a319f0415f867",
+        "text": "Fig. 5 | Locus short-time-scale movement at different spatial positions. a Location panel: Two-dimensional histograms of fluorescent chromosome marker foci positions as in Fig. 1b but for locus L4 (see Fig. 4). Green arrows highlight locus relocation and segregation events. Displacement panel: Spatially binned loci displacements, where each bin shows the average length of 1-second displacements for which the first point is located inside the boundaries of the bin. The position and size of the bins are the same as in the location panel above. Each bin has a non-black color only if the number of displacements in the bin is larger than 4. Bins with fewer than five displacements are black. Magenta (in the location panel) and cyan (in the displacement panel) plus signs correspond to the mean position of the replisome distributions from the same set of cells used for the L4 location and displacement distributions. The green arrow highlights a cell area bin where a minimum in displacements (dark purple bins in the displacement panel) colocalizes with a high \n\nacids (Figs. 1–5). Also at a slower growth rate, the average short-timescale movement of the replisome was lower than for the chromosome loci (Figs. S8 and S9). Similarly to the displacement results in Fig. 4, the displacement minima occurred upon colocalization with the replisome at different stages of the cell cycle for each locus (Fig. 4, Fig. S8). Similar to growth in M9 succinate, we found that loci L3 and L4 move towards the replisome to be replicated and that their replication was followed by segregation of the two loci copies (Fig. 6). In contrast to growth in M9 succinate with amino acids, however, both the L3 and the L4 locus location distributions could be split into two populations.",
+        "text_sha256": "sha256:0cd32dc3bf632b09f46fd917b1973a9004fdd5344235e185d22c4322dd18cbd9"
+      },
+      {
+        "evidence_key": "P:S-54b68e9c94f17df79bb9",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-54b68e9c94f17df79bb9",
+        "text": "One \n\n**==> picture [221 x 352] intentionally omitted <==**",
+        "text_sha256": "sha256:8251e45546568bd2c6a12ceb22c40fb9f8dcded4402b7f6c02ff34d240fea956"
+      },
+      {
+        "evidence_key": "P:S-6d57c20f9e70bcd8a25b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-6d57c20f9e70bcd8a25b",
+        "text": "**----- Start of picture text -----**<br>\nL2 1210 R2 161412<br>8 10<br>0.5 µm 642 0.5 µm 8042<br>0120 0120<br>110 110<br>100 100<br>90 90<br>80 80<br>70 70<br>60 60<br>50 50<br>0.5 µm 4030 0.5 µm 4030<br>L3 0.5 µm 109876543210120 R3 0.5 µm 9876543210120<br>110 110<br>100 100<br>90 90<br>80 80<br>70 70<br>60 60<br>50 50<br>0.5 µm 4030 0.5 µm 4030<br>L4 1412 R4 1210<br>10864 864<br>0.5 µm 2 0.5 µm 2<br>0120 0120<br>110 110<br>100 100<br>90 90<br>80 80<br>70 70<br>60 60<br>50 50<br>0.5 µm 4030 0.5 µm 4030<br>L5 1816 R5 20<br>1412 15<br>10<br>8 10<br>6<br>0.5 µm 42 0.5 µm 5<br>0120 0120<br>110 110<br>100 100<br>90 90<br>80 80<br>70 70<br>60 60<br>50 50<br>1 0.5 µm 1.5 Cell area2 (μm [2] ) 2.5 3 4030 1 0.5 µm 1.5 Cell area2 (μm [2] ) 2.5 3 4030<br>Ter 30<br>25<br>20<br>15<br>10<br>0.5 µm 5<br>0120<br>110<br>100<br>90<br>80<br>70<br>60<br>50<br>1 0.5 µm 1.5 Cell area2 (μm [2] ) 2.5 3 4030<br>of foci per cell and voxel x 1000Nr. of foci per cell and voxel x 1000Nr.<br>Mean displacement (nm) Mean displacement (nm)<br>of foci per cell and voxel x 1000Nr. of foci per cell and voxel x 1000Nr.<br>Mean displacement (nm) Mean displacement (nm)<br>of foci per cell and voxel × 1000Nr. of foci per cell and voxel x 1000Nr.<br>Mean displacement (nm) Mean displacement (nm)<br>of foci per cell and voxel x 1000Nr. of foci per cell and voxel x 1000Nr.<br>Mean displacement (nm) Mean displacement (nm)<br>of foci per cell and voxel × 1000Nr.<br>Mean displacement (nm)<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:d2f23b9bd890bd3b9118565da34d689619968f6f8a7d4a792e833eb92c9794aa"
+      },
+      {
+        "evidence_key": "P:S-9238f8f437d9890c65db",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-9238f8f437d9890c65db",
+        "text": "density of replisomes (red bins in location panel). Cartoon: An interpretation of the location and displacement distributions above. Here, the positions along the celllong axis of the replisomes are shown in gray. The position of the L4 loci is shown with the same colormap as in the displacement histogram above, ranging from purple, which indicates small 1-second displacement, to yellow, which indicates large 1-second displacements. b Location and displacement distributions as in a, for the 12 strains used in Fig. 4. The experiments with locus IDs: Ori, Ter, R2-5, and L2-5 were performed twice, and the experiments with locus IDs: R1, L1, R5, L5 were performed once. Repeated experiments with locus IDs: Ori, Ter, R2-5, and L2-5 are shown in Supplementary Fig. S7. Statistics can be found in Supplementary Dataset 1. Statistics of the number of cells and fluorescent foci can be found in Supplementary Dataset 2. \n\npopulation had the L3/L4 locus close to the old pole after division, while the other population had the L3/L4 locus positioned close to the new pole (Fig. 6). We will refer to this phenomenon as chromosome inversion. Similar inversion in the chromosome structure has also been observed previously[16][,][17] . \n\nWe also repeated the experiments in a growth condition where the cells grow with a doubling time of 43 minutes. As expected[29] ; changing from succinate to glucose in the medium primarily affected the cell size at birth, leaving the cell size at initiation relatively unaffected. The trend that loci short-time-scale movement decreases \n\nNature Communications | (2024) 15:6018 \n\n7 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-50047-z \n\n## **a** \n\n**==> picture [340 x 603] intentionally omitted <==**",
+        "text_sha256": "sha256:112371ba738e8b5228b1647a289bd29a4b6df79a97984ea36fc2a222c0324e8b"
+      },
+      {
+        "evidence_key": "P:S-d0bfecb365fb9b809e54",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-d0bfecb365fb9b809e54",
+        "text": "**----- Start of picture text -----**<br>\nReplisome 4035<br>30 15<br>25<br>10<br>20<br>5 5<br>10<br>0.5 µm 5 0<br>0<br>b<br>Ori 25<br>16<br>20 14<br>12<br>15 10<br>8<br>6<br>10 4<br>2<br>5 0<br>0.5 µm<br>0<br>L3 closest to new pole at birth 35<br>30 10<br>25 8<br>20 6<br>15 4<br>10 2<br>0.5 µm 5 0<br>0<br>L3 closest to old pole at birth 35<br>30<br>10<br>25<br>8<br>20 6<br>15 4<br>10 2<br>0.5 µm 5 0<br>0<br>L4 closest to new pole at birth 30<br>25<br>8<br>20<br>6<br>15<br>4<br>10 2<br>0.5 µm 5 0<br>0<br>L4 closest to old pole at birth 30<br>25 10<br>20 8<br>6<br>15<br>4<br>10<br>2<br>0.5 µm 5 0<br>0<br>Ter 60<br>50 25<br>40 20<br>30 15<br>10<br>20<br>5<br>0.5 µm 10 1 1.5 2 0<br>0.9 1.2 1.5 1.8 2 0<br>Cell area (μm [2] )<br>of foci per cell and bin x 1000<br>Nr. of foci per cell and long-axis bin × 100<br>Nr.<br>of foci per cell and bin x 1000<br>Nr. of foci per cell and long-axis bin × 100<br>Nr.<br>of foci per cell and bin x 1000<br>Nr. of foci per cell and long-axis bin × 100<br>Nr.<br>of foci per cell and bin x 1000<br>Nr. of foci per cell and long-axis bin × 100<br>Nr.<br>of foci per cell and bin x 1000 of foci per cell and long-axis bin × 100<br>Nr. Nr.<br>of foci per cell and bin x 1000<br>Nr. of foci per cell and long-axis bin × 100<br>Nr.<br>of foci per cell and bin x 1000<br>Nr. of foci per cell and long-axis bin × 100<br>Nr.<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:ca7d13d9480bc9c121db0707c7035acd7c2b2cb2630b35634023fc99bc87fd3e"
+      },
+      {
+        "evidence_key": "P:S-b63123e548af5833e862",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-b63123e548af5833e862",
+        "text": "Fig. 6 | Locus location distributions at slower growth rates. Two-dimensional histograms of fluorescent foci positions along the long and short axes of the cell, as in Fig. 5, for strains with locus (b), and replisome labels (a) imaged at slower growth rates. Projections of the foci positions along the cell-long axis are shown in the panels to the right. Solid white lines indicate the average cell pole positions. These \n\nexperiments were performed twice, and only data from one replicate is shown. Statistics can be found in Supplementary Dataset 1. Statistics of the number of cells and fluorescent foci in the two-dimensional histograms can be found in Supplementary Dataset 2. \n\nNature Communications | (2024) 15:6018 \n\n8 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-50047-z \n\n(~3 µm[2] ) as they relocated towards the replisome remained the same for the L3 locus (Fig. S10). Since initiation occurs at about the same cell size for cells grown in succinate and glucose, also the cell size at which L3 moved towards the replisome (at ~3 µm[2] ) and the cell size of the subsequent separation of the two L3 loci (at ~1.8 µm[2] ) is the same in both growth conditions (Fig. 5 and Fig. S10). Given the change in division size, the L3 separation occurred close to birth for cells grown in glucose (Fig. S10), but well after birth for cells grown in succinate (Fig. 5). For the terminus loci, the minimum in short-time-scale movement occurred at the cell middle, where the number of replisome foci per cell has already decreased to low values. We currently have no explanation regarding the underlying reason for this discrepancy.",
+        "text_sha256": "sha256:95e07bfc76ea0938e268a1e7d9d3283e8067840fda2421e3156c913d9b3042b8"
+      },
+      {
+        "evidence_key": "P:S-741a46c4654806a60443",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-741a46c4654806a60443",
+        "text": "Taken together, we find the movements of the chromosome in relation to the replisome to be similar for the fast, intermediate, and, for one of the two subpopulations, slow growth. For the second slowgrowing subpopulation, the movements of the loci in relation to the replisome behave as expected from intermediate and fast growth, but with the mid-replichore loci at the opposite pole at birth. \n\n## Discussion \n\nWe show direct evidence that chromosomal loci make long-range intracellular movements both directly before and directly after replication while the replisomes stay relatively stationary. This behavior is most clear for the L4 and R4 loci (Fig. 5a). These loci translocate, on average, more than half of the cell length in 30% of the average generation time (Fig. 5a). During the same period, the average movement of the replisomes is 5% of the cell length. This behavior is similar in cells with doubling times of 130 (Fig. 6), 60 (Fig. 5), and 40 (Fig. S10) minutes, although the loci travel shorter distances in the fastest growth conditions tested. In all three conditions tested, the ter-proximal loci exhibit similar pre-replicative movement as the R4 and L4 loci, but display no post-replicative segregation since their replication occurs close to the intracellular space where ter resides for a majority of the cell cycle. Both the intracellular position and rapid relocalization of ter have been reported previously[11] , and it has also been suggested that this process is a direct consequence of replication[23] . Additionally, across all tested conditions, the oriC-proximal locus moves towards the replication region well before its replication.",
+        "text_sha256": "sha256:868c3d7f41afc5563bfdb70688339ac92ffbf41d5f8241309734a67d99a74201"
+      },
+      {
+        "evidence_key": "P:S-9aea8d967c249e1cc9a9",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-9aea8d967c249e1cc9a9",
+        "text": "Typical behaviors of four selected loci in cells grown in slow and intermediate growth conditions are displayed in the model cartoons of Fig. 7 (Fig. 7a, 130 mins doubling time, Fig. 7b, 60 mins doubling time). \n\nThe overview of the chromosome loci and replisome movements throughout the cell-cycle shown in Fig. 7 is clearly different from what is presented in refs. 9,10,12,25,30. At the same time, the model fits nicely with the conclusions from refs. 26,27, although these studies did not track replisomes and chromosomal loci in the same cells. \n\nIn line with previous observations[27][,][29] , we find that replisomes stay spatially confined throughout the cell cycle (Figs. 1 and 2). The two replisomes can, within the region, temporarily be detected as separate fluorescent foci (Fig. S11)[27][,][29] , suggesting that bidirectionally moving replisomes do not form stable multi-replisome complexes while replicating[27][,][34] . The recent observations by Japaridze et al.[30] support this idea, since replisomes can be made to lose the spatial confinement and instead trail along the chromosome by perturbing the cell shape. Also the work of Reyes-Lamothe et al.[25] shows that replisomes have the possibility of separating over extended periods of time. However, Chen et al.[35] have suggested that the two bidirectionally moving replisomes are bound to each other during the first half of the replication period, and free from each other during the second half. On the other hand, the microscopy data presented in ref. 35 also fits well with transiently separating foci at random time points (Fig. S11)[27][,][29] and the bulk experiments in ref. 35 are based on cells in which the replication process is blocked on one arm which may affect the overall chromosome organization.",
+        "text_sha256": "sha256:7787613d6ab18dfa55a84b7e78698fdd34343c3d1b9ee4bbf4943d8ffc88e1f3"
+      },
+      {
+        "evidence_key": "P:S-253f592aa2634f0d38df",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-253f592aa2634f0d38df",
+        "text": "Taken together, this suggests that while it is possible for the replisomes to trail along the chromosome arms, this is not \n\nthe observed behavior for our strain of wild-type-shaped cells, at steady-state growth in three different conditions. The reason that the replisomes remain confined to a region through which the chromosome moves when replicated has been suggested to be an emerging effect of replicating ring polymers constrained into a rod-shaped container[18] . \n\nSince the chromosome-replisome dynamics were shown to be dramatically changed by perturbing the cell’s physiology[30] , this could also provide insights into the discrepancy between our observations and those presented in refs. 9 and 10. As ref. 27 points out, the replisome location distributions that were based on snap-shots of steadystate populations binned on cell size shown in refs. 9 and 10 are very similar to the replisome position distributions presented by us and others[27][–][29] . However, they present a different interpretation of when replication initiation occurs. The discrepancies between our interpretations and that of refs. 9 and 10 appear in their usage of temperature-sensitive DnaA mutants to synchronize initiation of DNA replication, which was needed in experiments predating time-lapse experiments. The synchronization procedure changes the ratio between chromosome content and cell size. It also affects the potential to trigger new initiation events following the return to the permissive temperature. Due to the perturbation of the cell physiology, this may change the chromosome-replisome dynamics, and thus, a comparison with the steady-state behavior of unperturbed cells may be misleading.",
+        "text_sha256": "sha256:bfb9b817bb58fd43479e53db39d62e4eb675b8699c1ccef4aa0471d2ee611de5"
+      },
+      {
+        "evidence_key": "P:S-db8ae56c896c69d5d714",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-db8ae56c896c69d5d714",
+        "text": "In addition to the discrepancy of the large-scale movements of the chromosome and replisome, described above, our displacement measurements (Fig. 3) show the opposite relation between loci and replisome short-time-scale movement compared to the results reported in ref. 25. A potential explanation for this discrepancy could be differences in labeling strategy, as our FROS labels are based on shorter arrays (12 repeats of binding sites as compared to 240) and are thus expected to move faster in the short-time-scale regime. \n\nAmong the loci that we investigated, the dif-proximal locus exhibits a specifically distinct short-time-scale movement pattern over the cell cycle (Figs. 4 and 5, Locus ID: Ter, 47 kb from dif). The decreases in short-time-scale movement of other loci are temporary, i.e. occurring only during replication, while Ter remains relatively immobile at midcell from replication until cell division. The prolonged decrease in short-time-scale movements fits well with the previously reported minima in short-time-scale movements close to terminus[24] and can be rationalized based on known interactions in the terminus region. Replication termination results in catenated copies of ter[14][,][36] , which are subsequently unlinked by the combined activity of FtsK and Topoisomerase IV[36][,][37] . The ter region has also been shown to be anchored to the septal ring at the cell middle based on an interaction dependent on MatP and ZapB[23] . The MatP-ZapB interaction has been suggested to stabilize ter at the septal ring, which could be reflected in its distinctive displacement patterns. The catenation and binding to the septal ring could contribute to the prolonged decrease in short-time-scale movement and narrow location distribution, compared to other loci.",
+        "text_sha256": "sha256:d45055ad24ef785385d5875d752df2203b653de15c72933ace965948b7b56ec0"
+      },
+      {
+        "evidence_key": "P:S-fee64408bb84f987fe1d",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-fee64408bb84f987fe1d",
+        "text": "When comparing loci dynamics in the slow (130 min doubling - time) and intermediate (60 doubling time) growth conditions, the dif proximal locus behavior is very similar. At birth, it resides near the new cell pole and relocates to the position where division will occur. While the dynamics of the dif-proximal loci are retained between the two growth conditions, the L3 and L4 loci display high cell-to-cell variability at slow growth conditions. Based on previous observations using loci markers of different colors in the same cell[16][,][17] , we expect the L3 and L4 to never reside at the same pole as R3 and R4. Hence, at slow growth, the mid-replichore region can have chromosome-wide cell-to-cell variability without affecting the ter-region. Importantly, the positions of the replisomes are unaffected by the mid-replichore inversion. When visualizing the two populations of L3 and L4 in slow growth (Fig. 6), the replisome distributions are always analyzed using the same set of cells as for the loci. If the replisome positions were affected by the \n\nNature Communications | (2024) 15:6018 \n\n9 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-50047-z \n\n## **a** \n\n**==> picture [325 x 393] intentionally omitted <==**",
+        "text_sha256": "sha256:2ea92090fb1a7605345c1e070be393e2ced8f5ba28e6115a67ab3ddfe0479e04"
+      },
+      {
+        "evidence_key": "P:S-fbf228b9bb99caab0dd7",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-fbf228b9bb99caab0dd7",
+        "text": "**----- Start of picture text -----**<br>\nOri L3<br>L4 Ter<br>Replisome<br>Initiation L3 replication L4 replication Termination<br>0.9 1.2 1.5 1.8 2.1<br>Cell area (μm [2] )<br>b<br>Termination Initiation<br>Ori L3<br>L4 Ter<br>Replisome<br>L3 replication L4 replication<br>1.07 1.21 1.36 1.5 1.64 1.79 1.932.07 2.21 2.36 2.5 2.64 2.79 2.93<br>Cell area (μm [2] )<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:0606f852f3c7a7115f9ae3cead332a832834027d06622554238a1a9acd7a20e6"
+      },
+      {
+        "evidence_key": "P:S-a09a2fe63edecb26ad03",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a09a2fe63edecb26ad03",
+        "text": "Fig. 7 | Global rearrangements of locus and replisome positions over the cell cycle. Cartoons illustrating the typical locations and replication of selected loci and replisomes in (a) slow and (b) intermediate growth. The two subpanels in (a) \n\nshow the behavior of the two observed subpopulations, with L3/L4 found either closer to the new pole (top) or old pole (bottom). \n\nmid-replichore inversion, we would, for example, expect the average location (‘+’ signs in Fig. 6) to be different in the two subpopulations. We also note some level of heredity[17] in the positions of the midreplichore loci; the daughter cell corresponding to the cell half where the mid-replichore loci resided at birth in the mother have higher frequencies of receiving the inverted mid-replichore organization (Fig. 6). \n\nIt has previously been suggested that stationary bacterial replisomes could facilitate the segregation of newly replicated loci by extruding them towards the cell poles[6][,][38][–][40] . Replication as the main driver for chromosome segregation has been discounted due to the observation that loci do not form two distinguishable fluorescent foci immediately after replication[12] . Prolonged colocalization between locus copies following their replication has been described as a consequence of locus cohesion[21] . Defined as a tethering between replicated copies of a locus over a time period from locus replication to segregation[21] , locus cohesion could contribute to the displacement minima in Figs. 3 and 4, as interlinked copies could be expected to diffuse slower than separated copies. As discussed in ref.",
+        "text_sha256": "sha256:7204073b3c61b01fd1818a63bd1f81db9e9d67db530602ae733b771e7b0aeb7d"
+      },
+      {
+        "evidence_key": "P:S-5386ce142401a1bda087",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-5386ce142401a1bda087",
+        "text": "41, determining when a locus is segregated based on the localization of fluorescent foci alone is challenging, as two copies of a locus can be colocalized in a diffraction-limited focus. We note that, at intermediate \n\ngrowth, the location distributions of oriC-proximal and dif-proximal loci split long after they were colocalized with the replisomes (Figs. 1 and 5b), while other loci exhibit a split in their location distributions soon after being replicated (e.g. L4, Fig. 5a). However, to conclude whether the displacement minimum is related to locus cohesion and segregation, we need an approach that does not rely on colocalization of foci that have the same color. \n\nIn this study, we have shown that E. coli chromosome loci generally exhibit larger short-time-scale movement than the replisomes. Replication takes place within a restricted region into which loci move when they are replicated. During the replication process, locus shorttime-scale movement decreases and becomes more similar to the replisome’s. We observe loci moving towards the replisome to be replicated and subsequently segregated in single cells. To conclude, these observations support a model with confined replisomes through which the chromosome moves to be replicated. \n\n## Methods \n\n## Strains and growth conditions \n\nAll constructed strains were derivatives of the strain E. coli MG1655 rph + ΔmalI::frt ΔintC::P59-malI-SYFP2-frt ΔgtrA::SpR frt-mCherry-dnaN. For \n\nNature Communications | (2024) 15:6018 \n\n10 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-50047-z \n\nthe construction of these strains, chromosomal modifications were performed using λ Red recombineering[42] and generalized transduction with phage P1 vir[43] . The strains and their genotypes are listed in Supplementary Table S1.",
+        "text_sha256": "sha256:0735b0332c56eaafe651634512a8e58c81d3af7b55b12797357e40d29de38d0e"
+      },
+      {
+        "evidence_key": "P:S-f7ac65fb9818b49e32c9",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-f7ac65fb9818b49e32c9",
+        "text": "Experiments at intermediate growth (Figs. 1–5 and 1–7) were performed in M9 minimal medium supplemented with 0.06× Pluronic F-108 (Sigma-Aldrich 542342) 0.4% succinate and 1× RPMI 1640 amino acid solution (Sigma). Experiments at slow growth (Fig. 6, Figs. S8 and S9) were performed in M9 minimal medium supplemented with 0.06× Pluronic F-108 (Sigma-Aldrich 542342) 0.2% glycerol. Experiments at fast growth (Fig. S8–10) were performed in M9 minimal medium supplemented with 51 μg/ml Pluronic F-108 (Sigma-Aldrich 542342) 0.4% succinate and 1× RPMI 1640 amino acid solution (Sigma). All experiments were performed at 30 °C. Strains were inoculated one day before each experiment in culture tubes with growth medium from frozen stock cultures stored at −80 °C. Cells were grown overnight at 30 °C in a shaking incubator (200 rpm).On the dayof the experiment, the cells were diluted 1:100 in growth medium and grown for 3–4 h (intermediate growth) or 2–3 h (fast growth) before being loaded in the microfluidic chip. For experiments at slow growth, the cells were loaded from a culture grown overnight. \n\nA mother-machine-type PDMS chip with open-ended channels[32] was used for all microfluidic experiments. The width and height of these channels was 1000 nm. Medium flow and loading of cells into the chip was performed by supplying pressure to the chip ports with a microfluidic flow controller built in-house (AnduinFlow). The imaging of the chip was performed in a H201-ENCLOSURE hood that enclosed the microscope stage, with the hood being connected to a H201-TUNIT-BL temperature controller (OKOlab).",
+        "text_sha256": "sha256:7b5b67fea3e372ea16e26a6292a11843c0e99de2bbca218be413b2003fd81b7d"
+      },
+      {
+        "evidence_key": "P:S-2f95ad040c17a36bafff",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-2f95ad040c17a36bafff",
+        "text": "## Microscopy \n\nAll imaging was performed with a Ti-E (Nikon) microscope equipped with ×100 immersion oil objectives (Nikon, CFI Apo Lambda, NA 1.45, and Nikon, NA 1.45, CFI Plan Apochromat Lambda D MRD71970) that were set up for phase-contrast and widefield epi-fluorescence microscopy. Phase-contrast and fluorescence images were acquired of cells growing in a microfluidic chip at 30 °C in M9 minimal medium. The imaging was performed over 20 h (slow growth), 10 h (intermediate growth) or 15 h (fast growth), unless otherwise noted. Phase-contrast images were acquired once per position on the microfluidic device with a 1 min[−][1] imaging frequency, except for experiments performed at fast growth where a 30 s[−][1] imaging frequency was used. Fluorescence images were acquired once per position with a 1 min[−][1] or 5 min[−][1] imaging frequency. The results for 1 min[−][1] (Figs. 1–5) and 5 min[–][1] (Figs. S6 and S7) are the same, but faster imaging gives more data along with a modest growth rate impact. Each imaged position included 20 – traps with ~200 300 cells in total per position. \n\nFor fluorescence image acquisition, the sample was irradiated with a 580 nm laser (VFL, MBP Communications) for mCherry excitation followed by a 515 nm laser (Fandango 150, Cobolt) for SYFP2 excitation. Both lasers were set to a 25 ms exposure time and 30 W/cm[2] power density at the image plane. The laser light was shuttered using an AOTFnC together with MDPS (AA Opto-Electronic) and reflected onto the sample using a FF444/521/608-Di01 (Semrock) triple-band dichroic mirror. Fluorescence images were acquired using a Kinetix sCMOS camera (Teledyne Photometrics).",
+        "text_sha256": "sha256:2158fc30f9b8d9d799c1e784f80138781df1e96b5426d4cd41a80c343762c01c"
+      },
+      {
+        "evidence_key": "P:S-37d72c3f84397360021c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-37d72c3f84397360021c",
+        "text": "Imaging of the two fluorescence channels was performed back-to-back by two function generators (Tektronix) that triggered the lasers based on the camera acquisition. Emitted fluorescence was transmitted through a BrightLine FF580-FDi02-T3 (Semrock) dichroic beamsplitter to separate the fluorescence for different channels. The separated fluorescence was then filtered through BrightLine FF01-505/119-25 (Semrock) and BrightLine FF02-641/75-25 (Semrock) filters and focused on two different areas of the sCMOS camera. \n\nFor the displacement measurements, the fluorescence imaging also involved an additional image acquisition in the two fluorescence channels at a given time interval after the first acquisition. The double acquisitions with a time interval were performed by using the SMART Streaming feature of the sCMOS camera, which allows for sequential acquisition of images with different exposure times. One of the acquisitions was used only to introduce the time interval between the two frames used for the displacement measurements. \n\nPhase-contrast images were acquired with a 50 ms exposure time using a DMK 38UX304 camera (The Imaging Source). The light source used for phase-contrast was a 480 nm LED and a TLED+ (Sutter Instruments). The transmitted light was passed through the same FF444/521/608-Di01 (Semrock) triple-band dichroic mirror as the fluorescence and reflected onto the camera with a Di02-R514 (Semrock) dichroic mirror. \n\n## Image analysis \n\nThe image analysis was performed using an automated image analysis pipeline that is primarily written in MATLAB R2022a (Mathworks) and previously described in ref. 44. Cell segmentation of phase-contrast images was performed using a nested Unet neural network[45] .",
+        "text_sha256": "sha256:3b377369ab8fc692d82d76b4868f88f4e83ee58423c37d8e620552cf905d9ead"
+      },
+      {
+        "evidence_key": "P:S-6d493bd01693fdbf0d11",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-6d493bd01693fdbf0d11",
+        "text": "Cell tracking was performed using the Baxter algorithm[46] and tracking of fluorescent foci was performed using the u-track algorithm[33] . Fluorescent foci of SYFP2 and mCherry were detected using a wavelet-based detection algorithm[47] and the detected coordinates were then refined using a maximum likelihood-based localization algorithm[48] . The localization was performed with the fitting of a 2D Normal distribution function to the fluorescent signal. To transform the localized focus coordinates between the cameras used to acquire fluorescence and phase-contrast images, landmark-based registration was performed of 500 nm beads (TetraSpeck, Thermo Fisher) that were visible on both cameras. \n\nThe estimation of replisome-oriC distances involved pairing of localized mCherry-DnaN and MalI-SYFP2 foci from the same cell. landmark-based registration was performed by imaging 100 nm fluorescent beads (TetraSpeck, Thermo Fisher) in two different fluorescence channels simultaneously on two different areas of the camera chip. The pairing between foci from two different fluorescence channels was performed based on this registration. Distances were estimated based on foci thatwere the closest to each other, and each focus was only paired with one other focus from the other fluorescence channel. The pairing of foci coordinates was performed using MATLAB’s matchpairs() function. \n\nPredicated replication sizes for the fluorescently labeled loci were calculated assuming exponential growth of the cells and using an average replication initiation size of 2.05 µm[2] , an average generation time of 50 min, and an average C-period of 45 min.",
+        "text_sha256": "sha256:bc6164a75b8e895b97a64d64d975cf3d936ff1cbb52bce4e26c1bd5d6ca4ea9a"
+      },
+      {
+        "evidence_key": "P:S-de9a4e28491eb458510c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-de9a4e28491eb458510c",
+        "text": "The replication size A(t) is then estimated by AðαÞ = AInit * expðμ * C * αÞ, where AInit is the average replication initiation size, µ is the average growth rate, C is the average C-period, and α is the genomic distance of a given locus from oriC divided by half of the length of the chromosome. \n\n## Reporting summary \n\nFurther information on research design is available in the Nature Portfolio Reporting Summary linked to this article. \n\n## Data availability \n\nThe raw microscopy data and analysis output generated in this study have been deposited in the Figshare database at https://doi.org/10. 17044/scilifelab.25907971. \n\n## Code availability \n\nAll code used for post-processing of analysis output and reproducing figures is available at https://doi.org/10.17044/scilifelab.25907971. \n\nNature Communications | (2024) 15:6018 \n\n11 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-50047-z \n\n## References \n\n1. Mäkelä, J. & Sherratt, D. J. Organization of the escherichia coli chromosome by a MukBEF axial core. Mol. Cell 78, 250–260.e5 (2020). \n\n2. Kavenoff, R. & Ryder, O. A. Electron microscopy of membraneassociated folded chromosomes of Escherichia coli. Chromosoma 55, 13–25 (1976). \n\n3. Le, T. B. K., Imakaev, M. V., Mirny, L. A. & Laub, M. T. High-resolution mapping of the spatial organization of a bacterial chromosome. Science 342, 731–734 (2013). \n\n4. O’Donnell, M. Replisome architecture and dynamics in Escherichia coli. J. Biol. Chem. 281, 10653–10656 (2006). \n\n5. Kurth, I. & O’Donnell, M. Replisome dynamics during chromosome duplication. EcoSal Plus 3, 2 (2009). \n\n6. Lemon, K. P. & Grossman, A. D. Localization of bacterial DNA polymerase: evidence for a factory model of replication. Science 282, 1516–1519 (1998). \n\n7. Molina, F. & Skarstad, K.",
+        "text_sha256": "sha256:e240d0d9c0ce0ad4a0cb9952d359133f1a425267f138021dd691e62b2084dddc"
+      },
+      {
+        "evidence_key": "P:S-45e1a8693a5801cbeb20",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-45e1a8693a5801cbeb20",
+        "text": "Replication fork and SeqA focus distributions in Escherichia coli suggest a replication hyperstructure dependent on nucleotide metabolism. Mol. Microbiol. 52, 1597–1612 (2004). \n\n8. Jensen, R. B., Wang, S. C. & Shapiro, L. A moving DNA replication factory in Caulobacter crescentus. EMBO J. 20, 4952–4963 (2001). \n\n9. Hiraga, S., Ichinose, C., Onogi, T., Niki, H. & Yamazoe, M. Bidirectional migration of SeqA-bound hemimethylated DNA clusters and pairing of oriC copies in Escherichia coli. Genes Cells 5, 327–341 (2000). \n\n10. Kongsuwan, K., Dalrymple, B. P., Wijffels, G. & Jennings, P. A. Cellular localisation of the clamp protein during DNA replication. FEMS Microbiol. Lett. 216, 255–262 (2002). \n\n11. Espeli, O., Mercier, R. & Boccard, F. DNA dynamics vary according to macrodomain topography in the E. coli chromosome. Mol. Microbiol. 68, 1418–1427 (2008). \n\n12. Bates, D. & Kleckner, N. Chromosome and replisome dynamics in E. coli: loss of sister cohesion triggers global chromosome movement and mediates chromosome segregation. Cell 121, 899–911 (2005). \n\n13. Niki, H., Yamaichi, Y. & Hiraga, S. Dynamic organization of chromosomal DNA in Escherichia coli. Genes Dev. 14, 212–223 (2000). \n\n14. Li, Y., Sergueev, K. & Austin, S. The segregation of the Escherichia coli origin and terminus of replication. Mol. Microbiol. 46, 985–996 (2002). \n\n15. Lau, I. F. et al. Spatial and temporal organization of replicating Escherichia coli chromosomes: Escherichia coli chromosome dynamics. Mol. Microbiol. 49, 731–743 (2004). \n\n16. Nielsen, H. J., Ottesen, J. R., Youngren, B., Austin, S. J. & Hansen, F. G. The Escherichia coli chromosome is organized with the left and right chromosome arms in separate cell halves. Mol. Microbiol. 62, 331–338 (2006). \n\n17. Wang, X., Liu, X., Possoz, C.",
+        "text_sha256": "sha256:6860f38870a40b214f8da85ca07928ab41bea5dd81dd7cfbc4f70a362b76de4c"
+      },
+      {
+        "evidence_key": "P:S-56b284eb59c90c14ee8b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-56b284eb59c90c14ee8b",
+        "text": "& Sherratt, D. J. The two Escherichia coli chromosome arms locate to separate cell halves. Genes Dev. 20, 1727–1731 (2006). \n\n18. Youngren, B., Nielsen, H. J., Jun, S. & Austin, S. The multifork Escherichia coli chromosome is a self-duplicating and selfsegregating thermodynamic ring polymer. Genes Dev. 28, 71–84 (2014). \n\n19. Badrinarayanan, A., Le, T. B. K. & Laub, M. T. Bacterial chromosome organization and segregation. Annu. Rev. Cell Dev. Biol. 31, 171–199 (2015). \n\n20. Sadhir, I. & Murray, S. M. Mid-cell migration of the chromosomal terminus is coupled to origin segregation in Escherichia coli. Nat. Commun. 14, 7489 (2023). \n\n21. Sunako, Y., Onogi, T. & Hiraga, S. Sister chromosome cohesion of Escherichia coli. Mol. Microbiol. 42, 1233–1241 (2001). \n\n22. Wang, X., Reyes-Lamothe, R. & Sherratt, D. J. Modulation of Escherichia coli sister chromosome cohesion by topoisomerase IV. Genes Dev. 22, 2426–2433 (2008). \n\n23. Espéli, O. et al. A MatP–divisome interaction coordinates chromosome segregation with cell division in E. coli. EMBO J. 31, 3198–3211 (2012). \n\n24. Javer, A. et al. Short-time movement of E. coli chromosomal loci depends on coordinate and subcellular localization. Nat. Commun. 4, 3003 (2013). \n\n25. Reyes-Lamothe, R., Possoz, C., Danilova, O. & Sherratt, D. J. Independent positioning and action of escherichia coli replisomes in live cells. Cell 133, 90–102 (2008). \n\n26. Cass, J. A., Kuwada, N. J., Traxler, B. & Wiggins, P. A. Escherichia coli chromosomal loci segregate from midcell with universal dynamics. Biophys. J. 110, 2597–2609 (2016). \n\n27. Mangiameli, S. M., Veit, B. T., Merrikh, H. & Wiggins, P. A. The replisomes remain spatially proximal throughout the cell cycle in bacteria. PLoS Genet. 13, e1006582 (2017). \n\n28.",
+        "text_sha256": "sha256:e5a4f6a88a02a6c872786f17a053c07c9f1edf0da7944564ebee6aefd25684e1"
+      },
+      {
+        "evidence_key": "P:S-935b30547b8ff17a4b01",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-935b30547b8ff17a4b01",
+        "text": "Wallden, M., Fange, D., Lundius, E. G., Baltekin, Ö. & Elf, J. The synchronization of replication and division cycles in individual E. coli cells. Cell 166, 729–739 (2016). \n\n29. Knöppel, A., Broström, O., Gras, K., Elf, J. & Fange, D. Regulatory elements coordinating initiation of chromosome replication to the Escherichia coli cell cycle. Proc. Natl Acad. Sci. USA 120, e2213795120 (2023). \n\n30. Japaridze, A., Gogou, C., Kerssemakers, J. W. J., Nguyen, H. M. & Dekker, C. Direct observation of independently moving replisomes in Escherichia coli. Nat. Commun. 11, 3109 (2020). \n\n31. Moolman, M. C. et al. Slow unloading leads to DNA-bound β2sliding clamp accumulation in live Escherichia coli cells. Nat. Commun. 5, 5820 (2014). \n\n32. Baltekin, Ö., Boucharin, A., Tano, E., Andersson, D. I. & Elf, J. Antibiotic susceptibility testing in less than 30 min using direct singlecell imaging. Proc. Natl Acad. Sci. USA 114, 9170–9175 (2017). \n\n33. Jaqaman, K. et al. Robust single-particle tracking in live-cell timelapse sequences. Nat. Methods 5, 695–702 (2008). \n\n34. Mangiameli, S. M., Cass, J. A., Merrikh, H. & Wiggins, P. A. The bacterial replisome has factory-like localization. Curr. Genet. 64, 1029–1036 (2018). \n\n35. Chen, P. J. et al. Interdependent progression of bidirectional sister replisomes in E. coli. Elife 12, e82241 (2023). \n\n36. Steiner, W., Liu, G., Donachie, W. D. & Kuempel, P. The cytoplasmic domain of FtsK protein is required for resolution of chromosome dimers. Mol. Microbiol. 31, 579–583 (1999). \n\n37. Hojgaard, A., Szerlong, H., Tabor, C. & Kuempel, P. Norfloxacininduced DNA cleavage occurs at the dif resolvase locus in Escherichia coli and is the result of interaction with topoisomerase IV. Mol. Microbiol. 33, 1027–1036 (1999). \n\n38. Lemon, K. P. & Grossman, A.",
+        "text_sha256": "sha256:4abe35b3bb78b70c29c172ae8e65367890a9dc07d367f10c56dc9c16dd80f543"
+      },
+      {
+        "evidence_key": "P:S-d1d0b10532fc20c9fe13",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-d1d0b10532fc20c9fe13",
+        "text": "D. The extrusion-capture model for chromosome partitioning in bacteria. Genes Dev. 15, 2031–2041 (2001). \n\n39. Sawitzke, J. & Austin, S. An analysis of the factory model for chromosome replication and segregation in bacteria. Mol. Microbiol. 40, 786–794 (2001). \n\n40. Nielsen, H. J., Youngren, B., Hansen, F. G. & Austin, S. Dynamics of Escherichia coli chromosome segregation during multifork replication. J. Bacteriol. 189, 8660–8666 (2007). \n\n41. Lesterlin, C., Gigant, E., Boccard, F. & Espéli, O. Sister chromatid interactions in bacteria revealed by a site-specific recombination assay. EMBO J. 31, 3468–3479 (2012). \n\n42. Datsenko, K. A. & Wanner, B. L. One-step inactivation of chromosomal genes in Escherichia coli K-12 using PCR products. Proc. Natl. Acad. Sci. 97, 6640–6645 (2000). \n\nNature Communications | (2024) 15:6018 \n\n12 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-50047-z \n\n43. Thomason, L. C., Costantino, N. & Court, D. L. E. coli genome manipulation by P1 transduction. Curr. Protoc. Mol. Biol. Chapter 1, 1.17.1–1.17.8 (2007). \n\n44. Camsund, D. et al. Time-resolved imaging-based CRISPRi screening. Nat. Methods 17, 86–92 (2020). \n\n45. Ronneberger, O., Fischer, P. & Brox, T. U-Net: Convolutional Networks for Biomedical Image Segmentation. in Medical Image Computing and Computer-Assisted Intervention – MICCAI 2015. MICCAI 2015. Lecture Notes in Computer Science() Vol. 9351 (eds Navab, N., Hornegger, J., Wells, W. & Frangi, A.) (Springer, Cham, 2015). https://doi.org/10.1007/978-3-31924574-4_28. \n\n46. Magnusson, K. E. G., Jalden, J., Gilbert, P. M. & Blau, H. M. Global linking of cell tracks using the Viterbi algorithm. IEEE Trans. Med. Imaging 34, 911–929 (2015). \n\n47. Olivo-Marin, J.-C. Extraction of spots in biological images using multiscale products.",
+        "text_sha256": "sha256:320ccf79c0107d1ed79dc5e38584167547376f9800971516ac521d094d93deba"
+      },
+      {
+        "evidence_key": "P:S-e149822c8f9e99464711",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-e149822c8f9e99464711",
+        "text": "Pattern Recognit. 35, 1989–1996 (2002). \n\n48. Lindén, M., Ćurić, V., Amselem, E. & Elf, J. Pointwise error estimates in localization microscopy. Nat. Commun. 8, 15115 (2017). \n\n## Funding \n\nOpen access funding provided by Uppsala University. \n\n## Competing interests \n\nThe authors declare no competing interests. \n\n## Additional information \n\nSupplementary information The online version contains supplementary material available at https://doi.org/10.1038/s41467-024-50047-z. \n\nCorrespondence and requests for materials should be addressed to David Fange or Johan Elf. \n\nPeer review information Nature Communications thanks Marcelo Nollmann and the other, anonymous, reviewers for their contribution to the peer review of this work. A peer review file is available. \n\nReprints and permissions information is available at http://www.nature.com/reprints \n\n## Acknowledgements \n\nWe thank Irmeli Barkefors for the critical reading of the manuscript. Nynke Dekker provided us with strains containing the mCherry-DnaN construct. Elias Amselem built the two-color setup. This study was made possible by grants from the ERC (advanced grant no. 885360), the Swedish Research Council (grant nos. 2016-06213 and 201803958), the Knut and Alice Wallenberg Foundation (grant nos. 2017.0291, and 2019.0439) and eSSENCE. The computations and data management were enabled by resources provided by the Swedish National Infrastructure for Computing at UPPMAX, partially funded by the Swedish Research Council through grant agreement no. 2018-05973. \n\n## Author contributions \n\nD.F. and J.E. conceived the study; K.G., J.E. and D.F. designed experiments; K.G. constructed most strains, performed the experiments, and analyzed the data; K.G. and D.F. wrote most of the analysis code; K.G., J.E. and D.F.",
+        "text_sha256": "sha256:ec466bd6ad97e80e4c529d780ce1b049913bbc3dff86a877a97fbe6f5a7684fc"
+      },
+      {
+        "evidence_key": "P:S-81f168adde1a8c3d0b86",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-81f168adde1a8c3d0b86",
+        "text": "interpreted results; K.G., J.E. and D.F. wrote the paper. \n\nPublisher’s note Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations. \n\nOpen Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/ licenses/by/4.0/. \n\n© The Author(s) 2024 \n\nNature Communications | (2024) 15:6018 \n\n13",
+        "text_sha256": "sha256:f8d94b9e5fa1c8a5fd3cdef7b50fb572b91b6fa53944721993c19debf502d0d7"
+      }
+    ]
+  },
+  "paper_id": "10.1038/s41467-024-50047-z",
+  "paper_sha256": "sha256:37e27aafa7ded44a62986d96d9fad52fe65194f0ed40bed5a0a6383cfd586712",
+  "parent_output_sha256s": [],
+  "parent_reviews": [],
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "review_source_sha256": "sha256:1166197008e9fc6bae4a9f3c21c42330ec29bc174d508cb80c2e6bd07ef45959",
+  "reviewer_spans": [
+    {
+      "char_end": 1238,
+      "char_start": 1199,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-194355ec73522c435314",
+      "source_role": "reviewer_report",
+      "text": "## Reviewer #1 (Remarks to the Author):",
+      "text_sha256": "sha256:f575013c42c9e91316f21a94feb0b0edfff3402d969a3e1e849f6dd77ac19843"
+    },
+    {
+      "char_end": 1654,
+      "char_start": 1241,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-72c4bfb765e3dbe07935",
+      "source_role": "reviewer_report",
+      "text": "The study of replisome localization has periodically resurfaced ever since the introduction of the \"replication factory\" model. This manuscript provides potentially powerful chromosome/replisome dynamics data, as opposed to most snapshot-based previous works. I strongly support its publication in Nature Communications, once the authors address several major presentational issues. Here are my detailed comments:",
+      "text_sha256": "sha256:d60b4f1c5f24f2df70731a477438bd3bf140a00ab9657b464d1ff49f4a82a716"
+    },
+    {
+      "char_end": 1684,
+      "char_start": 1657,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8553a6985bf140ccb74b",
+      "source_role": "reviewer_report",
+      "text": "## 1. General Observations:",
+      "text_sha256": "sha256:256a68969b4b4aa68ada0a6f27a8eb357d6c6b6eda16837ce2463abe7354479b"
+    },
+    {
+      "char_end": 2012,
+      "char_start": 1687,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1f859c3a143188316264",
+      "source_role": "reviewer_report",
+      "text": "The manuscript offers insightful and potentially impactful data. However, in several sections, it appears a bit underwhelming given the extensive prior studies on this subject. It's imperative that the authors revisit their manuscript and the existing literature to pinpoint and elucidate the novel aspects of their findings.",
+      "text_sha256": "sha256:e5bcb450219fa74fdc0b941daaf34724b10d4bc3a5ae6ce1e8ceaf8efb223e08"
+    },
+    {
+      "char_end": 2097,
+      "char_start": 2015,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-537198270c87513cfaaf",
+      "source_role": "reviewer_report",
+      "text": "(i) Section: 'Replication of a locus coincides with a decrease in its diffusivity'",
+      "text_sha256": "sha256:5a0e89f8e2bbce10b63ab8b1bffb01e1508c1a1b5b76f009655e323e6f498b49"
+    },
+    {
+      "char_end": 2514,
+      "char_start": 2100,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-49609b284267c8bd2abd",
+      "source_role": "reviewer_report",
+      "text": "- The results and Figure 3 need clarification. It's not evident how the data was collected and what it aims to showcase. The heatmaps across all panels need clearer labeling and interpretation. - Is the data reflective of the steady-state population or is it specific to the initiation point? Depending on this, the interpretation of the x-axis and the data concentration around 2-2.5um^2 can change significantly.",
+      "text_sha256": "sha256:8d9677c06b5a95769538be25ff161c9d8cefb6ebd5e350eeac4983a9ce0c6791"
+    },
+    {
+      "char_end": 2670,
+      "char_start": 2517,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-bbc78a0ad7827e22f6d8",
+      "source_role": "reviewer_report",
+      "text": "- If the study is showcasing the initiation point, why does the average initiation mass appear on the cloud's left-most periphery rather than its center?",
+      "text_sha256": "sha256:04e5871c4361c49979563a9cf86aafcfbdba3306bcc8c568d7179d0d676884bb"
+    },
+    {
+      "char_end": 2950,
+      "char_start": 2673,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a5f7a54c19bfe852ac88",
+      "source_role": "reviewer_report",
+      "text": "- Shouldn't a stationary replisome, pulling DNA through for replication, display more directed motion of the labeled loci? The term 'diffusivity' in this context seems misplaced, especially when no distinct diffusivity analysis is provided apart from the displacement heatmaps.",
+      "text_sha256": "sha256:49b62f70bdf3b803ec1a48bf05789a0ed1f9f7c15f3db2cef3d68bee44324a03"
+    },
+    {
+      "char_end": 3095,
+      "char_start": 2953,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5cab901dd522390d74c9",
+      "source_role": "reviewer_report",
+      "text": "- A reference standard for expected \"diffusivity\" would be beneficial to compare the observed values and justify 'high' vs. 'low' diffusivity.",
+      "text_sha256": "sha256:82a015c1c874a3cd84f4ecdd3c0e15e350b9e9fabf708727d63ef6df6dc9a395"
+    },
+    {
+      "char_end": 3156,
+      "char_start": 3098,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-219f314b1375922ae0ae",
+      "source_role": "reviewer_report",
+      "text": "- Why does the displacement increase > 2.5um^2 so sharply?",
+      "text_sha256": "sha256:78796bf956bcfbaa970cf4a202ce746de008c010f1359e94d73309315d814ad2"
+    },
+    {
+      "char_end": 3248,
+      "char_start": 3159,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-dd7d925a72635a156cc4",
+      "source_role": "reviewer_report",
+      "text": "- Due to the ambiguity in Figure 3, Figure 4 is also hard to follow (more on this below).",
+      "text_sha256": "sha256:66023e6b438a184c690b6518f9f696a65f6aff6bc6eb34d59229c5a9ed88017c"
+    },
+    {
+      "char_end": 3338,
+      "char_start": 3251,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1f11836dd7410966587f",
+      "source_role": "reviewer_report",
+      "text": "(ii) Section: 'Replication induces transient spatial repositioning of chromosomal loci'",
+      "text_sha256": "sha256:edf38b13ed16d4690a4c8db7c9b49c38fc0bc0c8884d4d3f11f7c055c14b09ff"
+    },
+    {
+      "char_end": 3493,
+      "char_start": 3341,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f8ce66304a2d8058d09f",
+      "source_role": "reviewer_report",
+      "text": "- For Figure 4, integrating a loci map, similar to works by Stuart Austin (Genes Dev 2014) or Paul Wiggins (PNAS 2010), would be helpful for the reader.",
+      "text_sha256": "sha256:04a6147e5998bcf836237723864d56e4ae4378e9b1544bc89a47432e7e0df2f4"
+    },
+    {
+      "char_end": 3671,
+      "char_start": 3496,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6e1e1f77956ea5bb3b41",
+      "source_role": "reviewer_report",
+      "text": "- Why do the vertical dashed lines in the panels vary so significantly, given the sequential progression of replication from ori to ter and non-overlapping replication cycles?",
+      "text_sha256": "sha256:eadd85d4186f7f87e52fe404c46847a26250095fbcdb2352d37acde9924937de"
+    },
+    {
+      "char_end": 3707,
+      "char_start": 3674,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-247c886189c1da9fee88",
+      "source_role": "reviewer_report",
+      "text": "(iii) Other General Observations:",
+      "text_sha256": "sha256:08b3dd45ef58951af43b85f982249c0e94ca213462e29230ddfb2499e4340685"
+    },
+    {
+      "char_end": 3844,
+      "char_start": 3710,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-eda6eef166e11b6795a0",
+      "source_role": "reviewer_report",
+      "text": "- The concept of 'cohesion', as discussed by Hiraga, is noticeably absent. Can cohesion impact the interpretations of Figures 3 and 4?",
+      "text_sha256": "sha256:92620d6c75a5ab070c450c56d085652e51ee2fb5f40dd6f518a3e292cc29cb55"
+    },
+    {
+      "char_end": 4081,
+      "char_start": 3847,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-90e0582e31e4c5b1450a",
+      "source_role": "reviewer_report",
+      "text": "- A robust model that aligns with the presented data would enhance the manuscript's depth. Furthermore, predictions based on this model about chromosome replication and organization under various growth conditions could be invaluable.",
+      "text_sha256": "sha256:10714babf2c88fe537ff0e08d024209c3a21dad572116ee1b13ea1935d4e3fba"
+    },
+    {
+      "char_end": 4254,
+      "char_start": 4084,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d7ea9db0d0ae2118521a",
+      "source_role": "reviewer_report",
+      "text": "- Could stationarity of replisomes be the result of the underlying chromosome structure (as discussed by Stuart Austin, Genes Dev, 2014, and other references thereafter)?",
+      "text_sha256": "sha256:bf53f2a52b784f58ce72f741619650d6ebca8448ab4630a6cfbd73758ae6fb10"
+    },
+    {
+      "char_end": 4451,
+      "char_start": 4257,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d0eb03ba3679a9bdc16d",
+      "source_role": "reviewer_report",
+      "text": "- More comprehensive explanations are needed to supplement the data. The manuscript would benefit immensely from visual illustrations or schematics to aid in clearer understanding. Minor Points:",
+      "text_sha256": "sha256:6b8f1660aacef42ba4498f1327a87d379d1e34a59f26cd20f2f7a3db7f89dafd"
+    },
+    {
+      "char_end": 4682,
+      "char_start": 4454,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-03af20f1b9ac1fca77ae",
+      "source_role": "reviewer_report",
+      "text": "- For Figure 1, direct annotations would help, such as 'oriC (malO/'MalI)' on the upper panel and 'replisome (mCherry-DnaN)' on the lower one. Also, the vertical white & red dashed lines should be labeled directly on the panels.",
+      "text_sha256": "sha256:a81e22996010713ea02ab7673a73cdad7d9a31305c53eecf092267f052ce9aa5"
+    },
+    {
+      "char_end": 4721,
+      "char_start": 4685,
+      "reviewer_id_hash": "REV-f025e964d6a416c4",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-aa71e213f2f15e09f1d1",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #2 (Remarks to the Author):",
+      "text_sha256": "sha256:44342433f6365a7f5949b5d3040f70d6f57a95f4a5f42f98700e18492093b116"
+    },
+    {
+      "char_end": 4959,
+      "char_start": 4724,
+      "reviewer_id_hash": "REV-f025e964d6a416c4",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ff5e831c3ec8dcd1049e",
+      "source_role": "reviewer_report",
+      "text": "There appears to still be some debate as to whether E. coli replisomes are stationary or if they track along the DNA. This manuscript addresses this question using fluorescent labeling of DNA loci along with a marker for the replisome.",
+      "text_sha256": "sha256:ad931f8999398b55bb3e02d79a696554c694e019f6c3b87a23a3b3b79229f29d"
+    },
+    {
+      "char_end": 5058,
+      "char_start": 4962,
+      "reviewer_id_hash": "REV-f025e964d6a416c4",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-febd0260a74955c6583f",
+      "source_role": "reviewer_report",
+      "text": "The data presented are indeed compelling and do show replisomes to be spatially confined arguing",
+      "text_sha256": "sha256:dd2980c118b825db7958c99447aca8395cbd2c7422e8d13f75035788555c73a0"
+    },
+    {
+      "char_end": 5113,
+      "char_start": 5061,
+      "reviewer_id_hash": "REV-f025e964d6a416c4",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-417f5dcda531e9f9f1ce",
+      "source_role": "reviewer_report",
+      "text": "against models put forth by references 10,11 and 12.",
+      "text_sha256": "sha256:aa175302267512e2c0af66b3f2ef96926a151e37284e1a6de63272d63b860d5e"
+    },
+    {
+      "char_end": 5197,
+      "char_start": 5116,
+      "reviewer_id_hash": "REV-f025e964d6a416c4",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f75d6a43c586e169b96c",
+      "source_role": "reviewer_report",
+      "text": "1) The data presented in Fig 3 and 4 needs a bit more explanation for the reader.",
+      "text_sha256": "sha256:d9f7e19fe49bc8bbe0417cf3748f4469b51aca92e9d8146dd320632f3a6cd595"
+    },
+    {
+      "char_end": 5750,
+      "char_start": 5200,
+      "reviewer_id_hash": "REV-f025e964d6a416c4",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-72e7a418a238697b212c",
+      "source_role": "reviewer_report",
+      "text": "2) The portion of the paper about oriC localization to the membrane seems like an add on which does not flow with the rest of the manuscript. Although it seems clear that oriC is not a membrane bound locus like LacY the authors would need to add other experiments to bolster this section of the paper. What happens if SeqA is over expressed? Does oriC show more \"membrane\" localization under that condition? If oriC shows any true membrane localization, it would be expected to be very transient and not represent the dominant position of the origin.",
+      "text_sha256": "sha256:f15e4493d846e30b1be428041ebe505499089bce94af6cc7c63238ebfa5275fc"
+    },
+    {
+      "char_end": 5972,
+      "char_start": 5753,
+      "reviewer_id_hash": "REV-f025e964d6a416c4",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8345035c543728277f38",
+      "source_role": "reviewer_report",
+      "text": "3) There needs to be some discussion as to the rationale that the data provided here are somehow more reliable than the data presented in refs 10,11 and 12. What accounts for the differences that are observed by others.",
+      "text_sha256": "sha256:7a1307f094112c3ec0dd5008fe432c6519a4928767975a9860e86f367b96e735"
+    },
+    {
+      "char_end": 6011,
+      "char_start": 5975,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e817671083a166e9008d",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #3 (Remarks to the Author):",
+      "text_sha256": "sha256:8c17865a9cabc7f290ce7a58f02add361b84a8c4dd8a742bbb1b6a885882bbd0"
+    },
+    {
+      "char_end": 6151,
+      "char_start": 6014,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-aef1673bb5e4ad456594",
+      "source_role": "reviewer_report",
+      "text": "The ms of Gras et al describes the use of fluorescence imaging to study whether the E.coli replisome moves during chromosome replication.",
+      "text_sha256": "sha256:b9ec75f7a7d761aaea466293084ff485b7fcc5a3800580bbeb481e3c936b8c6d"
+    },
+    {
+      "char_end": 6434,
+      "char_start": 6154,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-40ef8f21a1f579c5267e",
+      "source_role": "reviewer_report",
+      "text": "There is conflicting literature regarding this question that dates back over 20 years. The two prevailing models are: the factory model whereby replisomes remain static and the DNA is translocated, and the tracking model whereby the replisome tracks over the DNA as it replicates.",
+      "text_sha256": "sha256:d4b07c0e68117898013bbe485d1c3185df9e9871858e3220de2bbb90ba546fb4"
+    },
+    {
+      "char_end": 6869,
+      "char_start": 6437,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-63b018d277cb307f4137",
+      "source_role": "reviewer_report",
+      "text": "The experiments in the ms are well executed and reasonably described. The results of OriC and replisome displacements at different cell areas are particularly original and support the notion that chromosomes translocate through stationary replisomes. However, the presentation of figures could be considerably improved (see remarks below), and additional analysis would be expected to support the main conclusions of the manuscript.",
+      "text_sha256": "sha256:ec0bf84ffcc397c78e5fd4742a9b06cbbaf3b33630a52f4e9c4e6dcea212b945"
+    },
+    {
+      "char_end": 7814,
+      "char_start": 6872,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fa08de30d5ed83bfd863",
+      "source_role": "reviewer_report",
+      "text": "There are several lines of evidence supporting tracking and factory models in E. coli. The most recent studies using fluorescence imaging are from the Wiggins (Mangiameli, PLoS Genetics, 2017) and the Dekker labs (Japarizde, Nat. Comm. 2020). The present study provides additional support for the factory model, but the results and methods are similar to those already presented in previous studies (e.g. Mangiameli, 2017). The replisome localization over the cell cycle was reported using similar methods by Mangiameli et al (2017). Other results, such as demographs for FROS inserted at many different chromosomal positions were previously reported (e.g. Espeli lab). In fact, the tracking/factory model is perhaps an oversimplification, as replisomes were reported to split to remain together depending on growth conditions, and to perform excursions from one model (factory) to the other (tracking) during replication (Chen, Elife, 2023).",
+      "text_sha256": "sha256:51b98ce827e5a982d2c81eb973553c8755a8da1b60b0163960fcd13864b4e602"
+    },
+    {
+      "char_end": 8104,
+      "char_start": 7817,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c2337e49922ab5119207",
+      "source_role": "reviewer_report",
+      "text": "It is unclear whether the current study can truly exclude a possible combination of stationary and tracking models, as this does not seem to be addressed. Ultimately, because of these shortcomings, the ms does not provide enough additional evidence prompting a rethink of current models.",
+      "text_sha256": "sha256:f86d1d6728a0ce6c15abee01368f3257d06cb7631362a7790ae08c93b9fac4ae"
+    },
+    {
+      "char_end": 8637,
+      "char_start": 8107,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6e5ccbe9a34faacc58b4",
+      "source_role": "reviewer_report",
+      "text": "Lastly, we would recommend rewriting some sections of the manuscript for clarity. For instance, the “Initiation of replication does not occur at the cell membrane” section starts with a long paragraph describing the literature. We would expect this to be in the introduction of the manuscript, not within the results, as we have the feeling we are reading a different paper. This highlights also the fact that this section seems actually to address a different question than previous sections and how these are related is unclear.",
+      "text_sha256": "sha256:65bf5f73f56d51c1415a1f0034a53854b5bb5a44d1cab4049d430735a3713aa0"
+    },
+    {
+      "char_end": 8663,
+      "char_start": 8640,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-606041eba04e052fd31e",
+      "source_role": "reviewer_report",
+      "text": "Additional major issues",
+      "text_sha256": "sha256:af842e8fbc91c4a7881ae078701e015a99135d6d0bb3010beb6ecd454c2fcc5a"
+    },
+    {
+      "char_end": 8761,
+      "char_start": 8666,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f7b8699e51b5c17a7d24",
+      "source_role": "reviewer_report",
+      "text": "Additional analysis or experiments would be required to provide evidence for some of the claims",
+      "text_sha256": "sha256:bd85e3b6e45ef9077a7bf8975d39fb302e16f542b127254954d0e84c44116576"
+    },
+    {
+      "char_end": 8791,
+      "char_start": 8764,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-030a5b3c292ac3666a5e",
+      "source_role": "reviewer_report",
+      "text": "## made in the manuscript.:",
+      "text_sha256": "sha256:5df8c50d6a627b762696b4f5e829890c6a3daea59903a4113fe52a49ca2c7abb"
+    },
+    {
+      "char_end": 9071,
+      "char_start": 8794,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-dd606d157bd61f32163d",
+      "source_role": "reviewer_report",
+      "text": "The authors claim the oriC-proximal chromosome locus shows more dynamics over the cell cycle as compared to the replisome, however this does not seem to be shown. They show the RMSD of the replisome over 20 minutes but do not compare this result to the RMSD for the OriC locus.",
+      "text_sha256": "sha256:d846de6366f7c7afbe8ac3a852497972e8bf1c341906e22cd7a1d58b5d8f45ba"
+    },
+    {
+      "char_end": 9304,
+      "char_start": 9074,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5c9faac6e3312603f271",
+      "source_role": "reviewer_report",
+      "text": "+9; 58<=-8/1 B*= /166 <5@1< 92 A%#) D7&\" =41 69/5 ;169/-=1 2;97 =41 960 :961 58=9 =41 ;13598 92 =41 replisome, in which the locus diffusivity becomes slower”. We don’t see in Fig 5 the decrease in diffusivity the authors refer to.",
+      "text_sha256": "sha256:ce81cfffdd8f611e3eae02d7d6debca441e13bf875de69b816e91d8895fa19d5"
+    },
+    {
+      "char_end": 9648,
+      "char_start": 9307,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-114b20f3b9cfaa441357",
+      "source_role": "reviewer_report",
+      "text": "“indicating that the two replisomes moving bidirectionally on the chromosome stay close together throughout the replication process”. We could not find proof that this is the case from your data, we surely missed it. Perhaps it all depends on the definition of ‘close together’, as their spatial resolution seems to be the diffraction limit.",
+      "text_sha256": "sha256:72026f057938c7d65bcd54793226423b6e40a16fe3a6c72c129ad4b4000fc6b5"
+    },
+    {
+      "char_end": 10144,
+      "char_start": 9651,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0268520fcb292106a764",
+      "source_role": "reviewer_report",
+      "text": "As a follow up, the standard deviations in Fig. S1 shows that replisomes can potentially explore a ;13598 92 &$$87 -;9>80 =41 'C( 9; 750/166 :9<5=598<# ,4><\" =41 =?9 ;1:65<971< /9>60 .1 =45< distance apart and not necessarily ‘close together’. It is surprising that the authors do not attempt to track the two independent replisomes. This has been achieved before (see Mangiameli, 2017) and would be necessary in this ms to strengthen the authors conclusions and to provide additional inklink.",
+      "text_sha256": "sha256:2facf65c34ca8cf3714f4674c112c37e2fa29d0d849098410f025af73e7034e7"
+    },
+    {
+      "char_end": 10336,
+      "char_start": 10147,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-12403244d56aaa074b96",
+      "source_role": "reviewer_report",
+      "text": "“These observations show that the chromosome moves as a result of the replication process and not vice versa.” This is a strong statement and we don’t see the evidence for it in their data.",
+      "text_sha256": "sha256:2df0e1ad727c8e03bd4a02d89dc204c3b0614b93ba9126273e255880ec1e03d7"
+    },
+    {
+      "char_end": 10993,
+      "char_start": 10339,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ab3adb0745cd1b194262",
+      "source_role": "reviewer_report",
+      "text": "“Contrary to the membrane involvement suggested by previous studies, we did not observe localization distributions reminiscent of membrane binding at any point in the cell cycle (Fig. 1)”. To what extent the authors can support such a strong statement (contradicting well documented studies) from a histogram? One can easily imagine a short-lived excursion of the oriC to the membrane region that is not captured in a histogram just because it is short lived and therefore far less likely than a localization close to the long axis. Unless further experiments or analyses are presented, we do not think this represents enough support for this conclusion.",
+      "text_sha256": "sha256:4593fe92f215618042e5d6965fd30275d2a946298a60b001c953d995fea7071d"
+    },
+    {
+      "char_end": 11206,
+      "char_start": 10996,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-99eb98d8ea8469fa8234",
+      "source_role": "reviewer_report",
+      "text": "How can the distribution of a membrane protein, such as LacY be expected to be a model for what to expect from the replisome, that would briefly contact the membrane-proximal region upon replication initiation?",
+      "text_sha256": "sha256:f0637187d3692687d89d952f05df304f9948a239d5731c7c7bffbfd15fd502dd"
+    },
+    {
+      "char_end": 11919,
+      "char_start": 11209,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-31262699027e167a8216",
+      "source_role": "reviewer_report",
+      "text": "Some statements would profit from some toning down. For instance in the sentence: “We show striking evidence that chromosomal loci make large intracellular movements both directly before and directly after replication while the replisomes stay relatively stationary”, the authors could have described the fact the stationary replisomes were reported before, and that the choreography of genomic loci is well established. These two data together support a model whereby the chromosome translocates through more or less static replisomes. In this, they provide additional evidence that diffusivity of genomic loci decreases during their replication, which provides additional support to the aforementioned model.",
+      "text_sha256": "sha256:9d48a0db29a2eb2736f161e4db38ba2acc8240173e01079836a846719f7836a5"
+    },
+    {
+      "char_end": 12297,
+      "char_start": 11922,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7a2ddca9d2a975ead7cb",
+      "source_role": "reviewer_report",
+      "text": "We would recommend verifying some of their statements, for instance “As the replisome and ter colocalize, replication terminates, which results in catenated copies of ter”. If we remember well, XerCD recombination to decatenate chromosomes is only required in a small number of dividing cells (10-15%?). Their statement makes one think that this happens every division cycle.",
+      "text_sha256": "sha256:330e3a55ed1a9ffd0c3bd29c7eed88b970454abe81145026ab89f2cf962e8cc1"
+    },
+    {
+      "char_end": 12310,
+      "char_start": 12300,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6d69149d6a808f5c5cc4",
+      "source_role": "reviewer_report",
+      "text": "## Figures",
+      "text_sha256": "sha256:70b45482eb21d5d59892e8652c0b5daf75acb722829d0de18aa35ddb9f1ccb76"
+    },
+    {
+      "char_end": 12577,
+      "char_start": 12313,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a20fcb69e6949204c39a",
+      "source_role": "reviewer_report",
+      "text": "Raw images are absent from the ms and would be reassuring to both reviewers and readers. Some panels are repeated several times. For instance it seems that Figure 1 appears again in Fig 6c and in Fig. 5 (top panel?). What is the need to show the same panels again?",
+      "text_sha256": "sha256:d83b55b65c84008b95ea357f7f385fe3639b9a436858b1963f5f48703193c603"
+    },
+    {
+      "char_end": 12802,
+      "char_start": 12580,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-43edceeb6b24ca17ceb2",
+      "source_role": "reviewer_report",
+      "text": "Some figures are difficult to understand. For instance, we had a very hard time understanding what is being shown in Fig. 5. There are no labels on the many panels shown, nor a clear explanation in the text or the legends.",
+      "text_sha256": "sha256:ecf3706ebce6bd77a981d14fcb066b914731004f14bcbddd44621426e4f709f7"
+    },
+    {
+      "char_end": 12933,
+      "char_start": 12805,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1d8fb9f4bab60d2f12b1",
+      "source_role": "reviewer_report",
+      "text": "How many replisomes are detected per cell along the cell cycle? Do the authors ever detect splitting events in their conditions?",
+      "text_sha256": "sha256:6d4acab7f158627e56fce9ab37149d5132b745a05af7e53a1dfeb62f33873ead"
+    },
+    {
+      "char_end": 13046,
+      "char_start": 12936,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-40583774d2896614e644",
+      "source_role": "reviewer_report",
+      "text": "Statistics are lacking in all figures? How many cells? How many localizations? How many replicate experiments?",
+      "text_sha256": "sha256:7aca7616deae52cbb4708b28cb0a7acae4283bf9346570a79981123d52d980ff"
+    },
+    {
+      "char_end": 13095,
+      "char_start": 13049,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3ec10a61cbf236f2cb58",
+      "source_role": "reviewer_report",
+      "text": "Fig1: clarity could be improved by indicating:",
+      "text_sha256": "sha256:7d10cd02003f05b4554b076f5324d4297d0caf46db4f950e5749f044ae20dccf"
+    },
+    {
+      "char_end": 13122,
+      "char_start": 13098,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-34b634dc8d9996e1f981",
+      "source_role": "reviewer_report",
+      "text": "- Fluorescent label used",
+      "text_sha256": "sha256:50d2dd473a4d4fb66db64bbb47b02b274598a74858af7c761189e944bfd14fba"
+    },
+    {
+      "char_end": 13167,
+      "char_start": 13125,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3f5d8bbbb016414fdd9b",
+      "source_role": "reviewer_report",
+      "text": "- Significance of white and red dash lines",
+      "text_sha256": "sha256:27f60f11ec390f0eb7e1b63c70db791f638cc4d9175ab2ac449fecf8f60a6748"
+    },
+    {
+      "char_end": 13205,
+      "char_start": 13170,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d7e93e7131e79ff5f247",
+      "source_role": "reviewer_report",
+      "text": "- What does the colormap represent?",
+      "text_sha256": "sha256:b4f55de63c7e3d1e57957c521a6aee99f9254f536b02e2df27ba9e6db5a13672"
+    },
+    {
+      "char_end": 13256,
+      "char_start": 13208,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7959ffbea0842795f077",
+      "source_role": "reviewer_report",
+      "text": "- How is the number of loci per cell normalized?",
+      "text_sha256": "sha256:9dbcb70898cb785f29fc3d67ea9bf44532c90b9d11046b9d04147e9321d38e04"
+    },
+    {
+      "char_end": 13356,
+      "char_start": 13259,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-acf6695f9b289dd99412",
+      "source_role": "reviewer_report",
+      "text": "- Figures are generated from foci in 86930 cells \" Give the individual number for each condition.",
+      "text_sha256": "sha256:bf2c884a9415a1ea05a846309f47106b302ed7ffda2f94568d14b0080430ef5c"
+    },
+    {
+      "char_end": 13407,
+      "char_start": 13359,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-19c700d46d39a6f09704",
+      "source_role": "reviewer_report",
+      "text": "- How many replicate experiments were performed?",
+      "text_sha256": "sha256:9ab8a83d0731fe63bf872e2dc96024df64d9faadb5e90ea9c5af41c9175f4d41"
+    },
+    {
+      "char_end": 13417,
+      "char_start": 13410,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-10cafc0ea751a1ae2b87",
+      "source_role": "reviewer_report",
+      "text": "Fig S1:",
+      "text_sha256": "sha256:10e92162cdf91b45f3062496ff145907baf811b9d6b9b1ee9dc22958beb61996"
+    },
+    {
+      "char_end": 13482,
+      "char_start": 13420,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-53d5e1017f170c7db5dc",
+      "source_role": "reviewer_report",
+      "text": "Provide standard deviations on the mean STD values? Provide N.",
+      "text_sha256": "sha256:d65d66b27b966200961ceebfbfc836372e97a198a2256e5dd8feba7887103ac0"
+    },
+    {
+      "char_end": 13544,
+      "char_start": 13485,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-53ad6970530223eb4865",
+      "source_role": "reviewer_report",
+      "text": "Display curves for Old and New poles with different colors?",
+      "text_sha256": "sha256:3908067a7c5af9992350a799bdaf682b3ca27eb6cddd82250e8a1bea234a1694"
+    },
+    {
+      "char_end": 13726,
+      "char_start": 13547,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7df1e5d9716483560446",
+      "source_role": "reviewer_report",
+      "text": "Fig S1: \"It is unclear what the authors are tracking. Are they tracking the mean position of the two replisomes or the position of individual replisomes at each replication focus?",
+      "text_sha256": "sha256:fde3138c66af02603f6b196564e829ffabc73022f0d1af5611963cf64c210cc7"
+    },
+    {
+      "char_end": 14014,
+      "char_start": 13729,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-73d7f5dd895314eb68c8",
+      "source_role": "reviewer_report",
+      "text": "Page 4: “due to its higher resolution compared to the mCherry-based label” \" resolution or localization precision? If the authors meant resolution (we assume this because the point spread function of YPet is smaller than mCherry), could the authors explain why resolution matters here?",
+      "text_sha256": "sha256:7f152a1459118052cf985a8788a876b776be0858905df79fead1db17c1425f24"
+    },
+    {
+      "char_end": 14186,
+      "char_start": 14017,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-501071f9f860df7e2e7e",
+      "source_role": "reviewer_report",
+      "text": "Fig2: the figure shows the RMSD of the replisome with the error bars corresponding to standard error of the mean. How many trajectories were used to compute these plots?",
+      "text_sha256": "sha256:4e199b14f502992ba10e875c03de45a4a827de3442d61d94637a2c4d3b56f307"
+    },
+    {
+      "char_end": 14196,
+      "char_start": 14189,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5037f3a0a33bb7218ddc",
+      "source_role": "reviewer_report",
+      "text": "Fig S2:",
+      "text_sha256": "sha256:249dffcf2e193afa856c6dc8589dad06125509cc9b52076541f1c89140ec94e1"
+    },
+    {
+      "char_end": 14299,
+      "char_start": 14199,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-81f4a02104918b2e262e",
+      "source_role": "reviewer_report",
+      "text": "Why is the short axis RMSD 50% larger than in the main figure while the long axis RMSDs are similar?",
+      "text_sha256": "sha256:d5728f7290b0471a52e360493ea15505ca5e1739de4db73d5d4fc650ad50dc71"
+    },
+    {
+      "char_end": 14326,
+      "char_start": 14302,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ff8fb058309a2f82cadf",
+      "source_role": "reviewer_report",
+      "text": "What are the statistics?",
+      "text_sha256": "sha256:d59551e4da262ccf629a2708579189ffa4eef2029ef49436e62452885ecedf07"
+    },
+    {
+      "char_end": 14801,
+      "char_start": 14329,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2333fd65b0b740fd70cb",
+      "source_role": "reviewer_report",
+      "text": "Page 4: “Taken together, we find that the localization distribution of the replisome varies less compared to the oriC-proximal locus, both in terms of its average position and width of the distribution” \" Where have the authors quantified the OriC proximal locus distributions? How can the authors be sure the qualitative difference in fluorescent foci distributions shown in Fig1 is not due to the localization precision of the fluorescent proteins used (mCherry vs YFP)?",
+      "text_sha256": "sha256:a9045f38d8f30a794abdfdd59178054f25b18bd40470ae4ad264caf280ce729b"
+    },
+    {
+      "char_end": 14903,
+      "char_start": 14804,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1646212afca107814aeb",
+      "source_role": "reviewer_report",
+      "text": "Figs. 3,4,5 and 6: How many cells, loci and replicate experiments were performed in each condition?",
+      "text_sha256": "sha256:79ff9f9c803d56a4302ff56a50f095b339a681709804232bca337451357bcf04"
+    },
+    {
+      "char_end": 15119,
+      "char_start": 14906,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9f318d326e46ac3de3af",
+      "source_role": "reviewer_report",
+      "text": "Fig. 6: Ter is known to associate with membrane-associated proteins though the authors’ method does not detect this. Could the method remain too limited and not detect transient or asynchronous events (see above)?",
+      "text_sha256": "sha256:9019f9de725bce08c2e1c181e27c59cde12db259106b483dc77f4cd48e88b268"
+    },
+    {
+      "char_end": 15492,
+      "char_start": 15122,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9f50fcd2a0e9b808da5b",
+      "source_role": "reviewer_report",
+      "text": "No time lapse experiments supporting stationary replisome and translocating chromosomes through replisomes are presented. While this is not critical it would be reassuring to see the authors confirming their results using methods employed by other conflicting studies. Figures are not formatted properly. They lack scalebars, colorbar legends, consistent font size, etc…",
+      "text_sha256": "sha256:a3eea1d8cb5e4fce54eda9e241aaa24df98ffaa3b49642a7ff9ceaa005af0189"
+    },
+    {
+      "char_end": 91529,
+      "char_start": 91493,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-46197f815c7313c693da",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #1 (Remarks to the Author):",
+      "text_sha256": "sha256:6ffd34d82a3d649fbc91e1dc65fd25e243f665d42d0f633ad65db9c0ce240058"
+    },
+    {
+      "char_end": 91559,
+      "char_start": 91532,
+      "reviewer_id_hash": "REV-b749148b314de780",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b3f24c2d0fd92bf4c54c",
+      "source_role": "reviewer_report",
+      "text": "The revision is acceptable.",
+      "text_sha256": "sha256:f2a3491363e62be11ee736872272ae095d764a54d8d28eafba8bb9252edb4bde"
+    },
+    {
+      "char_end": 91840,
+      "char_start": 91601,
+      "reviewer_id_hash": "REV-f025e964d6a416c4",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d758b32c590b214e4b33",
+      "source_role": "reviewer_report",
+      "text": "The authors addressed my questions sufficiently. The introduction now reads like a review article as opposed to setting the stage for what the authors do and how they address the issue in the literature. The introduction should be revised.",
+      "text_sha256": "sha256:7e93d16418a390f81e022a468f1a7cc8743e3eb8968915ac31d36307ee9c67a2"
+    },
+    {
+      "char_end": 92147,
+      "char_start": 91882,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-801e7b8aaf7c1fbca61c",
+      "source_role": "reviewer_report",
+      "text": "The authors have made an important effort in providing a literature overview on the debated model of replisome dynamics over the years and on clarifying these models in the introduction of the ms. However, there are multiple issues remaining that need to be solved.",
+      "text_sha256": "sha256:1294575a5d9a3b37c7c94b7bfdbb1961aaaf3a496570a3dcb039e299c022c394"
+    },
+    {
+      "char_end": 92486,
+      "char_start": 92150,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0d5c85a82339c71f2824",
+      "source_role": "reviewer_report",
+      "text": "In our previous review, we asked what we felt was a simple question: “...the tracking/factory model is perhaps an oversimplification, as replisomes were reported to split to remain together depending on growth conditions, and to perform excursions from one model (factory) to the other (tracking) during replication (Chen, Elife, 2023)”",
+      "text_sha256": "sha256:38c5a4af23bd270150fef32c03f21606c1c41f0b7464eab38c1746bcadb5abf1"
+    },
+    {
+      "char_end": 92863,
+      "char_start": 92489,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-150080165a2d83c7a4b9",
+      "source_role": "reviewer_report",
+      "text": "The authors answer with a quite convoluted paragraph which is at times hard to follow. The data in the ms clearly supports a ‘factory-like’ model whereby replisomes remain spatially constrained and the DNA goes sequentially through this factory. It seems unclear how the solitary configuration fits into this model, and we would have expected a discussion of this in the ms.",
+      "text_sha256": "sha256:2c1275b20a9f5361f45dfe6eb948dc9ba88e9a9aef3170366d2c0adf55427e85"
+    },
+    {
+      "char_end": 93136,
+      "char_start": 92866,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d45783e89177100bde74",
+      "source_role": "reviewer_report",
+      "text": "In the PBP the authors make an attempt at explaining how their data would refute a solitary configuration model as defined by Chen et al. However, we were unable to understand the rationale of their answer given the lack of detail of what is being referred to in Fig. 5.",
+      "text_sha256": "sha256:55ba9cbec8e7c3f89f44f6c38ce3c1be8148c38c2fc903afeabb7cc6287831f0"
+    },
+    {
+      "char_end": 93389,
+      "char_start": 93139,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ca53162fa8c15035a0a8",
+      "source_role": "reviewer_report",
+      "text": "Line 162: “This shows that the two replisomes moving bidirectionally on the chromosome stay within a volume smaller than ~125x200 nm ellipsoid”. ~125x200 nm makes it an area unit, not a volume. Also, it is unclear where this number was obtained from.",
+      "text_sha256": "sha256:901d047adfd67de354fb35d0e215b1abbd9a2c50c13d928610e6920e87d7cc4e"
+    },
+    {
+      "char_end": 93941,
+      "char_start": 93392,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-18a139cd23f88d51cf47",
+      "source_role": "reviewer_report",
+      "text": "Line 172: “Since the replisome distributions in Fig. 1 showed a net average movement away from the cell middle on the time-scale of 20 min”. Since there is no time indication of this figure it is difficult to know what net average movement the authors are referring to. On the figure we do not see any movement of the replisome from cell area 1µm²\"2µm² and similarly for replisomes at ¼ positions from cell area 2µm²\"3µm². In addition, we do not understand why this movement is subtracted since it is part of the replisome dynamics being quantified?",
+      "text_sha256": "sha256:e1ea5af6a389f9d9bc96f18cd12e62ac8ca708b4b1513c53e860ecf73280720f"
+    },
+    {
+      "char_end": 94244,
+      "char_start": 93944,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0af87963c8e1cb69584a",
+      "source_role": "reviewer_report",
+      "text": "Line 180: The authors compare the RMSD of the replisome subtracted from their net average movement with the RMSD of OriC (we assumed the latter is not subtracted from their slow drift since there is no mention of it). How can the authors then compare the results from dynamics quantified differently?",
+      "text_sha256": "sha256:9e3e2bcd3ae985a1b8c434a27d695c1f85bce87f4ce9c5362e94ca0ffc4a0dca"
+    },
+    {
+      "char_end": 94637,
+      "char_start": 94247,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fe9aff57ff1720bdebba",
+      "source_role": "reviewer_report",
+      "text": "Figures overall remain difficult to understand. Often data are split between the main figure and the supplement (e.g. Fig2) and this complicates comparison of relevant datasets. Often figures do not contain panels, complicating interpretation. The fontsizes are at times unreadable. Colormaps lack legends. Choice of colors is confusing (e.g. Fig 3d). Additional comments on figures follow:",
+      "text_sha256": "sha256:41941d43f12d4fccbaeef493a7ff5409c4caad68e4f2e2c5e936f9dd6c319697"
+    },
+    {
+      "char_end": 95014,
+      "char_start": 94640,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-421a07c7e714564550a1",
+      "source_role": "reviewer_report",
+      "text": "Figure 1: Addition of panels would considerably aide readers in navigating the figure Please indicate the colormap units (normalized fluorescence intensity level) on the new timelapse panels The ‘Time’ label on these panels appears useless without any proper axis or units, and may be confusing if used with the same alignment and font size as “Birth” and “Division” labels.",
+      "text_sha256": "sha256:a49dbee309674be56efd0da50e4e65d8d920289b9fab880cfe6bd40eb4d68939"
+    },
+    {
+      "char_end": 95398,
+      "char_start": 95017,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3848e976b70c1457dee4",
+      "source_role": "reviewer_report",
+      "text": "Figure 2, panel a: Is the cartoon correct? Foci in the static heterogeneity section are still moving during the cell cycle, hence producing an MSD that cannot be flat. If this is the case, then we don’t understand how from a RMSD curve in panel B they conclude dynamic heterogeneity if both dynamic and static heterogeneities would produce RMSDs that continue increasing with time.",
+      "text_sha256": "sha256:c87b31d8485016ff2cae0241e04b28f8dfb2abaf586d503d7a6ec2e6d3695a5f"
+    },
+    {
+      "char_end": 95569,
+      "char_start": 95401,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7e1dc2fab5572f186f10",
+      "source_role": "reviewer_report",
+      "text": "Figure 5 is still very complex and hard to follow. This is unfortunate given that this seems to provide evidence against the solitary configuration model of Chen et al.",
+      "text_sha256": "sha256:a620716aa32628262a2eb56df7c484240ca6fbda0096ef954db0b302f5d8706e"
+    },
+    {
+      "char_end": 95584,
+      "char_start": 95572,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b78030919e518c5f282e",
+      "source_role": "reviewer_report",
+      "text": "Minor points",
+      "text_sha256": "sha256:1afb7c7faa4b1be3c06864490d595c666c48534290141ce9016e6de2ed4abe8b"
+    },
+    {
+      "char_end": 95650,
+      "char_start": 95587,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ad568c5dfded38a4b699",
+      "source_role": "reviewer_report",
+      "text": "Figure 2: why isn't the Fig S2 panel part of the main figure 2?",
+      "text_sha256": "sha256:392f8fe2b8cb6b54aef95a730aee6d07044a011fae736e6facce5f18dbc21f53"
+    },
+    {
+      "char_end": 95731,
+      "char_start": 95653,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b84654ee60539046e986",
+      "source_role": "reviewer_report",
+      "text": "Figure 3 panel d should be swapped with panel c (introduced later in the text)",
+      "text_sha256": "sha256:59d5063c8e3dd565863da017bd8ae7ba5871208d0f5c681d8e03142808f68622"
+    },
+    {
+      "char_end": 95824,
+      "char_start": 95734,
+      "reviewer_id_hash": "REV-e6728902d61967d0",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5996e1f9919e21600926",
+      "source_role": "reviewer_report",
+      "text": "Figure 5 panels a and b may be swapped since panel b is introduced first in the main text.",
+      "text_sha256": "sha256:d9785dc664cb6bbacf9cabbcd280f0e0d165478fb741b312b2c956290e5f4410"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

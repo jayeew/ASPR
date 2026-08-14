@@ -1,0 +1,446 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:c9d74c2b076f794ae4b095755099268bd1ea777873360d5e594b6b0a120b2397",
+  "input_sha256": "sha256:9429c3632eef3e7593a6879209569ac32457300e250d6b5cae333a9f3462db74",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:43d066222deef01da0099b8e3b52e705d7e36746f6cfa30260c9f1451b1930be",
+  "package_id": "RSP-4e1d9dfbf01032d356f7",
+  "paper_id": "10.1038/s41467-024-50839-3",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-50839-3",
+      "point_id": "N-SUP-1",
+      "rationale": "The reviewer’s prior-art objection frames the paper’s claimed distinction. The final paper identifies the contribution as surfactant-enabled nanoscale COF colloids with morphology- and concentration-dependent photocatalytic behavior (P:S-fd12a8ac080e3edfbf40; P:S-1ccb0ec1a937f313e702).",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-1b34241faa042d37"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c3b353fc03eadb8873bd"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-SUP-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-bf62d30b75c8a4782b0b",
+        "RR:SRC-R-bc627c98b5503db56911",
+        "RR:SRC-R-7f2640cd56553572ac65"
+      ],
+      "paper_id": "10.1038/s41467-024-50839-3",
+      "point_id": "N-LIM-1",
+      "rationale": "The reviewer stated that the materials had been reported previously. The final paper itself states that its syntheses were based on a previous report while presenting the claimed nanoscale distinction, so the prior-art limit remains only partially resolved and requires external verification (P:S-1ccb0ec1a937f313e702; P:S-fd12a8ac080e3edfbf40).",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-1b34241faa042d37"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c3b353fc03eadb8873bd"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-LIM-1"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-50839-3",
+      "point_id": "ST-CHAR-1",
+      "rationale": "The reviewer specifically identified added solid-state 13C NMR and XPS characterization. The final paper reports FT-IR, solid-state NMR, XPS, PXRD, porosity, and microscopy evidence for the isolated nano-COFs (P:S-e77c3053d4f0207ff267; P:S-e3b9e5950a40c16c74ce).",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-cca1348519c01a81"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-fb78cd89e4c841c891dd"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-ST-CHAR-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-d084e5c27253d842312a",
+        "RR:SRC-R-0d7d8fa60b1cf942c016",
+        "RR:SRC-R-35c70520d0dbfd7a1c9d"
+      ],
+      "paper_id": "10.1038/s41467-024-50839-3",
+      "point_id": "WK-STAB-1",
+      "rationale": "The reviewer requested post-photocatalytic solid-state NMR, FT-IR, NMR, SEM, and BET evidence. The response describes added NMR and SEM but explains that solid-state NMR and nitrogen sorption were not performed; the final paper reports TEM, STEM, SEM, NMR, and FT-IR after photocatalysis and notes aggregation (P:S-dfda54e44d7d2c931f19).",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-1b34241faa042d37"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-ffc5fd615fa094b1c160",
+        "RR:SRC-R-16e33d14537be69d0dea"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-WK-STAB-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-690e90b640a4413fafbf"
+      ],
+      "paper_id": "10.1038/s41467-024-50839-3",
+      "point_id": "Q-MORPH-1",
+      "rationale": "The reviewer found the TEM and AFM morphology assignments unclear. The final paper provides cryo-TEM and AFM assignments but continues to state that the reason for the differing morphologies of the similarly structured COFs is unclear (P:S-f70824492fd86f663695).",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-1b34241faa042d37"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c3b353fc03eadb8873bd"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q-MORPH-1"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-50839-3",
+      "point_id": null,
+      "rationale": "The request to re-evaluate the nitrogen sorption profile in the micropore region is audit-only because an author-response span for this item is not available as an author_response record; the final paper reports nitrogen sorption and surface-area results (P:S-e3b9e5950a40c16c74ce).",
+      "resolution_status": "unverifiable",
+      "reviewer_id_hashes": [
+        "REV-cca1348519c01a81"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-ff1b859f2207f46b3afd",
+        "RR:SRC-R-05fa4fbdd0fd11ee8b40"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUDIT-N2-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-0b3313d22234aad576c0",
+        "RR:SRC-R-1da43eed89177ebdc5af",
+        "RR:SRC-R-7b060de030615e50d963",
+        "RR:SRC-R-1bca5839f6f3b5182c69"
+      ],
+      "paper_id": "10.1038/s41467-024-50839-3",
+      "point_id": null,
+      "rationale": "The request for a rationale for using ascorbic acid as sacrificial donor is addressed in the final paper (P:S-1827f112c7c556e0c92f).",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-cca1348519c01a81"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-646be1a326c85afcdcdb"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUDIT-AA-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-0ada046c4c3729978333",
+        "RR:SRC-R-ec3274075fcfea425a19"
+      ],
+      "paper_id": "10.1038/s41467-024-50839-3",
+      "point_id": null,
+      "rationale": "The reported Figure 1 error is audit-only; the author response identifies it as a typographical error and the final paper contains the Figure 1 caption and morphology data (P:S-e77c3053d4f0207ff267; P:S-f70824492fd86f663695).",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-1b34241faa042d37"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-f7117871089b7e667844"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUDIT-FIG1-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-7f59206f7d9883f66426",
+        "RR:SRC-R-86dc8c43614969eea8bf",
+        "RR:SRC-R-1ecdad3239c4058227dc"
+      ],
+      "paper_id": "10.1038/s41467-024-50839-3",
+      "point_id": null,
+      "rationale": "The fluorescence/quantum-yield query is audit-only. The final paper provides concentration-dependent PL and lifetime discussion and describes quantum-yield measurements (P:S-75dcdced04b794c793b0; P:S-de13f040bc70feb84ffc; P:S-bb99e59ad3d707577f17).",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-1b34241faa042d37"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-43a34cef31d11c073aa2"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUDIT-QY-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-6c398a07eac95037276c"
+      ],
+      "paper_id": "10.1038/s41467-024-50839-3",
+      "point_id": null,
+      "rationale": "The title concern is subjective and cannot be verified from the final paper beyond the title itself (P:S-18fa1fd1a0af93c418ff).",
+      "resolution_status": "unverifiable",
+      "reviewer_id_hashes": [
+        "REV-1b34241faa042d37"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-1b9937a97e5d866bd9e6"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUDIT-TITLE-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-ffe21d9a04da7772b6d4",
+        "RR:SRC-R-62027a8ad044537cc250",
+        "RR:SRC-R-27ec316f29f9da11309a"
+      ],
+      "paper_id": "10.1038/s41467-024-50839-3",
+      "point_id": null,
+      "rationale": "The request for apparent-quantum-yield information and optical evidence of hydrogen evolution is audit-only. The final paper reports wavelength-dependent EQE and describes the corresponding measurement (P:S-e7bf12ba589955a3244e; P:S-9e8dd7db4c9b1df7c0c4).",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-1b34241faa042d37"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-3864c00a14f2a10104d9"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUDIT-EQE-1"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-1ccb0ec1a937f313e702",
+            "P:S-fd12a8ac080e3edfbf40"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-LIM-1",
+          "schema_version": "aspr_gear",
+          "severity": "major",
+          "suggested_action": "",
+          "text": "Novelty is limited by the concern that the two COF materials were previously reported; the final paper states that the nano-COF syntheses were based on a previous report, while asserting a nanoscale distinction."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "contribution",
+          "evidence_keys": [
+            "P:S-fd12a8ac080e3edfbf40",
+            "P:S-1ccb0ec1a937f313e702",
+            "P:S-63af19f8992f3eaa7008"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-SUP-1",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "",
+          "text": "The specific contribution is the preparation of two surfactant-stabilized nano-COF colloids and the association of their nanoscale morphology and concentration-dependent photophysics with sacrificial hydrogen evolution."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-024-50839-3",
+    "questions": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-f70824492fd86f663695"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-MORPH-1",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "",
+        "text": "What controls the distinct nanoribbon and nanosheet morphologies of the similarly structured TFP-BpyD and TFP-BD nano-COFs?"
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-e77c3053d4f0207ff267",
+          "P:S-e3b9e5950a40c16c74ce"
+        ],
+        "external_verification_required": false,
+        "point_id": "ST-CHAR-1",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "",
+        "text": "The final paper supplies complementary structural characterization of the isolated nano-COFs, including solid-state NMR, XPS, PXRD, adsorption measurements, and microscopy."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-fd12a8ac080e3edfbf40",
+        "P:S-6ba761160dd804a6f746",
+        "P:S-1827f112c7c556e0c92f",
+        "P:S-63af19f8992f3eaa7008",
+        "P:S-6e1cd88d08149143b111"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "The paper reports water-based synthesis of two surfactant-stabilized nano-COF colloids, compares them with bulk analogues, and links improved dispersion and light harvesting to enhanced sacrificial photocatalytic hydrogen evolution. It further examines an inverse concentration dependence using photoluminescence and transient-absorption measurements, while the central novelty is qualified by a prior-art concern about the underlying materials."
+    },
+    "weaknesses": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-dfda54e44d7d2c931f19"
+        ],
+        "external_verification_required": false,
+        "point_id": "WK-STAB-1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "",
+        "text": "Post-photocatalytic stability evidence remains incomplete relative to the request: the final paper reports microscopy, NMR, and FT-IR but not post-reaction solid-state NMR or nitrogen-sorption/BET measurements, and it notes aggregation of COF crystallites."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [],
+      "final_paper_evidence_keys": [
+        "P:S-e3b9e5950a40c16c74ce"
+      ],
+      "ledger_id": "L-AUDIT-N2-1",
+      "paper_id": "10.1038/s41467-024-50839-3",
+      "residual_summary": "The requested micropore-region reevaluation cannot be resolved from an author_response record in the package.",
+      "resolution_status": "unverifiable",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-ff1b859f2207f46b3afd",
+        "RR:SRC-R-05fa4fbdd0fd11ee8b40"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-0b3313d22234aad576c0",
+        "RR:SRC-R-1da43eed89177ebdc5af",
+        "RR:SRC-R-7b060de030615e50d963",
+        "RR:SRC-R-1bca5839f6f3b5182c69"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-1827f112c7c556e0c92f"
+      ],
+      "ledger_id": "L-AUDIT-AA-1",
+      "paper_id": "10.1038/s41467-024-50839-3",
+      "residual_summary": "The rationale for selecting ascorbic acid is present in the final paper.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-646be1a326c85afcdcdb"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-0ada046c4c3729978333",
+        "RR:SRC-R-ec3274075fcfea425a19"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-e77c3053d4f0207ff267",
+        "P:S-f70824492fd86f663695"
+      ],
+      "ledger_id": "L-AUDIT-FIG1-1",
+      "paper_id": "10.1038/s41467-024-50839-3",
+      "residual_summary": "The reported Figure 1 typographical error was corrected.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-f7117871089b7e667844"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-7f59206f7d9883f66426",
+        "RR:SRC-R-86dc8c43614969eea8bf",
+        "RR:SRC-R-1ecdad3239c4058227dc"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-75dcdced04b794c793b0",
+        "P:S-de13f040bc70feb84ffc",
+        "P:S-bb99e59ad3d707577f17"
+      ],
+      "ledger_id": "L-AUDIT-QY-1",
+      "paper_id": "10.1038/s41467-024-50839-3",
+      "residual_summary": "Quantum-yield and photophysical information was added.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-43a34cef31d11c073aa2"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-6c398a07eac95037276c"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-18fa1fd1a0af93c418ff"
+      ],
+      "ledger_id": "L-AUDIT-TITLE-1",
+      "paper_id": "10.1038/s41467-024-50839-3",
+      "residual_summary": "The title concern is subjective and has no auditable technical resolution.",
+      "resolution_status": "unverifiable",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-1b9937a97e5d866bd9e6"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-ffe21d9a04da7772b6d4",
+        "RR:SRC-R-62027a8ad044537cc250",
+        "RR:SRC-R-27ec316f29f9da11309a"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-e7bf12ba589955a3244e",
+        "P:S-9e8dd7db4c9b1df7c0c4"
+      ],
+      "ledger_id": "L-AUDIT-EQE-1",
+      "paper_id": "10.1038/s41467-024-50839-3",
+      "residual_summary": "EQE information and the related measurement description are present in the final paper.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-3864c00a14f2a10104d9"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

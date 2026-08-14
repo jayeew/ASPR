@@ -1,0 +1,553 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:59d53e051cc6c5e77d93a8ccbff2dd3149561c7dcfa73536bce7bbd238305f91",
+  "input_sha256": "sha256:103072db43367d7c7e3f9ef3bd93f3f7e8c53160fa842deeb8c515f500a0067a",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:6404411d2d66133bae8817007d1f181f4252a8ac6b6183694ea9d869186be323",
+  "package_id": "RSP-20af75ff09f7cca95b8f",
+  "paper_id": "10.1038/s41467-025-66466-5",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "point_id": "N1",
+      "rationale": "Reviewer 2 identifies spatially asymmetric W and O vacancies and the resulting defect-dipole hypothesis as the central methodological advance. The final paper describes edge-localized W vacancies, central O vacancies, and their performance consequences.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-9610b08ad438e482"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-b1be3520c2bed13155f3"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-35bdd22845a443622404"
+      ],
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "point_id": "N2",
+      "rationale": "Reviewer 2 asked whether the configurational strategy generalizes to other Aurivillius materials. The author response reports preliminary work, but the final paper supplies evidence only for Bi2WO6; the scope limitation remains in the final record.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-9610b08ad438e482"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-5da085e5bb463633d577"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T2"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "point_id": "S1",
+      "rationale": "Reviewer 3 credits the combined characterization and theoretical evidence. The final paper presents STEM-EELS spatial profiles together with ferroelectric switching and DFT dipole-moment evidence.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-190aeeefe21d91be"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-4ce4c30b2edae9adfc58"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T3"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "point_id": "S2",
+      "rationale": "Reviewer 3 highlights the performance evidence. The final paper reports faster degradation for BWO-ES than pristine and single-defect comparators, together with greater reactive-species yields and cycling stability.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-190aeeefe21d91be"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-4ce4c30b2edae9adfc58"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T4"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "point_id": "S3",
+      "rationale": "Reviewer 3 identifies the practical real-world setting as consequential. The final paper reports degradation and TOC removal for industrial flotation tailing wastewater under outdoor sunlight.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-190aeeefe21d91be"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-4ce4c30b2edae9adfc58"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T5"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-b1e73dc9c1493c7ffe89"
+      ],
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "point_id": "W1",
+      "rationale": "Reviewer 1 noted that performance comparisons could be confounded by different surface areas. The author response reports additional controls, but the final paper still documents a substantially higher surface area for BWO-ES while reporting the principal performance comparison without an area-normalized analysis.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-ed0982c3415edae0"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-0eec564477ed7f1023bc"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T6"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-35bdd22845a443622404"
+      ],
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "point_id": "Q1",
+      "rationale": "Reviewer 2 asks whether analogous defects can be engineered in bismuth vanadate and bismuth molybdate. The author response refers to preliminary investigations, whereas the final paper presents the study and evidence for Bi2WO6 only.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-9610b08ad438e482"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-5da085e5bb463633d577"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T7"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-8838ab38083159cb8f1b"
+      ],
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "point_id": null,
+      "rationale": "Reviewer 1 questioned the reliability and reproducibility of localized EDS evidence. The response describes replicated line scans and complementary STEM-EELS, and the final paper reports both EDS/XRF and STEM-EELS evidence. Retained for audit only.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-ed0982c3415edae0"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-4d02220114737c89fe3e"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T8"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-17da6e7a10d4c8f515bf"
+      ],
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "point_id": null,
+      "rationale": "Reviewer 1 requested vacancy concentrations and coordination information. The response supplies XRF compositions and EXAFS coordination values, and the final paper reports XRF quantification and EXAFS structural analysis. Retained for audit only.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-ed0982c3415edae0"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-715ff1164dee295ba245"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T9"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-3495d782f34e52fa51a9"
+      ],
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "point_id": null,
+      "rationale": "Reviewer 1 requested stronger evidence that the defects form dipoles rather than merely change surface potential. The response adds piezoresponse and DFT evidence, which are described in the final paper. Retained for audit only.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-ed0982c3415edae0"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-6504e55a83627f3ae74a"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T10"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-fc29baff03a115ff197f"
+      ],
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "point_id": null,
+      "rationale": "Reviewer 2 requested a chemical explanation for how ethylene glycol and NaOH establish the spatial defect configuration. The response and final paper explain their respective roles in O-vacancy formation and W leaching. Retained for audit only.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-9610b08ad438e482"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-4e58871a02ec6cd23382"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T11"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-8a612be502126a8535ce"
+      ],
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "point_id": null,
+      "rationale": "Reviewer 2 requested justification for zero-order kinetics. The response supplies the saturation rationale, and the final paper states that rationale with the fitted rates. Retained for audit only.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-9610b08ad438e482"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-eca5b83b933b4e9f8c0d"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T12"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-805c1bd7a4b7e8e44cc9"
+      ],
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "point_id": null,
+      "rationale": "Reviewer 3 requested cycling data for the single-defect materials. The response reports those controls, and the final paper compares cycling performance of BWO-ES with BWO-S and BWO-E. Retained for audit only.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-190aeeefe21d91be"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d4edf1fd43cb76bff091"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T13"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-93ce034cbc3a1b78fb8d"
+      ],
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "point_id": null,
+      "rationale": "Reviewer 3 identified a possible mismatch between simulated illumination and the visible-light experiments. The response reports correction, and the final Fig. 5 caption specifies visible-light radiation above 400 nm. Retained for audit only.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-190aeeefe21d91be"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-9b5fa57f7e4a5b806fc5"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T14"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-a6db3b37429304a7d8c8",
+            "P:S-fc252fa97510bad968e6"
+          ],
+          "external_verification_required": true,
+          "point_id": "N2",
+          "schema_version": "aspr_gear",
+          "severity": "major",
+          "suggested_action": "Distinguish demonstrated Bi2WO6 results from claims about transfer to other Aurivillius materials.",
+          "text": "The claimed generality of region-specific dual-defect engineering remains limited because the final paper demonstrates the configuration only in Bi2WO6."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-03409e42b4084e929dec",
+            "P:S-2066664dd3cbb0d3d931"
+          ],
+          "external_verification_required": true,
+          "point_id": "N1",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "State the advance as spatially separated W and O vacancies linked to a defect-induced dipole.",
+          "text": "The specific novelty is the region-specific placement of W vacancies at edges and O vacancies in central domains to create a defect-dipole configuration."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-025-66466-5",
+    "questions": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-a6db3b37429304a7d8c8",
+          "P:S-fc252fa97510bad968e6"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Report comparable characterization and performance data for bismuth vanadate and bismuth molybdate.",
+        "text": "Can the spatially separated W/O-defect strategy be reproduced and validated in other Aurivillius materials, including bismuth vanadate and bismuth molybdate?"
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-2066664dd3cbb0d3d931"
+        ],
+        "external_verification_required": false,
+        "point_id": "S1",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Maintain the convergent structural, spectroscopic, ferroelectric, and DFT evidence for the spatial defect configuration.",
+        "text": "The spatial defect assignment is supported by convergent STEM-EELS, EPR/XRF, piezoresponse, and DFT evidence."
+      },
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-6215a3b5bc845ca98bd9",
+          "P:S-89db64a4e0653d99d394"
+        ],
+        "external_verification_required": false,
+        "point_id": "S2",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Retain direct comparisons with pristine and single-defect materials for activity, reactive-species generation, and stability.",
+        "text": "BWO-ES is compared directly with pristine and single-defect materials, with higher degradation rates, reactive-species yields, and cycling stability."
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-2adcc0124fb60db9a6b8"
+        ],
+        "external_verification_required": false,
+        "point_id": "S3",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Retain the outdoor real-wastewater experiment with monitored degradation, TOC removal, temperature, and illumination.",
+        "text": "The industrial flotation tailing wastewater experiments extend the evaluation beyond model solutions to a high-salinity outdoor setting."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-03409e42b4084e929dec",
+        "P:S-2066664dd3cbb0d3d931",
+        "P:S-2adcc0124fb60db9a6b8"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "The paper develops one-step, region-specific W/O dual-defect engineering in Bi2WO6, placing W vacancies at edges and O vacancies in central domains to generate a defect-induced internal field. The final paper combines spatial and electronic characterization with photocatalytic comparisons and extends testing to high-salinity industrial wastewater under sunlight. The central remaining limitations are surface-area confounding in the principal activity comparison and the absence of final-paper validation that the configurational strategy transfers beyond Bi2WO6."
+    },
+    "weaknesses": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-c23817dafb6430599058",
+          "P:S-6215a3b5bc845ca98bd9"
+        ],
+        "external_verification_required": false,
+        "point_id": "W1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Provide area-normalized activity metrics or show matched-surface-area controls in the final-paper results.",
+        "text": "The central activity comparison remains potentially confounded by the substantially larger specific surface area of BWO-ES, so the defect-specific contribution to the observed rate enhancement is not fully isolated."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-b1e73dc9c1493c7ffe89"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-c23817dafb6430599058",
+        "P:S-6215a3b5bc845ca98bd9"
+      ],
+      "ledger_id": "L1",
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "residual_summary": "The response describes surface-area controls, but the final-paper primary comparison still reports activity alongside substantial area differences without area-normalized metrics.",
+      "resolution_status": "partially_resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-0eec564477ed7f1023bc"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-35bdd22845a443622404"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-a6db3b37429304a7d8c8",
+        "P:S-fc252fa97510bad968e6"
+      ],
+      "ledger_id": "L2",
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "residual_summary": "Preliminary extension is reported in the response, but no corresponding non-Bi2WO6 validation is retained in the final paper.",
+      "resolution_status": "partially_resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-5da085e5bb463633d577"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-8838ab38083159cb8f1b"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-d2a08f1fd6d7c2d29f3b"
+      ],
+      "ledger_id": "L3",
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "residual_summary": "Replicated EDS/XRF evidence and complementary STEM-EELS are incorporated in the final paper.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-4d02220114737c89fe3e"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-17da6e7a10d4c8f515bf"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-d2a08f1fd6d7c2d29f3b",
+        "P:S-1f72ea9ef64a4edcc672"
+      ],
+      "ledger_id": "L4",
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "residual_summary": "XRF quantification and EXAFS analysis address the requested vacancy and coordination characterization.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-715ff1164dee295ba245"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-3495d782f34e52fa51a9"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-2066664dd3cbb0d3d931"
+      ],
+      "ledger_id": "L5",
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "residual_summary": "Ferroelectric switching and DFT dipole-moment evidence were added to support the defect-dipole interpretation.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-6504e55a83627f3ae74a"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-fc29baff03a115ff197f"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-a6acbcc5c6211816ecf2"
+      ],
+      "ledger_id": "L6",
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "residual_summary": "The final paper explains the distinct roles of ethylene glycol and NaOH in O- and W-vacancy formation.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-4e58871a02ec6cd23382"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-8a612be502126a8535ce"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-6215a3b5bc845ca98bd9"
+      ],
+      "ledger_id": "L7",
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "residual_summary": "The final paper provides the surface-saturation rationale for using a zero-order kinetic model.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-eca5b83b933b4e9f8c0d"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-805c1bd7a4b7e8e44cc9"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-89db64a4e0653d99d394"
+      ],
+      "ledger_id": "L8",
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "residual_summary": "The final paper includes comparison of cycling behavior for BWO-ES, BWO-S, and BWO-E.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d4edf1fd43cb76bff091"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-93ce034cbc3a1b78fb8d"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-76b7ebea0896015a3a32"
+      ],
+      "ledger_id": "L9",
+      "paper_id": "10.1038/s41467-025-66466-5",
+      "residual_summary": "The final figure caption specifies visible-light radiation above 400 nm for the electric-field simulations.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-9b5fa57f7e4a5b806fc5"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

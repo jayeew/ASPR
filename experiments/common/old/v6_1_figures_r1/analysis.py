@@ -11,19 +11,19 @@ from typing import Any, Dict, Iterable, Mapping, Sequence, Tuple
 import numpy as np
 import pandas as pd
 
-from aspr.nature_multihorizon.candidate_registry_v6_1 import (
+from gear.nature_multihorizon.candidate_registry_v6_1 import (
     CandidateRegistryV61,
     load_candidate_registry_v6_1,
 )
-from aspr.nature_multihorizon.modeling_v6 import safe_spearman
-from aspr.nature_multihorizon.modeling_v6_1 import (
+from gear.nature_multihorizon.modeling_v6 import safe_spearman
+from gear.nature_multihorizon.modeling_v6_1 import (
     assemble_all_period_frame,
     evaluate_oof_points,
     paired_bootstrap_gain_intervals,
     run_fixed_medium_oof,
 )
-from aspr.nature_multihorizon.source_audit_v6 import sha256_file
-from aspr.path_layout import resolve_artifact_path
+from gear.nature_multihorizon.source_audit_v6 import sha256_file
+from gear.path_layout import resolve_artifact_path
 
 
 ANGLE_ORDER = (

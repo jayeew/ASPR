@@ -1,0 +1,449 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:cd3a0231098e6032c0e441b9e0b0854d6a6a5c5eb1a60721f54ac51db636b186",
+  "input_sha256": "sha256:e96c7b6a98a66f65c86f019d1f2f5942bc6e452fb147d346073af56247932e7c",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:3f5ba456e64e4438e4bd9b99611f8311717df59a9485dbc5243c8c6cc26bd4fe",
+  "package_id": "RSP-9fe8e42b16fc507e2a28",
+  "paper_id": "10.1038/s41467-023-36610-0",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-36610-0",
+      "point_id": "N1",
+      "rationale": "The reviewer identifies the broad biogeographic design and thermal-legacy framing as the distinctive contribution; the final paper continues to present that contribution.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-bb815b85e2e37f32"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-1b48f650d3d27bc2de65"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-e11c2477cfaa59f8a6c0",
+        "RR:SRC-R-3cd8ffd5034e5325af82"
+      ],
+      "paper_id": "10.1038/s41467-023-36610-0",
+      "point_id": "N2",
+      "rationale": "The reviewer challenged the breadth of the mechanistic and microbiome-wide framing. The response added enzyme classes, but the final paper still states that the prevailing adaptive mechanism cannot be defined, leaving a bounded novelty limit.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-bb815b85e2e37f32"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-582db632a2a6649ac866"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N2"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-36610-0",
+      "point_id": "S1",
+      "rationale": "The reviewer characterizes the work as a large-scale ecological study of enzyme thermal properties across contrasting marine habitats; that contribution remains represented in the final paper.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-bb815b85e2e37f32"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-1b48f650d3d27bc2de65"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-S1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-e11c2477cfaa59f8a6c0",
+        "RR:SRC-R-3cd8ffd5034e5325af82"
+      ],
+      "paper_id": "10.1038/s41467-023-36610-0",
+      "point_id": "S2",
+      "rationale": "The reviewer specifically notes that the expanded enzyme-class analyses strengthen the observed trend; the final paper reports seven functionally independent enzyme classes.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-bb815b85e2e37f32"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-6020a115562ed0a09181"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-S2"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-5aaf2908d9f8c3b40670",
+        "RR:SRC-R-328870388e7524fec0e5",
+        "RR:SRC-R-7b444db57b490578de1b"
+      ],
+      "paper_id": "10.1038/s41467-023-36610-0",
+      "point_id": "W1",
+      "rationale": "The reviewer notes the non-significant and weak low-temperature Tara Oceans phase-transition relationship. The response supplies an interpretation, but the final-paper figure still reports the weak/non-significant relationship, leaving the limitation partially resolved.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-bb815b85e2e37f32"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-af6e8ce150ef532ba099",
+        "RR:SRC-R-bf31906b0dff4f75e47f"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-2d00823c7129627f84f7"
+      ],
+      "paper_id": "10.1038/s41467-023-36610-0",
+      "point_id": "Q1",
+      "rationale": "The reviewer asks whether temperature-driven taxon sorting or selection of thermally adapted enzymes explains the observed pattern. The response acknowledges that the ordering of these processes cannot be determined, and the final paper retains that limitation.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-24cc59735265a927"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-87d8e51707da09864698"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-6f69d7195814fba6b576"
+      ],
+      "paper_id": "10.1038/s41467-023-36610-0",
+      "point_id": null,
+      "rationale": "The request to address protein flexibility was answered by added structural-flexibility analysis and is retained only as an audit record.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-2bed4acab81290c8"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-6db910d89364e32a339d"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-b25212d6487714be4dab",
+        "RR:SRC-R-726180cdb1caf35c3cc9"
+      ],
+      "paper_id": "10.1038/s41467-023-36610-0",
+      "point_id": null,
+      "rationale": "The request for a broader enzymatic panel and supporting sequence analysis was addressed in the revision and is audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-24cc59735265a927"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a50d6c7a10f66dd823fa",
+        "RR:SRC-R-fb60e91fe838f15cdd0a"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A2"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-ec2d6e0f73b874c2f8bc",
+        "RR:SRC-R-b0d46caeee50a6d85095"
+      ],
+      "paper_id": "10.1038/s41467-023-36610-0",
+      "point_id": null,
+      "rationale": "The apparent discrepancy between community-diversity results and enriched heterotroph results was clarified as referring to distinct populations and analyses; it is audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-24cc59735265a927"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-83849f379596ad7a76ba"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A3"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-529ac03125ef98e148d7"
+      ],
+      "paper_id": "10.1038/s41467-023-36610-0",
+      "point_id": null,
+      "rationale": "The request to clarify synthesized sequences and DNA-source details was answered in the response and is audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-bb815b85e2e37f32"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c81f5efca2c9baa1febd"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A4"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-3de48e70c3b7f19f9287"
+          ],
+          "external_verification_required": true,
+          "point_id": "N2",
+          "schema_version": "aspr_gear",
+          "severity": "major",
+          "suggested_action": "Bound the novel claim to the demonstrated association between thermal legacy and enzyme thermal response, distinguishing it from identification of the prevailing adaptive mechanism.",
+          "text": "The breadth of the proposed mechanism remains limited: the final paper itself states that its data cannot identify which adaptive mechanism prevails, constraining claims that enzyme selection explains microbiome thermal plasticity in general."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-d78da8296ee4dbe43da3",
+            "P:S-cacc1f46a8a6b7cabf3c"
+          ],
+          "external_verification_required": true,
+          "point_id": "N1",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "Retain the explicit distinction between the global biogeographic sampling design and the thermal-legacy comparison.",
+          "text": "The work’s novelty is supported by its combination of a broad marine biogeographic enzyme survey with a comparison of sites sharing similar mean annual temperature but differing in temperature variability."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-023-36610-0",
+    "questions": [
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-3de48e70c3b7f19f9287",
+          "P:S-8a62b33fbb604ed82d7b"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Specify which additional longitudinal, taxon-resolved, or variant-resolved measurements would distinguish taxon sorting from selection of thermally adapted enzyme variants.",
+        "text": "To what extent do the observed thermal patterns reflect selection or replacement of taxa versus selection of enzyme variants within taxa? The available data support both processes but do not establish their relative contribution."
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "contribution",
+        "evidence_keys": [
+          "P:S-d78da8296ee4dbe43da3",
+          "P:S-cacc1f46a8a6b7cabf3c"
+        ],
+        "external_verification_required": false,
+        "point_id": "S1",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Keep the sampling scope, thermal gradients, and complementary community-level and purified-enzyme measurements explicit.",
+        "text": "The study links native marine-sediment proteomes across a latitudinal mean-annual-temperature gradient with purified enzymes drawn from a wider global collection."
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-cacc1f46a8a6b7cabf3c",
+          "P:S-c9eb0181c8e4543740fe"
+        ],
+        "external_verification_required": false,
+        "point_id": "S2",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Maintain the enzyme-class-specific results alongside the aggregate interpretation.",
+        "text": "The final paper tests seven functionally independent enzyme classes and reports consistent variation in their thermal profiles across the transect."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-cacc1f46a8a6b7cabf3c",
+        "P:S-d78da8296ee4dbe43da3",
+        "P:S-c9eb0181c8e4543740fe",
+        "P:S-3de48e70c3b7f19f9287",
+        "P:S-fcb326d2b3f4a41a28f8"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "This study examines whether habitat thermal legacy is associated with the thermal behavior of marine-microbiome enzymes, combining sediment-proteome assays across a mean-annual-temperature gradient, purified-enzyme measurements from global locations, and comparisons among Red Sea sites with different temperature variability. The record supports the contribution of this broad ecological and enzyme-level design and the extension to seven enzyme classes. Its central interpretation remains bounded by two issues: the data do not identify the prevailing mechanism among taxon sorting, acclimation, and selection of enzyme variants, and the low-temperature Tara Oceans phase-transition relationship is weak or non-significant."
+    },
+    "weaknesses": [
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-fcb326d2b3f4a41a28f8",
+          "P:S-03e27aea3fcbcdf819ea"
+        ],
+        "external_verification_required": false,
+        "point_id": "W1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Present the low-temperature phase-transition result as a limitation of the inference and separate it from the better-supported thermal relationships.",
+        "text": "For the Tara Oceans esterases, the phase-transition-temperature relationship is non-significant before the reported inflection and weak thereafter. This limits the strength of rigidity-based inference at lower mean annual temperatures."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-e11c2477cfaa59f8a6c0",
+        "RR:SRC-R-3cd8ffd5034e5325af82"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-cacc1f46a8a6b7cabf3c",
+        "P:S-3de48e70c3b7f19f9287"
+      ],
+      "ledger_id": "L-N2",
+      "paper_id": "10.1038/s41467-023-36610-0",
+      "residual_summary": "Expansion beyond esterases addresses the single-enzyme concern, but the final paper retains uncertainty about which adaptive mechanism prevails.",
+      "resolution_status": "partially_resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-582db632a2a6649ac866"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-5aaf2908d9f8c3b40670",
+        "RR:SRC-R-328870388e7524fec0e5",
+        "RR:SRC-R-7b444db57b490578de1b"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-fcb326d2b3f4a41a28f8",
+        "P:S-03e27aea3fcbcdf819ea"
+      ],
+      "ledger_id": "L-W1",
+      "paper_id": "10.1038/s41467-023-36610-0",
+      "residual_summary": "The response adds an interpretation of the low-temperature pattern, while the final evidence still reports a non-significant or weak relationship.",
+      "resolution_status": "partially_resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-af6e8ce150ef532ba099",
+        "RR:SRC-R-bf31906b0dff4f75e47f"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-2d00823c7129627f84f7"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-3de48e70c3b7f19f9287",
+        "P:S-8a62b33fbb604ed82d7b"
+      ],
+      "ledger_id": "L-Q1",
+      "paper_id": "10.1038/s41467-023-36610-0",
+      "residual_summary": "The relative roles of taxon sorting and selection of thermally adapted enzyme variants remain unseparated.",
+      "resolution_status": "partially_resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-87d8e51707da09864698"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-6f69d7195814fba6b576"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-03e27aea3fcbcdf819ea"
+      ],
+      "ledger_id": "L-A1",
+      "paper_id": "10.1038/s41467-023-36610-0",
+      "residual_summary": "Structural-flexibility analysis was added; audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-6db910d89364e32a339d"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-b25212d6487714be4dab",
+        "RR:SRC-R-726180cdb1caf35c3cc9"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-cacc1f46a8a6b7cabf3c"
+      ],
+      "ledger_id": "L-A2",
+      "paper_id": "10.1038/s41467-023-36610-0",
+      "residual_summary": "The broader enzyme panel and sequence analysis were added; audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a50d6c7a10f66dd823fa",
+        "RR:SRC-R-fb60e91fe838f15cdd0a"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-ec2d6e0f73b874c2f8bc",
+        "RR:SRC-R-b0d46caeee50a6d85095"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-8a62b33fbb604ed82d7b",
+        "P:S-26c5fe910326478a6f80"
+      ],
+      "ledger_id": "L-A3",
+      "paper_id": "10.1038/s41467-023-36610-0",
+      "residual_summary": "The two diversity analyses were distinguished by population and assay; audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-83849f379596ad7a76ba"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-529ac03125ef98e148d7"
+      ],
+      "final_paper_evidence_keys": [],
+      "ledger_id": "L-A4",
+      "paper_id": "10.1038/s41467-023-36610-0",
+      "residual_summary": "Synthetic-sequence and manufacturer details were supplied; audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c81f5efca2c9baa1febd"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

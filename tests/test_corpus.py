@@ -13,7 +13,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from aspr.corpus import apply_strict_anchor_policy  # noqa: E402
+from gear.corpus import apply_strict_anchor_policy  # noqa: E402
 
 
 def run_cmd(args: list[str]) -> None:
@@ -225,7 +225,7 @@ def test_offline_corpus_build_creates_views() -> None:
             [
                 sys.executable,
                 "-m",
-                "aspr.corpus",
+                "gear.corpus",
                 "build",
                 "--offline",
                 "--out-dir",
@@ -323,7 +323,7 @@ def test_derive_strict_creates_strict_views() -> None:
             [
                 sys.executable,
                 "-m",
-                "aspr.corpus",
+                "gear.corpus",
                 "derive-strict",
                 "--source-dir",
                 str(source_dir),

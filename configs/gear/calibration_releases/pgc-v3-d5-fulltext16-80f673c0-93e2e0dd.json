@@ -1,0 +1,92 @@
+{
+  "contract": "aspr_calibration_release_v1",
+  "release_id": "pgc-v3-d5-fulltext16-80f673c0-93e2e0dd",
+  "alias": "prepublication_graph_v3:d5_fulltext16",
+  "status": "frozen",
+  "evidence_policy": "fig1_fig2_fig3_current_only",
+  "deprecated_fig4_to_fig10_used": false,
+  "row_count": 411490,
+  "created_at_utc": "2026-08-10T15:09:00.684016Z",
+  "source_manifest_sha256": "sha256:dd85e586e846c7d841575e99d6117ee259770e3617f988c92d646c1242eb646c",
+  "replay": {
+    "row_count": 411490,
+    "maximum_absolute_raw_error": 0.0,
+    "maximum_product_identity_error": 0.0,
+    "tolerance": 1e-10,
+    "passed": true
+  },
+  "assets": {
+    "feature_matrix_16": {
+      "file": "indicator_matrix_16.parquet",
+      "sha256": "sha256:93e2e0ddeca05fefcd5f6762bc4d2631821d1d718dd21bde7da0745820e23817",
+      "size_bytes": 13097604,
+      "role": "runtime"
+    },
+    "matrix_input_snapshot": {
+      "file": "input_snapshot.json",
+      "sha256": "sha256:21d267721552d044b14a45e16277c3676e22738d04432dc01dc918e4a799246d",
+      "size_bytes": 2992,
+      "role": "runtime"
+    },
+    "matrix_manifest": {
+      "file": "matrix_manifest.json",
+      "sha256": "sha256:f7077be6481ac268821ab8edee9330efd17a6792a8c92354dad1cb8f3934f36a",
+      "size_bytes": 4440,
+      "role": "runtime"
+    },
+    "official_model_joblib": {
+      "file": "official_hgb_model.joblib",
+      "sha256": "sha256:80f673c01cbeb4c2069f165d2ebd50a74659f8ef898c32a8698b5ddcdf025cb0",
+      "size_bytes": 11901203,
+      "role": "runtime"
+    },
+    "official_model_json": {
+      "file": "official_model.json",
+      "sha256": "sha256:ac4f48a24c895d68041e2f775a50aa590599db81b32838899ed59807fc04a787",
+      "size_bytes": 945,
+      "role": "runtime"
+    },
+    "official_run_manifest": {
+      "file": "run_manifest.json",
+      "sha256": "sha256:dd85e586e846c7d841575e99d6117ee259770e3617f988c92d646c1242eb646c",
+      "size_bytes": 3833,
+      "role": "runtime"
+    },
+    "official_score_table": {
+      "file": "official_aspr_scores.parquet",
+      "sha256": "sha256:135af32d70180e36a88600e2910f364d3efcf3e8de76f660e7ba6959ac9ac496",
+      "size_bytes": 9731490,
+      "role": "runtime"
+    },
+    "oof_domain_metrics": {
+      "file": "oof_domain_metrics.csv",
+      "sha256": "sha256:dccf0b5b38ade7f424e08831fab47a9922ea32d6f1714226866809923cae0946",
+      "size_bytes": 8838,
+      "role": "runtime"
+    },
+    "oof_fold_metrics": {
+      "file": "oof_fold_metrics.csv",
+      "sha256": "sha256:d1c89a7e1e36bf78ca7deed40dd1a6ba651f1f46ac04245bd992ff557d8537d5",
+      "size_bytes": 4718,
+      "role": "runtime"
+    },
+    "oof_metrics": {
+      "file": "oof_metrics.csv",
+      "sha256": "sha256:6daf30b513ee4eb1ace9b537fabffcaef278b666e1133e0a506efc3b5ed44de9",
+      "size_bytes": 575,
+      "role": "runtime"
+    },
+    "oof_predictions": {
+      "file": "oof_predictions.parquet",
+      "sha256": "sha256:1151a081e326b7b21dbca88e9580fa086afdd9dd330c1ca38931426f6f21ee9b",
+      "size_bytes": 123090613,
+      "role": "evaluation"
+    },
+    "paper_metadata": {
+      "file": "papers_primary_articles.parquet",
+      "sha256": "sha256:712d8f640765380bd41d5e9438ede64041b033681707612931e6fffe66338d08",
+      "size_bytes": 156581549,
+      "role": "runtime"
+    }
+  }
+}

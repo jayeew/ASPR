@@ -1,0 +1,367 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:cd625b5bdf2d9703a9687d4a45ebe62d6ec3718848e8defc36d082d83367a2df",
+  "input_sha256": "sha256:7f5c77893aad2d0d7b9e12746b8728774485ff562fef5a805d0aed5b524b772c",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:2f56398f9bbbb3387731fbe8f44441464a6b70ceecc544c2b1986b9c2cf9e5c3",
+  "package_id": "RSP-20f90e2b5f3b23f3c1aa",
+  "paper_id": "10.1038/s41467-025-61905-9",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-61905-9",
+      "point_id": "S1",
+      "rationale": "Reviewer reports describe a combined biochemical and molecular-dynamics investigation of ATP-dependent regulation. Final-paper support is provided by P:S-7ea22fc8ec472dd7dd21 for the apo-enzyme activity experiments and P:S-d4b0f240e588b84988d9 for the MD entry/exit analysis.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-4b799318401c8ed1",
+        "REV-ec02b73d01036ba0"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-3e439202253628182ed4",
+        "RR:SRC-R-2cd25c3eb9632662e6eb"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T1"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-61905-9",
+      "point_id": "S2",
+      "rationale": "Reviewer reports identify ATP-specific enhancement of FAD-dependent activity and an allosteric network as the central experimental and mechanistic findings. Final-paper support is provided by P:S-5513820c271ecf84f959 and P:S-20e7b1e8d5766ab8da25.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-4b799318401c8ed1",
+        "REV-bd89ef27a489c5f4"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-3e439202253628182ed4",
+        "RR:SRC-R-1ded407461526937c2fe"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T2"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-61905-9",
+      "point_id": "N1",
+      "rationale": "Reviewers frame the work as an investigation of ATP allosteric regulation of ACOX-1.1 and a potential ATP entry/exit mechanism. Final-paper support is provided by P:S-87f1885d625e6658766c and P:S-c29eb8d8925e0b36ac6b, which describe the ATP-dependent mechanism and the unusual ATP-binding domain.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-bd89ef27a489c5f4",
+        "REV-ec02b73d01036ba0"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-2cd25c3eb9632662e6eb",
+        "RR:SRC-R-1ded407461526937c2fe"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T3"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-c60bda4c47f3c2a56f41"
+      ],
+      "paper_id": "10.1038/s41467-025-61905-9",
+      "point_id": "N2",
+      "rationale": "The reviewer limited the broader significance because biological implications were insufficiently explored. The response acknowledges that the relevant C. elegans ATP concentrations are unknown, and final-paper span P:S-68e7051b8be65a5a2513 independently retains that uncertainty.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-bd89ef27a489c5f4"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8bc471c4e52795dce953"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T4"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-364a508aadc4e5e14269"
+      ],
+      "paper_id": "10.1038/s41467-025-61905-9",
+      "point_id": "W1",
+      "rationale": "The reviewer questioned whether the inferred high- and low-affinity FAD states were independently established. The response reports confirmation of the high-affinity site but states that its assay cannot confirm the low-affinity site; final-paper spans P:S-ffea3eb68f16366486fc and P:S-b50bbb26bcaecb728f88 retain the two-population account as an interpretation or suggested model.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-bd89ef27a489c5f4"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d9faab456d81d19de3f7"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T5"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-c60bda4c47f3c2a56f41"
+      ],
+      "paper_id": "10.1038/s41467-025-61905-9",
+      "point_id": "Q1",
+      "rationale": "Reviewers asked whether the relevant cellular ATP and FAD concentrations support the proposed regulation. The response and final-paper span P:S-68e7051b8be65a5a2513 both state that ATP concentrations in C. elegans organelles and tissues are not known.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-4b799318401c8ed1",
+        "REV-bd89ef27a489c5f4"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-0d098f3b9c4f5be690e1",
+        "RR:SRC-R-2f25c7e95cd66716f6bd"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T6"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-4d40fc10279e292299d4"
+      ],
+      "paper_id": "10.1038/s41467-025-61905-9",
+      "point_id": null,
+      "rationale": "Audit-only resolved kinetic-reporting concern: the response reports added FAD and ATP affinity measurements, and final-paper support appears in P:S-acb299ee5b5bb57952f6. The subsequent reviewer report states that the comments were addressed.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-4b799318401c8ed1",
+        "REV-bd89ef27a489c5f4"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-2abefa1c51ac7f889dbd",
+        "RR:SRC-R-cfc98776ae0fe51993ef",
+        "RR:SRC-R-f1e26ec61fd4fc59ef51"
+      ],
+      "round_ids": [
+        "round_1",
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T7"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-23fdd2c4c66f47ba789b",
+        "RR:SRC-R-4e500d0fe21523e2de0d"
+      ],
+      "paper_id": "10.1038/s41467-025-61905-9",
+      "point_id": null,
+      "rationale": "Audit-only resolved MD-representative-structure concern: the response reports clustering of apo and holo trajectories and revised comparisons; P:S-acb299ee5b5bb57952f6 describes the clustering procedure. The final reviewer report states that all concerns were addressed.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-ec02b73d01036ba0"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8dd851f59d8b4f8bfe65",
+        "RR:SRC-R-e56119e642c89b062790",
+        "RR:SRC-R-3b35f74218f9704c3b6d",
+        "RR:SRC-R-8b9d47f27ff2167d1903"
+      ],
+      "round_ids": [
+        "round_2",
+        "round_3"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T8"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-68e7051b8be65a5a2513",
+            "P:S-42a5819915e78c78462b"
+          ],
+          "external_verification_required": true,
+          "point_id": "N2",
+          "schema_version": "aspr_gear",
+          "severity": "major",
+          "suggested_action": "Clarify the physiological settings in which this regulatory mechanism is likely to operate.",
+          "text": "The broader biological significance remains constrained because the relevant ATP concentrations in C. elegans tissues and organelles are not established."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-87f1885d625e6658766c",
+            "P:S-c29eb8d8925e0b36ac6b"
+          ],
+          "external_verification_required": true,
+          "point_id": "N1",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "",
+          "text": "The work identifies ATP-dependent allosteric regulation of ACOX-1.1 through enhanced FAD affinity and examines an unusual buried ATP-binding site."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-025-61905-9",
+    "questions": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-68e7051b8be65a5a2513"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q1",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Determine ATP and free-FAD concentrations in the relevant C. elegans cellular compartments or define conditions that test the proposed regulatory regime.",
+        "text": "Under which C. elegans cellular or organellar ATP and free-FAD concentrations does ATP-dependent control of ACOX-1.1 operate?"
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-7ea22fc8ec472dd7dd21",
+          "P:S-d4b0f240e588b84988d9"
+        ],
+        "external_verification_required": false,
+        "point_id": "S1",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "",
+        "text": "The study combines apo-enzyme biochemical assays with molecular-dynamics analysis to investigate ATP-dependent regulation and ligand-site accessibility."
+      },
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-5513820c271ecf84f959",
+          "P:S-20e7b1e8d5766ab8da25"
+        ],
+        "external_verification_required": false,
+        "point_id": "S2",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "",
+        "text": "The evidence links ATP specificity and ATP-site or allosteric-network perturbations to FAD-dependent enzymatic activity."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-87f1885d625e6658766c",
+        "P:S-7ea22fc8ec472dd7dd21",
+        "P:S-d4b0f240e588b84988d9",
+        "P:S-68e7051b8be65a5a2513"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "The study investigates ATP-dependent allosteric regulation of C. elegans ACOX-1.1, combining biochemical measurements with molecular-dynamics analysis of FAD and ATP binding-site behavior. Reviewer reports support the specific contribution while identifying two remaining limits: the two-population FAD-binding interpretation is not fully independently resolved, and the physiological ATP and FAD regime in C. elegans remains unknown."
+    },
+    "weaknesses": [
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-ffea3eb68f16366486fc",
+          "P:S-b50bbb26bcaecb728f88"
+        ],
+        "external_verification_required": false,
+        "point_id": "W1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Distinguish the directly measured high-affinity ATP-dependent FAD interaction from the inferred low-affinity population with an independent measurement.",
+        "text": "The proposed division into ATP-responsive high-affinity and ATP-unresponsive low-affinity enzyme populations remains an interpretation rather than a fully independently established mechanism."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-c60bda4c47f3c2a56f41"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-68e7051b8be65a5a2513"
+      ],
+      "ledger_id": "L1",
+      "paper_id": "10.1038/s41467-025-61905-9",
+      "residual_summary": "The physiological framing was expanded, but the paper retains that ATP concentrations in C. elegans tissues and organelles are unknown.",
+      "resolution_status": "partially_resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-0d098f3b9c4f5be690e1",
+        "RR:SRC-R-2f25c7e95cd66716f6bd",
+        "RR:SRC-R-8bc471c4e52795dce953"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-364a508aadc4e5e14269"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-ffea3eb68f16366486fc",
+        "P:S-b50bbb26bcaecb728f88"
+      ],
+      "ledger_id": "L2",
+      "paper_id": "10.1038/s41467-025-61905-9",
+      "residual_summary": "The high-affinity ATP-dependent FAD interaction received additional support, but the response reports that the assay cannot confirm the low-affinity state, which remains modeled as a two-population interpretation.",
+      "resolution_status": "partially_resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d9faab456d81d19de3f7"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-4d40fc10279e292299d4"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-acb299ee5b5bb57952f6",
+        "P:S-e1a98fd2986c2a0f0f74"
+      ],
+      "ledger_id": "L3",
+      "paper_id": "10.1038/s41467-025-61905-9",
+      "residual_summary": "Added affinity measurements and kinetic-model details address the concerns about cofactor occupancy and kinetic reporting.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-2abefa1c51ac7f889dbd",
+        "RR:SRC-R-6e2851de653dcdc90898",
+        "RR:SRC-R-cfc98776ae0fe51993ef"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-23fdd2c4c66f47ba789b",
+        "RR:SRC-R-4e500d0fe21523e2de0d"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-acb299ee5b5bb57952f6"
+      ],
+      "ledger_id": "L4",
+      "paper_id": "10.1038/s41467-025-61905-9",
+      "residual_summary": "Trajectory clustering and the revised representative-structure comparison address the MD-comparability and selection concern.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8dd851f59d8b4f8bfe65",
+        "RR:SRC-R-e56119e642c89b062790",
+        "RR:SRC-R-3b35f74218f9704c3b6d"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

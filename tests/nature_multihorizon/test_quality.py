@@ -4,7 +4,7 @@ import unittest
 
 import pandas as pd
 
-from aspr.nature_multihorizon.quality import audit_pipeline_tables
+from gear.nature_multihorizon.quality import audit_pipeline_tables
 
 
 class QualityGateTests(unittest.TestCase):

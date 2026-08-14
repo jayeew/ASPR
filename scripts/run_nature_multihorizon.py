@@ -30,24 +30,24 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from aspr.nature_multihorizon.artifact_store import (  # noqa: E402
+from gear.nature_multihorizon.artifact_store import (  # noqa: E402
     ArtifactStore,
     audit_stage,
     hash_file,
     hash_json,
 )
-from aspr.nature_multihorizon.contracts import (  # noqa: E402
+from gear.nature_multihorizon.contracts import (  # noqa: E402
     FeatureSpec,
     HorizonSpec,
     ReleaseChannel,
     SplitSpec,
 )
-from aspr.nature_multihorizon.figure_views import (  # noqa: E402
+from gear.nature_multihorizon.figure_views import (  # noqa: E402
     OPTIONAL_FIGURE_EVIDENCE,
     export_figure_views,
 )
-from aspr.nature_multihorizon.quality import audit_pipeline_tables, write_quality_report  # noqa: E402
-from aspr.nature_multihorizon.release import (  # noqa: E402
+from gear.nature_multihorizon.quality import audit_pipeline_tables, write_quality_report  # noqa: E402
+from gear.nature_multihorizon.release import (  # noqa: E402
     audit_release,
     build_release_manifest,
     freeze_candidate_path,
@@ -175,7 +175,7 @@ def _config_path(config: Mapping[str, Any], section: str, key: str) -> Path:
 
 def _hash_code() -> str:
     paths = list(
-        sorted((PROJECT_ROOT / "aspr" / "nature_multihorizon").glob("*.py"))
+        sorted((PROJECT_ROOT / "gear" / "nature_multihorizon").glob("*.py"))
     )
     paths.extend(
         sorted(
@@ -184,13 +184,7 @@ def _hash_code() -> str:
             )
         )
     )
-    paths.extend(
-        [
-            Path(__file__).resolve(),
-            PROJECT_ROOT / "aspr" / "lats.py",
-            PROJECT_ROOT / "aspr" / "review_committee.py",
-        ]
-    )
+    paths.append(Path(__file__).resolve())
     paths = sorted(set(path for path in paths if path.is_file()))
     return hash_json({str(path.relative_to(PROJECT_ROOT)): hash_file(path) for path in paths})
 
@@ -205,7 +199,7 @@ def _hash_publication_code() -> str:
         "features.py",
     )
     paths = [
-        PROJECT_ROOT / "aspr" / "nature_multihorizon" / name for name in names
+        PROJECT_ROOT / "gear" / "nature_multihorizon" / name for name in names
     ]
     file_hashes = {
         str(path.relative_to(PROJECT_ROOT)): hash_file(path) for path in paths
@@ -237,7 +231,7 @@ def _hash_publication_code() -> str:
 
 def _hash_dirty_diff() -> str:
     scope = [
-        "aspr/nature_multihorizon",
+        "gear/nature_multihorizon",
         "scripts/run_nature_multihorizon.py",
         "configs/nature_multihorizon",
         "experiments/common/old/kg_perturbation_v2",
@@ -403,7 +397,7 @@ def _validate_config(config: Mapping[str, Any]) -> None:
         bootstrap_iterations=int(cv.get("bootstrap_repetitions", 2_000)),
         sealed_holdout_years=holdouts,
     )
-    from aspr.nature_multihorizon.taxonomy import DOMAIN_IDS
+    from gear.nature_multihorizon.taxonomy import DOMAIN_IDS
 
     configured_domains = tuple(str(value) for value in config.get("domains", ()))
     if set(configured_domains) != set(DOMAIN_IDS) or len(configured_domains) != 12:
@@ -730,16 +724,16 @@ def _read_stage_table(runtime: Runtime, stage: str, filename: str) -> pd.DataFra
 def _future_citers_table(runtime: Runtime) -> Path:
     """Resolve the audited large future-citer table without duplicating it."""
 
-    from aspr.nature_multihorizon.future_citers import resolve_future_citers_table
+    from gear.nature_multihorizon.future_citers import resolve_future_citers_table
 
     return resolve_future_citers_table(_require_stage(runtime, "future-citers"))
 
 
 def command_audit_source(runtime: Runtime, args: argparse.Namespace) -> Dict[str, Any]:
-    from aspr.nature_multihorizon.future_citers import (
+    from gear.nature_multihorizon.future_citers import (
         audit_prebuilt_future_multihorizon,
     )
-    from aspr.nature_multihorizon.v5_adapter import (
+    from gear.nature_multihorizon.v5_adapter import (
         audit_snapshot_reference_closure,
         audit_v5_source,
     )
@@ -787,7 +781,7 @@ def command_audit_source(runtime: Runtime, args: argparse.Namespace) -> Dict[str
 
 
 def command_recover(runtime: Runtime, args: argparse.Namespace) -> Dict[str, Any]:
-    from aspr.nature_multihorizon.v5_adapter import recover_v5_reference_closure
+    from gear.nature_multihorizon.v5_adapter import recover_v5_reference_closure
 
     return recover_v5_reference_closure(
         runtime.source_dir,
@@ -800,7 +794,7 @@ def command_recover(runtime: Runtime, args: argparse.Namespace) -> Dict[str, Any
 
 
 def command_ingest(runtime: Runtime, args: argparse.Namespace) -> Dict[str, Any]:
-    from aspr.nature_multihorizon.v5_adapter import (
+    from gear.nature_multihorizon.v5_adapter import (
         audit_reference_recovery,
         audit_snapshot_reference_closure,
         audit_v5_source,
@@ -878,7 +872,7 @@ def command_ingest(runtime: Runtime, args: argparse.Namespace) -> Dict[str, Any]
 def command_import_future(runtime: Runtime, args: argparse.Namespace) -> Dict[str, Any]:
     """Adopt the completed offline τ3/τ5/τ8 tables without network access."""
 
-    from aspr.nature_multihorizon.future_citers import (
+    from gear.nature_multihorizon.future_citers import (
         import_prebuilt_future_multihorizon,
     )
 
@@ -902,7 +896,7 @@ def command_import_future(runtime: Runtime, args: argparse.Namespace) -> Dict[st
 
 
 def command_taxonomy(runtime: Runtime, args: argparse.Namespace) -> Dict[str, Any]:
-    from aspr.nature_multihorizon.taxonomy import DOMAIN_IDS, build_taxonomy_table
+    from gear.nature_multihorizon.taxonomy import DOMAIN_IDS, build_taxonomy_table
 
     def build(output: Path) -> Mapping[str, Any]:
         papers = _read_stage_table(runtime, "ingest-v5", "papers.parquet")
@@ -950,13 +944,13 @@ def command_taxonomy(runtime: Runtime, args: argparse.Namespace) -> Dict[str, An
 
 
 def command_future_citers(runtime: Runtime, args: argparse.Namespace) -> Dict[str, Any]:
-    from aspr.nature_multihorizon.future_citers import (
+    from gear.nature_multihorizon.future_citers import (
         fetch_future_citers,
         materialize_future_tables,
         merge_materialized_future_batches,
     )
-    from aspr.nature_multihorizon.release import load_release
-    from aspr.corpus import short_openalex_id
+    from gear.nature_multihorizon.release import load_release
+    from gear.corpus import short_openalex_id
     from scripts.build_openalex_v3_citation_graph import OpenAlexClient, split_api_keys
 
     setattr(args, "_future_input_mode", "online_openalex")
@@ -1167,7 +1161,7 @@ def command_future_citers(runtime: Runtime, args: argparse.Namespace) -> Dict[st
 
 
 def command_graphs(runtime: Runtime, args: argparse.Namespace) -> Dict[str, Any]:
-    from aspr.nature_multihorizon.graph_snapshots import build_graph_snapshots
+    from gear.nature_multihorizon.graph_snapshots import build_graph_snapshots
 
     def build(output: Path) -> Mapping[str, Any]:
         papers = _read_stage_table(runtime, "taxonomy", "papers.parquet")
@@ -1191,7 +1185,7 @@ def command_graphs(runtime: Runtime, args: argparse.Namespace) -> Dict[str, Any]
 
 
 def command_features(runtime: Runtime, args: argparse.Namespace) -> Dict[str, Any]:
-    from aspr.nature_multihorizon.features import build_feature_table, feature_quality_summary
+    from gear.nature_multihorizon.features import build_feature_table, feature_quality_summary
 
     def build(output: Path) -> Mapping[str, Any]:
         papers = _read_stage_table(runtime, "taxonomy", "papers.parquet")
@@ -1232,7 +1226,7 @@ def command_features(runtime: Runtime, args: argparse.Namespace) -> Dict[str, An
 
 
 def command_targets(runtime: Runtime, args: argparse.Namespace) -> Dict[str, Any]:
-    from aspr.nature_multihorizon.targets import (
+    from gear.nature_multihorizon.targets import (
         build_diffusion_targets,
         build_diffusion_targets_from_deltas,
     )
@@ -1283,8 +1277,8 @@ def command_targets(runtime: Runtime, args: argparse.Namespace) -> Dict[str, Any
 
 
 def command_cohorts(runtime: Runtime, args: argparse.Namespace) -> Dict[str, Any]:
-    from aspr.nature_multihorizon.cohorts import build_cohort_membership, cohort_quality_summary
-    from aspr.nature_multihorizon.contracts import CohortSpec
+    from gear.nature_multihorizon.cohorts import build_cohort_membership, cohort_quality_summary
+    from gear.nature_multihorizon.contracts import CohortSpec
 
     def build(output: Path) -> Mapping[str, Any]:
         papers = _read_stage_table(runtime, "taxonomy", "papers.parquet")
@@ -1321,7 +1315,7 @@ def command_cohorts(runtime: Runtime, args: argparse.Namespace) -> Dict[str, Any
 
 
 def command_structural(runtime: Runtime, args: argparse.Namespace) -> Dict[str, Any]:
-    from aspr.nature_multihorizon.structural import (
+    from gear.nature_multihorizon.structural import (
         build_structural_validation,
         lock_structural_subset,
         read_future_citers_for_subset,
@@ -1363,7 +1357,7 @@ def command_structural(runtime: Runtime, args: argparse.Namespace) -> Dict[str, 
 
 
 def command_splits(runtime: Runtime, args: argparse.Namespace) -> Dict[str, Any]:
-    from aspr.nature_multihorizon.splits import (
+    from gear.nature_multihorizon.splits import (
         make_nested_folds,
         split_sealed_holdout,
         split_strict_label_availability,
@@ -1486,8 +1480,8 @@ def _model_frame(runtime: Runtime) -> pd.DataFrame:
 
 
 def command_train(runtime: Runtime, args: argparse.Namespace) -> Dict[str, Any]:
-    from aspr.nature_multihorizon.evaluation import run_nested_oof
-    from aspr.nature_multihorizon.splits import split_strict_label_availability
+    from gear.nature_multihorizon.evaluation import run_nested_oof
+    from gear.nature_multihorizon.splits import split_strict_label_availability
 
     def build(output: Path) -> Mapping[str, Any]:
         frame = _model_frame(runtime)
@@ -1597,14 +1591,14 @@ def command_train(runtime: Runtime, args: argparse.Namespace) -> Dict[str, Any]:
 
 
 def command_evaluate(runtime: Runtime, args: argparse.Namespace) -> Dict[str, Any]:
-    from aspr.nature_multihorizon.evaluation import evaluate_oof_predictions, safe_spearman
-    from aspr.nature_multihorizon.models import (
+    from gear.nature_multihorizon.evaluation import evaluate_oof_predictions, safe_spearman
+    from gear.nature_multihorizon.models import (
         DomainYearCalibrator,
         TargetResidualizer,
         fit_candidate_model,
     )
-    from aspr.nature_multihorizon.scoring import build_paper_scores, score_frame
-    from aspr.nature_multihorizon.targets import FoldLocalDiffusionTarget
+    from gear.nature_multihorizon.scoring import build_paper_scores, score_frame
+    from gear.nature_multihorizon.targets import FoldLocalDiffusionTarget
 
     import joblib
 

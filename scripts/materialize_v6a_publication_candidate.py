@@ -14,7 +14,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from aspr.corpus import audit_corpus, audit_strict_views, make_views  # noqa: E402
+from gear.corpus import audit_corpus, audit_strict_views, make_views  # noqa: E402
 
 
 DEFAULT_SOURCE_CORPUS_DIR = PROJECT_ROOT / "data" / "knowledge_corpus" / "v2_publication"

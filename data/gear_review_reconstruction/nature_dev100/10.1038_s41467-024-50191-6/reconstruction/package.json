@@ -1,0 +1,2050 @@
+{
+  "author_response_spans": [
+    {
+      "char_end": 8536,
+      "char_start": 8498,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-acc8f2b03ff4bebd3e3b",
+      "source_role": "author_response",
+      "text": "## **RESPONSE TO REVIEWERS’ COMMENTS**",
+      "text_sha256": "sha256:1418a8d54fa76fd8aaa6fb8c9f26fecff82de744fcf62a34e731530dda4e7da7"
+    },
+    {
+      "char_end": 8578,
+      "char_start": 8539,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-91dbab8a4fc9dfa8a3ee",
+      "source_role": "author_response",
+      "text": "## Reviewer #2 (Remarks to the Author):",
+      "text_sha256": "sha256:302a1824ba4ed0dda5528693469028e8e1f5b785e60ec4075c5e9d95c6bf2b94"
+    },
+    {
+      "char_end": 9227,
+      "char_start": 8581,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c6af84e3495ae2b5fdd0",
+      "source_role": "author_response",
+      "text": "This manuscript entitled “Evaporate-casting of Curvature Gradient Graphene Superstructures for Ultra-high Strength Structural Materials” reported a novel processing strategy toward graphene superstructure with a curvature gradient and meticulously design-ability of functional shapes. The content of this paper is detailed. The experiments are well designed and original insights are provided in this paper. It is acceptable for publication in \"Nature Communications\" after major revision. Response: Thank you very much for your positive comments. We do appreciate your valuable comments and shall further improve the manuscript as you suggested.",
+      "text_sha256": "sha256:dea22cd53239918a647c4e3492cbd5a3f85d6d87c6cf819071aaa5a1c98cd491"
+    },
+    {
+      "char_end": 9486,
+      "char_start": 9230,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c1ab9561e3216e9e12fb",
+      "source_role": "author_response",
+      "text": "As a structural material, the components of the material, interfacial interactions, and the structure are very important to the performance of the material. Although several interesting results were shown in the manuscript, major comments exist as follows:",
+      "text_sha256": "sha256:a43022c5147bf42228fa0e06b671f2b1bdb8ed46f7a0aa7610a6b1799c5a572f"
+    },
+    {
+      "char_end": 9510,
+      "char_start": 9489,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a1931a7750feae9af7d1",
+      "source_role": "author_response",
+      "text": "## For the component:",
+      "text_sha256": "sha256:6f9774a365db1af8cd7239dcfa9c8b45cff9b0f5f62124406841779e02b1535f"
+    },
+    {
+      "char_end": 11010,
+      "char_start": 9513,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ee6b0e6fb667128658e4",
+      "source_role": "author_response",
+      "text": "(1) It seems the authors didn’t wash the alkali out after the fabrication of cg-G. It is necessary to figure out the main component of the composites or it is inaccurate to name the composite “Graphene Superstructures”. Meanwhile, the origin of mechanical performance should be identified. The contribution of each component needs to be clear. Response: Thank you for your comments. In fact, we have completely removed the residual alkali in this work. The as-formed _cg-G_ after hydrothermal process was treated with 1M HCl for 6-8 h to fully react with alkali, followed by thoroughly rinsing process. To avoid the misunderstanding for the preparation procedure of the _cg-G_ , more detailed demonstrations have been added in lines 460-462 of the revised manuscript, and highlighted in red for easy reference. Besides, X-ray photoelectron spectroscopy (XPS) and Energy Dispersive Spectroscopy (EDS) analyses of _cg-G_ before evaporate-casting have also been conducted and shown in Fig. S6 of the revised Supplementary Information. Both of XPS and EDS revealed only C and O elements in the _cg-G_ without any other impurities, confirming the essential characteristics of graphene species. Therefore, the outstanding mechanical properties observed in this work come from solely from the intrinsic characteristics of the graphene material. The corresponding data and analyses have been added and highlighted in red in lines 126-129 of the revised manuscript and Fig. S6 of Supplementary Information.",
+      "text_sha256": "sha256:c50458e79ef2623ad176536dd6c56a88958fd2adbeda75caeac55f518f827bea"
+    },
+    {
+      "char_end": 11171,
+      "char_start": 11013,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1a8727fc77709749c3d8",
+      "source_role": "author_response",
+      "text": "(2) For a more comprehensive understanding of the material's components and properties, more characterizations including FITR, Elemental analysis, and Density",
+      "text_sha256": "sha256:cd56a7b4cdd1cd6fd02c9d0beaf8f101d9a9ffb005b600da91ff546843cf18a5"
+    },
+    {
+      "char_end": 11247,
+      "char_start": 11174,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5aeb6419766a025134af",
+      "source_role": "author_response",
+      "text": "## (before and after the evaporation casting process) should be included.",
+      "text_sha256": "sha256:099a436a0047be4aa2165801c967e689d976f914ebf8acb2cc3794d7a3085984"
+    },
+    {
+      "char_end": 11730,
+      "char_start": 11250,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e7caf2fbb740a05ca066",
+      "source_role": "author_response",
+      "text": "Response: Thank you for your helpful suggestions. The characterizations of FITR, EDS, and Density for _cg-G_ before and after evaporate-casting have been conducted. The detailed analysis and discussion of FITR and EDS analysis have been added in lines 126-129 of the revised manuscript and Fig. S6 of Supplementary Information. The density of _cg-G_ before and after evaporate-casting has been added in line 137 of the revised manuscript. All modifications are highlighted in red.",
+      "text_sha256": "sha256:19ac42a7edd332590b25f1601654d9d4f0d6e9c81de359bc3d5f3b6c9e049f6c"
+    },
+    {
+      "char_end": 11754,
+      "char_start": 11733,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b1b2120dd871d898e858",
+      "source_role": "author_response",
+      "text": "## For the interface:",
+      "text_sha256": "sha256:79eb89afb159f2cb294c26c28a23bb0ca1e5a15e2081614ecfc46e05e5ed41db"
+    },
+    {
+      "char_end": 12434,
+      "char_start": 11757,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a53321ac20f66fbf9772",
+      "source_role": "author_response",
+      "text": "(3) Authors should provide additional characterization and discussion on how the graphene structure transitions from porous to compact during the evaporate casting. It would be beneficial to include morphological data of the sample at various stages of evaporation to thoroughly examine the structural changes occurring during this process. Response: As suggested, the cuboid-shaped _cg-G_ with centrosymmetric curvature gradient structure (corresponding to the one shown in Figure 4c of main text and Fig. S16 of Supplementary Information) was selected as the sample to investigate morphological and structural changes of _cg-G_ at various stages of evaporate-casting process.",
+      "text_sha256": "sha256:4404ff538cfade30bb85e6beb1091b50f5f0720c81ca9cacb5582d31becf5a6e"
+    },
+    {
+      "char_end": 13756,
+      "char_start": 12437,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-57d0947538e1751821e6",
+      "source_role": "author_response",
+      "text": "As depicted in Fig. R1a, it is evident that the appearance of _cg-G_ hydrogel gradually changes from a square to a rectangular shape as the contraction process. The observations of microstructures and pore architectures in _cg-G_ during the capillary dehydration densification process were conducted and shown in Fig. R1b (here we choose the side view cross-section at position that parallel to the curvature central axis). Initially, the structure of _cg-G_ hydrogel shows relatively thin graphene layers (with approximately 20 μm spacing among them) parallel to the central axis of curvature. With the continuous evaporation of water molecules in the hydrogel, the distance between adjacent graphene sheets remains temporarily unchanged. However, wrinkles in the graphene sheets appear and become obvious after 1 hour, due to the influence of capillary forces, which is accompanied by an increase in the thickness of the sheets. Having further evaporated for 3 hours, a significant quantity of water is removed from graphene layers, causing the sheets to wrinkle and further densify. This induces a closer stacking of graphene layers and a decrease in the gap size. After fully removal of water molecules (~5 hours later), a compact graphene superstructure with an oriented arrangement of graphene layers is achieved.",
+      "text_sha256": "sha256:983d6bf92b3e3c105781f42dc752e0976d8e93c0ec6c9b4bc16498d983d88e4d"
+    },
+    {
+      "char_end": 14005,
+      "char_start": 13759,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f843116b4c1e8c1d7b1b",
+      "source_role": "author_response",
+      "text": "It is essential to underscore that during the casting process, the graphene sheets undergo changes in two directions. Along the sheet direction, the graphene sheets become highly curled and rough, whereas perpendicular to the sheet direction, the",
+      "text_sha256": "sha256:f9f8bdf3971ef26382ca059a66330141dd11b49c98f4d6c61ce92eb7cd168389"
+    },
+    {
+      "char_end": 14525,
+      "char_start": 14008,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a328800e09ee809cd1a4",
+      "source_role": "author_response",
+      "text": "wrinkling of the graphene sheets results in an increase in layer thickness and a reduction in interlayer distance. This wrinkling in both directions prevents irreversible stacking of parallel-aligned graphene walls during densification, ensuring the maintenance of the microstructure of the oriented graphene hydrogel after moisture evaporation. The pertinent data along with corresponding analyses have been added and highlighted in red in line 136 of the revised manuscript and Fig. S7 of Supplementary Information.",
+      "text_sha256": "sha256:4dca336820275994736cff15023de017fc35665bf833f8fd23a9b62cfbae1a22"
+    },
+    {
+      "char_end": 14581,
+      "char_start": 14528,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-776cbe602e6f6711cda2",
+      "source_role": "author_response",
+      "text": "**==> picture [357 x 234] intentionally omitted <==**",
+      "text_sha256": "sha256:4cfaa44629bb784af88eb573ccbc5bd808d00f123f0f794f10e37e3cdc21826d"
+    },
+    {
+      "char_end": 14690,
+      "char_start": 14583,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b8a028f1a5a71cf66980",
+      "source_role": "author_response",
+      "text": "Fig. R1 a) Digital and b) SEM images of _cg-G_ after evaporate-casting in different time (0 h, 1h, 3h, 5h).",
+      "text_sha256": "sha256:c409bad27c537f1b2d50716eb5fd1f0a2f91a4e4ff65d9975c10a24235020547"
+    },
+    {
+      "char_end": 14978,
+      "char_start": 14693,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3a9c0889f065cea9231a",
+      "source_role": "author_response",
+      "text": "(4) The authors claimed “the hydrogen bond interaction between GO sheets decreased distinctly and electrostatic repulsion increased” (page 19, line 484) but it is lack of evidence. More characterization should be presented to figure out the interfacial interactions between nanosheets.",
+      "text_sha256": "sha256:9e6ade7ac5535d5ba2408428afaa2b42947f0c007ec027eeb6981387a8d6a4b2"
+    },
+    {
+      "char_end": 15797,
+      "char_start": 14981,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-62427773f1ac26d9334d",
+      "source_role": "author_response",
+      "text": "Response: Thank you for your valuable comments. To explore the impact of alkali addition on GO nanosheets, the surface charge and rheological behavior of GO suspension before and after treatment with ammonia were assessed. Upon the addition of ammonia hydroxide (the volume ratio of GO aqueous dispersion to 32% ammonium hydroxide is 60:1), the Zeta potential of the GO dispersion underwent a notable negative shift from an initial -36.2 mV to approximately -47.7 mV (Fig. R2a). This suggests that ammonia can effectively promote the ionization of oxygen-containing functional groups (like carboxyl groups) on the surface of GO, thereby intensifying the electrostatic repulsion between GO sheets. Consequently, this enhancement in electrostatic repulsion dynamically promotes the formation of a liquid crystal phase.",
+      "text_sha256": "sha256:8062eb98696b9947af5984b0c0415dd362c52f729de2d6228f399c31ecc3ba7c"
+    },
+    {
+      "char_end": 16599,
+      "char_start": 15800,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d0fbbdd272c3b393f53d",
+      "source_role": "author_response",
+      "text": "Specifically, the robust electrostatic repulsion between GO sheets significantly enhances the fluidity of the system (Fig. R2b), facilitating the adjustment of GO sheets’ orientation in response to external disturbance. This adjustment enables them to migrate to the position of minimal free energy, ultimately resulting in the formation of a longrange ordered liquid crystal phase. Moreover, our previous work ( _ACS Nano 2019, 13, 9161−9170_ ) about the impact of KOH addition on the surface charge and rheological behavior of GO also reveals the similar trend for the enhanced fluidity of the dispersion after adding an appropriate quantity of KOH. The results and discussion have been added and highlighted with red at line 106 of the revised manuscript and Fig. S1 of Supplementary Information.",
+      "text_sha256": "sha256:486d5886f14844cd1e4172052328fd4d8c1fd1ea6faff740eef2187217a8b729"
+    },
+    {
+      "char_end": 16655,
+      "char_start": 16602,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a2b98934e3819af370e1",
+      "source_role": "author_response",
+      "text": "**==> picture [372 x 107] intentionally omitted <==**",
+      "text_sha256": "sha256:307f1a143e11ef23516b47e02c690d21b0ae07abf5f416a380385725fa790e88"
+    },
+    {
+      "char_end": 16778,
+      "char_start": 16657,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-332ee1defd5fa9f2efc7",
+      "source_role": "author_response",
+      "text": "Fig. R2 a) Zeta potentials, and b) apparent viscosities of GO suspension (3.5 mg mL[−1] ) with/without ammonia hydroxide.",
+      "text_sha256": "sha256:aa1685dc2de21c9b43cab94320fc63678e6dc8b601ad4c3a064c1968bb3488f1"
+    },
+    {
+      "char_end": 17260,
+      "char_start": 16781,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5f4b9757ef15407328af",
+      "source_role": "author_response",
+      "text": "(5) The interfacial interactions between graphene walls are crucial for their strength, as also indicated by the CG-MD simulation results in Fig. S3. However, the TEM image in Fig. 2f only vaguely depicts these alignments and does not clearly show the interactions between graphene sheets. I recommend employing ultra-high-resolution electron microscopy techniques, such as SEM or FIB-SEM, to more precisely characterize and analyze the interface microstructures within the cg-G.",
+      "text_sha256": "sha256:4e0a902a8642e75972199ccea866312ae785a0da14f5e06b6063fa6811e78e7c"
+    },
+    {
+      "char_end": 18281,
+      "char_start": 17263,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b9be449f9f218fe768c0",
+      "source_role": "author_response",
+      "text": "Response: Thank you for your valuable suggestion. In fact, during the spontaneous evaporation-casting process of _cg-G_ , water molecules serve as plasticizer, which enable relative sliding of graphene nanosheets within the walls. In this context, the capillary forces prompt adjacent graphene nanosheets to crumple as water within surface wrinkles evaporates. This would result in the distance between graphene nanosheets decreasing until adjacent layers make complete contact, leading to an increased thickness of graphene sheets. Consequently, a highly dense aligned microstructure with interlocked serrated configurations is formed. To precisely characterize and analyze the interface microstructures within the _cg-G_ , high-resolution SEM characterizations were conducted. As depicted in Fig. R3, the HR-SEM images demonstrate that the oriented behavior of the contracted graphene remains observable, consistent with the findings obtained through TEM analysis of Fig. 2f in revised manuscript. The pertinent data",
+      "text_sha256": "sha256:bd71d7dee091fdbf7854fe7f5a9c8b8eaa1973eeaf7af8d332904c25fbb384b2"
+    },
+    {
+      "char_end": 18436,
+      "char_start": 18284,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d31e67dccdcf230c236c",
+      "source_role": "author_response",
+      "text": "along with corresponding analyses have been added and highlighted in red in line 136 of the revised manuscript and Fig. S7 of Supplementary Information.",
+      "text_sha256": "sha256:54b00850d1b1a26714d6b67ef2656c029241c80150e205d02d69aa7710bb97bb"
+    },
+    {
+      "char_end": 18492,
+      "char_start": 18439,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1753bc15a3e5b9f4bb7a",
+      "source_role": "author_response",
+      "text": "**==> picture [314 x 122] intentionally omitted <==**",
+      "text_sha256": "sha256:e0f5db4e64839575930c15609f32ea78ba103805b3758ffcca999bf1a250e85a"
+    },
+    {
+      "char_end": 18593,
+      "char_start": 18494,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-49628ef040faf6f55e9f",
+      "source_role": "author_response",
+      "text": "Fig. R3 SEM images under different magnification of _cg-G_ after complete evaporatecasting process.",
+      "text_sha256": "sha256:03fc21976c51ceac9b341dc6208907d8a72004859c03ea86d2fd68cbf24e63d5"
+    },
+    {
+      "char_end": 18888,
+      "char_start": 18596,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a4ea0d60542fd821fe5c",
+      "source_role": "author_response",
+      "text": "(6) The bonding interface of the mortise and tenon structure depicted in Fig. 5 e and f should be further magnification and detailed discussion. Providing more detailed SEM images of this area would enhance the understanding of its interface characteristics and excellent mechanical strength.",
+      "text_sha256": "sha256:99dbb8045ebcc1ca1d34a5b998d6f86f0c30edff7cdff7436d810bdcb1191218"
+    },
+    {
+      "char_end": 19949,
+      "char_start": 18891,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-adb8c41d1cf7ee7ad94e",
+      "source_role": "author_response",
+      "text": "Response: Thank you for your suggestion. We have included SEM images depicting the bonding interface of the mortise and tenon structure, along with magnified views of different regions. As shown in Fig. R4a, it is evident that the two components of the mortise (part a) and tenon structure (part b) are tightly joined together without any gaps. Upon the enlarged SEM view of boundary (Fig. R4b−d), the contact points between the two parts exhibit a rough saw-tooth pattern. It suggests that the mortise (part a) and tenon structure (part b) are getting closer during the spontaneous evaporation-induced contraction of the _cg-G_ hydrogel, in which part a happens significant deformation as it wraps around and applies pressure to part b, leading to the formation of a dense connection interface. This resultant tight contact ensures the integrity of the assembled mortise and tenon structure and contributes to its outstanding mechanical properties. The results and discussion have been added and highlighted in red in Fig. S26e of Supplementary Information.",
+      "text_sha256": "sha256:0db6b68c9ed462d7d329b8541b49e1391246e43873cf2fb3d9988a43300969f4"
+    },
+    {
+      "char_end": 20005,
+      "char_start": 19952,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f18207dbe3b79df4ed43",
+      "source_role": "author_response",
+      "text": "**==> picture [270 x 213] intentionally omitted <==**",
+      "text_sha256": "sha256:6de4f9e51fc44c1b0313cc757e7549c769e4da863d37244f784ae816e8bd0b62"
+    },
+    {
+      "char_end": 20121,
+      "char_start": 20007,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-78d37fdf6f9e32b11d56",
+      "source_role": "author_response",
+      "text": "Fig. R4 (a−d) SEM images of the bonding interface of the mortise and tenon structure with different magnification.",
+      "text_sha256": "sha256:432411239d348729f724579d45221dbac02f09ac5c6ab4cec6eacc4791df45cd"
+    },
+    {
+      "char_end": 20149,
+      "char_start": 20124,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-54539bf80e680679a636",
+      "source_role": "author_response",
+      "text": "## Process and structure:",
+      "text_sha256": "sha256:fa316bc6cf193457163bd8058831bbd95d98681201fcfc86918620b4205ec221"
+    },
+    {
+      "char_end": 20631,
+      "char_start": 20152,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-cc2e0f77106f885e1baf",
+      "source_role": "author_response",
+      "text": "(7) Different parameters are suggested to explore. The porous structure is formed in the hydrothermal process and the optimal conditions should be discussed. How to control the gap sizes of layers? Meanwhile, the impact of the gap sizes between the graphene walls in the cg-G before evaporation casting on the structure and mechanical performance of the final product warrants further investigation. I suggest the author investigate how these gaps influence the final properties.",
+      "text_sha256": "sha256:1e38ed85eab3d7af7c18fe97f11c0913391f4fe1bf597facad246c9d8b645f4f"
+    },
+    {
+      "char_end": 20735,
+      "char_start": 20634,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-51df7024abf28242bdcf",
+      "source_role": "author_response",
+      "text": "Response: The preparation process of _cg-G_ hydrogels has been thoroughly investigated and optimized.",
+      "text_sha256": "sha256:291315fb15d1777ebc8581f37147fc37e89abee5b8ed61bb6b9a814b884af229"
+    },
+    {
+      "char_end": 21583,
+      "char_start": 20738,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ec6ebf28e531d8e82b4b",
+      "source_role": "author_response",
+      "text": "The gap size of _cg-G_ is predominantly governed by the GO concentration during the hydrothermal preparation process. To this end, we selected four different GO concentrations (1.5 mg mL[-1] , 2.5 mg mL[-1] , 3.5 mg mL[-1] , 4 mg mL[-1] ) under identical hydrothermal conditions (180 °C, 6h), and characterized the microstructures of the resulting hydrogels. The quantity of alkali increases or decreases proportionally with the amount of GO. At a GO concentration of 1.5 mg mL[-1] , the resultant graphene hydrogel exhibits an overall disordered state (Fig. R5a), with a pore size of approximately 30-50 μm. At low GO concentrations, the interaction between GO sheets is weakened, which makes them difficult to form a long-range ordered liquid crystal phase even with the addition of alkali, resulting in an unordered structure of the hydrogel.",
+      "text_sha256": "sha256:2877072c758934b0dd684918c62aead951b27e25ad5db249eb6c543ff8760b27"
+    },
+    {
+      "char_end": 21753,
+      "char_start": 21586,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d317c8399f7f65056273",
+      "source_role": "author_response",
+      "text": "Remarkably, uniform and ordered orientation structures can be achieved at concentrations of 2.5 mg mL[-1] , 3.5 mg mL[-1] , and 4 mg mL[-1] (Fig. R5b-d). The disparity",
+      "text_sha256": "sha256:14f93a6d699e6fec66effacc500743f3f2752b17e35d2e7e861e81aee441e661"
+    },
+    {
+      "char_end": 22319,
+      "char_start": 21756,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-41ee1cd408721fd2f0e5",
+      "source_role": "author_response",
+      "text": "lies in the gap size: at lower concentrations, the spacing is larger (approximately 30-40 μm), whereas with increasing concentration, the interlayer spacing of the orientation structure gradually decreases. At 4 mg mL[-1] , the gap size is reduced to approximately 10 μm. It is noteworthy that at a concentration of 3.5 mg mL[-1] , the orientation structure of _cg-G_ is remarkably uniform (in this work). The results and discussion have been added and highlighted in red at line 106, 472-475 of the revised manuscript and in Fig. S2 of Supplementary Information.",
+      "text_sha256": "sha256:de26445dd63a843a192867973d75ef9565c9bf383e0963b2ff05f29fe8acba25"
+    },
+    {
+      "char_end": 22375,
+      "char_start": 22322,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1317dde99142cfe6e13f",
+      "source_role": "author_response",
+      "text": "**==> picture [254 x 208] intentionally omitted <==**",
+      "text_sha256": "sha256:190a9f1663ca96df3ad9a27d1b337a6ff02c52d908d5b40a5454de9c9133e2f2"
+    },
+    {
+      "char_end": 22460,
+      "char_start": 22377,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-57e2fb3e377d5226a37f",
+      "source_role": "author_response",
+      "text": "Fig. R5 SEM images of graphene assemblies with different initial GO concentrations.",
+      "text_sha256": "sha256:3de3891e01c5627ead97e57546734b32a6b0027e110f9be387baf83ccd8e1d6e"
+    },
+    {
+      "char_end": 22903,
+      "char_start": 22463,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1de247bb7a80e01490d1",
+      "source_role": "author_response",
+      "text": "To investigate the impact of the initial gap size in the _cg-G_ on deformation behavior, we opted cuboid-shaped graphene hydrogels with centrosymmetric curvature gradient structure (corresponding to the one shown in Figure 4c of main text and Fig. S16 of Supplementary Information) at different initial GO concentrations. The initial configuration, dimensions, and microstructure of the cuboid-shaped hydrogels are illustrated in Figs. R6a.",
+      "text_sha256": "sha256:85f95734405b807df05605bc18ef7acdbf0c35e5892accb4d05df41280779d00"
+    },
+    {
+      "char_end": 23878,
+      "char_start": 22906,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-79294072754521d9f278",
+      "source_role": "author_response",
+      "text": "For the initial hydrogels, the ratio of _l_ to _w_ is 1. Following 5 hours of spontaneous water evaporation, all four cuboid-shaped hydrogels underwent contraction and deformation. As shown in Fig. R6b and R6c, it can be observed that the deformation behaviors of the four hydrogels vary significantly. Among them, the hydrogel with an initial GO concentration of 1.5 mg mL[-1] underwent irregular contraction, with _l’_ / _w’_ approximately 1.1. As the GO concentration increased, the regularity of the _cg-G_ significantly improved after evaporate-casting, with the degree of contraction of the _w_ side being noticeably greater than that of the _l_ side, resulting in _l’_ / _w’_ > 1. The higher the initial GO concentration, the smaller the _l’_ / _w’_ ratio. The values of _l’_ / _w’_ corresponding to the three GO concentrations are 1.7, 1.4, and 1.2, respectively. The variations in the _l’_ / _w’_ ratios primarily stem from differences in the quantity of graphene",
+      "text_sha256": "sha256:0ac6832117f919d04d353ff67821a2f395738a5efb7aed6952d9b7ed7f5bf928"
+    },
+    {
+      "char_end": 24115,
+      "char_start": 23881,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f407e6bb91d33ad8a015",
+      "source_role": "author_response",
+      "text": "sheets oriented perpendicular to the sheet direction. Higher initial concentrations of GO result in a greater number of graphene sheets within the same volume, leading to increased size and reduced shrinkage upon complete evaporation.",
+      "text_sha256": "sha256:af478019564e4de1340635187ebf71daab8be8fc76ffd8f5f5e5f29b38629aa5"
+    },
+    {
+      "char_end": 24875,
+      "char_start": 24118,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-dc8b6a26c1ff464a45ef",
+      "source_role": "author_response",
+      "text": "As discussed in the main text, this indicates an anisotropic contraction behavior that could significantly enhance the effectiveness of curvature gradient-induced deformation. Furthermore, the enhancement of deformation behavior diminishes with increasing initial GO concentration. Ultimately, considering the regularity of the deformation process and the degree of deformation behavior, we selected hydrogels with an initial concentration of 3.5 mg mL[-1] and an initial gap size of 20 μm as the precursor for studying the evaporate-casting deformation behavior of curvature gradient graphene hydrogels. The results and discussion have been added at lines 249251 of the revised manuscript and in Fig. S18 of Supplementary Information, highlighted with red.",
+      "text_sha256": "sha256:ab758a5641d49ba58a2868c41dfb79ac606a039bc33d716aaeea31c99b0442c7"
+    },
+    {
+      "char_end": 24931,
+      "char_start": 24878,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b1b4658209447e2078fe",
+      "source_role": "author_response",
+      "text": "**==> picture [310 x 247] intentionally omitted <==**",
+      "text_sha256": "sha256:67b3c4ed87533808a9430097c6576e0f75f7be67344d7ed0f900168bd548b62e"
+    },
+    {
+      "char_end": 25355,
+      "char_start": 24933,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-99054f776b3726443c39",
+      "source_role": "author_response",
+      "text": "Fig. R6 a, b) Photographs of cuboid-shaped graphene hydrogels (with different initial GO concentrations) with centrosymmetric microstructure after dehydration of 0 h and 5 h, and c) the corresponding SEM images of dehydration for 5 h. Scale bar: 500 μm. Initial size: 8 mm × 8 mm × 2 mm. The ratios of the two sides along ( _l_ ) and perpendicular to the wall plane ( _w_ ) after dehydration ( _l’_ / _w’_ ) are different.",
+      "text_sha256": "sha256:212d98742285663e697a1e92a4bc76d87aa5160f5d6282f22b0bda1165a30e72"
+    },
+    {
+      "char_end": 25692,
+      "char_start": 25358,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-15dddc9717cb966e9c2e",
+      "source_role": "author_response",
+      "text": "As illustrated in Fig. R7, we conducted a thorough examination of the mechanical properties of graphene hydrogels after water evaporation with various initial GO concentrations. Notably, the mechanical superiority of _cg-G_ superstructures over normal graphene assemblies, as discussed in Fig. 2g of the revised main text, is evident.",
+      "text_sha256": "sha256:90c85bce83dd7120731438cc346a68d3a51d4aaa9b3f7e965212f21f02b12f99"
+    },
+    {
+      "char_end": 26325,
+      "char_start": 25695,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f0cdb1b4aef7fb0663c2",
+      "source_role": "author_response",
+      "text": "This discrepancy arises from the influence of capillary forces induced by dehydration during the evaporate-casting process, which drive the deformation of the graphene assembly. At the nanoscale, graphene nanosheets form protruding structures, creating mechanical interlocks. At the assembly level, the layered structure exhibits enhanced orientation and stacking, resulting in extensive contact areas and intensified interlayer interaction. In contrast, disordered normal graphene assemblies only demonstrate mechanical reinforcement at the nanoscale, leading to inferior mechanical properties compared to _cg-G_ superstructures.",
+      "text_sha256": "sha256:2435a4aaac48d0349fc7bf3947a682885de1467a361531578e69e9418ee4a894"
+    },
+    {
+      "char_end": 27237,
+      "char_start": 26328,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-dea2d1929b2ea39c0991",
+      "source_role": "author_response",
+      "text": "Additionally, all samples of the other three types of _cg-G_ superstructures exhibited exceptional mechanical compression performance. These compression curves consist of two distinct phases: elastic deformation and plastic deformation. The yield point occurs at approximately 8% deformation, while the prolonged plastic deformation phase is attributed to the presence of numerous nanoscale pores within the material. During compression, these pores undergo compression until deformation reaches approximately 50%-60%, ultimately leading to structural collapse and failure. The presence of the plastic phase significantly enhances the material’s practical application performance, preventing direct failure under high stress and minimizing damage to instruments or devices. The discussion has been added in line 140 of the revised manuscript and Fig. S8 of Supplementary Information, and highlighted with red.",
+      "text_sha256": "sha256:2a2965d99c87e7f63417933884084d04a67960d687084cf479e80559a4811d68"
+    },
+    {
+      "char_end": 27293,
+      "char_start": 27240,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5ba768b4bedab4c29d91",
+      "source_role": "author_response",
+      "text": "**==> picture [200 x 165] intentionally omitted <==**",
+      "text_sha256": "sha256:c1355970486314ae9711794792154415fae5d37e304f223ea9a07e3a4984670b"
+    },
+    {
+      "char_end": 27415,
+      "char_start": 27295,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c542c7b6c9c388028f20",
+      "source_role": "author_response",
+      "text": "Fig. R7 Compressive stress-strain curves of the _cg-G_ with different initial GO concentrations after evaporate-casting.",
+      "text_sha256": "sha256:863442686eb30349dcfd2f36dbdd7ef7bc1101bf6eb485826849ced19b33fc24"
+    },
+    {
+      "char_end": 27633,
+      "char_start": 27418,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-777f82f3d06ded84bfb0",
+      "source_role": "author_response",
+      "text": "(8) The method of sintering should be explored. The samples obtained from other drying method should be compared to enrich the author's mechanism (The solvent evaporation and interface should be considered together)",
+      "text_sha256": "sha256:4740ef2d230051d194c8caa4a14a49ab06f5c9d237f140338f827214122c5f51"
+    },
+    {
+      "char_end": 27962,
+      "char_start": 27636,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ab10f6af306fa6e1aae5",
+      "source_role": "author_response",
+      "text": "Response: Thank you for your comments and suggestions. Regarding the drying method employed in this study, we utilized ambient room temperature spontaneous evaporation drying in the laboratory environment. The temperature was maintained at 25 °C, with no significant airflow (such as fans or air conditioning). To minimize the",
+      "text_sha256": "sha256:a4ca9c2799eae13e69bb915e9f259334c8d44a5019a1488b33d44e862bb315c9"
+    },
+    {
+      "char_end": 28351,
+      "char_start": 27965,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-799631ad3826b7f4e131",
+      "source_role": "author_response",
+      "text": "influence of the casting substrate on the evaporate-casting deformation process, we selected ultra-hydrophobic PTFE board as the deformation substrate. PTFE exhibits a large contact angle (~170°), which minimizes the surface tension between the _cg-G_ hydrogel and the substrate upon contact, thereby reducing the restriction of the substrate on the evaporate-casting shrinkage process.",
+      "text_sha256": "sha256:fe130f0d90e3027bd1f14808b9922f28b869ef0f2544776858934c2f68e53757"
+    },
+    {
+      "char_end": 28950,
+      "char_start": 28354,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b321f8bd5546d4593d49",
+      "source_role": "author_response",
+      "text": "To investigate the effects of different drying methods on _cg-G_ evaporate-casting behavior, we selected three _cg-G_ hydrogel samples with identical internal orientation microstructures. These samples were subjected to drying outdoor, convection oven, and drying in the laboratory environment, respectively. The outdoor drying occurred in Beijing, China, at noon on March 22nd, with a temperature of approximately 23 °C and a northwest wind of 3 levels. The convection oven was set at 35 °C with forced air circulation. Ultra-hydrophobic PTFE was used as the shrinking substrate for all samples.",
+      "text_sha256": "sha256:0280c387046ba7e5feda1ef65b8025372e1284057323cb39676da72d6ef60f30"
+    },
+    {
+      "char_end": 29842,
+      "char_start": 28953,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a0b8818ced845f1ff46d",
+      "source_role": "author_response",
+      "text": "The experimental results are presented in Fig. R8. After the evaporate-casting process, all three _cg-G_ superstructures exhibited almost identical configurations and dimensions. This indicates that factors such as air flow velocity and temperature, which can alter the evaporation rate of water, do not affect the outcome of the evaporatecasting deformation behavior. However, it was observed that the time required for evaporation deformation varied significantly across different environments. In outdoor conditions, higher winds accelerated the evaporation of moisture within the _cg-G_ hydrogel, hastening the evaporate-casting process, which was completed in just 2 hours. Furthermore, in the convection oven environment, the combination of higher temperature and faster airflow further accelerated moisture evaporation, completing the shrinkage deformation of _cg-G_ in just 1 hour.",
+      "text_sha256": "sha256:3186b8a5feca0744afad055da462d9c580b0ec3db0d42eb9daf06e307b54d935"
+    },
+    {
+      "char_end": 30449,
+      "char_start": 29845,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e056bc841e6f4f3f7342",
+      "source_role": "author_response",
+      "text": "These results demonstrate that different drying methods only affect the timing of the deformation process, without impacting the final structure. However, due to the uncontrollable nature of outdoor environmental conditions and the high energy consumption associated with convection ovens, the ambient room temperature spontaneous evaporation method is still preferred for practical experimental purposes, which requires no special treatment and consumes no energy. The discussion has been added and highlighted with red at line 251 of the revised manuscript and in Fig. S19 of Supplementary Information.",
+      "text_sha256": "sha256:16d4477c560b689c4f788c038cb8ef4e5526e3162ea38e101e89061ce0d72f08"
+    },
+    {
+      "char_end": 30505,
+      "char_start": 30452,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-443004adefe5c2caea18",
+      "source_role": "author_response",
+      "text": "**==> picture [325 x 267] intentionally omitted <==**",
+      "text_sha256": "sha256:58a21a824a24f4e92f66fe920a642cb663797fe6d1a3441485e5629886eb4b19"
+    },
+    {
+      "char_end": 30632,
+      "char_start": 30507,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-793c41310297087a2b1a",
+      "source_role": "author_response",
+      "text": "Fig. R8 Characterizations of _cg-G_ a) before and b) after evaporate-casting with different drying method. Scale bar: 500 μm.",
+      "text_sha256": "sha256:9b7cbb2cb864489af2ed7662d659a0ed88ad319d257731de883776efad749118"
+    },
+    {
+      "char_end": 30642,
+      "char_start": 30635,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-831a7c9f96ac809644d1",
+      "source_role": "author_response",
+      "text": "Others:",
+      "text_sha256": "sha256:d13fc2b7f6087e2c5ea4f76bb774cf12b6f550ae6e3efbd4f089bf02e90aea7a"
+    },
+    {
+      "char_end": 30781,
+      "char_start": 30645,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ed117066ee6ad9377e54",
+      "source_role": "author_response",
+      "text": "(9) The major concern is the universality. Is this innovative approach feasible for other materials? What are the applicable conditions?",
+      "text_sha256": "sha256:4c9e6bce6e107e79accb48b07cb7f6aea0c31ab9910fbf364ccca814f7a452fc"
+    },
+    {
+      "char_end": 31150,
+      "char_start": 30784,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6c8bc1a2827d72c23e6e",
+      "source_role": "author_response",
+      "text": "Response: Thank you for your valuable input. In fact, this evaporate-casting process can also be applicable for other similar hydrogel systems with oriented microstructures. For instance, the oriented MXene hydrogels based on our previous research ( _ACS Nano 2020, 14, 8, 10471–10479_ ) show similar contractive behaviors with graphene superstructures in this work.",
+      "text_sha256": "sha256:2efca4ac9d3d81a94511a363e9ecaa6f00a3b9712b5834973a071321e9bc77a3"
+    },
+    {
+      "char_end": 32075,
+      "char_start": 31153,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e0469751f5ae7349b10e",
+      "source_role": "author_response",
+      "text": "Specifically, the preparation of MXene hydrogels followed a meticulously outlined procedure. The Ti3C2T _x_ dispersion (60 mg g[-1] ) was carefully poured into PTFE molds, positioned atop a 0.5 cm thick stainless-steel block in contact with liquid nitrogen. Following the complete freezing of the Ti3C2T _x_ dispersion, the resultant frozen sample was extracted from the PTFE mold and stored in a refrigerator (T = −20 °C) for a duration of 4 hours. Subsequently, the frozen gel underwent a thawing process in 5 M HCl solution at room temperature, with gentle agitation, spanning a timeframe of 6 hours. The solution was then subjected to multiple replacements with deionized water until achieving neutrality. The subsequent dialysis process culminated in the preparation of MXene hydrogel characterized by a long-range oriented microstructure. Fig. R9 illustrates the ensuing steps wherein the obtained MXene hydrogel was",
+      "text_sha256": "sha256:1e631a551c32642746fa61e1e979727c38eb282feaa9e48e0a5083f39dc21d52"
+    },
+    {
+      "char_end": 32808,
+      "char_start": 32078,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-42a4996544e0fef2f93f",
+      "source_role": "author_response",
+      "text": "meticulously sliced into dimensions of 8 mm × 8 mm × 2 mm and positioned on a PTFE substrate, allowing for spontaneous evaporation of water under ambient conditions. Observations from Fig. R9a elucidate a significant reduction in dimensions perpendicular to the layer direction as water evaporated, indicating a marked decrease in gap size, whereas changes along the layer direction remained relatively minor. After 5 hours, the complete evaporation of water molecules within the MXene hydrogel culminated in its final evaporative shaping. Analogous to curvature gradient graphene hydrogels, the resultant MXene assembly manifested a regular rectangular structure, underscoring the controllable nature of MXene hydrogel shrinkage.",
+      "text_sha256": "sha256:4d53802f128909cb0b3c21e70f99e4e5df2456a7cf4c967943f388e4869e1e78"
+    },
+    {
+      "char_end": 33669,
+      "char_start": 32811,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7c3f5f596385aeb8ed65",
+      "source_role": "author_response",
+      "text": "Further analysis through SEM images (Fig. R9b) revealed a distinct long-range ordered structure within the MXene hydrogel prior to shrinkage, characterized by an interlayer spacing of approximately 50 μm. With ongoing water evaporation, the sheets of MXene hydrogel exhibited wrinkling, leading to the convergence of adjacent layers and a subsequent decrease in interlayer spacing until its eventual disappearance (Fig. R9c). This behavior mirrors the shrinkage exhibited by curvature gradient graphene hydrogels. Nonetheless, the degree of wrinkling observed in MXene hydrogel sheets was comparatively lower. Consequently, the degree of shrinkage along the layer direction within MXene hydrogel was diminished, with the _l’_ / _w’_ ratio after deformation reaching as high as ~2, significantly surpassing that of curvature gradient graphene superstructures.",
+      "text_sha256": "sha256:00b1b36382001dc2909427142e8effd696149c34e55713079fe45f787b61ddb3"
+    },
+    {
+      "char_end": 34253,
+      "char_start": 33672,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7de1939f10c7222851fe",
+      "source_role": "author_response",
+      "text": "These findings underscore the evaporative-induced deformation behavior shared between MXene hydrogels and _cg-G_ hydrogels, thereby validating the proposed method’s universality. Similarly, by replicating analogous oriented or curvature gradient structures, it is hypothesized that other materials such as graphene/MXene composite hydrogels or polymer composite hydrogels can likewise exhibit comparable evaporative deformation behavior. The discussion has been added at line 361 and 362 of the revised manuscript and in Fig. S30 of Supplementary Information, highlighted with red.",
+      "text_sha256": "sha256:83e7ec2e01fe4bee8b5440c069269ec8d4a7fae1869ce6a77c339e06adbce8ec"
+    },
+    {
+      "char_end": 34309,
+      "char_start": 34256,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-27d2b219dc1091b0cd41",
+      "source_role": "author_response",
+      "text": "**==> picture [320 x 386] intentionally omitted <==**",
+      "text_sha256": "sha256:ca94d41e21865e04ed0a5d9da9a6a80c1253bb5de6e4cb8176ac43fa9e29d929"
+    },
+    {
+      "char_end": 34557,
+      "char_start": 34311,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b27941fc78b802a6eff5",
+      "source_role": "author_response",
+      "text": "Fig. R9 a) Optical images of vertically oriented MXene hydrogel with evaporation time ranging from 0 to 5 h. SEM images of the MXene hydrogel b) before and c) after water evaporation. d) EDS mappings of Ti, C, F, and O elements. Scale bar: 50 μm.",
+      "text_sha256": "sha256:2736a9eee301ecd0e9e34a04b188caa38a8e4cdf4a1da4ce87a9c259f9057244"
+    },
+    {
+      "char_end": 35300,
+      "char_start": 34560,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e999d956d3a3932af698",
+      "source_role": "author_response",
+      "text": "(10) The layout and visualization of Fig. 1 should be further improved to more effectively showcase the novel aspects of the processing strategy and the curvature structures presented in this work. Especially for the process illustration, the current state lacks clarity and is unable to convey the process's uniqueness and casting flexibility. Response: As suggested, we have revised the schematic diagram of the evaporatecasting process of _cg-G_ in Fig. 1 of the revised main text. The modified structure clearly illustrates the macroscopic and microscopic changes in the curvature gradient structure before and after water evaporation. Additionally, we have included the revised Fig. 1 in the subsequent figure (Fig. R10) for reference.",
+      "text_sha256": "sha256:6d0f4188c233b39456464c711631b711480582f9cb4140df5bf6660010e359ec"
+    },
+    {
+      "char_end": 35356,
+      "char_start": 35303,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-063d2318043c810aefb3",
+      "source_role": "author_response",
+      "text": "**==> picture [321 x 247] intentionally omitted <==**",
+      "text_sha256": "sha256:8e17e3a0edacc15a4e4c57a9f690afb1f3c0a94b6e088db07e6a718bd449d4ef"
+    },
+    {
+      "char_end": 35399,
+      "char_start": 35358,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ab80f3cae57b03b2dbdf",
+      "source_role": "author_response",
+      "text": "Fig. R10 The revised Fig. 1 in main text.",
+      "text_sha256": "sha256:475b3313f49e171ee435fe1e7a580e8642ce86080c8d97eae5da514dd9bcb2fd"
+    },
+    {
+      "char_end": 35747,
+      "char_start": 35402,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-91121b3f7aa46e2fbafe",
+      "source_role": "author_response",
+      "text": "(11) Regarding the compression tests, the direction in which these were conducted should be specified. If the compressive strength of cg-G was obtained in the in-plane direction, it would be valuable to also include compressive strength data along the outof-plane direction for a more comprehensive mechanical property comparison and discussion.",
+      "text_sha256": "sha256:4607191b36533575fdccb297298db7f03e0b2f75392ed4a2481e1671048418ec"
+    },
+    {
+      "char_end": 36638,
+      "char_start": 35750,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9356109c98ca40d6d807",
+      "source_role": "author_response",
+      "text": "Response: Thank you for your comment and suggestion. Fig. R11 provides depicts the stress-strain curves of _cg-G_ after deformation at two different directions. As evident from the graph, _cg-G_ demonstrates notably high strength (~100 MPa) in two perpendicular stress directions. However, there are differences in the extent of deformation at the yield point. The difference lies in the fact that there is a greater Young's modulus along the direction of the sheet, while there is greater elastic and plastic deformation perpendicular to the direction of the sheet. This indicates that the mechanical properties are favorable in both directions, and in practical applications, the loading surface can be chosen according to specific needs. The results and discussion have been added at line 140 of the revised manuscript and in Fig. S8 of Supplementary Information, highlighted with red.",
+      "text_sha256": "sha256:ed6cb380629cce8cfbc3f86e3f595a168a87d17521c10ba87ded3a00c148590a"
+    },
+    {
+      "char_end": 36694,
+      "char_start": 36641,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8b483098d1cb6ef0208e",
+      "source_role": "author_response",
+      "text": "**==> picture [214 x 177] intentionally omitted <==**",
+      "text_sha256": "sha256:baf0e37364533344685b29d0a3a591efeceb44d748601a6a56b9bc990343bc78"
+    },
+    {
+      "char_end": 36815,
+      "char_start": 36696,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e71255423d2222bf5781",
+      "source_role": "author_response",
+      "text": "Fig. R11 Compressive stress-strain curves of the _cg-G_ after evaporate-casting under different compression directions.",
+      "text_sha256": "sha256:4e49142f08d27e7206f32e34565e86d9370a5bc733a8ba1f8dbc93ffef634e30"
+    },
+    {
+      "char_end": 36831,
+      "char_start": 36818,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b7fe8349b56f743a7a2b",
+      "source_role": "author_response",
+      "text": "## Reviewer 3",
+      "text_sha256": "sha256:df53b1bdcd9553f6fea8041e67ae30a418cb5f882447af3d75c8f29d4c5952e8"
+    },
+    {
+      "char_end": 37980,
+      "char_start": 36834,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a2bd6b2ca869060242bf",
+      "source_role": "author_response",
+      "text": "This work focuses on addressing the challenges currently encountered in the fabrication of microstructural materials, successfully develops a novel processing strategy toward graphene superstructure with a curvature gradient, and fabricates a robust structural material with meticulously designed functional shapes. Compared with traditional structural materials, the graphene superstructure fabricated by the dehydration-based evaporate-casting process is tightened _via_ capillary effect, resulting in a compact profile and extraordinary high mechanical strength of up to ~70 MPa. This study is very detailed, delving into the preparation and deformation of the graphene superstructure thoroughly, and readers can obtain specific information from the article. This is undoubtedly essential for guiding and advancing subminiature structural materials, addressing challenges faced by current material forming technologies. I strongly recommend publishing this work in Nature Communications after minor revision. Response: We do appreciate your positive and valuable comments, and shall further improve the manuscript according to your suggestion.",
+      "text_sha256": "sha256:41d57f9d4d5959c88e12734f70d2ea1f714d504446b067e71743aae8514767ed"
+    },
+    {
+      "char_end": 38313,
+      "char_start": 37983,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c5f87ee568b7a9c09afb",
+      "source_role": "author_response",
+      "text": "1. Figure 1 thoroughly illustrates the maturation deformation process of the capsule and the evaporate-casting of curvature gradient graphene. However, the information about the blue dot matrix in Figure 1d is missing. To more clearly obtain information directly from the image, it is recommended to mark the relevant description.",
+      "text_sha256": "sha256:9d7bf2b78813f15fbbcab6a07a7c976b40d275ad3a73690cf83105fa3253d42e"
+    },
+    {
+      "char_end": 38637,
+      "char_start": 38316,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4a72b6918b940f1aca0c",
+      "source_role": "author_response",
+      "text": "Response: Thank you for your valuable suggestion. We have revised the schematic diagram of the evaporate-casting process of _cg-G_ in Fig. 1 of the revised main text. The modified structure clearly illustrates the macroscopic and microscopic changes in the curvature gradient structure before and after water evaporation.",
+      "text_sha256": "sha256:06cf6962b1b8cd40580936e5dd6a5e9ccefea1656eb25dfb46d57266fc409f0c"
+    },
+    {
+      "char_end": 39164,
+      "char_start": 38640,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1d829317f479be8c16b3",
+      "source_role": "author_response",
+      "text": "2. Throughout the contraction process, what alterations take place in the geometric structure of normal graphene hydrogel? It is recommended to enhance the article by including configurations of normal graphene hydrogels after contraction, especially highlighting distinctive structures like crosses, dumbbells, butterflies, etc. In addition, what is the C/O ratio determined in graphene hydrogels, and does this ratio significantly influence the preparation of graphene superstructures through curvature gradient structure?",
+      "text_sha256": "sha256:34f5931b3651e0997e1cf43a772e671b6237cb8020d0c7657b3be0891f72bf9a"
+    },
+    {
+      "char_end": 39677,
+      "char_start": 39167,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f28491887343ec047ef6",
+      "source_role": "author_response",
+      "text": "Response: For the geometric structure of normal graphene hydrogels, the contraction process entails a reduction in volume with irregular altering in the shape. This is attributed to the irregular nature of the internal structure of normal graphene hydrogels. During the shrinkage process, the local asymmetric microstructure causes internal stress, which leads to uncontrollable deformation. In the paper, we have incorporated the demonstrations of normal graphene hydrogels with different geometric structures",
+      "text_sha256": "sha256:279267a74b5e60ea59605fceb36f062215472b8a30da3392e83360f4b1b01db1"
+    },
+    {
+      "char_end": 39819,
+      "char_start": 39680,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d78cdc76cada7268ca88",
+      "source_role": "author_response",
+      "text": "after contraction (Fig. R12). The results and discussion have been added and highlighted with red in Fig. S14 of Supplementary Information.",
+      "text_sha256": "sha256:0cacfbf924998cfcce6cde4f738f963ff0435e7fb285bc6b311780bf8870cabe"
+    },
+    {
+      "char_end": 40416,
+      "char_start": 39822,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5da49f1887da92b6fcba",
+      "source_role": "author_response",
+      "text": "Analysis _via_ X-ray photoelectron spectroscopy indicates an oxygen composition of approximately 20% and C/O ratio of ~4 within the graphene hydrogel. The quantity of oxygen functional groups plays a significant role in influencing the interaction between water molecules and graphene walls. As the number of oxygen functional groups increases, the hydrogen bonding interaction between water molecules and graphene walls strengthens, reducing the ease of the dehydration process. In essence, the contraction and deformation of _cg-G_ take more time when there are more oxygen functional groups.",
+      "text_sha256": "sha256:8143352a216725419d5b769f96117caa08360ef13515cc68268c3531d1bfe666"
+    },
+    {
+      "char_end": 40472,
+      "char_start": 40419,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-36e67759009af1437c1c",
+      "source_role": "author_response",
+      "text": "**==> picture [301 x 151] intentionally omitted <==**",
+      "text_sha256": "sha256:38be02470b2bce2fce47633a8ec8148cc7e90876765ebfeddf317814e2225d51"
+    },
+    {
+      "char_end": 40608,
+      "char_start": 40474,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6ab17c07345ab276d65d",
+      "source_role": "author_response",
+      "text": "Fig. R12 Digital and SEM images of normal graphene hydrogels with different geometric structures (a) before and (b) after contraction.",
+      "text_sha256": "sha256:faad2fe5a25b7e0f4bd1211c4005f2fbfb69b1906af112b39448f8703a409d55"
+    },
+    {
+      "char_end": 41100,
+      "char_start": 40611,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-621d1c7dd92bea480381",
+      "source_role": "author_response",
+      "text": "3. In Figure 5a, what distinguishes the representations of the two cube schematics? Are the scale levels consistent, and are there any instances of duplicated information representations? Please confirm. For the mechanical strength test in Figure 5a-d, why the graphene hydrogel is designed as a hollow structure and whether there is a structureactivity relationship? At the same time, is there any difference in mechanical strength of graphene hydrogel between solid and hollow structure?",
+      "text_sha256": "sha256:8eb4ac641626b735d4c4e0c051ee1a18dc0364580e6974985ac438e69144773d"
+    },
+    {
+      "char_end": 41675,
+      "char_start": 41103,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c5cf2012492daffc33f7",
+      "source_role": "author_response",
+      "text": "Response: Thank you for your comment. The two cube schematics in Fig. 5a are essentially identical. However, the upper diagram illustrates the external configuration of the hollow square structure, while the lower diagram depicts the microstructure of the hollow square structure. Both diagrams belong to the same dimensional scale. To prevent readers from perceiving similar information as redundant, we have adjusted the perspective of the schematic diagram below to better correspond with the physical image. The relevant modifications have been implemented in Fig. 5a.",
+      "text_sha256": "sha256:8fb9d02c638484118028d109fa774dc78bdcc9a243e5107b848ee42f3bae2764"
+    },
+    {
+      "char_end": 41846,
+      "char_start": 41678,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7f8610f20e0364d35715",
+      "source_role": "author_response",
+      "text": "In the context of structural materials, lightweight and high strength are pivotal physical attributes. The design of hollow structures aims to reduce the volume density",
+      "text_sha256": "sha256:3a332101f839cee16bc72675c6908228ac2b4fc3ad6c7d89398157b0b5df94e4"
+    },
+    {
+      "char_end": 43372,
+      "char_start": 41849,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6167aa647b01d444d909",
+      "source_role": "author_response",
+      "text": "of the material while maintaining its strength, thereby improving the specific strength of the material and making it more suitable for aerospace applications. In our experiments, we observed that incorporating cylindrical hollow structures within concentric circular arrangements does not compromise the compressive strength of the material. This is because, in compression experiments, the remarkable strength of the graphene superstructure primarily stems from the oriented contraction of graphene layers, and the interlocking interactions between layers. The hollow structure does not affect these microscopic interactions. Additionally, we conducted compression tests on solid graphene blocks, and when subjected to the pressure of a car passing over them, the solid and dense graphene blocks did not undergo destructive deformation (Fig. 2a). Furthermore, we conducted a comparison of the stress-strain curves between hollow and solid _cg-G_ after evaporate-casting (Fig. 2b). It is evident that the stress-strain curve of the hollow one exhibits a similar shape and magnitude to that of the solid one. In essence, the mechanical performance of the dense graphene block is not adversely affected by the presence of the hollow structure. Considering the effective reduction in mass achieved by the hollow structure in the _cg-G_ after evaporate-casting, it emerges as a more favorable configuration for structural materials. The discussion has been added in Fig. S25 of Supplementary Information, highlighted with red.",
+      "text_sha256": "sha256:d2a6071ce13fd97a97dacafb327c70ce9da4bb5b274d7e9178798d158fb89b7d"
+    },
+    {
+      "char_end": 43428,
+      "char_start": 43375,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9a2631b58f20310e76e0",
+      "source_role": "author_response",
+      "text": "**==> picture [323 x 128] intentionally omitted <==**",
+      "text_sha256": "sha256:80e66a981bed665a73765837a4c4009838768e6dcd90e1da14e648db27f23019"
+    },
+    {
+      "char_end": 43724,
+      "char_start": 43430,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-91eb73a17f4eac8fd894",
+      "source_role": "author_response",
+      "text": "Fig. R13 a) Photograph of evaporate-casted solid _cg-G_ s after being run over by car. After being run over by a car, no damage can be found on the five micro-fixators of _cgG_ after evaporate-casting. b) Compressive stress-strain curves of the solid and hollow _cg-Gs_ after evaporate-casting.",
+      "text_sha256": "sha256:ba18f9c90c81ac54c7b8a4dcbc4bf6a57408e22b0504ad7c9fe48c1ec9cc6e5c"
+    },
+    {
+      "char_end": 43996,
+      "char_start": 43727,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-03bd0c913aedee37078a",
+      "source_role": "author_response",
+      "text": "4. In this study, the deformation of graphene hydrogel derives from the evaporatecasting of curvature gradient structure. In Figure 3, what would occur during the contraction process if the cruciform structure were not disassembled from the concentric circle structure?",
+      "text_sha256": "sha256:b69cbc16d9e7756525d2cb2fc1d198de23760fc7dfea2f9f361099324b31cdd8"
+    },
+    {
+      "char_end": 44170,
+      "char_start": 43999,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6efc5a4c5e4b796e7eed",
+      "source_role": "author_response",
+      "text": "Response: Thank you for your comment. In Figure 3, the cruciform structure which was not disassembled from the concentric circle structure will undergo contraction without",
+      "text_sha256": "sha256:7470109ba926b15cec6903940103c0684f5cc15247a3cc82592be2aee03e82f1"
+    },
+    {
+      "char_end": 44200,
+      "char_start": 44173,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1a77ca7fc41d9346cd14",
+      "source_role": "author_response",
+      "text": "any additional deformation.",
+      "text_sha256": "sha256:4dcd5f710f7b770e5e29efcc2161207935e65a8affa46b32e0f9dbeb4394b82b"
+    },
+    {
+      "char_end": 45474,
+      "char_start": 44203,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b6ce9097c209f6643acc",
+      "source_role": "author_response",
+      "text": "As outlined in our paper, the deformation of graphene superstructures derives from the evaporate-casting of curvature gradient structure. If the cruciform structure remains integrated with the concentric circular structure, each edge/part of the cruciform exhibits a centrally symmetrical arrangement within the concentric circles. Throughout the contraction deformation process, both structures maintain the same size but in opposite direction of the configuration forces, resulting in an overall absence of deformation. In essence, the concentric circular structure of graphene hydrogel, postdehydration, contracts into smaller concentric circles, and any internal structure undergoes only dimensional changes without altering its shape compared to the initial hydrogel. We have already delved into this phenomenon in Fig. S12 of revised Supplementary Information. As shown in Fig. S12, the _cg-G_ of _d_ = 0 mm (blue) mostly consists of arcs with small radii and gaps between them, while the _cg-G_ of _d_ = 7 mm (green) mostly consists of arcs with large radii. In an ideal coaxial circular arc model, the assembly tends to contract uniformly. Various curvature structures within assemblies demonstrate consistent lateral dimensions following contraction deformation.",
+      "text_sha256": "sha256:5f8540b6fc956a1d4aa9f1cefac8e0ff2f9e2aaada11147e967b4ed9a7484d31"
+    },
+    {
+      "char_end": 45571,
+      "char_start": 45477,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-cbe8dccbfe9b9032644d",
+      "source_role": "author_response",
+      "text": "## 5. Is the contraction and deformation process of these graphene superstructures reversible?",
+      "text_sha256": "sha256:17a069d16614acdc13a629b41ed1a79c1fe14e69ec97608131cd58f29a57cdcc"
+    },
+    {
+      "char_end": 45995,
+      "char_start": 45574,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ab9e7e4901873552a3ae",
+      "source_role": "author_response",
+      "text": "Response: The contraction and deformation process of graphene superstructures are irreversible due to the robust π-π interaction between graphene layers. Throughout the hydrogel shrinkage process, the loss of water leads to a tight bonding of adjacent graphene layers through this formidable force. The re-infiltration of water molecules does not reverse the contraction of the graphene layers that have already occurred.",
+      "text_sha256": "sha256:f2253a3ace5418c6c635bac2c8a10e867bf7c537fb7c1d362327416ba6273d7d"
+    },
+    {
+      "char_end": 46310,
+      "char_start": 46272,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c95c08e79fa050d0c24f",
+      "source_role": "author_response",
+      "text": "## **RESPONSE TO REVIEWERS’ COMMENTS**",
+      "text_sha256": "sha256:1418a8d54fa76fd8aaa6fb8c9f26fecff82de744fcf62a34e731530dda4e7da7"
+    },
+    {
+      "char_end": 46349,
+      "char_start": 46313,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-508f84267985a998eaa3",
+      "source_role": "author_response",
+      "text": "Reviewer #2 (Remarks to the Author):",
+      "text_sha256": "sha256:44342433f6365a7f5949b5d3040f70d6f57a95f4a5f42f98700e18492093b116"
+    },
+    {
+      "char_end": 46465,
+      "char_start": 46352,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5961415193dc3c5c0741",
+      "source_role": "author_response",
+      "text": "The authors have addressed the questions very well with supporting experimental data. It is good for publication.",
+      "text_sha256": "sha256:f30185e1d5a89c57e03786f40771d4b80307d5a2253ce5402e1141c5e167607b"
+    },
+    {
+      "char_end": 46551,
+      "char_start": 46468,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5431b5c1af1383c658bf",
+      "source_role": "author_response",
+      "text": "Re. Thank you very much for your positive comments and your time on our manuscript.",
+      "text_sha256": "sha256:1545a4f2915d6babac156fcc967ea6b504ff9469ad854ce2690bebee0e6420f8"
+    },
+    {
+      "char_end": 46590,
+      "char_start": 46554,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-cf05dfa5d87afe779b8d",
+      "source_role": "author_response",
+      "text": "Reviewer #3 (Remarks to the Author):",
+      "text_sha256": "sha256:8c17865a9cabc7f290ce7a58f02add361b84a8c4dd8a742bbb1b6a885882bbd0"
+    },
+    {
+      "char_end": 46641,
+      "char_start": 46593,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e1e2b89c46c12f5d79cb",
+      "source_role": "author_response",
+      "text": "This manuscript seems now ready for publication.",
+      "text_sha256": "sha256:5d9bed92b7816ef9690e9e6a0ff919e852567c8dcba3e9a06e018de9e1e18be9"
+    },
+    {
+      "char_end": 46701,
+      "char_start": 46644,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fb2dbdbcf99acbd25aed",
+      "source_role": "author_response",
+      "text": "Re. Thank you very much for your positive recommendation.",
+      "text_sha256": "sha256:23cf854f84f1184ec691f74f2a03a2476e99ccc3ff8b0365610e1911bdbb2201"
+    }
+  ],
+  "contract": "reconstruction_session_package",
+  "forbidden_conversation_hashes": [],
+  "input_sha256": "sha256:bfb49e675848b4ddb9c6a81805d8d8685f80a091e21e1661f4fa9c8ddd9596d9",
+  "instructions": "Reconstruct the final-state peer review for one paper.\nUse reviewer_report spans as the only source of review opinions. Author responses may\nonly determine whether an issue was resolved; they cannot create or rewrite a review\npoint. Remove greetings, publication/acceptance recommendations, editorial decisions,\nand generic praise. Merge duplicates, preserve real reviewer disagreement, and produce\nat most 24 atomic points in StructuredReviewV2. Include contribution summary, novelty\nsupport/limits, strengths, weaknesses, and questions. Bind every retained point to at\nleast one reviewer quote key and one final PaperIR P:S-* span. Put resolved issues only\nin ReferenceTraceV2/revision_ledger. Keep partially_resolved or persists issues only\nwhen the residual is independently supported by the final paper. Unverifiable items are\naudit-only. Do not use graph signals, GEAR output, old reconstructions, ratings,\ndecisions, recommendations, or accept/reject language. Return only the completed\nReconstructionSessionResponseV2 JSON file.",
+  "package_id": "RSP-18c4b3097206fd404899",
+  "paper_context": {
+    "claims": [
+      {
+        "claim_id": "C-b06e71858d251daa",
+        "claim_type": "causal_claim",
+        "evidence_key": "P:S-51a2ddb7640c97a70eba",
+        "schema_version": "aspr_gear",
+        "text": "However, current material forming technologies suffer from internal stress or defects arising from the relative displacement of material molecules (or atoms) during the processing, which lead to a noteworthy attenuation of the intrinsic mechanical properties and a deterioration of processing precision[4][–][6] ."
+      },
+      {
+        "claim_id": "C-d0f2e8c79f7b648f",
+        "claim_type": "causal_claim",
+        "evidence_key": "P:S-51a2ddb7640c97a70eba",
+        "schema_version": "aspr_gear",
+        "text": "Nevertheless, random interlayer slippage of nanosheets in the above three assemblies will lead to unpredictable changes, and thus defects, in the resultant structure."
+      },
+      {
+        "claim_id": "C-40a28bbb1cc32f5d",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-010401d6046a66ad1671",
+        "schema_version": "aspr_gear",
+        "text": "**----- Start of picture text -----**<br> a i ii iii<br>Graphene nanosheets<br>Porous structure Layered structure Array structure<br>iv<br>Self-assembly<br>Top view<br>Graphene platelet<br>Curvature gradient superstructure<br>b c<br>Ma turation Dehydration<br>F<br>Bilayer structure Asymmetric<br>Bean pod (One curvature step) internal stress Deformation<br>Water evaporation<br>d<br>F<br>Evaporate-casting<br>Centripetal<br>Curvature gradient superstructure Water internal stress Designed-structure<br>Curvature increase<br>**----- End of picture text -----**<br>"
+      },
+      {
+        "claim_id": "C-02f008b3e962c6bb",
+        "claim_type": "significance_claim",
+        "evidence_key": "P:S-d5739924f25182b648af",
+        "schema_version": "aspr_gear",
+        "text": "Both Fourier transform infrared spectroscopy and energy dispersive spectroscopy before and after water evaporation indicate that the casting process does not alter the composition or content of functional groups on graphene sheets (Supplementary Fig."
+      },
+      {
+        "claim_id": "C-e3f294f5356ae141",
+        "claim_type": "causal_claim",
+        "evidence_key": "P:S-a62414938b4aacb5dc47",
+        "schema_version": "aspr_gear",
+        "text": "In situations where the curvature axis of the graphene superstructure is perpendicular to the plane of the cross-shaped samples, variations in the distribution of curvature gradients within the sample result in diverse bending behaviors during the evaporate- Nature Communications | (2024) 15:5917 3 Article https://doi.org/10.1038/s41467-024-50191-6 **==> picture [481 x 373] intentionally omitted <==**"
+      },
+      {
+        "claim_id": "C-13eb604cb35e1635",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-44d875ede939c42c7beb",
+        "schema_version": "aspr_gear",
+        "text": "The colors in FEA from yellow to dark blue indicate an increase of the radius of curvature (ρ)."
+      },
+      {
+        "claim_id": "C-1b0f5f09490af0ba",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-4982fbc4b8927f3aaa79",
+        "schema_version": "aspr_gear",
+        "text": "The alterations in shape along the horizontal direction are relies on the decreasing gap width of the wallstructures.As a result, the constant lateral dimension not only denotes a consistent curvature gradient but also a contraction that closely approximates the characteristics of an ideal coaxial circular arc model (see Supplementary Fig."
+      },
+      {
+        "claim_id": "C-e2bfd26e89fc43cd",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-51def229b211a578c656",
+        "schema_version": "aspr_gear",
+        "text": "Despite the significant contraction (high shrinkage coefficient level), the fundamental configuration of the cross-shaped samples remains unaltered when d = 0."
+      },
+      {
+        "claim_id": "C-97aa25af19eb7e1f",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-ddc172672603e9d9030d",
+        "schema_version": "aspr_gear",
+        "text": "This casting method demonstrates high stability."
+      },
+      {
+        "claim_id": "C-85f7dcf4c1d1c394",
+        "claim_type": "significance_claim",
+        "evidence_key": "P:S-ddc172672603e9d9030d",
+        "schema_version": "aspr_gear",
+        "text": "Then we delve into how the self-tightening effect of cg-Gs during the evaporate-casting process is harnessed to programmatically transform simple profiles into intricate structures."
+      },
+      {
+        "claim_id": "C-0343b867f05177ce",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-712ccc84a2b8233f0cf6",
+        "schema_version": "aspr_gear",
+        "text": "With water evaporating, moisture near highly curved graphene sheets becomes depleted first, leading to more pronounced deformations compared to regions with lower curvature."
+      },
+      {
+        "claim_id": "C-c26f5d6984e4c661",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-11d359a3fd0e650623c4",
+        "schema_version": "aspr_gear",
+        "text": "The coarse-grained molecular dynamics (CG-MD) calculation model show that the energy of the system initially increases and then decreases as raise of twist angles because of inter-adhered graphene walls driven by strong π–π interactions (Supplementary Fig."
+      }
+    ],
+    "contract": "reconstruction_paper_context",
+    "paper_id": "10.1038/s41467-024-50191-6",
+    "paper_sha256": "sha256:8f4d7b8a975e6fa8b83480990c5ee69227dd8671ceb61a55d21b07092c9fa51b",
+    "schema_version": "aspr_gear",
+    "spans": [
+      {
+        "evidence_key": "P:S-8dbdc2a9ec6445a2e63f",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8dbdc2a9ec6445a2e63f",
+        "text": "https://doi.org/10.1038/s41467-024-50191-6 \n\n**==> picture [523 x 31] intentionally omitted <==**",
+        "text_sha256": "sha256:55784e2ff542791614dea5da3b69f45f1cfd20678669ebdce41cae326df8cd97"
+      },
+      {
+        "evidence_key": "P:S-046f37651fb54179e17e",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-046f37651fb54179e17e",
+        "text": "Article \n\n## Evaporate-casting of curvature gradient graphene superstructures for ultra-high strength structural materials \n\nReceived: 6 November 2023 Accepted: 27 June 2024 Check for updates \n\nBing Lu[1,2] , Li Yu 3, Yajie Hu1, Ying Wang1, Fei Zhao 2, Yang Zhao 2 , Feng Liu 3 , Huhu Cheng 1 & Liangti Qu 1 \n\nIn contemporary manufacturing, the processing of structural materials plays a pivotal role in enabling the creation of robust, tailor-made, and precise components suitable for diverse industrial applications. Nonetheless, current material forming technologies face challenges due to internal stress and defects, resulting in a substantial decline in both mechanical properties and processing precision. We herein develop a processing strategy toward graphene superstructure with a curvature gradient, which allows us to fabricate robust structural materials with meticulously designed functional shapes. The structure consists of an arc-shaped assembly of graphene nanosheets positioned at co-axial curvature centers. During the dehydration-based evaporatecasting process, the assembly is tightened via capillary effect, inducing local bending. By precisely tuning the axis-center distance and tilt angle, we achieve accurate control over the shape of obtained structure. Notably, internal stress is harnessed to reinforce a designed mortise and tenon structure, resulting in a high joining strength of up to ~200 MPa. This innovative approach addresses the challenges faced by current material forming technologies and opens up more possibilities for the manufacturing of robust and precisely shaped components.",
+        "text_sha256": "sha256:1199277ce682965af5605dadbd6cc739b93a584af0fd944212c7f46ca668e221"
+      },
+      {
+        "evidence_key": "P:S-51a2ddb7640c97a70eba",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-51a2ddb7640c97a70eba",
+        "text": "Structural material processing plays crucial roles in virtually all aspects of modern manufacturing and industry, enabling the fabrication of customized, complex, and precision parts that are durable and wellsuited for various applications, spanning from electronics to aerospace and automotive industries[1][–][3] . However, current material forming technologies suffer from internal stress or defects arising from the relative displacement of material molecules (or atoms) during the processing, which lead to a noteworthy attenuation of the intrinsic mechanical properties and a deterioration of processing precision[4][–][6] . In line with the development of two-dimensional materials over the past decades, microstructures constructed from graphene and its derivatives as basic building blocks have showcased tremendous \n\npotential, demonstrating that the bottom-up self-assembly is an effective strategy to address the processing challenge[7][,][8] . Through the deliberate regulation of interactions between graphene sheets, such as π-π interaction and hydrogen bonding, one can achieve designed structures encompassing porous structure (Fig. 1a-i)[9][,][10] , layered structure (Fig. 1a-ii)[11][,][12] , or array structure (Fig. 1a-iii)[13][,][14] . To alter the assembly’s configuration and attain desired structural materials, an external force is necessary, while the resulting internal stress can be dissipated by relative slip between sheets. Nevertheless, random interlayer slippage of nanosheets in the above three assemblies will lead to unpredictable changes, and thus defects, in the resultant structure.",
+        "text_sha256": "sha256:d79236590d7a6a25c92fe61e89466283d7a73303a3e510f1cd6ceef1bdbb3ff2"
+      },
+      {
+        "evidence_key": "P:S-2860ba9d2bf8e510497a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-2860ba9d2bf8e510497a",
+        "text": "> 1Department of Chemistry, Key Laboratory of Organic Optoelectronics & Molecular Engineering, Ministry of Education, Tsinghua University, Beijing 100084, PR China.[2] Key Laboratory of Cluster Science, Ministry of Education of China, Key Laboratory of Photoelectronic/Electrophotonic Conversion Materials, School of Chemistry and Chemical Engineering, Beijing Institute of Technology, Beijing 100081, PR China.[3] State Key Laboratory of Nonlinear Mechanics, Institute of Mechanics, Chinese Academy of Sciences, Beijing 100190, PR China. e-mail: yzhao@bit.edu.cn; liufeng@imech.ac.cn; lqu@tsinghua.edu.cn \n\nNature Communications | (2024) 15:5917 \n\n1 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-50191-6 \n\n**==> picture [475 x 343] intentionally omitted <==**",
+        "text_sha256": "sha256:dd3f57be0a8bd9635aee0db0a1be96e4a890edec9330fd16b277086c455ca1bc"
+      },
+      {
+        "evidence_key": "P:S-010401d6046a66ad1671",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-010401d6046a66ad1671",
+        "text": "**----- Start of picture text -----**<br>\na i ii iii<br>Graphene nanosheets<br>Porous structure Layered structure Array structure<br>iv<br>Self-assembly<br>Top view<br>Graphene  platelet<br>Curvature gradient superstructure<br>b c<br>Ma turation Dehydration<br>F<br>Bilayer structure Asymmetric<br>Bean pod (One curvature step) internal stress Deformation<br>Water evaporation<br>d<br>F<br>Evaporate-casting<br>Centripetal<br>Curvature gradient superstructure Water internal stress Designed-structure<br>Curvature increase<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:ac74f2645929249cc750a7d9444ceb989fd3b23822851cd3845d5f37d9f86389"
+      },
+      {
+        "evidence_key": "P:S-c6ecf8f61517bcba4b44",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-c6ecf8f61517bcba4b44",
+        "text": "Fig. 1 | Conceptual illustrations of evaporate-casting of cg-G. a Graphene platelet derived from monolayer graphene nanosheets as basic building block for graphene-based functional architectures shown in i to iv: (i) porous structure, (ii) layered structure, (iii) array structure, and (iv) curvature gradient superstructure. The use of different colors (blue-gray and yellow) is to distinguish the common structure from our structure. b Deformation of the skin of bean pod. c Dehydration \n\nand deformation process of bilayer structure in the skin of bean pod. The two layers deem to be one curvature step. d Dehydration and evaporate-casting process of cg-G. The assembly is tightened by capillary action during water evaporating, and the curvature exhibits a gradient change, resulting in local bending driven by internal configurational force. \n\nThe gradient structures are introduced as a groundbreaking conceptual design, demonstrating that despite relatively low precision, the internal stress inherent in material forming can still be effectively harnessed to regulate the shapes of the resulting products. Owing to the well-organized structure along the gradient direction, including the gradient of functional groups (known as chemical gradient)[15] and gradient of pores (i.e., physical gradient)[16] , stress generated during material forming induces differential deformation at various positions within the material, achieving the shaping. Although the gradient structures are innovative in dissipating internal stress for high robustness, it still constitutes an emerging technology, presenting challenges in utilizing internal stress as a driving force for shaping process.",
+        "text_sha256": "sha256:e6d79da374e8fd1f8912f50ba4c49791abc9e2a5cff2e308c848bd45ec7e8847"
+      },
+      {
+        "evidence_key": "P:S-3a3a11604a7483714f0c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-3a3a11604a7483714f0c",
+        "text": "We demonstrate here the fabrication of a graphene superstructure with curvature gradient (cg-G), and present a processing strategy to construct strong structural material with designed functional shapes. The structure comprises a circular arc-shaped assembly of graphene nanosheets positioned at co-axial curvature centers (Fig. 1a-iv). Our inspiration draws from the curvature junctions observed within the layered cells of a bean pod (Fig. 1b)[17][–][19] . The curvature arises as a result of the asymmetrical shrinkage of two layers during the dehydration process, ultimately inducing internal stresses that enhance the structural strength of the entire assembly while also driving deformation (Fig. 1c)[20][,][21] . Water molecules act as molecular-level plasticizers, engaging with the oxygen-containing \n\nfunctional groups on the graphene nanosheets through hydrogen bonding, thus imparting mobility to the graphene nanosheets. The assembly is tightened by capillary action during the dehydrationbased evaporate-casting process, and the curvature also exhibits a gradient change, consequently inducing local bending driven by internal stress (Fig. 1d). Through controllable coordination of axiscenter distance and tilt angle, we can exert accurate control over the shape of the resulting casting. Remarkably, in designed mortise and tenon structure, internal stress can be leveraged to reinforce the formation, leading to the attainment of a super high-strength connection (~200 MPa) upon a specific strength of 143 MPa cm[3] g[−][1] , surpassing that of metallic welding connection, or even integrally formed alloys. The entire process is characterized by its high level of controllability, feasibility, cost-effectiveness, versatility, and environmentally friendly attributes.",
+        "text_sha256": "sha256:ff0c9688d8caabaf2eb8e2b0f44a310d5eab690877a9466eced9a1730ee3f4d8"
+      },
+      {
+        "evidence_key": "P:S-f34a4a99e32a4f6c5a1d",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-f34a4a99e32a4f6c5a1d",
+        "text": "## Results \n\n## Fabrication and characterization of cg-G \n\ncg-G is produced through an alkaline-assisted hydrothermal synthesis using graphene oxide (GO) as precursor (see Methods for details, Supplementary Figs. 1 and 2). The graphene walls are aligned around the geometric axis, which concurrently serves as the axis of curvature of the obtained structure. Using laser processing technology, one can shape the materials with exceptional precision, achieving accuracy of ca. 10 micrometers when combined with an evaporate-casting process \n\nNature Communications | (2024) 15:5917 \n\n2 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-50191-6 \n\n**==> picture [246 x 294] intentionally omitted <==**",
+        "text_sha256": "sha256:d36fddc0636c16e8bd27562421551d6facb7fb7c24a1470fe4d3829c184ac2fe"
+      },
+      {
+        "evidence_key": "P:S-2409751abd101fa1655e",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-2409751abd101fa1655e",
+        "text": "**----- Start of picture text -----**<br>\na b c<br>Cuboid-shaped  cg-G<br>c<br>a b<br>1 mm<br>d e<br>Point  c Graphene walls<br>gaps<br>50 μm 10 μm<br>f g<br>Aligned microstructure<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:bc178c1126a9c9f938cb21c7ff4e09f1df6705631fd57aa708f60d5fe0f6b0b4"
+      },
+      {
+        "evidence_key": "P:S-7cbb83390651b03831f8",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-7cbb83390651b03831f8",
+        "text": "**==> picture [239 x 122] intentionally omitted <==**",
+        "text_sha256": "sha256:a65b562e5508fb172234b91cabb8db260fd35487b98764bd72a90519525010e7"
+      },
+      {
+        "evidence_key": "P:S-e5a98374230f0a1748bf",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-e5a98374230f0a1748bf",
+        "text": "**----- Start of picture text -----**<br>\ng 80<br>60<br>40<br>20<br>0<br>Normal graphene Graphite CopperAluminum alloy TitaniumStainless steel cg-G<br>)<br>-1<br>3cm g<br>MPa<br>(<br>Specific compressive strength<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:77ed7d03ac43049b5fc01745ec8e61af724b9e3d9afeba2199d19f823bee9ee4"
+      },
+      {
+        "evidence_key": "P:S-29082cc322fcf7f7e221",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-29082cc322fcf7f7e221",
+        "text": "Fig. 2 | Morphology and structure characterizations of cg-G. a Photograph of a cuboid-shaped cg-G. b Schematic structure of cg-G. Three colorful points a (green), b (yellow), and c (purple) represent three different positions on the assembly. c SEM images of point a and point b in (b). The position close to the center of curvature shows obvious curvature gradient structure. d SEM image of point c and corresponding enlarged image. The structure of point c is composed of parallel graphene walls and gaps between them. e SEM images of graphene sheets in cg-G \n\nbefore and after evaporate-casting. f STEM images of point c in Fig. 2b after evaporate-casting. Yellow arrows represent the aligned direction of compact graphene walls. g Specific compressive strength comparison of various densified materials including normal graphene hydrogel after dehydration, graphite, kinds of metals, and cg-G after evaporate-casting (n = 3, error bar: standard deviation). Source data are provided as a source data file. \n\n(Fig. 2a and Supplementary Fig. 3). The resultant superstructure is featured with a curvature gradient (Fig. 2b), where the curvature is smaller further from the curvature center and increases as one approaches the center. The scanning electron microscopy (SEM) investigations demonstrate that the structure at point a (farther from the curvature center) shows a nearly align parallel to the central axis of curvature (Fig. 2c), while the one at point b (near to the curvature center) exhibits neat remarkable curved arrays toward the concentric axis. The side view cross-section at point c (parallel to the curvature central axis) shows a similar parallel structure to the one at point a (Fig. 2d). \n\nIn a swelling state, the gaps amidst the walls become saturated with water molecules.",
+        "text_sha256": "sha256:1f56bdd65f3978a1325643c58e63f7f9e20ca969ceffc67365eb3212ce4a3392"
+      },
+      {
+        "evidence_key": "P:S-d5739924f25182b648af",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-d5739924f25182b648af",
+        "text": "The evaporate-casting process generates capillary forces through water evaporation, drawing the flat graphene assembly and yielding the protruding structures (Fig. 2e, Supplementary Figs. 4 and 5). Analysis via X-ray photoelectron spectroscopy indicates an oxygen composition of approximately 20% within the cgG, affirming the presence of hydrophilic oxygen functional groups (Supplementary Fig. 6a). This observation emphasizes a robust interaction between water and the internal surfaces, thereby ensuring the potency of the capillary forces. Both Fourier transform infrared spectroscopy and energy dispersive spectroscopy before and after water evaporation indicate that the casting process does not alter the composition or content of functional groups on graphene sheets \n\n(Supplementary Fig. 6b, d, e). Additionally, X-ray diffraction patterns demonstrate no discernible peak shift between the dehydrated and hydrated states (Supplementary Fig. 6c), signifying a consistent interlayer structure connecting the two graphene nanosheets within the assemblies. This suggests that the protruding structures retain the intrinsic mechanical attributes of the graphene assembly. Upon complete dehydration, an aligned microstructure is observed under scanning transmission electron microscopy (STEM), wherein the protrusions are mechanically interlocked in a serrated configuration (Fig. 2f, Supplementary Fig. 7). Due to this distinctive structure, cg-G after deformation demonstrates a density of ~1.5 g cm[−][3] and high compressive strength of up to 70 MPa/(g/cm[3] ), surpassing that of various metals including stainless steel (SUS304) and doubling the strength of traditional graphene-based structural materials (Fig. 2g, Supplementary Fig. 8).",
+        "text_sha256": "sha256:6971325edd22171f5b37ef205019b4de0fa257922110b0517ac00acbea731209"
+      },
+      {
+        "evidence_key": "P:S-a62414938b4aacb5dc47",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a62414938b4aacb5dc47",
+        "text": "## Controllable shaping based on curvature gradient \n\nTo achieve precise control over curvature gradients, we utilized the distance (d) extending from the geometric center (O) of the samples to the curvature axis of the superstructure (O’) as a governing parameter (Fig. 3a, 3b-i). In situations where the curvature axis of the graphene superstructure is perpendicular to the plane of the cross-shaped samples, variations in the distribution of curvature gradients within the sample result in diverse bending behaviors during the evaporate- \n\nNature Communications | (2024) 15:5917 \n\n3 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-50191-6 \n\n**==> picture [481 x 373] intentionally omitted <==**",
+        "text_sha256": "sha256:329f47da3759177152b449b323edbf6bf191ed7a4dcbc390f253a2957fc1f135"
+      },
+      {
+        "evidence_key": "P:S-190fecba74f84dfcbb57",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-190fecba74f84dfcbb57",
+        "text": "**----- Start of picture text -----**<br>\na Center axis line b i d  = 0 mm d  = 3 mm d  = 7 mm<br>O’<br>O(O’) O(O’) O’ O’<br>d<br>O<br>Large La rge Large<br>ii<br>ρ ρ ρ<br>60 5<br>c Small S mall Small<br>4<br>40<br>3 iii<br>Lateral length<br>20 2<br>1 αe  = 0 αe αe<br>0<br>0<br>0 2 4 6 8<br>Distance  d  (mm)<br>d e d  = 0 mm d  = 3 mm d  = 7 mm<br>i<br>O O(O)’ O’ O’<br>O(O’) d<br>O’<br>ii Large Large Large<br>f 60 5 ρ ρ ρ<br>4 Small Small Small<br>40<br>3<br>iii<br>20 2 Lateral length<br>1 αe αe<br>0<br>0 αe  = 0<br>0 2 4 6 8<br>Distance  d  (mm)<br> (°) αe<br>Lateral length (mm)<br>In-plane deformation angle<br> (°)  αe<br>Lateral length (mm)<br>Out-plane deformation angle<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:76acfcdd165628ef2868ff6246c94dfeb4cab72a29f6e6ac4949f981e9a453d7"
+      },
+      {
+        "evidence_key": "P:S-44d875ede939c42c7beb",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-44d875ede939c42c7beb",
+        "text": "Fig. 3 | In-plane and out-plane evaporate-casting processing of cg-G. a–c Inplane processing. a Schematic diagrams of cross-shaped cg-G with an axis-center distance (d) perpendicular to centric axis of curvature. b Demonstrations of crossshaped cg-Gs with different microstructures before and after deformation: (i) Schematic diagrams of three cross-shaped cg-G with different d values (d = 0, 3, 7 mm) on in-plane direction. (ii) Gradient distribution of the curvatures and theoretical predictions of the deformation of the three cg-Gs based on finite element analysis (FEA). (iii) SEM images of the three deformed cg-Gs. The colors in FEA from yellow to dark blue indicate an increase of the radius of curvature (ρ). The degree of deformation can be represented by the included angle (αe). Scale bar: 500 μm. c αe and lateral length of final graphene architectures as a function of d (n = 3, error bar: \n\nstandard deviation). d–f Out-plane processing. d Schematic diagrams of cg-Gs with different d values along the centric axis of curvature. e Demonstrations of crossshaped cg-Gs with different microstructures before and after deformation: (i) Schematic diagrams of three cross-shaped cg-Gs with different d values (d = 0, 3, 7 mm) on out-plane direction. (ii) Corresponding gradient distribution of the curvatures and theoretical predictions of the deformation of the three cg-Gs based on FEA. (iii) SEM images of the three deformed cg-Gs. The degree of out-plane deformation can be represented by αe. Scale bar: 500 μm. f αe and lateral length of final graphene architectures as a function of d (n = 3, error bar: standard deviation). Source data are provided as a source data file. \n\ncasting process (Fig. 3b-ii and 3b-iii, Supplementary Figs. 9 and 10, Supplementary Video 1).",
+        "text_sha256": "sha256:3ee143a3cd2d8c2b38eaa9b2f86fc363831fc5a5a222eebabb54c819cea26a0e"
+      },
+      {
+        "evidence_key": "P:S-94af26871da4b6fb26e3",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-94af26871da4b6fb26e3",
+        "text": "The deformation of samples with diverse curvature gradients can be anticipated via computational prediction (see Methods for details). While the level of shrinkage is notably high, the overall form of the cross-shaped samples is upheld when d = 0. This phenomenon arises due to the counteraction of configurational forces in these sections, which is a consequence of the symmetric microstructures aligning along the in-plane direction. In contrast, the prominence of the differential distribution of the shrinkage coefficient amplifies as d increases (Supplementary Fig. 11). In this context, the degree of shrinkage escalates alongside a more substantial curvature gradient. As a result, these cross-shaped cg-Gs exhibit in-plane deformations toward the curvature center direction following the process of evaporate-casting. \n\nThe microscopic observation via SEM (Fig. 3b-iii) experimentally validated the correlation between deflection and curvature gradient. Samples with a carefully designed curvature gradient exhibited \n\ncorresponding bending angles (αe) along the longer sides (the long side of the initial cross-shaped cg-G) that aligned with the values derived from computational predictions (αc) (Fig. 3b-ii, Supplementary Fig. 9b). This alignment suggests a high level of uniformity in the selfdeformation facilitated by the curvature gradient. The lateral dimension, which signifies the extent of the long side of the initial crossshaped cg-G after deformation, is utilized to exemplify the pronounced regularity of self-deformation. Notably, despite the progressive augmentation in the curvature gradient, the lateral length remains invariant (Fig. 3c).",
+        "text_sha256": "sha256:ef8d8b7c13f861ea6ed4c3d728ae6fcf4219e10319c446b2222668e8379e8ecb"
+      },
+      {
+        "evidence_key": "P:S-4982fbc4b8927f3aaa79",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-4982fbc4b8927f3aaa79",
+        "text": "The alterations in shape along the horizontal direction are relies on the decreasing gap width of the wallstructures.As a result, the constant lateral dimension not only denotes a consistent curvature gradient but also a contraction that closely approximates the characteristics of an ideal coaxial circular arc model (see Supplementary Fig. 12 for details), which concurs with the structural characterization elucidated in Fig. 2. More examples of the in-plane deformation are shown in Supplementary Figs. 13 and 14. \n\nNature Communications | (2024) 15:5917 \n\n4 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-50191-6 \n\n**==> picture [467 x 347] intentionally omitted <==**",
+        "text_sha256": "sha256:a8494960b9db37b7d71ffd2cbd9a01d8da40e440f83ac87ab8c6e16cbad7f7ba"
+      },
+      {
+        "evidence_key": "P:S-6aa9b3efa0215945b048",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-6aa9b3efa0215945b048",
+        "text": "**----- Start of picture text -----**<br>\na b Water evaporation c<br>w<br>w’<br>Fy PcFx Fx Pc Fy l cg-G<br>0 h<br>Dehydration 5 h l’<br>Capillary force<br>After dehydration Layer spacings reduce 1 mm<br>d e Top view f<br>Top view Long center axis Long center axis<br>1 mm Large<br>Side view Side view<br>Side view ρ<br>100 μm<br>1 mm<br>Small<br>g h<br>Curvature centerline i ii iii<br>ii 10<br>i F F’<br>5 mm 5 mm 5 mm<br>Curvature centerline Before evaporate-casting<br>iii<br>30<br>External force 500 μm 500 μm 500 μm<br>Direction toward the center of curvature After evaporate-casting<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:7a0820170e6b6400da9d7efad9706a45e031a8db1459ff765f7a1f358b8d3812"
+      },
+      {
+        "evidence_key": "P:S-3e3589a020b2fb33c8ca",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-3e3589a020b2fb33c8ca",
+        "text": "**==> picture [166 x 126] intentionally omitted <==**",
+        "text_sha256": "sha256:f24a019b24f83c55cdae55e5189d7ad82929707930615ea5d450ffcbc68b4215"
+      },
+      {
+        "evidence_key": "P:S-629fd9803c71f05343a3",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-629fd9803c71f05343a3",
+        "text": "**----- Start of picture text -----**<br>\nh<br>i ii iii<br>5 mm 5 mm<br>Before evaporate-casting<br>500 μm 500 μm<br>After evaporate-casting<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:42feb634a605ef77a458e815d6fb159a245603c8c0f9869d22cac10f7198827a"
+      },
+      {
+        "evidence_key": "P:S-fd9a3d33262ca241e5c8",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-fd9a3d33262ca241e5c8",
+        "text": "Fig. 4 | Mechanism of evaporate-casting of cg-G. a Schematic of capillary force (Pc) of water in the groove of a monolayer graphene sheet, and the deformation of graphene groove after dehydration. The capillary force acts perpendicular to the water surface and can be divided into two force modes: one is normal to the graphene sheet (Fx) and the other is along the sheet (Fy). b Schematic of the dehydration process of graphene walls arrayed in parallel during evaporate-casting. c Photographs of cuboid-shaped cg-G comprising a centrosymmetric curvature gradient structure after dehydration of 0 h and 5 h, and the corresponding SEM image of dehydration for 5 h. Scale bar: 500 μm. Initial size: 8 mm × 8 mm × 2 mm. The ratios of the two sides along and perpendicular to the wall plane before (l, w) and after (l’, w’) dehydration are different, specifically, w/w’ > l/l’. d Digital images of top and side views for dumbbell-shaped cg-G. e Gradient distribution of the \n\ncurvatures and theoretical predictions of the deformation of the dumbbell-shaped cg-G. f SEM images of the dumbbell-shaped cg-G after evaporate-casting. The colors in FEA from yellow to dark blue indicate an increase of the radius of curvature (ρ). Scale bar for the two images on the left: 500 μm. g Schematic diagrams of the microstructure of (i) arc-shaped cg-G, and corresponding schematic diagrams of the assembly after being twisted to different angles (small angle of 10° (ii) and large angle of 30° (iii)). F and F’ represent two forces with equal magnitude but in opposite directions. After being twisted, the direction towards the curvature center (blue arrow) shifts from in-plane to out-plane.",
+        "text_sha256": "sha256:05efa8ae7403820d79ef9d3c7b84e643a28f7f94eda87350dd490340393254dd"
+      },
+      {
+        "evidence_key": "P:S-51def229b211a578c656",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-51def229b211a578c656",
+        "text": "h Digital photos and SEM images of three cg-G assemblies with a twisted angle of 0[o] (i), 10[o] (ii), and 30[o] (iii) before and after evaporate-casting. \n\nWe also examined a scenario where the axis of curvature is parallel to the plane of the cross-shape specimen, and we denoted the distance between the geometric center point and the curvature axis as d (Fig. 3d, 3e-i). The deformation induced by the evaporate-casting process was simulated computationally (Fig. 3e-ii, Supplementary Fig. 15a). Despite the significant contraction (high shrinkage coefficient level), the fundamental configuration of the cross-shaped samples remains unaltered when d = 0. This phenomenon can be ascribed to the equilibrium between internal stresses within symmetric microstructures. The distribution of the shrinkage coefficient becomes more pronounced as the curvature gradient increases (Fig. 3e-iii), signifying that the relationship between the degree of out-plane bending and curvature gradient mirrors that of in-plane deformation. Additionally, a distinct out-plane deformation becomes evident, aligning with the computational predictions. The independence of the lateral length on the curvature gradient underscores the nearly ideal arrangement of coaxial circular arc-shaped graphene assemblies, reinforcing the concordance between observations and expectations (Fig. 3f, Supplementary Fig. 15b). The consistency of these phenomena with the \n\nresults of in-plane deformation experiments highlights satisfactory controllability facilitated by the curvature gradient in self-shaping processes. \n\n## Mechanism of self-shaping \n\nThe evaporate-casting enabled self-shaping relies on the hierarchical deformation of graphene walls.",
+        "text_sha256": "sha256:b2b09126dbd461e5e5e3ee1369ab4b05f9b5f300c53f2be9829d41ded9ebbaca"
+      },
+      {
+        "evidence_key": "P:S-ddc172672603e9d9030d",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-ddc172672603e9d9030d",
+        "text": "Water molecules serve as plasticizers, enabling relative sliding of graphene nanosheets within the walls. In this context, as water within surface wrinkles evaporates, capillary forces prompt each graphene nanosheet to crumple (Fig. 4a). Consequently, protrusions emerge on the dehydrated wall surfaces (Fig. 2e, f), causing shrinkage along the plane of the wall. It’s worth noting that due to robust π-π interaction forces between graphene sheets, the crumpled walls retain their form even when in contact with water. On an assembly scale, capillary forces exert a tautening effect on the wall structures, diminishing gap sizes and hence yielding a compact arrangement (Fig. 4b). The emergence of protrusions and the constriction of wall structures collectively bring about macroscopic shape contraction in orthogonal directions. This behavior can be reflected on \n\nNature Communications | (2024) 15:5917 \n\n5 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-50191-6 \n\na cuboid sample comprising a centrosymmetric curvature gradient microstructure (Fig. 4c, Supplementary Figs. 16 and 17). The ratio of contraction along the wall plane (l’) compared to that perpendicular to the wall plane (w’) was measured at 1.4, indicating the anisotropic contraction behavior that could significantly bolster the efficacy of the curvature gradient induced deformation. This casting method demonstrates high stability. The ratio of l’/w’ is determined by the microstructure of cg-G (Supplementary Fig. 18), and remains unaffected by the surrounding environment during water evaporation (Supplementary Fig. 19). \n\nThen we delve into how the self-tightening effect of cg-Gs during the evaporate-casting process is harnessed to programmatically transform simple profiles into intricate structures.",
+        "text_sha256": "sha256:e25c232cb008fb7f7c8b244ae51f63fc41f57bf5d01a64fbd925967437fb1c8d"
+      },
+      {
+        "evidence_key": "P:S-712ccc84a2b8233f0cf6",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-712ccc84a2b8233f0cf6",
+        "text": "According to the Kelvin curvature effect[22] , water molecules are more likely to escape from curved surfaces. This observation aligns with our experimental findings that water evaporates more rapidly from the side with larger curvature. With water evaporating, moisture near highly curved graphene sheets becomes depleted first, leading to more pronounced deformations compared to regions with lower curvature. Considering these mechanisms, we can postulate the following relationship between radial strain (εr, strain towards the center of the curvature) and curvature radius (ρ) of cg-G during evaporate-casting: \n\n**==> picture [165 x 10] intentionally omitted <==**",
+        "text_sha256": "sha256:8b911ca39e477d915ea864fcd693f451dd59cf97683741d62a38304386b25033"
+      },
+      {
+        "evidence_key": "P:S-44a1115bc12eaebae28a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-44a1115bc12eaebae28a",
+        "text": "where ε0 (<0) represents the uniform shrinkage strain (the curvature radius equals zero). b (>0) is the curvature deformation coefficient, indicating the sensitivity of deformation to changes in curvature radius. f(ρ) is a function of ρ, signifying that as the curvature radius increases, the shrinkage deformation decreases. In this study, when analyzing cg-G slices consists of graphene walls positioned at co-axial curvature centers (Supplementary Fig. 20), we assumed a relationship between εr and ρ, i.e., εr = ε0 + bρ[2] (see Supplementary text for details). Specifically, the curvature microstructures of cg-G slices can be described by their d and θ values. Based on above relationship, we investigated the deformation of cg-G with different d and θ, and provided corresponding analytical expressions (see Supplementary text for details). Theoretical results not only effectively accord with the deformation states discussed in Fig. 3, but also accurately predict deformations of dumbbell-shaped cg-Gs (see Figs. 21–23 for a detailed discussion). For example, the FEA results and SEM images reveal that the dumbbell architecture (Fig. 4d, with a θ value of 45°) presents twists around the long center axis after deformation (Fig. 4e, f), resulting in a stereo and centrosymmetric final geometry, and bilateral cuboids transformed to be approximate trapezoidal cube due to the in-plane deformation. These results validate the mechanism of curvature gradient-induced bending deformation. \n\nApart from the self-shaping cg-G structures that can be predicted and understood through having defined the relevant θ and d parameters, this behavior can be further programmed through external force which allows the assembly to exhibit self-plastic capability like metals.",
+        "text_sha256": "sha256:84e29a587a76074b988c3429f2cd93c888ab3af319f095cefefad591b5d95348"
+      },
+      {
+        "evidence_key": "P:S-11d359a3fd0e650623c4",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-11d359a3fd0e650623c4",
+        "text": "To demonstrate this point, we applied two forces of equal magnitude and opposite direction on both ends of an arc-shaped cg-G (Fig. 4g), resulting in the initial twist deformations with different bending angles, such as a small angle of 10° (Fig. 4g-ii) and a large angle of 30° (Fig. 4g-iii), respectively. After deformation, the direction towards the curvature center (blue arrow) shifts from in-plane to outplane. The coarse-grained molecular dynamics (CG-MD) calculation model show that the energy of the system initially increases and then decreases as raise of twist angles because of inter-adhered graphene walls driven by strong π–π interactions (Supplementary Fig. 24). As the degree of deformation intensifies, the quantity of adhering walls escalates, causing a continual reduction in the system’s energy. When the energy drops below zero, the system achieves stability, and the \n\nstructure displays plasticity, enabling it to preserve the shape shaped by external forces (Fig. 4g-ii, iii). \n\nThe cg-G slices can be shaped due to their distinctive curvature gradient structures through evaporate-casting. As water evaporates, all arc-shaped cg-G architectures are expected to undergo alterations in their initial profiles (Fig. 4h). The one with symmetrical curvature center structure transformed into a closed-loop structure during the evaporate-casting process (Fig. 4h-i), aligning with the previously mentioned self-shaping principles. When subjected to additional forces with initial twist angles of 10° (Fig. 4h-ii) and 30° (Fig. 4h-iii), the direction pointing towards the center of curvature changed, signifying the existence of out-of-plane components of the asymmetry within the curvature structure. The changes directly resulted further structural deformations out of plane.",
+        "text_sha256": "sha256:46dac33b0b9cd5578b3feb474b62c872ca8ccba30b9040e643fa980953e272dd"
+      },
+      {
+        "evidence_key": "P:S-c424fd32e3c9b1e099ba",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-c424fd32e3c9b1e099ba",
+        "text": "In SEM images, two helix-shaped cg-G architectures with the same deformation mode but different pitches can be observed, and the twist angle is larger than it before deformation. These deformations resulted from the configurational forces generated by the combined effects of the initial curvature gradient and the additional twist angle during dehydration. These results confirm the previously established deformation mechanism. \n\n## Enhanced mechanical strength through hierarchical selftightening \n\nWe constructed a gasket structure (Fig. 5a), aligning the curvature center axis with the geometric center axis, to investigate the selftightening effect induced by evaporate-casting across a highly symmetric curvature gradient. Impressively, when five micro-fixators were placed between two thick stainless steel plates (Fig. 5b), the assembly could withstand nearly one ton of weight as exemplified by a car (weighing ~1200 kg) running over on the top (Fig. 5c). Throughout the compression process, the gasket structure remained unchanged (Supplementary Fig. 25), while distinct indentations appeared on the stainless steel plate (Fig. 5d), underscoring the superior strength of the gasket structure in comparison to stainless steel. By taking virtue from self-deformation behaviors induced by curvature gradient structures, we showed that various preset architectures could be accurately constructed, such as a blooming flower-like configuration (Supple– mentary Fig. 26a c). Additionally, the macroscopic-scale self-tightening is demonstrated by the mortise and tenon structure. We employed asymmetric shrinkage to craft samples featuring mortise structures (Fig. 5e). For the tenon structure, we positioned the curvature center axis at the center of the mortise circle.",
+        "text_sha256": "sha256:21f57f5231a2f20ebfb0bd606930486616966fa73d2e988759345b6a243b0ce8"
+      },
+      {
+        "evidence_key": "P:S-fdec3563717b37b0133d",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-fdec3563717b37b0133d",
+        "text": "This arrangement enabled the tenon structure to display an inward deformation tendency during the coupling process with evaporate-casting, ultimately achieving a macroscopic self-tightening effect. Upon examining the microscopic morphology of the joint, we observed slight deformation in the shoulder part of the mortise structure (Supplementary Fig. 26d), indicating the centripetal deformation inherent in the tenon structure. A tight juncture of the mortise and tenon structures revealed by the SEM investigation further confirmed the self-locking behavior (Fig. 5f, Supplementary Fig. 26e). Remarkably, a self-tightening mortise and tenon configuration, measuring merely 1 cubic millimeter in volume, demonstrated the capacity to lift a weight weighing 300,000 times its own mass (Fig. 5g, Supplementary Video 2). Its specific tensile strength reached up to 143 MPa cm[3] g[−][1] (Fig. 5h, Supplementary Figs. 27 and 28), comparable to welded metals[23][,][24] , and far superior to various types of connectors including self-healing polymer[25][–][27] , and 3D printed structures[28][–][30] (Supplementary Table 1). Energy utilization can also be calculated through the thermal transfer power during the material preparation process, and the mechanically interlocked structure exhibits values that are 1 to 4 orders of magnitude higher than those of the aforementioned contrast materials (the calculation of energy utilization is detailed in Supplementary Information). Concurrently, its substantial materials and size expandability, and adaptability serve to \n\nNature Communications | (2024) 15:5917 \n\n6 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-50191-6 \n\n**==> picture [481 x 359] intentionally omitted <==**",
+        "text_sha256": "sha256:21ff6aed90380c472f0c7655b39e5431a3df7e4a5819a9ad78b730a308586411"
+      },
+      {
+        "evidence_key": "P:S-bbc2a7c4238f06cfcc69",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-bbc2a7c4238f06cfcc69",
+        "text": "**----- Start of picture text -----**<br>\na b c d<br>m car : ~1200 k g Pits<br>Top view 1 cm<br>Loaded by a car<br>Stainless steel plates<br>5 cm 1 cm<br>Micro-fixator<br>e f<br>Part a Part a Part b<br>Pa rt a<br>P ar t b<br>Assembling<br>1 mm 200 μm<br>Mortise and tenon joint 1  mm After dehydration<br>1<br>g h This work<br>mlaptop / mcg-G connection :  ~30 0000 0.1<br>0.01 Self-healing polymer<br>0.001<br>mcg-G connection : ~4.2 mg<br>1E-4 3D printing<br>Welding of<br>1E-5 dissimilar metals<br>Mlaptop : ~1.28 kg Welding of same metals<br>5 cm 10 cm 1E-6<br>0.1 1 10 100 1000<br>Specific connection strength (MPa cm [3] g [-1] )<br>)-1<br>(2 WEnergy utilization m<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:fd5bcf4b2a2bd0a8ddd63440c074bf89164e57e036cae72ef6b6f518f2d7d8e4"
+      },
+      {
+        "evidence_key": "P:S-f83c4ae7bcb05e9c0105",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-f83c4ae7bcb05e9c0105",
+        "text": "Fig. 5 | Mechanical strength and demonstrations of cg-Gs after evaporatecasting. a Schematic and optical images of cuboid-shaped cg-G with circular void in the middle after evaporate-casting. Scale bar: 1 mm. b Optical images of five cuboidshaped cg-Gs with circular void in the middle after evaporate-casting. Those cuboids are put on a stainless steel plate and sandwiched by two pieces of stainless steel plates without binder (thickness: 1 mm). c Optical images of a car upon the five graphene architectures sandwiched by two pieces of stainless steel plates and the enlarged image. d Five obvious pits impressed on steel plate after being run over by \n\ncar. e Schematic and corresponding optical photos of cg-G blocks with mechanical interlocking structure. f Optical and SEM images of the clasped structure after evaporate-casting process. g Mechanical performance display of clasped structure. A single interlocking structure could pull up a laptop (~1.28 kg). h An Ashby diagram showing the energy utilization versus specific connection strength of graphene assemblies with mortise and tenon structure, as well as various 3D printing structures, self-healing polymers, and some typical welded same and dissimilar metals. Source data are provided as a source data file. \n\nposition it as a promising, innovative, and eco-friendly technology for structural connections (Supplementary Figs. 29 and 30). \n\nThe evaporate-casting of curvature gradient graphene superstructures presented herein allow for the controllable fabrication of graphene micro-architectures with diverse designed functional shapes and high mechanical strength.",
+        "text_sha256": "sha256:6acc47ebc6ae797de7c43b18c91343d859d1a5153eaea5afe2f66a0fa186bf76"
+      },
+      {
+        "evidence_key": "P:S-2a0496d8fd404f198412",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-2a0496d8fd404f198412",
+        "text": "With the controllable design of uniform arc-shaped assembly of graphene nanosheets positioned at co-axial curvature centers, configurational force pointed to the center of curvature generated during dehydration. As a result, the assembly is tightened during the dehydration-based evaporate-casting process via capillary force, inducing local bending. Through precisely tuning the axis-center distance and tilt angle, we realized accurate control over the shape of obtained evaporate-casting structure. In addition, mortise and tenon structure is induced to this work and the internal stress can be leveraged to reinforce the formation, leading to a high-strength connection (~200 MPa), surpassing that of multiple materials with connection structures, and even welded metals. Compared with traditional welding technology, the proposed evaporate-casting processing can occur spontaneously at room temperature, greatly reduced the threshold and energy consumption of the combination reaction. The entire process is characterized by its high level of controllability, \n\nfeasibility, cost-effectiveness, versatility, and environmentally friendly attributes. \n\n## Methods \n\n## Preparation of the GO dispersion \n\nGO was prepared via the modified Hummers method[31] . Firstly, 10 g of graphite powder (mesh number: 200) and sodium nitrate (3 g) were added into a beaker (3 L) containing 260 mL of concentrated sulfur acid (98%), and stirred at 0 °C for 2 h. Then, 30 g of potassium permanganate was carefully added under stirring, keep for 2 h. After that, the beaker was transferred to a constant temperature water bath of 35 °C and kept for stirring for 1 h. Thereafter, 460 mL of cold deionized water was dropwise added into the mixture and kept at 98 °C for 30 min.",
+        "text_sha256": "sha256:8041140acb1ac1422d8b5ba9992c8b3ce980546727389824fdc95426f00a52af"
+      },
+      {
+        "evidence_key": "P:S-95f6c2c2173d76146cc5",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-95f6c2c2173d76146cc5",
+        "text": "Additional 1 L of cold deionized water and 20 mL of hydrogen peroxide were poured into the solution. Finally, the product was centrifuged and washed by deionized water repeatedly until the pH changed from acidity to neutral, then the GO dispersion was produced. \n\n## Fabrication of random graphene assembly \n\nWe prepared graphene hydrogel with random structure through hydrothermal process with GO as precursor. Specially, 60 ml GO \n\nNature Communications | (2024) 15:5917 \n\n7 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-50191-6 \n\naqueous (3.5 mg mL[−][1] ) dispersion was added into a 100 ml Teflon-lined autoclave, and treated by a hydrothermal process (180 °C for 6 h) in air oven, resulting in a normal cylindrical graphene hydrogel with random microstructures. \n\nspectrometer. Mechanical tests were carried out using a Shimadzu AGS-X. Optical images were acquired on ZEISS Axio Scope. The graphene hydrogel assembly was sculptured by a 355 nm ultraviolet laser cutting system (Beijing Lagamin Laser Co., LM-UVY-5S-Y) under ambient conditions. \n\n## Fabrication of cg-G \n\n60 ml GO aqueous dispersion (3.5 mg mL[−][1] ) was added into a 100 ml Teflon-lined autoclave and add certain amount of alkali (e.g., ammonium hydroxide (the volume ratio of GO aqueous dispersion to ammonium hydroxide (concentration: 32%) is 60:1), potassium hydroxide (0.15 mol L[−][1] )) under stirring. Keep stirring for 5 min and then treated by a hydrothermal process (180 °C for 6 h) in air oven, resulting in a cylindrical graphene hydrogel with ordered concentric circle microstructures. Subsequently, the prepared hydrogel was immersed in 1 M HCl solution for 6–8 h. After thoroughly rinsing to eliminate any lingering acid, the pure cg-G was obtained.",
+        "text_sha256": "sha256:23b8d7971d6c2f3e5754b42c575b0ef69a082fa5d0c95d52906f76c2a993f7cb"
+      },
+      {
+        "evidence_key": "P:S-5049260a81502ddc5171",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-5049260a81502ddc5171",
+        "text": "After adding alkali, GO sheets could transform from disorder state into long-range oriented lamellar phases. Benefiting from the reaction between alkali and carboxyl on GO sheets, the hydrogen bond interaction between GO sheets decreased distinctly and electrostatic repulsion increased (Supplementary Fig. 1). Under following stirring process, GO sheets tuned their direction vector in real time and maintained an overall trend of parallel to each other. The outline of fabricated hydrogel is determined by the inner surface of reaction still because of the surface anchoring effect, as well as the aligned arrangement of GO sheets. Changing the lining shape of Teflon-lined autoclave, graphene assemblies with different geometry were prepared because of the surface anchoring effect, as well as the aligned arrangement of GO sheets. By adjusting the concentration of GO aqueous dispersion (1.5 mg mL[−][1] , 2.5 mg mL[−][1] , 3.5 mg mL[−][1] , 4 mg mL[−][1] ) and varying the quantity of alkali used, graphene hydrogels with different structures can be prepared (Supplementary Fig. 2). \n\ncg-Gs were fabricated via sculpturing graphene hydrogel with concentric circle microstructures by an ultraviolet laser cutting system (LAJAMIN 3D laser) conducted by computer operation system. By adjusting both the axis-center distance (d) and the tilt angle (θ: angle between the center axis of initial cylinder profile and the normal axis of target profile, changing from 0° to 90°), a diverse range of cg-G can be fabricated. \n\n## Fabrication of complex cg-G \n\nFirst, arc-shaped cg-G is fabricated via sculpturing graphene hydrogel with concentric circle microstructures (θ = 0°) by laser cutting system.",
+        "text_sha256": "sha256:2832a8689587b0ff17f1fe0ade0801b857b3faa6e3e59b15312d005f787d6b5b"
+      },
+      {
+        "evidence_key": "P:S-bee274af0343d9b52aba",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-bee274af0343d9b52aba",
+        "text": "Then, through the manipulation of one end of the arc structure while twisting the opposite end, external forces of equal magnitude but opposing directions can be simultaneously exerted at precise points on the target structure. By adjusting the twisting angle of the target structure, various complex cg-Gs can be created. \n\n## Fabrication of cg-G architectures via evaporating-casting process \n\nPut as-prepared cg-G slices on a Teflon substrate with glazed surface. The surface of Teflon is super-hydrophobic, which can decrease the influence from the detect between substrate and hydrogel furthest. Standing the hydrogel in ambient atmosphere or convection oven − (35 °C 65 °C) for a certain time, and cg-G architectures could be prepared via shrinking and deforming spontaneously. \n\n## Finite element analysis (FEA) \n\nDue to the varying distances from the center, the curvature and the degree of contraction of the material differ at different locations. Considering the known micro-mechanisms, we have set up the following strain field in FEA, εðx, y, zÞ = ε0 + bðx[2] + y[2] Þ = ε0 + br[2] , ε = 0 at the outermost region. Among them, ε0 < 0 represents the strain at the center, and b > 0 the curvature deformation coefficient. The contraction deformation is maximum at the center. As moving toward the outer regions, the degree of contraction gradually decreases. It is worth noting that graphene is distributed in a ring shape within the x-y plane in the specimen, while it is approximately uniformly distributed along the z-direction. Therefore, uniform loading in the z-direction is set to reflect this characteristic. It is also noted that the change in water evaporation rate during the deformation of graphene hydrogels. Thus, the set strain rate decreases as the deformation increases.",
+        "text_sha256": "sha256:0809068353018e3800156e795ad4bebc54722cf4cfc0b546b9ff8050700541d6"
+      },
+      {
+        "evidence_key": "P:S-73c1337f561c6be4100b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-73c1337f561c6be4100b",
+        "text": "All of the above-introduced deformation fields are achieved through an equivalent temperature field and implemented within the finite element solver ABAQUS by using the user subroutine to define incremental strains. The overall finite element model was meshed with 8-node brick (C3D8) elements. \n\n## Coarse grain molecular dynamics (MD) simulation \n\nCoarse grain molecular dynamics (MD) simulation is performed to uncover the deformation mechanism during shrinking process. In all models, each graphene sheet or platelet is depicted by coarse grain particles, which compose a square or rectangle sheet. According to Ref. [Steven Cranford], the total energy of graphene sheets or platelets could be written as \n\n**==> picture [192 x 10] intentionally omitted <==**",
+        "text_sha256": "sha256:2c1d648c40ab961b7596369f56da0087e8130271825b7c4d95ecf5594d6f3c50"
+      },
+      {
+        "evidence_key": "P:S-7a3122bf0fc583834b98",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-7a3122bf0fc583834b98",
+        "text": "where the first three terms are harmonic potentials given by \n\n**==> picture [242 x 18] intentionally omitted <==**",
+        "text_sha256": "sha256:5d515e09666a8a724d4f1a63e2038eed571ae95128f884412e9e0c22d5f019ce"
+      },
+      {
+        "evidence_key": "P:S-1aeaaf4220e18175eae7",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-1aeaaf4220e18175eae7",
+        "text": "where K T = 1000, K φ = 0:1 and K θ = 0:1. The equilibrium distance and angles are r0 = 1, φ0 = 180[°] and θ0 = 90[°] . Note that here the Lennard-Jones unit system are applied. Lennard-Jones potential is used to describe the adhesion interaction between graphene particles, \n\n**==> picture [203 x 26] intentionally omitted <==**",
+        "text_sha256": "sha256:ac2e721017d0335a8c42690fddf3148f12619399ba29c428fe95b1e2cd35d455"
+      },
+      {
+        "evidence_key": "P:S-4c82389957465c048c33",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-4c82389957465c048c33",
+        "text": "Where εad,gp = 1, and σad,gp = 0:89. The adhesion interaction between graphene particles and water particles, \n\n**==> picture [205 x 25] intentionally omitted <==**",
+        "text_sha256": "sha256:4406082c7f55242539a4b7698d3fe06e56d5771e71ef543ffee217d9b818a672"
+      },
+      {
+        "evidence_key": "P:S-6f965f0ae0a7701d5b27",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-6f965f0ae0a7701d5b27",
+        "text": "where εad,wp = 3, and σad,wp = 0:89. Besides, LJ potential is also used to depict the interaction between water particles \n\n## Characterization \n\nThe morphologies of the samples were investigated using a scanning electron microscope (SEM, SU-8010). HADDF-STEM images were obtained by FEI TecnaiTF20 transmission electron microscope. X-ray photoelectron spectroscopy was conducted on ULVAC-PHI PHI Quantro SXM X-ray photoelectron spectrometer. X-ray diffraction pattern was conducted on SmartLab multiple crystal X-ray \n\n**==> picture [256 x 63] intentionally omitted <==**",
+        "text_sha256": "sha256:9d868a8654804ae1576e355be4c706d59133b5dc2b412719fe5d960d3ed2812c"
+      },
+      {
+        "evidence_key": "P:S-b09b9f6efae322b9f71a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-b09b9f6efae322b9f71a",
+        "text": "Nature Communications | (2024) 15:5917 \n\n8 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-50191-6 \n\nIn some calculation models, parameters are changed due to the simulation scenario and scale difference. To be specific, the calculation model in Supplementary Fig. 24 does not include water particles, and the parameters K T = 100, K φ = 10, σad,gp = 0:4; in the calculation model (Supplementary Fig. 5), K T = 100, K φ = 100, and εad,wp = 0:2 to keep graphene sheets stay together[32][–][34] . \n\n## Reporting summary \n\nFurther information on research design is available in the Nature Portfolio Reporting Summary linked to this article. \n\n## Data availability \n\nThe data generated in this study are provided in the Supplementary Information and Source Data file. Source data are provided with this paper. \n\n## Code availability \n\nThe code supporting this study is available from the corresponding author upon request. \n\n## References \n\n1. Schaedler, T. A. et al. Ultralight metallic microlattices. Science 334, 962–965 (2011). \n\n2. Saleh, M. S., Hu, C. S. & Panat, R. Three-dimensional microarchitected materials and devices using nanoparticle assembly by pointwise spatial printing. Sci. Adv. 3, 1601986 (2017). \n\n3. Li, S. C. et al. Self-regulated non-reciprocal motions in singlematerial microstructures. Nature 605, 76–83 (2022). \n\n4. Cho, S. Y. et al. A general fruit acid chelation route for eco-friendly and ambient 3D printing of metals. Nat. Commun. 13, 104 (2022). \n\n5. Farrell, E. S., Cooperstein, I. & Magdassi, S. 3D printed organicceramic complex hybrid structures with high silica content. Adv. Sci. 5, 180061 (2019). \n\n6. Pham, M. S., Liu, C., Todd, I. & Lertthanasarn, J. Damage-tolerant architected materials inspired by crystal microstructure. Nature 565, 305–311 (2019). \n\n7.",
+        "text_sha256": "sha256:3dac5c699e8f90998ac2899eafb38b855dbdac461b9d0cdf5154b705641d851e"
+      },
+      {
+        "evidence_key": "P:S-98e3cc7ab7893e39de58",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-98e3cc7ab7893e39de58",
+        "text": "Sun, Z. X., Fang, S. Y. & Hu, Y. H. 3D graphene materials: from understanding to design and synthesis control. Chem. Rev. 120, 10336–10453 (2020). \n\n8. Zhu, C. et al. Highly compressible 3D periodic graphene aerogel microlattices. Nat. Commun. 6, 6962 (2015). \n\n9. Xu, Y. X., Sheng, K. X., Li, C. & Shi, G. Q. Self-assembled graphene hydrogel via a one-step hydrothermal process. ACS Nano 4, 4324–4330 (2010). \n\n10. Hu, H., Zhao, Z., Wan, W., Gogotsi, Y. & Qiu, J. Ultralight and highly compressible graphene aerogels. Adv. Mater. 25, 2219–2223 (2013). \n\n11. Xu, Y. X. et al. Flexible solid-state supercapacitors based on threedimensional graphene hydrogel films. ACS Nano 7, 4042–4049 (2013). \n\n12. Huang, L., Zhang, M., Li, C. & Shi, G. Graphene-based. Membr. Mol. Sep. J. Phys. Chem. Lett. 6, 2806–2815 (2015). \n\n13. Ma, H. et al. Maximization of spatial charge density: an approach to ultrahigh energy density of capacitive charge storage. Angew. Chem. Int. Ed. 59, 14541–14549 (2020). \n\n14. Xu, S. et al. Electric-field-assisted growth of vertical graphene arrays and the application in thermal interface materials. Adv. Funct. Mater. 30, 2003302 (2020). \n\n15. Cheng, H. H. et al. Spontaneous power source in ambient air of a well-directionally reduced graphene oxide bulk. Energy Environ. Sci. 11, 2839–2845 (2018). \n\n16. Yang, H. et al. Retarding ostwald ripening to directly cast 3D porous graphene oxide bulks at open ambient conditions. ACS Nano 14, 6249–6257 (2020). \n\n17. Armon, S., Efrati, E., Kupferman, R. & Sharon, E. Geometry and mechanics in the opening of chiral seed pods. Science 333, 1726–1730 (2011). \n\n18. Elbaum, R., Zaltzman, L., Burgert, I. & Fratzl, P. The role of wheat awns in the seed dispersal unit. Science 316, 884–886 (2007). \n\n19. Zhang, F. L. et al.",
+        "text_sha256": "sha256:686dcdc9339d455ad3d2894e1461d3357626c2676cccf5433f84579340a20b44"
+      },
+      {
+        "evidence_key": "P:S-1b2d1ef2c6b1c4abe6ea",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-1b2d1ef2c6b1c4abe6ea",
+        "text": "Unperceivable motion mimicking hygroscopic geometric reshaping of pine cones. Nat. Mater. 21, 1357–1365 (2022). \n\n20. Meng, Q. A. et al. Hydroactuated configuration alteration of fibrous dandelion pappi: toward self-controllable transport behavior. Adv. Funct. Mater. 26, 7378–7385 (2016). \n\n21. Harrington, M. J. et al. Origami-like unfolding of hydro-actuated ice plant seed capsules. Nat. Commun. 2, 337 (2011). \n\n22. Thomson, W. On the equilibrium of vapour at a curved surface of liquid. Philos. Mag. 42, 448–452 (1871). \n\n23. Singh, T. Nanoparticles reinforced joints produced using friction stir welding: a review. Eng. Res. Express 5, 022001 (2023). \n\n24. Lu, W., Zhang, Y., Yu, D., Sun, D. & Li, H. Research progress on control strategy of intermetallic compounds in welding process of heterogeneous materials. Steel Res. Int. 93, 2100427 (2022). \n\n25. Diaz-Marin, C. D. et al. Heat and mass transfer in hygroscopic hydrogels. Int. J. Heat. Mass Transf. 195, 123103 (2022). \n\n26. Kausar, A., Ahmad, I., Maaza, M. & Bocchetta, P. Self-healing nanocomposites-advancements and aerospace applications. J. Compos. Sci. 7, 148 (2023). \n\n27. Thangavel, G., Tan, M. W. M. & Lee, P. S. Advances in self-healing supramolecular soft materials and nanocomposites. Nano Converg. 6, 29 (2019). \n\n28. Shinde, V. V. et al. Material design for enhancing properties of 3D printed polymer composites for target applications. Technologies 10, 45 (2022). \n\n29. Dizon, J. R. C., Espera, A. H. Jr., Chen, Q. & Advincula, R. C. O Mechanical characterization of 3D-printed polymers. Addit. Manuf. 20, 44–67 (2018). \n\n30. Ramos, N., Mittermeier, C. & Kiendl, J. Experimental and numerical investigations on heat transfer in fused filament fabrication 3Dprinted specimens. Int. J. Adv. Manuf. Technol.",
+        "text_sha256": "sha256:86412e58590547a6c3e5e973b4fab336c80d4274677d2f8187141cc45e811253"
+      },
+      {
+        "evidence_key": "P:S-02c8f0d02e18c99cbc27",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-02c8f0d02e18c99cbc27",
+        "text": "118, 1367–1381 (2022). \n\n31. Lu, B. et al. Compact assembly and programmable integration of supercapacitors. Adv. Mater. 32, 1907005 (2020). \n\n32. Mofrad, M. R. K., Kamm, R. D. (2006). Cytoskeletal mechanics: models and measurements, (Cambridge University Press). \n\n33. Gittes, F. et al. Flexural rigidity of microtubules and actin filaments measured from thermal fluctuations in shape. J. Cell Biol. 120, 923–934 (1993). \n\n34. Baumann, ChristophG. et al. Ionic effects on the elasticity of single DNA molecules. Proc. Natl Acad. Sci. 94, 6185–6190 (1998). \n\n## Acknowledgements \n\nThis work was supported by the financial support from the National Natural Science Foundation of China (No. 52022051, 22035005, 22075165, 52090032, and 52073159 to L.Q.; 22075019 to Y.Z.; 11972349, 11790292 to F.L.; No. 22205129 to B.L.; No. 12302089 to L.Y.); Tsinghua-Foshan Innovation Special Fund (2020THFS0501 to L.Q.), the Strategic Priority Research Program of the Chinese Academy of Sciences (Grant No. XDB22040503 to F.L.). \n\n## Author contributions \n\nL.Q. proposed the research direction and supervised the project. B.L., Y.Z., and L.Q. designed theexperiments. B.L. carried out thematerials synthesis and all characterizations with help from Y.H., Y.W., F.Z., H.C., and Y.Z. B.L., Y.H., and Y.Z. were involved in data analyzing. B.L., L.Y., and F.L. conducted theoretical simulation. B.L. wrote the manuscript under the advice given from F.Z., Y.Z., F.L., and L.Q. All authors contributed to discussions. \n\nNature Communications | (2024) 15:5917 \n\n9 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-50191-6 \n\n## Competing interests \n\nThe authors declare no competing interests.",
+        "text_sha256": "sha256:1b7c4666d86ed8a875776bdd0254bb709c868194154c9d542f498abc3992d079"
+      },
+      {
+        "evidence_key": "P:S-876de390b645aea30c1b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-876de390b645aea30c1b",
+        "text": "## Additional information \n\nSupplementary information The online version contains supplementary material available at https://doi.org/10.1038/s41467-024-50191-6. \n\nCorrespondence and requests for materials should be addressed to Yang Zhao, Feng Liu or Liangti Qu. \n\nPeer review information Nature Communications thanks the anonymous reviewer(s) for their contribution to the peer review of this work. A peer review file is available. \n\nOpen Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/ licenses/by/4.0/. \n\n© The Author(s) 2024 \n\nReprints and permissions information is available at http://www.nature.com/reprints \n\nPublisher’s note Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations. \n\nNature Communications | (2024) 15:5917 \n\n10",
+        "text_sha256": "sha256:0defb453bf0150af966faab26bdca3df6597a97dff3af0b1a4e0abfc3defdc8c"
+      }
+    ]
+  },
+  "paper_id": "10.1038/s41467-024-50191-6",
+  "paper_sha256": "sha256:8f4d7b8a975e6fa8b83480990c5ee69227dd8671ceb61a55d21b07092c9fa51b",
+  "parent_output_sha256s": [],
+  "parent_reviews": [],
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "review_source_sha256": "sha256:f87147bfd2f423647cb9de6f86f8f32643f428151295cdc23357a5ca40af9fc2",
+  "reviewer_spans": [
+    {
+      "char_end": 1320,
+      "char_start": 1281,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-db1f1b404aced849b284",
+      "source_role": "reviewer_report",
+      "text": "## Reviewer #2 (Remarks to the Author):",
+      "text_sha256": "sha256:302a1824ba4ed0dda5528693469028e8e1f5b785e60ec4075c5e9d95c6bf2b94"
+    },
+    {
+      "char_end": 1812,
+      "char_start": 1323,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9ada908b56770ca5eb4a",
+      "source_role": "reviewer_report",
+      "text": "This manuscript entitled “Evaporate-casting of Curvature Gradient Graphene Superstructures for Ultra-high Strength Structural Materials” reported a novel processing strategy toward graphene superstructure with a curvature gradient and meticulously design-ability of functional shapes. The content of this paper is detailed. The experiments are well designed and original insights are provided in this paper. It is acceptable for publication in \"Nature Communications\" after major revision.",
+      "text_sha256": "sha256:9a6512c16c84e56c76e0fcad0b4fa6fb5c2f1b99f3e87a5051dd860c5b5c5358"
+    },
+    {
+      "char_end": 2071,
+      "char_start": 1815,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3526055876119173e0dc",
+      "source_role": "reviewer_report",
+      "text": "As a structural material, the components of the material, interfacial interactions, and the structure are very important to the performance of the material. Although several interesting results were shown in the manuscript, major comments exist as follows:",
+      "text_sha256": "sha256:a43022c5147bf42228fa0e06b671f2b1bdb8ed46f7a0aa7610a6b1799c5a572f"
+    },
+    {
+      "char_end": 2095,
+      "char_start": 2074,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9d6842f16338a23a4284",
+      "source_role": "reviewer_report",
+      "text": "## For the component:",
+      "text_sha256": "sha256:6f9774a365db1af8cd7239dcfa9c8b45cff9b0f5f62124406841779e02b1535f"
+    },
+    {
+      "char_end": 2441,
+      "char_start": 2098,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0e7709a7311b2ddaaaa8",
+      "source_role": "reviewer_report",
+      "text": "(1) It seems the authors didn’t wash the alkali out after the fabrication of cg-G. It is necessary to figure out the main component of the composites or it is inaccurate to name the composite “Graphene Superstructures”. Meanwhile, the origin of mechanical performance should be identified. The contribution of each component needs to be clear.",
+      "text_sha256": "sha256:91e765942fd11cfba3a76afce8a5abd5774ad8cc0f01bdff8d9bc23e1f689c7a"
+    },
+    {
+      "char_end": 2673,
+      "char_start": 2444,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4b05990c3d53b65f2367",
+      "source_role": "reviewer_report",
+      "text": "(2) For a more comprehensive understanding of the material's components and properties, more characterizations including FITR, Elemental analysis, and Density (before and after the evaporation casting process) should be included.",
+      "text_sha256": "sha256:e7c94cc0a5248b9630f629f670a1a1f413e1e1e0a3007c3852216107a0e2a270"
+    },
+    {
+      "char_end": 2697,
+      "char_start": 2676,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d800e9b443373826d02b",
+      "source_role": "reviewer_report",
+      "text": "## For the interface:",
+      "text_sha256": "sha256:79eb89afb159f2cb294c26c28a23bb0ca1e5a15e2081614ecfc46e05e5ed41db"
+    },
+    {
+      "char_end": 3040,
+      "char_start": 2700,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e18b568199abd8c8bd53",
+      "source_role": "reviewer_report",
+      "text": "(3) Authors should provide additional characterization and discussion on how the graphene structure transitions from porous to compact during the evaporate casting. It would be beneficial to include morphological data of the sample at various stages of evaporation to thoroughly examine the structural changes occurring during this process.",
+      "text_sha256": "sha256:d4b14a66abf9853321ec64c9cd27d28b543287bf635459b62838aa4bc0ef6a14"
+    },
+    {
+      "char_end": 3328,
+      "char_start": 3043,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5574a8154f0c83bdaee8",
+      "source_role": "reviewer_report",
+      "text": "(4) The authors claimed “the hydrogen bond interaction between GO sheets decreased distinctly and electrostatic repulsion increased” (page 19, line 484) but it is lack of evidence. More characterization should be presented to figure out the interfacial interactions between nanosheets.",
+      "text_sha256": "sha256:9e6ade7ac5535d5ba2408428afaa2b42947f0c007ec027eeb6981387a8d6a4b2"
+    },
+    {
+      "char_end": 3810,
+      "char_start": 3331,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a9191ea16ed05ddd1283",
+      "source_role": "reviewer_report",
+      "text": "(5) The interfacial interactions between graphene walls are crucial for their strength, as also indicated by the CG-MD simulation results in Fig. S3. However, the TEM image in Fig. 2f only vaguely depicts these alignments and does not clearly show the interactions between graphene sheets. I recommend employing ultra-high-resolution electron microscopy techniques, such as SEM or FIB-SEM, to more precisely characterize and analyze the interface microstructures within the cg-G.",
+      "text_sha256": "sha256:4e0a902a8642e75972199ccea866312ae785a0da14f5e06b6063fa6811e78e7c"
+    },
+    {
+      "char_end": 4105,
+      "char_start": 3813,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4a8c9ccf62fb4c297349",
+      "source_role": "reviewer_report",
+      "text": "(6) The bonding interface of the mortise and tenon structure depicted in Fig. 5 e and f should be further magnification and detailed discussion. Providing more detailed SEM images of this area would enhance the understanding of its interface characteristics and excellent mechanical strength.",
+      "text_sha256": "sha256:99dbb8045ebcc1ca1d34a5b998d6f86f0c30edff7cdff7436d810bdcb1191218"
+    },
+    {
+      "char_end": 4133,
+      "char_start": 4108,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-75721bac1900f9de5717",
+      "source_role": "reviewer_report",
+      "text": "## Process and structure:",
+      "text_sha256": "sha256:fa316bc6cf193457163bd8058831bbd95d98681201fcfc86918620b4205ec221"
+    },
+    {
+      "char_end": 4615,
+      "char_start": 4136,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-08a8ffbfea31e96097fd",
+      "source_role": "reviewer_report",
+      "text": "(7) Different parameters are suggested to explore. The porous structure is formed in the hydrothermal process and the optimal conditions should be discussed. How to control the gap sizes of layers? Meanwhile, the impact of the gap sizes between the graphene walls in the cg-G before evaporation casting on the structure and mechanical performance of the final product warrants further investigation. I suggest the author investigate how these gaps influence the final properties.",
+      "text_sha256": "sha256:1e38ed85eab3d7af7c18fe97f11c0913391f4fe1bf597facad246c9d8b645f4f"
+    },
+    {
+      "char_end": 4833,
+      "char_start": 4618,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-18e2fd79f926d7bcbb60",
+      "source_role": "reviewer_report",
+      "text": "(8) The method of sintering should be explored. The samples obtained from other drying method should be compared to enrich the author's mechanism (The solvent evaporation and interface should be considered together)",
+      "text_sha256": "sha256:4740ef2d230051d194c8caa4a14a49ab06f5c9d237f140338f827214122c5f51"
+    },
+    {
+      "char_end": 4846,
+      "char_start": 4836,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0854ce40017fdd824c93",
+      "source_role": "reviewer_report",
+      "text": "## Others:",
+      "text_sha256": "sha256:4696c8b43ec47929aec6f4ad6e359841813871f30d503dc9bdd27866759974d1"
+    },
+    {
+      "char_end": 4985,
+      "char_start": 4849,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b84920f0966f530a9aa2",
+      "source_role": "reviewer_report",
+      "text": "(9) The major concern is the universality. Is this innovative approach feasible for other materials? What are the applicable conditions?",
+      "text_sha256": "sha256:4c9e6bce6e107e79accb48b07cb7f6aea0c31ab9910fbf364ccca814f7a452fc"
+    },
+    {
+      "char_end": 5332,
+      "char_start": 4988,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-20bd17e6446fc42092e6",
+      "source_role": "reviewer_report",
+      "text": "(10) The layout and visualization of Fig. 1 should be further improved to more effectively showcase the novel aspects of the processing strategy and the curvature structures presented in this work. Especially for the process illustration, the current state lacks clarity and is unable to convey the process's uniqueness and casting flexibility.",
+      "text_sha256": "sha256:ae067911e8d76e8de082db59c0755c665f25f33bfb6d1530ef0f45f6fa1a1221"
+    },
+    {
+      "char_end": 5681,
+      "char_start": 5335,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b0fdbcc49e00b0d65d09",
+      "source_role": "reviewer_report",
+      "text": "(11) Regarding the compression tests, the direction in which these were conducted should be specified. If the compressive strength of cg-G was obtained in the in-plane direction, it would be valuable to also include compressive strength data along the out-of-plane direction for a more comprehensive mechanical property comparison and discussion.",
+      "text_sha256": "sha256:7ed976bfe0900107c89c352687340ef283fc6415952f5e66ab1bf1343eb1fc9a"
+    },
+    {
+      "char_end": 5723,
+      "char_start": 5684,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c13a56152ad1fad572bb",
+      "source_role": "reviewer_report",
+      "text": "## Reviewer #3 (Remarks to the Author):",
+      "text_sha256": "sha256:139e022c0140e59686a3f8163e91465606ddfe783e436f39face2fa66333fb0c"
+    },
+    {
+      "char_end": 6775,
+      "char_start": 5726,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1b60a01fcdcfcdca6522",
+      "source_role": "reviewer_report",
+      "text": "This work focuses on addressing the challenges currently encountered in the fabrication of microstructural materials, successfully develops a novel processing strategy toward graphene superstructure with a curvature gradient, and fabricates a robust structural material with meticulously designed functional shapes. Compared with traditional structural materials, the graphene superstructure fabricated by the dehydration-based evaporate-casting process is tightened via capillary effect, resulting in a compact profile and extraordinary high mechanical strength of up to ~70 MPa. This study is very detailed, delving into the preparation and deformation of the graphene superstructure thoroughly, and readers can obtain specific information from the article. This is undoubtedly essential for guiding and advancing subminiature structural materials, addressing challenges faced by current material forming technologies. I have no reservation to recommend this work for publication in Nature Communications after addressing following minor comments.",
+      "text_sha256": "sha256:ee77940af8850f9e7c6939520bc7367a3f0f2be34e2c1d34bd15aa25383e4966"
+    },
+    {
+      "char_end": 7108,
+      "char_start": 6778,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-cf17b88432e892565753",
+      "source_role": "reviewer_report",
+      "text": "1. Figure 1 thoroughly illustrates the maturation deformation process of the capsule and the evaporate-casting of curvature gradient graphene. However, the information about the blue dot matrix in Figure 1d is missing. To more clearly obtain information directly from the image, it is recommended to mark the relevant description.",
+      "text_sha256": "sha256:9d7bf2b78813f15fbbcab6a07a7c976b40d275ad3a73690cf83105fa3253d42e"
+    },
+    {
+      "char_end": 7635,
+      "char_start": 7111,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-85fed21ffaf3053c0ee0",
+      "source_role": "reviewer_report",
+      "text": "2. Throughout the contraction process, what alterations take place in the geometric structure of normal graphene hydrogel? It is recommended to enhance the article by including configurations of normal graphene hydrogels after contraction, especially highlighting distinctive structures like crosses, dumbbells, butterflies, etc. In addition, what is the C/O ratio determined in graphene hydrogels, and does this ratio significantly influence the preparation of graphene superstructures through curvature gradient structure?",
+      "text_sha256": "sha256:34f5931b3651e0997e1cf43a772e671b6237cb8020d0c7657b3be0891f72bf9a"
+    },
+    {
+      "char_end": 8128,
+      "char_start": 7638,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c4d2bfd618d34210726d",
+      "source_role": "reviewer_report",
+      "text": "3. In Figure 5a, what distinguishes the representations of the two cube schematics? Are the scale levels consistent, and are there any instances of duplicated information representations? Please confirm. For the mechanical strength test in Figure 5a-d, why the graphene hydrogel is designed as a hollow structure and whether there is a structure-activity relationship? At the same time, is there any difference in mechanical strength of graphene hydrogel between solid and hollow structure?",
+      "text_sha256": "sha256:928c072c40d9014883e6f3e89a8d2916bbf71651c4e855d0903b981339401d51"
+    },
+    {
+      "char_end": 8401,
+      "char_start": 8131,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8c1cf69600b608a814ff",
+      "source_role": "reviewer_report",
+      "text": "4. In this study, the deformation of graphene hydrogel derives from the evaporate-casting of curvature gradient structure. In Figure 3, what would occur during the contraction process if the cruciform structure were not disassembled from the concentric circle structure?",
+      "text_sha256": "sha256:1a73a8c242d98c03d466984a8bc5e87aaa11060e3ee576490f06cedf158eb993"
+    },
+    {
+      "char_end": 8495,
+      "char_start": 8404,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c126da7daa746c3d27c2",
+      "source_role": "reviewer_report",
+      "text": "5. Is the contraction and deformation process of these graphene superstructures reversible?",
+      "text_sha256": "sha256:cf246d1f32ff30460f79081ef8ec05cde8200e492190d429af0c22295e8982e2"
+    },
+    {
+      "char_end": 46063,
+      "char_start": 46027,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-cad9f8fcb4ca0554d377",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #2 (Remarks to the Author):",
+      "text_sha256": "sha256:44342433f6365a7f5949b5d3040f70d6f57a95f4a5f42f98700e18492093b116"
+    },
+    {
+      "char_end": 46179,
+      "char_start": 46066,
+      "reviewer_id_hash": "REV-5e07734060a8f021",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e0678cf1a346e8364f6b",
+      "source_role": "reviewer_report",
+      "text": "The authors have addressed the questions very well with supporting experimental data. It is good for publication.",
+      "text_sha256": "sha256:f30185e1d5a89c57e03786f40771d4b80307d5a2253ce5402e1141c5e167607b"
+    },
+    {
+      "char_end": 46218,
+      "char_start": 46182,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0feffd4af5e0461b539c",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #3 (Remarks to the Author):",
+      "text_sha256": "sha256:8c17865a9cabc7f290ce7a58f02add361b84a8c4dd8a742bbb1b6a885882bbd0"
+    },
+    {
+      "char_end": 46269,
+      "char_start": 46221,
+      "reviewer_id_hash": "REV-af8155ea0050b27b",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e4a59408f9e2fb5b9e60",
+      "source_role": "reviewer_report",
+      "text": "This manuscript seems now ready for publication.",
+      "text_sha256": "sha256:5d9bed92b7816ef9690e9e6a0ff919e852567c8dcba3e9a06e018de9e1e18be9"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

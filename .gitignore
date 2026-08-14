@@ -15,3 +15,8 @@ __pycache__/
 # Generated corpus and experiment artifacts are large local data products.
 data/knowledge_corpus/
 outputs/
+data/gear_cache/
+data/calibration/releases/
+outputs/gear/runs/
+data/gear_peer_review_benchmark_v1/
+outputs/gear/review_alignment/

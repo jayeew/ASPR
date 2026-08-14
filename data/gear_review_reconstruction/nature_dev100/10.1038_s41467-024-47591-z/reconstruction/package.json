@@ -1,0 +1,2644 @@
+{
+  "author_response_spans": [
+    {
+      "char_end": 9651,
+      "char_start": 9613,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3392bd6326f3bf2b910c",
+      "source_role": "author_response",
+      "text": "## **Response to Reviewers’ Comments**",
+      "text_sha256": "sha256:3d2a0f739c61608209b0bd52fc15e10795ecbe8f53568df8c646164c1eaa5320"
+    },
+    {
+      "char_end": 9683,
+      "char_start": 9654,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d7430aac24560d66e44c",
+      "source_role": "author_response",
+      "text": "## **Response to Reviewer 1**",
+      "text_sha256": "sha256:61f34031a796ee8d5f21030957ede2a3a8bb36dfe2eba69c774fd68ab10f5d7d"
+    },
+    {
+      "char_end": 9708,
+      "char_start": 9686,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0a1b9edecf0cafa10c83",
+      "source_role": "author_response",
+      "text": "## **Referee Letter:**",
+      "text_sha256": "sha256:c4840b6cb669f5a654dd03d8fa1cad6f3ef947e5ffaf2d7e331b60283236d67c"
+    },
+    {
+      "char_end": 10415,
+      "char_start": 9711,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e0b6cd9031cbaeebe251",
+      "source_role": "author_response",
+      "text": "_The manuscript reports on a novel catalytic system, based on P-doped NiAl oxides prepared using maize straw as template, which shows outstanding catalytic properties for the production of green diesel by hydrotreatment of a variety of biomass-derived oil substrates. One of the most relevant results is the remarkable activity of this system along the time on stream, with almost no variations being observed during tests up to 500 h. Moreover, the tests are performed under sulfur-free conditions which represents a great advantage compared with conventional/commercial catalysts. The authors make also a detailed comparison with previous literature showing the relevance of the results here reported._",
+      "text_sha256": "sha256:171dc12e42a586100b5aa3ca237de614d8323e1eb1ba8326f4ab6527ae7d2ecd"
+    },
+    {
+      "char_end": 10702,
+      "char_start": 10418,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6498fb0d06aeee025ee1",
+      "source_role": "author_response",
+      "text": "_This catalyst system, and several reference samples, are fully characterized by a large variety of conventional and advanced techniques, concluding that the origin of this singular catalytic performance is the generation of so called frustrated Lewis pairs coming from P-O-Ni sites._",
+      "text_sha256": "sha256:ec858932067826dba94483a8c3a9c3fc092c96ceb6e27a4884eb3895255114b7"
+    },
+    {
+      "char_end": 11214,
+      "char_start": 10705,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f3b02bde93c1a1b6f6bd",
+      "source_role": "author_response",
+      "text": "_Parts of the manuscript are somewhat confusing, mainly because a huge amount of experimental data are discussed in a short text in a superficial way. In this way, the supporting information includes a total of 43 figures and 7 tables. Some of the figures contain duplicate information. My suggestion is to include the methods section as supporting information, using the space so available for improving and extending the discussion of the results, as well as to remove unnecessary or duplicate information._",
+      "text_sha256": "sha256:c5225993af267b8b5440c77b91bbdb3ecb9bc4d256fea34a08456853a3d2645c"
+    },
+    {
+      "char_end": 11825,
+      "char_start": 11217,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0e2ab477b9b02505093a",
+      "source_role": "author_response",
+      "text": "**Response:** We appreciate the reviewer's encouraging assessment and helpful suggestions. Following the reviewer's suggestion, we have integrated the interrelated figures and removed any possible duplicate information from the section of supplementary materials to improve the concision of data. Meanwhile, we have extended the discussion of experimental results in the revised manuscript and supplementary materials to improve the readability. As for the methods section, we keep it in the main article following the editor's suggestion. The main changes we have made in the revised version are as follows:",
+      "text_sha256": "sha256:290e869176140edcc0758a5d14ec3e38d7818164221e36d13494fd2b7f370c90"
+    },
+    {
+      "char_end": 11994,
+      "char_start": 11828,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9ffb9e8dd62943810f88",
+      "source_role": "author_response",
+      "text": "- The previous Supplementary Fig. 11 (elemental mapping images of _ms_ -NiAl-P350), 32 (elemental mapping images of _ms_ -NiAl-P450-Sp.24h), 39 (atomic ratios of P/Ni",
+      "text_sha256": "sha256:cffa827c4955273dc7cee5ce0545bb1a4adb2b597f88f4f13a14742bf50f48c1"
+    },
+    {
+      "char_end": 11998,
+      "char_start": 11997,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-50535d8b606740ed8f75",
+      "source_role": "author_response",
+      "text": "1",
+      "text_sha256": "sha256:6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+    },
+    {
+      "char_end": 12085,
+      "char_start": 12001,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-81afa96fac98021a23bb",
+      "source_role": "author_response",
+      "text": "for ms-NiAl(t)-P350) and Table 7 (elemental contents of products) have been deleted.",
+      "text_sha256": "sha256:2280adb4a1fd71a281be2eacec67dced019766f7b513b04e51911463c8b4c21e"
+    },
+    {
+      "char_end": 12198,
+      "char_start": 12088,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b9aafea4bb13fdff91c0",
+      "source_role": "author_response",
+      "text": "- The previous Supplementary Fig. 1 and 2 have been integrated as Supplementary Fig. 1 in the revised version.",
+      "text_sha256": "sha256:9c52356418b47f2be5b29d836e4d6f949a5fcb1dec77c0be33b81ccb58ead9a4"
+    },
+    {
+      "char_end": 12311,
+      "char_start": 12201,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c1bba1ca2ca5580f5de8",
+      "source_role": "author_response",
+      "text": "- The previous Supplementary Fig. 3 and 4 have been integrated as Supplementary Fig. 2 in the revised version.",
+      "text_sha256": "sha256:375dff84df985e97c7ca03b203698075e824073ad7abad6556a5374dcd20b421"
+    },
+    {
+      "char_end": 12426,
+      "char_start": 12314,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ea4865175ad988810a1d",
+      "source_role": "author_response",
+      "text": "- The previous Supplementary Fig. 12 and 13 have been integrated as Supplementary Fig. 9 in the revised version.",
+      "text_sha256": "sha256:4d30504b0fb00c3e912cf6f7d75e0aa9a991f198d62d763680c0967f79608a99"
+    },
+    {
+      "char_end": 12542,
+      "char_start": 12429,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1af9bc2ad51a9b0b87ae",
+      "source_role": "author_response",
+      "text": "- The previous Supplementary Fig. 14 and 15 have been integrated as Supplementary Fig. 10 in the revised version.",
+      "text_sha256": "sha256:a7898da4c796ec538a6f8132fe8eefc48c50151324b3454a1e2b5fd0634d9979"
+    },
+    {
+      "char_end": 12658,
+      "char_start": 12545,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fbe651db44cd2a756f78",
+      "source_role": "author_response",
+      "text": "- The previous Supplementary Fig. 24 and 25 have been integrated as Supplementary Fig. 20 in the revised version.",
+      "text_sha256": "sha256:2cf60fa263d62de2ce8999e8d83cf6b5b7c021e47ba40a277864f014a691104f"
+    },
+    {
+      "char_end": 12774,
+      "char_start": 12661,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-05fc1a3ff03593775319",
+      "source_role": "author_response",
+      "text": "- The previous Supplementary Fig. 29 and 30 have been integrated as Supplementary Fig. 24 in the revised version.",
+      "text_sha256": "sha256:f928621bc184d1e0a785d8d3e389725a1ebce5648d79c74eabaf3ce699328342"
+    },
+    {
+      "char_end": 12894,
+      "char_start": 12777,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3072959db76b8326399a",
+      "source_role": "author_response",
+      "text": "- The previous Supplementary Fig. 31, 33 and 34 have been integrated as Supplementary Fig. 25 in the revised version.",
+      "text_sha256": "sha256:5b2d079700fa4f3cab8de43ba7de6817c8ad92f84c61b5396fc18739a4f50b8e"
+    },
+    {
+      "char_end": 13014,
+      "char_start": 12897,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-eefc9dde20fbb8daaa80",
+      "source_role": "author_response",
+      "text": "- The previous Supplementary Fig. 35, 36 and 38 have been integrated as Supplementary Fig. 26 in the revised version.",
+      "text_sha256": "sha256:4a2c162baedfc0c437cb25008208a72aae8bbe62bef9a4a935664004f2e45774"
+    },
+    {
+      "char_end": 13130,
+      "char_start": 13017,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c68f388b5b5d6ab75fa8",
+      "source_role": "author_response",
+      "text": "- The previous Supplementary Fig. 37 and 42 have been integrated as Supplementary Fig. 29 in the revised version.",
+      "text_sha256": "sha256:a1280bfd896b43474b9eb43485effb08b4110a5843741a10f50956d100144053"
+    },
+    {
+      "char_end": 13230,
+      "char_start": 13133,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-557c2bd634feef496144",
+      "source_role": "author_response",
+      "text": "- The synthesis details of _ms_ -NiAl-H2800-P350 have been added following Supplementary Fig. 11.",
+      "text_sha256": "sha256:161391058cb46ebcce43ef0a1db7434dbd74757192a72be97ebb04b739346341"
+    },
+    {
+      "char_end": 13366,
+      "char_start": 13233,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-bc411ee8d1f903d6e4d2",
+      "source_role": "author_response",
+      "text": "- A detailed discussion about the effect of calcination temperature (Supplementary Fig. 26-29) has been added in the revised version.",
+      "text_sha256": "sha256:0d9ae9f8d5d69a83f6930933e9242e49c6addeb56e84c7365b253a2717f77894"
+    },
+    {
+      "char_end": 13453,
+      "char_start": 13369,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-30264fd8009ad14dc932",
+      "source_role": "author_response",
+      "text": "In the revised version, the supporting information includes 34 figures and 7 tables.",
+      "text_sha256": "sha256:28dbc80cab9df55c14cb06a3d34dd566b10f23558f25a069a78e308ca3823bc6"
+    },
+    {
+      "char_end": 13476,
+      "char_start": 13456,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-426f625ae9acc56b5490",
+      "source_role": "author_response",
+      "text": "_Specific comments:_",
+      "text_sha256": "sha256:571950e217ff95895cf1dc88e06ccf9f744522cf5434d1f9ed26e237d15f95eb"
+    },
+    {
+      "char_end": 13575,
+      "char_start": 13479,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-54e8c3c80ad04616ef41",
+      "source_role": "author_response",
+      "text": "_1. Textural properties of the catalyst samples are not provided. Is there any reason for that?_",
+      "text_sha256": "sha256:e9f185d9ffff84e256050fe2c93bffdff9c8c99ea1c6685226e9cbd0b68067a3"
+    },
+    {
+      "char_end": 13579,
+      "char_start": 13578,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-12fe9fd7937ed563eda6",
+      "source_role": "author_response",
+      "text": "2",
+      "text_sha256": "sha256:d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"
+    },
+    {
+      "char_end": 13779,
+      "char_start": 13582,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-de3ee774a343600fc8d0",
+      "source_role": "author_response",
+      "text": "**Response:** We thank the reviewer for this question. The textural properties of samples have been provided in Supplementary Table 3, and the discussion has been added to the manuscript on page 6.",
+      "text_sha256": "sha256:83e72d886fe704ab4f5287dba863c6b57437dfec880d523a16ba910b3498eae3"
+    },
+    {
+      "char_end": 14208,
+      "char_start": 13782,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1d8df02f8cc9ce2d0985",
+      "source_role": "author_response",
+      "text": "· _“The Brunauer-Emmett-Teller (BET) surface area of ms-NiAl-P350 is 103.4 m[2] g[-1] , which is larger than that of NiAl-P350 powder (82.4 m[2]_ · _g[-1] , synthesized without mstemplate, Supplementary Fig. 7). Due to the high porosity, the ms-NiAl-P350 exhibited a much lower apparent density of 11.7 mg_ · _cm[-3] (Fig. 1a, Supplementary Fig. 8 and Supplementary Table 3) than the 307.1 mg_ · _cm[-3] of NiAl-P350 powder.”_",
+      "text_sha256": "sha256:63881db2756b3bca0ecf20e3f52ea4e4d5bc147bac807605415256d197bffc48"
+    },
+    {
+      "char_end": 14269,
+      "char_start": 14211,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-77e1197951bb09c05191",
+      "source_role": "author_response",
+      "text": "**Supplementary Table 3.** Textural properties of samples.",
+      "text_sha256": "sha256:69a7972f7c7d339450977d5260099f5eb03e3cfdb31310e1e735a8b56e188be4"
+    },
+    {
+      "char_end": 14667,
+      "char_start": 14272,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-176cf38266669adbc6ea",
+      "source_role": "author_response",
+      "text": "|**Sample**|**BET surface Area**<br>**(m²**·**g-1)**|**Pore Volume**<br>**(cm³**·**g-1)**|**Average pore**<br>**width** **(nm)**|**Apparent density**<br>**(mg**·**cm-3)**|\n|---|---|---|---|---|\n|**NiAl powder**|134.8|0.6|18.7|232.3|\n|**_ms_-NiAl**|248.9|0.7|12.9|9.6|\n|**NiAl-P350 powder**|82.4|0.5|23.8|307.1|\n|**_ms_-NiAl-P350**|103.4|0.4|17.7|11.7|\n|**_bulk_ NiAl-P350**|78.3|0.3|14.0|2770.0|",
+      "text_sha256": "sha256:27456f2bf53005848930175ad62787402397a6ee9586b62e2bab87993c359c8f"
+    },
+    {
+      "char_end": 15065,
+      "char_start": 14671,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0792260048efbee67087",
+      "source_role": "author_response",
+      "text": "_2. As the own authors indicate, the catalytic system prepared without using the maize straw template exhibits also remarkable catalytic properties: somewhat lower conversion but very high stability along the time on stream. This could benefit significantly the economy of the process, reducing the catalyst cost and making its preparation simpler. This issue should be assessed and commented._",
+      "text_sha256": "sha256:e949f7d017c0fbae8735dc1e6755c6ac1b92430fa8bb962eb8021bfc005531bf"
+    },
+    {
+      "char_end": 15463,
+      "char_start": 15068,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-52a151d6eae63caf46e2",
+      "source_role": "author_response",
+      "text": "**Response:** We would like to thank the reviewer for this constructive suggestion. Considering the catalyst cost and easier preparation, it is indeed more economical to produce the bulk NiAl-P350. In the revised version, we have added the data about the characterization of bulk NiAl-P350, its catalytic activity in comparison to _ms_ -NiAlP350, and the comments of the bulk NiAl-P350 catalyst.",
+      "text_sha256": "sha256:40d9beed1e083ddadde7974a568be8b7633904904aaa91d95ddb16a78817099e"
+    },
+    {
+      "char_end": 15711,
+      "char_start": 15466,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-faf2241d307be8653d9d",
+      "source_role": "author_response",
+      "text": "_“Furthermore, we prepared the bulk NiAl-P350 catalyst (without ms-template) on a kilogram scale and shaped it into extrudates (Supplementary Fig. 32), over which a stable conversion of methyl laurate (~80%) with high selectivity towards C11H24_",
+      "text_sha256": "sha256:f7b91e66e41d6e890eeec8330c122e0d664cf04a5d4ae25e88bab35669cde487"
+    },
+    {
+      "char_end": 15715,
+      "char_start": 15714,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-38df49cafc3aba801ab7",
+      "source_role": "author_response",
+      "text": "3",
+      "text_sha256": "sha256:4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce"
+    },
+    {
+      "char_end": 16562,
+      "char_start": 15718,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f40d091f3cee8487c822",
+      "source_role": "author_response",
+      "text": "_(~90%)/C12H26 (~4%) was achieved during 1000 h of operation at WHSV of 9.4 h[-1] . The reaction efficiency over the bulk NiAl-P350 catalyst (36.4 mmol·g[-1] ·h[-1] ) is lower than that over the ms-NiAl-P350 catalyst (117.9 mmol·g[-1] ·h[-1] ), which should be attributed to its limited accessibility of active sites, given that the two catalysts possess similar chemical characteristics as determined by the HRTEM, XRD and XPS analysis (Supplementary Figs. 33 and 34). This comparison demonstrates that replicating the biological structure of ms to generate hierarchical pores is a highly effective approach to enhance the catalytic performance of such FLP-type catalysts. However, the bulk NiAl-P350 would be a suitable alternative for industrial applications, taking into account the expense and magnitude of catalyst production.”_ (Page 16)",
+      "text_sha256": "sha256:41ccf506ccf4dac9b93f954cd0c9ddbec01dd0dc6b4b3f4b70fba027ea09a01a"
+    },
+    {
+      "char_end": 16618,
+      "char_start": 16565,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c94638a79d7237c9e293",
+      "source_role": "author_response",
+      "text": "**==> picture [345 x 218] intentionally omitted <==**",
+      "text_sha256": "sha256:9ebe1c52137445a2a4af30bb29b6aac11584495c57b8cbf62721fb1c07a39252"
+    },
+    {
+      "char_end": 16727,
+      "char_start": 16620,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-99f9af721491de115660",
+      "source_role": "author_response",
+      "text": "**Supplementary Fig. 33.** HAADF-STEM and the corresponding EDS elemental mapping images of bulk NiAl-P350.",
+      "text_sha256": "sha256:669004909bcd2c1cbf5c2b6f2d5936d6cb6aafcb07a55f3bf9ddc68d20a6287f"
+    },
+    {
+      "char_end": 16731,
+      "char_start": 16730,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7bc838e5ac7b5a6d25e0",
+      "source_role": "author_response",
+      "text": "4",
+      "text_sha256": "sha256:4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a"
+    },
+    {
+      "char_end": 16787,
+      "char_start": 16734,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-63c98ead0e8cf2b359f5",
+      "source_role": "author_response",
+      "text": "**==> picture [378 x 339] intentionally omitted <==**",
+      "text_sha256": "sha256:f2fb3463eb9b23a7136b041baca8d5ce165bc917ef3dd7f6c1f8431da3881e02"
+    },
+    {
+      "char_end": 16906,
+      "char_start": 16789,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4ba243c34deda3b3ae33",
+      "source_role": "author_response",
+      "text": "**Supplementary Fig. 34. (a)** XRD patterns of bulk NiAl and bulk NiAl-P350. **(b-d)** XPS spectra of bulk NiAl-P350.",
+      "text_sha256": "sha256:30d4ac25fc7503bfefe289032f8f2d04eb0cc89e096ed00ed164457f60c246fc"
+    },
+    {
+      "char_end": 16954,
+      "char_start": 16909,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-359d7f5148a5f33938ce",
+      "source_role": "author_response",
+      "text": "## **Response to Reviewer 2 Referee Letter:**",
+      "text_sha256": "sha256:83b9291c9095db0d71e1a148cb9eb3a7f5177744282b88dd2ea57c0e824ee619"
+    },
+    {
+      "char_end": 17731,
+      "char_start": 16957,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-77546a34cda087cdea5d",
+      "source_role": "author_response",
+      "text": "_In this submission from Li and co-workers, a series of Ni-Al-P oxide materials was prepared, and the conditions leading to a P-alloyed oxide, rather than Ni2P, was identified. A biological structure directing agent was utilized to prepare high surface area and porous Ni-Al LDH, which is an interesting approach. The materials were tested as catalysts for hydrotreating of various model compounds and real feedstocks. While this reviewer appreciates the combination of fundamental and applied efforts, the impact delivered from this approach do not meet the standards required for Nature Communications. The following are points where the manuscript does not bring the needed impact, and are thoughts for the authors to consider when resubmitting the manuscript elsewhere:_",
+      "text_sha256": "sha256:c90436d932b2f3f2abbb7b98b3bcc11f886911d2f1dbf9b2ebb8a8bc57a08f0b"
+    },
+    {
+      "char_end": 17735,
+      "char_start": 17734,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-04306a17a5def9973a73",
+      "source_role": "author_response",
+      "text": "5",
+      "text_sha256": "sha256:ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d"
+    },
+    {
+      "char_end": 18610,
+      "char_start": 17738,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-448cd7d05f327e516109",
+      "source_role": "author_response",
+      "text": "**Response:** We thank the reviewer for the assessment of our manuscript. In this work, we designed a “ _ms_ ” porous structured FLP catalyst, which enables efficient green diesel production without replenishing the sulfur source or other species during the hydrotreating process. We have demonstrated that the FLP structure plays a crucial role in achieving coke- and sintering-resistant activity during the hydrotreating process. To the best of our knowledge, such FLP configuration has never been reported before. So, we believe that our findings represent important advances in the fields of heterogeneous catalysis, materials science, and renewable energy, which should meet the standards required for _Nature Communications_ . Below is a point-by-point response to the reviewer, which explains why we think it is suitable for publication in _Nature Communications_ .",
+      "text_sha256": "sha256:5b22d2db558e86c6939881243c73e9081a96960a8ccc4f8aa0eafe57418d637c"
+    },
+    {
+      "char_end": 19137,
+      "char_start": 18613,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-30e0ecf22f883eb22610",
+      "source_role": "author_response",
+      "text": "_1. The authors motivate this report, and repeat throughout, that the results here have the potential to disrupt the multi-billion dollar sulfided catalyst industry. I disagree. It would take an extremely special material to disrupt this industry, including one that is especially easy to prepare. I appreciate the materials chemistry that went into the \"ms\" porous structure reported here, but that is not a scalable material, requiring quite high temperatures and phosphorus sources that are on regulated chemicals lists._",
+      "text_sha256": "sha256:585be11ba8354f4e5697cdb4b3a54c7c32187e880ac56f997e728876e4fa191f"
+    },
+    {
+      "char_end": 19762,
+      "char_start": 19140,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5ede9230c17db5819048",
+      "source_role": "author_response",
+      "text": "**Response:** We would like to express our gratitude to the reviewer for recognizing our efforts regarding the “ _ms_ ” porous structure. In fact, constructing the “ _ms_ ” porous structure can significantly improve the catalytic performance, resulting in a reaction efficiency (117.9 mmol·g[-1] ·h[-1] ) that is three times higher than that of a catalyst without the “ _ms_ ” structure (36.4 mmol·g[-1] ·h[-1] ). From another perspective, the use of “ _ms_ ” as a sacrificial biotemplate for shaping highly active catalysts may provide a good way for utilization of _ms_ -waste (global annual yield of ~1.1 billion tons).",
+      "text_sha256": "sha256:1d1e995165169a80a5a43234e442996a6e4f84fc29d1a20b946ac442a9e57a91"
+    },
+    {
+      "char_end": 20183,
+      "char_start": 19765,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-50c647374114d5e8df0e",
+      "source_role": "author_response",
+      "text": "During the synthesis of a P-doped NiAl-oxide catalyst, two steps that require high temperature are involved, namely calcination at 800 °C and phosphorization at 350 °C. These processes are similar to those used in the industrial production of sulfided catalysts (calcination at 500-800 °C and sulfuration at 200-350 °C). The phosphorus source used in this study is sodium hypophosphite (NaH2PO2), which has been widely",
+      "text_sha256": "sha256:e57d0ab53bae904ecdb2eb5dacd45e490b1070f75987ea05eea9a84605312a2e"
+    },
+    {
+      "char_end": 20187,
+      "char_start": 20186,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-167b749bfb64ce3b90dc",
+      "source_role": "author_response",
+      "text": "6",
+      "text_sha256": "sha256:e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683"
+    },
+    {
+      "char_end": 20412,
+      "char_start": 20190,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-63d18e79ef023ebffddb",
+      "source_role": "author_response",
+      "text": "used in the industrial field and is not listed as a regulated chemical in China. So, the production of this particular type of catalyst on a large scale would be easily accomplished under the present industrial conditions.",
+      "text_sha256": "sha256:abdb5b9da7b6b2660a8cf697cffa671fd389a02ee8b61e2bc69110c573bc136e"
+    },
+    {
+      "char_end": 20757,
+      "char_start": 20415,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c0aa072b26b67ed3026a",
+      "source_role": "author_response",
+      "text": "In this manuscript, we aimed to introduce the synthesis of a “ _ms_ ” porous structured FLP catalyst and to describe its catalytic nature in green diesel production. These contents are important in the fields of materials science and heterogeneous catalysis, and are expected to be suitable for a broad readership of _Nature Communications_ .",
+      "text_sha256": "sha256:72cd05a9f73d789c58d165d8357ded9349ce0175e6a79b34c03f2b1cdeee72cd"
+    },
+    {
+      "char_end": 21461,
+      "char_start": 20760,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2b83bee0c23d2c2fcdef",
+      "source_role": "author_response",
+      "text": "We completely agree with the reviewer that it would take an extremely special material to disrupt this industry, including one that is especially easy to prepare. Taking this issue into account, the catalyst without “ _ms_ ” template would be a suitable alternative for industrial applications. Indeed, this is the reason for including non- _ms_ catalyst data at the end of this manuscript, which serves as further evidence to prove the industrial viability of such a FLP catalyst and also draws the attention of readers from the industry. We think that this could make the manuscript more suitable for publication in the journal of _Nature Communications_ , which has a broadly interested readership.",
+      "text_sha256": "sha256:cc1ae32f9cd9dd090760d50c3efe09f8e857892dcb7fed1682d5949c6d359248"
+    },
+    {
+      "char_end": 21843,
+      "char_start": 21464,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-88bf4e7bb69fd90bfb49",
+      "source_role": "author_response",
+      "text": "_2. Further, alternatives to sulfided materials that are based on P-containing catalysts must overcome a similar barrier of \"P maintenance\", analogous to S maintenance. It is clear that the catalysts reported here change phase after hundreds of hours of reaction, suggesting that some type of P co-feed may be necessary, and this is a significant challenge to commercialization._",
+      "text_sha256": "sha256:6b20e654fdeb322620a78a7a8b3b2c013284f4cebb2d0e1143fdd26233edeac2"
+    },
+    {
+      "char_end": 22461,
+      "char_start": 21846,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-13463e02d3761e40fe99",
+      "source_role": "author_response",
+      "text": "**Response:** We thank the reviewer for this important comment. In fact, it is unnecessary to add P sources to our reaction system, which is a noteworthy advantage of our catalyst in comparison to sulfided catalysts. According to the ICP analysis (Supplementary Fig. 24b and Table 1), although the atomic ratio of P/Ni in _ms_ -NiAl-P350 decreased during the initial 24 h (possibly due to the loss of physically adsorbed P species), it is worth noting that the P/Ni ratio remained nearly unchanged throughout the remaining reaction duration. This indicates that there is no obvious P loss during 500 h of operation.",
+      "text_sha256": "sha256:9d689b1ce971ba42310dc0743041c68f2df0dc27d5375e5e0090497e8e91cf98"
+    },
+    {
+      "char_end": 22465,
+      "char_start": 22464,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d4234d445a2344f9b3d2",
+      "source_role": "author_response",
+      "text": "7",
+      "text_sha256": "sha256:7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451"
+    },
+    {
+      "char_end": 22521,
+      "char_start": 22468,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-419f0d6c4a5c175d3692",
+      "source_role": "author_response",
+      "text": "**==> picture [419 x 236] intentionally omitted <==**",
+      "text_sha256": "sha256:92064b251e066ed803cf54a1e8c2b37dccac10b8e391f6cdf0e2f06c14ab7d60"
+    },
+    {
+      "char_end": 22634,
+      "char_start": 22523,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-62c5dbd83c425238f45f",
+      "source_role": "author_response",
+      "text": "**Supplementary Fig. 24. (b)** Atomic ratios of P/Ni for fresh and spent _ms_ -NiAl-P350 determined by ICP-OES.",
+      "text_sha256": "sha256:3c83eba63bab76b9dd680a93b13645f47df1a2f9dd372c692ea5ae30a84e6a58"
+    },
+    {
+      "char_end": 23614,
+      "char_start": 22637,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a4249e5ca0d69abc336e",
+      "source_role": "author_response",
+      "text": "As the reviewer mentioned, the catalyst changes phase after 500 h reaction, and large Ni nanoparticles were observed in the sample of _ms_ -NiAl-P350-Sp.500h. However, its catalytic performance was unaffected. It was observed that the large metal particles were mainly composed of Ni species (Fig. 4b), without obvious P occupations (Fig. 4h). The XPS spectra showed that the chemical states of Ni, Al and P species after 500 h reaction remained unchanged compared with that of _ms_ -NiAl-P350-Sp.24h (Figs. 4e-g), except for a slightly more pronounced peak being assigned to the metallic Ni (Fig. 4e). It is possible to infer that the Ni species inside the NiAl-oxide skeleton without P-doping are prone to be reduced to form large Ni nanoparticles during the reaction, which has less affection to the surface FLP structure. So, the FLP catalyst of _ms_ -NiAl-P350 has excellent long-term stability under hydrotreating conditions without the need for phosphorus replenishment.",
+      "text_sha256": "sha256:4aa5fd33e3ffac42aef963b627a3601da4668e5d31990b46c26335ba703930e1"
+    },
+    {
+      "char_end": 23951,
+      "char_start": 23617,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c30ea63280314d203b47",
+      "source_role": "author_response",
+      "text": "_3. The combination of applied and fundamental approaches here reads as the combination of 2 separate papers, but these do not bring a high impact result. The results presented from the bulk P-NI-Al oxide (Figure 5), which is the more scalable version of the catalyst, demonstrate that all the materials chemistry associated with the_",
+      "text_sha256": "sha256:13df6bdba1e3a5174c23d5ff3f79ca88bca34a87d1ff68a81243dc400b4a5d75"
+    },
+    {
+      "char_end": 24105,
+      "char_start": 23954,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2c3fbb08005165ad3e2e",
+      "source_role": "author_response",
+      "text": "_porous material is not needed and the whole focus of the paper on that material is unnecessary - it should be focused on this more scalable material._",
+      "text_sha256": "sha256:dae76ecc170f0f9171b970fb09e7f88ecf5fc0c9063d4d6941ebf002da7eba55"
+    },
+    {
+      "char_end": 24905,
+      "char_start": 24108,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c69185d1be795db3d2bc",
+      "source_role": "author_response",
+      "text": "**Response:** We would like to thank the reviewer for this suggestion. As known, catalytic activity is one of the most important criteria for screening catalysts both in basic research and industrial production. In this work, the _ms_ template-induced biological structure plays an important role in improving accessibility of the active sites, thereby leading to an enhanced catalytic activity. In addition, this work is expected to inspire more research on the design of porous biological structural catalysts using waste biomass. Therefore, we consider it necessary to focus our attention on the _ms_ -NiAlP350 catalyst, where we have conducted an in-depth investigation into its structure and composition before and after use, and have determined the catalytic nature of the FLP configuration.",
+      "text_sha256": "sha256:b46d73e86d2a16eda43d45ab09afe839bd4957c562bd34bcd2d63d3bab835e4d"
+    },
+    {
+      "char_end": 25762,
+      "char_start": 24908,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-87b6d10066a06a5fcad7",
+      "source_role": "author_response",
+      "text": "At the end of the manuscript, we presented the bulk FLP catalyst (NiAl-P350) as an additional option for industrial applications. As the catalytic mechanism has already been demonstrated in detail using _ms_ -NiAl-P350 catalyst, it is not necessary to repeat the comprehensive characterization of the bulk FLP catalyst. So, we think that combination of fundamental and applied approaches in this manuscript could yield significant impact and garner greater attention from readers in the industry, which meets the standards required for _Nature Communications._ However, to address the reviewer's concern, we have moved the Fig. 5d (catalytic data of bulk catalyst) into the Supplementary Materials section (see Supplementary Fig. 32), and added a brief discussion about the comparison between _ms_ -NiAl-P350 and bulk NiAl-P350 in the revised manuscript.",
+      "text_sha256": "sha256:c1bd4229f3b1f5f55ac70f7750a9721fc3fba6595329a06c96ee2a9af1815df7"
+    },
+    {
+      "char_end": 26446,
+      "char_start": 25765,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8d9152e7a229b523a8db",
+      "source_role": "author_response",
+      "text": "_“Furthermore, we prepared the bulk NiAl-P350 catalyst (without ms-template) on a kilogram scale and shaped it into extrudates (Supplementary Fig. 32), over which a stable conversion of methyl laurate (~80%) with high selectivity towards C11H24 (~90%)/C12H26 (~4%) was achieved during 1000 h of operation at WHSV of 9.4 h[-1] . The reaction efficiency over the bulk NiAl-P350 catalyst (36.4 mmol·g[-1] ·h[-1] ) is lower than that over the ms-NiAl-P350 catalyst (117.9 mmol·g[-1] ·h[-1] ), which should be attributed to its limited accessibility of active sites, given that the two catalysts possess similar chemical characteristics as determined by the HRTEM, XRD and XPS analysis_",
+      "text_sha256": "sha256:c4f1898fe74ac340951d541c65023b085c5f6ab21fde641776eb6d977228f688"
+    },
+    {
+      "char_end": 26450,
+      "char_start": 26449,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-84afcd14375b3b4d5e6d",
+      "source_role": "author_response",
+      "text": "9",
+      "text_sha256": "sha256:19581e27de7ced00ff1ce50b2047e7a567c76b1cbaebabe5ef03f7c3017bb5b7"
+    },
+    {
+      "char_end": 26861,
+      "char_start": 26453,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f8d56cd99f9949dc816e",
+      "source_role": "author_response",
+      "text": "_(Supplementary Figs. 33 and 34). This comparison demonstrates that replicating the biological structure of ms to generate hierarchical pores is a highly effective approach to enhance the catalytic performance of such FLP-type catalysts. However, the bulk NiAl-P350 would be a suitable alternative for industrial applications, taking into account the expense and magnitude of catalyst production.”_ (Page 16)",
+      "text_sha256": "sha256:64841c0545fe663c7e1f228b7ca29556be835055e2eccf995b77be4d5c2e1775"
+    },
+    {
+      "char_end": 27258,
+      "char_start": 26864,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f06c933719f74cd456d8",
+      "source_role": "author_response",
+      "text": "_4. From the applied catalysis perspective, the catalytic data was not presented with the appropriate level of rigor to show that the \"ms\" version of the catalyst provides any advantage other than surface area. That is, there are no site density measurements that would enable a turnover frequency analysis, which would show that the 2 catalyst materials are operating the same or differently?_",
+      "text_sha256": "sha256:7ab1b9238c06e2c222c98ec02cdb5217bb9dbb15c7c7f11ab6f52e0163df5e8a"
+    },
+    {
+      "char_end": 28227,
+      "char_start": 27261,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-35a9d86cd80508b100d5",
+      "source_role": "author_response",
+      "text": "**Response:** We thank the reviewer for this valuable suggestion. A turnover frequency analysis could bring more information about the intrinsic activity if the number of active sites is precisely determined _._ However, it is difficult to accurately measure the number of frustrated Lewis pairs (i.e. Ni(-O-Al)···P) on the surface of our present catalyst. In order to ensure the precision of catalytic data, we did not carry out the turnover frequency analysis in this study, but we have calculated the normalized reaction efficiency in the revised manuscript to distinguish the catalytic activity more clearly. It is found that the reaction efficiency over the _ms_ -NiAl-P350 (117.9 mmol·g[-1] ·h[-1] ) is higher than that over the bulk NiAl-P350 (36.4 mmol·g[-1] ·h[-1] ). In the next work, the turnover frequency analysis will be studied in detail based on the catalyst, where the Ni(-O-Al)···P pairs are directly constructed on the surface of an Al2O3 carrier.",
+      "text_sha256": "sha256:ecd950297388cfcf57d7c933ff3e8cdf7657cc2cded7f757aef75081f65aa881"
+    },
+    {
+      "char_end": 28830,
+      "char_start": 28230,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6a8a7d65d5a108ab6d5e",
+      "source_role": "author_response",
+      "text": "_5. Thus, this combination of results would be better served as 2 separate papers: one focused in an applied catalysis journal where the preparation, characterization, and catalytic data from the non-structured, bulk material is presented. This would enable stronger arguments about the potential to replace sulfided catalysts. Then, a second paper could focus on the interesting materials chemistry using a structure directing agent that enables the production of high surface area analogs to these bulk materials. Some metric of performance must be found that differentiates these materials beyond_",
+      "text_sha256": "sha256:be19267d758a987fc22f6d07ab38ed72535c10a2179a3ce570ddaeb68b731b98"
+    },
+    {
+      "char_end": 28835,
+      "char_start": 28833,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d5b93c8ff8a10f504933",
+      "source_role": "author_response",
+      "text": "10",
+      "text_sha256": "sha256:4a44dc15364204a80fe80e9039455cc1608281820fe2b24f1e5233ade6af1dd5"
+    },
+    {
+      "char_end": 29893,
+      "char_start": 28838,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-49290ad3b1d0d8c61a31",
+      "source_role": "author_response",
+      "text": "_an increase surface area, and perhaps further structural analysis would find this._ **Response:** We appreciate the reviewer's valuable suggestion. It is generally reasonable to publish a first paper focusing on the bulk material and then a second one based on the materials with high surface area. However, in this manuscript, we have focused on the “ _ms_ ” porous structured FLP catalyst with high surface area, where the preparation, characterization, and catalytic data as well as the catalytic mechanism have been well presented. In this case, we feel that it is not necessary to repeat the similar experiments and characterization on the bulk catalyst for publishing the second paper. The data of bulk catalyst in our manuscript serves as evidence to prove the industrial viability of FLP catalyst, which can draw the attention of readers from the industry and make it more suitable for publishing in the journal of _Nature Communications_ with a broadly interested readership. We sincerely hope that the reviewer finds our responses satisfactory.",
+      "text_sha256": "sha256:bef45847900838be7ef95ff52529c28329841800e5de5d22f8a8ddfd289e05f9"
+    },
+    {
+      "char_end": 29925,
+      "char_start": 29896,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-af4004a970284eaaa244",
+      "source_role": "author_response",
+      "text": "## **Response to Reviewer 3**",
+      "text_sha256": "sha256:aba3c8968769fdd4c3ac7f7dcb3dc10fc27a2cdf365a966db38384033bea7ead"
+    },
+    {
+      "char_end": 29950,
+      "char_start": 29928,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-807786cdbdc860ba48d6",
+      "source_role": "author_response",
+      "text": "## **Referee Letter:**",
+      "text_sha256": "sha256:c4840b6cb669f5a654dd03d8fa1cad6f3ef947e5ffaf2d7e331b60283236d67c"
+    },
+    {
+      "char_end": 30248,
+      "char_start": 29953,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-bd951e808c3e33b85b79",
+      "source_role": "author_response",
+      "text": "_In this submission, the authors reported a frustrated Lewis pair catalyst to realize efficient green diesel production, and investigated its charge transfer mechanism in H2 activation. However in my opinion, the results and analysis is not sufficient to support their principle and conclusion._",
+      "text_sha256": "sha256:8880a895119756fc0e2fbe56bba31019efd54a7c659de07ebe4a0a80721b187f"
+    },
+    {
+      "char_end": 30401,
+      "char_start": 30251,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6d5ed8640db4703f2247",
+      "source_role": "author_response",
+      "text": "**Response:** We appreciate the reviewer for these valuable comments and constructive suggestions, which are very helpful in improving our manuscript.",
+      "text_sha256": "sha256:7ce2d43017498020a6f57aa0d9d4367f7b12e01cb87e0fed51ec1e049f4182d6"
+    },
+    {
+      "char_end": 30882,
+      "char_start": 30404,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a9362a6c7490965ea38f",
+      "source_role": "author_response",
+      "text": "_1. For the frustrated Lewis pair of Ni(-O-Al)•••P, the more positive Ni site caused by electron transfer from Ni-O to the nearby O-Al is an extremely important factor. The authors demonstrated this electron transfer by the higher white line intensity of Ni K- edge, and the existence of Niδ+ (2<δ<3) in Ni 2p3/2 XPS spectra. However, the more important and direct evidence is lacked, which is the comparison in Ni and Al XPS spectra between pour NiO or Al2O3 and Al-doped NiO._",
+      "text_sha256": "sha256:2571985482e77bf0cfeae555b04bd3afac7666b9e2eb6e8a9d5161b5ecbe45a5"
+    },
+    {
+      "char_end": 30887,
+      "char_start": 30885,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a02877960c51c4a87b46",
+      "source_role": "author_response",
+      "text": "11",
+      "text_sha256": "sha256:4fc82b26aecb47d2868c4efbe3581732a3e7cbcc6c2efb32062c08170a05eeb8"
+    },
+    {
+      "char_end": 31900,
+      "char_start": 30890,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c89110217b24bc6dd3cb",
+      "source_role": "author_response",
+      "text": "**Response:** We thank the reviewer for this helpful suggestion. According to the reviewer's suggestion, we have prepared the _ms_ -NiO and _ms_ -Al2O3 by a similar procedure to that of _ms_ -NiAl, and analyzed their Ni and Al XPS spectra. The Ni 2p3/2 XPS spectrum of _ms_ -NiO (Supplementary Fig. 12a and Table 4) showed two peaks at 855.9 eV and 854.0 eV, which were assigned to Ni[3+] and Ni[2+] , respectively. In the case δ+ of _ms_ -NiAl, a new peak belonging to Ni peak (2<δ<3) appeared at 855.7 eV, while the peaks of Ni[3+] (856.9 eV) and Ni[2+ ] (854.3 eV) both shifted to higher binding energy. In Al 2p region (Supplementary Fig. 12b), the binding energy of _ms_ -NiAl (74.1 eV) shifted to a lower value compared with that of _ms_ -Al2O3 (74.3 eV). These results illustrate that the interaction between Al[3+] and NiO was constructed in _ms_ -NiAl, wherein electrons transfer from Ni-O to the nearby O-Al. The data has been added to the Supplementary Materials section (see Supplementary Fig. 12).",
+      "text_sha256": "sha256:d72e159d4d7f712118663c505fecfa973bf30af8b8543406c9c794de071e61a6"
+    },
+    {
+      "char_end": 31956,
+      "char_start": 31903,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3b495fc9554df7048c9d",
+      "source_role": "author_response",
+      "text": "**==> picture [359 x 168] intentionally omitted <==**",
+      "text_sha256": "sha256:87c8f161c746b79c18cac464d7ff5e56d59178077f0f013393960f7d6a2235bc"
+    },
+    {
+      "char_end": 32092,
+      "char_start": 31958,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7eaa1ba5cf57b5c4c32b",
+      "source_role": "author_response",
+      "text": "**Supplementary Fig. 12. (a)** XPS Ni 2p spectra of _ms_ -NiAl and _ms_ -NiO. **(b)** XPS Al 2p spectra of _ms_ -NiAl and _ms_ -Al2O3.",
+      "text_sha256": "sha256:70d7a173a77e2f5ee370dc73df8ac0752e65b8ac3d4b3f6772708ede05ebfbe2"
+    },
+    {
+      "char_end": 32147,
+      "char_start": 32095,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-af943c9de487ed03c48c",
+      "source_role": "author_response",
+      "text": "**==> picture [419 x 48] intentionally omitted <==**",
+      "text_sha256": "sha256:c98768bb255fd9429c2e9c73b644fb189d5292a2a58ae32e26936e8fd78f237c"
+    },
+    {
+      "char_end": 32585,
+      "char_start": 32149,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f707f9ab6044be1b31ec",
+      "source_role": "author_response",
+      "text": "_2. In model 2, why is the crystal structure of the top Ni-Al-O layer is vastly different from that of the bottom layer? The top layer seems to be close to amorphous nature._ **Response:** Based on the crystal structure of NiO (111), we constructed the initial model of NiAl oxide by replacing 1/3 of the nickel atoms with Al atoms (Fig. R1). Therein, the top two layers were regarded as the crystal surface, while the bottom two layers",
+      "text_sha256": "sha256:e7a6c1884c9b149aabaf5ee1e788b4ba12956dac651a02c0b19edd181ce3f191"
+    },
+    {
+      "char_end": 32590,
+      "char_start": 32588,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5200635060dc351a5d8c",
+      "source_role": "author_response",
+      "text": "12",
+      "text_sha256": "sha256:6b51d431df5d7f141cbececcf79edf3dd861c3b4069f0b11661a3eefacbba918"
+    },
+    {
+      "char_end": 32986,
+      "char_start": 32593,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5412adc5e1710a848106",
+      "source_role": "author_response",
+      "text": "were used to simulate the inside crystal structure, which has a limited effect on the surface structure and catalytic reaction. Therefore, we optimized the equilibrium lattice constant of the top two layers while fixing the bottom two layers. The results indicate that the addition of Al indeed causes crystal reconstruction to a certain extent, making the top layer close to amorphous nature.",
+      "text_sha256": "sha256:c9a5b6346e8ae31aaa6535def44c9f9862e2c7d2d446ed07bf36ab469f4b504b"
+    },
+    {
+      "char_end": 33686,
+      "char_start": 32989,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9e68c16e5f5463f88e52",
+      "source_role": "author_response",
+      "text": "In the XRD pattern (Fig. R2), the _ms_ -NiAl only shows broad diffraction peaks belonging to the NiO phase without diffraction peaks ascribed to the Al-containing phase, indicating that the Al species is amorphous or incorporated into the NiO phase or both. Based on the Scherrer's equation, the size of the NiO phase in _ms_ -NiAl (7.8 nm) is much smaller than that in _ms_ -NiO (52.2 nm), indicating that the Al species has a confinement effect on the growth of NiO nanoparticles during calcination. By combining XRD analysis with the DFT model, it can be inferred that the surface of _ms_ - NiAl is close to amorphous in nature, due to the formation of Al[3+] -doped NiO-type NiAl mixed oxides.",
+      "text_sha256": "sha256:8cf72b2e015d79c19b57468795b9c80b4c1f4be342bc45b6be1814614671cbac"
+    },
+    {
+      "char_end": 33742,
+      "char_start": 33689,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8efc6ae4f13489b5c449",
+      "source_role": "author_response",
+      "text": "**==> picture [420 x 153] intentionally omitted <==**",
+      "text_sha256": "sha256:045cff3bcb646aae595d9f09a578ddb11aabd8eb520e438cd593a8ddcff1582c"
+    },
+    {
+      "char_end": 33825,
+      "char_start": 33744,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-129c8b6442c24e29aa29",
+      "source_role": "author_response",
+      "text": "**Fig. R1** Initial and optimized model 2 simulating the structure of _ms_ -NiAl.",
+      "text_sha256": "sha256:8fbcdc5292b4a0a51069d3ffafe51232e40a0a053692593fd91bae75103bfa6e"
+    },
+    {
+      "char_end": 33830,
+      "char_start": 33828,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d70e2e6f2c311f685901",
+      "source_role": "author_response",
+      "text": "13",
+      "text_sha256": "sha256:3fdba35f04dc8c462986c992bcf875546257113072a909c162f7e470e581e278"
+    },
+    {
+      "char_end": 33886,
+      "char_start": 33833,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a7a2ffc8f9c9bc4d3ca3",
+      "source_role": "author_response",
+      "text": "**==> picture [419 x 236] intentionally omitted <==**",
+      "text_sha256": "sha256:92064b251e066ed803cf54a1e8c2b37dccac10b8e391f6cdf0e2f06c14ab7d60"
+    },
+    {
+      "char_end": 33940,
+      "char_start": 33888,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-dd1f24afbeacbd5d7418",
+      "source_role": "author_response",
+      "text": "**Fig. R2** XRD spectra of _ms_ -NiAl and _ms_ -NiO.",
+      "text_sha256": "sha256:c67279715d915da6bc0d915ea18cf429c874a91af93185ad2b2716c1d29f19cb"
+    },
+    {
+      "char_end": 34242,
+      "char_start": 33943,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-83ae64d83a24c0245105",
+      "source_role": "author_response",
+      "text": "_3. According to P 2p XPS spectra, the peak at 133.8 eV in ms-NiAl-P350 is arises from P-O species, such as PO3, PO4, P2O5, etc. In the model 3, the PH group is bonding to one O atom. I don’t think this P-relevant construction is accurately representative for its actual structure reflected by XPS._",
+      "text_sha256": "sha256:1933c7e698525a681a006f2118f076224d573baab524a5864d8d58964630bfc1"
+    },
+    {
+      "char_end": 34705,
+      "char_start": 34245,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0e09476bf6d21fb69afe",
+      "source_role": "author_response",
+      "text": "**Response:** We thank the reviewer for this insightful comment. For the P 2p XPS spectrum of _ms-_ NiAl-P350, the peak assigned to P-O species can be further deconvoluted into two peaks (Fig. R3), wherein the sub-peak at 134.1 eV is attributed to phosphate species, while the sub-peak at 133.0 eV can be assigned to the P-O bond ( _ACS Energy Lett. 2018, 3, 892-898; ACS Catal. 2018, 8, 8420-8429_ ), confirming the validity of the P configuration in model 3.",
+      "text_sha256": "sha256:ea66680662880aedb5d1c2ab996784036b1f4467f491b27802c69db2f1f8f79c"
+    },
+    {
+      "char_end": 35303,
+      "char_start": 34708,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ffd211c3831cc5e3de98",
+      "source_role": "author_response",
+      "text": "Actually, we had tried several possible configurations to simulate and screen the active sites of the _ms_ -NiAl-P350 catalyst, which were not suitable due to their high energy barrier in H2 adsorption/activation. For instance, we tried to construct models in which the -PH group is bonded to another hydroxyl group (Fig. R4), however, the H2 molecules are unable to be stably adsorbed either on the P or the adjacent O/Al/Ni atoms. In addition, DFT calculations showed that the nudged elastic band (NEB) method could not locate the transition state of the H2 dissociation reaction at the bridge",
+      "text_sha256": "sha256:d747ca9d789c24bee65442ed0713299d9c99c3dd9cc2cd2876855b1769bf5b2f"
+    },
+    {
+      "char_end": 35308,
+      "char_start": 35306,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8bcbcb66b668634f60fa",
+      "source_role": "author_response",
+      "text": "14",
+      "text_sha256": "sha256:8527a891e224136950ff32ca212b45bc93f69fbb801c3b1ebedac52775f99e61"
+    },
+    {
+      "char_end": 35418,
+      "char_start": 35311,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3a45057bc829b7a9a56c",
+      "source_role": "author_response",
+      "text": "site between Ni···P (or Ni···OH), indicating that these sites are not active sites for the H2 dissociation.",
+      "text_sha256": "sha256:8d8e8ed437ff6b75f8a9f8fe5faf8522de95bb7bb0569dad657882d3dc1c0edb"
+    },
+    {
+      "char_end": 35771,
+      "char_start": 35421,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-edf1e3eb0303e6a9d009",
+      "source_role": "author_response",
+      "text": "In addition, we also tried to attach the -PH to the inner atoms, and the P atom eventually binds with two O atoms and one Ni atom after optimization (Fig. R5). This configuration may partially contribute to the appearance of a phosphate peak in P 2p XPS spectrum. However, the inner layer atoms are not effective active sites for catalytic reactions.",
+      "text_sha256": "sha256:a9ab5a7cfb7479f1886da75df28b604bd53ff74253e3838276206470175b26fb"
+    },
+    {
+      "char_end": 35827,
+      "char_start": 35774,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c8a56014ac81f000d72b",
+      "source_role": "author_response",
+      "text": "**==> picture [419 x 259] intentionally omitted <==**",
+      "text_sha256": "sha256:b522bb33479a59229bb1e7e6f9c2fd1224418685d298d23446eefc76a7c1ee24"
+    },
+    {
+      "char_end": 35899,
+      "char_start": 35829,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e66475e201cbe46ed63d",
+      "source_role": "author_response",
+      "text": "**Fig. R3** Deconvolution of the XPS P 2p spectrum of _ms_ -NiAl-P350.",
+      "text_sha256": "sha256:dd6a3e9f90043c511109136c731b8bc92b810213b2ec257c87dd1ad5d48ebe9f"
+    },
+    {
+      "char_end": 35955,
+      "char_start": 35902,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-96fcb6f343dd412365fb",
+      "source_role": "author_response",
+      "text": "**==> picture [401 x 212] intentionally omitted <==**",
+      "text_sha256": "sha256:93d4dd6a1ff8d3d2d636352a345241493aa30682da70bf873898c68f813a9c60"
+    },
+    {
+      "char_end": 35959,
+      "char_start": 35957,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e4ae781f3ceae372db0d",
+      "source_role": "author_response",
+      "text": "15",
+      "text_sha256": "sha256:e629fa6598d732768f7c726b4b621285f9c3b85303900aa912017db7617d8bdb"
+    },
+    {
+      "char_end": 36071,
+      "char_start": 35962,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d53838653a9a96fac23d",
+      "source_role": "author_response",
+      "text": "**Fig. R4** Initial and optimized configuration of H2 adsorption on different positions in Ni(-O-Al)···P FLP.",
+      "text_sha256": "sha256:6773e57f344e8ac3c5ea05715c260fd0d9a7429a77a7822f1b9212c91e915610"
+    },
+    {
+      "char_end": 36127,
+      "char_start": 36074,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1f339a21370ff5ed21e8",
+      "source_role": "author_response",
+      "text": "**==> picture [419 x 181] intentionally omitted <==**",
+      "text_sha256": "sha256:692133e85a11b81a3af7ea60bbbd684c554d6d9a1ab113c193933233387e8df5"
+    },
+    {
+      "char_end": 36265,
+      "char_start": 36129,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-112dba1d14dfcf981410",
+      "source_role": "author_response",
+      "text": "**Fig. R5** Optimized model 4 in which the P atom is inserted into the inner layer and eventually bonded to two O atoms and one Ni atom.",
+      "text_sha256": "sha256:9f3abd96729a491200ce1052a1bd56ff690a23d7cf3df22c978b060deed9fe2d"
+    },
+    {
+      "char_end": 36536,
+      "char_start": 36268,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e86472b60ccc6c234982",
+      "source_role": "author_response",
+      "text": "_4. BTW, the a PH2 group was used in model 3 of Supplementary Fig. 17 by mistake._ **Response:** We thank the Reviewer for pointing out this mistake. The group mentioned by the reviewer in model 3 should be a -PH group, which has been corrected in the revised version.",
+      "text_sha256": "sha256:d611055cd23e44307aee793750747fb991e02013c0ecd660628754624323df09"
+    },
+    {
+      "char_end": 36832,
+      "char_start": 36539,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-665865c914392d2cbdec",
+      "source_role": "author_response",
+      "text": "_5. According to the elemental contents of ms-NiAl-P350 revealed by ICP-OES (0.44 P/Ni atomic ratio) or XPS (0.91 P/Ni atomic ratio), the P/Ni atomic ratio in model 3 differs too much. So the sufficient P doping in bulk should be considered in DFT model, not just the PH group on the surface._",
+      "text_sha256": "sha256:2a4b922f3347fe5e30fd1aefc4a538d93dfabce9bd8ab9aadf683ae6f195f99e"
+    },
+    {
+      "char_end": 37324,
+      "char_start": 36835,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a678b41fa6f9fc462093",
+      "source_role": "author_response",
+      "text": "**Response:** We agree with the reviewer that there should be multiple P atoms in the model structure of _ms-_ NiAl-P350. According to the reviewer's suggestion, we added multiple -PH groups to the surface and inner layers of model 3 and optimized the structure to obtain model 5 (Fig. R6). It appears that the presence of additional P atoms had little effect on the charge of the atoms in the active center of model 3, which may be due to the poor electron transfer ability of NiAl-oxide.",
+      "text_sha256": "sha256:e40ab39a42339ebce3cdc289f2583e0b33c44ab5fe3ed20f95344492c93cc37c"
+    },
+    {
+      "char_end": 37494,
+      "char_start": 37327,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-46e660de63bf8e4ed532",
+      "source_role": "author_response",
+      "text": "In general, when establishing a structure model for a complicated material, a certain degree of simplification of the realistic system is inevitable, thereby enhancing",
+      "text_sha256": "sha256:2398163367bc996974e4b2a8a14ea591f4d17bf4d9b50023966040cfae9b88c5"
+    },
+    {
+      "char_end": 37499,
+      "char_start": 37497,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-74cb1c0302a98015b6f8",
+      "source_role": "author_response",
+      "text": "16",
+      "text_sha256": "sha256:b17ef6d19c7a5b1ee83b907c595526dcb1eb06db8227d650d5dda0a9f4ce8cd9"
+    },
+    {
+      "char_end": 38031,
+      "char_start": 37502,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-68545e07c1902ada611e",
+      "source_role": "author_response",
+      "text": "its intelligibility and universality. For example, in recent research ( _Nat. Commun. 2023, 14, 6808_ ), the authors have simplified the model of a potassium-modified edge-rich MoS2 catalyst (K/Mo mole ratio of 0.2) into a 6 × 6 × 1 tri-layer MoS2 supercell with only one K atom. In this work, we established a model 3 that contains one P atom and investigated subsequent H2 adsorption/activation around this atom, which is feasible to facilitate the calculation and make it easier to explain the energetics of Ni(-O-Al)···P FLP.",
+      "text_sha256": "sha256:c46d6d5e56ee4ab3c2ebb52f67c698c7f285f827dce0f05c7e09835557276fdf"
+    },
+    {
+      "char_end": 38087,
+      "char_start": 38034,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-620840e40602863e3202",
+      "source_role": "author_response",
+      "text": "**==> picture [419 x 251] intentionally omitted <==**",
+      "text_sha256": "sha256:f17334d6fb389affb69bd15e8477b291f84c1d47bf3521084507fb32d6f0528c"
+    },
+    {
+      "char_end": 38210,
+      "char_start": 38089,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9cb8e712877c9e649590",
+      "source_role": "author_response",
+      "text": "**Fig. R6** The Bader charges of typical Ni, O, Al or P atoms in model 3 (with one atom) and model 5 (with four P atoms).",
+      "text_sha256": "sha256:5d224e132d8fb6c8b2ad4626987a9a3bbfd75dff0fc6a4872c8486f432089663"
+    },
+    {
+      "char_end": 38763,
+      "char_start": 38213,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fd1ef49a739fa246b1b6",
+      "source_role": "author_response",
+      "text": "_6. The analysis in electron transfer between adsorbed H2 and FLP site by Bader charges is confused. Although the positive charge of Ni decreased (0.697 to 0.645), the electron of H2 atom bonded to Ni also increased (-0.012 to -0.039). So the 0.05 electron transfer from H2 to Ni is not convictive enough. The increased electron of Ni may be originated from its other coordination atoms (e.g. O), rather than H2. That means the role of Ni acid site in FLP sites is not well established. The authors should ascertain it by more careful investigation._",
+      "text_sha256": "sha256:e12a16ddad690da76989eb809c4305b1414214e8f7aa92126a1bcf42ae6d39a7"
+    },
+    {
+      "char_end": 38942,
+      "char_start": 38766,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0708ab6d03bb82ad5de2",
+      "source_role": "author_response",
+      "text": "**Response:** We regret that the electron transfer behavior during the H _2_ activation was not well explained. This point has been clearly presented in the revised manuscript.",
+      "text_sha256": "sha256:70f0f9f7948853a22bfdeedcec3c5e8e8045e17287195b612dae0e489bc7eb37"
+    },
+    {
+      "char_end": 38947,
+      "char_start": 38945,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0d93bb1fcf7bc24b96f8",
+      "source_role": "author_response",
+      "text": "17",
+      "text_sha256": "sha256:4523540f1504cd17100c4835e85b7eefd49911580f8efff0599a8f283be6b9e3"
+    },
+    {
+      "char_end": 39376,
+      "char_start": 38950,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e33b5c82fc4b6a6b8b43",
+      "source_role": "author_response",
+      "text": "_“As revealed by DFT calculations, when a H2 molecule approaches the constructed FLP site, electron transfer occurs along the path of P→H1→H2→Ni, resulting in the electron loss of P atom (0.17 eV) and the electron gain of H1 atom (0.09 eV), H2 atom (0.03 eV) and Ni atom (0.05 eV) (Fig. 3b and Supplementary Fig. 17), thereby leading to the elongation of the H-H bond from 0.78 Å in gaseous H2 to 1.83 Å in H2 (TS).”_ (Page 9)",
+      "text_sha256": "sha256:469dab528c37d0207f704f1e5dfdc0a7a0f646889effd1cc280aa18fb3f69771"
+    },
+    {
+      "char_end": 39663,
+      "char_start": 39379,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-60b5c74156bc11855123",
+      "source_role": "author_response",
+      "text": "In addition, to address the reviewer's concern, we also investigated the electron transfer number of the O atoms bonded with the Ni atom. The net electron gain/loss of the two O atoms is less than 0.01 eV, indicating that they do not directly participate in the H2 activation process.",
+      "text_sha256": "sha256:e5780c576e3501609e4a65a04970fb64c9287419bd3b390479c23e16fd57c091"
+    },
+    {
+      "char_end": 40054,
+      "char_start": 39666,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c58e40f59bf1ce69867b",
+      "source_role": "author_response",
+      "text": "_7. To demonstrate the advantage of FLP site, the catalytic abilities of contrast sample with single acid site (ms-NiAl) or basic site (P-doped NiO) also should be investigated. Likewise, the energy change profiles of H2 activation process on catalysts with single acid/basic site are needed, to confirm the promotion in H-H scission by FLP site in comparison with single site catalysts._",
+      "text_sha256": "sha256:1973d7210a667eb883f4c37528fbec7fb48d9a91e333755c28c19f02ab1da0e9"
+    },
+    {
+      "char_end": 40703,
+      "char_start": 40057,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-045f0796ae8591c689c7",
+      "source_role": "author_response",
+      "text": "**Response:** We appreciate the reviewer's helpful and constructive suggestion. It is indeed necessary to investigate the catalytic abilities of control samples with a single acid or basic site in order to demonstrate the advantage of FLP. However, the sample of _ms_ -NiAl was unstable under the reaction conditions, and metallic Ni rapidly appeared and acted as a new active site for H2 activation (Fig. 4a-iii and d and Supplementary Fig. 20a). In addition, it is difficult to synthesize the sample of P-doped NiO, because the NiO without incorporation of Al is easily converted to nickel phosphides (NixPy) during the phosphorization process.",
+      "text_sha256": "sha256:1843fa2559c877439e7e25a0ece5be250557a4aaf274bfcb24d026d1a33a5b72"
+    },
+    {
+      "char_end": 41214,
+      "char_start": 40706,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6972def79eb39199350b",
+      "source_role": "author_response",
+      "text": "To further confirm the necessity of FLPs in this catalytic system, we carried out a series of site-poisoning experiments. As known, pyrrole (strong Lewis acid) and pyridine (strong Lewis base) can be absorbed on the Lewis basic and acidic sites, respectively ( _Nat. Commun. 2017, 8, 15266_ ). Therefore, the FLPs can be effectively blocked by the pyridine and pyrrole molecules. It was found that after adding 20 wt% of pyrrole/pyridine into the catalytic system, the yield of target products decreased from",
+      "text_sha256": "sha256:a8726113da3ed27bb035eff9a2692a2d350bb5d7a51ccd81f60732dbcd33946e"
+    },
+    {
+      "char_end": 41219,
+      "char_start": 41217,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b1194c1d468eb4ba85e6",
+      "source_role": "author_response",
+      "text": "18",
+      "text_sha256": "sha256:4ec9599fc203d176a301536c2e091a19bc852759b255bd6818810a42c5fed14a"
+    },
+    {
+      "char_end": 41662,
+      "char_start": 41222,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d6467452bb21f67b643e",
+      "source_role": "author_response",
+      "text": "16.4% to 1.2% (pyrrole) and 2.1% (pyridine) at 300 °C, and from 82.0% to 33.6% (pyrrole) and 36.6% (pyridine) at 350 °C (Supplementary Fig. 30). These observations emphasized the necessity of Ni(-O-Al)···P FLPs construction for activating H2 in order to achieve a high activity in the present catalytic system. Corresponding changes have been made to the manuscript on page 14-15, and in the Supplementary Materials (Supplementary Fig. 30).",
+      "text_sha256": "sha256:2ad098f341fdc72d27059cefb08379a6007da9f6bd6d00369afaeddef2577c01"
+    },
+    {
+      "char_end": 41983,
+      "char_start": 41720,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a2964e68501499d6b32a",
+      "source_role": "author_response",
+      "text": "**----- Start of picture text -----**<br>\n20 100<br>300 oC 350 oC<br>16 80<br>12 60<br>8 40<br>4 20<br>0 0<br>Pure ML Pyrrole+ML   Pyridine+ML Pure ML Pyrrole+ML   Pyridine+ML<br>Yield of C11+C12 (%) Yield of C11+C12 (%)<br>**----- End of picture text -----**<br>",
+      "text_sha256": "sha256:b1f6076ec528c847a275eb5b39df708327b1dfab9d469985869e7122f95f03d7"
+    },
+    {
+      "char_end": 42290,
+      "char_start": 41986,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f7d21c445a2e5c389e95",
+      "source_role": "author_response",
+      "text": "**Supplementary Fig. 30.** Influences of molecular Lewis-base or Lewis-acid on the catalytic activity of Ni(-O-Al)···P FLP for hydrotreating methyl laurate (ML) to produce C11H24 and C12H26. Reaction conditions: PH2=3.0 MPa, WHSV=28.3 h[-1] . The content of pyrrole /pyridine in the feedstock is 20 wt.%.",
+      "text_sha256": "sha256:178af76fe5ac6ebf34608be2d15086f8c0c48f15929b48b213961fe3678604d2"
+    },
+    {
+      "char_end": 42890,
+      "char_start": 42293,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-26e097ac99724d4f454c",
+      "source_role": "author_response",
+      "text": "_8. As shown in Fig 3d, the conversion of methyl laurate kept at 85-88%, with selectivity of C11+C12 at 91.5%+4.5% in the long-term running of ms-NiAl-P350 (350 °C, WHSV=28.3 h-1) However in Fig 4d, the conversion (red star) is quite closed to 100%._ **Response:** Based on the reviewer's description, we think that the designated one is Fig. 3f (Fig. 4d shows the XRD patterns of the fresh and spent _ms_ -NiAl). In Fig. 3f, the vertical axis is not “Conversion” but “Activity retention”, which is used to compare the stability of various catalysts. It is calculated using the following equation:",
+      "text_sha256": "sha256:e96dc74efc6ee5afdb5f4241a2b73336ebd099aecdd010bc5515fc7a6b2b0b2f"
+    },
+    {
+      "char_end": 42945,
+      "char_start": 42893,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c356e4bc6c45915fc246",
+      "source_role": "author_response",
+      "text": "**==> picture [419 x 33] intentionally omitted <==**",
+      "text_sha256": "sha256:727c218f1b30dd3295382be51483b7aa448ebf29d2ec243329471e520cc7f89b"
+    },
+    {
+      "char_end": 42949,
+      "char_start": 42947,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a49f186a5b3dc69cda23",
+      "source_role": "author_response",
+      "text": "19",
+      "text_sha256": "sha256:9400f1b21cb527d7fa3d3eabba93557a18ebe7a2ca4e471cfe5e4c5b4ca7f767"
+    },
+    {
+      "char_end": 43018,
+      "char_start": 42952,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b6a0634d7fb5c23b4e30",
+      "source_role": "author_response",
+      "text": "The definition has been explained following Supplementary Table 6.",
+      "text_sha256": "sha256:1b1396ed51036ea04e92512855d1db33b268b8842b5dc13c69c479509bd9296d"
+    },
+    {
+      "char_end": 44674,
+      "char_start": 44636,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d849c69be1d12526bb32",
+      "source_role": "author_response",
+      "text": "## **Response to Reviewers’ Comments**",
+      "text_sha256": "sha256:3d2a0f739c61608209b0bd52fc15e10795ecbe8f53568df8c646164c1eaa5320"
+    },
+    {
+      "char_end": 44706,
+      "char_start": 44677,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-95ef431358e13d1d2648",
+      "source_role": "author_response",
+      "text": "## **Response to Reviewer 1**",
+      "text_sha256": "sha256:61f34031a796ee8d5f21030957ede2a3a8bb36dfe2eba69c774fd68ab10f5d7d"
+    },
+    {
+      "char_end": 44731,
+      "char_start": 44709,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c4cdfbac2196cc47d694",
+      "source_role": "author_response",
+      "text": "## **Referee Letter:**",
+      "text_sha256": "sha256:c4840b6cb669f5a654dd03d8fa1cad6f3ef947e5ffaf2d7e331b60283236d67c"
+    },
+    {
+      "char_end": 44897,
+      "char_start": 44734,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2dbcac3bfaa7b16bdd3b",
+      "source_role": "author_response",
+      "text": "_The authors have reorganized somewhat the information contained in the manuscript to avoid unnecessary duplications following the recommendation of the reviewer._",
+      "text_sha256": "sha256:91e054505c82c72c660381379cc13eca8c205c425a503e61e83649e5c5ab87c3"
+    },
+    {
+      "char_end": 45456,
+      "char_start": 44900,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d86890e2390c1abc92dd",
+      "source_role": "author_response",
+      "text": "_However, there is still pending a major issue. This is the comparison with the bulk catalyst. The authors claim that the the catalytic efficiency of the templated material is about three times higher than that of the bulk one, which is assigned to the limited accessibility of the latter. However, this conclusion is no so evident. The bulk catalyst presents a surface area relatively close to that of the templated ones. Moreover, the substrate conversion is also very high (around 80 %) and stable along the time on stream when using the bulk catalyst._",
+      "text_sha256": "sha256:98ec8c1a0fcc2315033307bbf4abcd056f95c1f087c5d59c1ed0a03a52de9ddb"
+    },
+    {
+      "char_end": 45812,
+      "char_start": 45459,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7cddcb0c2c574b6ee823",
+      "source_role": "author_response",
+      "text": "_Therefore, to support that conclusion, which is one of the most importants in the work, the authors should compare in a clear way the physicochemical properties and the catalytic performance (in similar conditions at varying WHSV values) of both templated and bulk catalysts, indicating how the catalytic efficiency is calculated in those experiments._",
+      "text_sha256": "sha256:7c7d9e700d7ae43b708153ffdc86452064e45dd299f28283365d609d82aa999f"
+    },
+    {
+      "char_end": 45885,
+      "char_start": 45815,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f5b5b0ce535bfd045d63",
+      "source_role": "author_response",
+      "text": "**Response:** We appreciate the reviewer for the valuable suggestions.",
+      "text_sha256": "sha256:9bbc508d0f31ebbd049ba441df9b9427eaabb9a83531b3a1068f5e694a1daeb1"
+    },
+    {
+      "char_end": 46228,
+      "char_start": 45888,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8a82a9aea4c9d6625f79",
+      "source_role": "author_response",
+      "text": "First, the catalytic performance of bulk NiAl-P350 was tested at various WHSV values (ranging from 2.8 h[-1] to 28.3 h[-1] ), and was compared with that of _ms_ -NiAl-P350 (Supplementary Fig. 33a). It is clear that the catalytic performance of _ms_ -NiAl-P350 is always superior to that of bulk NiAl-P350 under the same reaction conditions.",
+      "text_sha256": "sha256:5eb83dd65e263c217a0840c1c8b570e7c20196882d672acdd31858ad57bd0eb1"
+    },
+    {
+      "char_end": 46284,
+      "char_start": 46231,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-96ac8490f2e31c1e2ee1",
+      "source_role": "author_response",
+      "text": "**==> picture [305 x 133] intentionally omitted <==**",
+      "text_sha256": "sha256:bf4020e0d47886f8aecacf40d28aa602ce28918567fc714cf082a83c4565f3e0"
+    },
+    {
+      "char_end": 46538,
+      "char_start": 46286,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-04d88c0df967651d8a0f",
+      "source_role": "author_response",
+      "text": "**Supplementary Fig. 33. (a)** Conversion of methyl laurate as a function of WHSV value over _ms_ - NiAl-P350 and bulk NiAl-P350. **(b)** The calculated reaction rates over _ms_ -NiAl-P350 and bulk NiAl-P350. Reaction conditions: T=350 °C, PH2=3.0 MPa.",
+      "text_sha256": "sha256:3350c32bf5a5efe3e2f0589d6f640ab91d1e53d99a6e0a73c176c43fea7c6267"
+    },
+    {
+      "char_end": 46542,
+      "char_start": 46541,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b74b8ebf9c073192eb66",
+      "source_role": "author_response",
+      "text": "1",
+      "text_sha256": "sha256:6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+    },
+    {
+      "char_end": 46609,
+      "char_start": 46545,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-838aa086b259a6d20e3a",
+      "source_role": "author_response",
+      "text": "The catalytic reaction rates were calculated using the equation:",
+      "text_sha256": "sha256:f51d37a6e4fe166390c85353aec31808963693b803d0626364ee12664ebea4e8"
+    },
+    {
+      "char_end": 46664,
+      "char_start": 46612,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-03e9c68bd0fac60c4a58",
+      "source_role": "author_response",
+      "text": "**==> picture [178 x 23] intentionally omitted <==**",
+      "text_sha256": "sha256:ae00c2a4afc78b94c6910cdb4b1ed39b3f92fe1faf9837c9fe32348e8105eadc"
+    },
+    {
+      "char_end": 46866,
+      "char_start": 46666,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ee714c636b6e842227e9",
+      "source_role": "author_response",
+      "text": "Where WHSV (h[-1] ) is the mass flow rate of methyl laurate divided by the mass of catalyst, _XML_ (%) denotes the conversion of methyl laurate, 214.3 (g·mol[-1] ) is the molar mass of methyl laurate.",
+      "text_sha256": "sha256:038d71c9dda738c5afc735e2adab06721e9382c640c53c5faf8040c5e6b7045d"
+    },
+    {
+      "char_end": 47520,
+      "char_start": 46869,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-47346c9cca052ea6e120",
+      "source_role": "author_response",
+      "text": "To better compare the catalytic activities of the two catalysts, their reaction rates should be calculated and compared before a complete conversion and under a unified standard. When compared at identical conversion levels, the reaction rate is calculated to be 92.8 mmol·g[-1] ·h[-1] for _ms_ -NiAl-P350 (87.9% conversion, entry 5, Supplementary Fig. 33b), which is about four times higher than that for bulk NiAl-P350 (85.8% conversion, entry 2, Supplementary Fig. 33b). If the WHSV value is maintained constant, the reaction rate over _ms_ -NiAl-P350 is about two times higher than that over bulk NiAl-P350 (entry 5 and 6, Supplementary Fig. 33b).",
+      "text_sha256": "sha256:c8fd0eb1cf1f798593bf2074fd63a2e1173c8b7e9a43c41298b890178e213604"
+    },
+    {
+      "char_end": 47896,
+      "char_start": 47523,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8646b5e987df78dc9ce6",
+      "source_role": "author_response",
+      "text": "In fact, the _ms_ -NiAl-P350 and bulk NiAl-P350 were synthesized with similar procedures (except for the different shaping methods), and they possess similar chemical characteristics as determined by the HRTEM, XRD and XPS analysis (Supplementary Figs. 35 and 36). Therefore, it is reasonable to assume that the structure of the active sites in the two catalyst is similar.",
+      "text_sha256": "sha256:404be041d417e54f647a93b6f317da7d5532a66a98b2d922436310bc0944086e"
+    },
+    {
+      "char_end": 47952,
+      "char_start": 47899,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-cf741d82db13e23fd062",
+      "source_role": "author_response",
+      "text": "**==> picture [309 x 273] intentionally omitted <==**",
+      "text_sha256": "sha256:47b763d26929294e3ae5fd8c47ea4bb284483d82169807bd41189265ff471365"
+    },
+    {
+      "char_end": 47955,
+      "char_start": 47954,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-25877b1536a50721e58d",
+      "source_role": "author_response",
+      "text": "2",
+      "text_sha256": "sha256:d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"
+    },
+    {
+      "char_end": 48184,
+      "char_start": 47958,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d2f6156bb296dfae06e1",
+      "source_role": "author_response",
+      "text": "**Supplementary Fig. 36.** Comparison of structural characterization between _ms_ -NiAl-P350 and bulk NiAl-P350: **(a)** XRD patterns, XPS spectra in ( **b** ) Ni 2p3/2 region, ( **c** ) P 2p region and ( **d** ) Al 2p region.",
+      "text_sha256": "sha256:9ee6b0151c5e25998e4d21ac8b1e8df60f0b4efe57a670bb7a7d18d6ada836a5"
+    },
+    {
+      "char_end": 48795,
+      "char_start": 48187,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-21022e5a77874ee67c00",
+      "source_role": "author_response",
+      "text": "To figure out why _ms_ -NiAl-P350 works better than bulk NiAl-P350, their porous structures were further investigated. As shown in Supplementary Figs. 34a-b, the _ms_ - NiAl-P350 has well-developed porous channels replicated from the _ms_ -template, but there are only a few macropores visible in the bulk NiAl-P350. According to the mercury intrusion porosimetry measurement (Supplementary Fig. 34c), the total intrusion volume of _ms_ -NiAl-P350 is 44.5 cm[-3] ·g[-1] due to the presence of abundant macropores (ranging from 30-120 μm), which is much higher than that of bulk NiAlP350 (0.3 cm[-3] ·g[-1] ).",
+      "text_sha256": "sha256:bef1db4462cd7ab2d51a595e6202413436c9630c193296bf513c4a5e04d3d2fc"
+    },
+    {
+      "char_end": 48851,
+      "char_start": 48798,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b95572abec8252f0ca52",
+      "source_role": "author_response",
+      "text": "**==> picture [377 x 161] intentionally omitted <==**",
+      "text_sha256": "sha256:7060707086c72b2a9d68db4e8437441bc432bf79b06656069240713fdf302811"
+    },
+    {
+      "char_end": 49065,
+      "char_start": 48853,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-097da8125be2a8566bd4",
+      "source_role": "author_response",
+      "text": "**Supplementary Fig. 34. (a)** SEM images of _ms_ -NiAl-P350. **(b)** SEM images of bulk NiAl-P350. **(c)** Pore size distributions of _ms_ -NiAl-P350 and bulk NiAl-P350 measured by mercury intrusion porosimetry.",
+      "text_sha256": "sha256:800a6065051fce25a19410b9b2201f6348bf7456f75762efbea4e0c92dd41112"
+    },
+    {
+      "char_end": 49761,
+      "char_start": 49068,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-651f819515a1d8c0a1d9",
+      "source_role": "author_response",
+      "text": "It is well known that a heterogeneous catalytic reaction typically goes through the following steps: (1) external mass transfer, (2) internal mass transfer, (3) adsorption, (4) catalytic reaction, (5) desorption, (6) internal mass transfer, and (7) external mass transfer _(Ind. Eng. Chem. Res. 2023, 62, 7769-7838)_ . Appropriate design of porous properties can facilitate the acceleration of internal mass transfer and enhance the exposure of active sites, thereby optimizing the catalytic activity of catalysts ( _Chem. Soc. Rev., 2017, 46, 481-558; J. Mater. Chem. A, 2017, 5, 8825-8846; Science, 2018, 359,206-210_ ). When powdery catalysts are molded into monoliths by industrial shaping",
+      "text_sha256": "sha256:c7e4ece6f0b245c8df32b48d027e81419027e8ecad5d55695c3e812fed2f491f"
+    },
+    {
+      "char_end": 49765,
+      "char_start": 49764,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1844ac753aa194cb5a5d",
+      "source_role": "author_response",
+      "text": "3",
+      "text_sha256": "sha256:4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce"
+    },
+    {
+      "char_end": 50019,
+      "char_start": 49768,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b984027e3cec927ab458",
+      "source_role": "author_response",
+      "text": "methods (binders or high pressure are often involved), their porosity will be significantly reduced, leading to a decline in catalytic activity ( _Chem. Soc. Rev., 2013, 42, 6094-6112; ACS Catal. 2014, 4, 2409-2417; Nano Res. 2023, 16, 11358-11365_ ).",
+      "text_sha256": "sha256:36cba304c8ba99785ad0d163a086a5486f64ea3e6c773bf174f588f4acbb902f"
+    },
+    {
+      "char_end": 50562,
+      "char_start": 50022,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-098429668df7554a53f2",
+      "source_role": "author_response",
+      "text": "Considering the differences in BET surface area of _ms_ -NiAl-P350 (103.4 m[2] ·g[-1] ) and bulk NiAl-P350 (78.3 m[2] ·g[-1] ), together with the aforementioned differences in porosity, it can be inferred that the lower catalytic activity of bulk NiAl-P350 is attributed to its relatively lower porosity and surface area, which limit the internal mass transfer and accessibility of active sites. Corresponding changes have been made to the manuscript on page 16, and in the supplementary materials on page 36-39 (Supplementary Figs. 33-36).",
+      "text_sha256": "sha256:36a44610918b828384f4455886a9378f16bc3ea7da3614da6eec0e3cf53cc508"
+    },
+    {
+      "char_end": 50594,
+      "char_start": 50565,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ab5765484ea62b2a629c",
+      "source_role": "author_response",
+      "text": "## **Response to Reviewer 3**",
+      "text_sha256": "sha256:aba3c8968769fdd4c3ac7f7dcb3dc10fc27a2cdf365a966db38384033bea7ead"
+    },
+    {
+      "char_end": 50619,
+      "char_start": 50597,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-76c551c62ff3e37197a7",
+      "source_role": "author_response",
+      "text": "## **Referee Letter:**",
+      "text_sha256": "sha256:c4840b6cb669f5a654dd03d8fa1cad6f3ef947e5ffaf2d7e331b60283236d67c"
+    },
+    {
+      "char_end": 51056,
+      "char_start": 50622,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-cef8fa23d83d05adc478",
+      "source_role": "author_response",
+      "text": "_In the resubmission, the authors strengthened their manuscript by supplementing lots of experiments and explainations, to the key issues I concerned, e.g. the electron transfers within the FLP site and while H2 activation, the DFT model construction. Now the the conclusions about FLP site could be supported by their experimental evidence and analysis basically. I think it could be accepted by Nature Communications at this stage._",
+      "text_sha256": "sha256:663285d8fdd5e40edbaa694f90ce553699334b8ffb8fb1daa47d0f908c1ca1dd"
+    },
+    {
+      "char_end": 51170,
+      "char_start": 51059,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-cdcca8c23124c5cff678",
+      "source_role": "author_response",
+      "text": "**Response:** We thank the reviewer for the recognition of our work and for the time reviewing this manuscript.",
+      "text_sha256": "sha256:f91a174fe06ca46a9873fe009162a706db9598d6e800e7513eef1c4cdbd62ea8"
+    },
+    {
+      "char_end": 51174,
+      "char_start": 51173,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f0a218b796692b6d82d8",
+      "source_role": "author_response",
+      "text": "4",
+      "text_sha256": "sha256:4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a"
+    },
+    {
+      "char_end": 51637,
+      "char_start": 51599,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_3",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2500de5e331bfdeca4be",
+      "source_role": "author_response",
+      "text": "## **Response to Reviewers’ Comments**",
+      "text_sha256": "sha256:3d2a0f739c61608209b0bd52fc15e10795ecbe8f53568df8c646164c1eaa5320"
+    },
+    {
+      "char_end": 51669,
+      "char_start": 51640,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_3",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-acdfc40819f3d7f7fa82",
+      "source_role": "author_response",
+      "text": "## **Response to Reviewer 1**",
+      "text_sha256": "sha256:61f34031a796ee8d5f21030957ede2a3a8bb36dfe2eba69c774fd68ab10f5d7d"
+    },
+    {
+      "char_end": 51694,
+      "char_start": 51672,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_3",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3ff3f3b3adfc8e819546",
+      "source_role": "author_response",
+      "text": "## **Referee Letter:**",
+      "text_sha256": "sha256:c4840b6cb669f5a654dd03d8fa1cad6f3ef947e5ffaf2d7e331b60283236d67c"
+    },
+    {
+      "char_end": 51783,
+      "char_start": 51697,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_3",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5f9297a103889594db5d",
+      "source_role": "author_response",
+      "text": "_In the last revised version the authors have addressed in a suitable way the pending_",
+      "text_sha256": "sha256:7a132be0c12fd5779ae3ef160e2bb69b90bc391ab066aab1bac5ca2b5a5e8dca"
+    },
+    {
+      "char_end": 51817,
+      "char_start": 51786,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_3",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2bb0e57615f3d61b83b1",
+      "source_role": "author_response",
+      "text": "_issue stated by the reviewer._",
+      "text_sha256": "sha256:38f8842aed7c739fa64bf86a2e104d82c8a7e5ca95057165e05a7d4ee277fc1e"
+    },
+    {
+      "char_end": 51999,
+      "char_start": 51820,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_3",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-85f1ad11b126875d5275",
+      "source_role": "author_response",
+      "text": "_They have included additional experimental data and comments that now evidence clearly that the templated catalyst presents a performance quite superior to that of the bulk one._",
+      "text_sha256": "sha256:d9576ee0a217ff2ad059fe3567fae8b50143eced66c28eb8f200c82088d87ef1"
+    },
+    {
+      "char_end": 52058,
+      "char_start": 52002,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_3",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fb22df69ebb6d6c6b210",
+      "source_role": "author_response",
+      "text": "_Therefore, I recommend its acceptance for publication._",
+      "text_sha256": "sha256:7bedff1ee509bfdfb643a108998d41c7cb8d9d851304c4aeec38c2a6308a3dd2"
+    },
+    {
+      "char_end": 52172,
+      "char_start": 52061,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_3",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fa75413f940cfc045cfe",
+      "source_role": "author_response",
+      "text": "**Response:** We thank the reviewer for the recognition of our work and for the time reviewing this manuscript.",
+      "text_sha256": "sha256:f91a174fe06ca46a9873fe009162a706db9598d6e800e7513eef1c4cdbd62ea8"
+    },
+    {
+      "char_end": 52176,
+      "char_start": 52175,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_3",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-16e66fd5637feb358c35",
+      "source_role": "author_response",
+      "text": "1",
+      "text_sha256": "sha256:6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+    }
+  ],
+  "contract": "reconstruction_session_package",
+  "forbidden_conversation_hashes": [],
+  "input_sha256": "sha256:670aee09a06c8e2f2afdb0ebd03e5e96908d52453a76c8792b11ad7d86ecf676",
+  "instructions": "Reconstruct the final-state peer review for one paper.\nUse reviewer_report spans as the only source of review opinions. Author responses may\nonly determine whether an issue was resolved; they cannot create or rewrite a review\npoint. Remove greetings, publication/acceptance recommendations, editorial decisions,\nand generic praise. Merge duplicates, preserve real reviewer disagreement, and produce\nat most 24 atomic points in StructuredReviewV2. Include contribution summary, novelty\nsupport/limits, strengths, weaknesses, and questions. Bind every retained point to at\nleast one reviewer quote key and one final PaperIR P:S-* span. Put resolved issues only\nin ReferenceTraceV2/revision_ledger. Keep partially_resolved or persists issues only\nwhen the residual is independently supported by the final paper. Unverifiable items are\naudit-only. Do not use graph signals, GEAR output, old reconstructions, ratings,\ndecisions, recommendations, or accept/reject language. Return only the completed\nReconstructionSessionResponseV2 JSON file.",
+  "package_id": "RSP-558340cf4c782a07a3cb",
+  "paper_context": {
+    "claims": [
+      {
+        "claim_id": "C-9c88e446316f1e18",
+        "claim_type": "causal_claim",
+        "evidence_key": "P:S-1815d1af9f99ef32bd78",
+        "schema_version": "aspr_gear",
+        "text": "## Article ## Frustrated Lewis pair catalyst realizes efficient green diesel production Received: 13 August 2023 Accepted: 5 April 2024 Check for updates De-Chang Li[1,2,3,4] , Zhengyi Pan[1,2,3,4] , Zhengbin Tian[1,2,3] , Qian Zhang[1,2,3,4] , Xiaohui Deng[1,2,3] , Heqing Jiang[1,2,3,4] & Guang-Hui Wang 1,2,3,4 Hydrotreating renewable oils over sulfided metal catalysts is commercially applied to produce green diesel, but it requires a continuous sulfur replenishment to maintain catalyst activity, which inevitably results in sulfur contamination and increases production costs."
+      },
+      {
+        "claim_id": "C-c6b43f65a947fd02",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-1815d1af9f99ef32bd78",
+        "schema_version": "aspr_gear",
+        "text": "The catalyst runs more than 500 h at a weight hourly space velocity (WHSV) of 28.3 h[−][1] without deactivation (methyl laurate as a model compound), and is able to completely convert a real feedstock of soybean oil to diesel-range hydrocarbons with selectivity >90% during 500 h of operation."
+      },
+      {
+        "claim_id": "C-67a80c27a55d74af",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-1815d1af9f99ef32bd78",
+        "schema_version": "aspr_gear",
+        "text": "This work is expected to open up a new avenue for designing non-sulfur catalysts that can make the green diesel production greener."
+      },
+      {
+        "claim_id": "C-cce57698d7d0e7f2",
+        "claim_type": "causal_claim",
+        "evidence_key": "P:S-1633147b313a6e14c5f0",
+        "schema_version": "aspr_gear",
+        "text": "During operation a continuous replenishment of sulfur source (such as H2S) is required to maintain the activity of sulfided catalysts, which undesirably results in sulfur contamination and increases production costs[11] ."
+      },
+      {
+        "claim_id": "C-9d88cfeaa0c3ad52",
+        "claim_type": "significance_claim",
+        "evidence_key": "P:S-1633147b313a6e14c5f0",
+        "schema_version": "aspr_gear",
+        "text": "Relative to noble metal catalysts, transition metal phosphides afford comparable activity and relatively good stability[21] , and thus are considered as promising catalysts for hydrotreating processes[22] ."
+      },
+      {
+        "claim_id": "C-1e8f75b06cf6cb48",
+        "claim_type": "causal_claim",
+        "evidence_key": "P:S-1633147b313a6e14c5f0",
+        "schema_version": "aspr_gear",
+        "text": "Taking Ni2P-based catalysts as examples, their activity relies on the existence of metallic Ni centers and acidic properties (Brönsted acidity caused by P-OH groups and/or Lewis acidity due to electron transfer from Ni to P)[23] , between which the synergistic effect is beneficial for hydrotreating reactions[24][–][28] ."
+      },
+      {
+        "claim_id": "C-d9aef3016e54e0f9",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-0a40569f60a4c8a4b85e",
+        "schema_version": "aspr_gear",
+        "text": "Thus, new types of sulfurfree catalysts, taking into account the long-term stability and catalytic efficiency as well as the reproducibility and scalability of the synthetic methods, should be designed for green diesel production."
+      },
+      {
+        "claim_id": "C-ad25ddde35a6b0be",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-0a40569f60a4c8a4b85e",
+        "schema_version": "aspr_gear",
+        "text": "We first prepared NiAl layered double hydroxide nanosheets anchored on the ms cell walls (ms-NiAl-LDHs, Supplementary Fig."
+      },
+      {
+        "claim_id": "C-a4ace7a6a178c777",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-0a40569f60a4c8a4b85e",
+        "schema_version": "aspr_gear",
+        "text": "3Qingdao New Energy Shandong Laboratory, Qingdao, China."
+      },
+      {
+        "claim_id": "C-638be7dbf2ad278d",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-8625758d16e60b015618",
+        "schema_version": "aspr_gear",
+        "text": "A new peak at 852.5 eV was observed under a higher phosphorization temperature (450 °C, ms-NiAl-P450) and could be assigned to the Ni species in Ni2P phase (Fig."
+      },
+      {
+        "claim_id": "C-35ec9671c09845e6",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-8625758d16e60b015618",
+        "schema_version": "aspr_gear",
+        "text": "In P 2p region, ms-NiAl-P350 showed a peak at 133.8 eV, which arises from P-O species; while a new peak (129.5 eV) belonging to the P species in Ni2P was observed for ms-NiAl-P450 (Fig."
+      },
+      {
+        "claim_id": "C-bfc8b726c07dd031",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-8625758d16e60b015618",
+        "schema_version": "aspr_gear",
+        "text": "2e), indicating a slight decrease of the Ni oxidation state after phosphorization."
+      }
+    ],
+    "contract": "reconstruction_paper_context",
+    "paper_id": "10.1038/s41467-024-47591-z",
+    "paper_sha256": "sha256:7fa510d64590d7a06e48dafac1bdbf76477897920380234f29efefc9131c9a66",
+    "schema_version": "aspr_gear",
+    "spans": [
+      {
+        "evidence_key": "P:S-8b35e4dda62e898edb6a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8b35e4dda62e898edb6a",
+        "text": "https://doi.org/10.1038/s41467-024-47591-z \n\n**==> picture [523 x 31] intentionally omitted <==**",
+        "text_sha256": "sha256:74a1a984f8fe5fb0f246a4d594e1fb121b3780c7452cabc61940e91f9319973f"
+      },
+      {
+        "evidence_key": "P:S-1815d1af9f99ef32bd78",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-1815d1af9f99ef32bd78",
+        "text": "## Article \n\n## Frustrated Lewis pair catalyst realizes efficient green diesel production \n\nReceived: 13 August 2023 Accepted: 5 April 2024 Check for updates \n\nDe-Chang Li[1,2,3,4] , Zhengyi Pan[1,2,3,4] , Zhengbin Tian[1,2,3] , Qian Zhang[1,2,3,4] , Xiaohui Deng[1,2,3] , Heqing Jiang[1,2,3,4] & Guang-Hui Wang 1,2,3,4 \n\nHydrotreating renewable oils over sulfided metal catalysts is commercially applied to produce green diesel, but it requires a continuous sulfur replenishment to maintain catalyst activity, which inevitably results in sulfur contamination and increases production costs. We report a robust P-doped NiAloxide catalyst with frustrated Lewis pairs (i.e., P atom bonded with the O atom acts as an electron donor, while the spatially separated Ni atom acts as an electron acceptor) that allows efficient green diesel production without sulfur replenishment. The catalyst runs more than 500 h at a weight hourly space velocity (WHSV) of 28.3 h[−][1] without deactivation (methyl laurate as a model compound), and is able to completely convert a real feedstock of soybean oil to diesel-range hydrocarbons with selectivity >90% during 500 h of operation. This work is expected to open up a new avenue for designing non-sulfur catalysts that can make the green diesel production greener. \n\nGreen diesel, also called renewable diesel, is a mixture of oxygen-free hydrocarbons produced from renewable oils (e.g., vegetable oils and animal fats)[1][,][2] , which is chemically identical to petroleum diesel and fully compatible with the existing engines[3] . Using green diesel instead of petroleum diesel can significantly reduce the CO2 emission by over 50%[4][–][6] , contributing to mitigation of climate change as well as energy scarcity[7] .",
+        "text_sha256": "sha256:1588eef66adf1cc071224c837bcd0c0d1cf7e068dd0a18c87918653acd643b71"
+      },
+      {
+        "evidence_key": "P:S-1633147b313a6e14c5f0",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-1633147b313a6e14c5f0",
+        "text": "Currently, the global production capacity of green diesel, mainly by hydrotreating technology (commercialized by Neste Oil, UOP/ENI, Haldor-Topsoe, etc.)[8] , is more than 2.61 billion gallons per year and will reach 7.45 billion gallons in 2027[9] . The commercial hydrotreating processes for green diesel production often operate at temperatures of 260–400 °C under H2 pressures of 3–10 MPa using sulfided metals (e.g., sulfided CoMo and NiMo) as catalysts[10] . During operation a continuous replenishment of sulfur source (such as H2S) is required to maintain the activity of sulfided catalysts, which undesirably results in sulfur contamination and increases production costs[11] . \n\nTo address this issue, sulfur-free catalysts[12][,][13] , including noble metals (e.g., supported Pd, Pt catalysts)[14][,][15] , transition metal carbides/ phosphides[16][,][17] , etc., have been investigated in the past decades. Although noble metal catalysts show high activity[18] , the coke-induced rapid deactivation and their high costs represent the major obstacles to the industrial implementation[19][,][20] . Relative to noble metal catalysts, \n\ntransition metal phosphides afford comparable activity and relatively good stability[21] , and thus are considered as promising catalysts for hydrotreating processes[22] . Taking Ni2P-based catalysts as examples, their activity relies on the existence of metallic Ni centers and acidic properties (Brönsted acidity caused by P-OH groups and/or Lewis acidity due to electron transfer from Ni to P)[23] , between which the synergistic effect is beneficial for hydrotreating reactions[24][–][28] .",
+        "text_sha256": "sha256:473da424f6dc6ffa0cf1a7d984453f1aad1cdbfe01fac6998a5297b50dea24e4"
+      },
+      {
+        "evidence_key": "P:S-0a40569f60a4c8a4b85e",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-0a40569f60a4c8a4b85e",
+        "text": "Nevertheless, these phosphided catalysts also suffer from deactivation, due to carbon deposition, oxidation by H2O or oxygen-containing compounds, sintering and phosphide phase changing, etc.[12][,][25] , which are unable to meet the industrial requirements. Thus, new types of sulfurfree catalysts, taking into account the long-term stability and catalytic efficiency as well as the reproducibility and scalability of the synthetic methods, should be designed for green diesel production. \n\nIn this study, we report a monolithic P-doped NiAl-oxide catalyst with a hierarchical porous structure (derived from the maize straw (ms) template, Fig. 1a and Supplementary Fig. 1) for green diesel production. We first prepared NiAl layered double hydroxide nanosheets anchored on the ms cell walls (ms-NiAl-LDHs, Supplementary Fig. 2) by hydrothermal process. Then, we calcinated the obtained ms-NiAl-LDHs at 800 °C under air to remove the ms-template, and to obtain the NiAl-mixed oxide with a biological \n\n1Qingdao Institute of Bioenergy and Bioprocess Technology, Chinese Academy of Sciences, Qingdao, China. 2Shandong Energy Institute, Qingdao, China. 3Qingdao New Energy Shandong Laboratory, Qingdao, China. 4University of Chinese Academy of Sciences, Beijing, China. e-mail: wanggh@qibebt.ac.cn wanggh@qibebt.ac.cn \n\ne-mail: wanggh@qibebt.ac.cn wanggh@qibebt.ac.cn \n\nNature Communications | (2024) 15:3172 \n\n1 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-47591-z \n\n**==> picture [469 x 501] intentionally omitted <==**",
+        "text_sha256": "sha256:348fb454962d24f0aef0c269f91d30689f890b88d2ac792b76310d5b724c412c"
+      },
+      {
+        "evidence_key": "P:S-5cde65c8d1596380631d",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-5cde65c8d1596380631d",
+        "text": "**----- Start of picture text -----**<br>\nNiO (111)<br>0.241 nm<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:ff6e215f28ad83917446589786edbb00392bf71a4d679de9cb630ba0ecabebb4"
+      },
+      {
+        "evidence_key": "P:S-801556820a2de5163272",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-801556820a2de5163272",
+        "text": "Fig. 1 | Synthesis and structural characterization of ms-NiAl-P350. a Schematic illustration of the synthetic procedure. Photographs show the samples of ms-NiAlP350 monolith and NiAl-P350 powder (synthesized without ms-template) with the same mass, implying the relatively low apparent density of ms-NiAl-P350. b SEM and (c) synchrotron X-ray tomographic images of ms-NiAl-P350, showing the \n\nbiological architecture replicated from ms-template and the nanosheet structure derived from LDHs. d HAADF-STEM and EDS elemental mapping images of ms-NiAlP350, showing that the Ni, Al, O, and P elements are highly mixed with one another. e TEM (up) and HRTEM (down) images of ms-NiAl-P350, the lattice spacing fits well to the (111) plane of NiO. \n\narchitecture (ms-NiAl, Supplementary Figs. 3 and 4). The calcination step, i.e., fabrication of the mixed NiAl-oxide structure, is critical upon phosphorizing ms-NiAl (NaH2PO2 as P source, 350 °C), whereby P-doped NiAl-oxide catalyst (ms-NiAl-P350) rather than nickel phosphide is obtained. The ms-NiAl-P350 catalyst runs more than 500 h using methyl laurate as feedstock (WHSV = 28.3 h[−][1] ) without deactivation being observed (85–88% conversion with selectivity towards hydrocarbons >96% during 500 h of operation). The catalyst can be further extended to convert the real feedstocks, e.g., soybean oil, palm oil, duck fat, and waste cooking oil. We presume that the benign interaction between P and NiAl-oxide \n\n(i.e., frustrated Lewis pair of Ni(-O-Al)···P) is a critical factor in achieving coke- and sintering-resistant activity during hydrotreating reactions. \n\n## Results \n\n## Synthesis and characterizations of catalysts \n\nThe geometric shape of ms-NiAl-P350 was unchanged after phosphorizing (Supplementary Figs.",
+        "text_sha256": "sha256:ecda1e417b99d5a15028c0f94e62aaa97dd58709ea86ea6ba61c0bac8476afc1"
+      },
+      {
+        "evidence_key": "P:S-4fbcd14ef0b3263e7e64",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-4fbcd14ef0b3263e7e64",
+        "text": "5 and 6), but the color changed from light green to black (Fig. 1a), implying the successful incorporation of P (Supplementary Tables 1 and 2). Scanning electron microscopy (SEM) and synchrotron X-ray tomography images (Fig. 1b, c) also revealed \n\nNature Communications | (2024) 15:3172 \n\n2 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-47591-z \n\nthat the ms-NiAl-P350 displayed a biological architecture perfectly replicated from the ms-template, where the naturally well-developed mass transfer channels (e.g., honeycomb-like tissues and vascular bundles) with diameters ranging of 100–200 μm (hardly being fabricated by conventional chemical means) were well retained. The Brunauer-Emmett-Teller (BET) surface area of ms-NiAl-P350 is 103.4 m[2] ·g[−][1] , which is lager than that of NiAl-P350 powder (82.4 m[2] ·g[−][1] , synthesized without ms-template, Supplementary Fig. 7). Due to the high porosity, the ms-NiAl-P350 exhibited a much lower apparent density of 11.7 mg·cm[−][3] (Fig. 1a, Supplementary Fig. 8 and Supplementary Table 3) than the 307.1 mg·cm[−][3] of NiAl-P350 powder. High angle annular darkfield scanning transmission electron microscopy (HAADF-STEM) and the corresponding elemental mapping images (Fig. 1d) revealed that the Ni, Al, O, and P elements in ms-NiAl-P350 were highly mixed with one another. It is expected that such uniform elemental distributions were very conducive to the fabrication of active centers involving Ni and P. Transmission electron microscopy (TEM) and high-resolution TEM (HRTEM) images (Fig. 1e) displayed that the lattice spacing of the nanocrystals was 0.241 nm, corresponding to the (111) plane of NiO, rather than the nickel phosphide phase. \n\nX-ray diffraction (XRD) was performed to investigate the crystalline structure of ms-NiAl-P350.",
+        "text_sha256": "sha256:14ec197e059ed79e166f3175ef9b02aa203634f1a446dbb9bdea2736aaa62d44"
+      },
+      {
+        "evidence_key": "P:S-f19acc2f8e74889dcd9c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-f19acc2f8e74889dcd9c",
+        "text": "Its XRD pattern only showed the peaks belonging to the NiO phase (Fig. 2a), without the diffraction peaks ascribed to the Al- and/or P-related phases. For comparison, phosphorization of NiO supported on Al2O3 under the same condition leaded to the transformation of NiO into nickel phosphide phase (Supplementary Fig. 9a), being in line with previous literature[29][,][30] . This difference was attributable to the formation of Al[3+] doped NiO-type phase of ms-NiAl[31] , wherein the interaction between NiO and Al[3+] stabilizes the NiO-type phase against phosphorization (also against reduction by H2, Supplementary Fig. 9b). Ni phosphide nanocrystals were formed by increasing the phosphorization temperature to 450 °C (ms-NiAl-P450, Fig. 2a and Supplementary Fig. 10), or by reducing the \n\nms-NiAl under H2/Ar flow at 800 °C (to break the interaction between NiO and Al[3+] ) followed by phosphorization at 350 °C (ms-NiAl-H2800P350, Supplementary Fig. 11). \n\nX-rayphotoelectron spectroscopy (XPS) and X-ray absorption fine structure (XAFS) characterizations were performed to investigate the chemical states of elements in ms-NiAl-P350 and the reference samples. The Ni 2p3/2 XPS spectrum of ms-NiAl (Fig. 2b and Supplementary Table 4) showed three peaks at 856.9 eV, 855.7 eV, and 854.3 eV, which were assigned to Ni[3+] , Ni[δ][+] (2 < δ < 3, due to the formation of Ni–O–Al bonds, Supplementary Fig. 12) and Ni[2+] , respectively[31][,][32] . We found that the binding energies of the three peaks shifted to lower values gradually after phosphorizing at 300 °C (ms-NiAl-P300) and 350 °C (msNiAl-P350), due to the contribution of P-doping.",
+        "text_sha256": "sha256:32df56ffd8b2b4914641c69bb60dfe20184253e6cf67f7b27d061b90dd16d92b"
+      },
+      {
+        "evidence_key": "P:S-8625758d16e60b015618",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8625758d16e60b015618",
+        "text": "A new peak at 852.5 eV was observed under a higher phosphorization temperature (450 °C, ms-NiAl-P450) and could be assigned to the Ni species in Ni2P phase (Fig. 2b). In P 2p region, ms-NiAl-P350 showed a peak at 133.8 eV, which arises from P-O species; while a new peak (129.5 eV) belonging to the P species in Ni2P was observed for ms-NiAl-P450 (Fig. 2c). Correspondingly, the binding energy of Al 2p for ms-NiAl-P450 shifted to higher value (belonging to Al[3+] in AlPO4, Fig. 2d) compared with that for msNiAl-P350, implying the loss of interaction between Al[3+] and NiO. These results indicated that the P element in ms-NiAl-P350 modified the electronic structure of Ni species in NiAl-mixed oxide without forming the nickel phosphide phase. \n\nThe Ni K-edge XANES spectrum of ms-NiAl was very close to that of NiO (Fig. 2e), but the white line exhibited a higher intensity, implying a more oxidized Ni species (due to the formation of Ni–O–Al bonds, being in line with the XPS data, Fig. 2b). The white line intensity of msNiAl-P350 was between those of NiO and ms-NiAl (Fig. 2e), indicating a slight decrease of the Ni oxidation state after phosphorization. As expected, the XANES spectrum of ms-NiAl-450 was close to that of Ni foil, but the near-edge feature shifted to higher energy (Fig. 2e), implying the formation of Ni2P phase (electron transfer from Ni to P). \n\n**==> picture [481 x 279] intentionally omitted <==**",
+        "text_sha256": "sha256:1740ebbd76c6de7453d9e7acc6c01fb3dc577bfa8945661b0d96840c4c7f9904"
+      },
+      {
+        "evidence_key": "P:S-68f61527b0ed0a874b0d",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-68f61527b0ed0a874b0d",
+        "text": "**----- Start of picture text -----**<br>\nNiO (#65-5745) Ni2P (#03-0953) P-O P-Ni<br>ms -NiAl-P450<br>ms -NiAl-P450<br>ms -NiAl-P350 ms -NiAl-P450<br>ms -NiAl-P350<br>ms -NiAl-P350<br>ms -NiAl-P300<br>ms -NiAl-P300<br>ms -NiAl-P300<br>ms -NiAl ms -NiAl<br>ms -NiAl<br>20 30 40 50 60 70 80 864 861 858 855 852 849 140 136 132 128<br>2Theta (degree) Binding Energy (eV) Binding Energy (eV)<br>Ni foil<br>Al-(PO4) 8 NiO<br>ms -NiAl<br>ms -NiAl-P450 ms -NiAl-P350<br>6 ms -NiAl-P450<br>Ni-Ni<br>ms -NiAl-P350<br>4 Ni-Ni<br>ms -NiAl-P300 Ni foil Ni-O<br>NiO 2 Ni-P<br>Al-O-Ni<br>ms -NiAl<br>ms -NiAl ms -NiAl-P350<br>ms -NiAl-P450 0<br>80 78 76 74 72 8325 8340 8355 8370 8385 0 1 2 3 4 5 6<br>Binding Energy (eV) Photon Energy (eV) R (Å)<br>(arb. units)<br>y<br>ti<br>s<br>n<br>Iten Intensity (arb. units) Intensity (arb. units)<br>E)<br>(K))<br>(arb. units) 2<br>y<br>ti<br>s<br>n FT (K<br>te<br>In Normalized<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:e6bfe0025ad23873c8fac1bbd1d8e27c716a1a0937fc03af74f931ca971ab911"
+      },
+      {
+        "evidence_key": "P:S-2ecb91db5f418807056b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-2ecb91db5f418807056b",
+        "text": "Fig. 2 | Structural characterization of ms-NiAl-P350. a XRD results of ms-NiAlP350 and the reference samples. XPS spectra in (b) Ni 2p3/2 region, (c) P 2p region, and (d) Al 2p region of ms-NiAl-P350 and the reference samples. Ni K-edge (e) \n\nXANES and (f ) EXAFS spectra of ms-NiAl-P350 and the reference samples. The inset of (e) shows the enlarged XANES white-line region. The insets of (f) show the enlarged Ni–O and Ni–Ni peak regions. \n\nNature Communications | (2024) 15:3172 \n\n3 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-47591-z \n\nThe Ni K-edge EXAFS curves (Fig. 2f and Supplementary Table 5) showed that ms-NiAl-P350 contained two peaks belonging to the Ni–O and Ni–Ni bonds in NiO, similar to those of ms-NiAl and NiO. However, the Ni–O peak shifted to higher R value (as opposed to the Ni–Ni peak), and this can be attributed to the P-doping. Again, these results evidenced the presence of P-doped NiAl-oxide structure in ms-NiAl-P350. \n\nBased on these features, we constructed and optimized the model of P-doped NiAl-oxide using density functional theory (DFT) calculations to provide theoretical insights into the electronic structure of ms-NiAl-P350 (Fig. 3a and Supplementary Fig. 13). The Bader charge and charge density differences (Supplementary Figs. 14 and 15) showed that electron transfers from Ni–O to the nearby O–Al, leading to a more positive Ni site, and the P atom which preferentially bonds with the O atom acts as \n\nelectron donor (being consistent with the XPS and XAFS results). The resulting spatially separated Ni and P sites with a distance of 3.7 Å constitute a frustrated Lewis pair (FLP) (Fig. 3a and Supplementary Fig. 16).",
+        "text_sha256": "sha256:37cd137da1bd04e8dace45803c3ce0da38ba3d02102a0ff938ac55e3348dfbb4"
+      },
+      {
+        "evidence_key": "P:S-240cae5535bf3737a102",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-240cae5535bf3737a102",
+        "text": "As revealed by DFT calculations, when a H2 molecule approaches the constructed FLP site, electron transfer occurs along the path of P → H1 → H2 → Ni, resulting in the electron loss of P atom (0.17 eV) and the electron gain of H1 atom (0.09 eV), H2 atom (0.03 eV), and Ni atom (0.05 eV) (Fig. 3b and Supplementary Fig. 17), thereby leading to the elongation of the H–H bond from 0.78 Å in gaseous H2 to 1.83 Å in H2 (TS). Then, the H2 molecule is heterolytically dissociated to form a stable H–Ni and H–P configuration (Fig. 3c). From the energy profile depicted by Fig. 3c, the FLP facilitates the heterolytic H–H scission with significantly lower activation barrier (0.32 eV) than \n\n**==> picture [480 x 433] intentionally omitted <==**",
+        "text_sha256": "sha256:ec1bff0827b1e9d40e59af1990b0886fcc9ced8b882123d3f07de3c9b62db268"
+      },
+      {
+        "evidence_key": "P:S-a5d59dda36fb60ac4d62",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a5d59dda36fb60ac4d62",
+        "text": "**----- Start of picture text -----**<br>\n1.0<br>NiO<br>0.5 P-doped NiAl oxide<br>0.0<br>-0.5<br>-1.0<br>100<br>300 C 350 C 375 C 400 C<br>100<br>80<br>80 100<br>ms -NiAl-P350<br>60 Conversion 60 ms -NiAl 80 SC11<br>60<br>SC11 ms -NiAl-P450 SC12<br>40 40<br>40 SC12<br>20 Catalyzed by  ms -NiAl-P350<br>20 20 0<br>0 100 200 300 400 500<br>Time on stream (h)<br>0 0<br>0 50 100 150 200 250 300 0 100 200 300 400 500<br>Time on stream (h) Time on stream (h)<br>100 16 34 18 6/8 35 39 284029 NiAl-P350 15 100 2 191 6/843 5 3639 ms -NiAl-P350NiAl-P350<br>36 ms -NiAl-P350 80 25/17/26/10 7 15<br>80 33 [2/31/25/14/10/11/17] 3 5 12 22 37 14 3020 18 12 29<br>32 1 7 60 16 23 40<br>60 13 34 1322 28 27<br>21/9 24 27 40 9<br>4 31<br>40 24<br>20<br>23<br>21<br>20 0<br>0 50 100 150 400 600 800 1000 0 50 100 150 400 600 800 1000<br>Run time (h) Run time (h)<br>)V<br>(e<br>y<br>gre<br>n<br>E<br>%)(<br>e<br>g<br>tan<br>e<br>cre<br>P Conversion (%)<br>Selectivity (%)<br>%)(<br>n<br>o<br>it<br>n<br>teer<br>y<br>ti<br>v<br>it<br>c Final selectivity (%)<br>A<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:1725bf02e0a4bf457a85a0a0d15a1f3ade472c018ff0437625d3a27ee705b37f"
+      },
+      {
+        "evidence_key": "P:S-67d67b0852b3384fb5c8",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-67d67b0852b3384fb5c8",
+        "text": "Fig. 3 | DFT analysis and catalytic performance of ms-NiAl-P350. a The proposed Ni(-O-Al)···P FLP in P-doped NiAl oxide model. b The differential charge density distribution of H2 activation on the Ni(-O-Al)···P FLP (yellow isosurface means electron accumulation, blue isosurface means electron depletion). c The proposed H2 activation process on the P-doped NiAl oxide model and the corresponding energy change profiles. d Temperature screening for hydrotreating of methyl laurate over ms-NiAl-P350. Reaction conditions: PH2 = 3.0 MPa, WHSV = 28.3 h[−][1] . e Methyl laurate conversions as function of time over ms-NiAl-P350 and the \n\nreference catalysts. The inset shows the selectivity of C11H24 and C12H26 over msNiAl-P350. Reaction conditions: T = 350 °C, PH2 = 3.0 MPa, WHSV = 28.3 h[−][1] . f, g Comparison of ms-NiAl-P350 with other catalysts reported in literature: activity retention-time plots (f) and final selectivity-time plots (g). Numbers in (f and g) correspond to the row numbers in Supplementary Table 6, and the color of dots represents the WHSV used in the corresponding experimental system. NM means “not mentioned”. \n\nNature Communications | (2024) 15:3172 \n\n4 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-47591-z \n\nclassical NiO Lewis pair (0.91 eV). It can therefore be anticipated that ms-NiAl-P350 with a well-defined FLP structure has the potential to catalyze the hydrogenation reactions. \n\n## Catalytic performance in hydrogenation of methyl laurate \n\nThe distinctive structure of ms-NiAl-P350 and theoretical insights motivated us to investigate its catalytic properties in hydrotreating reaction using methyl laurate as a model compound in a fixed-bed continuous-flow reactor, wherein the target products were C11H24 and C12H26 (Supplementary Fig.",
+        "text_sha256": "sha256:9470411e6fa78e2fc6f6943cc8d17f925cbc01e2a7eab9859bf49717f12d0f6b"
+      },
+      {
+        "evidence_key": "P:S-2cf6e7e9bfa811bb24b9",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-2cf6e7e9bfa811bb24b9",
+        "text": "18)[20][,][33][,][34] . We screened the reaction temperature for methyl laurate hydrotreating over the ms-NiAl-P350 (reaction conditions: PH2 = 3.0 MPa, WHSV = 28.3 h[−][1] ). After reaction at an initial temperature of 300 °C for 60 h, the temperature was raised gradually to 350 °C, 375 °C and 400 °C, and kept at each temperature for a certain duration (Fig. 3d). The conversion dramatically increased from 28% (300 °C) to 87% (350 °C), 94% (375 °C) and 98% (400 °C), respectively. The selectivity towards C11H24/C12H26 (SC11+C12) increased from 63% (300 °C, the byproduct was mainly lauric acid) to 93–97% (350–400 °C, the oxygen was nearly fully removed). At each temperature, we observed no obvious deactivation during the reaction time period. In addition, we found that increasing H2 pressure (ranging from 0.5 to 4 MPa) only slightly increased the methyl laurate conversion (Supplementary Fig. 19). \n\nConsidering the phase transformation of ms-NiAl-P350 (P-doped NiAl-oxide phase) to ms-NiAl-P450 (Ni2P phase), we set the hydrotreating temperature at 350 °C to investigate the long-term stability of ms-NiAl-P350 at WHSV of 28.3 h[−][1] under H2 pressure of 3.0 MPa. The ms-NiAl-P350 exhibited stable conversion of methyl laurate (85–88%) and selectivity towards C11H24 (~91.5%)/C12H26 (~4.5%) during 500 h of operation (stopped because of H2 exhaustion) (Fig. 3e), far superior to the reference catalysts of ms-NiAl, ms-NiAl-P450 and ms-NiAl-H2800P350 (Fig. 3e and Supplementary Fig. 20), indicating its excellent durability. The NiAl-P350 synthesized without ms-template also showed good stability during 500 h of operation, but with a lower conversion (50–70%, Supplementary Fig. 21), probably due to the absence of hierarchical porous structure.",
+        "text_sha256": "sha256:ed2daf17f413e2f55e34e154125c62140ec745b9972e3b1bd6b365bb6815f8dd"
+      },
+      {
+        "evidence_key": "P:S-a01b6f389821b2b2707d",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a01b6f389821b2b2707d",
+        "text": "We also compared the selectivity and stability of ms-NiAl-P350 with various catalysts reported in previous literature (Fig. 3f, g and Supplementary Table 6), and found that the ms-NiAl-P350 under relatively higher WHSV outperformed these catalysts (Supplementary Fig. 22). By decreasing the WHSV to <11.3 h[−][1] (it is often set to 0.5 ~ 3.0 h[−][1] in commercial system), a complete conversion with SC11+C12 higher than 99.3% was achieved over the ms-NiAl-P350 (Supplementary Fig. 23). \n\n## Mechanism analysis \n\nIn order to understand the stability mechanism of ms-NiAl-P350, we studied the spent catalysts in detail. The catalyst deactivation in hydrotreating processes is often caused by coke formation, metal agglomeration, phase transformation, component loss, etc[2][,][14][,][17][,][35] . In this work, the coke formation and P loss of ms-NiAl-P350 were negligible (Supplementary Fig. 24). After 24 h of operation, the ms-NiAlP350-Sp.24 h well maintained its morphology (Fig. 4a-i), no obvious change in crystalline structure was observed (Fig. 4b). By comparison, metal agglomeration and phase transformation were clearly observed in the spent ms-NiAl-P450-Sp.24 h (Fig. 4a-ii, c and Supplementary Fig. 25). For the spent ms-NiAl-Sp.24 h, part of Ni species was transformed into Ni nanoparticles under high H2 pressure (Fig. 4a-iii, d). Therefore, the ms-NiAl-P350 showed better stability under hydrotreating condition than ms-NiAl-P450 and ms-NiAl. \n\nProlonging the operation time to 500 h for ms-NiAl-P350, large Ni nanoparticles were formed (Fig. 4a-iv, b). Surprisingly, however, its catalytic performance was unaffected. The XPS spectra showed that, except for a slightly more pronounced peak being assigned to the metallic Ni (Fig.",
+        "text_sha256": "sha256:ce24cd679e6af994618ad138d5f6653d181c6aba1006aa12c4d90c2cca155cca"
+      },
+      {
+        "evidence_key": "P:S-030b04b27ea643181780",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-030b04b27ea643181780",
+        "text": "4e), the chemical states of Ni, Al, and P species in msNiAl-P350-Sp.500 h remained unchanged compared with that of ms- \n\nNiAl-P350-Sp.24 h (Fig. 4e–g). Accordingly, the large metal particles were mainly composed of Ni species (Fig. 4h), rather than NixPy nanoparticles, being in agreement with the XRD data (Fig. 4b). The remaining Ni element in ms-NiAl-P350-Sp.500 h was still mixed well with P, Al, and O species (Fig. 4h). Notably, we found no obvious P loss during 500 h of operation (Supplementary Fig. 24b). Therefore, we infer that the P-doped NiAl-oxide with FLP sites was quite stable under hydrotreating conditions in a long-term operation. The Ni species inside the NiAl-oxide skeleton without P-doping, which have less contribution to the catalytic performance, were prone to be reduced to form large Ni nanoparticles. \n\nAs mentioned above, fabricating the ms-NiAl (Al[3+] -doped NiO-type NiAl-mixed oxide) by calcination at 800 °C under air was critical for the formation of P-doped NiAl-oxide. Lowering the calcination temperature (ranging from 650 to 350 °C) was not conducive to the formation of Ni–O–Al interaction, thus resulting in the formation of Ni–P bonds during phosphorization and poor catalytic performances (Supple– mentary Figs. 26 29). In addition, to confirm the necessity of FLPs in this catalytic system, we carried out a series of site-poisoning experiments. As known, pyrrole (strong Lewis acid) and pyridine (strong Lewis base) can be absorbed on the Lewis basic and acidic sites, respectively[36] . Therefore, the FLPs can be blocked by the pyridine and pyrrole molecules.",
+        "text_sha256": "sha256:c50b919e4b25739ee26a2c49d2ec9e5c9b7b3dd506ca85ac0e705fbaa77fa072"
+      },
+      {
+        "evidence_key": "P:S-5e8dc96df7e88cdfaad1",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-5e8dc96df7e88cdfaad1",
+        "text": "It was found that after adding 20 wt% of pyrrole/ pyridine into the catalytic system, the yield of target products decreased from 16.4% to 1.2% (pyrrole) and 2.1% (pyridine) at 300 °C, and from 82.0% to 33.6% (pyrrole) and 36.6% (pyridine) at 350 °C (Supplementary Fig. 30).These observations emphasized the necessity of Ni(-O-Al)···P FLPs construction for activating H2 in order to achieve a high activity in the present catalytic system. \n\n## Extension of catalytic system \n\nTo demonstrate the industrial viability of such a hydrotreating system, we tested the hydrotreating performance of the ms-NiAl-P350 using soybean oil as feedstock in the fixed-bed continuous-flow reactor (reaction conditions: T = 350 °C, PH2 = 3.0 MPa, WHSV = 6.0 h[−][1] ). The ms-NiAl-P350 showed a stable activity with a nearly complete conversion of soybean oil and a selectivity towards C15-C18 hydrocarbons higher than 90% during 500 h of operation (Fig. 5a), implying its excellent durability, well surpassing the reported Ni2P/SiO2 catalyst (Fig. 5a and Supplementary Fig. 31, synthesized by the method of number 15 in Fig. 3f, g, see the Supplementary Materials for the experimental details). Moreover, we also tested various feedstocks in a continuous operation, including palm oil, duck fat, waste cooking oil, and soybean oil (Supplementary Table 7), all of which were completely converted with >90% selectivities towards C15-C18 hydrocarbons (Fig. 5b, c), indicating the outstanding adaptability of the ms-NiAl-P350 to various feedstocks. \n\nFurthermore, we prepared the bulk NiAl-P350 catalyst (without ms-template) on a kilogram scale and shaped it into extrudates (Supplementary Fig.",
+        "text_sha256": "sha256:cf2ee2c6c2428d44b46a5a2523d6dbc365b4a55c152c17c3708cf8cefdbb6188"
+      },
+      {
+        "evidence_key": "P:S-4d78d520a12583c6052e",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-4d78d520a12583c6052e",
+        "text": "32), over which a stable conversion of methyl laurate (~80%) with high selectivity towards C11H24 (~90%)/C12H26 (~4%) was achieved during 1000 h of operation at WHSV of 9.4 h[−][1] . However, the catalytic reaction rate of bulk NiAl-P350 is significantly lower than that of ms-NiAl-P350 (Supplementary Fig. 33). This could be attributed to the reduced porosity and surface area of bulk NiAlP350, which limit the internal mass transfer and accessibility of active sites (Supplementary Fig. 34). It should be noted that the two catalysts possess similar chemical characteristics as determined by the HRTEM, XRD and XPS analysis (Supplementary Figs. 35 and 36). This comparison demonstrates that replicating the biological structure of ms to generate hierarchical pores is a highly effective approach to enhance the catalytic performance of such FLP-type catalysts. However, the bulk NiAl-P350 would be a suitable alternative for industrial applications, taking into account the expense and magnitude of catalyst production. \n\nNature Communications | (2024) 15:3172 \n\n5 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-47591-z \n\n**==> picture [476 x 474] intentionally omitted <==**",
+        "text_sha256": "sha256:3d279cd1bf5b1bae4aa068d0d25bb52f728911f3dfdbfae0666e92b12c37173c"
+      },
+      {
+        "evidence_key": "P:S-007e748e2ebf0630e536",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-007e748e2ebf0630e536",
+        "text": "**----- Start of picture text -----**<br>\n Ni (#65-2865) Ni2P (#03-0953)  Ni (#65-2865)<br> NiO (#44-1159) Ni12P5 (#22-1190)  NiO (#44-1159)<br>AlPO4 (#20-0045)<br>20 30 40 50 60 70 80 20 30 40 50 60 70 80 20 30 40 50 60 70 80<br>2Theta (degree) 2Theta (degree) 2Theta (degree)<br>868 864 860 856 852 848 140 136 132 128 81 78 75 72<br>Binding Energy (eV) Binding Energy (eV) Binding Energy (eV)<br>)s<br>ti<br>n<br>u<br>(bra.<br>y<br>ti<br>s<br>n<br>Iten Intensity (arb. units) Intensity (arb. units)<br>)s<br>ti<br>n<br>u<br>(bra.<br>y<br>ti<br>s<br>n<br>Itne Intensity (arb. units) Intensity (arb. units)<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:88d69ded5497d93e0345c1b15574aad4e00112d39a02b5b476d6dd7504f37077"
+      },
+      {
+        "evidence_key": "P:S-13719a726d6f6e1296f3",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-13719a726d6f6e1296f3",
+        "text": "Fig. 4 | Investigation of the stability mechanism of ms-NiAl-P350. a TEM images of the spent catalysts. b–d Comparison of XRD patterns of the fresh and spent catalysts. e–g XPS spectra of the spent ms-NiAl-P350 after 24 h and 500 h of operations. h HAADF-STEM and EDS elemental mapping images of the spent ms- \n\nNiAl-P350 after 500 h of operation. The large metal particles mainly contain Ni species. The P, Al, O, and Ni (except the Ni particles) elements in the spent ms-NiAlP350 are still mixed well with one another. \n\n## Discussion \n\nIn conclusion, we have developed the P-doped NiAl-oxide as a robust catalyst for efficient production of green diesel from renewable oils. The catalyst demonstrates outstanding durability and completely converts various feedstocks, e.g., methyl laurate, soybean oil, palm oil, duck fat, and waste cooking oil, with >90% selectivity towards dieselrange hydrocarbons. Notably, there is no need to replenish the sulfur source or other species during hydrotreating process, making the green diesel production much greener and cheaper. We demonstrated that the benign interaction between the mixed NiAl-oxide and P (i.e., Ni(-O-Al)···P FLP) contributed to the outstanding catalytic performance, and the synthesis of Ni(-O-Al)···P FLP-type catalyst can be readily scaled up in kilogram level. Moreover, the structural and compositional flexibility of LDHs (precursor of the P-doped NiAl-oxide \n\ncatalyst) offers immense opportunities to prepare other FLP-type catalysts for a variety of catalytic reactions beyond green diesel production. \n\n## Methods \n\n## Catalyst preparation \n\nSynthesis of ms-NiAl-LDHs. Typically, 4.5 mmol of Ni(NO3)2·6H2O, 1.5 mmol of Al(NO3)3·9H2O, and 13.5 mmol of urea were dissolved in 90 mL of water.",
+        "text_sha256": "sha256:083c38c3bd7bbb976b127f78691cff4249faf4b7ef7c0f635e8a714e5af5f15e"
+      },
+      {
+        "evidence_key": "P:S-4d59004cd817802e5a9e",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-4d59004cd817802e5a9e",
+        "text": "Then, the solution together with 1.0 g of the pretreated ms was transferred into a round bottom flask, followed by vacuum treating for three times to ensure full filling of the ms cells by the solution containing precursors. Next, the mixture was transferred into a teflon-lined stainless-steel autoclave, sealed and heated up to 100 °C, and kept at this temperature for 24 h. The product was collected by \n\nNature Communications | (2024) 15:3172 \n\n6 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-47591-z \n\n**==> picture [327 x 226] intentionally omitted <==**",
+        "text_sha256": "sha256:0952fb51c814ed5dfd46226a03e3e8498b337a231f47a97c7f9461bc6dd0e07d"
+      },
+      {
+        "evidence_key": "P:S-54ecd46fb280200a1f97",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-54ecd46fb280200a1f97",
+        "text": "Fig. 5 | Hydrotreating of various oils. a Soybean oil conversion and selectivity towards C15-C18 hydrocarbons (inset, photographs of the products) over ms-NiAlP350 and Ni2P/SiO2 (synthesized according to the method of number 15 in Fig. 3f, g). b Catalytic performances of ms-NiAl-P350 using various oils as feedstocks \n\nduring continuous operation (inset, photographs of the feedstocks and the products) and (c) the corresponding distributions of hydrocarbon products. Reaction conditions: T = 350 °C, PH2 = 3.0 MPa, WHSV = 6.0 h[−][1] . \n\nfiltration, washed several times with water and finally freeze-dried (msNiAl-LDHs). \n\nSynthesis of ms-NiAl-P350. Firstly, the ms-NiAl-LDHs was placed in a muffle furnace, calcined at 800 °C for 1 h, and then naturally cooled down to room temperature. The biological structured NiAl-mixed oxide was obtained (ms-NiAl). Then, the NaH2PO2 powder and the asobtained ms-NiAl were placed into a quartz tube (separated by quartz cotton), treated at 150 °C for 30 min in an Ar flow (30 mL/min). The quartz tube was pumped to form a vacuum, sealed, heated to 350 °C, and held at this temperature for 2 h. After cooling down to room temperature, the sample was passivated in a flow of 0.5% O2 in Ar (100 mL/min) for 2 h (ms-NiAl-P350). \n\nSynthesis of Ni2P/SiO2. The Ni2P/SiO2 was prepared according to the procedure described in literature[25] . Briefly, the SiO2 (S817570, Macklin, BET = 300 m[2] /g) was impregnated with an aqueous solution of Ni(NO3)2·6H2O and NH4H2PO4 (mass ratio of SiO2/Ni(NO3)2·6H2O/ NH4H2PO4 is 1/1.6/0.45) stabilized with HNO3 (keeping the pH in the – range of 4 4.5 to prevent precipitate formation). Then, the sample was dried at 120 °C for 4 h and calcined at 500 °C for 6 h.",
+        "text_sha256": "sha256:e2e81660118eca9a4a2d217da37523f1eb1b80633f70f6635b1a6b85e048bbee"
+      },
+      {
+        "evidence_key": "P:S-c3759903d7119e0a1270",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-c3759903d7119e0a1270",
+        "text": "The as-obtained powder was pelletized, crushed, sieved to a fraction of 25–60 mesh, and then reduced at 580 °C for 30 min in H2 flow to form Ni2P phase (Ni2P/SiO2). \n\n## Catalytic tests \n\nThe hydrotreating process was carried out in a continuous-flow stainless-steel fixed-bed reactor (inner diameter of 8 mm). In the blank reactor, the conversion of methyl laurate was negligible (<1%, even at 400 °C). Typically, 100 mg of ms-NiAl-P350 was cut into pieces, loaded into the reactor, and held by quartz cotton from the upper and lower sides. The catalyst was in situ treated at 350 °C for 2 h in a H2 flow (>99.9%, 118 mL/min). Then, the H2 pressure was adjusted to 3.0 MPa, \n\nand the methyl laurate was continuously fed into the reactor by using a liquid micro pump. The molar ratio of H2/methyl laurate was set as 25, and the weight hourly space velocity (WHSV) of methyl laurate was 28.3 h[−][1] . The liquid products were identified by GC-MS (Agilent 7890B5977B) and quantitatively analyzed by GC equipped with FID detector (Agilent 7890B). Tetrahydronaphthalene was used as an internal standard. The gaseous products were quantitatively analyzed by online GC equipped with a TCD and a TDX-101 packed column. N2 was used as an internal standard. The mass balance values were always higher than 95% for all the test points. The methyl laurate and soybean oil were used directly as a feedstock without dilution. The palm oil, duck fat, and waste cooking oil were diluted with an equal mass of hexane before using, as they exhibit poor fluidity atroom temperature.",
+        "text_sha256": "sha256:d67b1113d9b22eec050c891297720b8083355d38e84e6580cc67f82c14f1203e"
+      },
+      {
+        "evidence_key": "P:S-c739d874de1d535b3ed7",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-c739d874de1d535b3ed7",
+        "text": "The conversion and selectivity towards hydrocarbons were calculated using the following equations: \n\nmoles of feedstock in feed � moles of feedstock in product Conversion ð%Þ = × 100% moles of feedstock in feed \n\n**==> picture [206 x 17] intentionally omitted <==**",
+        "text_sha256": "sha256:a1bd699fbf8ae971af4b6c7a56a3fcbe0cca4fa5645545c8dda384dcb6e7b196"
+      },
+      {
+        "evidence_key": "P:S-79446270e010081cc4ea",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-79446270e010081cc4ea",
+        "text": "## Characterization methods \n\nA field-emission scanning electron microscope (SEM, Hitachi S4800) was employed to investigate the surface morphology. Transmission electron microscopy (TEM) images were acquired with Hitachi-7650 microscopes. High-resolution transmission electron microscope (HRTEM, Talos F200S, FEI) was adopted to analyze the internal structure and element mapping of catalysts. X-ray diffraction (XRD) patterns were acquired using a Bruker D8 Advance X-ray diffractometer with Cu Kα radiation (λ = 1.54 Å). X-ray photoelectron spectroscopy (XPS) was recorded with an X-ray photoelectron spectrometer (ESCALAB250, Thermo-VG Scientific, UK). Elemental \n\nNature Communications | (2024) 15:3172 \n\n7 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-47591-z \n\ncontents were determined by an inductively coupled plasma-optical emission spectrophotometer (ICP-OES, 730 Series, Agilent, USA). The pore structure of samples was determined by N2 sorption isotherm experiments at 77 K with a Micromeritics Gemini apparatus (Tristar II 3020 M, Micromeritics Instrument Co., USA). The specific surface area was calculated with the Brunauer-Emmett-Teller (BET) method, and pore volume was determined by Barrett-Joiner-Halenda (BJH) method. The thermogravimetric analysis was conducted with a thermogravimetric analyzer (TGA, SDT Q600, TA Instruments, USA) equipped with a thermal detector (DTG-60H). For TGA analysis, a certain amount of sample was placed in an alumina pan and degassed with Ar or H2/Ar (10%/90%), then heated from an ambient temperature to 800 °C with a heating rate of 10 °C/min. The temperature programmed reduction (TPR) analysis was conducted with an automatic chemical adsorption analyzer (Micromeritics AutoChem II 2920).",
+        "text_sha256": "sha256:683606e94dbe96d29578ea7ce7b5ea1158cfb8e5e33263c456ba3f3fac4c4e2c"
+      },
+      {
+        "evidence_key": "P:S-621e96de9f6145ce3ada",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-621e96de9f6145ce3ada",
+        "text": "For TPR experiments, 20 mg catalyst was loaded into a quartz tube and heated in 50 mL/min of 10 vol.% H2/Ar at a rate of 10 °C/min. \n\nThe X-ray absorption fine structure (XAFS) measurements were performed at the beamline 1W1B of the Beijing Synchrotron Radiation Facility (BSRF), Institute of High Energy Physics (IHEP), Chinese Academy of Sciences (CAS). Extended X-ray absorption fine structure spectra (EXAFS) were recorded at ambient temperature in transmission mode. The typical energy of the storage ring was 2.5 GeV with a maximum current of 250 mA; the Si (111) double crystal monochromator was used. Fourier transform of the EXAFS spectra was carried out in a K-range from 3.0 to 12.8 Å[−][1] . The IFFEFIT 1.2.11 date analysis package (Athena, Artemis, Atoms, and FEFF6) was used for the date analysis and fitting. \n\nSynchrotron X-ray tomography was carried out at the P05 beamline at DESY, Hamburg, Germany. For the measurements conducted here, the synchrotron beam energy was monochromatized to 20 KeV using a double multilayer monochromator (DMM). A CdWO4 single crystal scintillator of 100 µm thickness was used to convert the X-ray to visible light. A fast KIT CMOS camera (5120 × 3840 pixels) that was kept out of the direct beam by using a mirror was used. 2400 projections within a 180° battery rotation were recorded with the exposure time of 0.16 s. The field of view is 3.28 × 2.46 mm[2] , with a pixel size of ~0.6 µm. Note that for the cells measured at the P05 beamline, a binning process of 2 by 2 was used when normalizing the dataset to get a high signal-to-noise ratio. As a result, the resultant spatial resolution is 1.2 µm. The tomography data from P05 beamline were reconstructed using beamline Matlab ASTRA Toolbox.",
+        "text_sha256": "sha256:1653400fc64eacc3329b6c2ea2c69eee08244779b9a8668fa3893a7f57e2b378"
+      },
+      {
+        "evidence_key": "P:S-49310e282243e38db98d",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-49310e282243e38db98d",
+        "text": "The analysis of the tomography data was conducted by Avizo. \n\n## Computational methods \n\nThe Vienna Ab Initio Package (VASP) was employed to perform all the spin-polarized density functional theory (DFT) calculations within the generalized gradient approximation (GGA) in the PBE formulation. The projected augmented wave (PAW) potentials was chosen to describe the ionic cores and take valence electrons into account using a plane wave basis set with a kinetic energy cutoff of 400 eV. Partial occupancies of the Kohn–Sham orbitals were allowed using the Gaussian smearing method and a width of 0.05 eV. The electronic energy was considered self-consistent when the energy change was smaller than 10−5 eV. A geometry optimization was considered convergent when the residual forces were smaller than 0.02 eV/Å. Grimme’s DFT-D3 methodology was used to describe the dispersion interactions. \n\nThe equilibrium lattice constant of NaCl-type NiO was optimized, when using a 11 × 11 × 11 Monkhorst-Pack k-point grid for Brillouin zone sampling, to be a = 4.418 Å. We then use it to construct a NiO(001) monolayer model (model 1) with p(2 × 2) periodicity in the x and y directions and 2 stoichiometric layers in the Z direction together with a vacuum layer in the Z direction in the depth of 15 Å in order to mitigate \n\nthe interactions between the slab and its periodic images. Model 1 comprises of 32 Ni and 32 O atoms. Model 2 was built by replacing 8 Ni atoms in model 1 with Al atoms. Model 3 was built by adding a -PH group onto model 2. During structural optimizations, a 3 × 3 × 1 k-point grid in the Brillouin zone was used for k-point sampling, and the bottom stoichiometric layer was fixed while the top one was allowed to relax.",
+        "text_sha256": "sha256:1d5477bda6ca25351f37a61965b05c63a20d9d999a97bc28625d82c2adf2b8ae"
+      },
+      {
+        "evidence_key": "P:S-bb9047e20fdd71a9ac2b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-bb9047e20fdd71a9ac2b",
+        "text": "The adsorption energy (Eads) of adsorbate A was defined as \n\n**==> picture [100 x 11] intentionally omitted <==**",
+        "text_sha256": "sha256:51287600c9c01df86af4a90ab34b6f9e1590aeda32fe13d91916e9155dbd341e"
+      },
+      {
+        "evidence_key": "P:S-a731fe997bc044b2bdd4",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a731fe997bc044b2bdd4",
+        "text": "where EA/Surf, ESurf, and EA(g) are the energy of adsorbate A adsorbed on the surface, the energy of clean surface, and the energy of isolated A molecule in a cubic periodic box with a side length of 20 Å and a 1 × 1 × 1 Monkhorst-Pack k-point grid for Brillouin zone sampling, respectively. The H2 dissociation energy was defined as \n\n**==> picture [53 x 9] intentionally omitted <==**",
+        "text_sha256": "sha256:8be293d16987c727e7590ac8659786cfa7556f4a12429d58b34eefc2d7a72208"
+      },
+      {
+        "evidence_key": "P:S-4e473b82fe61229970f8",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-4e473b82fe61229970f8",
+        "text": "where EH* and EH2* are the energy of an adsorbed H atom, the energy of an adsorbed H2 molecule, respectively. \n\nThe transition state of an elementary reaction step was located by the nudged elastic band (NEB) method. In the NEB method, the path between the reactant(s) and product(s) was discretized into a series of five structural images. The intermediate images were relaxed until the perpendicular forces were smaller than 0.02 eV/Å. \n\n## Data availability \n\nAll relevant data thatsupport the findings of this study are presented in the manuscript and supplementary materials. Source data are available from the corresponding author upon reasonable request. Source data are provided with this paper. \n\n## References \n\n1. Naik, S. N., Goud, V. V., Rout, P. K. & Dalai, A. K. Production of first and second generation biofuels: a comprehensive review. Renew. Sust. Energ. Rev. 14, 578–597 (2010). \n\n2. Kubičková, I. & Kubička, D. Utilization of triglycerides and related feedstocks for production of clean hydrocarbon fuels and petrochemicals: a review. Waste Biomass. Valor. 1, 293–308 (2010). \n\n3. Knothe, G. Biodiesel and renewable diesel: A comparison. Prog. Energy Combust. Sci. 36, 364–373 (2010). \n\n4. Kargbo, H., Harris, J. S. & Phan, A. N. “Drop-in” fuel production from biomass: critical review on techno-economic feasibility and sustainability. Renew. Sust. Energ. Rev. 135, 110168 (2021). \n\n5. Arguelles-Arguelles, A., Amezcua-Allieri, M. A. & Ramírez-Verduzco, L. F. Life cycle assessment of green diesel production by hydrodeoxygenation of palm oil. Front. Energy Res. 9, 690725 (2021). \n\n6. Coronado, C. R., de Carvalho, J. A. & Silveira, J. L. Biodiesel CO2 emissions: a comparison with the main fuels in the Brazilian market. Fuel Process. Technol. 90, 204–211 (2009). \n\n7.",
+        "text_sha256": "sha256:a624c84f802d91569cd6cf41415f542e8428b6568f28023022b277e7f6764097"
+      },
+      {
+        "evidence_key": "P:S-ccf1144bc139d68ba8a4",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-ccf1144bc139d68ba8a4",
+        "text": "Calero, J. et al. An overview on glycerol-free processes for the production of renewable liquid biofuels, applicable in diesel engines. Renew. Sust. Energ. Rev. 42, 1437–1452 (2015). \n\n8. Sotelo-Boyas, R., Trejo-Zarraga, F. & de Jesus Hernandez-Loyo, F. Hydroconversion of triglycerides into green liquid fuels. Hydrogenation 338, 338 (2012). \n\n9. Reportlinker.com, Global renewable diesel market: analysis by production, by consumption, by feedstock, by region size and trends with impact of COVID-19 and forecast up to 2027. https:// www.reportlinker.com/p06323447/?utm_source=GNW (2022). \n\n10. Zhang, B. et al. Recent developments in commercial processes for refining bio-feedstocks to renewable diesel. BioEnergy Res. 11, 689–702 (2018). \n\nNature Communications | (2024) 15:3172 \n\n8 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-47591-z \n\n11. Pattanaik, B. P. & Misra, R. D. Effect of reaction pathway and operating parameters on the deoxygenation of vegetable oils to produce diesel range hydrocarbon fuels: a review. Renew. Sust. Energ. Rev. 73, 545–557 (2017). \n\n12. Ruddy, D. A. et al. Recent advances in heterogeneous catalysts for bio-oil upgrading via “ex situ catalytic fast pyrolysis”: catalyst development through the study of model compounds. Green. Chem. 16, 454–490 (2014). \n\n13. Di Vito Nolfi, G., Gallucci, K. & Rossi, L. Green diesel production by catalytic hydrodeoxygenation of vegetables oils. Int. J. Environ. Res. Public. Health 18, 13041 (2021). \n\n14. Santillan-Jimenez, E. & Crocker, M. Catalytic deoxygenation of fatty acids and their derivatives to hydrocarbon fuels via decarboxylation/decarbonylation. J. Chem. Technol. Biotechnol. 87, 1041–1050 (2012). \n\n15. Yuan, K., Yamazaki, Y., Jin, X. & Nozaki, K.",
+        "text_sha256": "sha256:8f5080c066a9f6e5812b86cadc1f3be36a2f26b6a197215698546cdbd6a9f084"
+      },
+      {
+        "evidence_key": "P:S-943e19c235c47162ca12",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-943e19c235c47162ca12",
+        "text": "Multifunctional WO3–ZrO2-supported platinum catalyst for remarkably efficient hydrogenolysis of esters to alkanes. J. Am. Chem. Soc. 145, 3454–3461 (2023). \n\n16. Yang, Y., Ochoa-Hernández, C., de la Peña O’Shea, V. A., Coronado, J. M. & Serrano, D. P. Ni2P/SBA-15 as a hydrodeoxygenation catalyst with enhanced selectivity for the conversion of methyl oleate into n-octadecane. ACS Catal. 2, 592–598 (2012). \n\n17. Alvarez-Galvan, M. C., Campos-Martin, J. M. & Fierro, J. L. G. Transition metal phosphides for the catalytic hydrodeoxygenation of waste oils into green diesel. Catalysts 9, 293 (2019). \n\n18. Snåre, M., Kubičková, I., Mäki-Arvela, P., Eränen, K. & Murzin, D. Y. Heterogeneous catalytic deoxygenation of stearic acid for production of biodiesel. Ind. Eng. Chem. Res. 45, 5708–5715 (2006). \n\n19. Mohammed, S. T. et al. Enhancement of stability of Pd/AC deoxygenation catalyst for hydrothermal production of green diesel fuel from waste cooking oil. Chem. Eng. Sci. 251, 117489 (2022). \n\n20. Chen, S., Zhou, G. & Miao, C. Green and renewable bio-diesel produce from oil hydrodeoxygenation: Strategies for catalyst development and mechanism. Renew. Sust. Energ. Rev. 101, 568–589 (2019). \n\n21. Jeong, H. et al. Comparison of activity and stability of supported Ni2P and Pt catalysts in the hydroprocessing of palm oil into normal paraffins. J. Ind. Eng. Chem. 83, 189–199 (2020). \n\n22. Galadima, A., Masudi, A. & Muraza, O. Towards sustainable catalysts in hydrodeoxygenation of algae-derived oils: a critical review. Mol. Catal. 523, 112131 (2022). \n\n23. Chen, J., Shi, H., Li, L. & Li, K. Deoxygenation of methyl laurate as a model compound to hydrocarbons on transition metal phosphide catalysts. Appl. Catal. B: Environ. 144, 870–884 (2014). \n\n24. Lee, Y. & Oyama, S.",
+        "text_sha256": "sha256:c5534d653ab36c3fbd33011ce704cb9fa9ba744f715c278f18597fe991821d35"
+      },
+      {
+        "evidence_key": "P:S-8066f9b631441c7a14eb",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8066f9b631441c7a14eb",
+        "text": "Bifunctional nature of a SiO2-supported Ni2P catalyst for hydrotreating: EXAFS and FTIR studies. J. Catal. 239, 376–389 (2006). \n\n25. Zarchin, R., Rabaev, M., Vidruk-Nehemya, R., Landau, M. V. & Herskowitz, M. Hydroprocessing of soybean oil on nickelphosphide supported catalysts. Fuel 139, 684–691 (2015). \n\n26. Liu, Y. et al. The production of diesel-like hydrocarbons from palmitic acid over HZSM-22 supported nickel phosphide catalysts. Appl. Catal. B: Environ. 174-175, 504–514 (2015). \n\n27. de Oliveira Camargo, M., Castagnari Willimann Pimenta, J. L., de Oliveira Camargo, M. & Arroyo, P. A. Green diesel production by solvent-free deoxygenation of oleic acid over nickel phosphide bifunctional catalysts: effect of the support. Fuel 281, 118719 (2020). \n\n28. Peroni, M., Mancino, G., Baráth, E., Gutiérrez, O. Y. & Lercher, J. A. Bulk and γ-Al2O3-supported Ni2P and MoP for hydrodeoxygenation of palmitic acid. Appl. Catal. B: Environ. 180, 301–311 (2016). \n\n29. Li, P. & Zeng, H. C. Bimetallic Ni–Fe phosphide nanocomposites with a controlled architecture and composition enabling highly \n\n   - efficient electrochemical water oxidation. J. Mater. Chem. A 6, 2231–2238 (2018). \n\n30. Yu, X.-Y., Feng, Y., Guan, B., Lou, X. W. & Paik, U. Carbon coated porous nickel phosphides nanoplates for highly efficient oxygen evolution reaction. Energy Environ. Sci. 9, 1246–1250 (2016). \n\n31. Pan, Z. et al. Layered double hydroxide derived NiAl-oxide hollow nanospheres for selective transfer hydrogenation with improved stability. J. Mater. Chem. A 8, 23376–23384 (2020). \n\n32. Fan, Q. et al. Double-confined nickel nanocatalyst derived from layered double hydroxide precursor: atomic scale insight into microstructure evolution. Chem. Mater. 28, 6296–6304 (2016). \n\n33. Pan, Z., Wang, R. & Chen, J.",
+        "text_sha256": "sha256:5b9d9301563394e717247225ddd2f78e5f8ff31ae883832063de37a765d8807a"
+      },
+      {
+        "evidence_key": "P:S-14838941ced0bdd4595f",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-14838941ced0bdd4595f",
+        "text": "Deoxygenation of methyl laurate as a model compound on Ni-Zn alloy and intermetallic compound catalysts: Geometric and electronic effects of oxophilic Zn. Appl. Catal. B: Environ. 224, 88–100 (2018). \n\n34. Tran, C.-C., Akmach, D. & Kaliaguine, S. Hydrodeoxygenation of vegetable oils over biochar supported bimetallic carbides for producing renewable diesel under mild conditions. Green. Chem. 22, 6424–6436 (2020). \n\n35. Sádaba, I., López Granados, M., Riisager, A. & Taarning, E. Deactivation of solid catalysts in liquid media: the case of leaching of active sites in biomass conversion reactions. Green. Chem. 17, 4133–4145 (2015). \n\n36. Zhang, S. et al. Solid frustrated-Lewis-pair catalysts constructed by regulations on surface defects of porous nanorods of CeO2. Nat. Commun. 8, 15266 (2017). \n\n## Acknowledgements \n\nThe work was supported by the National Natural Science Foundation of China (52100169, 22008249) and Natural Science Foundation of Shandong Province China (ZR2020QB196). We acknowledge HelmholtzZentrum Hereon (Geesthacht, Germany) for provision of the PETRA III P05 beamline and conducting the synchrotron X-ray tomography measurements as well as DESY (Hamburg, Germany) for operating the PETRA III synchrotron facility. We thank Fu Sun, Ingo Manke, Markus Osenberg, Fabian Wilde, and André Hilger for conducting the synchrotron X-ray tomography measurements and reconstructing and analyzing the tomography datasets. \n\n## Author contributions \n\nD.C.L. carried out the preparation and characterization of catalysts, tested the catalytic performances, analyzed the data, prepared the Figures, and drafted the manuscript. Z.P. provided the method of catalytic experiments. Z.T., Q.Z., X.D. and H.J. participated in the data analysis. G.H.W.",
+        "text_sha256": "sha256:261dc41c5697cc16f4ba067d43b80aaac213877bea568bb44cd91af23f391398"
+      },
+      {
+        "evidence_key": "P:S-dcd8613599efa47ad57d",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-dcd8613599efa47ad57d",
+        "text": "initiated and supervised the project and paper writing. All the authors approved the final version of the manuscript. \n\n## Competing interests \n\nThree patent applications related to this work were filed by Qingdao Institute of Bioenergy and Bioprocess Technology, Chinese Academy of Sciences. G.H.W., D.C.L. and Z.P. are inventors of a China patent (patent number: ZL202110886367.8) covering the core technology of catalyst preparation and its application in hydrodeoxygenation reactions. G.H.W. and D.C.L. are inventors of a China patent (patent number: ZL202110955550.9) covering the preparation of catalyst with biological architecture. The above two patents have been granted by China National Intellectual Property Administration. G.H.W., D.C.L., and Z.P. are inventors of an international patent (application number: PCT/CN2021/ 130970) covering the core technology of catalyst preparation and its application in hydrodeoxygenation reactions, and the patent is currently in the national stage (USA and European region). All other authors declare no competing interests. \n\nNature Communications | (2024) 15:3172 \n\n9 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-47591-z \n\n## Additional information \n\nSupplementary information The online version contains supplementary material available at https://doi.org/10.1038/s41467-024-47591-z. \n\nCorrespondence and requests for materials should be addressed to Guang-Hui Wang. \n\nPeer review information Nature Communications thanks the anonymous reviewers for their contribution to the peer review of this work. A peer review file is available.",
+        "text_sha256": "sha256:2d015407e75576db6bcc53962cb097b6cd50976603255fdb609b21beab77b064"
+      },
+      {
+        "evidence_key": "P:S-7e08bd88baa58b89bd52",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-7e08bd88baa58b89bd52",
+        "text": "Reprints and permissions information is available at http://www.nature.com/reprints \n\nOpen Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/ licenses/by/4.0/. \n\n© The Author(s) 2024 \n\nPublisher’s note Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations. \n\nNature Communications | (2024) 15:3172 \n\n10",
+        "text_sha256": "sha256:e9bd32ca6bbfd0ca4bf793abdb0b76e5d2b1ecd78c09236ad239a0a9b95343ef"
+      }
+    ]
+  },
+  "paper_id": "10.1038/s41467-024-47591-z",
+  "paper_sha256": "sha256:7fa510d64590d7a06e48dafac1bdbf76477897920380234f29efefc9131c9a66",
+  "parent_output_sha256s": [],
+  "parent_reviews": [],
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "review_source_sha256": "sha256:26fa1db1173342923e0569543457de10f4f6bc70be7c209829e88685d336e819",
+  "reviewer_spans": [
+    {
+      "char_end": 1338,
+      "char_start": 1299,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d3ac012c98c41f0ee643",
+      "source_role": "reviewer_report",
+      "text": "## Reviewer #1 (Remarks to the Author):",
+      "text_sha256": "sha256:f575013c42c9e91316f21a94feb0b0edfff3402d969a3e1e849f6dd77ac19843"
+    },
+    {
+      "char_end": 2043,
+      "char_start": 1341,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-23950266b56743281881",
+      "source_role": "reviewer_report",
+      "text": "The manuscript reports on a novel catalytic system, based on P-doped NiAl oxides prepared using maize straw as template, which shows outstanding catalytic properties for the production of green diesel by hydrotreatment of a variety of biomass-derived oil substrates. One of the most relevant results is the remarkable activity of this system along the time on stream, with almost no variations being observed during tests up to 500 h. Moreover, the tests are performed under sulfur-free conditions which represents a great advantage compared with conventional/commercial catalysts. The authors make also a detailed comparison with previous literature showing the relevance of the results here reported.",
+      "text_sha256": "sha256:5940d4d359123bda92dd0a945155e10d6767aea3b25028b637f0f86861268ca8"
+    },
+    {
+      "char_end": 2855,
+      "char_start": 2046,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-799484c31b88e9b77e69",
+      "source_role": "reviewer_report",
+      "text": "This catalyst system, and several reference samples, are fully characterized by a large variety of conventional and advanced techniques, concluding that the origin of this singular catalytic performance is the generation of so called frustrated Lewis pairs coming from P-O-Ni sites. Parts of the manuscript are somewhat confusing, mainly because a huge amount of experimental data are discussed in a short text in a superficial way. In this way, the supporting information includes a total of 43 figures and 7 tables. Some of the figures contain duplicate information. My suggestion is to include the methods section as supporting information, using the space so available for improving and extending the discussion of the results, as well as to remove unnecessary or duplicate information. Specific comments:",
+      "text_sha256": "sha256:993d09d372487028532c8b9b9dd25d3adaf16a8fa58aaa493e31a903e4c32eb0"
+    },
+    {
+      "char_end": 3343,
+      "char_start": 2858,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5aa4432b76f531404bd0",
+      "source_role": "reviewer_report",
+      "text": "- Textural properties of the catalyst samples are not provided. Is there any reason for that? - As the own authors indicate, the catalytic system prepared without using the maize straw template exhibits also remarkable catalytic properties: somewhat lower conversion but very high stability along the time on stream. This could benefit significantly the economy of the process, reducing the catalyst cost and making its preparation simpler. This issue should be assessed and commented.",
+      "text_sha256": "sha256:a9b61c3cc866b62dc9e9fb41419ec606ee5e6e47136b5b91dffefe8e8d2b8e81"
+    },
+    {
+      "char_end": 3385,
+      "char_start": 3346,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fa47f412e3b81e65b0df",
+      "source_role": "reviewer_report",
+      "text": "## Reviewer #2 (Remarks to the Author):",
+      "text_sha256": "sha256:302a1824ba4ed0dda5528693469028e8e1f5b785e60ec4075c5e9d95c6bf2b94"
+    },
+    {
+      "char_end": 4160,
+      "char_start": 3388,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-54d5e54432449254274b",
+      "source_role": "reviewer_report",
+      "text": "In this submission from Li and co-workers, a series of Ni-Al-P oxide materials was prepared, and the conditions leading to a P-alloyed oxide, rather than Ni2P, was identified. A biological structure directing agent was utilized to prepare high surface area and porous Ni-Al LDH, which is an interesting approach. The materials were tested as catalysts for hydrotreating of various model compounds and real feedstocks. While this reviewer appreciates the combination of fundamental and applied efforts, the impact delivered from this approach do not meet the standards required for Nature Communications. The following are points where the manuscript does not bring the needed impact, and are thoughts for the authors to consider when resubmitting the manuscript elsewhere:",
+      "text_sha256": "sha256:2590b961e4a4ab8f61bd4e3e553512efd8650eef4709a8c0fa14a5bee8b6abbc"
+    },
+    {
+      "char_end": 5061,
+      "char_start": 4163,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5aa9e7df0edf842381a8",
+      "source_role": "reviewer_report",
+      "text": "(1) The authors motivate this report, and repeat throughout, that the results here have the potential to disrupt the multi-billion dollar sulfided catalyst industry. I disagree. It would take an extremely special material to disrupt this industry, including one that is especially easy to prepare. I appreciate the materials chemistry that went into the \"ms\" porous structure reported here, but that is not a scalable material, requiring quite high temperatures and phosphorus sources that are on regulated chemicals lists. Further, alternatives to sulfided materials that are based on P-containing catalysts must overcome a similar barrier of \"P maintenance\", analogous to S maintenance. It is clear that the catalysts reported here change phase after hundreds of hours of reaction, suggesting that some type of P co-feed may be necessary, and this is a significant challenge to commercialization.",
+      "text_sha256": "sha256:8c199249b5236479804cf90d3f2542c88ab3068eb4834b29e89b0ab2f35e54b3"
+    },
+    {
+      "char_end": 5455,
+      "char_start": 5064,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-06da5c67f6e3f93ae7f0",
+      "source_role": "reviewer_report",
+      "text": "(2) The combination of applied and fundamental approaches here reads as the combination of 2 separate papers, but these do not bring a high impact result. The results presented from the bulk P- NI-Al oxide (Figure 5), which is the more scalable version of the catalyst, demonstrate that all the materials chemistry associated with the porous material is not needed and the whole focus of the",
+      "text_sha256": "sha256:06ad1d2f911bee34948e5837a6465935d3dfec79515d78cd5cf4fbd8e5c14e23"
+    },
+    {
+      "char_end": 5940,
+      "char_start": 5458,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c42f42b82452689d24a5",
+      "source_role": "reviewer_report",
+      "text": "paper on that material is unnecessary - it should be focused on this more scalable material. From the applied catalysis perspective, the catalytic data was not presented with the appropriate level of rigor to show that the \"ms\" version of the catalyst provides any advantage other than surface area. That is, there are no site density measurements that would enable a turnover frequency analysis, which would show that the 2 catalyst materials are operating the same or differently.",
+      "text_sha256": "sha256:1c8933e0e2077092e0ced49cf4462618b8cd0ed936c97142eb55e21167c5ee10"
+    },
+    {
+      "char_end": 6624,
+      "char_start": 5943,
+      "reviewer_id_hash": "REV-0be8df4ad25ba73e",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-88ea63ab1189306adcf9",
+      "source_role": "reviewer_report",
+      "text": "(3) Thus, this combination of results would be better served as 2 separate papers: one focused in an applied catalysis journal where the preparation, characterization, and catalytic data from the nonstructured, bulk material is presented. This would enable stronger arguments about the potential to replace sulfided catalysts. Then, a second paper could focus on the interesting materials chemistry using a structure directing agent that enables the production of high surface area analogs to these bulk materials. Some metric of performance must be found that differentiates these materials beyond an increase surface area, and perhaps further structural analysis would find this.",
+      "text_sha256": "sha256:a35c25a11ca98d44e02634b97320b116877516cb8c8edf489d21acf23a00701c"
+    },
+    {
+      "char_end": 6666,
+      "char_start": 6627,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f23c6fb34d52736b9fd2",
+      "source_role": "reviewer_report",
+      "text": "## Reviewer #3 (Remarks to the Author):",
+      "text_sha256": "sha256:139e022c0140e59686a3f8163e91465606ddfe783e436f39face2fa66333fb0c"
+    },
+    {
+      "char_end": 6997,
+      "char_start": 6669,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-da76a202b1bd5c4aeed8",
+      "source_role": "reviewer_report",
+      "text": "In this submission, the authors reported a frustrated Lewis pair catalyst to realize efficient green diesel production, and investigated its charge transfer mechanism in H2 activation. However in my opinion, the results and analysis is not sufficient to support their principle and conclusion. Some of my questions are as below:",
+      "text_sha256": "sha256:52c3bfab22096186fcbde2033e99210ac186ba4c075557b9e1d401e5425bd5a5"
+    },
+    {
+      "char_end": 7475,
+      "char_start": 7000,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d0ea5a08f46df35b62f9",
+      "source_role": "reviewer_report",
+      "text": "1. For the frustrated Lewis pair of Ni(-O-Al)•••P, the more positive Ni site caused by electron transfer from Ni-O to the nearby O-Al is an extremely important factor. The authors demonstrated this electron transfer by the higher white line intensity of Ni K-edge, and the existence of Niδ+ (2<δ<3) in Ni 2p3/2 XPS spectra. However, the more important and direct evidence is lacked, which is the comparison in Ni and Al XPS spectra between pour NiO or Al2O3 and Al-doped NiO.",
+      "text_sha256": "sha256:400b4e302a00870d70b79228316dc5d25a65f1dceebe8a7843ee6735cd363787"
+    },
+    {
+      "char_end": 7745,
+      "char_start": 7478,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d1af842cf11bec00fa6f",
+      "source_role": "reviewer_report",
+      "text": "2. There’re some serious problems in the (P-doped) NiAl-oxide models used in DFT calculation. (a) In model 2, why is the crystal structure of the top Ni-Al-O layer is vastly different from that of the bottom layer? The top layer seems to be close to amorphous nature.",
+      "text_sha256": "sha256:93f823c422343aff145e0fb28af8521bb7562f544fd0bca8e6bac2564156a963"
+    },
+    {
+      "char_end": 8124,
+      "char_start": 7748,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-810cad2291f9a5b355c3",
+      "source_role": "reviewer_report",
+      "text": "(b) According to P 2p XPS spectra, the peak at 133.8 eV in ms-NiAl-P350 is arises from P-O species, such as PO3, PO4, P2O5, etc. In the model 3, the PH group is bonding to one O atom. I don’t think this P-relevant construction is accurately representative for its actual structure reflected by XPS. BTW, the a PH2 group was used in model 3 of Supplementary Fig. 17 by mistake.",
+      "text_sha256": "sha256:31a2f056f2a6157681e68a56c8fd5df786213397195a1c303662cebcbbd402fd"
+    },
+    {
+      "char_end": 8419,
+      "char_start": 8127,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-20011d49602a6a6c734a",
+      "source_role": "reviewer_report",
+      "text": "(c) According to the elemental contents of ms-NiAl-P350 revealed by ICP-OES (0.44 P/Ni atomic ratio) or XPS (0.91 P/Ni atomic ratio), the P/Ni atomic ratio in model 3 differs too much. So the sufficient P doping in bulk should be considered in DFT model, not just the PH group on the surface.",
+      "text_sha256": "sha256:55390d3ced30a5e036422e5d3aeb86bc7011e04ae77f7bc6d57fd3b214f222ef"
+    },
+    {
+      "char_end": 8970,
+      "char_start": 8422,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c01d8abce3341ca5f0f7",
+      "source_role": "reviewer_report",
+      "text": "3. The analysis in electron transfer between adsorbed H2 and FLP site by Bader charges is confused. Although the positive charge of Ni decreased (0.697 to 0.645), the electron of H2 atom bonded to Ni also increased (-0.012 to -0.039). So the 0.05 electron transfer from H2 to Ni is not convictive enough. The increased electron of Ni may be originated from its other coordination atoms (e.g. O), rather than H2. That means the role of Ni acid site in FLP sites is not well established. The authors should ascertain it by more careful investigation.",
+      "text_sha256": "sha256:63b66a1dea2ea9ad3bc698100bca5853c53133f188bd7db62c254ea21dea40d0"
+    },
+    {
+      "char_end": 9359,
+      "char_start": 8973,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c0ff5647f9cdbb143f7c",
+      "source_role": "reviewer_report",
+      "text": "4. To demonstrate the advantage of FLP site, the catalytic abilities of contrast sample with single acid site (ms-NiAl) or basic site (P-doped NiO) also should be investigated. Likewise, the energy change profiles of H2 activation process on catalysts with single acid/basic site are needed, to confirm the promotion in H-H scission by FLP site in comparison with single site catalysts.",
+      "text_sha256": "sha256:66c6f2541bb1a4160fea7f633d96577ced511872ef857133d075069678242265"
+    },
+    {
+      "char_end": 9610,
+      "char_start": 9362,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-29db8ec28a937d9bab6f",
+      "source_role": "reviewer_report",
+      "text": "5. As shown in Fig 3d, the conversion of methyl laurate kept at 85-88%, with selectivity of C11+C12 at 91.5%+4.5% in the long-term running of ms-NiAl-P350 (350 °C, WHSV=28.3 h-1) However in Fig 4d, the conversion (red star) is quite closed to 100%.",
+      "text_sha256": "sha256:e072185ec9081912361b08d79a7838f7ecd644cdc834c8fc0b3ae6766f255fcd"
+    },
+    {
+      "char_end": 43084,
+      "char_start": 43048,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2e16229357544f8bc46f",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #1 (Remarks to the Author):",
+      "text_sha256": "sha256:6ffd34d82a3d649fbc91e1dc65fd25e243f665d42d0f633ad65db9c0ce240058"
+    },
+    {
+      "char_end": 43248,
+      "char_start": 43087,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a4d23079fc9a83a3d309",
+      "source_role": "reviewer_report",
+      "text": "The authors have reorganized somewhat the information contained in the manuscript to avoid unnecessary duplications following the recommendation of the reviewer.",
+      "text_sha256": "sha256:6e2c90d80452a89a900cdc03f40be82216cc6f6828a6e806ae9478d54af57f72"
+    },
+    {
+      "char_end": 43805,
+      "char_start": 43251,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e5a60c623dfc7deef845",
+      "source_role": "reviewer_report",
+      "text": "However, there is still pending a major issue. This is the comparison with the bulk catalyst. The authors claim that the the catalytic efficiency of the templated material is about three times higher than that of the bulk one, which is assigned to the limited accessibility of the latter. However, this conclusion is no so evident. The bulk catalyst presents a surface area relatively close to that of the templated ones. Moreover, the substrate conversion is also very high (around 80 %) and stable along the time on stream when using the bulk catalyst.",
+      "text_sha256": "sha256:5d23bff946929c333de7be9f996e12a8414dc2648e0b433818b9e941555bac09"
+    },
+    {
+      "char_end": 44159,
+      "char_start": 43808,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-13ed3c356bc380080662",
+      "source_role": "reviewer_report",
+      "text": "Therefore, to support that conclusion, which is one of the most importants in the work, the authors should compare in a clear way the physicochemical properties and the catalytic performance (in similar conditions at varying WHSV values) of both templated and bulk catalysts, indicating how the catalytic efficiency is calculated in those experiments.",
+      "text_sha256": "sha256:9317738bc210371388ef8348e0823562004d34a101f11f34f4e6108b1565e5a4"
+    },
+    {
+      "char_end": 44198,
+      "char_start": 44162,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fbf68213f131f7bd3e06",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #3 (Remarks to the Author):",
+      "text_sha256": "sha256:8c17865a9cabc7f290ce7a58f02add361b84a8c4dd8a742bbb1b6a885882bbd0"
+    },
+    {
+      "char_end": 44633,
+      "char_start": 44201,
+      "reviewer_id_hash": "REV-d4bb511745c2b0cd",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c8f2dd761b9c1c367770",
+      "source_role": "reviewer_report",
+      "text": "In the resubmission, the authors strengthened their manuscript by supplementing lots of experiments and explainations, to the key issues I concerned, e.g. the electron transfers within the FLP site and while H2 activation, the DFT model construction. Now the the conclusions about FLP site could be supported by their experimental evidence and analysis basically. I think it could be accepted by Nature Communications at this stage.",
+      "text_sha256": "sha256:56d045e080313be7748fc277f4f55ea8b8819b38128fbf4ced88903514603ab7"
+    },
+    {
+      "char_end": 51242,
+      "char_start": 51206,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_3",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7660c3b3d999242b27fa",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #1 (Remarks to the Author):",
+      "text_sha256": "sha256:6ffd34d82a3d649fbc91e1dc65fd25e243f665d42d0f633ad65db9c0ce240058"
+    },
+    {
+      "char_end": 51359,
+      "char_start": 51245,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_3",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e25c4fc81a244d28a365",
+      "source_role": "reviewer_report",
+      "text": "In the last revised version the authors have addressed in a suitable way the pending issue stated by the reviewer.",
+      "text_sha256": "sha256:f0946c08590ddaac1fc6a228ae9596dba7c0a34f4ac23d793c3221e8e22797c5"
+    },
+    {
+      "char_end": 51539,
+      "char_start": 51362,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_3",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d664330decb5a3f0a8ba",
+      "source_role": "reviewer_report",
+      "text": "They have included additional experimental data and comments that now evidence clearly that the templated catalyst presents a performance quite superior to that of the bulk one.",
+      "text_sha256": "sha256:65d46ae337332ffaf21b0c3e518f9857caf241e5463a98e103236d9c70876050"
+    },
+    {
+      "char_end": 51596,
+      "char_start": 51542,
+      "reviewer_id_hash": "REV-174c6a4845f8d5d6",
+      "round_id": "round_3",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5ded76192e65c601a421",
+      "source_role": "reviewer_report",
+      "text": "Therefore, I recommend its acceptance for publication.",
+      "text_sha256": "sha256:72dd04174438958d43d163405f1bf174358919a8b7ef82546b4477d65286339f"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

@@ -1,0 +1,1873 @@
+{
+  "author_response_spans": [],
+  "contract": "reconstruction_session_package",
+  "forbidden_conversation_hashes": [],
+  "input_sha256": "sha256:6921d61caef264d085ee5dbb56214e2475c3bc50560b90ee1bbfe22a73361c86",
+  "instructions": "Reconstruct the final-state peer review for one paper.\nUse reviewer_report spans as the only source of review opinions. Author responses may\nonly determine whether an issue was resolved; they cannot create or rewrite a review\npoint. Remove greetings, publication/acceptance recommendations, editorial decisions,\nand generic praise. Merge duplicates, preserve real reviewer disagreement, and produce\nat most 24 atomic points in StructuredReviewV2. Include contribution summary, novelty\nsupport/limits, strengths, weaknesses, and questions. Bind every retained point to at\nleast one reviewer quote key and one final PaperIR P:S-* span. Put resolved issues only\nin ReferenceTraceV2/revision_ledger. Keep partially_resolved or persists issues only\nwhen the residual is independently supported by the final paper. Unverifiable items are\naudit-only. Do not use graph signals, GEAR output, old reconstructions, ratings,\ndecisions, recommendations, or accept/reject language. Return only the completed\nReconstructionSessionResponseV2 JSON file.",
+  "package_id": "RSP-9e58cd335c7f07e3ef30",
+  "paper_context": {
+    "claims": [
+      {
+        "claim_id": "C-66806724cef84921",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-1801c40824abbebb130c",
+        "schema_version": "aspr_gear",
+        "text": "Said[5] , Mehdi Frachet[1] , Bridget Murphy 6,7, Kai Rossnagel 6,7,8, Stephan Rosenkranz 9 & Frank Weber 1 Research on charge-density-wave (CDW) ordered transition-metal dichalcogenides continues to unravel new states of quantum matter correlated to the intertwined lattice and electronic degrees of freedom."
+      },
+      {
+        "claim_id": "C-bade102137fe5e1c",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-1801c40824abbebb130c",
+        "schema_version": "aspr_gear",
+        "text": "Our results rule out the formation of a central-peak without full phonon softening for the CDW transition in 2H-TaSe2 and provide evidence for a novel precursor region above the CDW transition temperature TCDW, which is characterized by an overdamped phonon mode and not detectable in our photoemission experiments."
+      },
+      {
+        "claim_id": "C-db617b43ef042492",
+        "claim_type": "significance_claim",
+        "evidence_key": "P:S-1801c40824abbebb130c",
+        "schema_version": "aspr_gear",
+        "text": "Thus, 2H-TaSe2 exhibits structural before electronic static order and emphasizes the important lattice contribution to CDW transitions."
+      },
+      {
+        "claim_id": "C-583cb95981d77189",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-6ff4b238dde29fe37df6",
+        "schema_version": "aspr_gear",
+        "text": "In the seminal model by Peierls[20] an electronic instability in the presence of finite electron–phonon coupling (EPC) stabilizes the CDW ground state."
+      },
+      {
+        "claim_id": "C-7733248bc40a548f",
+        "claim_type": "significance_claim",
+        "evidence_key": "P:S-31884c02955fb524d78c",
+        "schema_version": "aspr_gear",
+        "text": "Thus, investigation of this soft phonon mode can yield important insights about the underlying mechanism governing the phase transition and has been indispensable to understanding the physics of many CDW materials[24][,][25][,][27][,][28] ."
+      },
+      {
+        "claim_id": "C-e24d9dbbe05317eb",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-d429f3d7546998ab8b67",
+        "schema_version": "aspr_gear",
+        "text": "On cooling through TCDW, 2H-TaSe2 first enters a CDW phase with an incommensurate ordering wave vector qCDW = (0.323,0,0) (all wave vectors are given in reciprocal lattice units; see the “Methods” section), which gradually evolves on cooling and reaches the commensurate value qCDW = (1/3,0,0) at TCDW-C ≈ 90 K[42] ."
+      },
+      {
+        "claim_id": "C-171abe1eeb4c0e04",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-165d53929518f94f2125",
+        "schema_version": "aspr_gear",
+        "text": "Before we discuss the temperature range T ≈ T* in more detail, we present the dispersion and the damping of the LA soft mode in Fig."
+      },
+      {
+        "claim_id": "C-7f6f40fa3f2d2bb4",
+        "claim_type": "causal_claim",
+        "evidence_key": "P:S-165d53929518f94f2125",
+        "schema_version": "aspr_gear",
+        "text": "In that case, the strong increase of electronic decay channels at the nesting wave vector leads to sharply localized phonon anomalies."
+      },
+      {
+        "claim_id": "C-b082a32460eac7b6",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-4b9f13eb566874790f81",
+        "schema_version": "aspr_gear",
+        "text": "The range of wave vectors over which the LA mode shows significant renormalization on cooling to T* is 0.032(10) r.l.u."
+      },
+      {
+        "claim_id": "C-1b766e0e2387b2c8",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-4b9f13eb566874790f81",
+        "schema_version": "aspr_gear",
+        "text": "However, the strong increase of the superlattice peak prohibits further analysis of in- or quasi-elastic scattering at lower temperatures with the given energy resolution, because the much weaker quasi-elastic scattering is hidden under the tail of the elastic peak."
+      },
+      {
+        "claim_id": "C-4f7d639ca5c2f2a5",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-a04d454c2222b749020e",
+        "schema_version": "aspr_gear",
+        "text": "The increase of the CDW superlattice peak intensity accelerates sharply below T* (vertical red dashed line in Fig."
+      },
+      {
+        "claim_id": "C-7bf2a20901a72228",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-1769e97325c63e009088",
+        "schema_version": "aspr_gear",
+        "text": "Just 1 K below, at T = 121 K, we find a more than twenty-fold increase of the scattering intensity centered at qCDW = (0.323,0,0)."
+      }
+    ],
+    "contract": "reconstruction_paper_context",
+    "paper_id": "10.1038/s41467-023-43094-5",
+    "paper_sha256": "sha256:86ccb2dda4e3345bb1cc07241a92742d80fc4e1a731f496d0530d83da27b417a",
+    "schema_version": "aspr_gear",
+    "spans": [
+      {
+        "evidence_key": "P:S-f45ae484d7bcdd7616e4",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-f45ae484d7bcdd7616e4",
+        "text": "**==> picture [523 x 31] intentionally omitted <==**",
+        "text_sha256": "sha256:c92503a235f2ff0ed9de0da37ee944558aded4066f9ed470ec7d939a03c1e11f"
+      },
+      {
+        "evidence_key": "P:S-1801c40824abbebb130c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-1801c40824abbebb130c",
+        "text": "Article \n\nhttps://doi.org/10.1038/s41467-023-43094-5 \n\n## Precursor region with full phonon softening above the charge-density-wave phase transition in 2H-TaSe 2 \n\nReceived: 17 March 2023 Accepted: 31 October 2023 Check for updates \n\nXingchen Shen 1,2, Rolf Heid 1, Roland Hott1, Amir-Abbas Haghighirad 1, Björn Salzmann 3, Marli dos Reis Cantarino 3,4, Claude Monney 3, Ayman H. Said[5] , Mehdi Frachet[1] , Bridget Murphy 6,7, Kai Rossnagel 6,7,8, Stephan Rosenkranz 9 & Frank Weber 1 Research on charge-density-wave (CDW) ordered transition-metal dichalcogenides continues to unravel new states of quantum matter correlated to the intertwined lattice and electronic degrees of freedom. Here, we report an inelastic x-ray scattering investigation of the lattice dynamics of the canonical CDW compound 2H-TaSe2 complemented by angle-resolved photoemission spectroscopy and density functional perturbation theory. Our results rule out the formation of a central-peak without full phonon softening for the CDW transition in 2H-TaSe2 and provide evidence for a novel precursor region above the CDW transition temperature TCDW, which is characterized by an overdamped phonon mode and not detectable in our photoemission experiments. Thus, 2H-TaSe2 exhibits structural before electronic static order and emphasizes the important lattice contribution to CDW transitions. Our abinitio calculations explain the interplay of electron-phonon coupling and Fermi surface topology triggering the CDW phase transition and predict that the CDW soft phonon mode promotes emergent superconductivity near the pressure-driven CDW quantum critical point.",
+        "text_sha256": "sha256:a0734f0bb7f18fb2412c057e0018ed2f7e884711e176950299babf6701081ce4"
+      },
+      {
+        "evidence_key": "P:S-6ff4b238dde29fe37df6",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-6ff4b238dde29fe37df6",
+        "text": "Charge-density-wave (CDW) order, a periodic modulation of the charge carrier density, often coexists or competes with superconductivity, e.g., in copper-oxide superconductors[1][–][4] and transition-metal-based kagome metals[5][–][10] . Strong electronic correlations originating in the electronic band structures featuring flat bands, Dirac cones and van Hove singularities are expected to be responsible for the reported phase competition. On the other hand, classic CDW materials such as the layered transition-metal dichalcogenides (TMD) continue to provide a rich playground for emergent physics including excitonic insulators[11][–][13] , dimensionality- \n\ndependent correlated electronic phases[14][,][15] as well as intriguing magnetic properties[16] with potential applications in spintronic devices[17] . CDW order is widespread in metallic TMDs[18][,][19] . In the seminal model by Peierls[20] an electronic instability in the presence of finite electron–phonon coupling (EPC) stabilizes the CDW ground state. While this scenario applies to several known quasi-1D materials[21][–][24] , recent work for layered TMDs[25][–][28] showed that the full momentum dependence of both the electronic band structure and the EPC have to be taken into account to explain CDW formation and the existence of closely related superconducting phases[29][–][34] . \n\n> 1Institute for Quantum Materials and Technologies, Karlsruhe Institute of Technology, 76021 Karlsruhe, Germany. 2College of Physics, Chongqing University, Chongqing 401331, P. R. China.[3] Département de Physique and Fribourg Center for Nanomaterials, Université de Fribourg, 1700 Fribourg, Switzerland. 4Instituto de Física, Universidade de São Paulo, São Paulo, São Paulo 05508-090, Brazil.",
+        "text_sha256": "sha256:8bfec2b83900f2b6982fcf3757c0028d24dbfa151577bb282d0ab7c6e7de2e63"
+      },
+      {
+        "evidence_key": "P:S-31884c02955fb524d78c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-31884c02955fb524d78c",
+        "text": "5Advanced Photon Source, Argonne National Laboratory, Lemont, IL 60439, USA.[6] Institute of Experimental and Applied Physics and KiNSIS, Kiel University, 24098 Kiel, Germany.[7] Ruprecht Haensel Laboratory, Kiel University, 24098 Kiel, Germany.[8] Ruprecht Haensel Laboratory, Deutsches Elektronen-Synchrotron DESY, 22607 Hamburg, Germany.[9] Materials Science Division, Argonne National Laboratory, Lemont, IL 60439, USA. e-mail: frank.weber@kit.edu \n\nNature Communications | (2023) 14:7282 \n\n1 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-43094-5 \n\nA hallmark of CDW order is a periodic lattice distortion and the softening of a symmetry-related phonon to zero energy at the phase transition temperature TCDW. Thus, investigation of this soft phonon mode can yield important insights about the underlying mechanism governing the phase transition and has been indispensable to understanding the physics of many CDW materials[24][,][25][,][27][,][28] . However, a full softening is not always observed questioning the displacive nature of the CDW phase transition. For instance, quasi-1D materials NbSe335 and (TaSe4)2I[36] as well as cuprates[2][,][3][,][37] and kagome metals[8] feature no or only little softening at TCDW. \n\n2H-TaSe2 is a prototypical CDW compound featuring a large periodic lattice distortion[38] and a momentum-dependent energy gap in the electronic band structure in its low-temperature state[39][,][40] . It is a layered material (see inset in Fig. 1a) for which CDW order with a transition temperature TCDW = 122.3 K was reported in the 1970s[41] .",
+        "text_sha256": "sha256:109a45ca91661c9eaa4dbace523754a3189d8c6a1583fa599ebb0cfcc8b64761"
+      },
+      {
+        "evidence_key": "P:S-d429f3d7546998ab8b67",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-d429f3d7546998ab8b67",
+        "text": "On cooling through TCDW, 2H-TaSe2 first enters a CDW phase with an incommensurate ordering wave vector qCDW = (0.323,0,0) (all wave vectors are given in reciprocal lattice units; see the “Methods” section), which gradually evolves on cooling and reaches the commensurate value qCDW = (1/3,0,0) at TCDW-C ≈ 90 K[42] . The superconducting transition temperature of 2H-TaSe2 is Tsc = 0.1 K. However, Tsc increases up to 8.2 K under pressure and a close connection between fluctuations of the pressure-suppressed CDW order and superconductivity is anticipated[31] . In 2H-TaSe2, the CDW soft phonon mode corresponds to the longitudinal acoustic (LA) phonon propagating along the [100] direction and has been investigated by inelastic neutron scattering (INS) experiments in the 1970s[38][,][41] . Surprisingly, the observed phonon \n\n**==> picture [241 x 170] intentionally omitted <==**",
+        "text_sha256": "sha256:d8ef541f16a2d80daf079f1c161d1737132ad6cd85956f62a35e6c13f2061998"
+      },
+      {
+        "evidence_key": "P:S-63927ca7687036329f93",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-63927ca7687036329f93",
+        "text": "Fig. 1 | Probing of charge-density-wave order in 2H-TaSe2. a Schematic dispersion (black solid lines) of an acoustic phonon with a soft mode at qCDW ≈ (1/3,0,0) for energy-loss (positive energies) and energy-gain (negative energies). The red dot indicates the position of the corresponding superlattice peak in the ordered phase. Thick vertical (green) and horizontal (blue) arrows illustrate the scans done on the HERIX spectrometer to investigate the phonon softening and superlattice peak formation in 2H-TaSe2. Labels b–d refer to the following panels showing typical results for the corresponding scans in more detail. Insets in (a) show the crystal structure of 2H-TaSe2 (P63=mmc, a = b = 3.44 Å, c = 12.7 Å, #194) and the layout of the Brillouin zone with high symmetry points labeled. b Energy scan at q ≠ qCDW. For a realistic picture we convoluted a damped harmonic oscillator function with the pseudo-voigt-like experimental resolution (ΔEFWHM = 1.5 meV). c Energy scan at q = qCDW. The signal from the superlattice peak is approximated by the resolution function whereas the damped phonon is represented by a damped harmonic oscillator function convoluted with the resolution function. The scattering contributions from the superlattice peak [thick (red) solid line] are easily distinguished from the phonon contribution [thick (blue) dashed line]. d Momentum scan at zero energy transfer, E = 0, across the CDW superlattice peak (red dot in (a)). Because of the finite energy resolution and the broad phonon lineshapes, it is not clear how strongly soft phonon mode and superlattice peak contribute to the scattering at zero energy transfer. \n\nsoftening was not complete, i.e., the energy of the LA mode at qCDW softened from above 7 meV at room temperature only to 4.5 meV at TCDW.",
+        "text_sha256": "sha256:4997c5dc70d45e87475c67df1d01bd05434da4eba4bd8b4a9e979d5ca8a87130"
+      },
+      {
+        "evidence_key": "P:S-ab101dabcb78000f8d8f",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-ab101dabcb78000f8d8f",
+        "text": "However, a resolution-limited, static central peak at zero energy transfer developed already below 150 K, well above TCDW where phonon softening was reported to be strongest. Similar observations, i.e., the rise of a central elastic peak before the corresponding phonon fully softens, had been made earlier in ferroelectric SrTiO343–45 and more recently in quasi-1D CDW compounds[22] as well as in cuprates[2] . The origin of the central peak is not fully understood[45] though it was ascribed to ordered fluctuations in some CDW-related materials[2][,][22] . The report of such an elastic peak rising above the phase transition temperature in 2H-TaSe2 is one of the earliest documented, although the authors of the original INS study[38] pointed out that the coarse momentum resolution in their experiments may have obscured a better view of the lattice dynamics. Hence, the lattice dynamical behavior in 2H-TaSe2 remains unclear and is highly relevant not only for its intertwined superconducting and charge-ordered phases but also for our understanding of other materials featuring CDW order such as quasi-1D (TaSe4)2I[36] , NbSe335, ZrTe322, and underdoped cuprates[2][,][3] . \n\nHere, we employ inelastic x-ray scattering (IXS) with meV resolution to study the CDW soft phonon mode in 2H-TaSe2. The much better momentum resolution of IXS compared to INS enables the detailed study of the soft-mode properties as a function of wave vectors as well as temperature. Combined with the energy resolution of 1.5 meV, IXS enables an unambiguous separation between the static superlattice peak (resolution limited in energy) and in- or quasi-elastic (not resolution limited) scattering from the soft phonon mode.",
+        "text_sha256": "sha256:91607c6df95b1bcdfc3b6642a4f4ca905466e179f76a47e4f2fe0405080e6133"
+      },
+      {
+        "evidence_key": "P:S-34182850b3859f0fbde1",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-34182850b3859f0fbde1",
+        "text": "We observe a full phonon softening of the LA phonon mode at qCDW = (0.323,0,0) and that the static CDW superlattice peak intensity rises strongly only on cooling to temperatures below that of the full phonon softening. This is in contrast to previous results[38] and rules out the central-peak scenario for 2H-TaSe2. Yet, the most surprising finding is that the phonon softening occurs at a temperature T* = 128.7 K, i.e., well above TCDW = 121.3 K. Analysis of high momentum resolution scans at E = 0 reveals that the phase at TCDW ≤ T ≤ T* is characterized by lattice fluctuations, observed as the overdamped soft phonon mode, coexisting with static but only medium-range CDW order. Furthermore, we performed ab initio lattice dynamical calculations to investigate the origin of CDW order as well as the role of the CDW soft phonon mode with regard to the increasing superconducting temperatures at high pressure. The results show that both electron–phonon coupling, as well as the Fermi surface topology, have to be taken into account to understand the origin of CDW order in 2H-TaSe2. It also seems to be an ideal candidate to investigate the interplay of a CDW quantum critical point and emergent superconductivity relevant to a number of other systems of interest, including cuprates and 122 Ni-based superconductors. \n\n## Results \n\nThe strategy of our IXS experiment is outlined in Fig. 1: The LA mode at q = (h,0,0) shows a pronounced softening close to the temperature of the phase transition at qCDW (black lines in Fig. 1a) where eventually the CDW superlattice peak (red dot at zero energy transfer) emerges. We performed energy scans at constant momentum transfer [vertical (green) arrows] and momentum scans at zero energy transfer [horizontal (blue) arrows].",
+        "text_sha256": "sha256:e8ea5189ed4b0a877a4430233586a59ee4b048fdd265bd8f4536c22ed36d90ea"
+      },
+      {
+        "evidence_key": "P:S-62c1594db3f2e9becd25",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-62c1594db3f2e9becd25",
+        "text": "Typical results for three different scenarios are sketched in Fig. 1b–d. At q ≠ qCDW, the LA mode can already have a low energy, e.g., Ephon ≈ 4 meV. Taking into account the energy resolution and damping due to electron–phonon coupling, the resulting scan shows broad phonons peaked at ±Ephon and with finite scattering intensity even at zero energy transfer (Fig. 1b). Constant momentum scans at q = qCDW and T ≈ TCDW typically show a resolution-limited signal corresponding to the rising static CDW superlattice peak (solid (red) line in Fig. 1c) easily distinguishable from the broad scattering from the damped soft phonon mode [dashed (blue) line]. Due to the \n\nNature Communications | (2023) 14:7282 \n\n2 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-43094-5 \n\n**==> picture [481 x 247] intentionally omitted <==**",
+        "text_sha256": "sha256:f3c02219f857c87dbe1c3dbbf889bd807a749de50b3524e83c0e68ad567e4db2"
+      },
+      {
+        "evidence_key": "P:S-9d82d3d163635e15b973",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-9d82d3d163635e15b973",
+        "text": "Fig. 2 | Energy scans of the soft phonon mode in 2H-TaSe2. Energy scans taken at q || [100] at a–c T = 250 K and d–f 130 K. Dashed (red) lines are fits consisting of DHO functions convoluted with the experimental resolution (blue solid lines), \n\nestimated background (straight dotted line) and a resolution limited pseudo-Voigt function for the elastic line (black dash-dotted line). Error bars represent standard deviations. Error bars represent s.d. \n\nsmall phonon scattering intensities, constant momentum scans employ a relatively broad momentum resolution, Δq = 0.09 Å[−][1] , not suited to investigate the correlation length of the rising CDW superlattice peak. Therefore, we performed additional momentum scans at zero energy transfer across q = qCDW with high resolution, Δq = 0.018 Å[−][1] . Generally, it is not clear which part of the scattering intensity at zero energy transfer originates from the static elastic peak and which part is due to the (nearly) completely damped LA phonon (Fig. 1d). Yet, the combined analysis of both types of scans allows the unambiguous determination of the temperature dependence of the elastic CDW superlattice peak concomitant with that of the soft phonon mode. \n\nFigure 2 illustrates raw data along the dispersion of the LA mode (Fig. 2a–f) and highlights its strong temperature dependence at q = (0.325,0,0) [≈qCDW = (0.323,0,0)] (Fig. 2b and e). The temperaturedependent energy of the LA mode at qCDW (Fig. 3a) shows a clear softmode behavior. Surprisingly, the softening is, within our experimental resolution, complete already just below 130 K, well above the reported CDW transition temperature[38] of about 122 K (vertical blue dashed line in Fig. 3a). Fitting a power law of the form |T−T*|[δ] (red solid line in Fig.",
+        "text_sha256": "sha256:78e4a4fcd233ed4ca51f38f7b0f7cf5446f593d0d48aaceaff110e6eab7f9b1d"
+      },
+      {
+        "evidence_key": "P:S-165d53929518f94f2125",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-165d53929518f94f2125",
+        "text": "3a) to the temperature dependence of the soft mode for T ≥ 130 K yields δ = 0.32(2) and T* = 128.7(3) K (vertical red dashed line in Fig. 3a). Below T*, the energy of the soft mode stays close to zero. The observed value of δ is lower than the mean-field one, δMF = 0.5, observed e.g. for the CDW transition in the iso-structural 2H-NbSe225. Since mean-field theory neglects fluctuations of the order parameter, δ = 0.32(2) indicates the presence of strong order parameter fluctuations in 2H-TaSe2. We expect reduced fluctuations far away from the transition and, indeed, the soft-mode energies for T ≥ 175 K follow mean-field behavior, which means that the square of the phonon energies depends linearly on temperature (see Fig. 3b). A linear fit for T ≥ 175 K extrapolates zero energy for the soft mode at T ≈ 85 K, which is close to TC-IC ≈ 88 K[41][,][42] , the temperature at which 2H-TaSe2 acquires a commensurate CDW. \n\nBefore we discuss the temperature range T ≈ T* in more detail, we present the dispersion and the damping of the LA soft mode in Fig. 3c, d, respectively. We find, within our experimental resolution, a V-like \n\ndispersion and a sharply peaked damping centered at qCDW at T = 130 K (black spheres in Fig. 3c, d) again in contrast to 2H-NbSe2, where the LA soft mode displays a much broader, U-shaped dispersion at the respective TCDW25,46. Phonon energies of the LA mode rise much faster going away from qCDW in 2H-TaSe2 than in 2H-NbSe2. A V-like dispersion (Fig. 3c) is expected when the EPC of the soft mode is dominated by a Fermi surface (FS) nesting. In that case, the strong increase of electronic decay channels at the nesting wave vector leads to sharply localized phonon anomalies.",
+        "text_sha256": "sha256:34cb53751d6864003904c7e1866033522dfd69a78c64a0ff91ae3532dd574ff4"
+      },
+      {
+        "evidence_key": "P:S-4b9f13eb566874790f81",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-4b9f13eb566874790f81",
+        "text": "The dispersion of 2H-TaSe2 is sharper than in 2H-NbSe2, in which FS nesting was shown to be completely absent[47] , but not as sharp as in some quasi-1D compounds, such as KCP[21] and ZrTe322. This is in line with results from angle-resolved photoemission spectroscopy (ARPES) revealing a moderately strong FS nesting in 2H-TaSe248. The range of wave vectors over which the LA mode shows significant renormalization on cooling to T* is 0.032(10) r.l.u. along the [100] direction (half-width of phonon anomaly, Fig. 3c) indicating a short coherence length of the CDW order parameter of ξ 0 = 17 ± 4 Å, in reasonable agreement with estimates from specific heat ξ 0≈14 Å[49] . \n\nFigure 4 shows energy scans at qCDW taken for temperatures TCDW ≤ T ≤ T* along with an analysis of the temperature dependence of the observed static CDW superlattice peak. The results show that the CDW superlattice-peak intensity (dash-dotted red lines in Fig. 4a–c) increases in this temperature range by a factor of 10. Yet, the spectrum at T = 122.5 K still shows similar spectral weights of the CDW superlattice peak (dash-dotted red line) and the soft phonon mode (solid blue line in Fig. 4c). Cooling further by only ΔT = 1 K, the scattering at zero energy jumps by a factor of 20 (inset of Fig. 4c) and we will see further below that this jump marks the onset of long-range CDW order. However, the strong increase of the superlattice peak prohibits further analysis of in- or quasi-elastic scattering at lower temperatures with the given energy resolution, because the much weaker quasi-elastic scattering is hidden under the tail of the elastic peak. The temperature dependences of the soft mode’s energy, its intensity, and that of the CDW superlattice peak are summarized in Fig. 4d, e, respectively.",
+        "text_sha256": "sha256:72bbb6fb811555f7aac66166902065a4ddd54a21d04b0150114755f6bf127fb2"
+      },
+      {
+        "evidence_key": "P:S-a512e047038a333ac8d8",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a512e047038a333ac8d8",
+        "text": "The intensity of the soft phonon mode dominates the spectra except for close to and, of course, below TCDW. Nevertheless, our results clearly \n\nNature Communications | (2023) 14:7282 \n\n3 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-43094-5 \n\n**==> picture [421 x 344] intentionally omitted <==**",
+        "text_sha256": "sha256:b8a68b4747c1c8d56bdac6689bf45a04e6e9d1af8d1533512aa404dee8c21068"
+      },
+      {
+        "evidence_key": "P:S-a04d454c2222b749020e",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a04d454c2222b749020e",
+        "text": "Fig. 3 | Temperature and momentum dependence of the soft phonon mode in 2H-TaSe2. a Temperature dependence of the energies of the LA phonon modes at q = (0.325,0,0) (=qCDW, spheres) and q = (0.28,0,0) (open circles). The line is a power law fit to the data for q = qCDW and T ≥ 130 K of the form |T−T*|[δ] yielding T* = 128.7 K (vertical red dashed line) and δ = 0.32 ± 0.02 (data in gray-shaded box are shown in more detail in Fig. 4d). The vertical blue dashed line indicates \n\nTCDW = 121.3 K. b Square of the phonon energy at q = qCDW as function of temperature. The solid line is a linear fit corresponding to δ = 0.5 in (a) for T ≥ 175 K. TICC[≈][88 K indicates the transition temperature into the commensurate CDW phase] (see inset in Fig. 5c). c Dispersion and d damping ratio Γ =ω of the LA mode along q = (h,0,0) for 250 K ≥ T ≥ 125 K. Lines are guides to the eye. Error bars represent s.d. \n\nshow that a small static CDW superlattice peak is already present at T ≈ 130 K. The increase of the CDW superlattice peak intensity accelerates sharply below T* (vertical red dashed line in Fig. 4e) before it jumps by a factor of 20 crossing TCDW (see also inset in Fig. 4c). \n\nOur results identify a precursor region at TCDW ≤ T ≤ T* characterized by the simultaneous presence of soft-mode lattice fluctuations and static CDW order. A critically damped phonon indicates that there is quasi-zero energy needed for small lattice distortions that are symmetry-related to the phonon oscillation pattern. On the other hand, the intensity of a superlattice peak is proportional to the square of the order parameter, i.e., the atomic displacement from the hightemperature equilibrium position. Thus, the presence of a weak CDW superlattice peak indicates small but finite displacements.",
+        "text_sha256": "sha256:7b688faea6d5cbb64b07a0df47fcc8872c9358e5ecfb964baaa0970722a6a7d0"
+      },
+      {
+        "evidence_key": "P:S-1769e97325c63e009088",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-1769e97325c63e009088",
+        "text": "A possible interpretation is that there exist small domains of static CDW order with a finite correlation length ξcorr, in a matrix of material with critical lattice fluctuations. On cooling, one would expect that ξcorr increases and finally diverges at the temperature at which the sample reaches long-range CDW order, i.e., at TCDW. \n\nHowever, the momentum resolution employed for energy scans (Δq = 0.09 Å[−][1] ) is too coarse for a detailed analysis of the CDW correlation length ξcorr. Therefore, we performed momentum scans at constant energy transfer of E = 0 (indicated by the horizontal blue arrow in Fig. 1a and illustrated in Fig. 1d) with an improved momentum resolution of Δq = 0.018 Å[−][1] (see the “Methods” section and Supplemental Note 2). Raw data at selected temperatures are shown in Fig. 5a. \n\nData at T = 122 K (red spheres in Fig. 5a) show the rise of scattering – intensity for a broad momentum range q = (0.3 0.35,0,0) on cooling. Just 1 K below, at T = 121 K, we find a more than twenty-fold increase of the scattering intensity centered at qCDW = (0.323,0,0). On further cooling the intensity increases further and the peak position moves towards the commensurate wave vector qCDW,C = (1/3,0,0) illustrated by the data for T = 80 K (orange spheres in Fig. 5a). From a peak fit we obtain the detailed temperature dependences of the integrated intensity (Fig. 5b), the peak position qCDW (Fig. 5c) and its line width Γexp,FWHM (Fig. 5d). The integrated peak intensity follows a power law of the form |T−TCDW|[2][β] for T ≤ 121 K with TCDW = 121.3(2) K and β = 0.21(1) (red line in the inset of Fig. 5b).",
+        "text_sha256": "sha256:d4aaff817b4e78725d17e690b128f27a6417269754463d3ce9983e3ae4bbcfb7"
+      },
+      {
+        "evidence_key": "P:S-85f59415ec49764a4ad3",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-85f59415ec49764a4ad3",
+        "text": "On further cooling, the intensity continues to increase and qCDW shifts to the commensurate value qCDW,C = (1/3,0,0) at temperatures close to TC-IC ≈ 88 K[42] (inset in Fig. 5c). Γexp,FWHM(T) shows that peaks are resolution limited for data taken at T ≤ 121 K. A power law fit of the form (T−TCDW)[δ] to Γexp,FWHM(T) for T ≥ 122 K corroborates the transition temperature to long-range CDW order TCDW = 121.3(2) K in good agreement with the literature[38][,][41][,][42][,][49] . A more detailed analysis which takes into account the experimental resolution and estimates the phononic background (see Fig. S2 and Supplemental Note 2) shows that the correlation length ξcorr of the static CDW domains in the precursor region increases along [100] on cooling from 100 to 200 Å just above TCDW (black spheres in Fig. 5e). Values along [010] are essentially the same while the correla– tion length along [001] is 4 5 times smaller. Thus, the precursor region \n\nNature Communications | (2023) 14:7282 \n\n4 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-43094-5 \n\n**==> picture [481 x 199] intentionally omitted <==**",
+        "text_sha256": "sha256:c0deaa8f1565517c4859e1bb9ae465304618ff47602df75fd9d5e24b110e252d"
+      },
+      {
+        "evidence_key": "P:S-f35b22803b257e4ea691",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-f35b22803b257e4ea691",
+        "text": "Fig. 4 | Evolution of elastic and inelastic scattering at TCDW ≤ T ≤ 150 K. a–c Energy scans taken at Q = τ + q with τ = (3,0,1) and q = qCDW [=(0.325,0,0)] at various temperatures 122.5 K ≤ T ≤ 127.5 K, i.e, TCDW < T < T*. Thin solid (black) lines are fits consisting of DHO functions convoluted with the experimental resolution (blue solid lines), constant background, and a resolution-limited pseudo-Voigt function for the rising CDW superlattice peak (red dash-dotted line). The inset in c shows data taken at T = 121.5 K (≈TCDW). Here, no analysis of inelastic scattering is possible because of the increase of the CDW superlattice peak by more than a factor of 20. \n\nd Temperature-dependent energy of the CDW soft phonon mode (blue spheres). The red solid line represents the same power-law fit as shown in Fig. 3a. e Temperature-dependent integrated intensities of the CDW superlattice peak (red spheres, see also red dash-dotted lines in (a–c)) and the soft phonon mode (blue spheres, see also blue solid lines in (a–c)). Small letters, a–c, reference panels showing the corresponding IXS raw data. Vertical blue and red dashed lines (in d and e) denote TCDW = 121.3 K and T* = 128.7 K, respectively. Error bars represent s.d. \n\nin 2H-TaSe2 is characterized by medium-range-sized CDW domains, which only form a long-range ordered state at T ≤ TCDW. \n\nThe precursor region has not been observed previously by other techniques. INS experiments[38][,][41] did not have sufficient momentum resolution while XRD[42] was energy integrated and so could not distinguish between static CDW and soft-mode intensity contributions. We performed synchrotron-based ARPES to cross-check results on our own samples with previous reports[40] .",
+        "text_sha256": "sha256:e4b919005efeadab3b0f67efc2558b8ce1c50ac993060f385633e6a468bd6e43"
+      },
+      {
+        "evidence_key": "P:S-16210016f076091c75ee",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-16210016f076091c75ee",
+        "text": "In particular, we looked for quantities previously used as a measure of the onset of CDW order such as a pseudo-gap[40] and the evolution across T*. Measurements were done with an incident photon energy of 80 eV (resolution <10 meV) over a temperature range 132 K ≥ T ≥ 113 K, i.e., cooling across T* and TCDW. Technical details and detailed results of our analysis are given in Supplemental Note 3. Here, we summarize, that—in agreement with previous reports—the electronic band structure exhibits a pseudo-gap (as defined in ref. 40, see Supplemental Note 3 and Fig. S3 for more details), which increases slowly on cooling in the upper part of the temperature range (open squares in Fig. 5e). The increase of the pseudo-gap on cooling accelerates by a factor 4 at lower temperatures and linear fits within the two temperature regions (dashed lines in Fig. 5e) intersect very close to TCDW = 121.3 K. However, no particular response is detectable on crossing T*. The presence of the pseudo-gap in 2H-TaSe2 has been reported up to nearly room temperature[48] as well as in the high-temperature phase of 2H-NbSe250. The latter report found that the pseudo-gap phase in 2H-NbSe2 at T > TCDW is related to incoherent CDW fluctuations. Long-range CDW order only sets in once phase coherence is established at T < TCDW. On the other hand, electrons adjust quasi-instantaneously to lattice motions. It is argued in the case of 2H-NbSe250 that fluctuations always yield a pseudo-gap irrespective of the time-scale of the fluctuations.",
+        "text_sha256": "sha256:32a002a3ccf68c3ca5933a5089267c391e9a9c1781710aba781ea9f1b6ffaac1"
+      },
+      {
+        "evidence_key": "P:S-295fd0e2ac57b4e197ca",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-295fd0e2ac57b4e197ca",
+        "text": "Therefore, we argue that electronic degrees of freedom do not distinguish between lattice fluctuations with a finite lifetime, i.e., the overdamped soft mode, and static correlations but follow the evolution of the energy-integrated signal as probed by standard x-ray diffraction[42] . Consequently, the pseudo-gap is rather insensitive to T* but responds to the large increase of scattering intensity on cooling below TCDW. \n\nWe performed calculations based on density-functional perturbation theory (DFPT, for details see the “Methods” section and Supplemental Note 4) to investigate the microscopic origin of CDW order and the impact of the CDW soft mode regarding the strongly increasing superconducting transition temperature at high pressure[31] . Results based on ambient-pressure lattice constants[38] correctly assess the CDW structural instability as an anomaly of the longitudinal acoustic phonon propagating along the Γ−M direction (thick solid line in Fig. 6a). The soft mode features imaginary phonon frequencies where the leading instability around q ≈ (0.35,0,0) is close to the experimentally observed qCDW. We further calculated the electronic contribution to the phonon linewidth \n\n**==> picture [221 x 22] intentionally omitted <==**",
+        "text_sha256": "sha256:0f276c91609ea0d7b83b8726e01c7af086746ab36aade2a109a34f2436a3c931"
+      },
+      {
+        "evidence_key": "P:S-8027d82aa5584c74f5fa",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8027d82aa5584c74f5fa",
+        "text": "vectorwhere g q[q] k, +[λ] ω qq,kλ[is the EPC matrix element for a phonon mode] is the mode’s energy and[P] δðϵk � ϵF Þδðϵk + q �[ λ][ at a wave] ϵF Þ gives the number of electronic states at thek Fermi level connected by the phonon wave vector q, i.e., the electronic joint density-ofstates (eJDOS). \n\nThe momentum dependence of γ[q] EPC,DFT[of the CDW soft phonon] mode is in good qualitative agreement with our experimental observations (solid line and symbols in Fig. 6b). The fact that the experimental values are significantly larger than the calculated ones has been already observed in several other IXS measurements in CDW systems[25][,][51][,][52] . While anharmonic effects close to the structural phase transition which are not included in our quasi-harmonic calculations might play a role, the finite momentum resolution in concert with steeply dispersing phonon modes will also lead to increased linewidths near the phase transition temperature (see Supplemental Note 2 for more details). For 2H-TaSe2, the eJDOS for electronic band transitions mediating strong coupling to the CDW soft phonon mode shows a clear maximum near qCDW (solid line in Fig. 6c, for more details see Figs. S4–S6 and Supplemental Note 4). The peak in the eJDOS is not very sharp in agreement with the reported moderately strong FS nesting in 2H-TaSe248. A more detailed analysis (see Figs. S4–S6 and \n\nNature Communications | (2023) 14:7282 \n\n5 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-43094-5 \n\n**==> picture [361 x 262] intentionally omitted <==**",
+        "text_sha256": "sha256:bfe6bf633ad0ac7793acca69a3ed21c1947a549e90d75c02330393ebac68bdd5"
+      },
+      {
+        "evidence_key": "P:S-82a71ba9aeb67f125561",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-82a71ba9aeb67f125561",
+        "text": "Fig. 5 | High-resolution momentum scans at E = 0 and temperatures T ≤ 140 K. a Momentum scans at zero energy transfer along the [100] direction, i.e., across qCDW for temperatures above and below the CDW transition. Data were taken in a high-momentum resolution setup (see Supplemental Note 2) to resolve the evolution of qCDW on cooling below TCDW. b–d Temperature-dependent b integrated intensity, c position qCDW and d line width Γexp,FWHM of peak fits to the momentum scans at zero energy transfer. Color-coded dots denote temperatures with data shown in (a). The inset in b shows the integrated intensity on a linear scale along with a power law fit (red line) of the form |T−TCDW|[δ] yielding TCDW = 121.3(2) K. The inset in c focuses on temperatures around TC-IC ≈ 88 K[42] . Lines are linear fits to the range below and above TC-IC. The solid red line in d is another power law fit to the \n\ncorresponding data for T ≥ 122 K and yields TCDW = 121.3(2) K, indicated by the vertical blue dashed line. The dashed horizontal line in d denotes the experimental momentum resolution. e The temperature-dependent correlation length ξ corr (spheres) of the static scattering was obtained by subtracting the data at T = 129 K (≈T*) as background and analyzing the linewidth of the static scattering rising below T* (see text, Supplemental Note 2 and Fig. S2). The solid line is a guide to the eye. The vertical blue and red dashed lines denote TCDW = 121.3 K and T* = 128.7 K, respectively. Green squares denote the temperature-dependent pseudo-gap deduced from ARPES measurements (see text, Supplemental Note 3 and Fig. S3). Dashed lines are linear fits to the data for T < TCDW and T > TCDW. Error bars represent s.d. \n\n**==> picture [481 x 182] intentionally omitted <==**",
+        "text_sha256": "sha256:8a964b19338e68b588a4b996ac991a4deffbeba793428762e8237abd7b4c4b7a"
+      },
+      {
+        "evidence_key": "P:S-7dfde4d453b29fa867c4",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-7dfde4d453b29fa867c4",
+        "text": "Fig. 6 | Ab-initio lattice dynamical calculations. a Calculated dispersion for longitudinal phonons along the Γ-M direction in 2H-TaSe2—performed in the hexagonal unit cell, P63=mmc. Imaginary phonon energies denote an unstable structure and are shown as negative values. b Calculated electronic contribution to the phonon linewidth γEPC,DFT (FWHM) of the LA soft phonon mode (thick solid and dashed lines in (a)). Symbols represent the linewidth (FWHM) of the DHO function approximated to the IXS data (right-hand scale, error bars represent s.d.). c Calculated electronic joint density-of-states (eJDOS) for the band transition \n\nmediating EPC of the soft mode (see Figs. S4–S6 and Supplemental Note 4). Solid lines denote calculations for ambient-pressure lattice constants (a = b = 3.436 Å, c = 12.7 Å). Dashed lines represent calculations based on the high-pressure lattice constants (a = b = 3.242 Å, c = 11.09 Å, see text). d Calculations for the high-pressure lattice constants showing the phonon density-of-states (PDOS), Eliashberg function α[2] FðωÞ, and electron–phonon coupling constant λEPC as function of phonon energy. \n\nNature Communications | (2023) 14:7282 \n\n6 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-43094-5 \n\nSupplemental Note 4) explains that a previously reported[19] , and by us reproduced, nesting feature at qnest = ð1=3,1=3,0Þ is not related to any significant EPC and, thus, irrelevant for the LA soft phonon mode. Thus, 2H-TaSe2 is an excellent example where the CDW properties are linked to an interplay of momentum-selective EPC matrix elements and FS topology.",
+        "text_sha256": "sha256:4472030559ced8f87bb93b46e4ab7efa94100300b9f879a44c6ff7d3f55ce370"
+      },
+      {
+        "evidence_key": "P:S-69c45aee73d06e8c1a7a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-69c45aee73d06e8c1a7a",
+        "text": "Regarding the superconducting properties at ambient pressure, it is expected that the EPC of the low-energy phonons is mostly gapped out by the opening of the CDW energy gap in the electronic band structure[39] , and, thus, cannot mediate superconductivity at T ≪ TCDW. On the other hand, the coupling of the optic branches with energies above 20 meV is relatively small.Estimates for a corresponding superconducting transition temperature are zero or very small (see Supplemental Note 4) consistent with the experimentally observed Tsc ≈ 0.1 K at ambient pressure[31] . \n\nInterestingly, calculations based on lattice constants obtained for p = 23 GPa[53] [Tc,max (p = 23 GPa) = 8.2 K][31] predict a stable phonon spectrum for the hexagonal structure of 2H-TaSe2 although the anomaly around qCDW is still clearly visible (thick dashed line in Fig. 6a). The stabilization of the LA mode at high pressure is accompanied by a strong reduction of its linewidth γEPC,DFT (dashed line in Fig. 6b) and eJDOS (dashed line in Fig. 6c). In particular the peak in the eJDOS near qCDW is flattened suggesting that the pressure-induced changes of the electronic band structure play an important role in the suppression of charge order at high pressure in 2H-TaSe2. Thus, we can analyze the EPC of 2H-TaSe2 when the CDW ground state is suppressed at high pressure (Fig. 6d). We find that more than 70% of the overall EPC constant λEPC = 1.03 originates from phonons below 15 meV (red solid line in Fig. 6d). The estimated value of Tc,DFPT = 10.6 K is in reasonable agreement with the experimentally observed Tc,exp = 8.2 K at p ≈ 23 GPa[31] .",
+        "text_sha256": "sha256:8a82935192c3fd23c32a21184cea5ba5c815d55cd630c0b5ab5f8d51448c8227"
+      },
+      {
+        "evidence_key": "P:S-8cde4afe27fd3eeddefc",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8cde4afe27fd3eeddefc",
+        "text": "We conclude that the EPC of the low-energy phonons in 2H-TaSe2 including the CDW soft phonon mode can drive the large increase of the superconducting transition temperature at high pressure. \n\n## Discussion \n\nThe presented IXS investigation puts the CDW transition in 2H-TaSe2 in a new light in that there is a full phonon softening. Our analysis shows that the tail of the scattering above TCDW (Fig. 5b), observed in synchrotron XRD[42] and previous neutron scattering work[38][,][41] , is dominated by scattering from the soft LA mode (see Fig. 4e). Thus, we can rule out the central-peak scenario for 2H-TaSe2 as it was observed, e.g., in SrTiO343–45, and other CDW compounds2,3,22,35,36. \n\nA new striking feature of the CDW transition in 2H-TaSe2 is the precursor region for TCDW = 121.3 K ≤ T ≤ T* = 128.7 K defined by the presence of an overdamped phonon mode and the slow increase of the static elastic line. Both features appear at qCDW. Thus, the characteristic features of the precursor region are not competitive but rather precursor-like with regard to the CDW phase at T ≤ T*. The presence of an overdamped phonon over a finite temperature range bears similarities to a liquid-like scenario for the soft phonon mode[54][,][55] . For instance, Ag-based argyrodites, which are promising candidates for thermoelectric applications, feature a structural phase transition temperature Ts at which a phonon softens on heating towards Ts. This soft optical phonon mode becomes and stays over-damped at temperatures T ≥ Ts and is linked to the diffusion of Ag ions in these materials[54][,][56] . Normally, the transition from a full soft phonon mode to a long-range CDW order occurs at the same temperature, e.g., in 2HNbSe225, 1T-VSe228 or the rare-earth tritellurides51,57.",
+        "text_sha256": "sha256:2b1b84261590f278255167f65ef1650d4d8acfebcd467c325bcb2eb0c2f8055e"
+      },
+      {
+        "evidence_key": "P:S-4120eb134dce30ef270b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-4120eb134dce30ef270b",
+        "text": "A possible reason for the anomalously wide temperature range, ΔT ≈ 7.4 K, in which this evolution happens might be strong fluctuations that prohibit a direct transition to a CDW long-range ordered phase. This transition only occurs at the lower end of ΔT, i.e., TCDWaccompanied by a large increase of the intensity of the, then resolution limited, superlattice peak. It is worth noting that the 20-fold increase of the elastic scattering within ΔT = 1 K from above to below TCDW (see Fig. 4c and inset) is much more abrupt than in similar measurements in 2H-NbSe2. In the \n\nlatter compound, the rise is rather gradual and the intensity is not even doubled on cooling ΔT = 1 K at any temperature close to or below TCDW,NbSe225. Similarly, specific heat data for 2H-TaSe2 shows a sharp peak at TCDW with a width of <1 K[49] , whereas equivalent data for 2HNbSe2 feature a width of more than 5 K[58] . It requires additional theoretical modeling which is able to include the effects of fluctuations to understand the details of the CDW transition in 2H-TaSe2 beyond the scope of the work reported here. \n\nOur results regarding the elastic superlattice peak compared to the weak pseudo-gap in the electronic band structure demonstrate that structural order precedes full electronic order in 2H-TaSe2. Early specific heat measurements in 2H-TaSe249 as well as theoretical considerations[59] already suggested a dominant lattice, i.e., phonon contribution to the phase transition entropy on entering the incommensurate CDW phase at TCDW. More recently, CDW order in quasi-1D ZrTe3 has been shown to feature a structural transition at the typically reported TCDW = 63 K while charge modulations only become longrange ordered below TLO = 56 K[60] .",
+        "text_sha256": "sha256:2f043b49e4e904c4ae70d7220ce4094b4d9f2e64a90b366d9d80705260d183d0"
+      },
+      {
+        "evidence_key": "P:S-e946975f4f0922f5a3db",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-e946975f4f0922f5a3db",
+        "text": "The authors argued that Friedel oscillations seeded by impurities produce the short-range charge modulations at TLO ≤ T ≤ TCDW, whereas only the long-range ordered modulations below TLO bear the true CDW nature. A similar scenario in 2H-TaSe2 might explain the weak electronic response to the transition at TCDW (see Fig. 5e, 8 and Supplemental Note 3 and refs. 39,40) and a strong one at the onset of commensurate order at TC-IC40,48. Yet, lattice dynamics in ZrTe322 are qualitatively different from those in 2H-TaSe2 and a more detailed comparison is necessary to understand these common characteristics. Overall, 2H-TaSe2 seems to be between meanfield-like 2H-NbSe2 and quasi-1D ZrTe3 in terms of the strength of FS nesting and the impact of fluctuations. Thus, the study of equally important electronic and lattice degrees of freedom in 2H-TaSe2 presents an interesting topic for future research. \n\nDiscussions on the interplay of CDW order and superconductivity have been revitalized by the discovery of CDW states in cuprates[2][,][3][,][61] . More recently, a sixfold increase of the superconducting transition temperature Tsc was reported for Ba1-xSrxNi2As2, a non-magnetic sister compound of the 122 iron-based superconductors, featuring a CDW state suppressed near the maximum Tsc value[62] . Inelastic x-ray scattering measurements of the parent compound, BaNi2As2, found a full phonon softening at the incommensurate CDW ordering wave vector well above TCDW61,63,64 similar to the precursor region observed by us in 2H-TaSe2. Interestingly, one report interpreted these findings for BaNi2As2 as a gradual slowing down on cooling of the already fully softened phonon mode before they coalesce into the static long-range CDW order[64] .",
+        "text_sha256": "sha256:e8fbb3a4f6c94bb60f4b92736d38659de0280957938a6f60063a8bb02ed72993"
+      },
+      {
+        "evidence_key": "P:S-c833612ed789b7a1d02f",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-c833612ed789b7a1d02f",
+        "text": "This is not comparable with our observations for 2HTaSe2 where we can always clearly distinguish between the resolutionlimited elastic line and the soft phonon mode (see Fig. 4a–c). Furthermore, it is argued for BaNi2As264 that the intense lattice fluctuations above TCDW can be responsible for the strong increase of Tsc when static CDW order is suppressed. However, Ba1−xSrxNi2As2 features a 1[st] order triclinic phase transition just below the onset of CDW order[65][,][66] and both structural transitions seem to be closely related and are suppressed near the same critical doping[62] . Thus, it will be difficult to establish the presence of a quantum critical point, let alone investigate CDW fluctuations and their impact on superconductivity. Here, we argue that 2H-TaSe2 under pressure is likely a good candidate to study the soft phonon mode near a CDW quantum critical point. No other structural transition is reported[67] and Tsc increases by more than a factor of eighty[31] . Furthermore, the here-reported full phonon softening at ambient pressure necessitates a revision of discussions on the nature of the CDW transition at ambient and finite pressure[31] . Combined with our calculations for high-pressure lattice constants (Fig. 6) and estimated Tsc of 10.6 K, our observations suggest that the highpressure CDW phase might remain 2nd order and can feature a CDW quantum critical point. This would be a rare opportunity since the relation in other CDW compounds often turned out to be less clear \n\nNature Communications | (2023) 14:7282 \n\n7 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-43094-5 \n\n(e.g., 2H-NbSe227,68, 1T-TiSe212,29,69,70, ZrTe371–73). Intercalated 2HPdxTaSe2 also seems to be an interesting candidate material[74] .",
+        "text_sha256": "sha256:5da3205f1cd9fb121e42ef46a41a47e10645af3c1475bcff6dc50f9a21c67435"
+      },
+      {
+        "evidence_key": "P:S-cd9412ff0246cda27487",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-cd9412ff0246cda27487",
+        "text": "Here, x-ray diffraction measurements are necessary to unambiguously determine the CDW phase diagram because the reports on 1T-TiSe2 showed that x-ray diffraction is more accurate than resistivity in determining the CDW phase diagram when CDW order is suppressed by pressure[69][,][75] or intercalation[29][,][30] . \n\n## Methods \n\nInelastic x-ray scattering experiments were carried out at the 30-ID beamline, HERIX spectrometer[76] , at the Advanced Photon Source, Argonne National Laboratory. The sample was a single crystal grown at the University of Kiel and resistivity measurements on a sample from the same growth batch indicate a CDW transition of TCDW,resist. = (121.7 ± 0.5) K (see Fig. S1 and Supplemental Note 1). All x-ray measurements presented in this work (Figs. 2–5, S2) were done in the same experiment on the HERIX spectrometer. Phonon excitations measured in constant-momentum scans were approximated by damped harmonic oscillator (DHO) functions[77] convoluted with a pseudo-Voigt resolution function [full-width at half-maximum (FWHM) = 1.5 meV, Lorentz ratio = 0.4]. The resolution function was further used to approximate resolution-limited elastic scattering at zero energy transfer. Measurements were done at scattering wave vectors Q = τ−q, where τ is a reciprocal lattice vector and q is the reduced wave vector in the first Brillouin zone. Wave vectors are expressed in reciprocal lattice units (r.l.u.) ð2π=a,2π=b,2π=cÞ with the lattice constants a = b = 3.44 Å and c = 12.7 Å of the high-temperature hexagonal unit cell (#194). All measurements were done in the Brillouin zone adjacent to τ = ð3,0,1Þ. Throughout the text, results are presented in reduced wave vectors q = τ−Q. Measurements were done at constant energy or constant momentum transfer.",
+        "text_sha256": "sha256:e11f1cf0c8c3d2171b819715319ab3ec145b43b50d448be0fc0adc423c451edb"
+      },
+      {
+        "evidence_key": "P:S-d4b99cc7095344189424",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-d4b99cc7095344189424",
+        "text": "For the former, we employed the best momentum resolution possible on the HERIX spectrometer (Δq = 0.018 Å[−][1] ) by decreasing the effective size of the backscattering analyzers to a circular diameter of 18 mm (FWHM) compared to 95 mm opening in energy scans at constant momentum transfer (Δq = 0.09 Å[−][1] ). For more details on the HERIX setup and data analysis see Supplemental Note 2. \n\nAngle-resolved photoelectron spectroscopy measurements were performed at the Bloch endstation of the R1 synchrotron at the MAXIV institute in Lund, Sweden. More experimental details and results are given in Supplemental Note 3. \n\nAb-initio lattice dynamical calculations based on densityfunctional-perturbation-theory (DFPT) were performed in the framework of the mixed basis pseudopotential method[42] . The exchangecorrelation functional was treated in the local-density approximation (LDA). Spin–orbit interaction was taken into account consistently. More details are given in Supplemental Note 4. \n\n## Data availability \n\nData used for figures are available at ref. 78. More detailed information including details of the ab-initio calculations is available from the corresponding author upon request. \n\n## References \n\n1. Ghiringhelli, G. et al. Long-range incommensurate charge fluctuations in (Y,Nd)Ba2Cu3O6+x. Science 337, 821–825 (2012). \n\n2. Le Tacon, M. et al. Inelastic X-ray scattering in YBa2Cu3O6.6 reveals giant phonon anomalies and elastic central peak due to chargedensity-wave formation. Nat. Phys. 10, 52–58 (2014). \n\n3. Blackburn, E. et al. Inelastic x-ray study of phonon broadening and charge-density wave formation in ortho-II-ordered YBa2Cu3O6.54. Phys. Rev. B 88, 054506 (2013). \n\n4. Keimer, B., Kivelson, S. A., Norman, M. R., Uchida, S. & Zaanen, J.",
+        "text_sha256": "sha256:8b0da676e9930e01c17e19bc9e035cf1266f79e2f4672d0d3ce5c241b9b866ea"
+      },
+      {
+        "evidence_key": "P:S-2764d894db5a0a2aa269",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-2764d894db5a0a2aa269",
+        "text": "From quantum matter to high-temperature superconductivity in copper oxides. Nature 518, 179–186 (2015). \n\n5. Ortiz, B. R. et al. New kagome prototype materials: discovery of KV3Sb5, RbV3Sb5, and CsV3Sb5. Phys. Rev. Mater. 3, 094407 (2019). \n\n6. Jiang, Y.-X. et al. Unconventional chiral charge order in kagome superconductor KV3Sb5. Nat. Mater. 20, 1353–1357 (2021). \n\n7. Liang, Z. et al. Three-dimensional charge density wave and surfacedependent vortex-core states in a Kagome superconductor CsV3Sb5. Phys. Rev. X 11, 031026 (2021). \n\n8. Xie, Y. et al. Electron–phonon coupling in the charge density wave state of CsV3Sb5. Phys. Rev. B 105, L140501 (2022). \n\n9. Subires, D. et al. Order–disorder charge density wave instability in the kagome metal (Cs,Rb)V3Sb5. Nat. Commun. 14, 1015 (2023). \n\n10. Li, H. et al. Observation of unconventional charge density wave without acoustic phonon anomaly in Kagome superconductors AV3Sb5 (A = Rb, Cs). Phys. Rev. X 11, 031050 (2021). \n\n11. Cercellier, H. et al. Evidence for an excitonic insulator phase in 1TTiSe2. Phys. Rev. Lett. 99, 146403 (2007). \n\n12. Monney, G., Monney, C., Hildebrand, B., Aebi, P. & Beck, H. Impact of Electron–hole correlations on the 1T-TiSe2 electronic structure. Phys. Rev. Lett. 114, 086402 (2015). \n\n13. Kogar, A. et al. Signatures of exciton condensation in a transition metal dichalcogenide. Science 358, 1314–1317 (2017). \n\n14. Xi, X. et al. Strongly enhanced charge-density-wave order in monolayer NbSe2. Nat. Nanotechnol. 10, 765–769 (2015). \n\n15. Ugeda, M. M. et al. Characterization of collective ground states in single-layer NbSe2. Nat. Phys. 12, 92–97 (2016). \n\n16. Wickramaratne, D., Khmelevskyi, S., Agterberg, D. F. & Mazin, I. I. Ising superconductivity and magnetism in NbSe2. Phys. Rev. X 10, 041003 (2020).",
+        "text_sha256": "sha256:4d188a1d2ffec1b42b9cda869f71e597de49b1fdf95264aecc14588518e5f3f6"
+      },
+      {
+        "evidence_key": "P:S-eb21b47453bab9938c65",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-eb21b47453bab9938c65",
+        "text": "17. Maniv, E. et al. Exchange bias due to coupling between coexisting antiferromagnetic and spin-glass orders. Nat. Phys. 17, 525–530 (2021). \n\n18. Rossnagel, K. On the origin of charge-density-waves in select layered transition-metal dichalcogenides. J. Phys. Condens. Matter 23, 213001 (2011). \n\n19. Johannes, M. D. & Mazin, I. I. Fermi surface nesting and the origin of charge density waves in metals. Phys. Rev. B 77, 165135 (2008). \n\n20. Peierls, R. E. Quantum Theory of Solids (Oxford University Press, 1955). \n\n21. Comes, R. et al. Inelastic neutron-scattering study of 2kf instability in K2Pt(CN)4Br0.3*3D2O. Phys. Status Solidi B-Basic Res. 71, 171–178 (1975). \n\n22. Hoesch, M., Bosak, A., Chernyshov, D., Berger, H. & Krisch, M. Giant Kohn anomaly and the phase transition in charge density wave ZrTe3. Phys. Rev. Lett. 102, 086402 (2009). \n\n23. Hoesch, M. et al. Splitting in the Fermi surface of ZrTe3: a surface charge density wave system. Phys. Rev. B 80, 075423 (2009). \n\n24. Monceau, P. Electronic crystals: an experimental overview. Adv. Phys. 61, 325–581 (2012). \n\n25. Weber, F. et al. Extended phonon collapse and the origin of the charge-density wave in 2H-NbSe2. Phys. Rev. Lett. 107, 107403 (2011). \n\n26. Flicker, F. & van Wezel, J. Charge order from orbital-dependent coupling evidenced by NbSe2. Nat. Commun. 6, 7034 (2015). \n\n27. Leroux, M. et al. Strong anharmonicity induces quantum melting of charge density wave in 2H-NbSe2 under pressure. Phys. Rev. B 92, 140303 (2015). \n\n28. Diego, J. et al. van der Waals driven anharmonic melting of the 3D charge density wave in VSe2. Nat. Commun. 12, 598 (2021). \n\n29. Kogar, A. et al. Observation of a charge density wave incommensuration near the superconducting dome in CuxTiSe2. Phys. Rev. Lett. 118, 027002 (2017). \n\n30.",
+        "text_sha256": "sha256:6d37e2650a3198b3479b34f5482601e861aec0f945af004ff856c08982191776"
+      },
+      {
+        "evidence_key": "P:S-6ed2e2158afd40694c94",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-6ed2e2158afd40694c94",
+        "text": "Morosan, E. et al. Superconductivity in CuxTiSe2. Nat. Phys. 2, 544–550 (2006). \n\n31. Freitas, D. C. et al. Strong enhancement of superconductivity at high pressures within the charge-density-wave states of 2H-TaS2 and 2H-TaSe2. Phys. Rev. B 93, 184512 (2016). \n\nNature Communications | (2023) 14:7282 \n\n8 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-43094-5 \n\n32. Berthier, C., Molinié, P. & Jérome, D. Evidence for a connection between charge density waves and the pressure enhancement of superconductivity in 2H-NbSe2. Solid StateCommun. 18, 1393–1395 (1976). \n\n33. Liu, X., Chong, Y. X., Sharma, R. & Davis, J. C. S. Discovery of a Cooper-pair density wave state in a transition-metal dichalcogenide. Science 372, 1447–1452 (2021). \n\n34. Sanna, A. et al. Real-space anisotropy of the superconducting gap in the charge-density wave material 2H-NbSe2. npj Quantum Mater. 7, 6 (2022). \n\n35. Requardt, H., Lorenzo, J., Monceau, P., Currat, R. & Krisch, M. Dynamics in the charge-density-wave system NbSe3 using inelastic x-ray scattering with meV energy resolution. Phys. Rev. B 66, 214303 (2002). \n\n36. Lorenzo, J. E. et al. A neutron scattering study of the quasi-onedimensional conductor (TaSe4)2I. J. Phys.: Condens. Matter 10, 5039 (1998). \n\n37. Miao, H. et al. Incommensurate phonon anomaly and the nature of charge density waves in cuprates. Phys. Rev. X 8, 011008 (2018). \n\n38. Moncton, D. E., Axe, J. D. & DiSalvo, F. J. Neutron scattering study of the charge-density wave transitions in 2H-TaSe2 and 2H-NbSe2. Phys. Rev. B 16, 801–819 (1977). \n\n39. Rossnagel, K., Rotenberg, E., Koh, H., Smith, N. V. & Kipp, L. Fermi surface, charge-density-wave gap, and kinks in 2H-TaSe2. Phys. Rev. B 72, 121103 (2005). \n\n40. Borisenko, S. et al. Pseudogap and charge density waves in two dimensions.",
+        "text_sha256": "sha256:9fdae79a752f5f4fe27433bba8628ed5947baba7d28e34b2eab4d73597d87609"
+      },
+      {
+        "evidence_key": "P:S-0252933f22876121c615",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-0252933f22876121c615",
+        "text": "Phys. Rev. Lett. 100, 196402 (2008). \n\n41. Moncton, D. E., Axe, J. D. & DiSalvo, F. J. Study of superlattice formation in 2H-NbSe2 and 2H-TaSe2 by neutron scattering. Phys. Rev. Lett. 34, 734–737 (1975). \n\n42. Leininger, P., Chernyshov, D., Bosak, A., Berger, H. & Inosov, D. S. Competing charge density waves and temperature-dependent nesting in 2H-TaSe2. Phys. Rev. B 83, 233101 (2011). \n\n43. Riste, T., Samuelsen, E. J., Otnes, K. & Feder, J. Critical behaviour of SrTiO3 near the 105°K phase transition. Solid State Commun. 9, 1455–1458 (1971). \n\n44. Shapiro, S. M., Axe, J. D., Shirane, G. & Riste, T. Critical neutron \n\n- scattering in SrTiO3 and KMnF3. Phys. Rev. B 6, 4332–4341 (1972). \n\n- 45. Cowley, R. A. & Shapiro, S. M. Structural phase transitions. J. Phys. Soc. of Japan 75, 111001 (2006). \n\n46. Weber, F. et al. Optical phonons and the soft mode in 2H-NbSe2. Phys. Rev. B 87, 245111 (2013). \n\n47. Weber, F. et al. Three-dimensional Fermi surface of 2H-NbSe2: Implications for the mechanism of charge density waves. Phys. Rev. B 97, 235122 (2018). \n\n48. Inosov, D. et al. Temperature-dependent Fermi surface of 2H-TaSe2 driven by competing density wave order fluctuations. Phys. Rev. B 79, 125112 (2009). \n\n49. Craven, R. A. & Meyer, S. F. Specific heat and resistivity near the charge-density-wave phase transitions in 2H-TaSe2 and 2H-TaS2. Phys. Rev. B 16, 4583–4593 (1977). \n\n50. Chatterjee, U. et al. Emergence of coherence in the charge-density wave state of 2H-NbSe2. Nat. Commun. 6, 6313 (2015). \n\n51. Maschek, M. et al. Wave-vector-dependent electron-phonon coupling and the charge-density-wave transition in TbTe3. Phys. Rev. B 91, 235146 (2015). \n\n52. Weber, F. et al. Electron–phonon coupling and the soft phonon mode in TiSe2. Phys. Rev. Lett. 107, 266401 (2011). \n\n53.",
+        "text_sha256": "sha256:145bb5d0a2c65795df9f7914db6e11c1167bc92c3b4a5c78d67b66e60e015653"
+      },
+      {
+        "evidence_key": "P:S-07932bc497323a4769e1",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-07932bc497323a4769e1",
+        "text": "Shen, X. et al. Suppression of charge-density wave order in 2H-TaSe2 by pressure. Experiment at ESRF https://doi.org/10.15151/ESRF-ES902987807 (2022). \n\n54. Ren, Q. et al. Extreme phonon anharmonicity underpins superionic diffusion and ultralow thermal conductivity in argyrodite Ag8SnSe6. Nat. Mater. https://doi.org/10.1038/s41563-023-01560-x (2023). \n\n55. Liu, H. et al. Copper ion liquid-like thermoelectrics. Nat. Mater. 11, 422–425 (2012). \n\n56. Shen, X. et al. Soft phonon mode triggering fast Ag diffusion in superionic argyrodite Ag8GeSe6. Small n/a https://doi.org/10. 1002/smll.202305048 (2023). \n\n57. Maschek, M. et al. Competing soft phonon modes at the chargedensity-wave transitions in DyTe3. Phys. Rev. B 98, 094304 (2018). \n\n58. Eremenko, V. et al. Heat capacity, thermal expansion and pressure derivative of critical temperature at the superconducting and charge density wave (CDW) transitions in NbSe2. Physica C: Supercond. 469, 259–264 (2009). \n\n59. McMillan, W. L. Microscopic model of charge-density waves in 2HTaSe2. Phys. Rev. B 16, 643 (1977). \n\n60. Yue, L. et al. Distinction between pristine and disorder-perturbed charge density waves in ZrTe3. Nat. Commun. 11, 98 (2020). \n\n61. Souliou, S. M., Weber, F. & Le Tacon, M. Lattice dynamics signatures of competing orders in unconventional superconductors. Synchrotron Radiat. News 1–8, https://doi.org/10.1080/08940886. 2023.2226045 (2023). \n\n62. Eckberg, C. et al. Sixfold enhancement of superconductivity in a tunable electronic nematic system. Nat. Phys. 16, 346–350 (2020). \n\n63. Souliou, S. M. et al. Soft-phonon and charge-density-wave formation in nematic BaNi2As2. Phys. Rev. Lett. 129, 247602 (2022). \n\n64. Song, Y. et al. Phonon softening and slowing-down of charge density wave fluctuations in BaNi2As2. Phys.",
+        "text_sha256": "sha256:d518de9184ae9542a54c9fcafd78db51d8a7286604c0dd3310453a97d94e37fe"
+      },
+      {
+        "evidence_key": "P:S-9ca50aff7ff47446398d",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-9ca50aff7ff47446398d",
+        "text": "Rev. B 107, L041113 (2023). \n\n65. Merz, M. et al. Rotational symmetry breaking at the incommensurate charge-density-wave transition in Ba(Ni,Co)2(As,P)2: possible nematic phase induced by charge/orbital fluctuations. Phys. Rev. B 104, 184509 (2021). \n\n66. Meingast, C. et al. Charge density wave transitions, soft phonon, and possible electronic nematicity in BaNi2(As1−xPx)2. Phys. Rev. B 106, 144507 (2022). \n\n67. McWhan, D. B., Fleming, R. M., Moncton, D. E. & DiSalvo, F. J. Reentrant lock-in transition of the charge-density wave in 2H-TaSe2 at high pressure. Phys. Rev. Lett. 45, 269–272 (1980). \n\n68. Rahn, D. J. et al. Gaps and kinks in the electronic structure of the superconductor 2H-NbSe2 from angle-resolved photoemission at 1 K. Phys. Rev. B 85, 224532 (2012). \n\n69. Joe, Y. I. et al. Emergence of charge density wave domain walls above the superconducting dome in 1T-TiSe2. Nat. Phys. 10, 421–425 (2014). \n\n70. Maschek, M. et al. Superconductivity and hybrid soft modes in 1TTiSe2. Phys. Rev. B 94, 214507 (2016). \n\n71. Zhu, X. et al. Disorder-induced bulk superconductivity in ZrTe3 single crystals via growth control. Phys. Rev. B 87, 024508 (2013). \n\n72. Zhu, X. et al. Superconductivity and charge density wave in ZrTe3−xSex. Sci. Rep. 6, 26974 (2016). \n\n73. Wang, J. et al. Superconductivity in single-crystalline ZrTe3−x (x ≤ 0.5) nanoplates. Nanoscale Adv. https://doi.org/10.1039/ D2NA00628F (2023). \n\n74. Bhoi, D. et al. Interplay of charge density wave and multiband superconductivity in 2H-PdxTaSe2. Sci. Rep. 6, 24068 (2016). \n\n75. Kusmartseva, A., Sipos, B., Berger, H., Forró, L. & Tutiš, E. Pressure induced superconductivity in pristine 1T-TiSe2. Phys. Rev. Lett. 103, 236401 (2009). \n\n76. Said, A. H. et al.",
+        "text_sha256": "sha256:6b455cd002d134810ae0510f7e45838bc36203fca3778faf09e92d4c6caba847"
+      },
+      {
+        "evidence_key": "P:S-cc7abfeef0c577aaec1b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-cc7abfeef0c577aaec1b",
+        "text": "High-energy-resolution inelastic X-ray scattering spectrometer at beamline 30-ID of the advanced photon source. J. Synchrotron Radiat. 27, 827–835 (2020). \n\n77. Fåk, B. & Dorner, B. Phonon line shapes and excitation energies. Physica B: Condens. Matter 234–236, 1107–1108 (1997). \n\n78. Shen, X. et al. Dataset: Precursor region with full phonon softening above the charge-density-wave phase transition in 2H-TaSe2 (repository: KITopen, 2023) https://doi.org/10.35097/1771. \n\nNature Communications | (2023) 14:7282 \n\n9 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-43094-5 \n\n## Acknowledgements \n\nX.S. was supported by the Helmholtz-OCPC Postdoc Program. S.R. was supported by the Materials Sciences and Engineering Division, Office of Basic Energy Sciences, U.S. Department of Energy. B.S., M.d.R.C., and C.M. acknowledge financial support from the Swiss National Science Foundation (SNSF) Grant No. P00P2 170597. M.d.R.C. was supported by grant #2020/13701-0, São Paulo Research Foundation FAPESP. This research used resources from the Advanced Photon Source, a U.S. Department of Energy (DOE) Office of Science User Facility operated for the DOE Office of Science by Argonne National Laboratory under Contract No. DE-AC02-06CH11357. The authors gratefully acknowledge MAX IV Laboratory for time on Beamline Bloch under Proposal 20200293, as well as the support from C. Polley and G. Carbone. \n\n## Author contributions \n\nInelastic x-ray scattering: X.S., A.A.H., A.H.S., B.M., S.R., F.W.; photoemission spectroscopy: B.S., M.d.R.C., C.M.; theory: R.H., R.H., F.W.; resistivity: M.F.; data analysis: X.S., B.S., C.M., F.W.; sample growth: K.R.; manuscript: X.S., C.M., S.R., F.W.; project coordination: F.W. \n\n## Funding \n\nOpen Access funding enabled and organized by Projekt DEAL.",
+        "text_sha256": "sha256:435c656c4562198661d8d8eb4fc67f743328e15cfa2eb6b5ce97c12a8f15dbb1"
+      },
+      {
+        "evidence_key": "P:S-8b5b6fe626eead9e011a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8b5b6fe626eead9e011a",
+        "text": "## Competing interests \n\nThe authors declare no competing interests. \n\nCorrespondence and requests for materials should be addressed to Frank Weber. \n\nPeer review information Nature Communications thanks Igor Zaliznyak, and the other, anonymous, reviewer(s) for their contribution to the peer review of this work. A peer review file is available. \n\nReprints and permissions information is available at http://www.nature.com/reprints \n\nPublisher’s note Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations. \n\nOpen Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/ licenses/by/4.0/. \n\n## Additional information \n\nSupplementary information The online version contains supplementary material available at https://doi.org/10.1038/s41467-023-43094-5. \n\n© The Author(s) 2023 \n\nNature Communications | (2023) 14:7282 \n\n10",
+        "text_sha256": "sha256:c939338dec3380023baf2e34df1094ceb88106e1e01cbf1e245c79d98d7e39b0"
+      }
+    ]
+  },
+  "paper_id": "10.1038/s41467-023-43094-5",
+  "paper_sha256": "sha256:86ccb2dda4e3345bb1cc07241a92742d80fc4e1a731f496d0530d83da27b417a",
+  "parent_output_sha256s": [],
+  "parent_reviews": [],
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "review_source_sha256": "sha256:7163b1f15c8ba3db0a5ffb334d996123b9bc932624fb5d0619b5d208dbfbdc8e",
+  "reviewer_spans": [
+    {
+      "char_end": 1288,
+      "char_start": 1273,
+      "reviewer_id_hash": "REV-4d61028605837edb",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e0293fa920b010a405fd",
+      "source_role": "reviewer_report",
+      "text": "## Reviewer #1:",
+      "text_sha256": "sha256:59fbb7e487638418f0619f9074afd4e1cd3e3ea9977a0f37112426377e1f1022"
+    },
+    {
+      "char_end": 1316,
+      "char_start": 1291,
+      "reviewer_id_hash": "REV-4d61028605837edb",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1f8b470a37870819869f",
+      "source_role": "reviewer_report",
+      "text": "## Remarks to the Author:",
+      "text_sha256": "sha256:d297ace2a2cd4ddfdc424e7bcf55a18d14b8a7fa4f15e188172eef777f13fec8"
+    },
+    {
+      "char_end": 1431,
+      "char_start": 1319,
+      "reviewer_id_hash": "REV-4d61028605837edb",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3235c0e3f7f9195b04c7",
+      "source_role": "reviewer_report",
+      "text": "Report on the manuscript ‘Precursor phase with full phonon softening above the CDW phase transition in 2H-TaSe2’",
+      "text_sha256": "sha256:02322afe574f391b314ff3784f28cd911a428462e6bb214d754e849a3692aa60"
+    },
+    {
+      "char_end": 2178,
+      "char_start": 1434,
+      "reviewer_id_hash": "REV-4d61028605837edb",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-496bd4c2a87e01a72ee3",
+      "source_role": "reviewer_report",
+      "text": "The work by X. Shen et al report a comprehensive lattice dynamics study of the 2D layered material TaSe2 by means of inelastic x-ray scattering and ARPES. The authors find, in contrast with the previous neutron data taken in the 70’s, a complete phonon softening at a temperature higher than the CDW transition. The softening is characterised by a critically damped phonon with a critical exponent lower than the mean field value, highlighting the role of the high temperature charge fluctuations. A detailed discussion of the results in a broad context of TMDs and CDW systems in also included. Finally, the main conclusion is that the Fermi surface nesting scenario is the main driving force of the CDW, unlike other TMDs like VSe2 and NbSe2.",
+      "text_sha256": "sha256:47d234854ca241b1b524a84e400321c362bc21d2ff60020a42228ae854050ef1"
+    },
+    {
+      "char_end": 2473,
+      "char_start": 2181,
+      "reviewer_id_hash": "REV-4d61028605837edb",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7ff68c4e67fa3322f7e7",
+      "source_role": "reviewer_report",
+      "text": "The paper is well written, the experiments were carefully performed and the data analysed. I believe that the manuscript deserves to be published in Nat. Comm. as it brings new information to understand the origin of TMDs and CDWs in general. However, I think that the papers can be improved:",
+      "text_sha256": "sha256:7a09d4c111169bdd32f8a7dbdac3666a80ea5840927a2967362cf248cb4b84fa"
+    },
+    {
+      "char_end": 3160,
+      "char_start": 2476,
+      "reviewer_id_hash": "REV-4d61028605837edb",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1691344ca773e33935f2",
+      "source_role": "reviewer_report",
+      "text": "- The authors say that the FS scenario seems to drive the phase transition, instead of EPI. This seems or does not seem to be the case. The softening of the phonon in momentum space is not so sharp as in ZrTe3, although not so broad as the NbSe2, but it still develops ‘some broadening’. I ask the authors to quantify the FS, i.e. real and imaginary parts of the electronic susceptibility and momentum dependence EPI and check whether ‘peaks’ appear and how broad they are. I understand that these calculations can be rather straightforward (although computationally expensive) given the expertise of the group. These calculations will also give a push to the manuscript in Nat. Comm.",
+      "text_sha256": "sha256:34ca56754dddcc891cf1bb0e2d45ebf78af975ee00994bda8912e5d750b55c48"
+    },
+    {
+      "char_end": 3477,
+      "char_start": 3163,
+      "reviewer_id_hash": "REV-4d61028605837edb",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-67d42a6cc097ba0312a0",
+      "source_role": "reviewer_report",
+      "text": "- The phonon softens at T>TCDW (7-9 K above TCDW), then, is the softening a precursor of the CDW phase at a different q? or, competing? I do not find a proper discussion on the origin of the sharp increase of the elastic line at TCDW. If not phonon driven, is this order-disorder, chemical bond instability type,…?",
+      "text_sha256": "sha256:ece49cdbb9d0eee79cbfe195adcdb58bbac1ea253bc57a6e88856999564bb204"
+    },
+    {
+      "char_end": 3962,
+      "char_start": 3480,
+      "reviewer_id_hash": "REV-4d61028605837edb",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4d2ec88c03cb96c7ff9d",
+      "source_role": "reviewer_report",
+      "text": "Finally, I would suggest the authors to improve the introduction and make it more Nature style. The intro is too narrow, focusing only in TaSe2 and TMDs. I would suggest to broaden it: cuprates, kagomes,… Note that in the cuprates the stripe order seems to lock the high temperature charge fluctuations to the commensurate value. Also, in the Kagomes, the dynamics of CDW does not show a soft mode, but the elastic line increases sharply defining an order-disorder phase transition…",
+      "text_sha256": "sha256:f6d6ca1704ecae8dad692a17fa65cf3b7765eab29badeb6be6b8dd47b9872885"
+    },
+    {
+      "char_end": 4047,
+      "char_start": 3965,
+      "reviewer_id_hash": "REV-4d61028605837edb",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d9d642ea9b3bea025828",
+      "source_role": "reviewer_report",
+      "text": "With addressing these comments, I recommend the paper to be published in Nat Comm.",
+      "text_sha256": "sha256:73b9427aee11b5f9fb6c7b4a8871031008ef51b23ba6f23a0814f2660e341f7c"
+    },
+    {
+      "char_end": 4065,
+      "char_start": 4050,
+      "reviewer_id_hash": "REV-ddc5c89265df2b48",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d04ec1aa84f9b41e2d67",
+      "source_role": "reviewer_report",
+      "text": "## Reviewer #2:",
+      "text_sha256": "sha256:a2029b88a242f2d2af2239753b8930bff26c9b0aab47628c13a04af8b2a821fe"
+    },
+    {
+      "char_end": 4093,
+      "char_start": 4068,
+      "reviewer_id_hash": "REV-ddc5c89265df2b48",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e283d2ed58fecbb35ef9",
+      "source_role": "reviewer_report",
+      "text": "## Remarks to the Author:",
+      "text_sha256": "sha256:d297ace2a2cd4ddfdc424e7bcf55a18d14b8a7fa4f15e188172eef777f13fec8"
+    },
+    {
+      "char_end": 4747,
+      "char_start": 4096,
+      "reviewer_id_hash": "REV-ddc5c89265df2b48",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2280016a9c26db88e81a",
+      "source_role": "reviewer_report",
+      "text": "I the present paper, X. Shen et al. employ inelastic x-ray scattering to solve a decades-old puzzle about the soft phonon mode at the CDW ordering vector in the layered transition-metal chalcogenide 2H-TaSe2. Contrary to an earlier conclusion from inelastic neutron scattering that found only partial softening of the phonon mode, here the authors demonstrate that the mode not only softens completely but even does so at a somewhat higher temperature than the CDW transition itself. They suggest that this indicates the presence of an additional precursor phase that exists in a narrow temperature range immediately above the CDW ordering transition.",
+      "text_sha256": "sha256:9125290daaa5248067cff0d7a7d88d9331ebd8d01309c49b7f1cc33e373d7269"
+    },
+    {
+      "char_end": 5209,
+      "char_start": 4750,
+      "reviewer_id_hash": "REV-ddc5c89265df2b48",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9b41214026b9241fc40e",
+      "source_role": "reviewer_report",
+      "text": "First of all, the main result of this paper pertaining to the demonstration of a complete phonon softening is a very important finding. Indeed, 2H-TaSe2 is a textbook example of a CDW system, and the theory of a CDW transition implies an essential coupling between the CDW and the periodic lattice distortion. The condensation of CDW fluctuations into an ordered phase requires/implies that the lattice develops a static symmetry-breaking distortion, which in",
+      "text_sha256": "sha256:a2ca9248d334d2a5b4a9f519ab43df5a437fe11d2ca075b09fa8f1824fb93d79"
+    },
+    {
+      "char_end": 5838,
+      "char_start": 5212,
+      "reviewer_id_hash": "REV-ddc5c89265df2b48",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d54d2b10827636d0086f",
+      "source_role": "reviewer_report",
+      "text": "accordance with the Goldstone theorem should be characterized by a gapless mode emanating from the ordering vector. The second-order character of the transition implies that this mode must soften continuously at temperatures above the transition. Therefore, the fact that this softening has not been observed in previous experiments is highly unexpected and cannot be reconciled with the well accepted theory of the CDW formation. In this respect, a clear demonstration of the existence of a fully softened mode is a long-anticipated and important result that, in my opinion, deserves the publication in Nature Communications.",
+      "text_sha256": "sha256:e889284406df69e49c44c43ac385db75ff24df8b044f15d27959c9f8d805351d"
+    },
+    {
+      "char_end": 7354,
+      "char_start": 5841,
+      "reviewer_id_hash": "REV-ddc5c89265df2b48",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a5b580516766f8d91eab",
+      "source_role": "reviewer_report",
+      "text": "This said, I find the second conclusion of the authors about the presence of a precursor phase above T_CDW much less convincing. This conclusion is essentially based on the extrapolation of data points in the T-dependence (Fig. 3a) to zero energy. These data points result, in turn, from the fits such as those in Fig. 2, where the peaks overlap strongly at temperatures below 130 K. Assuming that the intrinsic phonon signal in the vicinity of Q_CDW is given by a V-shaped phonon shape, something like E=sqrt(|q-q_0|^2+Delta^2), convoluting it with the experimental energyand momentum resolution would result in a 3D scattering intensity distribution I(q,E). It is well known that the positions of maxima in the one-dimensional cuts of this function in energy or momentum would not coincide with the actual dispersion E(q), and therefore extracting the true dispersion requires proper three-dimensional modeling of this function with full account of the resolution function, not just fits of one-dimensional cuts. It is very likely that by performing such one-dimensional analysis, the authors introduced a systematic error in their fitting results that increases towards T_CDW, resulting in a shift of the extrapolated point of phonon softening from its expected position. This analysis alone is therefore insufficient to claim the presence of another phase transition or an additional thermodynamic phase. Furthermore, no evidence for a transition at T* has been observed in other probes such as specific heat.",
+      "text_sha256": "sha256:a430b97e89d9f34fb2213878f9d4b492508ad329837bf543a2247d0279befcd5"
+    },
+    {
+      "char_end": 8154,
+      "char_start": 7357,
+      "reviewer_id_hash": "REV-ddc5c89265df2b48",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c51aa7f806f83462b4ef",
+      "source_role": "reviewer_report",
+      "text": "If the authors insist on their conclusion about the presence of a precursor phase, I would ask them to demonstrate using 3D modeling of the intensity function obtained from a convolution of the expected phonon dispersion with the calculated instrumental resolution that their measured data are incompatible with the phonon softening happening at T_CDW. It would be also helpful to see the zoomed-in version of the part of Fig. 3(a) in the immediate vicinity of the transition and the corresponding dispersion curves (like those in Fig. 3c) for all temperatures between T_CFW and T*. I find the step in q in Fig. 3(c) insufficiently detailed to see the U-shaped minimum in the gapped dispersion even for higher temperatures of 150 K and above, so it will be even less obvious at lower temperatures.",
+      "text_sha256": "sha256:f5a4c4924aea7c9a85c7d2f3aa22f70800257446fa26169cc5b06ed1e624ff1d"
+    },
+    {
+      "char_end": 8728,
+      "char_start": 8157,
+      "reviewer_id_hash": "REV-ddc5c89265df2b48",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e91399747167cc2841f0",
+      "source_role": "reviewer_report",
+      "text": "A minor technical comment: It would be helpful if the guides to the eye in Figs. 3(c),(d) show more physically realistic dependences. Why is the curve at 250 K approximated with a smooth curve, and those at 200 and 150 K are just interpolated linearly between the data points? For all curves with a finite energy gap, the dispersion cannot have a cusp at the minimum of the dispersion, therefore the current guides to the eye are actually misguiding the eye. I suggest using some empirical model for the dispersion instead, so that all curves are treated in the same way.",
+      "text_sha256": "sha256:37729a122050a124b2b50609bb9ab15aa06914e4b54b0142811f87c46f71dbe5"
+    },
+    {
+      "char_end": 9009,
+      "char_start": 8731,
+      "reviewer_id_hash": "REV-ddc5c89265df2b48",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-79633a8541be3e9413e9",
+      "source_role": "reviewer_report",
+      "text": "In summary, I find this paper is potentially publishable in Nature Communications if the authors can refute the hypothesis that the deviation of T* from T_CDW is an artifact of finite resolution effects and the particular fitting of the energy- and momentum-distribution curves.",
+      "text_sha256": "sha256:9c120c8a1cf27dcf03a9f3847da4b13a18b03886a71d0d68998b2ec53aaff8c3"
+    },
+    {
+      "char_end": 9027,
+      "char_start": 9012,
+      "reviewer_id_hash": "REV-87f0ec4543454645",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-47eb5c55e950837f5454",
+      "source_role": "reviewer_report",
+      "text": "## Reviewer #3:",
+      "text_sha256": "sha256:92122ce9d23003469635f53cd8e845676b45cb64eb672c647f82c2a27299ddf4"
+    },
+    {
+      "char_end": 9055,
+      "char_start": 9030,
+      "reviewer_id_hash": "REV-87f0ec4543454645",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9a56e9ddb693ed9dc7f5",
+      "source_role": "reviewer_report",
+      "text": "## Remarks to the Author:",
+      "text_sha256": "sha256:d297ace2a2cd4ddfdc424e7bcf55a18d14b8a7fa4f15e188172eef777f13fec8"
+    },
+    {
+      "char_end": 9899,
+      "char_start": 9058,
+      "reviewer_id_hash": "REV-87f0ec4543454645",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e29aadbcd06531099485",
+      "source_role": "reviewer_report",
+      "text": "The manuscript reports a primarily high-resolution inelastic Xray scattering (IXS) study of the charge density wave (CDW) formation in layered transition-metal dichalcogenide, 2H-TaSe2. The work is a significant advancement compared to the previous inelastic neutron scattering studies on this material carried out in the 1970-s (Refs. 25 and 28). Specifically, by carefully analyzing their measured Xray scattering profiles, authors are able to precisely follow the temperature dependence of both the energy and the lifetime of the phonon mode softening at the CDW transition. What they discover, is the pre-cursor short-range-ordered CDW phase with already softened overdamped phonon, which exists within several Kelvin temperature range (~123K to ~129K), above the temperature where long-range CDW is established (~122K). The IXS data are",
+      "text_sha256": "sha256:44d2b0673344d05ea3864be2e9b8e2a98b3ca78ac1a703234dcec622bec2cb17"
+    },
+    {
+      "char_end": 10896,
+      "char_start": 9902,
+      "reviewer_id_hash": "REV-87f0ec4543454645",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b698d157783b69393ebf",
+      "source_role": "reviewer_report",
+      "text": "supplemented by the ARPES measurements, which correlate the observed lattice structural and dynamical behaviors with the electronic structure, indicating that they have only a very small, albeit measurable impact on electronic properties. Finally, a DFT analysis is presented showing potential importance of the low-energy soft phonon spectrum investigated here by IXS for the dramatic enhancement of superconductivity in this material at high pressure, the result that is mainly motivational but also with a broad appeal to diverse readership of Nature Communicaitons. The work presents expertly performed measurements, which are also carefully and scrupulously analyzed and quite eloquently described. I think this is an interesting work with a broad appeal to the diverse scientific audience and recommend that it is accepted for publication in Nature Communications. Below, I list several minor technical comments, which authors should address in preparing their manuscript for publication.",
+      "text_sha256": "sha256:82763a6583b962780f9ace521cf39807444ac92382824a213188ee1b1c29bfd1"
+    },
+    {
+      "char_end": 11295,
+      "char_start": 10899,
+      "reviewer_id_hash": "REV-87f0ec4543454645",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-12f9791a1c3b312ffab8",
+      "source_role": "reviewer_report",
+      "text": "Line 70. \"The much better momentum resolution of IXS compared to INS ...\" -> angular resolution only? I would think the longitudinal momentum resolution is coupled to energy resolution - perhaps something could be added in methods on this? Line 129. \"in reasonable agreement with the coherence length of 14 Å estimated from specific heat measurements.\" - coherence length of what? Please specify.",
+      "text_sha256": "sha256:662f32ad573e274ca5cc725515eaf6177f5688cfa119e290faf2acc75a432311"
+    },
+    {
+      "char_end": 11546,
+      "char_start": 11298,
+      "reviewer_id_hash": "REV-87f0ec4543454645",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f4fa89ae5f522eeeff0d",
+      "source_role": "reviewer_report",
+      "text": "Line 150. \"symmetrically related\" -> symmetry-related Line 198. \" but strongly responds to\" -> I would remove \"strongly\". Line 202. \"the impact of the CDW soft mode regard the strongly increasing superconducting transition temperature\" -> \"regard\"?",
+      "text_sha256": "sha256:ab7ae90389f7016645e4a3b836a9f638daa3fd2ed995e01a0a3b7c4d20bc90ec"
+    },
+    {
+      "char_end": 11701,
+      "char_start": 11549,
+      "reviewer_id_hash": "REV-87f0ec4543454645",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4d2a0fc7e6b5c548b18a",
+      "source_role": "reviewer_report",
+      "text": "Line 493-494. Figure 4 caption. \"The red 494 solid line represents the same power law fit as shown in Fig. 2(c)\" - Fig. 2(c) looks lika a misnomer here.",
+      "text_sha256": "sha256:57838795e1cdf47e668563441974e06f651154021953fb222a0385d4d1660fca"
+    },
+    {
+      "char_end": 12024,
+      "char_start": 11704,
+      "reviewer_id_hash": "REV-87f0ec4543454645",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-350285d69b61d7fea2df",
+      "source_role": "reviewer_report",
+      "text": "Figure 4 - the break in the Y-axis in panel (e) is confusing. It is unclear to which part of the scale points to the left of the red dashed line including those marked (a), (b), (c) belong. I suggest splitting this panel into two different panels or using the left and right scales for \"CDW peak\" and \"phonon\" intensity.",
+      "text_sha256": "sha256:4d19a618ba5d281b5af2c53f8190cdc4eb501b416be6b2f1e0b34261d6e29a35"
+    },
+    {
+      "char_end": 12198,
+      "char_start": 12027,
+      "reviewer_id_hash": "REV-87f0ec4543454645",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fe498e643bbaf8c5e27a",
+      "source_role": "reviewer_report",
+      "text": "Temperature dependence shown in Fig. 4 was measured in a set of energy scans at q=(0.325,0,0), which authors call q_{CDW}, with high wave vector resolution of 0.018 1/\\AA.",
+      "text_sha256": "sha256:8b56bbe35288f0e646636e9b1ae2eb61d6f39648c6e4f2c865e1bfd8bdbadf18"
+    },
+    {
+      "char_end": 12879,
+      "char_start": 12201,
+      "reviewer_id_hash": "REV-87f0ec4543454645",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-639f676f98e94c15c907",
+      "source_role": "reviewer_report",
+      "text": "However, peak position in q moves in the temperature range where the T-dependence was measured, changing from 0.323 at T_{CDW} = 122.3K to 0.333 in commensurate phase below 88K. The changing position of the peak would impact the measured T-dependence of the peak intensity. Perhaps, this effect is of little or no importance, and in addition it has been investigated by the authors by performing elastic wavevector scans reported in the next Figure. Nevertheless, authors should discuss the impact of the changing peak position on the systematic error of their intensity measurement in Fig. 4 (perhaps with reference to the follow-up Fig. 5) and incorporate it in the error bar.",
+      "text_sha256": "sha256:b7f8f8e75afc5bd5a4e7dc9c676afe9bde909a6a741ba0c7e8982bb14400f69b"
+    },
+    {
+      "char_end": 12897,
+      "char_start": 12882,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-987a77e72bb44aedf5ff",
+      "source_role": "reviewer_report",
+      "text": "## Reviewer #4:",
+      "text_sha256": "sha256:5b72de75583042d94a22b2dc5024bb9a14ede02ac7d8de197259b9857a6435e9"
+    },
+    {
+      "char_end": 12925,
+      "char_start": 12900,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-90a15f04d3bcd63fbf92",
+      "source_role": "reviewer_report",
+      "text": "## Remarks to the Author:",
+      "text_sha256": "sha256:d297ace2a2cd4ddfdc424e7bcf55a18d14b8a7fa4f15e188172eef777f13fec8"
+    },
+    {
+      "char_end": 14345,
+      "char_start": 12928,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c2704653dde3c27a178f",
+      "source_role": "reviewer_report",
+      "text": "Xingchen Shen et al. employed Inelastic X-ray Scattering (IXS) and Angle Resolved Photoemission (ARPES) to study a phenomenon of charge density wave (CDW) transition in the single-crystalline sample of 2H-TaSe2, a material where CDW has been first detected experimentally about 50 years ago. IXS delivered the data about phonons: dispersion relations at various temperatures above and below ~122 K, a temperature of the CDW transition reported in the previous studies; ARPES measurements yielded contours of the Fermi surface at 126 K. IXS (as well as the neutron scattering) and ARPES are in essence the common techniques used in the studies of the CDW materials. On that account the authors have followed the valid experimental methodology. The abstract states that the results of this study rule out the “central-peak” scenario of the CDW transition in 2H-TaSe2 and provide evidence for a novel “precursor” phase developing above the transition temperature. The authors believe that the hallmark of the latter phase is the “complete” softening of the phonon mode. Given the substantial amount of reports dealing with the CDW transitions in the transition metal di-chalcogenides these two results could potentially warrant a publication in Nature Communications, a journal aiming at disseminating important advances. I should confess that I was not aware of the “central-peak” scenario of the CDW transition. I also",
+      "text_sha256": "sha256:51f6a64c182b8a0ecd8e368af845f30c579e9b2591a3f9bebd24365f19fbeb46"
+    },
+    {
+      "char_end": 15506,
+      "char_start": 14348,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6e5b7033f8aa370e7534",
+      "source_role": "reviewer_report",
+      "text": "was not able to find any mentioning of it in the literature. While this (central) peak has been observed in the numerous studies of the structural phase transitions, it seems it has not yet been invoked for explanation of the CDW transition. In essence, its origin has been debated. Recent IXS study of YBCO (Nature Physics 10, 52) attributed energy-resolution-limited elastic peak to the presence of CDW domains above and below the transition temperature. The major result discussed by Xingchen Shen et al. seems to be based on the erroneous belief that “central peak scenario” has been considered and debated as a possible mechanism of the CDW transition in 2H-TaSe2. The other observation, that is the softening of the phonon mode, is hardly new. It was studied in the seminal work by D. E. Moncton, J. D. Axe and F. J. DiSalvo (PRB 16, 801), albeit these authors admitted that insufficient resolution might have prevented the detailed analysis of the sharp anomaly in the dispersion (Figure 3a of the present manuscript supports this assumption). Nevertheless, the temperature dependence of the softening of the phonon was firmly established decades ago.",
+      "text_sha256": "sha256:ca900b6e9432fbc5d42837f4cc10ed5ab7325f7d361260ee4b91a77d55e7f735"
+    },
+    {
+      "char_end": 15962,
+      "char_start": 15509,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b6d74c53b6ef9affe287",
+      "source_role": "reviewer_report",
+      "text": "To conclude, the paper communicates results of the excellent IXS study of 2H-TaSe2 but it neither conveys any new findings nor does it resolve a long standing controversy since I believe that “central-peak scenario” has never been discussed in connection with the mechanism of the CDW transition. Observation of the softening of the phonon mode is in line with the previous studies but it cannot dislodge a model which has never (in my opinion) existed.",
+      "text_sha256": "sha256:4250da1c9e278d038d958aaf94ee614384cf6a144d2e81c8e94d35bd52693cdd"
+    },
+    {
+      "char_end": 16163,
+      "char_start": 15965,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c383ed7b4887c5893d34",
+      "source_role": "reviewer_report",
+      "text": "I shall admit that “central peak scenario” might have been mentioned in the reports which escaped my attention. However, it is my opinion that the manuscript cannot be published in its present form.",
+      "text_sha256": "sha256:1f7853a2583c0a389d107dade7b9394af6a2160dda84707bc5b3bcd6455e1770"
+    },
+    {
+      "char_end": 16181,
+      "char_start": 16166,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-243080f13cd4a68791d7",
+      "source_role": "reviewer_report",
+      "text": "## **REVIEWER**",
+      "text_sha256": "sha256:2d17445989f18f6687364ea6b3a41a3dbe463e1340db94818e07059a99a63879"
+    },
+    {
+      "char_end": 16199,
+      "char_start": 16184,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-461b2217edaa9528aa55",
+      "source_role": "reviewer_report",
+      "text": "## **COMMENTS**",
+      "text_sha256": "sha256:ad86b98ab278345efe886435b7ace6ca8c67434fe9810e7756ef7564fec33eb6"
+    },
+    {
+      "char_end": 16245,
+      "char_start": 16202,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4479526e48e3d9a86ab5",
+      "source_role": "reviewer_report",
+      "text": "## **Reviewer #1** (Remarks to the Author):",
+      "text_sha256": "sha256:959d34be2aafd4c1eb8cf82d5c20dfe2db1313bfb4c08b36cc15ba346773d807"
+    },
+    {
+      "char_end": 16360,
+      "char_start": 16248,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c1d00ca82b2ac843275c",
+      "source_role": "reviewer_report",
+      "text": "Report on the manuscript ‘Precursor phase with full phonon softening above the CDW phase transition in 2H-TaSe2’",
+      "text_sha256": "sha256:02322afe574f391b314ff3784f28cd911a428462e6bb214d754e849a3692aa60"
+    },
+    {
+      "char_end": 17107,
+      "char_start": 16363,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0b69ccc5a4a4f4cc1f23",
+      "source_role": "reviewer_report",
+      "text": "The work by X. Shen et al report a comprehensive lattice dynamics study of the 2D layered material TaSe2 by means of inelastic x-ray scattering and ARPES. The authors find, in contrast with the previous neutron data taken in the 70’s, a complete phonon softening at a temperature higher than the CDW transition. The softening is characterised by a critically damped phonon with a critical exponent lower than the mean field value, highlighting the role of the high temperature charge fluctuations. A detailed discussion of the results in a broad context of TMDs and CDW systems in also included. Finally, the main conclusion is that the Fermi surface nesting scenario is the main driving force of the CDW, unlike other TMDs like VSe2 and NbSe2.",
+      "text_sha256": "sha256:47d234854ca241b1b524a84e400321c362bc21d2ff60020a42228ae854050ef1"
+    },
+    {
+      "char_end": 17402,
+      "char_start": 17110,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e44a5df9b7db61a83ee1",
+      "source_role": "reviewer_report",
+      "text": "The paper is well written, the experiments were carefully performed and the data analysed. I believe that the manuscript deserves to be published in Nat. Comm. as it brings new information to understand the origin of TMDs and CDWs in general. However, I think that the papers can be improved:",
+      "text_sha256": "sha256:7a09d4c111169bdd32f8a7dbdac3666a80ea5840927a2967362cf248cb4b84fa"
+    },
+    {
+      "char_end": 18089,
+      "char_start": 17405,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b8af8e9430b14aec3402",
+      "source_role": "reviewer_report",
+      "text": "- The authors say that the FS scenario seems to drive the phase transition, instead of EPI. This seems or does not seem to be the case. The softening of the phonon in momentum space is not so sharp as in ZrTe3, although not so broad as the NbSe2, but it still develops ‘some broadening’. I ask the authors to quantify the FS, i.e. real and imaginary parts of the electronic susceptibility and momentum dependence EPI and check whether ‘peaks’ appear and how broad they are. I understand that these calculations can be rather straightforward (although computationally expensive) given the expertise of the group. These calculations will also give a push to the manuscript in Nat. Comm.",
+      "text_sha256": "sha256:34ca56754dddcc891cf1bb0e2d45ebf78af975ee00994bda8912e5d750b55c48"
+    },
+    {
+      "char_end": 18848,
+      "char_start": 18092,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-772fd0f2bc6ff8fa52db",
+      "source_role": "reviewer_report",
+      "text": "_We thank the referee for the positive assessment of our work and provide more details about the underlying mechanisms driving the CDW transitions in our calculations. A detailed discussion is given in supplemental note 3 (1 page additional text) along with three new figures S3-S5. In our calculations, we cannot extract the real part of the electronic susceptibility and, therefore, provide an analysis of the electronic joint density of states (eJDOS) which is closely related to the imaginary part of the susceptibility, also sometimes referred to as the nesting function. Thus, it reflects directly the Fermi surface properties and is particularly interesting with regard to the prototypical Peierls model for CDW in a one-dimensional metallic chain._",
+      "text_sha256": "sha256:40eabae48a5486775c6e1fb0ba26596661ab9eb8e740dc78eeb9528a7e5f3fb8"
+    },
+    {
+      "char_end": 19165,
+      "char_start": 18851,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d0f044086eace1e211f1",
+      "source_role": "reviewer_report",
+      "text": "- The phonon softens at T>TCDW (7-9 K above TCDW), then, is the softening a precursor of the CDW phase at a different q? or, competing? I do not find a proper discussion on the origin of the sharp increase of the elastic line at TCDW. If not phonon driven, is this order-disorder, chemical bond instability type,…?",
+      "text_sha256": "sha256:ece49cdbb9d0eee79cbfe195adcdb58bbac1ea253bc57a6e88856999564bb204"
+    },
+    {
+      "char_end": 19599,
+      "char_start": 19168,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-894dc9c7a2ed512a7dbe",
+      "source_role": "reviewer_report",
+      "text": "_The phonon softening at_ 𝑇𝑇> 𝑇𝑇𝐶 𝐶𝐶 _is a precursor of the CDW phase in our understanding. Combined with comments from another referee, we became aware that the use of “precursor phase” might not be correct since our results do not unambiguously determine the state of 2H-TaSe2 at_ 𝑇𝑇𝐶 𝐶𝐶 ≤𝑇𝑇≤ 𝑇𝑇[∗] _as a distinct thermodynamic phase. Therefore, we adopted the expression “precursor region” in our title and throughout the text._",
+      "text_sha256": "sha256:d2c379d8ac362d8a034989ebb9fb04e25d70655ba19c0fde48efb9b29cd698da"
+    },
+    {
+      "char_end": 19876,
+      "char_start": 19602,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4c9fc94d639a8088e9a5",
+      "source_role": "reviewer_report",
+      "text": "_Furthermore, we have added a new paragraph in the discussion on this topic (2[nd] paragraph in section DISCUSSION). For a more detailed understanding model calculations would be important which are able to include temperature effects as well as can cope with fluctuations._",
+      "text_sha256": "sha256:9d1ef05c39dc8f75a0dcbe87fe19332aa77daf16d32c048c9366af1abd5d247b"
+    },
+    {
+      "char_end": 20444,
+      "char_start": 19879,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-219642d0d0f1cb571a4c",
+      "source_role": "reviewer_report",
+      "text": "Finally, I would suggest the authors to improve the introduction and make it more Nature style. The intro is too narrow, focusing only in TaSe2 and TMDs. I would suggest to broaden it: cuprates, kagomes,… Note that in the cuprates the stripe order seems to lock the high temperature charge fluctuations to the commensurate value. Also, in the Kagomes, the dynamics of CDW does not show a soft mode, but the elastic line increases sharply defining an order-disorder phase transition… With addressing these comments, I recommend the paper to be published in Nat Comm.",
+      "text_sha256": "sha256:43a1dfbe39dcce449fb03320a8229f0215e0d99035dee515e21fcb0cafd8962d"
+    },
+    {
+      "char_end": 20671,
+      "char_start": 20447,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-76ff71cf7a0d0b33d405",
+      "source_role": "reviewer_report",
+      "text": "_In the revised introduction we put more emphasis on the broader context of our investigation and refer to lattice dynamical studies in cuprates, transition-metal-based Kagome materials as well as other classic CDW systems._",
+      "text_sha256": "sha256:3d21c92a937769681ec40200503884f9c637ab0b9c3fb910c0d9dca7edeca1b6"
+    },
+    {
+      "char_end": 20717,
+      "char_start": 20674,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-cdb661003a987b3ae3dd",
+      "source_role": "reviewer_report",
+      "text": "## **Reviewer #2** (Remarks to the Author):",
+      "text_sha256": "sha256:3062d098e31cfec187493b276b61303ea7541b606df5cfc71f882b0ab887f39a"
+    },
+    {
+      "char_end": 21371,
+      "char_start": 20720,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f82fe50668707d918701",
+      "source_role": "reviewer_report",
+      "text": "I the present paper, X. Shen et al. employ inelastic x-ray scattering to solve a decades-old puzzle about the soft phonon mode at the CDW ordering vector in the layered transition-metal chalcogenide 2H-TaSe2. Contrary to an earlier conclusion from inelastic neutron scattering that found only partial softening of the phonon mode, here the authors demonstrate that the mode not only softens completely but even does so at a somewhat higher temperature than the CDW transition itself. They suggest that this indicates the presence of an additional precursor phase that exists in a narrow temperature range immediately above the CDW ordering transition.",
+      "text_sha256": "sha256:9125290daaa5248067cff0d7a7d88d9331ebd8d01309c49b7f1cc33e373d7269"
+    },
+    {
+      "char_end": 22460,
+      "char_start": 21374,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-714fe9c8943a3ad6c62e",
+      "source_role": "reviewer_report",
+      "text": "First of all, the main result of this paper pertaining to the demonstration of a complete phonon softening is a very important finding. Indeed, 2H-TaSe2 is a textbook example of a CDW system, and the theory of a CDW transition implies an essential coupling between the CDW and the periodic lattice distortion. The condensation of CDW fluctuations into an ordered phase requires/implies that the lattice develops a static symmetry-breaking distortion, which in accordance with the Goldstone theorem should be characterized by a gapless mode emanating from the ordering vector. The second-order character of the transition implies that this mode must soften continuously at temperatures above the transition. Therefore, the fact that this softening has not been observed in previous experiments is highly unexpected and cannot be reconciled with the well accepted theory of the CDW formation. In this respect, a clear demonstration of the existence of a fully softened mode is a long-anticipated and important result that, in my opinion, deserves the publication in Nature Communications.",
+      "text_sha256": "sha256:47cf201b52cf554852245b851ef62e2a8eed30f18525eb2bb0a57c9f2da020f3"
+    },
+    {
+      "char_end": 22675,
+      "char_start": 22463,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-24aa61b7c9cc7160adbe",
+      "source_role": "reviewer_report",
+      "text": "_We thank the referee for the positive appraisal of our work. We believe that our analysis of the origin of the CDW in 2H-TaSe2 (added in the revised version) further emphasizes this model character of 2H-TaSe2._",
+      "text_sha256": "sha256:d960231967f227c464c42060bc4cd7331cdb01ebacaccaa67bbdf8958499c879"
+    },
+    {
+      "char_end": 24192,
+      "char_start": 22678,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1cef876538320f60f8f1",
+      "source_role": "reviewer_report",
+      "text": "This said, I find the second conclusion of the authors about the presence of a precursor phase above T_CDW much less convincing. This conclusion is essentially based on the extrapolation of data points in the T-dependence (Fig. 3a) to zero energy. These data points result, in turn, from the fits such as those in Fig. 2, where the peaks overlap strongly at temperatures below 130 K. Assuming that the intrinsic phonon signal in the vicinity of Q_CDW is given by a V-shaped phonon shape, something like E=sqrt(|q-q_0|^2+Delta^2), convoluting it with the experimental energy- and momentum resolution would result in a 3D scattering intensity distribution I(q,E). It is well known that the positions of maxima in the one-dimensional cuts of this function in energy or momentum would not coincide with the actual dispersion E(q), and therefore extracting the true dispersion requires proper threedimensional modeling of this function with full account of the resolution function, not just fits of one-dimensional cuts. It is very likely that by performing such one-dimensional analysis, the authors introduced a systematic error in their fitting results that increases towards T_CDW, resulting in a shift of the extrapolated point of phonon softening from its expected position. This analysis alone is therefore insufficient to claim the presence of another phase transition or an additional thermodynamic phase. Furthermore, no evidence for a transition at T* has been observed in other probes such as specific heat.",
+      "text_sha256": "sha256:9cf8e34eac7d4f4aeafd0502053ea237222b35a55838f7487992b2968852fb08"
+    },
+    {
+      "char_end": 24681,
+      "char_start": 24195,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f3725569936c66db8b8c",
+      "source_role": "reviewer_report",
+      "text": "_We agree with the referee that resolution effects can be misleading. However, a broad/coarse resolution makes it difficult to observe sharp features such as the phonon softening in 2H-TaSe2. Indeed, this was the problem of the early INS experiments[1] . The fact that we clearly see the softening is already proof that we have a good resolution. Thus, measurements with coarse resolution tend to underestimate a softening, i.e., the deduced phonon energies are larger than in reality._",
+      "text_sha256": "sha256:da7e4f04ceba92c2e6f704a1cef533ed873de1dca4604e7361d2225c60a8ab1c"
+    },
+    {
+      "char_end": 24878,
+      "char_start": 24684,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e2ba2cfb0f9763d20149",
+      "source_role": "reviewer_report",
+      "text": "_We exemplify this behavior with data on the soft mode in SrTiO3 (see figure and discussion further down). The data shows that the finite resolution of our phonon measurements rather lead to an_",
+      "text_sha256": "sha256:04689d23c4217d2dbe2e89f056729b260bc6d5bea1bbd1d458b0064cd1a4e006"
+    },
+    {
+      "char_end": 25513,
+      "char_start": 24881,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-321de66511164f88784b",
+      "source_role": "reviewer_report",
+      "text": "_overestimation of the strongly renormalized phonon mode. Therefore, the discrepancy between T* and TCDW cannot be explained by resolution effects. We also note that no deviations between the temperature deduced from phonon softening and the onset of long-range ordered CDW superlattice peaks have been observed in the same experimental setup for 2H-NbSe2[2] or some rare-earth tritellurides[3,4] . Furthermore, a large number of publications based on IXS measurements adopts a similar type of analysis and did not yet find a similar discrepancy between the temperature of the phonon softening and TCDW indicating long-range order._",
+      "text_sha256": "sha256:d3da8a18574d7b07893e22657d992c371ff1af39bf0b0a324036c5991009721c"
+    },
+    {
+      "char_end": 26001,
+      "char_start": 25516,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a72a403f60787b95e0cf",
+      "source_role": "reviewer_report",
+      "text": "_However, the referee is right that the use of the expression “precursor phase” is misleading. Our data show the phonon softening at T* but the characteristics at TCDW ≤ T ≤ T* are more that of a suppressed CDW transition which fully occurs only at TCDW. Therefore, we change our phrasing and use the term “precursor region” in the title and throughout the text. We highlight the particularity of this region which has not been observed – to our knowledge – in any other CDW material._",
+      "text_sha256": "sha256:0a5d7159a198c647c6a839699520dab0b126870151ec696ea86b921f26c2722a"
+    },
+    {
+      "char_end": 26356,
+      "char_start": 26004,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fd45aecf8e94dd58d1ce",
+      "source_role": "reviewer_report",
+      "text": "If the authors insist on their conclusion about the presence of a precursor phase, I would ask them to demonstrate using 3D modeling of the intensity function obtained from a convolution of the expected phonon dispersion with the calculated instrumental resolution that their measured data are incompatible with the phonon softening happening at T_CDW.",
+      "text_sha256": "sha256:95c609b63175ffa2563c65646813351d39d332b6dbf9ad4d32244b1caceb1d48"
+    },
+    {
+      "char_end": 26888,
+      "char_start": 26359,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-dc9408c379541af3793c",
+      "source_role": "reviewer_report",
+      "text": "_While we do not insist on the presence of a separate phase between TCDW and T* we would like to make a comment on the resolution effects. Rather than convoluting the expected dispersion with the resolution ellipsoid, we can present comparable measurements of a soft phonon mode in SrTiO3 which we performed recently on the same IXS instrument. The anomaly of the soft mode at_ _**q** cubic = (0.5,0.5,0.5) in SrTiO3 is similarly sharp in momentum space[5] and we can learn how resolution may affect the deduced phonon energies._",
+      "text_sha256": "sha256:a87d1a4d10a2d1e31691ac9b6fcfe01f0655ffb5937fed2ec0ab56ba55a201c1"
+    },
+    {
+      "char_end": 27117,
+      "char_start": 26891,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-da8e786118661ba9f999",
+      "source_role": "reviewer_report",
+      "text": "_We explain in Supplemental Note 1 that we reduced the aperture of the round analyzer opening to improve the angular, i.e., momentum resolution and be able to follow the temperature dependence of the elastic peak in 2H-TaSe2._",
+      "text_sha256": "sha256:689f180f5d39fcc98bb79bf1e68c9b2fadd1e677c13ffb75a776cc41be94e923"
+    },
+    {
+      "char_end": 27173,
+      "char_start": 27120,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d6480738c9a65479c98d",
+      "source_role": "reviewer_report",
+      "text": "**==> picture [214 x 190] intentionally omitted <==**",
+      "text_sha256": "sha256:9e757c2a9124122a9be1d6a1676c47292cd82eade65ca279a6233d51c330ecf4"
+    },
+    {
+      "char_end": 27747,
+      "char_start": 27175,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e832c92c8672ba14f446",
+      "source_role": "reviewer_report",
+      "text": "_For SrTiO3, we performed measurements of the soft phonon mode with different apertures of the round analyzer opening (Figure on the right). The data shown in blue correspond to the typical setup which we also used for our phonon measurements in 2H-TaSe2. We see that the deduced phonon energy for the typical setup slightly overestimates the soft mode energy (see inset). This is understandable since the broader momentum resolution probes a region in which the soft mode already disperses upwards away from the superlattice peak position, i.e.,_ _**q** = (0.5,0.5,0.5)._",
+      "text_sha256": "sha256:e8336f22cc3ff6acad1460e7af085c4c0db759682c3d008a37f1c90b6a52536b"
+    },
+    {
+      "char_end": 27914,
+      "char_start": 27750,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9ff8ec1ffa53058b9e09",
+      "source_role": "reviewer_report",
+      "text": "_Therefore, we argue that the very low energy of the CDW soft phonon mode in 2H-TaSe2 at T = T* is not an artefact due to the finite resolution of our measurement._",
+      "text_sha256": "sha256:f8c502adb6ee242de8d4fe8700e68191ab031296d4e50dd89a43feba19e71d83"
+    },
+    {
+      "char_end": 28361,
+      "char_start": 27917,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b9247f518e688ef18a5e",
+      "source_role": "reviewer_report",
+      "text": "It would be also helpful to see the zoomed-in version of the part of Fig. 3(a) in the immediate vicinity of the transition and the corresponding dispersion curves (like those in Fig. 3c) for all temperatures between T_CFW and T*. I find the step in q in Fig. 3(c) insufficiently detailed to see the U-shaped minimum in the gapped dispersion even for higher temperatures of 150 K and above, so it will be even less obvious at lower temperatures.",
+      "text_sha256": "sha256:7c3737bb497f70a2489c91541c871a43a59fc8bf84fb3fd0d2428bd3fc0d8551"
+    },
+    {
+      "char_end": 28850,
+      "char_start": 28364,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c040398fb2755a2886fd",
+      "source_role": "reviewer_report",
+      "text": "_The zoom of Figure 3(a) is shown in Figure 4(d). For T < T*, we measured the dispersion only for T = 125 K. The results are now included in Figure 3(c) and (d). Due to beam time limitations, the data at T = 125 K were only taken at the same momenta as the dispersion lines at T ≥ 150 K. The results are (within the error bar) identical with those obtained at the respective wavevectors at T = 130 K and indicate that the phonon does not change significantly in this temperature range._",
+      "text_sha256": "sha256:1d0d18b5c57609c0f9956dd07a61f37fdb29d4c3f5d900a256f2c0a9b6ffcd49"
+    },
+    {
+      "char_end": 29293,
+      "char_start": 28853,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8cb2fc2029348a0c711f",
+      "source_role": "reviewer_report",
+      "text": "_We agree with the referee that it would be good to have a finer momentum step size close to_ _**q** CDW. However, this would only make sense if we simultaneously would improve the momentum resolution, e.g., as we did for SrTiO3 (see above). However, the data for SrTiO3 show that the phonon intensity decreases dramatically and there is simply not enough beam time to perform extended phonon measurements in high momentum resolution mode._",
+      "text_sha256": "sha256:3647305c65a96b6c378d7e8a8b4bd448e568452c8ec1cd1c2bfa910aebf0248b"
+    },
+    {
+      "char_end": 29867,
+      "char_start": 29296,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ca9468af01a5e46432cd",
+      "source_role": "reviewer_report",
+      "text": "A minor technical comment: It would be helpful if the guides to the eye in Figs. 3(c),(d) show more physically realistic dependences. Why is the curve at 250 K approximated with a smooth curve, and those at 200 and 150 K are just interpolated linearly between the data points? For all curves with a finite energy gap, the dispersion cannot have a cusp at the minimum of the dispersion, therefore the current guides to the eye are actually misguiding the eye. I suggest using some empirical model for the dispersion instead, so that all curves are treated in the same way.",
+      "text_sha256": "sha256:37729a122050a124b2b50609bb9ab15aa06914e4b54b0142811f87c46f71dbe5"
+    },
+    {
+      "char_end": 30190,
+      "char_start": 29870,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7d655f8880bf30980a5d",
+      "source_role": "reviewer_report",
+      "text": "_We thank the referee for pointing out this issue. Rather than adjusting a function to the observed points on the dispersion we decided to only show straight connecting lines. This way it is clear that the lines have no physical meaning and that the dispersion in between the measured wave vectors is not exactly known._",
+      "text_sha256": "sha256:6cf72f2820cead446a992b4af36f08568077b8717bec18127eec0ccde2c3c320"
+    },
+    {
+      "char_end": 30471,
+      "char_start": 30193,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-25be242c99277e98d9bd",
+      "source_role": "reviewer_report",
+      "text": "In summary, I find this paper is potentially publishable in Nature Communications if the authors can refute the hypothesis that the deviation of T* from T_CDW is an artifact of finite resolution effects and the particular fitting of the energy- and momentum-distribution curves.",
+      "text_sha256": "sha256:9c120c8a1cf27dcf03a9f3847da4b13a18b03886a71d0d68998b2ec53aaff8c3"
+    },
+    {
+      "char_end": 30627,
+      "char_start": 30474,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-47067233aa510a0a6751",
+      "source_role": "reviewer_report",
+      "text": "_We believe that we show evidence that the softening happens indeed above TCDW and hope that the referee supports publication of the revised manuscript._",
+      "text_sha256": "sha256:38ac5b8dc191430eaec12f73a9b2742e806e311188ba22c6ad50f0b2825ea9ae"
+    },
+    {
+      "char_end": 30673,
+      "char_start": 30630,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ffde3588786e36770695",
+      "source_role": "reviewer_report",
+      "text": "## **Reviewer #3** (Remarks to the Author):",
+      "text_sha256": "sha256:87fb08106bbcb9c648eb6320b86f2ab9a40a5b17ddefd9f400cd36e0bc597c3b"
+    },
+    {
+      "char_end": 32086,
+      "char_start": 30676,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1374bef0cf986457adf4",
+      "source_role": "reviewer_report",
+      "text": "The manuscript reports a primarily high-resolution inelastic Xray scattering (IXS) study of the charge density wave (CDW) formation in layered transition-metal dichalcogenide, 2H-TaSe2. The work is a significant advancement compared to the previous inelastic neutron scattering studies on this material carried out in the 1970-s (Refs. 25 and 28). Specifically, by carefully analyzing their measured Xray scattering profiles, authors are able to precisely follow the temperature dependence of both the energy and the lifetime of the phonon mode softening at the CDW transition. What they discover, is the pre-cursor short-range-ordered CDW phase with already softened overdamped phonon, which exists within several Kelvin temperature range (~123K to ~129K), above the temperature where longrange CDW is established (~122K). The IXS data are supplemented by the ARPES measurements, which correlate the observed lattice structural and dynamical behaviors with the electronic structure, indicating that they have only a very small, albeit measurable impact on electronic properties. Finally, a DFT analysis is presented showing potential importance of the low-energy soft phonon spectrum investigated here by IXS for the dramatic enhancement of superconductivity in this material at high pressure, the result that is mainly motivational but also with a broad appeal to diverse readership of Nature Communicaitons.",
+      "text_sha256": "sha256:61c359a83cd27380038ba0c3d2168dba44a11d653cd996834716570dc6e1d968"
+    },
+    {
+      "char_end": 32513,
+      "char_start": 32089,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1bd0ecee85a7dc65d355",
+      "source_role": "reviewer_report",
+      "text": "The work presents expertly performed measurements, which are also carefully and scrupulously analyzed and quite eloquently described. I think this is an interesting work with a broad appeal to the diverse scientific audience and recommend that it is accepted for publication in Nature Communications. Below, I list several minor technical comments, which authors should address in preparing their manuscript for publication.",
+      "text_sha256": "sha256:043a22788018b06552ddf2452a077883cf2ab01ed7a0ef54a453be928f9f5272"
+    },
+    {
+      "char_end": 32650,
+      "char_start": 32516,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1a0f8ad72646650d02c9",
+      "source_role": "reviewer_report",
+      "text": "_We thank the referee for his positive comments on our work and provide responses/revisions to his further comments in the following._",
+      "text_sha256": "sha256:49c7aed2a0a4c157abf155d20633b656fc65caffa99d1a9c9ce4899fb3c74fdd"
+    },
+    {
+      "char_end": 32892,
+      "char_start": 32653,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5c9c0703b5ef70d509c3",
+      "source_role": "reviewer_report",
+      "text": "Line 70. \"The much better momentum resolution of IXS compared to INS ...\" -> angular resolution only? I would think the longitudinal momentum resolution is coupled to energy resolution - perhaps something could be added in methods on this?",
+      "text_sha256": "sha256:8d0037f1cbe0a535531eb3e1e353ac098dd4887031cc97bb05082eaf93ff3325"
+    },
+    {
+      "char_end": 32940,
+      "char_start": 32895,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4d0995094dd9a20020b7",
+      "source_role": "reviewer_report",
+      "text": "_We discuss this in the supplemental note 1._",
+      "text_sha256": "sha256:abde246c5eb336fb26a5967a1862d386a429a7e3fa77670f976e9f2bc6ae2f5e"
+    },
+    {
+      "char_end": 33099,
+      "char_start": 32943,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-365d613e6cfe0931b39d",
+      "source_role": "reviewer_report",
+      "text": "Line 129. \"in reasonable agreement with the coherence length of 14 Å estimated from specific heat measurements.\" - coherence length of what? Please specify.",
+      "text_sha256": "sha256:52bc1f8c0cbfe8dffecacd0fdf94fa19ab33afa7676c1f7cc512a63d403904a9"
+    },
+    {
+      "char_end": 33629,
+      "char_start": 33102,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fca4f5ec0dd8ef7de2da",
+      "source_role": "reviewer_report",
+      "text": "_It is the coherence length of the CDW order parameter. McMillan has shown that the observations for 2H-TaSe2 can be understood in a phonon-entropy model, i.e., that phonons provide most of the entropy at the CDW phase transition. He introduces a coherence length_ 𝜉𝜉0 _which is related to the range in reciprocal space over which renormalization of the soft mode is expected. Craven et al. estimated_ 𝜉𝜉0 = 14 Å _based on their specific heat measurements [40]. We have clarified the corresponding section in the results part._",
+      "text_sha256": "sha256:bc190b5f0df80731e80ee3a3982923432dc8d57bc20534bdf19ef046e605cdd7"
+    },
+    {
+      "char_end": 33685,
+      "char_start": 33632,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8adea5f82eb346468812",
+      "source_role": "reviewer_report",
+      "text": "Line 150. \"symmetrically related\" -> symmetry-related",
+      "text_sha256": "sha256:7ef84a8ff490fe26ca2a99f06ed06c8128e42ca6bee7dee5b28b8c4e45f67f11"
+    },
+    {
+      "char_end": 33760,
+      "char_start": 33688,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-96d12b808b502920822d",
+      "source_role": "reviewer_report",
+      "text": "_Ok_ Line 198. \" but strongly responds to\" -> I would remove \"strongly\".",
+      "text_sha256": "sha256:4c03a0d981e42d690ef5b40fb81bda311d096c941f1c06df721e76a1ef0f3c77"
+    },
+    {
+      "char_end": 33768,
+      "char_start": 33763,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2b2adeac20e8e031b260",
+      "source_role": "reviewer_report",
+      "text": "_Ok._",
+      "text_sha256": "sha256:4a3b735dd3543c80ade05236e91cd7bc2fa75f63d3a8ddff904005bece5475c4"
+    },
+    {
+      "char_end": 33897,
+      "char_start": 33771,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-594946524512402db7ad",
+      "source_role": "reviewer_report",
+      "text": "Line 202. \"the impact of the CDW soft mode regard the strongly increasing superconducting transition temperature\" -> \"regard\"?",
+      "text_sha256": "sha256:a20a30c3f3b4109429ce91143e1880f412f4337590973166a38e3c1ea8a1e8ae"
+    },
+    {
+      "char_end": 34040,
+      "char_start": 33900,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-988b09cf0801d5ab5cb0",
+      "source_role": "reviewer_report",
+      "text": "_We corrected the_ sentence: “role of the CDW soft phonon mode with regard to the increasing superconducting temperatures at high pressure”.",
+      "text_sha256": "sha256:14d45e0e8b77aadafb0eed663b6fd0506cf69dc748d9cb76c8407df3abd2ec79"
+    },
+    {
+      "char_end": 34191,
+      "char_start": 34043,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d89337de3bd6a4dd7b80",
+      "source_role": "reviewer_report",
+      "text": "Line 493-494. Figure 4 caption. \"The red solid line represents the same power law fit as shown in Fig. 2(c)\" - Fig. 2(c) looks lika a misnomer here.",
+      "text_sha256": "sha256:ece7b652c1e0b60385292b46b6dda9a8587a25926a720f6a1318178c70841cbe"
+    },
+    {
+      "char_end": 34242,
+      "char_start": 34194,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-61b66c902b7c65cdb7c5",
+      "source_role": "reviewer_report",
+      "text": "_We corrected it. It refers now to Figure 3(a)._",
+      "text_sha256": "sha256:4e963d1749ee5759df85f9acca21e530d4c71ce7e61bfe50e9fbb37de02c270d"
+    },
+    {
+      "char_end": 34565,
+      "char_start": 34245,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b6e60f19106084898e91",
+      "source_role": "reviewer_report",
+      "text": "Figure 4 - the break in the Y-axis in panel (e) is confusing. It is unclear to which part of the scale points to the left of the red dashed line including those marked (a), (b), (c) belong. I suggest splitting this panel into two different panels or using the left and right scales for \"CDW peak\" and \"phonon\" intensity.",
+      "text_sha256": "sha256:4d19a618ba5d281b5af2c53f8190cdc4eb501b416be6b2f1e0b34261d6e29a35"
+    },
+    {
+      "char_end": 34645,
+      "char_start": 34568,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f1cb4f0de9304f80a94b",
+      "source_role": "reviewer_report",
+      "text": "_In order to avoid confusion we deleted the break and show all on one scale._",
+      "text_sha256": "sha256:6fe56fcd5cc77a7df9f88fc08ea791977f21eb17baf36f3de7966c65000080e6"
+    },
+    {
+      "char_end": 35498,
+      "char_start": 34648,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a837550da9ab6909c77a",
+      "source_role": "reviewer_report",
+      "text": "Temperature dependence shown in Fig. 4 was measured in a set of energy scans at q=(0.325,0,0), which authors call q_{CDW}, with high wave vector resolution of 0.018 1/\\AA. However, peak position in q moves in the temperature range where the T-dependence was measured, changing from 0.323 at T_{CDW} = 122.3K to 0.333 in commensurate phase below 88K. The changing position of the peak would impact the measured T-dependence of the peak intensity. Perhaps, this effect is of little or no importance, and in addition it has been investigated by the authors by performing elastic wavevector scans reported in the next Figure. Nevertheless, authors should discuss the impact of the changing peak position on the systematic error of their intensity measurement in Fig. 4 (perhaps with reference to the follow-up Fig. 5) and incorporate it in the error bar.",
+      "text_sha256": "sha256:16b1ef076e6e2eb2a467aab665c5a85240bc7fc4200eb557157c9f2c0243835b"
+    },
+    {
+      "char_end": 35987,
+      "char_start": 35501,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4e66dd633fa7014491d8",
+      "source_role": "reviewer_report",
+      "text": "_All energy/phonon scans (including those analysed in Figure 4) were performed with the standard momentum resolution of 0.09 Å[-1] , which is much broader than the shift of the CDW peak position on cooling below TCDW. Furthermore, energy/phonon scans analyzed in Figure 4 were done at T ≥ 122.5 K (< TCDW). Here, even high-resolution scans at zero energy transfer (see Fig. 5(c)) do not find a significant temperature dependent wave vector of the peak due to CDW fluctuation/soft mode._",
+      "text_sha256": "sha256:1faa7dfd6a360e684f577da9107c618126f713d1cae379ff4b7bbe8e622a0386"
+    },
+    {
+      "char_end": 36033,
+      "char_start": 35990,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f45d865afc51799848fe",
+      "source_role": "reviewer_report",
+      "text": "## **Reviewer #4** (Remarks to the Author):",
+      "text_sha256": "sha256:135683a6f1cab471de75a6890608ec785646760d2263e0c86794f4db00619c4d"
+    },
+    {
+      "char_end": 39264,
+      "char_start": 36036,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f53f8a64652b0f64f452",
+      "source_role": "reviewer_report",
+      "text": "Xingchen Shen et al. employed Inelastic X-ray Scattering (IXS) and Angle Resolved Photoemission (ARPES) to study a phenomenon of charge density wave (CDW) transition in the single-crystalline sample of 2H-TaSe2, a material where CDW has been first detected experimentally about 50 years ago. IXS delivered the data about phonons: dispersion relations at various temperatures above and below ~122 K, a temperature of the CDW transition reported in the previous studies; ARPES measurements yielded contours of the Fermi surface at 126 K. IXS (as well as the neutron scattering) and ARPES are in essence the common techniques used in the studies of the CDW materials. On that account the authors have followed the valid experimental methodology. The abstract states that the results of this study rule out the “central-peak” scenario of the CDW transition in 2H-TaSe2 and provide evidence for a novel “precursor” phase developing above the transition temperature. The authors believe that the hallmark of the latter phase is the “complete” softening of the phonon mode. Given the substantial amount of reports dealing with the CDW transitions in the transition metal di-chalcogenides these two results could potentially warrant a publication in Nature Communications, a journal aiming at disseminating important advances. I should confess that I was not aware of the “central-peak” scenario of the CDW transition. I also was not able to find any mentioning of it in the literature. While this (central) peak has been observed in the numerous studies of the structural phase transitions, it seems it has not yet been invoked for explanation of the CDW transition. In essence, its origin has been debated. Recent IXS study of YBCO (Nature Physics 10, 52) attributed energy-resolution-limited elastic peak to the presence of CDW domains above and below the transition temperature. The major result discussed by Xingchen Shen et al. seems to be based on the erroneous belief that “central peak scenario” has been considered and debated as a possible mechanism of the CDW transition in 2H-TaSe2. The other observation, that is the softening of the phonon mode, is hardly new. It was studied in the seminal work by D. E. Moncton, J. D. Axe and F. J. DiSalvo (PRB 16, 801), albeit these authors admitted that insufficient resolution might have prevented the detailed analysis of the sharp anomaly in the dispersion (Figure 3a of the present manuscript supports this assumption). Nevertheless, the temperature dependence of the softening of the phonon was firmly established decades ago. To conclude, the paper communicates results of the excellent IXS study of 2H-TaSe2 but it neither conveys any new findings nor does it resolve a long standing controversy since I believe that “centralpeak scenario” has never been discussed in connection with the mechanism of the CDW transition. Observation of the softening of the phonon mode is in line with the previous studies but it cannot dislodge a model which has never (in my opinion) existed. I shall admit that “central peak scenario” might have been mentioned in the reports which escaped my attention. However, it is my opinion that the manuscript cannot be published in its present form.",
+      "text_sha256": "sha256:5e79e867685acdc7b3e93909bbb70fcf9515525d9b504f1458271ec4a4c4b574"
+    },
+    {
+      "char_end": 39911,
+      "char_start": 39267,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0ed209bafb951391c1f5",
+      "source_role": "reviewer_report",
+      "text": "_We thank the referee for his review of our work and the positive assessment of the quality of our IXS study. However, we disagree with his statement that “_ the temperature dependence of the softening of the phonon was firmly established decades ago _”. It was established that there is_ _**a** temperature dependence. But important points including whether the phonon fully softens and, if, at what temperature were not known. Certainly, a full phonon softening well above the CDW phase transition temperature has not been reported or discussed for 2H-TaSe2, another transition-metal dichalcogenide or (to our knowledge) in any CDW material._",
+      "text_sha256": "sha256:c18b5d63ee634119be418a8e74c412e68b3c3efbea90b775dbcf649937b007c5"
+    },
+    {
+      "char_end": 40510,
+      "char_start": 39914,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0969ada5f96935be8546",
+      "source_role": "reviewer_report",
+      "text": "_The authors of the original phonon study[1] say that they cannot deduce too much detail on the lattice dynamics because of their coarse momentum resolution. However, they are confident enough to show the integrated intensity of the peak at zero energy transfer which rises just below 150 K, i.e., wellabove TCDW. Even if the phonon would soften at TCDW, this alleged rise of the elastic peak at high temperature would have to be addressed in order to understand the origin of the CDW order in 2HTaSe2. Thus, our study provides important insights in that it does not reproduce this behavior. The_",
+      "text_sha256": "sha256:34d3f286d0c3cf6602cbe445a41ee5578d10f334d87d2936e822093d1608a45f"
+    },
+    {
+      "char_end": 40640,
+      "char_start": 40513,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-232f78a7576f8e69bc48",
+      "source_role": "reviewer_report",
+      "text": "_elastic line only rises above the phonon intensity level at temperatures below that at which the soft mode is fully softened._",
+      "text_sha256": "sha256:8ed8a710f26c012b009847642da2f5d36de163a273a5da4e1d47396bf8cb29b5"
+    },
+    {
+      "char_end": 41558,
+      "char_start": 40643,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d0d0723d17a46af5ac7d",
+      "source_role": "reviewer_report",
+      "text": "_We argue that it is useful to discuss our results with respect to the observation of a central peak since the corresponding results are clearly shown in Ref.[1] and similar observation have been recently reported not only in cuprates but also in other, more conventional CDW materials like ZrTe3. We also emphasize that the issue of a central peak is an observation rather than a fully understood model scenario, e.g., like the Peierls scenario for CDW formation in a 1D metal. The origin of the central peak is still not fully understood, even in well-known central-peak compounds such as SrTiO3. Scatteringtype, i.e., XRD investigations of 2H-TaSe2 focused on the intriguing change from an incommensurate to a commensurate CDW at temperatures below 100K[6] . Thus, our study highlights that new techniques should be applied to “old” materials. Important points can be clarified or previous results be corrected._",
+      "text_sha256": "sha256:8dc84a2c2ecacea6dd7a2571b00668502206746b48aa451cd9d2203cd5c3c34d"
+    },
+    {
+      "char_end": 41579,
+      "char_start": 41561,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-43f5107a10429fb2e3c9",
+      "source_role": "reviewer_report",
+      "text": "## **References:**",
+      "text_sha256": "sha256:84469bacf29e2e96777b6df79c4f2fc74fb00d65a5af0cdae73bce982ccd137c"
+    },
+    {
+      "char_end": 41764,
+      "char_start": 41582,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-983a0274ee271cc78500",
+      "source_role": "reviewer_report",
+      "text": "- 1 Moncton, D. E., Axe, J. D. & DiSalvo, F. J. Neutron scattering study of the charge-density wave transitions in 2H-TaSe2 and 2H-NbSe2. _Physical Review B_ **16** , 801-819 (1977).",
+      "text_sha256": "sha256:0b70d9393ff3ed3303f44d68ef750049758861f525160278caf1d8e0df09da93"
+    },
+    {
+      "char_end": 42029,
+      "char_start": 41767,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b0d3f926d1a713bc5d04",
+      "source_role": "reviewer_report",
+      "text": "- 2 Weber, F., Rosenkranz, S., Castellan, J. P., Osborn, R., Hott, R., Heid, R., Bohnen, K. P., Egami, T., Said, A. H. & Reznik, D. Extended Phonon Collapse and the Origin of the Charge-Density Wave in 2H-NbSe2. _Physical Review Letters_ **107** , 107403 (2011).",
+      "text_sha256": "sha256:d9ad06ba2e0829886ae3604d2ffc5abb275e0ac5615eae2ba6ecd7296c4d2050"
+    },
+    {
+      "char_end": 42306,
+      "char_start": 42032,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c160f01b045d0be84003",
+      "source_role": "reviewer_report",
+      "text": "- 3 Maschek, M., Zocco, D. A., Rosenkranz, S., Heid, R., Said, A. H., Alatas, A., Walmsley, P., Fisher, I. R. & Weber, F. Competing soft phonon modes at the charge-density-wave transitions in DyTe3. _Physical Review B_ **98** , 094304, doi:10.1103/PhysRevB.98.094304 (2018).",
+      "text_sha256": "sha256:c78f402a882736515b9def0ce6be2dcea29efd0170ce7551fa00f0b16e6b6817"
+    },
+    {
+      "char_end": 42549,
+      "char_start": 42309,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-765a1a10ac0fdac608df",
+      "source_role": "reviewer_report",
+      "text": "- 4 Maschek, M., Rosenkranz, S., Heid, R., Said, A. H., Giraldo-Gallo, P., Fisher, I. R. & Weber, F. Wave-vector-dependent electron-phonon coupling and the charge-density-wave transition in TbTe3. _Physical Review B_ **91** , 235146 (2015).",
+      "text_sha256": "sha256:4ac301a4c44620f5eec957a4e2f0924755977e2d0bcba960c6d237220e99e5d4"
+    },
+    {
+      "char_end": 42767,
+      "char_start": 42552,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-54dca4e712bd1c990410",
+      "source_role": "reviewer_report",
+      "text": "- 5 Stirling, W. G. Neutron inelastic scattering study of the lattice dynamics of strontium titanate: harmonic models. _Journal of Physics C: Solid State Physics_ **5** , 2711, doi:10.1088/0022-3719/5/19/005 (1972).",
+      "text_sha256": "sha256:a192b77f761448810c40abc627ffce836e6933bc3ed13a11dff7a8c3ca322dd9"
+    },
+    {
+      "char_end": 42967,
+      "char_start": 42770,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-50bd661dd481d41edf26",
+      "source_role": "reviewer_report",
+      "text": "- 6 Leininger, P., Chernyshov, D., Bosak, A., Berger, H. & Inosov, D. S. Competing charge density waves and temperature-dependent nesting in _2H_ -TaSe2. _Physical Review B_ **83** , 233101 (2011).",
+      "text_sha256": "sha256:d583facc144deb10a91b105c573c6ed1ee0d63788395942b4908c485abeec7af"
+    },
+    {
+      "char_end": 43159,
+      "char_start": 43042,
+      "reviewer_id_hash": "REV-4d61028605837edb",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-58c113bc8845d4242e79",
+      "source_role": "reviewer_report",
+      "text": "The authors have successfully addressed all my comments thus I support the publication of the manuscript in Nat Comm.",
+      "text_sha256": "sha256:f806fa81cb9d5189c1b1eb04fadb8f6257bc8ab8ef900eca5028eb66ff6f0e85"
+    },
+    {
+      "char_end": 43185,
+      "char_start": 43162,
+      "reviewer_id_hash": "REV-4d61028605837edb",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7b602d93e3d3f89dc883",
+      "source_role": "reviewer_report",
+      "text": "Just minor corrections:",
+      "text_sha256": "sha256:1a5872d5c134795f88966350c81c046e5e791b10c2e791a8fe60b047b20573d0"
+    },
+    {
+      "char_end": 43216,
+      "char_start": 43188,
+      "reviewer_id_hash": "REV-4d61028605837edb",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f0bdd361b93e5a29403f",
+      "source_role": "reviewer_report",
+      "text": "- line 270 2H-VSe2->1T-VSe2.",
+      "text_sha256": "sha256:133fe7a699f36c4784341e889f9ac8a3d9fcfeb11d61ac66bc87fa8da2779c85"
+    },
+    {
+      "char_end": 43592,
+      "char_start": 43219,
+      "reviewer_id_hash": "REV-4d61028605837edb",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-24823522187d9bd8048b",
+      "source_role": "reviewer_report",
+      "text": "- I would warn the authors about the new ref. [6] on kagomes. The chirality of the CDW in AV3Sb5 is being largely questioned and the STM data was not reproducible by other groups. Comprehensive description of the CDW in AV3Sb5, relevant for TaSe2, can be found in Phys. Rev. X 11, 031050 (2021), Nature Communications 14, 1015 (2023), Phys. Rev. B 105, L140501 (2022), etc.",
+      "text_sha256": "sha256:8c3c836deec4a9defa62a39ebf28838705c87c4c6ceeb6d37215ceb7d3e6cbe2"
+    },
+    {
+      "char_end": 43635,
+      "char_start": 43613,
+      "reviewer_id_hash": "REV-ddc5c89265df2b48",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e178d076bab6b40b389b",
+      "source_role": "reviewer_report",
+      "text": "Remarks to the Author:",
+      "text_sha256": "sha256:69494487ab3523dad419b9f4e4028e7c21fae90d12680ed4de25910e7fb392cb"
+    },
+    {
+      "char_end": 43734,
+      "char_start": 43638,
+      "reviewer_id_hash": "REV-ddc5c89265df2b48",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6a5cb71154af37ad1afe",
+      "source_role": "reviewer_report",
+      "text": "In my opinion, the authors have only partly addressed my comments raised in the previous report.",
+      "text_sha256": "sha256:e20231a23f75f53b2113da968f913b4e55679a9e2b3e1440222d34718a4c617a"
+    },
+    {
+      "char_end": 45419,
+      "char_start": 43737,
+      "reviewer_id_hash": "REV-ddc5c89265df2b48",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-cd98a219f92398830fb7",
+      "source_role": "reviewer_report",
+      "text": "In particular, their argumentation regarding the influence of experimental resolution on the extraction of phonon softening temperature is not satisfactory. They argue based on an analogy with another compound, SrTiO3, that finite momentum resolution would lead to an increase in the fitted peak positions instead of a decrease. While I agree with that, the effect of the energy resolution would be opposite. Two peaks that appear at a finite distance in energy that is smaller than the energy resolution would appear as a single peak in an energy scan and would be fitted to zero phonon energy while the actual value is finite. All curves shown for the SrTiO3 data in the authors' reply are very far from this limit, as the peaks are well resolved in the data. To properly extract the peak positions, one would need proper modeling of the experimental intensity that involves multidimensional convolution with the resolution function that considers both energy and momentum resolution. This is a rather straightforward analysis, and unless this is properly done I am not convinced that the CDW transition and the phonon softening transition are indeed different as suggested by the presented fits. Considering that the authors admitted that there is no thermodynamic phase transition at T*, I find it very likely that the \"precursor region\" just represents a region where the phonon is so low in energy that it cannot be resolved within the experimental (energy) resolution. If this is indeed the case, this region would be of extrinsic origin, therefore properly refuting this hypothesis with numerical modeling is essential, especially given the very scarce data at low energies.",
+      "text_sha256": "sha256:eaf946e6ebcb1e5d79fff5eea3466580f651d5dedb3d6ce0fd6eb4cbc0b02c0e"
+    },
+    {
+      "char_end": 46158,
+      "char_start": 45422,
+      "reviewer_id_hash": "REV-ddc5c89265df2b48",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-219f9f8e52d551196781",
+      "source_role": "reviewer_report",
+      "text": "In a peak such as the one shown in Fig. 4(a-c), a single peak is fitted with a sum of a sharp elastic peak and two somewhat broader phonon modes. If the width of the phonon peak is treated as a free fitting parameter, it would be strongly coupled with the position of the peak, resulting in much larger error bars than those presented in panel (d). This is because two sharper peaks at slightly inelastic positions give nearly the same peak shape as one broader peak centered at zero. Because the intrinsic width of the peak depends both on momentum and on energy resolution functions, it is important to mention how the width of the peak was determined and what parameters were kept free in the fit for the determination of error bars.",
+      "text_sha256": "sha256:794dba8e011b37fe53d7d8504d728889862de16ff7f6e56f29a3eb5a90feea3b"
+    },
+    {
+      "char_end": 47113,
+      "char_start": 46161,
+      "reviewer_id_hash": "REV-ddc5c89265df2b48",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a7640994e6503b9b6534",
+      "source_role": "reviewer_report",
+      "text": "Another point that caught my attention in the authors' reply is that they use the eJDOS instead of the proper nesting functon(imaginary part of the Lindhard susceptibility) to evaluate the nesting properties of the Fermi surface. There is an essential difference between the two, namely the joint density of states would give a divergency (or large peak) at Q=0 or at a Q vector connecting similarly shaped Fermi pockets of the same type (hole-like with hole-like or electron-like with electron-like), whereas the nesting responsible for an electronic instability can only occur between a hole- and electron-like pockets, which is correctly captured by the Lindhard susceptibility only. In this respect, using the eJDOS instead of the Lindhard susceptibility for estimating the nesting properties is inaccurate and should be avoided. I do not see any reason why the authors cannot calculate the nesting function instead, this is rather straightforward.",
+      "text_sha256": "sha256:9d4302e36ff78d8a81bf80fdddb27f9853f0fe11132f4ab043f3ab86a07b67fa"
+    },
+    {
+      "char_end": 47314,
+      "char_start": 47116,
+      "reviewer_id_hash": "REV-ddc5c89265df2b48",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7f1fd5b252f3d5d9322a",
+      "source_role": "reviewer_report",
+      "text": "With this said, I still consider that this paper is of sufficient interest for publication in Nature Communications, but the technical questions raised by the referees need to be addressed properly.",
+      "text_sha256": "sha256:7a77b9beaecc3b67611fbfa8842b9f2e7e943a2817a13b3f15fc249260086d68"
+    },
+    {
+      "char_end": 47745,
+      "char_start": 47363,
+      "reviewer_id_hash": "REV-87f0ec4543454645",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9f074a99763c49934641",
+      "source_role": "reviewer_report",
+      "text": "In the revised manuscript authors have thoroughly addressed comments and suggestions included in my previous report from the first review round. I think that revisions have improved manuscript significantly and recommend that it is accepted for publication. Below, I list several minor revisions which authors might address when preparing the final resubmission of their manuscript.",
+      "text_sha256": "sha256:c9f0536caafa660ec876a3a6689957a0f476de7456be07409a80055f0b0a72b0"
+    },
+    {
+      "char_end": 48450,
+      "char_start": 47748,
+      "reviewer_id_hash": "REV-87f0ec4543454645",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-57dfb84d19fbef353026",
+      "source_role": "reviewer_report",
+      "text": "1. From Fig. 3(b) it appears that the phonon mode at Q_{CDW} is not just a soft phonon below 130 K, but an over-damped one. This is an important observation, which would be useful to emphasize in the manuscript. It allows to rationalize why there is this broad precursor range of temperatures where lattice dynamics is soft but structural transition does not occur - an overdamped oscillator bears no dynamics (strictly speaking, its frequency is not zero, but is undefined). In other words, liquid-like, diffusive lattice dynamics, is present within the precursor region with softened but overdamped phonon at Q_{CDW} before it is overcome by truly zerofrequency (zero-energy) static order at T_{CDW}.",
+      "text_sha256": "sha256:e83762c57333e8171362405091c932283521768a09c229a4e74a517da117c644"
+    },
+    {
+      "char_end": 48590,
+      "char_start": 48453,
+      "reviewer_id_hash": "REV-87f0ec4543454645",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-73111c110887e590bc28",
+      "source_role": "reviewer_report",
+      "text": "2. Line 158, \"line in Fig. 4(e), note the break of the vertical scale\" - now there is break in Fig. 4e, so this needs be removed/revised?",
+      "text_sha256": "sha256:d489387253d274087bea25f0e05a68583c6df0771325e1abfeaaacc62a254864"
+    },
+    {
+      "char_end": 49638,
+      "char_start": 48593,
+      "reviewer_id_hash": "REV-87f0ec4543454645",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a713f2d28a0b8b9f5cca",
+      "source_role": "reviewer_report",
+      "text": "I must note that cannot concur with the opinion of Reviewer #4 that ruling out a central peak scenario for the CDW transition in 2H-TaSe is not important, or, as Reviewer #4 writes, \"neither conveys any new findings nor does it resolve a long-standing controversy\". The argument of that Reviewer that \"I believe that “central peak scenario” has never been discussed in connection with the mechanism of the CDW transition\" is not well founded. As reviewer themselves notes, the central peak phenomenon, which is observed in a rather broad range of phase transition, is an enigmatic phenomenon whose origin is still unclear and broadly debated. It is therefore natural to ask in the spirit of scientific inquiry, whether CDW is also possibly associated with central peak formation? Hence, I believe that ruling out the formation of a central peak without full phonon softening is an extremely important and timely finding reported in the manuscript, which provides insight both into the CDW formation mechanisms and the central peak enigma itself.",
+      "text_sha256": "sha256:88108f3f16ef681386c9553fa506b53fbb4c5e75bdb88bcd95d02e8b819ccf3f"
+    },
+    {
+      "char_end": 51361,
+      "char_start": 49687,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-73fea1fc114f98fef2a4",
+      "source_role": "reviewer_report",
+      "text": "In the revised manuscript Xingchen Shen et al have downplayed claim that their data rule out “central peak scenario” of the CDW transition in 2HTaSe2. In my first report I doubted that such a “scenario” was ever put forth while explaining the CDW transition in chalcogenides. Observation of the soft phonon mode at temperatures slightly exceeding accepted transition temperature (~122K) seems to be the main result which potentially can warrant a report in Nature Communications. The upper boundary of the “precursor” region, that is 128.7 K, was found by fitting the experimental data plotted in Figure 3a (phonon energy versus temperature). 128.7K is just ~7K over the commonly used transition temperature of ~122K. Unfortunately, the authors do not discuss quality of their samples and do not mention any transport measurements conducted on the same sample which was studied by the IXS. In my opinion such data should be included. As it happens, transition temperatures reported in the literature vary by ~1K. Moreover, recent study of TaS2 and TaSe2 detected increase of the transition temperatures in the “aged” samples (Appl. Phys. Lett. 118, 193105 (2021)). I believe it is imperative to present transport data indicating transition temperature when discussing precursor zone which only extends up to ~7K above the CDW transition. The readers may also wonder about precision of the temperature measurements achieved in this work. Can the authors elaborate on how temperature was measured and calibrated? Is it possible that “precursor” region lies within the arrow bars of the measurement? Relevant information can be simply added to the Methods section of the paper.",
+      "text_sha256": "sha256:2a699f20d1ef10a9da80ed035171c79afcda5ed8622b2bc83ed87a6f12847aac"
+    },
+    {
+      "char_end": 51756,
+      "char_start": 51364,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a5aad366f7efa910e5ca",
+      "source_role": "reviewer_report",
+      "text": "Lastly, I like to comment on the inclusion of the ab-initio calculations and ARPES data. The DFPT results are interesting, but they mostly relate to the superconducting transition and enhancement of the critical temperature at high pressure. Both are valid subjects, but they seem to be not fitting well into the paper focusing on the “precursor” zone. Similarly, presented ARPES data are not",
+      "text_sha256": "sha256:d8bd8dffc0b486fde60ba9e42032571e2624d37c5f13ebf593cbd2c8f8125fec"
+    },
+    {
+      "char_end": 53669,
+      "char_start": 51759,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e8996c2d3c940babf1e0",
+      "source_role": "reviewer_report",
+      "text": "really discussed in the context of the main subject of the study. The figures display Fermi contours and spectra taken at a few points in the zone above and below the transition. The Fermi surfaces and observed shifts of the leading edges are in general agreement with the data reported in the literature. The authors do not discuss nesting features of the Fermi surfaces (which by the way are very difficult to read; reader not familiar with the previous ARPES studies of TaSe2 will not be able to trace the contours). A nice example of such a discussion in connection to the CDW transition in di-chalcogenides could be found in New Journal of Physics 10, 125027 (2008). In order to put ARPES measurements in the context of the paper the authors of the present manuscript could have attempted extraction of the electron phonon coupling parameters from the ARPES data. In its present form the paper stands as a collection of independent studies (IXS, ARPES, DFT) loosely linked together by the sample. I have no doubts about quality of the data. But I doubt that the paper delivers any new findings which warrant publication in Nature journals. The manuscript would make an excellent publication in the specialized journals as it reports how improved momentum and energy resolution achievable in the modern IXS setups help to refine a picture of the phonon softening in a CDW material which was first drawn about 50 years ago (PRB 16, 801). Since I only doubt degree of the novelty, it should be left to the editors of Nature to decide whether this report constitutes a significant advance which may interest the broad audience. That said, I like to stress that without addition of the transport data clearly demonstrating a CDW transition at exactly 121.3K and detailed discussion covering precision of the temperature measurements existence of the precursor zone might be questioned by the initiated readers.",
+      "text_sha256": "sha256:cff899e8ec00aa46abfed44d62122323845ca901b0d24e719dc35e022fe23d02"
+    },
+    {
+      "char_end": 81500,
+      "char_start": 81160,
+      "reviewer_id_hash": "REV-ddc5c89265df2b48",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9a9efeb968a807cf81fa",
+      "source_role": "reviewer_report",
+      "text": "I thank the authors for the detailed response, which I find mostly convincing. Any further discussion would go into technical details that are probably not so important for the publication decision, so I tend to recommend the paper for publication in its current version. Below I just want to respond to the authors' replies to my comments.",
+      "text_sha256": "sha256:2c00ed0f8772842ce0dbd7ff6c446c782aa2a2b12341a5ba24c61d00b1ad4126"
+    },
+    {
+      "char_end": 82254,
+      "char_start": 81503,
+      "reviewer_id_hash": "REV-ddc5c89265df2b48",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-937c1ca5d734efa8930a",
+      "source_role": "reviewer_report",
+      "text": "1. Regarding the discussion of resolution effects, one has to understand that the assumption that the spectrum can be fitted by two symmetric peaks corresponding to Stokes and anti-Stokes processes with damping is an approximation. In reality, when considering both momentum and energy resolutions, the peak intensity will have contributions from an infinite number of phonons in the vicinity of the q vector. At the point where the dispersion relationship is nonlinear (which is the case at E=0), this can lead to an asymmetric shape of the peaks and the deviation of the fitted peak positions from the true peak positions. With this said, I admit that the one-dimensional type of analysis employed by the authors is considered standard in the field.",
+      "text_sha256": "sha256:8852b297041b2bfbcd1c337caed01e53afc3a8f60d8338e94c7b11c63ae8ae66"
+    },
+    {
+      "char_end": 83294,
+      "char_start": 82257,
+      "reviewer_id_hash": "REV-ddc5c89265df2b48",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-588be11d73983363e309",
+      "source_role": "reviewer_report",
+      "text": "2. Regarding the calculation of the nesting vectors, the paper by Johannes and Mazin emphasizes the nesting occurs at wave vectors where the _real_ part of the Lindhard function has its maxima. This is consistent with the criterion for the CDW instability, as described for example in S.-K. Chan and V. Heine, J. Phys. F: Met. Phys. 3 795 (1973). The quantity relevant for the formation of the CDW is chi_0 in the static limit. This has no contribution from the imaginary part which vanishes at E=0 as an odd function of energy. The confusion therefore seems to arise because different authors use the word \"nesting\" in different senses. If one means just overlapping Fermi surfaces (joint density of states), then the imaginary part of chi_0 must be considered, but this is unrelated to the CDW instability. The actual CDW wave vector, as emphasized by Johannes and Mazin, is at the maximum of the real part of chi_0, and for the purposes of the present paper it would probably be a better (or just another useful) quantity to consider.",
+      "text_sha256": "sha256:c6472d527d44291afc7e821380d46c2f7be1a0c08dd923f092365fafd07b72dc"
+    },
+    {
+      "char_end": 83335,
+      "char_start": 83297,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0f2e160a28a5ffc1940a",
+      "source_role": "reviewer_report",
+      "text": "## Reviewer #4: Remarks to the Author:",
+      "text_sha256": "sha256:72df20bc2bbf9bec4fdb96cc3c64fb9367c8ad7706784c139930debcd035b385"
+    },
+    {
+      "char_end": 83552,
+      "char_start": 83338,
+      "reviewer_id_hash": "REV-4332c5325b13f3a1",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-dcfb1d3a5a45deee4273",
+      "source_role": "reviewer_report",
+      "text": "The authors have included transport data and provided a reasonable explanation of how the temperature was measured. Consequently, my previous concerns have been adequately addressed. I have no additional questions.",
+      "text_sha256": "sha256:3bb3684c22dab074bb473a889f9c0ad69b01f4971e7f0a9f880dd859f10527d9"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

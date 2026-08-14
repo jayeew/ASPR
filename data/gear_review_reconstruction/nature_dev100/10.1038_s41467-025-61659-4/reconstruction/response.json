@@ -1,0 +1,152 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:df7a254d31eda5e72790ef1e51e45fa0fcfa1e17f1ce6605673c291eaafee572",
+  "input_sha256": "sha256:134f1146505ee08b7a64a8f3c3e8abc5c27c7b73c19762f331a287f82f60422e",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:9858fadb44a047bcad1df6930f0552f3e2089235e9332b1e8fefd68d71044a86",
+  "package_id": "RSP-540c117bfc62d3bdcd5d",
+  "paper_id": "10.1038/s41467-025-61659-4",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-dea5c3827e72bff4351b",
+        "RR:SRC-R-b0e8687c813520528a98"
+      ],
+      "paper_id": "10.1038/s41467-025-61659-4",
+      "point_id": null,
+      "rationale": "The reviewer questioned the provenance and annotation of the Supplementary Fig. 2 ladder, boxes, lanes, and image panels. The author response describes corrections, but the available final PaperIR span refers to the processing figure rather than preserving the supplementary immunoblot image and annotations needed to independently confirm them.",
+      "resolution_status": "unverifiable",
+      "reviewer_id_hashes": [
+        "REV-54f12c4c22034468"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d53845c5bde22513e637"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-AUDIT-SUPPFIG2"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-91de0f74936c8ad49660"
+      ],
+      "paper_id": "10.1038/s41467-025-61659-4",
+      "point_id": null,
+      "rationale": "The reviewer identified a typographical error. The author response states that it was corrected, and the final paper uses the corrected term in its structural-methods description.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-54f12c4c22034468"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-1cd5f770ca967f8bf052"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-AUDIT-TYPO"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-65f17fe59de9e3539a4a"
+      ],
+      "paper_id": "10.1038/s41467-025-61659-4",
+      "point_id": null,
+      "rationale": "The reviewer requested that the manuscript place strain-dependent receptor usage in a broader virology context. The final discussion includes comparisons with receptor shifts in merbecoviruses and influenza viruses, consistent with the reported incorporation.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-54f12c4c22034468"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-2e9ebf5f7da48a3ad2a9"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-AUDIT-VIROLOGY-CONTEXT"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "not_discussed",
+      "limiting_points": [],
+      "schema_version": "aspr_gear",
+      "supporting_points": []
+    },
+    "paper_id": "10.1038/s41467-025-61659-4",
+    "questions": [],
+    "schema_version": "aspr_gear",
+    "strengths": [],
+    "summary": {
+      "evidence_keys": [
+        "P:S-abe62db14d5ffa94b158",
+        "P:S-8be239a97ace14978077",
+        "P:S-0a06165fc3cd5e2043dc",
+        "P:S-483cd9dd49cfdca798b0"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "The paper determines a 2.99 Å cryo-EM structure of WEEV 71V1658 VLPs bound to human PCDH10 EC1-EC2, defining an EC1-binding cleft across adjacent E2-E1 heterodimers. Structure-guided PCDH10 mutations are evaluated by binding and cell-entry assays, and the study links E2 position 153 and avian PCDH10 residue 89 to strain- and host-associated receptor engagement. The final discussion also situates the strain-dependent receptor-usage observation alongside analogous receptor shifts in other viral families. The reviewer-report record contains no retained, independently supported persistent weakness or residual question after audit of the three specific comments."
+    },
+    "weaknesses": []
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-dea5c3827e72bff4351b",
+        "RR:SRC-R-b0e8687c813520528a98"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-32759da81315fdbe6d48"
+      ],
+      "ledger_id": "LEDGER-SUPPFIG2",
+      "paper_id": "10.1038/s41467-025-61659-4",
+      "residual_summary": "The final PaperIR does not include the supplementary immunoblot image and its annotations, so the reported figure corrections cannot be independently assessed.",
+      "resolution_status": "unverifiable",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d53845c5bde22513e637"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-91de0f74936c8ad49660"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-86db56fb0e095af0f3d0"
+      ],
+      "ledger_id": "LEDGER-TYPO",
+      "paper_id": "10.1038/s41467-025-61659-4",
+      "residual_summary": "The reported typographical correction is reflected in the final paper.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-1cd5f770ca967f8bf052"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-65f17fe59de9e3539a4a"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-0a06165fc3cd5e2043dc",
+        "P:S-483cd9dd49cfdca798b0"
+      ],
+      "ledger_id": "LEDGER-VIROLOGY-CONTEXT",
+      "paper_id": "10.1038/s41467-025-61659-4",
+      "residual_summary": "The final discussion supplies the requested broader virology context for strain-dependent receptor usage.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-2e9ebf5f7da48a3ad2a9"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

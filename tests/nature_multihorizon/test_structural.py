@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from aspr.nature_multihorizon.structural import (
+from gear.nature_multihorizon.structural import (
     annotate_future_reference_coverage,
     annotate_future_reference_coverage_from_parquet,
     read_future_citers_for_subset,

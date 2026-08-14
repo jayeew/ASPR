@@ -1,0 +1,453 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:44a200c5a49fa2e3db506fa6aac698a5bb74d695c8d16a3d01b7e8887cb65dc2",
+  "input_sha256": "sha256:a9a664e58321d0316b3532c39627515e259be39f604bae0ef535e99985a68315",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:4488ce0aa5148636ae62b23e498b79b8fcfe434aad8f7db5dafeb6144ab0bd62",
+  "package_id": "RSP-24d69e164b97b4760579",
+  "paper_id": "10.1038/s41467-023-36113-y",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-36113-y",
+      "point_id": "N-01",
+      "rationale": "Reviewer reports identified the octameric σB-dependent RNAP assembly as a new bacterial regulatory mechanism; the final paper describes an eight-unit auto-inhibited complex and RbpA-dependent prevention of assembly.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-2940e06327b24858",
+        "REV-861a1f795739ad67"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-cb402042d91ca07106d9",
+        "RR:SRC-R-a5715e32a5776134c03e"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-01"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-36113-y",
+      "point_id": "N-02",
+      "rationale": "The novelty framing is limited by the reviewer’s identification of prior RNAP oligomerization examples; the final paper correspondingly limits its claim to the absence of a described RNAP-octamer structure.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-2940e06327b24858"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-cb402042d91ca07106d9"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-02"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-36113-y",
+      "point_id": "ST-01",
+      "rationale": "Reviewer 2 specifically recognized the combination of negative-stain and biochemical assays. The final paper provides interface mapping, assembly assays, and transcriptional measurements for the NCR insertion mutant.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-861a1f795739ad67"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a5715e32a5776134c03e"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-ST-01"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-36113-y",
+      "point_id": "ST-02",
+      "rationale": "Reviewer 1’s second-round report states that the added solution-state data support octamer formation and RbpA-mediated disruption. The final paper reports both prevention of assembly and dissociation of preformed octamers after RbpA addition.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-2940e06327b24858"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-54784428fb58a11a8674"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-ST-02"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-2addbc8ef3b711721b00"
+      ],
+      "paper_id": "10.1038/s41467-023-36113-y",
+      "point_id": "W-01",
+      "rationale": "The reviewer asked whether the mechanism extends beyond M. tuberculosis. The response treats this as requiring tests in other species, while the final paper’s sequence comparisons and speculative discussion do not provide those tests.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-2940e06327b24858"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d57c43bf8865ab358767"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-ed9f1e26a406f572c31e",
+        "RR:SRC-R-3f62b94650916bb4567d"
+      ],
+      "paper_id": "10.1038/s41467-023-36113-y",
+      "point_id": "W-02",
+      "rationale": "The reviewer questioned σB occupancy in all eight protomers. The final paper supplies indirect density-volume evidence suggesting a majority of octamers contain eight σB copies, but this remains qualified rather than a direct occupancy measurement.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-861a1f795739ad67"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-4f9ad86b7b9059ab9967"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W-02"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-995589fd6134a34607b2"
+      ],
+      "paper_id": "10.1038/s41467-023-36113-y",
+      "point_id": "Q-01",
+      "rationale": "The reviewer asked whether the NCR-insertion phenotype depends on insert identity or geometry. The final paper reports one defined σA-derived insertion and its phenotype, leaving the broader determinant unresolved.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-861a1f795739ad67"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-151bf3002a6188da4dcb"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-0a461130e0310ed5eccc"
+      ],
+      "paper_id": "10.1038/s41467-023-36113-y",
+      "point_id": "Q-02",
+      "rationale": "The reviewer highlighted the apparent discrepancy between disrupted oligomerization and unchanged basal activity for Y57A/H60A. The final paper reports distinct transcriptional consequences for Y57A and H60A, but does not directly resolve the mechanistic discrepancy under the octamer-forming conditions.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-2940e06327b24858"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d983b1c9e32502e06fb4"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q-02"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-de374a7c25629a779799"
+      ],
+      "paper_id": "10.1038/s41467-023-36113-y",
+      "point_id": "Q-03",
+      "rationale": "The reviewer questioned whether RbpA expression is consistent with the proposed physiological model. The final paper presents concurrent transcriptional induction and explicitly frames the hibernating-octamer role as speculation, leaving cellular protein levels and in vivo function unresolved.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-861a1f795739ad67"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-931da7ae1b8d2612b543"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q-03"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-2e70ea3bc919a9f3cc89"
+      ],
+      "paper_id": "10.1038/s41467-023-36113-y",
+      "point_id": null,
+      "rationale": "The panel-labeling request is audit-only: the author response reports labels were added, and the final Figure 6 caption identifies assays with and without RbpA.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-2940e06327b24858"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-938dcad6fe8a51908543"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-129a174dd8d872c06e9c",
+        "RR:SRC-R-974e907dc87e7bf79a69"
+      ],
+      "paper_id": "10.1038/s41467-023-36113-y",
+      "point_id": null,
+      "rationale": "The request for solution-state confirmation and particle quantification is audit-only: the response reports added SEC and quantification, and the final paper describes SEC profiles and quantified negative-stain measurements.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-2940e06327b24858"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-f3e73f71ac1f528b75d7"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-02"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f753320fc321ac399702"
+      ],
+      "paper_id": "10.1038/s41467-023-36113-y",
+      "point_id": null,
+      "rationale": "The requested 3D-FSC material is audit-only because the response reports supplementary additions but the supplied final PaperIR spans do not independently expose those calculations.",
+      "resolution_status": "unverifiable",
+      "reviewer_id_hashes": [
+        "REV-861a1f795739ad67"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-b223b9cde8f83226fde9"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-03"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-f603d82d7e834017b872"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-02",
+          "schema_version": "aspr_gear",
+          "severity": "minor",
+          "suggested_action": "Bound the novelty claim to the structurally characterized Mtb RNAP octamer and distinguish it from prior RNAP oligomerization reports.",
+          "text": "Novelty is limited to the structurally characterized octameric mechanism: reviewers noted prior oligomerization-based regulation of several RNA polymerases, and the final paper itself limits the claim to the absence of previously described RNAP octamer structures."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-98d21f217518252f18bf",
+            "P:S-f875529e7913e8b88a93"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-01",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "Retain the contribution as the identification of a σB-dependent octameric auto-inhibition mechanism in Mtb RNAP.",
+          "text": "The contribution is a σB-dependent, eight-unit Mtb RNAP assembly linked to an immature, auto-inhibited holoenzyme conformation and modulation by RbpA; reviewers characterized this as a new bacterial RNAP regulatory mechanism."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-023-36113-y",
+    "questions": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-1266753b11780daca0b5"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-01",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Test insert variants that separate sequence identity from insertion length and geometry.",
+        "text": "The PAAQ NCR insertion abolishes octamer formation, but whether this effect is sequence-specific, length-dependent, or shape-dependent remains unresolved."
+      },
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-5dae1b26ae8357f81c83",
+          "P:S-27fc24f60921cd417d0b"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-02",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Reconcile the Y57A/H60A transcription phenotypes with the oligomerization results under matched octamer-forming conditions.",
+        "text": "Both Y57A and H60A abolish octamer formation, yet the reported transcriptional effects differ; the link between interface disruption, monomer availability, and basal transcription remains to be resolved."
+      },
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-f603d82d7e834017b872"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-03",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Establish cellular protein levels, octamer formation, and functional consequences across growth and stress states.",
+        "text": "How RbpA and σB abundance in cells governs the proposed hibernating-octamer cycle remains uncertain, because the final paper presents the physiological storage model as speculative."
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-1266753b11780daca0b5"
+        ],
+        "external_verification_required": false,
+        "point_id": "ST-01",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Retain the integrated structural, assembly, and functional evidence as a central strength.",
+        "text": "The work connects mapped σB-mediated intersubunit contacts to a targeted NCR insertion that suppresses octamer formation and increases promoter-complex formation and transcription in the monomeric state."
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-e5d89c454b375844766f",
+          "P:S-246f1548378dd6fc96af"
+        ],
+        "external_verification_required": false,
+        "point_id": "ST-02",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Retain the direct comparison of RbpA addition before and after octamer formation.",
+        "text": "The final experiments distinguish prevention of assembly from addition to preformed octamers and support RbpA-associated dissociation using negative-stain EM and SEC."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-98d21f217518252f18bf",
+        "P:S-2a089febdbd768ac0429",
+        "P:S-e5d89c454b375844766f",
+        "P:S-f603d82d7e834017b872"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "The study presents a cryo-EM and biochemical model in which Mtb EσB forms an eight-protomer, auto-inhibited assembly whose formation is opposed by RbpA. The evidence links σB-dependent contacts and an NCR insertion mutant to assembly and transcriptional behavior. The principal residual limits concern direct σB occupancy across protomers, generality beyond Mtb, and the physiological role of the proposed hibernating state."
+    },
+    "weaknesses": [
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-060f3ad62c5ccdc51320",
+          "P:S-f603d82d7e834017b872"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-01",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Test oligomerization and transcriptional consequences with σB/RNAP combinations from additional mycobacterial species and in cellular contexts.",
+        "text": "The proposed auto-inhibition mechanism remains specific to the reconstituted Mtb system. Sequence comparisons and a speculative physiological model do not establish its conservation across mycobacteria or its operation in vivo."
+      },
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-f1ff87a8fa667176a61b"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-02",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Provide a direct orthogonal occupancy measurement or clearly retain the conclusion as a majority-occupancy inference.",
+        "text": "σB occupancy of every octamer protomer is supported indirectly by C1-map density-volume variation; the final wording only suggests that a majority of octamers contain eight σB copies."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-2e70ea3bc919a9f3cc89"
+      ],
+      "final_paper_evidence_keys": [],
+      "ledger_id": "L-01",
+      "paper_id": "10.1038/s41467-023-36113-y",
+      "residual_summary": "Figure 6 now identifies the conditions with and without RbpA.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-938dcad6fe8a51908543"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-129a174dd8d872c06e9c",
+        "RR:SRC-R-974e907dc87e7bf79a69"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-246f1548378dd6fc96af"
+      ],
+      "ledger_id": "L-02",
+      "paper_id": "10.1038/s41467-023-36113-y",
+      "residual_summary": "SEC and negative-stain quantification are included for the oligomerization analysis.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-f3e73f71ac1f528b75d7"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [],
+      "final_paper_evidence_keys": [
+        "P:S-e5d89c454b375844766f"
+      ],
+      "ledger_id": "L-03",
+      "paper_id": "10.1038/s41467-023-36113-y",
+      "residual_summary": "The final paper reports dissociation after RbpA addition to preformed octamers.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-92e3abca55a92f4e6c6c"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f753320fc321ac399702"
+      ],
+      "final_paper_evidence_keys": [],
+      "ledger_id": "L-04",
+      "paper_id": "10.1038/s41467-023-36113-y",
+      "residual_summary": "The response reports added 3D-FSC calculations, but no supplied final PaperIR span independently exposes them.",
+      "resolution_status": "unverifiable",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-b223b9cde8f83226fde9"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

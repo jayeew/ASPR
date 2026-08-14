@@ -1,0 +1,731 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:dc7f9623d415cf1a16c2c97f0f1ea9aed91ee5ea667c4d747d4bade13ea31a42",
+  "input_sha256": "sha256:bfb49e675848b4ddb9c6a81805d8d8685f80a091e21e1661f4fa9c8ddd9596d9",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:fbfa961f3bc0d0dc229a728af54f894d793fb89bd25d3fc9de3da91155c3eec7",
+  "package_id": "RSP-18c4b3097206fd404899",
+  "paper_id": "10.1038/s41467-024-50191-6",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "point_id": "N1",
+      "rationale": "The reviewer identified the curvature-gradient evaporate-casting strategy as a distinct processing approach. Final-paper support: P:S-3a3a11604a7483714f0c.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-5e07734060a8f021",
+        "REV-af8155ea0050b27b"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-9ada908b56770ca5eb4a",
+        "RR:SRC-R-1b60a01fcdcfcdca6522"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T1"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "point_id": "S1",
+      "rationale": "The reviewer-described contribution is supported by the final paper's controllable curvature-gradient architecture and shape-control parameters. Final-paper support: P:S-3a3a11604a7483714f0c and P:S-a62414938b4aacb5dc47.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-5e07734060a8f021",
+        "REV-af8155ea0050b27b"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-9ada908b56770ca5eb4a",
+        "RR:SRC-R-1b60a01fcdcfcdca6522"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T2"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "point_id": "S2",
+      "rationale": "The final paper supports the reviewer-described capillary-driven compaction account with observations of water-mediated sheet mobility, crumpling, and reduced wall gaps. Final-paper support: P:S-ddc172672603e9d9030d.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-af8155ea0050b27b"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-1b60a01fcdcfcdca6522"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T3"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "point_id": "S3",
+      "rationale": "The final paper supports the reviewer-described structural-material demonstration through the self-tightening mortise-and-tenon connection and its reported mechanical performance. Final-paper support: P:S-fdec3563717b37b0133d.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-af8155ea0050b27b"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-1b60a01fcdcfcdca6522"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T4"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-ee6b0e6fb667128658e4"
+      ],
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "point_id": null,
+      "rationale": "The author response reports alkali removal and compositional characterization, resolving the requested clarification of composition and component contributions.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-5e07734060a8f021"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-0e7709a7311b2ddaaaa8"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T5"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-e7caf2fbb740a05ca066"
+      ],
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "point_id": null,
+      "rationale": "The author response reports the requested FTIR, EDS, and density characterizations before and after evaporate-casting.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-5e07734060a8f021"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-4b05990c3d53b65f2367"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T6"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-a53321ac20f66fbf9772",
+        "RR:SRC-R-57d0947538e1751821e6",
+        "RR:SRC-R-a328800e09ee809cd1a4"
+      ],
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "point_id": null,
+      "rationale": "The author response reports time-resolved morphological observations during evaporate-casting and an accompanying structural account.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-5e07734060a8f021"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e18b568199abd8c8bd53"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T7"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-62427773f1ac26d9334d",
+        "RR:SRC-R-d0fbbdd272c3b393f53d"
+      ],
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "point_id": null,
+      "rationale": "The author response reports surface-charge and rheological measurements addressing the requested evidence for interfacial interactions.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-5e07734060a8f021"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-5574a8154f0c83bdaee8"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T8"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-b9be449f9f218fe768c0",
+        "RR:SRC-R-d31e67dccdcf230c236c"
+      ],
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "point_id": null,
+      "rationale": "The author response reports high-resolution SEM characterization of the interface microstructure.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-5e07734060a8f021"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a9191ea16ed05ddd1283"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T9"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-adb8c41d1cf7ee7ad94e"
+      ],
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "point_id": null,
+      "rationale": "The author response reports magnified SEM images and discussion of the mortise-and-tenon bonding interface.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-5e07734060a8f021"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-4a8c9ccf62fb4c297349"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T10"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-51df7024abf28242bdcf",
+        "RR:SRC-R-ec6ebf28e531d8e82b4b",
+        "RR:SRC-R-41ee1cd408721fd2f0e5",
+        "RR:SRC-R-1de247bb7a80e01490d1"
+      ],
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "point_id": null,
+      "rationale": "The author response reports parameter studies linking GO concentration, initial gap size, deformation, and mechanical behavior.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-5e07734060a8f021"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-08a8ffbfea31e96097fd"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T11"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-ab10f6af306fa6e1aae5",
+        "RR:SRC-R-b321f8bd5546d4593d49",
+        "RR:SRC-R-e056bc841e6f4f3f7342"
+      ],
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "point_id": null,
+      "rationale": "The author response reports comparisons among drying conditions and their effects on the final configuration.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-5e07734060a8f021"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-18e2fd79f926d7bcbb60"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T12"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-6c8bc1a2827d72c23e6e",
+        "RR:SRC-R-7de1939f10c7222851fe"
+      ],
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "point_id": null,
+      "rationale": "The author response reports an oriented MXene-hydrogel demonstration and states the applicable structural condition.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-5e07734060a8f021"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-b84920f0966f530a9aa2"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T13"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-e999d956d3a3932af698"
+      ],
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "point_id": null,
+      "rationale": "The author response reports revision of the process schematic to clarify the curvature-gradient structure and evaporate-casting process.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-5e07734060a8f021"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-20bd17e6446fc42092e6"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T14"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-9356109c98ca40d6d807"
+      ],
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "point_id": null,
+      "rationale": "The author response reports stress-strain measurements in two perpendicular compression directions.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-5e07734060a8f021"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-b0fdbcc49e00b0d65d09"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T15"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f28491887343ec047ef6",
+        "RR:SRC-R-d78cdc76cada7268ca88",
+        "RR:SRC-R-5da49f1887da92b6fcba"
+      ],
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "point_id": null,
+      "rationale": "The author response supplies the requested normal-hydrogel comparison and discusses the C/O ratio and its role in dehydration.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-af8155ea0050b27b"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-85fed21ffaf3053c0ee0"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T16"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-c5cf2012492daffc33f7",
+        "RR:SRC-R-6167aa647b01d444d909"
+      ],
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "point_id": null,
+      "rationale": "The author response explains the paired schematics and reports the hollow-versus-solid mechanical comparison.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-af8155ea0050b27b"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c4d2bfd618d34210726d"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T17"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-6efc5a4c5e4b796e7eed",
+        "RR:SRC-R-b6ce9097c209f6643acc"
+      ],
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "point_id": null,
+      "rationale": "The author response explains the predicted contraction of an integrated cruciform and concentric-circle structure.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-af8155ea0050b27b"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8c1cf69600b608a814ff"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T18"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-ab9e7e4901873552a3ae"
+      ],
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "point_id": null,
+      "rationale": "The author response states that contraction and deformation are irreversible and gives the proposed interlayer-interaction basis.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-af8155ea0050b27b"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c126da7daa746c3d27c2"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T19"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "positive",
+      "limiting_points": [],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-3a3a11604a7483714f0c"
+          ],
+          "external_verification_required": true,
+          "point_id": "N1",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "No additional action specified.",
+          "text": "The reviewer record identifies curvature-gradient evaporate-casting as a distinct processing strategy for fabricating graphene superstructures with designed functional shapes."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-024-50191-6",
+    "questions": [],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "contribution",
+        "evidence_keys": [
+          "P:S-3a3a11604a7483714f0c",
+          "P:S-a62414938b4aacb5dc47"
+        ],
+        "external_verification_required": false,
+        "point_id": "S1",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "No additional action specified.",
+        "text": "The curvature-gradient architecture provides explicit geometric control variables—axis-center distance and tilt angle—for shaping graphene assemblies."
+      },
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-ddc172672603e9d9030d"
+        ],
+        "external_verification_required": false,
+        "point_id": "S2",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "No additional action specified.",
+        "text": "The paper links water-mediated sheet mobility, capillary-driven crumpling, reduced wall gaps, and anisotropic contraction in a coherent evaporate-casting mechanism."
+      },
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-fdec3563717b37b0133d"
+        ],
+        "external_verification_required": false,
+        "point_id": "S3",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "No additional action specified.",
+        "text": "The mortise-and-tenon demonstration connects the self-tightening architecture to a mechanically interlocked structural connection."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-3a3a11604a7483714f0c",
+        "P:S-ddc172672603e9d9030d",
+        "P:S-fdec3563717b37b0133d"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "The paper presents a curvature-gradient graphene architecture that uses dehydration-based evaporate-casting to transform simple assemblies into designed shapes. The final evidence describes capillary-driven densification and anisotropic contraction, and applies the resulting self-tightening behavior to a mortise-and-tenon connection. The reviewer record supports a positive novelty characterization for this processing strategy; the detailed requests on composition, interfaces, processing conditions, generality, mechanical characterization, and presentation are recorded as resolved audit items."
+    },
+    "weaknesses": []
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-ee6b0e6fb667128658e4"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-d5739924f25182b648af"
+      ],
+      "ledger_id": "L1",
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "residual_summary": "The response reports removal of residual alkali and compositional measurements.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-0e7709a7311b2ddaaaa8"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-e7caf2fbb740a05ca066"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-d5739924f25182b648af"
+      ],
+      "ledger_id": "L2",
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "residual_summary": "The response reports added FTIR, EDS, and density characterization.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-4b05990c3d53b65f2367"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-a53321ac20f66fbf9772",
+        "RR:SRC-R-57d0947538e1751821e6",
+        "RR:SRC-R-a328800e09ee809cd1a4"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-ddc172672603e9d9030d"
+      ],
+      "ledger_id": "L3",
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "residual_summary": "The response reports morphology observations at successive evaporation stages.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e18b568199abd8c8bd53"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-62427773f1ac26d9334d",
+        "RR:SRC-R-d0fbbdd272c3b393f53d"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-5049260a81502ddc5171"
+      ],
+      "ledger_id": "L4",
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "residual_summary": "The response reports surface-charge and rheological evidence for the interfacial-interaction discussion.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-5574a8154f0c83bdaee8"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-b9be449f9f218fe768c0",
+        "RR:SRC-R-d31e67dccdcf230c236c"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-d5739924f25182b648af"
+      ],
+      "ledger_id": "L5",
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "residual_summary": "The response reports high-resolution SEM characterization of the graphene-wall interfaces.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a9191ea16ed05ddd1283"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-adb8c41d1cf7ee7ad94e"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-fdec3563717b37b0133d"
+      ],
+      "ledger_id": "L6",
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "residual_summary": "The response reports magnified SEM evidence and discussion for the mortise-and-tenon interface.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-4a8c9ccf62fb4c297349"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-51df7024abf28242bdcf",
+        "RR:SRC-R-ec6ebf28e531d8e82b4b",
+        "RR:SRC-R-41ee1cd408721fd2f0e5",
+        "RR:SRC-R-1de247bb7a80e01490d1"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-ddc172672603e9d9030d"
+      ],
+      "ledger_id": "L7",
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "residual_summary": "The response reports studies of initial GO concentration, wall gaps, deformation, and mechanical behavior.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-08a8ffbfea31e96097fd"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-ab10f6af306fa6e1aae5",
+        "RR:SRC-R-b321f8bd5546d4593d49",
+        "RR:SRC-R-e056bc841e6f4f3f7342"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-ddc172672603e9d9030d"
+      ],
+      "ledger_id": "L8",
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "residual_summary": "The response reports comparisons among drying methods.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-18e2fd79f926d7bcbb60"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-6c8bc1a2827d72c23e6e",
+        "RR:SRC-R-7de1939f10c7222851fe"
+      ],
+      "final_paper_evidence_keys": [],
+      "ledger_id": "L9",
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "residual_summary": "The response reports an oriented MXene-hydrogel demonstration and identifies an oriented microstructure as an applicable condition.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-b84920f0966f530a9aa2"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-e999d956d3a3932af698"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-c6ecf8f61517bcba4b44"
+      ],
+      "ledger_id": "L10",
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "residual_summary": "The response reports a revised Fig. 1 schematic.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-20bd17e6446fc42092e6"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-9356109c98ca40d6d807"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-d5739924f25182b648af"
+      ],
+      "ledger_id": "L11",
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "residual_summary": "The response reports compression measurements in two perpendicular directions.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-b0fdbcc49e00b0d65d09"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f28491887343ec047ef6",
+        "RR:SRC-R-d78cdc76cada7268ca88",
+        "RR:SRC-R-5da49f1887da92b6fcba"
+      ],
+      "final_paper_evidence_keys": [],
+      "ledger_id": "L12",
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "residual_summary": "The response reports normal-hydrogel comparisons and C/O-ratio discussion.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-85fed21ffaf3053c0ee0"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-c5cf2012492daffc33f7",
+        "RR:SRC-R-6167aa647b01d444d909"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-f83c4ae7bcb05e9c0105"
+      ],
+      "ledger_id": "L13",
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "residual_summary": "The response explains the cube schematics and reports solid-versus-hollow comparisons.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c4d2bfd618d34210726d"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-6efc5a4c5e4b796e7eed",
+        "RR:SRC-R-b6ce9097c209f6643acc"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-94af26871da4b6fb26e3"
+      ],
+      "ledger_id": "L14",
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "residual_summary": "The response explains contraction without added deformation for the integrated symmetric structure.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8c1cf69600b608a814ff"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-ab9e7e4901873552a3ae"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-ddc172672603e9d9030d"
+      ],
+      "ledger_id": "L15",
+      "paper_id": "10.1038/s41467-024-50191-6",
+      "residual_summary": "The response identifies the process as irreversible after dehydration.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c126da7daa746c3d27c2"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

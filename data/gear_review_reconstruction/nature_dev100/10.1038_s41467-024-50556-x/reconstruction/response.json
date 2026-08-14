@@ -1,0 +1,510 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:c453ff67eea2449ce55f4f4621ab1da92ec4fb657d3e874bd109e2ff3538fed8",
+  "input_sha256": "sha256:7ee3924da78e7607e354e171f30de98febaed746e25a80b02a0df9108c38c151",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:fc5b0d0cc8491949d94b53b6c884135be12ba96554e091806678d830b6eb6ec5",
+  "package_id": "RSP-85344e5f4b656a5453f6",
+  "paper_id": "10.1038/s41467-024-50556-x",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-6052e9ea789d60a49c33",
+        "RR:SRC-R-e5483bfebd1f1169423a"
+      ],
+      "paper_id": "10.1038/s41467-024-50556-x",
+      "point_id": "N-001",
+      "rationale": "The final paper documents experimentally observed deviations from the AlphaFold2 model, including side-chain arrangements at Phe82 and Trp118, supporting an experimentally specific contribution beyond the predicted binding mode (P:S-45bc4c7eb9db53ebeb85; P:S-79f08748f00e2d1d435f).",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-a8136597f84f09b4",
+        "REV-f7a42286e8c000b8"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a2f95d808824862db4c3",
+        "RR:SRC-R-a5bc7a6bbfbefca59d5d"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-001"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-6052e9ea789d60a49c33",
+        "RR:SRC-R-e5483bfebd1f1169423a"
+      ],
+      "paper_id": "10.1038/s41467-024-50556-x",
+      "point_id": "N-002",
+      "rationale": "The residual novelty limitation remains independently supported because the final paper states that a prior AlphaFold2 model had enhanced mechanistic understanding and that the experimental structure occupies the predicted groove with a 1.3 Å overall superposition (P:S-2b454277578d8e77700f; P:S-45bc4c7eb9db53ebeb85).",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-a8136597f84f09b4",
+        "REV-f7a42286e8c000b8"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a2f95d808824862db4c3",
+        "RR:SRC-R-a5bc7a6bbfbefca59d5d"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-002"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-50556-x",
+      "point_id": "S-001",
+      "rationale": "The final paper directly supports the experimentally integrated structural and biochemical evidence: purified complex binding, five ITC measurements, and mutational tests of the recognition interface (P:S-4731fd342ee3ede920e9; P:S-d1f14ec7bf6080f6fe11).",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-a8136597f84f09b4",
+        "REV-f7a42286e8c000b8"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a2f95d808824862db4c3",
+        "RR:SRC-R-a5bc7a6bbfbefca59d5d"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-S-001"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-0fdec96ede3d6edee18f"
+      ],
+      "paper_id": "10.1038/s41467-024-50556-x",
+      "point_id": "S-002",
+      "rationale": "The final paper reports knockout-and-rescue GPS experiments in which wild-type, but not degron-binding-deficient ASB7 mutants, restored degradation of LZTS1 and CEP152 degrons (P:S-8dd5cec0091836d218a1; P:S-432bb33325c47d1a6d52).",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-a8136597f84f09b4"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-404e34a665920080dfd8"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-S-002"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f15f77a5b78472f893aa"
+      ],
+      "paper_id": "10.1038/s41467-024-50556-x",
+      "point_id": "W-001",
+      "rationale": "The rescue data are final-paper supported, but the final figure and text describe ectopic gRNA-resistant ASB7 and Flag-tagged expression rather than a comparison with endogenous ASB7 abundance (P:S-432bb33325c47d1a6d52; P:S-8dd5cec0091836d218a1).",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-a8136597f84f09b4"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-404e34a665920080dfd8"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W-001"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-1a6c63049c001740c365"
+      ],
+      "paper_id": "10.1038/s41467-024-50556-x",
+      "point_id": "Q-001",
+      "rationale": "The final paper explains a motif-based screening and compound-design rationale, but its language remains prospective and does not report screening of additional physiological substrates or testing of compounds (P:S-254d9f8d69940bc06921; P:S-56a0a2dbde9ac514c348).",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-a8136597f84f09b4"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-91813bf26a132b81a136"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q-001"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-cffdfb7aeb4c4d54814a"
+      ],
+      "paper_id": "10.1038/s41467-024-50556-x",
+      "point_id": "Q-002",
+      "rationale": "The final paper specifies use of ASB7 residues 11–318, but the final methods do not state why residues 1–10 were omitted for structural work (P:S-2b454277578d8e77700f; P:S-56a0a2dbde9ac514c348).",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-a8136597f84f09b4"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-bb9937a6d0fb6d29a8cf"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q-002"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-947220422afc068a2344",
+        "RR:SRC-R-d7aedf2753d661b8f62a"
+      ],
+      "paper_id": "10.1038/s41467-024-50556-x",
+      "point_id": null,
+      "rationale": "The wording concern about claiming that the mechanism remained elusive was addressed in the final framing, which acknowledges the prior AlphaFold2 model while distinguishing structural validation (P:S-2b454277578d8e77700f).",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-a8136597f84f09b4",
+        "REV-f7a42286e8c000b8"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c9ed3416f5582e3d7212",
+        "RR:SRC-R-cb90a7e93e73b5018a25"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-001"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-4f1394ececeec18f11eb"
+      ],
+      "paper_id": "10.1038/s41467-024-50556-x",
+      "point_id": null,
+      "rationale": "The final paper now describes CLIP2, GIGYF1, CCDC17, CEP152, and LZTS1 as reported substrate proteins rather than asserting them as established substrates (P:S-2b454277578d8e77700f).",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-f7a42286e8c000b8"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-b93085f097a3d9eef9d2"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-002"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-b753173f0b846c2def5c"
+      ],
+      "paper_id": "10.1038/s41467-024-50556-x",
+      "point_id": null,
+      "rationale": "The final data-collection and refinement table consistently reports a 2.41 Å upper resolution limit with associated statistics (P:S-932478c018675c804b5b).",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-f7a42286e8c000b8"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-2aa6b0b416e4bb7a04ac"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-003"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-d876c0d6d4432ff46e19",
+        "RR:SRC-R-eb181255255ebb70a7d8"
+      ],
+      "paper_id": "10.1038/s41467-024-50556-x",
+      "point_id": null,
+      "rationale": "The Figure 5 presentation concern is audit-only: the final paper contains the revised Figure 5 cellular-assay presentation and caption, including the GFP/DsRed measurement description (P:S-432bb33325c47d1a6d52).",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-a8136597f84f09b4",
+        "REV-f7a42286e8c000b8"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8ee42def78203dcbda31",
+        "RR:SRC-R-6bf8d41b33b1c81f6310"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-004"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-d62348cda57361d700b2"
+      ],
+      "paper_id": "10.1038/s41467-024-50556-x",
+      "point_id": null,
+      "rationale": "The final text explicitly defines one-letter degron-residue and three-letter ASB7-residue nomenclature (P:S-495ad9418195710f2fb7).",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-f7a42286e8c000b8"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-4ac643893f1cbc485c39"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-005"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-a1d5092648b483730cd4",
+        "RR:SRC-R-26859e80ec39c7e7b90a"
+      ],
+      "paper_id": "10.1038/s41467-024-50556-x",
+      "point_id": null,
+      "rationale": "Availability of the requested supplementary GPS raw measurements and full repeated-ITC fit information cannot be verified from the supplied final-paper spans; this is audit-only.",
+      "resolution_status": "unverifiable",
+      "reviewer_id_hashes": [
+        "REV-f7a42286e8c000b8"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e5f4c71135cca1605d3d",
+        "RR:SRC-R-126ec5bbae64c0171301"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-006"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-2b454277578d8e77700f",
+            "P:S-45bc4c7eb9db53ebeb85"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-002",
+          "schema_version": "aspr_gear",
+          "severity": "major",
+          "suggested_action": "The residual novelty boundary is documented in the final paper.",
+          "text": "The conceptual advance is bounded by the previously mapped degrons and AlphaFold2 binding model: the experimental structure largely confirms the predicted recognition mode, even though it resolves consequential local differences."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-45bc4c7eb9db53ebeb85",
+            "P:S-79f08748f00e2d1d435f"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-001",
+          "schema_version": "aspr_gear",
+          "severity": "minor",
+          "suggested_action": "The experimentally resolved contribution is documented in the final paper.",
+          "text": "The experimental structure supplies a specific advance over the model by resolving altered degron orientation and functionally important Phe82 and Trp118 side-chain interactions."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-024-50556-x",
+    "questions": [
+      {
+        "aspect": "other",
+        "evidence_keys": [
+          "P:S-254d9f8d69940bc06921",
+          "P:S-56a0a2dbde9ac514c348"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-001",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "The prospective scope remains to be documented.",
+        "text": "What evidence establishes that the defined motif can identify additional physiological ASB7 substrates or enable compounds that disrupt ASB7–degron recognition, beyond the reported DDA3-focused validation?"
+      },
+      {
+        "aspect": "presentation_reproducibility",
+        "evidence_keys": [
+          "P:S-2b454277578d8e77700f",
+          "P:S-56a0a2dbde9ac514c348"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-002",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "The construct-selection rationale remains to be documented.",
+        "text": "Why were residues 1–10 omitted from the ASB7 construct used for structural characterization?"
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-4731fd342ee3ede920e9",
+          "P:S-d1f14ec7bf6080f6fe11"
+        ],
+        "external_verification_required": false,
+        "point_id": "S-001",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "None.",
+        "text": "The study integrates a high-resolution complex structure with direct binding assays and targeted mutagenesis, linking the recognition groove to specific ASB7–degron contacts."
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-8dd5cec0091836d218a1",
+          "P:S-432bb33325c47d1a6d52"
+        ],
+        "external_verification_required": false,
+        "point_id": "S-002",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "None.",
+        "text": "Knockout-and-rescue cellular GPS experiments connect the in vitro binding interface to degron degradation in cells for two degrons."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-254d9f8d69940bc06921",
+        "P:S-45bc4c7eb9db53ebeb85",
+        "P:S-8dd5cec0091836d218a1"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "The paper determines the ASB7–Elongin B/C–LZTS1 degron structure, maps an ANK-repeat recognition groove and key contact residues, and combines binding, mutational, and knockout-rescue cellular assays to relate degron recognition to degradation. Its principal contribution is experimental refinement and functional validation of a previously predicted ASB7 helical-degron interaction."
+    },
+    "weaknesses": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-432bb33325c47d1a6d52",
+          "P:S-8dd5cec0091836d218a1"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-001",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "The remaining expression-level limitation is documented in the final record.",
+        "text": "The rescue experiments establish the direction of the cellular effect, but the reported ectopic, Flag-tagged rescue expression is not calibrated to endogenous ASB7 abundance, limiting interpretation of mutant-specific effects at physiological dosage."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-947220422afc068a2344",
+        "RR:SRC-R-d7aedf2753d661b8f62a"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-2b454277578d8e77700f"
+      ],
+      "ledger_id": "L-001",
+      "paper_id": "10.1038/s41467-024-50556-x",
+      "residual_summary": "Resolved framing correction; retained separately only as the bounded novelty assessment.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c9ed3416f5582e3d7212",
+        "RR:SRC-R-cb90a7e93e73b5018a25"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-4f1394ececeec18f11eb"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-2b454277578d8e77700f"
+      ],
+      "ledger_id": "L-002",
+      "paper_id": "10.1038/s41467-024-50556-x",
+      "residual_summary": "Resolved terminology correction.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-b93085f097a3d9eef9d2"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-b753173f0b846c2def5c"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-932478c018675c804b5b"
+      ],
+      "ledger_id": "L-003",
+      "paper_id": "10.1038/s41467-024-50556-x",
+      "residual_summary": "Resolved after reprocessing and consistent final reporting.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-2aa6b0b416e4bb7a04ac"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-d876c0d6d4432ff46e19",
+        "RR:SRC-R-eb181255255ebb70a7d8"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-432bb33325c47d1a6d52"
+      ],
+      "ledger_id": "L-004",
+      "paper_id": "10.1038/s41467-024-50556-x",
+      "residual_summary": "Resolved figure-labeling and presentation issue.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8ee42def78203dcbda31",
+        "RR:SRC-R-6bf8d41b33b1c81f6310"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-d62348cda57361d700b2"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-495ad9418195710f2fb7"
+      ],
+      "ledger_id": "L-005",
+      "paper_id": "10.1038/s41467-024-50556-x",
+      "residual_summary": "Resolved nomenclature clarification.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-4ac643893f1cbc485c39"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-a1d5092648b483730cd4",
+        "RR:SRC-R-26859e80ec39c7e7b90a"
+      ],
+      "final_paper_evidence_keys": [],
+      "ledger_id": "L-006",
+      "paper_id": "10.1038/s41467-024-50556-x",
+      "residual_summary": "Supplementary raw GPS and complete repeated-ITC materials are not represented in the supplied final-paper spans.",
+      "resolution_status": "unverifiable",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e5f4c71135cca1605d3d",
+        "RR:SRC-R-126ec5bbae64c0171301"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

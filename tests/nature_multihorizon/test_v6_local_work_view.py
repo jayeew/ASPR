@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from aspr.nature_multihorizon.local_work_view import (
+from gear.nature_multihorizon.local_work_view import (
     compact_work_record,
     materialize_local_work_view,
     reconstruct_abstract,

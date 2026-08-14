@@ -14,7 +14,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 import scripts.publication_corpus_v2 as publication_corpus_v2  # noqa: E402
-from aspr.corpus import namespace_multi_domain  # noqa: E402
+from gear.corpus import namespace_multi_domain  # noqa: E402
 from scripts.publication_corpus_v2 import (  # noqa: E402
     FIGURE_LOGIC_POLICY,
     FIGURE_VIEW_CONTRACT,

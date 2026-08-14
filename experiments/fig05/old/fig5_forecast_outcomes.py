@@ -35,7 +35,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[3]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from aspr.env import load_env
+from gear.env import load_env
 
 load_env()
 os.environ.setdefault("MPLCONFIGDIR", "/tmp/aspr_matplotlib_cache")

@@ -14,14 +14,14 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from aspr.nature_multihorizon.candidate_registry_v6_1 import (
+from gear.nature_multihorizon.candidate_registry_v6_1 import (
     load_candidate_registry_v6_1,
 )
-from aspr.nature_multihorizon.modeling_v6_1 import (
+from gear.nature_multihorizon.modeling_v6_1 import (
     build_v6_1_feature_sets,
     load_simple_config,
 )
-from aspr.nature_multihorizon.source_audit_v6 import sha256_file
+from gear.nature_multihorizon.source_audit_v6 import sha256_file
 
 
 DEFAULT_CONFIG = (

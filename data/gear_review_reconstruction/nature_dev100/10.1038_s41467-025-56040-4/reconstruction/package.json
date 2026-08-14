@@ -1,0 +1,2094 @@
+{
+  "author_response_spans": [
+    {
+      "char_end": 10622,
+      "char_start": 10428,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-95fffcb25e0a2bddd5bc",
+      "source_role": "author_response",
+      "text": "We thank the referees for high assessment of our work and constructive comments. Please, find below our detailed responses with description of changes in the corrected version of the manuscript.",
+      "text_sha256": "sha256:b2bfa17c66865a53bac70266521a210b2aa730a482a34c540ffad66e1f156802"
+    },
+    {
+      "char_end": 10694,
+      "char_start": 10625,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c989ec2682deddfac587",
+      "source_role": "author_response",
+      "text": "---------------------------------------------------------------------",
+      "text_sha256": "sha256:b44c74baf0d51fe7971ba7dcc05f87ce17eb263c36680bc942c59717a652d675"
+    },
+    {
+      "char_end": 10734,
+      "char_start": 10697,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-cc9eb3e6b234c37d363d",
+      "source_role": "author_response",
+      "text": "Reply to the comments of Reviewer #1:",
+      "text_sha256": "sha256:2ef36d5274c3763e0d4e110e0edc3268c39f6c7dadcfac02403c4bb0eba777cf"
+    },
+    {
+      "char_end": 10748,
+      "char_start": 10737,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b91a04e4f4585b86b469",
+      "source_role": "author_response",
+      "text": "## Comment:",
+      "text_sha256": "sha256:349e1af06bbddf9df1854e3c6e2b22f163481001605c295d7cdb2652ac2d9757"
+    },
+    {
+      "char_end": 11155,
+      "char_start": 10751,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a5650f1cdf4c1ee4fb74",
+      "source_role": "author_response",
+      "text": "This is one of the most amazing papers I have ever refereed. The development of a single microwave photon bolometric detector has been a sort of holy grail for the next level of the state of the art in quantum enable technology. In particular, if these results and device prove practical in practical implementations, they will completely change the complexion of axion dark matter searches, for example.",
+      "text_sha256": "sha256:0c97afd15a9e5e8ed57ae75e58d8bd1c06a7dde53cd526a2f5ebb2c70f972d88"
+    },
+    {
+      "char_end": 11590,
+      "char_start": 11158,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-554012f8a81ec42daee2",
+      "source_role": "author_response",
+      "text": "Reply: We sincerely thank the referee for their high assessment and kind words regarding our work. We are excited about the potential impact of this device on quantum-enabled technologies, particularly in advancing the search for axion dark matter. We appreciate the referee's recognition of the broader implications of our results and are committed to further exploring the practical applications of our detector in future studies.",
+      "text_sha256": "sha256:b34c68842acd2f8f0aeadf1c2375c2d32daf65ffe668d1b692006aaa4ef2e6cf"
+    },
+    {
+      "char_end": 11998,
+      "char_start": 11607,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9d4ef6906256fbfe6e72",
+      "source_role": "author_response",
+      "text": "There are a few point the authors left out that are very important. First, compared to the usual Josephson parametric array (JPA) amplifiers used in many experiments, the single JJ used in this manner isn't an amplifier per se, so the circulator that is usually need when using JPAs is not needed here. This is a lossy element and limits, for example, the effectiveness of quantum squeezing.",
+      "text_sha256": "sha256:c6f8bba819a92af879e4acda831f5394e0ea39403ed8e583838ce30283829353"
+    },
+    {
+      "char_end": 12230,
+      "char_start": 12001,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e59cdd381e4ac8329e65",
+      "source_role": "author_response",
+      "text": "Second, the flux tuning needed for JPA amplifiers is not needed. Also, the usual pumping required for a JPA is not needed, and as the authors say, there are no extra leads into the shielded box which alleviates the noise problem.",
+      "text_sha256": "sha256:e5883e1b7016c71728f81f8e880225c942e98ee55fe39b93bd518a549a496bc6"
+    },
+    {
+      "char_end": 12242,
+      "char_start": 12233,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ddbb59ea5b34be7d86bd",
+      "source_role": "author_response",
+      "text": "## Reply:",
+      "text_sha256": "sha256:7bcf10920f59e0c13e43baa10748037e49b20b6e2b3d605c1ae7f8a8c0a99173"
+    },
+    {
+      "char_end": 12865,
+      "char_start": 12245,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c70e0fdcb384f4e00511",
+      "source_role": "author_response",
+      "text": "We completely agree with the referee’s insightful observations. Indeed, we did not delve into all of these details in the manuscript, opting instead to cite Ref. [21] (Lamoreaux et al., Phys. Rev. D 88, 035020, 2013), which highlights the quantum-limited nature of JPAs compared to our proposed Josephson threshold detectors. However, due to space constraints, we focused on the key distinctions. We believe that experts in the field would be familiar with the advantages you mention, such as the absence of a circulator, flux tuning, and external pumping, all of which simplify our approach and improve the sensitivity.",
+      "text_sha256": "sha256:c8147579050132543a99c2d2782491bf23e9233c4cb8bfdb6f942da162de6233"
+    },
+    {
+      "char_end": 13105,
+      "char_start": 12882,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-70abcb359bce2cde90b7",
+      "source_role": "author_response",
+      "text": "It seems when the JJ \"clicks\" due to a photon absorption, it has some dead time to recover. I reread the paper several times and didn't quite see that time elaborated, however it is inferred from the maximum detection rate.",
+      "text_sha256": "sha256:1e01799238b1032da2001425e10c7cc2e64d48f35d69d2d5749cd35caa7866ec"
+    },
+    {
+      "char_end": 13393,
+      "char_start": 13120,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-897382a7eeb01f1ce9ee",
+      "source_role": "author_response",
+      "text": "Thank you for pointing out this important aspect. We have now included this information in the manuscript. The dead time of the detector, primarily limited by the RC filters and readout electronics, is approximately 2–10 ms. We now add this information into the manuscript:",
+      "text_sha256": "sha256:ddfdcf2715e6e18bc80b00610ab74b5689b2d4522cc40fbe7c6aff0599605e6a"
+    },
+    {
+      "char_end": 13720,
+      "char_start": 13396,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8f8c53f07133916f48c4",
+      "source_role": "author_response",
+      "text": "With the chosen parameters, the response time of the detector is of order inversed plasma frequency of the junction, so below 1 ns. However, the dead time of the detector, i.e., the time needed to restore the initial state after the switching, is primarily limited by the RC filters and readout electronics, and is ~2–10 ms.",
+      "text_sha256": "sha256:577d447dd3e375a23cd24b890769623d22e02f9dc007668626e6969ca100b230"
+    },
+    {
+      "char_end": 13885,
+      "char_start": 13737,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-685572a1120241579b7e",
+      "source_role": "author_response",
+      "text": "The idea of this detector was proposed and simulated in 2018 and this manuscript is apparently the first experimental demonstration of the detector.",
+      "text_sha256": "sha256:c6ffee26b499952618576c366e776f2bb4df8c6c2d4c0837068b438b2c19a68c"
+    },
+    {
+      "char_end": 14195,
+      "char_start": 13900,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2decb6e609d976a9e80f",
+      "source_role": "author_response",
+      "text": "Indeed, our previous work proposed and simulated this detector in 2018, achieving a marginal single-photon detection due to background radiation. In the current manuscript, we have significantly improved this efficiency by better screening the device and nearly eliminating the background noise.",
+      "text_sha256": "sha256:56240133d5d2454e611cb1f6792a1e37d2caf9687a201a43789b36fd5cc4ee49"
+    },
+    {
+      "char_end": 14558,
+      "char_start": 14212,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-699058d98740f801ec88",
+      "source_role": "author_response",
+      "text": "The authors do not apparently discuss the degree to which magnetic field variations, or the magnitude, of fields at the JPA, must be controlled for stable operation. Normally I would say this discussion is required however the authors might not know, and the shielding they have is \"good enough.\" An estimate of the degree of shielding is needed.",
+      "text_sha256": "sha256:7778e93e9e6117b05ea24382d4f1b9bc08e878a20771532576890e43b8336106"
+    },
+    {
+      "char_end": 15013,
+      "char_start": 14561,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-55d8b2b3ba8678f73b86",
+      "source_role": "author_response",
+      "text": "Reply: We are employing cryoperm and superconducting shields, which have proven effective in mitigating external magnetic field influences. Our experimental setup shows no sensitivity to either the Earth's magnetic field or nearby magnets. We plan to assess the shielding effectiveness more rigorously in the context of axion searches, where the detector is typically situated near strong magnetic fields. We add the following text into the manuscript:",
+      "text_sha256": "sha256:0f279b15b815f1c6961cbe069400457761cea4bafb7bdf17ab574b84adf2ed53"
+    },
+    {
+      "char_end": 15115,
+      "char_start": 15016,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-97368db8a7c8cdf20cd3",
+      "source_role": "author_response",
+      "text": "Our experimental setup shows no sensitivity to either the Earth's magnetic field or nearby magnets.",
+      "text_sha256": "sha256:b698b6a77c7b8ac91aa02d72bdcb68d8a66d3091c6d7eaef6b5e725385240e34"
+    },
+    {
+      "char_end": 15557,
+      "char_start": 15132,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-46312803f93c0f56fafd",
+      "source_role": "author_response",
+      "text": "What truly needed, however, is a current (which is surely converted to a voltage)/time trace of a typical detection signal. There are no details of the low-frequency readout electronics, and this needs to be described. I am guessing it is a damped pulse at the JJ resonator frequency, still we need to see what a pulse or step looks like, and does the system self recover or does the current need to be turned off to do that?",
+      "text_sha256": "sha256:39bb169e2a9a5e6ca2e73309a8588a437a3ba0a35d6943f0025942cce45c5fa3"
+    },
+    {
+      "char_end": 16107,
+      "char_start": 15560,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4ef0ce46b5bfc3ef3a0d",
+      "source_role": "author_response",
+      "text": "Reply: We appreciate the referee's suggestion and include the current and voltage versus time traces of a typical detection signal in the Methods section as the inset of Fig. 6a of the revised manuscript. We agree that this information is crucial for understanding the system's operation. As the system is underdamped, the current flowing through the junction must be zeroed after detecting a photon, which also accounts for the dead time mentioned earlier. We also have included this information in the main text. The figure caption now reads as:",
+      "text_sha256": "sha256:92cf3d32f1e0df9b1b2f2929fdbc47c85fee199e8ec1e0f7a22e5c9c37f030fd"
+    },
+    {
+      "char_end": 16205,
+      "char_start": 16110,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9397b4bacb598b810c85",
+      "source_role": "author_response",
+      "text": "Inset: example of a single shot measurement with bias current rise and fall times of 3 ms each.",
+      "text_sha256": "sha256:412c0f36892b1c394a855114a88e7834dc6968c391f045618ecab4e495788d6d"
+    },
+    {
+      "char_end": 16265,
+      "char_start": 16208,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4d79c8a711347b69ee0f",
+      "source_role": "author_response",
+      "text": "We also add the following information into the main text:",
+      "text_sha256": "sha256:9fd9588645d609b64c94d840d96e031adb6e666a7327f5dca0eeae8f476ffaab"
+    },
+    {
+      "char_end": 16373,
+      "char_start": 16268,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e65ef4d46ced8f5efa87",
+      "source_role": "author_response",
+      "text": "The output voltage is readout using room temperature AD745 amplifier and and analog-to-digital converter.",
+      "text_sha256": "sha256:e6283ee471b78243ed60cc9b439a9804913f32c421ba8825cdb9e77c57743d3c"
+    },
+    {
+      "char_end": 16488,
+      "char_start": 16390,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8ec10297b3a7ccec599b",
+      "source_role": "author_response",
+      "text": "The issue of magnetic shielding of these types of detectors in axion haloscopes has been solved, I",
+      "text_sha256": "sha256:c6e7128918ee0b62616753383a1da1bd9fd4cdb4ebcc1e00e4fe0d19de96f0fc"
+    },
+    {
+      "char_end": 16591,
+      "char_start": 16491,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d18212f0cc2bcc1fcf5e",
+      "source_role": "author_response",
+      "text": "should know because I designed the first successful JPA magnetic shields for the HAYSTAC experiment.",
+      "text_sha256": "sha256:1892d89465f70d56c920786e5012e48718706c06bb53a8f242ba40783def642e"
+    },
+    {
+      "char_end": 16698,
+      "char_start": 16594,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8439abd8435bfffd140a",
+      "source_role": "author_response",
+      "text": "The only concern is excessive sensitivity to vibration, electrical noise, temperature fluctuations, etc.",
+      "text_sha256": "sha256:ce09518e03d50b35061db3e70d0f101fbd790ec189370644b958cb18899afb17"
+    },
+    {
+      "char_end": 17591,
+      "char_start": 16701,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ef82b2c9948304c94aaf",
+      "source_role": "author_response",
+      "text": "Reply: Indeed, these junctions can be susceptible to vibrations and electrical noise. In response, we have implemented specialized dampers for compressors and pumps of the fridge to suppress vibrations and mitigate microphonic effects. In Fig. 6 of the Methods section, we present the current-voltage curves (Fig. 6a), which demonstrate very stable switching at the critical current, with a spread of less than 1%. Additionally, Fig. 6b illustrates the progress in reducing dark count times; starting from the blue dotted curve, we improved our dampers and filters, ultimately achieving the red dotted curve fitted by the blue solid curve. This effort has allowed us to surpass the theoretical limit of macroscopic quantum tunneling (MQT), as the standard MQT theory does not apply to our sample operating in the phase diffusion regime, more details are given in the description of Fig. 6b.",
+      "text_sha256": "sha256:a2f1b98b55d60343f788b2767dbb2abc3cd6f443789b828e3987fb180cefd3fa"
+    },
+    {
+      "char_end": 17769,
+      "char_start": 17608,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-cfca96a9040a927368a1",
+      "source_role": "author_response",
+      "text": "The bandwidth appears as high, but there is no estimate anywhere. The fact that disparate cavity resonances can be thermally observed demonstrates the bandwidth.",
+      "text_sha256": "sha256:715dfa51864d4424f12219679812ef64565f559d340e6bdc587534039a9b7e2d"
+    },
+    {
+      "char_end": 18190,
+      "char_start": 17772,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2d7d3d29f68bd6f0b2cb",
+      "source_role": "author_response",
+      "text": "Reply: The detector's bandwidth is approximately 3 GHz around 14 GHz, determined by the coplanar antenna. Furthermore, the measurement of additional cavity resonances indicates the presence of a subband associated with the internal resonances of the Josephson junction sample. This may explain why we observe 8.8 GHz photons with lower efficiency. These values are now included into the revised manuscript for clarity:",
+      "text_sha256": "sha256:82c7ea30740cbecca0b63f453f23f41f644182585beda858406c1401b17d60f9"
+    },
+    {
+      "char_end": 18401,
+      "char_start": 18193,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c147fb5590fc2b422f48",
+      "source_role": "author_response",
+      "text": "The detector's bandwidth is approximately 3 GHz around 14 GHz, determined by the coplanar antenna. It also has a subband near 8.8 GHz, associated with the internal resonances of the Josephson junction sample.",
+      "text_sha256": "sha256:7e52ae3bbd8f657be115db0d4334e48aa693e53a367f250bf377523c39de10b1"
+    },
+    {
+      "char_end": 18718,
+      "char_start": 18418,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6b9fe197aaac06c7f25f",
+      "source_role": "author_response",
+      "text": "A real question is how stable are these detectors, are they really usable for anything beyond a demonstration? However, once the principle is accepted as viable, the general technical development by a worldwide effort will accelerate the process of technical development toward practical application.",
+      "text_sha256": "sha256:3f4be2ef0b564ff4bb1972438da6c133e76c98bc80975e002d67305ad52162b6"
+    },
+    {
+      "char_end": 19289,
+      "char_start": 18721,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1e81cfacc30c2e1d6734",
+      "source_role": "author_response",
+      "text": "Reply: We utilize the same shadow evaporation technology as for Josephson junctions employed in superconducting qubits, which have demonstrated considerable stability. Specifically, the current sample was fabricated in August 2020 and has successfully undergone multiple cooldowns, including the most recent one this summer. This experience indicates that the detectors are not only viable for demonstration purposes but are also stable enough for further practical applications as the principle gains acceptance. We have added into the Methods the following sentence:",
+      "text_sha256": "sha256:8e26d0f44469544b3e2d553aacc326c873ed8b5416396320509bb0c7d75785d4"
+    },
+    {
+      "char_end": 19576,
+      "char_start": 19292,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9ec5eec8a65948973834",
+      "source_role": "author_response",
+      "text": "The SIS junction structures made of aluminum were deposited at NNSTU using a well-established shadow evaporation technique [67,68] without breaking the vacuum. This technology is typically used for fabrication of superconducting qubits that ensures long time operation of the samples.",
+      "text_sha256": "sha256:ef1d29fa95b8a3d8129446db6270c180be222c841a8d62aae1457b825a720af5"
+    },
+    {
+      "char_end": 19721,
+      "char_start": 19593,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b2d6c75394d3901572bf",
+      "source_role": "author_response",
+      "text": "One thing has left me puzzled, now that I see the earlier work I am having a hard time understanding why it is not better known.",
+      "text_sha256": "sha256:5294824b503b437ed0ffd11de875fc81467f451d5fbda12865e2bc0a3915104c"
+    },
+    {
+      "char_end": 19912,
+      "char_start": 19724,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-17c54524fe1f05512331",
+      "source_role": "author_response",
+      "text": "Reply: Thank you for your thoughtful comment! Indeed, the main reasons being the passing of Prof. L.S. Kuzmin, and our limited possibility to participate in international conferences. This",
+      "text_sha256": "sha256:f9207dc3d9f6f9fe462dd32b3e24dbb8bcd74133f6cb6410d17e0bab86ae8477"
+    },
+    {
+      "char_end": 20085,
+      "char_start": 19915,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d2121058bf3d1b39c2ae",
+      "source_role": "author_response",
+      "text": "heavily affected the visibility of our work. We appreciate your interest and hope that this paper will contribute to a greater awareness of our research in the community.",
+      "text_sha256": "sha256:9073a16eac997b5fdbf7e40430fe08ee567c52791424fd863a37bf5292c68b61"
+    },
+    {
+      "char_end": 20465,
+      "char_start": 20102,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-39dd929726ca2d01f500",
+      "source_role": "author_response",
+      "text": "The title would be better if the single photon detection was mentioned, something like \"detection of single photons from a thermally excited cavity by use of an underdamped Josephson juntion\" I am not telling the authors how to write their paper, but it seems to me the present titile is inadequate. I thought this was going to be a kook paper based on the title.",
+      "text_sha256": "sha256:e94ef81245f4d3e95c85f8fc12fec8d5f79aabaf015fa6af74aaeb80f3ef95e7"
+    },
+    {
+      "char_end": 20528,
+      "char_start": 20480,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-895ab74dd94e1f71ab7d",
+      "source_role": "author_response",
+      "text": "Yes, thank you, the title has been corrected as:",
+      "text_sha256": "sha256:3ee5f70f224d481ddf0e4317bd94fa63f3b5cc26613746864243bdd6f81fc54a"
+    },
+    {
+      "char_end": 20621,
+      "char_start": 20531,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-bbdd1562256f7c6b2394",
+      "source_role": "author_response",
+      "text": "Detection of Single-Mode Thermal Microwave Photons Using an Underdamped Josephson Junction",
+      "text_sha256": "sha256:1f37c13e923a583dab1acb0de8422a285fbbe8853d51f7d1776e615fc64dcf71"
+    },
+    {
+      "char_end": 20797,
+      "char_start": 20638,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1a5f6f20a6d9ee9a76db",
+      "source_role": "author_response",
+      "text": "The overall structure of the paper isn't quite like the other professional papers in this field, but I don't mind. Others will. Those others should be ignored.",
+      "text_sha256": "sha256:4d6cc3ab5bbfc3444dabbfda43b1056911b70ff288fba397ea34fa3c8a1189c4"
+    },
+    {
+      "char_end": 20912,
+      "char_start": 20800,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-32c1fdb4d50498d6cf73",
+      "source_role": "author_response",
+      "text": "Reply: The structure of the manuscript has been corrected in accordance with the style of Nature Communications.",
+      "text_sha256": "sha256:66a3e16fda62dfbbe6d7d1bc01e2a2c4e58954952642c090e2a42254fe7b46ba"
+    },
+    {
+      "char_end": 21290,
+      "char_start": 20929,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d2e0bdf34dab3c52f61d",
+      "source_role": "author_response",
+      "text": "The introduction goes on for quite a long time, how much of that is really necessary? On the other hand I am tired of referees dictating how papers should be published and holding them hostage until they get their way. The principal issues I list above, however, are in regard to missing information that if included would tremendously benefit the presentation.",
+      "text_sha256": "sha256:ca7780cfbe918d2b00ace29fce4ea58a716fdf9e5c5e7e7d9bf244bb345518ff"
+    },
+    {
+      "char_end": 21350,
+      "char_start": 21293,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-dedef7b9950133d454a4",
+      "source_role": "author_response",
+      "text": "Reply: Thank you, the introduction is slightly shortened.",
+      "text_sha256": "sha256:48673007203db9c088b4dfe094c97aa2c8a449b6a5bd080d221a5b5dea735586"
+    },
+    {
+      "char_end": 21449,
+      "char_start": 21353,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-36c8c47556b49a9b6ee6",
+      "source_role": "author_response",
+      "text": "Comment: The citation in the paper to Ref. 17 on p. 4, second column, has a weird question mark.",
+      "text_sha256": "sha256:4a4e585e2b4afcd692ec14c75319f904035c7b30568f297536dd06be858ee5a0"
+    },
+    {
+      "char_end": 21560,
+      "char_start": 21452,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1d6a22a2bbc78be1c83e",
+      "source_role": "author_response",
+      "text": "Reply: Thank you for noting this technical misprint, instead of the question mark the proper number is [57].",
+      "text_sha256": "sha256:8e0a7a4d975d8a92c655a7243b177b9f2172097708d09bae689a3edcd6026902"
+    },
+    {
+      "char_end": 21652,
+      "char_start": 21563,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-023c368b572654d7c9cb",
+      "source_role": "author_response",
+      "text": "-----------------------------------------------------------------------------------------",
+      "text_sha256": "sha256:ef80b6d3d1f4d9d11de0a5a82c346876368d9e3714d6c949040b2319466dd955"
+    },
+    {
+      "char_end": 21695,
+      "char_start": 21655,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c4a5ea7c2d122484a036",
+      "source_role": "author_response",
+      "text": "## Reply to the comments of Reviewer #2:",
+      "text_sha256": "sha256:71023e03fbd35e0dcad7070cbce7835c7f870e6ddde23aae6359aef76c795fd5"
+    },
+    {
+      "char_end": 22346,
+      "char_start": 21712,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b8f6a57869911361169e",
+      "source_role": "author_response",
+      "text": "The authors present a microwave photon counting scheme based on a current biased Josephson junction in the underdamped regime, similar to the work of Y.-F. Chen et al., Phys. Rev. Lett. 107, 217401. The photon counting scheme is tailored towards Axionic Dark Matter searches, and the design parameters for the single photon detector (SPD) were optimized using the results from an earlier publications of Kuzmin (the last author of this publication). The authors claim the combination of high detection efficiencies (~40% @ ~14 GHz) and low dark count rates (~0.1 Hz) make this a competitive detection scheme for dark matter detectors.",
+      "text_sha256": "sha256:1c316871b84a5bbfde904661c08dc49702356dafe2994fcc0beb6fab48543dfa"
+    },
+    {
+      "char_end": 22645,
+      "char_start": 22349,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-259523833d9c0b9d00b6",
+      "source_role": "author_response",
+      "text": "Reply: We would like to clarify that the efficiency we report is for the entire setup, which includes both the photon source and the detector. After answering your other questions, we have found that ~40% efficiency is the lower bound extracted from our fitting and more correct estimate is ~45+-",
+      "text_sha256": "sha256:70ead41495301e2f4385a1c7d236a2dce9690d473cd7dbb76dc6623de626cf75"
+    },
+    {
+      "char_end": 22950,
+      "char_start": 22648,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-888a853a463dec1c8929",
+      "source_role": "author_response",
+      "text": "5%. We report the low dark count rates of ~0.1 Hz for the bias current value where we collect the most statistics. However, from Fig. 2d one can see that the minimal observed dark count rate nearly reaches 0.01 Hz. We have not checked for lower rates due to enormous measurement time required for this.",
+      "text_sha256": "sha256:823c6b887415485b5e698fd2c3d7c7417aa9db705364528595c5b67784cdce5d"
+    },
+    {
+      "char_end": 23018,
+      "char_start": 22967,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3c591339a706326379dc",
+      "source_role": "author_response",
+      "text": "## Below are some questions I have for the authors:",
+      "text_sha256": "sha256:3da320f7221d08c9744a765c91e61985187bf8b90d2eabaaff36c2887347f67c"
+    },
+    {
+      "char_end": 23516,
+      "char_start": 23021,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-145f0b699a629ac3291a",
+      "source_role": "author_response",
+      "text": "(0) What distinguishes the photon detector used in this work from one presented by Y.-F. Chen et al., Phys. Rev. Lett. 107, 217401? From what I could gather, this scheme uses a steady state bias, rather than a pulsed-bias scheme to induce switching into the voltage state, and detects thermal fields from a cavity rather than a resistor. In addition, the circuit parameters may have been optimized to (i) lower dark counts & (ii) detect frequencies more relevant to Axionic Dark Matter searches.",
+      "text_sha256": "sha256:1e54cb413633a86e977f5f744dd8197639a17357dfa7f3ee96ab68391d300876"
+    },
+    {
+      "char_end": 24419,
+      "char_start": 23519,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ce7b37086f04f831faf3",
+      "source_role": "author_response",
+      "text": "Reply: The key distinction between our work and that of Y.-F. Chen et al. lies in the size of the Josephson junction and the associated operational parameters. In the referenced work, the authors use a much larger junction with a critical current (Ic) on the order of 200 µA, requiring a bias current set at 99.9% of Ic to detect photons. This high bias leads to significantly increased dark count rates due to the absence of phase diffusion and potential current instabilities, making it challenging to detect weak thermal signals. Consequently, the authors resorted to synthetically generating thermal noise, upconverting it, and applying a low-pass filter, effectively creating synthetic thermal noise. They also employed an HBT interferometer to observe thermal signatures, possibly due to the difficulty in resolving the arrival of single photons due to a high dark count rate of their detector.",
+      "text_sha256": "sha256:22262e7b5b348a918efaf4263f81769c7bf13725c66a16a495e6f791a1fd5a92"
+    },
+    {
+      "char_end": 24641,
+      "char_start": 24422,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0825d49f29e114e649f7",
+      "source_role": "author_response",
+      "text": "Another notable difference is that their approach utilizes a broadband (as opposed to single-mode) noise source, which limits their ability to observe the same effects that we achieved with singlemode thermal radiation.",
+      "text_sha256": "sha256:bed2a4d30fe898e9f163610aa2b23842746e4b8db2b57a45e77d0a48c0382f01"
+    },
+    {
+      "char_end": 25131,
+      "char_start": 24644,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6abde0646df295eec53a",
+      "source_role": "author_response",
+      "text": "In contrast, our work utilizes a direct thermal photon source from the cavity without any need for conversion or filtering. Our junctions, optimized specifically for Axionic Dark Matter searches, exhibit a very low dark count rate (~0.01 Hz, as shown in Fig. 2d), enabling direct detection of thermal photons from the cavity. Furthermore, we believe our work provides the first direct observation of quantum chaos, evidenced by the natural super-Poissonian statistics of thermal photons.",
+      "text_sha256": "sha256:fd600f76388e3c2ec3fd4a47994d478b4c1ef73517b4339d4b3c0c67e5790f69"
+    },
+    {
+      "char_end": 25316,
+      "char_start": 25148,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ba9c5e3ed74953db3efb",
+      "source_role": "author_response",
+      "text": "(1) What are the estimated detection efficiencies and dark count rates needed for Axionic Dark Matter searches? Specifically, are the numbers achieved here good enough?",
+      "text_sha256": "sha256:1cd515a58a88d2dc719f45bb38873f9232c98e253f92bf0b8977cfa7f41efba1"
+    },
+    {
+      "char_end": 25970,
+      "char_start": 25319,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-59f59eeda7290e4314c9",
+      "source_role": "author_response",
+      "text": "Reply: To the best of our knowledge, the parameters achieved in this work, if applied to an axion search, would yield the most sensitive detection technique to date. This represents an improvement by several orders of magnitude compared to the currently used quantum-limited amplifiers. For comparison, the typical bandwidth used in axion searches is around 10 kHz. In the case of quantum-limited amplifiers, this bandwidth can be directly compared to the dark count rate divided by the detection efficiency. In our case, this results in a dark count rate of a fraction of a Hz, which is significantly smaller, leading to far more sensitive detection.",
+      "text_sha256": "sha256:1dc4f15fc076a8e9bd30db14aa2359af810a8257428fd34a581d592e53ce65cf"
+    },
+    {
+      "char_end": 26174,
+      "char_start": 25973,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1245af68d9bdc2144ec2",
+      "source_role": "author_response",
+      "text": "This also underscores the key difference with the work of Y.-F. Chen et al., where the dark count rate was on the order of hundreds of MHz, placing it in a regime highly unfavorable for axion searches.",
+      "text_sha256": "sha256:8e03563dfd863fe8267bb658575a823e51bfdf7deeb17431e4e965a342caecda"
+    },
+    {
+      "char_end": 26446,
+      "char_start": 26191,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-78b61e9a54097a9f5092",
+      "source_role": "author_response",
+      "text": "(2) What range of photon frequencies will be used for these searches? Does this detection scheme cover this range? It seems the detection efficiencies reported here are a strong function of the photon frequency, for example, 1% at 9 GHz and 40% at 14 GHz.",
+      "text_sha256": "sha256:8986b3194d719f7ca9c108b919e82d4e89781e8944e47e51914953899c74e3fa"
+    },
+    {
+      "char_end": 27151,
+      "char_start": 26449,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-200897fbdf3a88d3515e",
+      "source_role": "author_response",
+      "text": "Reply: This is a very relevant question. Currently, there are few definitive predictions for the specific frequency range of axions, so experiments are spanning several orders of magnitude in frequency. Astrophysical and cosmological indications suggest a preferred range between 1 GHz and 100 GHz. The most sensitive experiments today are focusing on frequencies above approximately 10 GHz. This is precisely the range where the quantum limit of amplifiers becomes a significant limitation, making detectors like the one presented in this work not only desirable but necessary for advancing the sensitivity of axion searches. The following text is now included into the revised manuscript for clarity:",
+      "text_sha256": "sha256:266e29e882a28cc61fa8ed179255597d56b0fe450b8c5dcde6200f18865b760b"
+    },
+    {
+      "char_end": 27807,
+      "char_start": 27379,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8542d509f3c975285f79",
+      "source_role": "author_response",
+      "text": "(3) How does the demonstration of super-Poissonian statistics differ from what was demonstrated in the following references: (i) D. Bozyigit et al., Nature Physics 7, 154-158 (2011), (ii) C. Lang et al., Phys. Rev. Lett. 106, 243601 (2011), and (iii) Y.-F. Chen et al., Phys. Rev. Lett. 107, 217401 ? In other words, have these references already demonstrated the super-poissonian statistics of thermal microwave photon sources?",
+      "text_sha256": "sha256:db74c3c8b2c23078fbb87c86d91e25f58548d08bf7b2cd383f522a59b2bfe2d7"
+    },
+    {
+      "char_end": 28937,
+      "char_start": 27810,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-887734dde10f7516b0d9",
+      "source_role": "author_response",
+      "text": "Reply: The key difference is that in the references mentioned, the statistics of microwave photons were demonstrated by analyzing correlation functions, whereas in our paper, we demonstrate it through the direct analysis of switching event times. In the works by D. Bozyigit et al., _Nature Physics_ 7, 154-158 (2011), and C. Lang et al., _Phys. Rev. Lett._ 106, 243601 (2011), the authors used quantum-limited linear parametric amplifiers for photon detection, rather than single-photon detectors. They used a qubit-based source of photons that give sub-Poissonian statistics rather than the super-Poissonian one for thermal photons (anti-bunching instead of bunching). In the work by Y.-F. Chen et al., _Phys. Rev. Lett._ 107, 217401, probably the first observation of microwave photon bunching is presented without actually discussing the resulted photon statistics, only noting its deviation from the Poissonian one. The authors used a much larger Josephson junction, resulting in a significantly higher dark count rate (as discussed in reply to question (0)), which restricted them to operate with high photon fluxes only.",
+      "text_sha256": "sha256:4cf4179f92d54c6cc18cbeb3af9bbf42e49e649cbf94a5bbb5622cd7584aa489"
+    },
+    {
+      "char_end": 29278,
+      "char_start": 28940,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-008ca5bf02b042117491",
+      "source_role": "author_response",
+      "text": "Contrary, our approach enables the direct detection of individual thermal photons with a much lower dark count rate, making the statistical analysis of photon arrival times feasible and distinct from the methods employed in these earlier works. We note that all above mentioned papers are cited in the corrected version of the manuscript.",
+      "text_sha256": "sha256:4a68b32eb5674c848be2ae0d648ece08c00689ff1468e9b0817db3de42a03aa7"
+    },
+    {
+      "char_end": 29630,
+      "char_start": 29295,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-33bd195d6c13b52ca634",
+      "source_role": "author_response",
+      "text": "(4) From Fig. 2(b), I estimate a 6-7 dB difference between the transmission peak of the f_1 and f_2 modes, so crudely a factor of 4 in power. How does this explain the factor of 32 in detection efficiency between these two modes? It appears the coplanar antenna selectivity would have to be responsible for the bulk of the degradation.",
+      "text_sha256": "sha256:5a19d1498d328d29faaca8770f4a1d6194ac0cb72de57be67a0f58523dca13f2"
+    },
+    {
+      "char_end": 29921,
+      "char_start": 29633,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e013a31ea882b7c49959",
+      "source_role": "author_response",
+      "text": "Reply: The factor of 32 difference in detection efficiency can be attributed to three key factors. First, the coplanar antenna is primarily optimized for detecting 14 GHz photons within a 10% frequency band, whereas 9 GHz falls outside this optimal range, corresponding to a subband where",
+      "text_sha256": "sha256:c8946138bd9138df1801b52cc742a47b316a33097ce03361e9433f8db6174df3"
+    },
+    {
+      "char_end": 30661,
+      "char_start": 29924,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c40fd7e92b47dab96e51",
+      "source_role": "author_response",
+      "text": "its sensitivity is notably reduced. Second, the coupling of the loop cavity antenna (off-chip) is also optimized for the 14 GHz mode, as shown in Fig. 2b. However, we emphasize that these measurements are taken at room temperature, which, while useful for guidance, do not provide quantitative accuracy, as we know the performance can vary significantly at millikelvin temperatures. Third, 9 GHz photons carry less energy than 14 GHz photons, making it more challenging to switch the single-photon detector (SPD) into the finite voltage state. Nonetheless, we believe that the selectivities of both the on-chip and off-chip antennas are largely responsible for the bulk of the degradation in detection efficiency between these two modes.",
+      "text_sha256": "sha256:08bba0e7f8555ce8e22d8be557ff8e3b61d9bca20a539d01858b85f12b3c514d"
+    },
+    {
+      "char_end": 31076,
+      "char_start": 30664,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0877a3cae166c7f58574",
+      "source_role": "author_response",
+      "text": "We further note that in the context of this experiment, a high efficiency on all the modes is not desirable. The exponential dependence on temperature would yield roughly only one mode providing for all the detected photons. Instead, we aimed to observe a temperature range where the main mode that determines the rate changes, which allows us to achieve a stronger signature in both the rate and the statistics.",
+      "text_sha256": "sha256:c4c98e2075eeebe86a98d8758140bb6a0d4122b51c4c0b02ccae1cea73f23529"
+    },
+    {
+      "char_end": 31487,
+      "char_start": 31093,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-188436048796843cc162",
+      "source_role": "author_response",
+      "text": "(5) How fast does this device need to operate? Are the authors worried that the fundamental detection efficiency will degrade significantly as the photon flux increases? Switching to the voltage state generates quasiparticles, and these quasiparticles will lead to internal damping mechanisms within the detector that absorb thermal quanta before the junction can switch into the voltage state.",
+      "text_sha256": "sha256:07afdf67df6a919e1ae0bf94556a91914ae4aac72d0515ee522793cfebf7268c"
+    },
+    {
+      "char_end": 32326,
+      "char_start": 31490,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-91da7d731de45d0c158a",
+      "source_role": "author_response",
+      "text": "Reply: After switching to the voltage state, the detector enters a dead time during which it must recover to its initial state to accept the next photon. This dead time, determined by the RC filters and readout electronics, is currently estimated to be about 2-10 ms. During this period, there is sufficient time for the generated quasiparticles to relax. The detector is optimized for low photon fluxes typical of axion searches, and the maximum photon rate we have measured is approximately 3000 photons per second. We do not anticipate significant degradation in fundamental detection efficiency within this operational regime. However, in regimes of higher photon numbers, one might rely again on linear amplifiers, heterodyne detection, and other techniques to maintain performance. We now add this information into the manuscript:",
+      "text_sha256": "sha256:1abb6d3464d4757fccf798b36f1ed8227d315dd707f9d665d7f5d98630b4a693"
+    },
+    {
+      "char_end": 32953,
+      "char_start": 32670,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-465a1182d836aa900451",
+      "source_role": "author_response",
+      "text": "(6) Is the lack of frequency selectivity for this detector desirable for dark matter searches? I would think, naively, that one would require this photon counter to be frequency selective to focus these counts coming from a specific frequency band (corresponding to one cavity mode).",
+      "text_sha256": "sha256:a9f22d3493b034516ab392b67614cec5468f135d3bd20aee65b2a7c649b4f6f7"
+    },
+    {
+      "char_end": 33355,
+      "char_start": 32956,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-93fcd8dcee9cfba35a3b",
+      "source_role": "author_response",
+      "text": "Reply: The dark matter axion would manifest as an added flux of photons at a very specific frequency, so the reviewer is correct in noting that frequency selectivity would be desirable to avoid confusion with spurious signals. However, axion searches typically involve a frequencytunable cavity where axions are converted to photons, providing inherent frequency selectivity within the setup itself.",
+      "text_sha256": "sha256:0e7b6b4d8ec00f861c13b993767a1072dec34e6b87313eef88c8f84be2c69d8b"
+    },
+    {
+      "char_end": 33650,
+      "char_start": 33358,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1915c0a59131d9c784d9",
+      "source_role": "author_response",
+      "text": "Additionally, for a detector to avoid being affected by quantum noise, it should \"click\" rather than measure both energy and time as an amplifier would do. This necessitates sacrificing some degree of frequency selectivity to construct a detector that operates beyond the quantum limit. While",
+      "text_sha256": "sha256:ca7f845e77d02d2efda46d7dbb9f3d146968eaaf1fb35af650cdd10d48ee527e"
+    },
+    {
+      "char_end": 33846,
+      "char_start": 33653,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3b5610b1de876b5b691b",
+      "source_role": "author_response",
+      "text": "frequency selectivity could be reintroduced through additional filtering, the cavity in axion searches fulfills this role, making a broadband detector the preferred choice for most experiments.",
+      "text_sha256": "sha256:ffa2d72d1f623db54c3eadac2090679beb9685263435e292f91a9615f049ddf6"
+    },
+    {
+      "char_end": 34015,
+      "char_start": 33849,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7b4f533b12f64ddf9101",
+      "source_role": "author_response",
+      "text": "Moreover, the underdamped Josephson junctions employed in our detector possess their own frequency selectivity, effectively restricting unwanted background radiation.",
+      "text_sha256": "sha256:17b9c010996ebc648939447bf1c9ba471d58dc88c6e2961c94e59702ddabfc21"
+    },
+    {
+      "char_end": 34293,
+      "char_start": 34032,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-483a8d5592fef1523a66",
+      "source_role": "author_response",
+      "text": "A few minor comments: (a) A circuit diagram in Fig. 2 could help improve clarity, specifically in Fig. 2(c). I struggled to understand the circuit diagram, and these false color images are far less an interesting than an accurate circuit diagram of this device.",
+      "text_sha256": "sha256:8b66978d091a7070aa1536ff4f3d8307b95c5fad2e1864ebc5d6bf26736cb3c2"
+    },
+    {
+      "char_end": 34390,
+      "char_start": 34296,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-50dd5af9952e3a2b5106",
+      "source_role": "author_response",
+      "text": "Reply: A circuit diagram has been added in Fig. 2c in the corrected version of the manuscript.",
+      "text_sha256": "sha256:6a717dd195b28f7e3430b7f30ab1ee7d01ac680e2c80a117544f5a8101675315"
+    },
+    {
+      "char_end": 34489,
+      "char_start": 34407,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ec47d00527c140d04b95",
+      "source_role": "author_response",
+      "text": "(b) Fig. 2(a) refers to the device as an SPC, the rest of the text call it an SPD.",
+      "text_sha256": "sha256:2c469eaf998a52e98ee33cda739a7c58d20bd0fa4ef95c8bd2360962ad7bc0c2"
+    },
+    {
+      "char_end": 34535,
+      "char_start": 34492,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7a369f23a2db4953c64f",
+      "source_role": "author_response",
+      "text": "Reply: Thank you, this is corrected to SPD.",
+      "text_sha256": "sha256:6adea1837f3203c0b8a4f93acf88f59ed71f26bb60244a8d8cb718de368a2773"
+    },
+    {
+      "char_end": 34916,
+      "char_start": 34552,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-73039e102f7a3114da65",
+      "source_role": "author_response",
+      "text": "(c) Consider including error bars from the extracted fit parameters used in the model corresponding to Fig. 3(b). The agreement between data and experiment appears to be excellent, but I imagine there is still covariance between fit parameters that leads to uncertainty in the reported numbers. That is, the detection efficiences eta_1, eta_2, and dark count rate.",
+      "text_sha256": "sha256:9348df71fc68474f98d5848981afae23b05f6f722530ef3c51bcf6af9c6735db"
+    },
+    {
+      "char_end": 35134,
+      "char_start": 34919,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6d6d03df52614496e0bf",
+      "source_role": "author_response",
+      "text": "Reply: Yes, the referee is correct, ~40% efficiency is the lower bound extracted from our fitting and more correct estimate is ~45+-5%. We have added the corresponding dotted plots into Fig. 3b and the caption text:",
+      "text_sha256": "sha256:1d39c36b0c43c88eaec8ffec0d21c4ac57dfd6dd9a6af6aa3b64f13950c350db"
+    },
+    {
+      "char_end": 35288,
+      "char_start": 35137,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ee1962cd7cddddc985b0",
+      "source_role": "author_response",
+      "text": "The data are fitted with the expected cavity photon rate r_c (1) (red solid curve) and black dotted curves showing +-0.05 \\eta_2 spread of the fitting…",
+      "text_sha256": "sha256:ab2061043a62b4c35fd62e9d4f098c454c7ebda4c4f8f5197040cc2bbde4f629"
+    },
+    {
+      "char_end": 35499,
+      "char_start": 35291,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-97226a58e4a347c07e3c",
+      "source_role": "author_response",
+      "text": "Comment: (d) Related to part (c), are the authors confident that heating the cavity doesn't change the dark count rate? In other words, how do you know the SPD is thermally isolated from the heated Cu cavity?",
+      "text_sha256": "sha256:72b3a6ef7fd61f18021523b3fd26a1e6d93fab1ea96c6e8c6a94a0a77f37864e"
+    },
+    {
+      "char_end": 36125,
+      "char_start": 35502,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6dda6afd5a9707bd33c5",
+      "source_role": "author_response",
+      "text": "Reply: Yes, we are confident that heating the cavity does not significantly affect the dark count rate. We conducted additional experiments in which we closed the cavity output and heated it to the same temperatures. The only noticeable response occurred at higher cavity temperatures, specifically when exceeding 80 mK. This heating effect is mitigated by the use of a robust copper leg in the sample holder, which allows any heat transfer via the SMA connector to dissipate through this leg, preventing it from reaching the Josephson junction sample. This description is corrected as the following text in the manuscript:",
+      "text_sha256": "sha256:2a137fe06c567ed577db7bb11baddfd3a81751ec1dbc48a6105adf2fa3921ba0"
+    },
+    {
+      "char_end": 36380,
+      "char_start": 36128,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d55c988fc455a53a8de2",
+      "source_role": "author_response",
+      "text": "It was checked that the dark count rate nearly does not change at the same cavity temperature variation if the sample is disconnected from the cavity, and also that the response is heavily suppressed if the cavity is connected to the SPD by the port 1.",
+      "text_sha256": "sha256:63f25164c02c3f6f6500f968c9afe710914eb06ef2e068fc253ae809f7e003b7"
+    },
+    {
+      "char_end": 36689,
+      "char_start": 36397,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-375383e4a5e21df4967b",
+      "source_role": "author_response",
+      "text": "Overall, I have no major concerns about the scientific accuracy or utility of this work. However, I am struggling to understand if the results presented here are novel enough to warrant publication. Specifically, I would like to hear the authors responses to questions (1) and (3) from above.",
+      "text_sha256": "sha256:7736f83b4db62ec12da2460be5b6499139a4e18de6cbe4c16ffefee14af48382"
+    },
+    {
+      "char_end": 37209,
+      "char_start": 36692,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2076a48daadb9a52347f",
+      "source_role": "author_response",
+      "text": "Reply: Thank you for your positive assessment of our results! We appreciate your interest in the novelty of our work. The responses to questions (1) and (3) are provided above, highlighting how our detection efficiencies and super-Poissonian statistics differ from previous studies. We believe these findings represent a significant advancement in the field, as well as in the context of axion dark matter searches, and we hope this clarification demonstrates the contribution of our work to the scientific community.",
+      "text_sha256": "sha256:6a986e00c78cecdc78cfb5b9114b681b589689d11c09a53f38f7ff89429d70c7"
+    }
+  ],
+  "contract": "reconstruction_session_package",
+  "forbidden_conversation_hashes": [],
+  "input_sha256": "sha256:54f7d0d10f19b60f0cc50f84403ad4366318c4227c7345269f83926b5543b05e",
+  "instructions": "Reconstruct the final-state peer review for one paper.\nUse reviewer_report spans as the only source of review opinions. Author responses may\nonly determine whether an issue was resolved; they cannot create or rewrite a review\npoint. Remove greetings, publication/acceptance recommendations, editorial decisions,\nand generic praise. Merge duplicates, preserve real reviewer disagreement, and produce\nat most 24 atomic points in StructuredReviewV2. Include contribution summary, novelty\nsupport/limits, strengths, weaknesses, and questions. Bind every retained point to at\nleast one reviewer quote key and one final PaperIR P:S-* span. Put resolved issues only\nin ReferenceTraceV2/revision_ledger. Keep partially_resolved or persists issues only\nwhen the residual is independently supported by the final paper. Unverifiable items are\naudit-only. Do not use graph signals, GEAR output, old reconstructions, ratings,\ndecisions, recommendations, or accept/reject language. Return only the completed\nReconstructionSessionResponseV2 JSON file.",
+  "package_id": "RSP-5bedc859024e9d91a622",
+  "paper_context": {
+    "claims": [
+      {
+        "claim_id": "C-14e9070aba8454be",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-cb623572a97846203983",
+        "schema_version": "aspr_gear",
+        "text": "The development of single-photon detectors (SPDs) in the microwave range has drawn significant interest from the field of quantum technologies."
+      },
+      {
+        "claim_id": "C-e5cdca8339d34cb8",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-cb623572a97846203983",
+        "schema_version": "aspr_gear",
+        "text": "Transitioning to photon detectors is crucial[34][,][35] as they outperform quantum-limited amplifiers and quantum-enhanced measurement techniques, especially at higher frequencies (above a few GHz) where the standard quantum limit of linear amplification significantly hinders sensitivity[34][,][36] ."
+      },
+      {
+        "claim_id": "C-e03966f6546ba35c",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-f7fe9d287912b1da0d96",
+        "schema_version": "aspr_gear",
+        "text": "2b, reveals the first four resonant modes."
+      },
+      {
+        "claim_id": "C-130fbf087f71295f",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-9263c23aa13e250f5cdc",
+        "schema_version": "aspr_gear",
+        "text": "**----- Start of picture text -----**<br> (a)<br>copper cavity single photon detector<br>(b) (c)<br>photonic activation<br>first<br>cavity mode thermal activation<br>second<br>cavity mode quantum tunnelling<br>Jos e phson phase<br>cavity temperature<br>superconducting resistive<br>state state<br>potential<br>Log(photon rate)<br>**----- End of picture text -----**<br>"
+      },
+      {
+        "claim_id": "C-d1abdd0f6cde32f4",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-ade486b68dc00ccacf49",
+        "schema_version": "aspr_gear",
+        "text": "b Mean switching times of the SPD at 17 mK, showing significant reductions in dark counts due to filtering improvements over several months (dots - experiment, solid curves - theory)."
+      },
+      {
+        "claim_id": "C-6a80af33c11c00fc",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-ade486b68dc00ccacf49",
+        "schema_version": "aspr_gear",
+        "text": "Figure 3b shows the mean switching time of the SPC-73 sample, demonstrating significant reductions in dark counts through iterative filtering and screening improvements."
+      },
+      {
+        "claim_id": "C-ee750e0464b2ad7e",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-ce05bd9111defdf7eb11",
+        "schema_version": "aspr_gear",
+        "text": "The method for measuring the cavity resonances with using the PAT steps is as follows."
+      },
+      {
+        "claim_id": "C-5aa9a9049699c044",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-825a1d945e4ceb9b7cee",
+        "schema_version": "aspr_gear",
+        "text": "First of all we measure a series of IV curves at a frequency close to a resonance with various microwave power values (Fig."
+      },
+      {
+        "claim_id": "C-74be4eaaca575cb2",
+        "claim_type": "significance_claim",
+        "evidence_key": "P:S-825a1d945e4ceb9b7cee",
+        "schema_version": "aspr_gear",
+        "text": "Using the calibration curve obtained at the previous step we transform the positions of the current step into the value of the incident power in dB."
+      },
+      {
+        "claim_id": "C-c4870b6e6618b86a",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-d5419a2dcb66e5e73200",
+        "schema_version": "aspr_gear",
+        "text": "On first approximation, the cavity photon rate rc(T) measured with an SPD can be calculated considering n modes as **==> picture [173 x 23] intentionally omitted <==**"
+      },
+      {
+        "claim_id": "C-6302003f7b60ffa5",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-6844e5368aa9473ed603",
+        "schema_version": "aspr_gear",
+        "text": "5a we present an event plot of the recorded data at various cavity temperatures, from 21 to 62 mK, showing an exponential increase of the switching rate."
+      },
+      {
+        "claim_id": "C-d796baa6898e28cf",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-6844e5368aa9473ed603",
+        "schema_version": "aspr_gear",
+        "text": "From this data, we verify that only the first two modes contribute to the detector response at these temperatures, while the higher frequency modes are irrelevant."
+      }
+    ],
+    "contract": "reconstruction_paper_context",
+    "paper_id": "10.1038/s41467-025-56040-4",
+    "paper_sha256": "sha256:37e152f9c19d77eba4328d75b4ab1ca764de79bb27f7a770e6e1f0611c2a0b0c",
+    "schema_version": "aspr_gear",
+    "spans": [
+      {
+        "evidence_key": "P:S-20e851933a9d7c46442b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-20e851933a9d7c46442b",
+        "text": "https://doi.org/10.1038/s41467-025-56040-4 \n\n**==> picture [523 x 31] intentionally omitted <==**",
+        "text_sha256": "sha256:e0b7e66380ef52daf5d32dbdf44662519cde2624c91e7235701830b18692d4e3"
+      },
+      {
+        "evidence_key": "P:S-f558971f441d055c165d",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-f558971f441d055c165d",
+        "text": "## Article \n\n## Detection of single-mode thermal microwave photons using an underdamped Josephson junction \n\nReceived: 3 July 2024 A. L. Pankratov 1,2 , A. V. Gordeeva[1] , A. V. Chiginev 1,2, L. S. Revin1,2, A. V. Blagodatkin[1,2] , N. Crescini 3,4 & L. S. Kuzmin1,5,6 Accepted: 8 January 2025 Published online: 11 April 2025 When measuring electromagnetic radiation of frequency f, the most sensitive Check for updates detector counts single quanta of energy hf. Single photon detectors have been demonstrated from γ-rays to infrared wavelengths, with ongoing efforts to extend their range to microwaves. Here we show that an underdamped Josephson junction can detect 14 GHz thermal photons, with energy 10 yJ or 50 μeV, stochastically emitted by a microwave copper cavity at millikelvin temperatures. After characterizing the source and the detector, we vary the cavity temperature and measure the photon rate. The device achieves 45% efficiency and a dark count rate of 0.1 Hz over several GHz. Demonstrated super-Poissonian photon statistics is a signature of thermal light and a hallmark of quantum chaos. We discuss applications in dark matter axion searches and note its relevance to quantum information and fundamental physics. \n\nPhotons, the quanta of light, are massless particles whose energy E is related to their frequency f by Planck’s constant h, through the relation E = hf[1] . The most energetic photons ever recorded, with E > 100 TeV, belong to the class of gamma rays, which extend down to E ~ MeV[2] . Lower energy photons, such as X-rays, have energies around E ~ keV[3][–][5] . Single photons in the gamma and X-ray ranges are detected using highenergy physics techniques, such as crystal scintillators and photomultiplier tubes[6] .",
+        "text_sha256": "sha256:a7e3abcfb2c2f87c0e9328b9804b4ab79f71fefc8a58c03f26915c28a669e6bb"
+      },
+      {
+        "evidence_key": "P:S-cb623572a97846203983",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-cb623572a97846203983",
+        "text": "In the optical domain, where photons typically have energies of E ~ eV, single-photon detection is well-established, utilizing devices like photomultipliers and avalanche photodiodes[7] . Advancements in superconducting technologies have enabled photon detection in the infrared range (E ~ meV), employing methods such as nanowires[8][,][9] , transition-edge sensors[10] , kinetic inductance detectors[5] , and Josephson junctions[4] . \n\nThe microwave range, with photon energies around E ~50 μeV ( ~10 yJ), represents the frontier of single-photon detection[11] . This range has been explored using quantum dots[12] and bolometric schemes[13][–][15] . The development of single-photon detectors (SPDs) in the microwave range has drawn significant interest from the field of \n\nquantum technologies. Circuit quantum electrodynamics schemes[16] have been proposed[17][,][18] and implemented with qubits[19][–][26] . \n\nThe demand for microwave SPDs is exemplified in dark matter searches, such as those for axions[27][–][29] . In particular, dark matter haloscopes[30][–][33] rely on precision power measurements using low-noise amplifiers. Transitioning to photon detectors is crucial[34][,][35] as they outperform quantum-limited amplifiers and quantum-enhanced measurement techniques, especially at higher frequencies (above a few GHz) where the standard quantum limit of linear amplification significantly hinders sensitivity[34][,][36] . \n\nThe axion signal, characterized by a stochastic emission of rare photons at frequency fa, depends on the unknown axion mass and has a narrow bandwidth of 10[−][6] fa27. Consequently, suitable photon detectors must exhibit a low dark count rate, wide spectral range, high efficiency, and continuous operation capabilities.",
+        "text_sha256": "sha256:e3c1093c7ab5f93183e82179fbab06c51784942a44556c07c00766fec16f6ae1"
+      },
+      {
+        "evidence_key": "P:S-2a5e51ab8f150126f4d5",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-2a5e51ab8f150126f4d5",
+        "text": "Existing microwave photon detectors generally fall short of these requirements, although some recent experiments[24][,][37] have addressed these challenges. Josephson junctions have been proposed and analyzed as threshold detectors for microwave photons[38][–][44] . While they have been realized \n\n> 1Nizhny Novgorod State Technical University n.a. R. E. Alekseev, Nizhny Novgorod 603950, Russia. 2Institute for Physics of Microstructures of RAS, Nizhny Novgorod 603950, Russia.[3] Fondazione Bruno Kessler (FBK), I-38123 Trento, Italy.[4] Univ. Grenoble Alpes, CNRS, Grenoble INP, Institut Néel, 38000 Grenoble, France.[5] Chalmers University of Technology, 41296 Gothenburg, Sweden.[6] Deceased: L. S. Kuzmin. e-mail: alp@ipmras.ru; a.gordeeva@nntu.ru alp@ipmras.ru; a.gordeeva@nntu.ru; a.gordeeva@nntu.ru a.gordeeva@nntu.ru \n\n> e-mail: alp@ipmras.ru; a.gordeeva@nntu.ru alp@ipmras.ru; a.gordeeva@nntu.ru; a.gordeeva@nntu.ru a.gordeeva@nntu.ru \n\nNature Communications |(2025)16:3457 \n\n1 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-025-56040-4 \n\nfor detecting high photon rates[44] , their use in detecting rare photons remains an experimental challenge. \n\nIn this work, we demonstrate the detection of single microwave photons with high efficiency and a sub-hertz dark count rate using an underdamped Josephson junction (JJ). The photons are generated via thermal emission from a bulk copper resonator. The experimental scheme and operation principles are illustrated in Fig. 1. The cavity design determines the frequency of the emitted photons, and the emission rate is adjusted from less than one photon per hour to thousands of photons per second by varying the cavity temperature. The photons are collected by the detector using an on-chip impedance-matching line terminated by a JJ.",
+        "text_sha256": "sha256:a43db4012c7d486a2b2728453db74dd5da0f4e042910b52f5f1165d379f5cb3f"
+      },
+      {
+        "evidence_key": "P:S-f7fe9d287912b1da0d96",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-f7fe9d287912b1da0d96",
+        "text": "When a photon impinges on the detector, the current-biased JJ switches to the resistive state, producing a detection event. The observed thermal photons depend exponentially on temperature and, when sourced from a single mode, follow a super-Poissonian statistics[45][,][46] , providing a unique signature of their nature[47] . \n\n## Results \n\n## Experiment concept \n\nThe experiment consists of two main components: a photon source and a photon detector, as shown in Fig. 2. The photon source is a cylindrical cavity with a radius of 3.0 cm and a height of 1.2 cm (Fig. 2a). The cavity body is made of oxygen-free, high-conductivity copper, ensuring effective thermalization and a quality factor of approximately 10[4] . The cavity is coupled to two SMA ports: port 1, weakly coupled, is used for characterization, while port 2 is close to critical coupling. The measured S21 transmission of the resonator, shown in Fig. 2b, reveals the first four resonant modes. \n\nThe detector is an underdamped Al-AlOx-Al Josephson junction connected to the cavity antenna. When a photon is absorbed, the junction switches to the running state, producing a measurable voltage drop of hundreds of microvolts. Figure 2c shows the circuit diagram, chip layout, optical images, and an SEM image of the Josephson junction. The on-chip coplanar line is designed as an impedance transformer from 50 Ω to 200 Ω. Simulations indicate that the matching efficiency exceeds 60% even for junctions with RN values up \n\nto 2 kΩ. The detector’s bandwidth is ~3 GHz around 14 GHz, with a subband near 8.8 GHz linked to internal resonances of the JJ sample. \n\nMicrowave signals from cavity port 2 are delivered through a short coaxial cable soldered to the PCB coplanar line, which is bonded to the chip’s coplanar line.",
+        "text_sha256": "sha256:99a6f04489316863b3d097978195eb5de669dee331aabc8879514eaa48e62dea"
+      },
+      {
+        "evidence_key": "P:S-81b6b0d6daabf1083d8e",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-81b6b0d6daabf1083d8e",
+        "text": "Bias and voltage line T-filters consist of feedthrough capacitors (1.1 nF, red), on-plate resistors (500 Ω, blue), and external resistors (10 kΩ, not shown). The output voltage is read using a room-temperature AD745 amplifier and analog-to-digital converter. \n\nThe setup with the cavity mounted on the coldest plate of a dilution refrigerator is shown in Fig. 2d. The SPD is housed inside cryoperm and superconducting screens to minimize magnetic noise and stray light. A SQUID thermometer on the cavity ensures precise temperature control, while a 5 Ω heating resistor is installed at the cavity base. Measurements of the SPD’s response to the resonator’s signal were conducted by varying the heating temperature from 21 mK to 80 mK, corresponding to heating resistor voltages of 0 mV to 28 mV. The SPD’s copper base is anchored directly to the mixing chamber plate to reduce heat transfer through the SMA connector. SPD switching time measurements were automated, enabling precise feedback for cavity and cryostat plate temperatures. \n\nThe SPD was fabricated using the shadow evaporation technique, forming an Al-AlOx-Al trilayer on a Si substrate with an area of 2.5 × 0.7 μm[2] , see Methods. At 17 mK, the measured critical current is IC = 170 nA, and the normal state resistance is RN = 1480 Ω (Fig. 3a). The chosen parameters balance reduced dark count rates and optimal quantum efficiency, targeting a regime that minimizes thermal activation and quantum tunneling events[42] . The critical current and damping allow operation in the phase diffusion regime[44][,][48] , enhancing performance. The detector response time, determined by the inverse plasma frequency, is below 1 ns. The detector’s dead time, governed by RC filters, is 2–10 ms.",
+        "text_sha256": "sha256:5aa49c57fd3c005bfe8728c7c8d510f051d0545b902ae938f278cf0370cfed79"
+      },
+      {
+        "evidence_key": "P:S-df26be84b6a07e10be97",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-df26be84b6a07e10be97",
+        "text": "An example of a single-shot measurement with 3 ms bias current rise and fall times and a 42 ms switching time is shown in the inset of Fig. 3a. \n\nSequential measurements of the SPC-73 sample’s currentvoltage characteristics confirm setup stability (Fig. 3a). The critical current at 17 mK, IC = 170 nA, approaches the Bardeen-CooperSchrieffer (BCS) theoretical limit of 197 nA in the absence of \n\n**==> picture [325 x 221] intentionally omitted <==**",
+        "text_sha256": "sha256:bd9abe95e7ae4ddee1b3e7cfe654456cb9f084a47fcd85205686c63b3e6ea393"
+      },
+      {
+        "evidence_key": "P:S-9263c23aa13e250f5cdc",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-9263c23aa13e250f5cdc",
+        "text": "**----- Start of picture text -----**<br>\n(a)<br>copper cavity single photon detector<br>(b) (c)<br>photonic activation<br>first<br>cavity mode thermal activation<br>second<br>cavity mode quantum tunnelling<br>Jos e phson phase<br>cavity temperature<br>superconducting resistive<br>state state<br>potential<br>Log(photon rate)<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:2b8ba20d27b06f2cbecd58bc71f3c9e65a034ddf8869111e6ac3e7dea4552da7"
+      },
+      {
+        "evidence_key": "P:S-bd75e27909c6c610b670",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-bd75e27909c6c610b670",
+        "text": "Fig. 1 | Description of the experimental scheme. a A microwave cavity is connected to the photon detector, where the former acts as a source of thermal photons and the latter is formed by the Josephson junction, inserted into a coplanar waveguide adapter. b Temperature dependence of the rate of thermal photons emitted by the cavity. With a corresponding temperature change of tens of millikelvin, the photon rate is varied by orders of magnitude. c The tilted washboard \n\npotential describes the dynamics of a Josephson junction: the system is superconducting if the wavefunction is confined to a minimum, and resistive if it runs down the potential. The switching to the resistive state can be due to the arrival of a photon, or due to noise, appearing as thermal escape or quantum tunnelling processes, which therefore needs to be suppressed. \n\nNature Communications |(2025)16:3457 \n\n2 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-025-56040-4 \n\n**==> picture [156 x 102] intentionally omitted <==**",
+        "text_sha256": "sha256:d01c4ac5230b5b6ece1fc22992b216dffad1c7874fc2a56f1eacf9e0fb7d32b3"
+      },
+      {
+        "evidence_key": "P:S-6c9804555765a93c1f93",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-6c9804555765a93c1f93",
+        "text": "**==> picture [107 x 102] intentionally omitted <==**",
+        "text_sha256": "sha256:b1355d3c5a62f9668fe37977c36b9a96e33f9c866308783a3d67e70a76e4f36a"
+      },
+      {
+        "evidence_key": "P:S-fa996802d49d26535168",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-fa996802d49d26535168",
+        "text": "**==> picture [107 x 102] intentionally omitted <==**",
+        "text_sha256": "sha256:b1355d3c5a62f9668fe37977c36b9a96e33f9c866308783a3d67e70a76e4f36a"
+      },
+      {
+        "evidence_key": "P:S-205087152e110c81d7fb",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-205087152e110c81d7fb",
+        "text": "**==> picture [107 x 102] intentionally omitted <==**",
+        "text_sha256": "sha256:b1355d3c5a62f9668fe37977c36b9a96e33f9c866308783a3d67e70a76e4f36a"
+      },
+      {
+        "evidence_key": "P:S-115f206fb58ecafdb273",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-115f206fb58ecafdb273",
+        "text": "**==> picture [107 x 102] intentionally omitted <==**",
+        "text_sha256": "sha256:b1355d3c5a62f9668fe37977c36b9a96e33f9c866308783a3d67e70a76e4f36a"
+      },
+      {
+        "evidence_key": "P:S-6ea7770f659693172615",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-6ea7770f659693172615",
+        "text": "**==> picture [107 x 102] intentionally omitted <==**",
+        "text_sha256": "sha256:b1355d3c5a62f9668fe37977c36b9a96e33f9c866308783a3d67e70a76e4f36a"
+      },
+      {
+        "evidence_key": "P:S-c100f97f239e96bff942",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-c100f97f239e96bff942",
+        "text": "**==> picture [107 x 102] intentionally omitted <==**",
+        "text_sha256": "sha256:b1355d3c5a62f9668fe37977c36b9a96e33f9c866308783a3d67e70a76e4f36a"
+      },
+      {
+        "evidence_key": "P:S-c3ec37ed13f6bba8ca50",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-c3ec37ed13f6bba8ca50",
+        "text": "**==> picture [177 x 68] intentionally omitted <==**",
+        "text_sha256": "sha256:b06448ad8b47d4027c371f1a7b4e77f20b49286700719af1848eac1017dd2e79"
+      },
+      {
+        "evidence_key": "P:S-d04b72c5bed11558c327",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-d04b72c5bed11558c327",
+        "text": "**==> picture [178 x 68] intentionally omitted <==**",
+        "text_sha256": "sha256:83ce2967a13665b85cb32f21f571e6ab3035f6c2733a616402e620088eb74423"
+      },
+      {
+        "evidence_key": "P:S-81be360e9b3896609bc4",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-81be360e9b3896609bc4",
+        "text": "**==> picture [72 x 68] intentionally omitted <==**",
+        "text_sha256": "sha256:7005f2b6d984c54b1d5a098a4251cefa36ea996ee1ad971eabaa9a6e08f61c1d"
+      },
+      {
+        "evidence_key": "P:S-6b3c43cddaa010646b43",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-6b3c43cddaa010646b43",
+        "text": "Fig. 2 | Microwave cavity and photon detector used in this work. a The cavity, critically coupled to the SPD through antenna port 2, while port 1 is weakly coupled and used for characterization purposes. At the center of the cavity, a sketch of the 14 GHz mode shape is shown. b Room-temperature response of the cavity, showing resonant modes starting from the fundamental mode at 8.81 GHz. A comparison with resonances at 17 mK is provided in Fig. 4. (c) Circuit diagram with optical images of the detector connected to the cavity antenna and mounted in the sample \n\nholder. SEM image of the Josephson junction with artificial colors: pink - bottom Al electrode, blue - top Al electrode, violet - overlapping areas. The feeding dc lines are also shown, indicating the bias current Ib and measured voltage U. d Picture of the coldest plate of the dilution refrigerator, showing the sample holder within the cryoperm screen and the copper cavity. A SQUID thermometer is mounted on top, with a heating resistor installed below. \n\n**==> picture [258 x 160] intentionally omitted <==**",
+        "text_sha256": "sha256:aa56ccdc1e7046eb871ce3379853365a37b95440289fda32a1011548fe22256b"
+      },
+      {
+        "evidence_key": "P:S-17a547ef811040088ca0",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-17a547ef811040088ca0",
+        "text": "**----- Start of picture text -----**<br>\n(a) (b)<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:84445142291a988d5eeea611a058a28eb8b8de8b35db3c6e2827d6eae8e8a118"
+      },
+      {
+        "evidence_key": "P:S-e8ee98ca80a62b842073",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-e8ee98ca80a62b842073",
+        "text": "**==> picture [216 x 180] intentionally omitted <==**",
+        "text_sha256": "sha256:05919fe93ba5c159b1e24369311d68c94b60e2681a14c0b02cb5b5a1a33a976d"
+      },
+      {
+        "evidence_key": "P:S-ade486b68dc00ccacf49",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-ade486b68dc00ccacf49",
+        "text": "Fig. 3 | Preliminary characterization of the detector. a Current-voltage characteristics of the sample at 17 mK, sequentially measured 10 times to demonstrate setup stability. Inset: Example of a single-shot measurement with bias current rise and fall times of 3 ms each. b Mean switching times of the SPD at 17 mK, showing \n\nsignificant reductions in dark counts due to filtering improvements over several months (dots - experiment, solid curves - theory). Error bars are smaller than the dot size. \n\nthermal and quantum noise. Figure 3b shows the mean switching time of the SPC-73 sample, demonstrating significant reductions in dark counts through iterative filtering and screening improvements. Theoretical tunneling time predictions[38][,][49][,][50] (red solid curve) match closely the experimental data after improvements. Stray light mitigation efforts yielded the rightmost curve (red \n\ndots), surpassing the standard tunneling time limit. This points to the onset of the quantum phase diffusion regime[44] , where the dark count rate decreases significantly. Interestingly, the rightmost data align with the classical Kramers’ time predictions[51] , fitting at 18 mK a critical current value of 191 nA, consistent with the BCS theoretical limit for this sample. \n\nNature Communications |(2025)16:3457 \n\n3 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-025-56040-4 \n\n**==> picture [325 x 138] intentionally omitted <==**",
+        "text_sha256": "sha256:443b18ae8d69b2f68c0ea78622c2fc8fb32fc9c3a8d659fd51fa906c2911a81e"
+      },
+      {
+        "evidence_key": "P:S-a9226c36f817d2513a82",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a9226c36f817d2513a82",
+        "text": "**----- Start of picture text -----**<br>\n(a) (b) (c)<br>(d) (e)<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:4063c162df4f187a84160f1d1f3268b1c77fd45bbb1766a42d3d449de6b014ba"
+      },
+      {
+        "evidence_key": "P:S-5e22ee66a59930c972e7",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-5e22ee66a59930c972e7",
+        "text": "**==> picture [140 x 99] intentionally omitted <==**",
+        "text_sha256": "sha256:bfb8da72a23202b8a8ceba9d4441fc38746ff45ae7603a95b25f8cbb030712c9"
+      },
+      {
+        "evidence_key": "P:S-194b5afad4e532308863",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-194b5afad4e532308863",
+        "text": "**==> picture [478 x 156] intentionally omitted <==**",
+        "text_sha256": "sha256:99c4d6dc4565852d253c9f58f4b35e5263d0b0094590f98143694f2c066a2c56"
+      },
+      {
+        "evidence_key": "P:S-ce05bd9111defdf7eb11",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-ce05bd9111defdf7eb11",
+        "text": "Fig. 4 | Measurements of cavity resonances by photon-assisted tunneling steps of the SPD. a IV curves at various incident radiation powers and constant frequency of 13.9537 GHz; b Calibration curve to translate the position of current step to dB; c IV curves at various frequencies of incoming radiation and constant power; d,e Comparison of frequency response of the cavity measured at room temperature by \n\nVNA (blue) and at 17 mK measured by photon-assisted tunneling steps in SPD (red). d Resonance at8.8 GHz, e resonance at 13.9 GHz. Both dependences are normalized to the same level so that their maxima are at 0 dB. Blue curves are actually the enlarged curves from Fig. 2b. \n\n## Measuring the cavity resonances \n\nAn underdamped Josephson tunnel junction is well-known as a detector of a harmonic signal with a minimum detectable power down to the femtowatt level, by measuring the photon-assisted tunneling (PAT) steps at the inverse branch of a current-voltage characteristic. In this work, we use PAT steps (see Methods) to measure resonant curves of the cavity at low temperatures. \n\nTo correctly fit the measured photon rate with the theory, see below, we must properly characterise the cavity quality factors as well as their central frequencies and substitute these values into Eq. (1). The resonator has four resonant frequencies: 8.81 GHz; 13.95 GHz; 16.67 GHz and 17.85 GHz, but the rate of photon emission at frequencies 16.67 GHz and 17.85 GHz is more than one order of magnitude lower than at the other two frequencies. Therefore, when determining the SPD efficiency, only modes at 8.81 GHz and 13.95 GHz were taken into account. \n\nThe method for measuring the cavity resonances with using the PAT steps is as follows.",
+        "text_sha256": "sha256:538a3aa06a49c7d67c5853978613709bd72e463140bbb7b0317336e680798deb"
+      },
+      {
+        "evidence_key": "P:S-825a1d945e4ceb9b7cee",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-825a1d945e4ceb9b7cee",
+        "text": "First of all we measure a series of IV curves at a frequency close to a resonance with various microwave power values (Fig. 4a). Then we plot the calibration curve that shows the dependence of the current step position on the supplied microwave power in dB at a certain voltage on the SPD (Fig. 4b, blue diamonds). We make an exponential fit of the calibration curve and thus have the dependence of the incident power on the current step position at any value between the measured points (Fig. 4b, red curve). Then, finally, we measure IV curves at a constant supplied microwave power with frequencies varying in the vicinity of the cavity resonance (Fig. 4c). Using the calibration curve obtained at the previous step we transform the \n\npositions of the current step into the value of the incident power in dB. Since we make such measurements near the resonant frequency, the incident power strongly depends on the frequency of the microwave signal. The frequency response of the cavity near 8.8 GHz (d) and 13.9 GHz (e) measured by the PAT steps (red curves) are presented in Fig. 4d, e. For comparison, we plot the room temperature frequency response of the cavity, measured with a VNA (blue). We see that the quality factor at low temperature 17 mK increases, as expected, with a simultaneous shift of the resonant frequencies to slightly higher values. Thus, at low temperatures, the quality factor of the 8.81 GHz mode reaches Q1 = 7340, and the one of the 13.9 GHz mode is Q2 = 4650. The measured values of quality factors and central frequencies are used for fitting of the measured photon rate with the theory in Eq. (1), shown in Fig. 5.",
+        "text_sha256": "sha256:a97cdd223c32fb5b0eaf6d32558d2ee8a16cf345a85b17e6d41e6ca744bde147"
+      },
+      {
+        "evidence_key": "P:S-d5419a2dcb66e5e73200",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-d5419a2dcb66e5e73200",
+        "text": "## Detecting single photons, thermally emitted from the cavity \n\nThe average number of thermal photons in a cavity mode follows the Planck distribution and depends on the modes’ resonance frequency, loaded quality factor, and temperature. Dissipation regulates the photon lifetime, giving rise to an emission rate that can be controlled by coupling an antenna to the mode[52] . On first approximation, the cavity photon rate rc(T) measured with an SPD can be calculated considering n modes as \n\n**==> picture [173 x 23] intentionally omitted <==**",
+        "text_sha256": "sha256:7f5d0b1772502ae0ab9c46426176c09769cbbfafaa54733a9f8c2b595d02bd2c"
+      },
+      {
+        "evidence_key": "P:S-e12dcf0af5f142ccd890",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-e12dcf0af5f142ccd890",
+        "text": "Nature Communications |(2025)16:3457 \n\n4 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-025-56040-4 \n\n**==> picture [479 x 320] intentionally omitted <==**",
+        "text_sha256": "sha256:e1a6f8197b63cb1fdd45f64df68f8e23fc72b58b83f660964314b42ee8a907c9"
+      },
+      {
+        "evidence_key": "P:S-c7205abe815d6947165d",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-c7205abe815d6947165d",
+        "text": "**----- Start of picture text -----**<br>\n(a)<br>(b) (c)<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:c5ffe3cbf20e8c4935ab4a9e22538dc889c6a6da4bd767f8f752d3a817adc4b1"
+      },
+      {
+        "evidence_key": "P:S-a4259f9e8211648ba27c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a4259f9e8211648ba27c",
+        "text": "Fig. 5 | Single microwave photon detection. a An event plot of the recorded data is shown at various temperatures of the cavity. b The SPD switching rate, fitted with the theoretical photon rate, using formula (1). The error bars do not exceed the dot sizes due to 5000 averages. The data are fitted with the expected cavity photon rate rc (1) (red solid curve) plus a dark count rate rDC (green dashed line) to extract the \n\nefficiency and noise floor of the detector. The black dotted curves show ± 0.05 η2 spread of the fitting. The values of quantum efficiency η reach ~ 0.0125 and 0.45 ± 0.05 for 8.81 GHz and 13.9 GHz modes, respectively. c The SPD switching rates versus bias current, measured at the base temperature 17 mK, for various cavity temperatures from 21 to 80 mK. \n\nwhere fi, τi are the frequencies and the lifetimes of the cavity modes’ photons, respectively; h is the Planck constant, kB is the Boltzmann constant and T is the temperature. The photon lifetime τi = Qi/(2πfi) is extracted from the quality factor Qi of the mode and its central frequency fi. The parameter ηi is the ratio between the thermally available photons of the i-th cavity mode and the detected ones. It depends on the cavity antenna coupling and on the detector quantum efficiency. The fact that the antenna is critically coupled to the cavity means that only a half of available photons exit the cavity and go to the detector. Thanks to the exponential dependence of the rate on the hfi/kBT ratio, at low enough temperatures only a limited number of modes significantly contribute to the rate, allowing us to neglect the effect of higher-order resonances.",
+        "text_sha256": "sha256:8d21766f4b54f6faf0580272c3a7f21bd44e8edb3132b5919a32639aecd4351e"
+      },
+      {
+        "evidence_key": "P:S-6844e5368aa9473ed603",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-6844e5368aa9473ed603",
+        "text": "To observe the variation of the photon rate and characterise the quantum efficiency and dark count rate of the detector, we measured the temperature dependence of the switching events. To this end, the temperature of the cold plate of a dilution fridge was fixed at about 17 mK, while the cavity, weakly thermally coupled to the plate, was heated by a resistor to a temperature of 21 to 80 mK, precisely controlled using a SQUID noise thermometer. An estimate of a photon-induced current pulse is given in Methods. \n\nIn Fig. 5a we present an event plot of the recorded data at various cavity temperatures, from 21 to 62 mK, showing an exponential increase of the switching rate. Figure 5b displays the switching rate versus temperature and its fit. We fit the data with the expected cavity photon rate rc(T) in Eq. (1) plus a dark count rate rDC = 1/τ0, which is the \n\ninverse of the mean switching time τ0 taken from the lowest temperature data, to extract the efficiency and noise floor of the detector. For this analysis, the quality factors and resonance frequencies are fixed to the values measured using PAT steps, see Fig. 4. In particular, at f1 = 8.81 GHz, Q1 ≃ 7340, and at f2 = 13.95 GHz, Q2 ≃ 4650. Figure 5b shows a good agreement between the expected cavity photon rate and the experiment. From this data, we verify that only the first two modes contribute to the detector response at these temperatures, while the higher frequency modes are irrelevant. The detection efficiency η2 is as high as 45 ± 5% for the mode f2, with a dark count rate of 0.1 Hz. In this experiment, the estimated efficiency is a convolution between the antenna coupling and the detector efficiency, and is therefore a lower limit.",
+        "text_sha256": "sha256:eb5e081a4eafb7034e124e17b0947340c6a7f2fa25b7131c0e02a3d8fedbd552"
+      },
+      {
+        "evidence_key": "P:S-09bdbcc56dab8a3f1e3c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-09bdbcc56dab8a3f1e3c",
+        "text": "For instance, η1 ≃ 1% is mainly due to the weak coupling of the antenna to the mode f1, as can be deduced from Fig. 2b, as well as SPD coplanar antenna selectivity, aimed to efficiently receive 14 GHz photons. The choice of the antennas’ couplings is tailored to swap the main contribution to rc(T) from f1 to f2 at a temperature of about 50 mK, therefore forming a peculiar cavity response, as shown in Fig. 5b. \n\nIn Fig. 5c, the SPD is characterised by measuring its mean switching rate versus bias current for various cavity temperatures. The mean switching rate coincides with the SPD dark count rate at the lowest cavity temperature of 21 mK in the absence of thermal photons, while it is defined by the photon rate at a large cavity temperature. One can see that the switching rate, starting from 0.01 Hz at the smallest bias current, increases by four orders of magnitude when heating cavity up to 80 mK, demonstrating the efficient response to incoming \n\nNature Communications |(2025)16:3457 \n\n5 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-025-56040-4 \n\n**==> picture [321 x 206] intentionally omitted <==**",
+        "text_sha256": "sha256:d1a3d22369131cb23c2d5df5885912313716e36ca4c8ea332bea46c99a674449"
+      },
+      {
+        "evidence_key": "P:S-2de3975af343e645ea0b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-2de3975af343e645ea0b",
+        "text": "Fig. 6 | Distribution of times between sequential switchings of the SPD at three various temperatures. The experimental data (dots) are fitted by expð�t=τÞ=τ (dashed curves) without any fitting parameters with the mean switching time τ directly taken from experimental data. Good agreement between fitting and \n\nexperiment is observed at 21 mK and 80 mK cavity temperatures. One can note super-Poissonian distribution at intermediate cavity temperature 47 mK. Inset: The τ to σ ratio vs cavity temperature, showing deviation from Poissonian statistics. \n\nphotons. It was checked that the dark count rate nearly does not change at the same cavity temperature variation if the sample is disconnected from the cavity, and also that the response is heavily suppressed if the cavity is connected to the SPD by the port 1. \n\nSince a signature of single-mode thermal photons is their superPoissonian statistics[45] , let us study the ratio of the SPD mean switching time τ to its standard deviation σ. It is known that in the case of Poissonian statistics, which is a natural statistics of thermal or quantum dark counts of our detector, this ratio should be equal to unity[51] . In the inset of Fig. 6 the τ/σ ratio vs temperature is shown. One can see that at low and high temperatures τ/σ is close to unity, proving the Poissonian statistics. At intermediate temperatures, τ/σ is significantly lower than unity, reaching the minimum value of 0.73 at 47 mK. This is evidence of the super-Poissonian distribution of photons, also known as photon bunching. \n\nThe time intervals between the events are presented as switching time distributions in Fig. 6 and fitted with an exponential distribution (dashed curves).",
+        "text_sha256": "sha256:26101b32f414eb88720decac2a834f1ab6a8be147de23c29699a27717443cac6"
+      },
+      {
+        "evidence_key": "P:S-73257708b6754b293e71",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-73257708b6754b293e71",
+        "text": "This probability density for noise-induced escapes (or tunneling) across (through) the barrier should represent Poissonian distribution in the form wðtÞ = expð�t=τÞ=τ[51] . One can see that the curve for 21 mK is fitted by the above exponential dependence without any fitting parameter for τ = 9.026 s. The curve for 80 mK is also wellfitted by exponential dependence with τ = 7.214 ms. In all cases, τ is taken directly from the experimental data as the mean time interval between the events. At the same time, at 47 mK, the switching time distribution is better fitted by the power dependence t[−][α] with α = 0.75 (dotted curve) than by the exponential dependence with τ = 0.119 s, at least for intermediate switching times. This is the evidence of quantum chaos[47] as natural statistics of thermal photons[45] , see below. The change from Poissonian distribution at low temperatures to superPoissonian at intermediate and back to Poissonian at high temperatures can be explained in the following way. At low temperatures, when the thermal photons in the cavity are very rare, the Poissonian statistics is the internal statistics of the detector as, e.g., for noise-induced escapes across a potential barrier[51] . With temperature increase, the contribution of thermal photons from a single 8.81 GHz mode starts to dominate, which, as argued in[45] , should demonstrate the superPoissonian statistics (see the mode contribution vs temperature in \n\nFig. 5b). With further increase of the temperature, the main 14 GHz mode starts to compete with the first one (their contributions become equal at 54 mK), which leads to Poissonization of the thermal photon statistics, according to[45] .",
+        "text_sha256": "sha256:7764e42939f27c707df026d1cb7d1d4445271cb2f85938ac05f08e16baba6fe1"
+      },
+      {
+        "evidence_key": "P:S-dc8c22efc28aad65954a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-dc8c22efc28aad65954a",
+        "text": "To our knowledge, this is the first direct observation of the super-Poissonian statistics of microwave thermal photons. The observation of super-Poissonian statistics of photons was proposed to be used as a signature of quantum chaos[47] . Figure 7a shows the results of quantum chaos modeling[47] , where the authors propose to use photon arrival histograms as a tool for observing quantum chaos. The authors compare the results of numerical simulations, and show that the statistics changes from Poissonian for regular dynamics to super-Poissonian in the case of the quantum chaos appearance. This is exactly the distribution observed in our experiment, shown in Fig. 7b, supporting the slogan: quantum chaos—nonlinear linearity. Here, we should add, that while the cavity represents completely linear resonator, the total system is not linear, since the resonator is weakly coupled to the Josephson junction detector, which is a strongly nonlinear element. \n\n## Discussion \n\nIn this work we describe and operate a microwave single photon detector used to observe the clicking and the statistics of thermal photons emitted by a resonator at ultracryogenic temperatures. The Josephson junction-based sensor shows a sub-Hz dark count rate and high efficiency, combined with a reduced operation complexity compared to qubit-based designs[23][,][24] . The SPD was used to observe single microwave photons emitted by a single-mode and a multi-mode thermal source, i. e. a copper cavity. Although widely accepted[45][,][53][,][54] , an experimental demonstration of the super-Poissonian statistics of thermal microwave photons was, to our knowledge, missing.",
+        "text_sha256": "sha256:f5cda4d902efb10220d5c29e18c1de6eba1a4519c3205d4b111dc7d46a577870"
+      },
+      {
+        "evidence_key": "P:S-191d103042be993aa52d",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-191d103042be993aa52d",
+        "text": "The measured photon rate is consistent with thermal emission from the microwave cavity modes, and closely follows the expected temperature dependence. The photon distribution displays a clear reduction of the mean-to-standard deviation ratio when the light is emitted mainly by one mode, which instead remains unitary for dark count and multimode emission. The dynamical range of the detector extends from its dark count rate to the kHz range and is currently limited by the acquisition electronics’ speed. The detector dynamics was not further \n\nNature Communications |(2025)16:3457 \n\n6 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-025-56040-4 \n\n**==> picture [249 x 153] intentionally omitted <==**",
+        "text_sha256": "sha256:341190bdb17b63937fc987c6da7271386bdb3846cbe70b3c5f43ee65a300542c"
+      },
+      {
+        "evidence_key": "P:S-8e6b54e232301503fc7c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8e6b54e232301503fc7c",
+        "text": "**----- Start of picture text -----**<br>\n(a) (b)<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:84445142291a988d5eeea611a058a28eb8b8de8b35db3c6e2827d6eae8e8a118"
+      },
+      {
+        "evidence_key": "P:S-5ae6f4d8ce255a356b0a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-5ae6f4d8ce255a356b0a",
+        "text": "**==> picture [223 x 157] intentionally omitted <==**",
+        "text_sha256": "sha256:4443b2cc20611b7f4c2b6e56160cb392165f189f7f8a83035e731940b2b5bc4a"
+      },
+      {
+        "evidence_key": "P:S-8c5babdb5b8c7aa7ca5c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8c5babdb5b8c7aa7ca5c",
+        "text": "Fig. 7 | Comparison of Poissonian and super-Poissonian distributions. a Numerically computed distributions according to[47] . b Measured switching time distribution (blue dots) of thermal photons from a cavity representing super-Poissonian distribution, fitted with exponent (red dashed curve) and t[−][α] dependence. \n\ninvestigated and will be the subject of future works. The SPD efficiency can be better characterised with an on-demand microwave photon source[55][–][58] , to disentangle it from other systematic uncertainties. Future efforts to improve the SPD aim mainly at improving its dark count rate. For instance, a junction with lower IC could enter the phase diffusion regime, which is expected to increase its lifetime, and thereby reduce the dark count rate[44] . Advancing the screening and filtering of the setup is also foreseen to improve the detector performance. In perspective, this work paves the way to a deeper examination of thermal light’s quantum properties and to their use to study quantum chaos[47] , ghost imaging[59][–][61] , and more[45] . The device itself finds numerous applications in the field of precision physics beyond the Standard Model, as for instance Axion searches[34][,][35] . On the one hand, the performance requirements needed to drastically improve current Axion experiments are already met by the current device. On the other hand, these apparata typically include strong magnetic field and long operation times, posing a challenge to the screening and long-termstability of the detector. Nevertheless, the implementation of single microwave photon detectors such as the one presented here fosters the emergence of next-generation beyond the Standard Model experiments[42][,][62] .",
+        "text_sha256": "sha256:2c985815180ea607adf53d3881daf4cd38024f293743f5987cd3d59f761422a8"
+      },
+      {
+        "evidence_key": "P:S-4537243248ee13754be6",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-4537243248ee13754be6",
+        "text": "## Methods \n\n## Sample fabrication \n\nThe fabrication of a Josephson junction-based single photon detector requires a two-layer process. In the first Ti/Au/Pd multilayer, the contact pads, the antenna, and dc wires were fabricated at the nanofabrication facility of Chalmers university using laserwriter and lift-off technology. In the second layer, we patterned the superconductor-insulator-superconductor (SIS) tunnel junctions with the electron beam lithography. Thereafter, the SIS junction structures made of aluminum were deposited at NNSTU using a well-established shadow evaporation technique[63][,][64] without breaking the vacuum. This technology is typically used for the fabrication of superconducting qubits that ensures long-time operation of the samples. \n\nOur experimental setup shows no sensitivity to either the Earth’s magnetic field or nearby magnets. \n\n## Photon-assisted tunneling steps \n\nThe frequency response of the cavity at low temperatures was measured by using the photon-assisted tunneling steps of the SPD’s IV curves[65] , see Fig. 4. When the voltage at the junction is slightly lower than the doubled gap voltage, a single electron (quasiparticle) is able to tunnel from one side of the junction to another one. It becomes possible when eV + hf > 2Δ with V, f, Δ being voltage, emission frequency and superconducting energy gap, respectively. This effect appears in the IV curve of the junction as PAT step. The position of this step depends on the power of the incident signal while the voltage depends on its frequency. \n\n## Estimation of a single-photon-induced current pulse \n\nLet us demonstrate that the Josephson junction works as a microwave single photon detector when its bias current Ib is slightly lower than the critical current IC. As outlined in Fig.",
+        "text_sha256": "sha256:d8291e4b33cff9d2d594e37eba4c5950d2e84a8cc0e72b4930a0804161accd49"
+      },
+      {
+        "evidence_key": "P:S-0fbfb1fa6e6ea27d8769",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-0fbfb1fa6e6ea27d8769",
+        "text": "1, the dynamics of a Josephson junction can be treated as the evolution of a phase particle in a tilted washboard potential. An absorbed photon causes a current pulse ΔI through the junction, overcoming the threshold, and thus leading to the appearance of measurable resistive state with a finite voltage of about 0.4 mV. In the Josephson circuit, the energy hf of the incoming photon is split between the energy of the supercurrent Es stored in the tank circuit and the energy Ed dissipated in the subgap resistor Rqp, approaching RN close to zero voltage, according to quasiparticle IV curve of a tunnel Josephson junction[66] . Assuming the simple relation between Es and the pulse amplitude ΔI[42] , Es = LJJΔI[2] /2, and taking into 1=2 account that in parallel RLC-resonant circuit Q = RN�C=LJJ� , Es/Ed = Q/ 2π, the current increase due to the photon can be estimated as fi fi fi fi fi fi fi fi fi fi fi fi fi fi fi fi fi fi fi f ΔI = q2hf L[�] JJ[1][ð][1 + 2][π][=][Q][Þ][�][1] , where the junction inductance LJJ depends �1=2 on the bias current I as LJJ = _=ð2eÞðI[2] C[�][I][2][Þ] . Using the above parameters, for IC = 170 nA the single photon current pulse ΔI is estimated about 60 nA. \n\n## Shielding of the detector \n\nThe shielding of the setup from the environment is straightforward. The detector is readout with dc lines, filtered by the T-filters already described in the main text. Photons are emitted and measured inside the compact volume of the cavity and the detector holder without the need of any microwave cable, thereby ensuring a strong decoupling from the environment. External magnetic fields around the detector are screened by a two-layer cryoperm and superconducting screen.",
+        "text_sha256": "sha256:fc128db34ab8849610eed6c2cc8b172034f6bed289276ad514a8fda772d69f1e"
+      },
+      {
+        "evidence_key": "P:S-2e84d72b3be398145e9e",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-2e84d72b3be398145e9e",
+        "text": "## Data availability \n\nThe data that support the findings of this study are included into Supplementary materials. Source data are provided with this paper. \n\n## References \n\n1. Glauber, R. J. Nobel lecture: One hundred years of light quanta. Rev. Mod. Phys. 78, 1267–1278 (2006). \n\nNature Communications |(2025)16:3457 \n\n7 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-025-56040-4 \n\n2. Amenomori, M. et al. First detection of photons with energy beyond 100 tev from an astrophysical source. Phys. Rev. Lett. 123, 051101 (2019). \n\n3. Natarajan, C. M., Tanner, M. G. & Hadfield, R. H. Superconducting nanowire single-photon detectors: physics and applications. Superconduct. Sci. Technol. 25, 063001 (2012). \n\n4. Walsh, E. D. et al. Josephson junction infrared single-photon detector. Science 372, 409–412 (2021). \n\n5. Kouwenhoven, K. et al. Resolving power of visible-to-near-infrared hybrid β − Ta/Nb − Ti − N kinetic inductance detectors. Phys. Rev. Appl. 19, 034007 (2023). \n\n6. Bettini, A.Introduction to elementary particle physics; 1st ed. https:// cds.cern.ch/record/1111396 (Cambridge Univ. Press, Cambridge, 2008). \n\n7. Hadfield, R. H. Single-photon detectors for optical quantum information applications. Nat. Photonics 3, 696–705 (2009). \n\n8. Esmaeil Zadeh, I. et al. Superconducting nanowire single-photon detectors: A perspective on evolution, state-of-the-art, future developments, and applications. Appl. Phys. Lett. 118 (2021). \n\n9. Khasminskaya, S. et al. Fully integrated quantum photonic circuit with an electrically driven light source. Nat. Photonics 10, 727–732 (2016). \n\n10. Irwin, K. D & Hilton, G. C. Transition-Edge Sensors. (Springer, Berlin: Heidelberg, Germany, 2005) 63–150. \n\n11. Gleyzes, S. et al.",
+        "text_sha256": "sha256:8309f429f26abe5b7a354ce82be922bf5a75bbe70f4a69335a48e33084f258c9"
+      },
+      {
+        "evidence_key": "P:S-8b315c9054eba837713e",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8b315c9054eba837713e",
+        "text": "Quantum jumps of light recording the birth and death of a photon in a cavity. Nature 446, 297–300 (2007). \n\n12. Astafiev, O. et al. Single-photon detector in the microwave range. Appl. Phys. Lett. 80, 4250–4252 (2002). \n\n13. Govenius, J., Lake, R. E., Tan, K. Y. & Möttönen, M. Detection of Zeptojoule Microwave Pulses Using Electrothermal Feedback in Proximity-Induced Josephson Junctions. Phys. Rev. Lett. 117, 030802 (2016). \n\n14. Lee, G.-H. et al. Graphene-based Josephson junction microwave bolometer. Nature 586, 42–46 (2020). \n\n15. Kokkoniemi, R. et al. Bolometer operating at the threshold for circuit quantum electrodynamics. Nature 586, 47–51 (2020). \n\n16. Blais, A., Grimsmo, A. L., Girvin, S. M. & Wallraff, A. Circuit quantum electrodynamics. Rev. Mod. Phys. 93, 025005 (2021). \n\n17. Royer, B., Grimsmo, A. L., Choquette-Poitevin, A. & Blais, A. Itinerant Microwave Photon Detector. Phys. Rev. Lett. 120, 203602 (2018). \n\n18. Grimsmo, A. L. et al. Quantum Metamaterial for Broadband Detection of Single Microwave Photons. Phys. Rev. Appl. 15, 034074 (2021). \n\n19. Johnson, B. R. et al. Quantum non-demolition detection of single microwave photons in a circuit. Nat. Phys. 6, 663–667 (2010). \n\n20. Inomata, K. et al. Single microwave-photon detector using an artificial Λ-type three-level system. Nat. Commun. 7, 1–7 (2016). \n\n21. Kono, S., Koshino, K., Tabuchi, Y., Noguchi, A. & Nakamura, Y. Quantum non-demolition detection of an itinerant microwave photon. Nat. Phys. 14, 546–549 (2018). \n\n22. Lescanne, R. et al. Irreversible Qubit-Photon Coupling for the Detection of Itinerant Microwave Photons. Phys. Rev. X 10, 021038 (2020). \n\n23. Albertinale, E. et al. Detecting spins by their fluorescence with a microwave photon counter. Nature 600, 434–438 (2021). \n\n24. Dixit, A. V.",
+        "text_sha256": "sha256:dd9b16b336f1fc181f787aeb43ee68c55d1f47fc6d38237fa948a8de1c3ab409"
+      },
+      {
+        "evidence_key": "P:S-c82890e3fb597a487bf8",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-c82890e3fb597a487bf8",
+        "text": "et al. Searching for Dark Matter with a Superconducting Qubit. Phys. Rev. Lett. 126, 141302 (2021). \n\n25. Balembois, L. et al. Cyclically operated microwave single-photonfi fi **f** counter with sensitivity of 10[�][22] W=phz. Phys. Rev. Appl. 21, 014043 (2024). \n\n26. Besse, J.-C. et al. Single-Shot Quantum Nondemolition Detection of Individual Itinerant Microwave Photons. Phys. Rev. X 8, 021003 (2018). \n\n27. Sikivie, P. Invisible axion search methods. Rev. Mod. Phys. 93, 015004 (2021). \n\n28. Irastorza, I. G. & Redondo, J. New experimental approaches in the search for axion-like particles. Prog. Part. Nucl. Phys. 102, 89–159 (2018). \n\n29. Sushkov, A. O. Quantum Science and the Search for Axion Dark Matter. Phys. Rev. X Quantum 4, 020101 (2023). \n\n30. Braine, T. et al. Extended search for the invisible axion with the axion dark matter experiment. Phys. Rev. Lett. 124, 101303 (2020). \n\n31. Kwon, O. et al. First Results from an Axion Haloscope at CAPP around 10.7 μeV. Phys. Rev. Lett. 126, 191802 (2021). \n\n32. Adair, C. M. et al. Search for dark matter axions with cast-capp. Nat. Commun. 13, 6180 (2022). \n\n33. Crescini, N. et al. Axion Search with a Quantum-Limited Ferromagnetic Haloscope. Phys. Rev. Lett. 124, 171801 (2020). \n\n34. Lamoreaux, S. K., van Bibber, K. A., Lehnert, K. W. & Carosi, G. Analysis of single-photon and linear amplifier detectors for microwave cavity dark matter axion searches. Phys. Rev. D. 88, 035020 (2013). \n\n35. Barbieri, R. et al. Searching for galactic axions through magnetized media: The QUAX proposal. Phys. Dark Universe 15, 135–141 (2017). \n\n36. Clerk, A. A., Devoret, M. H., Girvin, S. M., Marquardt, F. & Schoelkopf, R. J. Introduction to quantum noise, measurement, and amplification. Rev. Mod. Phys. 82, 1155–1208 (2010). \n\n37. Braggio, C.",
+        "text_sha256": "sha256:157731cf636a8c3c2ebe23e8b891c101764cd585cf6c5e235f52574768922666"
+      },
+      {
+        "evidence_key": "P:S-3bdf343cf9196c4faef8",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-3bdf343cf9196c4faef8",
+        "text": "et al. Quantum-enhanced sensing of axion dark matter with a transmon-based single microwave photon counter (2024). 2403.02321. \n\n38. Oelsner, G. et al. Underdamped Josephson junction as a switching current detector. Appl. Phys. Lett. 103, 142605 (2013). \n\n39. Oelsner, G. et al. Detection of Weak Microwave Fields with an Underdamped Josephson Junction. Phys. Rev. Appl. 7, 014012 (2017). \n\n40. Chen, Y.-F. et al. Microwave Photon Counter Based on Josephson Junctions. Phys. Rev. Lett. 107, 217401 (2011). \n\n41. Poudel, A., McDermott, R. & Vavilov, M. G. Quantum efficiency of a microwave photon detector based on a current-biased Josephson junction. Phys. Rev. B 86, 174506 (2012). \n\n42. Kuzmin, L. S. et al. Single Photon Counter Based on a Josephson Junction at 14 GHz for Searching Galactic Axions. IEEE Trans. Appl. Superconduct. 28, 2400505 (2018). \n\n43. Revin, L. S. et al. Microwave photon detection by an Al Josephson junction. Beilstein J. Nanotechnol. 11, 960–965 (2020). \n\n44. Pankratov, A. L. et al. Towards a microwave single-photon counter for searching axions. npj Quantum Inf. 8, 1–7 (2022). \n\n45. Fox, M. Quantum Optics: An Introduction, 15 of Oxford Master Series in Physics (Oxford University Press, 2006). \n\n46. Kovalenko, A. et al. Emergence of super-poissonian light from indistinguishable single-photon emitters. Optica 10, 456–463 (2023). \n\n47. Yusipov, I. I., Vershinina, O. S., Denisov, S. V. & Ivanchenko, M. V. Photon waiting-time distributions: A keyhole into dissipative quantum chaos. Chaos 30, ArticleSequenceNumber:023107 (2020). \n\n48. Pankratov, A. L., Ladeynov, D. A., Revin, L. S., Gordeeva, A. V. & Ilichev, E. V. Quantum and phase diffusion crossovers in small Al Josephson junctions. Chaos Solitons Fractals 184, 114990 (2024). \n\n49. Martinis, J. M.",
+        "text_sha256": "sha256:7301414d485acece179b7f10149b0cb4c0bada404d25df7f8fe70904a4e9fd6e"
+      },
+      {
+        "evidence_key": "P:S-1db7578f4407600c0f55",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-1db7578f4407600c0f55",
+        "text": "& Grabert, H. Thermal enhancement of macroscopic quantum tunneling: Derivation from noise theory. Phys. Rev. B 38, 2371–2379 (1988). \n\n50. Golubev, D. S., Il’ichev, E. V. & Kuzmin, L. S.Single-Photon Detection with a Josephson Junction Coupled to a Resonator. Phys. Rev. Appl. 16, 014025 (2021). \n\n51. Malakhov, A. N. & Pankratov, A. L.Evolution Times of Probability ’ \n\nDistributions and Averages — Exact Solutions of the Kramers Problem, chap. 6, 357–438 (John Wiley & Sons, Ltd, Hoboken, NJ, USA, 2002). \n\n52. Pozar, D.Microwave Engineering, 4th Edition https://books.google. fr/books?id=JegbAAAAQBAJ (Wiley, 2011). \n\nNature Communications |(2025)16:3457 \n\n8 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-025-56040-4 \n\n53. Morgan, B. L. & Mandel, L. Measurement of photon bunching in a thermal light beam. Phys. Rev. Lett. 16, 1012–1015 (1966). \n\n54. Boitier, F., Godard, A., Rosencher, E. & Fabre, C. Measuring photon bunching at ultrashort timescale by two-photon absorption in semiconductors. Nat. Phys. 5, 267–270 (2009). \n\n55. Bozyigit, D. et al. Antibunching of microwave-frequency photons observed in correlation measurements using linear detectors. Nat. Phys. 7, 154–158 (2011). \n\n56. Lang, C. et al. Observation of Resonant Photon Blockade at Microwave Frequencies Using Correlation Function Measurements. Phys. Rev. Lett. 106, 243601 (2011). \n\n57. Peng, Z. H., de Graaf, S. E., Tsai, J. S. & Astafiev, O. V. Tuneable ondemand single-photon source in the microwave range. Nat. Commun. 7, 1–6 (2016). \n\n58. Zhou, Y., Peng, Z., Horiuchi, Y., Astafiev, O. V. & Tsai, J. S. Tunable Microwave Single-Photon Source Based on Transmon Qubit with High Efficiency. Phys. Rev. Appl. 13, 034007 (2020). \n\n59. Gatti, A., Brambilla, E., Bache, M. & Lugiato, L. A.",
+        "text_sha256": "sha256:ba65ac8b38ba91c3807fcb9e4f2afef0a9aae6d04c16319dfc7ea2186c02727b"
+      },
+      {
+        "evidence_key": "P:S-96f5ae17e17ec83df2e6",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-96f5ae17e17ec83df2e6",
+        "text": "Ghost imaging with thermal light: Comparing entanglement and classicalcorrelation. Phys. Rev. Lett. 93, 093602 (2004). \n\n60. Ou, L.-H. & Kuang, L.-M. Ghost imaging with third-order correlated thermal light. J. Phys. B: At., Mol. Opt. Phys. 40, 1833 (2007). \n\n61. Liu, Q., Chen, X.-H., Luo, K.-H., Wu, W. & Wu, L.-A. Role of multiphoton bunching in high-order ghost imaging with thermal light sources. Phys. Rev. A 79, 053844 (2009). \n\n62. Jaeckel, J. & Ringwald, A. The low-energy frontier of particle physics. Annu. Rev. Nucl. Part. Sci. 60, 405–437 (2010). \n\n63. Gordeeva, A. V. et al. Record electron self-cooling in cold-electron bolometers with a hybrid superconductor-ferromagnetic nanoabsorber and traps. Sci. Rep. 10, 1–10 (2020). \n\n64. Moskalev, D. O. et al. Optimization of shadow evaporation and oxidation for reproducible quantum josephson junction circuits. Sci. Rep. 13, 1–10 (2023). \n\n65. Tien, P. K. & Gordon, J. P. Multiphoton Process Observed in the Interaction of Microwave Fields with the Tunneling between Superconductor Films. Phys. Rev. 129, 647–651 (1963). \n\n66. Barone, A. & Paternò, G. Physics and applications of Josephson effect. (John Wiley & Sons, New York, 1982). \n\n## Acknowledgements \n\nThe work is supported by the Russian Science Foundation (Project No. 19-79-10170). N.C. acknowledges the support from the Italian Institute of Nuclear Physics (INFN) within the QUAX experiment. The authors wish to thank G. Carugno for triggering the interest on photon detectors and for the multiple advice in the course of this work, A.A. Yablokov for writing an automated Python-based software, and I.V. Rakut’ for sample holder fabrication. The numerical data shown in Fig.",
+        "text_sha256": "sha256:f2651ba95cdb2930fac15e65c511b8e699dbb4a7d30ddfe7976d2b55039f2c96"
+      },
+      {
+        "evidence_key": "P:S-e3f5b84bb1588ea723d7",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-e3f5b84bb1588ea723d7",
+        "text": "7a to demonstrate a qualitative view of a super-Poissonian distribution as a hallmark of quantum chaos is a courtesy of Yusipov I.I. et al.[47] . \n\n## Author contributions \n\nThe general idea of the work was suggested by L.S.K., N.C., A.V.G. and A.L.P. The sample fabrication was performed by A.V.G and A.V.B. A.L.P. ran the experiment with support of A.V.G., A.V.C. and L.S.R. Data were analyzed by N.C., A.L.P., A.V.G. and A.V.C. A.L.P., A.V.G., L.S.R. and A.V.B. designed and assembled the experiment. The cavity was designed by N.C., and tested by N.C., A.L.P., A.V.G. and A.V.C. All authors, led by N.C. and A.L.P., contributed to manuscript with figures created by N.C., A.V.G. and A.V.C. \n\n## Competing interests \n\nThe authors declare no competing interests. \n\n## Additional information \n\nSupplementary information The online version contains supplementary material available at https://doi.org/10.1038/s41467-025-56040-4. \n\nCorrespondence and requests for materials should be addressed to A. L. Pankratov or A. V. Gordeeva. \n\nPeer review information Nature Communications thanks Steve Lamoreaux and Alex Opremcak for their contribution to the peer review of this work. A peer review file is available. \n\nReprints and permissions information is available at http://www.nature.com/reprints \n\nPublisher’s note Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations.",
+        "text_sha256": "sha256:17bb1915ea76644bd1b8060c1fbe14774e702a11f1b12953f531179eaff09df1"
+      },
+      {
+        "evidence_key": "P:S-f687501c05238c97de91",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-f687501c05238c97de91",
+        "text": "Open Access This article is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License, which permits any non-commercial use, sharing, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if you modified the licensed material. You do not have permission under this licence toshare adapted material derived from this article or parts of it. The images or other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http:// creativecommons.org/licenses/by-nc-nd/4.0/. \n\n© The Author(s) 2025, corrected publication 2025 \n\nNature Communications |(2025)16:3457 \n\n9",
+        "text_sha256": "sha256:0e9c0ae740450382cce19c3f90001efd6fca77c5978bfff7f9d61f376214d5a6"
+      }
+    ]
+  },
+  "paper_id": "10.1038/s41467-025-56040-4",
+  "paper_sha256": "sha256:37e152f9c19d77eba4328d75b4ab1ca764de79bb27f7a770e6e1f0611c2a0b0c",
+  "parent_output_sha256s": [],
+  "parent_reviews": [],
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "review_source_sha256": "sha256:110d90fe0156729303aa474c7983b7b3b88afb507497cb4c31cc00ecbc6e08c8",
+  "reviewer_spans": [
+    {
+      "char_end": 393,
+      "char_start": 382,
+      "reviewer_id_hash": "REV-61bdba7965be8859",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-76154c94fb79c7ef5e44",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #1",
+      "text_sha256": "sha256:bb5637404007ecf46212c7de9acbdccb2e5e387fa64a4c5dcb56e89b8da6a709"
+    },
+    {
+      "char_end": 419,
+      "char_start": 396,
+      "reviewer_id_hash": "REV-61bdba7965be8859",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5589f3834297316b5bce",
+      "source_role": "reviewer_report",
+      "text": "(Remarks to the Author)",
+      "text_sha256": "sha256:51e736a6f14e162299ba4783b83b452aaedafe35abd275d495265496d8d006b1"
+    },
+    {
+      "char_end": 826,
+      "char_start": 422,
+      "reviewer_id_hash": "REV-61bdba7965be8859",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5965c4f141595d3cee18",
+      "source_role": "reviewer_report",
+      "text": "This is one of the most amazing papers I have ever refereed. The development of a single microwave photon bolometric detector has been a sort of holy grail for the next level of the state of the art in quantum enable technology. In particular, if these results and device prove practical in practical implementations, they will completely change the complexion of axion dark matter searches, for example.",
+      "text_sha256": "sha256:0c97afd15a9e5e8ed57ae75e58d8bd1c06a7dde53cd526a2f5ebb2c70f972d88"
+    },
+    {
+      "char_end": 1221,
+      "char_start": 829,
+      "reviewer_id_hash": "REV-61bdba7965be8859",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-71ef338afc4584429aa3",
+      "source_role": "reviewer_report",
+      "text": "There are a few point the authors left out that are very important. First, compared to the usual Josephson parametric array (JPA) amplifiers used in many experiments, the single JJ used in this manner isn't an amplifier per se, so the circulator that is usually need when using JPAs is not needed here. This is a lossy element and limits, for example, the effectiveness of quantum squeezing .",
+      "text_sha256": "sha256:22f3350d34c2459b4e287c1089ae87ce12197d11222b0e20c0a490edb0b6c248"
+    },
+    {
+      "char_end": 1453,
+      "char_start": 1224,
+      "reviewer_id_hash": "REV-61bdba7965be8859",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3b71e14b430afd25c900",
+      "source_role": "reviewer_report",
+      "text": "Second, the flux tuning needed for JPA amplifiers is not needed. Also, the usual pumping required for a JPA is not needed, and as the authors say, there are no extra leads into the shielded box which alleviates the noise problem.",
+      "text_sha256": "sha256:e5883e1b7016c71728f81f8e880225c942e98ee55fe39b93bd518a549a496bc6"
+    },
+    {
+      "char_end": 1679,
+      "char_start": 1456,
+      "reviewer_id_hash": "REV-61bdba7965be8859",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f0b5ed30dbaebc38adf1",
+      "source_role": "reviewer_report",
+      "text": "It seems when the JJ \"clicks\" due to a photon absorption, it has some dead time to recover. I reread the paper several times and didn't quite see that time elaborated, however it is inferred from the maximum detection rate.",
+      "text_sha256": "sha256:1e01799238b1032da2001425e10c7cc2e64d48f35d69d2d5749cd35caa7866ec"
+    },
+    {
+      "char_end": 1830,
+      "char_start": 1682,
+      "reviewer_id_hash": "REV-61bdba7965be8859",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3144ac74b4c5750dc1bd",
+      "source_role": "reviewer_report",
+      "text": "The idea of this detector was proposed and simulated in 2018 and this manuscript is apparently the first experimental demonstration of the detector.",
+      "text_sha256": "sha256:c6ffee26b499952618576c366e776f2bb4df8c6c2d4c0837068b438b2c19a68c"
+    },
+    {
+      "char_end": 2179,
+      "char_start": 1833,
+      "reviewer_id_hash": "REV-61bdba7965be8859",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-742cc905c8ff68f50f3d",
+      "source_role": "reviewer_report",
+      "text": "The authors do not apparently discuss the degree to which magnetic field variations, or the magnitude, of fields at the JPA, must be controlled for stable operation. Normally I would say this discussion is required however the authors might not know, and the shielding they have is \"good enough.\" An estimate of the degree of shielding is needed.",
+      "text_sha256": "sha256:7778e93e9e6117b05ea24382d4f1b9bc08e878a20771532576890e43b8336106"
+    },
+    {
+      "char_end": 2607,
+      "char_start": 2182,
+      "reviewer_id_hash": "REV-61bdba7965be8859",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-737ac7f4f2dc7e78fe2c",
+      "source_role": "reviewer_report",
+      "text": "What truly needed, however, is a current (which is surely converted to a voltage)/time trace of a typical detection signal. There are no details of the low-frequency readout electronics, and this needs to be described. I am guessing is is a damped pulse at the JJ resonator frequency, still we need to see what a pulse or step looks like, and does the system self recover or does the current need to be turned off to do that?",
+      "text_sha256": "sha256:710e9efbb2f8eddfeb75a6febc05a2db81f5839b79069006cc7adbc3f981fe90"
+    },
+    {
+      "char_end": 2914,
+      "char_start": 2610,
+      "reviewer_id_hash": "REV-61bdba7965be8859",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-529c7bf5b1d5c68331ae",
+      "source_role": "reviewer_report",
+      "text": "The issue of magnetic shielding of these types of detectors in axion haloscopes has been solved, I should know because I designed the first successful JPA magnetic shields for the HAYSTAC experiment. The only concern is excessive sensitivity to vibration, electrical noise, temperature fluctuations, etc.",
+      "text_sha256": "sha256:f903ebe3e515af16872f4296f85d15f45a0fd529d5848f118dddefc9df387026"
+    },
+    {
+      "char_end": 3078,
+      "char_start": 2917,
+      "reviewer_id_hash": "REV-61bdba7965be8859",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-df908c04ae0547c9cc42",
+      "source_role": "reviewer_report",
+      "text": "The bandwidth appears as high, but there is no estimate anywhere. The fact that disparate cavity resonances can be thermally observed demonstrates the bandwidth.",
+      "text_sha256": "sha256:715dfa51864d4424f12219679812ef64565f559d340e6bdc587534039a9b7e2d"
+    },
+    {
+      "char_end": 3381,
+      "char_start": 3081,
+      "reviewer_id_hash": "REV-61bdba7965be8859",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9e135dd10abdc170d590",
+      "source_role": "reviewer_report",
+      "text": "A real question is how stable are these detectors, are they really usable for anything beyond a demonstration? However, once the principle is accepted as viable, the general technical development by a worldwide effort will accelerate the process of technical development toward practical application.",
+      "text_sha256": "sha256:3f4be2ef0b564ff4bb1972438da6c133e76c98bc80975e002d67305ad52162b6"
+    },
+    {
+      "char_end": 3512,
+      "char_start": 3384,
+      "reviewer_id_hash": "REV-61bdba7965be8859",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ec3ccaef2f9e0c064307",
+      "source_role": "reviewer_report",
+      "text": "One thing has left me puzzled, now that I see the earlier work I am having a hard time understanding why it is not better known.",
+      "text_sha256": "sha256:5294824b503b437ed0ffd11de875fc81467f451d5fbda12865e2bc0a3915104c"
+    },
+    {
+      "char_end": 3878,
+      "char_start": 3515,
+      "reviewer_id_hash": "REV-61bdba7965be8859",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-330763db7d6665fb47e7",
+      "source_role": "reviewer_report",
+      "text": "The title would be better if the single photon detection was mentioned, something like \"detection of single photons from a thermally excited cavity by use of an underdamped Josephson juntion\" I am not telling the authors how to write their paper, but it seems to me the present titile is inadequate. I thought this was going to be a kook paper based on the title.",
+      "text_sha256": "sha256:e94ef81245f4d3e95c85f8fc12fec8d5f79aabaf015fa6af74aaeb80f3ef95e7"
+    },
+    {
+      "char_end": 4040,
+      "char_start": 3881,
+      "reviewer_id_hash": "REV-61bdba7965be8859",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a3791c40d800bd865adc",
+      "source_role": "reviewer_report",
+      "text": "The overall structure of the paper isn't quite like the other professional papers in this field, but I don't mind. Others will. Those others should be ignored.",
+      "text_sha256": "sha256:4d6cc3ab5bbfc3444dabbfda43b1056911b70ff288fba397ea34fa3c8a1189c4"
+    },
+    {
+      "char_end": 4127,
+      "char_start": 4043,
+      "reviewer_id_hash": "REV-61bdba7965be8859",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-43fbe7f4513489652cf8",
+      "source_role": "reviewer_report",
+      "text": "The introduction goes on for quite a long time, how much of that is really necesary?",
+      "text_sha256": "sha256:9e1ae92f18daf9f7e9d0501cf580736052581e4f114d3df6379938ca8ee3a5fd"
+    },
+    {
+      "char_end": 4405,
+      "char_start": 4130,
+      "reviewer_id_hash": "REV-61bdba7965be8859",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0e7a7bdf6d5ec2ea2c31",
+      "source_role": "reviewer_report",
+      "text": "On the other hand I am tired of referees dictating how papers should be published and holding them hostage until they get their way. The principal issues I list above, however, are in regard to missing imformation that if included would tremendously benefit the presentation.",
+      "text_sha256": "sha256:34f88e45418de834624aebef0f86ce70bd7b6d4a9bdad6a38248be1ef9977925"
+    },
+    {
+      "char_end": 4495,
+      "char_start": 4408,
+      "reviewer_id_hash": "REV-61bdba7965be8859",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-33e8546a3c9517c7efe8",
+      "source_role": "reviewer_report",
+      "text": "The citation in the paper to Ref. 17 on p. 4, second column, has a weird question mark.",
+      "text_sha256": "sha256:078565dd3dbaa1f658e95aeb741948a5cdf8b09538c70c1ab2425751466f54a9"
+    },
+    {
+      "char_end": 4512,
+      "char_start": 4498,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0347dd20180ec695d9e9",
+      "source_role": "reviewer_report",
+      "text": "## Reviewer #2",
+      "text_sha256": "sha256:3d0fad378a281670111e784901384937e21f16ac7506c996ce48d04359041744"
+    },
+    {
+      "char_end": 4541,
+      "char_start": 4515,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2da882b6c9c5357ee810",
+      "source_role": "reviewer_report",
+      "text": "## (Remarks to the Author)",
+      "text_sha256": "sha256:b38337db1eff07919f014d2d1aed7fae07b89a322c1e85d46fb57634c9d7e0f5"
+    },
+    {
+      "char_end": 5178,
+      "char_start": 4544,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3b876c8c71dbdc8ddfb3",
+      "source_role": "reviewer_report",
+      "text": "The authors present a microwave photon counting scheme based on a current biased Josephson junction in the underdamped regime, similar to the work of Y.-F. Chen et al., Phys. Rev. Lett. 107, 217401. The photon counting scheme is tailored towards Axionic Dark Matter searches, and the design parameters for the single photon detector (SPD) were optimized using the results from an earlier publications of Kuzmin (the last author of this publication). The authors claim the combination of high detection efficiencies (~40% @ ~14 GHz) and low dark count rates (~0.1 Hz) make this a competitive detection scheme for dark matter detectors.",
+      "text_sha256": "sha256:1c316871b84a5bbfde904661c08dc49702356dafe2994fcc0beb6fab48543dfa"
+    },
+    {
+      "char_end": 5232,
+      "char_start": 5181,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e0aab2b00caeed3d9d9f",
+      "source_role": "reviewer_report",
+      "text": "## Below are some questions I have for the authors:",
+      "text_sha256": "sha256:3da320f7221d08c9744a765c91e61985187bf8b90d2eabaaff36c2887347f67c"
+    },
+    {
+      "char_end": 5730,
+      "char_start": 5235,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9801be1f9e06a8bd8025",
+      "source_role": "reviewer_report",
+      "text": "(0) What distinguishes the photon detector used in this work from one presented by Y.-F. Chen et al., Phys. Rev. Lett. 107, 217401? From what I could gather, this scheme uses a steady state bias, rather than a pulsed-bias scheme to induce switching into the voltage state, and detects thermal fields from a cavity rather than a resistor. In addition, the circuit parameters may have been optimized to (i) lower dark counts & (ii) detect frequencies more relevant to Axionic Dark Matter searches.",
+      "text_sha256": "sha256:1e54cb413633a86e977f5f744dd8197639a17357dfa7f3ee96ab68391d300876"
+    },
+    {
+      "char_end": 5901,
+      "char_start": 5733,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-84ccd7e582b1e8e5ed89",
+      "source_role": "reviewer_report",
+      "text": "(1) What are the estimated detection efficiencies and dark count rates needed for Axionic Dark Matter searches? Specifically, are the numbers achieved here good enough?",
+      "text_sha256": "sha256:1cd515a58a88d2dc719f45bb38873f9232c98e253f92bf0b8977cfa7f41efba1"
+    },
+    {
+      "char_end": 6159,
+      "char_start": 5904,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a75df20529271437ca98",
+      "source_role": "reviewer_report",
+      "text": "(2) What range of photon frequencies will be used for these searches? Does this detection scheme cover this range? It seems the detection efficiencies reported here are a strong function of the photon frequency, for example, 1% at 9 GHz and 40% at 14 GHz.",
+      "text_sha256": "sha256:8986b3194d719f7ca9c108b919e82d4e89781e8944e47e51914953899c74e3fa"
+    },
+    {
+      "char_end": 6590,
+      "char_start": 6162,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ad998fc0831b5df1b8a9",
+      "source_role": "reviewer_report",
+      "text": "(3) How does the demonstration of super-Poissonian statistics differ from what was demonstrated in the following references: (i) D. Bozyigit et al., Nature Physics 7, 154-158 (2011), (ii) C. Lang et al., Phys. Rev. Lett. 106, 243601 (2011), and (iii) Y.-F. Chen et al., Phys. Rev. Lett. 107, 217401 ? In other words, have these references already demonstrated the super-poissonian statistics of thermal microwave photon sources?",
+      "text_sha256": "sha256:db74c3c8b2c23078fbb87c86d91e25f58548d08bf7b2cd383f522a59b2bfe2d7"
+    },
+    {
+      "char_end": 6927,
+      "char_start": 6593,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b9b7a23f6098914593bf",
+      "source_role": "reviewer_report",
+      "text": "(4) From Fig. 2(b), I estimate a 6-7 dB difference between the tranmission peak of the f_1 and f_2 modes, so crudely a factor of 4 in power. How does this explain the factor of 32 in detection efficiency between these two modes? It appears the coplanar antenna selectivity would have to be responsible for the bulk of the degradation.",
+      "text_sha256": "sha256:3d9b724bdd0b38797acf4f7b0b129dc697c37be6ac792fd169683d2905df30d7"
+    },
+    {
+      "char_end": 7324,
+      "char_start": 6930,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-121831fa8f120a654197",
+      "source_role": "reviewer_report",
+      "text": "(5) How fast does this device need to operate? Are the authors worried that the fundamental detection efficiency will degrade significantly as the photon flux increases? Switching to the voltage state generates quasiparticles, and these quasiparticles will lead to internal damping mechanisms within the detector that absorb thermal quanta before the junction can switch into the voltage state.",
+      "text_sha256": "sha256:07afdf67df6a919e1ae0bf94556a91914ae4aac72d0515ee522793cfebf7268c"
+    },
+    {
+      "char_end": 7610,
+      "char_start": 7327,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-77da5f05c8cc7d4e253f",
+      "source_role": "reviewer_report",
+      "text": "(6) Is the lack of frequency selectivity for this detector desirable for dark matter searches? I would think, naively, that one would require this photon counter to be frequency selective to focus these counts coming from a specific frequency band (corresponding to one cavity mode).",
+      "text_sha256": "sha256:a9f22d3493b034516ab392b67614cec5468f135d3bd20aee65b2a7c649b4f6f7"
+    },
+    {
+      "char_end": 7637,
+      "char_start": 7613,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-905f5f402af8ddf5c2d0",
+      "source_role": "reviewer_report",
+      "text": "## A few minor comments:",
+      "text_sha256": "sha256:cf561f25ce9df89f5eaff97a4acd740b1d9358a150f71a1b1f3d76b7efa82c79"
+    },
+    {
+      "char_end": 7879,
+      "char_start": 7640,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-aad87a13d71d8168e729",
+      "source_role": "reviewer_report",
+      "text": "(a) A circuit diagram in Fig. 2 could help improve clarity, specifically in Fig. 2(c). I struggled to understand the circuit diagram, and these false color images are far less an interesting than an accurate circuit diagram of this device.",
+      "text_sha256": "sha256:b653117f0babf17ab7ba7684da00f1ba407e9955f2d11571851379123779efa6"
+    },
+    {
+      "char_end": 7964,
+      "char_start": 7882,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b1dc9f989ad04469dc42",
+      "source_role": "reviewer_report",
+      "text": "(b) Fig. 2(a) refers to the device as an SPC, the rest of the text call it an SPD.",
+      "text_sha256": "sha256:2c469eaf998a52e98ee33cda739a7c58d20bd0fa4ef95c8bd2360962ad7bc0c2"
+    },
+    {
+      "char_end": 8331,
+      "char_start": 7967,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-64be8922955a618f9a39",
+      "source_role": "reviewer_report",
+      "text": "(c) Consider including error bars from the extracted fit parameters used in the model corresponding to Fig. 3(b). The agreement between data and experiment appears to be excellent, but I imagine there is still covariance between fit parameters that leads to uncertainty in the reported numbers. That is, the detection efficiences eta_1, eta_2, and dark count rate.",
+      "text_sha256": "sha256:9348df71fc68474f98d5848981afae23b05f6f722530ef3c51bcf6af9c6735db"
+    },
+    {
+      "char_end": 8533,
+      "char_start": 8334,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1d914b7d1c5ac6aec653",
+      "source_role": "reviewer_report",
+      "text": "(d) Related to part (c), are the authors confident that heating the cavity doesn't change the dark count rate? In other words, how do you know the SPD is thermally isolated from the heated Cu cavity?",
+      "text_sha256": "sha256:ee1f42188e103c44ced3e7883a7c09a0f7ca0b85d5aa9bfea538bdbfbb3a52e5"
+    },
+    {
+      "char_end": 8828,
+      "char_start": 8536,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e84770d1d48da8143982",
+      "source_role": "reviewer_report",
+      "text": "Overall, I have no major concerns about the scientific accuracy or utility of this work. However, I am struggling to understand if the results presented here are novel enough to warrant publication. Specifically, I would like to hear the authors responses to questions (1) and (3) from above.",
+      "text_sha256": "sha256:7736f83b4db62ec12da2460be5b6499139a4e18de6cbe4c16ffefee14af48382"
+    },
+    {
+      "char_end": 8876,
+      "char_start": 8865,
+      "reviewer_id_hash": "REV-61bdba7965be8859",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e65f78526bd9c6857bd8",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #1",
+      "text_sha256": "sha256:bb5637404007ecf46212c7de9acbdccb2e5e387fa64a4c5dcb56e89b8da6a709"
+    },
+    {
+      "char_end": 8902,
+      "char_start": 8879,
+      "reviewer_id_hash": "REV-61bdba7965be8859",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4ca0b4a59dfc59d2d796",
+      "source_role": "reviewer_report",
+      "text": "(Remarks to the Author)",
+      "text_sha256": "sha256:51e736a6f14e162299ba4783b83b452aaedafe35abd275d495265496d8d006b1"
+    },
+    {
+      "char_end": 9094,
+      "char_start": 8905,
+      "reviewer_id_hash": "REV-61bdba7965be8859",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c44fcc347669ffcb423c",
+      "source_role": "reviewer_report",
+      "text": "The authors have adequately addressed all of the points that were raised. I think this is a useful paper, at least the concept will be further developed based on the successes the reported.",
+      "text_sha256": "sha256:62281ae428bc7d530cd1b4bc4c1542a2f33e7626ee5e408692f9a6661e2083d8"
+    },
+    {
+      "char_end": 9111,
+      "char_start": 9097,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-430371da3a601c2462aa",
+      "source_role": "reviewer_report",
+      "text": "## Reviewer #2",
+      "text_sha256": "sha256:3d0fad378a281670111e784901384937e21f16ac7506c996ce48d04359041744"
+    },
+    {
+      "char_end": 9137,
+      "char_start": 9114,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2c751e22dc76abd70524",
+      "source_role": "reviewer_report",
+      "text": "(Remarks to the Author)",
+      "text_sha256": "sha256:51e736a6f14e162299ba4783b83b452aaedafe35abd275d495265496d8d006b1"
+    },
+    {
+      "char_end": 9444,
+      "char_start": 9140,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a06158e85d569d2d17c9",
+      "source_role": "reviewer_report",
+      "text": "The authors have thoroughly addressed all of my comments and concerns, and have revised the manuscript to improve its quality of presentation. After reading their responses to my initial report along with their revised manuscript, I now recommend this manuscript for publication in Nature Communications.",
+      "text_sha256": "sha256:f699da1fa595e180a04aa81116c34f67e1ea3808f10c85b7a304a0996901cc76"
+    },
+    {
+      "char_end": 9819,
+      "char_start": 9447,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-228541c22bb361a8998f",
+      "source_role": "reviewer_report",
+      "text": "**Open Access** This Peer Review File is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons license, and indicate if changes were made.",
+      "text_sha256": "sha256:9f5503e73ea3fb699da0e8f25b90596ae62506f4f1d25c12131452f2fbe3794e"
+    },
+    {
+      "char_end": 10168,
+      "char_start": 9822,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2abd248afae27cf9cb09",
+      "source_role": "reviewer_report",
+      "text": "In cases where reviewers are anonymous, credit should be given to 'Anonymous Referee' and the source. The images or other third party material in this Peer Review File are included in the article’s Creative Commons license, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons",
+      "text_sha256": "sha256:b7a300cd02d0ea7963ca6fb4099761423d2063f0bef48ddc67b9c64a96296288"
+    },
+    {
+      "char_end": 10425,
+      "char_start": 10171,
+      "reviewer_id_hash": "REV-05337660408e5dac",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-43767ab82462dbc3c811",
+      "source_role": "reviewer_report",
+      "text": "license and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this license, visit https://creativecommons.org/licenses/by/4.0/",
+      "text_sha256": "sha256:cf54d3444868bd2920f133041eaaae46be15360fc4e43376815700557475083b"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

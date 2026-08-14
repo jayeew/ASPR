@@ -1,0 +1,70 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "input_sha256": "sha256:fa36053deba2dfd455a6472d9212165b1ef11edfc28fa7091596aecc1e250f5c",
+  "model_id": "FILL_MODEL_ID",
+  "output_sha256": "FILL_AFTER_HASHING_hash_payload",
+  "package_id": "RSP-214b20388b1edb74b418",
+  "paper_id": "10.1038/s41467-025-67817-y",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "point_id": "FILL_RETAINED_POINT_ID_OR_NULL",
+      "rationale": "FILL",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "FILL_REVIEWER_ID_HASH"
+      ],
+      "reviewer_quote_keys": [
+        "RR:FILL_REVIEWER_QUOTE_KEY"
+      ],
+      "round_ids": [
+        "FILL_ROUND_ID"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "FILL_UNIQUE_TRACE_ID"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "not_discussed",
+      "limiting_points": [],
+      "schema_version": "aspr_gear",
+      "supporting_points": []
+    },
+    "paper_id": "10.1038/s41467-025-67817-y",
+    "questions": [],
+    "schema_version": "aspr_gear",
+    "strengths": [],
+    "summary": {
+      "evidence_keys": [
+        "P:S-FILL"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "FILL"
+    },
+    "weaknesses": []
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [],
+      "final_paper_evidence_keys": [
+        "P:S-FILL"
+      ],
+      "ledger_id": "FILL_UNIQUE_LEDGER_ID",
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "residual_summary": "FILL",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:FILL_REVIEWER_QUOTE_KEY"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

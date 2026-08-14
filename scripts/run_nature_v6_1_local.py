@@ -14,23 +14,23 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from aspr.nature_multihorizon.materialize_v6_1 import (
+from gear.nature_multihorizon.materialize_v6_1 import (
     materialize_reference_overlap_extension,
     materialize_v6_1_dataset,
 )
-from aspr.nature_multihorizon.active_dataset import (  # noqa: E402
+from gear.nature_multihorizon.active_dataset import (  # noqa: E402
     load_active_dataset,
 )
-from aspr.nature_multihorizon.audit_v6_1 import audit_v6_1_dataset
-from aspr.nature_multihorizon.modeling_v6_1 import (
+from gear.nature_multihorizon.audit_v6_1 import audit_v6_1_dataset
+from gear.nature_multihorizon.modeling_v6_1 import (
     freeze_registry_before_oof,
     load_simple_config,
     run_v6_1_experiment,
 )
-from aspr.nature_multihorizon.openalex_controls_v6_1 import (
+from gear.nature_multihorizon.openalex_controls_v6_1 import (
     extract_target_metadata,
 )
-from aspr.nature_multihorizon.screening_v6_1 import (
+from gear.nature_multihorizon.screening_v6_1 import (
     freeze_registry_from_screening,
     run_candidate_screening,
 )

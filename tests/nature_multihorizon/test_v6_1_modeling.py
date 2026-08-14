@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from scipy.stats import spearmanr
 
-from aspr.nature_multihorizon.modeling_v6_1 import (
+from gear.nature_multihorizon.modeling_v6_1 import (
     _rank_group_ids,
     _weighted_rank_correlation,
     explicit_temporal_splits,

@@ -5,7 +5,7 @@ import unittest
 
 from pydantic import ValidationError
 
-from aspr.nature_multihorizon.contracts import (
+from gear.nature_multihorizon.contracts import (
     AUXILIARY_FEATURES,
     CORE_FEATURES,
     CohortSpec,

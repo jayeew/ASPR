@@ -18,7 +18,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from aspr.corpus import normalize_doi, normalize_openalex_id, normalize_title, slugify  # noqa: E402
+from gear.corpus import normalize_doi, normalize_openalex_id, normalize_title, slugify  # noqa: E402
 
 
 DEFAULT_BASE_CORPUS_DIR = (

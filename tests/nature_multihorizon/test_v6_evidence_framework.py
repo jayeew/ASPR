@@ -11,19 +11,19 @@ import pandas as pd
 import pytest
 from pydantic import ValidationError
 
-from aspr.nature_multihorizon.cohorts import build_cohort_membership
-from aspr.nature_multihorizon.contracts import CohortSpec, HorizonSpec
-from aspr.nature_multihorizon.contracts_v6 import (
+from gear.nature_multihorizon.cohorts import build_cohort_membership
+from gear.nature_multihorizon.contracts import CohortSpec, HorizonSpec
+from gear.nature_multihorizon.contracts_v6 import (
     EvidenceValue,
     InfluenceForecast,
     InnovationEvidenceProfile,
 )
-from aspr.nature_multihorizon.evidence_registry import (
+from gear.nature_multihorizon.evidence_registry import (
     PROMOTION_GATE_IDS,
     audit_registry_implementations,
     load_evidence_registry,
 )
-from aspr.nature_multihorizon.features_v6 import (
+from gear.nature_multihorizon.features_v6 import (
     canonical_pair,
     cosine_distance_profiles,
     field_disparity_mean,
@@ -40,8 +40,8 @@ from aspr.nature_multihorizon.features_v6 import (
     uzzi_atypicality_p10,
     uzzi_conventionality_median,
 )
-from aspr.nature_multihorizon.targets import build_diffusion_targets_from_deltas
-from aspr.nature_multihorizon.promotion_v6 import (
+from gear.nature_multihorizon.targets import build_diffusion_targets_from_deltas
+from gear.nature_multihorizon.promotion_v6 import (
     PromotionGateEvidence,
     PromotionStatus,
     build_promotion_report,
@@ -142,7 +142,7 @@ def test_promotion_after_sealed_holdout_inspection_is_rejected() -> None:
 
 
 def load_evidence_registry_from_payload(payload: dict) -> object:
-    from aspr.nature_multihorizon.evidence_registry import EvidenceRegistry
+    from gear.nature_multihorizon.evidence_registry import EvidenceRegistry
 
     return EvidenceRegistry.model_validate(payload)
 

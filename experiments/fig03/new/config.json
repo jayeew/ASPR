@@ -3,7 +3,7 @@
   "figure_version": "fig3-aspr-performance-landscape-v15-uncapped-v2",
   "baseline_svg_sha256": "02646f85c5190fbf9d8cde51c9ae0a364eb89808863fa2a6242410f8a7bd25d1",
   "frozen_panel_sha256": {},
-  "source_dir": "innovation_impact_feature_selection/evidence_derived_v3/experiments/oof_feature_set_comparison_v3/outputs/hgb_uncapped_v2",
+  "calibration_release": "prepublication_graph_v3:d5_fulltext16",
   "model_config": "configs/nature_multihorizon/hgb_uncapped_v2.json",
   "output_dir": "outputs/fig03/new",
   "primary_horizon": 5,

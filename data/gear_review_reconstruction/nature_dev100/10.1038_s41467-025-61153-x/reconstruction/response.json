@@ -1,0 +1,437 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:d56d9f860887b114974f976dd38ef9850e28ea16d0d71465fe48b1b483c70ea6",
+  "input_sha256": "sha256:a9141b7fa2bcc30069c3a3597a15192e88954e14ccf03ea0fdbe1e241b6f8a2f",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:609292f23f4179fa67c6fd75dba19dfabbe4de646130b2222a62af6e77e8e126",
+  "package_id": "RSP-eedb229e482e6404df04",
+  "paper_id": "10.1038/s41467-025-61153-x",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-61153-x",
+      "point_id": "NOV-01",
+      "rationale": "The reviewer characterized the work as a comprehensive immune-correlate analysis in a large mRNA-RSV efficacy trial; the final paper describes the multi-marker Day 29 CoR/CoP and mediation framework.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-d09a33c00a4981ba"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-df916a1fa2470b3771f1"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TRACE-NOV-01"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-61153-x",
+      "point_id": "NOV-02",
+      "rationale": "The reviewer explicitly situated the analysis alongside prior COVID-19 mRNA-vaccine correlate analyses; the final reference list documents that prior body of work, limiting claims of methodological novelty.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-d09a33c00a4981ba"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-df916a1fa2470b3771f1"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TRACE-NOV-02"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-61153-x",
+      "point_id": "STR-01",
+      "rationale": "The reviewer identified a comprehensive analysis of a very large trial. The final paper documents the randomized phase 3 cohort and the prespecified immune-correlate analysis.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-d09a33c00a4981ba"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-df916a1fa2470b3771f1"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TRACE-STR-01"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-61153-x",
+      "point_id": "STR-02",
+      "rationale": "The reviewer noted that four antibody assays were evaluated. The final paper compares RSV-A and RSV-B neutralization with preF and postF IgG markers across the study endpoints.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-d85da4a49b80c34b"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-4fb28f49cf2b3c4fe25a"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TRACE-STR-02"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-6c84e90a2e456cb2cfe6",
+        "RR:SRC-R-f426b906f2817d238cfa"
+      ],
+      "paper_id": "10.1038/s41467-025-61153-x",
+      "point_id": "WEAK-01",
+      "rationale": "The reviewer requested interpretation of overlap between cases and non-cases and whether a high-protection cutoff exists. The response added discussion, but the final paper still states that high-marker vaccine cases occur and cannot attain very low risk.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-d09a33c00a4981ba"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-141f79a5c8965a3669c0"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TRACE-WEAK-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-fec870ed37cdc2df057c"
+      ],
+      "paper_id": "10.1038/s41467-025-61153-x",
+      "point_id": "WEAK-02",
+      "rationale": "The reviewer requested main-text visualization of postF IgG's weaker surrogate performance. The response retained that finding in the supplement; the final text likewise refers to postF's limited mediation in a supplementary figure.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-d09a33c00a4981ba"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a944acfef497a58878ed"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TRACE-WEAK-02"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-04181101b643298a9127",
+        "RR:SRC-R-cd90a53e2722d9eda757"
+      ],
+      "paper_id": "10.1038/s41467-025-61153-x",
+      "point_id": "WEAK-03",
+      "rationale": "The reviewer asked for assay-validation citation and confirmation that the measured signal was IgG rather than total immunoglobulin. The final methods clarify IgG-specific detection, but the cited final span provides no validation reference.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-d09a33c00a4981ba"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a081c3c32307c52677ce"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TRACE-WEAK-03"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-6c84e90a2e456cb2cfe6",
+        "RR:SRC-R-f426b906f2817d238cfa"
+      ],
+      "paper_id": "10.1038/s41467-025-61153-x",
+      "point_id": "Q-01",
+      "rationale": "The reviewer asked whether an antibody cutoff could serve as a development target. The final paper explicitly reports residual risk among participants with high nAb or preF-IgG values.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-d09a33c00a4981ba"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-141f79a5c8965a3669c0"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TRACE-Q-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-5e748b631068a5b58bc4",
+        "RR:SRC-R-212c85793055e54cbe6f"
+      ],
+      "paper_id": "10.1038/s41467-025-61153-x",
+      "point_id": "Q-02",
+      "rationale": "The reviewer sought fuller interpretation of the positive fold-rise association. The final discussion still states that this association is difficult to interpret and that fold-rise cannot be assessed as a CoP using the reported design.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-d09a33c00a4981ba"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-994b556f5057683dd1b6"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TRACE-Q-02"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-9a8c4044eb9ba825752c",
+        "RR:SRC-R-1f4525f2eb6c0da1a901"
+      ],
+      "paper_id": "10.1038/s41467-025-61153-x",
+      "point_id": "Q-03",
+      "rationale": "The reviewer requested discussion of the F-only vaccine scope and possible additional correlates for other platforms. The final paper acknowledges that high-marker cases and low-marker non-cases imply additional protective markers may exist.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-d09a33c00a4981ba"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-b7338f4574d1893b2e08"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TRACE-Q-03"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-5b8e3e6d6861cfe62e2f"
+      ],
+      "paper_id": "10.1038/s41467-025-61153-x",
+      "point_id": null,
+      "rationale": "The response states that the Figure S23 legend was clarified, but the final-paper spans supplied in this package do not permit independent verification of the supplementary figure.",
+      "resolution_status": "unverifiable",
+      "reviewer_id_hashes": [
+        "REV-d85da4a49b80c34b"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-2063d621f3dadb6ef861"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TRACE-AUDIT-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-01fbd3504f5afb850b2f"
+      ],
+      "paper_id": "10.1038/s41467-025-61153-x",
+      "point_id": null,
+      "rationale": "The requested treatment-by-marker interaction reporting is present in the final methods, resolving the requested clarification.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-d85da4a49b80c34b"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-99c4eb40c8c07ae35110"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TRACE-AUDIT-02"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-a34f8ba4e912d54e8218"
+          ],
+          "external_verification_required": true,
+          "point_id": "NOV-02",
+          "schema_version": "aspr_gear",
+          "severity": "minor",
+          "suggested_action": "Position the contribution as an RSV-specific application and validation of established immune-correlate approaches, with a direct comparison to prior mRNA-vaccine analyses.",
+          "text": "The analytical framing is related to prior COVID-19 mRNA-vaccine immune-correlate analyses, so the methodological advance should not be overstated."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-c2223804f452c4edbe94",
+            "P:S-2bbc91977fadeb3b3724"
+          ],
+          "external_verification_required": true,
+          "point_id": "NOV-01",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "State the contribution as applying complementary Day 29 CoR/CoP, mediation, baseline, and fold-rise analyses to the mRNA-1345 phase 3 efficacy trial.",
+          "text": "The study brings a broad, endpoint-spanning immune-correlate analysis of mRNA-1345, combining Day 29 marker, baseline, fold-rise, and mediation analyses."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-025-61153-x",
+    "questions": [
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-018b6621d736db5e5c92"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-01",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Define whether any marker threshold can support an individual-level or development decision, and quantify the residual risk above it.",
+        "text": "What antibody threshold, if any, has sufficiently bounded residual RSV risk to serve as a decision-relevant protection target?"
+      },
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-506e41f42d53487e4e84"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-02",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Specify an analysis or study design that can distinguish the fold-rise association from baseline-marker confounding and assess fold-rise as a potential CoP.",
+        "text": "How can the positive fold-rise association be disentangled from its relation to baseline antibody level and evaluated as a protection marker?"
+      },
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-018b6621d736db5e5c92"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-03",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Test whether correlates beyond F-directed antibodies improve prediction in vaccines presenting additional RSV antigens or using other platforms.",
+        "text": "To what extent do these F-directed correlates generalize to vaccine platforms that elicit responses to additional RSV antigens?"
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-2bbc91977fadeb3b3724",
+          "P:S-bab56131795ebf363f27"
+        ],
+        "external_verification_required": false,
+        "point_id": "STR-01",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Retain the clear linkage between the randomized efficacy trial, the case-cohort design, and the weighted correlate analyses.",
+        "text": "The analysis is grounded in a large randomized phase 3 trial and uses a prespecified, inverse-probability-weighted case-cohort framework."
+      },
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-c2223804f452c4edbe94",
+          "P:S-573b638ba2a07d6e122c"
+        ],
+        "external_verification_required": false,
+        "point_id": "STR-02",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Keep the four-marker comparison and the contrast between Day 29, baseline, and fold-rise findings central to the presentation.",
+        "text": "Evaluating RSV-A and RSV-B neutralization together with preF and postF IgG across multiple endpoints distinguishes markers with more consistent CoR/CoP evidence from postF IgG."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-a80439ecd576a24d2574",
+        "P:S-c2223804f452c4edbe94",
+        "P:S-992dd058834d3d2c3e3f",
+        "P:S-263914a554c27dc8e1e9"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "This phase 3 mRNA-1345 immune-correlate analysis evaluates Day 29, baseline, and fold-rise RSV antibody markers against RSV clinical endpoints. It reports consistent inverse associations and substantial mediated vaccine efficacy for Day 29 RSV neutralizing antibodies and preF IgG, while recognizing that marker correlations do not yield a fully deterministic protection threshold and that endpoint-wise analyses have statistical limitations."
+    },
+    "weaknesses": [
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-018b6621d736db5e5c92"
+        ],
+        "external_verification_required": false,
+        "point_id": "WEAK-01",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Calibrate the CoP conclusion to residual risk at high marker values and avoid implying a protective cutoff that the data do not establish.",
+        "text": "High Day 29 nAb or preF-IgG levels do not eliminate RSV risk, so the reported correlations do not yet establish a deterministic or individually predictive correlate of protection."
+      },
+      {
+        "aspect": "presentation_reproducibility",
+        "evidence_keys": [
+          "P:S-5062ddb51079b120a13b",
+          "P:S-573b638ba2a07d6e122c"
+        ],
+        "external_verification_required": false,
+        "point_id": "WEAK-02",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Include a compact main-text visualization of postF IgG alongside the stronger markers, or explicitly justify why the supporting contrast remains supplementary.",
+        "text": "The weaker and less consistent postF-IgG result remains primarily supported by supplementary analyses, reducing the visibility of an important negative comparator."
+      },
+      {
+        "aspect": "presentation_reproducibility",
+        "evidence_keys": [
+          "P:S-4e4d9da19509ff6b174e"
+        ],
+        "external_verification_required": false,
+        "point_id": "WEAK-03",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Add a direct assay-validation citation or a precise reference to the validation documentation while retaining the IgG-specific detection description.",
+        "text": "The methods now describe IgG-specific detection, but the final assay description does not itself provide a validation citation or an immediately accessible validation reference."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-5b8e3e6d6861cfe62e2f"
+      ],
+      "final_paper_evidence_keys": [],
+      "ledger_id": "LEDGER-01",
+      "paper_id": "10.1038/s41467-025-61153-x",
+      "residual_summary": "Supplementary Figure S23 is not independently represented in the final-paper spans supplied for this session.",
+      "resolution_status": "unverifiable",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-2063d621f3dadb6ef861"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-01fbd3504f5afb850b2f"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-04941c0a9935a58385e3"
+      ],
+      "ledger_id": "LEDGER-02",
+      "paper_id": "10.1038/s41467-025-61153-x",
+      "residual_summary": "The final methods report treatment-by-marker interaction effects, addressing the requested Prentice-criterion detail.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-99c4eb40c8c07ae35110"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from aspr.nature_multihorizon.sealed_v6 import (
+from gear.nature_multihorizon.sealed_v6 import (
     SEALED_OUTCOME_COLUMNS,
     assemble_locked_sealed_features,
 )

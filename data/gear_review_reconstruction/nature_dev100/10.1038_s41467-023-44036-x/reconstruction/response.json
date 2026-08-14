@@ -1,0 +1,790 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:f0c035b6a59135bdcfd4f0a8f555fb6c3eec040bf29bc1784798b1b7175cd957",
+  "input_sha256": "sha256:3bdc9d21f58e96971c652a61aad7c837b556102c8f49ce45ebdcfc4b00e5b5c2",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:179c41381b0247d8a0b46d18b089044d1e723bafb85dec0f8bfc5b88ac89e16e",
+  "package_id": "RSP-c84d527a73140900d4a1",
+  "paper_id": "10.1038/s41467-023-44036-x",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "point_id": "N-CHARGE-PROFILE-DESIGN",
+      "rationale": "Reviewer reports identify charge-profile tailoring and the giant bilayer contrast as the specific contribution; the final paper retains the stated LSMO dual role.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-8ac915a6af1e3407",
+        "REV-25f079e88867f77f"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e57bb22296c0d88a6406",
+        "RR:SRC-R-0f35c33536daa988190e"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-CHARGE-PROFILE-DESIGN"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-18d3b8a4f4e1d6d97ba7"
+      ],
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "point_id": "N-MOTT-FRAMING-LIMIT",
+      "rationale": "Reviewer 3 repeated the conceptual objection in round 2. The final paper provides indirect and theoretical support but does not directly establish the disputed state classification.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-daf20108a763ca6a"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-559b87708fac8e529235",
+        "RR:SRC-R-8dec9e4689a9d7d6790e"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-MOTT-FRAMING-LIMIT"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "point_id": "S-THICKNESS-SERIES",
+      "rationale": "The reviewer identified the extensive nickelate and LSMO thickness study; the final paper contains the corresponding thickness-dependent switching data.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-daf20108a763ca6a"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-6221174931e61441c4c1"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-S-THICKNESS-SERIES"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "point_id": "S-ROOM-TEMPERATURE-PERFORMANCE",
+      "rationale": "The reports identify the room-temperature resistance contrast and bilayer enhancement as the central quantitative result; the final paper reports the corresponding values.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-8ac915a6af1e3407",
+        "REV-25f079e88867f77f"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e57bb22296c0d88a6406",
+        "RR:SRC-R-0f35c33536daa988190e"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-S-ROOM-TEMPERATURE-PERFORMANCE"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "point_id": "S-COMPETING-CHARGE-ROLES",
+      "rationale": "The reports discuss charge-profile control and the LSMO role; the final paper specifies the competing screening, carrier-density, and shunting mechanisms.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-8ac915a6af1e3407",
+        "REV-daf20108a763ca6a"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e57bb22296c0d88a6406",
+        "RR:SRC-R-7d62aa8fe7e6ba36bbd8"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-S-COMPETING-CHARGE-ROLES"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-18d3b8a4f4e1d6d97ba7"
+      ],
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "point_id": "W-MOTT-STATE-EVIDENCE",
+      "rationale": "The reviewer states that the ultrathin LaNiO3 Mott state has not been demonstrated. The final paper relies on a theoretical surface-layer prediction and does not add a direct state measurement.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-daf20108a763ca6a"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-559b87708fac8e529235"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W-MOTT-STATE-EVIDENCE"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-18d3b8a4f4e1d6d97ba7"
+      ],
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "point_id": "Q-CARRIER-DENSITY-VS-UW",
+      "rationale": "The reviewer explicitly distinguishes carrier-density tuning from U/W tuning. The final paper describes carrier-density-driven switching but does not directly resolve the requested mechanistic distinction for the bilayer result.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-daf20108a763ca6a"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8dec9e4689a9d7d6790e"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q-CARRIER-DENSITY-VS-UW"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-8c11fab091c4a0a36507",
+        "RR:SRC-R-009be0f2073363cd08c9"
+      ],
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "point_id": null,
+      "rationale": "The response added state-resolved relaxation data and discussion; the final paper reports the requested time dependence.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-8ac915a6af1e3407"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-6b7cd0d49606043ce6d2"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUDIT-RELAXATION"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-41aef39d939216e4379f",
+        "RR:SRC-R-621e47887842a3b9fa92"
+      ],
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "point_id": null,
+      "rationale": "The response addressed the capping-layer confound and the final paper discusses PZT-induced conductivity suppression.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-8ac915a6af1e3407"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-047ecaac6af94fa6e82a"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUDIT-CAPPING"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f91fd50091c68614e28d",
+        "RR:SRC-R-86003a9904eb42cf6f72"
+      ],
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "point_id": null,
+      "rationale": "The response added comparison with prior charge-transfer measurements and Mn EELS analysis; the final paper includes both contextual comparison and interfacial EELS evidence.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-8ac915a6af1e3407",
+        "REV-25f079e88867f77f"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-75031c82b9ee4e517135",
+        "RR:SRC-R-2230e175d84f62e57a10"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUDIT-CHARGE-TRANSFER-VALIDATION"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-a2c8e06178263381af5e",
+        "RR:SRC-R-3cd177742f6cea937066",
+        "RR:SRC-R-18094bf09ea27ccf592e"
+      ],
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "point_id": null,
+      "rationale": "The response changed the title, revised the abstract wording, and reported a presentation revision; the final paper reflects the revised title and abstract.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-25f079e88867f77f"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-6f043b4bbc4f010f2708",
+        "RR:SRC-R-265ef96f18de278e06d4",
+        "RR:SRC-R-8d6725f50c678004b94c"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUDIT-COMMUNICATION"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-c64b9a5e7aeb2914a4e4",
+        "RR:SRC-R-1c0cabfbfad7f655202e"
+      ],
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "point_id": null,
+      "rationale": "The response states that the supplementary figure and caption were clarified, but the relevant supplementary figure is not available in the final PaperIR spans.",
+      "resolution_status": "unverifiable",
+      "reviewer_id_hashes": [
+        "REV-25f079e88867f77f"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-fc8e9e10c88cdeb1ff3b"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUDIT-FIGURE-ANNOTATION"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-80290677c654ac1a1106"
+      ],
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "point_id": null,
+      "rationale": "The response supplied a fabrication workflow and the final paper documents the device fabrication route and points to Supplementary Note 2.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-25f079e88867f77f"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-0895facaf17b221fb21e"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUDIT-FABRICATION"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-9f46593851db6e3df659",
+        "RR:SRC-R-826bba8f4f6d8d6899e0"
+      ],
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "point_id": null,
+      "rationale": "The final paper gives the device-size range, but the PaperIR spans do not provide device-size-dependent switching data.",
+      "resolution_status": "unverifiable",
+      "reviewer_id_hashes": [
+        "REV-25f079e88867f77f"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d070e8e4121af76c1c60"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUDIT-SIZE-SCALING"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-82896f2ec41ae12ff581"
+      ],
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "point_id": null,
+      "rationale": "The response identified LaAlO3 as the substrate, and the final Fig. 2 caption specifies that substrate.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-25f079e88867f77f"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c5cfa64d10c12b607a4c"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUDIT-SUBSTRATE"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-bff794fb6d4ce3ab0582",
+        "RR:SRC-R-7e806247b30ddcb78686"
+      ],
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "point_id": null,
+      "rationale": "The response added Hall and polarization measurements; the final paper reports the polarization-state carrier densities and remnant-polarization estimate.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-25f079e88867f77f",
+        "REV-daf20108a763ca6a"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-b6262345d9fd512a1260",
+        "RR:SRC-R-9125ece679fd0a18c9da"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUDIT-HALL-POLARIZATION"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-7630eb56a6f96740d290",
+        "RR:SRC-R-87f1c31473178268a5f8"
+      ],
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "point_id": null,
+      "rationale": "The response added retention and cycling characterization for the bilayer device; the final paper reports the relaxation and cycling results.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-25f079e88867f77f"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-f277fd076f0821837506"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUDIT-RETENTION-CYCLING"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-0ec8cec66f125de8e379"
+      ],
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "point_id": null,
+      "rationale": "The response supplied a standalone 2-uc LSMO sheet resistance, and the final paper includes the corresponding value.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-daf20108a763ca6a"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-da92b92374ee6f06e137"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUDIT-LSMO-RESISTANCE"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-e58fb577f105c278f9dd"
+      ],
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "point_id": null,
+      "rationale": "The response states that the structural distinction was added to Supplementary Note 1, which is not available as a final PaperIR span.",
+      "resolution_status": "unverifiable",
+      "reviewer_id_hashes": [
+        "REV-daf20108a763ca6a"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-bee03c46ff17dd1751cc"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUDIT-CRYSTAL-STRUCTURE"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-b2907a7dd2aac637b6c2"
+      ],
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "point_id": null,
+      "rationale": "The response states that the spelling was corrected, and the final paper uses the corrected term.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-8ac915a6af1e3407"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a1d812ba09bc8bf76ed9"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUDIT-TYPO"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-c6281c994fb374eae7cd",
+            "P:S-f7712414f87ee945cd31"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-MOTT-FRAMING-LIMIT",
+          "schema_version": "aspr_gear",
+          "severity": "major",
+          "suggested_action": "Distinguish the device-performance advance from a claim that the ultrathin nickelate channel is a directly demonstrated Mott insulator.",
+          "text": "The advance is limited by an unresolved Mott-transistor framing: the reviewer continued to question whether the ultrathin nickelate channel is demonstrated to be Mott insulating and whether that classification is required for the claimed mechanism."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-98f63936b71d18ab57d3",
+            "P:S-04f81cf1da0cec85d4be"
+          ],
+          "external_verification_required": false,
+          "point_id": "N-CHARGE-PROFILE-DESIGN",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "None.",
+          "text": "The specific advance is the composite-channel design in which LSMO tailors the RNiO3 charge profile while contributing screening, rather than relying only on single-layer channel optimization."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-023-44036-x",
+    "questions": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-adc3ded1943e4b8bed41",
+          "P:S-29f7de3af29957f874ae"
+        ],
+        "external_verification_required": true,
+        "point_id": "Q-CARRIER-DENSITY-VS-UW",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "State the experimental signature that separates carrier-density tuning from a correlation-energy-driven interpretation.",
+        "text": "What direct evidence establishes that the large bilayer switching follows carrier-density tuning near the metal-insulator transition, rather than a change in U/W or an unspecified starting channel state?"
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-fdff0013a5b44bc3636d",
+          "P:S-8d38c53b6148a3901a69"
+        ],
+        "external_verification_required": false,
+        "point_id": "S-THICKNESS-SERIES",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "None.",
+        "text": "The study systematically compares single-layer and bilayer RNiO3/LSMO channels over layer thickness, tying the largest response to a defined thickness regime near the dead-layer limit."
+      },
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-3cb619b24c3ebbc872d2",
+          "P:S-8d38c53b6148a3901a69"
+        ],
+        "external_verification_required": false,
+        "point_id": "S-ROOM-TEMPERATURE-PERFORMANCE",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "None.",
+        "text": "The reported room-temperature composite-channel performance is quantitatively specified and compared with single-layer devices, including Roff/Ron of 385.4 and Delta R/Ron of 38,440%."
+      },
+      {
+        "aspect": "contribution",
+        "evidence_keys": [
+          "P:S-04f81cf1da0cec85d4be",
+          "P:S-48593e28634fe6397292"
+        ],
+        "external_verification_required": false,
+        "point_id": "S-COMPETING-CHARGE-ROLES",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "None.",
+        "text": "The device argument explicitly treats carrier-density reduction, depolarization screening, and parallel conduction as competing effects, providing a material-design rationale for the bilayer response."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-98f63936b71d18ab57d3",
+        "P:S-3cb619b24c3ebbc872d2",
+        "P:S-f7712414f87ee945cd31",
+        "P:S-adc3ded1943e4b8bed41"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "The review record identifies a PZT-gated RNiO3/LSMO composite channel as the central contribution: interfacial charge-transfer and screening design is used to raise room-temperature nonvolatile resistance switching beyond single-layer channels. The final paper reports a geometry-dependent maximum for LNO(2.5)/LSMO(2), with Delta R/Ron of 38,440% and Roff/Ron of 385.4. A focused conceptual concern remains over describing the ultrathin-nickelate devices as Mott transistors without direct evidence for the proposed Mott-insulating channel state and carrier-density-tuning mechanism."
+    },
+    "weaknesses": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-c6281c994fb374eae7cd",
+          "P:S-f7712414f87ee945cd31"
+        ],
+        "external_verification_required": true,
+        "point_id": "W-MOTT-STATE-EVIDENCE",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Provide direct state-sensitive evidence, or narrow the Mott-insulator framing for ultrathin LaNiO3.",
+        "text": "The Mott-insulating state of ultrathin LaNiO3 is not directly demonstrated: the final text describes LaNiO3 as a correlated metal and cites theoretical work for an orbital-specific insulating surface layer."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-18d3b8a4f4e1d6d97ba7"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-c6281c994fb374eae7cd",
+        "P:S-f7712414f87ee945cd31",
+        "P:S-adc3ded1943e4b8bed41"
+      ],
+      "ledger_id": "L-MOTT-FRAMING",
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "residual_summary": "Direct evidence for the Mott-state classification and a clear separation of carrier-density tuning from a U/W interpretation remain absent.",
+      "resolution_status": "persists",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-559b87708fac8e529235",
+        "RR:SRC-R-8dec9e4689a9d7d6790e"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-8c11fab091c4a0a36507",
+        "RR:SRC-R-009be0f2073363cd08c9"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-e8bdb7837b914749f20e"
+      ],
+      "ledger_id": "L-RELAXATION",
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "residual_summary": "State-dependent relaxation data are included; audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-6b7cd0d49606043ce6d2"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-41aef39d939216e4379f",
+        "RR:SRC-R-621e47887842a3b9fa92"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-0e9fdd723b3fb7cc45f8"
+      ],
+      "ledger_id": "L-CAPPING",
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "residual_summary": "Capping-layer effects are discussed; audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-047ecaac6af94fa6e82a"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f91fd50091c68614e28d",
+        "RR:SRC-R-86003a9904eb42cf6f72"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-296ad2234e1e061b325a",
+        "P:S-cd47426cac2f3510fe29"
+      ],
+      "ledger_id": "L-CHARGE-TRANSFER-VALIDATION",
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "residual_summary": "Prior-art comparison and Mn EELS evidence are included; audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-75031c82b9ee4e517135",
+        "RR:SRC-R-2230e175d84f62e57a10"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-a2c8e06178263381af5e",
+        "RR:SRC-R-3cd177742f6cea937066",
+        "RR:SRC-R-18094bf09ea27ccf592e"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-98f63936b71d18ab57d3"
+      ],
+      "ledger_id": "L-COMMUNICATION",
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "residual_summary": "Title, abstract wording, and presentation edits are reflected in the final paper; audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-6f043b4bbc4f010f2708",
+        "RR:SRC-R-265ef96f18de278e06d4",
+        "RR:SRC-R-8d6725f50c678004b94c"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-c64b9a5e7aeb2914a4e4",
+        "RR:SRC-R-1c0cabfbfad7f655202e"
+      ],
+      "final_paper_evidence_keys": [],
+      "ledger_id": "L-FIGURE-ANNOTATION",
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "residual_summary": "The relevant supplementary figure is unavailable in final PaperIR; audit-only.",
+      "resolution_status": "unverifiable",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-fc8e9e10c88cdeb1ff3b"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-80290677c654ac1a1106"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-18be38a4064410515384"
+      ],
+      "ledger_id": "L-FABRICATION",
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "residual_summary": "Fabrication details and a supplementary workflow were supplied; audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-0895facaf17b221fb21e"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-9f46593851db6e3df659",
+        "RR:SRC-R-826bba8f4f6d8d6899e0"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-18be38a4064410515384"
+      ],
+      "ledger_id": "L-SIZE-SCALING",
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "residual_summary": "The final PaperIR states the size range but does not contain size-dependent switching results; audit-only.",
+      "resolution_status": "unverifiable",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d070e8e4121af76c1c60"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-82896f2ec41ae12ff581"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-32bf231e1deaafd4388e"
+      ],
+      "ledger_id": "L-SUBSTRATE",
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "residual_summary": "The Fig. 2 substrate is specified; audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c5cfa64d10c12b607a4c"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-bff794fb6d4ce3ab0582",
+        "RR:SRC-R-7e806247b30ddcb78686"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-617a72ad08679abe939c",
+        "P:S-0e9fdd723b3fb7cc45f8"
+      ],
+      "ledger_id": "L-HALL-POLARIZATION",
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "residual_summary": "Hall and remnant-polarization measurements are included; audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-b6262345d9fd512a1260",
+        "RR:SRC-R-9125ece679fd0a18c9da"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-7630eb56a6f96740d290",
+        "RR:SRC-R-87f1c31473178268a5f8"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-e8bdb7837b914749f20e",
+        "P:S-59df5aa6a33fbfc64eed"
+      ],
+      "ledger_id": "L-RETENTION-CYCLING",
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "residual_summary": "Retention and cycling results for the bilayer device are included; audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-f277fd076f0821837506"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-0ec8cec66f125de8e379"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-e8bdb7837b914749f20e"
+      ],
+      "ledger_id": "L-LSMO-RESISTANCE",
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "residual_summary": "The standalone ultrathin-LSMO resistance is stated; audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-da92b92374ee6f06e137"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-e58fb577f105c278f9dd"
+      ],
+      "final_paper_evidence_keys": [],
+      "ledger_id": "L-CRYSTAL-STRUCTURE",
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "residual_summary": "The stated supplementary structural discussion is unavailable in final PaperIR; audit-only.",
+      "resolution_status": "unverifiable",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-bee03c46ff17dd1751cc"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-b2907a7dd2aac637b6c2"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-296ad2234e1e061b325a"
+      ],
+      "ledger_id": "L-TYPO",
+      "paper_id": "10.1038/s41467-023-44036-x",
+      "residual_summary": "The spelling correction is reflected in the final paper; audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a1d812ba09bc8bf76ed9"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

@@ -18,7 +18,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[4]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from aspr.nature_multihorizon.source_audit_v6 import sha256_file  # noqa: E402
+from gear.nature_multihorizon.source_audit_v6 import sha256_file  # noqa: E402
 from experiments.common.old.v6_1_figures_r1.analysis import (  # noqa: E402
     ANGLE_ORDER,
     ANGLE_SHORT,

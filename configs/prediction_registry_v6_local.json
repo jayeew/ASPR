@@ -202,7 +202,7 @@
       "missingness_rule": "Failed, absent, or window-capped retrieval is missing, never zero.",
       "fold_rule": "No learned transform; class weighting and calibration are training-fold only.",
       "quality_rules": [{"rule_id": "Q_FETCH_SUCCESS", "field": "future_fetch_success_rate", "operator": "ge", "threshold": 0.99, "provenance": "Frozen v6 source-quality gate."}],
-      "implementation_name": "aspr.nature_multihorizon.targets.build_diffusion_targets_from_deltas",
+      "implementation_name": "gear.nature_multihorizon.targets.build_diffusion_targets_from_deltas",
       "admission_checks": {"V1": true, "V2": true, "V3": true, "V4": true, "V5": true, "V6": true, "V7": true, "V8": true, "V9": true, "V10": true},
       "disposition_reason": "Primary first-stage outcome in the preregistered two-part model.",
       "future_information_allowed": true
@@ -226,7 +226,7 @@
       "missingness_rule": "Failed or capped retrieval remains null.",
       "fold_rule": "Used descriptively and in sensitivity models; any scaling is training-fold only.",
       "quality_rules": [{"rule_id": "Q_FETCH_SUCCESS", "field": "future_fetch_success_rate", "operator": "ge", "threshold": 0.99, "provenance": "Frozen v6 source-quality gate."}],
-      "implementation_name": "aspr.nature_multihorizon.targets.build_diffusion_targets_from_deltas",
+      "implementation_name": "gear.nature_multihorizon.targets.build_diffusion_targets_from_deltas",
       "admission_checks": {"V1": true, "V2": true, "V3": true, "V4": true, "V5": true, "V6": true, "V7": true, "V8": true, "V9": true, "V10": true},
       "disposition_reason": "Descriptive and sensitivity outcome; not the innovation label or primary conditional diffusion estimand.",
       "future_information_allowed": true
@@ -250,7 +250,7 @@
       "missingness_rule": "Any failed retrieval or taxonomy coverage below 0.80 is null for the conditional outcome.",
       "fold_rule": "Component rank references, target transforms, tuning, and calibration are training-fold only.",
       "quality_rules": [{"rule_id": "Q_TAXONOMY_COVERAGE", "field": "minimum_future_taxonomy_coverage", "operator": "ge", "threshold": 0.8, "provenance": "Frozen per-paper v6 target rule; sensitivity at 0.9."}],
-      "implementation_name": "aspr.nature_multihorizon.targets_v6.FoldLocalDiffusionTargetTransformer",
+      "implementation_name": "gear.nature_multihorizon.targets_v6.FoldLocalDiffusionTargetTransformer",
       "admission_checks": {"V1": true, "V2": true, "V3": true, "V4": true, "V5": true, "V6": true, "V7": true, "V8": true, "V9": true, "V10": true},
       "disposition_reason": "Primary positive-uptake diffusion estimand; exact equal weights are transparently project-defined.",
       "future_information_allowed": true
@@ -274,7 +274,7 @@
       "missingness_rule": "Failed retrieval or absent taxonomy for positive citers is null.",
       "fold_rule": "Log transform and ranking are training-fold only when used in a model target.",
       "quality_rules": [{"rule_id": "Q_FIELD_COVERAGE", "field": "future_field_coverage", "operator": "ge", "threshold": 0.8, "provenance": "Frozen per-paper taxonomy gate."}],
-      "implementation_name": "aspr.nature_multihorizon.targets.build_diffusion_targets_from_deltas",
+      "implementation_name": "gear.nature_multihorizon.targets.build_diffusion_targets_from_deltas",
       "admission_checks": {"V1": true, "V2": true, "V3": true, "V4": true, "V5": true, "V6": true, "V7": true, "V8": true, "V9": true, "V10": true},
       "disposition_reason": "Visible component of the primary diffusion estimand.",
       "future_information_allowed": true
@@ -298,7 +298,7 @@
       "missingness_rule": "Failed retrieval or inadequate positive-citer taxonomy is null.",
       "fold_rule": "Ranking is training-fold only when used in a model target.",
       "quality_rules": [{"rule_id": "Q_TOPIC_COVERAGE", "field": "future_topic_coverage", "operator": "ge", "threshold": 0.8, "provenance": "Frozen per-paper taxonomy gate."}],
-      "implementation_name": "aspr.nature_multihorizon.targets.build_diffusion_targets_from_deltas",
+      "implementation_name": "gear.nature_multihorizon.targets.build_diffusion_targets_from_deltas",
       "admission_checks": {"V1": true, "V2": true, "V3": true, "V4": true, "V5": true, "V6": true, "V7": true, "V8": true, "V9": true, "V10": true},
       "disposition_reason": "Visible evenness component; algebraic variants are not added as independent targets.",
       "future_information_allowed": true
@@ -322,7 +322,7 @@
       "missingness_rule": "Failed retrieval, capped windows, or insufficient future-citer reference coverage is null.",
       "fold_rule": "Component ranks are training-fold only for predictive sensitivity; full-subset ranks are descriptive.",
       "quality_rules": [{"rule_id": "Q_STRUCTURAL_COVERAGE", "field": "future_citer_reference_coverage", "operator": "ge", "threshold": 0.8, "provenance": "Frozen structural-subset gate."}],
-      "implementation_name": "aspr.nature_multihorizon.targets.build_structural_targets",
+      "implementation_name": "gear.nature_multihorizon.targets.build_structural_targets",
       "admission_checks": {"V1": true, "V2": true, "V3": true, "V4": true, "V5": true, "V6": true, "V7": true, "V8": true, "V9": true, "V10": true},
       "disposition_reason": "Conditional secondary outcome because the exact graph composite is project-defined and available only on a prelocked subset.",
       "future_information_allowed": true
@@ -346,7 +346,7 @@
       "missingness_rule": "Missing publication year excludes the row before outcome inspection.",
       "fold_rule": "Encoding or spline knots are fitted on training folds only.",
       "quality_rules": [{"rule_id": "Q_YEAR_COMPLETE", "field": "publication_year_coverage", "operator": "eq", "threshold": 1, "provenance": "Target-corpus identity requirement."}],
-      "implementation_name": "aspr.nature_multihorizon.prediction_features_v6.build_registered_control_features",
+      "implementation_name": "gear.nature_multihorizon.prediction_features_v6.build_registered_control_features",
       "admission_checks": {"V1": true, "V2": true, "V3": true, "V4": true, "V5": true, "V6": true, "V7": true, "V8": true, "V9": true, "V10": true},
       "disposition_reason": "Mandatory exposure control; never an innovation indicator."
     },
@@ -369,7 +369,7 @@
       "missingness_rule": "Unmapped is an explicit category and is excluded from 12-domain macro only by the preregistered taxonomy rule, never by outcome.",
       "fold_rule": "Categorical encoding is fitted on training folds; unseen labels map to an explicit unknown level.",
       "quality_rules": [{"rule_id": "Q_DOMAIN_COVERAGE", "field": "domain12_mapping_coverage", "operator": "ge", "threshold": 0.95, "provenance": "Frozen v6 source-quality gate."}],
-      "implementation_name": "aspr.nature_multihorizon.prediction_features_v6.build_registered_control_features",
+      "implementation_name": "gear.nature_multihorizon.prediction_features_v6.build_registered_control_features",
       "admission_checks": {"V1": true, "V2": true, "V3": true, "V4": true, "V5": true, "V6": true, "V7": true, "V8": true, "V9": true, "V10": true},
       "disposition_reason": "Mandatory field-opportunity control and reporting stratum."
     },
@@ -392,7 +392,7 @@
       "missingness_rule": "Missing venue maps to an explicit unknown level.",
       "fold_rule": "Encoding is training-fold only.",
       "quality_rules": [{"rule_id": "Q_VENUE_COVERAGE", "field": "venue_family_coverage", "operator": "ge", "threshold": 0.95, "provenance": "Frozen target-metadata rule."}],
-      "implementation_name": "aspr.nature_multihorizon.prediction_features_v6.build_registered_control_features",
+      "implementation_name": "gear.nature_multihorizon.prediction_features_v6.build_registered_control_features",
       "admission_checks": {"V1": true, "V2": true, "V3": true, "V4": true, "V5": true, "V6": true, "V7": true, "V8": true, "V9": true, "V10": true},
       "disposition_reason": "Exposure control without externally refreshed prestige metrics."
     },
@@ -415,7 +415,7 @@
       "missingness_rule": "Unretrieved reference lists are missing, not empty.",
       "fold_rule": "Any centering or scaling is training-fold only.",
       "quality_rules": [{"rule_id": "Q_REFERENCE_LISTS", "field": "reference_list_retrieval_coverage", "operator": "ge", "threshold": 0.95, "provenance": "Frozen local closure gate."}],
-      "implementation_name": "aspr.nature_multihorizon.prediction_features_v6.build_registered_control_features",
+      "implementation_name": "gear.nature_multihorizon.prediction_features_v6.build_registered_control_features",
       "admission_checks": {"V1": true, "V2": true, "V3": true, "V4": true, "V5": true, "V6": true, "V7": true, "V8": true, "V9": true, "V10": true},
       "disposition_reason": "Strong baseline control for both citation opportunity and pair-count mechanics."
     },
@@ -438,7 +438,7 @@
       "missingness_rule": "No valid reference years yields null plus a missing indicator.",
       "fold_rule": "Imputation and scaling are training-fold only.",
       "quality_rules": [{"rule_id": "Q_REFERENCE_YEAR_COVERAGE", "field": "reference_year_coverage", "operator": "ge", "threshold": 0.9, "provenance": "Outcome-blind project coverage rule."}],
-      "implementation_name": "aspr.nature_multihorizon.prediction_features_v6.build_registered_control_features",
+      "implementation_name": "gear.nature_multihorizon.prediction_features_v6.build_registered_control_features",
       "admission_checks": {"V1": true, "V2": true, "V3": true, "V4": true, "V5": true, "V6": true, "V7": true, "V8": true, "V9": true, "V10": true},
       "disposition_reason": "Controls for recency of the cited knowledge base."
     },
@@ -461,7 +461,7 @@
       "missingness_rule": "No mapped cited references yields null plus a missing indicator.",
       "fold_rule": "Imputation and scaling are training-fold only.",
       "quality_rules": [{"rule_id": "Q_PRIOR_GRAPH_COVERAGE", "field": "prior_graph_reference_coverage", "operator": "ge", "threshold": 0.8, "provenance": "Outcome-blind project coverage rule."}],
-      "implementation_name": "aspr.nature_multihorizon.prediction_features_v6.build_registered_control_features",
+      "implementation_name": "gear.nature_multihorizon.prediction_features_v6.build_registered_control_features",
       "admission_checks": {"V1": true, "V2": true, "V3": true, "V4": true, "V5": true, "V6": true, "V7": true, "V8": true, "V9": true, "V10": true},
       "disposition_reason": "Conditional sensitivity control until the full strictly-prior reference-graph degree view is materialized and coverage-audited."
     },
@@ -484,7 +484,7 @@
       "missingness_rule": "Fewer than two valid references or unavailable snapshot is null.",
       "fold_rule": "Any scaling or nonlinear transform is training-fold only.",
       "quality_rules": [{"rule_id": "Q_BC_REFERENCE_COVERAGE", "field": "bc_reference_coverage", "operator": "ge", "threshold": 0.8, "provenance": "Outcome-blind opportunity-layer gate."}],
-      "implementation_name": "aspr.nature_multihorizon.prediction_features_v6.build_bibliographic_opportunity_features",
+      "implementation_name": "gear.nature_multihorizon.prediction_features_v6.build_bibliographic_opportunity_features",
       "admission_checks": {"V1": true, "V2": true, "V3": true, "V4": true, "V5": true, "V6": true, "V7": true, "V8": true, "V9": true, "V10": true},
       "disposition_reason": "Primary reach measure in the separately reported opportunity block."
     },
@@ -507,7 +507,7 @@
       "missingness_rule": "Unavailable or inadequate reference metadata is null.",
       "fold_rule": "Log transform and scaling are training-fold only.",
       "quality_rules": [{"rule_id": "Q_BC_REFERENCE_COVERAGE", "field": "bc_reference_coverage", "operator": "ge", "threshold": 0.8, "provenance": "Outcome-blind opportunity-layer gate."}],
-      "implementation_name": "aspr.nature_multihorizon.prediction_features_v6.build_bibliographic_opportunity_features",
+      "implementation_name": "gear.nature_multihorizon.prediction_features_v6.build_bibliographic_opportunity_features",
       "admission_checks": {"V1": true, "V2": true, "V3": true, "V4": true, "V5": true, "V6": true, "V7": true, "V8": true, "V9": true, "V10": true},
       "disposition_reason": "Weighted opportunity measure; kept separate from unweighted reach."
     },
@@ -530,7 +530,7 @@
       "missingness_rule": "Unavailable snapshot is null.",
       "fold_rule": "Scaling is training-fold only.",
       "quality_rules": [{"rule_id": "Q_BC_GRAPH_SIZE", "field": "eligible_prior_paper_count", "operator": "ge", "threshold": 100, "provenance": "Outcome-blind minimum for interpretable network position."}],
-      "implementation_name": "aspr.nature_multihorizon.prediction_features_v6.build_bibliographic_opportunity_features",
+      "implementation_name": "gear.nature_multihorizon.prediction_features_v6.build_bibliographic_opportunity_features",
       "admission_checks": {"V1": true, "V2": true, "V3": true, "V4": true, "V5": true, "V6": true, "V7": true, "V8": true, "V9": true, "V10": true},
       "disposition_reason": "Available research-community size, not an innovation construct."
     },
@@ -553,7 +553,7 @@
       "missingness_rule": "Unavailable snapshot is null.",
       "fold_rule": "No learned transform outside training folds.",
       "quality_rules": [{"rule_id": "Q_BC_REFERENCE_COVERAGE", "field": "bc_reference_coverage", "operator": "ge", "threshold": 0.8, "provenance": "Outcome-blind opportunity-layer gate."}],
-      "implementation_name": "aspr.nature_multihorizon.prediction_features_v6.build_bibliographic_opportunity_features",
+      "implementation_name": "gear.nature_multihorizon.prediction_features_v6.build_bibliographic_opportunity_features",
       "admission_checks": {"V1": true, "V2": true, "V3": true, "V4": true, "V5": true, "V6": true, "V7": true, "V8": true, "V9": true, "V10": true},
       "disposition_reason": "Conditional sensitivity measure because exact neighbor-induced edges are expensive on the full graph and no approximation is admitted without equivalence evidence."
     },
@@ -576,7 +576,7 @@
       "missingness_rule": "Unavailable snapshot is null.",
       "fold_rule": "Scaling is training-fold only.",
       "quality_rules": [{"rule_id": "Q_BC_GRAPH_SIZE", "field": "eligible_prior_paper_count", "operator": "ge", "threshold": 100, "provenance": "Outcome-blind minimum for interpretable network position."}],
-      "implementation_name": "aspr.nature_multihorizon.prediction_features_v6.build_bibliographic_opportunity_features",
+      "implementation_name": "gear.nature_multihorizon.prediction_features_v6.build_bibliographic_opportunity_features",
       "admission_checks": {"V1": true, "V2": true, "V3": true, "V4": true, "V5": true, "V6": true, "V7": true, "V8": true, "V9": true, "V10": true},
       "disposition_reason": "Conditional sensitivity only because exact per-paper traversal may be computationally prohibitive on the full frozen graph; no approximation is admitted without a separate equivalence test."
     }

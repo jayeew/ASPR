@@ -13,6 +13,7 @@ from typing import Any
 from .analysis import (
     CONFIG_PATH,
     build_panel_data,
+    calibration_source_dir,
     load_config,
     resolve_path,
     sha256_file,
@@ -23,7 +24,7 @@ from .render import render_from_tables
 
 
 def _source_records(config: Mapping[str, Any]) -> list[Mapping[str, Any]]:
-    source_dir = resolve_path(str(config["source_dir"]))
+    source_dir = calibration_source_dir(config)
     paths = [
         source_dir / "oof_predictions.parquet",
         source_dir / "oof_metrics.csv",
@@ -54,6 +55,7 @@ def _manifest(
         "status": audit["status"] if audit else f"stage_{stage}_complete",
         "stage": stage,
         "source_policy": "uncapped_v2_source-year_complete_local_frozen",
+        "calibration_release": config["calibration_release"],
         "old_fig3_inputs_used": False,
         "model_family": "hgb",
         "baseline_svg_sha256": config["baseline_svg_sha256"],

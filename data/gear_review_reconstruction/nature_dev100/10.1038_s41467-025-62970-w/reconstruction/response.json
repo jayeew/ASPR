@@ -1,0 +1,536 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:b2ab50b476e288fe0a7092dcce815193b49bac50d07309abb97eb27a882ef4db",
+  "input_sha256": "sha256:b2044df7c3ae593c3fced61c59849cdd4b4e218c081d9536749190e461c2736d",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:648c256c163331e181fd70654e43babd8db8b74719482a88a22585a2c2f04edf",
+  "package_id": "RSP-1a0f17fafc44a64a9dff",
+  "paper_id": "10.1038/s41467-025-62970-w",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-62970-w",
+      "point_id": "N-1",
+      "rationale": "The reviewer characterizes the study as examining whether carbon-credit purchases relate to achieved emission reductions and future targets amid conflicting prior expectations. The final paper documents the multi-source design and the two outcome measures.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-8cc1133c617849f5"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e362bc7b00a21f74697e"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-24a84f7d82c2dec0b9c7",
+        "RR:SRC-R-32422ffae8e7c71c0447",
+        "RR:SRC-R-8f093ca96d3692b5dc82"
+      ],
+      "paper_id": "10.1038/s41467-025-62970-w",
+      "point_id": "N-2",
+      "rationale": "The requested sample-selection clarification was added, but the final paper retains a three-sector, selected-company scope and states that effects cannot be evaluated in other hard-to-decarbonise sectors.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-96dda9f93462739e"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-559d59096e1aaec1dfc5"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-2"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-62970-w",
+      "point_id": "ST-1",
+      "rationale": "The reviewer identifies the study's focus on credit purchases, historical emissions, and future targets; the final paper specifies the 89-company data assembly, registry cross-validation, and paired retrospective and forward-looking measures.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-8cc1133c617849f5"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e362bc7b00a21f74697e"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-ST-1"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-62970-w",
+      "point_id": "ST-2",
+      "rationale": "The reviewer notes the broad null finding alongside possible exceptions among major airline purchasers. The final paper separately reports the overall null association and documents case evidence for investment competition at Delta and easyJet.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-8cc1133c617849f5"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e362bc7b00a21f74697e"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-ST-2"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-62970-w",
+      "point_id": "W-1",
+      "rationale": "The reviewer expressly distinguishes the handful of airlines and other major purchasers from the overall result. The final paper retains qualitative evidence of competition for particular companies while stating that the long-term effect on emission trajectories is unclear.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-8cc1133c617849f5"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e362bc7b00a21f74697e"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-9be6c5bb46f3d9c8d75c"
+      ],
+      "paper_id": "10.1038/s41467-025-62970-w",
+      "point_id": "Q-1",
+      "rationale": "The reviewer noted that the analysis did not establish emissions reduced per dollar for credits versus internal measures. The wording was revised, but the final paper still reports case evidence of competition and explicitly leaves its long-term impact unclear.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-8cc1133c617849f5"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-054efc533826f7d316bf"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-8d94dc883903dd59ca1b"
+      ],
+      "paper_id": "10.1038/s41467-025-62970-w",
+      "point_id": null,
+      "rationale": "The requested abstract precision was incorporated in the final abstract.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-8cc1133c617849f5"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-986f244d9399ec6b3787"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-82750e55ea2f8c1bbfef",
+        "RR:SRC-R-cec4422a2ec014e7eece",
+        "RR:SRC-R-c67b6e18cd64a1805f69",
+        "RR:SRC-R-d12e686db53481d30711",
+        "RR:SRC-R-20bf0172aec18d51bf27",
+        "RR:SRC-R-73e938ab8c2fac027e4e",
+        "RR:SRC-R-9128128860d5247fe27b"
+      ],
+      "paper_id": "10.1038/s41467-025-62970-w",
+      "point_id": null,
+      "rationale": "The requested Figure 1 and methods explanations are present in the final caption and model-description sections.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-8cc1133c617849f5"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-6029675b66ff448f0f20"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-2"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f57b9724ad956ef81a46",
+        "RR:SRC-R-f6badc44e7cab97ed26d",
+        "RR:SRC-R-cc02766450ed9b02b1a7",
+        "RR:SRC-R-bf736fdffd95f7c5e654"
+      ],
+      "paper_id": "10.1038/s41467-025-62970-w",
+      "point_id": null,
+      "rationale": "The requested comparison with moral-hazard literature on market-based instruments was integrated into the introduction and discussion.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-8cc1133c617849f5"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-cabd404095dfc7501bbf"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-3"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-a4c8ca3545f97c795502",
+        "RR:SRC-R-e543d3bab3b66e461e6e",
+        "RR:SRC-R-f8a5cca682d1a1babab0",
+        "RR:SRC-R-9b635e603005114f8f23",
+        "RR:SRC-R-d9a7ef09f3d697125196",
+        "RR:SRC-R-05eaedf2390c2839af97"
+      ],
+      "paper_id": "10.1038/s41467-025-62970-w",
+      "point_id": null,
+      "rationale": "The target-ambition method now situates its harmonisation choices relative to prior target-comparison literature and explains its treatment of intensity targets.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-8cc1133c617849f5"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c0ed28101d4c5de0719d",
+        "RR:SRC-R-24a58fadc7c0bd993ef1",
+        "RR:SRC-R-0ddf8f3f74ec28d3358f"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-4"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-9e62584f895df4ad2629",
+        "RR:SRC-R-e41251ee5c844ddbae89",
+        "RR:SRC-R-89a170c57a951affdfd4"
+      ],
+      "paper_id": "10.1038/s41467-025-62970-w",
+      "point_id": null,
+      "rationale": "The final introduction adds the requested review of prior evidence on carbon-management practices and renewable-energy attributes.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-96dda9f93462739e"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e03e5794d904146e8afe"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-5"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-5d9e73814de322799b4d",
+        "RR:SRC-R-a0fe40d34d32b2653ace"
+      ],
+      "paper_id": "10.1038/s41467-025-62970-w",
+      "point_id": null,
+      "rationale": "The final discussion includes the requested policy-implications section.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-96dda9f93462739e"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d64614660d74d677b5d0"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-6"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-6bdf179f6ab13b886de0",
+            "P:S-a3f77a980cd05caaeda7",
+            "P:S-1b270b2be2da1b94e1d9"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-2",
+          "schema_version": "aspr_gear",
+          "severity": "minor",
+          "suggested_action": "State the contribution and its inference boundary as applying to the sampled sectors and observed outcomes.",
+          "text": "The contribution is bounded to 89 selected multinationals in oil and gas, automobile manufacturing, and aviation; the paper states that it cannot evaluate voluntary-offsetting effects in other hard-to-decarbonise sectors or reliably detect small effects."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-e119f81c4b6fdecc62df",
+            "P:S-4efdd03efa8577b33a96"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-1",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "Retain the distinction between this observed-performance design and the earlier industry-report and explanatory-variable evidence.",
+          "text": "The study evaluates observed emissions and target ambition in 89 hard-to-abate multinationals using CDP data, registry cross-validation, and sustainability-report analysis, directly testing a question that prior industry reports and related studies had not resolved."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-025-62970-w",
+    "questions": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-b74b59b17ee74212e134",
+          "P:S-d807688c3173e036e759",
+          "P:S-7a42da8b146d67696f19"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-1",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Clarify what additional longitudinal or causal evidence would establish the magnitude and consequence of the case-level competition pathway.",
+        "text": "What evidence could determine whether the case-level competition between carbon-credit spending and internal measures changes long-term emission trajectories, rather than only documenting shared budgets or target design?"
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-e119f81c4b6fdecc62df",
+          "P:S-4efdd03efa8577b33a96"
+        ],
+        "external_verification_required": false,
+        "point_id": "ST-1",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Preserve the explicit link between the assembled data sources and the retrospective and forward-looking outcome measures.",
+        "text": "The design combines observed carbon-credit retirements with historical scope 1-emission change and forward-looking target ambition, using CDP data, registry checks, and report-based qualitative evidence."
+      },
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-d807688c3173e036e759",
+          "P:S-725d691dac64f80fdc06",
+          "P:S-7a42da8b146d67696f19"
+        ],
+        "external_verification_required": false,
+        "point_id": "ST-2",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Maintain the separation between the sample-wide regression result and the company-level qualitative cases.",
+        "text": "The analysis distinguishes the sample-wide absence of a significant association from company-level evidence that large offsetting campaigns can compete with internal decarbonisation finance or target achievement."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-e119f81c4b6fdecc62df",
+        "P:S-4efdd03efa8577b33a96",
+        "P:S-d807688c3173e036e759"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "This study examines whether voluntary carbon-credit retirement is associated with historical scope 1-emission change or climate-target ambition among 89 multinational firms in oil and gas, automobile manufacturing, and aviation. It reports no significant sample-wide association, while qualitative evidence identifies potential competition with internal decarbonisation for a small group of large-scale offsetters."
+    },
+    "weaknesses": [
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-d807688c3173e036e759",
+          "P:S-725d691dac64f80fdc06",
+          "P:S-7a42da8b146d67696f19"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-1",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Keep the general null conclusion separate from the unresolved scale and long-term implications of the large-offsetter cases.",
+        "text": "The relationship between the broad null association and the identified large-offsetter exceptions remains uncertain: the paper presents qualitative investment and target pathways, but states that their long-term impact on emissions trajectories is unclear."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-8d94dc883903dd59ca1b"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-cd35f41fdb721e17e4d0"
+      ],
+      "ledger_id": "L-1",
+      "paper_id": "10.1038/s41467-025-62970-w",
+      "residual_summary": "The abstract now specifies that the comparison concerns climate strategies.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-986f244d9399ec6b3787"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-82750e55ea2f8c1bbfef",
+        "RR:SRC-R-cec4422a2ec014e7eece",
+        "RR:SRC-R-c67b6e18cd64a1805f69",
+        "RR:SRC-R-d12e686db53481d30711",
+        "RR:SRC-R-20bf0172aec18d51bf27",
+        "RR:SRC-R-73e938ab8c2fac027e4e",
+        "RR:SRC-R-9128128860d5247fe27b"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-46d72dc17a78e6fb0b5b",
+        "P:S-842e05edbe9414aafb14",
+        "P:S-e9aa673fd7173ddd92b0"
+      ],
+      "ledger_id": "L-2",
+      "paper_id": "10.1038/s41467-025-62970-w",
+      "residual_summary": "The caption and methods define coefficient direction, reference categories, emphasis of retired credits, and intermediate-target coverage.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-6029675b66ff448f0f20"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-9be6c5bb46f3d9c8d75c"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-b74b59b17ee74212e134"
+      ],
+      "ledger_id": "L-3",
+      "paper_id": "10.1038/s41467-025-62970-w",
+      "residual_summary": "The challenged comparative-efficiency wording was removed.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-054efc533826f7d316bf"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f57b9724ad956ef81a46",
+        "RR:SRC-R-f6badc44e7cab97ed26d",
+        "RR:SRC-R-cc02766450ed9b02b1a7",
+        "RR:SRC-R-bf736fdffd95f7c5e654"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-6f435dc7e3b7f8d2a271",
+        "P:S-fce1ea9af83908d6000e",
+        "P:S-7a42da8b146d67696f19"
+      ],
+      "ledger_id": "L-4",
+      "paper_id": "10.1038/s41467-025-62970-w",
+      "residual_summary": "The final paper incorporates moral-hazard framing and the requested comparison with renewable-energy attributes.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-cabd404095dfc7501bbf"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-a4c8ca3545f97c795502",
+        "RR:SRC-R-e543d3bab3b66e461e6e",
+        "RR:SRC-R-f8a5cca682d1a1babab0",
+        "RR:SRC-R-9b635e603005114f8f23",
+        "RR:SRC-R-d9a7ef09f3d697125196",
+        "RR:SRC-R-05eaedf2390c2839af97"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-842e05edbe9414aafb14",
+        "P:S-552b87acba952cc0db21",
+        "P:S-9cf62fa1cfaeca1c7d6d"
+      ],
+      "ledger_id": "L-5",
+      "paper_id": "10.1038/s41467-025-62970-w",
+      "residual_summary": "The target-ambition method now explains its relationship to prior comparison methods and its intensity-target choices.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c0ed28101d4c5de0719d",
+        "RR:SRC-R-24a58fadc7c0bd993ef1",
+        "RR:SRC-R-0ddf8f3f74ec28d3358f"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-9e62584f895df4ad2629",
+        "RR:SRC-R-e41251ee5c844ddbae89",
+        "RR:SRC-R-89a170c57a951affdfd4"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-6f435dc7e3b7f8d2a271",
+        "P:S-fce1ea9af83908d6000e"
+      ],
+      "ledger_id": "L-6",
+      "paper_id": "10.1038/s41467-025-62970-w",
+      "residual_summary": "The introduction now reviews relevant prior evidence on corporate carbon management and renewable-energy attributes.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e03e5794d904146e8afe"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-24a84f7d82c2dec0b9c7",
+        "RR:SRC-R-32422ffae8e7c71c0447",
+        "RR:SRC-R-8f093ca96d3692b5dc82"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-1b270b2be2da1b94e1d9"
+      ],
+      "ledger_id": "L-7",
+      "paper_id": "10.1038/s41467-025-62970-w",
+      "residual_summary": "The methods now specify the sectoral sample frame, selection rule, exclusion, and final counts.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-559d59096e1aaec1dfc5"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-5d9e73814de322799b4d",
+        "RR:SRC-R-a0fe40d34d32b2653ace"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-6bdf179f6ab13b886de0"
+      ],
+      "ledger_id": "L-8",
+      "paper_id": "10.1038/s41467-025-62970-w",
+      "residual_summary": "The discussion now states policy implications concerning voluntary offsetting and compliance mechanisms.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d64614660d74d677b5d0"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

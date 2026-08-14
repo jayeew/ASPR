@@ -1,0 +1,324 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:b6d227b9511313e2dfb8bfb828a0d2710baefb737614009a1aee0a1800fb99c5",
+  "input_sha256": "sha256:52a87edab8d56ceaddca47d9a9bec5da53a2deac186874b31afdfdd594799673",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:ef5ac275155a10ebf8fb592f2817df0425e2b9e4179e39851ecc767bab0742ec",
+  "package_id": "RSP-d9798aaa5df517e6f7b1",
+  "paper_id": "10.1038/s41467-023-40345-3",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-40345-3",
+      "point_id": "NOV-01",
+      "rationale": "Reviewer #3 reports that substantial added data confirm key points. The final paper identifies the integrated PMZH design in P:S-799a0c010e3e1d73ba53 and reports SLC43A2 editing in P:S-b92703f3386e592e4184.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-370b48251aa4d139"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-39360cac8352d82a3ed5"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TRACE-NOV-01"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-40345-3",
+      "point_id": "NOV-02",
+      "rationale": "Reviewer #3's final report supports retention of the key-point evidence record. P:S-1a7baee2217b14c32854 describes existing routes to STING priming, while P:S-799a0c010e3e1d73ba53 defines the claimed contribution as their integration with CRISPR-mediated methionine regulation.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-370b48251aa4d139"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-39360cac8352d82a3ed5"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TRACE-NOV-02"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-40345-3",
+      "point_id": "STR-01",
+      "rationale": "Reviewer #3 identifies substantial added data confirming core points. P:S-b92703f3386e592e4184 reports target-locus mutation and SLC43A2 protein disruption, and P:S-f6cd6ef017af1834227e reports the associated T-cell and tumor readouts.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-370b48251aa4d139"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-39360cac8352d82a3ed5"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TRACE-STR-01"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-40345-3",
+      "point_id": "STR-02",
+      "rationale": "Reviewer #3 identifies substantial added data confirming core points. The final paper reports STING-associated cellular readouts in P:S-97fa7b0f8f07fd3b5abc, BMDC measurements in P:S-476c41f5eaa6f9ce0d8c, and in-vivo efficacy and immune-cell analyses in P:S-0d046e2caf89a18bb273 and P:S-8e9061c5ac246bfeb126.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-370b48251aa4d139"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-39360cac8352d82a3ed5"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TRACE-STR-02"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-2e6e8a30864ae79d07d6"
+      ],
+      "paper_id": "10.1038/s41467-023-40345-3",
+      "point_id": null,
+      "rationale": "Audit-only resolution record: Reviewer #1 states that concerns were addressed. The final paper provides panel-level replication and statistical information in P:S-4ad29c3bd6c8f75cccc1 and P:S-24b03533024965466073.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-36d9842f2e67b05a"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a41842bf81e5f026cb9d"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TRACE-AUDIT-R1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f62f396659150f8b045a"
+      ],
+      "paper_id": "10.1038/s41467-023-40345-3",
+      "point_id": null,
+      "rationale": "Audit-only resolution record: Reviewer #2 states that comments were addressed. The final paper documents revised mechanistic and in-vivo evidence in P:S-97fa7b0f8f07fd3b5abc and P:S-c63129ffb93d6e89ad6a.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-de030f94ad46a996"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8e8d4c0daf0f8ec44abc"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TRACE-AUDIT-R2"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-7e465531731a0e3d76e7"
+      ],
+      "paper_id": "10.1038/s41467-023-40345-3",
+      "point_id": null,
+      "rationale": "Audit-only resolution record: Reviewer #3 reports substantial added data and that the revision addressed reviewer comments. The final paper contains the corresponding multi-level evidence in P:S-b92703f3386e592e4184, P:S-476c41f5eaa6f9ce0d8c, and P:S-0d046e2caf89a18bb273.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-370b48251aa4d139"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-39360cac8352d82a3ed5"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TRACE-AUDIT-R3"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-74753bb25867ea8e2a04"
+      ],
+      "paper_id": "10.1038/s41467-023-40345-3",
+      "point_id": null,
+      "rationale": "Audit-only resolution record: Reviewer #4 states that all concerns were adequately addressed. The final paper provides methods, stated sampling, and statistical reporting in P:S-4ad29c3bd6c8f75cccc1, P:S-8e9061c5ac246bfeb126, and P:S-24b03533024965466073.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-c7f552b47ab19644"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-7b41584b22ebce3cd405"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TRACE-AUDIT-R4"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-1a7baee2217b14c32854",
+            "P:S-799a0c010e3e1d73ba53"
+          ],
+          "external_verification_required": true,
+          "point_id": "NOV-02",
+          "schema_version": "aspr_gear",
+          "severity": "minor",
+          "suggested_action": "Frame the advance as an integrated platform and distinguish it from the component strategies described in the background.",
+          "text": "The contribution is system-level: the manuscript combines established CRISPR delivery, metal-ion/ROS biology, and STING-priming concepts into PMZH rather than presenting each component as a new mechanism."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-799a0c010e3e1d73ba53",
+            "P:S-b92703f3386e592e4184",
+            "P:S-97fa7b0f8f07fd3b5abc"
+          ],
+          "external_verification_required": true,
+          "point_id": "NOV-01",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "Retain the integrated-delivery and dual-mechanism framing in the contribution statement.",
+          "text": "The reported contribution integrates SLC43A2-targeting CRISPR/Cas9 delivery with Mn/Zn-MOF-mediated ROS and cGAS/STING activation, then follows that design through editing and pathway readouts."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-023-40345-3",
+    "questions": [],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-b92703f3386e592e4184",
+          "P:S-4ad29c3bd6c8f75cccc1",
+          "P:S-f6cd6ef017af1834227e"
+        ],
+        "external_verification_required": false,
+        "point_id": "STR-01",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Preserve the linked delivery, editing, and T-cell evidence sequence when presenting the mechanism.",
+        "text": "The evidence sequence connects carrier uptake and plasmid delivery to SLC43A2 editing, methionine-related T-cell readouts, and in-vivo tumor-cell and infiltrating-CD8+ T-cell measurements."
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-97fa7b0f8f07fd3b5abc",
+          "P:S-476c41f5eaa6f9ce0d8c",
+          "P:S-0d046e2caf89a18bb273",
+          "P:S-8e9061c5ac246bfeb126"
+        ],
+        "external_verification_required": false,
+        "point_id": "STR-02",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Keep the cellular, dendritic-cell, and animal-model readouts clearly separated while showing their mechanistic connection.",
+        "text": "The final study spans tumor-cell STING-associated readouts, BMDC measurements, and in-vivo antitumor and immune-cell analyses rather than relying on a single efficacy endpoint."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-f2e193a9eba3dc5f0279",
+        "P:S-799a0c010e3e1d73ba53",
+        "P:S-b92703f3386e592e4184",
+        "P:S-97fa7b0f8f07fd3b5abc",
+        "P:S-0d046e2caf89a18bb273",
+        "P:S-e2d56f27c03c71cfd9e5"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "The paper reports PMZH, an HA-coated Mn/Zn metal-organic framework that encapsulates a CRISPR/Cas9 plasmid targeting SLC43A2. It links SLC43A2 disruption and altered methionine competition to T-cell readouts, while Mn/Zn-associated ROS, mtDNA release, and STING-associated signaling are measured in cells and BMDCs. The in-vivo work evaluates tumor growth, immune-cell infiltration, distant-tumor control, and a lung-metastasis model in preclinical mouse systems."
+    },
+    "weaknesses": []
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-2e6e8a30864ae79d07d6"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-4ad29c3bd6c8f75cccc1",
+        "P:S-24b03533024965466073"
+      ],
+      "ledger_id": "LEDGER-R1",
+      "paper_id": "10.1038/s41467-023-40345-3",
+      "residual_summary": "Audit-only: no retained residual point.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a41842bf81e5f026cb9d"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f62f396659150f8b045a"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-97fa7b0f8f07fd3b5abc",
+        "P:S-c63129ffb93d6e89ad6a"
+      ],
+      "ledger_id": "LEDGER-R2",
+      "paper_id": "10.1038/s41467-023-40345-3",
+      "residual_summary": "Audit-only: no retained residual point.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8e8d4c0daf0f8ec44abc"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-7e465531731a0e3d76e7"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-b92703f3386e592e4184",
+        "P:S-476c41f5eaa6f9ce0d8c",
+        "P:S-0d046e2caf89a18bb273"
+      ],
+      "ledger_id": "LEDGER-R3",
+      "paper_id": "10.1038/s41467-023-40345-3",
+      "residual_summary": "Audit-only: no retained residual point.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-39360cac8352d82a3ed5"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-74753bb25867ea8e2a04"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-4ad29c3bd6c8f75cccc1",
+        "P:S-8e9061c5ac246bfeb126",
+        "P:S-24b03533024965466073"
+      ],
+      "ledger_id": "LEDGER-R4",
+      "paper_id": "10.1038/s41467-023-40345-3",
+      "residual_summary": "Audit-only: no retained residual point.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-7b41584b22ebce3cd405"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

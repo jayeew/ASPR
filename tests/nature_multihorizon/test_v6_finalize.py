@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from aspr.nature_multihorizon.finalize_v6 import (
+from gear.nature_multihorizon.finalize_v6 import (
     canonical_artifact_id,
     read_gate_results,
 )

@@ -1,0 +1,615 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:e3d85cf1fc901937437d8ba7f7cff3fc393f0906a0727bdacda8854f6e6a5ee4",
+  "input_sha256": "sha256:fa36053deba2dfd455a6472d9212165b1ef11edfc28fa7091596aecc1e250f5c",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:3cb25efec11fa449123e964a7e310f68da61a93f9e56207f4988ea0f6bd4873b",
+  "package_id": "RSP-214b20388b1edb74b418",
+  "paper_id": "10.1038/s41467-025-67817-y",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-2ef74200b505ca23136d",
+        "RR:SRC-R-a6424137238bc1a42d16"
+      ],
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "point_id": "N2",
+      "rationale": "The response adds citations and explains a distinction from annealed prior work, but the final paper itself identifies related parallel-crossover and co-transcriptional approaches. Establishing the degree of architectural novelty relative to these systems requires comparison beyond the supplied record.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-13a961f62c026530",
+        "REV-e359d3fb1a19befe"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-2b6fb48f1e6367cf55b1",
+        "RR:SRC-R-01c9e897eb808858bb7c"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N2"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "point_id": "N1",
+      "rationale": "Reviewers identify the direct visualization of defined RNA nanostructures in human cell nuclei as the distinguishing contribution; the final paper presents the co-transcriptional design and cellular structural evidence.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-13a961f62c026530",
+        "REV-e359d3fb1a19befe"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-cfab61d77182680820ff",
+        "RR:SRC-R-bd45e61e216e15156945"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N1"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "point_id": "S1",
+      "rationale": "The reviewer reports describe the paranemic-cohesion tile architecture and multiple programmed assemblies; the final paper provides the corresponding design and co-transcriptional AFM evidence.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-13a961f62c026530",
+        "REV-97447b0eb9cae26a"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-4a873f1e0a1f9c863278",
+        "RR:SRC-R-5156ff812ef20a0c53a9"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-S1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-0e69d7b1048ae33cb50e"
+      ],
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "point_id": "S2",
+      "rationale": "The reviewer identifies the TEM comparison as evidence for nuclear assemblies; the response revised the comparison method, and the final paper reports AFM-TEM spacing comparisons for D4 and D10.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-13a961f62c026530",
+        "REV-e359d3fb1a19befe"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-cfab61d77182680820ff",
+        "RR:SRC-R-bd45e61e216e15156945"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-S2"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-3c7d8a7f5e5801522de3",
+        "RR:SRC-R-5136423288ab56d2f59c",
+        "RR:SRC-R-86eb86da6e0763af6d10"
+      ],
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "point_id": "W1",
+      "rationale": "The response adds localization analysis and moderates the explanation, but the final paper reports appreciable nucleus-and-cytosol distributions and explicitly leaves the factors governing localization for future investigation.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-e359d3fb1a19befe"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c83fd8243e4b2a64bafd"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-e116b468edfc3bcfa007"
+      ],
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "point_id": "Q1",
+      "rationale": "The response directs this question to the localization discussion. The final paper presents candidate explanations but states that the exact mechanisms of nuclear retention remain to be elucidated.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-13a961f62c026530"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-1473f427b21095a4b105",
+        "RR:SRC-R-b2160d115a3e54a6f979"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-1840c58ec897e891d3a2",
+        "RR:SRC-R-a49bbf438976a7f0adb2"
+      ],
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "point_id": "Q2",
+      "rationale": "The response reports an attempted D3 test but was unable to confidently detect assembly. The final paper's cellular experiments remain focused on D4 and D10, so generalization across designs is unresolved.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-97447b0eb9cae26a"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-0044d1b7a5197ab70fd9"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q2"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-6333e44878ef1d18a035",
+        "RR:SRC-R-4af247d18dd7637f3e49",
+        "RR:SRC-R-1e60ee8dbf7dc133e6eb"
+      ],
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "point_id": null,
+      "rationale": "The responses describe expanded design and sequence-assignment methods, which are reflected in the final paper; this resolved reproducibility issue is audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-13a961f62c026530",
+        "REV-e359d3fb1a19befe"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-66663dd9a185f0feb6ee",
+        "RR:SRC-R-2e43079cc1f307d26ec1"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-dfbcf677f5217a64806a",
+        "RR:SRC-R-2ef74200b505ca23136d"
+      ],
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "point_id": null,
+      "rationale": "The response states that the requested prior literature was added, and the final paper includes the relevant citations; this resolved literature issue is audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-e359d3fb1a19befe"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-2b6fb48f1e6367cf55b1",
+        "RR:SRC-R-d8648b2b1753a4cd6c6d"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A2"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-adaeee9af7e79d1018b6",
+        "RR:SRC-R-573fbfad1a9f40f5805d"
+      ],
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "point_id": null,
+      "rationale": "The response reports new TA-buffer experiments without EDTA, and the final paper describes the revised magnesium analysis; this resolved issue is audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-e359d3fb1a19befe"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8f73d3310934ff094e89"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A3"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-c3dea16b3c1c70273dc6",
+        "RR:SRC-R-15610b8980653906d79c",
+        "RR:SRC-R-478003ccfa304a4bad43"
+      ],
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "point_id": null,
+      "rationale": "The response reports statistical testing, independent experiments, and clarification of the sensor analysis; the final paper provides the revised sensing results and scope. This resolved issue is audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-e359d3fb1a19befe"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8a356993e6d6927dddc2"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A4"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-b6a556e6147c7b12a52e",
+        "RR:SRC-R-66ca7f5c799e261e3807",
+        "RR:SRC-R-1d39eefe153ac0b848bb"
+      ],
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "point_id": null,
+      "rationale": "The responses state that co-transcriptional AFM images replaced the confusing presentation and that length measurements were added. The final paper presents co-transcriptional AFM data; this resolved presentation issue is audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-13a961f62c026530",
+        "REV-e359d3fb1a19befe"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-04ed18768aca0208138a",
+        "RR:SRC-R-366bb7ee99a149c21ff1",
+        "RR:SRC-R-eee328a73b33033a53d5"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A5"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-0e69d7b1048ae33cb50e",
+        "RR:SRC-R-fcaf6f6e1e4996797e0c"
+      ],
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "point_id": null,
+      "rationale": "The responses replace drawn overlays with line-distance comparisons, and the final paper describes the AFM-TEM spacing analysis. This resolved interpretation issue is audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-13a961f62c026530",
+        "REV-e359d3fb1a19befe"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-2f0ff1301dad77d2f35e",
+        "RR:SRC-R-9e0c287e6df4309f06f6"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A6"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-843b515dd23bea3b958a"
+      ],
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "point_id": null,
+      "rationale": "The response reports a bulk XTT assay and acknowledges possible stress in cells with large accumulations, but the supplied final-paper spans do not independently verify these observations. This issue is audit-only.",
+      "resolution_status": "unverifiable",
+      "reviewer_id_hashes": [
+        "REV-13a961f62c026530"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e4cbb86ef8174866b1aa"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A7"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f5e61d1900c7e789d046"
+      ],
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "point_id": null,
+      "rationale": "The response describes a revised mutation schematic that follows the remaining reviewer request. This resolved presentation issue is audit-only.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-e359d3fb1a19befe"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-92cd21878a1ce32ada36"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A8"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-7fa686245b9b8475eb00",
+            "P:S-15e46dbbbd9c002fafd6",
+            "P:S-61cd7651e8b318ca72f9"
+          ],
+          "external_verification_required": true,
+          "point_id": "N2",
+          "schema_version": "aspr_gear",
+          "severity": "major",
+          "suggested_action": "Compare the PC-tile architecture and folding pathway directly with the closest RNA paranemic-crossover, single-stranded origami, and cellular co-transcriptional systems, separating architectural precedent from the cellular TEM demonstration.",
+          "text": "The paper identifies closely related parallel-crossover, single-stranded origami, and co-transcriptional RNA work. The extent to which the architectural design itself, rather than the direct nuclear TEM visualization, is distinct from these precedents requires external comparison."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-830f5cdbcc3348c13c28",
+            "P:S-48dc9a4f04fee09e2e1f"
+          ],
+          "external_verification_required": true,
+          "point_id": "N1",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "Frame the central advance as the demonstrated co-transcriptional formation and direct structural visualization of defined RNA nanonets in human cell nuclei.",
+          "text": "The contribution is a programmable single-stranded RNA system that forms defined assemblies co-transcriptionally and is structurally visualized in human cells by both cellular imaging and TEM."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-025-67817-y",
+    "questions": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-37d751b4539c8c912c02",
+          "P:S-3df9660a5d73fda5d814"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Test structural, sequence, and trafficking-factor perturbations that can distinguish retention from export and establish whether localization can be predictably controlled.",
+        "text": "Which structural and cellular factors determine nuclear retention versus cytosolic distribution, and can a defined design change reproducibly switch the localization outcome?"
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-66c72880b8218c74e130",
+          "P:S-27c8f4a2ebe1a30aa6dd"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q2",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Evaluate cellular assembly and localization across smaller, linear, and additional two-dimensional designs using the same quantitative analysis applied to D4 and D10.",
+        "text": "Do cellular assembly and nuclear enrichment extend beyond the two large nanonet designs D4 and D10 to smaller or linear RNA tile architectures?"
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-299c75c1a613bd8ae36a",
+          "P:S-4e6d2d9933fb236d9e31",
+          "P:S-3158424033a257c7c9e7"
+        ],
+        "external_verification_required": false,
+        "point_id": "S1",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Retain the explicit link between the PC/KL design choices, the programmed geometries, and the co-transcriptional AFM characterization.",
+        "text": "The work supplies a design framework using paranemic cohesion and kissing-loop interactions to program co-transcriptionally folded rings, linear arrays, and two-dimensional lattices, with AFM characterization of multiple architectures."
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-27c8f4a2ebe1a30aa6dd",
+          "P:S-48dc9a4f04fee09e2e1f"
+        ],
+        "external_verification_required": false,
+        "point_id": "S2",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Preserve the quantitative distribution analysis and the orthogonal AFM, cellular-imaging, and TEM comparison for the tested D4 and D10 assemblies.",
+        "text": "For D4 and D10, the study combines cellular imaging with TEM and compares periodic features to AFM reference structures, providing convergent evidence for assembled nanonet-like structures in transfected human cells."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-830f5cdbcc3348c13c28",
+        "P:S-299c75c1a613bd8ae36a",
+        "P:S-27c8f4a2ebe1a30aa6dd",
+        "P:S-48dc9a4f04fee09e2e1f",
+        "P:S-37d751b4539c8c912c02",
+        "P:S-3df9660a5d73fda5d814"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "This study develops single-stranded RNA tiles that fold co-transcriptionally through paranemic cohesion and kissing-loop interactions, assemble into programmed architectures, and are examined in human cells. The evidence supports the design framework and, for D4 and D10, convergent cellular-imaging and TEM evidence of nanonet-like assemblies. The remaining scope limits are that localization is not exclusively nuclear, its mechanism remains unresolved, and in-cell evaluation is confined to two large designs. Novelty is strongest for the direct cellular structural visualization, whereas the architectural distinction from close RNA crossover and origami precedents requires explicit comparison."
+    },
+    "weaknesses": [
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-27c8f4a2ebe1a30aa6dd",
+          "P:S-37d751b4539c8c912c02",
+          "P:S-3df9660a5d73fda5d814"
+        ],
+        "external_verification_required": false,
+        "point_id": "W1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Constrain localization claims to the measured distributions of D4 and D10 and distinguish observed nuclear enrichment from a demonstrated, general mechanism of nuclear retention.",
+        "text": "The inference of a preferred nuclear localization should be qualified: both tested designs include cells with nucleus-and-cytosol distributions, and the paper states that the factors governing localization and retention remain to be determined."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-6333e44878ef1d18a035",
+        "RR:SRC-R-4af247d18dd7637f3e49",
+        "RR:SRC-R-1e60ee8dbf7dc133e6eb"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-978db201740f9cc458a1",
+        "P:S-00bd5f43ef48c3828502",
+        "P:S-6c5cefb1d20133a00c08"
+      ],
+      "ledger_id": "L-A1",
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "residual_summary": "Expanded design and sequence-assignment descriptions are present in the supplied final-paper evidence.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-66663dd9a185f0feb6ee",
+        "RR:SRC-R-2e43079cc1f307d26ec1"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-dfbcf677f5217a64806a",
+        "RR:SRC-R-2ef74200b505ca23136d"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-7fa686245b9b8475eb00",
+        "P:S-61cd7651e8b318ca72f9"
+      ],
+      "ledger_id": "L-A2",
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "residual_summary": "Requested contextual and prior-art citations are included in the supplied final-paper evidence.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-2b6fb48f1e6367cf55b1",
+        "RR:SRC-R-d8648b2b1753a4cd6c6d"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-adaeee9af7e79d1018b6",
+        "RR:SRC-R-573fbfad1a9f40f5805d"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-b307b5c5afb1448463df",
+        "P:S-4ccaf2af89af76c9e6c2"
+      ],
+      "ledger_id": "L-A3",
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "residual_summary": "The final paper describes magnesium experiments in TA buffer and the corresponding interpretation.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8f73d3310934ff094e89"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-c3dea16b3c1c70273dc6",
+        "RR:SRC-R-15610b8980653906d79c",
+        "RR:SRC-R-478003ccfa304a4bad43"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-e38dce085b494313ef01",
+        "P:S-02adc847ac90ab9e5827"
+      ],
+      "ledger_id": "L-A4",
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "residual_summary": "The final paper reports revised sensor performance and provides source data and fluorescence statistical analysis.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8a356993e6d6927dddc2"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-b6a556e6147c7b12a52e",
+        "RR:SRC-R-66ca7f5c799e261e3807",
+        "RR:SRC-R-1d39eefe153ac0b848bb"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-3158424033a257c7c9e7",
+        "P:S-074a84be1750831b3468"
+      ],
+      "ledger_id": "L-A5",
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "residual_summary": "The final paper presents co-transcriptional AFM images for the relevant tile and aptamer designs.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-04ed18768aca0208138a",
+        "RR:SRC-R-366bb7ee99a149c21ff1",
+        "RR:SRC-R-eee328a73b33033a53d5"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-0e69d7b1048ae33cb50e",
+        "RR:SRC-R-fcaf6f6e1e4996797e0c"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-48dc9a4f04fee09e2e1f",
+        "P:S-6f45d367b5d61c7931ca"
+      ],
+      "ledger_id": "L-A6",
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "residual_summary": "The final paper reports line-spacing comparisons between TEM and AFM rather than relying on drawn overlays.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-2f0ff1301dad77d2f35e",
+        "RR:SRC-R-9e0c287e6df4309f06f6"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-843b515dd23bea3b958a"
+      ],
+      "final_paper_evidence_keys": [],
+      "ledger_id": "L-A7",
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "residual_summary": "The supplied final-paper evidence does not independently verify the response's cell-viability and large-assembly stress observations.",
+      "resolution_status": "unverifiable",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e4cbb86ef8174866b1aa"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f5e61d1900c7e789d046"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-e38dce085b494313ef01"
+      ],
+      "ledger_id": "L-A8",
+      "paper_id": "10.1038/s41467-025-67817-y",
+      "residual_summary": "The response reports that the requested mutation schematic revision was made; the final sensing description is consistent with the revised mutation analysis.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-92cd21878a1ce32ada36"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

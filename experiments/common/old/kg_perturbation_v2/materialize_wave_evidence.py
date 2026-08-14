@@ -19,13 +19,13 @@ PROJECT_ROOT = Path(__file__).resolve().parents[4]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from aspr.nature_multihorizon.artifact_store import hash_file  # noqa: E402
-from aspr.nature_multihorizon.figure_views import (  # noqa: E402
+from gear.nature_multihorizon.artifact_store import hash_file  # noqa: E402
+from gear.nature_multihorizon.figure_views import (  # noqa: E402
     CORE_FEATURES,
     MECHANISM_COLUMNS,
 )
-from aspr.nature_multihorizon.features import build_feature_table  # noqa: E402
-from aspr.nature_multihorizon.scoring import FrozenReleaseScorer  # noqa: E402
+from gear.nature_multihorizon.features import build_feature_table  # noqa: E402
+from gear.nature_multihorizon.scoring import FrozenReleaseScorer  # noqa: E402
 from scripts.run_nature_multihorizon import _figure_evidence_sources  # noqa: E402
 
 

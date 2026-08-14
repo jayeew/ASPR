@@ -9,7 +9,7 @@ from types import SimpleNamespace
 
 import pandas as pd
 
-from aspr.nature_multihorizon.artifact_store import (
+from gear.nature_multihorizon.artifact_store import (
     ArtifactStore,
     hash_file,
     hash_json,

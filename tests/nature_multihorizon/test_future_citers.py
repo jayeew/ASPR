@@ -8,14 +8,14 @@ import unittest
 
 import pandas as pd
 
-from aspr.nature_multihorizon.future_citers import (
+from gear.nature_multihorizon.future_citers import (
     audit_prebuilt_future_multihorizon,
     fetch_future_citers,
     import_prebuilt_future_multihorizon,
     materialize_future_tables,
     merge_materialized_future_batches,
 )
-from aspr.nature_multihorizon.targets import build_diffusion_targets_from_deltas
+from gear.nature_multihorizon.targets import build_diffusion_targets_from_deltas
 
 
 def _write_prebuilt_fixture(root: Path) -> None:

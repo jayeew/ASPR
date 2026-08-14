@@ -8,16 +8,16 @@ from pathlib import Path
 
 import pandas as pd
 
-from aspr.nature_multihorizon.candidate_registry_v6_1 import (
+from gear.nature_multihorizon.candidate_registry_v6_1 import (
     EXPECTED_ANGLES,
     candidate_registry_sha256,
     load_candidate_registry_v6_1,
     verify_search_log,
 )
-from aspr.nature_multihorizon.screening_v6_1 import (
+from gear.nature_multihorizon.screening_v6_1 import (
     freeze_registry_from_screening,
 )
-from aspr.nature_multihorizon.modeling_v6_1 import load_simple_config
+from gear.nature_multihorizon.modeling_v6_1 import load_simple_config
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]

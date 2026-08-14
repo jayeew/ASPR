@@ -1,0 +1,1544 @@
+{
+  "author_response_spans": [
+    {
+      "char_end": 10920,
+      "char_start": 10805,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-feb1ea316c2710865c98",
+      "source_role": "author_response",
+      "text": "RESPONSE: We thank the reviewer for the enthusiasm and the positive feedback to our work. This is much appreciated.",
+      "text_sha256": "sha256:213d3ea717190dadd060f665fb51939722a2b2ccd5e0c392a6d20e585da8ee52"
+    },
+    {
+      "char_end": 11416,
+      "char_start": 10923,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f2314c7bb48ba047329f",
+      "source_role": "author_response",
+      "text": "1. The authors have recently shown that group 2 epitope antibodies (ref 14) recognize a chimeric protein consisting of the N-terminal domain of TG3 fused to core/C1C2 domains of TG2. Given that the binding determinants identified in the crystal structure are primarily in the core domain (80XW), this finding is somewhat surprising and raises the questions whether analogous interactions could occur with the core domain of TG2 (although the antibodies have been shown not to bind native TG2).",
+      "text_sha256": "sha256:ba36511eae70377cf5a50a0477c12a30a5c42661bfc7012d810b9eccfd4a2673"
+    },
+    {
+      "char_end": 12209,
+      "char_start": 11419,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d614a64cf5df6d5df59e",
+      "source_role": "author_response",
+      "text": "RESPONSE: The reviewer is correct that in our previous study (Das et al., Adv Sci 2023, PMID: 37424036) we indicated that epitope group 2 is mainly located in the N-terminal domain. Hence it may seem paradoxical that Fab of DH63-B02 binds to the cataly�c core domain. In our previous work (ref 14) we also showed that out of our 4 an�bodies that belong to epitope group 2, DH63-B02 is the only one that does not bind to a chimeric TG3/TG2 molecule with the N-terminal domain from TG3 (see Fig 3D of the paper). This data suggest that this an�body binds to the cataly�c core and not to the N-terminal domain, yet s�ll it competes for TG3 binding with the three other epitope 2 group an�bodies. More informa�on about the previously observed binding of DH63-B02 to TG3 is now included in text.",
+      "text_sha256": "sha256:a4da83f1b54d27f9d1a76b6d70ff0dc9d40426c1893d0bf162fa5cfd4c6a1777"
+    },
+    {
+      "char_end": 12299,
+      "char_start": 12212,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e2a0fc862cddce06c3e7",
+      "source_role": "author_response",
+      "text": "2. Considerable efforts were made in previous work to remove Ca2+ from the purified TG3",
+      "text_sha256": "sha256:2efeff6d2ee0898a550720ae0a0affdb46eecdcd8b9ed7cf9b0cfa10b30b407c"
+    },
+    {
+      "char_end": 13230,
+      "char_start": 12302,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4d8abb80f3900a7e938d",
+      "source_role": "author_response",
+      "text": "zymogen. In fact, it turned out that the enzyme acquired the first Ca2+ ion during its synthesis (https://doi.org/10.1093/emboj/21.9.2055). Despite extensive efforts it was not possible to remove Ca2+ from site 1 (In fact, this work should be referred to at line 268/9 on page 12). Hence, it is somewhat surprising that simple EDTA treatment apparently removed Ca2+ from site 1 in the present work. The main difference appears to be that Ca2+ is stripped from a cleaved form of TG3 rather than the zymogen (a somewhat artificial scenario), and this therefore suggests that there are corresponding differences in the core domain in the loop consisting of Ile223-Val231 that connects Ca2+ site 1 and the enzyme active site between zymogen and Ca2+-stripped cleaved enzyme. Can a cleaved, Ca2+stripped and then reactivated enzyme (with Ca2+) gain back its full enzymatic activity? This aspect should be discussed in the manuscript.",
+      "text_sha256": "sha256:e7cb9aeaa0cab4cc632ac5a7a96335f49bb70be6c37551843916992f34f0a15c"
+    },
+    {
+      "char_end": 13852,
+      "char_start": 13233,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d37240c6a6a535307f4a",
+      "source_role": "author_response",
+      "text": "RESPONSE: We appreciate this valuable comment. The structure without calcium was obtained by including EDTA in the purifica�on buffer, and EDTA was consequently also present in the crystalliza�on drop solu�on. As is men�oned in the methods sec�on, these crystals took much longer to grow (two months compared to the usual 1-2 weeks), so it is conceivable that it was the prolonged incuba�on that stripped the last calcium ion from the protein. We have reworded the text and made this informa�on easier to find in the revised manuscript. We have also added the reference (formerly at line 268/9 on page 12) as suggested.",
+      "text_sha256": "sha256:f8ce13269c135bf00c7a2520f0821a55cac7460161053974e3c6b51d748b085b"
+    },
+    {
+      "char_end": 14246,
+      "char_start": 13855,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2b926ccfacceab86a2b7",
+      "source_role": "author_response",
+      "text": "3. It is also of note that complex formation of Fab with Ca2+-stripped cleaved enzyme is low as stated in methods (page 23, lines 523-525), perhaps suggesting reduced affinity? A more thorough analysis of binding kinetics for the different TG3 conformations may provide additional information, and perhaps reveal some additional insights that may not be apparent in equilibrium binding data.",
+      "text_sha256": "sha256:4fb27797f2114400d71013442a2b561b2ae9b6491df17a1b9f6cb2c780072851"
+    },
+    {
+      "char_end": 14814,
+      "char_start": 14249,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ec0de6c18d17e1c482df",
+      "source_role": "author_response",
+      "text": "RESPONSE: We agree with the reviewer that this may indicate lower affinity of the Fab for the Ca[2+] -stripped enzyme. In the initial work even though we had this suspicion, we did not embark on examining the affinity of the Fab to the complex without Ca[2+] for the mere reason that this represents an unphysiological setting. We will still argue that this is valid reasoning as _in vivo_ TG3-specific antibodies bind TG3 in the extracellular environment where Ca[2+ ] is present (1.1–1.4 mM for humans). For this reason, we prefer not to include such an analysis.",
+      "text_sha256": "sha256:16e8770e8634cd3d86b616a03542e1e32fef48d67a0a8896d041a9d892d56f2b"
+    },
+    {
+      "char_end": 14835,
+      "char_start": 14817,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a5b9eafe10070cde5665",
+      "source_role": "author_response",
+      "text": "specific comments:",
+      "text_sha256": "sha256:c3ae66722d908b82456b603d12200f0d2f75a0d4abe9519f0b16d8c69f41b10b"
+    },
+    {
+      "char_end": 15144,
+      "char_start": 14838,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d974c47f0422b202dbc0",
+      "source_role": "author_response",
+      "text": "In Fig 1, I suggest that authors number the three Ca2+-binding sites in order to provide the reader with the context for the detailed discussion in Figs. 5 & 6. Also, the choice of colour for the N-terminal domain and the core domain are a bit unfortunate as the two shades of blue are hard to distinguish.",
+      "text_sha256": "sha256:1de42d0c3a33ae3449268228c25a46f9866517285e5de676554e71b534e49cf9"
+    },
+    {
+      "char_end": 15423,
+      "char_start": 15147,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0a76b0fde8cb76eb602d",
+      "source_role": "author_response",
+      "text": "RESPONSE: We thank the reviewer for these excellent comments. The Ca[2+] binding sites are now labeled as suggested, also in Fig 3a and in Fig 6a. In the previous version of Fig 1a, the surface coloring of the N-terminal domain was incorrect making its dis�nc�on from the core",
+      "text_sha256": "sha256:443a90ba6d5cd5dc15254e997fc62e99eb487d52b1e12d2bb87e220e7323cba7"
+    },
+    {
+      "char_end": 15593,
+      "char_start": 15426,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-31da502cdb6bb7edc64a",
+      "source_role": "author_response",
+      "text": "In Fig 3, Asp 354 is incorrectly labeled as 'E354'. This should be corrected to 'D354'. RESPONSE: We thank the reviewer for spotting this error which is now corrected.",
+      "text_sha256": "sha256:6f593d94950e16f178105697bbc002b39d4f47309ef3cd6d4545859ec1fdfb89"
+    },
+    {
+      "char_end": 15687,
+      "char_start": 15596,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1ffb1cbec2df490bb53a",
+      "source_role": "author_response",
+      "text": "Page 10, lines 213-216 - relevant extended video data should be referred to. RESPONSE: Done",
+      "text_sha256": "sha256:89d3114c4c7ec402a24f3108731a2391b4b3b21cc74e40f7713fe7b33a5d8fb0"
+    },
+    {
+      "char_end": 15833,
+      "char_start": 15690,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-669f5eae37f9e3d35903",
+      "source_role": "author_response",
+      "text": "Page 12, lines 292/3 - it should be made clear that this statement refers to a comparison between the zymogen and Ca2+-stripped cleaved enzyme.",
+      "text_sha256": "sha256:a840659ae6474d7f414c996aa7930eb319db77c09b77a676533b3dc28a70a08c"
+    },
+    {
+      "char_end": 16267,
+      "char_start": 15836,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2ab5296b6d288fb5ee92",
+      "source_role": "author_response",
+      "text": "RESPONSE: We thank the reviewer for pointing out this unclarity. Scrutinizing supplementary table 4, it is evident that 10/17 H-bonds are tighter in the Ca[2+] -stripped enzyme compared to the cleaved TG3, while 14/17 are tighter in the Ca[2+] -stripped enzyme compared to the zymogen. We have updated the text to make the statement clearer, and we have also corrected an erroneous number of H-bonds stated in the previous version.",
+      "text_sha256": "sha256:988809631f1019487da2576927c1f926d8bcd58288629a1841e5aa6c6fd4ec47"
+    },
+    {
+      "char_end": 16854,
+      "char_start": 16270,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8be66d00c0fa73508aca",
+      "source_role": "author_response",
+      "text": "Given that enzyme preparation is fundamental to these studies, it should be matched by the detail in which it is described. There is much information missing from the provided description: full details of buffers used in extraction and purification should be stated (page 20); how exactly was the enzyme concentrated for crystallization (page 22); were SEC conditions for all separations of complexes the same, i.e. as given on page 20? RESPONSE: Further details on the methods are provided. We hope a sufficient degree of details is provided in the revised version of the manuscript.",
+      "text_sha256": "sha256:1479962aed00b58c3c773f94911d37468cf6449844e88b9480a5561423653698"
+    },
+    {
+      "char_end": 17710,
+      "char_start": 16857,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-358f02d30e232581d65b",
+      "source_role": "author_response",
+      "text": "Mg2+ at site 3: given the crystallization conditions, it is unlikely that Mg2+ occupancy would be observed at this site. The authors comment on this in the methods section (page 24, line 583-587). However, given that Ca2+-Mg2+ exchange has an essential role in regulating enzyme activity, I would suggest that a sentence is added in the results section to point this out to the reader and make this information more accessible. RESPONSE: We thank the reviewer for this suggestion. The text describing the occupancy of metal binding sites has been moved to the Results section along with an addition of a table displaying the CheckMyMetal results (Supplementary table 2). As suggested, we have also added a comment on the reported impact on TG3 activity by exchanging Ca[2+] with Mg[2+] at binding site 3 (Ahvazi et al, J Biol Chem 2003, PMID: 12679341).",
+      "text_sha256": "sha256:67fffe323b253bf769333989b09e7b69258a06d055dae57340fbb3911515fc45"
+    },
+    {
+      "char_end": 17724,
+      "char_start": 17713,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9b023556e4ce13040ab4",
+      "source_role": "author_response",
+      "text": "Supplement:",
+      "text_sha256": "sha256:c9837b83183b0af119263ad7c7487564fd302f1350b042cb80471e3e9a8df529"
+    },
+    {
+      "char_end": 17844,
+      "char_start": 17727,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c03ec8b99a2498204aec",
+      "source_role": "author_response",
+      "text": "Extended data videos - amino acid numbers should be given for ranges highlighted in colour (in legend) RESPONSE: Done",
+      "text_sha256": "sha256:c584942afd3b9dfbb25e48f7a215fa4a69e8f3d8ffcec19bc28d88e352d4dbdc"
+    },
+    {
+      "char_end": 17974,
+      "char_start": 17847,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-839df7f7ae576affe450",
+      "source_role": "author_response",
+      "text": "Extended data table 1 - units are missing for refinement statistics (Rcryst/Rfree, percentage; rmsd bond length, angstrom; etc)",
+      "text_sha256": "sha256:c455baca4c64aa321e5d7471b9daf550dcaa86380d4c45e7b6f8f61de320c360"
+    },
+    {
+      "char_end": 18025,
+      "char_start": 17977,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-cec188404b6e0f23995d",
+      "source_role": "author_response",
+      "text": "RESPONSE: The missing units have now been added.",
+      "text_sha256": "sha256:1e769b272f9afd4738f612d3c43aa28febc5fd56461744ce9d0a1306824cac39"
+    },
+    {
+      "char_end": 19082,
+      "char_start": 18999,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-70edc68bdf835988723f",
+      "source_role": "author_response",
+      "text": "RESPONSE: We very much appreciate that the reviewer has found our work interesting.",
+      "text_sha256": "sha256:a5ca82eafce7a657419e5e6bfa885709772ccc94d7d8362b846587d590d750de"
+    },
+    {
+      "char_end": 19211,
+      "char_start": 19085,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c943e2fe77f4849496b7",
+      "source_role": "author_response",
+      "text": "1.Exact cleavage site of TG3??. Is the cleavage site conserved in other TG family?. Suggest to make the fig showing this fact.",
+      "text_sha256": "sha256:f701a681cf61ee79a59c2792c43d42f64a0acfda1b89207b09ab797063618d5c"
+    },
+    {
+      "char_end": 19482,
+      "char_start": 19214,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-cb89c7e3f8a23a020d5c",
+      "source_role": "author_response",
+      "text": "RESPONSE: The exact cleavage sites by dispase and cathepsin L in TG3 have been determined previously. The figure below (taken from Cheng et al, JBC 2006, PMID: 16565075) illustrates the identified cleavage sites (dispase open triangle and cathepsin L closed triangle).",
+      "text_sha256": "sha256:b79f4b7e95eb4c45cdfece01e001c290160c1c279b10df94f349d9485f78de7a"
+    },
+    {
+      "char_end": 19537,
+      "char_start": 19485,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5f7ff748a3b93e0db904",
+      "source_role": "author_response",
+      "text": "**==> picture [280 x 81] intentionally omitted <==**",
+      "text_sha256": "sha256:a5c6d45aea22428968ca6f103469d71f1d108387a40227e72981e9fa0bd300db"
+    },
+    {
+      "char_end": 19591,
+      "char_start": 19539,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-03d304acf14f69acc2b8",
+      "source_role": "author_response",
+      "text": "**==> picture [280 x 80] intentionally omitted <==**",
+      "text_sha256": "sha256:cdd63f947493adb6d62986278c8bf04e3ef5577b4e0a33828bfeb585e89db523"
+    },
+    {
+      "char_end": 19798,
+      "char_start": 19593,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ba57bcc932cc293d80de",
+      "source_role": "author_response",
+      "text": "This sequence is not conserved among transglutaminases (see alignment below) which likely explains why the “TG3-zymogen activation mechanism” is not occurring for the other transglutaminase family members.",
+      "text_sha256": "sha256:d650e8b969192d3d42ed0eb469346cf2f58d9fa0779ef0effcd3f19d1566d4c2"
+    },
+    {
+      "char_end": 20951,
+      "char_start": 19801,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-768c91399d19c900d341",
+      "source_role": "author_response",
+      "text": "|sp|P00488|F13A_HUMAN|LIVTKQIGGDGMMDITDTYKFQEGQEEERLALETALMYGAKKPLNTEGVM----------|513|\n|---|---|---|\n|sp|P22735|TGM1_HUMAN|LIVTKAISSNMREDITYLYKHPEGSDAERKAVETAAAHGSKPNVYA--NR----------|573|\n|sp|P21980|TGM2_HUMAN|KISTKSVGRDEREDITHTYKYPEGSSEEREAFTRANHLNKLAEKE---------------|469|\n|sp|O43548|TGM5_HUMAN|FISTKSIQSDERDDITENYKYEEGSLQERQVFLKALQ--KLKARSFHGSQRGAELQPSRP|483|\n|sp|O95932|TGM6_HUMAN|CISTKAVGSDSRVDITDLYKYPEGSRKERQVYSKAVN--RLFGVEASGRRIWIRRAG--G|478|\n|sp|Q08188|TGM3_HUMAN|YISTKAVGSNARMDVTDKYKYPEGSDQERQVFQKALG--KLKPNTPFAAT----------|469|\n||* ** :  :   *:*  **. **.  ** .   *||\n|sp|P00488|F13A_HUMAN|------------------KSRSNVDMDFEV-ENAVLGKDFKLSITFRNNSHNRYTITAYL|554|\n|sp|P22735|TGM1_HUMAN|------------------GSAEDVAMQVEA-QDAVMGQDLMVSVMLINHSSSRRTVKLHL|614|\n|sp|P21980|TGM2_HUMAN|--------------------ETGMAMRIRVGQSMNMGSDFDVFAHITNNTAEEYVCRLLL|509|\n|sp|O43548|TGM5_HUMAN|TSLSQDSPRSLHTPSLRPSDVVQVSLKFKLLDPPNMGQDICFVLLALNMSSQFKDLKVNL|543|\n|sp|O95932|TGM6_HUMAN|RCL---WRDDLLEP----ATKPSIAGKFKVLEPPMLGHDLRLALCLANLTSRAQRVRVNL|531|\n|sp|Q08188|TGM3_HUMAN|------SSMGLETE----EQEPSIIGKLKVAGMLAVGKEVNLVLLLKNLSRDTKTVTVNM|519|\n||:   ..      :* :. .     * :         :||",
+      "text_sha256": "sha256:9cd1da0f07d1f2a0dbcf688a97024b49a03b5f6f443e94724ac62bacb73501bd"
+    },
+    {
+      "char_end": 21184,
+      "char_start": 20955,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-dd91a6e39404d610067d",
+      "source_role": "author_response",
+      "text": "We have included text in the Discussion section that mentions the distinct sequence of TG3 in the cleavage region which likely explaining why it has this unique property among transglutaminases of zymogen cleavage and activation.",
+      "text_sha256": "sha256:0f22123c8c843ed7e1e33ef4b7422591a506aead7fcf301b77980db340ff2ff8"
+    },
+    {
+      "char_end": 22396,
+      "char_start": 21187,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-eb7b0fdf9ed4d82ba622",
+      "source_role": "author_response",
+      "text": "2. How can the author so sure that their suggested Ca2+ binding sites contains Ca2+. Prove it experimentally. The ion characterization by electron density map is not proper way. RESPONSE: The metal binding sites of TG3 have been extensively characterized before done with equilibrium dialysis, inductively coupled plasma mass spectrometry and X-ray crystallography (Ahvazi et al, EMBO J 2002, PMID: 11980702; Ahvazi et al, JBC 2003, PMID: 12679341). This work demonstrated that TG3 has three metal binding sites that are occupied by Ca[2+] or Mg[2+] . Binding site 1 and 2 can bind Ca[2+] whereas binding site 3 can bind Ca[2+] or Mg[2+] , but having a preference for binding of Ca[2+] . TG3 with two Ca[2+] and one Mg[2+] ions bound (PDB ID 1NUG) was found to be catalytically inactive (see response to reviewer #1 above), and to have a structure slightly different from a structure with three Ca[2+ ] ions bound (PDB ID 1NUD). Importantly, in this structure the Mg[2+ ] ion sitting in binding site three (by contrast to Ca[2+ ] in this site) is unable to coordinate with residue D325 of TG3. Our two structures with Ca[2+] but without inhibitor (PBD IDs 8OXV and 8OXW) match PDB ID 1NUD and not PDB ID 1NUG.",
+      "text_sha256": "sha256:56448b49afb358d800c9a7538c56f47819fe9f833c0ee21a5d5d8e382cbd3768"
+    },
+    {
+      "char_end": 22576,
+      "char_start": 22399,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-39225fb4980cfcd0f436",
+      "source_role": "author_response",
+      "text": "Our structures were generated in conditions with concentrations of Ca[2+] dominating over Mg[2+] further speaking to our structures containing Ca[2+] at the metal binding sites.",
+      "text_sha256": "sha256:43bf9e61a3c8b0aea3f8e16c2db4f74b45a0c1e726a195fc787672a13be13573"
+    },
+    {
+      "char_end": 23620,
+      "char_start": 22579,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-883945280377a1a9c4f3",
+      "source_role": "author_response",
+      "text": "The best evidence for presence of Ca[2+] in our structures, however, comes from the direct scrutiny of our X-ray crystallography data. While analytical methods for detection on metal ions like atomic absorption spectroscopy and inductively coupled plasma mass spectrometry provide information about presence or absence of metal ions, X-ray crystallography provides information about the location of a metal within a macromolecule. X-ray crystallography has thus become a prominent method for assessing binding of metals to proteins (Kraus et al, Metallomics 2017, PMID: 28967006). Along with this development in the field, the accuracy of this type of analysis has become much better, not least because of tools like CheckMyMetal, (Zheng et al, Nat Protoc 2013, PMID: 24356774; Gucwa et al, Prot Sci 2023, PMID: 36464767) – the tool we used in our analysis. So, while we agree with the reviewer that X-ray crystallography may not have been considered proper for analysis metal binding to proteins, we will argue that this notion has changed.",
+      "text_sha256": "sha256:ddb2de918715157aef77046571e0f59ff58e94caafb3141eb30b531a68690c43"
+    },
+    {
+      "char_end": 24593,
+      "char_start": 23623,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-529e0a745cac515f536f",
+      "source_role": "author_response",
+      "text": "CheckMyMetal (CMM) uses a valida�on algorithm for a systema�c inspec�on of the metalbinding architectures in macromolecular structures. The algorithm is trained on highresolu�on X-ray data (<1.5Å) and is con�nuously updated. It performs an in-depth analysis of the posi�on, charge and type of atoms and residues surrounding the metal. The output is a detailed report lis�ng the values of an ion site, highligh�ng discrepancies from the target values. The algorithm considers the characteris�cs of each metal ion site. For example, calcium is a divalent alkali-earth metal and is typically six-coordinated with octahedral geometry and a typical Ca-O distance of 2.4-2.5 Å. Calcium can also be coordinated by seven ligands, caused by at least one bidentate ligand. Calcium is usually coordinated by at least two carboxyl side chains from Asp or Glu, and o�en has water molecules in the first coordina�on sphere forming hydrogen bonds to a carboxyl side chain in the second",
+      "text_sha256": "sha256:8e536c2d10add1fcc91cb6c399e1e14386a75a549004cd5b9ba89a6e0b1c693c"
+    },
+    {
+      "char_end": 24820,
+      "char_start": 24596,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-25a862b4ea22d1ae825d",
+      "source_role": "author_response",
+      "text": "coordina�on sphere. We see all these characteris�cs in our TG3 structures. We have included the results of the CMM analysis in Supplementary Data Table 2. We would like to highlight the following features from this analysis:",
+      "text_sha256": "sha256:4a3289632311f1b70274a5e0e32c543c38b35bfbba73f4657a4956170a59e124"
+    },
+    {
+      "char_end": 25199,
+      "char_start": 24823,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ed29b89c625ca7c82aac",
+      "source_role": "author_response",
+      "text": "**Site 1** has octahedral geometry with one bidentate ligand (Asp229) and four other Ca-O bonds of appropriate length (2.37-2.45 Å). The water molecule is coordinated by the carboxyl side chain of Asp228 in the second coordina�on sphere. The valence is 2, which is the op�mal value for an alkali-earth metal, and the r.m.s.d. from op�mal geometry are within acceptable levels.",
+      "text_sha256": "sha256:ef96ab75871f6c9616dcfd5d9e8ad934d0cc4697bee996fbc0308953289dcb57"
+    },
+    {
+      "char_end": 25588,
+      "char_start": 25202,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f15436b78dd876a28f96",
+      "source_role": "author_response",
+      "text": "**Site 2** has octahedral geometry with one bidentate ligand (Glu444) and one other carboxyl ligand (Glu449). In addi�on, this site has two other Ca-O bonds including two water molecules, all of appropriate values (2.33-2.46). One of the water molecules is coordinated by a carboxyl side chain (Asp396). A valency of 2.3 and a rmsd of 13.2 is within acceptable values suppor�ng calcium.",
+      "text_sha256": "sha256:231131e445bc437866d2086278a03bd10f90bd89e514833d1ac32ee89a324d8f"
+    },
+    {
+      "char_end": 25873,
+      "char_start": 25591,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f2a9a1b66307a96cab44",
+      "source_role": "author_response",
+      "text": "**Site 3** has octahedral geometry with three carboxyl side chain ligands and three addi�onal Ca-O bonds including 1 water molecule. A valency of 2.3 and rmsd from op�mal geometry are within acceptable levels. 8OXX has an addi�onal carboxyl side chain instead of the water molecule.",
+      "text_sha256": "sha256:210c6f7c69692d42e11973e1f8ded6d0427d65ed73cde6994c24af68a6e191a3"
+    },
+    {
+      "char_end": 26155,
+      "char_start": 25876,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b988cca5728b3e1b2e48",
+      "source_role": "author_response",
+      "text": "We tried subs�tu�ng magnesium into the structures. However, we got discrepancies for the bond lengths (too long for Mg-O preferred distance of 2.1 Å). Since the distance between Mg and O is so short, there is rarely room for several acidic coordina�ng ligands in the first shell.",
+      "text_sha256": "sha256:1829b5b17afa1cafaf888d96248cdc84a040650410533b36bc7c5e6c03de34df"
+    },
+    {
+      "char_end": 26459,
+      "char_start": 26158,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-78c87f72cd2a19e1e37f",
+      "source_role": "author_response",
+      "text": "Sodium is also an unlikely candidate since it rarely is coordinated by Asp or Glu side chains, and the valence would be too high (should be between 0.7 and 1.3 for sodium). Heavier atoms like Sr[2+] or Ba[2+] have longer metal-ligand distances and are also dis�nguishable by stronger electron density.",
+      "text_sha256": "sha256:4c90918930d72b12ff46bcb639085b6fc57a2a07a2bcc8c741eac9aee3515321"
+    },
+    {
+      "char_end": 26611,
+      "char_start": 26462,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6da2bf721ba84a5fb402",
+      "source_role": "author_response",
+      "text": "Based on previous work with TG3 and our CMM analysis we are confident that the three metal binding sites contain Ca[2+] and not any other metal ions.",
+      "text_sha256": "sha256:e64a6b3b705a5ccff72f79aaf67a82e2611d458968a565886a2e45d0d3b65348"
+    },
+    {
+      "char_end": 26803,
+      "char_start": 26614,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e98d0fd9e5ee02435dbf",
+      "source_role": "author_response",
+      "text": "3. In the Fig2, can the author detect cleaved C1C2 fragment on SEC profile? I can not see it on profile at the right panel. Have to show it with making broaden retention volume. ~19 or 20??",
+      "text_sha256": "sha256:af08686299e9e04c069abc04e1fa44fef42b65e9f48fa9a35a46f7a04e0e68b3"
+    },
+    {
+      "char_end": 27624,
+      "char_start": 26806,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-bb31fa0549c48acfea6a",
+      "source_role": "author_response",
+      "text": "RESPONSE: The reviewer is indeed right in that the C1C2 fragment is absent from the SEC profile. We have tried to find the eluted C1C2 without success, it is not present in any of the fractions. Our leading hypothesis is that the released C1C2 forms complexes with itself and is retained by the top filter of the column. Analysis of the homologous protein TG2 has indeed shown that it can form large non-covalent complexes when TG2 binds calcium and the C1C2 domains change conformation in relation to the core domain (Stamnaes et al, 2015, PMID: 26244572). We have observed a slight increase in the back pressure of the column over time. Since we do not have a definitive answer to this question, and it is likely not physiologically important for TG3, we did not include a discussion on this point in the manuscript.",
+      "text_sha256": "sha256:970b1a9b5b26e6ae7faadd80c224a58150a5ef9070bd58dea40195dc621e35d7"
+    },
+    {
+      "char_end": 27807,
+      "char_start": 27627,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-792a83fd361357ab9926",
+      "source_role": "author_response",
+      "text": "4. In the fig3. beta sheet at the core domain was moved after binding of Z-DON. Is it similar with the case of TG2/Z-DON complex? Although C1C2 is not in the TG3/Z-DON complex, the",
+      "text_sha256": "sha256:8439f4e8e4d8f95b41775cae2e0cee26a0798205a823c8ac09695c6c0880f967"
+    },
+    {
+      "char_end": 27921,
+      "char_start": 27810,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-93932a874630744a6f18",
+      "source_role": "author_response",
+      "text": "comparison of structural movement of TG3/Z-DON and TG2/Z-DON will be interesting. Need comparison fig. at Fig3.",
+      "text_sha256": "sha256:a966542856639f1ba51e348a51821cdcdd61b0e7cbdf89faa086d1451966cce6"
+    },
+    {
+      "char_end": 28441,
+      "char_start": 27924,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1f028ecda93bc001e7d1",
+      "source_role": "author_response",
+      "text": "RESPONSE: The TG2/Z-DON complex (PDB ID 3S3J) is without bound Ca[2+] , so the comparison is not straightforward. Our results from TG3 demonstrate that binding of Ca[2+] is an integral part if the structural rearrangement of the enzyme along with binding of the inhibitor. This essential feature is not represented in the PDB ID 3S3J structure. Thus, we will argue that the comparison is not very informative, and we prefer not to include it in the revised manuscript. We hope the reviewer will subscribe to our view.",
+      "text_sha256": "sha256:ea3bb8cf3b98ec931a82d1809e706955bca7ce93fda87863cd565444c822259b"
+    },
+    {
+      "char_end": 28596,
+      "char_start": 28444,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-79d48133b2479ff1c0d1",
+      "source_role": "author_response",
+      "text": "5. Fig4. Because this paper contains high resolution structure, it is worth to showing the electron density of Z-DON substrate and Ca2+ ion in the figs.",
+      "text_sha256": "sha256:a40b7045b63a9f8eb3ddcfcf9f28a2c70002b8c410977e79124f45e784ce38f7"
+    },
+    {
+      "char_end": 28725,
+      "char_start": 28599,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-de4310d01b68aefa0c2f",
+      "source_role": "author_response",
+      "text": "RESPONSE: This is an excellent suggestion. Figure 4 is now updated with the electron density surrounding Z-DON in both panels.",
+      "text_sha256": "sha256:f2980f149a3a19c857dbf130a71ea35cc9d68fcd3eb39e90cf784fc39a08f726"
+    },
+    {
+      "char_end": 28925,
+      "char_start": 28728,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5431ebc166f52192c1da",
+      "source_role": "author_response",
+      "text": "6. If the function of cleaved C1 and C2 of TG3 is not clear, it is good to analyse the activity of TG3 with or without cleavage. The effect of this cleavage on the transglutaminase activity of TG3.",
+      "text_sha256": "sha256:236674904457d3a1efd9a2665d973a7606a6071de64757d6a76542c4265c75f2"
+    },
+    {
+      "char_end": 29170,
+      "char_start": 28928,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-34989658d8349ad72c06",
+      "source_role": "author_response",
+      "text": "RESPONSE: We thank the reviewer for the comment. To the best of our knowledge, this issue has been settled already. As reported (Ahvazi et al, EMBO J 2002, PMID: 11980702) TG3 as a zymogen even in presence of Ca[2+] is catalytically inactive.",
+      "text_sha256": "sha256:47abc20e9d3738b1466389bef49f13a8a6f80f206e0844d17d2ce1197ce6dd81"
+    },
+    {
+      "char_end": 31656,
+      "char_start": 30801,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a1752963b3438f076117",
+      "source_role": "author_response",
+      "text": "RESPONSE: We have read again the papers by Ahvazi et al., (EMBO J 2002; PMID: 11980702 and J Biol Chem 2003; PMID: 12679341). In fact, while these authors in the 2002 paper reported that they were unable to strip Ca[2+] from TG3, they reported in their 2003 paper that they indeed were able to remove 85% of Ca[2+] from TG3 using 5 mM EGTA. Regrettably, this fact had missed our attention. The authors did not produce crystals and did not report the crystal structure of this protein. This is new in our work. Reassuringly, our results on Ca[2+] -stripping are consistent with the previous results. We have now changed the wording of our paper to accurately refer that TG3 stripped of Ca[2+] has been reported before, but never crystallized (lines 257-258). We have also updated the methods with details of our Ca[2+] stripping protocol (lines 530 + 532).",
+      "text_sha256": "sha256:fb61ee1c7fc6942f29f12bd230c99c38103de42227623707deced0e23ad52865"
+    },
+    {
+      "char_end": 31682,
+      "char_start": 31659,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1e085f7025af2a2b4305",
+      "source_role": "author_response",
+      "text": "## reviewer 2, point 3:",
+      "text_sha256": "sha256:96fb3c305ab25c5648428451ae24d4b96b818061844963c0bfe371062d9c9b69"
+    },
+    {
+      "char_end": 31924,
+      "char_start": 31685,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ac22f593ec0caa3d0801",
+      "source_role": "author_response",
+      "text": "Instability of C1/C2 fragment following dissociation from N/core-domains - it should be mentioned that the C1/C2 fragment was not recoverable following dissociation. RESPONSE: This fact is now mentioned in the revised text (lines 179-180).",
+      "text_sha256": "sha256:6dba2bbcfe00c2e2a44e21a5cc728a4cc4e6d7be2129d8df5e8f09d70e7a4cc0"
+    }
+  ],
+  "contract": "reconstruction_session_package",
+  "forbidden_conversation_hashes": [],
+  "input_sha256": "sha256:ece35365bd7cc6f67b1cdd2bbb6b81c00628c5497b3f72f15e4659dd2c6d5364",
+  "instructions": "Reconstruct the final-state peer review for one paper.\nUse reviewer_report spans as the only source of review opinions. Author responses may\nonly determine whether an issue was resolved; they cannot create or rewrite a review\npoint. Remove greetings, publication/acceptance recommendations, editorial decisions,\nand generic praise. Merge duplicates, preserve real reviewer disagreement, and produce\nat most 24 atomic points in StructuredReviewV2. Include contribution summary, novelty\nsupport/limits, strengths, weaknesses, and questions. Bind every retained point to at\nleast one reviewer quote key and one final PaperIR P:S-* span. Put resolved issues only\nin ReferenceTraceV2/revision_ledger. Keep partially_resolved or persists issues only\nwhen the residual is independently supported by the final paper. Unverifiable items are\naudit-only. Do not use graph signals, GEAR output, old reconstructions, ratings,\ndecisions, recommendations, or accept/reject language. Return only the completed\nReconstructionSessionResponseV2 JSON file.",
+  "package_id": "RSP-a3e23b92dacaa006346d",
+  "paper_context": {
+    "claims": [
+      {
+        "claim_id": "C-140898f29096d672",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-9436abd138e3161827e3",
+        "schema_version": "aspr_gear",
+        "text": "The findings support a model where B-cell receptors of TG3-specific B cells bind and internalize TG3-gluten enzyme-substrate complexes thereby facilitating gluten-antigen presentation, T-cell help and autoantibody production."
+      },
+      {
+        "claim_id": "C-56c016b7ba91dd66",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-fe108d9958cb107af019",
+        "schema_version": "aspr_gear",
+        "text": "The two first reactions are termed transamidation, and when Lys is a substrate, it results in protein crosslinking by formation of an isopeptide bond."
+      },
+      {
+        "claim_id": "C-3b473a8649cd80de",
+        "claim_type": "causal_claim",
+        "evidence_key": "P:S-fe108d9958cb107af019",
+        "schema_version": "aspr_gear",
+        "text": "The latter reaction is termed deamidation and results in conversion of Gln to Glu."
+      },
+      {
+        "claim_id": "C-f0a1bba99efaae33",
+        "claim_type": "significance_claim",
+        "evidence_key": "P:S-bc9f31cf329ea9a53519",
+        "schema_version": "aspr_gear",
+        "text": "It follows that it will be important to define the conformation of the enzyme-substrate intermediate of TG3 to understand the autoantibody production in DH."
+      },
+      {
+        "claim_id": "C-44aa7f71063ca857",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-bc9f31cf329ea9a53519",
+        "schema_version": "aspr_gear",
+        "text": "Importantly, the structure of the enzyme-substrate intermediate of TG3 without C1C2 was recognized by autoantibodies in DH patients, supporting a model where TG3specific B cells internalize gluten peptides as part of TG3-gluten enzyme-substrate complexes."
+      },
+      {
+        "claim_id": "C-43bd480948108de6",
+        "claim_type": "causal_claim",
+        "evidence_key": "P:S-929a4f21123230bd214a",
+        "schema_version": "aspr_gear",
+        "text": "The fact that we find no evidence for binding of Mg[2+] is relevant, as replacement of Ca[2+] with Mg[2+] in binding site 3 was reported to cause structural changes and prevent the catalytic activity of TG3[7] ."
+      },
+      {
+        "claim_id": "C-ab47652166331c37",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-929a4f21123230bd214a",
+        "schema_version": "aspr_gear",
+        "text": "The Fab makes slight interactions with the C2 domain by one residue of CDR-L2 and two residues in framework region 3 of the light chain."
+      },
+      {
+        "claim_id": "C-ba3703083d98a09c",
+        "claim_type": "causal_claim",
+        "evidence_key": "P:S-35a9fd15002f63dd5f4a",
+        "schema_version": "aspr_gear",
+        "text": "Addition of Z-DON leads to irreversible alkylation of the active site Cys and thus captures TG3 in a conformation likely representing the substrate-bound intermediate."
+      },
+      {
+        "claim_id": "C-083c96dc2eafc9b9",
+        "claim_type": "causal_claim",
+        "evidence_key": "P:S-b4f44e3f21584410cca6",
+        "schema_version": "aspr_gear",
+        "text": "Thus, the binding of Z-DON leads to a structural rearrangement of TG3."
+      },
+      {
+        "claim_id": "C-944509b7ae9a2379",
+        "claim_type": "causal_claim",
+        "evidence_key": "P:S-3aa1bc8def1bd37aa9e5",
+        "schema_version": "aspr_gear",
+        "text": "The restrained angles of Pro might cause a clash of Phe with hydrophilic TG2 residues Lys176 and Gln169, which are equivalent Nature Communications | (2023) 14:6216 4 Article https://doi.org/10.1038/s41467-023-42004-z **==> picture [325 x 113] intentionally omitted <==**"
+      },
+      {
+        "claim_id": "C-c284407fd2f14880",
+        "claim_type": "causal_claim",
+        "evidence_key": "P:S-e929c67982d53ea26700",
+        "schema_version": "aspr_gear",
+        "text": "In Ca[2+] binding site 3, the lack of Ca[2+] leads to a rearrangement of the loop containing Asp325 so that Ser324 can form an H-bond with Gly527 of the C1 domain."
+      },
+      {
+        "claim_id": "C-4ea28374033de040",
+        "claim_type": "significance_claim",
+        "evidence_key": "P:S-e929c67982d53ea26700",
+        "schema_version": "aspr_gear",
+        "text": "described as the opening of a channel important for the catalytic function of TG3, possibly by controlling substrate access to the active site[7][,][8] ."
+      }
+    ],
+    "contract": "reconstruction_paper_context",
+    "paper_id": "10.1038/s41467-023-42004-z",
+    "paper_sha256": "sha256:7588216fcd47b703b2d8e58973e69588764ce706db9cfa8589a1cd2b6d2e5b15",
+    "schema_version": "aspr_gear",
+    "spans": [
+      {
+        "evidence_key": "P:S-f8eae54d4bcac4ce3fc8",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-f8eae54d4bcac4ce3fc8",
+        "text": "https://doi.org/10.1038/s41467-023-42004-z \n\n**==> picture [523 x 31] intentionally omitted <==**",
+        "text_sha256": "sha256:21d627840418bb5947f373b2567e5974b931cbbf61ca29cea416c6788e7b2f35"
+      },
+      {
+        "evidence_key": "P:S-9436abd138e3161827e3",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-9436abd138e3161827e3",
+        "text": "## Article \n\n## Autoantibody binding and unique enzymesubstrate intermediate conformation of human transglutaminase 3 \n\nReceived: 20 June 2023 Accepted: 25 September 2023 Check for updates \n\nJulie Elisabeth Heggelund 1,2 , Saykat Das[1,2] , Jorunn Stamnaes[1,2] , Rasmus Iversen 1,2 & Ludvig M. Sollid 1,2 \n\nTransglutaminase 3 (TG3), the autoantigen of dermatitis herpetiformis (DH), is a calcium dependent enzyme that targets glutamine residues in polypeptides for either transamidation or deamidation modifications. To become catalytically active TG3 requires proteolytic cleavage between the core domain and two C-terminal β-barrels (C1C2). Here, we report four X-ray crystal structures representing inactive and active conformations of human TG3 in complex with a TG3-specific Fab fragment of a DH patient derived antibody. We demonstrate that cleaved TG3, upon binding of a substrate-mimicking inhibitor, undergoes a large conformational change as a β-sheet in the catalytic core domain moves and C1C2 detaches. The unique enzyme-substrate conformation of TG3 without C1C2 is recognized by DH autoantibodies. The findings support a model where B-cell receptors of TG3-specific B cells bind and internalize TG3-gluten enzyme-substrate complexes thereby facilitating gluten-antigen presentation, T-cell help and autoantibody production. \n\nTransglutaminase 3 (TG3) belongs to a family of calcium-dependent enzymes which in sequence-specific fashions target Gln residues in polypeptides for posttranslational modifications[1] . The reaction happens via a ping-pong mechanism, where a thioester bond involving active site Cys273 of TG3 and the side chain carbonyl of the substrate Gln is formed as an intermediate.",
+        "text_sha256": "sha256:cc2f44b18125af842cf72ab2fe0441448747205405d4d0b70ba88502607cb104"
+      },
+      {
+        "evidence_key": "P:S-fe108d9958cb107af019",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-fe108d9958cb107af019",
+        "text": "The enzyme-substrate intermediate is resolved through a nucleophilic attack by a second substrate, which can either be a polyamine, the ε-NH2 group of a polypeptide Lys residue or water. The two first reactions are termed transamidation, and when Lys is a substrate, it results in protein crosslinking by formation of an isopeptide bond. The latter reaction is termed deamidation and results in conversion of Gln to Glu. \n\nTG3, like all human transglutaminase enzymes, has a four-domain structure with an N-terminal β-sandwich domain, two C-terminal β-barrel domains (C1C2) and a catalytic core domain that harbours a catalytic triad with Cys, His and Asp residues[1] . Several X-ray crystal structures have been determined for three human transglutaminases TG2, TG3 and factor XIIIA (FXIIIA) (Supplementary Table 1). Both TG2 and FXIIIA (PDB IDs TG2: 1KV3 and 2Q3Z; FXIIIA: 1GGU and 4KTY)[2][–][5] \n\nwere reported to undergo a large conformational change with displacement of C1C2 upon binding of an inhibitor mimicking a peptide substrate in the active site. TG3 is unique among transglutaminases in the requirement for proteolytic cleavage between the core domain and C1C2 to become catalytically active[6] . In the structure of cleaved TG3 with three bound calcium ions (PDB ID 1NUD)[7] , C1C2 remains associated with the N-terminal and core domains through non-covalent interactions, and the active site Cys273 is engaged in a hydrogen bond with Tyr526 of the C1 domain.",
+        "text_sha256": "sha256:a48fcf635cb195e638ecef73f5d61476fbeb1cca40b3c51d04735e0fac4c61e9"
+      },
+      {
+        "evidence_key": "P:S-50854583e4101d65e5cb",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-50854583e4101d65e5cb",
+        "text": "This Tyr residue is conserved among transglutaminases, and the Cys-Tyr hydrogen bond along with the occupation of the active site by a loop of the C1 domain is a shared feature in structures of transglutaminases with no substrate occupancy of the active site (PDB IDs human TG2: 1KV3, human TG3: 1L9M, human FXIIIA: 1GGU, and red sea bream transglutaminase: 1G0D)[2][,][4][,][8][,][9] . For TG2, the Tyr-Cys interaction was demonstrated to stabilize the closed, inactive enzyme conformation[10] . In a structure of FXIIIA with a bound irreversible peptidomimetic inhibitor, the Tyr residue undergoes large movement in conjunction with inhibitor binding and displacement of C1C2 (PDB ID 4KTY)[5] . Based on this structure of the \n\n> 1KG Jebsen Coeliac Disease Research Centre, Institute of Clinical Medicine, University of Oslo, Oslo, Norway. 2Department of Immunology, Oslo University Hospital-Rikshospitalet, Oslo, Norway. e-mail: j.e.heggelund@medisin.uio.no; l.m.sollid@medisin.uio.no \n\nNature Communications | (2023) 14:6216 \n\n1 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-42004-z \n\nenzyme-substrate intermediate of FXIIIA, it was hypothesized that a similar active TG3 conformation must exist, and atomic details of the calcium-binding sites of the active TG3 structure were predicted[5] . \n\nTransglutaminase activity is involved in the gluten-sensitive disorders celiac disease and dermatitis herpetiformis (DH) through creation of antigenic gluten epitopes by deamidation[11] . In addition, TG2 is a target of autoantibodies in celiac disease[12] , whereas DH is characterized by autoantibodies to both TG2 and TG3[13] .",
+        "text_sha256": "sha256:b5eb368f40f35bffd046bcbd91e77e22f36182f59a2c137ab8816accfd053d40"
+      },
+      {
+        "evidence_key": "P:S-307dbf29961cc299b3a9",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-307dbf29961cc299b3a9",
+        "text": "Recently, we identified TG3-specific and TG2-specific plasma cells in duodenal biopsies of DH patients, and we generated a panel of TG3-specific monoclonal antibodies (mAbs) from single isolated cells[14] . These antibodies are specific to TG3 and do not cross-react to TG2. Further, we identified three distinct groups of conformational epitopes whose exact location within the TG3 structure remains unknown. These findings give credence to the notion that, via involvement of haptencarrier like transglutaminase-gluten peptide complexes, TG3-specific B cells can receive help from gluten-specific T cells to become TG3antibody producing plasma cells, much like TG2-specific B cells in celiac disease can receive help from gluten-specific T cells to become TG2-antibody producing plasma cells[15] . \n\nAs demonstrated for TG2, such hapten-carrier-like complexes can take two different forms; they can be isopeptide-linked adducts where a gluten Gln residue is attached to a Lys residue on the enzyme surface, or they can be enzyme-substrate intermediates where the gluten peptide is bound in the active site[16] . The former is a stable product, whereas the latter is a transient state that will be generated as long as substrate is available. Although both forms can facilitate interactions between TG2-specific B cells and gluten-specific T cells[17] , recent evidence points to the enzyme-substrate intermediate as the main driving antigen[18] . Unlike TG2, TG3 was observed not to catalyse formation of isopeptide bonds between gluten peptides and the enzyme itself[19] , suggesting that interactions between TG3-specific B cells and glutenspecific T cells can only be fuelled by enzyme-substrate complexes.",
+        "text_sha256": "sha256:45012db3412e57e7c0bc522d3c8375ae1f0f4b67fac8abf928bc5f668f3162c7"
+      },
+      {
+        "evidence_key": "P:S-bc9f31cf329ea9a53519",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-bc9f31cf329ea9a53519",
+        "text": "Thus, to be able to receive help from a gluten-specific T cell, a TG3specific B cell must be able to bind TG3 with a bound gluten peptide substrate. It follows that it will be important to define the conformation of the enzyme-substrate intermediate of TG3 to understand the autoantibody production in DH. \n\nHere, we describe both inactive and active conformations of human TG3 in complex with a TG3-specific Fab fragment derived from a DH patient. We show that cleaved TG3 with three bound calcium ions, upon binding of an inhibitor mimicking a substrate undergoes a large conformational change, as C1C2 including residue Tyr526 detaches from the rest of the enzyme. Importantly, the structure of the enzyme-substrate intermediate of TG3 without C1C2 was recognized by autoantibodies in DH patients, supporting a model where TG3specific B cells internalize gluten peptides as part of TG3-gluten enzyme-substrate complexes. This will enable T-cell help by glutenspecific T cells and ultimately autoantibody production to TG3. \n\n## Results \n\n## Crystal structure of Fab DH63-B02 complexed with TG3 \n\nAll structures of TG3 were solved in complex with the Fab fragment of the anti-TG3 antibody DH63-B02, derived from DH patient gut biopsies[14] . This Fab was chosen as it belongs to a group of DH autoantibodies which targets a major epitope region of TG3 (epitope group 2; N-terminally oriented). The observation that DH63-B02 does not recognize a TG3/TG2 chimeric molecule with the N-terminal domain from TG3 suggests that the antibody binds to the catalytic core rather than the N-terminal domain[14] . The initial structures were generated of zymogen TG3 (PDB ID 8OXV to 1.8 Å resolution) as well as dispasecleaved TG3 with bound Ca[2][+] (PDB ID 8OXW to 1.7 Å resolution) (Supplementary Table 2).",
+        "text_sha256": "sha256:24cf68ceb8891b45b0ac4b1ca2369a2649c3cf499e76837373d819c39bc76031"
+      },
+      {
+        "evidence_key": "P:S-929a4f21123230bd214a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-929a4f21123230bd214a",
+        "text": "Both structures, being almost identical, contain three Ca[2+] bound at calcium-binding sites 1–3 as previously described in structures of \n\nTG3[7][,][8] and FXIIIA[5][,][20] . CheckMyMetal[21] server analysis was consistent with binding of Ca[2+] and not any other metal ions (Supplementary Table 3). Moreover, replacing Ca[2+] with Mg[2+] in the highest resolution structure led to positive difference electron density, supporting the placement of Ca[2+] over Mg[2+] in all three positions. The fact that we find no evidence for binding of Mg[2+] is relevant, as replacement of Ca[2+] with Mg[2+] in binding site 3 was reported to cause structural changes and prevent the catalytic activity of TG3[7] . In both structures, the C1C2 domains are present with the Tyr526 residue of the C1 domain making a hydrogen bond with Cys273 thereby occluding the active site as described in previously published TG3 structures[7][,][8] . The loop (residues 461-473) containing the TG3 cleavage site is unresolved in both structures but was confirmed to be intact in the zymogen structure by analysing crystals by SDS-PAGE (Supplementary Fig. 1). \n\nThe structures further reveal that the Fab primarily binds to the catalytic domain of TG3 (Fig. 1a, b, Supplementary Tables 4 and 5). The paratope/epitope contacts are identical in the zymogen and the cleaved form of TG3. The Fab has direct H-bonds with residues of the catalytic domain of TG3 through all complementarity-determining region (CDR) loops of both the heavy (CDR-H) and light (CDR-L) chain except CDR-H2. The CDR loops also have several water-mediated interactions. The Fab makes slight interactions with the C2 domain by one residue of CDR-L2 and two residues in framework region 3 of the light chain.",
+        "text_sha256": "sha256:cf2fd6717d10ba2bf17cd7da2d99a931f05b8630fa207fc9b2109faf6fe12fbe"
+      },
+      {
+        "evidence_key": "P:S-35a9fd15002f63dd5f4a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-35a9fd15002f63dd5f4a",
+        "text": "The epitope is located 13 Å away from the active site Cys and on the opposite side of the cleavable loop. Owing to this distance, it is unlikely that antibody binding affects the enzymatic function of TG3. \n\nOur observation that the zymogen and the dispase-cleaved forms of TG3 are almost identical with Tyr526 engaged in hydrogen bonding to Cys273 in both structures, suggest that the enzyme must obtain a different conformation while acting on substrate. To investigate this possibility, we generated crystals of cleaved TG3 with an inhibitor bound in the active site as a proxy for substrate. We included Fab DH63-B02 and had Ca[2+] present in the crystallization solution. \n\nThe peptidomimetic inhibitor Z-DON (where “DON” refers to the Gln-mimicking electrophilic amino acid 6-diazo-5-oxo-L-norleucine) was chosen as active site inhibitor as it showed the highest activity for TG3 among several screened inhibitors[22] . Addition of Z-DON leads to irreversible alkylation of the active site Cys and thus captures TG3 in a conformation likely representing the substrate-bound intermediate. Formation of Z-DON adduct to Cys273 of TG3 was verified by mass spectrometry (Supplementary Fig. 2). \n\n## Chromatography analysis of TG3 with and without Z-DON \n\nBefore undertaking structural studies, the effects of Z-DON binding to TG3 were assessed by size exclusion chromatography (SEC) analysis. Incubation with Z-DON changed the elution time of dispase-activated TG3 (from 14.5 to 16.2 ml), indicating a reduction in the overall size of the enzyme. SDS-PAGE analysis revealed that the C-terminal domains C1 and C2 were missing thus explaining the later elution (Fig. 2). Released C1C2 was not visible on the chromatogram, suggesting that it did not enter the column.",
+        "text_sha256": "sha256:4c374fb91baf1ab01bcd1700632b7cd1c410d5bcf76efb329c52d286ce95e7f5"
+      },
+      {
+        "evidence_key": "P:S-13d43544809db000661f",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-13d43544809db000661f",
+        "text": "The control sample that was treated equally, but not added Z-DON, kept the initial elution time. Evidence suggests that in vivo TG3 is cleaved by cathepsin L to generate an active enzyme[23] . To confirm that dispase- and cathepsin L-digested TG3 behave similarly, we repeated the experiment using cathepsin L-cleaved TG3. Also in this case, incubation with Z-DON induced detachment of the C1C2 fragment (Supplementary Fig. 3). \n\n## Structural analysis of the catalytic site in the enzyme-substrate intermediate \n\nThe crystal structure of cleaved TG3 with Z-DON and Ca[2+] was solved at 2.5 Å resolution (PDB ID 8OXX, Supplementary Table 2). CheckMyMetal analysis confirmed the occupancy of three metal binding sites by Ca[2+] (Supplementary Table 3). The data demonstrate that C1 and C2 \n\nNature Communications | (2023) 14:6216 \n\n2 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-42004-z \n\n**==> picture [325 x 196] intentionally omitted <==**",
+        "text_sha256": "sha256:9d3f36a903614b64b09b01a1b193d1b643ba50c4cfe75a14eb23f4a9d17593d6"
+      },
+      {
+        "evidence_key": "P:S-aa95f72c7537069c9546",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-aa95f72c7537069c9546",
+        "text": "Fig. 1 | Binding of Fab DH63-B02 to TG3. a Structure of the complex of Fab DH63B02 with TG3 (PDB ID 8OXW). The TG3 N-terminal domain is coloured dark blue, the catalytic domain is coloured light blue, the C1 domain is coloured green, and the C2 domain is coloured yellow. Ca[2+] ions are shown as green spheres, and labelled 1, 2 and 3 according to their binding site occupancies. The Fab heavy chain \n\nis coloured black, and the light chain is grey. The CDR1 loops are coloured blue (H) and cyan (L), the CDR2 loops are coloured dark green (H) and light green (L), and the CDR3 loops are coloured magenta (H) and light pink (L). b Closeup of paratopeepitope interactions with depiction of direct H-bonds (red broken lines) between residues of Fab DH63-B02 and TG3. \n\n**==> picture [289 x 80] intentionally omitted <==**",
+        "text_sha256": "sha256:cc2e414ca78a0391ade0f0c4ac5a8f5ea835ba59ff4efea7d0b266604cbfbda0"
+      },
+      {
+        "evidence_key": "P:S-b282cc400783285d3037",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-b282cc400783285d3037",
+        "text": "**==> picture [58 x 34] intentionally omitted <==**",
+        "text_sha256": "sha256:a2b1cf21d3d1077cead4aebf270a0a606673aefddb6d1f3e9ae8c7edb49923d4"
+      },
+      {
+        "evidence_key": "P:S-b4f44e3f21584410cca6",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-b4f44e3f21584410cca6",
+        "text": "Fig. 2 | Size exclusion chromatography (SEC) analysis of TG3 without or with Z-DON. Top panels show SDS-PAGE analysis of the corresponding SEC fractions. M: Molecular weight marker. A: Sample applied to the column. 16–21. Fractions of the SEC run. Blue line: absorbance at 280 nm. The size of the zymogen is 79 kDa, the size of the N-terminal and core domains (N-core) of TG3 is 51 kDa, and the size of \n\nC1C2 is 26 kDa. Z-DON-incubated samples eluted in two peaks, where the smaller peak represented uncleaved (zymogen) TG3 as a result of incomplete dispase digestion. The experiment was repeated twice with similar results. Source data are provided in the Source data file. \n\nindeed are missing from the structure (Fig. 3a). Thus, the binding of Z-DON leads to a structural rearrangement of TG3. In addition to the loss of the C-terminal domains, there is also a change in a β-sheet at the C-terminal end of the catalytic core domain, comprising residues 306–322 and 395–415 (Fig. 3b, Supplementary Movie 1). These sequences include some of the residues in the Ca[2+] binding sites 2 and 3 \n\n(see later). In the structures without Z-DON, the C1 domain is occluding the binding site, and Tyr526 is engaged in H-bonding with Cys273 (Fig. 3c, Supplementary Table 6). The detachment of the C1 domain facilitates the binding of Z-DON to Cys273, to Asn329 and to the backbone carbonyl of Trp237—residues that before detachment all bound to C1 (Fig. 3d–f, Supplementary Table 6). Four residues of the \n\nNature Communications | (2023) 14:6216 \n\n3 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-42004-z \n\n**==> picture [325 x 453] intentionally omitted <==**",
+        "text_sha256": "sha256:0cfce2a6f1a9edeb49a6fe915ed389c5c5d2fc1ca12adbe5d0bf325e072a7145"
+      },
+      {
+        "evidence_key": "P:S-d28eb539f78aaec6fae8",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-d28eb539f78aaec6fae8",
+        "text": "Fig. 3 | Structure of TG3 with Z-DON inhibitor bound in the active site. a The overall structure of cleaved TG3 + Z-DON + Fab DH63-B02 (PDB ID 8OXX). The β- sheet is highlighted in magenta, Z-DON is shown as yellow sticks, Ca[2+] ions are shown as green spheres and labelled 1–3 according to their respective binding sites. b Superimposition of TG3 (N-terminal and core domain) with and without Z-DON, showing the movement of the β-sheet. c Closeup of the active site of TG3 without Z- DON, showing C1 in dark green (PDB ID 8OXW). The catalytic triad of Cys273, His331 \n\nand Asp354 are shown together with the proposed catalytic dyad His301 and Glu359. d Closeup of the active site of TG3 with Z-DON (yellow sticks) bound. e Closeup of Z-DON binding to TG3 with H-bonds shown in green and a water molecule shown in red. f Schematic representation of the interactions of TG3 with Z-DON. H-bonds are shown by green broken lines. TG3 residues engaged in binding of Z-DON are labelled. \n\nβ-sheet (Gly317, Asn318, Trp410 and Asn412) have their H-bonds to the C1 domain broken. The movement of the β-sheet enables Asp310 to directly co-ordinate Ca[2+] at calcium-binding site 3, replacing a water molecule (Fig. 3c, d). \n\nThere are striking differences in the area around the active site of TG3 (Fig. 3c, d and Supplementary Movie 1). The side chain of Trp328 has turned by 90 degrees, exposing the active-site Cys273 by forming a tunnel that conceivably channels the Lys residue side chain to the acylenzyme thioester to exert its nucleophilic attack. Of note, this is not the same tunnel as described by Ahvazi et al.[7] . The movement of the Trp328 residue breaks its water-mediated contact with His301 and enables the formation of a direct H-bond between Trp328 and Gln358.",
+        "text_sha256": "sha256:9ac951685f336a812193386ea54b8be5009ee5499085d00e86eda21a65522db3"
+      },
+      {
+        "evidence_key": "P:S-3aa1bc8def1bd37aa9e5",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-3aa1bc8def1bd37aa9e5",
+        "text": "His301 and Glu359 have been suggested to make up a catalytic dyad \n\nfacilitating the nucleophilic attack by Lys[5] . The interaction between these two residues is intact in all three structures with calcium. The arrangement of the active site as we observed in the inhibitor-bound conformation has not been seen in other published TG3 structures. \n\nThe active site of TG3 has a hydrophobic patch that is not seen in TG2 (Fig. 4). This patch is located at the N-terminal side of the inhibitor/substrate. This feature would select for hydrophobic residues at the N-terminal side of the substrate Gln and could explain that TG3, unlike TG2, was demonstrated to deamidate the sequence FPPQQPF (deamidation site underlined)[19] . Compared to sequences targeted by TG2, this sequence uniquely has a Pro in position −2 and a Phe in position −3. The restrained angles of Pro might cause a clash of Phe with hydrophilic TG2 residues Lys176 and Gln169, which are equivalent \n\nNature Communications | (2023) 14:6216 \n\n4 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-42004-z \n\n**==> picture [325 x 113] intentionally omitted <==**",
+        "text_sha256": "sha256:99ed5f6dc9156a16079d195b7bee79ca62b736eb9b486e0f7f3dafcac54f2d79"
+      },
+      {
+        "evidence_key": "P:S-6a38210159aabc7711a4",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-6a38210159aabc7711a4",
+        "text": "Fig. 4 | Substrate binding sites of TG3 and TG2. Hydrophobic residues are coloured grey, hydrophilic and polar residues are coloured orange. Electron density maps of Z-DON are generated in Coot for the TG3 structure and downloaded \n\nfrom the PDB for the TG2 structure. 2Fo-Fc maps are blue and contoured at 1.0σ, Fo-Fc maps are green/red and contoured at 3.0σ. a TG3 with Z-DON (PDB ID 8OXX). b TG2 with Z-DON (PDB ID 3S3J). \n\nto the small hydrophobic residues Gly172 and Val165 in TG3. In structures of FXIIIA recently published, it was demonstrated how residues in the corresponding area of the substrate binding site (termed the α- space) have alternative conformations and move to accommodate different inhibitors/substrates[20] . \n\n## Details of the Ca[2][+] binding sites in TG3 \n\nThe cleaved TG3 structure with Z-DON has several small but notable differences at Ca[2+] binding site 3 compared to the TG3 structure without Z-DON. This site is co-ordinated by the side chains of Asp302, Asp304, Asn306, Asp310, Asp325, as well as the backbone of Ser308 (Fig. 5a–c). In the structure with Z-DON, the β-strand containing Asp310 is shifted 4 Å away from the Ca[2+] and is instead binding to the ion via a water molecule. This structure of TG3 demonstrates a direct interaction between Asp310 and Ca[2+] , similarly to the inhibitor-bound FXIIIA structure[5] . The movement of Asp310 is part of a larger shift of the β-sheet in the C-terminal portion of the catalytic domain and widens the binding site of the inhibitor/substrate substantially. \n\nThe calcium ion at Ca[2+] binding site 1 is co-ordinated by the side chains of Asn225 and Asn229, and the backbone carbonyls of Ala222, Asn225, Asn227 and a water molecule.",
+        "text_sha256": "sha256:3a0ccae46e9bdb44d2bb7d58d0bb6806e6806cf8281cd17228aa68c7d1c8cdfe"
+      },
+      {
+        "evidence_key": "P:S-e929c67982d53ea26700",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-e929c67982d53ea26700",
+        "text": "These interactions are equivalent to the interactions in FXIIIA (called Ca[2+] binding site 3 in FXIIIA)[5] and all published structures of TG3[7][,][8] . This site has been measured to have the highest affinity to Ca[2+] in TG3[7] . \n\nAt Ca[2+] binding site 2 the calcium ion is co-ordinated by the side chains of Asn394, Glu444 and Glu449, the backbone carbonyl of Ser416 and two water molecules. These interactions are equivalent to the interactions in FXIIIA (called Ca[2+] binding site 1 in FXIIIA)[5] . The Ca[2+] coordination at this site is identical in the structures with and without Z-DON. \n\nthis region might explain why Ca[2+] is crucial for this enzymatic reaction to occur. \n\nIn Ca[2+] binding site 3, the lack of Ca[2+] leads to a rearrangement of the loop containing Asp325 so that Ser324 can form an H-bond with Gly527 of the C1 domain. The loop is covering parts of the substrate binding site and has been described in previous structures that are also lacking Ca[2+] in site 3 (Supplementary Table 1)[8] . Upon calcium binding, there is a loop movement which Ahvazi et al. described as the opening of a channel important for the catalytic function of TG3, possibly by controlling substrate access to the active site[7][,][8] . This channel is an opening between the core domain and the C1 domain, and we hence propose that this structural change rather is an integral part of the C1C2 domain detachment process. Other amino acid residues are kept in a similar position as in the structures with Ca[2+] , but many of the H-bonds between the catalytic domain and the C1C2 domain are tighter in the structure lacking calcium.",
+        "text_sha256": "sha256:773d3cba516f68966e847997147859193b3f508b4f705827f3e7c15eac1deece"
+      },
+      {
+        "evidence_key": "P:S-0d736ba1a7e3dd556330",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-0d736ba1a7e3dd556330",
+        "text": "Specifically, 10/17 H-bonds are tighter in the Ca[2+] -stripped enzyme compared to the cleaved TG3, while 14/17 are tighter in the Ca[2+] -stripped enzyme compared to the zymogen (Supplementary Table 6). Taken together, these observations suggest that the interactions between the catalytic domain and the C1C2 domains are weakened upon binding of Ca[2+] and the enzymatic cleavage. \n\nIn Ca[2+] binding site 2, the backbone keeps the same position in the two structures, while the side chains are positioned slightly differently. In the structure without Ca[2+] , Ser416 is peptide-plane flipped allowing the neighbouring His417 to form an H-bond to Glu449 (Fig. 6). In the TG2 structures without Ca[2+] (PDB IDs 1KV3, 3LY6, 4PYG) the His417 equivalent Leu420 cannot form this H-bond, and Ser420 (corresponding to Ser416 in TG3), is interacting with the C1 domain of the closed conformation of TG2. \n\n## Structure of cleaved TG3 with Ca[2][+] removed \n\nThe crystal structures of TG2 are all without calcium ions. TG3 has been solved with one, two and three calcium ions, but never with zero ions (Supplementary Table 1). To investigate the effect of calcium on the structure of TG3, we added 10 mM EDTA to strip Ca[2+] from cleaved TG3, mixed with Fab DH63-B02 as before, and grew crystals. \n\nThe structure was solved to 2.0 Å resolution and differs from the previously described structures in the three Ca[2+] binding sites. Calcium-depleted cleaved TG3 has been analysed before[7] , but never been crystallized and subjected to structural analysis. Changes at this site have effects on a loop bridging it to the active site of the enzyme (Fig. 6). Most notably, the His301 – Glu359 dyad is disrupted.",
+        "text_sha256": "sha256:95997f2a1a0981d886e1c52d694030e74ce71e6f98cde582f037d5d6a6c18894"
+      },
+      {
+        "evidence_key": "P:S-d621ee7fb9c5ef6f0d2c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-d621ee7fb9c5ef6f0d2c",
+        "text": "This is enabled by the absence of Ca[2+] in site 1 which frees Asn225 to form an H-bond with the carbonyl of Pro357, causing the Pro residue to flip by 180 degrees compared to the Ca[2+] bound forms of TG3. This conformation constrains Gln358 and Glu359 to stay away from the active site of TG3. The residues Ala355 through Glu359 is predicted to be part of the binding site for the second (lysyl) substrate, and the large shift of \n\n## Binding of DH mAbs to TG3 enzyme-substrate intermediate conformer \n\nTo test if TG3-specific antibodies in DH patients are reactive with the substrate-bound conformation of TG3, we used SEC-purified Z-DONassociated TG3 without C1C2 to assess binding of patient-derived mAbs in ELISA. Although the mAbs were originally isolated using the zymogen form of TG3[14] , all 12 mAbs covering epitope groups 1, 2 and 3 retained good reactivity to the inhibitor-bound enzyme without the C1C2 domains (Fig. 7). \n\n## Discussion \n\nHere, we present the structure of TG3 with a peptidomimetic irreversible inhibitor bound at the active site. This structure likely represents the conformation of TG3 with the active site occupied by substrate. In this structure, as compared to the non-inhibitor bound structure, there are structural alterations of the catalytic core domain, and the two C-terminal β-barrel domains, C1 and C2, are missing. In the presence of Ca[2+] and upon binding of substrate and formation of the thioester \n\nNature Communications | (2023) 14:6216 \n\n5 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-42004-z \n\n**==> picture [323 x 114] intentionally omitted <==**",
+        "text_sha256": "sha256:809cf9de0978d934f3fb4f6ca60c5ffc1a685709c7763b9b84594b4e1a6a1afb"
+      },
+      {
+        "evidence_key": "P:S-a2c15a6ba5d2223a379c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a2c15a6ba5d2223a379c",
+        "text": "Fig. 5 | Interactions at Ca[2+] binding site 3. Ca[2+] is shown as either purple or green spheres, water molecules as red spheres and H-bonds as broken lines. a Closeup of Ca[2+] binding site 3 in TG3 without Z-DON (PDB ID 8OXW). b Comparison of TG3 \n\nwith and without Z-DON. c Closeup of Ca[2+] binding site 3 in TG3 with Z-DON bound (PDB ID 8OXX). \n\n**==> picture [324 x 399] intentionally omitted <==**",
+        "text_sha256": "sha256:45d8d61731b2d50e68d6c5d8c1c245f20ac88088e89ab8001bfd37a46021fbac"
+      },
+      {
+        "evidence_key": "P:S-185f95c9c9750231715c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-185f95c9c9750231715c",
+        "text": "Fig. 6 | The area around the Ca[2+] binding sites in structures of TG3 with and without bound Ca[2+] . The C1 domain with Tyr526 is shown in dark green. Ca[2+] are shown as green spheres and are labelled 1–3, H-bonds are shown as broken lines. a Ca[2+] binding site 1 and TG3 active site with Ca[2+] (PDB ID 8OXW). b Ca[2+] binding site 1 and TG3 active site without Ca[2+] (PDB ID 8OXY). c Ca[2+] binding site 3 with Ca[2+] . \n\nd Ca[2+] binding site 3 with comparison between TG3 with and without Ca[2+] bound. e Ca[2+] binding site 3 in TG3 without Ca[2+] . f Ca[2+] binding site 2 with Ca[2+] . g Ca[2+] binding site 2 with comparison between TG3 with and without Ca[2+] bound. h Ca[2+] binding site 2 in TG3 without Ca[2+] . \n\nNature Communications | (2023) 14:6216 \n\n6 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-42004-z \n\n**==> picture [325 x 461] intentionally omitted <==**",
+        "text_sha256": "sha256:5fb0c51702764e283d7ca0a23d34706af50c60b27390bb09739c816e25f1e31c"
+      },
+      {
+        "evidence_key": "P:S-4d557156f4db8f96b533",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-4d557156f4db8f96b533",
+        "text": "**----- Start of picture text -----**<br>\nA<br>M 1 2 3 M 1 2 3<br>75 kD- 75 kD- M: Molecular weight marker<br>50 kD- 1: TG3 (zymogen)<br>50 kD-<br>2: TG3 (dispase digested)<br>25 kD- 25 kD-<br>3: TG3 + Z-DON (SEC fraction w/o C1C2)<br>B<br>mAb targeting epitope  mAb targeting epitope  mAb targeting epitope<br>group 1  group 2  group 3<br>DH63-A01 DH63-B02 DH63-A02<br>2.5<br>2.0<br>1.5<br>1.0<br>0.5<br>0.0<br>2.5 DH44-A06 DH51-A04 DH44-A10<br>2.0<br>1.5<br>1.0<br>0.5<br>0.0<br>DH51-A03 DH44-A02 DH44-A09<br>2.5<br>2.0<br>1.5<br>1.0<br>0.5<br>0.0<br>DH51-C01 DH51-B07 DH44-A01<br>2.5<br>2.0<br>1.5<br>1.0<br>0.5<br>0.0<br>0.001 0.01 0.1 1 0.001 0.01 0.1 1 0.001 0.01 0.1 1<br>Antibody (µg/ml)<br>TG3 (zymogen) TG3 + Z-Don (SEC fraction w/o C1C2)<br>OD405<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:cdee10b9f797e3e1e5c9b38096d7b03cabf739ab0b16ecea272362a71be89925"
+      },
+      {
+        "evidence_key": "P:S-8b20b2ff5968116df8eb",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8b20b2ff5968116df8eb",
+        "text": "Fig. 7 | Reactivity of DH patient derived mAbs to the enzyme-substrate intermediate conformer of TG3 without the C1C2 domains. A SDS-PAGE analysis of different forms of TG3. The proteins were visualized by coomassie staining (left) or Western blotting (right) using a TG3-specific antibody that recognizes a C-terminal epitope. The protein loaded in lane 3 corresponds to SEC fraction 21 shown in Fig. 2. \n\nThe analysis was repeated once with similar results. B ELISAbinding curves showing reactivity of 12 TG3-specific mAbs generated from gut plasma cells of DH patients with the zymogen and enzyme-substrate conformers of TG3. The antibodies represent three distinct epitope groups as indicated. Source data are provided in the Source data file. \n\nintermediate, TG3 will undergo a conformational change. The Cys273Tyr526 hydrogen bond is broken, and in the active site the occupation by a loop of the C1 domain is replaced with the substrate (inhibitor). A tunnel for an incoming Lys is created to the active site allowing the ε-NH2 group of Lys to exert its nucleophilic attack on the acyl-enzyme - thioester, completing the catalytic cycle of the enzyme. A shift in a β sheet located in the C-terminal part of TG3 impacts the interaction of the catalytic core domain with C1 and C2 making these two domains detach. The shift also changes the substrate binding site. \n\nThe two C-terminal domains have varying configuration in other inhibitor-bound transglutaminases; in FXIIIA (PDB ID 4KTY) they flip away from the active site to the other side of the protein[5] , while in the TG2 structure (PDB ID 2Q3Z) they move so that TG2 adopts an extended, open conformation[3] .",
+        "text_sha256": "sha256:3087dde99c76067df7c0260c8261b973abe5560cfe06d81fe7e0bb8c02aeaf4d"
+      },
+      {
+        "evidence_key": "P:S-f3ffc6823a10d4048e94",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-f3ffc6823a10d4048e94",
+        "text": "The latter structure does not contain \n\nany Ca[2+] which may indicate that it does not represent a catalytically active conformation of TG2. It is possible that the observed extended conformation of TG2 is a result of crystal contacts, as there are extensive interactions between C2 and an adjacent symmetry-related TG2 molecule in the crystal lattice. The catalytic dyad residues of TG2, His305 and Glu363, are not positioned in the same way in this TG2 structure as in the FXIIIA and TG3 structures. Interestingly, Alphafold v2.0 (alphafold.ebi.ac.uk) has modelled TG2 (P21980, [https://alphafold.ebi.ac.uk/entry/P21980]) to look more like the calcium-bound structures of TG3 and FXIIIA than all published TG2 structures. In the model the catalytic dyad is formed, and the residues of the Ca[2+] sites 1 and 3 are co-ordinated similarly to the corresponding sites in TG3 and FXIIIA. Biochemical analysis demonstrated that TG2 at increasing Ca[2+] concentrations can bind as many as \n\nNature Communications | (2023) 14:6216 \n\n7 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-42004-z \n\nsix calcium ions[24] . Five non-canonical Ca[2+] binding sites were defined by site-directed mutagenesis of which three correspond to the three Ca[2+] binding sites of TG3. Future studies are needed to identify the enzyme-substrate intermediate conformation of TG2 with bound calcium. \n\nA common feature among transglutaminases may be a loosened interaction of C1 and C2 with the catalytic core domain upon substrate binding. In TG3, where cleavage of the linker between C1 and the catalytic core domain is required for activity, substrate binding appears to result in complete departure of the two domains.",
+        "text_sha256": "sha256:07f61fc8feed0b6c48c78d37b7ac89f1c72cbbc5e16cd1f238f5feb1f4680a07"
+      },
+      {
+        "evidence_key": "P:S-8c2361a70263bd7e8830",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8c2361a70263bd7e8830",
+        "text": "In other transglutaminases, where the linker is intact, likely due to different amino acid sequences in this region compared to TG3, C1 and C2 move away from the active site but remain physically attached to the rest of the protein. This may suggest that in the active conformation of these molecules, the C1 and C2 domains have functions that are not related to the catalytic activity of the enzyme. Of relevance to this notion, several functions have been ascribed to the C-terminal domains of TG2; the C1C2 domains interact with α2-macroglobulin in the pathway of low density lipoprotein receptor-related protein 1 (LRP1)-mediated uptake and endocytosis of TG2[25] , they are responsible for homotypic association that can facilitate enzyme multimerization[26] , and the C2 domain mediates binding of TG2 to an unknown extracellular matrix binding partner[27] . \n\nHere, we solve the structure of zymogen TG3 with three bound calcium ions. Comparison of this structure with that of cleaved TG3 with three bound calcium ions demonstrates that the two forms have identical conformations. Still, cleavage of the loop between the catalytic core domain and the C1 domain is required for the enzyme to become active. Hence, our findings suggest that rather than inducing conformational changes, cleavage enables the subsequent structural rearrangement that will take place upon binding of substrate/inhibitor. \n\nAs predicted previously[5] , the catalytic dyad residues His301 and Glu359 likely are important for the transamidation reaction by TG3. Of note, in all our structures with calcium the two residues have the same arrangement.",
+        "text_sha256": "sha256:15f84f1615ea00ebd851867a7abdef96cb0c76f19b5ef66e9b289e5e7ddcfedc"
+      },
+      {
+        "evidence_key": "P:S-0dfd9ab041a4a291f6db",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-0dfd9ab041a4a291f6db",
+        "text": "In FXIIIA, changing the His residue (His342) to Ala gave only a minor change in the affinity for the lysyl substrate, yet the catalytic transamidating activity was decreased by 85%[28] . In the structure of the calcium bound enzyme-substrate intermediate conformer of FXIIIA (PDB ID 4KTY), the two dyad residues (His 342 and Glu401), having an arrangement identical to that of our structures, were proposed to facilitate the nucleophilic attack by the Lys residue on the acyl-enzyme thioester. Further, Keillor et al. suggested that commonly for transglutaminases the His residue of the dyad serves as second base that mediates an initial deprotonation of the acyl-acceptor substrate prior to a second deprotonation by the active site general base during the nucleophilic attack[29] . Future analysis with mutation of the dyad residues and assessment of catalytic activity both when it comes to transamidation and deamidation should give further insight into the functional role of the dyad His and Glu residues in TG3 and other transglutaminases. \n\nThe underlying hypothesis for this work is that TG3-specific autoantibodies in DH are generated as a result of interactions between TG3-specific B cells and gluten-specific T cells facilitated by formation of TG3-gluten complexes, similar to what has previously been suggested for the TG2-specific autoantibodies in celiac disease[15] . Our observation that TG3-specific mAbs derived from DH patients retain good reactivity to substrate (inhibitor)-bound TG3 without the C1C2 domains speaks in favour of a model where the enzyme-substrate intermediate enables gluten antigen uptake by B cells, thereby facilitating the T cell-B cell interaction and production of TG3-specific autoantibodies.",
+        "text_sha256": "sha256:5fe2e8b4108ef0bbef46ab22ae56aaa16936c1f3b0fda09bb27ee0e53c8c095a"
+      },
+      {
+        "evidence_key": "P:S-617ce02bfe67cf5a3084",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-617ce02bfe67cf5a3084",
+        "text": "TG3-specific antibodies of DH patients recognize the TG3 enzyme both with and without bound substrate/inhibitor. In a situation where the enzyme is actively turning over substrate and cycles between peptide-bound and unbound states, a B cell likely must be able to recognize both conformations in order to bind TG3 stably \n\nand to efficiently internalize the intermediate via its B-cell receptor. This mechanism will allow uptake of gluten peptides by TG3-specific B cells followed by release of deamidated products in endosomes and subsequent presentation to T cells on HLA-DQ molecules. \n\nTaken together, the structural analysis of complexes between TG3 and Fab of a DH patient autoantibody has given useful molecular insight into TG3 enzymology and autoantibody binding. The link between TG3 and DH hasa striking parallel to the link between TG2 and celiac disease. Still, insight is missing about the active conformation of TG2 and where exactly the conformational epitopes of TG2 are located. Encouraged by the results of this study, future work should aim for similar analysis of TG2. \n\n## Methods \n\n## Production and purification of anti-TG3 antibody DH63-B02 Fab \n\nDNA encoding the heavy and light chains of the anti-TG3 antibody DH63-B02 Fab were cloned into expression vectors and co-transfected into HEK 293-F cells (A14527, ThermoFisher Scientific) by using polyethyleneimine (23966-1, Polysciences). The transfected cells were cultured in shaker flasks at 37 °C, 8% CO2 for 6 days before the supernatant was harvested. The secreted Fabs were purified by affinity chromatography. The supernatant was incubated with CaptureSelect LC-lambda (Hu) Affinity Matrix resin (084905, Life Technologies, Lot 110714-01) for 2 h before the slurry was applied to a gravity column.",
+        "text_sha256": "sha256:f4f8ec6e44eb20432bf5bbd8c1459915dcc91d57ca82aed917b1316b7c7223d5"
+      },
+      {
+        "evidence_key": "P:S-21f3da2c5b4458c5a0fc",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-21f3da2c5b4458c5a0fc",
+        "text": "The resin was washed with 10 column volumes of wash buffer (sodium phosphate pH 7.2) and the protein was eluted with elution buffer (0.1 M glycine pH 2.5). The protein was neutralized by adding 0.2 ml neutralization buffer (0.1 M Tris pH 8.0) to each 1 ml of eluted protein. The purified protein was buffer exchanged into PBS and concentrated using 10,000 MWCO Vivaspin spin column (Cytiva) to approximately 3 mg/ml. \n\n## Production and purification of human TG3 \n\nHuman recombinant TG3 was produced in Sf9 insect cells as described[14] . Cell pellets were resuspended in lysis buffer: 50 mM sodium phosphate pH 8.0, 300 mM NaCl, 10 mM imidazole, 1% NP-40 substitute and EDTA-free cOmplete protease inhibitor cocktail (Roche) and incubated for 1 h on ice with vortexing every 15 min. The suspension was centrifuged at 18,000 × g for 40 min and the supernatant was collected. His-tagged TG3 was purified from the lysate by Ni-NTA affinity chromatography. The resin was washed with 4 column volumes of lysis buffer without detergent and protease inhibitors. This wash was repeated twice to ensure a pure sample. TG3 was eluted using 3 column volumes of elution buffer (50 mM sodium phosphate pH 8.0, 300 mM NaCl and 250 mM imidazole) and dialysed into a storage buffer (20 mM Tris-HCl pH 7.4, 300 mM NaCl, 1 mM DTT, 1 mM EDTA). The purified protein was supplemented with 10% (v/v) glycerol and stored at −80 °C. \n\n## SEC analysis of TG3 \n\nTG3 (zymogen) in storage buffer was cleaved by incubation with dispase I (D4818, Sigma) at 37 °C for 30 min, using 0.1 mg of dispase per mg of TG3 and supplemented with 5 mM CaCl2.",
+        "text_sha256": "sha256:d51c7848fef83ee92cc932c1465326450fd5d168b7a570a39b9c5a51c8b426d0"
+      },
+      {
+        "evidence_key": "P:S-911a5d7cde1aac9694ae",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-911a5d7cde1aac9694ae",
+        "text": "The dispase was subsequently removed by SEC using a Superdex 200 10/300 column (GE Healthcare) with running buffer 20 mM Tris pH 8, 150 mM NaCl, 8 mM CaCl2, 1 mM EDTA, 1 mM DTT at a flow rate of 0.5 ml/min. The resulting peak fractions were combined and concentrated using a 10,000 molecular weight cut-off (MWCO) Vivaspin spin column (Cytiva). The irreversible active site inhibitor Z-DON (Z-DON-Val-Pro-LeuOMe, Z006, Zedira) was added to the cleaved TG3 sample at a molar ratio of 25:1 and incubated at room temperature overnight together with a control sample without Z-DON. The next day, the samples were subjected to SEC as described above. The fractions of interest were individually concentrated using spin columns with 10,000 MWCO and analysed by SDS-PAGE using a 4–12% TGX gel (Bio-Rad) at 200 V for 30 min. \n\nNature Communications | (2023) 14:6216 \n\n8 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-42004-z \n\nTo analyse cathepsin L digestion of TG3, zymogen TG3 was diluted 1:1 in 0.1 M MES pH 6.0 and cleaved by incubation with cathepsin L (P07711, R&D Systems) at 37 °C for 30 min, using 0.003 mg cathepsin L per mg of TG3 and 10 mM CaCl2. The sample was neutralized by the addition of Tris-HCl pH 9 to a concentration of 50 mM. Z-DON was added to the cathepsin L cleaved TG3 to a molar ratio of 120:1 and incubated at 4 °C overnight. A control sample without Z-DON was incubated in parallel. The next day, the samples were analysed by SEC using a Superdex 200 10/300 column (GE Healthcare) with TBS running buffer (50 mM Tris pH 7.6, 150 mM NaCl, 2 mM CaCl2), at a flow rate of 0.5 ml/min.",
+        "text_sha256": "sha256:c39b206e4c546c3821b69f584d168a6fc23e093eb2096d6b436ea6d4efa3c964"
+      },
+      {
+        "evidence_key": "P:S-65059423fb4c0d93d362",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-65059423fb4c0d93d362",
+        "text": "## Western blot analysis \n\nTG3 samples were loaded on SDS-PAGE gels (TGX gel, Bio-Rad) and blotted onto a nitrocellulose membrane (10600020, Cytiva) using a semi-dry transfer instrument (Bio-Rad). The membrane was incubated with polyclonal goat IgG specific for the C2 domain of TG3 (immunogen peptide residues 598–610) (PA5-37896, Invitrogen), diluted 1:3000 in TBS (50 mM Tris pH 7.6, 150 mM NaCl) with 0.1% (v/v) Tween20. After incubation and washing, binding of the primary antibody was detected with peroxidase-conjugated donkey anti-goat IgG (705035003, Jackson), diluted 1:7000 in TBS with 0.1% (v/v) Tween-20. Bands were visualized using enhanced chemiluminescence according to the manufacturer’s instructions (SuperSignal WestPico Chemiluminescent Substrate, ThermoFisher Scientific), and recorded with a chemiluminescence reader (G:BOX Chemi XRQ, Syngene). \n\n## ELISA \n\nZymogen TG3 or SEC purified TG3 without C1C2 were coated on polystyrene plates (Nunc Maxisorp Immuno-plate, ThermoFisher Scientific) at 1 µg/ml in TBS by overnight incubation at 4 °C. The wells were washed, in this step and subsequent washings, with TBS (50 mM Tris pH 7.6, 150 mM NaCl) supplemented with 0.1% (v/v) Tween-20 and 10 mM CaCl2. Next, the wells were incubated with TG3-specific mAbs (expressed and purified as human IgG1[14] ) diluted in TBS supplemented with 0.1% (v/v) Tween-20, 3% (w/v) BSA and 10 mM CaCl2 for 1 h at room temperature. After washing, the wells were incubated with alkaline phosphatase-conjugated goat anti-human IgG (2040-04, Southern Biotech) diluted 1:2000 for 1 h at room temperature, washed again and incubated with 5 mg phosphatase substrate tablet (1003347284, ThermoFisher Scientific) dissolved in 10 ml phosphatase substrate buffer (1 M diethanolamine pH 9.8, 0.5 mM MgCl2).",
+        "text_sha256": "sha256:15a665a55de2af5bc53b14a4bb86477648351f62d97962519075c79a8cf614f0"
+      },
+      {
+        "evidence_key": "P:S-57ddd3a33fac3efa4f69",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-57ddd3a33fac3efa4f69",
+        "text": "Signals were measured in a plate reader (Multiskan ascent, ThermoFisher Scientific) at 405 nm. \n\n## Mass spectrometry \n\nTG3 (zymogen) and SEC-purified dispase-cleaved TG3 (2 µg, either unmodified or incubated with Z-DON and CaCl2) was reduced with DTT and alkylated with iodoacetamide followed by precipitation on magnetic amine beads (MagReSyn, Resyn Biosciences)[30] for overnight digestion with sequencing grade trypsin (Promega). Tryptic digests were analysed by LC-MS/MS using the EvoSep One LC system (EvoSep Biosystems) coupled to an Orbitrap Q Exactive HF mass spectrometer (ThermoElectron, Bremen, Germany) equipped with a nanoelectrospray ion source (EasySpray/Thermo). For liquid chromatography separation we used a 15 cm C18 column (Dr Maisch C18 AQ, 3 µm beads, 100 µm ID, 15 cm long, EV-1074, with stainless steel emitter EV1086). The standard EVOSEP method 30 sample/day was used. The mass spectrometer was operated in the data-dependent mode to automatically switch between MS and MS/MS acquisition. Survey full scan MS spectra (from m/z 375 to 1500) were acquired in the Orbitrap with resolution R = 60,000 at m/z 200 (after accumulation to a target of 3,000,000 ions in the quadruple). The method used allowed sequential isolation of the most intense multiply charged ions, up to twenty, depending on signal intensity, for fragmentation on the HCD cell using \n\nhigh-energy collision dissociation at a target value of 100,000 charges or maximum acquisition time of 15 ms. MS/MS scans were collected at 15,000 resolution at the Orbitrap cell. Target ions already selected for MS/MS were dynamically excluded for 30 seconds.",
+        "text_sha256": "sha256:cf4b779879cfdc3b207d75d7855bcfba96b884776ec355c0a0070bf9b5136520"
+      },
+      {
+        "evidence_key": "P:S-6b51bfa8f3bd9c53a01f",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-6b51bfa8f3bd9c53a01f",
+        "text": "General mass spectrometry conditions were: electrospray voltage, 1.9 kV; no sheath and auxiliary gas flow, heated capillary temperature of 250oC, normalized HCD collision energy 28%. Mass spectrometry raw files (n = 3, TG3 zymogen, SEC purified cleaved unmodified TG3, SEC purified cleaved Z-DON reacted TG3) were searched against a database containing the sequence of human TG3 with carbamidomethyl (+57 Da) or Z-DON (+600.3159 Da) as variable modification on cysteine (MaxQuant version 2.0.1.0)[31] . MS/MS spectra of peptides harbouring the active site Cys were extracted in Qual Browser (Thermo Xcalibur version 3.0.63, ThermoFisher Scientific) from raw files of SEC purified TG3 and verified by manual annotation of y-fragment ions. \n\n## Preparation of complexes for crystallization \n\nZymogen TG3 was mixed with purified Fab DH63-B02 at a 1:1.1 molar ratio and incubated overnight at4 °C. The complex was purified by SEC using a Superdex 200 10/300 column (GE Healthcare) with running buffer 20 mM Tris pH 8, 150 mM NaCl, 1 mM EDTA. The resulting peak fractions were pooled and concentrated to 17 mg/ml using a 10,000 MWCO Vivaspin spin column (Cytiva). We observed that not all TG3 was complexed with Fab using these conditions. To increase the fraction of Fab-bound TG3, all buffers were supplemented with CaCl2 in subsequent experiments. \n\nZymogen TG3 was cleaved by incubation with dispase as described above. The dispase was removed by SEC as before but with 2 mM CaCl2 supplemented in the running buffer (20 mM Tris pH 8, 150 mM NaCl, 1 mM EDTA, 2 mM CaCl2). TG3 was subsequently mixed with Fab DH63-B02 at a 1:1.1 molar ratio and incubated overnight at 8 °C.",
+        "text_sha256": "sha256:d355eb4f7ed4eea66e48c0863eb45a20c138638770f39f5104f130b013503882"
+      },
+      {
+        "evidence_key": "P:S-0389ccdb512ba5a557e8",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-0389ccdb512ba5a557e8",
+        "text": "The complex was purified by SEC, and the resulting peak fractions were pooled and concentrated to 7 mg/ml using a 10,000 MWCO Vivaspin spin column (Cytiva). \n\nCleaved TG3 was mixed with Z-DON at a 1:25 molar ratio, and with Fab DH63-B02 at a 1:1.1 molar ratio. The mixture was incubated at room temperature overnight and subsequently purified by SEC as before, but with 8 mM CaCl2 supplemented in the running buffer (20 mM Tris pH 8, 150 mM NaCl, 1 mM EDTA, 2 mM CaCl2). The resulting peak fractions were pooled and concentrated to 8 mg/ml using a 10,000 MWCO Vivaspin spin column (Cytiva). \n\nTo prepare the TG3 complex without calcium, 10 mM EDTA was added to cleaved TG3. After 10 min, Fab DH63-B02 was added to the sample at a 1:1.1 molar ratio and incubated overnight at 4 °C. The concentration of EDTA in the sample incubated overnight was 5 mM. The complex was purified by SEC as before, but with 1 mM EDTA and no CaCl2 in the running buffer (20 mM Tris pH 8, 150 mM NaCl, 1 mM EDTA). Only ~10% of the protein was complexed, these fractions were pooled and concentrated to 5.1 mg/ml using a 10,000 MWCO Vivaspin spin column (Cytiva). \n\n## Crystallization of TG3 complexes \n\nThe initial crystallization hits for the TG3 zymogen+Fab complex were obtained in the Morpheus crystallization screen (Molecular Dimensions, UK), row A containing 30 mM CaCl2 and 30 mM MgCl2, using a sitting-drop setup dispensed by a Mosquito robot (SPT Labtech, UK). These initial needle clusters were used to create microseeds by crushing the crystals with a seed bead (Hampton Research) according to the manufacturer’s instructions. The microseeds were used in the following hanging-drop optimization experiments inspired by random microseed matrix screening, rMMS[32] .",
+        "text_sha256": "sha256:d142a72f8cdb42be3819fa52d02d5ef0cf1356cdc033e97d38e1d88ce7080dd5"
+      },
+      {
+        "evidence_key": "P:S-c8ad7447741fd3a89171",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-c8ad7447741fd3a89171",
+        "text": "All three CaCl2 complexes were crystallized in 0.1 M HEPES-MOPS pH 7.1, 16–22% ethylene glycol, 8–11% PEG 8000, 6–10 mM CaCl2 and 3–10 mM MgCl2. The TG3+Fab complex was cross-seeded with microseeds of TG3 zymogen+Fab, and the TG3+Fab+Z-DON complex was cross-seeded using microseeds of \n\nNature Communications | (2023) 14:6216 \n\n9 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-42004-z \n\nTG3+Fab. Diffraction-quality crystals were obtained in 3–7 days. The crystal without CaCl2 was grown in 0.1 M Bicine-Tris pH 8.5, 22% ethylene glycol and 11% PEG 8000, without microseeds, and took 2 months to grow. \n\nFor all setups, the crystals were cryo-protected using an additional 20% ethylene glycol and flash-cooled in liquid nitrogen. \n\n## SDS-PAGE analysis of crystals \n\nSingle crystals were harvested from the same drop that yielded the crystal used to solve the structure of TG3 zymogen+Fab. The crystals were washed in crystallization well solution and dissolved in distilled water mixed with Laemmli loading buffer. The sample was boiled for 5 min before half of the sample was added β-mercaptoethanol. The – samples were loaded onto a 4 12% TGX gel (Bio-Rad) and run at 200 V for 30 min. \n\n## Data collection and re nement \n\nDiffraction data were collected at the ESRF beam lines ID23-1, ID23-2, ID30A-3 and ID30B on four different occasions (25.02.2022, 31.05.2022, 22.09.2022 and 24.01.2023). The experimental sessions can be traced through the DOIs for 8OXV (10.15151/ESRF-ES649173307), 8OXW (10.15151/ESRF-ES-771249081), 8OXX (10.15151/ ESRF-ES-874802477) and 8OXY (10.15151/ESRF-ES-1022934233). The data collection and refinement statistics are shown in Supplementary Table 2.",
+        "text_sha256": "sha256:f7823017910a59ccfd78723f87a0220539613dde4843cc3c52b9d9f574b9acd0"
+      },
+      {
+        "evidence_key": "P:S-eb965b0fb7bbcd2a23fe",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-eb965b0fb7bbcd2a23fe",
+        "text": "The data were indexed, scaled and merged by the ESRF autoprocessing software, before the unmerged and unscaled files were reprocessed using Aimless[33] in the CCP4 software suite[34] . All complexes crystallized in space group P21. The structures were solved using molecular replacement by the program Phaser MR[35] . The zymogen structure was solved using structures 1NUG[7] and an Alphafold Colabfold[36] model of the Fab DH63-B02 as molecular replacement search models. Parts of the Alphafold Fab model were not optimally placed in the structure and had to be rebuilt using Buccaneer[37] and manual rebuilding in Coot[38] . The TG3+Fab structure was solved using the refined TG3 zymogen+Fab structure as search model, and the TG3+Fab+Z-DON structure was solved using the refined TG3+Fab structure, with the C-terminal domains removed, as search model. \n\nThe structures were refined using REFMAC5[39] and manually optimized using Coot. Strong positive difference electron density was observed in the three Ca[2+] binding sites identified in previous TG3 structures, and in the active site for the TG3 + Z-DON structure. The Z-DON molecule and restraints library file were prepared using an isomeric SMILES string in Acedrg[40] . All four datasets were refined using translation/libration/screw-motion (TLS) restraints in REFMAC5. The TG3+Fab+Z-DON dataset was moderately anisotropic and was refined using external ProSmart restraints[41] for the Fab only. The loop connecting the catalytic core domain of TG3 to the C1C2 domains was not possible to place in any of the four structures due to weak electron density in the area and was consequently left out.",
+        "text_sha256": "sha256:ad58d1beba9d475cfb971736670b6c150d44c3790ce3d21b9988da7e0ca7b9aa"
+      },
+      {
+        "evidence_key": "P:S-83d6cf1e30de5395e288",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-83d6cf1e30de5395e288",
+        "text": "The loops comprising residues 78–82 in TG3 and 136–142 in Fab heavy chain were difficult to place with confidence but were kept at their most likely positions. Metal ion binding was assessed using the server CheckMyMetal[21] . The final structures were validated using Molprobity[42] , and by careful assessment of the PDB validation report. All figures were prepared with PyMol (Schrödinger LLC). Data refinement software versions are publicly available under each PDB entry experimental tab, and stated in the Reporting Summary. \n\n## Reporting summary \n\nFurther information on research design is available in the Nature Portfolio Reporting Summary linked to this article. \n\n## Data availability \n\nThe X-ray model co-ordinates and structure factors have been deposited in the Protein Data Bank (www.rcsb.org) under the \n\naccession codes 8OXV, 8OXW, 8OXX and 8OXY. Source data are provided with this paper. \n\n## References \n\n1. Lorand, L. & Graham, R. M. Transglutaminases: crosslinking enzymes with pleiotropic functions. Nat. Rev. Mol. Cell Biol. 4, 140–156 (2003). \n\n2. Liu, S., Cerione, R. A. & Clardy, J. Structural basis for the guanine nucleotide-binding activity of tissue transglutaminase and its regulation of transamidation activity. Proc. Natl Acad. Sci. USA 99, 2743–2747 (2002). \n\n3. Pinkas, D. M., Strop, P., Brunger, A. T. & Khosla, C. Transglutaminase 2 undergoes a large conformational change upon activation. PLoS Biol. 5, e327 (2007). \n\n4. Fox, B. A. et al. Identification of the calcium binding site and a novel ytterbium site in blood coagulation factor XIII by x-ray crystallography. J. Biol. Chem. 274, 4917–4923 (1999). \n\n5. Stieler, M. et al. Structure of active coagulation factor XIII triggered by calcium binding: basis for the design of next-generation anticoagulants.",
+        "text_sha256": "sha256:eb83017e6d5631812d496ac7446e03688b7e653c23c5ffc17110df3c8754c3a5"
+      },
+      {
+        "evidence_key": "P:S-6b5f5f804355787f1bbe",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-6b5f5f804355787f1bbe",
+        "text": "Angew. Chem. Int Ed. Engl. 52, 11930–11934 (2013). \n\n6. Kim, H. C. et al. Protransglutaminase E from guinea pig skin. Isolation and partial characterization. J. Biol. Chem. 265, 21971–21978 (1990). \n\n7. Ahvazi, B., Boeshans, K. M., Idler, W., Baxa, U. & Steinert, P. M. Roles of calcium ions in the activation and activity of the transglutaminase 3 enzyme. J. Biol. Chem. 278, 23834–23841 (2003). \n\n8. Ahvazi, B., Kim, H. C., Kee, S. H., Nemes, Z. & Steinert, P. M. Threedimensional structure of the human transglutaminase 3 enzyme: binding of calcium ions changes structure for activation. EMBO J. 21, 2055–2067 (2002). \n\n9. Noguchi, K. et al. Crystal structure of red sea bream transglutaminase. J. Biol. Chem. 276, 12055–12059 (2001). \n\n10. Begg, G. E. et al. Mechanism of allosteric regulation of transglutaminase 2 by GTP. Proc. Natl Acad. Sci. USA 103, 19683–19688 (2006). \n\n11. Iversen, R. & Sollid, L. M. The immunobiology and pathogenesis of celiac disease. Annu. Rev. Pathol. 18, 47–70 (2023). \n\n12. Dieterich, W. et al. Autoantibodies to tissue transglutaminase as predictors of celiac disease. Gastroenterology 115, 1317–1321 (1998). \n\n13. Sárdy, M., Karpati, S., Merkl, B., Paulsson, M. & Smyth, N. Epidermal transglutaminase (TGase 3) is the autoantigen of dermatitis herpetiformis. J. Exp. Med. 195, 747–757 (2002). \n\n14. Das, S. et al. Separate gut plasma cell populations produce autoantibodies against transglutaminase 2 and transglutaminase 3 in dermatitis herpetiformis. Adv. Sci. 10, e2300401 (2023). \n\n15. Sollid, L. M., Molberg, O., McAdam, S. & Lundin, K. E. Autoantibodies in coeliac disease: tissue transglutaminase-guilt by association? Gut 41, 851–852 (1997). \n\n16. Fleckenstein, B. et al.",
+        "text_sha256": "sha256:717dda6d7a35c4b26f3fb6b45cab07bf28a03dfa14b0c12a5bc4fd10791127b5"
+      },
+      {
+        "evidence_key": "P:S-ea551b6e532b47a50d98",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-ea551b6e532b47a50d98",
+        "text": "Molecular characterization of covalent complexes between tissue transglutaminase and gliadin peptides. J. Biol. Chem. 279, 17607–17616 (2004). \n\n17. Iversen, R., Fleur du Pre, M., Di Niro, R. & Sollid, L. M. Igs as substrates for transglutaminase 2: Implications for autoantibody production in celiac disease. J. Immunol. 195, 5159–5168 (2015). \n\n18. Iversen, R. et al. Evidence that pathogenic transglutaminase 2 in celiac disease derives from enterocytes. Gastroenterology 159, 788–790 (2020). \n\n19. Stamnaes, J., Dorum, S., Fleckenstein, B., Aeschlimann, D. & Sollid, L. M. Gluten T cell epitope targeting by TG3 and TG6; implications for dermatitis herpetiformis and gluten ataxia. Amino Acids 39, 1183–1191 (2010). \n\n20. Stieler, M. et al. Structure-based design of FXIIIa-blockers: addressing a transient hydrophobic pocket in the active site of FXIIIa. ChemMedChem 15, 900–905 (2020). \n\n21. Gucwa, M. et al. CMM-An enhanced platform for interactive validation of metal binding sites. Protein Sci. 32, e4525 (2023). \n\nNature Communications | (2023) 14:6216 \n\n10 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-42004-z \n\n22. Schaertl, S. et al. A profiling platform for the characterization of transglutaminase 2 (TG2) inhibitors. J. Biomol. Screen 15, 478–487 (2010). \n\n23. Cheng, T. et al. Cystatin M/E is a high affinity inhibitor of cathepsin V and cathepsin L by a reactive site that is distinct from the legumainbinding site. A novel clue for the role of cystatin M/E in epidermal cornification. J. Biol. Chem. 281, 15893–15899 (2006). \n\n24. Kiraly, R. et al. Functional significance of five noncanonical Ca[2+] - binding sites of human transglutaminase 2 characterized by sitedirected mutagenesis. FEBS J. 276, 7083–7096 (2009). \n\n25. Loppinet, E. et al.",
+        "text_sha256": "sha256:50ab6e1937eea86e449089591c1cb23010df42fafee59dba02922322d3c07a27"
+      },
+      {
+        "evidence_key": "P:S-a2aba04f206a6d3e40ab",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a2aba04f206a6d3e40ab",
+        "text": "LRP-1 links post-translational modifications to efficient presentation of celiac disease-specific T cell antigens. Cell Chem. Biol. 30, 55–68.e10 (2023). \n\n26. Stamnaes, J., Iversen, R., du Pre, M. F., Chen, X. & Sollid, L. M. Enhanced B-cell receptor recognition of the autoantigen transglutaminase 2 by efficient catalytic self-multimerization. PLoS ONE 10, e0134922 (2015). \n\n27. Stamnaes, J., Cardoso, I., Iversen, R. & Sollid, L. M. Transglutaminase 2 strongly binds to an extracellular matrix component other than fibronectin via its second C-terminal beta-barrel domain. FEBS J. 283, 3994–4010 (2016). \n\n28. Hettasch, J. M. & Greenberg, C. S. Analysis of the catalytic activity of human factor XIIIa by site-directed mutagenesis. J. Biol. Chem. 269, 28309–28313 (1994). \n\n29. Keillor, J. W., Clouthier, C. M., Apperley, K. Y. P., Akbar, A. & Mulani, A. Acyl transfer mechanisms of tissue transglutaminase. Bioorg. Chem. 57, 186–197 (2014). \n\n30. Batth, T. S. et al. Protein aggregation capture on microparticles enables multipurpose proteomics sample preparation. Mol. Cell Proteom. 18, 1027–1035 (2019). \n\n31. Cox, J. & Mann, M. MaxQuant enables high peptide identification rates, individualized p.p.b.-range mass accuracies and proteomewide protein quantification. Nat. Biotechnol. 26, 1367–1372 (2008). \n\n32. Shaw Stewart, P. D., Kolek, S. A., Briggs, R. A., Chayen, N. E. & Baldock, P. F. M. Random microseeding: A theoretical and practical exploration of seed stability and seeding techniques for successful protein crystallization. Cryst. Growth Des. 11, 3432–3441 (2011). \n\n33. Evans, P. R. &Murshudov, G. N. Howgood are mydata and what isthe resolution? Acta Crystallogr D. Biol. Crystallogr 69, 1204–1214 (2013). \n\n34. Potterton, L. et al.",
+        "text_sha256": "sha256:9734503af220f71dbd0267e97514cebc59588aec06fa489624c971eb91f08581"
+      },
+      {
+        "evidence_key": "P:S-2a4605517802d1d13451",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-2a4605517802d1d13451",
+        "text": "CCP4i2: the new graphical user interface to the CCP4program suite. Acta Crystallogr D. Struct. Biol. 74,68–84 (2018). \n\n35. McCoy, A. J. et al. Phaser crystallographic software. J. Appl Crystallogr 40, 658–674 (2007). \n\n36. Mirdita, M. et al. ColabFold: making protein folding accessible toall. Nat. Methods 19, 679–682 (2022). \n\n37. Cowtan, K. The Buccaneer software for automated model building. 1. Tracing protein chains. Acta Crystallogr D. Biol. Crystallogr 62, 1002–1011 (2006). \n\n38. Emsley, P., Lohkamp, B., Scott, W. G. & Cowtan, K. Features and development of Coot. Acta Crystallogr D. Biol. Crystallogr 66, 486–501 (2010). \n\n39. Kovalevskiy, O., Nicholls, R. A., Long, F., Carlon, A. & Murshudov, G. N. Overview of refinement procedures within REFMAC5: utilizing data from different sources. Acta Crystallogr D. Struct. Biol. 74, 215–227 (2018). \n\n40. Long, F. et al. AceDRG: a stereochemical description generator for ligands. Acta Crystallogr D. Struct. Biol. 73, 112–122 (2017). \n\n41. Nicholls, R. A., Fischer, M., McNicholas, S. & Murshudov, G. N. Conformation-independent structural comparison of macromolecules with ProSMART. Acta Crystallogr D. Biol. Crystallogr 70, 2487–2499 (2014). \n\n42. Chen, V. B. et al. MolProbity: all-atom structure validation for macromolecular crystallography. Acta Crystallogr D. Biol. Crystallogr 66, 12–21 (2010). \n\n## Acknowledgements \n\nWe acknowledge the European Synchrotron Radiation Facility (ESRF) for provision of synchrotron radiation facilities.",
+        "text_sha256": "sha256:e49c244edc3187133518ca9a8f704a51b69fda4ebf88c2bf5754d5da7de02d09"
+      },
+      {
+        "evidence_key": "P:S-5d810bf2ce0effea1172",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-5d810bf2ce0effea1172",
+        "text": "The work was supported by grants from the South-Eastern Norway Regional Health Authority (project 2020027 to L.M.S.); Stiftelsen KG Jebsen (project SKGJ-MED-017 to L.M.S.) and the University of Oslo World-leading research programme on human immunology (WL-IMMUNOLOGY to L.M.S.) We would like to thank The Proteomics Core Facility at the Department of Immunology, University of Oslo/Oslo University Hospital for the mass spectrometrybased proteomic analyses. This facility is a member of the National Network of Advanced Proteomics Infrastructure (NAPI), which is funded by the Research Council of Norway INFRASTRUKTUR-program (project number: 295910). \n\n## Author contributions \n\nJ.E.H.: Conceptualization, data curation, formal analysis, investigation, methodology, project administration, resources, validation, visualiza— — tion, writing original draft, writing review and editing. S.D.: Data curation, formal analysis, investigation, formal analysis, resources, vali— dation, visualization, writing review and editing. J.S.: Data curation, — formal analysis, investigation, visualization, writing review and editing. R.I.: Formal analysis, investigation, resources, supervision, visualization, — — writing original draft, writing review and editing. L.M.S.: Conceptualization, formal analysis, funding acquisition, project administra— tion, supervision, validation, visualization, writing original draft, writing — review and editing. \n\n## Competing interests \n\nThe authors declare no competing interests. \n\n## Additional information \n\nSupplementary information The online version contains supplementary material available at https://doi.org/10.1038/s41467-023-42004-z. \n\nCorrespondence and requests for materials should be addressed to Julie Elisabeth Heggelund or Ludvig M. Sollid.",
+        "text_sha256": "sha256:b6fba686425c63c9f650b8f0b8fce9f817d52f659f42dea3583cafb102380303"
+      },
+      {
+        "evidence_key": "P:S-6cec010739d020d96f1e",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-6cec010739d020d96f1e",
+        "text": "Peer review information Nature Communications thanks Daniel Aeschlimann and Hyun Ho Park for their contribution to the peer review of this work. A peer review file is available. \n\nReprints and permissions information is available at http://www.nature.com/reprints \n\nPublisher’s note Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations. \n\nOpen Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons license, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons license, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons license and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this license, visit http://creativecommons.org/ licenses/by/4.0/. \n\n© The Author(s) 2023 \n\nNature Communications | (2023) 14:6216 \n\n11",
+        "text_sha256": "sha256:c2bb3e9d5544e25f3723327a024880711a220cbc70139dd7f47b44d221b99dde"
+      }
+    ]
+  },
+  "paper_id": "10.1038/s41467-023-42004-z",
+  "paper_sha256": "sha256:7588216fcd47b703b2d8e58973e69588764ce706db9cfa8589a1cd2b6d2e5b15",
+  "parent_output_sha256s": [],
+  "parent_reviews": [],
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "review_source_sha256": "sha256:30f19bec7c9d8692d07160272717cbb495640e0432fe41dccfaddf062de8bd7b",
+  "reviewer_spans": [
+    {
+      "char_end": 1310,
+      "char_start": 1271,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8ebe1e362de41130fbb1",
+      "source_role": "reviewer_report",
+      "text": "## Reviewer #1 (Remarks to the Author):",
+      "text_sha256": "sha256:f575013c42c9e91316f21a94feb0b0edfff3402d969a3e1e849f6dd77ac19843"
+    },
+    {
+      "char_end": 2704,
+      "char_start": 1313,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8a59bc2bdf66b8688ed0",
+      "source_role": "reviewer_report",
+      "text": "Ludvig Sollid and collaborators have recently isolated clonal antibodies from patients with Dermatitis Herpetiformis and shown that these fall into one of 3 epitope groups in terms of specificity. Here, a recombinantly produced Fab fragment is co-crystallized with TG3, the autoantigen recognized in these patients. Four x-ray structures are described corresponding to different physiologically relevant states of the enzyme. The main novelty is two-fold: Firstly, it defines a paratope/epitope interaction site of a patient derived antibody with the autoantigen and secondly, it provides the first structure of TG3 with a substrate-mimic in the active site. Importantly, the latter reveals cross-talk between substrate interaction and Ca2+-binding at site 3 which provides new insights into the catalytic mechanism. The binding epitope (termed group 2) recognized by the antibodies appears unperturbed by changes in enzyme configuration occurring during catalysis as indicated by similar apparent binding affinities for zymogen and enzyme irreversibly modified with substrate mimetic in the active site. There is now considerable evidence that interaction of IgD with the thioester intermediate of the enzyme with gluten peptides is what drives the autoantibody formation. The finding that the respective antibody epitope is preserved in different enzyme conformations is in line with this.",
+      "text_sha256": "sha256:5d3e52eefffafe1a10616e28567df1e8516a3df4544740fd5e74435a15deecf3"
+    },
+    {
+      "char_end": 3112,
+      "char_start": 2707,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d2893c27ff62e98f0c82",
+      "source_role": "reviewer_report",
+      "text": "This is an excellent and rigorously conducted study that provides important new insights as outlined in paragraph above. The data is conclusive, experimentally well supported, and exceptionally well presented and discussed. Refinement statistics are indicating that high quality structural information has been obtained. However, there are a number of points that require further clarification as follows:",
+      "text_sha256": "sha256:a38354da70fade55923406598b278272a938e298626e66503d4dd219b94cd45d"
+    },
+    {
+      "char_end": 3608,
+      "char_start": 3115,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a97d971b0c47fc7379a6",
+      "source_role": "reviewer_report",
+      "text": "1. The authors have recently shown that group 2 epitope antibodies (ref 14) recognize a chimeric protein consisting of the N-terminal domain of TG3 fused to core/C1C2 domains of TG2. Given that the binding determinants identified in the crystal structure are primarily in the core domain (80XW), this finding is somewhat surprising and raises the questions whether analogous interactions could occur with the core domain of TG2 (although the antibodies have been shown not to bind native TG2).",
+      "text_sha256": "sha256:ba36511eae70377cf5a50a0477c12a30a5c42661bfc7012d810b9eccfd4a2673"
+    },
+    {
+      "char_end": 4498,
+      "char_start": 3611,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7beb1811f777153f76db",
+      "source_role": "reviewer_report",
+      "text": "2. Considerable efforts were made in previous work to remove Ca2+ from the purified TG3 zymogen. In fact, it turned out that the enzyme acquired the first Ca2+ ion during its synthesis (https://doi.org/10.1093/emboj/21.9.2055). Despite extensive efforts it was not possible to remove Ca2+ from site 1 (In fact, this work should be referred to at line 268/9 on page 12). Hence, it is somewhat surprising that simple EDTA treatment apparently removed Ca2+ from site 1 in the present work. The main difference appears to be that Ca2+ is stripped from a cleaved form of TG3 rather than the zymogen (a somewhat artificial scenario), and this therefore suggests that there are corresponding differences in the core domain in the loop consisting of Ile223-Val231 that connects Ca2+ site 1 and the enzyme active site between zymogen and Ca2+-stripped cleaved enzyme. Can a cleaved, Ca2+-stripped",
+      "text_sha256": "sha256:48c155e0e07a9710b74a045ae786dd78d0d6d26b64c58a0d820d15ff5d5a53ee"
+    },
+    {
+      "char_end": 4630,
+      "char_start": 4501,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a3997f7dee39d6ee8d10",
+      "source_role": "reviewer_report",
+      "text": "and then reactivated enzyme (with Ca2+) gain back its full enzymatic activity? This aspect should be discussed in the manuscript.",
+      "text_sha256": "sha256:678724da13122f4c4220a6e8270d5efc513a6a51b6672f0dd534db9ba65376ca"
+    },
+    {
+      "char_end": 5024,
+      "char_start": 4633,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d8b7b9da671d3a0dacee",
+      "source_role": "reviewer_report",
+      "text": "3. It is also of note that complex formation of Fab with Ca2+-stripped cleaved enzyme is low as stated in methods (page 23, lines 523-525), perhaps suggesting reduced affinity? A more thorough analysis of binding kinetics for the different TG3 conformations may provide additional information, and perhaps reveal some additional insights that may not be apparent in equilibrium binding data.",
+      "text_sha256": "sha256:4fb27797f2114400d71013442a2b561b2ae9b6491df17a1b9f6cb2c780072851"
+    },
+    {
+      "char_end": 5045,
+      "char_start": 5027,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-dd40e68500d66d364dea",
+      "source_role": "reviewer_report",
+      "text": "specific comments:",
+      "text_sha256": "sha256:c3ae66722d908b82456b603d12200f0d2f75a0d4abe9519f0b16d8c69f41b10b"
+    },
+    {
+      "char_end": 5354,
+      "char_start": 5048,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e6fc8587354244659923",
+      "source_role": "reviewer_report",
+      "text": "In Fig 1, I suggest that authors number the three Ca2+-binding sites in order to provide the reader with the context for the detailed discussion in Figs. 5 & 6. Also, the choice of colour for the N-terminal domain and the core domain are a bit unfortunate as the two shades of blue are hard to distinguish.",
+      "text_sha256": "sha256:1de42d0c3a33ae3449268228c25a46f9866517285e5de676554e71b534e49cf9"
+    },
+    {
+      "char_end": 5444,
+      "char_start": 5357,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a41e5e46a853a50e05ed",
+      "source_role": "reviewer_report",
+      "text": "In Fig 3, Asp 354 is incorrectly labeled as 'E354'. This should be corrected to 'D354'.",
+      "text_sha256": "sha256:dc1536610150bb1d3e0f936c58bff89fe1081682fcd52af6e3228a450ff5b434"
+    },
+    {
+      "char_end": 5523,
+      "char_start": 5447,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-97f03c591fe69140f50e",
+      "source_role": "reviewer_report",
+      "text": "Page 10, lines 213-216 - relevant extended video data should be referred to.",
+      "text_sha256": "sha256:89ca845ff13aad4bf00decc739e7975b6e1528abfeecf7c5e616eabbf6dbb0e4"
+    },
+    {
+      "char_end": 5669,
+      "char_start": 5526,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-33301b356617487814c5",
+      "source_role": "reviewer_report",
+      "text": "Page 12, lines 292/3 - it should be made clear that this statement refers to a comparison between the zymogen and Ca2+-stripped cleaved enzyme.",
+      "text_sha256": "sha256:a840659ae6474d7f414c996aa7930eb319db77c09b77a676533b3dc28a70a08c"
+    },
+    {
+      "char_end": 6108,
+      "char_start": 5672,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3094040009088fb5e71a",
+      "source_role": "reviewer_report",
+      "text": "Given that enzyme preparation is fundamental to these studies, it should be matched by the detail in which it is described. There is much information missing from the provided description: full details of buffers used in extraction and purification should be stated (page 20); how exactly was the enzyme concentrated for crystallization (page 22); were SEC conditions for all separations of complexes the same, i.e. as given on page 20?",
+      "text_sha256": "sha256:929c1d65085c50476ef2b2b94cd8cd48a8b9d7b45af277b4363314dbedd9fdfd"
+    },
+    {
+      "char_end": 6538,
+      "char_start": 6111,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2c778fa8c318a0ec3a11",
+      "source_role": "reviewer_report",
+      "text": "Mg2+ at site 3: given the crystallization conditions, it is unlikely that Mg2+ occupancy would be observed at this site. The authors comment on this in the methods section (page 24, line 583-587). However, given that Ca2+-Mg2+ exchange has an essential role in regulating enzyme activity, I would suggest that a sentence is added in the results section to point this out to the reader and make this information more accessible.",
+      "text_sha256": "sha256:1325f187c1ce58c03ae6438faeb16c53e91a53733831d28fb9d6c4e8bfce0d18"
+    },
+    {
+      "char_end": 6552,
+      "char_start": 6541,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3748ca3606674da3d538",
+      "source_role": "reviewer_report",
+      "text": "Supplement:",
+      "text_sha256": "sha256:c9837b83183b0af119263ad7c7487564fd302f1350b042cb80471e3e9a8df529"
+    },
+    {
+      "char_end": 6657,
+      "char_start": 6555,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d1c109835dbc27ea7c28",
+      "source_role": "reviewer_report",
+      "text": "Extended data videos - amino acid numbers should be given for ranges highlighted in colour (in legend)",
+      "text_sha256": "sha256:a8280d17424c36263d8071a27bf23a75c21d6fee1bb8ecc91cdceb02931c21ec"
+    },
+    {
+      "char_end": 6787,
+      "char_start": 6660,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b4edfed21a7dfecc7ec0",
+      "source_role": "reviewer_report",
+      "text": "Extended data table 1 - units are missing for refinement statistics (Rcryst/Rfree, percentage; rmsd bond length, angstrom; etc)",
+      "text_sha256": "sha256:c455baca4c64aa321e5d7471b9daf550dcaa86380d4c45e7b6f8f61de320c360"
+    },
+    {
+      "char_end": 6826,
+      "char_start": 6790,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f153ad579d99a4019c32",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #2 (Remarks to the Author):",
+      "text_sha256": "sha256:44342433f6365a7f5949b5d3040f70d6f57a95f4a5f42f98700e18492093b116"
+    },
+    {
+      "char_end": 7758,
+      "char_start": 6829,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-57fdae2ce0be90c80f4e",
+      "source_role": "reviewer_report",
+      "text": "Heggelund et al reported the several structures of TG2 in complex with autoantibody and found a large conformational change of beta-sheet in the catalytic core domain and C1C2 domain detaches. In addition, they found three Ca2+ binding sites, which is very controversial in the field of transglutaminase research field. Finally, they insist that their structural findings support a model where B-cell receptors of TG3-specific B cells bind and how its binding can facilitate gluten-antigen presentation and autoantibody production. I think this paper is a very interesting research result even though this paper contains limitations. Overall, the manuscript is well written and reflecting the main outcomes of the study. Regarding the new finding of TG3/autoantibody binding site, C1C2 processing, Ca2+ binding site, and et al, this paper can be recommended to be published in Nature communications after major revision as below;",
+      "text_sha256": "sha256:b0b63d85d80776967aafd0fc4809a0c9b9e26e68ea96ecc2efd50fb36d07c758"
+    },
+    {
+      "char_end": 7887,
+      "char_start": 7761,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b9dbb6c8631a659d5d03",
+      "source_role": "reviewer_report",
+      "text": "1.Exact cleavage site of TG3??. Is the cleavage site conserved in other TG family?. Suggest to make the fig showing this fact.",
+      "text_sha256": "sha256:f701a681cf61ee79a59c2792c43d42f64a0acfda1b89207b09ab797063618d5c"
+    },
+    {
+      "char_end": 8067,
+      "char_start": 7890,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-074db409fcf46e290370",
+      "source_role": "reviewer_report",
+      "text": "2. How can the author so sure that their suggested Ca2+ binding sites contains Ca2+. Prove it experimentally. The ion characterization by electron density map is not proper way.",
+      "text_sha256": "sha256:b15d97605bd229bf9a260d6c408bf7862fe07603e7a3e3d2251b7c76a02a6cb8"
+    },
+    {
+      "char_end": 8259,
+      "char_start": 8070,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-654807bd5bcecc6a85c4",
+      "source_role": "reviewer_report",
+      "text": "3. In the Fig2, can the author detect cleaved C1C2 fragment on SEC profile? I can not see it on profile at the right panel. Have to show it with making broaden retention volume. ~19 or 20??",
+      "text_sha256": "sha256:af08686299e9e04c069abc04e1fa44fef42b65e9f48fa9a35a46f7a04e0e68b3"
+    },
+    {
+      "char_end": 8554,
+      "char_start": 8262,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-db7c9d48cec017696532",
+      "source_role": "reviewer_report",
+      "text": "4. In the fig3. beta sheet at the core domain was moved after binding of Z-DON. Is it similar with the case of TG2/Z-DON complex? Although C1C2 is not in the TG3/Z-DON complex, the comparison of structural movement of TG3/Z-DON and TG2/Z-DON will be interesting. Need comparison fig. at Fig3.",
+      "text_sha256": "sha256:af6f0f03cbc8059669725685ab28300e76eb3d02b3258739bbd47bfeddb8a05e"
+    },
+    {
+      "char_end": 8709,
+      "char_start": 8557,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-cee134652561709822e6",
+      "source_role": "reviewer_report",
+      "text": "5. Fig4. Because this paper contains high resolution structure, it is worth to showing the electron density of Z-DON substrate and Ca2+ ion in the figs.",
+      "text_sha256": "sha256:a40b7045b63a9f8eb3ddcfcf9f28a2c70002b8c410977e79124f45e784ce38f7"
+    },
+    {
+      "char_end": 8909,
+      "char_start": 8712,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-368d53ca7733cbb01938",
+      "source_role": "reviewer_report",
+      "text": "6. If the function of cleaved C1 and C2 of TG3 is not clear, it is good to analyse the activity of TG3 with or without cleavage. The effect of this cleavage on the transglutaminase activity of TG3.",
+      "text_sha256": "sha256:236674904457d3a1efd9a2665d973a7606a6071de64757d6a76542c4265c75f2"
+    },
+    {
+      "char_end": 8961,
+      "char_start": 8912,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-265f605801dc68be2e56",
+      "source_role": "reviewer_report",
+      "text": "## **POINT-BY-POINT RESPONSE, NCOMMS-23-27458-T**",
+      "text_sha256": "sha256:9e7e9bc1c23009ace9ea343eea347f1754e7ede6cf405ea55817214af5ac56fb"
+    },
+    {
+      "char_end": 9000,
+      "char_start": 8964,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e11ff7fab792248d1f10",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #1 (Remarks to the Author):",
+      "text_sha256": "sha256:6ffd34d82a3d649fbc91e1dc65fd25e243f665d42d0f633ad65db9c0ce240058"
+    },
+    {
+      "char_end": 29234,
+      "char_start": 29198,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-162ebc2e801ac1e8a64d",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #1 (Remarks to the Author):",
+      "text_sha256": "sha256:6ffd34d82a3d649fbc91e1dc65fd25e243f665d42d0f633ad65db9c0ce240058"
+    },
+    {
+      "char_end": 29774,
+      "char_start": 29237,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e17d68b824bb66188b88",
+      "source_role": "reviewer_report",
+      "text": "The revised version of the manuscript by Heggelund et al in principal addresses the points raised by the reviewers, and the respective changes further improved this excellent manuscript. However, the answers to two of the points raised in the review process, although adequately addressed in the rebuttal, are not really \"visible\" in the manuscript. The respective information will be of interest to the specialist audience, and I suggest therefore that authors add a sentence for each to make this information more explicitly available.",
+      "text_sha256": "sha256:3ea3aa24b03d022630bfaedbbda799966dd5544b1e1fff933d9aaa9197a22923"
+    },
+    {
+      "char_end": 29797,
+      "char_start": 29777,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ad2a652e8c4131911fde",
+      "source_role": "reviewer_report",
+      "text": "reviewer 1, point 2:",
+      "text_sha256": "sha256:8c174cb9f5ff769fcb3eb4f3c62c97251f9f0cd637bc0699d6412c84668047de"
+    },
+    {
+      "char_end": 30111,
+      "char_start": 29800,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b3942e71b40986e18770",
+      "source_role": "reviewer_report",
+      "text": "Ca2+-stripping at binding site 1 - the conformation reported in structure 80XY may be dependent on cleavage between N/core- and C1/C2-domains (which would explain the discrepancy to the prior work, i.e. stripping of Ca2+ may be possible for cleaved enzyme but not zymogen). This possibility should be mentioned.",
+      "text_sha256": "sha256:3cd132f24e2a48015a1533802c2cf7b449604e8a0a0108b7fd89b1e38146ba62"
+    },
+    {
+      "char_end": 30134,
+      "char_start": 30114,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d5771bed1cae0dadcb52",
+      "source_role": "reviewer_report",
+      "text": "reviewer 2, point 3:",
+      "text_sha256": "sha256:db8a287510d49d7ed3a880d37154bfaf2c89f9104d7b2a66c00ab33df0e4dd83"
+    },
+    {
+      "char_end": 30302,
+      "char_start": 30137,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-262540847e2322a97751",
+      "source_role": "reviewer_report",
+      "text": "Instability of C1/C2 fragment following dissociation from N/core-domains - it should be mentioned that the C1/C2 fragment was not recoverable following dissociation.",
+      "text_sha256": "sha256:d3e28e1a1dd3319d98e2b9848c3de45a86d02b51d9b7dacc969fc70220e99ebb"
+    },
+    {
+      "char_end": 30341,
+      "char_start": 30305,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b62fefc2c9befbf9a35a",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #2 (Remarks to the Author):",
+      "text_sha256": "sha256:44342433f6365a7f5949b5d3040f70d6f57a95f4a5f42f98700e18492093b116"
+    },
+    {
+      "char_end": 30372,
+      "char_start": 30344,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c9f5b010a13cfb595ef0",
+      "source_role": "reviewer_report",
+      "text": "I am OK with their revision.",
+      "text_sha256": "sha256:549e2f994455fd5953c1c36917a549986087347361bd672e947acf6f20ee3dd3"
+    },
+    {
+      "char_end": 30423,
+      "char_start": 30375,
+      "reviewer_id_hash": "REV-21c7c3e1a75084e7",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ddde345fca3d9904b226",
+      "source_role": "reviewer_report",
+      "text": "## **POINT-BY-POINT RESPONSE, NCOMMS-23-27458A**",
+      "text_sha256": "sha256:beb32b9b0df61e748fb1723172c8387c4b5a0156907067122cb67203b41db32c"
+    },
+    {
+      "char_end": 30461,
+      "char_start": 30426,
+      "reviewer_id_hash": "REV-e20b58628707bf75",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8037ad1994aebdb896d6",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #1 (Remark to the Author):",
+      "text_sha256": "sha256:cd2112928a3937afa1f3aac58fa864181d3a8f12878089e0d5eff118d6d320fb"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

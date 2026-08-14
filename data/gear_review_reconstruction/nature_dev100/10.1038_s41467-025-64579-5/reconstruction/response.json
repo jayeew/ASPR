@@ -1,0 +1,462 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:0255a1572c431ae0263a93b100086ad6d4f4e0b03c34b2c661c22b3032827638",
+  "input_sha256": "sha256:7b18546ef3aa5b3f30126d379d2fc04805ab016d95df88d9710fb01274d250fe",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:76add2b26bef43c170ca6698684066e7441038ef758ad0b6c939cd1d65dcf400",
+  "package_id": "RSP-7426c589ecc71fab124f",
+  "paper_id": "10.1038/s41467-025-64579-5",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-64579-5",
+      "point_id": "N-S1",
+      "rationale": "The specific device-engineering contribution identified in the report is supported by the final description of spatially controlled oxidation, gate-tunable states, and array implementation.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-745e1d28edba00f2"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-656291ed8aac03cde996"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-S1"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-64579-5",
+      "point_id": "N-L1",
+      "rationale": "The final paper continues to frame the work around Schottky-barrier modulation and cites prior TMDC memtransistor work; the reported array scale and architecture leave the reviewer’s novelty limitation material.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-07492369d77dd116",
+        "REV-89080ad9648e20c0"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-7a3462c38e67262260dc",
+        "RR:SRC-R-4c7e611036b20e452a57"
+      ],
+      "round_ids": [
+        "round_1",
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-L1"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-64579-5",
+      "point_id": "S-1",
+      "rationale": "The reviewer’s specific observation about fabrication and the array demonstration is retained as a strength and is independently described in the final paper.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-745e1d28edba00f2"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-656291ed8aac03cde996"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-S-1"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-64579-5",
+      "point_id": "S-2",
+      "rationale": "The report’s specific recognition of array operation is supported by the final device statistics and hardware-ANN implementation.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-745e1d28edba00f2"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-656291ed8aac03cde996"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-S-2"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-64579-5",
+      "point_id": "W-1",
+      "rationale": "Additional endurance data address the original missing-data concern, but the final paper itself reports compromised monolayer retention and endurance under ambient exposure.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-07492369d77dd116"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-7fd7f4ac455e8eda7f31"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-366911bd78f3abe987ff"
+      ],
+      "paper_id": "10.1038/s41467-025-64579-5",
+      "point_id": "W-2",
+      "rationale": "The final revision supplies nonlinearity and asymmetry analyses and algorithm details, while retaining device-dependent nonideal LTD behavior and mitigation through pulse and algorithmic measures.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-07492369d77dd116"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-7d3e9f83ec1fd16d71f2",
+        "RR:SRC-R-1b39268543f95e530e8c"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W-2"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-64579-5",
+      "point_id": "Q-1",
+      "rationale": "The final methods confirm ambient electrical measurements and the final discussion attributes monolayer degradation to ambient species; this leaves controlled-environment stability as a residual evidentiary question.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-745e1d28edba00f2"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-2c841af4a1e009b49175"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q-1"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-64579-5",
+      "point_id": "Q-2",
+      "rationale": "The final paper adds a compact-model estimate for sub-1-V switching, but the explanation remains parameter-based rather than a direct measurement of the migration process or barrier in the scaled device.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-745e1d28edba00f2"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-b3c43204f479f8b2e3dc"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q-2"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-64579-5",
+      "point_id": null,
+      "rationale": "The requested gate-dependent output and transfer characteristics are described in the final paper.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-745e1d28edba00f2"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-ff9b1d0380e5bd6cce75"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-1"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-64579-5",
+      "point_id": null,
+      "rationale": "Growth conditions are specified in the final methods, and the final text reports AFM, Raman mapping, STM/STS, and FET-array characterization.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-89080ad9648e20c0"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-9abd354347e4ec993672"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-2"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-64579-5",
+      "point_id": null,
+      "rationale": "The final paper reports TEM thickness values and a treatment-time thickness trend, addressing the request for quantitative evidence.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-89080ad9648e20c0"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-aae885f1c60b7d162249"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-3"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-64579-5",
+      "point_id": null,
+      "rationale": "The final paper identifies the elemental mapping as energy-dispersive X-ray spectroscopy.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-89080ad9648e20c0"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-eb77a7443eca2020d91b"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-4"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-64579-5",
+      "point_id": null,
+      "rationale": "The final PaperIR text does not permit an independent assessment of whether figure annotations and embedded legends were sufficiently improved.",
+      "resolution_status": "unverifiable",
+      "reviewer_id_hashes": [
+        "REV-89080ad9648e20c0"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-689aa9f3bf55244f78e6"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-5"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-f820839de566511ba2b9",
+            "P:S-122aa1395b09d3b7440d",
+            "P:S-545e724a653e8cec8f02"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-L1",
+          "schema_version": "aspr_gear",
+          "severity": "major",
+          "suggested_action": "Evidence needed: an independently benchmarked distinction from prior Schottky-barrier TMDC memtransistors and comparable array demonstrations.",
+          "text": "The novelty case is limited because Schottky-barrier modulation in TMDC memtransistors and array realization were already reported; the final contribution is best delimited as controlled vacancy placement and performance uniformity rather than a new switching concept or architectural leap."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-48850030ea40ef631fa7",
+            "P:S-5c5a3e3a1e3f8cae9aeb",
+            "P:S-545e724a653e8cec8f02"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-S1",
+          "schema_version": "aspr_gear",
+          "severity": "minor",
+          "suggested_action": "Contribution boundary: controlled oxidation and vacancy-location control, linked to reduced charge trapping and array uniformity.",
+          "text": "The paper supplies a concrete implementation advance: localized oxidation controls vacancy distribution near the contact, while the final analysis distinguishes beneficial Schottky-barrier modulation from detrimental vacancy-induced trapping."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-025-64579-5",
+    "questions": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-ecc4822fa103057d5a98",
+          "P:S-62af418cf3785c7e5279"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Evidence needed: retention, endurance, and switching comparisons under controlled atmosphere or encapsulation.",
+        "text": "How much of the monolayer retention and endurance loss is removed under controlled atmosphere or encapsulation, relative to the reported ambient measurements?"
+      },
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-7ec36e562d81c8f48615",
+          "P:S-9b26001f953c0ac68bc2"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-2",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Evidence needed: a direct scaled-device test that constrains the migration barrier and activation mechanism.",
+        "text": "What direct scaled-device evidence constrains the migration barrier and vacancy-motion mechanism underlying the sub-1-V set operation, beyond the compact-model parameter estimate?"
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-48850030ea40ef631fa7",
+          "P:S-ed6aba78c8a92a15afe4"
+        ],
+        "external_verification_required": false,
+        "point_id": "S-1",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Evidence recorded in the final structural and spectroscopic characterization.",
+        "text": "The fabrication strategy spatially localizes plasma oxidation and is supported by TEM, EDS, Raman, XPS, and UPS evidence connecting treatment to vacancy and Schottky-barrier control."
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-df43859e2066eb60e940",
+          "P:S-169702b8da0fe754d57d",
+          "P:S-31d8738679172bdc8440"
+        ],
+        "external_verification_required": false,
+        "point_id": "S-2",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Evidence recorded in the array statistics and hardware-ANN results.",
+        "text": "The study connects individual-device behavior to fabricated-array tests: it reports 12 × 6 statistics, a 5 × 5 hardware ANN, quantified update behavior, and an MNIST implementation using measured device responses."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-426d82e97bf5e1d7b93b",
+        "P:S-5c5a3e3a1e3f8cae9aeb",
+        "P:S-31d8738679172bdc8440",
+        "P:S-545e724a653e8cec8f02"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "This work implements MoS2 memtransistor arrays in which localized oxidation regulates vacancy distribution and hence Schottky-barrier switching. The final paper reports gate-tunable multistate operation, array uniformity, scaled 500-nm channels, and hardware ANN image-processing demonstrations. Its contribution is strongest as controlled device engineering and an experimentally supported account of the trade-off between barrier modulation and vacancy-induced trapping; novelty relative to prior TMDC memtransistors remains bounded, and ambient stability plus nonideal synaptic updates remain consequential limits."
+    },
+    "weaknesses": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-ecc4822fa103057d5a98"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Residual to track: layer-resolved stability under deployment-relevant environments and durations.",
+        "text": "Retention and endurance are materially layer-dependent: few-layer devices are reported as stable for over 100 switching cycles, over 10^3 s retention, and nearly 10,000 LTP/LTD pulses, whereas monolayer devices are explicitly described as vulnerable to ambient oxidative degradation."
+      },
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-169702b8da0fe754d57d",
+          "P:S-31d8738679172bdc8440",
+          "P:S-a426b6989308e0aa01aa"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-2",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Residual to track: accuracy sensitivity to device-to-device update asymmetry under the stated hardware mapping.",
+        "text": "The ANN result is conditioned by nonideal synaptic updates: only one of three illustrated devices has comparatively symmetric LTP/LTD behavior, while the reported accuracy relies on increasing-pulse programming and algorithmic measures that suppress the effect of asymmetric depression."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [],
+      "final_paper_evidence_keys": [
+        "P:S-5c5a3e3a1e3f8cae9aeb"
+      ],
+      "ledger_id": "L-A-1",
+      "paper_id": "10.1038/s41467-025-64579-5",
+      "residual_summary": "Gate-dependent I–V and transfer-curve evidence is described in the final paper.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-ff9b1d0380e5bd6cce75"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [],
+      "final_paper_evidence_keys": [
+        "P:S-1470d01d4b3b3eb0f56b",
+        "P:S-21a87a453a86ea509dea"
+      ],
+      "ledger_id": "L-A-2",
+      "paper_id": "10.1038/s41467-025-64579-5",
+      "residual_summary": "CVD conditions and multiple material-quality characterizations are included in the final paper.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-9abd354347e4ec993672"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [],
+      "final_paper_evidence_keys": [
+        "P:S-48850030ea40ef631fa7"
+      ],
+      "ledger_id": "L-A-3",
+      "paper_id": "10.1038/s41467-025-64579-5",
+      "residual_summary": "Quantitative thinning and cross-sectional TEM evidence are reported in the final paper.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-aae885f1c60b7d162249"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [],
+      "final_paper_evidence_keys": [
+        "P:S-48850030ea40ef631fa7"
+      ],
+      "ledger_id": "L-A-4",
+      "paper_id": "10.1038/s41467-025-64579-5",
+      "residual_summary": "The final text identifies the elemental analysis as EDS.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-eb77a7443eca2020d91b"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [],
+      "final_paper_evidence_keys": [],
+      "ledger_id": "L-A-5",
+      "paper_id": "10.1038/s41467-025-64579-5",
+      "residual_summary": "Text-only PaperIR evidence cannot establish whether the requested figure-annotation changes were sufficient.",
+      "resolution_status": "unverifiable",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-689aa9f3bf55244f78e6"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

@@ -39,19 +39,19 @@ IMPLEMENTATION_PATH = Path(__file__).resolve()
 DEFINITION_VERSION = "targeted_operationalizations_v3_20260730"
 UPSTREAM_IMPLEMENTATIONS: Dict[str, tuple[Path, str]] = {
     "EF0318": (
-        ASPR_ROOT / "aspr" / "nature_multihorizon" / "features_v6.py",
+        ASPR_ROOT / "gear" / "nature_multihorizon" / "features_v6.py",
         "field_variety",
     ),
     "EF0312": (
-        ASPR_ROOT / "aspr" / "nature_multihorizon" / "features_v6_1.py",
+        ASPR_ROOT / "gear" / "nature_multihorizon" / "features_v6_1.py",
         "field_gini_balance",
     ),
     "EF0315": (
-        ASPR_ROOT / "aspr" / "nature_multihorizon" / "features_v6.py",
+        ASPR_ROOT / "gear" / "nature_multihorizon" / "features_v6.py",
         "field_disparity_mean",
     ),
     "EF0309": (
-        ASPR_ROOT / "aspr" / "nature_multihorizon" / "features_v6.py",
+        ASPR_ROOT / "gear" / "nature_multihorizon" / "features_v6.py",
         "rao_stirling_integration",
     ),
     "EF0052": (

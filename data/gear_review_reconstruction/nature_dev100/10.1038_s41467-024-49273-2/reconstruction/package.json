@@ -1,0 +1,1885 @@
+{
+  "author_response_spans": [
+    {
+      "char_end": 6459,
+      "char_start": 6421,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b12cf46c55c1034d301d",
+      "source_role": "author_response",
+      "text": "## **Response to reviewers’ comments**",
+      "text_sha256": "sha256:c9dd940d445377be56dce1cc3905c20a3701d98e44991a55aa00e36fd1899f61"
+    },
+    {
+      "char_end": 6499,
+      "char_start": 6462,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4e8f728b3bf837c4e06e",
+      "source_role": "author_response",
+      "text": "## **Manuscript ID:** NCOMMS-24-00792",
+      "text_sha256": "sha256:44350162becdffafed970893a6d1047078a96a2df12e54d7e3693d70b135dcaf"
+    },
+    {
+      "char_end": 6596,
+      "char_start": 6502,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6b752e67e96418233d69",
+      "source_role": "author_response",
+      "text": "**Title:** Model-based evaluation of photoelectrochemical water splitting at elevated pressure",
+      "text_sha256": "sha256:dab25d1c6201670be9eb8e6bf7854373199df9e5d028692133e7cde296e09297"
+    },
+    {
+      "char_end": 6814,
+      "char_start": 6599,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7840f8b76070a7c5f036",
+      "source_role": "author_response",
+      "text": "In this response letter, the reviewers’ comments to our original manuscript are provided in **black** , and our point-by-point responses as well as the corresponding changes to the manuscript are shown in **blue** .",
+      "text_sha256": "sha256:1d0772f9e6d749c115ec822c1a021fc39b8745beb4fa6c21ae86abc5ee63b925"
+    },
+    {
+      "char_end": 6860,
+      "char_start": 6817,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-cc65032812acb8577cb3",
+      "source_role": "author_response",
+      "text": "## **Reviewer #1 (Remarks to the Author):**",
+      "text_sha256": "sha256:c54722ad14fd45d24c8fff2e4597726eaed0731616bcd87286b3eb3bba450471"
+    },
+    {
+      "char_end": 7723,
+      "char_start": 6863,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d76ddf9cf3782d777931",
+      "source_role": "author_response",
+      "text": "This paper conducts a model-based evaluation of photoelectrochemical water splitting at elevated pressure conditions. It provides a thorough analysis of the benefits and penalties associated with high pressure operation, taking into account the effects on bubble characteristics, product gas crossover, bubble-induced optical losses, and concentration overpotential. Operating electrically driven water splitting at high pressures is of significant interest in both academic research and industrial applications. While photoelectrochemical water splitting is still at a relatively low TRL, the research is forward-looking by developing a fundamental understanding of how elevated pressure affects device performance, and can be useful to inform future design of photoelectrochemical devices. However, there are a few issues that need to be addressed/clarified.",
+      "text_sha256": "sha256:fdb1af6507186f4c7f28410abcc01974ccaaa8a6d039a4c13e3bbc14f0219cd5"
+    },
+    {
+      "char_end": 8256,
+      "char_start": 7726,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-22b2ad2f2cf229967183",
+      "source_role": "author_response",
+      "text": "**1.** One major issue related to gas-evolving electrodes is that bubbles adhering to the electrodes will block the reaction site and cause the shielding effect, resulting in a localized surge in overpotential (activation and ohmic losses). This can also contribute to increased heterogeneity in other distributions within the device, and therefore affect the overall performance of the device. It is not clear in the paper how the bubble coverage on the electrode surface and the shielding effect have been included in the model.",
+      "text_sha256": "sha256:2e85fc907af5b001897451723708828841700aa39c1a28e18b9c0bd310f08d91"
+    },
+    {
+      "char_end": 9418,
+      "char_start": 8259,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9b044aabbc0de0f34179",
+      "source_role": "author_response",
+      "text": "_**Response:**_ We thank the reviewer for this valuable suggestion. The effects of bubble adhering to the electrodes were not included in our model, due to the limitations of our Euler-Euler model in simulating the gas/electrolyte interface. We have emphasized this in the _Methods_ section in the revised manuscript. However, we have now provided an estimate of how pressure would affect bubble coverage on electrodes’ surface and the resulting overpotential. We obtained the gaseous volume fraction from our multiphysics simulations and integrated along the surface of the electrode in order to obtain the bubble coverage. The data is shown in Fig. R1a, with bubble coverage ( _Θ_ ) decreasing significantly from ~30% at 1 bar to < 5% above 4 bar. We then used the empirical correlations reported in the literature by Vogt[1] in order to estimate the bubble coverage overpotential ( _V_ Θ), as shown in Fig. R1b. The bubble coverage overpotential is ~20 mV at 1 bar and decreased to < 5 mV for operating pressure of > 4 bar. We have now added a brief discussion in the revised manuscript and as Supplementary Note 4 in the revised supplementary information.",
+      "text_sha256": "sha256:6a430a12373b920e3fa967c56dafbbbef9462e24b5ea453251fb214a6152811c"
+    },
+    {
+      "char_end": 9474,
+      "char_start": 9421,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fd46c662377e2e1295cd",
+      "source_role": "author_response",
+      "text": "**==> picture [328 x 208] intentionally omitted <==**",
+      "text_sha256": "sha256:a3fa5a3c5944a8c6b0f492aa47eb179992c9f6adaf707568ccadd46a65004dd0"
+    },
+    {
+      "char_end": 9793,
+      "char_start": 9476,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-dd1a2de0f9906d3245ca",
+      "source_role": "author_response",
+      "text": "**Figure R1. (a)** Bubble coverage ( _Θ_ ) of electrode surface as a function of pressure as obtained from our multiphysics simulations (Fig. 4a-e) at device angle (  ) 90°. **(b)** The resulting bubble overpotential ( _V_ Θ) calculated from the data of _Θ_ in (a) and the empirical relationship reported by Vogt.[1]",
+      "text_sha256": "sha256:102ec1199891bdbfc7f77c7748c6ddfd5aba9c833d19fe7ff4f0abd4d9d9126f"
+    },
+    {
+      "char_end": 9833,
+      "char_start": 9796,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-75b2081739e3d4c02314",
+      "source_role": "author_response",
+      "text": "Associated changes to the manuscript:",
+      "text_sha256": "sha256:e34ade5e3a85400a7e2ef4de4c04673ade56c6ea36c94d5cc19a7e723f6cbaa6"
+    },
+    {
+      "char_end": 11379,
+      "char_start": 9836,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-afb98b41b28924c4911b",
+      "source_role": "author_response",
+      "text": "• _Results and discussions_ ( _Manuscript_ ), page 20, line 353 – 363: “ _Another important bubble-induced loss is the overpotential due to bubble coverage (or blockage) of the (photo)electrode area. However, this overpotential is not directly solved in our Euler-Euler multiphase model, as described in the Methods section. Instead, we have estimated the bubble coverage overpotential indirectly by (i) integrating the gas volume fraction along the surface of the electrode to calculate the bubble coverage (Θ) and (ii) using the empirical correlation reported by Vogt to evaluate the bubble coverage induced overpotential (V_ Θ _).[1] More details on the steps are described in Supplementary Note 4. Θ and V_ Θ _are plotted as a function of pressure in Figs. S9a and b, respectively. Increasing pressure significantly suppresses Θ and V_ Θ _; at operating pressure of 4 bar and higher, the value of VΘ is negligible (< 5 mV). Note that bubble coverage-induced overpotential is significantly smaller than the pH gradient-induced overpotential. Due to this very minor contribution, V_ Θ _is neglected in the following discussions._ ” • _Method_ ( _Manuscript_ ), page 32, line 599 – 602: “ _Note that the effects of bubble adhering to the electrodes and increasing the overpotential is not directly simulated due to the limitations of our Euler-Euler model. Estimations were, however, made based on the gas volume fraction obtained from our model and an empirical correlation reported in the literature, as described in Supplementary Note 4.”_",
+      "text_sha256": "sha256:f54922f7ef4e35d8f1a4408ee81faafae1d540d2a482fe14dd5329290e15821d"
+    },
+    {
+      "char_end": 11546,
+      "char_start": 11382,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b105d4146be0958927ea",
+      "source_role": "author_response",
+      "text": "- Supplementary Note 4, describing the steps to estimate bubble coverage and bubble coverage overpotential, has been added to the revised supplementary information.",
+      "text_sha256": "sha256:44028583d8be8a9a41d4cf6fa6102c0676ae139e9bf995d4e9340f889c47bb62"
+    },
+    {
+      "char_end": 11631,
+      "char_start": 11549,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4d65bcdec20958f9fe5c",
+      "source_role": "author_response",
+      "text": "- Figure R1 has been added as Figure S11 in the revised supplementary information.",
+      "text_sha256": "sha256:df41591cdcb0e27be43cac9312c874b01280499b2a439ee9852bb88c6f0a4002"
+    },
+    {
+      "char_end": 11899,
+      "char_start": 11634,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-190c4f8a276c74b982da",
+      "source_role": "author_response",
+      "text": "**2.** In the paper, the amounts of dissolved gases in the electrolyte are calculated from the bubble formation efficiency. It would be useful to validate the calculated values by comparing them with the solubility of gases in the electrolyte to see the deviations.",
+      "text_sha256": "sha256:ae8805f81591adf65bd4b36316bb4168b74a7054bab34a28414962d38dc4d6c8"
+    },
+    {
+      "char_end": 12319,
+      "char_start": 11902,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-eb2cd043ba5e1e7df026",
+      "source_role": "author_response",
+      "text": "_**Response:**_ We appreciate the reviewer’s suggestion. Fig. R2 shows the comparison between the simulated gas concentrations from our model (black data points) with (i) the solubility of gases in the electrolyte (calculated using Henry’s law – blue data points) and (ii) the supersaturated gas concentrations as determined based on reported empirical correlations (red data points).[2,3] It can be observed that the",
+      "text_sha256": "sha256:f5121e5ac94b1868d0783efb8655b3b0909d455b7f5d34ac1ae7ee6b0390f4eb"
+    },
+    {
+      "char_end": 12648,
+      "char_start": 12322,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d4cf2eaa752a18a50bfd",
+      "source_role": "author_response",
+      "text": "concentration of dissolved gases increases with pressure, and our simulated results agree well with the empirical correlations. The slight discrepancy can be explained by the absence of gas bubble formation in the empirical correlation. We have added a brief discussion in the model validation section of Supplementary Note 2.",
+      "text_sha256": "sha256:9dd77bdc04bde304302be90ea0590bdef9b95da70fce9309f69f20e1f57f6061"
+    },
+    {
+      "char_end": 12704,
+      "char_start": 12651,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-29cfb032df4d0ee8c22b",
+      "source_role": "author_response",
+      "text": "**==> picture [428 x 261] intentionally omitted <==**",
+      "text_sha256": "sha256:53acbad56fc3d87e9b20865c52d2dfe85113ddbabdbaef79eadb4b8dc6422f6c"
+    },
+    {
+      "char_end": 13447,
+      "char_start": 12706,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8053530de4534a42d0a3",
+      "source_role": "author_response",
+      "text": "**Figure R2.** Supersaturated concentration of (a) O2 and (b) H2 gases in the vicinity of electrodes. 𝑐w is the predicted concentration of O2 or H2 in the vicinity of electrode based on the empirical equation in literature.[2,3] 𝑐s is the molar solubility of gas in water, which is calculated based on Henry’s law: 𝑐s = 𝑝g⁄𝐾H, in which 𝑝g is the partial pressure of the products. Henry’s constants for oxygen and hydrogen are 𝐾H,O2 = 769.2 atm M[−1] and 𝐾H,H2 = 1282.05 atm M[−1] , respectively,[4,5] assuming that the solution is pure water and the temperature is 298 K. 𝑐O2,our model and 𝑐H2,our model are the simulated O2 and H2 concentrations using our model, respectively. _j_ is the current density, which is 10 mA cm[-2] in this case.",
+      "text_sha256": "sha256:9d0ba1c27a3a1bead340c6f9f7aa51da2fefb444f5646517b8e11dd78de773d4"
+    },
+    {
+      "char_end": 13490,
+      "char_start": 13450,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-125ac4e8fb62d69b5232",
+      "source_role": "author_response",
+      "text": "## Associated changes to the manuscript:",
+      "text_sha256": "sha256:0126e081b96efc33e1b2b8985cc76ba49b848fef4e96680c29a18c9f5b25ca98"
+    },
+    {
+      "char_end": 14052,
+      "char_start": 13493,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f5dba56be31c506d1b35",
+      "source_role": "author_response",
+      "text": "- _Supplementary Note 2_ ( _Supplementary information_ ): “ _We also validated our model by comparing the dissolved gas concentration to that obtained from the empirical relationship reported by Shibata and Vogt.[4,5] As shown in Fig. S6, both the dissolved O2 and H2 concentrations obtained from our model are much higher than the solubility values, and they are in relatively good agreement with the empirical supersaturated concentration; slight deviation can be explained by the fact that no bubble formation is considered in the empirical correlation._ ”",
+      "text_sha256": "sha256:a43701670607d0e05474ec96737e082dbaea7da338756db38fa2ed7168a24401"
+    },
+    {
+      "char_end": 14138,
+      "char_start": 14055,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8829e8aa08aab1aed3b2",
+      "source_role": "author_response",
+      "text": "- • Figure R2 has been added as Figure S6 in the revised supplementary information.",
+      "text_sha256": "sha256:80ba7105a104c6f47dcf0d9e661b5b6adfff69406eff3877e6f9291647def352"
+    },
+    {
+      "char_end": 14942,
+      "char_start": 14141,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ffd0cc7adb5c99a51455",
+      "source_role": "author_response",
+      "text": "**3.** The model used in the paper is developed for a membrane-free cell. However, most photoelectrochemical reactors use membranes/separators, and these membrane-based reactors are the probable scalable options considering the extensive experience in scaling up membrane-based electrolysers. Additionally, the bubble characteristics are determined using thin-film Pt electrodes, which can exhibit surface properties (e.g., morphology, wettability, etc) very different from those of commonly used nanostructured (photo)catalysts. The difference in surface properties can lead to a very different dynamics of bubble formation and growth near the electrodes. A question therefore arises: to what extent can the conclusions of this paper be generally applicable to (photo)electrochemical water splitting?",
+      "text_sha256": "sha256:99660b71dc760b7ea9eef23c689d054093d4298e12fbe92c0618dc5bf1e64f37"
+    },
+    {
+      "char_end": 16488,
+      "char_start": 14945,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-41d7b9d0ae741a00d9a6",
+      "source_role": "author_response",
+      "text": "_**Response:**_ We thank the reviewer for these valuable comments/suggestions. We are confident that our conclusion can be generally applied to (photo)electrochemical water splitting due to the following arguments. First, the introduction of membrane would only affect the product crossover loss ( _f_ col), i.e., _f_ col would diminish in the presence of membrane. Since _f_ col has been shown to be a minor factor in the overall loss contributions (see Figs. 9b and S13), the inclusion of the membrane will not alter the pressuredependent loss analysis. Second, regarding the influence of surface properties, we agree that bubble nucleation, growth and detachment will indeed vary depending on the electrode’s surface roughness and/or wettability. These processes are not captured in our model and may be affected at higher pressure. However, we would like to emphasize that changes in bubble properties that we showed to be induced by pressure elevation will still likely be valid. This is supported by the good agreement between our measurements of bubble properties (performed using thin film Pt electrodes) and the empirical correlations obtained from Sillen’s experimental data[6] (performed using optically transparent and perforated plate nickel electrodes). Nevertheless, we acknowledge that our study and our multiphysics model have certain limitations. We have clearly described these limitations in the original manuscript, and we have now added additional limitations regarding bubble nucleation/growth in the revised manuscript.",
+      "text_sha256": "sha256:eafec97bc818a5fcba6135e02baba1abee0d179fd438257df7514878f16e97e5"
+    },
+    {
+      "char_end": 17608,
+      "char_start": 16531,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-605bb3a1c21aebb63f59",
+      "source_role": "author_response",
+      "text": "|ociated changes to the manuscript:|ociated changes to the manuscript:|\n|---|---|\n|•<br>_Results and discussions_(_Manuscript_), page 24, line 420 – 424: “_Both the bubble-plume-induced_||\n|_optical losses (_<br>𝑓<br>𝑜𝑝𝑙_) and product crossover losses (_<br>𝑓<br>𝑐𝑜𝑙_) are suppressed as pressure increases._|_The_|\n|_minor contribution of_<br>𝑓<br>𝑐𝑜𝑙_is interesting considering that our simulations assume a membrane-free_||\n|_cell configuration; the inclusion of membrane or separator in the reactor will likely suppress_<br>𝑓<br>𝑐𝑜𝑙||\n|_even further.”_||\n|•<br>_Results and discussions_(_Manuscript_), page 25, line 443 – 448: “_In addition, although the pressure-_||\n|_induced changes of bubble characteristics are independent of the electrode-electrolyte system,_|_the_|\n|_surface properties of the (photo)electrode (e.g., morphology, wettability, etc) and the concentration_||\n|_of the electrolyte could alter the bubble characteristics at a given pressure. These considerations,_||\n|_including bubble nucleation and growth, are not included in our Euler-Euler model._”||",
+      "text_sha256": "sha256:77bdb13defad1bdff540f69a5c41dfb1c7946706c36aca72ed27e147409eea45"
+    },
+    {
+      "char_end": 17766,
+      "char_start": 17612,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0d81e58e6459ed549711",
+      "source_role": "author_response",
+      "text": "**4.** The selected electrode length (2 cm) is notably small in the context of industry applications. How scalable are the conclusions drawn in the paper?",
+      "text_sha256": "sha256:c73f6f2c42a38ffa662f80cad684c394426e167c1cbecc24a244cfe04836ab49"
+    },
+    {
+      "char_end": 18622,
+      "char_start": 17769,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3cb1582198e604d94591",
+      "source_role": "author_response",
+      "text": "_**Response:**_ We acknowledge that the electrode length considered in our study is small in the context of industrial applications. To assess the scalability of our results as suggested by the reviewer, we have now performed additional simulations using our multiphysics model considering larger cell geometries. 𝐿𝑥 is fixed as 3 cm, while 𝐿𝑦 is parameterized as 2, 5, and 10 cm, which is equivalent to an electrode active area of 4, 25, and 100 cm[2] , respectively. We evaluated the influence of operating pressure on the simulated gas volume fraction. Indeed, as shown in Fig. R3, the gas volume fraction can be significantly suppressed at elevated pressure regardless of the cell geometry. This is consistent with the conclusion made from the smaller scale cell geometry, i.e., 𝐿𝑥 = 0.5 cm and 𝐿𝑦 = 2 cm, see Fig. 4 and Fig. 6 in the _Manuscript_ .",
+      "text_sha256": "sha256:974fcb87fcb64dfc8b04f9bbe08435ef8a235acfc519f05c68fc17a04eb23856"
+    },
+    {
+      "char_end": 18678,
+      "char_start": 18625,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-506031ae554ece7ef31e",
+      "source_role": "author_response",
+      "text": "**==> picture [298 x 333] intentionally omitted <==**",
+      "text_sha256": "sha256:7c256172d960c732395bf87ff25c1db8ea25c1be03cdf1c34cf801b869b0ca1e"
+    },
+    {
+      "char_end": 19057,
+      "char_start": 18680,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-dac9f50687adcb47cf8c",
+      "source_role": "author_response",
+      "text": "**Figure R3.** Simulated gaseous phase distribution in various cell geometries at different pressure. (a) – (c) 𝐿𝑦 = 2, 4, 10 cm at 1 bar. (d) – (f) 𝐿𝑦 = 2, 4, 10 cm at 10 bar. 𝐿𝑥 is kept as 3 cm. The current density is 10 mA cm[-2] . The average inlet velocity of the electrolyte is set as 3 cm s[-1] , and the device tilt angle is fixed at 30°. The scale bars represent 1 cm.",
+      "text_sha256": "sha256:6cfb6344dd8060088b2fad9d960b731c868d53617ac33e245c0f8dd7775a5538"
+    },
+    {
+      "char_end": 19103,
+      "char_start": 19060,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b802355a9ba8baf634c6",
+      "source_role": "author_response",
+      "text": "## **Reviewer #3 (Remarks to the Author):**",
+      "text_sha256": "sha256:487a6cd6b311ca0a1d8662be67d067e2fb81a04f6371517fa6bef4f29fa09fa5"
+    },
+    {
+      "char_end": 19705,
+      "char_start": 19106,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-623f8967b47f3026fecd",
+      "source_role": "author_response",
+      "text": "The authors investigated the implications of operating PEC water splitting directly at elevated pressure and evaluate the benefits and penalties associated with elevated pressure operation through the development of a multiphysics model. The topic discussed in interesting. However, I am concerned about the setup the authors used for this demonstration. As I see, the electrodes used are not photoelectrodes. Most of the investigation and conclusions also applied to water electrolysis system. Another main issue is most of the experimental details are not sufficient. The comments are shown below.",
+      "text_sha256": "sha256:ea24a02b8149f85929395b2c07002bc2119c1ce37b9a0fe541bbad3e0f9b3753"
+    },
+    {
+      "char_end": 20596,
+      "char_start": 19708,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-450d1e83862dd455595f",
+      "source_role": "author_response",
+      "text": "**1.** The authors utilized Pt-decorated FTO electrodes with a constant current to simulate photoelectrochemical water splitting under elevated pressure. However, I am concerned about its suitability. 1) it is difficult to use this electrode to reflect the effect on the light absorption. The light scattering also depends on the wavelength. 2) the current varied greatly if applied a constant voltage. Utilizing a constant current mode, the voltage will be adapted according which may lead to a great change in voltage causing some irreversible damages to the photoelectrode. Maybe the authors can add one experiment with constant voltage to investigate how will the elevated pressure affect the current. The conclusions here can also apply to the water electrolysis, except the optical loss. Maybe can change the title to a large range of electrochemical or photoelectrochemical system.",
+      "text_sha256": "sha256:ccd03e6776d36cae3a9fdf53539e1fff92f194066b77cd74fc0b62064e0a53e1"
+    },
+    {
+      "char_end": 21934,
+      "char_start": 20599,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fb3ec89ce2e32fd4df20",
+      "source_role": "author_response",
+      "text": "_**Response:**_ We appreciate the concerns raised by the reviewer and the valuable suggestions. We have now measured the transmission as a function of wavelength before and after bubble evolution at 1 bar. The result is shown in Fig. R4, indicating no wavelength dependence on the reduction on transmission. In other words, we can assume that bubble scattering effect is wavelength-independent, which is perhaps not surprising considering the relatively large bubble size compared to the optical wavelengths. In addition, we have also performed a constant voltage experiment as suggested by the reviewer and monitored the change in current with elevated pressure (Fig. R5). We observed a slight decrease of current, which is attributed to the increased thermodynamic cell potential at elevated pressure. Finally, we understand the reviewer’s suggestion to change the title. Indeed, some of our conclusions are also applicable to electrochemical water splitting devices. However, considering that the bubble-induced optical loss is the dominating factor in the overall losses we considered (see _f_ opl in Fig. 9b), we believe the main messages of our study (e.g., optimum operating pressure) would still be more applicable to photoelectrochemical water splitting. Therefore, we have decided to keep the initial title of our manuscript.",
+      "text_sha256": "sha256:a4d37a361b04839dcb538d2744c4076aca01c6902fa4aeba8421cd4537d558bb"
+    },
+    {
+      "char_end": 21990,
+      "char_start": 21937,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-34d76008ee4c51386760",
+      "source_role": "author_response",
+      "text": "**==> picture [270 x 195] intentionally omitted <==**",
+      "text_sha256": "sha256:f2add769a62fabbc72815498d4ba2eebafa27a8f5de3e2f016749cab7ebd5297"
+    },
+    {
+      "char_end": 22123,
+      "char_start": 21992,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-48fc7ab1260ece5fe7b1",
+      "source_role": "author_response",
+      "text": "**Figure R4.** Transmittance measured through a transparent (photo)electrochemical cell at 1 bar without and with bubble formation.",
+      "text_sha256": "sha256:36c1db7fd26b7a297470fd050c0c166f738be4d736a0c4082e34ae329cd6499d"
+    },
+    {
+      "char_end": 22179,
+      "char_start": 22126,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-18ed9c5e174e767745a5",
+      "source_role": "author_response",
+      "text": "**==> picture [252 x 182] intentionally omitted <==**",
+      "text_sha256": "sha256:027bc894c48e8597d7fecbba8a75ede894c5b45d52f351985f673049ce0131cb"
+    },
+    {
+      "char_end": 22419,
+      "char_start": 22181,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fa5abb25606ba2439050",
+      "source_role": "author_response",
+      "text": "**Figure R5.** Current at various operating pressure. The working electrode is 5 nm Pt/FTO, the counter electrode is Pt wire, the reference electrode is Ag/AgCl. The electrolyte is 1 M KOH (pH = 14). Pressurization was done by purging O2.",
+      "text_sha256": "sha256:3edf8e32777710f83a78f72a924c8fdaf89530a2846647509345fbbe08398ddd"
+    },
+    {
+      "char_end": 22462,
+      "char_start": 22422,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a2c87257e2799e45c6b3",
+      "source_role": "author_response",
+      "text": "## Associated changes to the manuscript:",
+      "text_sha256": "sha256:0126e081b96efc33e1b2b8985cc76ba49b848fef4e96680c29a18c9f5b25ca98"
+    },
+    {
+      "char_end": 22805,
+      "char_start": 22465,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1347331d8f4731ce8af4",
+      "source_role": "author_response",
+      "text": "• Supplementary Note 3 (Supplementary information): “ _Bubble scattering is assumed to be wavelength-independent, which is validated by measuring the transmittance through our (photo)electrochemical cell with and without bubble formation at 1 bar (see Fig. S9)._ ” • Figure R4 is added as Figure S9 in the revised supplementary information.",
+      "text_sha256": "sha256:96b629faec5c627a60e1cf8c958efb7b0e9742bb61ddce0068f30928269a9fba"
+    },
+    {
+      "char_end": 23003,
+      "char_start": 22808,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0663713129a29a5a74c2",
+      "source_role": "author_response",
+      "text": "**2.** In the method, the cell was operated safely up to a pressure of 4 bar against atmospheric pressure. However, the experiments are conducted under 1-10 bar. How could it operate above 4 bar?",
+      "text_sha256": "sha256:198332fbc9c9762d7cfde8eca2062476ea3f346c9105314b6578e426aa2d7a34"
+    },
+    {
+      "char_end": 23397,
+      "char_start": 23006,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c447b1889cabcafe5603",
+      "source_role": "author_response",
+      "text": "_**Response:**_ We clarify that the experiments to validate our model were only performed up to 4 bar, as shown in Figs. 2, S1, S2, and S5. The results shown in our manuscript for 1 – 10 bar (or up to 20 bar for certain cases) were obtained by performing simulations with our validated model. To prevent any misunderstanding, we have now added a clarifying sentence to the _Methods_ section.",
+      "text_sha256": "sha256:410f90ccf501369aca0d07c2484ebddfc89ef3ed88cfec447bff088a923a7e9f"
+    },
+    {
+      "char_end": 23437,
+      "char_start": 23400,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-48580882b624e8d8aab3",
+      "source_role": "author_response",
+      "text": "Associated changes to the manuscript:",
+      "text_sha256": "sha256:e34ade5e3a85400a7e2ef4de4c04673ade56c6ea36c94d5cc19a7e723f6cbaa6"
+    },
+    {
+      "char_end": 23704,
+      "char_start": 23440,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-dec33ac454fb5762ee80",
+      "source_role": "author_response",
+      "text": "- _Methods (Manuscript)_ , page 27, line 486 – 488: “ _This cell was operated safely up to a pressure of 4 bar(a). Note that this limited pressure range should not be confused with that used in our simulations, which is 1 – 10 bar (or 20 bar for certain cases)._ ”",
+      "text_sha256": "sha256:af2c0b59b692b72714f5bb21b9c798819ed967e498c9e28a4fb3789cb768f6c0"
+    },
+    {
+      "char_end": 23866,
+      "char_start": 23707,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3fe10a37dc0f6ac69663",
+      "source_role": "author_response",
+      "text": "**3.** According to Fig. S1b, the both O2 and H2 bubbles are generated at the same cell. How did the authors get the only O2 bubbles visualization in Fig. S1c?",
+      "text_sha256": "sha256:c130b57e820fd8533be86c1d04d63ea816add5ef5d277110b37ebc1ff6783674"
+    },
+    {
+      "char_end": 24423,
+      "char_start": 23869,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7b2d9814cea9b9ff21f9",
+      "source_role": "author_response",
+      "text": "_**Response:**_ We utilized a Makro-Planar T* 2/100 (Zeiss) lens for our bubble shadowgraphy, and the aperture was kept as _f_ = 2 (minimum). This equipment setting enabled us to focus our view on bubble formation from the chosen electrode, as shown by the schematic in Fig. S1b ( _Supplementary information_ ). Bubble formation from the other electrode did not interrupt our observation due to the relatively large distance between the two electrodes (~3 cm). Detailed information regarding the camera setup has now been added to the revised manuscript.",
+      "text_sha256": "sha256:4e43a974a0af0ac381b708e6ef890a9dc8f8333fc32790261643282aff87e5f6"
+    },
+    {
+      "char_end": 24659,
+      "char_start": 24466,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-dcd8efed101408a73a4d",
+      "source_role": "author_response",
+      "text": "• _Methods (Manuscript),_ page 28, line 505 – 510: “ _A Makro-Planar T* 2/100 lens (Zeiss) was used to capture the bubble shadowgraphs, and the aperture was kept as f = 2 (minimum value). This_",
+      "text_sha256": "sha256:34c620e13d67b63bd3baf283ddc206bc0d244ee053ea6b50abad1182d888a62e"
+    },
+    {
+      "char_end": 24898,
+      "char_start": 24662,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-187e05d786e95880419a",
+      "source_role": "author_response",
+      "text": "_setting enabled us to focus our view on bubble formation from the chosen electrode. Bubble formation from the other electrode did not interrupt our observation due to the relatively large distance between the two electrodes (~3 cm)._ ”",
+      "text_sha256": "sha256:e58dc8b35dbd56b3f3e7abbf52f13967e50992c8e74c48a38148be92033235b2"
+    },
+    {
+      "char_end": 25107,
+      "char_start": 24901,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c209f1f36818d230aa47",
+      "source_role": "author_response",
+      "text": "**4.** Fig. 1 compares the calculated values from the fitting equations with the experimental 131 dataset reported by Sillen (black data points). Why did the authors not include their own experimental data?",
+      "text_sha256": "sha256:36b36a47942e964a0fc54e8ec910337dafff55a3a32f8153c6808c494087248e"
+    },
+    {
+      "char_end": 25778,
+      "char_start": 25110,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4728f6a46ed6c49d720e",
+      "source_role": "author_response",
+      "text": "_**Response:**_ Indeed, as the reviewer mentioned, the experimental data reported by Sillen[6] was used to empirically correlate bubble characteristics (diameters, density) to the operating conditions (pressure, current density, flow rate) and generate fitting equations. Note that these empirical correlations satisfactorily cover the whole pressure range we considered in this study, i.e., 1 – 20 bar. Our experiments were then conducted at a lower pressure range (i.e., 1 – 4 bar) to independently validate the empirical correlations. Including our experimental data in the initial fitting steps should not be done as it would introduce a circular argument fallacy.",
+      "text_sha256": "sha256:2fbfcbdfdb19fa66283719dd4c6b2de9ee2d3ad4873cea134b9f036c400776b4"
+    },
+    {
+      "char_end": 26061,
+      "char_start": 25781,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-294e92a6fbb8f940c63b",
+      "source_role": "author_response",
+      "text": "**5.** The authors define product crossover as the fraction of the molar flux that extends beyond the center of the channel. How did the authors measure the molar flux that extends beyond the center of the channel? These information should be described in the methods with detail.",
+      "text_sha256": "sha256:baee57a36574eca48a6733527e61e1a7c74dfb09d6e95f327b991f1c3b710fab"
+    },
+    {
+      "char_end": 26589,
+      "char_start": 26064,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ec0b2de516df49ffd312",
+      "source_role": "author_response",
+      "text": "_**Response:**_ First of all, we clarify that the product crossover data that we presented were simulated results from our multiphysics model (as we clearly identified in the caption of Fig. 6). We obtained this data by introducing an imaginary line at the center of the channel and integrating the molar flux of bubbles to the left and right of this imaginary line. In order to prevent any potential confusion from readers, we have further identified that the data shown in Fig. 6 were simulated in the figure caption title.",
+      "text_sha256": "sha256:02840395561d3fee6b1b1982b2ef60e050e71687f7f9c717e36f2f7d39285b69"
+    },
+    {
+      "char_end": 26964,
+      "char_start": 26635,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c13b1891c51bff6d50c7",
+      "source_role": "author_response",
+      "text": "- Caption for Fig. 6 ( _Manuscript_ ): “ _**Simulated O2 bubble molar flux at various operating pressures.** Simulated O2 bubble molar flux at the device outlet under various operating pressures. The average velocity at electrolyte inlet is set as 3 cm s[-1] , current density is 10 mA cm[-2] , device tilt angle is_ 30[°] _._ ”.",
+      "text_sha256": "sha256:6f7b8c6ec55da903ffb43083775b47eb7aaa46e5b70937f12f8b41baf4296d65"
+    },
+    {
+      "char_end": 27032,
+      "char_start": 26967,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0d66677452dd685c5576",
+      "source_role": "author_response",
+      "text": "## **6.** How did the authors measure the optical loss in Fig. 7?",
+      "text_sha256": "sha256:c96c14ec6a6331420c263b39404982d9405fbf8c09306d1e60ddd83ed5a3c0b1"
+    },
+    {
+      "char_end": 27333,
+      "char_start": 27035,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2deeb1435a532d213773",
+      "source_role": "author_response",
+      "text": "_**Response:**_ As mentioned in the caption of Fig. 7 ( _Simulated optical loss due to O2 and H2 bubbles at various operating pressures_ ), the optical loss data shown in Fig. 7 was not measured but simulated. In order to prevent any further misleading, we have further modified the figure caption.",
+      "text_sha256": "sha256:78cf42935e3e835c9b8eaffe0807e9645945b6ac4c8ad407835dffda649aac21"
+    },
+    {
+      "char_end": 27723,
+      "char_start": 27379,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-04777254d379fb15cd61",
+      "source_role": "author_response",
+      "text": "- Caption for Fig. 7 ( _Manuscript_ ): “ _**Simulated bubble-plume-induced optical loss as a function of the operating pressure.** Simulated optical loss due to O2 and H2 bubbles at various operating pressures. The average velocity at electrolyte inlet is set as 3 cm s[-1] , device tilt angle is_ 90[°] _, current density is 10 mA cm[-2] ._ ”.",
+      "text_sha256": "sha256:2e95fc196771c53481c34ecea03a7d38f3c7a0a1cad3427b3e6b97875c394d9e"
+    },
+    {
+      "char_end": 27797,
+      "char_start": 27726,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8c0994d638b51568b211",
+      "source_role": "author_response",
+      "text": "## **7.** Again, how did the authors monitor the pH changes in Fig. 8b?",
+      "text_sha256": "sha256:1dbf79627dc3bca8b9e900eef655cd55b88e9d2d4db9962162b85f515df474b8"
+    },
+    {
+      "char_end": 28079,
+      "char_start": 27800,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1c1c8e3a78866d137fda",
+      "source_role": "author_response",
+      "text": "_**Response:**_ We apologize for the confusion. The local pH distribution and the concentration overpotential data shown in Fig. 8 are not measured results, but they are simulated results from our multiphysics model. We have now clearly identified this in the caption for Fig. 8.",
+      "text_sha256": "sha256:6c8568026b16a480e13b8c774fc4d036b856392cd505b51146b46a7f8b8dd44b"
+    },
+    {
+      "char_end": 28298,
+      "char_start": 28082,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e2fef499e2d601f0a141",
+      "source_role": "author_response",
+      "text": "Finally, we would like to emphasize that all the simulated results were obtained using a model that has been validated against experimental data. We are currently working on directly measuring all these data (optical",
+      "text_sha256": "sha256:8c512473f6dd372f428c88193c4c1bd2ff5cd62f1a6b5de9e92d59a559576ac4"
+    },
+    {
+      "char_end": 28814,
+      "char_start": 28301,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3380238d5f9674880fd9",
+      "source_role": "author_response",
+      "text": "loss, crossover, pH distribution using in situ fluorescence techniques we reported previously)[7] in a pressurized flow cell. The schematic and the digital photographs of the flow cell are shown in _Supplementary Note 2_ . However, the required elevated pressure operation has been proven to complicate the measurements. Additional efforts beyond the scope of the current work are required. We hope to be able to report these results as soon as we overcome the challenges and are confident with the obtained data.",
+      "text_sha256": "sha256:2004f23019d1b40f86a3918bd89dc53908242eef9e2cd81aa83a488f4fa8c292"
+    },
+    {
+      "char_end": 29346,
+      "char_start": 28860,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-63367592b56836fcd765",
+      "source_role": "author_response",
+      "text": "- Caption for Fig. 8 ( _Manuscript_ ): “ _**Influence of operating pressure to the simulated local pH distribution and concentration overpotentials.** (a) Colormaps of pH in the cell at different operating pressures, i.e., 1 bar vs. 10 bar. (b) pH gradient near the electrode at different operating pressures, (c) pH gradient induced voltage loss vs. pressure. The current density is 10 mA cm[-2] and the inlet electrolyte velocity is 3 cm s[-1] . The electrolyte is 2M KPi (pH 7.2)._ ”",
+      "text_sha256": "sha256:0e3039c91404ab1338f9f34484a8eef0046b45aed04c64b7a28fe56acb71494c"
+    },
+    {
+      "char_end": 29858,
+      "char_start": 29349,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-27e91fe8a333ec9b5254",
+      "source_role": "author_response",
+      "text": "• _Results and discussions_ ( _Manuscrip_ t), page 26, line 451 – 457: “ _We have initiated efforts to directly measure the various loss contributions, i.e., optical loss, crossover, and pH distribution (using e.g., in situ fluorescence techniques we reported previously[69] ) in our pressurized flow cell (Fig. S4); however, these measurements are not yet technically feasible due to the additional complexity introduced by elevated pressure operation. Further efforts to construct and study higher-pressure_",
+      "text_sha256": "sha256:2a989d9597cb4bdb29d4c3eb5db578fdd446eb1dab656e3a8c797e7bf2f1f117"
+    },
+    {
+      "char_end": 30073,
+      "char_start": 29861,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1198cd544c3e62a00507",
+      "source_role": "author_response",
+      "text": "_PEC devices, even at the lab scale, are therefore urgently needed in order to experimentally unravel pressure-dependent parameters and fully evaluate the potential of PEC water splitting at elevated pressure._ ”",
+      "text_sha256": "sha256:bd48d57da3a7cf88c32cf4c99e6724eb9c254fc2e9c00a5684ca2ee85229db89"
+    },
+    {
+      "char_end": 30093,
+      "char_start": 30076,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3016ca3f4d801e7006ff",
+      "source_role": "author_response",
+      "text": "## **References**",
+      "text_sha256": "sha256:cd568ed901e9a3a6956359805662c0c90406f56851be2edd3d25eae80daf558a"
+    },
+    {
+      "char_end": 30253,
+      "char_start": 30096,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-bb42971ea509d7f3e746",
+      "source_role": "author_response",
+      "text": "- 1 Balzer, R. & Vogt, H. Effect of electrolyte flow on the bubble coverage of vertical gas-evolving electrodes. _J. Electrochem. Soc._ **150** , E11 (2002).",
+      "text_sha256": "sha256:9e68a0b272070b2064a62d940ba0596e7e86352bbf0cea7e2fc2dd4161281378"
+    },
+    {
+      "char_end": 30415,
+      "char_start": 30256,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-33b584f8cdcc779be683",
+      "source_role": "author_response",
+      "text": "- 2 Shibata, S. Supersaturation of oxygen in acidic solution in the vicinity of an oxygen-evolving platinum anode. _Electrochim. Acta_ **23** , 619-623 (1978).",
+      "text_sha256": "sha256:a93df380debaac0c596909466a405f8029b675becbca8b44b8cf22e7e963db4c"
+    },
+    {
+      "char_end": 30569,
+      "char_start": 30418,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a3b3e6c38fb1daf7fe69",
+      "source_role": "author_response",
+      "text": "- 3 Vogt, H. On the supersaturation of gas in the concentration boundary layer of gas evolving electrodes. _Electrochim. Acta_ **25** , 527-531 (1980).",
+      "text_sha256": "sha256:06799b5075f362576e514761d5538d4baaeb87909da06ba3d5ac9587da3f7c35"
+    },
+    {
+      "char_end": 30782,
+      "char_start": 30572,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e036dcd6f6adda5b6e5d",
+      "source_role": "author_response",
+      "text": "- 4 Takahashi, T. _et al._ Global sea–air CO2 flux based on climatological surface ocean pCO2, and seasonal biological and temperature effects. _Deep-Sea Res. II: Top. Stud. Oceanogr._ **49** , 16011622 (2002).",
+      "text_sha256": "sha256:837a53d2123e71c6651e4333cd2a98218dd2724513d8a966b0a025d70a4c11ba"
+    },
+    {
+      "char_end": 30906,
+      "char_start": 30785,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ad4c978248543f1df6d4",
+      "source_role": "author_response",
+      "text": "- 5 Smith, F. L. & Harvey, A. H. Avoid common pitfalls when using Henry's law. _Chem. Eng. Prog._ **103** , 33-39 (2007).",
+      "text_sha256": "sha256:bd398aafd98516121fec0c6f90049d1a1f94ba420fdb8b5c8f9661b915a96628"
+    },
+    {
+      "char_end": 31079,
+      "char_start": 30909,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0d66a24563dccd232eb8",
+      "source_role": "author_response",
+      "text": "- 6 Sillen, C., Barendrecht, E., Janssen, L. & Van Stralen, S. Gas Bubble Behaviour during Water Electrolysis. in _Hydrogen as an energy vector_ 328-348 (Springer, 1980).",
+      "text_sha256": "sha256:6439dbe06d792ec568541cebb2813bdef8cb658e4bbdc8f7b401ae1e5ddc8170"
+    },
+    {
+      "char_end": 31345,
+      "char_start": 31082,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6a85cbeb68537179d8b2",
+      "source_role": "author_response",
+      "text": "- 7 Obata, K., Van De Krol, R., Schwarze, M., Schomäcker, R. & Abdi, F. F. In situ observation of pH change during water splitting in neutral pH conditions: impact of natural convection driven by buoyancy effects. _Energy Environ. Sci._ **13** , 5104-5116 (2020).",
+      "text_sha256": "sha256:9354873908a9c2404a7939583a5fba0c0340f86c820b8ea5c8a72a03ce3a89e6"
+    }
+  ],
+  "contract": "reconstruction_session_package",
+  "forbidden_conversation_hashes": [],
+  "input_sha256": "sha256:547dec55ec453a07b36f2add66c25feac9b4daba1d151168f1cd3aef7ae22d87",
+  "instructions": "Reconstruct the final-state peer review for one paper.\nUse reviewer_report spans as the only source of review opinions. Author responses may\nonly determine whether an issue was resolved; they cannot create or rewrite a review\npoint. Remove greetings, publication/acceptance recommendations, editorial decisions,\nand generic praise. Merge duplicates, preserve real reviewer disagreement, and produce\nat most 24 atomic points in StructuredReviewV2. Include contribution summary, novelty\nsupport/limits, strengths, weaknesses, and questions. Bind every retained point to at\nleast one reviewer quote key and one final PaperIR P:S-* span. Put resolved issues only\nin ReferenceTraceV2/revision_ledger. Keep partially_resolved or persists issues only\nwhen the residual is independently supported by the final paper. Unverifiable items are\naudit-only. Do not use graph signals, GEAR output, old reconstructions, ratings,\ndecisions, recommendations, or accept/reject language. Return only the completed\nReconstructionSessionResponseV2 JSON file.",
+  "package_id": "RSP-29676b8865337cdd9162",
+  "paper_context": {
+    "claims": [
+      {
+        "claim_id": "C-d2f38ac96bf47fea",
+        "claim_type": "significance_claim",
+        "evidence_key": "P:S-7f2a1b1aea1e06422cc1",
+        "schema_version": "aspr_gear",
+        "text": "Abdi 1,3 Photoelectrochemical (PEC) water splitting is a promising approach for sustainable hydrogen production."
+      },
+      {
+        "claim_id": "C-7ffcbe615c1b3573",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-7f2a1b1aea1e06422cc1",
+        "schema_version": "aspr_gear",
+        "text": "We evaluate the benefits and penalties associated with elevated pressure operation by developing a multiphysics model that incorporates empirical data and direct experimental observations."
+      },
+      {
+        "claim_id": "C-21218602d9f4f915",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-0353a3c9096162fb2f70",
+        "schema_version": "aspr_gear",
+        "text": "First, the close integration of the light absorber with the electrocatalyst in a PEC cell greatly improves the system’s thermal management."
+      },
+      {
+        "claim_id": "C-8060c70592a29a21",
+        "claim_type": "causal_claim",
+        "evidence_key": "P:S-0353a3c9096162fb2f70",
+        "schema_version": "aspr_gear",
+        "text": "For PV devices, the thermal loss from solar radiation can lead to an operating temperature of 60–80 °C, resulting in an efficiency loss of ≥10% within the semiconductors[1] ."
+      },
+      {
+        "claim_id": "C-51265fc35b3fe7e8",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-0353a3c9096162fb2f70",
+        "schema_version": "aspr_gear",
+        "text": "An increase in temperature may also enhance charge transport within the photoelectrode material itself, particularly for polaronic materials such as metal oxides, leading to higher efficiencies[9][,][10] ."
+      },
+      {
+        "claim_id": "C-2aae3889d4b1471b",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-74d83b85d396177e5aa0",
+        "schema_version": "aspr_gear",
+        "text": "With significant progress made in developing efficient lightabsorbing semiconductors and electrocatalysts[14][–][22] , reactor or device engineering currently plays a critical role in translating the materials > 1Institute for Solar Fuels, Helmholtz-Zentrum Berlin für Materialien und Energie GmbH, Hahn-Meitner-Platz 1, Berlin, Germany."
+      },
+      {
+        "claim_id": "C-10915a3ca0ceeab7",
+        "claim_type": "significance_claim",
+        "evidence_key": "P:S-74d83b85d396177e5aa0",
+        "schema_version": "aspr_gear",
+        "text": "An important parameter in the operation of the PEC device is the operating pressure."
+      },
+      {
+        "claim_id": "C-e19bda139ee689de",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-74d83b85d396177e5aa0",
+        "schema_version": "aspr_gear",
+        "text": "First, most applications that use hydrogen (e.g., hydrogenpowered vehicles, petroleum refining, ammonia production, and methanol synthesis) require the hydrogen to be stored or processed at elevated pressure."
+      },
+      {
+        "claim_id": "C-e0268d7eecd8634b",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-74d83b85d396177e5aa0",
+        "schema_version": "aspr_gear",
+        "text": "Second, operation at elevated pressure is expected to decrease bubble formation."
+      },
+      {
+        "claim_id": "C-ba8db15f428a3e03",
+        "claim_type": "causal_claim",
+        "evidence_key": "P:S-74d83b85d396177e5aa0",
+        "schema_version": "aspr_gear",
+        "text": "This is beneficial since extensive bubble formation may lead to optical losses due to scattering and diffraction[24][,][25] , ohmic losses in the electrolyte[26][–][28] , as well as severe product crossover in the absence of adequate electrolyte flow[29][,][30] ."
+      },
+      {
+        "claim_id": "C-195491f954ee6bf7",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-2312581722d2124677f4",
+        "schema_version": "aspr_gear",
+        "text": "Recently, the concept of in situ utilization of photoelectrochemically generated H2 for hydrogenation of biomass feedstock was introduced and demonstrated as an approach to increase the competitiveness of the PEC system[31] ."
+      },
+      {
+        "claim_id": "C-268db1a938b7b4be",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-2312581722d2124677f4",
+        "schema_version": "aspr_gear",
+        "text": "Elevating pressure in such a system would increase the concentration of dissolved H2, thus potentially facilitating the hydrogenation reaction."
+      }
+    ],
+    "contract": "reconstruction_paper_context",
+    "paper_id": "10.1038/s41467-024-49273-2",
+    "paper_sha256": "sha256:51f6f5a3e79c5d0c54b9cecbbe81f231f2eea2a0250e3eaa688bfd36fe9e07a9",
+    "schema_version": "aspr_gear",
+    "spans": [
+      {
+        "evidence_key": "P:S-9eb76329b365c38a640c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-9eb76329b365c38a640c",
+        "text": "https://doi.org/10.1038/s41467-024-49273-2 \n\n**==> picture [523 x 31] intentionally omitted <==**",
+        "text_sha256": "sha256:6ffcb9ae9bc8e28b5e292937f58cc575bb64f2be248eabc3f04c56709bf28c8e"
+      },
+      {
+        "evidence_key": "P:S-7f2a1b1aea1e06422cc1",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-7f2a1b1aea1e06422cc1",
+        "text": "Article \n\n## Assessing elevated pressure impact on photoelectrochemical water splitting via multiphysics modeling \n\nReceived: 4 January 2024 Accepted: 29 May 2024 Check for updates \n\nFeng Liang 1, Roel van de Krol 1,2 & Fatwa F. Abdi 1,3 \n\nPhotoelectrochemical (PEC) water splitting is a promising approach for sustainable hydrogen production. Previous studies have focused on devices operated at atmospheric pressure, although most applications require hydrogen delivered at elevated pressure. Here, we address this critical gap by investigating the implications of operating PEC water splitting directly at elevated pressure. We evaluate the benefits and penalties associated with elevated pressure operation by developing a multiphysics model that incorporates empirical data and direct experimental observations. Our analysis reveals that the operating pressure influences bubble characteristics, product gas crossover, bubble-induced optical losses, and concentration overpotential, which are crucial for the overall device performance. We iden– tify an optimum pressure range of 6 8 bar for minimizing losses and achieving efficient PEC water splitting. This finding provides valuable insights for the design and practical implementation of PEC water splitting devices, and the approach can be extended to other gas-producing (photo)electrochemical systems. Overall, our study demonstrates the importance of elevated pressure in PEC water splitting, enhancing the efficiency and applicability of green hydrogen generation. \n\nSolar water splitting has been considered a technology that could potentially overcome the limitation of sunlight’s intermittency by storing solar energy in the form of hydrogen.",
+        "text_sha256": "sha256:8051a02fc7651e529ee64e863c05ea84da21fe1cce264d0157a83b4946dd92e1"
+      },
+      {
+        "evidence_key": "P:S-0353a3c9096162fb2f70",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-0353a3c9096162fb2f70",
+        "text": "Two main approaches exist, an indirect approach in which a photovoltaic cell is coupled to an electrolyzer (PV-EC) and a direct approach in which photoelectrodes are used to combine the functions of light absorption and electrocatalysis in a single photoelectrochemical (PEC) device. The latter offers several advantages. First, the close integration of the light absorber with the electrocatalyst in a PEC cell greatly improves the system’s thermal management. For PV devices, the thermal loss from solar radiation can lead to an operating temperature of 60–80 °C, resulting in an efficiency loss of ≥10% within the semiconductors[1] . In PEC devices, however, such detrimental temperature will not be reached because the surrounding electrolyte acts as a coolant for the \n\nelectrodes. Moreover, any temperature increment will both reduce the thermodynamically required voltage for water splitting[2][–][6] , and enhance the electrochemical reaction kinetics and mass transport in the electrolyte[7][–][10] . An increase in temperature may also enhance charge transport within the photoelectrode material itself, particularly for polaronic materials such as metal oxides, leading to higher efficiencies[9][,][10] . Second, PEC devices show much lower operating current densities (10–20 mA cm[−][2] ) than commercial water electrolyzers (0.5–2 A cm[−][2] ). This dramatically reduces the demands on the electrocatalysts and may enable the use of earth-abundant alternatives to platinum-group metals (PGMs), such as Ru, Ir, and Pt[11][–][13] .",
+        "text_sha256": "sha256:887d0ad732e32564d678d6eff961bb0137b46e144af29723f3ea9e8c1462e4cf"
+      },
+      {
+        "evidence_key": "P:S-74d83b85d396177e5aa0",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-74d83b85d396177e5aa0",
+        "text": "With significant progress made in developing efficient lightabsorbing semiconductors and electrocatalysts[14][–][22] , reactor or device engineering currently plays a critical role in translating the materials \n\n> 1Institute for Solar Fuels, Helmholtz-Zentrum Berlin für Materialien und Energie GmbH, Hahn-Meitner-Platz 1, Berlin, Germany. 2Technische Universität Berlin, Department of Chemistry, Straße des 17. Juni 124, Berlin, Germany.[3] School of Energy and Environment, City University of Hong Kong, 83 Tat Chee Avenue, Kowloon, Hong Kong SAR, China. e-mail: ffabdi@cityu.edu.hk \n\nNature Communications | (2024) 15:4944 \n\n1 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-49273-2 \n\nand devices developed in laboratories towards practical applications. An important parameter in the operation of the PEC device is the operating pressure. All PEC water-splitting devices reported in the literature operate at atmospheric pressure. However, operating PEC water-splitting devices at elevated pressure offers several practical benefits. First, most applications that use hydrogen (e.g., hydrogenpowered vehicles, petroleum refining, ammonia production, and methanol synthesis) require the hydrogen to be stored or processed at elevated pressure. Directly generating hydrogen at a higher pressure in PEC cells would remove the need for extra pressurization steps or at least reduce the number of compression stages[23] . Second, operation at elevated pressure is expected to decrease bubble formation. This is beneficial since extensive bubble formation may lead to optical losses due to scattering and diffraction[24][,][25] , ohmic losses in the electrolyte[26][–][28] , as well as severe product crossover in the absence of adequate electrolyte flow[29][,][30] .",
+        "text_sha256": "sha256:51ac370b02f8bcacdd6efa890e23c3f707e7f886311853efe7f7d672399eed1f"
+      },
+      {
+        "evidence_key": "P:S-2312581722d2124677f4",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-2312581722d2124677f4",
+        "text": "Recently, the concept of in situ utilization of photoelectrochemically generated H2 for hydrogenation of biomass feedstock was introduced and demonstrated as an approach to increase the competitiveness of the PEC system[31] . Elevating pressure in such a system would increase the concentration of dissolved H2, thus potentially facilitating the hydrogenation reaction. \n\nAt the same time, operating PEC cells at elevated pressure can also have drawbacks. Although decreased bubble formation is generally considered to be favorable, it may diminish the effective role of bubble-induced micro- and macro-convection in ensuring efficient mass transport and stabilizing the local pH near the electrodes[32][–][34] . Another drawback is the increase in thermodynamic voltage that is needed when splitting water at elevated pressure[35][,][36] . A 100 to 120 mV increase of electrolyzer cell voltage, attributed to the Nernst potential, has been reported with increasing operating pressure from 1 to 50 bar[35] . \n\nIn the present study, we investigate the benefits vs. penalties associated with PEC water splitting at elevated pressure. A membranefree device configuration is considered, in which hydrogen and oxygen separation is ensured via proper hydrodynamic control[37][,][38] . This separator-free approach has been demonstrated for various electrochemical devices, such as water electrolyzers, fuel cells, and redox flow batteries[30][,][39][–][45] . We develop a multiphysics model that accounts for the electrochemistry, two-phase fluid flow, and mass transport in a PEC device, with a particular focus on the pressure-dependent bubble characteristics.",
+        "text_sha256": "sha256:d9180997379c60bb031023c6b1f300156bba38487124d066211d2d582898cd02"
+      },
+      {
+        "evidence_key": "P:S-86266c1b2092069e85d0",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-86266c1b2092069e85d0",
+        "text": "Two main parameters, the bubble formation efficiency, ηbub, and the average bubble diameter, Dbub, are obtained from empirical data and validated by experimental observation of bubbles formed in a pressurized water-splitting cell. Using this model, we quantify the impact of increasing the operating pressureonthe various loss mechanisms (e.g., optical scattering, product crossover, concentration overpotential) in a membrane-free PEC water-splitting device. By considering these losses together with the thermodynamic voltage penalty and the specific work needed for hydrogen compression, the benefits vs. penalties are analyzed, and the optimum operating pressure range for membrane-free PEC water-splitting devices is determined. \n\n## Results and Discussion \n\n## Pressure-dependent bubble characteristics \n\nBubble formation in a (photo)electrochemical system is a complex process, as it is affected by various factors, such as current density[46] , electrolyte flow rate[47] , surface tension of the electrolyte[48][,][49] , concentration of the electrolyte[50] , hydrophobicity of the electrodes[51] , and operating pressure[28][,][52] . Herein, we correlate the bubble characteristics with the operating pressure p, current density jloc, and electrolyte flow velocity vL through a multivariable regression of the extensive experimental data reported by Sillen[28] . To the best of our knowledge, this is the only study that reported bubble characterizations in an electrochemical device operating at higher pressure. In that study, \n\nboth oxygen and hydrogen bubbles generated under wide operating conditions (jloc = 50 – 500 mA cm[−][2] , p = 0.25 – 30 bar, vL = 0 – 100 cm s[−][1] ) were investigated.",
+        "text_sha256": "sha256:43b76188b7e06fc7caaab4b19c72a7c2f6fabddf49c5b834e9663737c5ac28de"
+      },
+      {
+        "evidence_key": "P:S-fb83f0e5979d5fa7abcd",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-fb83f0e5979d5fa7abcd",
+        "text": "Interested readers are referred to ’ Chapter 3 in Sillen s report for the detailed experimental conditions[28] . We use a mathematical model of dynamic objects for nonlinear regression based on nonlinear least squares (NLS) to describe the correlation between the target variables and the above-mentioned parameters. A versatile software package (ndCurveMaster) was adopted to conduct the nonlinear regression and find the optimized fitting equations for the average diameter (DO2 , DH2 ) and number density (NO2 , NH2 ) of the oxygen and hydrogen bubbles. The following generic form of the fitting equations was obtained with the respective coefficients listed in Table S1: \n\n**==> picture [244 x 27] intentionally omitted <==**",
+        "text_sha256": "sha256:987ee7f631ed4727db854a5a86342ad25cc79aa5c9e3c3ee669301f4b315637e"
+      },
+      {
+        "evidence_key": "P:S-16c409a1a5d41ef1028f",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-16c409a1a5d41ef1028f",
+        "text": "**==> picture [10 x 8] intentionally omitted <==**",
+        "text_sha256": "sha256:2a15b34b93ada98e272be9848f788c111d29db422dbe682df8f1887c51426d24"
+      },
+      {
+        "evidence_key": "P:S-da938de01210e29e3973",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-da938de01210e29e3973",
+        "text": "Figure 1 compares the calculated values from the fitting equations with the experimental dataset reported by Sillen (black data points). They agree relatively well, as shown by the coefficient of determination (R[2] , which describes the goodness of fit) of the multivariable regression. It is important to note that the current densities applied in Sillen’s experiment are in the range of 50 – 500 mA cm[−][2] , which is considerably higher than the typical current density range in PEC cells (1 – 20 mA cm[−][2] ). We therefore also checked our fitting equations against another dataset reported by Holmes-Gentle et al.[24] , in which O2 bubble characteristics were measured at current densities of 0.5 – 8 mA cm[−][2] . These data are added as red data points in Fig. 1a, b, and they remain close to the y = x line; this confirms the applicability of the fitting equations at lower current densities. \n\nAs a further confirmation step, we also performed experiments to monitor the generation of O2 bubbles in a moderately pressurized water-splitting cell and determine the bubble formation efficiency (ηbub). We refer to the Methods section for the description and Fig. S2 for the schematic of the experimental setup and the shadowgraphs of the observed bubbles. Figure 2a compares the ηbub vs. pressure curve for O2 bubbles as determined from our experiments (see Supplementary Note 1 and Fig. S2) to that calculated using Eq. 1. The experimental data fit relatively well with the calculated values, which supports the validity of our derived pressure-dependence relationship of bubble characteristics. \n\nFigure 2b–d shows the O2 and H2 bubble characteristics at various operating pressures, as obtained from our fitting equations.",
+        "text_sha256": "sha256:45661833dab8abb4506a277c617c40742c1b561970c32a0aaf9257a8291de0c5"
+      },
+      {
+        "evidence_key": "P:S-283c697ef336c4fe13b9",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-283c697ef336c4fe13b9",
+        "text": "The average bubble diameters (Dbub) of O2 and H2 significantly decrease with increasing pressure, while the number densities of bubbles (Nbub) for both gasses increase with pressure elevation. Finally, the derived bubble formation efficiency, ηbub, decreases as pressure increases. This is not surprising since the solubility of H2 and O2 increases at higher pressure, resulting in higher fractions of dissolved H2 and O2 in the electrolyte. \n\nWe briefly note that the obtained ηbub for H2 is considerably lower than that for O2. This is surprising since oxygen is more soluble in water than hydrogen at the same temperature[53][,][54] . We tentatively attribute this deviation to a higher density of bubble nucleation sites for H2 than O2. Indeed, H2 bubbles are smaller than O2 bubbles, and the density of H2 bubbles is much higher than that of O2 bubbles (see Fig. 2b, c). As a result, the interface area between H2 bubbles and the electrolyte is large, and compared to O2, more H2 molecules can exchange with the (non-saturated) electrolyte and end up as dissolved gas. In the following sections, we use the bubble formation efficiency of O2 for both gaseous products in our simulation. It should be noted that a higher value of the H2 bubble formation efficiency in the model \n\nNature Communications | (2024) 15:4944 \n\n2 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-49273-2 \n\n**==> picture [358 x 293] intentionally omitted <==**",
+        "text_sha256": "sha256:8e47cf578f5a1f277a90c4572b1e421fb882fa12bfc24d5638f095a846ebf4d5"
+      },
+      {
+        "evidence_key": "P:S-43640469e4a3c5b7dc11",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-43640469e4a3c5b7dc11",
+        "text": "Fig. 1 | Comparison of bubble properties obtained from calculation and measured values in the literature. a O2 bubble diameter (DO2 ) and (b) O2 number density (NO2 ) as calculated from Eq. 1 vs. measured values in the literature. The same plots for H2 bubble diameter and number density are shown in (c) and (d). The \n\ngoodness of the fits is evidenced from the R[2] values. We attribute the relatively low R[2] value for H2 bubble densities to the rather dispersed datasets; Note that the data for oxygen is distributed across two orders of magnitude, while the hydrogen data spans three orders of magnitude. \n\n**==> picture [359 x 269] intentionally omitted <==**",
+        "text_sha256": "sha256:ca2cb43d22b31b4d4a6083a20ff3270c320712be3293a57734cc5d427f7e7972"
+      },
+      {
+        "evidence_key": "P:S-5bb75f5f58ef9b8acd7b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-5bb75f5f58ef9b8acd7b",
+        "text": "**----- Start of picture text -----**<br>\np p<br>p p<br>D<br>N<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:7d1ebb002b119bf626c42ac44d732180fa4c37885c9265730c1cc90ee5a10076"
+      },
+      {
+        "evidence_key": "P:S-afb81c27e32b15d13c65",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-afb81c27e32b15d13c65",
+        "text": "Fig. 2 | Pressure-dependent bubble characteristics. a O2 bubble formation efficiency (ηbub) vs. operating pressure. Comparison of the O2 bubble formation efficiency as determined from our experiments and calculated using Eq. 1. The error bars represent ±20% of the measured values, while the values are the averageof 500 image frames. (b–d) Calculated pressure-dependent O2 and H2 bubble \n\ncharacteristics. b Average bubble diameters (Dbub), (c) number density of bubbles (Nbub), and (d) derived bubble formation efficiency (ηbub) as a function of the operating pressure. The current density and the electrolyte velocity are kept constant at 10 mA cm[−][2] and 3 cm s[−][1] , respectively. \n\nNature Communications | (2024) 15:4944 \n\n3 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-49273-2 \n\nwould lead to an overestimation of the influence of H2 bubbles on e.g., optical losses. \n\n## Influence of pressure on the bubble plume, molar fluxes of products, and crossover \n\nWe now investigate the influence of operating pressure on the bubble plume and product crossover in a membrane-free PEC water-splitting device. Schematic representations of our model and the accompanying boundary conditions are shown in Fig. S3. Further details of the modeling are described in the Methods section. In brief, twodimensional (2D) multiphysics simulations were performed with a specific electrode length (same as channel length Ly) and the gap between electrodes (channel width Lx, see Table S2). In this 2D model, the directions perpendicular and parallel to the channel flow are defined as the x and y directions, respectively. The device tilt angle, θ, is defined as the angle between the y direction and the horizontal orientation (see Fig. S3a).",
+        "text_sha256": "sha256:7cf449622dd78110b69316ae592e01fea07e2e692f2ec3be4dfa96b86362c90c"
+      },
+      {
+        "evidence_key": "P:S-1a93c5de182d2c402cc9",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-1a93c5de182d2c402cc9",
+        "text": "An Euler-Euler multiphase model was used, which calculates the volume fraction (αi) and velocity vectors (vi) of phase i (i.e., gas or liquid). The pressure-dependent bubble formation efficiency, ηbub, was applied at the electrode surface as a boundary condition to determine the flux and fraction of the gaseous products (see Figs. S3b, c and Eqs. 10 and 11 in the Methods section). The amounts of dissolved gasses in the electrolyte were therefore calculated from ð1 � ηbubÞ and then further modeled with the transport of diluted species theory. Unless specified differently, the current density was 10 mA cm[−][2] , and the average inlet velocity of the electrolyte was 3 cm s[−][1] . The pressure dependence of the gas density was included via the ideal gas law in our simulations. An increase in pressure was found to have negligible impact on other gas properties, such as dynamic \n\nviscosity μg, specific heat capacity Cpg, and thermal conductivity kg; nevertheless, these properties were also updated with their pressuredependent values during the simulations[55] . Detailed parameters and properties used in our numerical simulations are tabulated in Tables S2–S4. To ensure the validity of our multiphase flow model, measurements using a flow cell setup were conducted. The description of this validation experiment and the comparison of simulation vs. experimental results are shown in Supplementary Note 2, Fig. S4 and S5, and Supplementary Movie 1–4. \n\nWe consider a device configuration in which the anode is the upward-facing electrode (see Fig. S3a for the definition of upward- and downward-facing electrodes).",
+        "text_sha256": "sha256:9e257bc9105376ab9b4c4275869d5feccb48ce8a3f7a7a052856e7cf45303114"
+      },
+      {
+        "evidence_key": "P:S-5a0d75989da29fecb08c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-5a0d75989da29fecb08c",
+        "text": "Bubbles produced at the downwardfacing electrode (i.e., H2 at the cathode in this case) remain very close to the electrode due to the upward buoyancy force; they are unlikely to contribute to product crossover and are therefore not considered in this section. Detailed discussions on this as well as the choice of anode as the upward-facing electrode for product crossover analysis, have been provided in our previous study[29] . Fig. 3 shows the simulated volume fraction of O2 bubbles in the PEC device at 1 bar and at elevated pressures for the device tilt angle of 90° (a–e) and 30° (f–j). At 1 bar (Fig. 3a, f), the impact of the device tilt angle on the extent of the bubble plume can be clearly observed. When the PEC device is oriented vertically (θ = 90[°] ), the bubble plume remains very close to the electrode surface (see magnification of this region in Fig. 3a). At θ = 30[°] (Fig. 3f), the bubble plume is extended towards and even beyond the middle of the channel. The bubble plume is much suppressed with increasing pressure. At 2 bar, as shown in Fig. 3b, g, the bubble plume remains relatively close to the electrode surface even when the PEC device is tilted at 30[°] (which is generally considered the \n\n**==> picture [508 x 350] intentionally omitted <==**",
+        "text_sha256": "sha256:7ddfeb3c72819cfb61c50fe718085ecb010bdd487e7eb151dde5d1233d4367aa"
+      },
+      {
+        "evidence_key": "P:S-16b57da466de1c71f5bc",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-16b57da466de1c71f5bc",
+        "text": "**----- Start of picture text -----**<br>\n(a) 1 bar (b) 2 bar (c) 4 bar (d) 6 bar (e) 10 bar<br>35 35<br>0.35 0.20 0.08<br>30 30<br>0.30 0.07<br>0.25 0.15 0.06 25 25<br>0.1  0.20 0.05 20 20<br>mm 0.15 0.10 0.04 15 15<br>0.03<br>0.10 0.05 0.02 10 10<br>0.05 0.01 5 5<br>1 mm<br>0.00 0.00 0 0 0<br>g [90]<br>(f) 1 bar (g) 2 bar (h) 4 bar (i) 6 bar (j) 10 bar<br>14 14 14 14 14<br>12 12 12 12 12<br>10 10 10 10 10<br>8 8 8 8 8<br>6 6 6 6 6<br>4 4 4 4 4<br>1 mm 2 2 2 2 2<br>0 0 0 0 0<br>30<br>g<br>Fig. 3 | Bubble plume distribution at different operating pressures and device 2 bar, (c) and (h) are at 4 bar, (d) and (i) are at 6 bar, (e) and (j) are at 10 bar. The<br> Colormaps of the simulated gas volume fraction (O2) generated from2) generated from) generated from current density is 10 mA cm [-2] , and the average inlet velocity of the electrolyte is set<br> θ = 90° (a–e) and 30° = 90° (a–e) and 30°a–e) and 30°–e) and 30°e) and 30°) and 30° as 3 cm s [-1] .<br>)<br>) -3<br>gas vol. fraction -3<br>gas vol. fraction gas vol. fraction<br>gas vol. fraction (X10<br>gas vol. fraction (X10<br>-3)gas vol. fraction (X10 -3)gas vol. fraction (X10 -3)gas vol. fraction (X10 -3)gas vol. fraction (X10 -3)gas vol. fraction (X10<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:4bfd3cfb9aa27782f07c5292e023468c99f4f2c80867706d7c9f007b1f9a3035"
+      },
+      {
+        "evidence_key": "P:S-000340cbafacba4e4f7c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-000340cbafacba4e4f7c",
+        "text": "Fig. 3 | Bubble plume distribution at different operating pressures and device tilt angles. Colormaps of the simulated gas volume fraction (O2) generated from2) generated from) generated from the anode (left boundary of the domain) in a device tilted at θ = 90° (a–e) and 30° = 90° (a–e) and 30°a–e) and 30°–e) and 30°e) and 30°) and 30° (f–j) and operated at various pressures. (a) and (f) are at 1 bar, (b) and (g) are at \n\nNature Communications | (2024) 15:4944 \n\n4 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-49273-2 \n\n**==> picture [420 x 294] intentionally omitted <==**",
+        "text_sha256": "sha256:84b65c7411e33f6737aa4492cacf726cf7d299edc69dc28e4b2ec354276364d9"
+      },
+      {
+        "evidence_key": "P:S-1bebed98a0602baf0f3b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-1bebed98a0602baf0f3b",
+        "text": "**----- Start of picture text -----**<br>\n4 0.20<br>3  10 bar1 bar (a) (b) pressure (bar)<br>1 2<br>2 0.15 4  6<br>1 dissolved O2 8  10<br>0.10<br>0.2 O2 bubble dissolved H2<br>0.05<br>0.1 Crossover<br>0.0 0.00<br>-0.2 -0.1 0.0 0.1 0.2 -0.2 -0.1 0.0 0.1 0.2<br>x  / [cm] x  / [cm]<br>10<br>(c)<br>8<br>6<br>4<br>H2<br>2<br>0 O2<br>1 2 3 4 5 6 7 8 9 10<br>p  / [bar]<br>-1]<br> s x<br>-2 ]<br>m ulf -1<br>c r  s<br>lo alo -2<br>m m<br> / [ elb<br>x b mol cm<br>ulf bu / [<br>r 2<br>alo O<br>M<br>%][<br>/<br>f opt. loss<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:0d27df4e1a552d65c0b6f7bacd21ea02d65323472ba4d395bbf651dd3935d277"
+      },
+      {
+        "evidence_key": "P:S-7bf9e3e8a0e1fe7a21cb",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-7bf9e3e8a0e1fe7a21cb",
+        "text": "Fig. 4 | Multiphysics simulation results. a Simulated molar flux of dissolved products and O2 bubbles at the device outlet under operating pressures of 1 bar (solid) and 10 bar (dashed). b Simulated O2 bubble molar flux at the device outlet under various operating pressures. c Simulated bubble-plume-induced optical loss \n\n(fopt. loss) as a function of the operating pressure. The average velocity at electrolyte inlet is set as 3 cm s[-1] , current density is 10 mA cm[-2] , device tilt angle is 30[°] in (a) and (b), while θ = 90[°] in (c). \n\noptimal angle for photovoltaic panels in continental Europe[54] ). Further increasing the operating pressure significantly decreases the volume fraction of the gaseous phase, as evident from at least one order of magnitude difference between the color scalebars in Fig. 3b and Fig. 3e. Such a significant effect of pressure is consistent with the lower bubble formation efficiency, ηbub. \n\nTo determine the contribution of dissolved and gaseous products to the product crossover, we calculate the molar flux of O2 bubbles and dissolved products at the device outlet, as shown in Fig. 4a, at a device tilt angle of 30°. At 1 bar, the molar flux of the dissolved products (i.e., O2 and H2) remains within ~0.1 cm of the electrodes. Increasing the operating pressure, even to 10 bar, does not seem to influence the extent of the molar flux of the dissolved products at the outlet. This is because the molar flux of the dissolved products is dominated by the convective contribution (see Fig. S7); the diffusive contribution is negligible due to the relatively slow diffusion of dissolved O2 and H2 in aqueous solutions[56] . On the other hand, Fig.",
+        "text_sha256": "sha256:0b4884935ffa77ee3ec9e3b6d86a90770e703a5662593e919f576e578a407a0a"
+      },
+      {
+        "evidence_key": "P:S-45e20d404ecd0250de35",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-45e20d404ecd0250de35",
+        "text": "4a shows that the molar O2 flux contained in bubbles extends further into the channel and is therefore expected to dominate product crossover. The figure also shows that increasing the pressure from 1 to 10 bar confines the O2 bubbles to a region much closer to the electrode and will thus reduce crossover. \n\nFigure 4b shows the molar flux of O2 bubbles at various pressures. For our membrane-free PEC device configuration, we define product crossover as the fraction of the molar flux that extends beyond the center of the channel (see the shaded region in Fig. 4b), as also similarly considered in other reports[29][,][39][,][40][,][57] . At 1 bar and θ = 30°, the O2 crossover is ~1%. As the operating pressure of the PEC device increases, the molar flux of O2 bubbles at the channel outlet is significantly suppressed. For θ = 30°, product crossover is fully prevented for operating pressures higher than 2 bar. \n\nIt should be noted that our analysis assumes a uniform bubble diameter in the channel and a constant bubble formation efficiency over the whole electrode surface. In reality, these values are likely to vary across the electrode and channel. Further studies, therefore, require a detailed understanding of bubble nucleation, growth, and detachment to simulate the local-reaction-dependent bubble diameter and bubble formation efficiency more accurately. \n\n## Influence of pressure on the bubble-induced optical loss \n\nAs depicted in the schematic representation of the PEC water splitting device (see Fig. S3a), solar photons need to pass the electrolyte before reaching the upward-facing electrode.",
+        "text_sha256": "sha256:8593685ed45f8ab679330a8cb984b553ffc0190301f457e16b866d2395fdbc24"
+      },
+      {
+        "evidence_key": "P:S-492136161c9f71396adf",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-492136161c9f71396adf",
+        "text": "As the electrolyte contains gaseous products, i.e., H2 and O2, these photons might be scattered and reflected from gas bubbles in the flow, leading to additional optical losses[24][,][25] . Since performing PEC water splitting at elevated pressure has a significant impact on the bubble formation, we investigate its effect on bubble-induced optical losses. \n\nWe quantify the bubble-induced optical losses (f opt:loss) based on the volume fraction obtained in our multiphysics simulations. The detailed methods, including the step-by-step procedure and equations, are documented in Supplementary Note 3. We consider both the H2 and O2 bubble plumes in a PEC water-splitting device that is oriented vertically (θ = 90°). This orientation was chosen since Fig. 3 shows that it results in gaseous H2 and O2 volume fractions that are several orders of magnitude higher than other device orientations. A higher volume fraction denotes a denser bubble plume near the electrode, which in turn results in stronger scattering and reflectance of the solar photons. Our analysis, therefore, represents a worst-case scenario for bubble-induced optical losses. \n\nFigure 4c shows the bubble-induced optical losses as a function of operating pressure. At 1 bar, the total optical loss from H2 and O2 \n\nNature Communications | (2024) 15:4944 \n\n5 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-49273-2 \n\nbubble plumes is ~9%, and H2 bubbles contribute much more significantly than O2 bubbles. This is because the number density of H2 bubbles, Nbub, is much higher than that of O2 bubbles (~13 mm[−][1] vs. ~1 mm[−][1] at 1 bar, respectively—see Fig. S10).",
+        "text_sha256": "sha256:dd547dbb6aa58c14c5f679c90ccf8c0608bf1176e0ff21bf2432ce5f3faf23d7"
+      },
+      {
+        "evidence_key": "P:S-b163d7cda5b30c4fbabb",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-b163d7cda5b30c4fbabb",
+        "text": "With increasing pressure, the opticalloss decreases significantly, which isconsistent with the fact that bubble diameter and bubble formation efficiency both decrease with increasing pressure (see Fig. 2b, d). At 10 bar, the total optical loss is only ~1%, which is almost one order of magnitude lower than the optical loss at 1 bar. This represents an important advantage of operating PEC water-splitting devices at elevated pressure. \n\nWe note that a constant scattering coefficient (K a = 0:5) is assumed for both H2 and O2 bubbles in our analysis (see equations S10 and S12). In reality, Ka is affected by the scattering cross section as and the bubble cross-section area ab (see equation S12), which can be associated with bubble characteristics, e.g., bubble shape, size, etc[24][,][25] . Further correlations between bubbles and the corresponding optical loss can be made using a ‘microscopic’ point of view that captures time- and spatial-resolved interfacial fluctuations. To do so, more sophisticated numerical models are required, such as Euler-Lagrange[58][–][60] , phase-field[61][,][62] , or Lattice Boltzmann[63][–][66] , but simulations using these models require much higher computational costs and are therefore beyond the scope of the current study. \n\nWe briefly acknowledge that the tandem photoelectrochemical water splitting configuration considered in our model, in which two photoelectrodes are used and placed vertically, represents the worstcase scenario for bubble-induced optical scattering loss. In practice, smart engineering of the device configuration, as reported in the literature[23][,][67] , might be applicable to reduce this loss.",
+        "text_sha256": "sha256:414f6b919a41ba657d73c89a205ade5ad734ca2858c72b22b3b4354f966d85c1"
+      },
+      {
+        "evidence_key": "P:S-e20b6248eb8741bed59a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-e20b6248eb8741bed59a",
+        "text": "Another way of alleviating this scattering loss is to employ a “dark” electrode as the upward-facing one and a photoelectrode as the downward-facing one. When this is done, other drawbacks, such as hindered ion transport, the necessity to use noble metals as counter electrodes, etc., need to be carefully considered. \n\n## Influence of pressure on the concentration overpotentials \n\nIn our recent study, we showed that bubble-induced convection dominates the fluid dynamics of electrolytes in the vicinity of the electrodes[32] . This is especially important when neutral pH electrolytes are used, in which local pH gradients in electrolyte regions close to the electrode may develop during proton-coupled electron transfer reactions. Since an increase in pressure affects the bubble characteristics, the local pH gradient and the resulting concentration overpotentials are also expected to change with increasing pressure. We, therefore, simulate the impact of increasing pressure on the concentration overpotentials in a PEC water-splitting device with a neutral pH electrolyte (see the “Methods” section for the detailed description of our model). Again, we consider that the PEC water-splitting device is oriented vertically (θ = 90°); a denser bubble plume and a stronger momentum exchange between bubbles and liquid electrolyte are achieved in this orientation, which results in a more pronounced effect on the concentration overpotentials. \n\nFigure 5a shows the colormaps of the pH of the electrolyte (2 M KPi) in a PEC water-splitting device operating at 1 and at 10 bar. The pH gradient at 10 bar is slightly larger than that at 1 bar, although this is difficult to see even in the magnified view of the regions close to the electrodes (Fig. 5a).",
+        "text_sha256": "sha256:d6bdb711f550f1b0f8bc3f5394e72a2e9bd3003d23e0fb87d7e147ba402fea1d"
+      },
+      {
+        "evidence_key": "P:S-2d9082f092529a987d13",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-2d9082f092529a987d13",
+        "text": "The pressure-induced effect is more visible shown in Fig. 5b, where the changes in pH (ΔpH) along the surface of the anode and cathode are plotted at various operating pressures. A pH gradient develops along the electrodes, with higher ΔpH observed at regions closer to the outlet (y = 2 cm). Increasing the pressure from 1 to 10 bar results in a small increase of the ΔpH. This can be explained by the decreasing bubble diameter and bubble formation efficiency with increasing pressure, which diminishes the beneficial effect of bubbleinduced convection in minimizing the pH gradient. However, with only a ~ 1 mV increase in overpotential after a ten-fold increase in pressure, \n\nthe overall effect of pressure on concentration overpotential is negligible (Fig. 5c). \n\nWe note that the negligible impact of pressure on the concentration overpotentials may be related to the relatively small size of the cell (Lx = 0:5 cm, Ly = 2 cm) adopted in the present study. As bubbly flow gradually develops along the electrode (Fig. 5b), the change in concentration overpotential will increase for electrodes that have longer dimensions in the flow direction. \n\nAnother important bubble-induced loss is the overpotential due to bubble coverage (or blockage) of the (photo)electrode area. However, this overpotential is not directly solved in our Euler-Euler multiphase model, as described in the “Methods” section. Instead, we have estimated the bubble coverage overpotential indirectly by (i) integrating the gas volume fraction along the surface of the electrode to calculate the bubble coverage (Θ) and (ii) using the empirical correlation reported by Vogt to evaluate the bubble coverage induced overpotential (VΘ)[68] . More details on the steps are described in Supplementary Note 4.",
+        "text_sha256": "sha256:5135478875e95c079c46792830736380e66d7c8f2eec5321d51396f980664e9e"
+      },
+      {
+        "evidence_key": "P:S-fe5b78de46a627738e57",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-fe5b78de46a627738e57",
+        "text": "Θ and VΘ are plotted as a function of pressure in Figs. S11a, b, respectively. Increasing pressure significantly suppresses Θ and VΘ; at an operating pressure of 4 bar and higher, the value of VΘ is negligible (<5 mV). Note that bubble coverage-induced overpotential is significantly smaller than the pH gradient-induced overpotential. Due to this very minor contribution, VΘ is neglected in the following discussions. \n\n## Optimum pressure range for membrane-free photoelectrochemical water splitting \n\nWe now combine our findings in the previous sections to determine the optimum pressure range for PEC water-splitting devices. We consider two scenarios in which the end goal is to store H2 at 700 bar (typical pressure of H2 refueling stations), as depicted in Fig. 6a. In the first scenario, PEC water splitting occurs at atmospheric pressure. The generated H2 needs to go through several stages of compression to reach 700 bar. For simplicity, only two stages are illustrated in Fig. 6a: from 1 bar to p and from p to 700 bar. Although more compression stages would realistically be needed, the number of compression stages chosen in our evaluation does not affect the results since we only consider the specific work associated with pressurization. In the second scenario, PEC water splitting is performed directly at an elevated pressure p. The need for post-generation compression is therefore reduced, as the generated H2 only needs to be pressurized from p to 700 bar. This advantage, combined with reduced product crossover and reduced bubble-induced optical losses, represents the benefits of the second scenario.",
+        "text_sha256": "sha256:6cf7a4a1060a807f66f0d22b9a65882a67066aa4f546b2632f2acdaeb9d12857"
+      },
+      {
+        "evidence_key": "P:S-1c9f39eb911535b7cf2c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-1c9f39eb911535b7cf2c",
+        "text": "On the other hand, directly performing PEC water splitting at elevated pressure in the second scenario results in several penalties, such as higher concentration overpotential and a higher thermodynamic cell voltage (a voltage increase of 48 mV per decade of pressure for both hydrogen and oxygen was reported at 50 °C)[36] . An optimum pressure likely exists at which the benefits of performing PEC water splitting at elevated pressure outweigh the penalties. \n\nIn order to make a parallel comparison between the various loss mechanisms, all losses are translated to energy losses in units of kWh. For this purpose, we consider a membrane-free PEC water splitting device with an area of 1 m[2] generating 1 kg of H2. The device is oriented vertically, with an inlet electrolyte velocity of 3 cm s[−][1] and an average current density of 10 mA cm[−][2] . The specific work needed for compressing 1 kg H2 from the collection pressure p to 700 bar (f swc, see the results in Fig. S12) is calculated based on thermodynamics. The crossover loss and the optical loss are translated to kWh (f col and f opl, respectively) by considering the lower heating value (LHV) of H2 (33.3 kWh kg[−][1] ). Finally, the concentration overpotentials and pressuredependent increment of thermodynamic cell voltage are translated into kWh (f cop and f tcv) from mV by taking into account the average current density of the device. Detailed equations on the \n\nNature Communications | (2024) 15:4944 \n\n6 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-49273-2 \n\n**==> picture [399 x 483] intentionally omitted <==**",
+        "text_sha256": "sha256:ed81b582670378cc07cfb90b113964c95ab5329cbd111fd406e9028776275235"
+      },
+      {
+        "evidence_key": "P:S-4c00a4634fc7452990ac",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-4c00a4634fc7452990ac",
+        "text": "**==> picture [62 x 46] intentionally omitted <==**",
+        "text_sha256": "sha256:5f336fe4735ce6760b979d9e6902a089b393ba77d24eea5b2883ba9130b1f1e2"
+      },
+      {
+        "evidence_key": "P:S-6089d5902a6c5cf97de0",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-6089d5902a6c5cf97de0",
+        "text": "Fig. 5 | Influence of operating pressure to the simulated local pH distribution and concentration overpotentials. a Colormaps of pH in the cell at different operating pressures, i.e., 1 bar vs. 10 bar. b pH gradient near the electrodes at \n\n**==> picture [61 x 40] intentionally omitted <==**",
+        "text_sha256": "sha256:caaaea2c2df60449a9d2b6f2087e7ccec704972f77b9a5775b671250ef3350fd"
+      },
+      {
+        "evidence_key": "P:S-ea6a3df078f9e6ec1f8e",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-ea6a3df078f9e6ec1f8e",
+        "text": "different operating pressures, c pH gradient induced voltage loss (VpH grad) vs. pressure. The current density is 10 mA cm[-2] , the inlet electrolyte velocity is 3 cm s[-1] , the device tilt angle is 90[°] . The electrolyte is 2 M KPi (pH 7.2). \n\ntranslation from the various units to kWh are provided in the “Methods” section. \n\nThe breakdown of various energy losses as a function of the operating pressure is shown in Fig. 6b. The cumulative losses at 1 bar (~5.5 kWh) represent the losses associated with operating under the first scenario of Fig. 6a. Here, the main losses are bubble-induced optical losses (~3 kWh) and the energy needed to compress H2 to 700 bar (~2 kWh). With increasing operating pressure, the second scenario of Fig. 6a comes into play. Both the bubble-plume-induced \n\noptical losses (f opl) and product crossover losses (f col) are suppressed as the pressure increases. The minor contribution of f col is interesting considering that our simulations assume a membrane-free cell configuration; the inclusion of membrane or separator in the reactor will likely suppress f col even further. At the same time, the specific work for post-generation compression is also reduced with increasing PEC operating pressure (see Fig. S12). In contrast, the losses due to the increase in thermodynamic cell voltage (f tcv) increase with pressure, while the concentration overpotential losses (f cop) remain relatively \n\nNature Communications | (2024) 15:4944 \n\n7 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-49273-2 \n\n**==> picture [324 x 364] intentionally omitted <==**",
+        "text_sha256": "sha256:6c312e9fc7419b6296dba449a1fcaaf7a201bb372a404cc87d929cf70d0d5f69"
+      },
+      {
+        "evidence_key": "P:S-4744c3b7206ef83c739f",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-4744c3b7206ef83c739f",
+        "text": "**----- Start of picture text -----**<br>\n(a)<br>1 bar p<br>H2O<br>PEC cell 1 [st] stage of  700 bar<br>(atmospheric pressure) mechanical H2<br>compressor<br>p 2 [nd] stage of  H2 pressurized<br>mechanical H2 tank<br>H2O compressor<br>PEC cell<br>(elevated pressure)<br>(b)<br>35<br>30 LHV of 1 kg of H2<br>f f<br>swc col<br>f f<br>5 cop opl<br>f<br>tcv<br>4<br>3<br>2<br>1<br>0<br>1 2 4 6 8 10 12 14 16 18 20<br>p  / [bar]<br>Scenario (i)<br>Scenario (ii)<br> / [kWh]<br>Losses<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:b79bf1d8b7d3ccad726cdadf1f887312e6765d58ba43ed47e3501917ba77fdd6"
+      },
+      {
+        "evidence_key": "P:S-da301f94038cfe52edc8",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-da301f94038cfe52edc8",
+        "text": "Fig. 6 | Assessment of the benefits and penalties of operating PEC water splitting cells at elevated pressure. a Schematic illustration of the two scenarios considered in our analysis. The two branches in the image represent different options for performing PEC water splitting, either at (i) atmospheric pressure or ii) at elevated pressure p. The collected hydrogen from both operation modes are fed into mechanical compressors in order to reach the pressure of 700 bar at the final storage tank. b Energy losses associated with operating PEC water splitting cells at \n\nvarious pressures. A 1 m[2] PEC water splitting device generating 1 kg of H2 is considered. The gray horizontal dashed line indicates the lower heating value (LHV) of 1 kg of H2 for a comparison. In panel (b), f swc is the specific work required for the compression of H2 from collected to 700 bar, f col is the crossover loss induced by the gaseous products, f cop denotes the pH gradient induced voltage loss, f opl is the optical loss induced by bubble scattering effect, f tcv is the thermodynamic cell voltage loss associated with pressure elevation. \n\nconstant. The combined losses reach a value of ~3 kWh at an operating – pressure of 6 8 bar, which represents a ~ 50% reduction compared to the losses at 1 bar. A further increase in pressure offers no significant advantages, as the total loss plateaus at the same level (± 5%). It is also interesting to note that even if the impact on optical loss is neglected, which may be realized in a certain device configuration (e.g., downward facing photoelectrode combined with upward facing dark electrode), the total energy loss at 6 bar is very close to that at 1 bar (see Fig. S13 in which Fig. 6b is re-plotted without considering f opl).",
+        "text_sha256": "sha256:a9433a46551d3419a13696bf9ff372b001b809005679534615a54b5060c0ca18"
+      },
+      {
+        "evidence_key": "P:S-4fe694bd2d82eb3a81ee",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-4fe694bd2d82eb3a81ee",
+        "text": "We therefore conclude that only minor benefits can be obtained by conducting PEC water splitting in a membrane-free cell beyond 6–8 bar, which should be considered as the optimum pressure range for the operation of such devices. \n\nFinally, we note that our quantitative comparison is currently limited to the above-mentioned loss mechanisms and considerations. In reality, more factors need to be included in analyzing the feasibility of PEC water-splitting devices operated at elevated pressure, such as the mechanical strength of the cell materials, pumping power loss, the longevity of the (photo)electrodes and catalysts when operating at elevated pressure, the maintenance cost of the cell, etc. Our multiphysics model also assumes a constant cell temperature of 25 °C and \n\nthat the physical processes in the photoelectrodes are not affected by pressure elevation. In addition, although the pressure-induced changes of bubble characteristics are independent of the electrodeelectrolyte system, the surface properties of the (photo)electrode (e.g., morphology, wettability, etc) and the concentration of the electrolyte could alter the bubble characteristics at a given pressure. These considerations, including bubble nucleation and growth, are not included in our Euler-Euler model. Including these contributing factors in the current analysis is not trivial, as it requires detailed knowledge of the device configuration and construction. As no elevated pressure PEC has yet been demonstrated, these details are currently not available. We have initiated efforts to directly measure the various loss contributions, i.e., optical loss, crossover, and pH distribution (using e.g., in situ fluorescence techniques we reported previously[69] ) in our pressurized flow cell (Fig.",
+        "text_sha256": "sha256:a537583f2c9de28bd9ad5b7e3fb8d08979ea213037cfa81d890b60440baca331"
+      },
+      {
+        "evidence_key": "P:S-ebc172c6cb3be824b498",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-ebc172c6cb3be824b498",
+        "text": "S4); however, these measurements are not yet technically feasible due to the additional complexity introduced by elevated pressure operation. Further efforts to construct and study higher-pressure PEC devices, even at the lab scale, are therefore urgently needed in order to experimentally unravel pressuredependent parameters and fully evaluate the potential of PEC water splitting at elevated pressure. \n\nNature Communications | (2024) 15:4944 \n\n8 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-49273-2 \n\nIn summary, we have evaluated the quantitative benefits and penalties for operating a PEC water-splitting device at elevated pressure. This was accomplished by developing a multiphysics model that combines electrochemistry, two-phase fluid flow, and diluted species transport considerations in a membrane-free configuration. A key component of the model is the use of pressure-dependent bubble characteristics, which were obtained from empirical data that was validated against our experimental observations of O2 bubbles in a moderately pressurized water-splitting cell. The operation at elevated pressure (up to 10 bar) was then simulated using our model, revealing the influence of operating pressure on the various loss factors in a PEC water-splitting device. Most importantly, bubble formation and the spatial extent of the bubble plume are minimized with increasing pressure. This, in turn, suppresses product crossover to a negligible level at pressures > 2 bar, while bubble-induced optical losses can be minimized to ~1% at 10 bar.",
+        "text_sha256": "sha256:1953c778bb2cdd7fa2dee15b512085e360fde92f38d8543cf8155490713f1bfe"
+      },
+      {
+        "evidence_key": "P:S-fd68fd847cca5d55b322",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-fd68fd847cca5d55b322",
+        "text": "The positive impact of bubble-induced convection to minimize local pH gradient was found to diminish with increasing pressure; this effect is, however, not significant even for a neutral pH electrolyte (the change in concentration overpotential was ~1 mV for a pressure elevation up to 10 bar). These insights were used to evaluate the combined energy losses in a scenario where the PECgenerated hydrogen was further compressed to 700 bar, taking into account the energy needed for this post-generation compression step. We showed that by increasing the operating pressure of the PEC cell from 1 to 6–8 bar, the combined energy losses can be reduced by a factor of ~2. Our analysis revealed that there is no measurable benefit from operating beyond 6–8 bar, which is therefore proposed as the optimum pressure range for the operation of PEC water-splitting devices. \n\n## Methods \n\nthe other electrode did not interrupt our observation due to the relatively large distance between the two electrodes (~3 cm). See the details of the schematic illustration and the setup image in Fig. S1a, b. 500 image frames at 25 fps were recorded (i.e., acquisition time of 20 s) ~5 mins after applying the constant current density to ensure that steady state condition of bubble formation has been reached. The images were processed and analyzed using ImageJ. An illustration of the captured O2 bubbles is shown in Fig. S1c. A region-of-interest (ROI) in the optical frame was selected to obtain the average bubble diameter, Dbub and number density of bubbles, Nbub. Regions where bubbles are active, i.e., frequently formed, grew, detached, etc., were selected for our analysis.",
+        "text_sha256": "sha256:b9f50feb3b52db23c562b7519e018ded7cc6012d248e91c40ef48d15a5a37c0b"
+      },
+      {
+        "evidence_key": "P:S-0fac9cb7fa7116008645",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-0fac9cb7fa7116008645",
+        "text": "In practice, three factors were considered when choosing the ROI: (i) the size of bubbles within the region is uniformly distributed, (ii) the region does not contain a large accumulation of bubbles, and (iii) the region is located near the center of the frame. Due to the limitation of our cell design (no forced convection), electrode regions near the edges (especially the top edge) are more likely to contain large accumulation of bubbles, see Fig. S1c. Therefore, these regions were avoided when choosing the ROI. Following the method described in Supplementary Note 1, the experimental bubble formation efficiency, ηbub, was derived, except that the rising velocity of bubbles captured with the time-sequential frames from our measurements was used instead of the Stoke terminal velocity shown in equation S3. \n\n## Multiphysics model \n\nTwo-phase fluid flow. An Euler-Euler laminar model was adopted to simulate the two-phase fluid dynamics in our membrane-free PEC water-splitting device. As depicted in Fig. S3a, b, the governing equations, including two sets of continuity and momentum equations, were solved in a 2D domain. \n\n## Bubble observation in a pressurized water-splitting cell \n\nA customized (photo)electrochemical cell printed using transparent heat-resistant plastic (VisiJet M2S-HT90) was used as the watersplitting cell, which has an internal volume of ~120 ml, with an electrode active area of 2 cm × 2 cm. This cell was operated safely up to a pressure of 4 bar(a). Note that this limited pressure range should not be confused with that used in our simulations, which is 1–10 bar (or 20 bar for certain cases). The technical drawing of this cell is available from the corresponding author upon reasonable request.",
+        "text_sha256": "sha256:61f41157935ee282e283bb4a719ab0f33d4f846e1c714e1fce774ad3ad1fcd2c"
+      },
+      {
+        "evidence_key": "P:S-8e18bf568c6f9149b5d9",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8e18bf568c6f9149b5d9",
+        "text": "The electrodes were prepared by depositing 5 nm of Pt onto FTO substrates (thickness of 2.2 mm, ~7 Ω/sq, Sigma-Aldrich). The deposition was done by electron beam evaporation in a customized high vacuum deposition chamber (Telemark) with a base pressure of 2 × 10[−][7] mbar. A deposition rate of 0.5 Å s[−][1] was used. The Pt/FTO electrodes were used as both the anode and cathode. To form an electrical connection with the electrodes, a small part of the Pt surface was connected to an electrical wire with a conductive tape (3 M). An aqueous solution of 1 M KOH (Merck KGaA, ≥85%) was prepared as the electrolyte using ultrapure water (resistivity > 18.2 MΩ cm, Milli-Q Integral system). The electrolyte was purged with N2 for ~10 min while stirred using a magnetic stirrer before each measurement. The water-splitting cell was pressurized by feeding N2 into the cell while controlling the mass flow rate at the cell outlet using a pressure controller (Bronkhorst HighTech, uncertainty: 0.2%). Electrochemical measurements were performed in a two-electrode configuration using a VersaSTAT 3 potentiostat/galvanostat (AMETEK). The current density was kept constant at 10 mA cm[−][2] . O2 bubbles were recorded using a shadowgraphy setup from LaVision. A solar simulator (Wacom-WXS-100S-L2H AM 1.5GMM) was used to illuminate the electrodes; the shadow of the bubbles could therefore be detected using a camera (2752 × 2200 pixels, 25 fps) placed behind the electrodes. A Makro-Planar T* 2/100 lens (Zeiss) was used to capture the bubble shadow graphs, and the aperture was kept as f = 2 (minimum value). This setting enabled us to focus our view on bubble formation from the chosen electrode. Bubble formation from \n\n**==> picture [173 x 19] intentionally omitted <==**",
+        "text_sha256": "sha256:c54f6fd1a4a5596a5bb81ee8c00014309c04df0a45a85ae7864dfd043b88810a"
+      },
+      {
+        "evidence_key": "P:S-fa4a8d76075841d6261e",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-fa4a8d76075841d6261e",
+        "text": "**==> picture [228 x 20] intentionally omitted <==**",
+        "text_sha256": "sha256:327f6b30f17fda70fd772dd2b4417d718d7039badcf9c9b78ad3155391ace97a"
+      },
+      {
+        "evidence_key": "P:S-9056e931ba8e145080a1",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-9056e931ba8e145080a1",
+        "text": "where αi, ρi, and vi represent the volume fraction, density, and velocity vector of phase i (L for liquid and G for gas), respectively. g denotes the gravity vector. μmix is the dynamic viscosity of the mixture. \n\n**==> picture [168 x 13] intentionally omitted <==**",
+        "text_sha256": "sha256:6094655261b84f9f09a98dadf752d821abe67bf067cc7dbd84807b4d338e656f"
+      },
+      {
+        "evidence_key": "P:S-ea777b71be624cbb4564",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-ea777b71be624cbb4564",
+        "text": "The gravity vector in our 2D domain was defined based on the device tilt angle, θ, and the gravitational acceleration constant, g. \n\n**==> picture [165 x 9] intentionally omitted <==**",
+        "text_sha256": "sha256:62e494b280f3ffe6342daef4b460f00151d7e28d811cb884d534feb7163df586"
+      },
+      {
+        "evidence_key": "P:S-e7e2d4803d600c58a776",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-e7e2d4803d600c58a776",
+        "text": "The volume fractions of the liquid and gas phases need to satisfy the following equation. \n\n**==> picture [147 x 9] intentionally omitted <==**",
+        "text_sha256": "sha256:b84c270aff2729b751d104a3c3ac9ee3aaf20f3e2bcfb033598c1063e23135fe"
+      },
+      {
+        "evidence_key": "P:S-f7d6a8e5e24dd305eec7",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-f7d6a8e5e24dd305eec7",
+        "text": "Fi�j in Eq. 3 is a momentum exchange term between two phases, and is described below. \n\n**==> picture [219 x 20] intentionally omitted <==**",
+        "text_sha256": "sha256:047094bd5eeee9adab1ecb25b56a439ae746c0290d51bf599b09a644ac975715"
+      },
+      {
+        "evidence_key": "P:S-22d7f296ca95acd99cd5",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-22d7f296ca95acd99cd5",
+        "text": "CD and Dbub represent the drag coefficient and the bubble diameter, respectively. The Schiller-Naumann model was used to determine CD. \n\n**==> picture [199 x 27] intentionally omitted <==**",
+        "text_sha256": "sha256:dec3a1e97957262fb39d37c3b91e7dd9cf59cec42a598aa106253fbf95e7ad8f"
+      },
+      {
+        "evidence_key": "P:S-d116a6f6ef901c183112",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-d116a6f6ef901c183112",
+        "text": "Nature Communications | (2024) 15:4944 \n\n9 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-49273-2 \n\nin which Reb denotes the particle Reynolds number, \n\n**==> picture [168 x 22] intentionally omitted <==**",
+        "text_sha256": "sha256:3c64dee0fb5412bb3631d7d5bc29320886f60f87853aeddfcf8e88f2d3b87d0d"
+      },
+      {
+        "evidence_key": "P:S-a7c26d32aa1fbf766a2f",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a7c26d32aa1fbf766a2f",
+        "text": "Dbub is the pressure-dependent bubble diameter. Reb was found to be ≈ 3 when vL = 3 cm s[�][1] , θ = 90[°] , and p = 1 bar, indicating laminar flow. \n\nThe boundary conditions for the liquid phase include the following: (i) a fully developed laminar flow was assumed at the electrolyte inlet, and (ii) both sides of the channel were considered as a no-slip wall for the liquid phase. For the gas phase, bubbles were assumed to be generated uniformly along the electrode surface. At the electrode surface (see the gas-producing electrode in Fig. S3b), the inlet velocity of gas bubbles (in Eq. 10) was determined using the local current density (jloc) and pressure-dependent bubble formation efficiency (ηbub). The mass flux of gas bubbles was calculated using Eq. 11. All of these vectors were assumed to be perpendicular to the electrode surface, i.e., the x-direction. \n\n**==> picture [156 x 20] intentionally omitted <==**",
+        "text_sha256": "sha256:52db646b8dd7ccee3c1342f1eb4b4c138d35cd7d0990993904ba0c546b12b870"
+      },
+      {
+        "evidence_key": "P:S-dc56ae6ce109d83d672c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-dc56ae6ce109d83d672c",
+        "text": "**==> picture [157 x 21] intentionally omitted <==**",
+        "text_sha256": "sha256:c2e3c881c4aff0ad3b4bb94d753f71754d4b9dcfcee8a408099e0d501e01083c"
+      },
+      {
+        "evidence_key": "P:S-15bf30527cade4c71713",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-15bf30527cade4c71713",
+        "text": "Here, F, M, and ne are the Faraday constant, the molar mass of gas (O2 or H2), and the number of electrons involved in the reactions, respectively. In our study, due to gravity, the overall product crossover was limited by the bubbles generated at the upward-facing electrode. The slip wall condition was set for bubbles at both sides of the channel. \n\n## Mass transport and electrochemistry \n\nTheory of diluted species was adopted to solve the mass transport of the dissolved ions, as depicted in Fig. S3c. Mass transport in the solution is governed by the Nernst-Planck equation: \n\n**==> picture [241 x 20] intentionally omitted <==**",
+        "text_sha256": "sha256:13ac7284c41564a79eafe93c00b231171257eeab91b165df43bbd40cadf67e8d"
+      },
+      {
+        "evidence_key": "P:S-a59d9da9dc1d3818bb9f",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a59d9da9dc1d3818bb9f",
+        "text": "where cm, Nm, Dm, and zm denote the concentration, the molar flux, the diffusion coefficient, and the charge of the dissolved species, m, respectively. It is worth noting that the diffusion coefficient, Dm, is dependent on multiple parameters, see equation S15. We therefore checked the influence of pressure on Dm, see Supplementary Note 5 and Fig. S14. ϕL is the electrolyte potential. vL is the electrolyte velocity and was determined from the two-phase fluid flow model. Electroneutrality was assumed, and conservation of charge was fulfilled in the electrolyte. The electrolyte pH was chosen to be the pK a2 of the phosphate buffer since the local pH gradient is efficiently minimized (see the buffer equilibrium in the domain, Fig. S3c). Other minority phosphate buffer species, i.e., H3PO4 and PO43-, were not considered in our model. The molar flux at the electrode surface was determined from the local current density: \n\n**==> picture [176 x 22] intentionally omitted <==**",
+        "text_sha256": "sha256:42115bdfd4c91aca1b7ea1e1997519b375a698ef7da843f4efd92bc4ed7bb234"
+      },
+      {
+        "evidence_key": "P:S-188f91137340482bf7ed",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-188f91137340482bf7ed",
+        "text": "where vm is the stoichiometry coefficient, i.e., �4, 2, and �1 for H[+] , H2 and O2, respectively (ne = 4). ηbub is the pressure-dependent bubble formation efficiency. The local current density jloc was determined from the Butler Volmer equation: \n\n**==> picture [200 x 21] intentionally omitted <==**",
+        "text_sha256": "sha256:ae70d45a5a2086ceb0b83ceb76c9dfff89a8397ab17871f51ee5f9291e51c0e9"
+      },
+      {
+        "evidence_key": "P:S-491679c10ba119cf25ac",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-491679c10ba119cf25ac",
+        "text": "where j0, αa and αc are exchange current density and the anodic and cathodic transfer coefficients, respectively. The overpotential, η was determined from the following equations, which contain the concentration overpotential due to pH gradient. \n\n**==> picture [197 x 21] intentionally omitted <==**",
+        "text_sha256": "sha256:2aee0df637f1741eb1e92d2147c925c1e0f5b2dd3ca31617811ea35bbe5de4ab"
+      },
+      {
+        "evidence_key": "P:S-d901f1778202297452e8",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-d901f1778202297452e8",
+        "text": "**==> picture [195 x 20] intentionally omitted <==**",
+        "text_sha256": "sha256:1051e61d9d8aae6b4a9642d41578921da08853aca55a5c2773293a6166aa2b51"
+      },
+      {
+        "evidence_key": "P:S-3ade2f29fe8dc3b6c4bb",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-3ade2f29fe8dc3b6c4bb",
+        "text": "Here, ϕs denotes the electrode potential and is assumed to be constant along the electrode. The cathode potential is set to be 0 V. We note that the presence of bubbles may affect the local electrolyte conductivity, such that a Bruggeman correction may be required[70] . However, according to our previous study[29] , including the Bruggeman correction does not change the local current density distribution (<0.1% over a 10 cm electrode) due to the relatively low operating current density (10 – 20 mA cm[−][2] ) in solar-driven water splitting and the compact cell size used in our study. Note that the effects of bubble adhering to the electrodes and increasing the overpotential is not directly simulated due to the limitations of our Euler-Euler model. Estimations were, however, made based on the gas volume fraction obtained from our model and an empirical correlation reported in the literature, as described in Supplementary Note 4. \n\n## Numerical treatment \n\nThe multiphysics model was solved in a coupled mode: the liquid velocity determined by the Euler-Euler multiphase model contributes to the mass transport of the dissolved species, and the resultant local current density, in turn, determines the gas bubble inlet along the electrode in the Euler-Euler multiphase model. Steady state simulations were performed with COMSOL Multiphysics® 5.6 on a highperformance work station (Intel(R) Xeon(R) CPU E-5-2650 v2, 32 physical cores, 192 GB RAM). The fluid variables, such as pressure p, liquid (continuous) phase velocity vL, and gas (dispersed) phase velocity vG were solved using the PARDISO solver, while the volume fractions αi were solved with the MUMPS solver. The variables involved in mass transport and electrochemistry were solved with the PARDISO solver.",
+        "text_sha256": "sha256:699b856b3f3997088c2ee303147a094effc423eb6298defabf41e42c9e51fd3b"
+      },
+      {
+        "evidence_key": "P:S-89686e0974202bfc0c6a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-89686e0974202bfc0c6a",
+        "text": "A relative tolerance of 0.005 was set as the convergence criterion. The operational conditions of the membrane-free PEC water-splitting cell used in the simulations are tabulated in Table S2, and all the parameters used are summarized in Tables S3 and S4. \n\n## Model and mesh independence validation \n\nThe two-phase model of this study is validated against experimental − measurements, see the Supplementary Note S2, Figs. S4 S6 and Supplementary Movie 1–4. In addition, as declared in the report[32] , our multiphysics model is largely inspired by previous studies of Mat and co-workers[71][–][73] , in which they validated the simulated gas volume fraction against the measured data using local conductivity experiments. Mesh independence of the present model was checked by considering the relative error of the liquid velocity as a function of the max. mesh size, see Fig. S15. \n\n## Quantitative comparison \n\nCrossover loss to kWh. Based on the assumptions we made in the context, the theoretical production rate of H2 can be obtained \n\n**==> picture [163 x 22] intentionally omitted <==**",
+        "text_sha256": "sha256:3deee88544d7301d0ca0df5b9324439edae828a0936298db3c83a67a55cdbe3f"
+      },
+      {
+        "evidence_key": "P:S-75aee184451533082171",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-75aee184451533082171",
+        "text": "where jloc is the average local current density, MH2 is the molar mass of H2, ne is the electrons consumed in hydrogen production reaction, F is the Faraday constant. The amount of time needed (in [h]) for \n\nNature Communications | (2024) 15:4944 \n\n10 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-49273-2 \n\nproducing 1 kg H2 out of PEC water-splitting cell according to our assumption is therefore, \n\n**==> picture [166 x 21] intentionally omitted <==**",
+        "text_sha256": "sha256:3b9e1bc54ae652fc352bcc19d6d9dee464557c272c39846c70b250dc42525c98"
+      },
+      {
+        "evidence_key": "P:S-d6e1217c8ff892e33aae",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-d6e1217c8ff892e33aae",
+        "text": "where mH2 is the expected mass of H2, Ae is the active area of the electrode. With the crossover ratio f cr,loss obtained from our multiphysics model, the loss of H2 can be obtained: \n\n## Data availability \n\nAll raw data generated during the study are available from the corresponding author upon reasonable request. The data shown in Figs. 1, 2, 4–6, and Supplemental Figs. S2, S5–S7, and S9–S15 are provided in the Source Data file. Source data are provided in this paper. Source data are provided in this paper. \n\n## Code availability \n\nThe multiphysics model files used in this study are available from the corresponding author upon reasonable request. \n\n**==> picture [176 x 11] intentionally omitted <==**",
+        "text_sha256": "sha256:af4ee7b18d44fcea8ceeba1e4b1beb3b0a587d0fd78079cbc4ac967c0a958474"
+      },
+      {
+        "evidence_key": "P:S-084a1175e13d71835963",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-084a1175e13d71835963",
+        "text": "where mH2 is the expected production mass of H2, ηbub determines the amount of H2 in the gaseous phase among the overall production. Note that bubble-induced product crossover was solely considered in this study. The lower heating value (LHV) of H2 was then used to translate the crossover loss to kWh: \n\n**==> picture [174 x 11] intentionally omitted <==**",
+        "text_sha256": "sha256:74870ff3ef928190635e939d2c41555c9722df8738e26066ecf9af2b826c6174"
+      },
+      {
+        "evidence_key": "P:S-1c039e26251f064826de",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-1c039e26251f064826de",
+        "text": "## Optical loss to kWh \n\nThe optical loss (in [%]) obtained from our model can be translated to kWh using the following relation: \n\n**==> picture [189 x 11] intentionally omitted <==**",
+        "text_sha256": "sha256:223e9d80ffa1115ebd2c85feab6efbb3174f9566601920689d84c573b60f63fb"
+      },
+      {
+        "evidence_key": "P:S-006708a4585219f5643a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-006708a4585219f5643a",
+        "text": "where f opt,loss½%� is the optical loss that is obtained in our multiphysics model. \n\n## Specific work for H2 compression \n\nThe specific work needed for H2 compression can be determined using the equations[74] \n\n**==> picture [152 x 28] intentionally omitted <==**",
+        "text_sha256": "sha256:353b61e60d6f9a3aefd0034279bdc9d0d4306791b2dfc9c1eea6d54dbe0c841f"
+      },
+      {
+        "evidence_key": "P:S-4f398b05d67c35543cbc",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-4f398b05d67c35543cbc",
+        "text": "**==> picture [247 x 50] intentionally omitted <==**",
+        "text_sha256": "sha256:55e08daaa350d5014c13569b3ed3b54a53e030f6566dcd5eaa2e5ea019478da4"
+      },
+      {
+        "evidence_key": "P:S-0d3e9df6c242445da1f7",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-0d3e9df6c242445da1f7",
+        "text": "where f swc is the specific work needed for compressing 1 kg H2 from state 1 to state 2, which is already in [kWh]. \n\n## Concentration overpotential to kWh \n\nThe concentration overpotential, V pH,grad½V�, can be translated into kWh with the following relation: \n\n**==> picture [210 x 13] intentionally omitted <==**",
+        "text_sha256": "sha256:7c8f92656c13ed29b0c35341736791471ada0123b69b315a6ac3246da0fa9498"
+      },
+      {
+        "evidence_key": "P:S-497c62eaae18adfde781",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-497c62eaae18adfde781",
+        "text": "## Thermodynamic cell voltage loss to kWh \n\nThe pressure-induced thermodynamic cell voltage loss, E[0] cell[½][V][�][, can be] translated into kWh with the following relation: \n\n**==> picture [212 x 68] intentionally omitted <==**",
+        "text_sha256": "sha256:60cbfdab4ac162fbe0120a5f1fb4d67f4318226a251f03e4acf0eab2ffe43e71"
+      },
+      {
+        "evidence_key": "P:S-f09565cf8f0d38a72aca",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-f09565cf8f0d38a72aca",
+        "text": "## References \n\n1. Würfel, P. & Würfel, U. Physics of Solar Cells: From Basic Principles to Advanced Concepts. (John Wiley & Sons, 2016). \n\n2. Tembhurne, S., Nandjou, F. & Haussener, S. A thermally synergistic photo-electrochemical hydrogen generator operating under concentrated solar irradiation. Nat. Energy 4, 399–407 (2019). \n\n3. Tembhurne, S. & Haussener, S. Integrated photo-electrochemical solar fuel generators under concentrated irradiation. J. Electrochem. Soc. 163, H988 (2016). \n\n4. Tembhurne, S. & Haussener, S. Integrated photo-electrochemical solar fuel generators under concentrated irradiation I. 2-D nonisothermal multi-physics. Modeling. J. Electrochem. Soc. 163, H988–H998 (2016). \n\n5. Tembhurne, S. Y. & Haussener, S. Integrated photoelectrochemical solar fuel generators under concentrated irradiation-part I: 2-D non-isothermal multiphysics modelling. J. Electrochem. Soc. 163, H988–H998 (2016). \n\n6. Qureshy, A. M., Ahmed, M. & Dincer, I. Performance assessment study of photo-electro-chemical water-splitting reactor designs for hydrogen production. Int. J. Hydrogen Energy 44, 9237–9247 (2019). \n\n7. Rettie, A. J. et al. Anisotropic small-polaron hopping in W: BiVO4 single crystals. Appl. Phys. Lett. 106, 022106 (2015). \n\n8. Rettie, A. J. et al. Combined charge carrier transport and photoelectrochemical characterization of BiVO4 single crystals: intrinsic behavior of a complex metal oxide. J. Am. Chem. Soc. 135, 11389–11396 (2013). \n\n9. Ye, X., Yang, J., Boloor, M., Melosh, N. A. & Chueh, W. C. Thermallyenhanced minority carrier collection in hematite during photoelectrochemical water and sulfite oxidation. J. Mater. Chem. A 3, 10801–10810 (2015). \n\n10. Zhang, L. et al.",
+        "text_sha256": "sha256:aacbd955423bb580d95724856b4dd33d8fa63701f6f68f1550cd2efce1ecfc43"
+      },
+      {
+        "evidence_key": "P:S-ae43f1274368304bd158",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-ae43f1274368304bd158",
+        "text": "Significantly enhanced photocurrent for water oxidation in monolithic Mo:BiVO4/SnO2/Si by thermally increasing the minority carrier diffusion length. Energy Environ. Sci. 9, 2044–2052 (2016). \n\n11. Vilanova, A., Lopes, T. & Mendes, A. Large-area photoelectrochemical water splitting using a multi-photoelectrode approach. J. Power Sources 398, 224–232 (2018). \n\n12. van de Krol, R. & Parkinson, B. Perspectives on the photoelectrochemical storage of solar energy. MRS Energy Sustain. 4, E13 (2017). \n\n13. Ardo, S. et al. Pathways to electrochemical solar-hydrogen tech- \n\n   - nologies. Energy Environ. Sci. 11, 2768–2783 (2018). \n\n14. Cheng, W.-H. et al. Monolithic photoelectrochemical device for direct water splitting with 19% efficiency. ACS Energy Lett 3, 1795–1800 (2018). \n\n15. Khaselev, O. & Turner, J. A. A monolithic photovoltaicphotoelectrochemical device for hydrogen production via water splitting. Science 280, 425–427 (1998). \n\n16. May, M. M., Lewerenz, H.-J., Lackner, D., Dimroth, F. & Hannappel, T. Efficient direct solar-to-hydrogen conversion by in situ interface transformation of a tandem structure. Nat. Commun. 6, 1–7 (2015). \n\nNature Communications | (2024) 15:4944 \n\n11 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-49273-2 \n\n17. Abdi, F. F. et al. Efficient solar water splitting by enhanced charge separation in a bismuth vanadate-silicon tandem photoelectrode. Nat. Commun. 4, 2195 (2013). \n\n18. Kim, J. H. et al. Hetero-type dual photoanodes for unbiased solar water splitting with extended light harvesting. Nat. Commun. 7, 1–9 (2016). \n\n19. Shi, X. et al. Unassisted photoelectrochemical water splitting exceeding 7% solar-to-hydrogen conversion efficiency using photon recycling. Nat. Commun. 7, 1–6 (2016). \n\n20. Ahmet, I. Y. et al.",
+        "text_sha256": "sha256:3fd2e9f0addae27f50e2b49d0f1a40383f07c734fa298a0c3b5401db8eb6e949"
+      },
+      {
+        "evidence_key": "P:S-d50fb62cab005f50870b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-d50fb62cab005f50870b",
+        "text": "Demonstration of a 50 cm[2] BiVO4 tandem photoelectrochemical-photovoltaic water splitting device. Sustain. Energy Fuels 3, 2366–2379 (2019). \n\n21. Lee, W. J., Shinde, P. S., Go, G. H. & Ramasamy, E. Ag grid induced photocurrent enhancement in WO3 photoanodes and their scale-up performance toward photoelectrochemical H2 generation. Int. J. Hydrogen Energy 36, 5262–5270 (2011). \n\n22. Tolod, K. R., Hernández, S. & Russo, N. Recent advances in the BiVO4 photocatalyst for sun-driven water oxidation: top-performing photoanodes and scale-up challenges. Catalysts 7, 13 (2017). \n\n23. Ivanova, M. E. et al. Technological Pathways to Produce Compressed and Highly Pure Hydrogen from Solar Power. Angew. Chem. Int. Ed. e202218850 https://doi.org/10.1002/anie. 202218850 (2023). \n\n24. Holmes-Gentle, I., Bedoya-Lora, F., Alhersh, F. & Hellgardt, K. Optical losses at gas evolving photoelectrodes: implications for photoelectrochemical water splitting. J. Phys. Chem. C 123, 17–28 (2018). \n\n25. Dorfi, A. E., West, A. C. & Esposito, D. V. Quantifying losses in photoelectrode performance due to single hydrogen bubbles. J. Phys. Chem. C 121, 26587–26597 (2017). \n\n26. Haussener, S. et al. Modeling, simulation, and design criteria for photoelectrochemical water-splitting systems. Energy Environ. Sci. 5, 9922–9935 (2012). \n\n27. Xiang, C. et al. Modeling, simulation, and implementation of solar‐ driven water‐splitting devices. Angew. Chem. Int. Ed. 55, 12974–12988 (2016). \n\n28. Sillen, C. W. The Effect of Gas Bubble Evolution On The Energy Efficiency in Water Electrolysis, (Eindhoven University of Technology, Netherlands, 1983). \n\n29. Obata, K., Mokeddem, A. & Abdi, F. F. Multiphase fluid dynamics simulations of product crossover in solar-driven, membrane-less water splitting. Cell Rep. Phys.",
+        "text_sha256": "sha256:2b8fe1af8d4ff16f86edc2ed9e4af6d127275fe2b9d7158fa54fa05f7ac058db"
+      },
+      {
+        "evidence_key": "P:S-b94ed9b5d54d2df57b05",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-b94ed9b5d54d2df57b05",
+        "text": "Sci. 2, 100358 (2021). \n\n30. Holmes-Gentle, I., Hoffmann, F., Mesa, C. A. & Hellgardt, K. Membrane-less photoelectrochemical cells: product separation by hydrodynamic control. Sustain. Energy Fuels 1, 1184–1198 (2017). \n\n31. Obata, K. et al. Solar-driven upgrading of biomass by coupled hydrogenation using in situ (photo) electrochemically generated H2. Nat. Commun. 14, 6017 (2023). \n\n32. Obata, K. & Abdi, F. F. Bubble-induced convection stabilizes the local pH during solar water splitting in neutral pH electrolytes. Sustain. Energy Fuels 5, 3791–3801 (2021). \n\n33. Cao, Z. et al. Regulation of bubble behavior on a TiO2 photoelectrode surface during photoelectrocatalytic water splitting. J. Phys. Chem. C 126, 12480–12491 (2022). \n\n34. Cao, Z. et al. Visualization of bubble dynamic behaviors during photoelectrochemical water splitting with TiO2 photoelectrode. Electrochim. Acta 347, 136230 (2020). \n\n35. Hanke-Rauschenbach, R., Bensmann, B. & Millet, P. Hydrogen production using high-pressure electrolyzers. in Compendium of Hydrogen Energy https://doi.org/10.1016/B978-1-78242-361-4. 00007-8 (Woodhead Publishing, Oxford, 2015). \n\n36. Suermann, M., Kiupel, T., Schmidt, T. J. & Büchi, F. N. Electrochemical hydrogen compression: efficient pressurization concept derived from an energetic evaluation. J. Electrochem. Soc. 164, F1187 (2017). \n\n37. Esposito, D. V. Membraneless electrolyzers for low-cost hydrogen production in a renewable energy future. Joule 1, 651–658 (2017). \n\n38. Modestino, M. A., Rivas, D. F., Hashemi, S. M. H., Gardeniers, J. G. & Psaltis, D. The potential for microfluidics in electrochemical energy systems. Energy Environ. Sci. 9, 3381–3391 (2016). \n\n39. Talabi, O. O., Dorfi, A. E., O’Neil, G. D. & Esposito, D. V.",
+        "text_sha256": "sha256:d4c952b8d4e792a9f439429b44678fe9e05deb3d13a190d5508f39572caf6d3d"
+      },
+      {
+        "evidence_key": "P:S-8708e51a86d672e73fc5",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8708e51a86d672e73fc5",
+        "text": "Membraneless electrolyzers for the simultaneous production of acid and base. Chem. Commun. 53, 8006–8009 (2017). \n\n40. O’Neil, G. D., Christian, C. D., Brown, D. E. & Esposito, D. V. Hydrogen production with a simple and scalable membraneless electrolyzer. J. Electrochem. Soc. 163, F3012 (2016). \n\n41. Hashemi, S. M. H. et al. A versatile and membrane-less electrochemical reactor for the electrolysis of water and brine. Energy Environ. Sci. 12, 1592–1604 (2019). \n\n42. Jin, J. et al. An experimental and modeling/simulation-based evaluation of the efficiency and operational performance characteristics of an integrated, membrane-free, neutral pH solar-driven water-splitting system. Energy Environ. Sci. 7, 3371–3380 (2014). \n\n43. Davis, J. T., Qi, J., Fan, X., Bui, J. C. & Esposito, D. V. Floating membraneless PV-electrolyzer based on buoyancy-driven product separation. Int. J. Hydrogen Energy 43, 1224–1238 (2018). \n\n44. Mota, N. D. et al. Membraneless, room-temperature, direct borohydride/cerium fuel cell with power density of over 0.25 W/cm[2] . J. Am. Chem. Soc. 134, 6076–6079 (2012). \n\n45. Braff, W. A., Bazant, M. Z. & Buie, C. R. Membrane-less hydrogen bromine flow battery. Nat. Commun. 4, 2346 (2013). \n\n46. Sillen, C., Barendrecht, E., Janssen, L. & Van Stralen, S. Gas Bubble Behaviour during Water Electrolysis. in Hydrogen as an energy vector 7, 539–614 (Springer, 1980). \n\n47. Matsushima, H., Iida, T. & Fukunaka, Y. Gas bubble evolution on transparent electrode during water electrolysis in a magnetic field. Electrochim. Acta 100, 261–264 (2013). \n\n48. Matsushima, H., Fukunaka, Y. & Kuribayashi, K. Water electrolysis under microgravity: Part II. Description of gas bubble evolution phenomena. Electrochim. Acta 51, 4190–4198 (2006). \n\n49. Matsushima, H. et al.",
+        "text_sha256": "sha256:41a8ccc05ca3cbdf9b4c564b5b8f62d4a7ece877705558ba1c31081436fee9f2"
+      },
+      {
+        "evidence_key": "P:S-374b9ebc7a8b1976c8b8",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-374b9ebc7a8b1976c8b8",
+        "text": "Water electrolysis under microgravity: Part 1. Experimental technique. Electrochim. Acta 48, 4119–4125 (2003). \n\n50. Zeng, K. & Zhang, D. Recent progress in alkaline water electrolysis for hydrogen production and applications. Prog. Energy Combust. Sci. 36, 307–326 (2010). \n\n51. Ahn, S. H. et al. Effect of morphology of electrodeposited Ni catalysts on the behavior of bubbles generated during the oxygen evolution reaction in alkaline water electrolysis. Chem. Commun. 49, 9323–9325 (2013). \n\n52. Janssen, L., Sillen, C. & Barendrecht, E. & Van Stralen, S. Bubble behaviour during oxygen and hydrogen evolution at transparent electrodes in KOH solution. Electrochim. Acta 29, 633–642 (1984). \n\n53. Kolev, N. I. in Multiphase Flow Dynamics 4: Turbulence, Gas Adsorption and Release, Diesel Fuel Properties (ed Nikolay Ivanov Kolev) 2nd Edn,209-239 (Springer Berlin Heidelberg, 2012). \n\n54. Pray, H. A., Schweickert, C. & Minnich, B. H. Solubility of hydrogen, oxygen, nitrogen, and helium in water at elevated temperatures. Ind. Eng. Chem. 44, 1146–1151 (1952). \n\n55. Lemmon, E., Bell, I. H., Huber, M. & McLinden, M. NIST Standard Reference Database 23: Reference Fluid Thermodynamic and Transport Properties-REFPROP, Version 10.0, National Institute of Standards and Technology. Standard Reference Data Program, Gaithersburg (2018). \n\n56. Cussler, E. L. & Cussler, E. L. Diffusion: Mass Transfer in Fluid Systems. (Cambridge University Press, 2009). \n\n57. Pang, X., Davis, J. T., Harvey, A. D. & Esposito, D. V. Framework for evaluating the performance limits of membraneless electrolyzers. Energy & Environmental Science 13, 3663–3678 (2020). \n\nNature Communications | (2024) 15:4944 \n\n12 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-024-49273-2 \n\n58. Ma, J., Chahine, G. L. & Hsiao, C.-T.",
+        "text_sha256": "sha256:b134830c4406dc1e3e76bf9c77ac3bc776b05f4f511e227de714372f8d2113bf"
+      },
+      {
+        "evidence_key": "P:S-57305eb156f91962ef4b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-57305eb156f91962ef4b",
+        "text": "Spherical bubble dynamics in a – \n\nbubbly medium using an Euler Lagrange model. Chem. Eng. Sci. 128, 64–81 (2015). \n\n59. Sokolichin, A., Eigenberger, G., Lapin, A. & Lübert, A. Dynamic numerical simulation of gas-liquid two-phase flows Euler/Euler versus Euler/Lagrange. Chem. Eng. Sci. 52, 611–626 (1997). \n\n60. Shams, E., Finn, J. & Apte, S. A numerical scheme for Euler–Lagrange simulation of bubbly flows in complex systems. Int. \n\n   - J. Numer. Methods Fluids 67, 1865–1898 (2011). \n\n61. Borcia, R. & Bestehorn, M. Phase-field simulations for drops and bubbles. Phys. Rev. E 75, 056309 (2007). \n\n62. Zhang, Z., Liu, W. & Free, M. L. Phase-field modeling and simulation of gas bubble coalescence and detachment in a gas-liquid twophase electrochemical system. J. Electrochem. Soc. 167, 013532 (2019). \n\n63. Anderl, D., Bogner, S., Rauh, C., Rüde, U. & Delgado, A. Free surface lattice Boltzmann with enhanced bubble model. Comput. Math. Appl. 67, 331–339 (2014). \n\n64. Cheng, M., Hua, J. & Lou, J. Simulation of bubble–bubble interaction using a lattice Boltzmann method. Comput. Fluids 39, 260–270 (2010). \n\n65. Liu, X., Chai, Z. & Shi, B. A phase-field-based lattice Boltzmann modeling of two-phase electro-hydrodynamic flows. Phys. Fluids 31, 092103 (2019). \n\n66. Yu, Z., Yang, H. & Fan, L.-S. Numerical simulation of bubble interactions using an adaptive lattice Boltzmann method. Chem. Eng. Sci. 66, 3441–3451 (2011). \n\n67. Ghalta, R. & Srivastava, R. Photocatalytic selective conversion of furfural to γ-butyrolactone through tetrahydrofurfuryl alcohol intermediates over Pd NP decorated g-C3N4. Sustain. Energy Fuels 7, 1707–1723 (2023). \n\n68. Balzer, R. & Vogt, H. Effect of electrolyte flow on the bubble coverage of vertical gas-evolving electrodes. J. Electrochem. Soc.",
+        "text_sha256": "sha256:fda10e24e75767a155584ecfc2a4f382ff40361c41e5d599222bba5e8e80f18d"
+      },
+      {
+        "evidence_key": "P:S-21637e427c586b3cef81",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-21637e427c586b3cef81",
+        "text": "150, E11 (2002). \n\n69. Obata, K., van de Krol, R., Schwarze, M., Schomäcker, R. & Abdi, F. F. In situ observation of pH change during water splitting in neutral pH conditions: impact of natural convection driven by buoyancy effects. Energy Environ. Sci. 13, 5104–5116 (2020). \n\n70. Bruggeman, D. Calculation of different physical constants of heterogen substances I Dielectric constants and conductibility of mixtures from isotrop substances. Ann. Phys. 416, 665–679 (1935). \n\n71. Mat, M. D. & Aldas, K. Application of a two-phase flow model for natural convection in an electrochemical cell. Int. J. Hydrogen Energy 30, 411–420 (2005). \n\n72. Aldas, K., Pehlivanoglu, N. & Mat, M. D. Numerical and experimental investigation of two-phase flow in an electrochemical cell. Int. J. Hydrogen Energy 33, 3668–3675 (2008). \n\n73. Mat, M. D., Aldas, K. & Ilegbusi, O. J. A two-phase flow model for hydrogen evolution in an electrochemical cell. Int. J. Hydrogen Energy 29, 1015–1023 (2004). \n\n74. Burheim, O. S. in Engineering Energy Storage (ed Odne Stokke – \n\nBurheim) 147 192 (Academic Press, 2017). \n\n## Acknowledgements \n\nThe Helmholtz Association of German Research Centers (HGF) and the Federal Ministry of Education and Research (BMBF), Germany, are gratefully acknowledged for supporting the development of solarpowered technologies for H2 generation within the frame of the \n\nInnovation Pool project “Solar H2: Highly Pure and Compressed” and the Helmholtz Research Program “Materials and Technologies for the Energy Transition” (MTET). Part of the work was also carried out with the support of the Helmholtz Energy Materials Foundry (HEMF), a large-scale distributed research infrastructure founded by the German Helmholtz Association.",
+        "text_sha256": "sha256:4a0d5ff95c4fbe8e48af71f0f2eed5d24338e27a2c8aa82761a3ccb88971e2e8"
+      },
+      {
+        "evidence_key": "P:S-c0beeff94537321ec148",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-c0beeff94537321ec148",
+        "text": "We also acknowledge Karsten Harbauer for his assistance in the preparation of Pt/FTO electrodes, Christian Höhn and Markus Bürger for the construction of the pressurized water splitting cell, Dr. Keisuke Obata for his initial input on the multiphysics model, and Dr. Babu Radhakrishnan for his assistance during the validation experiments. F. F. A. acknowledges support from CityU Start-up Grant (project 9610621). \n\n## Author contributions \n\nConceptualization: F. L. and F.F.A. methodology: F.L. and F.F.A. investi– – gation: F.L. writing original draft: F.L. writing review & editing: F.L., R.v.d.K., and F.F.A.; supervision, R.v.d.K., and F.F.A.; funding acquisition, R.v.d.K., and F.F.A. \n\n## Funding \n\nOpen Access funding enabled and organized by Projekt DEAL. \n\n## Competing interests \n\nThe authors declare no competing interests. \n\n## Additional information \n\nSupplementary information The online version contains supplementary material available at https://doi.org/10.1038/s41467-024-49273-2. \n\nCorrespondence and requests for materials should be addressed to Fatwa F. Abdi. \n\nPeer review information Nature Communications thanks Xin Zhao, and the other, anonymous, reviewer(s) for their contribution to the peer review of this work. A peer review file is available. \n\nReprints and permissions information is available at http://www.nature.com/reprints \n\nPublisher’s note Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations.",
+        "text_sha256": "sha256:95dffadca139bdb44ddef9dabcdde9d85156487128d8d6ad5b10d4d1f50ce763"
+      },
+      {
+        "evidence_key": "P:S-69954c02bf9dd4fb0704",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-69954c02bf9dd4fb0704",
+        "text": "Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http://creativecommons.org/ licenses/by/4.0/. \n\n© The Author(s) 2024 \n\nNature Communications | (2024) 15:4944 \n\n13",
+        "text_sha256": "sha256:eb0934ebf1b3b02f8ed17f3211dedc446d24c4bcec8779165653457e30fa6fca"
+      }
+    ]
+  },
+  "paper_id": "10.1038/s41467-024-49273-2",
+  "paper_sha256": "sha256:51f6f5a3e79c5d0c54b9cecbbe81f231f2eea2a0250e3eaa688bfd36fe9e07a9",
+  "parent_output_sha256s": [],
+  "parent_reviews": [],
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "review_source_sha256": "sha256:f4a4d92975f4959a64998c294ce24eea79283b33796a272db9e6d62adcaaa9bf",
+  "reviewer_spans": [
+    {
+      "char_end": 1312,
+      "char_start": 1273,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d7cde75a5966cf9566e1",
+      "source_role": "reviewer_report",
+      "text": "## Reviewer #1 (Remarks to the Author):",
+      "text_sha256": "sha256:f575013c42c9e91316f21a94feb0b0edfff3402d969a3e1e849f6dd77ac19843"
+    },
+    {
+      "char_end": 2175,
+      "char_start": 1315,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ab7ed7d5772eb1e0ffc4",
+      "source_role": "reviewer_report",
+      "text": "This paper conducts a model-based evaluation of photoelectrochemical water splitting at elevated pressure conditions. It provides a thorough analysis of the benefits and penalties associated with high pressure operation, taking into account the effects on bubble characteristics, product gas crossover, bubble-induced optical losses, and concentration overpotential. Operating electrically driven water splitting at high pressures is of significant interest in both academic research and industrial applications. While photoelectrochemical water splitting is still at a relatively low TRL, the research is forward-looking by developing a fundamental understanding of how elevated pressure affects device performance, and can be useful to inform future design of photoelectrochemical devices. However, there are a few issues that need to be addressed/clarified.",
+      "text_sha256": "sha256:fdb1af6507186f4c7f28410abcc01974ccaaa8a6d039a4c13e3bbc14f0219cd5"
+    },
+    {
+      "char_end": 2704,
+      "char_start": 2178,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-27bbc1bfccfad1495267",
+      "source_role": "reviewer_report",
+      "text": "1. One major issue related to gas-evolving electrodes is that bubbles adhering to the electrodes will block the reaction site and cause the shielding effect, resulting in a localized surge in overpotential (activation and ohmic losses). This can also contribute to increased heterogeneity in other distributions within the device, and therefore affect the overall performance of the device. It is not clear in the paper how the bubble coverage on the electrode surface and the shielding effect have been included in the model.",
+      "text_sha256": "sha256:85ed3adb9136412d36f89ba074fcf42b5aac8bebe5d451d2d10e08205725eb2d"
+    },
+    {
+      "char_end": 2968,
+      "char_start": 2707,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-07c2de33fdf0e45826f1",
+      "source_role": "reviewer_report",
+      "text": "2. In the paper, the amounts of dissolved gases in the electrolyte are calculated from the bubble formation efficiency. It would be useful to validate the calculated values by comparing them with the solubility of gases in the electrolyte to see the deviations.",
+      "text_sha256": "sha256:fbf67200bf3ecb1b09a0683f7bea0adf2531c5569e258abe463bb10018de6cc7"
+    },
+    {
+      "char_end": 3768,
+      "char_start": 2971,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5c60682ad23e068893b3",
+      "source_role": "reviewer_report",
+      "text": "3. The model used in the paper is developed for a membrane-free cell. However, most photoelectrochemical reactors use membranes/separators, and these membrane-based reactors are the probable scalable options considering the extensive experience in scaling up membrane-based electrolysers. Additionally, the bubble characteristics are determined using thin-film Pt electrodes, which can exhibit surface properties (e.g., morphology, wettability, etc) very different from those of commonly used nanostructured (photo)catalysts. The difference in surface properties can lead to a very different dynamics of bubble formation and growth near the electrodes. A question therefore arises: to what extent can the conclusions of this paper be generally applicable to (photo)electrochemical water splitting?",
+      "text_sha256": "sha256:4cac2345b96f6a6e58d0f32a49f62692bcd464ab27a55e6bcf54ca90b2c4708c"
+    },
+    {
+      "char_end": 3921,
+      "char_start": 3771,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-905151bc12117fe9ca6f",
+      "source_role": "reviewer_report",
+      "text": "4. The selected electrode length (2 cm) is notably small in the context of industry applications. How scalable are the conclusions drawn in the paper?",
+      "text_sha256": "sha256:4f424349d412b82938cbc95bc4bb658d5cead943b23bcceb63c9c50cbdc097b0"
+    },
+    {
+      "char_end": 3960,
+      "char_start": 3924,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-867c1ff258812e6bdb51",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #3 (Remarks to the Author):",
+      "text_sha256": "sha256:8c17865a9cabc7f290ce7a58f02add361b84a8c4dd8a742bbb1b6a885882bbd0"
+    },
+    {
+      "char_end": 4266,
+      "char_start": 3963,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-188435df91c13a17d9d1",
+      "source_role": "reviewer_report",
+      "text": "The authors investigated the implications of operating PEC water splitting directly at elevated pressure and evaluate the benefits and penalties associated with elevated pressure operation through the development of a multiphysics model. The topic discussed in interesting. However, I am concerned about",
+      "text_sha256": "sha256:c69836721bd8f216a77bbf475a7e69a07bff1f2fd91ae664217fe4a6793546bd"
+    },
+    {
+      "char_end": 4357,
+      "char_start": 4269,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-92ba6cf15318cc104a6e",
+      "source_role": "reviewer_report",
+      "text": "the setup the authors used for this demonstration. As I see, the electrodes used are not",
+      "text_sha256": "sha256:efebbfff65a48ea2df5c2e986337c43cbaa36de77d7073437b9d74b4d5ec4a08"
+    },
+    {
+      "char_end": 4566,
+      "char_start": 4360,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5a695f5932644d40e667",
+      "source_role": "reviewer_report",
+      "text": "photoelectrodes. Most of the investigation and conclusions also applied to water electrolysis system. Another main issue is most of the experimental details are not sufficient. The comments are shown below.",
+      "text_sha256": "sha256:3ce7537a31fafeb544cd249199f39f4ad92b56dbba2a3a6c504ac929d3d4fccd"
+    },
+    {
+      "char_end": 5453,
+      "char_start": 4569,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3f3c6e0ae078a1c9ee35",
+      "source_role": "reviewer_report",
+      "text": "1. The authors utilized Pt-decorated FTO electrodes with a constant current to simulate photoelectrochemical water splitting under elevated pressure. However, I am concerned about its suitability. 1) it is difficult to use this electrode to reflect the effect on the light absorption. The light scattering also depends on the wavelength. 2) the current varied greatly if applied a constant voltage. Utilizing a constant current mode, the voltage will be adapted according which may lead to a great change in voltage causing some irreversible damages to the photoelectrode. Maybe the authors can add one experiment with constant voltage to investigate how will the elevated pressure affect the current. The conclusions here can also apply to the water electrolysis, except the optical loss. Maybe can change the title to a large range of electrochemical or photoelectrochemical system.",
+      "text_sha256": "sha256:113e1db4d1388bf3a3530426af41622c4fa6e4f07d7900a2efec2f581e529d92"
+    },
+    {
+      "char_end": 5647,
+      "char_start": 5456,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f4f96301fc855a498ded",
+      "source_role": "reviewer_report",
+      "text": "2. In the method, the cell was operated safely up to a pressure of 4 bar against atmospheric pressure. However, the experiments are conducted under 1-10 bar. How could it operate above 4 bar?",
+      "text_sha256": "sha256:b700370601456ff3d9e9750eb2e4ed79929fc2140d59d2858973a789a91ff862"
+    },
+    {
+      "char_end": 5805,
+      "char_start": 5650,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-72154da480c6ec1cdde9",
+      "source_role": "reviewer_report",
+      "text": "3. According to Fig. S1b, the both O2 and H2 bubbles are generated at the same cell. How did the authors get the only O2 bubbles visualization in Fig. S1c?",
+      "text_sha256": "sha256:82403ac62abe3de4ce2009fbe314b5bf0a3a082154e1660066ccb61cae186d79"
+    },
+    {
+      "char_end": 6010,
+      "char_start": 5808,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4414e2d312b511dd3f03",
+      "source_role": "reviewer_report",
+      "text": "4. Fig. 1 compares the calculated values from the fitting equations with the experimental 131 dataset reported by Sillen (black data points). Why did the authors not include their own experimental data?",
+      "text_sha256": "sha256:3298294bb831c1ec8062b11b71307677d264971fcb6dcd8ba662c64c9eba3146"
+    },
+    {
+      "char_end": 6290,
+      "char_start": 6013,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9b46d29957e5c45616d8",
+      "source_role": "reviewer_report",
+      "text": "5. The authors define product crossover as the fraction of the molar flux that extends beyond the center of the channel. How did the authors measure the molar flux that extends beyond the center of the channel? These information should be descripted in the methods with detail.",
+      "text_sha256": "sha256:7651973bf829c927fa75b79639d756fe963f832a40f2a9f13280b7ffc5c9cb89"
+    },
+    {
+      "char_end": 6351,
+      "char_start": 6293,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-455cffeb0b66584c1686",
+      "source_role": "reviewer_report",
+      "text": "6. How did the authors measure the optical loss in Fig. 7?",
+      "text_sha256": "sha256:f84eb85a57c97d4fbb405d33dc4ecde1347e548154ea2d5b9a8ba68883b0e7f9"
+    },
+    {
+      "char_end": 6418,
+      "char_start": 6354,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f5c7519e95a25291fcc3",
+      "source_role": "reviewer_report",
+      "text": "7. Again, how did the authors monitor the pH changes in Fig. 8b?",
+      "text_sha256": "sha256:779c15c7ba7b28e4058a5c9616111b5040d645e7c8bf7c09111ea10296cd323b"
+    },
+    {
+      "char_end": 31413,
+      "char_start": 31377,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ecf78822a14c3a8d6184",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #1 (Remarks to the Author):",
+      "text_sha256": "sha256:6ffd34d82a3d649fbc91e1dc65fd25e243f665d42d0f633ad65db9c0ce240058"
+    },
+    {
+      "char_end": 31453,
+      "char_start": 31416,
+      "reviewer_id_hash": "REV-5be1fb4a712a465a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7801a493a3795b70745c",
+      "source_role": "reviewer_report",
+      "text": "My comments have been well addressed.",
+      "text_sha256": "sha256:d8be2dc4868ef70e3b49aec5eec332c1b3ea356d23aa0b5cffa7288628dfd0e5"
+    },
+    {
+      "char_end": 31492,
+      "char_start": 31456,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9ef26e305cfda8eee5c7",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #3 (Remarks to the Author):",
+      "text_sha256": "sha256:8c17865a9cabc7f290ce7a58f02add361b84a8c4dd8a742bbb1b6a885882bbd0"
+    },
+    {
+      "char_end": 31515,
+      "char_start": 31495,
+      "reviewer_id_hash": "REV-74663f3a9f935699",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f5880538a1398bcd81d7",
+      "source_role": "reviewer_report",
+      "text": "no further comments.",
+      "text_sha256": "sha256:3cbd1b646e1206e5df58c03bf648904e292d0ef938eccb0e23c1e06e5074950d"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

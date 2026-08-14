@@ -1,0 +1,1885 @@
+{
+  "author_response_spans": [
+    {
+      "char_end": 12141,
+      "char_start": 12102,
+      "reviewer_id_hash": "REV-d7c32453df4bf5da",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-182b7b1c1ac4b019b540",
+      "source_role": "author_response",
+      "text": "## **Response to reviewers' comments:**",
+      "text_sha256": "sha256:1707e77cac85b0ca4e7783e2062fd9d614b3b759448c83ebaafaedf3093a160a"
+    },
+    {
+      "char_end": 12646,
+      "char_start": 12144,
+      "reviewer_id_hash": "REV-d7c32453df4bf5da",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fe809169a9dde0430329",
+      "source_role": "author_response",
+      "text": "We would like to express our sincere gratitude for the time, effort, and expertise the reviewers have dedicated to reviewing our manuscript. Your feedback and suggestions have been invaluable in improving the quality and clarity of this manuscript. We have significantly improved the manuscript through additional analyses and new experiments. Our point-by-point responses to the reviewers’ comments are below; we included each reviewer’s comments in an italic font to help contextualize our responses.",
+      "text_sha256": "sha256:0fe2f9beb4b30fad5004419a2442fca58b13d093673df6db46c10d816b5ca5f9"
+    },
+    {
+      "char_end": 12668,
+      "char_start": 12649,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c6d53d6c1fef835c3e70",
+      "source_role": "author_response",
+      "text": "## **Reviewer #1:**",
+      "text_sha256": "sha256:7f0d3c9398adbd050b456165eebf3532b13b692b4d13f1a545111af0a9947958"
+    },
+    {
+      "char_end": 13400,
+      "char_start": 12671,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3b53317ecd788927dfd6",
+      "source_role": "author_response",
+      "text": "_In this manuscript, the authors develop a new method based on high-resolution imaging and high-throughput sequencing that can capture the subcellular spatial distribution of the transcriptome. The authors first used this method to analyze RNA of granulosa cells in the ovary, and then analyzed RNA in nucleolus and stress granules. Finally, the authors used this method to confirm that the length of the mRNA and the number of m6A modifications are the key factors affecting whether the mRNA can enter into the stress granules. I quite like this new method developed by the authors, but I also have some concerns and questions that I would like to share with the authors to improve the quality of this manuscript. Major Points:_",
+      "text_sha256": "sha256:84ca4ccc0ed895b4a7c24d359b2ac56dce4979a9feacf21bdbb9015f504b5687"
+    },
+    {
+      "char_end": 14129,
+      "char_start": 13403,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1b9f23eb9d31de826532",
+      "source_role": "author_response",
+      "text": "_1. The author mentioned that “stronger laser power means that more cDNA molecules can be photocleaved”. Ideally, all cDNA in the regions of interest should be photocleaved to fully capture the transcriptomes. Have the laser conditions (laser power and dwell time) been tested to allow photocleavage of all cDNA? For different experimental materials, photocleavage was performed with different laser power and dwell time. How can the laser power and dwell time be determined for different materials? Moreover, as shown in Figure 2A and Figure 3A, the fluorescence signal remained strong after photocleavage. It may be a concern that some cDNA was not photocleaved, which may affect the integrity of the transcriptome dataset._",
+      "text_sha256": "sha256:ea29a95f32648d26b44c617a5b11682d02c1187e6b34e44c1886f766b1e1a6b8"
+    },
+    {
+      "char_end": 14380,
+      "char_start": 14132,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-901f1347330539fc93c2",
+      "source_role": "author_response",
+      "text": "Thank you for raising this important point. To identify the optimal laser parameters for PHOTON, including both the laser power and the dwell time (the amount of time the laser stays at each pixel of an ROI), we performed the following experiments.",
+      "text_sha256": "sha256:9293e3cffc521e2340dbe6091f43aa634a34f177a99067f088cdae266f2ef2cb"
+    },
+    {
+      "char_end": 15434,
+      "char_start": 14383,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-75252f29863104ef83e5",
+      "source_role": "author_response",
+      "text": "First, we performed a yield/sensitivity test by generating PHOTON libraries of ~5,000 HeLa cells under a laser power of 2.5 mW, 25 mW, and ‘max power’, respectively. We defined ‘max power’ as the situation where all cDNA molecules in the cells were photocleaved. This was achieved by using RT primers that did not have any of the photo-caging mechanisms but contained a 5’ phosphate group for ligation. Thus, these ‘unblocked’ RT primers were used to set the upper bound of the yield and sensitivity achieved by a PHOTON experiment. Interestingly, we found that among all three laser power conditions, PHOTON captured a similar number of RNA species (one-way ANOVA, p = 0.0589) (Figure S1C; reproduced below in Panel A). This suggests that PHOTON is highly sensitive even under a low laser power. However, the expression levels of these genes slightly but steadily increased as the laser power rose (Figure S1D; reproduced below in Panel B). This result corroborates with the notion that the yield of PHOTON increases as a function of the laser power.",
+      "text_sha256": "sha256:ec00eb8e9ea60f5a5fdef2cb7572efc0a44b8a415bb6047e911c592fd323ea28"
+    },
+    {
+      "char_end": 16028,
+      "char_start": 15437,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ed6247e988d96405aaed",
+      "source_role": "author_response",
+      "text": "Next, we performed a specificity test in which we tested the ability of the PHOTON laser setup to only focus on molecules within an ROI. To this end, we generated a lawn of photocaged RT oligos and directed the laser to ROIs of the same size under different levels of laser power or laser dwell time. We found that as either the laser power or the dwell time increased, the photocleaved area outside of the intended ROI also enlarged (Figure S1E; reproduced below in Panel C). This result indicates that the specificity of PHOTON decreases as higher laser power or longer dwell time is used.",
+      "text_sha256": "sha256:a4ee84ff8f9d7d44b0bee7af46f5a03457a13c1fd38d4c3a7be1053f1e90bb4d"
+    },
+    {
+      "char_end": 17453,
+      "char_start": 16031,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e2a3e16c3a3fa6bee12c",
+      "source_role": "author_response",
+      "text": "Together, these results suggest that PHOTON is highly sensitive in capturing RNA information in situ. Given into account the sensitivity, the yield, and the specificity of PHOTON, we chose a laser power of 2.5 mW and a dwell time of 100 µs for all the subcellular PHOTON experiments for the following reasons: 1) a 10-fold increase in the laser power only enhanced the yield of PHOTON by approximately 5-8%; 2) the number of RNA species detected under varying laser powers were comparable; 3) a high laser power and a long dwell time would significantly increase the non-specific photocleavage of cDNA molecules outside of the ROIs; and 4) In practice, a longer dwell time means a longer total experimental time. As photocleavage of thousands of subcellular compartments across numerous fields of views in multiple replicates is often needed for a single PHOTON experiment, keeping the total experimental time within a reasonable range (< a few hours) becomes important for the purpose of experimental efficiency and for preventing RNA molecules in the cells from degradation. However, for tissue-level spatial transcriptomics, a higher laser power may be used as the margin for errors for tissuelevel ROIs is much greater than subcellular ones. For PHOTON experiment on ovarian tissue, for example, we used a laser power of 15 mW. We have included our reasoning in the Discussion section. Please see Page 15, Paragraph 2.",
+      "text_sha256": "sha256:1e7ad761bbf61e8b5d27d4403121449ba3788adaf5217da6e507f966fd85bc02"
+    },
+    {
+      "char_end": 17509,
+      "char_start": 17456,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-92fcae144b78ee0316fe",
+      "source_role": "author_response",
+      "text": "**==> picture [264 x 281] intentionally omitted <==**",
+      "text_sha256": "sha256:e74deb2fd881c3d058c3264c9fbce6b20bcd604ad7411693226d1fb28071e734"
+    },
+    {
+      "char_end": 17988,
+      "char_start": 17511,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-93e2e36041adbbb918bb",
+      "source_role": "author_response",
+      "text": "_2. The authors analyzed RNA in stress granules induced by sodium arsenite through PHOTON. Many different stresses can induce the formation of stress granules, such as heat stress, sorbitol, and hydrogen peroxide treatment. Is there a difference in the RNA of stress granules induced by different stress treatments? Also have the authors discovered any factors other than length and number of m6A modifications that affect mRNA entry into stress granules from the PHOTON data?_",
+      "text_sha256": "sha256:d02ccc55b61660db0a0cf33e246e295a254481e13b76ef98b767740f07ef7cd9"
+    },
+    {
+      "char_end": 18615,
+      "char_start": 17991,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a502fbae0136b211f1be",
+      "source_role": "author_response",
+      "text": "To answer your first question, we applied PHOTON to assay RNA content of heat shockinduced SGs in HeLa cells (Figure S3F&G; reproduced below in Panels A&B). We found that although a significant number of RNA species were enriched in both heat shock-induced and sodium arsenite-induced SGs (p < 0.0001, hypergeometric test), these two types of SGs also contained distinct RNA species (Figure S3H; reproduced below in Panel C). This observation suggests that the RNA composition of SGs differs according to the stressor, consistent with previous reports (Khong, A., et al., Mol Cell, 2017; Padron, A., et al. Mol Cell, 2019.).",
+      "text_sha256": "sha256:88a2c2817cabe1c79343bae71edfd6150c182c88feea4a0a232217b7145b00fd"
+    },
+    {
+      "char_end": 19345,
+      "char_start": 18618,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4d36e2e63468df62f928",
+      "source_role": "author_response",
+      "text": "To answer your second question, we examined if the translation efficiency of a given mRNA is a determinant for its subcellular localization during stress given that selective mRNA species can be recruited into the SGs for translation suppression. We found that under both the sodium arsenite-induced and heat shock-induced cellular stress, transcripts that are depleted from SGs tend to have higher translation efficiency than those that are enriched in SGs (Mann-Whitney U test, _p_ < 0.001 for both groups) (Figure S4A; reproduced below in Panel D). This finding demonstrates that besides the transcript length and number of m[6] A modifications, the translation status of the mRNA may also influence its localization to SGs.",
+      "text_sha256": "sha256:7f1dbee04ae81482dc3d089211aa663c77fe4da9d36d8a8f8d41536927b93326"
+    },
+    {
+      "char_end": 19401,
+      "char_start": 19348,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-dc183927b73ab9652919",
+      "source_role": "author_response",
+      "text": "**==> picture [279 x 205] intentionally omitted <==**",
+      "text_sha256": "sha256:21e47fd81b823a0b8eeedfd01e571399274dc13c5737a3360af5049f209c72b2"
+    },
+    {
+      "char_end": 19872,
+      "char_start": 19403,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-bccebaa8a3bdc5e7ac0d",
+      "source_role": "author_response",
+      "text": "_3. In result 4, the authors wrote “By pairing the SG PHOTON data with the whole cell PHOTON data ...... overlapped SG-depleted genes out of 1780 genes)”. It would have been better for the authors to graph the data in this passage in the manuscript for better understanding. In addition to this, the authors selected AHNAK, MN1 and ZACN3 mRNAs to be imaged simultaneously with the stress granules and demonstrated that the data obtained through PHOTON are more precise_",
+      "text_sha256": "sha256:fc6bbd720ef7987528b32c828f1ff7c48c01c50431ebc28f3f2b1571722d428c"
+    },
+    {
+      "char_end": 20008,
+      "char_start": 19875,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6450af9b741246e047c6",
+      "source_role": "author_response",
+      "text": "_than existing public databases. However, the number of mRNAs selected by the authors was too small to draw appropriate conclusions._",
+      "text_sha256": "sha256:27f7b140e44ce237ebf612476cc03cac4e9cc19f390cfcc561527751166acd32"
+    },
+    {
+      "char_end": 20428,
+      "char_start": 20011,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b027abd6dc270be0f25c",
+      "source_role": "author_response",
+      "text": "Thank you for the suggestions. We have plotted the data in Figure S3E (reproduced below in Panel A). For the HCR-FISH experiment, we re-selected 8 genes which share a similar level of expression according to the whole cell PHOTON data. We designed HCR probes against these 8 genes. Out of them, 4 probe sets yielded robust signals. We therefore presented these data in the new Figure 3D (reproduced below in Panel B).",
+      "text_sha256": "sha256:0079c3b2e4c4c7e4353340736a1db5184ff9d0c11c16955fc19cc2d0029fae11"
+    },
+    {
+      "char_end": 20484,
+      "char_start": 20431,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8d4f2adda2ee1b022a5e",
+      "source_role": "author_response",
+      "text": "**==> picture [381 x 272] intentionally omitted <==**",
+      "text_sha256": "sha256:65f8476ebee706c5bcf50a1f3e6d15261649b915167101e2ba7c137537fdd697"
+    },
+    {
+      "char_end": 20761,
+      "char_start": 20486,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-292b9db9bced749e6a42",
+      "source_role": "author_response",
+      "text": "_4. In Figure 3D, the MN1 and ZACN mRNA signals were much less than AHNAK mRNA signals. Is this due to the difference in the abundance of RNA itself, or the poor sensitivity of the hybrid probe of MN1 and ZACN mRNA? Suggest to detect the content of AHNAK, MN1 and ZACN mRNA._",
+      "text_sha256": "sha256:4b864f542df2b3620fb92f794fa66fd2954b1e5adb5fb72cc7674aca2bd725a3"
+    },
+    {
+      "char_end": 21106,
+      "char_start": 20764,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-69061c2d57e525153382",
+      "source_role": "author_response",
+      "text": "You were right. Upon checking the whole cell PHOTON data, we found that the expression level of _AHNAK_ was higher than _MN1_ and _ZACN_ . To avoid any potential bias introduced by differences in RNA abundance, we re-selected genes whose expression levels were comparable. The new data is in the new Figure 3D and reproduced above in Panel B.",
+      "text_sha256": "sha256:2a83cba2faab62c9dbaf3fac079d49e84228ad6cb44e2693e7ec40d5a07a1706"
+    },
+    {
+      "char_end": 21505,
+      "char_start": 21109,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6d783180edc326c359ed",
+      "source_role": "author_response",
+      "text": "_5. The authors used PHOTON to analyze the transcriptome of GCs in the ovary, nucleoli and SGs. These subcellular compartments are granular and easily distinguishable under the microscope. However, the transcriptome of some lamellar subcellular compartments, such as mitochondria and endoplasmic reticulum, is also of interest, and whether PHOTON is applicable to these subcellular compartments._",
+      "text_sha256": "sha256:20ed9384044d56d9ea702453a640ffd8f83522c5ca82c2e2b1aa6ee7bbb2a573"
+    },
+    {
+      "char_end": 22288,
+      "char_start": 21508,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7a646cd9425cec49d7da",
+      "source_role": "author_response",
+      "text": "Thank you for raising another important point. To test if PHOTON can be applied to lamellar subcellular compartments, we turned to mitochondria which typically form a dynamic, interconnected network that consists of tubular structures with various shapes. Using the MitoTracker, we showed that the PHOTON pipeline could segment mitochondria with high accuracy (Figure S3B; reproduced below in Panel A). By pairing the mitochondrial PHOTON data with the whole cell PHOTON data, we found that many mitochondrial genes were among the top transcripts that were differentially enriched in the mitochondria (Log2 fold change>1; adjusted p value <0.05) (Figure S3C; reproduced below in Panel B). This result further suggests that PHOTON is applicable to various subcellular compartments.",
+      "text_sha256": "sha256:cc0ce5e11b8c4378852e9eaeaf93b0ba7cc74464a2e32d88eab15b6f68fc46c4"
+    },
+    {
+      "char_end": 22344,
+      "char_start": 22291,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6f7b033fe483b9bbfdbe",
+      "source_role": "author_response",
+      "text": "**==> picture [260 x 145] intentionally omitted <==**",
+      "text_sha256": "sha256:7e68bf76255eaeb78b7dbf10edef426f6d8b0d50fc36e90589dc56bec92e2259"
+    },
+    {
+      "char_end": 22364,
+      "char_start": 22346,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ae50e151436dc93526a1",
+      "source_role": "author_response",
+      "text": "## _Minor Points:_",
+      "text_sha256": "sha256:9e44ebb75df3b92a36e9945f7e30539cd8d986cd36d2cfe2510de3d312664657"
+    },
+    {
+      "char_end": 22591,
+      "char_start": 22367,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5e7516054c94b0c65be5",
+      "source_role": "author_response",
+      "text": "_1. In Figure 3C, it is sufficient to add only the white dashed outlines. There is no need to add yellow arrows to indicate that these are SGs that have not been photocleaved. Yellow arrows make the images more complicated._",
+      "text_sha256": "sha256:b76d825d71771792ce098070d04e82a501fac7b001f403f962acb7f38c784f81"
+    },
+    {
+      "char_end": 22711,
+      "char_start": 22594,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e508af9aef82d9e590aa",
+      "source_role": "author_response",
+      "text": "Thank you for the suggestion. We have deleted the yellow arrows in the images. The new Figure 3C is reproduced below.",
+      "text_sha256": "sha256:941bd42af6417da4c1ec0b3e4ac38e4c7891be4f7b55403f443d4ff11fe27a89"
+    },
+    {
+      "char_end": 22767,
+      "char_start": 22714,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d87ecd36101f66dc9638",
+      "source_role": "author_response",
+      "text": "**==> picture [138 x 172] intentionally omitted <==**",
+      "text_sha256": "sha256:281cc13ac4859066989186949e987e3fc03c3961a5c693f1d16c21e86cfa33b8"
+    },
+    {
+      "char_end": 22870,
+      "char_start": 22769,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6d75a3e193786d37d7f2",
+      "source_role": "author_response",
+      "text": "_2. In the legend of Figure 3E, the authors need to indicate whether n represents cells or granules._",
+      "text_sha256": "sha256:b67b42396674918667b775489253cd237941939c00b4de13b4d7d06bedbd1628"
+    },
+    {
+      "char_end": 22943,
+      "char_start": 22873,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-98a6cc5126859bae58ae",
+      "source_role": "author_response",
+      "text": "Thank you for pointing this out. The n represents the number of cells.",
+      "text_sha256": "sha256:d58e72e034d46bb403c4b959b9a7638ffbd6ca492e054ecfceb0ff3694d41b55"
+    },
+    {
+      "char_end": 23064,
+      "char_start": 22946,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-79767ef1829d1830ba87",
+      "source_role": "author_response",
+      "text": "_3. In Figure 4, the order in which the figures are placed does not match the order in which they appear in the text._",
+      "text_sha256": "sha256:7b32e521d4300e6c53a68b52d69e13270f048dd08b246a42872a0d3224c255de"
+    },
+    {
+      "char_end": 23232,
+      "char_start": 23067,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4e6e52ae198e98d0d8e1",
+      "source_role": "author_response",
+      "text": "Thank you for pointing this out. We have rearranged the panels in Figure 4 to match the order in which they appear in the text. The new Figure 4 is reproduced below.",
+      "text_sha256": "sha256:40ce91b1386d8eaf5ffdcef323175d7879951387afc55fc91bda528e84083dcb"
+    },
+    {
+      "char_end": 23288,
+      "char_start": 23235,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1c4756485ea083ad3e45",
+      "source_role": "author_response",
+      "text": "**==> picture [394 x 292] intentionally omitted <==**",
+      "text_sha256": "sha256:f70aee237e75be36c2bc16166ad7efb7b19fc7495340430339319f3ef68e9eff"
+    },
+    {
+      "char_end": 23515,
+      "char_start": 23290,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c4eec8fed7b7396f2144",
+      "source_role": "author_response",
+      "text": "_4. Fig S4 needs additional data, such as immunoblotting to show that Mettl3 is reduced in the Mettl3 KO cell line. And the vertical coordinate of Fig S4 needs to be labeled “Mettl3 KO vs. WT” for the reader's understanding._",
+      "text_sha256": "sha256:58b0bf0cc3bd3f8314a37a69b5920e5aeea0b2e21635e9301ddc23936080de8c"
+    },
+    {
+      "char_end": 23772,
+      "char_start": 23518,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-59787e0a3c041514508e",
+      "source_role": "author_response",
+      "text": "Thank you for the suggestions. We have performed Western Blot to confirm the loss of METTL3 protein in the _Mettl3_ KO cell line (Figure S4B; reproduced in Panel A below). We have also updated the y axis label of Figure S4C (reproduced below in Panel B).",
+      "text_sha256": "sha256:085bf6ae811d11f076a18ab953b544fe21e85a486f2761bd97f8b1d8fb519e52"
+    },
+    {
+      "char_end": 23828,
+      "char_start": 23775,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-391069d96b305fbb4fa9",
+      "source_role": "author_response",
+      "text": "**==> picture [362 x 132] intentionally omitted <==**",
+      "text_sha256": "sha256:6bd1119f542f9d0ab5f6bddc16ce47eff0cb929163b1dff5d8a32d55f12c0ef9"
+    },
+    {
+      "char_end": 23936,
+      "char_start": 23830,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4cdfdbab00c749bcecec",
+      "source_role": "author_response",
+      "text": "_5. There are some errors in the spelling of “m6A” in Figs. 4A, 4B and S4. “6” needs to be superscripted._",
+      "text_sha256": "sha256:9918549a895eb02ed9cc577aa5f749eca6ecb055c1560bd62299152659fc5eaa"
+    },
+    {
+      "char_end": 24078,
+      "char_start": 23939,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-917c2a7e34ba4bf18939",
+      "source_role": "author_response",
+      "text": "Thank you for pointing out the typos. We have corrected them in respective figures. Please see the reproduced Figure 4 and Figure S4 above.",
+      "text_sha256": "sha256:14e92a6e44db8fc5b55afdc0bb28687118a134a1598cbfd5310fe6edfe725d3a"
+    },
+    {
+      "char_end": 24175,
+      "char_start": 24081,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-849e568720ee991a42f2",
+      "source_role": "author_response",
+      "text": "_6. In Fig4D, it would be better to label it “100 µM STM2457” for the reader's understanding._",
+      "text_sha256": "sha256:a05290013ae9f1f095c62a6794cb62f8e8a12f60c57cd318129156b0775e7dd1"
+    },
+    {
+      "char_end": 24289,
+      "char_start": 24178,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f30157c3ef13dff3d4a3",
+      "source_role": "author_response",
+      "text": "Thank you for the suggestion. We have updated the label of Figure 4D. Please see the reproduced Figure 4 above.",
+      "text_sha256": "sha256:b017c03c704adf47ab9280a2e15354477062c4c1df0e13b178c0ddef146e6b19"
+    },
+    {
+      "char_end": 24314,
+      "char_start": 24292,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ba768a5022c4aec8ad70",
+      "source_role": "author_response",
+      "text": "## **Reviewer #2** _:_",
+      "text_sha256": "sha256:32f4a8f65a75f489e29e14eaef44371eb06f9f563c324acb0d928e60641c3a3e"
+    },
+    {
+      "char_end": 25829,
+      "char_start": 24317,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2e7ca4b27b7820a6081a",
+      "source_role": "author_response",
+      "text": "_The manuscript describes an intelligent method for the isolation and bulk sequencing analysis of RNA from fixed tissue sections or cells. The authors demonstrate the utility and superior performance of their protocol compared to established biochemical RNA isolation methods by analysing nucleolar RNA in cultured cells, mRNA tissue sections and RNA from stress granules in cultured cells. To explore the utility of the method in analysing the RNA in subcellular structures they the RNA content of stress granules and the mechanism targeting specific RNA subset to these structures. They analysed stress granules from fibroblasts of wild type and Mettl3 mutant mice. Their method was showed that there was a reduction of RNAs in the mutant cells suggesting that RNA methylation is required for targeting to the granules. They confirmed the result by qPCR for a few transcripts. Finally they analysed all stress granule RNAs which are sensitive to the activity of Mettl3 by comparing the content of granules from treated and untreated Hela cells with a methylation inhibitor. They found that the selective accumulation of mRNAs in the granules is at least partially attributed to reduced m6A modifications.Overall I found the experiments well controlled and presented. The method is intelligent, versatile and relatively easily applicable provided that the automatic selection of subecellualr structures works seamlessly. The manuscript is concise and well written. I have two major suggestions for improvement:_",
+      "text_sha256": "sha256:4a35b823e4c253e65fba2a8e23f3508882583273cf9879b4df73245bb50e822e"
+    },
+    {
+      "char_end": 26304,
+      "char_start": 25832,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6687822a57d3228087ba",
+      "source_role": "author_response",
+      "text": "_1) The authors provide extensive control for the specificity of the photocleavage method. However they don't provide any indication for the sensitivity of the method. How many tissue sections of ovaries did they process in Figure 2? How thick were the sections? Is there an estimate of how many cells granuloma cells they had to treat to generate a representative library. This is important to know if the method is going to be useful for future spatial tissue analysis._",
+      "text_sha256": "sha256:bbcd4619778852453e401361284da69f12ca67ada0fa3fc65999369d61191dff"
+    },
+    {
+      "char_end": 26579,
+      "char_start": 26307,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-18749402c641a55f2f47",
+      "source_role": "author_response",
+      "text": "Thank you for raising this important point. The sensitivity of PHOTON consists of two aspects: 1) the amount of cellular materials needed to generate reproducible signals above background; and 2) the level of laser power needed to capture enough transcriptome information.",
+      "text_sha256": "sha256:458ef06c130ab00f28b970b0aa58c43261f58e6a000b7ae12347a69ab5d6cf49"
+    },
+    {
+      "char_end": 26861,
+      "char_start": 26582,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-32846f53e04fc861f37e",
+      "source_role": "author_response",
+      "text": "For the first aspect, we quantified the signal-to-noise ratio (SNR) of PHOTON. To do this, we photocleaved various proportions of ~5,000 HeLa cells using two different levels of laser power and measured the SNR under each condition. We found that under the 25 mW laser light, the",
+      "text_sha256": "sha256:0bdfee25c8a9ba50e36983fe0890d77c8f7bd029fc0b93267ea240b288e870d4"
+    },
+    {
+      "char_end": 27592,
+      "char_start": 26864,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-50e910ebb3a16be4527b",
+      "source_role": "author_response",
+      "text": "SNR was approximately 357 times the fraction of cells photocleaved; and under 2.5 mW laser light, the SNR was 57 times the fraction of cells photocleaved. Notably, the signal of PHOTON was still above the noise (SNR>1.2) even though only 0.5% of the cells (~25 HeLa cells) were photocleaved at a low laser power of 2.5 mW (Figure 1E; reproduced below in Panel A). For the PHOTON experiment shown in Figure 2, only a single slice of mouse ovarian tissue at a 10micron thickness was used per experiment. Although it was difficult to ascertain the exact number of granulosa cells photocleaved for each experiment, we estimated that the number was ~600. We have included this information in the text. Please see Page 7, Paragraph 1.",
+      "text_sha256": "sha256:3a39dd952b88a78aff463066316b50345beb717a3b4af7bea7d2df97c8c6fece"
+    },
+    {
+      "char_end": 28292,
+      "char_start": 27595,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-49cee61765e70de972b2",
+      "source_role": "author_response",
+      "text": "For the second aspect, we generated PHOTON libraries of ~5,000 HeLa cells under a laser power of 2.5 mW, 25 mW, and ‘max power’, respectively. We defined ‘max power’ as the situation where all cDNA molecules in the cells were photocleaved. This was achieved by using RT primers that did not have any of the photo-caging mechanisms but contained a 5’ phosphate group for ligation. Thus, these ‘unblocked’ RT primers were used to set the upper bound of the yield and sensitivity achieved by a PHOTON experiment. Interestingly, we found that among all three laser power conditions, PHOTON captured a similar number of RNA species (one-way ANOVA, p = 0.0589) (Figure S1C; reproduced below in Panel B).",
+      "text_sha256": "sha256:c7c1c3eec854105d941315544d2d641d9c22c6c1eb96dad98ffd6953a9fbefae"
+    },
+    {
+      "char_end": 28432,
+      "char_start": 28295,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3b04dd709b92c48cacbe",
+      "source_role": "author_response",
+      "text": "Together, our data suggests that PHOTON is highly sensitive even with a minimum amount of cellular materials and under a low laser power.",
+      "text_sha256": "sha256:3d345ceee1af3c2186739c34e607c7a2de365bae9e116464e2d90db2cd31a464"
+    },
+    {
+      "char_end": 28488,
+      "char_start": 28435,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3e58bd0247d47d6973e2",
+      "source_role": "author_response",
+      "text": "**==> picture [314 x 132] intentionally omitted <==**",
+      "text_sha256": "sha256:20687010631943b03a9cdfe388d1f849a96d2ed9021fad4e7cff0b3ab0490107"
+    },
+    {
+      "char_end": 28887,
+      "char_start": 28490,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9943512c09c45151d798",
+      "source_role": "author_response",
+      "text": "_2) In figure 3 the authors claim the superiority of Photon compared to biochemical methods in identifying true components of stress granules. I think that these data may be of interest and and would suggest to include a supplementary table showing the RNAs enriched both in their and the publicly available data set, the unique RNAs of their data set and the unique RNas of the previous dataset._",
+      "text_sha256": "sha256:3a57e71caa7659b173f598633a40124e654bd535b9bb19550f17fbb448ebecab"
+    },
+    {
+      "char_end": 28965,
+      "char_start": 28890,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b318ce2d73488f0fef4e",
+      "source_role": "author_response",
+      "text": "Thank you for the suggestion. We have included the information in Table S2.",
+      "text_sha256": "sha256:441059aa5494654faeda88b8a04e0ab8139f5061c85a31e9db7ff16dcda97d4d"
+    },
+    {
+      "char_end": 28988,
+      "char_start": 28968,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-323c9c633e7af8f0ec06",
+      "source_role": "author_response",
+      "text": "## **Reviewer #3** :",
+      "text_sha256": "sha256:55ac7052bc613738c9d75318d51ddefcc484d3d5de12c7c9486088f14af40249"
+    },
+    {
+      "char_end": 29265,
+      "char_start": 28991,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-05fc8222be9a9b074896",
+      "source_role": "author_response",
+      "text": "_The manuscript by Rajachandran et al. presents PHOTON (Photoselection of Transcriptome over Nanoscale), a new method for spatial transcriptome profiling selected regions from a tissue with subcellular precision. The PHOTON workflow first captures RNAsin situ using reverse_",
+      "text_sha256": "sha256:1a4792cd92c0a93af5cb48aabeb9aa7dab75ab0f1c0588117c99131d8bcd02fd"
+    },
+    {
+      "char_end": 30015,
+      "char_start": 29268,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-969f226cfb1ad47fd0dd",
+      "source_role": "author_response",
+      "text": "_transcription primers with fluorophore, then selectively uncages cDNAs within target regions of interest (ROI) using near-UV laser light. Subsequently the uncaged cDNAs are ligated by PCR handle and all such ligated cDNAs from a tissue sample are prepared as a next-generation sequencing library. The authors demonstrate that PHOTON can capture the whole transcriptome of a target cell type or of a target subcellular compartment at tissue level. The advantage of this technique lies in its simplicity, low cost, and high spatial resolution. The current limitation is that PHOTON can only select one set of ROI from each tissue sample, and all cDNAs from those ROI are aggregated for “bulk” sequencing without preserving the spatial information._",
+      "text_sha256": "sha256:7bd498f2dcbeb2ba84efd5416e83379a87f5acb3c218ed67d43d06c80f0b4d18"
+    },
+    {
+      "char_end": 30465,
+      "char_start": 30018,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3d9a0196662d0408d426",
+      "source_role": "author_response",
+      "text": "_The authors provide informative evaluation of PHOTON’s effectiveness in isolating ROI, it would also be helpful to provide more quantitative results on the quality of transcriptome profiling. Relevant metrics may include the transcript density captured by PHOTON, the amount of RNA diffusion during sample preparation and imaging, and the unbiasedness of the transcript capture (for example, the relative amount of mitochondria RNA, mature RNA)._",
+      "text_sha256": "sha256:eba5f61ce00f515eddb6e4bef49c182cd56f0e4d6eff08c8bd665286e7d36884"
+    },
+    {
+      "char_end": 30797,
+      "char_start": 30468,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-39e81169f3401df2daaa",
+      "source_role": "author_response",
+      "text": "Thank you for the suggestion. We have performed the following characterizations of the PHOTON data. First, we quantified the number of RNA species captured by PHOTON. We showed that even at a low laser power of 2.5 mW, PHOTON captured more than 24,000 RNA species from ~5,000 HeLa cells (Figure S1C; reproduced below in Panel A).",
+      "text_sha256": "sha256:1d62dc6ea197408c866b2e8236bc229c0a270716756f3a9acb011cae5793c61e"
+    },
+    {
+      "char_end": 31462,
+      "char_start": 30800,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6725a96205386deac80a",
+      "source_role": "author_response",
+      "text": "Second, we tested the ability of the PHOTON laser setup to only focus on molecules within an ROI. To this end, we generated a lawn of photocaged RT oligos and directed the laser to ROIs of the same size under different levels of laser power or laser dwell time. We found that as either the laser power or the dwell time increased, the photocleaved area outside of the intended ROI also enlarged (Figure S1E; reproduced below in Panel B). This result indicates that the specificity of PHOTON decreases as higher laser power or longer dwell time is used. Thus, we chose a laser power of 2.5 mW and a dwell time of 100 µs for all the subcellular PHOTON experiments.",
+      "text_sha256": "sha256:d24f2e91ae68288ee38d1a68dc6088023800558a1d49fa92efa13e20e9432455"
+    },
+    {
+      "char_end": 31786,
+      "char_start": 31465,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-46799283e010fe22402f",
+      "source_role": "author_response",
+      "text": "Finally, we found that PHOTON libraries generated from total RNA of ~5,000 HeLa cells had an alignment rate to the mitochondrial genome of 1.95 ± 0.35% (mean ± s.d.; n= 4 experiments) and alignment rate to the mRNAs of 43.80 ± 3.89% (mean ± s.d.; n= 4 experiments). We have included the statistics in Page 5, Paragraph 4.",
+      "text_sha256": "sha256:3a1b35e5ad4bc759e5f93642b07522273e9627ac801fe9a063134dad5b96b4ec"
+    },
+    {
+      "char_end": 31842,
+      "char_start": 31789,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d7bc0639c4fd1b5816be",
+      "source_role": "author_response",
+      "text": "**==> picture [352 x 154] intentionally omitted <==**",
+      "text_sha256": "sha256:827b42cc283a0cd0a8a0c82d56096c0a81ad2b55ebc644d46f39096a95bc236b"
+    },
+    {
+      "char_end": 32770,
+      "char_start": 31844,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0ce764e2e07e105cbcaa",
+      "source_role": "author_response",
+      "text": "_As the authors acknowledged, sequencing based spatial transcriptomics technologies also provide whole transcriptome profiling while preserving the spatial information of the captured RNA molecules. The authors compared PHOTON with Slide-seq V2 in terms of the relative gene expression profiles they capture, but recent sub-micron resolution technologies such as Stereoseq and Seq-cope may be more relevant as they provide subcellular as opposed to the near cellular resolution of Slide-seq. Although a direct comparison may require substantial resources, the authors could comment on the quantitative comparison between PHOTON and those subcellular resolution sequencing based platforms in terms of the metrics mentioned above (transcript density, effective spatial resolution, unbiasedness) in addition to the cost effectiveness of their workflows, versatility across tissue and sample types, and/or other relevant aspects._",
+      "text_sha256": "sha256:d4c2565646ac9a42adc28bb4449bbdef227300d8fda32bf8adf8d5662f1e4cb9"
+    },
+    {
+      "char_end": 33933,
+      "char_start": 32773,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-82d43a714b1e0b5edfe1",
+      "source_role": "author_response",
+      "text": "Thank you for the suggestion. Our data showed that PHOTON captured a similar number of mRNA species from the granulosa cells of the ovarian follicles compared with Slide-seqV2 (Figure S2C; reproduced below). Using PHOTON, we were able to target regions that ranged in size from millimeters down to 300 nm. This high spatial resolution was on par with the recent ∼ array-based spatial transcriptomics technologies such as Seq-Scope ( 0.5–0.8 μm) and Stereoseq (220 nm spot size and a center-to-center distance of 500 or 715 nm). And like these technologies, PHOTON is applicable to various sample types. However, because library generation is not targeted to a cell population of interest, sequencing costs of these array-based technologies can be high (especially for human samples), and deep sequencing is required to adequately profile uncommon cell types. In contrast, PHOTON reduces sequencing costs by targeting library generation to the cellular population of interest, which decreases the number of sequencing reads needed to adequately profile the sample. We have included this information in the Discussion section. Please see Page 14, Paragraphs 2&3.",
+      "text_sha256": "sha256:80609bfc99b29bb2b3698190703ba6c0544effd13149e5b2d4544d5d667ff738"
+    },
+    {
+      "char_end": 33988,
+      "char_start": 33936,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fd5c99725c4551510772",
+      "source_role": "author_response",
+      "text": "**==> picture [134 x 78] intentionally omitted <==**",
+      "text_sha256": "sha256:a9a2070dcc9da00b07dc471a4e64dd699d649510b290c0a26f7de46760902acb"
+    },
+    {
+      "char_end": 34726,
+      "char_start": 33990,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b7e9e237909eee36dc12",
+      "source_role": "author_response",
+      "text": "_PHOTON’s ability to target membrane-less organelles that are difficult to isolate biochemically makes it a valuable addition to existing spatial profiling toolkit, and the application in revealing the role of m6A modification on mRNA’s partition into SG is impressive. A potential limiting factor is the automated ROI selection for high-throughput profiling since it highly relies on imaging segmentation which could be challenging for many cell types and (sub)cellular structures. It would be helpful for potential users if the authors could provide more details on the automated ROI selection procedure and discuss more about which types of biological structures in which types of tissues could be reliably identified and segmented._",
+      "text_sha256": "sha256:57f0cd97e1b00b6e8cbf5322bc719cd2a27e2e6fdadf81e94861b87b064cad9d"
+    },
+    {
+      "char_end": 35164,
+      "char_start": 34729,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6af480ebd8e31d5242d8",
+      "source_role": "author_response",
+      "text": "Thank you for raising this important point. To test if PHOTON can be applied to lamellar subcellular compartments, we turned to mitochondria which typically form a dynamic, interconnected network that consists of tubular structures with various shapes. Using the MitoTracker, we showed that the PHOTON pipeline could segment mitochondria with high accuracy (Figure S3B; reproduced below in Panel A). By pairing the mitochondrial PHOTON",
+      "text_sha256": "sha256:3daaf563e2055921d9314dbc4c39af8d13aaf9a704cba78c7a207bae450889b4"
+    },
+    {
+      "char_end": 35508,
+      "char_start": 35167,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3c2cab90c30ec801823c",
+      "source_role": "author_response",
+      "text": "data with the whole cell PHOTON data, we found that many mitochondrial genes were among the top transcripts that were differentially enriched in the mitochondria (Log2 fold change>1; adjusted p value <0.05) (Figure S3C; reproduced below in Panel B). This result further suggests that PHOTON is applicable to various subcellular compartments.",
+      "text_sha256": "sha256:46a38cc99f34c3ae99defd26fce3809fd6a06fbe30d1491f67094cb688bb0349"
+    },
+    {
+      "char_end": 36137,
+      "char_start": 35511,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4d9f82f1625079bdbe0f",
+      "source_role": "author_response",
+      "text": "Our current PHOTON pipeline builds upon the image segmentation capability of the built-in Nikon software where a user-interface is provided to allow users to set a series of parameters (e.g., size, intensity threshold, and circularity) and to apply various functions (e.g., erosion, holefilling, and local maxima identification) to the images. With software upgrades bringing in AIbased image segmentation capabilities to the system, we expect that the types of biological structures PHOTON is applicable to will continue to expand. We have provided this information in the Discussion section. Please see Page 15, Paragraph 3.",
+      "text_sha256": "sha256:bc640ccc016001183bba02ebae6e49ed3f44c1cfae6dcce956944644f1abc479"
+    },
+    {
+      "char_end": 36193,
+      "char_start": 36140,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-aa2ccc3b4a999a1019bd",
+      "source_role": "author_response",
+      "text": "**==> picture [284 x 158] intentionally omitted <==**",
+      "text_sha256": "sha256:63a6dca0a0bf3cf22837d9a6b1ab3bc862ff87cb7171df41d1c408372bc95c01"
+    },
+    {
+      "char_end": 36202,
+      "char_start": 36195,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-36bcd2517660a9f0be8c",
+      "source_role": "author_response",
+      "text": "_Minor_",
+      "text_sha256": "sha256:22e4d729485a296e1f0336d3e8062d438f15a3d60df014bcc01487ae42307b20"
+    },
+    {
+      "char_end": 36411,
+      "char_start": 36205,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-61ee5e2eea956620b333",
+      "source_role": "author_response",
+      "text": "_The combination of poly dT and randomer could potentially achieve less biased capture of all RNA species, is it observed in practice that PHOTON is less biased than other techniques that only use poly dT?_",
+      "text_sha256": "sha256:1a8fe6c464164b68c9ccf31289fdc8375d4623339f15bdff272458803c1993d0"
+    },
+    {
+      "char_end": 36579,
+      "char_start": 36414,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d423ce7ad95084ef6223",
+      "source_role": "author_response",
+      "text": "We indeed observed many RNA species that do not possess a poly A tail in the PHOTON datasets such as snoRNAs (Panel A), histone genes (Panel A), and tRNAs (Panel B).",
+      "text_sha256": "sha256:e3f5ba922c8d17192fe9e12188602759ec51284c9cefce6f3f70341fd7920072"
+    },
+    {
+      "char_end": 36635,
+      "char_start": 36582,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3fbb6a94904e44005a00",
+      "source_role": "author_response",
+      "text": "**==> picture [359 x 169] intentionally omitted <==**",
+      "text_sha256": "sha256:7aba9b00ccad24ff4230c80d66475c98b6afc474048b13cdfee3272aa7a91b70"
+    },
+    {
+      "char_end": 36945,
+      "char_start": 36637,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4b67018ebb4c41b7d813",
+      "source_role": "author_response",
+      "text": "_Was the pairwise comparison of expression levels observed by different technologies (PHOTON vs Slide-seq V2 and RNA-seq on mechanically isolated cells) restricted to genes that were captured by both technologies? It was not clear from the figure how to interpret the comparison among lowly expressed genes._",
+      "text_sha256": "sha256:8c715c0c687a071a997c937bb8286a2a95c0b9a3256d8035e5489f323d8c6325"
+    },
+    {
+      "char_end": 37123,
+      "char_start": 36948,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d1b5fdf20f8744f6ce20",
+      "source_role": "author_response",
+      "text": "Yes, these comparisons were done on genes that were captured by both technologies. We have provided information on the number of shared genes in Figure S2C (reproduced below).",
+      "text_sha256": "sha256:6caa6830724bc605e8484d7494df3face8aa50be30cd680334f8a4478872fdf9"
+    },
+    {
+      "char_end": 37178,
+      "char_start": 37126,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e5c0af676bbd69bce076",
+      "source_role": "author_response",
+      "text": "**==> picture [264 x 83] intentionally omitted <==**",
+      "text_sha256": "sha256:7df4873c1dd6096806e87596df6ba05c26a3f9cd81a8c659749d31ef6ebb80cf"
+    },
+    {
+      "char_end": 37236,
+      "char_start": 37180,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-96192d036fde3b482eb1",
+      "source_role": "author_response",
+      "text": "_It may be helpful to combine Figure S1A with Figure 1._",
+      "text_sha256": "sha256:c42992a4398fe797c954518b219257e36ea503582a9985ed9dde7ffe6c1af1a6"
+    },
+    {
+      "char_end": 37307,
+      "char_start": 37239,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-0baf029ae254082a0844",
+      "source_role": "author_response",
+      "text": "Thank you for the suggestion. We have moved Figure S1A to Figure 1B.",
+      "text_sha256": "sha256:88234d17649fef93289d58530b2a0da1599151d2312466f34d3106d44d6dd133"
+    }
+  ],
+  "contract": "reconstruction_session_package",
+  "forbidden_conversation_hashes": [],
+  "input_sha256": "sha256:ef128bcb7af9ceb34bb4f8cc1d098fca2df20100962555b2e0d9e66aa44c9611",
+  "instructions": "Reconstruct the final-state peer review for one paper.\nUse reviewer_report spans as the only source of review opinions. Author responses may\nonly determine whether an issue was resolved; they cannot create or rewrite a review\npoint. Remove greetings, publication/acceptance recommendations, editorial decisions,\nand generic praise. Merge duplicates, preserve real reviewer disagreement, and produce\nat most 24 atomic points in StructuredReviewV2. Include contribution summary, novelty\nsupport/limits, strengths, weaknesses, and questions. Bind every retained point to at\nleast one reviewer quote key and one final PaperIR P:S-* span. Put resolved issues only\nin ReferenceTraceV2/revision_ledger. Keep partially_resolved or persists issues only\nwhen the residual is independently supported by the final paper. Unverifiable items are\naudit-only. Do not use graph signals, GEAR output, old reconstructions, ratings,\ndecisions, recommendations, or accept/reject language. Return only the completed\nReconstructionSessionResponseV2 JSON file.",
+  "package_id": "RSP-cac56edb1f8f8abe2554",
+  "paper_context": {
+    "claims": [
+      {
+        "claim_id": "C-0d72c1b7d66098b8",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-39f9bd723f4c5bd10583",
+        "schema_version": "aspr_gear",
+        "text": "Here, we present PHOTON, a method which combines high resolution imaging with high throughput sequencing to achieve spatial transcriptome profiling at subcellular resolution."
+      },
+      {
+        "claim_id": "C-9d0a77011591c26c",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-e1f21f7c0128f15e11b9",
+        "schema_version": "aspr_gear",
+        "text": "Given the significant roles of RNA distribution in cell functions, there is a need for tools that can specifically capture RNA species within subcellular compartments."
+      },
+      {
+        "claim_id": "C-2b3b876e5f759902",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-36cae8eda61b18ab0ede",
+        "schema_version": "aspr_gear",
+        "text": "Here, we present PHOTON (Photoselection of Transcriptome over Nanoscale), a method which combines high-resolution imaging with high-throughput sequencing to achieve spatial transcriptome profiling at subcellular resolution."
+      },
+      {
+        "claim_id": "C-8b3f8d62f4b8a661",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-36cae8eda61b18ab0ede",
+        "schema_version": "aspr_gear",
+        "text": "First, to construct a photocaged in situ cDNA library, we use custom reverse transcription (RT) primers."
+      },
+      {
+        "claim_id": "C-22bd86fe88e9ebdc",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-280796a36e2c0587884b",
+        "schema_version": "aspr_gear",
+        "text": "## The feasibility of PHOTON To test the feasibility of PHOTON, we first characterized PHOTON libraries in cultured HeLa cells."
+      },
+      {
+        "claim_id": "C-968ba3e0209d2f40",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-280796a36e2c0587884b",
+        "schema_version": "aspr_gear",
+        "text": "1C, images), we observed an accompanying 86.9% ± 4.3% (mean ± standard deviation (s.d.), N = 51 cells) decrease in fluorescence intensity within the exposed cells (Fig."
+      },
+      {
+        "claim_id": "C-c9795fa162be52d4",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-280796a36e2c0587884b",
+        "schema_version": "aspr_gear",
+        "text": "In contrast, no decrease in fluorescence intensity was observed in non-targeted cells (Supplementary Fig."
+      },
+      {
+        "claim_id": "C-4780646c2e86d5d1",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-a68f897860956cfb6208",
+        "schema_version": "aspr_gear",
+        "text": "First, we performed a yield/sensitivity test by generating PHOTON libraries of ~ 5000 HeLa cells under a laser power of 2.5 mW, 25 mW, and ‘max power’, respectively."
+      },
+      {
+        "claim_id": "C-d958912ff4d1f973",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-274889797f7cf8313476",
+        "schema_version": "aspr_gear",
+        "text": "A Schematic diagram illustrating the PHOTON method."
+      },
+      {
+        "claim_id": "C-55583bb3abbf5ce0",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-274889797f7cf8313476",
+        "schema_version": "aspr_gear",
+        "text": "First, in situ RT is performed using photocleavable RT primers."
+      },
+      {
+        "claim_id": "C-3c2bf2a8510f3a28",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-274889797f7cf8313476",
+        "schema_version": "aspr_gear",
+        "text": "The color-outlined cells were exposed to 25 mW 405 nm laser light, which cleaved the fluorophores from the RT primers and resulted in an 86.9% ± 4.3% (mean ± s.d.) intensity decrease (n = 51 cells, 1 experiment)."
+      },
+      {
+        "claim_id": "C-2e5648e104f8646d",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-274889797f7cf8313476",
+        "schema_version": "aspr_gear",
+        "text": "The box represents the range between the first and third quartiles of the data."
+      }
+    ],
+    "contract": "reconstruction_paper_context",
+    "paper_id": "10.1038/s41467-025-59801-3",
+    "paper_sha256": "sha256:cb7f2e3cbdd140938ede67ee1988c7303126216c0738d255fd01a0097ee48958",
+    "schema_version": "aspr_gear",
+    "spans": [
+      {
+        "evidence_key": "P:S-1e4916ba474564e2144c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-1e4916ba474564e2144c",
+        "text": "https://doi.org/10.1038/s41467-025-59801-3 \n\n**==> picture [523 x 31] intentionally omitted <==**",
+        "text_sha256": "sha256:7cfa7f38a1f3b24e272920e9c1fb73d02e0ec5cc2720f3b9ec3ce27349e0ca4a"
+      },
+      {
+        "evidence_key": "P:S-39f9bd723f4c5bd10583",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-39f9bd723f4c5bd10583",
+        "text": "## Article Subcellular level spatial transcriptomics with PHOTON \n\nReceived: 5 September 2024 Shreya Rajachandran[1,2,5] , Qianlan Xu[1,2,5] , Qiqi Cao[1,2] , Xin Zhang[1,2] , Fei Chen 3,4, Sarah M. Mangiameli[3,4] & Haiqi Chen 1,2 Accepted: 6 May 2025 The subcellular localization of RNA is closely linked to its function. Many RNA Check for updates species are partitioned into organelles and other subcellular compartments for storage, processing, translation, or degradation. Thus, capturing the subcellular spatial distribution of RNA would directly contribute to the understanding of RNA functions and regulation. Here, we present PHOTON, a method which combines high resolution imaging with high throughput sequencing to achieve spatial transcriptome profiling at subcellular resolution. We demonstrate PHOTON as a versatile tool to accurately capture the transcriptome of target cell types in situ at the tissue level such as granulosa cells in the ovary, as well as RNA content within subcellular compartments such as the nucleoli, the mitochondria, and the stress granules. Using PHOTON, we also reveal the functional role of m[6] A modifications on mRNA partitioning into stress granules. These results collectively demonstrate that PHOTON is a flexible and generalizable platform for understanding subcellular molecular dynamics through the transcriptomic lens. \n\nRNA distribution within a cell is intimately linked to cell functions[1][,][2] . The enrichment of selective RNA species in subcellular compartments is a phenomenon observed across species. These RNA-containing compartments partition cellular content, create cellular asymmetries, enhance biological reactions, and promote molecular interactions required for cellular functions and cell fate decisions[3][–][5] .",
+        "text_sha256": "sha256:4b0cb383e3842a76e0f39986750d3e9645c43f2778dce3294eff4317e97c41f6"
+      },
+      {
+        "evidence_key": "P:S-e1f21f7c0128f15e11b9",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-e1f21f7c0128f15e11b9",
+        "text": "For instance, selective mRNAs have been shown to be recruited into the stress granules (SGs) for translation suppression during cellular stress[6][,][7] . In the nucleus, the nucleolus has been demonstrated to be the site for ribosomal RNA (rRNA) synthesis[8] and inflammatory RNA decay during infection[9] . Given the significant roles of RNA distribution in cell functions, there is a need for tools that can specifically capture RNA species within subcellular compartments. \n\nWhile many methods have been developed to study RNA distribution within cells, only a few have been applied on a transcriptomewide scale. Furthermore, current transcriptomics methods suffer from various limitations. For example, a conventional approach to profile \n\nRNA content within subcellular compartments is to biochemically (e.g., protein-RNA crosslinking followed by immunoprecipitation) and/or mechanically (e.g., density gradient followed by centrifugation) purify these compartments and sequence their RNA content[10][–][12] . However, this approach requires millions of cells as input, which makes it challenging to apply to rare cell types. And more importantly, not all subcellular compartments can be purified, especially for those membraneless, transient biomolecular condensates. Even for compartments that can be isolated, such as the SGs, current protocols fail to remove contaminants or prevent content loss during the isolation process. \n\nImaging-based spatial transcriptomics methods such as MERFISH[13] and seqFISH[14] can visualize the distribution of thousands of mRNAs within individual cells.",
+        "text_sha256": "sha256:c1573e935ac7e1e702899a08f1939a2318546339bea2a4059ee06ad64a54cfd4"
+      },
+      {
+        "evidence_key": "P:S-089870ebf6ab128f08d0",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-089870ebf6ab128f08d0",
+        "text": "The drawbacks of these approaches, however, are the need for designing and synthesizing a large pool of probe sets targeting RNAs of interest, the requirement for specialized technical expertise and instrumentation, and sophisticated image processing and data analysis. \n\n> 1Cecil H. and Ida Green Center for Reproductive Biology Sciences, University of Texas Southwestern Medical Center, Dallas, TX, USA. 2Department of Obstetrics and Gynecology, University of Texas Southwestern Medical Center, Dallas, TX, USA.[3] Gene Regulation Observatory, The Broad Institute of MIT and Harvard, Cambridge, MA, USA.[4] Department of Stem Cell and Regenerative Biology, Harvard University, Cambridge, MA, USA.[5] These authors contributed equally: Shreya Rajachandran, Qianlan Xu. e-mail: haiqi.chen@utsouthwestern.edu \n\nNature Communications | (2025) 16:4457 \n\n1 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-025-59801-3 \n\nEmerging proximity labeling-based RNA profiling methods, such as APEX-seq, are powerful tools to capture RNA transcripts at a high spatiotemporal resolution[15][,][16] . However, they often require timeconsuming genome engineering in which a labeling enzyme (e.g., a biotin ligase) is genetically fused to a protein enriched in a type of compartment. This makes it difficult to scale to various types of subcellular compartments. And the specificity of these methods is dictated by the specificity of the protein the labeling enzyme is fused to. \n\nThus, there remains a need for tools that (1) can capture the spatial localization of thousands of endogenous RNA species within various types of subcellular compartments; (2) require significantly less input than existing methods; and 3) do not need genetic manipulations.",
+        "text_sha256": "sha256:23cc2be6eb4ce6ffa8b62285cae9ab56e9936fee543c561aba87f9002443c4cc"
+      },
+      {
+        "evidence_key": "P:S-36cae8eda61b18ab0ede",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-36cae8eda61b18ab0ede",
+        "text": "Here, we present PHOTON (Photoselection of Transcriptome over Nanoscale), a method which combines high-resolution imaging with high-throughput sequencing to achieve spatial transcriptome profiling at subcellular resolution. We demonstrate PHOTON as a versatile tool to capture the transcriptome of target cell types in situ at the tissue level as well as RNA content within subcellular compartments. Using PHOTON, we also reveal the functional role of m[6] A modifications on mRNA partitioning into SGs. These examples illustrate the versatility of PHOTON and its ability to reveal biological insights. \n\n## Results \n\n## The PHOTON Work ow \n\nTo develop the methodology, we drew from our previous work in sequencing DNA of fixed samples at sub-micron (~300 nm) resolution using imaging-guided, laser-targeted photo-selection[17] . Based on the same imaging setup, PHOTON can be broken down into four major steps: (1) construction of a photocaged cDNA library in situ; (2) selective uncaging of the cDNA molecules using targeted illumination with near-ultraviolet (UV) laser light; (3) sample digestion and PCR handle ligation to uncaged cDNA molecules; and (4) library preparation followed by sequencing (Fig. 1A). \n\nFirst, to construct a photocaged in situ cDNA library, we use custom reverse transcription (RT) primers. These primers contain, at the 3’ end, either a poly dT sequence or a random hexamer to hybridize to both mRNA and other non-poly adenylated RNA species. The 5’ end of the RT primer is linked to a fluorophore using a photocleavable linker. In addition, four 6-nitropiperonyloxymethyl (N-POM)-modified dTs as well as a biotin-conjugated dT are incorporated into the primers (Fig. 1B and Supplementary Table 1).",
+        "text_sha256": "sha256:0fa040c4db9278da549e67b4e1f252147db55880419d712ee2bc2717936f01bc"
+      },
+      {
+        "evidence_key": "P:S-98f17f63d244180e9e37",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-98f17f63d244180e9e37",
+        "text": "We next visualize the sample by microscopy and use fluorescent stains of a subcellular compartment to guide the identification of regions of interest (ROIs). Automated in-line image segmentation allows scalable assays of thousands of individual ROIs localized throughout the sample. Selective illumination of the ROIs using a 405 nm laser line cleaves the fluorophores from the RT primers via photocleavage of the linker, revealing a 5′ phosphate group. In the meantime, the 405 nm laser line also uncages the N-POM dTs within the primers, restoring the base paring functions of these dTs (Fig. 1A, Step 2). Thus, the photocleavable linker and the N-POM dTs serve as dual photocaging mechanisms to prevent unwanted uncaging of cDNA molecules. \n\nFollowing photocleavage, cells are lysed, and nucleic acids are purified. A PCR handle containing a priming site for library amplification is then ligated to the 5’ end of the RT primer through a splint oligo (Supplementary Table 1). This ligation step only happens to the cDNA molecules where the 5′ phosphate groups were previously revealed and the N-POM dTs were previously uncaged through photocleavage (Fig. 1A, Step 3). Photocaged cDNA molecules do not have available 5′ phosphates, and the intact N-POM dTs prevent the base pairing of the splint oligos to the RT primers. Therefore, the photocaged cDNA molecules cannot pass the ligation stage. \n\nSuccessfully ligated cDNA molecules can be pulled down by streptavidin beads due to the presence of biotin molecules on the RT primers. These purified cDNA molecules are subject to template switching using template switching oligos (TSOs) to add a second PCR handle.",
+        "text_sha256": "sha256:40e083ab014e9e4a7c85e5d71320d8eba0ece9ff2eeb3667a3d8876fc78fa91d"
+      },
+      {
+        "evidence_key": "P:S-280796a36e2c0587884b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-280796a36e2c0587884b",
+        "text": "Following PCR amplification, the PCR products are subject to Illumina Nextera XT sequencing library preparation workflow, and the resulting libraries are depleted of rRNA sequences using DASH[18] . The final products are sequenced on an Illumina platform (Fig. 1A, Step 4). \n\n## The feasibility of PHOTON \n\nTo test the feasibility of PHOTON, we first characterized PHOTON libraries in cultured HeLa cells. To do this, we fixed and permeabilized HeLa cells, and performed in situ RT with the custom photocaged RT primers. cDNA products were visualized through the fluorophore on the RT primers (Fig. 1C, left image). When a subset of cells was exposed to a focused 405 nm laser light (Fig. 1C, images), we observed an accompanying 86.9% ± 4.3% (mean ± standard deviation (s.d.), N = 51 cells) decrease in fluorescence intensity within the exposed cells (Fig. 1C, plot) due to the photocleavage and subsequent diffusion of the fluorophore. In contrast, no decrease in fluorescence intensity was observed in non-targeted cells (Supplementary Fig. 1A). \n\nTo confirm that PHOTON libraries were generated from cellular RNA, we subjected two groups of cells (~5000 cells in each group) to the PHOTON workflow except that the reverse transcriptase was omitted in one group of cells (i.e., no RT). As expected, no PHOTON library was generated from the no RT group (Supplementary Fig. 1B). \n\nTo assess the baseline efficacy of the photocaging mechanism of the custom RT primers, we compared the size of PHOTON libraries generated with and without photocleaving the RT primers. Briefly, following in situ RT using the RT primers, cDNA products were isolated from the cells and split into halves.",
+        "text_sha256": "sha256:63ce3d84231790a3d2c5113944af8dd69891ba0faa96dad805fd653a6dfc7c86"
+      },
+      {
+        "evidence_key": "P:S-4bbc359f896f7c84d752",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-4bbc359f896f7c84d752",
+        "text": "One half was exposed to the 405 nm laser light to photocleave the RT primers, while the other half was protected from light. The two halves were then subject to the rest of the PHOTON workflow. As expected, the photocleaved half resulted in a PHOTON library while the photocaged half did not (Fig. 1D, left). Quantification of the two halves using qPCR showed that the photocaging mechanism is 99.1 ± 0.26% (mean ± s.d.; n = 3 experiments) effective in preventing unwanted photocleavage of cDNA molecules (Fig. 1D, right). \n\nSequencing of the PHOTON libraries generated from total RNA (with ribosomal RNAs largely depleted) of ~ 5000 HeLa cells showed an alignment rate to the mitochondrial genome of 1.95 ± 0.35% (mean ± s.d.; n = 4 experiments) and alignment rate to the mRNAs of 43.80 ± 3.89% (mean ± s.d.; n = 4 experiments). \n\nWe next quantified the signal-to-noise ratio (SNR) of PHOTON. Given the design of PHOTON, we expect that the noise mainly stems from unwanted photocleavage of cDNA molecules due to, for instance, accidental exposure of the photocaged cDNA molecules to ambient light during sample processing or defective RT primer oligos during oligo synthesis. We also expect that the amount of signals scales with the level of laser power (stronger laser power means that more cDNA molecules can be photocleaved), as well as the number of cells photocleaved (which is proportional to the area of ROIs). Therefore, we calculated the relationship between the SNR and the laser power as well as the fraction of cells photocleaved in situ. To do this, we photocleaved various proportions of ~5000 HeLa cells using two different levels of laser power and measured the SNR under each condition.",
+        "text_sha256": "sha256:a12286f99b4d8f803b7ff5491c15d3e89bb13b10bc793ffcece279f1eaeb594f"
+      },
+      {
+        "evidence_key": "P:S-a68f897860956cfb6208",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a68f897860956cfb6208",
+        "text": "We found that under the 25 mW laser light, the SNR was approximately 357 times the fraction of cells photocleaved, and under 2.5 mW laser light, the SNR was 57 times the fraction of cells photocleaved. Notably, the signal of PHOTON was still above the noise (SNR > 1.2) even though only 0.5% of the cells (~ 25 HeLa cells) were photocleaved at a low laser power of 2.5 mW (Fig. 1E). \n\nTo further identify the optimal laser parameters for PHOTON, including both the laser power and the dwell time (the amount of time \n\nNature Communications | (2025) 16:4457 \n\n2 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-025-59801-3 \n\nthe laser stays at each pixel of an ROI), we performed the following experiments. \n\nFirst, we performed a yield/sensitivity test by generating PHOTON libraries of ~ 5000 HeLa cells under a laser power of 2.5 mW, 25 mW, and ‘max power’, respectively. We defined ‘max power’ as the situation where all cDNA molecules in the cells were photocleaved. This was achieved by using RT primers that did not have any of the photocaging mechanisms but contained 5’ phosphate groups for ligation (Supplementary Table 1). Thus, these ‘unblocked’ RT primers were \n\nused to set the upper bound of the yield and sensitivity achieved by a PHOTON experiment. Interestingly, we found that among all three laser power conditions, PHOTON captured a similar number of RNA species (Supplementary Fig. 1C, one-way ANOVA p = 0.0589). This suggests that PHOTON is highly sensitive even under low laser power. However, the expression levels of these RNAs slightly but steadily increased as the laser power rose (Supplementary Fig. 1D). This result corroborates with the notion that the yield of PHOTON increases as a function of the laser power. \n\n**==> picture [124 x 46] intentionally omitted <==**",
+        "text_sha256": "sha256:7019c233e8bed3225f592b8deef14fbca41cb87aab0efb613a7e6d1bb9e2910b"
+      },
+      {
+        "evidence_key": "P:S-c034de515f6973861f0b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-c034de515f6973861f0b",
+        "text": "**==> picture [90 x 55] intentionally omitted <==**",
+        "text_sha256": "sha256:0191800e0498f616c75ceb5999c5eb36c35740d20e45e92af95c57a9ebf92aeb"
+      },
+      {
+        "evidence_key": "P:S-789a95daed714c8f1496",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-789a95daed714c8f1496",
+        "text": "**==> picture [105 x 56] intentionally omitted <==**",
+        "text_sha256": "sha256:4cd8c0fc1d5e515e61295497a250871c97d206ba6050b5e9424e6ee0976e7632"
+      },
+      {
+        "evidence_key": "P:S-55b58905faaeb3086a9d",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-55b58905faaeb3086a9d",
+        "text": "**==> picture [321 x 189] intentionally omitted <==**",
+        "text_sha256": "sha256:c748d717b7215d91dfd4e2bec501fc3394d96ba4c48cc9a08fe3205bb7c25aea"
+      },
+      {
+        "evidence_key": "P:S-b8151621882b4f8e711e",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-b8151621882b4f8e711e",
+        "text": "**==> picture [75 x 77] intentionally omitted <==**",
+        "text_sha256": "sha256:b618ffdc4f92bb0ca4b798e95827ab731d9dfa85bcdaa7772bea0518ee600bc1"
+      },
+      {
+        "evidence_key": "P:S-0e89287ddc3fde4d22c7",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-0e89287ddc3fde4d22c7",
+        "text": "**==> picture [406 x 127] intentionally omitted <==**",
+        "text_sha256": "sha256:5a88771d77805d5463ab3bd32225894f9f8a07d6e756f749081422104a91903c"
+      },
+      {
+        "evidence_key": "P:S-274889797f7cf8313476",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-274889797f7cf8313476",
+        "text": "Fig. 1 | PHOTON enables spatially resolved transcriptome profiling. A Schematic diagram illustrating the PHOTON method. First, in situ RT is performed using photocleavable RT primers. Second, targeted illumination is performed within specific ROIs identified by fluorescence imaging. Exposure of the cDNA molecules to near-UV light modifies the N-POM-caged dTs and breaks the photocleavable linkers on the RT primers, releasing the fluorescent labels and revealing the phosphate groups. Third, nucleic acids are purified, and PCR handles are ligated to previously photocleaved cDNA molecules through splint oligos. Finally, successfully ligated cDNA molecules are pulled down using streptavidin beads, and a template switching step is performed with TSOs. Following PCR amplification, sequencing libraries are generated and read by next-generation sequencing. B Design of the RT primer. C Photocleavage of cDNA molecules in HeLa cells. The color-outlined cells were exposed to 25 mW 405 nm laser light, which cleaved the \n\nfluorophores from the RT primers and resulted in an 86.9% ± 4.3% (mean ± s.d.) intensity decrease (n = 51 cells, 1 experiment). Scale bar, 5 µm. The box represents the range between the first and third quartiles of the data. The line within the box indicates the median. The whiskers extend to the furthest data points. Source data are provided as a Source Data file. D Measuring the efficiency of the PHOTON photocaging mechanism. Left: tapestation gel image of a representative experiment; Right: bar graph showing the photocaging efficiency of PHOTON (n = 3 independent experiments). On average, 99.1 ± 0.26% (mean ± s.d.) of the photocaged cDNA molecules could not be amplified without near-UV light exposure. Source data are provided as a Source Data file.",
+        "text_sha256": "sha256:5fab7af5dbbfcc5223690afdc5c23d54af240ed6d0f6b510036ec4a8f07a1d00"
+      },
+      {
+        "evidence_key": "P:S-90a9987ee8ccc8973753",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-90a9987ee8ccc8973753",
+        "text": "E SNR of PHOTON as a function of the fraction of cells selected under two different laser power conditions. The shaded areas represent the 95% confidence interval. Source data are provided as a Source Data file. \n\nNature Communications | (2025) 16:4457 \n\n3 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-025-59801-3 \n\n**==> picture [373 x 375] intentionally omitted <==**",
+        "text_sha256": "sha256:391dc4e335610c10d9f767a9a9da2c72e395fb0ac01ed6677e30c1dec7aba6e8"
+      },
+      {
+        "evidence_key": "P:S-754f0d8e772953dc3c5c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-754f0d8e772953dc3c5c",
+        "text": "Fig. 2 | PHOTON captures the spatial transcriptome of granulosa cells (GCs) in the mouse ovary. A Morphologically guided targeting of GCs in the adult mouse ovarian tissue slices. A secondary follicle was visualized by the fluorescence of the photocaged cDNA molecules. Scale bar, 15 µm. B Expression levels of ovarian celltype marker genes revealed by PHOTON. n = 2 independent replicates. Error bars \n\nrepresent a 95% confidence interval. C Comparison between the mouse GC transcriptome generated by the follicle isolation method and that generated by PHOTON. The schematic was created using BioRender. D Comparison between the mouse GC transcriptome generated by Slide-seqV2 and that generated by PHOTON. \n\nNext, we performed a specificity test in which we tested the ability of the PHOTON laser setup to only focus on molecules within an ROI. To this end, we generated a lawn of photocaged RT oligos and directed the laser to ROIs of the same size under different levels of laser power or laser dwell time. We found that as either the laser power or the dwell time increased, the photocleaved area outside of the intended ROI also enlarged (Supplementary Fig. 1E). This result indicates that the specificity of PHOTON decreases as higher laser power or longer dwell time is used. \n\nTogether, these results suggest that PHOTON is highly sensitive in capturing RNA information in situ. Taking into account the sensitivity, the yield, and the specificity of PHOTON, we chose a laser power of 2.5 mW and a dwell time of 100 µs for all the subsequent subcellular PHOTON experiments (see Discussion).",
+        "text_sha256": "sha256:26b3958fff87496913b9b5c59bcca57c7b4da011e145e031d56456e69943969e"
+      },
+      {
+        "evidence_key": "P:S-7f4ecaf6985fcf3332b8",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-7f4ecaf6985fcf3332b8",
+        "text": "PHOTON reproduces transcriptome data in the mouse ovary After demonstrating the feasibility of PHOTON, we set out to validate its capability to capture the cellular transcriptome at the tissue level. \n\nWe focused on granulosa cells (GCs; a cell type supporting oocyte development) in the ovarian follicles because GCs can be easily identified through their spatial locations and tissue morphology (Fig. 2A and Supplementary Fig. 2A). We generated two sets of PHOTON libraries by each photocleaving approximately 600 GCs from follicles at various developmental stages in a single mouse ovarian tissue section at a 10-micron thickness. The PHOTON data were highly reproducible, as demonstrated by the high correlation between the two replicates (Supplementary Fig. 2B). Transcriptome analysis showed that known GC markers such as Inha, Nr5a2, and Serpine2 were highly expressed in the PHOTON datasets while markers of other cell types in the ovary were not (Fig. 2B). \n\nTo further benchmark the GC transcriptome data generated using PHOTON, we compared them to a publicly available GC RNA-seq dataset. This public dataset was generated by mechanically dissecting out individual follicles from mouse ovarian tissues using punctures and then isolating GCs from follicles[19] . We found that PHOTON \n\nNature Communications | (2025) 16:4457 \n\n4 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-025-59801-3 \n\ncaptured significantly more genes (>2-fold) than what was reported in the public RNA-seq dataset (Supplementary Fig. 2C), and that both PHOTON replicates only moderately correlated with the public RNAseq dataset in terms of the expression levels for the shared genes (Fig. 2C).",
+        "text_sha256": "sha256:7e7eb7d26030ae4f3b7aee4279b9617c8b1fbe1cc807b833853f0a0e5a41face"
+      },
+      {
+        "evidence_key": "P:S-2cbf43635e7e8541c9cd",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-2cbf43635e7e8541c9cd",
+        "text": "We reasoned that this was because the mechanical method of isolating GCs could not fully tease out other ovarian cell types and therefore the reference library may contain contaminants. To test this hypothesis, we extracted the GC transcriptome from another publicly available dataset in which mouse ovarian tissue sections were subject to unbiased spatial transcriptome profiling at a near single-cell resolution using Slide-seqV2[20] . This approach does not require GC isolation. PHOTON captured a similar number of genes with Slide-seqV2 (Supplementary Fig. 2C). And indeed, a much higher correlation coefficient in gene expression levels was observed between the PHOTON replicates and the Slide-seqV2 data (Fig. 2D). \n\nTogether, these data suggest that PHOTON can accurately capture the transcriptome information of target cell types within a tissue in a spatially resolved manner. \n\n## PHOTON assays transcriptome in subcellular compartments \n\nFollowing the validation of PHOTON at the tissue level, we next sought to validate its capability to capture RNA information at the subcellular level. \n\nWe first turned to the nucleolus – a well-characterized nuclear compartment with an essential role in ribosome biogenesis. We developed a computational pipeline to automatically identify and photocleave cDNA molecules in the nucleoli of fixed HeLa cells (Fig. 3A). The nucleolus PHOTON data was highly reproducible as demonstrated by the high correlation between the two replicates (Supplementary Fig. 3A). In parallel, we also used PHOTON to generate paired whole cell transcriptome data. This allowed us to identify RNA species that were specifically enriched in the nucleolus. The nucleolus is known to be rich in noncoding RNAs, mostly the rRNAs and small nucleolar RNAs (snoRNAs).",
+        "text_sha256": "sha256:c51805cf5d25a591d2139b2c5d437a3da5b68cead66eb0eb260e2668aaf65d46"
+      },
+      {
+        "evidence_key": "P:S-8cf1604e4f5bb01a5c49",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8cf1604e4f5bb01a5c49",
+        "text": "Indeed, the majority of top-enriched RNAs identified by PHOTON were snoRNAs (because DASH, an rRNA depletion protocol, was included in the PHOTON workflow, rRNA was barely detected in the PHOTON datasets) (Fig. 3B). Of interest, PHOTON also identified long noncoding RNA RMRP to be associated with the nucleolus (Fig. 3B), consistent with a previous finding[21] . \n\nTo further showcase the versatility of PHOTON in characterizing subcellular compartments, we next focused on mitochondria. Unlike the nucleoli, mitochondria typically form a dynamic, interconnected network that consists of tubular structures which can vary in shape, posing challenges to our on-the-fly image segmentation pipeline. Using MitoTracker to visualize mitochondria, we showed that the PHOTON pipeline could identify cDNA molecules within mitochondria (Supplementary Fig. 3B). By pairing the mitochondrial PHOTON data with the whole cell PHOTON data, we found that many mitochondrial genes were among the top transcripts that were differentially enriched in the mitochondria (Log2 fold change > 1; adjusted p-value < 0.05) (Supplementary Fig. 3C). \n\nFinally, we applied PHOTON to characterize SGs, a membrane-less compartment. SGs are cytoplasmic mRNA-protein assemblies that are important in the cellular stress response and may contribute to degenerative diseases[22] . We applied PHOTON to capture the RNA content of SGs in HeLa cells induced by sodium arsenite treatment (Fig. 3C). The SG PHOTON data was highly reproducible as demonstrated by the high correlation between three replicates (Supplementary Fig. 3D). By pairing the SG PHOTON data with the whole cell PHOTON data, we identified transcripts that were differentially enriched and depleted in the SGs ( | Log2 fold change | > 1; adjusted p-value < 0.05).",
+        "text_sha256": "sha256:82293d3a6bfcd7e45806fe3e49d5625009b1079cf34b8d0fb220362dfbdbaad8"
+      },
+      {
+        "evidence_key": "P:S-adead71d6b1c6f4346fc",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-adead71d6b1c6f4346fc",
+        "text": "When comparing these data with a publicly available SG dataset generated by the conventional purification method[10] , we found a significant overlap between the SG-enriched (p < 0.05, hypergeometric test)/SG-depleted (p < 0.0001, hypergeometric test) \n\ntranscripts from the PHOTON data and those from the public data (Supplementary Fig. 3E and Supplementary Data 1). \n\nWe next performed hybridization chain reaction-based fluorescence in situ hybridization (HCR-FISH) to verify the subcellular localization of some of the identified transcripts. For example, ZMIZ1 and EP400 mRNA were found to be enriched in SGs in both the PHOTON data and the public dataset. This observation was confirmed by HCRFISH imaging of the ZMIZ1 and EP400 transcripts, which showed a significant overlap between the mRNA signals and SG signals (Fig. 3D). Of interest, there were also discrepancies between the PHOTON data and the public dataset. For instance, both AHNAK2 and ZACN mRNAs were reported to be enriched in SGs in the public dataset. However, our PHOTON data indicated no enrichment of these two mRNA in the SGs. Indeed, HCR-FISH showed that neither AHNAK2 nor ZACN mRNA signals significantly overlapped with the SG signals (Fig. 3D). This discrepancy between the PHOTON data and the public dataset may be due to the low specificity of the conventional SG purification method, as contaminations might have occurred during the SG isolation procedure. \n\nBesides sodium arsenite-induced SGs, we also showed that PHOTON could assay RNA content of heat shock-induced SGs in HeLa cells (Supplementary Fig. 3F, G).",
+        "text_sha256": "sha256:02542585231c649f4344d3e7557923c102b37006c616a40e47964fa8cb7aa193"
+      },
+      {
+        "evidence_key": "P:S-8c9185e90ed70957ff83",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8c9185e90ed70957ff83",
+        "text": "We found that although a significant number of RNA species were enriched in both heat shock-induced and sodium arsenite-induced SGs (p < 0.001, hypergeometric test), these two types of SGs also contained distinct RNA species (Supplementary Fig. 3H). This observation suggests that the RNA composition of SGs differs according to the stressor, consistent with previous reports[10][,][16] . \n\nTogether, these results suggest that PHOTON can accurately assay the RNA content of subcellular compartments. \n\n## PHOTON provides insights into the mechanism of mRNA recruitment into SGs \n\nFinally, we leveraged PHOTON to investigate the regulatory mechanisms governing RNA subcellular distributions using the SG as a model. \n\nGiven that selective mRNA species can be recruited into the SGs for translation suppression[6][,][7] , we first examined if the translation efficiency of a given mRNA is a determinant for its subcellular localization during stress. To this end, we cross-referenced both the sodium arsenite-induced SG PHOTON data and heat shock-induced SG PHOTON data with a public dataset looking at the translation efficiency of mRNAs[23] . We found that under both the sodium arsenite-induced and heat shock-induced cellular stress, transcripts that were depleted from SGs tend to have higher translation efficiency than those enriched in SGs (Mann-Whitney U test, p < 0.001) (Supplementary Fig. 4A). This finding demonstrates that the translation status of the mRNA may influence its localization to SGs, corroborating a previous notion[10] . \n\nPrevious studies have also demonstrated that during cellular stress, mRNAs with longer transcript length were preferentially enriched in SGs than shorter ones[10][,][11] .",
+        "text_sha256": "sha256:2d1294712be8c4711601e4285c4adb1a70d21f2ba9cfc7f290fee196aadddff5"
+      },
+      {
+        "evidence_key": "P:S-a5ee2e4b3403f732b755",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a5ee2e4b3403f732b755",
+        "text": "Analysis of our sodium arseniteinduced SG PHOTON data confirmed this observation (Fig. 4A), which further validated the ability of PHOTON to accurately capture RNA content in subcellular compartments. Despite this length bias, mRNAs of the same length can show different recruitment into SGs, suggesting the existence of sequence-specific factors that affect mRNA recruitment into SGs. One of such length-independent factors have been proposed to be the N[6] -methyladenosine (m[6] A) modifications on mRNAs as the binding of YTHDF proteins to m[6] A may facilitate the partitioning of the bond mRNAs into SGs[24][,][25] (Fig. 4B). However, disentangling the relative contribution of m[6] A from that of the transcript length in mediating mRNA enrichment in SGs is challenging as m[6] A often occurs within long internal exons which are often present in long transcripts[26] . Furthermore, a recent study suggests that m[6] A modifications have negligible effects on mRNA partitioning into SGs[27] . \n\nWe therefore set out to use PHOTON to clarify the role of m[6] A modifications in the spatial distribution of mRNAs in relation to SGs. \n\nNature Communications | (2025) 16:4457 \n\n5 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-025-59801-3 \n\n**==> picture [467 x 577] intentionally omitted <==**",
+        "text_sha256": "sha256:966cc0e138355278149f86851a89ce384c69d3f56d0437cd661cc05f9905afa4"
+      },
+      {
+        "evidence_key": "P:S-7b4b72428cb729d4836a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-7b4b72428cb729d4836a",
+        "text": "Fig. 3 | PHOTON captures transcriptome information within subcellular compartments. A Representative images of photocleaving cDNA molecules within nucleoli (white outlines). Scale bar, 2 µm. n = 2 independent experiments. B Heatmap showing the top-enriched RNA species in the nucleolus identified using the PHOTON data. C Representative images of photocleaving cDNA molecules (cyan) in sodium arsenite-induced SGs (magenta). SGs with white dashed outlines \n\nwere targeted for photocleavage. Scale bar, 1 µm. n = 3 independent experiments. D HCR-FISH images showing the spatial distribution of ZMIZ1, EP400, AHNAK2, and ZACN mRNAs (green) in relation to sodium arsenite-induced SGs (red) in HeLa cells. Line graphs on the right show the intensity profiles of both the mRNA signal (green line) and the SG signal (red line) along the yellow line in the inserts. Scale bar, 2 µm. n = 1 experiment. \n\nNature Communications | (2025) 16:4457 \n\n6 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-025-59801-3 \n\n**==> picture [107 x 88] intentionally omitted <==**",
+        "text_sha256": "sha256:8a43c582428878d957583b5561871b7f40333a61b8a58b125aed982ba21f7520"
+      },
+      {
+        "evidence_key": "P:S-15062cbe112e66c7a3c6",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-15062cbe112e66c7a3c6",
+        "text": "**==> picture [146 x 121] intentionally omitted <==**",
+        "text_sha256": "sha256:5d87d870ef2bc2f9562ae619fd8898a2a52b93709149e8126fab058977e181f6"
+      },
+      {
+        "evidence_key": "P:S-091db4fef1b66dc004bb",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-091db4fef1b66dc004bb",
+        "text": "Fig. 4 | PHOTON reveals the functional role of m[6] A in mRNA recruitment into SGs. A Cumulative distribution plot of transcript abundance in the sodium arsenite-induced SGs of normal HeLa cells, binned based on the transcript length. Numbers in the parentheses indicate the number of transcripts in each bin. Source data are provided as a Source Data file. B m[6] A modifications may facilitate the partitioning of mRNAs into SGs through m[6] A-binding proteins. The schematic was created using BioRender. C Dose-dependent depletion of mRNA m[6] A modifications \n\nTo this end, we first used a drug-inducible Mettl3-knockout mouse embryonic fibroblast (MEF) cell line (Mettl3KO)[28] . 4-hydroxytamoxifen (4-OHT) treatment of this cell line for more than 5 days resulted in a loss of Mettl3 protein and subsequently a reduction of m[6] A on mRNAs (Supplementary Fig. 4B). We captured the RNA content of sodium arsenite-induced SGs in both wild type (WT) and Mettl3KO MEF cells using PHOTON while also capturing the corresponding total cellular RNA in parallel as input. We then focused on four genes with known quantities of m[6] A sites on their mRNAs. We quantified their fold changes in SG enrichment in Mettl3KO vs. WT cells using qPCR (n = 3 replicates per gene). We found that there was a negative effect of m[6] A reduction on the enrichment of mRNA transcripts in SGs. This negative effect was increasingly pronounced in transcripts with more m[6] A modifications (Supplementary Fig. 4C). \n\nNext, we conducted a transcriptome-wide analysis to provide a comprehensive measurement of the role of m[6] A modifications in mRNA recruitment to SGs. To this end, we treated HeLa cells with a potent METTL3 inhibitor, STM2457, to reduce the m[6] A level on mRNAs (Fig.",
+        "text_sha256": "sha256:6a904f92d4d5702961e6e6a7b7e6ad1e8738b74ecbcd58d5bb72ba224937bcf6"
+      },
+      {
+        "evidence_key": "P:S-651f54d0cd9c9de57de2",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-651f54d0cd9c9de57de2",
+        "text": "4C) and induced SG formation using sodium arsenite. To distinguish the contribution of mRNA length and m[6] A in recruiting mRNA to SGs, mRNAs were grouped into bins based on the transcript length, and their fold enrichment in SGs was quantified using PHOTON. We found that, unlike the normal control HeLa cells shown in Fig. 4A, the length-dependent mRNA enrichment in SG was lost in HeLa cells \n\n**==> picture [209 x 130] intentionally omitted <==**",
+        "text_sha256": "sha256:1b72fdd8e4a72d8605ef58d0dbc7a9b88e99fd65474d11dd0c2cca25cd431083"
+      },
+      {
+        "evidence_key": "P:S-2ff047affd80ed9d9c3b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-2ff047affd80ed9d9c3b",
+        "text": "**==> picture [205 x 177] intentionally omitted <==**",
+        "text_sha256": "sha256:bbfdb4a150e82717351970de4959ad32c6ab2ba1c142f4dce0b7537fa004a2e4"
+      },
+      {
+        "evidence_key": "P:S-b066768376e751d00e85",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-b066768376e751d00e85",
+        "text": "using METTL3 inhibitor STM2457. n = 3 independent replicates. The box represents the range between the first and third quartiles of the data. The line within the box indicates the mean. The whiskersextend to the furthest data points. Source data are provided as a Source Data file. D Cumulative distribution plot of transcript abundance in sodium arsenite-induced SGs of STM2457 (100 μM)-treated HeLa cells, binned based on the transcript length. Numbers in the parentheses indicate the number of transcripts in each bin. Source data are provided as a Source Data file. \n\ntreated with STM2457 at 100 μM for 6 h (Fig. 4D) even though PHOTON captured a comparable number of transcripts in each transcript length bin between the control and the treatment group (n = 3 experiments per group). \n\nTogether, these results suggest that the correlation between the transcript length and the SG enrichment is mediated, atleast in part, by m[6] A modifications. \n\n## Discussion \n\nPHOTON offers a solution to extract subcellular transcriptomic information by assimilating both imaging and sequencing technologies. We demonstrated that PHOTON can be flexibly applied across ROIs that spanned order-of-magnitude size scales, from specific regions of the mouse ovarian tissue to various subcellular compartments. In-line image segmentation enabled ROI generation based on an extensive range of spatial features and automated the targeted photocleavage process over large numbers of cells or features. At the tissue scale, PHOTON accurately captured the transcriptome of GCs within their native tissue microenvironment.",
+        "text_sha256": "sha256:df3ed3c8c665288219d26dd130611c65bdac503644ff470b111c3c6a62af6f90"
+      },
+      {
+        "evidence_key": "P:S-f730b2b35ba082d23216",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-f730b2b35ba082d23216",
+        "text": "At the subcellular scale, we used PHOTON to enable selective sequencing of the RNA content in the nucleoli, the mitochondria, and the SGs and demonstrate the role of m[6] A modifications in the recruitment of mRNA into SGs. Taken together, these results show that PHOTON has the potential to uncover connections between spatial and transcriptomic information at diverse length scales. \n\nNature Communications | (2025) 16:4457 \n\n7 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-025-59801-3 \n\nAt the tissue level, we anticipate that PHOTON will be a useful alternative to existing spatial transcriptomics technology for fast, sensitive, and robust spatial annotation of cell types and states. Compared with PHOTON, existing spatial transcriptomics methods can be inaccessible due to the high cost. For example, array-based spatial barcoding methods powerfully profile large numbers of cells in tissue sections, but require the use of specialized microfluidics or custom arrays[29][,][30] . Furthermore, because library generation is not targeted to a cell population of interest, sequencing costs can be high (especially for human samples), and deep sequencing is required to adequately profile uncommon celltypes. In contrast, PHOTON reduces sequencing costs by targeting library generation to the cellular population of interest, which decreases the number of sequencing reads needed to adequately profile the sample. \n\nAt the subcellular level, PHOTON adds to the arsenal of RNA localization methods while offering unique advantages. First, PHOTON can be used to analyze “unpurifiable” structures such as the membrane-less biomolecular condensates that are challenging to access via conventional purification-based approaches.",
+        "text_sha256": "sha256:710fb078be50a0863d5320a6b174435ab338293afb99f42456f867818636b346"
+      },
+      {
+        "evidence_key": "P:S-135cca88170c407de428",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-135cca88170c407de428",
+        "text": "Second, PHOTON provides sequence information for both coding and non-coding RNA transcripts. If combined with long-read sequencing platforms, PHOTON can be readily adapted to allow transcript isoforms with distinct localization to be distinguished. Third, no genetic manipulation or antibody-based pulled down is needed in the PHOTON workflow, making it easy to scale while maintain the high specificity. Finally, the high spatial resolution of the laser light employed in PHOTON allows the selective sequencing of ROIs with a spatial resolution down to the optical diffraction limit (200–300 nm). This high spatial resolution is on par with the recent nanoscale array-based spatial transcriptomics technologies such as Seq-Scope (∼ 0.5–0.8 μm)[31] and Stereo-seq (220 nm spot size with a center-to-center distance of 500 or 715 nm)[32] . \n\nSince many subcellular compartments directly contribute to the regulation of RNAs, PHOTON offers opportunities for mechanistic discoveries of this process. For instance, SGs have been described as a triage for mRNAs during cellular stress, where they either store translationally silent mRNA, transfer mRNA transcripts to processing bodies where they will be degraded, or transfer mRNA back into polysomes for translation[33] . Thus, understanding which mRNAs are preferentially recruited to SGs during cellular stress and the underlying recruitment mechanisms would inform us on how cells cope with stress under physiological and pathological conditions. Using PHOTON, we confirmed a previous observation that long mRNAs tend to localize to SGs. Furthermore, we showed that this length-dependent enrichment of mRNAs in SGs was mediated, at least partially, by m[6] A as long mRNAs failed to show enrichment in SGs in cells lacking m[6] A.",
+        "text_sha256": "sha256:a4d03f19d9e787aad3586bec6315927b215d57b26c044a70c90ba339940a6f56"
+      },
+      {
+        "evidence_key": "P:S-1d9a90a3be9bb335d189",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-1d9a90a3be9bb335d189",
+        "text": "This observation is consistent with a recent study[28] . And it is likely that YTHDF proteins bind to m[6] A to drive the partition of long mRNAs into SGs. \n\nPHOTON leverages the laser setup used for the fluorescence recovery after photobleaching (FRAP) for photocleaving cDNA molecules within an ROI. This FRAP module can be readily found in a microscopy core facility at many institutes, which significantly lowers the barrier for accessibility. Depending on the samples of interest, different laser settings may be tested. Our study showed that a low laser power and a short dwell time could avoid the unspecific photocleaving of cDNA molecules outside of an ROI but at a cost of a reduced yield (Supplementary Fig. 1). However, given that a 10-fold increase in the laser power only enhanced the yield by approximately 5-8% and that the number of genes detected under varying laser powers were comparable (Supplementary Fig. 1E, F), we argue that our emphasis on specificity over yield is justified, especially for subcellular ROIs with small sizes (<1 µm in diameter). For tissue-level spatial transcriptomics, however, a higher laser power may be used as the margin for error in tissue-level ROIs is much greater than in subcellular ones. For the \n\nPHOTON experiment on ovarian tissue shown in Fig. 2, for example, we used a laser power of 15 mW. In general, we do not recommend increasing laser dwell time. This is because, in practice, a longer dwell time means a longer total experimental time.",
+        "text_sha256": "sha256:22bb0ef6c4efb189e992f1e4d639824574408494a7423e6775248ca887cb1b09"
+      },
+      {
+        "evidence_key": "P:S-337431ddd9a5fdea5591",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-337431ddd9a5fdea5591",
+        "text": "As photocleavage of thousands of subcellular compartments across numerous fields of view in multiple replicates is often needed for a single PHOTON experiment, keeping the total experimental time within a reasonable range (< a few hours) becomes important for the purpose of experimental efficiency and for preventing RNA molecules in the cells from degradation. \n\nOur current PHOTON pipeline builds upon the image segmentation capability of the built-in microscope software where an interactive interface is provided to allow users to set a series of parameters (e.g., size, intensity threshold, and circularity) and to apply various functions (e.g., erosion, hole-filling, and local maxima identification) to identify ROIs. With software upgrades bringing in artificial intelligence-based image segmentation capabilities to the microscope system, we expect that the types of biological structures to which PHOTON is applicable will continue to expand. \n\nWhile PHOTON offers several advantages over existing technologies to capture subcellular transcriptomic information, there are opportunities for further optimization. One limitation of the current PHOTON protocol is that only a single set of spatial regions can be selected within each specimen, and the data are inherently aggregated over these ROIs. Although this drawback can partially be mitigated by deconvolution algorithms, future versions of PHOTON may enable spatial barcoding of multiple classes of (and potentially individual) spatial regions. Potential approaches for multiplexed target selection include sequential rounds of photocleavage at different targets with in situ ligation of target-specific, barcoded PCR handles taking place between rounds.",
+        "text_sha256": "sha256:3f58ce6e130683e18daa39d745e9454446dfce591f43604135e816c2175afdf3"
+      },
+      {
+        "evidence_key": "P:S-a5bb29b8315eef615341",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a5bb29b8315eef615341",
+        "text": "Another limitation of PHOTON is that during photocleavage, the laser passes through the entire thickness of the specimen and can potentially uncage cDNA molecules above and below the focal plane outside of the targeted subcellular compartments. Currently, we navigate this effect by sectioning tissues to approximately single-cell thickness and optimizing optical conditions. Both the axial and lateral resolution of PHOTON could be further improved by targeting the RNA molecules with two-photon absorption, enabling fully volumetric photocleavage. \n\nIn summary, PHOTON is broadly applicable to spatial transcriptomic analyses of many organisms and cell types. Future use of PHOTON in conjunction with other methods with a similar design principle, such as PSS[17] may enable multi-modal profiling (e.g., a combination of the transcriptome, genome, and epigenome) of subcellular compartments to shed light on the mechanisms of gene regulation in a spatially resolved manner. \n\n## Methods \n\nAll research in this work complied with the regulations at UT Southwestern Medical Center. \n\n## Cell culture \n\nHeLa cells were obtained from ATCC (CRM-CCL-2). Cells were maintained in DMEM, high glucose, pyruvate (Thermo Fisher Scientific 11995073), 10% heat inactivated fetal bovine serum (Thermo Fisher Scientific 16140-071), and 1% Pen-Strep (Gibco, 15140-122) at 37 °C/5% CO2. The day before the PHOTON experiment, cells were washed with 1X dPBS, dissociated with 0.05% Trypsin-EDTA (Thermo Fisher Scientific 25300054), and collected into a new tube. Cell density was measured with the DeNovix CellDrop cell counter. Cells were plated in a Cellvis 96-well glass bottom plate (Cellvis P96-1.5H-N) pre-treated with Matrigel Matrix (Corning 354234) diluted in DMEM at a 1:50 dilution.",
+        "text_sha256": "sha256:40a95d2aeda3b65ab6e0f166a34550606265878e60ea91caf7ad966b13194d41"
+      },
+      {
+        "evidence_key": "P:S-13f5dd578c17c56e351b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-13f5dd578c17c56e351b",
+        "text": "To induce SG formation by sodium arsenite, cells were incubated in DMEM containing 0.2 mM sodium arsenite for 50 min at 37 °C/5% CO2. To induce SG formation by heat shock, cells were incubated at \n\nNature Communications | (2025) 16:4457 \n\n8 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-025-59801-3 \n\n42 °C for 90 min in a 5% CO2 incubator and then fixed with 0.4% PFA in pre-warmed PBS for 10 min at room temperature. Mettl3 conditional KO MEF Cells were a gift from Dr. Samie Jaffrey at Weill Medical College of Cornell University. To achieve Mettl3 KO, cells were treated with 500 nM 4-OHT for at least 5 days. Mettl3 KO was confirmed by Western Blot using an anti-Mettl3 antibody (Proteintech 15073-1-AP) at a dilution of 1:2000. \n\n## Tissue preparation \n\nAnimal-related experiments were performed with prior approval of the UT Southwestern Medical Center on Use and Care of Animals, in accordance with the guidelines established by the National Research Council Guide for the Care and Use of Laboratory Animals. Mice were housed in the UT Southwestern Medical Center animal facility, in an environment controlled for light (12 h on/off) and temperature – (21 23 °C) with ad libitum access to water and food. \n\nTwo 8-week-old female C57BL/6 mice (The Jackson Laboratory) were intraperitoneally injected with 5 IU pregnant mare serum gonadotropin (PMSG, Lee Biosolutions Inc 493102.5) and after 48 hours were injected with 5 IU human chorionic gonadotropin (hCG, MilliporeSigma CG10). After euthanasia, ovaries from stimulated mice were dissected and washed with 1X PBS for 3 times. Ovaries were then immersed in 4% PFA for two hours at room temperature.",
+        "text_sha256": "sha256:4f754d624e73be4e8860b3a2e3be71ab0dc1ef83ea027794a0be513a2676eb2c"
+      },
+      {
+        "evidence_key": "P:S-c208cfbba7711b00f854",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-c208cfbba7711b00f854",
+        "text": "After washing with 1X PBS for 3 times, ovaries were transferred into 10% sucrose solution and rotated overnight in the 4 °C cold room, followed by dehydration with 20% and 30% sucrose solution sequentially. Tissues were embedded in optimal cutting compound (OCT) media after kimwiping excess liquid, frozen on dry ice, and then stored at − 80 °C for later experiments. The ovarian tissue blocks were cut into sections of 10 μm thickness using Leica CM1950 Cryostat, and the sections were transferred into glass-bottom dishes (MatTek P35G-1.5-14-C) treated with 0.1% Poly-L-Lysine (Sigma-Aldrich P8920-100ML). \n\n## PHOTON work ow \n\nAll oligonucleotides for PHOTON were synthesized at IDT. Sequences were reported in Supplementary Table 1. \n\nSamples were fixed in a glass-bottom dish or plate with 0.4% PFA for 10 min at room temperature, followed by 3 times of 1X PBS wash. Permeabilization was performed using 0.5% Triton X-100 (Sigma Aldrich, T9284-100ML) supplemented with 0.4 U/μL RNase inhibitor (NEB, M0314L) for 15 min at room temperature, followed by 3 times of 1X PBS wash. Samples can then undergo sample-specific immunofluorescent staining to label the ROIs (see Immunostaining below). \n\nIn situ RT was performed in the RT mix (0.5 μM NPOM-RT, 0.5 μM NPOM-RT-Random, 10 U/μL Maxima Reverse Transcriptase (Thermo Fisher Scientific, EP0741), 0.4 U/μL RNase inhibitor, 1X RT Buffer, and 1 mM dNTPs (Thermo Fisher Scientific, R0194)) on a shaker for 30 min at room temperature followed by incubation overnight at 37 °C. Samples were protected from light during the RT process.",
+        "text_sha256": "sha256:5cfc01bdfd04b05efa97538fd4068d6965eb44481387b326ef689dd1899ab10c"
+      },
+      {
+        "evidence_key": "P:S-7de3a7b0522c7e2cac06",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-7de3a7b0522c7e2cac06",
+        "text": "ROIs were visualized on an inverted Nikon CSU-W1 Yokogawa spinning disk confocal microscope using either a 0.95 NA CFI Apochromat LWD Lambda S 20x water immersion objective lens (for tissue) or a 1.15 NA CFI Apo LWD Lambda S 40x water immersion objective lens (for cells). For GCs in the ovarian tissue, RO1s were selected manually. For nucleoli and SGs, the JOBS and GA3 modules in the NISElements AR software were used to enable real-time segmentation of ROIs using custom scripts. Selected ROIs were scanned for targeted photocleavage using an XY galvo scanning module via the Nikon Ti2LAPP system (Nikon) coupled with a 50 mW 405 nm laser line. For GCs in the ovarian follicles, photocleavage was performed with 37.5 mW laser power and a dwell time of 300 microseconds. For nucleoli and SGs, 2.5 mW laser power and a dwell time of 100 microseconds were used. \n\nFollowing photocleavage, samples were digested by incubation in reverse-crosslinking buffer (50 mM Tris pH 8.0, 50 mM NaCl, and 0.2% \n\nSDS) with 1:50 proteinase K (NEB P8107S) for 30 min at 55 °C in the dark. Nucleic acids were then extracted using the NucleoSpin Gel and PCR Clean-up XS Kit (Takara Bio 740611.250). \n\nLigation adapters were generated by annealing 10 μM Splint Oligos with 10 μM P7 Handles in STE Buffer (10 mM Tris pH 8.0, 50 mM NaCl, and 1 mM EDTA) at a total reaction volume of 50 μL. The annealing was performed by heating the oligo mix at 95 °C for two minutes, followed by a cool-down to 20 °C at a rate of 1 °C per minute. \n\nLigation was performed by mixing 10 μL of the annealed ligation adapters with the purified nucleic acids. The ligation reaction also included 20 U of RNase inhibitor and 1X T4 DNA Ligase Reaction Buffer, bringing the total reaction volume to 47.5 μL.",
+        "text_sha256": "sha256:e5a9815067c02131ea75c9da912695107f359e1ad921f5ec1721f5595f6a65d6"
+      },
+      {
+        "evidence_key": "P:S-bf72271390aa9158edff",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-bf72271390aa9158edff",
+        "text": "The ligation mix was then incubated for 30 min at room temperature on a shaker in the dark. After that, 2.5 μL of T4 DNA Ligase (NEB M0202L) was added to the mix, bringing the total reaction volume to 50 μL. The ligation mix was then incubated for 30 min at room temperature on a shaker in the dark. \n\nTo pull down cDNA molecules, 10 μL/sample MyOne Streptavidin C1 Dynabeads (Thermo Fisher Scientific 65001) were placed on a magnetic stand and washed once with 1X B&W-T Buffer (5 mM Tris pH 8.0, 1 M NaCl, 0.5 mM EDTA, and 0.05% Tween 20) and washed twice with 1X B&W-T Buffer supplemented with 0.4 U/μL RNase Inhibitor. After the washes, each 10 μL of the beads were resuspended in 100 μL of 2X B&T Buffer (10 mM Tris pH 8.0, 2 M NaCl, 1 mM EDTA, and 0.8 U/μL RNase inhibitor). \n\nFollowing ligation, 50 μL of nuclease-free water was added to the ligation mix, bringing the total volume up to 100 μL. Then, 100 μL of the MyOne Streptavidin C1 Dynabeads resuspended in 2X B&T Buffer was added to each sample. The mixture was rotated on an end-to-end rotator for 60 min at room temperature in the dark. After incubation, samples were placed on a magnetic stand. The supernatant was removed, and the beads were washed three times with 1X B&W-T buffer supplemented with 0.4 U/μL RNase inhibitor and washed once with STE buffer supplemented with 0.4 U/μL RNase inhibitor. \n\nAfter the washes, the MyOne Streptavidin C1 Dynabeads were resuspended in 50 μL of template switch mix for a second round of RT. The template switch mix consisted of 1X RT Buffer, 1 mM dNTPs, 10 U/μL Maxima Reverse Transcriptase, and 2.5 μM template switch oligomer (TSO). Resuspended beads were rotated on an end-to-end rotator for 30 min at room temperature in the dark, and then were shaken at 300 rpm for 90 min at 42 °C.",
+        "text_sha256": "sha256:2b482fabe2dfd0d2419e10cfc3304084f088c21f79cbb812033b819aaa0ee592"
+      },
+      {
+        "evidence_key": "P:S-83e0bfd3d5a8469bc686",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-83e0bfd3d5a8469bc686",
+        "text": "The beads were resuspended by pipetting every 30 min during the incubation period. After incubation, beads were washed with STE Buffer for 3 times at room temperature. \n\nAfter the STE buffer wash, beads were resuspended in 55 μL PCR Mix (1X Q5 Hot Start High-Fidelity 2X Master Mix (NEB M0494L), 0.45 μM PCR_TSO, and 0.45 μM PCR_P7). The PCR reaction was run on a BioRad T100 Thermal Cycler, which was programmed with an initial denaturation step of 98 °C for 30 s followed by five cycles of 98 °C at 10 s, 65 °C for 30 s, and 72 °C for 3 min. The final extension was 72 °C for 5 min. \n\nTo determine the number of additional cycles needed for the PCR reaction, after the initial 5 cycles of PCR amplification, samples were placed on a magnetic stand and 2.5 μL of supernatant from each sample was combined with 7.5 μL qPCR master mix (1X SYBR Green (Thermo Fisher Scientific S7563), 0.45 μM PCR_TSO, 0.45 μM PCR_P7, and 1X Q5 Hot Start High-Fidelity 2X Master Mix). qPCR was run on a LightCycler 480 II System (Roche Diagnostics 05015243001) in a 384well plate with the following program: 98 °C for 30 s; 35 cycles of 98 °C at 10 s, 65 °C at 30 s, and 72 °C at 60 s. 72 °C for 5 min. The number of qPCR cycles needed to reach 1/3 of the saturated signal was used as the additional PCR cycles needed for each sample. \n\nPCR products from the initial 5-cycle amplification were put back into the thermocycler for additional amplification using the number of cycles determined by the qPCR experiment. After the second round of PCR, samples were placed on a magnetic stand. Supernatant was \n\nNature Communications | (2025) 16:4457 \n\n9 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-025-59801-3 \n\ncollected and cleaned with 0.8X AMPure XP Beads (Beckman Colter A63880).",
+        "text_sha256": "sha256:f9d20f150b3a82d3d7d05c8531f46020f0172e90c30bbe7caa31e70c2f691ec7"
+      },
+      {
+        "evidence_key": "P:S-738049843f184aa4e3a7",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-738049843f184aa4e3a7",
+        "text": "The concentrations of purified PCR products were determined using the Qubit dsDNA HS Assay (Thermo Fisher Scientific Q32854). \n\nPurified PCR products were subject to sequencing library preparation using the Nextera XT Library Prep Kit (Illumina FC-131-1024) following the manufacturer’s instructions. The resulting libraries were cleaned with 0.7X SPRI Select DNA Beads (Beckman Coulter B23317). The concentration and size distribution of the sequencing libraries were quantified using the Agilent D1000 High Sensitivity Screentape Kit (Agilent 5067-5584) on an Agilent TapeStation 2200 system. \n\nDASH[18] was used to eliminate the rRNA and mitochondrial DNA in the sequencing libraries of mouse ovarian granulosa cells, Hela cell nucleoli, and SGs from MEF and HeLa cell lines. Briefly, crRNA oligos were ordered from IDT and pooled to a stock concentration of 100 μM in IDTE Buffer (10 mM Tris and 0.1 mM EDTA). 100 μM DASH tracrRNA was then mixed in equimolar ratio with the pooled crRNA to a final duplex concentration of 10 μM. The duplex was then heated at 95 °C for 5 min and allowed to cool to room temperature. The crRNA:tracrRNA complex was then aliquoted and stored at − 80 °C. To create the ribonucleoprotein (RNP) complex, the 10 μM crRNA:tracrRNA duplexes was combined with EnGen Spy Cas9 NLS (NEB M0646M) in equimolar amounts in 1X PBS to a final concentration of 1 μM. The RNP complex solution was then incubated at room temperature for 5–10 min for optimal formation of the RNP complex. For mitochondria PHOTON sequencing libraries, to retain the mitochondrial RNA species, the SEQuoia RiboDepletion kit (17006487, Bio-Rad) was used to eliminate fragments derived from both ribosomal RNA (rRNAs) and mitochondrial ribosomal RNA (mt rRNA).",
+        "text_sha256": "sha256:e0c1021d5b06e2dacd45734c1d61567130e3e6b012f6760b8a9313829d62c185"
+      },
+      {
+        "evidence_key": "P:S-967bab90ac9a82bfc82f",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-967bab90ac9a82bfc82f",
+        "text": "To perform in vitro digestion, each sequencing library was diluted to 10 nM in 20 μL nuclease-free water and mixed with 10 μL of 10X Cas9 Nuclease Reaction Buffer and 70 μL of the Cas9 RNP complex. Reactions were incubated at 37 °C for 60 min. After incubation, 1 μL of proteinase K was added to each reaction, and the mixture was further incubated at 56 °C for 10 min to release the DNA substrate from the Cas9 endonuclease. \n\nThe post-DASH libraries were cleaned up using 0.8X SPRI Select beads. The concentration and size distribution of the sequencing libraries were quantified using the Agilent D1000 High Sensitivity Screentape Kit (Agilent 5067-5584) on an Agilent TapeStation 2200 system. Libraries were sequenced on either an Illumina NextSeq 2000 or a NovaSeq X Plus. \n\n## Immunostaining \n\nTo visualize SGs during the PHOTON workflow, cells were incubated on a shaker for one hour at room temperature with the anti-eIF3eta antibody (Santa Cruz sc-137214) at a 1:200 dilution in 1X PBS supplemented with 0.4 U/μL RNase inhibitor. Cells were then washed three times for 5 min each with 1X PBS and incubated on a shaker in the dark for one hour at room temperature with of anti-mouse Alexa 647 secondary antibody (1:200 dilution, Thermo Fisher Scientific A-31571) supplemented with 0.4 U/μL RNase inhibitor. Cells were washed three times for five minutes each in 1X PBS, and post-fixed with 0.4% PFA in the dark for ten minutes at room temperature. After fixation, samples were washed three times for five minutes each with 1X PBS. \n\nGCs in the ovarian follicles can be directly visualized through the fluorescent signals on the RT primers. Nuclei were visualized by staining the tissue with DRAQ5 dye (abcam ab108410) at a 1:300 dilution in 1X PBS for 30–60 min at room temperature.",
+        "text_sha256": "sha256:c65a5e631e5c803b5b2a8a5690ea274208cabea726e52a9336802fc0be81226f"
+      },
+      {
+        "evidence_key": "P:S-a2f523a33d8597d70ca7",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a2f523a33d8597d70ca7",
+        "text": "Nucleoli were visualized using 2.5 μM nucleolus bright green dye (Dojindo Laboratories c511). \n\n## Mitochondrion staining \n\nThe HeLa cell mitochondria were labeled by MitoTracker Deep Red FM dye (Invitrogen, M22426). Live cells were incubated with the \n\nMitoTracker probe at 100 nM in growth medium at 37 °C for 1 h. MitoTracker dyes was retained by 2% formaldehyde fixation for 15 min in pre-warmed growth medium. Cells were triple washed in PBS with gentle shaking for 5 min, then permeabilized with 0.5% Triton X-100 in PBS at room temperature for 15 min. \n\n## SNR quantification \n\nApproximately 5000 HeLa cells per well were used in this experiment. A fixed percentage of cells were photocleaved for each well, and the samples were subject to the PHOTON workflow. The amount of the resulting library from each well was quantified and compared with that from the unblocked well (i.e., no photocleavage) using qPCR. For photocleavage, two different laser intensities were assessed. Low laser intensity was set at 2.5 mW with 100 microsecond dwell time. High laser intensity was set at 25 mW with 100 microsecond dwell time. \n\n## HCR-FISH \n\nTo validate the HeLa cell SG PHOTON dataset, we used HCR RNA-FISH targeting AHNAK, MN1, and ZACN. Briefly, sodium arsenite-treated HeLa cells were fixed with 4% PFA for ten minutes at room temperature. After fixation, cells were washed with 1X PBS twice for five minutes each at room temperature on a shaker. Cells were then permeabilized with ice-cold 70% Ethanol overnight at − 20 °C. After permeabilization, cells were washed twice for five minutes each with 1X PBS and incubated in antibody buffer (Molecular Instruments) for 60 min at room temperature on a shaker.",
+        "text_sha256": "sha256:6bac459966a58cf5f91d7a227b2987ae60af281ad1db22897bafb3a1c7ac4983"
+      },
+      {
+        "evidence_key": "P:S-af4a06a839cc24123497",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-af4a06a839cc24123497",
+        "text": "Cells were then incubated overnight at 4 °C with the anti-eIF3eta antibody diluted at 1:100 in Antibody Buffer. \n\nAfter primary antibody incubation, cells were washed three times for five minutes each with 1X PBS and incubated for 60 min at room temperature with the anti-mouse secondary antibody (Molecular Instruments) diluted at 1:100 in antibody buffer. After incubation, cells were post-fixed with 4% PFA for ten minutes at room temperature and washed twice for five minutes each with 1X PBS and then washed twice for five minutes each with 5X SSC buffer (Thermo Fisher Scientific AM9770). Cells were then pre-conditioned in pre-warmed hybridization buffer (Molecular Instruments) for 30 min at 37 °C. \n\nProbes targeting each mRNA were ordered from Molecular Instruments and were diluted to 16 nM in the probe hybridization buffer. These probes were added to the cells for overnight incubation at 37 °C. After incubation, cells were washed four times for five minutes each with probe wash buffer (Molecular Instruments) at 37 °C and were then washed 5 × 5 min with SSCT buffer (5X SSC and 0.1% Tween 20) at room temperature. After washing, cells were pre-conditioned in amplification buffer (Molecular Instruments) for 30 min at room temperature. \n\nTo amplify the signal, fluorescent hairpins matching each probe set and the antibody were first heated at 95 °C for 90 s and cooled to room temperature in the dark for 30 min. The harpins were then added to the amplification buffer to achieve a final concentration of 60 nM. Cells were incubated with the hairpin solution overnight in the dark at room temperature. After incubation, excess hairpins were removed by washing 5 × 5 min with SSCT at room temperature.",
+        "text_sha256": "sha256:d70fcc7fee9b700305b525f4592cccf4245f83ac48d04d93878f11be0b78dcdf"
+      },
+      {
+        "evidence_key": "P:S-7769b6c77587ff72a83a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-7769b6c77587ff72a83a",
+        "text": "Cells were imaged on an inverted Nikon CSU-W1 Yokogawa spinning disk confocal microscope with a 1.15 NA CFI Apo LWD Lambda S 40x water immersion objective lens. \n\n## METTL3 inhibitor treatment and m[6] A quantification in HeLa Cells \n\nThe METTL3 inhibitor STM2457 (Selleck Chemicals S9870) was used to induce acute depletion of mRNA m[6] A methylation. Cells were treated with 20 µM, 50 µM, and 100 µM STM2457, respectively, while the control cells received the same amount of DMSO. After 6 h of treatment, cells were lysed in TRI Reagent. Total RNA was then isolated using the Direct-zol RNA MiniPrep kit (Zymo Research R2053). Subsequently, \n\nNature Communications | (2025) 16:4457 \n\n10 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-025-59801-3 \n\nmRNA was isolated from the total RNA using Dynabeads Oligo(dT)25 (Thermo Fisher Scientific #61002). The m[6] A level on mRNAs was then colorimetrically quantified using the m[6] A RNA Methylation Quantification kit (abcam ab185912), with the absorbance signal measured at 450 nm by a CLARIOstar Plus plate reader (BMG Labtech). \n\n## Sequencing data analysis \n\nRaw paired sequencing reads were trimmed to eliminate remaining adapter sequences and bases with quality scores < 25. Sequences with less than 35 bp were also removed. Trimmed data were aligned to the reference genome using HiSAT2[34] . Features (genes, transcripts, and exons) were counted using featureCounts[35] . Pairwise differential expression analysis was performed using DESeq2[36] . \n\n## Statistics and reproducibility \n\nStatistical analyses of the data and the number of independent replicates for each experiment were detailed in the Results section. and included in the figure legends. No statistical method was used to predetermine sample size.",
+        "text_sha256": "sha256:8818c768dcd61425e4c6b88438bd4de14cf170bf5a56029c7b1bea773b821a25"
+      },
+      {
+        "evidence_key": "P:S-3a1b6c11a9355568709f",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-3a1b6c11a9355568709f",
+        "text": "No data were excluded from the analyses. The experiments were not randomized. And the Investigators were not blinded to allocation during experiments and outcome assessment. \n\n## Reporting summary \n\nFurther information on research design is available in the Nature Portfolio Reporting Summary linked to this article. \n\n## Data availability \n\nThe raw sequencing data supporting the findings of this study are available in the NCBI BioProject database with the BioProject ID # PRJNA1152621. The publicly available Slide-seqV2 data of the mouse ovary can be accessed through the GEO accession # GSM7689280. The publicly available RNA-seq data of isolated mouse ovaries can be accessed through the GEO accession # GSE119508. Source data are provided in this paper. \n\n## Code availability \n\nCustom code is available at https://github.com/HaiqiChenLab/ PHOTON. \n\n## References \n\n1. Buxbaum, A. R., Haimovich, G. & Singer, R. H. In the right place at the right time: visualizing and understanding mRNA localization. Nat. Rev. Mol. Cell Biol. 16, 95–109 (2015). \n\n2. Fasken, M. B. & Corbett, A. H. Mechanisms of nuclear mRNA quality control. RNA Biol. 6, 237–241 (2009). \n\n3. Pamula, M. C. & Lehmann R. How germ granules promote germ cell fate. Nat. Rev. Genet. 11, 803–821 2024. \n\n4. Anderson, P. & Kedersha, N. RNA granules. J. Cell Biol. 172, 803–808 (2006). \n\n5. Anderson, P. & Kedersha, N. RNA granules: post-transcriptional and epigenetic modulators of gene expression. Nat. Rev. Mol. Cell Biol. 10, 430–436 (2009). \n\n6. Buchan, J. R. & Parker, R. Eukaryotic stress granules: the ins and outs of translation. Mol. Cell 36, 932–941 (2009). \n\n7. Protter, D. S. W. & Parker, R. Principles and properties of stress granules. Trends Cell Biol. 26, 668–679 (2016). \n\n8. Pederson, T.",
+        "text_sha256": "sha256:31943bf5abf74a9db4aecc25f3a0e5f84fafee3a5498eb3f95d205ba75ce3821"
+      },
+      {
+        "evidence_key": "P:S-ceb410858dafbbb605fe",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-ceb410858dafbbb605fe",
+        "text": "The plurifunctional nucleolus. Nucleic Acids Res. 26, 3871–3876 (1998). \n\n9. Lee, T. A. et al. The nucleolus is the site for inflammatory RNA decay during infection. Nat. Commun. 13, 5203 (2022). \n\n10. Khong, A. et al. The stress granule transcriptome reveals principles of mRNA accumulation in stress granules. Mol. Cell 68, 808–820 (2017). \n\n11. Namkoong, S. et al. Systematic characterization of stress-induced RNA granulation. Mol. Cell 70, 175–187.e8 (2018). \n\n12. Lee, F. C. Y. & Ule, J. Advances in CLIP technologies for studies of protein-RNA interactions. Mol. Cell 69, 354–369 (2018). \n\n13. Xia, C. et al. Spatial transcriptome profiling by MERFISH reveals subcellular RNA compartmentalization and cell cycle-dependent gene expression. Proc. Natl. Acad. Sci. USA 116, 19490–19499 (2019). \n\n14. Eng, C. L. et al. Transcriptome-scale super-resolved imaging in tissues by RNA seqFISH. Nature 568, 235–239 (2019). \n\n15. Fazal, F. M. et al. Atlas of subcellular RNA localization revealed by APEX-Seq. Cell 178, 473–490 (2019). \n\n16. Padron, A., Iwasaki, S. & Ingolia, N. T. Proximity RNA labeling by APEX-Seq reveals the organization of translation initiation complexes and repressive RNA granules. Mol. Cell 75, 875–887 (2019). \n\n17. Mangiameli, S. M. et al. Photoselective sequencing: microscopically guided genomic measurements with subcellular resolution. Nat. Methods 20, 686–694 (2023). \n\n18. Gu, W. et al. Depletion of Abundant Sequences by Hybridization (DASH): using Cas9 to remove unwanted high-abundance species in sequencing libraries and molecular counting applications. Genome Biol. 17, 41 (2016). \n\n19. Bianco, S. et al. The ovulatory signal precipitates LRH-1 transcriptional switching mediated by differential chromatin accessibility. Cell Rep. 28, 2443–2454 (2019). \n\n20.",
+        "text_sha256": "sha256:593fe1717db04ad2898dafc24591e9f6a98a2875b37baea031c66b5986dd5060"
+      },
+      {
+        "evidence_key": "P:S-f46b460974946ef9a6df",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-f46b460974946ef9a6df",
+        "text": "Mantri, M. et al. A spatiotemporal molecular atlas of the ovulating mouse ovary. Proc. Natl. Acad. Sci. USA 121, e2317418121 (2024). \n\n21. Rosenbluh, J. et al. RMRP is a non-coding RNA essential for early murine development. PLoS ONE 6, e26270 (2011). \n\n22. Wolozin, B. & Ivanov, P. Stress granules and neurodegeneration. Nat. Rev. Neurosci. 20, 649–666 (2019). \n\n23. Sidrauski, C. et al. The small molecule ISRIB reverses the effects of eIF2α phosphorylation on translation and stress granule assembly. Elife 4, e05033 (2015). \n\n24. Ries, R. J. et al. m(6)A enhances the phase separation potential of mRNA. Nature 571, 424–428 (2019). \n\n25. Fu, Y. & Zhuang, X. m(6)A-binding YTHDF proteins promote stress granule formation. Nat. Chem. Biol. 16, 955–963 (2020). \n\n26. Dominissini, D. et al. Topology of the human and mouse m6A RNA methylomes revealed by m6A-seq. Nature 485, 201–206 (2012). \n\n27. Khong, A. et al. Limited effects of m(6)A modification on mRNA partitioning into stress granules. Nat. Commun. 13, 3735 (2022). \n\n28. Ries, R. J. et al. m(6)A governs length-dependent enrichment of mRNAs in stress granules. Nat. Struct. Mol. Biol. 30, 1525–1535 (2023). \n\n29. Zhang, X. et al. Dissecting mammalian reproduction with spatial transcriptomics. Hum. Reprod. Update 29, 794–810 (2023). \n\n30. Tian, L., Chen, F. & Macosko, E. Z. The expanding vistas of spatial transcriptomics. Nat. Biotechnol. 41, 773–782 (2023). \n\n31. Cho, C. S. et al. Microscopic examination of spatial transcriptome using Seq-Scope. Cell 184, 3559–3572.e22 (2021). \n\n32. Chen, A. et al. Spatiotemporal transcriptomic atlas of mouse organogenesis using DNA nanoball-patterned arrays. Cell 185, 1777–1792 (2022). \n\n33. Anderson, P. & Kedersha, N. Stress granules: the Tao of RNA triage. Trends Biochem. Sci.",
+        "text_sha256": "sha256:40872217f42f678c5d4ecf05a6d2a795bd2e5ff444ac14ecf0295316a0f8b616"
+      },
+      {
+        "evidence_key": "P:S-7ce854e1256133b12a04",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-7ce854e1256133b12a04",
+        "text": "33, 141–150 (2008). \n\n34. Kim, D., Langmead, B. & Salzberg, S. L. HISAT: a fast spliced aligner with low memory requirements. Nat. Methods 12, 357–360 (2015). \n\n35. Liao, Y., Smyth, G. K. & Shi, W. featureCounts: an efficient general purpose program for assigning sequence reads to genomic features. Bioinformatics 30, 923–930 (2014). \n\n36. Love, M. I., Huber, W. & Anders, S. Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biol. 15, 550 (2014). \n\n## Acknowledgements \n\nH.C. acknowledges support from the Cecil H. and Ida Green Center for Reproductive Biology Sciences Endowment and NIH/NHGRI (R01HG013358). \n\nNature Communications | (2025) 16:4457 \n\n11 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-025-59801-3 \n\n## Author contributions \n\nH.C. conceived and supervised the project. S.R. and Q.X. performed experiments. Q.C. and X.Z. prepared and processed tissue samples. H.C., F.C. and S.M.M. designed the method prototype. H.C., Q.X., and S.R. analyzed data. H.C., Q.X. and S.R. wrote the manuscript with input from all authors. Co-first authors reserve the right to display their names in the first place when citing this article in their CVs, resumes, biosketches, and other relevant documents. \n\n## Competing interests \n\nH.C., S.M.M., and F.C. are on a patent related to this work. F.C. is an academic founder of Curio Biosciences and Doppler Biosciences, and scientific advisor for Amber Bio. The remaining authors declare no competing interests. \n\n## Additional information \n\nSupplementary information The online version contains supplementary material available at https://doi.org/10.1038/s41467-025-59801-3. \n\nCorrespondence and requests for materials should be addressed to Haiqi Chen.",
+        "text_sha256": "sha256:0a6fab15ef796a010b5d61560b0df1def4b8aabceabf387d910ce67c07d50c06"
+      },
+      {
+        "evidence_key": "P:S-b31ff31ee058cf1290df",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-b31ff31ee058cf1290df",
+        "text": "Reprints and permissions information is available at http://www.nature.com/reprints \n\nPublisher’s note Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations. \n\nOpen Access This article is licensed under a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License, which permits any non-commercial use, sharing, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons licence, and indicate if you modified the licensed material. You do not have permission under this licence toshare adapted material derived from this article or parts of it. The images or other third party material in this article are included in the article’s Creative Commons licence, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons licence and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this licence, visit http:// creativecommons.org/licenses/by-nc-nd/4.0/. \n\n© The Author(s) 2025 \n\nPeer review information Nature Communications thanks Shixian Lin, Yichen Si, and the other anonymous reviewer(s) for their contribution to the peer review of this work. A peer review file is available. \n\nNature Communications | (2025) 16:4457 \n\n12",
+        "text_sha256": "sha256:28951fab67cf00d5a9abc07b5182b45a15a16dca3e73c52cc8e6ddeb63e80629"
+      }
+    ]
+  },
+  "paper_id": "10.1038/s41467-025-59801-3",
+  "paper_sha256": "sha256:cb7f2e3cbdd140938ede67ee1988c7303126216c0738d255fd01a0097ee48958",
+  "parent_output_sha256s": [],
+  "parent_reviews": [],
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "review_source_sha256": "sha256:43e004270b14e48af181eaadfba4a0cb8e0b2070541fad13cfee6e3c5772b83b",
+  "reviewer_spans": [
+    {
+      "char_end": 343,
+      "char_start": 332,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5dd9c6882983a37cfc24",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #1",
+      "text_sha256": "sha256:bb5637404007ecf46212c7de9acbdccb2e5e387fa64a4c5dcb56e89b8da6a709"
+    },
+    {
+      "char_end": 369,
+      "char_start": 346,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-671970f750bd1e3e1f12",
+      "source_role": "reviewer_report",
+      "text": "(Remarks to the Author)",
+      "text_sha256": "sha256:51e736a6f14e162299ba4783b83b452aaedafe35abd275d495265496d8d006b1"
+    },
+    {
+      "char_end": 1099,
+      "char_start": 372,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3c2a5012025b75783e99",
+      "source_role": "reviewer_report",
+      "text": "In this manuscript, the authors develop a new method based on high-resolution imaging and high-throughput sequencing that can capture the subcellular spatial distribution of the transcriptome. The authors first used this method to analyze RNA of granulosa cells in the ovary, and then analyzed RNA in nucleolus and stress granules. Finally, the authors used this method to confirm that the length of the mRNA and the number of m6A modifications are the key factors affecting whether the mRNA can enter into the stress granules. I quite like this new method developed by the authors, but I also have some concerns and questions that I would like to share with the authors to improve the quality of this manuscript. Major Points:",
+      "text_sha256": "sha256:61b553cb1c9a7c43096ff4500995761f7a470801292b9e9094b40e6e74292a7b"
+    },
+    {
+      "char_end": 2930,
+      "char_start": 1102,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-69b352cda738b0075513",
+      "source_role": "reviewer_report",
+      "text": "1. The author mentioned that “stronger laser power means that more cDNA molecules can be photocleaved”. Ideally, all cDNA in the regions of interest should be photocleaved to fully capture the transcriptomes. Have the laser conditions (laser power and dwell time) been tested to allow photocleavage of all cDNA? For different experimental materials, photocleavage was performed with different laser power and dwell time. How can the laser power and dwell time be determined for different materials? Moreover, as shown in Figure 2A and Figure 3A, the fluorescence signal remained strong after photocleavage. It may be a concern that some cDNA was not photocleaved, which may affect the integrity of the transcriptome dataset. 2. The authors analyzed RNA in stress granules induced by sodium arsenite through PHOTON. Many different stresses can induce the formation of stress granules, such as heat stress, sorbitol, and hydrogen peroxide treatment. Is there a difference in the RNA of stress granules induced by different stress treatments? Also have the authors discovered any factors other than length and number of m6A modifications that affect mRNA entry into stress granules from the PHOTON data? 3. In result 4, the authors wrote “By pairing the SG PHOTON data with the whole cell PHOTON data ......genes out of 1616 genes; 864 overlapped SG-depleted genes out of 1780 genes)”. It would have been better for the authors to graph the data in this passage in the manuscript for better understanding. In addition to this, the authors selected AHNAK, MN1 and ZACN3 mRNAs to be imaged simultaneously with the stress granules and demonstrated that the data obtained through PHOTON are more precise than existing public databases. However, the number of mRNAs selected by the authors was too small to draw appropriate conclusions.",
+      "text_sha256": "sha256:64d482d0883f13451cd968aafacec591b9dca6381eb04b2a8421aa7ac6cefbe7"
+    },
+    {
+      "char_end": 3206,
+      "char_start": 2933,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a95f8b6c6695bfe4b58a",
+      "source_role": "reviewer_report",
+      "text": "4. In Figure 3D, the MN1 and ZACN mRNA signals were much less than AHNAK mRNA signals. Is this due to the difference in the abundance of RNA itself, or the poor sensitivity of the hybrid probe of MN1 and ZACN mRNA? Suggest to detect the content of AHNAK, MN1 and ZACN mRNA.",
+      "text_sha256": "sha256:4e993d70e8acd3bf390212375cfff9b9848036e797dd12b5f5aec676c90bb54f"
+    },
+    {
+      "char_end": 3603,
+      "char_start": 3209,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-584796e404e5ba63b9ba",
+      "source_role": "reviewer_report",
+      "text": "5. The authors used PHOTON to analyze the transcriptome of GCs in the ovary, nucleoli and SGs. These subcellular compartments are granular and easily distinguishable under the microscope. However, the transcriptome of some lamellar subcellular compartments, such as mitochondria and endoplasmic reticulum, is also of interest, and whether PHOTON is applicable to these subcellular compartments.",
+      "text_sha256": "sha256:5023b9fcf9158ecb9a7d3355f70e2f10c375b8287a02e74b7529990f3e8d5ced"
+    },
+    {
+      "char_end": 3619,
+      "char_start": 3606,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3550ae682a5434477fcc",
+      "source_role": "reviewer_report",
+      "text": "Minor Points:",
+      "text_sha256": "sha256:0625204142169f6c6b5cd3dea831140674199faa8c42423e7f7d0aab56d5d146"
+    },
+    {
+      "char_end": 3844,
+      "char_start": 3622,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-aea22c32ebaf3c13f180",
+      "source_role": "reviewer_report",
+      "text": "1. In Figure 3C, it is sufficient to add only the white dashed outlines. There is no need to add yellow arrows to indicate that these are SGs that have not been photocleaved. Yellow arrows make the images more complicated.",
+      "text_sha256": "sha256:abd2c7d5728d69f7479ef203a15fbaeec4506ccadcd15bdd293319b0648f4496"
+    },
+    {
+      "char_end": 3946,
+      "char_start": 3847,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-37d1da36439715e6be0f",
+      "source_role": "reviewer_report",
+      "text": "2. In the legend of Figure 3E, the authors need to indicate whether n represents cells or granules.",
+      "text_sha256": "sha256:ae6322cd39351b228772b9eeccabeb3a749954d467228f9aed58f91251ab1cfd"
+    },
+    {
+      "char_end": 4289,
+      "char_start": 3949,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3138a5ee46ebdb89110e",
+      "source_role": "reviewer_report",
+      "text": "3. In Figure 4, the order in which the figures are placed does not match the order in which they appear in the text. 4. Fig S4 needs additional data, such as immunoblotting to show that Mettl3 is reduced in the Mettl3 KO cell line. And the vertical coordinate of Fig S4 needs to be labeled “Mettl3 KO vs. WT” for the reader's understanding.",
+      "text_sha256": "sha256:7eb217b2af39c9ffa80ff6aaaafb2b660095a9dc9c5d02ed9377c1bd642961c0"
+    },
+    {
+      "char_end": 4396,
+      "char_start": 4292,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f4058b7d70223b46c2de",
+      "source_role": "reviewer_report",
+      "text": "5. There are some errors in the spelling of “m6A” in Figs. 4A, 4B and S4. “6” needs to be superscripted.",
+      "text_sha256": "sha256:61572b5238f5acfe3b18b9099102ae216c35033a3b29b613035066a7a9145d7b"
+    },
+    {
+      "char_end": 4491,
+      "char_start": 4399,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-23b043b453f7e665d0aa",
+      "source_role": "reviewer_report",
+      "text": "6. In Fig4D, it would be better to label it “100 µM STM2457” for the reader's understanding.",
+      "text_sha256": "sha256:23c2289b405aad3595a0029e23db624520d1468daa3eaca28f6422af1501df37"
+    },
+    {
+      "char_end": 4505,
+      "char_start": 4494,
+      "reviewer_id_hash": "REV-13422d9c0463ee4c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-23ba45b1cc27b4dcbedb",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #2",
+      "text_sha256": "sha256:284d5cd0cc09c4ad897c03eb93c16d928a4736304aee51b128d9ca3f0c86474e"
+    },
+    {
+      "char_end": 4534,
+      "char_start": 4508,
+      "reviewer_id_hash": "REV-13422d9c0463ee4c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c574f1b72eec013be8a1",
+      "source_role": "reviewer_report",
+      "text": "## (Remarks to the Author)",
+      "text_sha256": "sha256:b38337db1eff07919f014d2d1aed7fae07b89a322c1e85d46fb57634c9d7e0f5"
+    },
+    {
+      "char_end": 6048,
+      "char_start": 4537,
+      "reviewer_id_hash": "REV-13422d9c0463ee4c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fe5e41e796b6e84f1019",
+      "source_role": "reviewer_report",
+      "text": "The manuscript describes an intelligent method for the isolation and bulk sequencing analysis of RNA from fixed tissue sections or cells. The authors demonstrate the utility and superior performance of their protocol compared to established biochemical RNA isolation methods by analysing nucleolar RNA in cultured cells, mRNA tissue sections and RNA from stress granules in cultured cells. To explore the utility of the method in analysing the RNA in subcellular structures they the RNA content of stress granules and the mechanism targeting specific RNA subset to these structures. They analysed stress granules from fibroblasts of wild type and Mettl3 mutant mice. Their method was showed that there was a reduction of RNAs in the mutant cells suggesting that RNA methylation is required for targeting to the granules. They confirmed the result by qPCR for a few transcripts. Finally they analysed all stress granule RNAs which are sensitive to the activity of Mettl3 by comparing the content of granules from treated and untreated Hela cells with a methylation inhibitor. They found that the selective accumulation of mRNAs in the granules is at least partially attributed to reduced m6A modifications. Overall I found the experiments well controlled and presented. The method is intelligent, versatile and relatively easily applicable provided that the automatic selection of subecellualr structures works seamlessly. The manuscript is concise and well written. I have two major suggestions for improvement:",
+      "text_sha256": "sha256:c4ebab1814aa107c874ef5c360644e7c26ad4959f315252a39d52bbdfe1ae083"
+    },
+    {
+      "char_end": 6521,
+      "char_start": 6051,
+      "reviewer_id_hash": "REV-13422d9c0463ee4c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d6fcc408134f56c1a7d9",
+      "source_role": "reviewer_report",
+      "text": "1) The authors provide extensive control for the specificity of the photocleavage method. However they don't provide any indication for the sensitivity of the method. How many tissue sections of ovaries did they process in Figure 2? How thick were the sections? Is there an estimate of how many cells granuloma cells they had to treat to generate a representative library. This is important to know if the method is going to be useful for future spatial tissue analysis.",
+      "text_sha256": "sha256:be4209140261cddf7d742f298842cf55388d85cc35fc3b4834eeec75ed011cbb"
+    },
+    {
+      "char_end": 6919,
+      "char_start": 6524,
+      "reviewer_id_hash": "REV-13422d9c0463ee4c",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-725bfec881367998080c",
+      "source_role": "reviewer_report",
+      "text": "2) In figure 3 the authors claim the superiority of Photon compared to biochemical methods in identifying true components of stress granules. I think that these data may be of interest and and would suggest to include a supplementary table showing the RNAs enriched both in their and the publicly available data set, the unique RNAs of their data set and the unique RNas of the previous dataset.",
+      "text_sha256": "sha256:f58ac455e4830a1fb3662c1111e0d6c7e4a6df61286b2e14306f6ab8ad18532f"
+    },
+    {
+      "char_end": 6936,
+      "char_start": 6922,
+      "reviewer_id_hash": "REV-d7c32453df4bf5da",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-510dbe2e86bb8bc77ed9",
+      "source_role": "reviewer_report",
+      "text": "## Reviewer #3",
+      "text_sha256": "sha256:7421e358ce7586e94ff2437dd0a8e26a146d66b59c3974a6a80802c7290bf856"
+    },
+    {
+      "char_end": 6965,
+      "char_start": 6939,
+      "reviewer_id_hash": "REV-d7c32453df4bf5da",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ec17e526e55ff744dea5",
+      "source_role": "reviewer_report",
+      "text": "## (Remarks to the Author)",
+      "text_sha256": "sha256:b38337db1eff07919f014d2d1aed7fae07b89a322c1e85d46fb57634c9d7e0f5"
+    },
+    {
+      "char_end": 7986,
+      "char_start": 6968,
+      "reviewer_id_hash": "REV-d7c32453df4bf5da",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7326dd4ee840f5af78a1",
+      "source_role": "reviewer_report",
+      "text": "The manuscript by Rajachandran et al. presents PHOTON (Photoselection of Transcriptome over Nanoscale), a new method for spatial transcriptome profiling selected regions from a tissue with subcellular precision. The PHOTON workflow first captures RNAsin situ using reverse transcription primers with fluorophore, then selectively uncages cDNAs within target regions of interest (ROI) using near-UV laser light. Subsequently the uncaged cDNAs are ligated by PCR handle and all such ligated cDNAs from a tissue sample are prepared as a next-generation sequencing library. The authors demonstrate that PHOTON can capture the whole transcriptome of a target cell type or of a target subcellular compartment at tissue level. The advantage of this technique lies in its simplicity, low cost, and high spatial resolution. The current limitation is that PHOTON can only select one set of ROI from each tissue sample, and all cDNAs from those ROI are aggregated for “bulk” sequencing without preserving the spatial information.",
+      "text_sha256": "sha256:1908e7d0a66f8c7f62b0a672ed065b20017f13abfc981aa6fd0570b0bd17b2dc"
+    },
+    {
+      "char_end": 8468,
+      "char_start": 7989,
+      "reviewer_id_hash": "REV-d7c32453df4bf5da",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c6b54f2ef0de1052cf07",
+      "source_role": "reviewer_report",
+      "text": "The authors provide informative evaluation of PHOTON’s effectiveness in isolating ROI, it would also be helpful to provide more quantitative results on the quality of transcriptome profiling. Relevant metrics may include the transcript density captured by PHOTON, the amount of RNA diffusion during sample preparation and imaging, and the unbiasedness of the transcript capture (for example, the relative amount of mitochondria RNA, mature RNA, and unspliced RNA in the readout).",
+      "text_sha256": "sha256:ca3d65c0daf8130a492b430c026b00c9edf3aad40562e66133a6fa476b8b738d"
+    },
+    {
+      "char_end": 9396,
+      "char_start": 8471,
+      "reviewer_id_hash": "REV-d7c32453df4bf5da",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b3ca0e11e009cb87ca10",
+      "source_role": "reviewer_report",
+      "text": "As the authors acknowledged, sequencing based spatial transcriptomics technologies also provide whole transcriptome profiling while preserving the spatial information of the captured RNA molecules. The authors compared PHOTON with Slide-seq V2 in terms of the relative gene expression profiles they capture, but recent sub-micron resolution technologies such as Stereo-seq and Seq-cope may be more relevant as they provide subcellular as opposed to the near cellular resolution of Slide-seq. Although a direct comparison may require substantial resources, the authors could comment on the quantitative comparison between PHOTON and those subcellular resolution sequencing based platforms in terms of the metrics mentioned above (transcript density, effective spatial resolution, unbiasedness) in addition to the cost effectiveness of their workflows, versatility across tissue and sample types, and/or other relevant aspects.",
+      "text_sha256": "sha256:37914c899fe260c7fb19d7d9df9a64c7e6938ab1ebfbf7f9149293f31ca94a06"
+    },
+    {
+      "char_end": 10133,
+      "char_start": 9399,
+      "reviewer_id_hash": "REV-d7c32453df4bf5da",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-90bd9cf5e34f6d4a187b",
+      "source_role": "reviewer_report",
+      "text": "PHOTON’s ability to target membrane-less organelles that are difficult to isolate biochemically makes it a valuable addition to existing spatial profiling toolkit, and the application in revealing the role of m6A modification on mRNA’s partition into SG is impressive. A potential limiting factor is the automated ROI selection for high-throughput profiling since it highly relies on imaging segmentation which could be challenging for many cell types and (sub)cellular structures. It would be helpful for potential users if the authors could provide more details on the automated ROI selection procedure and discuss more about which types of biological structures in which types of tissues could be reliably identified and segmented.",
+      "text_sha256": "sha256:fba2222ab6024afdc6d046aa2a4ed2be33367d8c49708adba6605d110e2d602b"
+    },
+    {
+      "char_end": 10144,
+      "char_start": 10136,
+      "reviewer_id_hash": "REV-d7c32453df4bf5da",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5a066e508d64daddd34f",
+      "source_role": "reviewer_report",
+      "text": "## Minor",
+      "text_sha256": "sha256:b894665e8aa1b3b1bd7c477cb64966c49a961dac0686bb61abb3f6b7883c74fc"
+    },
+    {
+      "char_end": 10351,
+      "char_start": 10147,
+      "reviewer_id_hash": "REV-d7c32453df4bf5da",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-65c2bd61d1e37dab673d",
+      "source_role": "reviewer_report",
+      "text": "The combination of poly dT and randomer could potentially achieve less biased capture of all RNA species, is it observed in practice that PHOTON is less biased than other techniques that only use poly dT?",
+      "text_sha256": "sha256:84d55944b2a4e2da3ac2eaf4e90a43fe9a0571cd517c14369b9625922f586b15"
+    },
+    {
+      "char_end": 10659,
+      "char_start": 10354,
+      "reviewer_id_hash": "REV-d7c32453df4bf5da",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-206d032d2cb67385af1a",
+      "source_role": "reviewer_report",
+      "text": "Was the pairwise comparison of expression levels observed by different technologies (PHOTON vs Slide-seq V2 and RNAseq on mechanically isolated cells) restricted to genes that were captured by both technologies? It was not clear from the figure how to interpret the comparison among lowly expressed genes.",
+      "text_sha256": "sha256:590f94e6da13caf338d673a5684b52af5337ca3eb4cf34b5bfc2b93ae370cb7a"
+    },
+    {
+      "char_end": 10716,
+      "char_start": 10662,
+      "reviewer_id_hash": "REV-d7c32453df4bf5da",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1f7b53ec6e8b45bf7453",
+      "source_role": "reviewer_report",
+      "text": "It may be helpful to combine Figure S1A with Figure 1.",
+      "text_sha256": "sha256:1ef3144b9ef45d878c0ae11fa326014eb330cfb403b74ee28fe7c8d9b2e383c5"
+    },
+    {
+      "char_end": 10764,
+      "char_start": 10753,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fa12e5cdae356dd07bb8",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #1",
+      "text_sha256": "sha256:bb5637404007ecf46212c7de9acbdccb2e5e387fa64a4c5dcb56e89b8da6a709"
+    },
+    {
+      "char_end": 10851,
+      "char_start": 10767,
+      "reviewer_id_hash": "REV-f21c33609ef39b59",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c8470ec7a10fd57326db",
+      "source_role": "reviewer_report",
+      "text": "(Remarks to the Author) the authors have addressed all my questions in the revision.",
+      "text_sha256": "sha256:639bf914faa96d06647473b005ea334d167872c827869b3fcdb519fbbb0d5ce2"
+    },
+    {
+      "char_end": 10865,
+      "char_start": 10854,
+      "reviewer_id_hash": "REV-13422d9c0463ee4c",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-30b074abe1617585c204",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #2",
+      "text_sha256": "sha256:284d5cd0cc09c4ad897c03eb93c16d928a4736304aee51b128d9ca3f0c86474e"
+    },
+    {
+      "char_end": 10938,
+      "char_start": 10868,
+      "reviewer_id_hash": "REV-13422d9c0463ee4c",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2f7f5b1ae6d6fcade46c",
+      "source_role": "reviewer_report",
+      "text": "(Remarks to the Author) The authors addressed my comments satisfactory",
+      "text_sha256": "sha256:2a94c33abee47d3c01f950f5633449cceee7c1b5ae1fa99c13bbe91be51c5fc1"
+    },
+    {
+      "char_end": 10952,
+      "char_start": 10941,
+      "reviewer_id_hash": "REV-d7c32453df4bf5da",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-144ebe7e96c05509f4da",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #3",
+      "text_sha256": "sha256:0c3c590d45b97461806503ee702336ddc4ba58f5d399601b254764e24de23f2e"
+    },
+    {
+      "char_end": 10978,
+      "char_start": 10955,
+      "reviewer_id_hash": "REV-d7c32453df4bf5da",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a3b231e61e840d651552",
+      "source_role": "reviewer_report",
+      "text": "(Remarks to the Author)",
+      "text_sha256": "sha256:51e736a6f14e162299ba4783b83b452aaedafe35abd275d495265496d8d006b1"
+    },
+    {
+      "char_end": 11118,
+      "char_start": 10981,
+      "reviewer_id_hash": "REV-d7c32453df4bf5da",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8dc0e1391d865e787467",
+      "source_role": "reviewer_report",
+      "text": "I think the authors have provided good explanation and evidence to answer my questions. I don't have further concern for this manuscript.",
+      "text_sha256": "sha256:fb286c8293766b418a9fbfddeda818b18c86171fe29a86bf38c8680f3d670cf0"
+    },
+    {
+      "char_end": 11493,
+      "char_start": 11121,
+      "reviewer_id_hash": "REV-d7c32453df4bf5da",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-77eeb6c7a60ccdaab757",
+      "source_role": "reviewer_report",
+      "text": "**Open Access** This Peer Review File is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons license, and indicate if changes were made.",
+      "text_sha256": "sha256:9f5503e73ea3fb699da0e8f25b90596ae62506f4f1d25c12131452f2fbe3794e"
+    },
+    {
+      "char_end": 12014,
+      "char_start": 11496,
+      "reviewer_id_hash": "REV-d7c32453df4bf5da",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5b4c13d61b2d969f0d6b",
+      "source_role": "reviewer_report",
+      "text": "In cases where reviewers are anonymous, credit should be given to 'Anonymous Referee' and the source. The images or other third party material in this Peer Review File are included in the article’s Creative Commons license, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons license and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder.",
+      "text_sha256": "sha256:ddbfe802f72f3577234c94fb1661a26f0990ff2ebe989431c516ad29bf834949"
+    },
+    {
+      "char_end": 12099,
+      "char_start": 12017,
+      "reviewer_id_hash": "REV-d7c32453df4bf5da",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3a8273e99750e7b86a3f",
+      "source_role": "reviewer_report",
+      "text": "To view a copy of this license, visit https://creativecommons.org/licenses/by/4.0/",
+      "text_sha256": "sha256:17c778bc80f96df013272279f66fd6abb191c070a82d8cf6c994e6e4de5944a0"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

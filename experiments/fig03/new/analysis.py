@@ -13,6 +13,8 @@ import numpy as np
 import pandas as pd
 from scipy.stats import spearmanr
 
+from gear.calibration_assets import load_calibration_release
+
 HERE = Path(__file__).resolve().parent
 PROJECT_ROOT = HERE.parents[2]
 CONFIG_PATH = HERE / "config.json"
@@ -51,7 +53,7 @@ def load_config(path: Path = CONFIG_PATH) -> dict[str, Any]:
     """Load and minimally validate the figure configuration."""
     config = read_json(path)
     required = {
-        "source_dir",
+        "calibration_release",
         "model_config",
         "output_dir",
         "horizons",
@@ -62,6 +64,11 @@ def load_config(path: Path = CONFIG_PATH) -> dict[str, Any]:
     if missing:
         raise ValueError(f"Fig.3 config lacks required keys: {missing}")
     return config
+
+
+def calibration_source_dir(config: Mapping[str, Any]) -> Path:
+    """Resolve inputs through the frozen public calibration registry."""
+    return load_calibration_release(str(config["calibration_release"])).asset_root
 
 
 def clean_generated_outputs(output_dir: Path) -> None:
@@ -115,7 +122,7 @@ def rank_decile(values: pd.Series) -> pd.Series:
 
 def load_hgb_predictions(config: Mapping[str, Any]) -> pd.DataFrame:
     """Load only the formal HGB prediction rows required by the figure."""
-    source_dir = resolve_path(str(config["source_dir"]))
+    source_dir = calibration_source_dir(config)
     columns = [
         "paper_id",
         "publication_year",
@@ -142,7 +149,7 @@ def load_hgb_predictions(config: Mapping[str, Any]) -> pd.DataFrame:
 
 def build_score_summary(config: Mapping[str, Any], panel_dir: Path) -> pd.DataFrame:
     """Audit the official two-field ASPR production score."""
-    source_dir = resolve_path(str(config["source_dir"]))
+    source_dir = calibration_source_dir(config)
     scores = pd.read_parquet(source_dir / "official_aspr_scores.parquet")
     required = {"raw_prediction_score", "aspr_score", "paper_id"}
     if not required.issubset(scores.columns):
@@ -296,7 +303,7 @@ def _bootstrap_decile_shares(
 
 def load_overall_metrics(config: Mapping[str, Any]) -> pd.DataFrame:
     """Load the 12 registered formal-HGB overall OOF metrics."""
-    source_dir = resolve_path(str(config["source_dir"]))
+    source_dir = calibration_source_dir(config)
     metrics = pd.read_csv(source_dir / "oof_metrics.csv")
     selected = metrics[
         metrics["model_family"].eq(str(config["model_family"]))

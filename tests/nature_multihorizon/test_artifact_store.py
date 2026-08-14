@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from aspr.nature_multihorizon.artifact_store import (
+from gear.nature_multihorizon.artifact_store import (
     ArtifactExistsError,
     ArtifactStore,
     IncompleteStageError,

@@ -23,8 +23,8 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from aspr.corpus import normalize_openalex_id
-from aspr.nature_multihorizon.openalex_controls_v6_1 import _target_metadata
+from gear.corpus import normalize_openalex_id
+from gear.nature_multihorizon.openalex_controls_v6_1 import _target_metadata
 
 
 def sha256_file(path: Path) -> str:

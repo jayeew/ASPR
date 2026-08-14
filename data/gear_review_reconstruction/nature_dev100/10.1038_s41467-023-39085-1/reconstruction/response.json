@@ -1,0 +1,617 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:93ac92e3c924c988c1ebad8b44c1ade71bbba73dc8b9935423a13812dba60cb9",
+  "input_sha256": "sha256:8436ff53efd6c7a05adcd983d8db69f3602c080963206658ea131f752b1fbf6e",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:f4efd502085074911757c6bdbc70c82e667a95996e9900fec33db0553fca32ea",
+  "package_id": "RSP-56d08521ede2f2d3b799",
+  "paper_id": "10.1038/s41467-023-39085-1",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "point_id": "N-01",
+      "rationale": "The reviewer described an automated AFM/CNN workflow that connects tissue-scale mechanics with biological and clinical measurements; the final paper retains the corresponding spatial registration and prediction workflow.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-2af7b6bc6dfcb337"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8d9833d6cdc8e3e69fd2"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-3489c80ed1ddf4299a32"
+      ],
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "point_id": "N-02",
+      "rationale": "The reviewer maintained that FFPE use was not empirically validated against pre-fixation stiffness. The response explicitly states that paired pre- and post-fixation stiffness was not assessed, and the final paper reports morphology comparisons rather than such paired measurements.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-693a9b33e043dc35"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-2a7ecc262f9bc4641964"
+      ],
+      "round_ids": [
+        "round_3"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-02"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "point_id": "S-01",
+      "rationale": "The reviewer’s description identifies automated AFM acquisition and calibration as a substantive technical contribution, and the final paper documents calibration and stability controls.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-693a9b33e043dc35"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d4f3a17d0ba78f3bf6ce"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-S-01"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "point_id": "S-02",
+      "rationale": "The reviewer identified the spatial association of STIFMaps with EMT-related biology; the final paper reports marker correlations with predicted elasticity rather than with collagen or DAPI intensity alone.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-693a9b33e043dc35"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-ae2c933bdbb52ff4b3be"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-S-02"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "point_id": "S-03",
+      "rationale": "The reviewer highlighted the PDX experiments examining stiffness-associated metastatic behavior. The final paper retains controlled soft-versus-stiff PDX comparisons with mechanosignaling, EMT, and metastasis measurements.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-693a9b33e043dc35"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-ae2c933bdbb52ff4b3be"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-S-03"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-3489c80ed1ddf4299a32"
+      ],
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "point_id": "W-01",
+      "rationale": "The reviewer’s requested paired FFPE validation was not performed according to the response. The final paper bases the FFPE extension on preserved collagen morphology and nonetheless states that elasticity of the original tissue can be predicted.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-693a9b33e043dc35"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-2a7ecc262f9bc4641964"
+      ],
+      "round_ids": [
+        "round_3"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-c6b25e3d55ea9d80826b",
+        "RR:SRC-R-74c3d995385ce7581675"
+      ],
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "point_id": "W-02",
+      "rationale": "The reviewer questioned whether the abstract’s final interpretation was substantiated. The final paper continues to present clinical spatial associations alongside PDX experiments while using language of direct implication for human tumor metastasis.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-6982d55e1d2b39d2"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-f46d02a7789d1ef99a36"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W-02"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f1ba8ac204c4e5bc5092",
+        "RR:SRC-R-e20612644aa88a658c1a"
+      ],
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "point_id": "W-03",
+      "rationale": "The response clarifies training choices and that other architectures were tried. The final paper states that AlexNet performed best but does not provide comparative performance results for the alternative architectures requested by the reviewer.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-2af7b6bc6dfcb337"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-27aeb769beb90d468a48"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W-03"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-0fe294e6a0d26f5b3070",
+        "RR:SRC-R-45eefb20da7d3aacf88f",
+        "RR:SRC-R-5ed0737142c998f09b2e"
+      ],
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "point_id": "W-04",
+      "rationale": "The response reports reanalyses at reduced indentation. The final methods still specify 20 μm sections and a 2 μm fitting protocol, leaving the substrate-effect sensitivity analysis only partially represented in the final paper.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-2af7b6bc6dfcb337"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c8658446a43b65908695"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W-04"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-74c3d995385ce7581675"
+      ],
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "point_id": "W-05",
+      "rationale": "The reviewer maintained that requested clarifications had not received substantial changes. The final paper continues to combine method development, animal experiments, and clinical association claims, so the requested framing clarification remains relevant.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-6982d55e1d2b39d2"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-51533e76242884a855f6"
+      ],
+      "round_ids": [
+        "round_3"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W-05"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-eef6178762650cb4eb44"
+      ],
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "point_id": "Q-01",
+      "rationale": "The reviewer asked whether STIFMap can determine collagen bundling. The response says this requires further work, while the final paper states that collagen morphology informs elasticity predictions without resolving bundling as a distinct output.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-693a9b33e043dc35"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-3df24228dfa9a7d01307"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-bfbd3ffeb1f5ac5fc136"
+      ],
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "point_id": "Q-02",
+      "rationale": "The reviewer asked about histopathological differences in metastases from soft- and stiff-matrix PDX tumors. The response discusses primary-tumor histopathology and metastatic lesion frequency and size, while the final paper does not provide the requested metastatic histopathology comparison.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-693a9b33e043dc35"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-85329b5948e42a8e97aa"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q-02"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-86901c82dd5c4b967fc0"
+      ],
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "point_id": null,
+      "rationale": "Additional mechanosignaling markers, including YAP, were supplied in response to the reviewer’s request and are represented in the final PDX results.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-693a9b33e043dc35"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-feb1dbbb4ede3581c409"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-74149a12806f5af1a086"
+      ],
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "point_id": null,
+      "rationale": "The requested Twist1 assessment was added according to the response, and the final paper includes Twist1 with ZEB1 and SLUG analyses in TNBC samples.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-693a9b33e043dc35"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d4db9da10af575a68758"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-02"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-6a57de3128a7eae2ed0c"
+      ],
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "point_id": null,
+      "rationale": "The response describes before-and-after reference-gel checks for tip integrity, and the final paper reports these calibration controls.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-2af7b6bc6dfcb337"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c216f509f426e93269f5"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-03"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-18210f1a97c36c55961c",
+        "RR:SRC-R-a10d8d8d1a0c37cda394"
+      ],
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "point_id": null,
+      "rationale": "The response describes cantilever-clearance tests addressing the surface-topography concern, but no corresponding final-paper span independently documents the control.",
+      "resolution_status": "unverifiable",
+      "reviewer_id_hashes": [
+        "REV-2af7b6bc6dfcb337"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-adf37186f19f4b0ee8af"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-04"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-e20612644aa88a658c1a"
+      ],
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "point_id": null,
+      "rationale": "The response supplies architecture, initialization, training, and overfitting details. The final methods document the patient-level training-validation split and network settings.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-2af7b6bc6dfcb337"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-27aeb769beb90d468a48"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-05"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-5d56c2752dda873cd6d6",
+            "P:S-6b2fa17bc82a28d81796"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-02",
+          "schema_version": "aspr_gear",
+          "severity": "major",
+          "suggested_action": "",
+          "text": "The FFPE extension is presented as prediction of the original tissue elasticity, but the final evidence compares collagen morphology across processing states rather than directly validating predicted elasticity against matched pre-fixation measurements."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-a13dce00e97c061d4c8b",
+            "P:S-822cb5cd28e5aa41ed57",
+            "P:S-1c1c139681ba0cb489ce"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-01",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "",
+          "text": "STIFMap combines automated AFM, image registration, and a CNN to generate micron-scale elasticity maps that can be aligned with tumor biomarkers."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-023-39085-1",
+    "questions": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-4ee030c5cbf3655c0232"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-01",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "",
+        "text": "Can the morphology-driven model distinguish collagen bundling from other collagen features that covary with predicted stiffness?"
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-ef6f33661f11277b0867"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-02",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "",
+        "text": "Do lung metastases from soft- and stiff-matrix PDX tumors differ histopathologically, beyond the reported differences in lesion number and size?"
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-b2152b047aca5e9cb8c7",
+          "P:S-13ec4dd3f788f91862cf"
+        ],
+        "external_verification_required": false,
+        "point_id": "S-01",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "",
+        "text": "The automated acquisition workflow includes positional precision testing, reference-gel calibration before and after sampling, and tissue-stability and loading-rate controls."
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-44525ea0a9b959af742d",
+          "P:S-8f5476d9ea1698c3afcd"
+        ],
+        "external_verification_required": false,
+        "point_id": "S-02",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "",
+        "text": "Predicted elasticity is associated with mechanosignaling and EMT-marker readouts in patient material, with comparisons against collagen and DAPI intensity."
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-7a88cc76ecedc9f374de",
+          "P:S-ef6f33661f11277b0867"
+        ],
+        "external_verification_required": false,
+        "point_id": "S-03",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "",
+        "text": "Controlled soft- and stiff-matrix PDX experiments connect matrix condition with integrin and YAP signaling, EMT-related expression, and metastatic lesion measurements."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-a13dce00e97c061d4c8b",
+        "P:S-1c1c139681ba0cb489ce",
+        "P:S-8f5476d9ea1698c3afcd",
+        "P:S-4c662573be92982dbda2"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "The study develops STIFMap, combining automated AFM, image registration, and a CNN to infer spatial stromal elasticity in breast tissue and relate it to mechanosignaling and EMT-associated markers. The final paper provides technical calibration, patient-tissue associations, and matrix-perturbation PDX experiments, while the FFPE and human-disease interpretations remain bounded by the available validation and association evidence."
+    },
+    "weaknesses": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-5d56c2752dda873cd6d6",
+          "P:S-6b2fa17bc82a28d81796"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-01",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "",
+        "text": "The FFPE claim lacks direct validation against stiffness measured in matched tissue before fixation; preserved collagen morphology alone does not establish recovery of original elasticity."
+      },
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-a13dce00e97c061d4c8b",
+          "P:S-4c662573be92982dbda2",
+          "P:S-3de07d05b57686a0b3c5"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-02",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "",
+        "text": "The clinical results are spatial associations between predicted elasticity and EMT-related markers, whereas the interpretation extends to direct implication of tension-induced EMT in human breast-tumor metastasis."
+      },
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-7260b50b215112554444",
+          "P:S-c36873ad61053acab1be"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-03",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "",
+        "text": "AlexNet is stated to outperform ResNet, DenseNet, and neural-architecture-search models, but the final paper does not provide comparative results that substantiate the architecture choice."
+      },
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-0337a9faccee4d09ab6e"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-04",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "",
+        "text": "The final methods specify 2 μm indentation in 20 μm sections, but do not present the requested substrate-effect sensitivity analysis alongside this protocol."
+      },
+      {
+        "aspect": "presentation_reproducibility",
+        "evidence_keys": [
+          "P:S-a13dce00e97c061d4c8b",
+          "P:S-4c662573be92982dbda2"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-05",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "",
+        "text": "The framing continues to span instrument development, mechanistic PDX experiments, and clinical association claims, leaving the principal advance and the evidentiary boundary between these components insufficiently explicit."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-86901c82dd5c4b967fc0"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-7a88cc76ecedc9f374de"
+      ],
+      "ledger_id": "L-01",
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "residual_summary": "Additional mechanosignaling markers are included in the final PDX results.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-feb1dbbb4ede3581c409"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-74149a12806f5af1a086"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-8f5476d9ea1698c3afcd"
+      ],
+      "ledger_id": "L-02",
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "residual_summary": "Twist1 staining and its spatial association with predicted elasticity are included in the final clinical analysis.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d4db9da10af575a68758"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-6a57de3128a7eae2ed0c"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-b2152b047aca5e9cb8c7"
+      ],
+      "ledger_id": "L-03",
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "residual_summary": "Reference-gel calibration before and after sampling is documented in the final paper.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c216f509f426e93269f5"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-18210f1a97c36c55961c",
+        "RR:SRC-R-a10d8d8d1a0c37cda394"
+      ],
+      "final_paper_evidence_keys": [],
+      "ledger_id": "L-04",
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "residual_summary": "The response describes clearance controls for potential cantilever-beam contact, but their final-paper placement cannot be verified from the provided final spans.",
+      "resolution_status": "unverifiable",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-adf37186f19f4b0ee8af"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-e20612644aa88a658c1a"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-c36873ad61053acab1be"
+      ],
+      "ledger_id": "L-05",
+      "paper_id": "10.1038/s41467-023-39085-1",
+      "residual_summary": "Training configuration and a patient-level training-validation split are documented in the final methods.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-27aeb769beb90d468a48"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

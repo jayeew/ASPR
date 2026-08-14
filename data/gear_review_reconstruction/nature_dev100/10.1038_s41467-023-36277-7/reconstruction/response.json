@@ -1,0 +1,489 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:1d490b2a001673cad5ea7886271ee67214ff799a089dea549537090f2e15498c",
+  "input_sha256": "sha256:9ab77abba58d6d8e9a244dd0090d762b0896367b2a8940421a2919a3caecc93c",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:d1762d811f2563e3f101fc82a248a0c78004f224fd8fb697d97fd2869eea1e2c",
+  "package_id": "RSP-eb7cd15799a472fe5228",
+  "paper_id": "10.1038/s41467-023-36277-7",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-36277-7",
+      "point_id": "N-1",
+      "rationale": "The reviewer identified this as the first patient cohort for TEFM, and the final paper reports seven variants in seven individuals from five families with functional characterization.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-a48d23d84aa117cb"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-bdc5082da08e1f1ede23"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-675255005207b6ea550a"
+      ],
+      "paper_id": "10.1038/s41467-023-36277-7",
+      "point_id": "N-2",
+      "rationale": "The request to temper variant-level structural inference remains relevant because the final paper states that P5 variant pathogenicity is unclear and could not be tested in available material.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-2ac0512157e4c4c3"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-fac81056c13b438582e7"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-02"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-36277-7",
+      "point_id": "S-1",
+      "rationale": "The reviewer specifically identified functional studies and modelling as support; the final paper reports reduced distal transcripts and impaired recombinant-mutant transcriptional activity.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-19a159909682b3a9"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-04ccbf22f7a5350ced1f"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-03"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-36277-7",
+      "point_id": "S-2",
+      "rationale": "The reviewer described the integrated patient, cellular, biochemical, and zebrafish design; the final paper documents patient-tissue transcript defects and animal-model findings.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-a48d23d84aa117cb"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-bdc5082da08e1f1ede23"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-04"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f14d143147f2676e1f83"
+      ],
+      "paper_id": "10.1038/s41467-023-36277-7",
+      "point_id": "S-3",
+      "rationale": "The reviewer regarded the NMJ evidence as substantive while requesting interpretation by muscle type; the final paper reports separate fast- and slow-muscle colocalization analyses and an F0 knockout movement phenotype.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-34d8925183dec46b"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-0baa3f634368e91acf30",
+        "RR:SRC-R-c13d908a8c8f8cc00a36"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-05"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-675255005207b6ea550a",
+        "RR:SRC-R-284f375519f6324a1690"
+      ],
+      "paper_id": "10.1038/s41467-023-36277-7",
+      "point_id": "W-1",
+      "rationale": "The reviewer requested more defensible structural interpretation. The final discussion narrows the interpretation but independently acknowledges unavailable P5 material, untested consequences, and relatively high allele frequencies.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-2ac0512157e4c4c3"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-fac81056c13b438582e7",
+        "RR:SRC-R-4fe6f6e28e1b69d67faf"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-06"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-add832a325a96465941e",
+        "RR:SRC-R-388626e5d8343da89266"
+      ],
+      "paper_id": "10.1038/s41467-023-36277-7",
+      "point_id": "W-2",
+      "rationale": "The reviewer challenged the inference from elevated mtDNA copy number to replication. The final paper presents competing explanations and explicitly states that further research is required to test the replication-transcription switch model.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-2ac0512157e4c4c3"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-1d671f7d83e362290c20"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-07"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-92e11a2a4bb8f664f832",
+        "RR:SRC-R-c829aa68c9ea0a41a905"
+      ],
+      "paper_id": "10.1038/s41467-023-36277-7",
+      "point_id": "W-3",
+      "rationale": "The reviewers sought clarification of variable OXPHOS findings. The final paper documents discordance between fibroblasts and muscle and offers residual activity or other factors as possible explanations rather than resolving the source of variation.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-19a159909682b3a9"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8bfa4f43da61fc7c55b8"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-08"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f14d143147f2676e1f83"
+      ],
+      "paper_id": "10.1038/s41467-023-36277-7",
+      "point_id": "Q-1",
+      "rationale": "The reviewer asked how distinct innervation changes affect interpretation. The final paper provides fast- and slow-muscle measurements but states that further work is required to determine the functional implication for TEFM and the NMJ.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-34d8925183dec46b"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-0baa3f634368e91acf30",
+        "RR:SRC-R-c13d908a8c8f8cc00a36"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-09"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-a9e9929c4d68921caefd",
+        "RR:SRC-R-5ecb8761ab04ee060a75"
+      ],
+      "paper_id": "10.1038/s41467-023-36277-7",
+      "point_id": null,
+      "rationale": "The initial requests for a clearer cohort-level phenotype summary were addressed through revised clinical presentation and a summary table.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-19a159909682b3a9"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a76b51b00fc150026823",
+        "RR:SRC-R-45921e972dc0f49739cf",
+        "RR:SRC-R-10ec41ba0c9dc37a86b2",
+        "RR:SRC-R-9957c407839b9405ea56",
+        "RR:SRC-R-de710e59abdc15b395dd",
+        "RR:SRC-R-cd1cb364a32f4895c1de",
+        "RR:SRC-R-66d7560d819e1b688896"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-10"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-21be9024a21be6d91503",
+        "RR:SRC-R-0a4b872e663088af0531"
+      ],
+      "paper_id": "10.1038/s41467-023-36277-7",
+      "point_id": null,
+      "rationale": "The ambiguity about whether Figure 4 panels represented fibroblasts or muscle was addressed in the final figure caption.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-a48d23d84aa117cb"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-49c41e206ff07895a41d",
+        "RR:SRC-R-4f3fa2ce6ba2d97afab3"
+      ],
+      "round_ids": [
+        "round_1",
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-11"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-45d1ba813b0161d9bda1"
+      ],
+      "paper_id": "10.1038/s41467-023-36277-7",
+      "point_id": null,
+      "rationale": "The final paper names the anti-TEFM reagent, but the supplied final-paper evidence does not permit verification of the requested direct recombinant-protein validation.",
+      "resolution_status": "unverifiable",
+      "reviewer_id_hashes": [
+        "REV-2ac0512157e4c4c3"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-63c38edf6faa1735a2bf"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-12"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-0feeb4277b0de6486d63"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-2",
+          "schema_version": "aspr_gear",
+          "severity": "major",
+          "suggested_action": "Constrain variant-specific conclusions for P5 and identify the evidence needed to establish the effects of p.(Arg34Trp) and p.(Lys188Arg).",
+          "text": "The disease-gene association is limited by unresolved pathogenicity of the two P5 missense variants: patient material was unavailable, direct transcriptomic, proteomic, and steady-state tests were not performed, and both variants have relatively high population allele frequencies."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-86efb440961245d31270",
+            "P:S-cbfa88aca9c06d5e84d6"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-1",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "State the cohort size, clinical range, and functional link precisely when framing the contribution.",
+          "text": "The work establishes a TEFM-associated mitochondrial disease cohort, identifying seven variants in seven individuals from five unrelated families and linking the clinical presentations to impaired mitochondrial transcription."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-023-36277-7",
+    "questions": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-b785befe48f6175b3675",
+          "P:S-bfc475d9e9a0f7fabd09"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Define how the fast- and slow-muscle morphological changes alter neuromuscular function and how those findings map to human NMJ dysfunction.",
+        "text": "How do the observed fast- and slow-muscle innervation abnormalities determine the functional contribution of TEFM to the NMJ and their relevance to the human phenotype?"
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-2fadfe3ad172e7f95f0a",
+          "P:S-62ff01e6ac69267556c1"
+        ],
+        "external_verification_required": false,
+        "point_id": "S-1",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Retain the explicit link between patient transcript patterns and the biochemical processivity assays.",
+        "text": "Patient muscle and fibroblast transcript data show preferential loss of promoter-distal mitochondrial transcripts, while recombinant mutant assays provide a direct functional route to impaired TEFM-supported transcription."
+      },
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-3cceef2898ce8844c1e6",
+          "P:S-5c70eb7000249afc8a48",
+          "P:S-62ff01e6ac69267556c1"
+        ],
+        "external_verification_required": false,
+        "point_id": "S-2",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Maintain the cross-system presentation of patient cells, affected muscle, and recombinant proteins.",
+        "text": "The evidence spans patient-derived fibroblasts and muscle, quantitative protein and OXPHOS measurements, RNA-seq, and purified mutant TEFM, enabling comparison of tissue-specific and molecular effects."
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-b785befe48f6175b3675",
+          "P:S-bfc475d9e9a0f7fabd09",
+          "P:S-da0e88dca0db9927a7aa"
+        ],
+        "external_verification_required": false,
+        "point_id": "S-3",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Keep fast- and slow-muscle analyses distinct when describing the zebrafish NMJ evidence.",
+        "text": "The zebrafish experiments measure presynaptic and postsynaptic colocalization separately in fast and slow muscle and add an F0 CRISPR model with a movement phenotype, extending the in vivo evidence beyond a single readout."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-cbfa88aca9c06d5e84d6",
+        "P:S-62ff01e6ac69267556c1",
+        "P:S-bfc475d9e9a0f7fabd09"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "The study links biallelic TEFM variants in seven patients to a broad childhood-onset mitochondrial neurological and neuromuscular phenotype. Patient samples show promoter-distal mitochondrial transcript loss, mutant TEFM impairs transcriptional activity in vitro, and zebrafish models show movement and NMJ abnormalities. The principal residual limits concern variant attribution in P5, interpretation of elevated mtDNA copy number, and the basis of tissue-variable OXPHOS findings."
+    },
+    "weaknesses": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-0feeb4277b0de6486d63"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Separate experimentally established effects from structural predictions and prioritize direct assays for the P5 variants when material becomes available.",
+        "text": "Variant-level causality is incomplete for P5: the paper cannot test the two missense variants in patient material and reports that their pathogenicity remains unclear."
+      },
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-65c5b14560d427c48e8e",
+          "P:S-04d424c80492d8c3a74c"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-2",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Frame the replication-transcription switch as an unresolved model and distinguish the observed mtDNA copy-number increase from demonstrated replication initiation.",
+        "text": "Higher mtDNA copy number in P1 and P2 together with reduced prevention of CSBII termination is compatible with, but does not establish, a TEFM replication-transcription switch; the paper gives competing interpretations and states that further research is required."
+      },
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-3cceef2898ce8844c1e6",
+          "P:S-5c70eb7000249afc8a48",
+          "P:S-64d754501654a59dafc3"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-3",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "State the measured tissue-specific OXPHOS findings separately from proposed explanations and avoid treating residual activity as a demonstrated cause of clinical variability.",
+        "text": "The OXPHOS phenotype remains difficult to generalize across patients and tissues: muscle shows marked respiratory-chain changes, whereas most examined fibroblasts do not, and the proposed explanation by residual activity or additional factors remains tentative."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-a9e9929c4d68921caefd",
+        "RR:SRC-R-5ecb8761ab04ee060a75"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-86efb440961245d31270",
+        "P:S-d929cbc8ce919c30f33d"
+      ],
+      "ledger_id": "L-01",
+      "paper_id": "10.1038/s41467-023-36277-7",
+      "residual_summary": "Clinical presentation was reorganized and summarized; no retained final-state point is required for the original cohort-description requests.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a76b51b00fc150026823",
+        "RR:SRC-R-45921e972dc0f49739cf",
+        "RR:SRC-R-10ec41ba0c9dc37a86b2",
+        "RR:SRC-R-9957c407839b9405ea56",
+        "RR:SRC-R-de710e59abdc15b395dd",
+        "RR:SRC-R-cd1cb364a32f4895c1de",
+        "RR:SRC-R-66d7560d819e1b688896"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-21be9024a21be6d91503",
+        "RR:SRC-R-0a4b872e663088af0531"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-ae644022316375b2f84c",
+        "P:S-faef9d324a17e3241148"
+      ],
+      "ledger_id": "L-02",
+      "paper_id": "10.1038/s41467-023-36277-7",
+      "residual_summary": "The final Figure 4 caption identifies fibroblast and skeletal-muscle panels.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-49c41e206ff07895a41d",
+        "RR:SRC-R-4f3fa2ce6ba2d97afab3"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-38caeebf29e922355a46",
+        "RR:SRC-R-063553332a808eba1dd2"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-65c5b14560d427c48e8e"
+      ],
+      "ledger_id": "L-03",
+      "paper_id": "10.1038/s41467-023-36277-7",
+      "residual_summary": "The wording of the CSBII termination statement was corrected; the remaining biological uncertainty is retained separately as W-2.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-86b77649813de9a653c7"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-45d1ba813b0161d9bda1"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-c2a065dcac9628c7f086"
+      ],
+      "ledger_id": "L-04",
+      "paper_id": "10.1038/s41467-023-36277-7",
+      "residual_summary": "The final paper specifies the anti-TEFM antibody, but the supplied final-paper evidence cannot verify direct recombinant-protein validation.",
+      "resolution_status": "unverifiable",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-63c38edf6faa1735a2bf"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

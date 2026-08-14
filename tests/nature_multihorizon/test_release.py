@@ -8,9 +8,9 @@ from pathlib import Path
 
 import pandas as pd
 
-from aspr.nature_multihorizon.artifact_store import ArtifactExistsError, hash_json
-from aspr.nature_multihorizon.contracts import ReleaseChannel
-from aspr.nature_multihorizon.release import (
+from gear.nature_multihorizon.artifact_store import ArtifactExistsError, hash_json
+from gear.nature_multihorizon.contracts import ReleaseChannel
+from gear.nature_multihorizon.release import (
     REQUIRED_FROZEN_ARTIFACTS,
     ReleaseAuditError,
     ReleaseError,

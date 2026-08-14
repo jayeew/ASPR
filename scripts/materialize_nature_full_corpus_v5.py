@@ -12,7 +12,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from aspr.corpus import audit_corpus, build_topics_and_edges, make_views, root_work_columns  # noqa: E402
+from gear.corpus import audit_corpus, build_topics_and_edges, make_views, root_work_columns  # noqa: E402
 from scripts.nature_portfolio_v5 import (  # noqa: E402
     DEFAULT_V5_CORPUS_DIR,
     DEFAULT_V5_OUTPUT_DIR,

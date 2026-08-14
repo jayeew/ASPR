@@ -1,0 +1,506 @@
+{
+  "$defs": {
+    "NoveltyAssessment": {
+      "additionalProperties": false,
+      "properties": {
+        "judgment": {
+          "$ref": "#/$defs/NoveltyJudgment"
+        },
+        "limiting_points": {
+          "items": {
+            "$ref": "#/$defs/ReviewPoint"
+          },
+          "maxItems": 3,
+          "title": "Limiting Points",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "aspr_gear",
+          "default": "aspr_gear",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "supporting_points": {
+          "items": {
+            "$ref": "#/$defs/ReviewPoint"
+          },
+          "maxItems": 3,
+          "title": "Supporting Points",
+          "type": "array"
+        }
+      },
+      "required": [
+        "judgment"
+      ],
+      "title": "NoveltyAssessment",
+      "type": "object"
+    },
+    "NoveltyJudgment": {
+      "enum": [
+        "positive",
+        "mixed",
+        "negative",
+        "not_discussed"
+      ],
+      "title": "NoveltyJudgment",
+      "type": "string"
+    },
+    "PointSeverity": {
+      "enum": [
+        "none",
+        "minor",
+        "major"
+      ],
+      "title": "PointSeverity",
+      "type": "string"
+    },
+    "QAResult": {
+      "additionalProperties": false,
+      "properties": {
+        "disagreement_fields": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Disagreement Fields",
+          "type": "array"
+        },
+        "notes": {
+          "default": "",
+          "title": "Notes",
+          "type": "string"
+        },
+        "paper_semantic_pass": {
+          "default": false,
+          "title": "Paper Semantic Pass",
+          "type": "boolean"
+        },
+        "passed": {
+          "title": "Passed",
+          "type": "boolean"
+        },
+        "schema_version": {
+          "const": "aspr_gear",
+          "default": "aspr_gear",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "supported_point_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Supported Point Ids",
+          "type": "array"
+        },
+        "unsupported_point_ids": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Unsupported Point Ids",
+          "type": "array"
+        }
+      },
+      "required": [
+        "passed"
+      ],
+      "title": "QAResult",
+      "type": "object"
+    },
+    "ReferenceTrace": {
+      "additionalProperties": false,
+      "properties": {
+        "author_response_keys": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Author Response Keys",
+          "type": "array"
+        },
+        "paper_id": {
+          "title": "Paper Id",
+          "type": "string"
+        },
+        "point_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Point Id"
+        },
+        "rationale": {
+          "default": "",
+          "title": "Rationale",
+          "type": "string"
+        },
+        "resolution_status": {
+          "$ref": "#/$defs/ResolutionStatus"
+        },
+        "reviewer_id_hashes": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Reviewer Id Hashes",
+          "type": "array"
+        },
+        "reviewer_quote_keys": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Reviewer Quote Keys",
+          "type": "array"
+        },
+        "round_ids": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Round Ids",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "aspr_gear",
+          "default": "aspr_gear",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "trace_id": {
+          "title": "Trace Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "trace_id",
+        "paper_id",
+        "reviewer_quote_keys",
+        "round_ids",
+        "reviewer_id_hashes",
+        "resolution_status"
+      ],
+      "title": "ReferenceTrace",
+      "type": "object"
+    },
+    "ResolutionStatus": {
+      "enum": [
+        "resolved",
+        "partially_resolved",
+        "persists",
+        "unverifiable"
+      ],
+      "title": "ResolutionStatus",
+      "type": "string"
+    },
+    "ReviewAspect": {
+      "enum": [
+        "contribution",
+        "novelty_prior_art",
+        "method",
+        "experiment_evidence",
+        "results_conclusion",
+        "presentation_reproducibility",
+        "other"
+      ],
+      "title": "ReviewAspect",
+      "type": "string"
+    },
+    "ReviewPoint": {
+      "additionalProperties": false,
+      "properties": {
+        "aspect": {
+          "$ref": "#/$defs/ReviewAspect"
+        },
+        "evidence_keys": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Evidence Keys",
+          "type": "array"
+        },
+        "external_verification_required": {
+          "default": false,
+          "title": "External Verification Required",
+          "type": "boolean"
+        },
+        "point_id": {
+          "minLength": 1,
+          "title": "Point Id",
+          "type": "string"
+        },
+        "schema_version": {
+          "const": "aspr_gear",
+          "default": "aspr_gear",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "severity": {
+          "$ref": "#/$defs/PointSeverity",
+          "default": "none"
+        },
+        "suggested_action": {
+          "default": "",
+          "title": "Suggested Action",
+          "type": "string"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "point_id",
+        "aspect",
+        "text"
+      ],
+      "title": "ReviewPoint",
+      "type": "object"
+    },
+    "ReviewSummary": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_keys": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Evidence Keys",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "aspr_gear",
+          "default": "aspr_gear",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "text": {
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "text",
+        "evidence_keys"
+      ],
+      "title": "ReviewSummary",
+      "type": "object"
+    },
+    "RevisionLedgerEntry": {
+      "additionalProperties": false,
+      "properties": {
+        "author_response_keys": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Author Response Keys",
+          "type": "array"
+        },
+        "final_paper_evidence_keys": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Final Paper Evidence Keys",
+          "type": "array"
+        },
+        "ledger_id": {
+          "title": "Ledger Id",
+          "type": "string"
+        },
+        "paper_id": {
+          "title": "Paper Id",
+          "type": "string"
+        },
+        "residual_summary": {
+          "default": "",
+          "title": "Residual Summary",
+          "type": "string"
+        },
+        "resolution_status": {
+          "$ref": "#/$defs/ResolutionStatus"
+        },
+        "reviewer_quote_keys": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "title": "Reviewer Quote Keys",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "aspr_gear",
+          "default": "aspr_gear",
+          "title": "Schema Version",
+          "type": "string"
+        }
+      },
+      "required": [
+        "ledger_id",
+        "paper_id",
+        "reviewer_quote_keys",
+        "resolution_status"
+      ],
+      "title": "RevisionLedgerEntry",
+      "type": "object"
+    },
+    "SessionKind": {
+      "enum": [
+        "reconstruction",
+        "qa",
+        "arbitration"
+      ],
+      "title": "SessionKind",
+      "type": "string"
+    },
+    "StructuredReview": {
+      "additionalProperties": false,
+      "description": "The single label/draft/final-review contract for GEAR.",
+      "properties": {
+        "novelty": {
+          "$ref": "#/$defs/NoveltyAssessment"
+        },
+        "paper_id": {
+          "minLength": 1,
+          "title": "Paper Id",
+          "type": "string"
+        },
+        "questions": {
+          "items": {
+            "$ref": "#/$defs/ReviewPoint"
+          },
+          "title": "Questions",
+          "type": "array"
+        },
+        "schema_version": {
+          "const": "aspr_gear",
+          "default": "aspr_gear",
+          "title": "Schema Version",
+          "type": "string"
+        },
+        "strengths": {
+          "items": {
+            "$ref": "#/$defs/ReviewPoint"
+          },
+          "title": "Strengths",
+          "type": "array"
+        },
+        "summary": {
+          "$ref": "#/$defs/ReviewSummary"
+        },
+        "weaknesses": {
+          "items": {
+            "$ref": "#/$defs/ReviewPoint"
+          },
+          "title": "Weaknesses",
+          "type": "array"
+        }
+      },
+      "required": [
+        "paper_id",
+        "summary",
+        "novelty"
+      ],
+      "title": "StructuredReview",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "contract": {
+      "const": "reconstruction_session_response",
+      "default": "reconstruction_session_response",
+      "title": "Contract",
+      "type": "string"
+    },
+    "conversation_hash": {
+      "pattern": "^sha256:[0-9a-f]{64}$",
+      "title": "Conversation Hash",
+      "type": "string"
+    },
+    "input_sha256": {
+      "title": "Input Sha256",
+      "type": "string"
+    },
+    "model_id": {
+      "minLength": 1,
+      "title": "Model Id",
+      "type": "string"
+    },
+    "output_sha256": {
+      "title": "Output Sha256",
+      "type": "string"
+    },
+    "package_id": {
+      "title": "Package Id",
+      "type": "string"
+    },
+    "paper_id": {
+      "title": "Paper Id",
+      "type": "string"
+    },
+    "prompt_sha256": {
+      "title": "Prompt Sha256",
+      "type": "string"
+    },
+    "qa": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/QAResult"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "reference_traces": {
+      "items": {
+        "$ref": "#/$defs/ReferenceTrace"
+      },
+      "title": "Reference Traces",
+      "type": "array"
+    },
+    "review": {
+      "$ref": "#/$defs/StructuredReview"
+    },
+    "revision_ledger": {
+      "items": {
+        "$ref": "#/$defs/RevisionLedgerEntry"
+      },
+      "title": "Revision Ledger",
+      "type": "array"
+    },
+    "schema_sha256": {
+      "title": "Schema Sha256",
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "aspr_gear",
+      "default": "aspr_gear",
+      "title": "Schema Version",
+      "type": "string"
+    },
+    "session_kind": {
+      "$ref": "#/$defs/SessionKind"
+    }
+  },
+  "required": [
+    "package_id",
+    "session_kind",
+    "paper_id",
+    "model_id",
+    "conversation_hash",
+    "prompt_sha256",
+    "schema_sha256",
+    "input_sha256",
+    "review",
+    "reference_traces",
+    "output_sha256"
+  ],
+  "title": "ReconstructionSessionResponse",
+  "type": "object"
+}

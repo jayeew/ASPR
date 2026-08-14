@@ -5,24 +5,24 @@ import unittest
 import numpy as np
 import pandas as pd
 
-from aspr.nature_multihorizon.contracts import (
+from gear.nature_multihorizon.contracts import (
     AUXILIARY_FEATURES,
     CORE_FEATURES,
     FeatureSpec,
     SplitSpec,
 )
-from aspr.nature_multihorizon.evaluation import (
+from gear.nature_multihorizon.evaluation import (
     conditional_spearman,
     evaluate_oof_predictions,
     run_nested_oof,
 )
-from aspr.nature_multihorizon.models import (
+from gear.nature_multihorizon.models import (
     DomainYearCalibrator,
     FoldLocalFeatureTransformer,
     fit_candidate_model,
 )
-from aspr.nature_multihorizon.scoring import build_score_packets, packets_to_frame
-from aspr.nature_multihorizon.splits import make_nested_folds
+from gear.nature_multihorizon.scoring import build_score_packets, packets_to_frame
+from gear.nature_multihorizon.splits import make_nested_folds
 
 
 def synthetic_frame(n_rows: int = 240, seed: int = 17) -> pd.DataFrame:

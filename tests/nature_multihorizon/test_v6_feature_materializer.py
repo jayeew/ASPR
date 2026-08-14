@@ -5,7 +5,7 @@ import json
 import numpy as np
 import pandas as pd
 
-from aspr.nature_multihorizon.feature_materializer_v6 import (
+from gear.nature_multihorizon.feature_materializer_v6 import (
     annual_field_distances,
     build_v6_reference_feature_table,
 )

@@ -11,7 +11,7 @@ from typing import Any, Dict, List, Mapping, Sequence, Tuple
 import numpy as np
 import pandas as pd
 
-from aspr.nature_multihorizon.screening_v6_1 import (
+from gear.nature_multihorizon.screening_v6_1 import (
     reference_subsampling_stability,
 )
 from experiments.common.new.base.builders_1_5 import (

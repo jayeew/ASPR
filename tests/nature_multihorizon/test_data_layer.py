@@ -14,22 +14,22 @@ from typing import Callable, Optional, Type
 import numpy as np
 import pandas as pd
 
-from aspr.nature_multihorizon.cohorts import build_cohort_membership
-from aspr.nature_multihorizon.contracts import AUXILIARY_FEATURES, CORE_FEATURES
-from aspr.nature_multihorizon.features import build_feature_table
-from aspr.nature_multihorizon.graph_snapshots import (
+from gear.nature_multihorizon.cohorts import build_cohort_membership
+from gear.nature_multihorizon.contracts import AUXILIARY_FEATURES, CORE_FEATURES
+from gear.nature_multihorizon.features import build_feature_table
+from gear.nature_multihorizon.graph_snapshots import (
     build_graph_snapshots,
     load_prior_graph,
     load_snapshot_catalog,
 )
-from aspr.nature_multihorizon.targets import (
+from gear.nature_multihorizon.targets import (
     DIFFUSION_TARGET_COMPONENTS,
     FoldLocalDiffusionTarget,
     build_diffusion_targets,
     build_future_fetch_status,
 )
-from aspr.nature_multihorizon.taxonomy import build_taxonomy_table, map_domain12
-from aspr.nature_multihorizon.v5_adapter import (
+from gear.nature_multihorizon.taxonomy import build_taxonomy_table, map_domain12
+from gear.nature_multihorizon.v5_adapter import (
     audit_reference_recovery,
     audit_v5_source,
     ingest_v5,

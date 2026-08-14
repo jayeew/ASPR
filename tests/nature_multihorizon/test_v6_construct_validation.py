@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-from aspr.nature_multihorizon.construct_validation_v6 import (
+from gear.nature_multihorizon.construct_validation_v6 import (
     C1_METRICS,
     N1_METRICS,
     metric_correlation_audit,

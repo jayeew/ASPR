@@ -10,7 +10,7 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
 import numpy as np
 import pandas as pd
 
-from aspr.corpus import (
+from gear.corpus import (
     DEFAULT_COMPLETE_END_YEAR,
     normalize_doi,
     normalize_openalex_id,

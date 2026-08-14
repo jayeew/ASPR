@@ -10,7 +10,13 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from .analysis import read_json, resolve_path, sha256_file, write_json
+from .analysis import (
+    calibration_source_dir,
+    read_json,
+    resolve_path,
+    sha256_file,
+    write_json,
+)
 
 
 def _check(checks: list[dict[str, Any]], name: str, passed: bool, detail: str) -> None:
@@ -70,9 +76,7 @@ def _audit_score(
     checks: list[dict[str, Any]],
 ) -> None:
     row = score.iloc[0]
-    score_path = (
-        resolve_path(str(config["source_dir"])) / "official_aspr_scores.parquet"
-    )
+    score_path = calibration_source_dir(config) / "official_aspr_scores.parquet"
     expected_count = len(pd.read_parquet(score_path, columns=["paper_id"]))
     _check(
         checks,
@@ -130,7 +134,7 @@ def _audit_deciles(
         f"horizons={observed_horizons}; models={observed_models}; combinations={len(combination_deciles)}",
     )
     source = pd.read_parquet(
-        resolve_path(str(config["source_dir"])) / "oof_predictions.parquet",
+        calibration_source_dir(config) / "oof_predictions.parquet",
         columns=[
             "horizon",
             "model_family",
@@ -268,7 +272,7 @@ def _audit_landscape(
     )
     overall = landscape[["horizon", "model_id", "overall_spearman"]].drop_duplicates()
     formal = overall[overall["horizon"].eq(5) & overall["model_id"].eq("fulltext_16")]
-    metrics = pd.read_csv(resolve_path(str(config["source_dir"])) / "oof_metrics.csv")
+    metrics = pd.read_csv(calibration_source_dir(config) / "oof_metrics.csv")
     source_formal = metrics[
         metrics["horizon"].eq(5)
         & metrics["model_id"].eq("fulltext_16")
@@ -405,7 +409,7 @@ def _audit_source_prediction_alignment(
         "realized_diffusion_target",
     ]
     frame = pd.read_parquet(
-        resolve_path(str(config["source_dir"])) / "oof_predictions.parquet",
+        calibration_source_dir(config) / "oof_predictions.parquet",
         columns=columns,
     )
     model_ids = [str(row["id"]) for row in config["model_sets"]]

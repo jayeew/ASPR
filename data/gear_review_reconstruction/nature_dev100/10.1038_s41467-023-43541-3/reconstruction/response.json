@@ -1,0 +1,470 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:46a355e4e6bfa47e919d72f5772208ac89ca0ab239edb4d916a1819ca951b6f1",
+  "input_sha256": "sha256:5d26d7e73008f1975d325b5488eebb02f049c5b8a3385c269c6496a73814496a",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:2c3f74065ae7c48c61bb4602364906c35b51ccb7ec8dae039bafd589b7d25f30",
+  "package_id": "RSP-1bce73a317528f986ecb",
+  "paper_id": "10.1038/s41467-023-43541-3",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-43541-3",
+      "point_id": "N-SUP-01",
+      "rationale": "Reviewer support for a first observation is retained because the final paper states that no coherent oscillations had been reported in 2D-material quantum devices and reports coherent charge oscillations in a BLG DQD (P:S-6d7d9008b84c3c6517d7; P:S-2f9698ca85cb93c1ffd0).",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-274ebe62849e3136",
+        "REV-6878fc133ed8f484"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-99a3154719023ee16b7f",
+        "RR:SRC-R-d576ef40803980016572"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-SUP-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-8a2310493d87ee041b7e",
+        "RR:SRC-R-4cd9c64d240b5be439e5"
+      ],
+      "paper_id": "10.1038/s41467-023-43541-3",
+      "point_id": "N-LIM-01",
+      "rationale": "The residual novelty limit is independently supported by the final cross-platform comparison: PAT and Fourier-derived values are reported in the 400–500 ps range and compared with other material systems (P:S-7a41d2e80c2324dba6d5; P:S-f140c12701ccb98a4dff).",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-4b8616a6c65cd1ab"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-821b97c276bb240eec8f"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-LIM-01"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-43541-3",
+      "point_id": "STR-01",
+      "rationale": "The final paper provides the retained experimental basis for the reported coherent oscillations: interference fringes are identified as the signature of coherent charge oscillations (P:S-75a7468e718175fdfbde), and the pulse-sequence mechanism is described in P:S-e2d47923b0ef442dae2d.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-274ebe62849e3136",
+        "REV-6878fc133ed8f484"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d930d6e1233480851582",
+        "RR:SRC-R-d576ef40803980016572"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-STR-01"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-43541-3",
+      "point_id": "STR-02",
+      "rationale": "The retained cross-method strength is supported by the final PAT estimate and its 729-point distribution (P:S-f140c12701ccb98a4dff) and by the independently derived Fourier estimate (P:S-74331b1b8f9f5e6a27ec).",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-274ebe62849e3136"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d930d6e1233480851582"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-STR-02"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-023-43541-3",
+      "point_id": "STR-03",
+      "rationale": "The final paper documents a calibrated PAT determination of the TLS dispersion and tunnel coupling (P:S-3231f82096aae31473fb; P:S-a3fcd7a553c478ce83d8), supporting the retained methodological strength.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-274ebe62849e3136"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-5272673ee8fd2031724d"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-STR-03"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-6129798e8e1b75fd24f1",
+        "RR:SRC-R-838cd7a7f9404a9f578f"
+      ],
+      "paper_id": "10.1038/s41467-023-43541-3",
+      "point_id": "WEAK-01",
+      "rationale": "The residual uncertainty remains explicit in the final paper: the PAT distribution has substantial variation attributed to frequency-dependent power transmission, and PAT power broadening makes the value a lower bound (P:S-f140c12701ccb98a4dff).",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-4b8616a6c65cd1ab",
+        "REV-6878fc133ed8f484"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-07fead1ba8ba7593a1fa",
+        "RR:SRC-R-0c06c2cc04ec6cfdc38d"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-WEAK-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-50ea7935831904403090",
+        "RR:SRC-R-031633b3fa5a4e0100ec"
+      ],
+      "paper_id": "10.1038/s41467-023-43541-3",
+      "point_id": "WEAK-02",
+      "rationale": "The final paper retains the first-fringe absence as a pulse-distortion effect and states that time-axis resolution is insufficient for quantitative decoherence analysis (P:S-fc7307581ce3a0e655e4).",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-4b8616a6c65cd1ab"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a94a62e78755981576f4"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-WEAK-02"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-d566efba17d66bedee84",
+        "RR:SRC-R-3a564bd02882f5f9a230"
+      ],
+      "paper_id": "10.1038/s41467-023-43541-3",
+      "point_id": "Q-01",
+      "rationale": "The final paper reports PAT-derived tunnel couplings for three gate settings (P:S-a3fcd7a553c478ce83d8; P:S-43254ac0fb5b374aeaa1), while the directly presented coherent-oscillation analysis is performed in the selected intermediate-coupling regime; this leaves the coupling dependence of coherence only partially established in the final PaperIR.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-6878fc133ed8f484"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-7b9a1784f1e15a1d61ad",
+        "RR:SRC-R-bba37865e632654154b3"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-9dd3d8ad3fd549e54b64",
+        "RR:SRC-R-13823f569449d58ed68f"
+      ],
+      "paper_id": "10.1038/s41467-023-43541-3",
+      "point_id": null,
+      "rationale": "The request for context on other 2D materials was resolved in the final paper, which discusses extensions to WSe2 and MoSe2 and material-dependent noise mechanisms (P:S-2f9698ca85cb93c1ffd0).",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-4b8616a6c65cd1ab"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-af67567099dfd68fdbe2"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUD-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-775c23db2fd6c9663fef",
+        "RR:SRC-R-a72ae944a8da62f773ea"
+      ],
+      "paper_id": "10.1038/s41467-023-43541-3",
+      "point_id": null,
+      "rationale": "The question about spin and valley participation was resolved by final text specifying the applied field, valley polarization, and partial spin polarization in the PAT discussion (P:S-3231f82096aae31473fb).",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-4b8616a6c65cd1ab"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a086082e17fa321a5438"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUD-02"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-113e7db4a7019a1908b2",
+        "RR:SRC-R-89f3c62cc445d740b2aa",
+        "RR:SRC-R-7398a469f3047334bb32"
+      ],
+      "paper_id": "10.1038/s41467-023-43541-3",
+      "point_id": null,
+      "rationale": "The requests for pulse parameters, initialization, and current-readout details were resolved by final descriptions of the rate and initialization protocol (P:S-43254ac0fb5b374aeaa1; P:S-45fcc4a4250424aa268c) and DC measurement and calibration (P:S-cfc3cf63669292b45cd8).",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-4b8616a6c65cd1ab"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-48dd9c6691365e0d07b0",
+        "RR:SRC-R-7aa368fd6f9f7bd46102",
+        "RR:SRC-R-bfbfc8d9d46be9f552bd"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUD-03"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-1f0abe4143e6338cd95a"
+      ],
+      "paper_id": "10.1038/s41467-023-43541-3",
+      "point_id": null,
+      "rationale": "The final PaperIR supplied in this package does not establish whether the requested second-device Figure R7 material was included in the Supplementary Information.",
+      "resolution_status": "unverifiable",
+      "reviewer_id_hashes": [
+        "REV-6878fc133ed8f484"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-9ba97fc213376c4bed52"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-AUD-04"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-7a41d2e80c2324dba6d5",
+            "P:S-f140c12701ccb98a4dff"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-LIM-01",
+          "schema_version": "aspr_gear",
+          "severity": "minor",
+          "suggested_action": "State the platform-specific scope alongside the comparison.",
+          "text": "The novelty is platform-specific rather than a record-coherence claim: the 400–500 ps ensemble decoherence times are comparable to values in established semiconductor systems."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-6d7d9008b84c3c6517d7",
+            "P:S-e0d7d59a10cf484a9749",
+            "P:S-2f9698ca85cb93c1ffd0"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-SUP-01",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "None.",
+          "text": "The specific contribution is the observation and analysis of phase-coherent charge oscillations in a bilayer-graphene double quantum dot, a platform where coherent oscillations had not previously been reported."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-023-43541-3",
+    "questions": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-a3fcd7a553c478ce83d8",
+          "P:S-43254ac0fb5b374aeaa1"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-01",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Clarify the scope of direct coherence evidence across the reported coupling range.",
+        "text": "How do the coherent-oscillation signatures and their periods evolve across gate-tuned interdot couplings, beyond the intermediate-coupling regime used for the main interference analysis?"
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-75a7468e718175fdfbde",
+          "P:S-e2d47923b0ef442dae2d"
+        ],
+        "external_verification_required": false,
+        "point_id": "STR-01",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "None.",
+        "text": "The interference-fringe measurements provide a concrete time-domain signature of coherent charge oscillations, with the LZSM pulse sequence and readout mechanism explicitly described."
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-f140c12701ccb98a4dff",
+          "P:S-74331b1b8f9f5e6a27ec"
+        ],
+        "external_verification_required": false,
+        "point_id": "STR-02",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "None.",
+        "text": "Charge decoherence is estimated independently by PAT linewidths and Fourier analysis of LZSM data, yielding mutually consistent average values in the reported 400–500 ps range."
+      },
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-3231f82096aae31473fb",
+          "P:S-a3fcd7a553c478ce83d8",
+          "P:S-cfc3cf63669292b45cd8"
+        ],
+        "external_verification_required": false,
+        "point_id": "STR-03",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "None.",
+        "text": "The PAT analysis quantitatively maps the two-level-system dispersion, extracts the lever arm and tunnel coupling, and is accompanied by pulse-amplitude calibration and measurement details."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-15a6d951798f57aa474a",
+        "P:S-75a7468e718175fdfbde",
+        "P:S-f140c12701ccb98a4dff",
+        "P:S-74331b1b8f9f5e6a27ec",
+        "P:S-2f9698ca85cb93c1ffd0"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "This study demonstrates coherent charge oscillations in a bilayer-graphene double quantum dot using LZSM interference and reports ensemble charge-decoherence times of roughly 400–500 ps from both PAT and Fourier analysis. Its contribution is the platform-specific observation of phase coherence, supported by complementary measurements, while the residual scope is set by PAT power/transmission variation, limited time-domain resolution, and incomplete direct mapping of coherence across tunnel-coupling regimes."
+    },
+    "weaknesses": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-f140c12701ccb98a4dff"
+        ],
+        "external_verification_required": false,
+        "point_id": "WEAK-01",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Quantify the sensitivity of the PAT estimate to delivered microwave power.",
+        "text": "The PAT-derived decoherence times show substantial variation associated with frequency-dependent transmitted power and power broadening; the paper therefore treats the PAT estimate as a lower bound."
+      },
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-fc7307581ce3a0e655e4"
+        ],
+        "external_verification_required": false,
+        "point_id": "WEAK-02",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Characterize pulse distortion at the first fringe and its impact on time-domain analysis.",
+        "text": "Pulse distortion is invoked to explain the missing first-fringe oscillations, and the time-axis resolution is stated to be insufficient for a quantitative decoherence analysis in that domain."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-9dd3d8ad3fd549e54b64",
+        "RR:SRC-R-13823f569449d58ed68f"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-2f9698ca85cb93c1ffd0"
+      ],
+      "ledger_id": "L-AUD-01",
+      "paper_id": "10.1038/s41467-023-43541-3",
+      "residual_summary": "Final discussion includes other 2D materials and material-dependent charge-noise considerations.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-af67567099dfd68fdbe2"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-775c23db2fd6c9663fef",
+        "RR:SRC-R-a72ae944a8da62f773ea"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-3231f82096aae31473fb"
+      ],
+      "ledger_id": "L-AUD-02",
+      "paper_id": "10.1038/s41467-023-43541-3",
+      "residual_summary": "Final PAT discussion addresses the field-induced valley and spin splitting relevant to accessible excited states.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a086082e17fa321a5438"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-113e7db4a7019a1908b2",
+        "RR:SRC-R-89f3c62cc445d740b2aa",
+        "RR:SRC-R-7398a469f3047334bb32"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-43254ac0fb5b374aeaa1",
+        "P:S-45fcc4a4250424aa268c",
+        "P:S-cfc3cf63669292b45cd8"
+      ],
+      "ledger_id": "L-AUD-03",
+      "paper_id": "10.1038/s41467-023-43541-3",
+      "residual_summary": "Final text specifies pulse rate, initialization logic, DC current readout, and calibration.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-48dd9c6691365e0d07b0",
+        "RR:SRC-R-7aa368fd6f9f7bd46102",
+        "RR:SRC-R-bfbfc8d9d46be9f552bd"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-1f0abe4143e6338cd95a"
+      ],
+      "final_paper_evidence_keys": [],
+      "ledger_id": "L-AUD-04",
+      "paper_id": "10.1038/s41467-023-43541-3",
+      "residual_summary": "The supplied final PaperIR does not verify placement of the second-device Figure R7 material in the Supplementary Information.",
+      "resolution_status": "unverifiable",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-9ba97fc213376c4bed52"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

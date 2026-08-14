@@ -1,0 +1,2006 @@
+{
+  "author_response_spans": [
+    {
+      "char_end": 27755,
+      "char_start": 26793,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-bc405d9944a692c142a2",
+      "source_role": "author_response",
+      "text": "We thank the reviewer for their suggestion to clarify the meaning of the title “Diminishing Returns of Reservoir Construction”. There is an implied simplification involved with using the word \"return\". We are using the word \"return\" in the same way as the phrase \"return on investment\". In other words, the \"return\" (or benefit) of constructing new reservoirs, as defined by NS, has declined. Of course there are other benefits to building reservoirs (e.g., flood reduction, recreation), as well as costs (environmental, social), but we are framing the returns in terms of water storage. To provide more clarification, we have changed the title to “Diminishing Storage Returns of Reservoir Construction”, and modified the following sentence in the manuscript: “While the new reservoirs have led to a steadily increasing global storage capacity, their returns are diminished (i.e., their NS is lower) compared to those built in the 20[th] century.” (Lines 70-71).",
+      "text_sha256": "sha256:3f13a320fb42a1c32bf3fd776ee662f454943b94a35dfd83b1b5728f1d563818"
+    },
+    {
+      "char_end": 28898,
+      "char_start": 27758,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6cd5f8a38da89e636d42",
+      "source_role": "author_response",
+      "text": "Our finding about the decreasing NS values of new reservoirs is based on a comparison of the NS values of old and new reservoirs in the same basin, while assuming that climatology conditions within a basin were homogeneous. So it is reasonable to state that “The reservoirs constructed in the 21[st] century have smaller NS values and larger seasonal variations than those built earlier, suggesting they are more susceptible to droughts.”. In addition, we changed the term “returns” to “storage returns” for clarification: “With predicted decreasing runoff and increasing water demand, these observed diminishing storage returns of reservoir construction will likely persist into the future.” (Lines 23-25), “The contrasting storage and NS trends indicate that the recent storage returns of global reservoir construction have been declining since the start of the 21[st] century.” (Lines 100-102), “The results from this study highlight the challenges of resolving finite water resources through reservoir regulations, particularly in developing countries where the storage returns from these impoundments are diminishing.” (Lines 206-209).",
+      "text_sha256": "sha256:f9d2f6ad6912dbe8b9c445c7c997dda01a4d03e67ff55bc6f585b39ba607d236"
+    },
+    {
+      "char_end": 28940,
+      "char_start": 28901,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e441465ada19c05dd808",
+      "source_role": "author_response",
+      "text": "## Reviewer #2 (Remarks to the Author):",
+      "text_sha256": "sha256:302a1824ba4ed0dda5528693469028e8e1f5b785e60ec4075c5e9d95c6bf2b94"
+    },
+    {
+      "char_end": 29246,
+      "char_start": 28943,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d42e22a8a4c2fb6b286a",
+      "source_role": "author_response",
+      "text": "The authors have carefully addressed my previous comments. I reiterate the value of this study. However, while I appreciate that the authors added caveats regarding sedimentation, the analysis and additional elements provided in response to my comments and that of the other reviewer warrant adjustment.",
+      "text_sha256": "sha256:c2984243ba376e549169f4f876f7b77df83c7545ae66793082c0548e43852f5c"
+    },
+    {
+      "char_end": 29431,
+      "char_start": 29249,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-53a2844c182a2a741ae5",
+      "source_role": "author_response",
+      "text": "First, P20L362 “Despite the impacts of sedimentation on the absolute reservoir storage, the conclusions based on the normalized storage (NS) results are not affected. This is because",
+      "text_sha256": "sha256:6370b542f7df4ed4465bdc3e95131be51d70cfe2784255e41d5e4f704d8d2241"
+    },
+    {
+      "char_end": 29954,
+      "char_start": 29434,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-58df3ef294e89557cf55",
+      "source_role": "author_response",
+      "text": "sedimentation tends to reduce the actual storage (numerator) and storage capacity (denominator) equally, so the NS is not much affected.” Although the statement that NS is unaffected is valid, this strict definition of NS (using current storage capacity rather than initial storage capacity as the denominator) is of little relevance for management. What really matters for water provision and hydroelectric production for example, is actual storage/initial storage capacity. Therefore, I suggest removing this argument.",
+      "text_sha256": "sha256:93ec80cf31619c191c273ca979447a2f1b24f944f54455e9749130739a8fe591"
+    },
+    {
+      "char_end": 30013,
+      "char_start": 29957,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4b2518fa0b5b48d0d43a",
+      "source_role": "author_response",
+      "text": "Thanks for this comment. We have removed this statement.",
+      "text_sha256": "sha256:20cc27e0aeaaec9eadd8476d47b0c25d6359a37bf71891d7c47861ff74363be0"
+    },
+    {
+      "char_end": 31711,
+      "char_start": 30016,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3aeb0ff2e2c75867929e",
+      "source_role": "author_response",
+      "text": "Second, I question the choice of reservoirs for illustrating the impact of sedimentation. How were these reservoirs chosen? The annual sedimentation rates, which range between 0.025 and 0.253%/year are on the very low range compared to global averages. The following paragraph from Wisser et al. (2013) illustrates this point : “A global data set with consistently measured sediment volumes trapped in reservoirs over time is not available, and, in fact there has been a decline in the collection of sedimentation data [Syvitski, 2003; Vanmaercke et al., 2011b]. For the US, the Reservoir Sedimentation Database (RESSED) [Ackermann et al., 2009] provides statistics on reservoir volumes derived from bathymetric surveys for more than 1800 reservoirs from which sedimentation loss rates can be calculated (using successive surveys). We calculated sedimentation rates of 1024 reservoirs with at least two complete surveys (using the most recent surveys) and supplemented this data set with observed loss rates from an additional 191 reservoirs globally from a variety of sources (Figure 1) to get a global sample of observed loss rates.This data set covers a wide range of physical conditions in the catchment (e.g., slope, climate, soil type, and land use) and local reservoir conditions (size, area, bathymetry, purpose, and management practices). Observed loss rates vary between 0.0017% a−1 and 36% a−1 and are 1.35% a−1 on average (median = 0.55% a−1). Loss rates for reservoirs with a capacity larger than the minimum capacity in the GRanD database (1 million m3) have lower loss rates (mean = 0.76% a−1, median 0.35% a−1; Table 1). Weighted by initial capacity, the mean loss rate is 0.66%.",
+      "text_sha256": "sha256:cec44ac0141184f204ed59b9efab56f3a9ab8a9f0ccf8e3e6cba237f14c77505"
+    },
+    {
+      "char_end": 32058,
+      "char_start": 31714,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b037e66408fe9fd954ee",
+      "source_role": "author_response",
+      "text": "Out of fifty reservoirs in Italy, Patro et al. (2022) mention “According to the latest report of the International Commission On Large Dams (ICOLD, 2009), the global average value for sedimentation rate (and so storage loss) is around 0.96%.” and find mean annual sedimentation rates of 0.57% and a total mean loss of reservoir capacity of 37%.",
+      "text_sha256": "sha256:066f95c8fe553b8760dd16b14855abd5c81d99f896ecebe6241ca490a966b29f"
+    },
+    {
+      "char_end": 32315,
+      "char_start": 32061,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-645336879b5eecde02ce",
+      "source_role": "author_response",
+      "text": "These points do not lessen the merit of this study but must be properly acknowledged. Sedimentation is a widespread phenomenon in reservoirs that surely has, on aggregate, more long-term impact on storage capacity than the changes observed by this study.",
+      "text_sha256": "sha256:e7f6c5941c6ab8ab9406be725c8bce4fa14d24b27aef89399aafbfc7ac2b44e2"
+    },
+    {
+      "char_end": 32479,
+      "char_start": 32318,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6cf145fdfdb9d49f742d",
+      "source_role": "author_response",
+      "text": "Thanks for pointing this out. In the previous response, we randomly selected four reservoirs with available sediment rate values from the Duke Nicholas Institute",
+      "text_sha256": "sha256:db200adc4b254c1aa26e7c86f768e16b49e16012859f581c824e9d3e60a4ea5c"
+    },
+    {
+      "char_end": 33107,
+      "char_start": 32482,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-20be49385f5be66b8cb5",
+      "source_role": "author_response",
+      "text": "(https://nicholasinstitute.duke.edu/reservoir-national-trends/sediment). This database provides sediment rate data for 150 U.S. reservoirs, and 100 of them are included in our dataset—which were selected to further evaluate the effects of sedimentation on the NS trend values. The sediment rate values of these reservoirs range from 0 to 18.18 %/year, with mean and median values of 1.37 and 0.70 %/year, respectively—which are close to the values in the abovereferences mentioned by the reviewer. Figure R3 shows the distribution of the sediment values, with over half of the reservoirs having sediment rates below 1 %/year.",
+      "text_sha256": "sha256:c8cfdfa2c942c129180edc0beb19c9c17f9ab812c407c35255e84d87ce5bc3b2"
+    },
+    {
+      "char_end": 33163,
+      "char_start": 33110,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3dd766354a92d706a185",
+      "source_role": "author_response",
+      "text": "**==> picture [314 x 220] intentionally omitted <==**",
+      "text_sha256": "sha256:00d37fa5543014d52e19e3b99a14144785f73d8db3bcdf3d0d9a591da6174ef7"
+    },
+    {
+      "char_end": 33297,
+      "char_start": 33165,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-41f13d89edef6057a498",
+      "source_role": "author_response",
+      "text": "Figure R3. Distribution of the sediment rates for the 100 reservoirs used to evaluate the effects of sedimentation on the NS trends.",
+      "text_sha256": "sha256:5eed8475ad7489d1507dc39444c49673a305e3dce4ae471a2fe011cc47c0e3a8"
+    },
+    {
+      "char_end": 33775,
+      "char_start": 33300,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6a77c67b447431f1225d",
+      "source_role": "author_response",
+      "text": "Figure R4 shows the comparison of the NS trend values with and without considering the sedimentation at these 100 selected reservoirs. The results suggest that sedimentation can reduce the NS trend values. Thus, the decreasing NS trends presented in this study are conservative. We did not consider the sedimentation because a reliable sedimentation database is still not available at the global scale. We have updated Extended Data Fig. 7 and added the following description",
+      "text_sha256": "sha256:d06e638f1c9f6a230a85f10f81e8a3e6681bca40ab535c2b1d549a9ef7589992"
+    },
+    {
+      "char_end": 34344,
+      "char_start": 33778,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b94c426e39ee373c4bea",
+      "source_role": "author_response",
+      "text": "in Lines 362-368, “The sediment rate values of these reservoirs range from 0 to 18.18 %/year, with mean and median values of 1.37 %/year and 0.70 %/year, respectively (Extended Data Fig. 7a). We compared the NS trend values with and without considering the impacts of sedimentation (Extended Data Fig. 7b). This comparison shows that sedimentation can reduce the NS trend values. Note that the sediment dataset has a relatively large uncertainty due to the scarcity of field measurements and the effects of sediment removal activities (e.g., dredging and flushing).”",
+      "text_sha256": "sha256:6290eb3d8e2f3559dcd29460cbef04040727bbbd064f04b0eec29cf92573e669"
+    },
+    {
+      "char_end": 34400,
+      "char_start": 34347,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-31ab1f45b5b18d94cc98",
+      "source_role": "author_response",
+      "text": "**==> picture [278 x 279] intentionally omitted <==**",
+      "text_sha256": "sha256:09473b40e50ca2c44f76ae5479b34e94faa412298c248c28db9dc252097728c2"
+    },
+    {
+      "char_end": 34486,
+      "char_start": 34402,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2ceab21375c0e7eb754e",
+      "source_role": "author_response",
+      "text": "Figure R4. Comparison of NS trend values with and without considering sedimentation.",
+      "text_sha256": "sha256:2df025db7b25540fa1d35ce37a76bcf8260bc27ff4a0cdf8ca38285215b1cd72"
+    },
+    {
+      "char_end": 34658,
+      "char_start": 34489,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a1abb33d60396f6fe545",
+      "source_role": "author_response",
+      "text": "Once these corrections are made, I consider this study to be ready for publication. Thanks again for the reviewer’s time and effort in helping to improve the manuscript.",
+      "text_sha256": "sha256:1ff1b5528c3d03d3135325bfca738424b736522c1f3c0288f9f8b234ad4008a4"
+    },
+    {
+      "char_end": 34674,
+      "char_start": 34661,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-77eae6a41a09826d1702",
+      "source_role": "author_response",
+      "text": "## References",
+      "text_sha256": "sha256:65b72d86eeeb214ab8ca5fd24cb7cd7773e58084e95b670040df03e21e8c6fa7"
+    },
+    {
+      "char_end": 34876,
+      "char_start": 34677,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-627331b95c4a3240731e",
+      "source_role": "author_response",
+      "text": "Patro ER, De Michele C, Granata G, Biagini C. 2022. Assessment of current reservoir sedimentation rate and storage capacity loss: An Italian overview. Journal of Environmental Management 320: 115826.",
+      "text_sha256": "sha256:d74e1e32b1bca843e9f1efa0e52c6bc6b837afd4ecf939009f0166e0bfc01b52"
+    },
+    {
+      "char_end": 35075,
+      "char_start": 34879,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f3519ce1a72d26b7e6f4",
+      "source_role": "author_response",
+      "text": "Wisser D, Frolking S, Hagen S, Bierkens MFP. 2013. Beyond peak reservoir storage? A global estimate of declining water storage capacity in large reservoirs. Water Resources Research 49: 5732–5739.",
+      "text_sha256": "sha256:0e9175798e83fdd5b2210f8d75195420d83198c67882a04150098fdce68888f8"
+    },
+    {
+      "char_end": 40926,
+      "char_start": 40838,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-40affcaadd34744dcf1a",
+      "source_role": "author_response",
+      "text": "We thank the reviewer for their time and effort in helping us to improve the manuscript.",
+      "text_sha256": "sha256:b55b22e5d616542372680a2f63499d5a2346c3340d6ad2d9d403370e0a747145"
+    },
+    {
+      "char_end": 41331,
+      "char_start": 40929,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-24ce479fdbdad85b38b7",
+      "source_role": "author_response",
+      "text": "About sedimentation impact on reservoir water level and area. I would like to thank the authors for looking into the literature and consulting Dagmar Llewellyn in the Bureau of Reclamation. I accept this rebuttal. Since potential readers may have similar concerns, I highly recommend that the authors include a similar discussion in the paper (in either the main text or methods) to echo this rebuttal.",
+      "text_sha256": "sha256:a49b303c1b8320a79c6ac8ae8f47315043bcc65e3d5ae18616c3036a28b503b3"
+    },
+    {
+      "char_end": 42362,
+      "char_start": 41334,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b56590d0a350790071d7",
+      "source_role": "author_response",
+      "text": "For example, the authors can briefly discuss: (1) how reservoir management may respond to sedimentation (in most cases, sedimentation does not allow for water to be stored higher, with the exception of some of the flood-control reservoirs), and (2) how this response implies to the validity of the authors’ methods and conclusions (as sediment accumulates, the reservoir storage capacity may just decrease under the same water area, leading to limited impacts on the NS). Thanks for this comment. We have added discussion in the Methods section about the impact of sedimentation on reservoir water level and area changes (Lines 367-376): “Although sedimentation can reduce storage capacity, reservoir management does not allow for water to be stored higher due to concerns about dam safety. One rare exception is when a flood control reservoir has a recreation pool for which a certain volume of water is required to be maintained, and the surface level (of this required volume) is well below the elevation at capacity. In this",
+      "text_sha256": "sha256:ccac8ff248b185e32d724cb364843e28f1c43035b7e27ca2e3226393d71d52cd"
+    },
+    {
+      "char_end": 42913,
+      "char_start": 42365,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-45d647ddcb87e351293c",
+      "source_role": "author_response",
+      "text": "case, sedimentation can increase the surface area required to store the specified amount of water. Flushing or dredging is usually applied for mitigating the sedimentation effects on storage. In this study, our method relies on using surface area to infer the storage and does not consider the sedimentation effects. If the sedimentation amount is notable in a reservoir, then both the storage and storage capacity can be overestimated. However, based on the evaluation below, sedimentation has a limited effect on the NS values and the NS trends.”",
+      "text_sha256": "sha256:654816502d3ee69e751aa2a4c8bc8231d72973fd671d017ec1b6bfc5dd51e18d"
+    },
+    {
+      "char_end": 43071,
+      "char_start": 42916,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-233d20438686d48a78c3",
+      "source_role": "author_response",
+      "text": "The new text focuses on point (1).  For point (2), we have included a detailed explaination that addresses the observed sedimentation data (Lines 377-393).",
+      "text_sha256": "sha256:d5827f6de46ac9a979e8618a0a9f97b063635c94b63bf414ee05da76e07b47f0"
+    },
+    {
+      "char_end": 43851,
+      "char_start": 43074,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-671c918a396d23f5d164",
+      "source_role": "author_response",
+      "text": "About validation of the NS trends. It seems the NS trends derived from the simulation method are overall comparable with the trends from the bathymetry-based method. Although there are some disagreement and variability, the mean bias between the two methods appears low. I think this is a positive message. I highly recommend the authors add this validation (with Figure R1) to the paper (such as in “Evaluation of storage estimation” section), because given the focus here, validating NS trends is just as important as validating storage capacities. As another (optional) suggestion: If I were the authors, I would also try to absorb the validation statistics (such as the RMSE in Figure R1) to the uncertainties of the NS trend estimates for at least the 347 GRBD reservoirs.",
+      "text_sha256": "sha256:13c73b5bd90dc6ea5a84af0357c869684953a68a83bce5d2bda8996a6115606d"
+    },
+    {
+      "char_end": 44395,
+      "char_start": 43854,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d5ac839e9f9429e466b4",
+      "source_role": "author_response",
+      "text": "Thanks for this comment. We have added language about this validation and a new figure (Supplementary Fig. 7) to the “Evaluation of storage estimation” section (Lines 345-349), “In addition, we compared the NS trend values derived from the simulation method with the results from bathymetry-based methods for the 347 global reservoirs. Supplementary Fig. 7 shows that the NS trend values derived from these two methods show good agreement (R[2] = 0.76), with the majority of the data aligning with the 1:1 line (with a slope value of 0.99).”",
+      "text_sha256": "sha256:fd4fd45731749f7458e4fad2544a708cc6520f76dcd1aeb7b32675f9dd75839f"
+    },
+    {
+      "char_end": 44578,
+      "char_start": 44398,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c9f9345cdafcf8f66b32",
+      "source_role": "author_response",
+      "text": "As the NS trends are primarily evaluated at large scales in this study, we have used the validation statistics in Supplementary Fig. 5 to assess the uncertainties of the NS trends.",
+      "text_sha256": "sha256:15602244557b88aedc03912da56173bc6ef109b0ee0a8be87c66f1c0fb6d44c1"
+    },
+    {
+      "char_end": 44960,
+      "char_start": 44581,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9a76024102df2767a747",
+      "source_role": "author_response",
+      "text": "About reservoir water area at capacity (Ao). It is good to see the authors have performed this sensitivity test and the difference between the estimated capacities using 95% Ao and those using 100% Ao appears limited based on the 277 reservoirs with in-situ storage. This is encouraging. To further secure this very important aspect, I am wondering if the authors can expand this",
+      "text_sha256": "sha256:acb1092c8dc93207b92921a1b9576b6fa5330bbc11e69c5341347d58ce9743b8"
+    },
+    {
+      "char_end": 45118,
+      "char_start": 44963,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-57662f4d0f2bde59a97e",
+      "source_role": "author_response",
+      "text": "sensitivity analysis to other reservoirs, in order to inform the potential impact of inconsistent use of Ao on the conclusions about pre- and post-1999 NS.",
+      "text_sha256": "sha256:49303a30a780d3d4542c97985ee01e041cad39488a315f8ebdf581aedf35d81d"
+    },
+    {
+      "char_end": 46028,
+      "char_start": 45121,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-ef0dda531319244b18f4",
+      "source_role": "author_response",
+      "text": "For example, I suggest the following scheme for the sensitivity analysis (which should be straightforward to implement): (1) for the subset of pre-1999 reservoirs using 95% water occurrence as Ao, replace their Ao by 100% water occurrence, (2) for the subset of post-1999 reservoirs using 95% water occurrence as Ao, keep their Ao as they are (basically do nothing for post-1999 reservoirs), and (3) compare how much difference this inconsistent use of Ao will cause for the calculated pre-1999 and post-1999 NS values. This design should, in theory, report the maximum impact of Ao. As a reminder, the authors may need to re-simulate the geometric models for some of the pre-1999 reservoirs because their Ao is changed. I also recommend that the authors include such a sensitivity analysis in the method section, which will secure to readers that this aspect won’t affect the main conclusions of the paper.",
+      "text_sha256": "sha256:484272b73bdb050a278b52eec6d5bb5e50c8bdff95a080028efda4774892a0a2"
+    },
+    {
+      "char_end": 47882,
+      "char_start": 46031,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-45c848c59b607fab7281",
+      "source_role": "author_response",
+      "text": "We extended the uncertainty analysis to the global reservoirs. We generated another global storage dataset by using the100-percentile areas to replace the 95-percentile areas , and then compared the pre-1999 and post-1999 NS values between these two datasets. This is similar to the scheme the reviewer suggested because most of the new reservoir polygons added in v1.3 were based on the maximum (100-percentile) water occurrence extent that is equal to our 100-percentile area. Results show that the Ao values have limited impact on the pre-1999 and post-1999 NS values. We have added sensitivity analysis to the “Sources of uncertainty” section (Lines 417-435), “The water area at capacity is an important input for the simulation model. We adopted the 95-percentile areas to represent the water area at capacity for the majority of the reservoirs. The 100-percentile areas were not selected because these values may correspond to flooding circumstances, which can lead to overestimated water area values at capacity. However, most of the new reservoir polygons added in GRanD v1.3 were based on the maximum (100-percentile) water occurrence extent from the GSW dataset. Therefore, we conducted an uncertainty analysis using the 95- and 100-percentile areas as inputs. Specifically, we used the improved simulation method to derive the storage values from 1999 to 2018, with water-area-at-capacity input values from the 95- and 100-percentile areas, respectively. The _in situ_ storage values of the 277 reservoirs (that we used to validate our storage dataset) were used to validate the simulated storage. Validation results (Supplementary Fig. 10ab) indicate that the storage values from the 95- and 100-percentile area inputs agree well with the _in situ_ measured values (with R[2] values of 0.98 and 0.99, and RMSE values of 0.30 km[3] and 0.29",
+      "text_sha256": "sha256:e88e32c6301f85d765739737cd81819cf5d681f584bc765c8aa70294b7b69de7"
+    },
+    {
+      "char_end": 48493,
+      "char_start": 47885,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2c91e50c80ea453b9d39",
+      "source_role": "author_response",
+      "text": "km[3] ). We then compared the storage values derived from these two inputs (Supplementary Fig. 10c), which show good agreement (with a slope of 1.0 and a bias of 0.015 km[3] ). Additionally, we evaluated the impacts of the water-area-at-capacity inputs on the NS values. We used the 100percentile areas to replace the 95-percentile areas to generate a different version of the global storage dataset, and then compared the pre-1999 and post-1999 NS values between these two datasets. Results show that the water-area-at-capacity inputs only have a limited impact on the NS values (Supplementary Fig. 10d-e).”",
+      "text_sha256": "sha256:cf38afedd6cbcd83948a3c20ec30c1848f13aba5f456a5c4242208df90103712"
+    },
+    {
+      "char_end": 48549,
+      "char_start": 48496,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-03fb8db0de29d9712bb8",
+      "source_role": "author_response",
+      "text": "**==> picture [468 x 149] intentionally omitted <==**",
+      "text_sha256": "sha256:5406259aed33347af7a2016ae6121d9cd0e19744b63fa8edfd6d7d43487dd57f"
+    },
+    {
+      "char_end": 48604,
+      "char_start": 48551,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-dbec8883d3ef8906ee9c",
+      "source_role": "author_response",
+      "text": "**==> picture [468 x 148] intentionally omitted <==**",
+      "text_sha256": "sha256:8d2c9d9a6567958f26cf43032840cfbf70b4556496330b9446261f575461caeb"
+    },
+    {
+      "char_end": 49041,
+      "char_start": 48606,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-268e2a9e9055b483c76a",
+      "source_role": "author_response",
+      "text": "**Supplementary Fig. 10** (a-b) Validation of simulated storage values from 1999 to 2018 with water area at capacity values from 95- and 100-percentile areas (respectively) used as inputs; (c) Comparison of the simulated storage values derived from these two inputs; (d-e) Comparison of NS values for pre- and post-1999 reservoirs between global storage datasets using the 95- and 100-percentile areas as water-area-at-capacity inputs.",
+      "text_sha256": "sha256:096000497f91253b6cce0066dd28fb8083b64c97821981970399d0c3e1304c6c"
+    },
+    {
+      "char_end": 49413,
+      "char_start": 49044,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a3b711c112695103556c",
+      "source_role": "author_response",
+      "text": "About “diminishing returns”. I want to thank the authors for clarifying the meaning of “return” and making modifications in the text. While I am still not fully convinced by some of the arguments, the changes have been much helpful and clearer. My concern is: even the same basin does not warrant a homogenous hydroclimate condition, and reservoir operation and storage",
+      "text_sha256": "sha256:fe4b8ecafd1ca26307f708299bfde2dc8dc185a4198624ff8f75b607541cedd5"
+    },
+    {
+      "char_end": 49994,
+      "char_start": 49416,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a3c520cacf6e9f17ed08",
+      "source_role": "author_response",
+      "text": "pattern vary by stream power, geomorphology, and nuances in water management, which can vary reservoir by reservoir and across the same basin. So as a reader, I am not fully convinced that smaller NS values and larger seasonal variations in the post-1999 reservoirs have to suggest newer reservoirs are more susceptible to drought and brining less “return” values. I recommend that the authors give a last try to further clarity some of the terms (such as explicitly define what “return” means as early as possible) and probably soften some of the claims lacking solid supports.",
+      "text_sha256": "sha256:74de5ff20b66d2649c0f39f319b30281ae85e1b73552eb8fb438b024293d3792"
+    },
+    {
+      "char_end": 51267,
+      "char_start": 49997,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8af1b148d596e8916e67",
+      "source_role": "author_response",
+      "text": "We agree with the reviewer that the hydroclimate conditions, reservoir operations, and storage patterns may vary reservoir by reservoir across the same basin. Considering these factors, we only selected groupings of reservoirs located in the same basin with the same primary function, with each basin containing at least five new reservoirs and five old reservoirs (to be spatially representative). To be clear, we did not compare the NS values of individual reservoirs. Instead, we treated the new and old reservoirs as two groups, and compared the NS values of the two groups during the same time period (1999-2018). In this way, the climate and human effects could be reduced as much as possible. We have added an explicit clarifications of “return” in Lines 70-72 and Line 80-82, “While the newly constructed reservoirs have contributed to a steadily increasing global storage capacity, their returns (in terms of NS) are found to be smaller than those built in the 20[th] century (over the period of 1999-2018).”  “It is worth noting that there are many other social-economic benefits to building reservoirs (e.g., hydropower generation, flood reduction, water supply, and recreation), but here we are framing the returns only in terms of normalized water storage.”",
+      "text_sha256": "sha256:a5b89cf101a24d5c884365ba045f6fe4c004f4cafe0faf5ebaf6e1ac2a4e39fc"
+    },
+    {
+      "char_end": 51313,
+      "char_start": 51270,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-bba77f4c1a0489e85674",
+      "source_role": "author_response",
+      "text": "## **Reviewer #2 (Remarks to the Author):**",
+      "text_sha256": "sha256:afb87c0d9db9643ccbd4542f3b95c2cacc5b3ad4916e8c67cf521300b70304c6"
+    },
+    {
+      "char_end": 51495,
+      "char_start": 51316,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5e6e3db481d261bc6fdd",
+      "source_role": "author_response",
+      "text": "The authors have expanded great efforts in addressing all of the reviewers' concerns and suggestions over all rounds of review, which I applaud. I do not have additional comments.",
+      "text_sha256": "sha256:d89e6c559ffed4eee890b0459fb2af768f6bd7a5c76f18b68e6666139c325528"
+    },
+    {
+      "char_end": 51510,
+      "char_start": 51498,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-04e5641858929a4850cc",
+      "source_role": "author_response",
+      "text": "Best wishes,",
+      "text_sha256": "sha256:3f94fb79ff73c074ef5a4e98d1cb6c8117df5a565096de3cd685313662824732"
+    },
+    {
+      "char_end": 51531,
+      "char_start": 51513,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-27621f2882dae9b818f5",
+      "source_role": "author_response",
+      "text": "Mathis L. Messager",
+      "text_sha256": "sha256:79e0f68ac980dd7fddc88de3be660426bca30d63c69bbbdf6c7d39fccc088255"
+    },
+    {
+      "char_end": 51619,
+      "char_start": 51534,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6a716755d84059cae220",
+      "source_role": "author_response",
+      "text": "We greatly appreciate your comments. They have significantly improved the manuscript.",
+      "text_sha256": "sha256:b4e6827da1a9c2364e8db6fc5946b738636341873ba41ef9bc1a36dbb43a1484"
+    },
+    {
+      "char_end": 52637,
+      "char_start": 52550,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_3",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-350612b799119cc9236f",
+      "source_role": "author_response",
+      "text": "We thank the reviewer for your time and effort in helping us to improve the manuscript.",
+      "text_sha256": "sha256:5f3b9fba95d62c6083d560a5315b2e525353ef158eee336b1220278bc93abf20"
+    }
+  ],
+  "contract": "reconstruction_session_package",
+  "forbidden_conversation_hashes": [],
+  "input_sha256": "sha256:aadf021ee6b904e3370856e669a4762ef8c391ea65c80d21e95de86739f382c4",
+  "instructions": "Reconstruct the final-state peer review for one paper.\nUse reviewer_report spans as the only source of review opinions. Author responses may\nonly determine whether an issue was resolved; they cannot create or rewrite a review\npoint. Remove greetings, publication/acceptance recommendations, editorial decisions,\nand generic praise. Merge duplicates, preserve real reviewer disagreement, and produce\nat most 24 atomic points in StructuredReviewV2. Include contribution summary, novelty\nsupport/limits, strengths, weaknesses, and questions. Bind every retained point to at\nleast one reviewer quote key and one final PaperIR P:S-* span. Put resolved issues only\nin ReferenceTraceV2/revision_ledger. Keep partially_resolved or persists issues only\nwhen the residual is independently supported by the final paper. Unverifiable items are\naudit-only. Do not use graph signals, GEAR output, old reconstructions, ratings,\ndecisions, recommendations, or accept/reject language. Return only the completed\nReconstructionSessionResponseV2 JSON file.",
+  "package_id": "RSP-3166868465f124a62269",
+  "paper_context": {
+    "claims": [
+      {
+        "claim_id": "C-dfeeeaaf362e286b",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-e8c9ee01770953c8ecb8",
+        "schema_version": "aspr_gear",
+        "text": "Total global reservoir storage has increased at a rate of 27.82 ± 0.08 km[3] /yr, which is mainly attributed to the construction of new — dams."
+      },
+      {
+        "claim_id": "C-b7c4a60564e61839",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-e8c9ee01770953c8ecb8",
+        "schema_version": "aspr_gear",
+        "text": "The decline of NS values is especially pronounced in the global south, while the global north mainly exhibits an NS increase."
+      },
+      {
+        "claim_id": "C-36e826b0d44f596a",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-e8c9ee01770953c8ecb8",
+        "schema_version": "aspr_gear",
+        "text": "The 20th Century witnessed a massive dam construction boom, first starting in North America and then spreading to the rest of the inhabited world."
+      },
+      {
+        "claim_id": "C-b2d8014ed3aefa4e",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-10ecc0e36701ba127464",
+        "schema_version": "aspr_gear",
+        "text": "After a decline in growth during the 1990s[14] , hundreds of large new dams have been added in Asia, Africa, and South America[3] ."
+      },
+      {
+        "claim_id": "C-866f437fabced2f4",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-bd27fde34490400c5ecd",
+        "schema_version": "aspr_gear",
+        "text": "Here, we develop the Global Reservoir Storage (GRS) dataset to evaluate the conditions of global reservoir impoundments—particularly reservoirs constructed after 1999 (hereafter referred to as “post1999 reservoirs”)."
+      },
+      {
+        "claim_id": "C-f4c5b33e55bcd732",
+        "claim_type": "method_claim",
+        "evidence_key": "P:S-bd27fde34490400c5ecd",
+        "schema_version": "aspr_gear",
+        "text": "We built GRS using multi-source satellite data by converting monthly reservoir water areas from the Global Reservoir Surface Area Dataset (GRSAD)[32] to monthly storage values using bathymetric maps[33] and, where necessary, an improved bathymetry simulation method[34] (see “Methods”)."
+      },
+      {
+        "claim_id": "C-7f25bef469ead320",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-77b81604d5a993987302",
+        "schema_version": "aspr_gear",
+        "text": "## Results and discussion We introduce “normalized storage” (NS), a new term defined as the ratio of the actual storage from a group of reservoirs to the storage capacity of these same reservoirs."
+      },
+      {
+        "claim_id": "C-0a2cbdfc786c0643",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-77b81604d5a993987302",
+        "schema_version": "aspr_gear",
+        "text": "This makes regions with different storage capacities comparable, and it is not affected by the increased storage from new reservoirs."
+      },
+      {
+        "claim_id": "C-021025cb4a541790",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-77b81604d5a993987302",
+        "schema_version": "aspr_gear",
+        "text": "The use of NS allows us to: (1) split the pre- and post-1999 reservoirs and directly evaluate the behaviors of newly constructed reservoirs; (2) compare the NS trends with the actual storage trends for new insights; and (3) assess reservoirs grouped by different functionalities (e.g., hydropower, irrigation)."
+      },
+      {
+        "claim_id": "C-a5a16c489282d650",
+        "claim_type": "result_claim",
+        "evidence_key": "P:S-77b81604d5a993987302",
+        "schema_version": "aspr_gear",
+        "text": "While the newly constructed reservoirs have contributed to a steady increase in global storage capacity, their storage returns (in terms of NS) are found to be smaller than those built in the 20th – century (over the period of 1999 2018)."
+      },
+      {
+        "claim_id": "C-280d696363a8148a",
+        "claim_type": "causal_claim",
+        "evidence_key": "P:S-405c5f38bfc5ccd516d6",
+        "schema_version": "aspr_gear",
+        "text": "Regardless of the function — and/or spatial scale, all results lead to the same conclusion that post1999 reservoirs have lower NS levels, but larger seasonal variations, than pre-1999 reservoirs (Fig."
+      },
+      {
+        "claim_id": "C-d93aefbbdbd4d1e3",
+        "claim_type": "novelty_claim",
+        "evidence_key": "P:S-4c0be3af456c91a5895f",
+        "schema_version": "aspr_gear",
+        "text": "**----- Start of picture text -----**<br> a 9.5% b 80 Hydropower<br>71.37 ± 1.84<br>6.9%3.4%7.9% 600<br>7.8%<br>Hydropower 60 63.65 ± 4.66<br>Storage Irrigation 400<br>19.9% capacity Flood control Pre-1999 reservoirs<br>63.6% Others 40 Post-1999 reservoirs 200<br>80.9%<br>20 0<br>Pre-1999 reservoirs Post-1999 reservoirs 2000 2002 2004 2006 2008 2010 2012 2014 2016 2018<br>c 80 Irrigation d 80 Flood control<br>60.83 ± 2.88 60 40<br>56.90 ± 3.09<br>60 60<br>40<br>50.98 ± 6.71 20<br>40 40<br>52.39 ± 8.53 20<br>20 0 20 0<br>2000 2002 2004 2006 2008 2010 2012 2014 2016 2018 2000 2002 2004 2006 2008 2010 2012 2014 2016 2018<br>e Turkey-MED Turkey-BLK Euphrates Yangtze China-SE Pearl Mekong India-South India-WC Parana<br>100<br>Irrigation Hydropower Hydropower Hydropower Hydropower Hydropower Hydropower Irrigation Irrigation Hydropower<br>80<br>60<br>40<br>20<br>0<br>Pre- Post- Pre- Post- Pre- Post- Pre- Post- Pre- Post- Pre- Post- Pre- Post- Pre- Post- Pre- Post- Pre- Post-<br>3)<br>Normalized storage (%)<br>Accumulative new capacity (km<br>3) 3)<br>Normalized storage (%) Normalized storage (%)<br>Accumulative new capacity (km Accumulative new capacity (km<br>Normalized Storage (%)<br>**"
+      }
+    ],
+    "contract": "reconstruction_paper_context",
+    "paper_id": "10.1038/s41467-023-38843-5",
+    "paper_sha256": "sha256:f54be88bc63c007ebb2e32062e641a31759926b4daed9e222c97a0730b0bc28d",
+    "schema_version": "aspr_gear",
+    "spans": [
+      {
+        "evidence_key": "P:S-fb2b71cda33c41540540",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-fb2b71cda33c41540540",
+        "text": "https://doi.org/10.1038/s41467-023-38843-5 \n\n**==> picture [523 x 31] intentionally omitted <==**",
+        "text_sha256": "sha256:04c18016432ca3977bd9aeebf261f71ef45c67faf7034ab5d689916070b6ae52"
+      },
+      {
+        "evidence_key": "P:S-e8c9ee01770953c8ecb8",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-e8c9ee01770953c8ecb8",
+        "text": "## Article \n\n## Diminishing storage returns of reservoir construction \n\nReceived: 12 November 2022 Yao Li 1,4, Gang Zhao 2,5, George H. Allen 3 & Huilin Gao 1 Accepted: 17 May 2023 Surface water reservoirs are increasingly being relied upon to meet rising demands in the context of growing population and changing climate. HowCheck for updates ever, the amount of water available in reservoirs (and the corresponding trends) have not been well quantified at the global scale. Here we use satellite observations to estimate the storage variations of 7245 global reservoirs from 1999 to 2018. Total global reservoir storage has increased at a rate of 27.82 ± 0.08 km[3] /yr, which is mainly attributed to the construction of new — dams. However, the normalized reservoir storage (NS) the ratio of the actual — storage to the storage capacity has declined by 0.82 ± 0.01%. The decline of NS values is especially pronounced in the global south, while the global north mainly exhibits an NS increase. With predicted decreasing runoff and increasing water demand, these observed diminishing storage returns of reservoir construction will likely persist into the future. \n\nAlthough global reservoirs have a much smaller total capacity compared to natural lakes, their flow regulation represents the most intensive human-induced alteration of the hydrological cycle[1][–][5] . The 20th Century witnessed a massive dam construction boom, first starting in North America and then spreading to the rest of the inhabited world. Behind these dams, sprawling reservoirs have fundamentally enhanced our ability to manage Earth’s freshwater resources[6][–][8] , but have also imposed adverse environmental and social effects[9][–][13] .",
+        "text_sha256": "sha256:a820175f82a20806f1372b44b65c97577466bb8d2eff22a12e6778ddc299c074"
+      },
+      {
+        "evidence_key": "P:S-10ecc0e36701ba127464",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-10ecc0e36701ba127464",
+        "text": "After a decline in growth during the 1990s[14] , hundreds of large new dams have been added in Asia, Africa, and South America[3] . In addition, over 3700 hydropower dams (each over 1 MW in capacity) are being planned or are under construction as of 2014, most of which are in developing countries[15] . With water scarcity intensified by both climate change[16][–][19] and increasing water demand[20] , reservoir water availability is essential for sustainable development[21] . Yet dam construction and reservoir operations are rarely coordinated amongst countries despite nearly half of all land being covered by international river basins[22] . To best inform future decision-making related to global surface water management, the storage conditions of reservoir impoundments—particularly those — newly constructed should be carefully evaluated. \n\nHowever, knowledge about the long-term variation of reservoir storage is very limited at a global scale. In situ measurements of reservoir storage are often not shared, especially across international river basins[23] . Land-surface and hydrologic models produce highly uncertain storage estimates, largely due to the lack of reservoir operations/management information[24][–][26] . By relating reservoir surface area and elevation values, satellite remote sensing provides a viable alternative for monitoring storage[27][–][31] . Although recent studies have quantified long-term surface area time series values and seasonal elevation variations of reservoirs globally[5][,][32] , reliable storage estimations have only focused on reservoirs built before 1999 (hereafter referred to as “pre-1999 reservoirs”)[27][–][31] .",
+        "text_sha256": "sha256:ff7b0bb58a1b162b35e0985e32e8c7e570b6daf2601e305bf28017e52d3c8b4f"
+      },
+      {
+        "evidence_key": "P:S-bd27fde34490400c5ecd",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-bd27fde34490400c5ecd",
+        "text": "Here, we develop the Global Reservoir Storage (GRS) dataset to evaluate the conditions of global reservoir impoundments—particularly reservoirs constructed after 1999 (hereafter referred to as “post1999 reservoirs”). We built GRS using multi-source satellite data by converting monthly reservoir water areas from the Global Reservoir Surface Area Dataset (GRSAD)[32] to monthly storage values using bathymetric maps[33] and, where necessary, an improved bathymetry simulation method[34] (see “Methods”). The GRS dataset is the most \n\n> 1Zachry Department of Civil and Environmental Engineering, Texas A&M University, College Station, TX, USA. 2Department of Global Ecology, Carnegie Institution for Science, Stanford, CA, USA.[3] Department of Geosciences, Virginia Polytechnic and State University, Blacksburg, VA, USA.[4] Present address: Chongqing Jinfo Mountain Karst Ecosystem National Observation and Research Station, School of Geographical Sciences, Southwest University, Chongqing, China.[5] Present address: Key Laboratory of Water Cycle and Related Land Surface Processes, Institute of Geographic Sciences and Natural Resources Research, Chinese Academy of Sciences, Beijing, China. e-mail: hgao@civil.tamu.edu \n\nNature Communications | (2023) 14:3203 \n\n1 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-38843-5 \n\ncomprehensively validated long-term storage record for all of the consistently mapped reservoirs in the Global Reservoir and Dam Database (GRanD)[3] , and represents a major advancement in tracking global reservoir storage conditions. GRS is comprised of storage records from 1999 to 2018 for 7245 reservoirs (6658 km[3] total capacity) as reported in GRanD[3] (Fig. 1a).",
+        "text_sha256": "sha256:6548dc429bf6d657819624bc160944506a04bf544eecc8166f02c5028be3916b"
+      },
+      {
+        "evidence_key": "P:S-77b81604d5a993987302",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-77b81604d5a993987302",
+        "text": "While post-1999 reservoirs only account for 7.14% of the number of reservoirs, their combined storage contributes to 14.34% of total global capacity (834.78 km[3] ). \n\n## Results and discussion \n\nWe introduce “normalized storage” (NS), a new term defined as the ratio of the actual storage from a group of reservoirs to the storage capacity of these same reservoirs. The NS offers a unique flexibility for quantifying and comparing the storage returns of impoundment from different groups of reservoirs across global, continental, and basin scales. This makes regions with different storage capacities comparable, and it is not affected by the increased storage from new reservoirs. The use of NS allows us to: (1) split the pre- and post-1999 reservoirs and directly evaluate the behaviors of newly constructed reservoirs; (2) compare the NS trends with the actual storage trends for \n\nnew insights; and (3) assess reservoirs grouped by different functionalities (e.g., hydropower, irrigation). \n\nWhile the newly constructed reservoirs have contributed to a steady increase in global storage capacity, their storage returns (in terms of NS) are found to be smaller than those built in the 20th – century (over the period of 1999 2018). The NS values of the post-1999 reservoirs are significantly lower (and with larger seasonal variations) than the pre-1999 ones, at 60.59 ± 4.33% and 70.36 ± 1.36%, respectively (Fig. 1b). The NS values also depend on reservoir function. For instance, the NS values in reservoirs whose primarily function is hydropower are generally higher than those whose primarily function is irrigation or flood control. Therefore, we further compared the NS values for pre-1999 and post-1999 reservoirs in terms of reservoir function, at both global and basin scales.",
+        "text_sha256": "sha256:5a8861e6804aa9f96a0bbdf94c0505e81404198bbe1e700827f6b355eb2baf11"
+      },
+      {
+        "evidence_key": "P:S-405c5f38bfc5ccd516d6",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-405c5f38bfc5ccd516d6",
+        "text": "Regardless of the function — and/or spatial scale, all results lead to the same conclusion that post1999 reservoirs have lower NS levels, but larger seasonal variations, than pre-1999 reservoirs (Fig. 2). It is worth noting that there are many social-economic benefits to building reservoirs (e.g., hydropower generation, flood reduction, water supply, and recreation), but here we are framing the returns only in terms of normalized water storage. \n\n**==> picture [483 x 247] intentionally omitted <==**",
+        "text_sha256": "sha256:f64661b09d892177fec3cb8031344e9e7dd653706b6ccfd67941ff96d2b90ac9"
+      },
+      {
+        "evidence_key": "P:S-7f866617910a91939582",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-7f866617910a91939582",
+        "text": "**==> picture [16 x 17] intentionally omitted <==**",
+        "text_sha256": "sha256:f376d95b5d8d2ff1d98bcac951f6fb0d727db2c96290950d1e3e0c8966a92538"
+      },
+      {
+        "evidence_key": "P:S-0635e6336551abf48dd9",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-0635e6336551abf48dd9",
+        "text": "**==> picture [15 x 19] intentionally omitted <==**",
+        "text_sha256": "sha256:0cd896cd9ed1bbbfc9654012dafbca86b0483a8791b96051405ed53cc455551e"
+      },
+      {
+        "evidence_key": "P:S-577f60f26b62f1f663c7",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-577f60f26b62f1f663c7",
+        "text": "**==> picture [16 x 17] intentionally omitted <==**",
+        "text_sha256": "sha256:f376d95b5d8d2ff1d98bcac951f6fb0d727db2c96290950d1e3e0c8966a92538"
+      },
+      {
+        "evidence_key": "P:S-67e120bf42e6b3485920",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-67e120bf42e6b3485920",
+        "text": "**==> picture [16 x 17] intentionally omitted <==**",
+        "text_sha256": "sha256:f376d95b5d8d2ff1d98bcac951f6fb0d727db2c96290950d1e3e0c8966a92538"
+      },
+      {
+        "evidence_key": "P:S-6c3b776de1b87e3cea08",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-6c3b776de1b87e3cea08",
+        "text": "**==> picture [274 x 22] intentionally omitted <==**",
+        "text_sha256": "sha256:8acf64774bf04dfc4de5bb18af58438c49b12c880eb0735d1e1e3027a3cb6e6c"
+      },
+      {
+        "evidence_key": "P:S-37e8633a3542446265f8",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-37e8633a3542446265f8",
+        "text": "**==> picture [16 x 9] intentionally omitted <==**",
+        "text_sha256": "sha256:6bfd411dbe97ef9ff0ab1a2203134200be6daaf610b95c3ec9fb1554f267e34c"
+      },
+      {
+        "evidence_key": "P:S-fa1f1d55ae3c295422a7",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-fa1f1d55ae3c295422a7",
+        "text": "**==> picture [15 x 15] intentionally omitted <==**",
+        "text_sha256": "sha256:0ed62f214a798603f423969eaee508d861320662330453b86d903adae1057d55"
+      },
+      {
+        "evidence_key": "P:S-a654dbbf85d955df720d",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-a654dbbf85d955df720d",
+        "text": "**==> picture [16 x 22] intentionally omitted <==**",
+        "text_sha256": "sha256:f9d11cd1ee2dac076164bea54521bb0be0b5f143e8a892bcc7c7ae45272389a2"
+      },
+      {
+        "evidence_key": "P:S-8d26fb29d9ee40de3e4f",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8d26fb29d9ee40de3e4f",
+        "text": "**==> picture [16 x 27] intentionally omitted <==**",
+        "text_sha256": "sha256:fa3ee9dba3da73159b3a31a02f4b5dcbf2823123466913b20e717d1f41d6cc64"
+      },
+      {
+        "evidence_key": "P:S-18ec6be700755166d412",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-18ec6be700755166d412",
+        "text": "**==> picture [16 x 36] intentionally omitted <==**",
+        "text_sha256": "sha256:2ba3adb6f95f1558aee309a67c31e6b80c586a63266c72c76d252f4b086006ab"
+      },
+      {
+        "evidence_key": "P:S-03702ada8fc375f1e7e4",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-03702ada8fc375f1e7e4",
+        "text": "**==> picture [15 x 39] intentionally omitted <==**",
+        "text_sha256": "sha256:1c463e3fb3615476a73c8f3eea3cc98aa8c32eb2e30cb69eca320eccd4a11194"
+      },
+      {
+        "evidence_key": "P:S-71b1bbccbb660e5f0f2e",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-71b1bbccbb660e5f0f2e",
+        "text": "**==> picture [16 x 45] intentionally omitted <==**",
+        "text_sha256": "sha256:072df68714127f2d8534ac020f6749349593301340590076e74500faee4388dd"
+      },
+      {
+        "evidence_key": "P:S-115a0c161d42386ae551",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-115a0c161d42386ae551",
+        "text": "**==> picture [16 x 56] intentionally omitted <==**",
+        "text_sha256": "sha256:5d443b126c815770e9df518c8d8dd04eb0f9a0e9329c1e894a5a084388ad3d8e"
+      },
+      {
+        "evidence_key": "P:S-d0935a13b992f54ab8fc",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-d0935a13b992f54ab8fc",
+        "text": "**==> picture [16 x 59] intentionally omitted <==**",
+        "text_sha256": "sha256:96e201a9c3e35ef9fd1052be94a215be9f1697d1ec4cefcdcb15053864b76714"
+      },
+      {
+        "evidence_key": "P:S-074c828e851e74cd3d7f",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-074c828e851e74cd3d7f",
+        "text": "**==> picture [15 x 62] intentionally omitted <==**",
+        "text_sha256": "sha256:572f876c323f9d385a3c3b024e9e84a11e5bc9cbdb31e83ee0b4c6063f9fd689"
+      },
+      {
+        "evidence_key": "P:S-6ffa9bb60e4c704a04bc",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-6ffa9bb60e4c704a04bc",
+        "text": "**==> picture [16 x 76] intentionally omitted <==**",
+        "text_sha256": "sha256:401fd0ba7099d1ff98d7741873bf843a8889e80542f37c628425732895a9866f"
+      },
+      {
+        "evidence_key": "P:S-37e22758b21f41291476",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-37e22758b21f41291476",
+        "text": "**==> picture [16 x 82] intentionally omitted <==**",
+        "text_sha256": "sha256:fdc142575c298d54ebb887b4c4a8a150c111ef0a0ce095aa910b6b1c747b264d"
+      },
+      {
+        "evidence_key": "P:S-558657c3c800e0237d0f",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-558657c3c800e0237d0f",
+        "text": "**==> picture [16 x 90] intentionally omitted <==**",
+        "text_sha256": "sha256:64eecd0575b2e3431d38b8fb0cfd589d62c2fe00f2c8ef4fea923c1fba66c0fe"
+      },
+      {
+        "evidence_key": "P:S-72fbe2fa4dfdcbcd58ad",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-72fbe2fa4dfdcbcd58ad",
+        "text": "**==> picture [15 x 90] intentionally omitted <==**",
+        "text_sha256": "sha256:03d4cf22c2acbf15a2856fbd73e6fe46a84550e2769c49f5938e5efd923c57c3"
+      },
+      {
+        "evidence_key": "P:S-ae698a041177f02d8e1e",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-ae698a041177f02d8e1e",
+        "text": "Fig. 1 | Comparison of normalized storage (NS) variations of global pre- and post-1999 reservoirs. a Locations of the global reservoirs (with pre-1999 reservoirs in red and post-1999 reservoirs in cyan). b Comparison of the NS values of \n\nglobal pre- and post-1999 reservoirs (excluding regulated natural lakes), along with the accumulative storage capacity of the post-1999 reservoirs. \n\nNature Communications | (2023) 14:3203 \n\n2 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-38843-5 \n\n**==> picture [491 x 346] intentionally omitted <==**",
+        "text_sha256": "sha256:f63b61a002d8baa55005d02339e5d00a880fb431fef201d6d98be05882f07be1"
+      },
+      {
+        "evidence_key": "P:S-4c0be3af456c91a5895f",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-4c0be3af456c91a5895f",
+        "text": "**----- Start of picture text -----**<br>\na 9.5% b 80 Hydropower<br>71.37 ± 1.84<br>6.9%3.4%7.9% 600<br>7.8%<br>Hydropower 60 63.65 ± 4.66<br>Storage Irrigation 400<br>19.9% capacity Flood control Pre-1999 reservoirs<br>63.6% Others 40 Post-1999 reservoirs 200<br>80.9%<br>20 0<br>Pre-1999 reservoirs Post-1999 reservoirs 2000 2002 2004 2006 2008 2010 2012 2014 2016 2018<br>c 80 Irrigation d 80 Flood control<br>60.83 ± 2.88 60 40<br>56.90 ± 3.09<br>60 60<br>40<br>50.98 ± 6.71 20<br>40 40<br>52.39 ± 8.53 20<br>20 0 20 0<br>2000 2002 2004 2006 2008 2010 2012 2014 2016 2018 2000 2002 2004 2006 2008 2010 2012 2014 2016 2018<br>e Turkey-MED Turkey-BLK Euphrates Yangtze China-SE Pearl Mekong India-South India-WC Parana<br>100<br>Irrigation Hydropower Hydropower Hydropower Hydropower Hydropower Hydropower Irrigation Irrigation Hydropower<br>80<br>60<br>40<br>20<br>0<br>Pre- Post- Pre- Post- Pre- Post- Pre- Post- Pre- Post- Pre- Post- Pre- Post- Pre- Post- Pre- Post- Pre- Post-<br>3)<br>Normalized storage (%)<br>Accumulative new capacity (km<br>3) 3)<br>Normalized storage (%) Normalized storage (%)<br>Accumulative new capacity (km Accumulative new capacity (km<br>Normalized Storage (%)<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:4b4c92c031a280e82c0b05973abc415b354d970070075832fb7436d9efa5b7d2"
+      },
+      {
+        "evidence_key": "P:S-49c61b22d06440174feb",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-49c61b22d06440174feb",
+        "text": "Fig. 2 | Comparison of normalized storage (NS) in terms of reservoir function at global and basin scales. a Reservoir storage capacity proportion corresponding to primary function for pre-1999 (outer ring) and post-1999 (inner ring) reservoirs globally. b–d Comparison of the NS values of global pre- and post-1999 reservoirs (excluding regulated natural lakes) with primary functions of hydropower, irrigation, and flood control, along with the accumulative storage capacity of the post- \n\n1999 reservoirs. e Comparison of the NS values of pre- and post-1999 reservoirs (excluding regulated natural lakes) for ten basins that have more than five post1999 reservoirs with the same primary function. Box ranges represent the upper and lower quartiles, whiskers extend to 1.5 times the interquartile range, and outliers are denoted as dots. The statistical results are summarized in Supplementary Table 1. \n\nThe global total reservoir storage shows a nearly continuous increase during the last two decades (Fig. 3), with a mean value of 4236.32 ± 181.64 km[3] (mean ± std) and a growth rate of 27.82 ± 0.08 km[3] /yr (Supplementary Table 2). This increase is primarily attributable to the construction of new reservoirs at a mean rate of 41.61 km[3] /yr (Supplementary Fig. 1). Unlike the total storage, the global NS has a significant decreasing trend (at a rate of −0.82 ± 0.01%/20 yr). The contrasting storage and NS trends indicate that the recent storage returns of global reservoir construction have been declining since the start of the 21st century. \n\nAt the continental scale, this decreasing normalized storage is particularly evident in Asia, Africa, and South America, which are the continents where most of the newly constructed reservoirs are located (Fig. 1a).",
+        "text_sha256": "sha256:a1851269fd2651e03e43ac8569c79218dd65f38062c4975c3bb955df3cf443c9"
+      },
+      {
+        "evidence_key": "P:S-52f616fa956fe2f07ad0",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-52f616fa956fe2f07ad0",
+        "text": "Asia holds the largest number of reservoirs (2352) and the highest storage capacity (2386.78 km[3] ) of any continent. It also has the most rapid storage increase with a growth rate of 16.76 ± 0.05 km[3] /yr, accounting for 60.04% of the global trend from 1999 to 2018. This increase is mainly attributed to new reservoir construction. While the NS of all Asian reservoirs combined has a decreasing trend − ( 0.18 ± 0.01%/20 yr), the NS value of the pre-1999 reservoirs shows a significant increase (1.30 ± 0.01%/20 yr), which suggests that the overall reduction of NS is attributed to the post-1999 reservoirs. Both Africa and South America show increasing storage but decreasing NS. Their storage growth is primarily driven by newly impounded \n\nreservoirs. However, the pre-1999 reservoirs in Africa (−3.81 ± 0.03%/ 20 yr) and South America (−4.28 ± 0.04%/20 yr) have experienced significant NS drops, which is the driver for the overall NS decrease in these two continents (−3.99 ± 0.03%/20 yr and −3.53 ± 0.04%/20 yr, — respectively). For the other three continents which are dominated by developed countries, and have few post-1999 reservoirs—the storage and NS trends coincide. North America and Europe particularly exhibit significant increasing trends in NS, which together offset the overall global decreasing NS trend. Note that the decreasing NS trends are conservative, as we did not consider the impacts of sedimentation when conducting the trend analysis (see Methods). \n\nBasin-scale reservoir storage information is essential for managing local water resources and assessing changes to the hydrological — cycle, yet this knowledge is lacking at the global scale particularly for transboundary river basins[35] . Thus, we evaluate the storage variations at the basin scale (Fig. 4).",
+        "text_sha256": "sha256:83de274c6013e839ee940843cf80ce374c5dade96d281db7021cfad9ed3b25ac"
+      },
+      {
+        "evidence_key": "P:S-18b61bb7d8250b673994",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-18b61bb7d8250b673994",
+        "text": "The majority of the Earth’s basins experienced storage growth (Fig. 4a). Asian basins have the most storage growth, while basins in southern Africa have suffered from storage losses. The highest increase is found in the Yangtze River Basin (3.34 ± 0.01 km[3] /yr), which is characterized by the most intensive dam construction activities in Asia (e.g., Three Gorges Dam)[15] . The fastest storage decline occurred in the Colorado River Basin (−0.62 ± 0.003 km[3] /yr), due to the combined effects from an extended drought since 2000[36] and increasing water use[37] . With regard to NS (Fig. 4b), \n\nNature Communications | (2023) 14:3203 \n\n3 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-38843-5 \n\n**==> picture [262 x 345] intentionally omitted <==**",
+        "text_sha256": "sha256:2bf1c47c99d3c80f72c8d83979cd62bbe58cf4b8201bc5891e3092e0277cb4cc"
+      },
+      {
+        "evidence_key": "P:S-5d22dc9c4e637d825a46",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-5d22dc9c4e637d825a46",
+        "text": "**==> picture [106 x 96] intentionally omitted <==**",
+        "text_sha256": "sha256:75b571994e1ad7c0885f498a24f7c4e52877ab54f82773b8077e316ff72961e1"
+      },
+      {
+        "evidence_key": "P:S-344b122ffb63b94b7d5d",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-344b122ffb63b94b7d5d",
+        "text": "**==> picture [65 x 40] intentionally omitted <==**",
+        "text_sha256": "sha256:44c16bd5f94e1f116b4f2d19ae3faaf6f89e7dac2952c3bc8aab2767a657ccca"
+      },
+      {
+        "evidence_key": "P:S-1d1f90bc9544cbe84ad3",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-1d1f90bc9544cbe84ad3",
+        "text": "**==> picture [43 x 41] intentionally omitted <==**",
+        "text_sha256": "sha256:416b85770700b91c3b1dc734cf1f79c24b6026962e48b339e1e921a068d17ed4"
+      },
+      {
+        "evidence_key": "P:S-e330409f7a8e87220fe8",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-e330409f7a8e87220fe8",
+        "text": "Fig. 3 | Monthly reservoir storage and normalized storage (NS) variations at the global and continental scales from 1999 to 2018. a Global, b Asia, c North America, d Africa, e South America, f Europe, and g Oceania. \n\n**==> picture [489 x 239] intentionally omitted <==**",
+        "text_sha256": "sha256:19e420006928150bc7200d83073b819879e2084dbe35042db89415aece9b0051"
+      },
+      {
+        "evidence_key": "P:S-9f995bff27048a47c8ee",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-9f995bff27048a47c8ee",
+        "text": "**----- Start of picture text -----**<br>\na b<br>Storage trend<br>(km [3] /yr) NS trend (%/yr)<br>-0.76 - -0.50 < -0.75<br>-0.50 - -0.25 -0.75 - -0.25<br>-0.25 - 0.00 -0.25 - 0.00<br>0.00 - 0.50 0.00 - 0.25<br>0.50 - 1.00 0.25 - 0.75<br>1.00 - 3.33 > 0.75<br>c d<br>Mean annual<br>Mean NS (%) CV of NS (%)<br>0 - 40 0 - 2<br>40 - 50 2 - 4<br>50 - 60 4 - 8<br>60 - 70 8 - 12<br>70 - 80 12 - 24<br>80 - 90 24 - 36<br>90 - 100 36 - 56<br>**----- End of picture text -----**<br>",
+        "text_sha256": "sha256:914670198e6485bfa8b91d06e7c47364a61474690c0bad5de0a6c6eccfa8d40f"
+      },
+      {
+        "evidence_key": "P:S-07f6c48e563f0ead7fc0",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-07f6c48e563f0ead7fc0",
+        "text": "Fig. 4 | Reservoir storage and normalized storage (NS) variations from 1999 to 2018 at the basin scale. a Storage trends, b NS trends, c Long-term mean NS, and d Mean annual coefficient of variation (CV) of NS. Note that with the basins shown \n\nin (a) and (b), the significant trends (p < 0.05) are delineated in white, and the nonsignificant trends (p > 0.05) are delineated in black. The number of reservoirs and the total storage for each basin are shown in Supplementary Fig. 2. \n\nNature Communications | (2023) 14:3203 \n\n4 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-38843-5 \n\n**==> picture [479 x 431] intentionally omitted <==**",
+        "text_sha256": "sha256:ec09a9e2752b5245b0c973aa626e6e5d749d9b150d891888790a0533da3930c0"
+      },
+      {
+        "evidence_key": "P:S-9e0644fead5801f0fdda",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-9e0644fead5801f0fdda",
+        "text": "Fig. 5 | The potential drivers of normalized storage (NS) patterns at the basin scale. a Long-term mean runoff (Q) values from 2000 to 2018, c Mean population density (2000–2020), and e Storage capacity percentage of hydropower reservoirs. Plots b, d, and f show the respective correlations between the metrics to the \n\nleft (shown in a, c, and e) along with the long-term mean NS values (2000–2018) for global basins that contain more than five reservoirs. Note that a log transformation was applied to the runoff and population data to correct for heteroskedasticity (see “Methods”). \n\ndecreasing trends predominate—especially over the Southern Hemisphere, including those areas in South America and southern Africa. The basins with increased NS are mainly in East Asia, Europe, and North America. However, fewer basins in Asia show significant increases in NS compared to storage—and the NS increases in European and North American basins are generally weak. \n\nTo assess the overall reservoir water availability and stability, we also examined the long-term mean and variation of the NS values from 1999 to 2018 at the basin scale (Fig. 4c, d). The reservoirs in highlatitude regions (e.g., the Great Lakes and Siberia) have relatively high NS values. This is attributable to the fact that these northern reservoirs are less affected by human activities due to low population density. On the other hand, the basins in South and Southeast Asia (e.g., the Indus and Yangtze basins) have low NS levels likely because of the high water demand driven by the large populations in these areas. Moreover, the annual mean coefficient of variation (CV) of the NS values (Fig.",
+        "text_sha256": "sha256:4e60d14437a1a1d10eb75fbde44937936ae961d680c6aa24ff47621f075f71d6"
+      },
+      {
+        "evidence_key": "P:S-8d677bced5df87207215",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8d677bced5df87207215",
+        "text": "4d) indicates that the reservoirs in high-latitude areas—as well as those in Europe and North America—are relatively stable, with comparatively \n\n— small dynamics. In contrast, the Asian reservoirs with the exception of — those in high-latitude regions show large intra-annual variability. The large NS variability in the Amazon basin is attributable to the extensive damming of highly seasonal Amazonian rivers[38] . Finally, the basin with the highest annual CV value—the Indus basin in India—has experienced substantial groundwater depletion[39] , suggesting that surface water and groundwater levels have both been dominated by human activities in response to the region’s severe water shortage. \n\nReservoir NS is impacted by multiple factors, including upstream runoff, population density, and reservoir function—which directly affect reservoir storage values through inflow, demand, and operation (see “Methods” and Fig. 5). The global runoff, especially in tropical regions, suggests a considerable decrease during the last two decades (Fig. 6a). This suggests that declines in runoff may be the driver of the observed trends (of decreasing NS) in reservoirs with large storage variations. The decreasing trends in runoff are most significant in South America followed by Africa, which contribute to the reduction of NS values in these regions (Fig. 6a). These trends may exacerbate \n\nNature Communications | (2023) 14:3203 \n\n5 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-38843-5 \n\n**==> picture [427 x 574] intentionally omitted <==**",
+        "text_sha256": "sha256:0cfa73b5231428ff625727d06a6714063581ab286201567b396249b9a11efb33"
+      },
+      {
+        "evidence_key": "P:S-847b5c6a86a9a7655062",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-847b5c6a86a9a7655062",
+        "text": "Fig. 6 | Global water stress under population growth. a Runoff (Q) trends from 2000 to 2018 at the basin scale, with the significant trends (p < 0.05) delineated in white and the non-significant trends (p > 0.05) delineated in black. b Population density trends from 2000 to 2020 at the basin scale, with the significant trends (p < 0.05) delineated in white and the non-significant trends (p > 0.05) delineated in black. c The world population, global reservoir storage, and per capita storage from \n\n1999 to 2018. Shading illustrates the 95% confidence intervals for the best-fit linear trends, and ʻaʼ represents the trend value. The world population data were collected from the World Bank (https://data.worldbank.org/indicator/SP.POP.TOTL), and the annual total reservoir storage values were derived by averaging the monthly Global Reservoir Storage dataset. The per capita storage is the ratio of global reservoir storage and world population. \n\nNature Communications | (2023) 14:3203 \n\n6 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-38843-5 \n\nalready stressed reservoirs where NS is significantly decreasing (Fig. 4b). In the last two decades, global population growth is outpacing increases in reservoir storage, causing a significant decrease in the per capita storage (−0.38 ± 0.04 m[3] /yr, Fig. 6c). If regionally declining runoff persists into the future, it will likely add considerable pressure on global reservoirs for meeting the anticipated rising demands on water resources. In particular, we expect that regions in Africa and South Asia will experience increasing water shortages under the predicted extensive decrease in runoff[16][,][40][,][41] and increase in population (Fig. 6).",
+        "text_sha256": "sha256:92894770f041f9c6f3c55b66f08fb9a04748d8e1c97bdf2a3580f49bfb61a632"
+      },
+      {
+        "evidence_key": "P:S-9b50d53f131b03f9b0f2",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-9b50d53f131b03f9b0f2",
+        "text": "Special attention should be paid to reservoir water management strategies in these hotspots of water scarcity[39][,][42] . \n\nOur analysis reveals that the global reservoir normalized storage (i.e., NS) has significantly declined in the 21st century despite an increase in total storage due to the construction of new reservoirs. The changes mainly occurred in South America, and Africa, where the world’s developing countries are located. However, these negative trends have been weakened at the global scale due to the significant — increasing NS in the Global North North America (2.61 ± 0.01%/20 yr) and Europe (1.50 ± 0.01%/20 yr). In particular, the NS values of the post-1999 reservoirs are much smaller than those of the pre-1999 ones. Asia, South America, and Africa are the primary “hotspots” where most future dam construction activities are planned, with Brazil, China, and the Democratic Republic of Congo taking the lead[15] . However, future development of new reservoirs likely will not alleviate the water stress caused by increasing municipal and industrial water demand in south Asia (e.g., India) and southeast Asia (e.g., China). In South America and Africa, the reduced NS values are mainly associated with the large decreases in runoff trends. The results from this study highlight the challenges of resolving finite water resources through reservoir regulation—particularly in developing countries, where the storage returns from these impoundments are diminishing. These findings offer a new perspective for reevaluating the socio-economic benefits of new reservoir construction, and the tension between growing water demand and lessening water availability in developing countries.",
+        "text_sha256": "sha256:f1a28eed1a146043b4a08178cdf83cfe9f255ce832af98a21b1a32e0c131b9a3"
+      },
+      {
+        "evidence_key": "P:S-5fab33e05e6eaede3eaa",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-5fab33e05e6eaede3eaa",
+        "text": "## Methods \n\n## Reservoir storage estimation \n\nTo estimate the time series of reservoir storage variations, we used the reservoir list/information, the surface area, and the Area-Storage (A-V) relationships. \n\nWe extracted the information for 7245 reservoirs from the Global Reservoir and Dam Database (GRanD)[3] (latest version v1.3). GRanD documents geospatially referenced dams and their associated reservoirs (larger than 0.1 km[3] ). GRanD also provides multiple attributes, such as dam height and length, reservoir area, and reservoir storage. The recently released GRanD v1.3 contains 7320 records, with a cumulative reservoir storage capacity of 6811 km[3] . Note that some dams are not associated with reservoirs. We assessed the storage variations for the 7245 reservoirs, which account for a total capacity of 6658 km[3] . There are 57 reservoirs in GRanD without reported storage capacity values. The capacity values for these were estimated based on empirical relationships established in Lehner et al.[3] . However, we found that this did not significantly impact the findings of this study (by comparing the results between including and excluding these reservoirs). Note that this study did not include a comprehensive census of the world’s reservoirs, especially with regard to the very small reservoirs. The GlObal geOreferenced Database of Dams (GOODD) provides the locations of 38,667 dams, but the associated reservoir shapes and other attributes are not available[43] . Lehner et al.[3] estimate that there were approximately 2000 km[3] more reservoirs (mainly small reservoirs) than the 6197 km[3] included in GRanD v1.1 (as of early 2011).",
+        "text_sha256": "sha256:06aad89852d8242b8c31ae858757fed46f50b24f9b2740daf38fe8469a34f726"
+      },
+      {
+        "evidence_key": "P:S-cd44eaf570be1297df3c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-cd44eaf570be1297df3c",
+        "text": "Couto and Olden[44] reveal that 82,891 small hydropower plants (SHPs) are being operated or are under construction—but their analysis is at the nation scale, and georeferenced location information for the individual SHPs are not accessible. Malerba et al.[45] detected \n\n1.765 million farm dams that occupy a volume of 10.99 km[3] . It has been estimated that the cumulative reservoir storage capacity is around 7000–8300 km[3][1][,][3][,][43][,][46] , and GRanD accounts for about 83% of this. \n\nWe adopted the surface area time series values for these reservoirs from the Global Reservoir Surface Area Dataset (GRSAD)[32] . — Leveraging the Landsat-based Global Surface Water (GSW) dataset[47] which contains Earth’s monthly surface water maps at a 30 m resolution from 1984 to 2018—GRSAD corrected the underestimations due to image contamination (e.g., clouds and ice/snow) using a novel algorithm. However, this algorithm cannot be applied to images when more than 95% of the reservoir area is contaminated. Under these conditions, the missing monthly reservoir area values were filled in by a linear interpolation. It should be noted that, although Landsat observations for areas such as the United States and Australia are sufficient for seasonal and interannual evaluations from the early 1980s onward, the coverage for other regions is relatively low before the launch of Landsat-7 in 1999[48][–][50] . Therefore, the seasonal and interannual variations of reservoir storage were analyzed starting from 1999 in this study. \n\nThe monthly storage time series were generated by applying GRSAD area estimations to the A-V relationships for the 7245 reservoirs. The A-V relationships were adopted from two sources.",
+        "text_sha256": "sha256:5bf6c9eca44659d9b564c71cdde349e3fef5dc50a19485689d50dc72f14315d6"
+      },
+      {
+        "evidence_key": "P:S-dcd32937ff5f7b0216ec",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-dcd32937ff5f7b0216ec",
+        "text": "The first is the high-resolution Global Reservoir Bathymetry Dataset (GRBD)[33] , which provides A-V relationships for 347 global artificial reservoirs. By combining the Surface Water Occurrence (SWO) images from GSW with lidar/radar altimetry data, the Area-Elevation (A-E) relationships were first derived for each reservoir. Then, the A-E relationships were, in turn, applied to the corresponding SWO images to obtain the bathymetry values. From the 3-D bathymetric maps, the A-V relationships were then derived[51] . \n\nThe other source is a new A-V dataset produced by modifying a simulation method developed by Yigzaw et al.[34] , which was used for the 6898 reservoirs not included in GRBD. The modification was made in two aspects. First, we improved upon the representation of the reservoir areas at capacity. Yigzaw et al.[34] assumed that the polygon areas in GRanD represented the surface areas at storage capacity. However, the reservoir polygons were primarily based on information from the static Shuttle Radar Topography Mission (SRTM) DEM collected in February of 2000—a period when most reservoirs were unlikely to be at their peaks (because of low fill, a dry season, or some other factors). To minimize this kind of uncertainty, we calculated the 95th percentile area value for each reservoir from the GRSAD dataset, and compared it with the associated area provided in GRanD. The larger value of the two was then selected to represent the area at capacity (for each given reservoir). A total of 5152 reservoir records were updated to the 95th percentile area values. Second, we combined each reservoir’s vertical and bottom profile shapes to estimate the area at each layer by scaling to the area at capacity (i.e., the top layer area).",
+        "text_sha256": "sha256:fc92d71416cb56ef4580bc1495f39950d5dc58803294c7e449cafed341e2edd4"
+      },
+      {
+        "evidence_key": "P:S-1129d8c405e782cec1a1",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-1129d8c405e782cec1a1",
+        "text": "Yigzaw et al.[34] used the effective length and width of the reservoirs, but did not consider the fact that the complexity of the surface shapes may lead to large uncertainties. We selected three possible bottom profile shapes—parabolic, linear, and square root—and used them in combination with four vertical profile shapes—prism, bowl, wedge, and concave wedge—to obtain twelve different reservoir geometries to choose from. A diagram of a reservoir geometry with a parabolic bottom profile and a prism vertical profile is shown in Supplementary Fig. 3a, with the corresponding parameters denoted in Supplementary Fig. 3b. The selected vertical and bottom profile shapes are shown in Supplementary Figs. 3c and 3d, respectively. \n\nThe simulation method included two steps: First, the optimal geometry was determined for each reservoir. The total storage value was calculated for each of the twelve possible geometries by integrating the area with respect to the depth. Then the geometry with the estimated total storage closest to the reported capacity value in GRanD was selected as the optimal geometry. Second, for a given area value, \n\nNature Communications | (2023) 14:3203 \n\n7 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-38843-5 \n\nthe corresponding storage value was calculated by integration, and then the A-V relationship was derived. \n\nHere we use a reservoir geometry with a parabolic bottom profile and a prism vertical profile (Supplementary Fig. 3a) to demonstrate the process of creating a simulated A-V relationship. As shown in Supplementary Fig. 3b, A0 represents the area at capacity that is associated with a depth of D0, which was derived from the dam height HðD0 = 0:95HÞ[34] .",
+        "text_sha256": "sha256:0ff31d0b329333f14a43d937e23e27f956cfab525a9ba4f826383637af192ab3"
+      },
+      {
+        "evidence_key": "P:S-79e6fa6f086c6f4a58f0",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-79e6fa6f086c6f4a58f0",
+        "text": "It should be noted that for reservoirs with no available dam height information, D0 was substituted by the average depth— which was calculated using the ratio of storage and area values at capacity. Next, for a given layer with a depth of D which is z meters below the top layer (z = D0 � D), its corresponding water area A can be calculated based on the bottom and vertical profile shapes (Eq. (1)). \n\n**==> picture [155 x 27] intentionally omitted <==**",
+        "text_sha256": "sha256:c6161fc8938707f64b30fd668c251ce5dfb5694574125449add51897fb628128"
+      },
+      {
+        "evidence_key": "P:S-33a0dd595ceadd40cdf2",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-33a0dd595ceadd40cdf2",
+        "text": "The estimated total storage ðV 0Þ is calculated by integrating the area ðAÞ with respect to the depth (Eq. (2)). \n\n**==> picture [189 x 27] intentionally omitted <==**",
+        "text_sha256": "sha256:ffdab3c48b1b235a37bd8f3c3bd74f06f45e8c4e70056ba12a2d3f3bb02ff291"
+      },
+      {
+        "evidence_key": "P:S-e0a08d0b117786793d68",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-e0a08d0b117786793d68",
+        "text": "Similarly, the estimated total storage ðV 0Þ values for the other geometries are obtained using the equations in Supplementary Table 3. Then, the reported storage capacity value (V c) is compared with the estimated total storage values, and the geometry with the closest estimation is selected. It should be noted that some geometries have the same estimated storage values, such as a prism vertical profile with a linear bottom profile and a bowl vertical profile with a parabolic bottom profile (Supplementary Table 3). In this case, either one can be selected, which has no effect on the storage calculation. \n\nNext, Eqs. (1) and (2) are combined to derive the A-V relationship (Eq. (3)). \n\n**==> picture [197 x 22] intentionally omitted <==**",
+        "text_sha256": "sha256:8eba73779f3483a5690e027d9b90e3491b02bad2cd7f3670d3b0d9fce307e644"
+      },
+      {
+        "evidence_key": "P:S-643ba80c9830ba08976e",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-643ba80c9830ba08976e",
+        "text": "The storage equations for other geometries are summarized in Supplementary Table 3. \n\nWe selected 16 reservoirs with available in situ A-V relationships from which to compare our modified simulation method with that of Yigzaw et al.[34] (Supplementary Fig. 4). Results show that our modification can greatly improve the accuracy of the A-V relationships. \n\n## Evaluation of storage estimations \n\nWe collected in situ measurements for 277 reservoirs from the United States, Australia, and India to validate the storage results (a total of 101,041 pairs). As shown in Supplementary Fig. 5, the set of estimated storage values agrees well with gauge observations, with an R[2] value of >0.99 and a slope of 1.01. The volumes of the validation reservoirs are primarily between 2 and 5 km[3] . With regard to the validation results, 49 reservoirs (22 from the United States, 22 from India, and 5 from Australia) employed the A-V relationships derived from bathymetry data. To further evaluate the performance of the two storage estimation methods, we used the simulation method to derive the A-E relationships for these same 49 reservoirs, and then compared the estimated storage values. Supplementary Fig. 6 shows that the estimated storage values from the two methods are in overall good agreement with the observations. For the storage estimations using the bathymetry-based A-V relationships, the coefficient of determination (R[2] ) ranges from 0.41 to 0.99, the mean bias error (MBE) from −1.32 km[3] to 0.63 km[3] , and normalized root mean square error (NRMSE) from 4.40% to 30.80% (Supplementary Table 4).",
+        "text_sha256": "sha256:6b73d98d61f6980ff0b21966b4ed5859892d49caae49ccd94166d2458fdc03f4"
+      },
+      {
+        "evidence_key": "P:S-440eabd06d76a8a53e73",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-440eabd06d76a8a53e73",
+        "text": "With regard to the results from the simulation-based method, the R[2] , MBE, and NRMSE values range from \n\n0.41 to 0.99, −1.84 km[3] to 4.92 km[3] , and 6.26% to 127.73%, respectively (Supplementary Table 4). In general, the bathymetry-based method (with mean MBE and NRMSE values of 0.041 km[3] and 13.28%) performed better than the simulation method (with mean MBE and NRMSE values of 0.23 km[3] and 24.30%). Although the bathymetrybased A-V relationships are only available for 347 reservoirs, they represent 51.08% of the total global capacity (according to GRanD v1.3) — which can help to reduce the overall error/uncertainty. It should be noted that the storage estimates from the simulation method have a relatively large bias in some cases. For example, the Rana Pratap Sagar, Yeleru, and Nagarjuna Sagar reservoirs have NRMSE values of 127.73%, 87.14%, and 73.09%, respectively. However, the estimated storage values for these reservoirs have good correlations with in situ data (with R[2] values of 0.80, 0.89, and 0.81, respectively), indicating that the patterns of variation can be successfully captured. Using the Rana Pratap Sagar Reservoir as an example, the long-term trend derived from the simulated storage time series is 0.006 km[3] /yr, which is consistent with the value calculated from in situ measurements (0.005 km[3] /yr). Therefore, the effect of this relatively large bias should not be significant because our analysis is focused on evaluating the trends of storage variation across large scales. \n\nWe used the above-mentioned 277 reservoirs to evaluate the uncertainty of the storage dataset.",
+        "text_sha256": "sha256:69693a7120ba5ce99bbed688d49aa43f8e8fa094a1f0743ff7a466fc33f23557"
+      },
+      {
+        "evidence_key": "P:S-b608daa21109d570649b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-b608daa21109d570649b",
+        "text": "For each month, the total estimated storage value of these reservoirs was compared with the total in situ measurement value to calculate the NRMSE (i.e., 4.15%), which was used to represent the overall uncertainty of the validation dataset. It should be noted that this overall NRMSE value is smaller than the averaged NRMSE value (22.45%) of the 277 individual reservoirs, due to the offset effectbetween the overestimations and underestimations.In addition, we compared the NS trend values derived from the simulation method with the results from the bathymetry-based methods for the 347 global reservoirs. Supplementary Fig. 7 shows that the NS trend values derived from these two methods show good agreement (R[2] = 0.76), with the majority of the data aligning with the 1:1 line (with a slope value of 0.99). \n\n## Sources of uncertainty \n\nThe storage dataset is associated with uncertainties primarily from two sources. The first is uncertainty due to reservoir sedimentation, which can reduce the storage capacity[52] . Reservoir sedimentation is affected by several major factors, such as geometry, streamflow, sediment load, particle size, deposit-specific weight, reservoir size, and operation rules[53][–][55] . It has been reported that the sedimentation rate varies with reservoir size, with the larger reservoirs having smaller rates[56][–][58] . Recently, Wisser et al.[58] evaluated the storage capacity loss for global reservoirs in GRanD. Their analysis shows that the total storage capacity declined by 4.5% from 1990 to 2010, at an annual rate of 0.23%. Moreover, Dendy et al.[57] estimated the average annual loss rates for a series of different size categories using the sedimentation data for 1105 reservoirs.",
+        "text_sha256": "sha256:6487c20676391f9213b046f9f1e2452014db00bb3a2cb08c7f2c55ebf85f9ca0"
+      },
+      {
+        "evidence_key": "P:S-36d855e7753cc0e41a49",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-36d855e7753cc0e41a49",
+        "text": "Based on the set of loss rates obtained from Dendy et al.[57] , we calculated the annual storage sedimentation values for each reservoir included in the GRS dataset. Then, the total storage sedimentation was divided by the total storage capacity to estimate the — annual storage sedimentation rate 0.18%. Currently, a wide range of techniques (e.g., flushing and dredging) have been developed and implemented to control sedimentation, and to ensure the long-term sustainability of the reservoirs[55][,][59][–][61] . It should be noted that a fraction of the reservoirs in our dataset (e.g., some in the U.S. and India) were evaluated in terms of live storage, which is more resistant to sedimentation. \n\nAlthough sedimentation can reduce storage capacity, reservoir management does not allow for water to be stored higher than planned due to concerns about dam safety. One rare exception is when a flood-control reservoir has a recreation pool for which a certain volume of water is required to be maintained, and the surface level \n\nNature Communications | (2023) 14:3203 \n\n8 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-38843-5 \n\n(of this required volume) is well below the elevation at capacity. In this case, sedimentation can increase the surface area required to store the specified amount of water. Flushing or dredging is usually applied for mitigating the sedimentation effects on storage. In this study, our method relies on using surface area to infer the storage and does not consider the sedimentation effects. If the sedimentation amount is notable in a reservoir, then both the storage and storage capacity can be overestimated. However, based on the evaluation below, sedimentation has a limited effect on the NS values and the NS trends.",
+        "text_sha256": "sha256:b1d24d592a69d934b68827318915c4c84549b16e7f339cc2fe396d9a4e155aa9"
+      },
+      {
+        "evidence_key": "P:S-8432ff03895a161d811b",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-8432ff03895a161d811b",
+        "text": "To further evaluate the impacts of sedimentation, we selected 100 U.S. reservoirs that have sediment information from the Duke Nicholas Institute (https://nicholasinstitute.duke.edu/reservoir-nationaltrends/sediment). The sediment rate values of these reservoirs range from 0 to 18.18%/year, with mean and median values of 1.37%/year and 0.70%/year, respectively (Supplementary Fig. 8a). We compared the NS trend values with and without considering the impacts of sedimentation (Supplementary Fig. 8b). This comparison shows that sedimentation can reduce the NS trend values. Note that the sediment dataset has a relatively large uncertainty due to the scarcity of field measurements, and to the effects of sediment removal activities (e.g., dredging and flushing). As demonstrated in Eqs. (4)–(6), the NS values are lower when considering sedimentation processes, and therefore (while the difference is very minor) the decreasing NS trends presented in this study are conservative. \n\n**==> picture [187 x 59] intentionally omitted <==**",
+        "text_sha256": "sha256:0b3b5c758c456f148a4240466ea60fdafa7dee8142a661826b50d54ff32f57a7"
+      },
+      {
+        "evidence_key": "P:S-fcd42332ae0014a0a371",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-fcd42332ae0014a0a371",
+        "text": "**==> picture [246 x 33] intentionally omitted <==**",
+        "text_sha256": "sha256:14cc2051ab6b532509bee4a7ca89354e064f3cbe256b4e7e4039439b4087271a"
+      },
+      {
+        "evidence_key": "P:S-2106ebfaf0dd468a8c5c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-2106ebfaf0dd468a8c5c",
+        "text": "where V and V c are the remotely sensed reservoir storage and storage capacity values (km[3] ), a is the sediment rate (%/year), t is the time (year), and NSsediment and NS are the normalized storage values with and without considering the sedimentation. \n\nThe second source is related to the modified simulation method and the input data. The performance of the mathematical approximation is sometimes not ideal because the reservoir geometry is very complicated. However, it shows that the storage estimations from the simulation method have overall good consistency with in situ measurements (with a mean R[2] value of 0.81), indicating that they can successfully capture the storage variation patterns. In addition, some uncertainty can be attributed to the input data (i.e., the dam height, and the area and storage values at capacity) provided by GRanD. According to the GRanD technical report, the storage capacity values in GRanD can be classified as “maximum capacity”, “gross capacity”, “normal capacity”, “live capacity” or “minimum capacity”. These are not distinguished in the dataset, which can explain the relatively large vertical bias from the simulation method for the 22 Indian reservoirs (Supplementary Fig. 6 and Supplementary Table 4). The in situ measurements provided by the India Water Resources Information System (India-WRIS) are live storage values. As shown in Supplementary Fig. 9a, the storage capacity values from GRanD are larger than those from India-WRIS. For example, the storage capacity value of Rana Pratap Sagar Reservoir from GRanD (2.90 km[3] ) is twice as much as that from India-WRIS (1.436 km[3] )—which resulted a large error (with an NRMSE of 127.73%).",
+        "text_sha256": "sha256:3e872fe1c6b8fc677e9a31c935fb306ce337a331855760ce2d711ee3e327f9c1"
+      },
+      {
+        "evidence_key": "P:S-08901e9e78c5c7b9fae5",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-08901e9e78c5c7b9fae5",
+        "text": "Note that the storage values for Indian reservoirs using the bathymetry-based method are live storage values. For the 27 reservoirs in the United States and Australia, the storage capacity \n\nvalues from GRanD agree well with those from water management agencies such as the United States Geological Survey (USGS), the United States Bureau of Recreation (USBR), and the United States Army Corps of Engineers (USACE) (Supplementary Fig. 9b). Therefore, the simulation method performed better in the United States and Australia (with an average NRMSE of 15.38%) than in India (with an average NRMSE of 35.24%). Moreover, this comparison of storage capacity values also indicates that the input data provided by GRanD are reliable. \n\nThe water area at capacity is an important input for the simulation model. We adopted the 95-percentile areas to represent the water area at capacity for the majority of the reservoirs. The 100-percentile areas were not selected because these values may correspond to flooding circumstances, which can lead to overestimated water area values at capacity. However, most of the new reservoir polygons added in GRanD v1.3 were based on the maximum (100-percentile) water occurrence extent from the GSW dataset. Therefore, we conducted an uncertainty analysis using the 95- and 100-percentile areas as inputs. Specifically, we used the improved simulation method to derive the storage values from 1999 to 2018, with water-area-at-capacity input values from the 95- and 100-percentile areas, respectively. The in situ storage values of the 277 reservoirs (that we used to validate our storage dataset) were used to validate the simulated storage. Validation results (Supplementary Fig.",
+        "text_sha256": "sha256:aefcfd0c26ffece50aeda01e129e9173b91e69ea1f27d51df4604f61af2bf87e"
+      },
+      {
+        "evidence_key": "P:S-1efe75b26ef564a3e3ae",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-1efe75b26ef564a3e3ae",
+        "text": "10a, b) indicate that the storage values from the 95- and 100-percentile area inputs agree well with the in situ measured values (with R[2] values of 0.98 and 0.99, and RMSE values of 0.30 km[3] and 0.29 km[3] ). We then compared the storage values derived from these two inputs (Supplementary Fig. 10c), which show good agreement (with a slope of 1.0 and a bias of 0.015 km[3] ). In addition, we evaluated the impacts of the water-area-at-capacity inputs on the NS values. We used the 100-percentile areas to replace the 95-percentile areas to generate a different version of the global storage dataset, and then compared the pre-1999 and post-1999 NS values between these two datasets. Results show that the water-area-at-capacity inputs only have a limited impact on the NS values (Supplementary Fig. 10d, e). \n\n## Comparisons with other storage datasets available at a global scale \n\nA number of remotely sensed global reservoir storage datasets have been developed since the early 2010s[27][–][31] . All of these datasets are based on using the A-E relationships to estimate the reservoir and/or lake storage variations. The main difference between them is the source of the satellite data. For example, Busker et al.[29] combined the GSW dataset and the satellite altimetry database DAHITI—Database for Hydrological Time Series over Inland Waters—to establish the A-E relationships, which provide long-term storage variation values for 137 lakes and reservoirs. Comparisons of A-E relationships in Busker et al.[29] with ours show similar quality[33] . Tortini et al.[30] used MODIS-based water surface areas and a satellite radar altimetry dataset to establish A-E relationships for 347 global lakes and reservoirs.",
+        "text_sha256": "sha256:9818886c56b85cc585f4d211c99b7ab22186d9b9b68b141aae1af680125b9e40"
+      },
+      {
+        "evidence_key": "P:S-86894074012a3b3a10ea",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-86894074012a3b3a10ea",
+        "text": "In general, the MODIS-based reservoir storage estimations have larger errors and uncertainties than those of Landsat-based estimations[31] . In addition, the Busker et al.[29] and Tortini et al.[30] datasets provide the time series of storage variations (i.e., change in storage) rather than absolute storage values. \n\n## Normalized storage calculation \n\nWe used the ratio of the total water storage in all of the reservoirs relative to the total storage capacity for a geographical domain (i.e., global, continental, and river basin scales) to calculate the normalized storage. In this way, the NS can be used as an overall indicator of the relative storage variations at large scales. Note that we did not use the average value of the NS for all of the reservoirs (with each reservoir having equal weight). This is because it is a mathematical average primarily determined by the NS of the large amount small reservoirs \n\nNature Communications | (2023) 14:3203 \n\n9 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-38843-5 \n\n(accounting for a small percentage of actual storage), and thus would not represent the actual storage conditions at a large scale. Furthermore, the NS values calculated using the current approach are more physically comparable to the basin scale runoff. \n\nThe storage values during the impoundment periods of new reservoirs could impact the NS values. To eliminate this effect, we used two methods to determine the impoundment period for each post1999 reservoir. For the reservoirs listed in GRanD, we collected their impoundment period information from various sources, such as water management agencies, academic literature, and websites like Wikipedia. Note that public impoundment information is only available for a few reservoirs (e.g., Three Gorges reservoir).",
+        "text_sha256": "sha256:ca6b0ef8a67400e9be682eb58de6dff172e34467e7a22609c4e4a56bde37fbb6"
+      },
+      {
+        "evidence_key": "P:S-633686a6f730aee19eef",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-633686a6f730aee19eef",
+        "text": "For the remainder of the reservoirs, we used a semi-manual method to identify their impoundment periods. We plotted their storage time series and then identified the turning point after which the storage values maintained consistent seasonal variations. For each of the post-1999 reservoirs, the storage values during their impoundment periods were removed before they were used for calculating the NS time series. \n\n## Comparison of NS values between pre- and post-1999 reservoirs \n\nThe operation of a reservoir depends on the primary reservoir purpose, which can impact the NS level. We compared the NS values for global pre- and post-1999 reservoirs in terms of reservoir function. Figure 2a shows that post-1999 reservoirs tend to be designed for hydropower purposes (vs. pre-1999 ones; 80.9% vs. 63.6%), but less for irrigation (7.8% vs. 19.9%) and flood control (3.4% vs. 6.9%). The NS values for post-1999 reservoirs are lower (with larger seasonal variations) than pre-1999 reservoirs (Fig. 2b–d) for all of the reservoir functions—hydropower (63.65 ± 4.66% vs. 71.37 ± 1.84%), irrigation (52.39 ± 8.53% vs. 60.83 ± 2.88%), and flood control (50.98 ± 6.71% vs. 56.90 ± 3.09%). At the continental scale, the locations of pre- and post1999 reservoirs may play a role, because of the heterogeneous climatology within the continent. Thus, we conducted the comparison— taking the reservoir function into consideration—at the basin scale, assuming that the climatology conditions within a basin were homogeneous. We only selected basins that have at least five post-1999 reservoirs with the same primary function, such that the NS values would not be biased by a small number of samples. A total of ten basins were identified that met this criterion.",
+        "text_sha256": "sha256:4a081693e3dfa684be411ac766e88e0bb627814b6b93fb0c3b4e0fb00edca222"
+      },
+      {
+        "evidence_key": "P:S-b3fbf92fc081322a7686",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-b3fbf92fc081322a7686",
+        "text": "Results show that, in nine out of the ten basins studied, the mean NS values of post-1999 reservoirs are lower than those of pre-1999 reservoirs—with the exception of post1999 reservoirs used for irrigation purposes in the India-South basin (Fig. 2e and Supplementary Table 1). With regard to mean annual CV values, the pre- and post-1999 reservoirs used for irrigation in the same basins have similar seasonal variations (Supplementary Table 1). However, post-1999 reservoirs with hydropower as their primary purpose exhibit greater seasonal variation than pre-1999 (hydropower focused) reservoirs—except for those in the Parana basin (Supplementary Table 1). Thus, these comparisons indicate that post-1999 reservoirs have lower NS levels—but larger seasonal variations—than pre-1999 ones. \n\n## Trend analysis of storage and NS time series \n\nWe adopted the scheme developed by Pascolini-Campbell et al.[62] to evaluate the trends of storage and NS time series. First, the seasonal cycle was removed using the climatology values, and then a moving average of 15 months was applied to obtain the interannual variability of the anomaly time series. Then, the non-parametric Mann-Kendall significance test[63][,][64] was used to statistically assess if there was a monotonic upward or downward trend of storage (or NS) over time (with α = 0.05). Finally, the Theil-Sen slope estimator[65][,][66] was employed to detect the linear trend of storage (or NS) time series. Note that the first and last seven monthly values of the time series were not used for the trend analysis. \n\n## Analysis of potential drivers of NS patterns \n\nWe analyzed the potential drivers of the NS patterns at the basin scale, which included runoff, population density, and reservoir use.",
+        "text_sha256": "sha256:5d1ecce131eab5d0d56a659499088983e4ac424da6827dcd21138b3b21e271c6"
+      },
+      {
+        "evidence_key": "P:S-dc47897cf3ea4526ef1c",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-dc47897cf3ea4526ef1c",
+        "text": "The runoff data were provided by the GLDAS Noah Land Surface Model L4 monthly 0.25 × 0.25 degree V2.1 (GLDAS_NOAH025_M 2.1) product from 2000 to 2018[67] . We calculated the long-term mean runoff value for each basin that contained the studied reservoirs. The gridded population density data were collected from the Gridded Population — of the World, Version 4 (GPWv4) data sets which provide an estimate of population density for the years 2000, 2005, 2010, 2015, and 2020 (https://sedac.ciesin.columbia.edu/data/set/gpw-v4-populationdensity-adjusted-to-2015-unwpp-country-totals-rev11). We used the average value from these five years to represent the population density for each basin. The primary function of reservoirs is dominated by hydropower across the world (Fig. 2a), and the NS values of hydropower reservoirs are generally higher than those of others (Fig. 2b–d). We calculated the storage capacity percentage of hydropower reservoirs for each basin. Then, we analyzed the correlation between these three drivers and the long-term mean NS values (2000–2018) at the basin scale (Fig. 5). Note that a log-log transformation was applied for the evaluation of the runoff and population density to correct for heteroskedasticity. \n\nRunoff varies greatly across global basins, with low values in Central Asia, southern Africa, and Oceania; and high values in the tropical regions and South Asia (Fig. 5a). As shown in Fig. 5b, the longterm mean runoff and NS values show a significant positive correlation (Pearson correlation r = 0.21, p < 0.05). The East and South Asia regions are the most densely populated, represented by China and India (Fig. 5c). Conversely, the high-latitude regions, the Amazon, and Oceania are each sparsely populated (Fig. 5c). As indicated in Fig.",
+        "text_sha256": "sha256:798abc824b0e990779206ac7ba2d2d5e8f6a1df828dabc7c1baf2c4b76f6ec6c"
+      },
+      {
+        "evidence_key": "P:S-86e37a6e958be7986a44",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-86e37a6e958be7986a44",
+        "text": "5d, population density is significantly correlated with the NS pattern (r = −0.36, p < 0.001). We used the storage capacity percentage of hydropower reservoirs for evaluating the role of reservoir function, as hydropower reservoirs need to maintain relatively high water levels to ensure that their generators operate efficiently. Figure 5e shows the storage capacity percentage of the hydropower reservoirs within each basin. The reservoirs in the high-latitude basins are primarily designed for hydropower (and therefore have high hydropower percentages), while the basins in sub-tropical regions have relatively low hydropower percentages. However, the basins in South America and central Africa also have high hydropower percentages. The significantly positive correlation (Fig. 5f) between hydropower percentage and NS (r = 0.37, p < 0.001) indicates that reservoir function is also an important driver of NS level. \n\n## Data availability \n\nThe Global Reservoir Storage (GRS) dataset generated in this study has been deposited in the Zenodo[68] under accession code https://doi.org/ 10.5281/zenodo.7855477, with an interactive map on Google Earth Engine platform (https://yao.users.earthengine.app/view/grs). The in situ measurements for validating the storage estimations were provided by the United States Geological Survey (USGS), the United States Bureau of Recreation (USBR), the United States Army Corps of Engineers (USACE), the California Data Exchange Center (CDEC), the Australia Bureau of Meteorology (BOM), and the India Water Resources Information System (India-WRIS). \n\n## Code availability \n\nThe codes used for computations and statistical analyses are available at https://doi.org/10.5281/zenodo.7874111. \n\n## References \n\n1. Chao, B. F., Wu, Y. & Li, Y.",
+        "text_sha256": "sha256:5cac4ac270d7caa6e28d2e201efa9b9d665926fe8eeddba914d8b48e42a43200"
+      },
+      {
+        "evidence_key": "P:S-20b0e15681f8bac8b600",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-20b0e15681f8bac8b600",
+        "text": "Impact of artificial reservoir water impoundment on global sea level. Science 320, 212–214 (2008). \n\nNature Communications | (2023) 14:3203 \n\n10 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-38843-5 \n\n2. Haddeland, I. et al. Global water resources affected by human interventions and climate change. Proc. Natl Acad. Sci. USA 111, 3251–3256 (2014). \n\n3. Lehner, B. et al. High-Resolution Mapping of the World’s Reservoirs and Dams for Sustainable River-Flow Management. Front. Ecol. Environ. 9, 494–502 (2011). \n\n4. Lettenmaier, D. P. & Milly, P. Land waters and sea level. Nat. Geosci. 2, 452 (2009). \n\n5. Cooley, S. W., Ryan, J. C. & Smith, L. C. Human alteration of global surface water storage variability. Nature 591, 78–81 (2021). \n\n6. Biemans, H. et al. Impact of reservoirs on river discharge and irrigation water supply during the 20th century. Water Resour. Res. 47, W03509 (2011). \n\n7. Plate, E. J. Flood risk and flood management. J. Hydrol. 267, 2–11 (2002). \n\n8. Veldkamp, T. et al. Water scarcity hotspots travel downstream due to human interventions in the 20th and 21st century. Nat. Commun. 8, 15697 (2017). \n\n9. Di Baldassarre, G. et al. Water shortages worsened by reservoir effects. Nat. Sustain. 1, 617–622 (2018). \n\n10. Grill, G. et al. Mapping the world’s free-flowing rivers. Nature 569, 215–221 (2019). \n\n11. Vörösmarty, C. J. et al. Global threats to human water security and river biodiversity. Nature 467, 555–561 (2010). \n\n12. Degu, A. M. et al. The influence of large dams on surrounding climate and precipitation patterns. Geophys. Res. Lett. 38, L04405 (2011). \n\n13. Kirchherr, J., Pohlner, H. & Charles, K. J. Cleaning up the big muddy: a meta-synthesis of the research on the social impact of dams. Environ. Impact Assess. Rev. 60, 115–125 (2016). \n\n14.",
+        "text_sha256": "sha256:278e91228cf8d238aeccf543a7ea4b3e509ea5fdfe93cf9884facfaffe26ff66"
+      },
+      {
+        "evidence_key": "P:S-518ac80c255d17b293ea",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-518ac80c255d17b293ea",
+        "text": "Fields, D., Odegard, L., French, L. & Revell, G. Directions in Hydropower: Scaling up for Development (The World Bank, 2009). \n\n15. Zarfl, C., Lumsdon, A. E., Berlekamp, J., Tydecks, L. & Tockner, K. A global boom in hydropower dam construction. Aquat. Sci. 77, 161–170 (2015). \n\n16. Schewe, J. et al. Multimodel assessment of water scarcity under climate change. Proc. Natl Acad. Sci. USA 111, 3245–3250 (2014). \n\n17. Gosling, S. N. & Arnell, N. W. A global assessment of the impact of climate change on water scarcity. Clim. Change 134, 371–385 (2016). \n\n18. Ehsani, N., Vörösmarty, C. J., Fekete, B. M. & Stakhiv, E. Z. Reservoir operations under climate change: storage capacity options to mitigate risk. J. Hydrol. 555, 435–446 (2017). \n\n19. Giuliani, M., Anghileri, D., Castelletti, A., Vu, P. N. & Soncini-Sessa, R. Large storage operations under climate change: expanding uncertainties and evolving tradeoffs. Environ. Res. Lett. 11, 035009 (2016). \n\n20. Burek, P. et al. Water futures and solution-fast track initiative (2016). \n\n21. Gleick, P. H. Global freshwater resources: soft-path solutions for the 21st century. Science 302, 1524–1528 (2003). \n\n22. Wolf, A. T., Natharius, J. A., Danielson, J. J., Ward, B. S. & Pender, J. K. International river basins of the world. Int. J. Water Resour. Dev. 15, 387–427 (1999). \n\n23. Zhang, S., Gao, H. & Naz, B. S. Monitoring reservoir storage in South Asia from multisatellite remote sensing. Water Resour. Res. 50, 8927–8943 (2014). \n\n24. Yassin, F. et al. Representation and improved parameterization of reservoir operation in hydrological and land-surface models. Hydrol. Earth Syst. Sci. 23, 3735–3764 (2019). \n\n25. Shin, S., Pokhrel, Y. & Miguez‐Macho, G.",
+        "text_sha256": "sha256:beced8644dc74de92d4cf6825429fe90020bd17fc15862398aff2cc3c2babdff"
+      },
+      {
+        "evidence_key": "P:S-2c2e3b22a77502082e80",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-2c2e3b22a77502082e80",
+        "text": "High‐resolution modeling of reservoir release and storage dynamics at the continental scale. Water Resour. Res. 55, 787–810 (2019). \n\n26. Zhou, T., Nijssen, B., Gao, H. & Lettenmaier, D. P. The contribution of reservoirs to global land surface water storage variations. J. Hydrometeorol. 17, 309–325 (2016). \n\n27. Crétaux, J.-F. et al. SOLS: a lake database to monitor in the Near Real Time water level and storage variations from remote sensing data. Adv. Space Res. 47, 1497–1507 (2011). \n\n28. Gao, H., Birkett, C. & Lettenmaier, D. P. Global monitoring of large reservoir storage from satellite remote sensing. Water Resour. Res. 48, W09504 (2012). \n\n29. Busker, T. et al. A global lake and reservoir volume analysis using a surface water dataset and satellite altimetry. Hydrol. Earth Syst. Sci. 23, 669–690 (2019). \n\n30. Tortini, R. et al. Satellite-based remote sensing data set of global surface water storage change from 1992 to 2018. Earth Syst. Sci. Data 12, 1141–1151 (2020). \n\n31. Li, Y. et al. NASA’s MODIS/VIIRS global water reservoir product suite from moderate resolution remote sensing data. Remote Sens. 13, 565 (2021). \n\n32. Zhao, G. & Gao, H. Automatic correction of contaminated images for assessment of reservoir surface area dynamics. Geophys. Res. Lett. 45, 6092–6099 (2018). \n\n33. Li, Y., Gao, H., Zhao, G. & Tseng, K.-H. A high-resolution bathymetry dataset for global reservoirs using multi-source satellite imagery and altimetry. Remote Sens. Environ. 244, 111831 (2020). \n\n34. Yigzaw, W. et al. A new global storage‐area‐depth dataset for modeling reservoirs in land surface and earth system models. Water Resour. Res. 54, 10372–10386 (2018). \n\n35. Biancamaria, S., Hossain, F. & Lettenmaier, D. P. Forecasting transboundary river water elevations from space. Geophys.",
+        "text_sha256": "sha256:8b9811b93a0eb5bcdcc29137d40f00ed9131044c0d95377b0e47a85a0994c1c0"
+      },
+      {
+        "evidence_key": "P:S-336070b74a0ce6c3ec5a",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-336070b74a0ce6c3ec5a",
+        "text": "Res. Lett. 38, L11401 (2011). \n\n36. Udall, B. & Overpeck, J. The twenty‐first century Colorado River hot drought and implications for the future. Water Resour. Res. 53, 2404–2418 (2017). \n\n37. Kuhn, E. & Fleck, J. Science Be Dammed: How Ignoring Inconvenient Science Drained the Colorado River (University of Arizona Press, 2019). \n\n38. Latrubesse, E. M. et al. Damming the rivers of the Amazon basin. Nature 546, 363–369 (2017). \n\n39. Rodell, M., Velicogna, I. & Famiglietti, J. S. Satellite-based estimates of groundwater depletion in India. Nature 460, 999 (2009). \n\n40. Collins, M. et al. Long-term climate change: projections, commit— \n\nments and irreversibility. in Climate Change 2013 The Physical Science Basis: Contribution of Working Group I to the Fifth Assessment Report of the Intergovernmental Panel on Climate Change 1029–1136 (Cambridge University Press, 2013). \n\n41. Cisneros, J. Freshwater resources. in “Climate Change 2014–Impacts, Adaptation and Vulnerability: Part A: Global and Sectoral Aspects”. Working Group II Contribution to the IPCC Fifth Assessment Report 229–270 (Cambridge University Press, 2014). \n\n42. Droogers, P. et al. Water resources trends in Middle East and North Africa towards 2050. Hydrol. Earth Syst. Sci. 16, 3101–3114 (2012). \n\n43. Mulligan, M., van Soesbergen, A. & Sáenz, L. GOODD, a global dataset of more than 38,000 georeferenced dams. Sci. Data 7, 1–8 (2020). \n\n44. Couto, T. B. & Olden, J. D. Global proliferation of small hydropower plants–science and policy. Front. Ecol. Environ. 16, 91–100 (2018). \n\n45. Malerba, M. E., Wright, N. & Macreadie, P. I. A continental-scale assessment of density, size, distribution and historical trends of farm dams using deep learning convolutional neural networks. Remote Sens. 13, 319 (2021). \n\n46.",
+        "text_sha256": "sha256:aad840bc04011ae1b29abd93709d878c79ca15d57e6740825b113e06fc1aa255"
+      },
+      {
+        "evidence_key": "P:S-724ac1077a36cb02b9c9",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-724ac1077a36cb02b9c9",
+        "text": "Vörösmarty, C. J. et al. Anthropogenic sediment retention: major global impact from registered river impoundments. Glob. Planet. change 39, 169–190 (2003). \n\n47. Pekel, J.-F., Cottam, A., Gorelick, N. & Belward, A. S. High-resolution mapping of global surface water and its long-term changes. Nature 540, 418–422 (2016). \n\nNature Communications | (2023) 14:3203 \n\n11 \n\nArticle \n\nhttps://doi.org/10.1038/s41467-023-38843-5 \n\n48. Pickens, A. H. et al. Mapping and sampling to characterize global inland water dynamics from 1999 to 2018 with full Landsat timeseries. Remote Sens. Environ. 243, 111792 (2020). \n\n49. Arvidson, T., Gasch, J. & Goward, S. N. Landsat 7’s long-term — \n\nacquisition plan an innovative approach to building a global imagery archive. Remote Sens. Environ. 78, 13–26 (2001). \n\n50. Wulder, M. A. et al. The global Landsat archive: status, consolidation, and direction. Remote Sens. Environ. 185, 271–283 (2016). \n\n51. Li, Y., Gao, H., Jasinski, M. F., Zhang, S. & Stoll, J. D. Deriving highresolution reservoir bathymetry from ICESat-2 prototype photoncounting lidar and landsat imagery. IEEE Trans. Geosci. Remote Sens. 57, 7883–7893 (2019). \n\n52. D. Tullos, P. A. Nelson, R. H. Hotchkiss & Wegner, D. Sediment mismanagement puts reservoirs and ecosystems at risk. Eos 102, https://doi.org/10.1029/2021EO157145 (2021). \n\n53. Salas, J. D. & Shin, H.-S. Uncertainty analysis of reservoir sedimentation. J. Hydraul. Eng. 125, 339–350 (1999). \n\n54. United States Bureau of Reclamation. Design of small dams. Water Resources Technical Publication Series (1987). \n\n55. Schleiss, A. J., Franca, M. J., Juez, C. & De Cesare, G. Reservoir sedimentation. J. Hydraul. Res. 54, 595–614 (2016). \n\n56. Rahmani, V. et al.",
+        "text_sha256": "sha256:a5d8b59fedd2375af796b972988c4db3b3d33d2d38e267f074316a217e2d2236"
+      },
+      {
+        "evidence_key": "P:S-5cf22479c507ffa0b418",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-5cf22479c507ffa0b418",
+        "text": "Examining storage capacity loss and sedimentation rate of large reservoirs in the central US Great Plains. Water 10, 190 (2018). \n\n57. Dendy, F., Champion, W. & Wilson, R. Reservoir sedimentation surveys in the United States. Wash. DC Am. Geophys. Union Geophys. Monogr. Ser. 17, 349–357 (1973). \n\n58. Wisser, D., Frolking, S., Hagen, S. & Bierkens, M. F. Beyond peak reservoir storage? A global estimate of declining water storage capacity in large reservoirs. Water Resour. Res. 49, 5732–5739 (2013). \n\n59. Morris, G. L. in Modern Water Resources Engineering 279–337 (Springer, 2014). \n\n60. Garcia, M. Sedimentation Engineering: Processes, Measurements, Modeling, and Practice (American Society of Civil Engineers, 2008). \n\n61. Kondolf, G. M. et al. Sustainable sediment management in reservoirs and regulated rivers: experiences from five continents. Earth’s Future 2, 256–280 (2014). \n\n62. Pascolini-Campbell, M., Reager, J. T., Chandanpurkar, H. A. & Rodell, M. A 10 per cent increase in global land evapotranspiration from 2003 to 2019. Nature 593, 543–547 (2021). \n\n63. Mann, H. B. Nonparametric tests against trend. Econometrica: J. Econ. Soc. 13, 245–259 (1945). \n\n64. Kendall, M. G. Rank Correlation Methods (1948). \n\n65. Theil, H. A rank-invariant method of linear and polynomial regression analysis. Indag. Math. 12, 173 (1950). \n\n66. Sen, P. K. Estimates of the regression coefficient based on Kendall’s tau. J. Am. Stat. Assoc. 63, 1379–1389 (1968). \n\n67. Rodell, M. et al. The global land data assimilation system. Bull. Am. Meteorol. Soc. 85, 381–394 (2004). \n\n68. Li, Y. Global Reservoir Storage (GRS) dataset [Data set]. Zenodo, https://doi.org/10.5281/zenodo.7855477 (2023).",
+        "text_sha256": "sha256:21bedb685fe401b7a2e3175b00adfb0f0401827530edbd74b9038147afdb9960"
+      },
+      {
+        "evidence_key": "P:S-7e012df79b43bd8a03b2",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-7e012df79b43bd8a03b2",
+        "text": "## Acknowledgements \n\nThis work was supported in part by the NASA Science of Terra, Aqua, and Suomi NPP (TASNPP) Program under Grant 80NSSC18K0939 and the Texas A&M President’s Excellence Fund X-Grants Program. We gratefully thank USGS, USACE, USBR, CEDC, BOM, and WRIS for providing in situ data. This work has benefitted from the usage of the Texas A&M Supercomputing Facility (http://hprc.tamu.edu) and Google Earth Engine. We thank Dr. Dagmar Llewellyn for the information relating to the impacts of sedimentation on reservoir water level and area. \n\n## Author contributions \n\nY.L. conceptualized the study, developed the method, performed analysis, and drafted the manuscript. H.G. conceptualized the study, assisted with the analysis, and reviewed and edited the manuscript. G.Z. and G.H.A. assisted with the analysis and reviewed and edited the manuscript. \n\n## Competing interests \n\nThe authors declare no competing interests. \n\n## Additional information \n\nSupplementary information The online version contains supplementary material available at https://doi.org/10.1038/s41467-023-38843-5. \n\nCorrespondence and requests for materials should be addressed to Huilin Gao. \n\nPeer review information Nature Communications thanks Mathis Messager and the other, anonymous, reviewer(s) for their contribution to the peer review of this work. A peer review file is available. \n\nReprints and permissions information is available at http://www.nature.com/reprints \n\nPublisher’s note Springer Nature remains neutral with regard to jurisdictional claims in published maps and institutional affiliations.",
+        "text_sha256": "sha256:508d959bc7e58970835d8b521b924960dbc32d48450cd00242ca37df091beb59"
+      },
+      {
+        "evidence_key": "P:S-fabe0094cf292f9e7368",
+        "page": 1,
+        "schema_version": "aspr_gear",
+        "section_path": [
+          "Document"
+        ],
+        "span_id": "S-fabe0094cf292f9e7368",
+        "text": "Open Access This article is licensed under a Creative Commons Attribution 4.0 International License, which permits use, sharing, adaptation, distribution and reproduction in any medium or format, as long as you give appropriate credit to the original author(s) and the source, provide a link to the Creative Commons license, and indicate if changes were made. The images or other third party material in this article are included in the article’s Creative Commons license, unless indicated otherwise in a credit line to the material. If material is not included in the article’s Creative Commons license and your intended use is not permitted by statutory regulation or exceeds the permitted use, you will need to obtain permission directly from the copyright holder. To view a copy of this license, visit http://creativecommons.org/ licenses/by/4.0/. \n\n© The Author(s) 2023 \n\nNature Communications | (2023) 14:3203 \n\n12",
+        "text_sha256": "sha256:c9a1c5de502d820da4b1c06bac49986aeab8269fba6faaccf0bcb22cdd8969c6"
+      }
+    ]
+  },
+  "paper_id": "10.1038/s41467-023-38843-5",
+  "paper_sha256": "sha256:f54be88bc63c007ebb2e32062e641a31759926b4daed9e222c97a0730b0bc28d",
+  "parent_output_sha256s": [],
+  "parent_reviews": [],
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "review_source_sha256": "sha256:9c2c13d94742b4ad679acd40359cb02103e15c66032ae8c188ef29d87c389c86",
+  "reviewer_spans": [
+    {
+      "char_end": 1525,
+      "char_start": 1486,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f291ff0be418e3750bdf",
+      "source_role": "reviewer_report",
+      "text": "## Reviewer #1 (Remarks to the Author):",
+      "text_sha256": "sha256:f575013c42c9e91316f21a94feb0b0edfff3402d969a3e1e849f6dd77ac19843"
+    },
+    {
+      "char_end": 2607,
+      "char_start": 1528,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4b5c955be9b4845c066d",
+      "source_role": "reviewer_report",
+      "text": "I have carefully reviewed the author’s revision. The authors have taken additional effort to address my technical concerns. Particularly, I was concerned about the global applicability of the authors’ method in modeling reservoir bathymetric profiles. Accordingly, the authors have expanded the validation of the profile modeling method to the 347 reservoirs included in the Global Reservoir Bathymetry Dataset (GRBD). The modeled reservoir storage capacities agree overall well with the storage capacities based on reservoir bathymetries in GRBD. I was also concerned about the impacts of ignoring reservoir sedimentation on the derived Normalized Storage (NS) trend. Accordingly, the authors expanded the discussion on the theoretical impact of reservoir sedimentation, accompanied by an experiment on four US reservoirs. Their discussion shows that ignoring sedimentation may underestimate the severity of the NS decline, but the underestimation is probably small. The authors have also included some of the validation statistics to the uncertainties of their trend estimates.",
+      "text_sha256": "sha256:29ef00ac480441fb0a4e79a8706fe67b845f5df2aa68ddffdf400d0707155f11"
+    },
+    {
+      "char_end": 3285,
+      "char_start": 2610,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b4d16c66b0e928f9c437",
+      "source_role": "reviewer_report",
+      "text": "I found the authors’ revision has further improved the fidelity of their data products and the reliability of their scientific results. While this is encouraging, I reserve a few technical concerns and remain skeptical about what’s really behind the pattern of declining reservoir NS. In addition, I found the connotation of “diminishing returns of reservoir construction” rather implicit. This is partially because the current attribution, which is based on simple correlation analysis, has not yet sufficiently disentangled the signals of climate, reservoir construction, and operations/managements. I listed my remaining concerns below for the authors to further consider.",
+      "text_sha256": "sha256:1fc0833dfc619776fdc775a5a340b25ab5bf4813740e7593363f3e005959fbaa"
+    },
+    {
+      "char_end": 4740,
+      "char_start": 3288,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-be4ec2c080b96347954b",
+      "source_role": "reviewer_report",
+      "text": "R2C3. Impact of reservoir sedimentation. The authors rebutted that their conclusions based on reservoir NS are not affected by the ignorance of reservoir sedimentation, because “sedimentation tends to reduce the actual storage (numerator) and storage capacity (denominator) equally”. I agree with this rebuttal, if we assume sediment infilling did not affect the states of reservoir surface water elevation or area in the first place. This assumption may be true when the total sediment in a reservoir does not exceed the sediment reserve or the dead pool storage. But in other cases, substantial sediment infilling might lead to an altered operation of the reservoir water stage, which consequentially affected the reservoir water area. For instance, the reservoir conservation pool allows some flexibility to elevate the water level to compensate for the loss of actual water storage due to infilling, although this depends on the sedimentation adaptation policy of the reservoir. I am not sure how common this case occurred in aging reservoirs. Can the authors double check from the literature or at least include some discussion? In summary, I am concerned that, if the average water level of an aging reservoir was elevated as a response to sedimentation, the water area time series mapped from spectral images would also be enlarged, which could lead to an overestimated phase (or a positive bias) of the NS time series in the pre1999 reservoirs.",
+      "text_sha256": "sha256:3122768d050c243a54c48f18ea98a588efcd212b820294754830cb091716dbee"
+    },
+    {
+      "char_end": 5718,
+      "char_start": 4743,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-aac9acded3f0d8a07fb2",
+      "source_role": "reviewer_report",
+      "text": "R2C7. Validation of the reservoir bathymetric profile models. This expanded validation, which included 347 reservoirs with detailed bathymetry in GRBD, still focuses on total reservoir storage capacity, NOT the NS trend that matters more to the authors’ scientific conclusions. Since the profile model selection was gauged by storage capacity, it is not too surprising that the modeled storage capacities agree well with those in GRBD. However, I am not sure the agreement in storage capacity also warrants a good agreement between the NS trends derived from the two methods. As I suggested previously, I strongly encourage the authors to go further and conduct a more comprehensive comparison between the results (not only storage capacities but also NS trends) based on the profile modeling method and the results based on GRBD bathymetries. I see this additional validation very important for justifying and assuring a global applicability of the authors’ modeling method.",
+      "text_sha256": "sha256:861982f8b9bd9e9d278e5a5d77af747451bcf613c3ce55a5ccd9b562a7cc08c4"
+    },
+    {
+      "char_end": 6004,
+      "char_start": 5721,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7d9c5e5f40260c2c93e8",
+      "source_role": "reviewer_report",
+      "text": "R2C10. Reservoir water area at capacity. Based on the equations in Extended Data Table 2, the water area at capacity (Ao) functions as a scaling factor and is critical to the accuracies of the derived storage change and NS time series. In general, an overestimated Ao would lead to a",
+      "text_sha256": "sha256:8851409f85abdc0ad5660822dff61f26bedbd110e14f8f1a1c7eb02e24d9edf6"
+    },
+    {
+      "char_end": 6505,
+      "char_start": 6007,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-840d408aaaab21abd151",
+      "source_role": "reviewer_report",
+      "text": "negative bias of the NS time series, and vice versa. For this reason, I have been critical about whether the authors estimated Ao for pre-1999 and post-1999 reservoirs consistently, and particularly, whether there is a possibility that the values of Ao for pre-1999 reservoirs were “underestimated” in comparison with those for post-1999 ones. If so, the higher phase of the NS time series in the pre-1999 reservoirs (a key finding of this paper) would be, in part, an artefact of the scaling bias.",
+      "text_sha256": "sha256:002cbc61b8f6f319c78f0353f70d5d88ae077df61d7ea5fe5751c0f318af166f"
+    },
+    {
+      "char_end": 7322,
+      "char_start": 6508,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-677add2ecae8d474331d",
+      "source_role": "reviewer_report",
+      "text": "As the authors clarified in the rebuttal, “if the 95th percentile area was less than the reported area in GRanD, the maximum documented area value was selected to represent the area at capacity”, and “only 20% of the post-1999 reservoirs use the 95-percentile area to represent the area at capacity”. This means that for the majority (80%) of post-1999 reservoirs, the maximum area value documented in GRanD is greater than the 95-percentile area in GRSAD. This is in contrary to pre-1999 reservoirs, where the majority (roughly 75%) ended up having the value in GRanD replaced by the 95-percentile area in GRSAD to present the area at capacity (as described in Lines 263-266). This means that the maximum area available in GRanD is smaller than the 95-percentile area in GRSAD for most of the pre-1999 reservoirs.",
+      "text_sha256": "sha256:38f699549512bcd8d773238d4bf3eb6e25d3409744049ddf989baa18ad829e74"
+    },
+    {
+      "char_end": 8330,
+      "char_start": 7325,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-18849b894d488b5c2ffe",
+      "source_role": "reviewer_report",
+      "text": "By looking into GRanD v1.3, I noticed that for about 50% of the post-1999 reservoirs, the maximum area value in GRanD comes from the polygon area, rather than “Area_rep” or “Area_max”. As described in the technical documentation of GRanD, most new reservoir polygons added in v1.3 were based on the maximum (100-percentile) water occurrence extent of the Joint Research Center (JRC) product (Pekel et al. 2016). This perhaps explained why the authors here found the GRanD areas for most post-1999 reservoirs are already larger than the 95-percentile GRSAD areas (which were also based on the JRC occurrence product). Regardless of the reason, we here may have Ao for most pre-1999 reservoirs based on the 95-percentile area but Ao for most post-1999 reservoirs based on the water extent larger than the 95-percentile area. This inconsistency echoes my above-described concern, i.e., the decrease of NS in post-1999 reservoirs as a false signal. I recommend the authors to further examine this possibility.",
+      "text_sha256": "sha256:c50114a7c704921b186bf69de17ba753a4c31a75aea417d7641c1d0f25b52376"
+    },
+    {
+      "char_end": 9826,
+      "char_start": 8333,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9f4aa1579e7ef673a37f",
+      "source_role": "reviewer_report",
+      "text": "Eventually, about the meaning of “diminishing returns of reservoir construction”. I still struggle to fully understand what this expression conveys scientifically, so I highly recommend that the authors explicitly define the connotation of this expression in text. Even if the above technical concerns are all cleared, the relatively low NS value and the declining NS trend in post-1999 reservoirs may not necessarily suggest new reservoir constructions are diminishing. As seen in Figure 1, post- and pre-1999 reservoirs exhibit very different spatial distributions: as the authors also mentioned, post-1999 reservoirs are more spread out whereas newer reservoirs tend to emerge in developing countries, with a major cluster in the headwater regions of southwestern China and Southeast Asia. It is completely possible that this geographic skewedness, with differences in stream power, climate, and reservoir operation rules, may have contributed to part of the difference in NS behaviors (phase, trend, and seasonal amplitude) between pre- and post1999 reservoirs. Additionally, the existing attribution analysis also indicates the NS declines in South America and Africa were probably climate-related, rather than being an impact of new reservoirs. So overall, some of the claims, such as “reservoirs constructed in the 21st century” are “more susceptible to droughts” and “the recent returns of global reservoir constructions have been declining”, appear vague and lacking logical supports.",
+      "text_sha256": "sha256:c78d8400d1eb56f9e3959f81182a52c178981b57d7fe74052e544802743134ca"
+    },
+    {
+      "char_end": 9868,
+      "char_start": 9829,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3a3db55bef6b11eda812",
+      "source_role": "reviewer_report",
+      "text": "## Reviewer #2 (Remarks to the Author):",
+      "text_sha256": "sha256:302a1824ba4ed0dda5528693469028e8e1f5b785e60ec4075c5e9d95c6bf2b94"
+    },
+    {
+      "char_end": 10174,
+      "char_start": 9871,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b3b28db4236d52ddc23d",
+      "source_role": "reviewer_report",
+      "text": "The authors have carefully addressed my previous comments. I reiterate the value of this study. However, while I appreciate that the authors added caveats regarding sedimentation, the analysis and additional elements provided in response to my comments and that of the other reviewer warrant adjustment.",
+      "text_sha256": "sha256:c2984243ba376e549169f4f876f7b77df83c7545ae66793082c0548e43852f5c"
+    },
+    {
+      "char_end": 10880,
+      "char_start": 10177,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-eb841066a3ce99b88b8e",
+      "source_role": "reviewer_report",
+      "text": "First, P20L362 “Despite the impacts of sedimentation on the absolute reservoir storage, the conclusions based on the normalized storage (NS) results are not affected. This is because sedimentation tends to reduce the actual storage (numerator) and storage capacity (denominator) equally, so the NS is not much affected.” Although the statement that NS is unaffected is valid, this strict definition of NS (using current storage capacity rather than initial storage capacity as the denominator) is of little relevance for management. What really matters for water provision and hydroelectric production for example, is actual storage/initial storage capacity. Therefore, I suggest removing this argument.",
+      "text_sha256": "sha256:e542bfdc7772ffffa468106a5546b4e9673d9ef691f972b68bbffd76a8c1478d"
+    },
+    {
+      "char_end": 12578,
+      "char_start": 10883,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-81d1af9104bd0a0aa0fe",
+      "source_role": "reviewer_report",
+      "text": "Second, I question the choice of reservoirs for illustrating the impact of sedimentation. How were these reservoirs chosen? The annual sedimentation rates, which range between 0.025 and 0.253%/year are on the very low range compared to global averages. The following paragraph from Wisser et al. (2013) illustrates this point : “A global data set with consistently measured sediment volumes trapped in reservoirs over time is not available, and, in fact there has been a decline in the collection of sedimentation data [Syvitski, 2003; Vanmaercke et al., 2011b]. For the US, the Reservoir Sedimentation Database (RESSED) [Ackermann et al., 2009] provides statistics on reservoir volumes derived from bathymetric surveys for more than 1800 reservoirs from which sedimentation loss rates can be calculated (using successive surveys). We calculated sedimentation rates of 1024 reservoirs with at least two complete surveys (using the most recent surveys) and supplemented this data set with observed loss rates from an additional 191 reservoirs globally from a variety of sources (Figure 1) to get a global sample of observed loss rates.This data set covers a wide range of physical conditions in the catchment (e.g., slope, climate, soil type, and land use) and local reservoir conditions (size, area, bathymetry, purpose, and management practices). Observed loss rates vary between 0.0017% a−1 and 36% a−1 and are 1.35% a−1 on average (median = 0.55% a−1). Loss rates for reservoirs with a capacity larger than the minimum capacity in the GRanD database (1 million m3) have lower loss rates (mean = 0.76% a−1, median 0.35% a−1; Table 1). Weighted by initial capacity, the mean loss rate is 0.66%.",
+      "text_sha256": "sha256:cec44ac0141184f204ed59b9efab56f3a9ab8a9f0ccf8e3e6cba237f14c77505"
+    },
+    {
+      "char_end": 12925,
+      "char_start": 12581,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a64e59b77e0c191a33fc",
+      "source_role": "reviewer_report",
+      "text": "Out of fifty reservoirs in Italy, Patro et al. (2022) mention “According to the latest report of the International Commission On Large Dams (ICOLD, 2009), the global average value for sedimentation rate (and so storage loss) is around 0.96%.” and find mean annual sedimentation rates of 0.57% and a total mean loss of reservoir capacity of 37%.",
+      "text_sha256": "sha256:066f95c8fe553b8760dd16b14855abd5c81d99f896ecebe6241ca490a966b29f"
+    },
+    {
+      "char_end": 13182,
+      "char_start": 12928,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e2d4499a8f972494e1e2",
+      "source_role": "reviewer_report",
+      "text": "These points do not lessen the merit of this study but must be properly acknowledged. Sedimentation is a widespread phenomenon in reservoirs that surely has, on aggregate, more long-term impact on storage capacity than the changes observed by this study.",
+      "text_sha256": "sha256:e7f6c5941c6ab8ab9406be725c8bce4fa14d24b27aef89399aafbfc7ac2b44e2"
+    },
+    {
+      "char_end": 13268,
+      "char_start": 13185,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8cb8400c9d5ff8865579",
+      "source_role": "reviewer_report",
+      "text": "Once these corrections are made, I consider this study to be ready for publication.",
+      "text_sha256": "sha256:fb7fef2beb5d32ff742a44c43e6117d8daa1359bb2fa26e75d369182786b904a"
+    },
+    {
+      "char_end": 13284,
+      "char_start": 13271,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1235c764069aedf94d64",
+      "source_role": "reviewer_report",
+      "text": "## References",
+      "text_sha256": "sha256:65b72d86eeeb214ab8ca5fd24cb7cd7773e58084e95b670040df03e21e8c6fa7"
+    },
+    {
+      "char_end": 13486,
+      "char_start": 13287,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f620fd3da08a0cb702fc",
+      "source_role": "reviewer_report",
+      "text": "Patro ER, De Michele C, Granata G, Biagini C. 2022. Assessment of current reservoir sedimentation rate and storage capacity loss: An Italian overview. Journal of Environmental Management 320: 115826.",
+      "text_sha256": "sha256:d74e1e32b1bca843e9f1efa0e52c6bc6b837afd4ecf939009f0166e0bfc01b52"
+    },
+    {
+      "char_end": 13685,
+      "char_start": 13489,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5ca765e33e385b9288de",
+      "source_role": "reviewer_report",
+      "text": "Wisser D, Frolking S, Hagen S, Bierkens MFP. 2013. Beyond peak reservoir storage? A global estimate of declining water storage capacity in large reservoirs. Water Resources Research 49: 5732–5739.",
+      "text_sha256": "sha256:0e9175798e83fdd5b2210f8d75195420d83198c67882a04150098fdce68888f8"
+    },
+    {
+      "char_end": 14126,
+      "char_start": 13688,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b4ccedf90c14c4852a89",
+      "source_role": "reviewer_report",
+      "text": "We sincerely appreciate the constructive comments and suggestions from the reviewers and the editor. We have revised the manuscript and addressed these comments point by point. We hope this revised manuscript fulfills the editor's and reviewers’ high standards for _Nature Communications_ . The reviewers’ comments are shown in black, our responses are highlighted in blue, and the revised text in the manuscript is highlighted in orange.",
+      "text_sha256": "sha256:3de7dbcf127e6de1b0a97f6a3c724c84a01c701602fb0926ec6a54f66ebd49f6"
+    },
+    {
+      "char_end": 14172,
+      "char_start": 14129,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3740624f932c52bb6dc0",
+      "source_role": "reviewer_report",
+      "text": "## **Reviewer #1 (Remarks to the Author):**",
+      "text_sha256": "sha256:c54722ad14fd45d24c8fff2e4597726eaed0731616bcd87286b3eb3bba450471"
+    },
+    {
+      "char_end": 16116,
+      "char_start": 15935,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-df365ca194a60f04bea9",
+      "source_role": "reviewer_report",
+      "text": "We greatly appreciate your comments. They have significantly improved the manuscript. We have addressed them in the following responses, and have revised the manuscript accordingly.",
+      "text_sha256": "sha256:67dcf1d06a83cca99066a34cd5c165339f96404a67dc03f5eb3147883cce3d73"
+    },
+    {
+      "char_end": 17572,
+      "char_start": 16119,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c68e68a016f738fdaa3f",
+      "source_role": "reviewer_report",
+      "text": "R2C3. Impact of reservoir sedimentation. The authors rebutted that their conclusions based on reservoir NS are not affected by the ignorance of reservoir sedimentation, because “sedimentation tends to reduce the actual storage (numerator) and storage capacity (denominator) equally”. I agree with this rebuttal, if we assume sediment infilling did not affect the states of reservoir surface water elevation or area in the first place. This assumption may be true when the total sediment in a reservoir does not exceed the sediment reserve or the dead pool storage. But in other cases, substantial sediment infilling might lead to an altered operation of the reservoir water stage, which consequentially affected the reservoir water area. For instance, the reservoir conservation pool allows some flexibility to elevate the water level to compensate for the loss of actual water storage due to infilling, although this depends on the sedimentation adaptation policy of the reservoir. I am not sure how common this case occurred in aging reservoirs. Can the authors double check from the literature or at least include some discussion? In summary, I am concerned that, if the average water level of an aging reservoir was elevated as a response to sedimentation, the water area time series mapped from spectral images would also be enlarged, which could lead to an overestimated phase (or a positive bias) of the NS time series in the pre-1999 reservoirs.",
+      "text_sha256": "sha256:cabb8ca689f75ce80d6b9885fa900fdf881681553c8c6b5cbc5281a938792264"
+    },
+    {
+      "char_end": 17996,
+      "char_start": 17575,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2e8ebd56847f9429b817",
+      "source_role": "reviewer_report",
+      "text": "Thanks for this comment. We have searched the literature broadly (e.g., journal papers and technical reports) but did not find explicit answers for this comment. Therefore, to find out how common this case occurs in aging reservoirs affected by sedimentation, we consulted Dagmar Llewellyn, a hydrologist and planning supervisor from Bureau of Reclamation. Such cases should be very rare, according to her response below:",
+      "text_sha256": "sha256:7e8771e20e65e94a472d03b14ad9493c16ee74a9d32f3e01479c4ae8aff07d0b"
+    },
+    {
+      "char_end": 18951,
+      "char_start": 17999,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-930228cbf8b750c71511",
+      "source_role": "reviewer_report",
+      "text": "“Water managers do not often change their operations in response to sediment build up in the reservoirs, and that sediment does not often change the surface area of the reservoir when it is full. There are certain circumstances in which what the reviewer is saying could occur.  For example, if a flood-control reservoir has a recreation pool for which Congress authorized a certain volume of water, which is well below the capacity of the reservoir.  In this case, yes, sedimentation could increase the surface area required to store the specified amount of water. However, I think this in an exception that proves the rule that, for most reservoirs, this would not happen - we water managers would not change our operation because of sediment at the bottom of the reservoir. I think this would almost never be done for water storage reservoirs, since generally, these reservoirs store whatever water is available, up to the capacity of the reservoir.",
+      "text_sha256": "sha256:ffa7a623e66f6176cee84519c01033c540e270ad2205843590c2920a7e1f597c"
+    },
+    {
+      "char_end": 19455,
+      "char_start": 18954,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7fe4173553281cf47832",
+      "source_role": "reviewer_report",
+      "text": "Sediment at the bottom of the reservoir does not allow for water to be stored higher, since the total storage is limited by the dam. Instead, the capacity of the reservoir just decreases for the same surface area. For flood control reservoirs, there is some small possibility (like in my first example), but generally the flood pools are based on specific pool elevations, which correlate with a specific surface area that does not change with accumulation of sediment at the bottom of the reservoir.”",
+      "text_sha256": "sha256:2168747224264b699babd7caeb6272f60dff2ce9b5a2008ec492282bca856982"
+    },
+    {
+      "char_end": 20795,
+      "char_start": 20436,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-5c6f0d5db407a1e4bfca",
+      "source_role": "reviewer_report",
+      "text": "Thanks for this comment. We compared the NS trend values derived from the simulation method with the results from bathymetry-based methods for 347 global reservoirs. Figure R1 shows that the NS trend values derived from these two methods show good agreement (R[2] = 0.76), with the majority of the points centered on the 1:1 line (with a slope value of 0.99).",
+      "text_sha256": "sha256:5b8e9ddcd64d13db573d723f9db897de19597aa9e03715fe4905e893a7c20a6d"
+    },
+    {
+      "char_end": 20851,
+      "char_start": 20798,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-22dcd1d1149536f472d6",
+      "source_role": "reviewer_report",
+      "text": "**==> picture [330 x 274] intentionally omitted <==**",
+      "text_sha256": "sha256:feb21a7dd93c6c3875fd51d5ab6151e4f87ef369df6150e309a1a78b7345554a"
+    },
+    {
+      "char_end": 20947,
+      "char_start": 20853,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-9a871f1ddd3bf74e56bf",
+      "source_role": "reviewer_report",
+      "text": "Figure R1. Comparison of NS trend values derived from bathymetry and simulation based methods.",
+      "text_sha256": "sha256:5cb300bcb9be8b9b370acf9c33f0bb97bed8e645f973e163c90697edae1ca58d"
+    },
+    {
+      "char_end": 21732,
+      "char_start": 20950,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7be39d705600492ded6e",
+      "source_role": "reviewer_report",
+      "text": "R2C10. Reservoir water area at capacity. Based on the equations in Extended Data Table 2, the water area at capacity (Ao) functions as a scaling factor and is critical to the accuracies of the derived storage change and NS time series. In general, an overestimated Ao would lead to a negative bias of the NS time series, and vice versa. For this reason, I have been critical about whether the authors estimated Ao for pre-1999 and post-1999 reservoirs consistently, and particularly, whether there is a possibility that the values of Ao for pre-1999 reservoirs were “underestimated” in comparison with those for post-1999 ones. If so, the higher phase of the NS time series in the pre-1999 reservoirs (a key finding of this paper) would be, in part, an artefact of the scaling bias.",
+      "text_sha256": "sha256:1c314d42fc468ec78ba7cde13ab421cab44811ee7f68e349a4b5618a5b746fda"
+    },
+    {
+      "char_end": 22303,
+      "char_start": 21735,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-191a1020af2286f195aa",
+      "source_role": "reviewer_report",
+      "text": "As the authors clarified in the rebuttal, “if the 95th percentile area was less than the reported area in GRanD, the maximum documented area value was selected to represent the area at capacity”, and “only 20% of the post-1999 reservoirs use the 95-percentile area to represent the area at capacity”. This means that for the majority (80%) of post-1999 reservoirs, the maximum area value documented in GRanD is greater than the 95-percentile area in GRSAD. This is in contrary to pre-1999 reservoirs, where the majority (roughly 75%) ended up having the value in GRanD",
+      "text_sha256": "sha256:6a41168da0a70bb8c812e1121f2e859aa58446da57a28e378179cb9592403fce"
+    },
+    {
+      "char_end": 22550,
+      "char_start": 22306,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-c116cc7dc876df30232d",
+      "source_role": "reviewer_report",
+      "text": "replaced by the 95-percentile area in GRSAD to present the area at capacity (as described in Lines 263-266). This means that the maximum area available in GRanD is smaller than the 95percentile area in GRSAD for most of the pre-1999 reservoirs.",
+      "text_sha256": "sha256:2d001d42f98c5c57099eb1edbbaa39023f510c395af23fc154b75e3288f1e76e"
+    },
+    {
+      "char_end": 23557,
+      "char_start": 22553,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4b2a3813a21f54ec9a7c",
+      "source_role": "reviewer_report",
+      "text": "By looking into GRanD v1.3, I noticed that for about 50% of the post-1999 reservoirs, the maximum area value in GRanD comes from the polygon area, rather than “Area_rep” or “Area_max”. As described in the technical documentation of GRanD, most new reservoir polygons added in v1.3 were based on the maximum (100-percentile) water occurrence extent of the Joint Research Center (JRC) product (Pekel et al. 2016). This perhaps explained why the authors here found the GRanD areas for most post-1999 reservoirs are already larger than the 95percentile GRSAD areas (which were also based on the JRC occurrence product). Regardless of the reason, we here may have Ao for most pre-1999 reservoirs based on the 95-percentile area but Ao for most post-1999 reservoirs based on the water extent larger than the 95-percentile area. This inconsistency echoes my above-described concern, i.e., the decrease of NS in post-1999 reservoirs as a false signal. I recommend the authors to further examine this possibility.",
+      "text_sha256": "sha256:f5ead9dd8ddd8a48653377757688974ed2cc43c5be190c1df9fba042fe5801c2"
+    },
+    {
+      "char_end": 24811,
+      "char_start": 23560,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-78150a35f036c1c37bb8",
+      "source_role": "reviewer_report",
+      "text": "Thanks for pointing this out. We agree with the reviewer that water area at capacity (Ao) is an important input for the simulation model. It is challenging to validate the water area values due to the lack of in situ data (Zhao et al. 2018). Therefore, we used the _in situ_ storage values of the 277 reservoirs (that we used to validate our storage dataset) to conduct an uncertainty analysis, using the 95-percentile area as the water area at capacity. We used the improved simulation method to derive the storage values from 1999 to 2018, with water-area-at-capacity inputs values from the 95- and 100-percentile areas, respectively. Validation results (Figure R2a-b) indicate that the storage values from the 95- and 100-percentile area inputs agree well with the _in situ_ values (R[2] values of 0.98 and 0.99, and RMSE values of 0.30 km[3 ] and 0.29 km[3] ). In addition, we compared the storage values derived from these two inputs (Figure R2c), which show good agreement (with a slope of 1.0 and a bias of 0.015 km[3] ). This small bias should have very limited impact on the NS values at large scales, as compared to the large capacity values. Thus, our key findings are reliable by using the 95-percentile area as the water area at capacity.",
+      "text_sha256": "sha256:ca3a66b7d75e2a62b54a1dbcb5bd6f7b222cd2916db8f806f431a1205ac41dd0"
+    },
+    {
+      "char_end": 24867,
+      "char_start": 24814,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-3c6e7fbfdf8b92a5ed0c",
+      "source_role": "reviewer_report",
+      "text": "**==> picture [468 x 149] intentionally omitted <==**",
+      "text_sha256": "sha256:5406259aed33347af7a2016ae6121d9cd0e19744b63fa8edfd6d7d43487dd57f"
+    },
+    {
+      "char_end": 25114,
+      "char_start": 24869,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e50edcdeba076df11544",
+      "source_role": "reviewer_report",
+      "text": "Figure R2. (a-b) Validation of simulated storage values from 1999 to 2018 with inputs of water area at capacity values from 95- and 100-percentile areas, respectively; (c) Comparison of the simulated storage values derived from these two inputs.",
+      "text_sha256": "sha256:027b9cbdeda83f0e23585fd861e79d3fa75665b00f28243d2bacc3d79e382400"
+    },
+    {
+      "char_end": 25127,
+      "char_start": 25117,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-6992b4c7a738b108292f",
+      "source_role": "reviewer_report",
+      "text": "Reference:",
+      "text_sha256": "sha256:44dc4af8bac109543212c7d1ec9e6aa2fda51b29fed4d8336663b0e6e1bb8b65"
+    },
+    {
+      "char_end": 25294,
+      "char_start": 25130,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_1",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-d846ad23452c95b9fe9f",
+      "source_role": "reviewer_report",
+      "text": "Zhao, G. & Gao, H. Automatic correction of contaminated images for assessment of reservoir surface area dynamics. Geophysical Research Letters 45, 6092-6099 (2018).",
+      "text_sha256": "sha256:1a17a0409a17628063aafd5d26eb91b0e4889c3ecff553ab2d584f6d4e536318"
+    },
+    {
+      "char_end": 35137,
+      "char_start": 35101,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-7584521426857d4ebb03",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #1 (Remarks to the Author):",
+      "text_sha256": "sha256:6ffd34d82a3d649fbc91e1dc65fd25e243f665d42d0f633ad65db9c0ce240058"
+    },
+    {
+      "char_end": 35585,
+      "char_start": 35140,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-e024491d9c2e4f473f97",
+      "source_role": "reviewer_report",
+      "text": "I want to thank the authors for their continued effort improving the manuscript. I have carefully reviewed their revision for this round, and found my major concerns addressed fairly well and the manuscript further improved. I have a few more suggestions based on the authors’ responses to each of my previous concerns. Once these suggestions have been incorporated, I will feel comfortable to recommend its publication in Nature Communications.",
+      "text_sha256": "sha256:3c7205482ef0afbc7ea0ffd195075b5685c36bcf8d57e061f12cdf969090fe8b"
+    },
+    {
+      "char_end": 35990,
+      "char_start": 35588,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-b5e24086eb25e248570d",
+      "source_role": "reviewer_report",
+      "text": "About sedimentation impact on reservoir water level and area. I would like to thank the authors for looking into the literature and consulting Dagmar Llewellyn in the Bureau of Reclamation. I accept this rebuttal. Since potential readers may have similar concerns, I highly recommend that the authors include a similar discussion in the paper (in either the main text or methods) to echo this rebuttal.",
+      "text_sha256": "sha256:a49b303c1b8320a79c6ac8ae8f47315043bcc65e3d5ae18616c3036a28b503b3"
+    },
+    {
+      "char_end": 36464,
+      "char_start": 35993,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-79de9ca1b460f97b35c5",
+      "source_role": "reviewer_report",
+      "text": "For example, the authors can briefly discuss: (1) how reservoir management may respond to sedimentation (in most cases, sedimentation does not allow for water to be stored higher, with the exception of some of the flood-control reservoirs), and (2) how this response implies to the validity of the authors’ methods and conclusions (as sediment accumulates, the reservoir storage capacity may just decrease under the same water area, leading to limited impacts on the NS).",
+      "text_sha256": "sha256:9c599e47f600515ac3f5b96c8c687706b5685f177b1f0b47201ed1a2ffadc099"
+    },
+    {
+      "char_end": 37244,
+      "char_start": 36467,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fa11fff5870395c252ff",
+      "source_role": "reviewer_report",
+      "text": "About validation of the NS trends. It seems the NS trends derived from the simulation method are overall comparable with the trends from the bathymetry-based method. Although there are some disagreement and variability, the mean bias between the two methods appears low. I think this is a positive message. I highly recommend the authors add this validation (with Figure R1) to the paper (such as in “Evaluation of storage estimation” section), because given the focus here, validating NS trends is just as important as validating storage capacities. As another (optional) suggestion: If I were the authors, I would also try to absorb the validation statistics (such as the RMSE in Figure R1) to the uncertainties of the NS trend estimates for at least the 347 GRBD reservoirs.",
+      "text_sha256": "sha256:13c73b5bd90dc6ea5a84af0357c869684953a68a83bce5d2bda8996a6115606d"
+    },
+    {
+      "char_end": 37782,
+      "char_start": 37247,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f59fef25edc513d6402c",
+      "source_role": "reviewer_report",
+      "text": "About reservoir water area at capacity (Ao). It is good to see the authors have performed this sensitivity test and the difference between the estimated capacities using 95% Ao and those using 100% Ao appears limited based on the 277 reservoirs with in-situ storage. This is encouraging. To further secure this very important aspect, I am wondering if the authors can expand this sensitivity analysis to other reservoirs, in order to inform the potential impact of inconsistent use of Ao on the conclusions about pre- and post-1999 NS.",
+      "text_sha256": "sha256:1fcc9e9d057603c72f3bba6e7bd8c292b907cc8483b12ee381afce1b5dcb62a0"
+    },
+    {
+      "char_end": 38692,
+      "char_start": 37785,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-429eade4dc592ac05166",
+      "source_role": "reviewer_report",
+      "text": "For example, I suggest the following scheme for the sensitivity analysis (which should be straightforward to implement): (1) for the subset of pre-1999 reservoirs using 95% water occurrence as Ao, replace their Ao by 100% water occurrence, (2) for the subset of post-1999 reservoirs using 95% water occurrence as Ao, keep their Ao as they are (basically do nothing for post-1999 reservoirs), and (3) compare how much difference this inconsistent use of Ao will cause for the calculated pre-1999 and post-1999 NS values. This design should, in theory, report the maximum impact of Ao. As a reminder, the authors may need to re-simulate the geometric models for some of the pre-1999 reservoirs because their Ao is changed. I also recommend that the authors include such a sensitivity analysis in the method section, which will secure to readers that this aspect won’t affect the main conclusions of the paper.",
+      "text_sha256": "sha256:484272b73bdb050a278b52eec6d5bb5e50c8bdff95a080028efda4774892a0a2"
+    },
+    {
+      "char_end": 39558,
+      "char_start": 38695,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-8a2a0abadb7217fb771e",
+      "source_role": "reviewer_report",
+      "text": "About “diminishing returns”. I want to thank the authors for clarifying the meaning of “return” and making modifications in the text. While I am still not fully convinced by some of the arguments, the changes have been much helpful and clearer. My concern is: even the same basin does not warrant a homogenous hydroclimate condition, and reservoir operation and storage pattern vary by stream power, geomorphology, and nuances in water management, which can vary reservoir by reservoir and across the same basin. So as a reader, I am not fully convinced that smaller NS values and larger seasonal variations in the post-1999 reservoirs have to suggest newer reservoirs are more susceptible to drought and brining less “return” values. I recommend that the authors give a last try to further clarity some of the terms (such as explicitly define what “return” means",
+      "text_sha256": "sha256:d2bbcf7e2f7833b39530e12e7aed9b04553d8eec0b02dc08af45a6ba7e14a564"
+    },
+    {
+      "char_end": 39645,
+      "char_start": 39561,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-1497b9b6787fffac9d9b",
+      "source_role": "reviewer_report",
+      "text": "as early as possible) and probably soften some of the claims lacking solid supports.",
+      "text_sha256": "sha256:671d8ce5f20e90ab394b42720f825b7f68a735eca712e74db9bd256b18ab0aee"
+    },
+    {
+      "char_end": 39684,
+      "char_start": 39648,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2ab6b04d525b67f537fb",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #2 (Remarks to the Author):",
+      "text_sha256": "sha256:44342433f6365a7f5949b5d3040f70d6f57a95f4a5f42f98700e18492093b116"
+    },
+    {
+      "char_end": 39866,
+      "char_start": 39687,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-fb5b8cc87b8d2778e31a",
+      "source_role": "reviewer_report",
+      "text": "The authors have expanded great efforts in addressing all of the reviewers' concerns and suggestions over all rounds of review, which I applaud. I do not have additional comments.",
+      "text_sha256": "sha256:d89e6c559ffed4eee890b0459fb2af768f6bd7a5c76f18b68e6666139c325528"
+    },
+    {
+      "char_end": 39900,
+      "char_start": 39869,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-99f2e03f7e5163a45f04",
+      "source_role": "reviewer_report",
+      "text": "Best wishes, Mathis L. Messager",
+      "text_sha256": "sha256:e08187dbe5dae23d133763aa103b03538fa035d2604d61a62416f3579afa0f8c"
+    },
+    {
+      "char_end": 40341,
+      "char_start": 39903,
+      "reviewer_id_hash": "REV-3cbc889f0d4c47db",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-15d4a66c0f0b61aaecef",
+      "source_role": "reviewer_report",
+      "text": "We sincerely appreciate the constructive comments and suggestions from the reviewers and the editor. We have revised the manuscript and addressed these comments point by point. We hope this revised manuscript fulfills the editor's and reviewers’ high standards for _Nature Communications_ . The reviewers’ comments are shown in black, our responses are highlighted in blue, and the revised text in the manuscript is highlighted in orange.",
+      "text_sha256": "sha256:3de7dbcf127e6de1b0a97f6a3c724c84a01c701602fb0926ec6a54f66ebd49f6"
+    },
+    {
+      "char_end": 40387,
+      "char_start": 40344,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_2",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-f78803d1b73013721b90",
+      "source_role": "reviewer_report",
+      "text": "## **Reviewer #1 (Remarks to the Author):**",
+      "text_sha256": "sha256:c54722ad14fd45d24c8fff2e4597726eaed0731616bcd87286b3eb3bba450471"
+    },
+    {
+      "char_end": 51683,
+      "char_start": 51647,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_3",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-2ff2f1004fc6ec46ec57",
+      "source_role": "reviewer_report",
+      "text": "Reviewer #1 (Remarks to the Author):",
+      "text_sha256": "sha256:6ffd34d82a3d649fbc91e1dc65fd25e243f665d42d0f633ad65db9c0ce240058"
+    },
+    {
+      "char_end": 52092,
+      "char_start": 51686,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_3",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-4e6c7fadfa0e63a9ac1c",
+      "source_role": "reviewer_report",
+      "text": "I want to thank the authors for taking additional time investigating the comments I suggested last time. I have reviewed the authors' responses and revision, and found them addressed well and the uncertainties acceptable. Therefore, I am overall content with and convinced by the scientific rigor and conclusions. I have no more comments. I want to congratulate the authors for producing such a nice paper!",
+      "text_sha256": "sha256:ef90cf75cc7442672b77187d4564c17d97df0026681f69631764c1ad570fc219"
+    },
+    {
+      "char_end": 52138,
+      "char_start": 52095,
+      "reviewer_id_hash": "REV-94715f6d9aa96b2a",
+      "round_id": "round_3",
+      "schema_version": "aspr_gear",
+      "source_key": "RR:SRC-R-a0fbb4246b4fe3b249c3",
+      "source_role": "reviewer_report",
+      "text": "## **Reviewer #1 (Remarks to the Author):**",
+      "text_sha256": "sha256:c54722ad14fd45d24c8fff2e4597726eaed0731616bcd87286b3eb3bba450471"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

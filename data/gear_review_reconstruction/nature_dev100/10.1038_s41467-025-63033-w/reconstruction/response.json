@@ -1,0 +1,481 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:2852841e443d5bd2ea5e41f922fe952c8cc468f76b7ee12b1811d3144367942d",
+  "input_sha256": "sha256:8944ac278d1bc579522a42ec9d4749df7ea94a5ec5a0b64bdfff36f80f5fa14b",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:41dab21e19afbffa90a2bd52c47a4f8eff820837d20367e360c97d7d616d9c49",
+  "package_id": "RSP-25c73221954bcaaafe92",
+  "paper_id": "10.1038/s41467-025-63033-w",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-63033-w",
+      "point_id": "N-01",
+      "rationale": "The reviewer identifies the TA-mediated thermo-reversible paste-to-gel composite as the central contribution; the final paper specifies the competitive TA–clay–PNIPAM network and reversible transition.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-434f5a7f356110e1"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8b98f57e9c3a80d37274"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-01"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-63033-w",
+      "point_id": "N-02",
+      "rationale": "One reviewer disputed the degree of advance. The final paper positions the work as a previously unstudied paste-to-gel host–guest system, but this positioning does not itself resolve that scope-relative novelty disagreement.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-c52fdb00e3f680ec"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-09c1b87644893e87a1ef"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N-02"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-63033-w",
+      "point_id": "S-01",
+      "rationale": "The reviewer describes the regulated ternary interactions and reversible phase behavior; the final paper supplies the clay-free control showing that TA–PNIPAM alone does not form a paste-like network.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-d46fa0f0f334f7fb"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-3bf3790f0d8d15929763"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-S-01"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-63033-w",
+      "point_id": "S-02",
+      "rationale": "The reviewer identifies the thermally controlled paste/gel, self-healing, and deformation behavior; the final paper reports reversible modulus-state switching and cyclic recovery.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-d46fa0f0f334f7fb"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-3bf3790f0d8d15929763"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-S-02"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-63033-w",
+      "point_id": "W-01",
+      "rationale": "The reviewer questioned what the FTIR evidence establishes. The final paper presents the added TA-associated peak as only probably arising from the proposed interactions, leaving the molecular assignment qualified.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-434f5a7f356110e1"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-1d4eb13f4ed82e2fb206"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W-01"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-63033-w",
+      "point_id": "W-02",
+      "rationale": "The reviewer requested a smaller-cavity macrocycle control. The final paper compares TA with larger-cavity BTA and nonmacrocyclic molecules, but does not provide the requested smaller-cavity macrocycle comparison.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-c52fdb00e3f680ec"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-870c00bb8fa49facb979"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W-02"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-63033-w",
+      "point_id": "W-03",
+      "rationale": "The reviewer requested conventional mechanical comparison of the two systems. The final paper describes a tensile-test protocol, while its principal comparative evidence remains rheological, leaving the requested explicit paste/gel conventional-mechanics comparison unclear.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-434f5a7f356110e1"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-90ea2f56466295462608"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W-03"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-63033-w",
+      "point_id": "W-04",
+      "rationale": "The reviewer asked for conductivity without the graphene-derived filler. The final paper presents the conductive formulation with sulfonated reduced graphene oxide and its circuit demonstration, leaving the baseline unfilled-system conductivity unreported in the final-paper evidence.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-434f5a7f356110e1"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-5e2d2d91e04e84497c14"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W-04"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-63033-w",
+      "point_id": "Q-01",
+      "rationale": "The reviewer questioned the 25 °C, 20 h polymerization and possible exotherm-related phase behavior. The final methods retain those conditions, so the experimental rationale and temperature-history evidence remain a residual reproducibility question.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-c52fdb00e3f680ec"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d5aa1ea53e66f3368d86"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q-01"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-63033-w",
+      "point_id": "Q-02",
+      "rationale": "The reviewer asked about effects substantially above 40 °C. The final paper records thermal measurements over 20–50 °C and reports temperature-dependent switching, but does not provide a focused account of side effects at higher temperatures.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-434f5a7f356110e1"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-252ab539b7b688d5c894"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q-02"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-902aec3ac4f2aded1711",
+        "RR:SRC-R-13284451b2743f64b741",
+        "RR:SRC-R-0eafe84625b2f1c05c3d"
+      ],
+      "paper_id": "10.1038/s41467-025-63033-w",
+      "point_id": null,
+      "rationale": "Audit-only: the originally missing formulation range and hydration conditions were addressed in the response and are reflected in the final composition and testing-method spans.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-434f5a7f356110e1"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-5d3483421402519a29d6"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-01"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-0bb7a85b35d874cb3e36",
+        "RR:SRC-R-7564b8e439a04ab80898"
+      ],
+      "paper_id": "10.1038/s41467-025-63033-w",
+      "point_id": null,
+      "rationale": "Audit-only: the requested clay-free control and clarified substitute-molecule conditions were added; final-paper controls support the resolution.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-434f5a7f356110e1"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-568e9ed5d67cc79bc12a"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-02"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f953b5f0a23029545b5e",
+        "RR:SRC-R-8adae0c4be6401473d47",
+        "RR:SRC-R-542024a0adb472c1bb36"
+      ],
+      "paper_id": "10.1038/s41467-025-63033-w",
+      "point_id": null,
+      "rationale": "Audit-only: contextual literature, clay structural information, and the DLS-distribution explanation were added or clarified in the final state.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-434f5a7f356110e1",
+        "REV-c52fdb00e3f680ec"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-3a581ce325341b87d288",
+        "RR:SRC-R-b4dc1fa89238e90c5292",
+        "RR:SRC-R-7678975aac2325166829"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A-03"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-36ca228aa3cbb68b97e8",
+            "P:S-2d02865dba50220b5827"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-02",
+          "schema_version": "aspr_gear",
+          "severity": "major",
+          "suggested_action": "Calibrate the novelty claim against the closest prior dynamic hydrogel and host–guest systems, specifying the technical distinction demonstrated here.",
+          "text": "Novelty remains contested: the manuscript frames competitive host–guest paste-to-gel transitions as previously unstudied, whereas one reviewer did not view the advance as sufficiently distinctive in context."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-5e1302381b0fbb45d51a",
+            "P:S-36ca228aa3cbb68b97e8"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-01",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "Retain a precise comparison between the binary PNIPAM–clay gel and the TA-containing ternary paste-to-gel system.",
+          "text": "The specific claimed advance is a protonated-TA, clay, and PNIPAM ternary network that couples competitive interactions to a reversible, thermally triggered paste-to-gel transition."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-025-63033-w",
+    "questions": [
+      {
+        "aspect": "presentation_reproducibility",
+        "evidence_keys": [
+          "P:S-013be625e6af5bfaa730"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-01",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Report polymerization-time conversion or network-development data and record the reaction temperature profile under the stated formulation.",
+        "text": "What direct evidence establishes that 20 h at 25 °C is required for this formulation, and that polymerization heat does not induce inhomogeneity or an unintended PNIPAM transition?"
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-67ae1237b0b179ed3f92",
+          "P:S-f37dfbf02f0ff8bf2bd7"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-02",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Quantify reversibility, morphology, and mechanical retention across an expanded high-temperature range and state any degradation threshold.",
+        "text": "How do repeated exposures above the reported switching window affect phase reversibility, water loss, and the material’s mechanical or self-healing behavior?"
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "contribution",
+        "evidence_keys": [
+          "P:S-dcd87e42c18f088d0292",
+          "P:S-166b7551531dd5db3345"
+        ],
+        "external_verification_required": false,
+        "point_id": "S-01",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Keep the clay-free and nonmacrocyclic controls prominent when presenting the ternary-network mechanism.",
+        "text": "The study distinguishes the roles of the three components: clay is necessary for a cohesive network, while the TA cavity is contrasted with nonmacrocyclic controls and larger-cavity BTA."
+      },
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-78268ada6b570160d0e8",
+          "P:S-e6c2ea39a870c222491f"
+        ],
+        "external_verification_required": false,
+        "point_id": "S-02",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Present the reversible rheology and cyclic recovery alongside the operational temperature range.",
+        "text": "The final paper provides a coherent functional package linking thermally reversible modulus-state switching with cyclic strain recovery of the TA-containing paste."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-5e1302381b0fbb45d51a",
+        "P:S-36ca228aa3cbb68b97e8",
+        "P:S-78268ada6b570160d0e8"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "The paper reports a TA–clay–PNIPAM supramolecular paste whose competitive interactions are proposed to enable reversible thermal switching between a moldable paste and a more rigid gel, with accompanying self-healing and conductive-filler demonstrations. The final state adds composition, control, and mechanistic material, while the remaining review focus is the strength of molecular assignment, the completeness of cavity-size and mechanics controls, conductivity baselines, and high-temperature/polymerization characterization."
+    },
+    "weaknesses": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-627f276f276742bcf137",
+          "P:S-edc9768558c9081b4ee3"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-01",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Add hydrated-state or orthogonal spectroscopic evidence with quantitative analysis that discriminates the proposed TA–PNIPAM and TA–clay interactions.",
+        "text": "The spectroscopic support for the proposed interaction network remains qualified: the final FTIR discussion attributes the added TA-associated feature only probabilistically, so FTIR alone does not fully establish the claimed binding changes."
+      },
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-166b7551531dd5db3345",
+          "P:S-9e2f08a407a6d158b28f"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-02",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Test a smaller-cavity macrocycle, or explicitly limit the cavity-size conclusion to the available TA, BTA, and nonmacrocyclic comparisons.",
+        "text": "The cavity-size argument is bounded by the available controls: larger-cavity BTA and nonmacrocyclic molecules are tested, but a smaller-cavity macrocycle is not."
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-97e0cb0b512002c9b5ba",
+          "P:S-67ae1237b0b179ed3f92"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-03",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Identify the samples used in tensile testing and provide an explicit conventional-mechanics comparison of the accessible paste and gel states, with its temperature and hydration conditions.",
+        "text": "Mechanical comparison is primarily rheological; the final methods describe tensile testing but do not make an explicit conventional-mechanics comparison of the PNIPAM–clay gel and the thermally switched TA-containing material clear."
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-d16f60f80cd408030814",
+          "P:S-e34f33b9e1f951e2686a"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-04",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Report conductivity and circuit performance for the unfilled paste and quantify the incremental effect of sulfonated reduced graphene oxide.",
+        "text": "The electrical demonstration establishes function for the sulfonated-rGO-filled paste, but does not isolate the baseline electrical behavior of the water-containing unfilled paste."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-902aec3ac4f2aded1711",
+        "RR:SRC-R-13284451b2743f64b741",
+        "RR:SRC-R-0eafe84625b2f1c05c3d"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-ceb7e78600bd6c1a2bd2",
+        "P:S-9f5624a256c117eeb746"
+      ],
+      "ledger_id": "L-01",
+      "paper_id": "10.1038/s41467-025-63033-w",
+      "residual_summary": "Resolved audit item: formulation variation, solid-content information, and the native hydration condition are documented in the final state.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-5d3483421402519a29d6"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-0bb7a85b35d874cb3e36",
+        "RR:SRC-R-7564b8e439a04ab80898"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-dcd87e42c18f088d0292",
+        "P:S-166b7551531dd5db3345"
+      ],
+      "ledger_id": "L-02",
+      "paper_id": "10.1038/s41467-025-63033-w",
+      "residual_summary": "Resolved audit item: the clay-free comparator and same-condition substitute-molecule controls are represented in the final paper.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-568e9ed5d67cc79bc12a"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f953b5f0a23029545b5e",
+        "RR:SRC-R-8adae0c4be6401473d47",
+        "RR:SRC-R-542024a0adb472c1bb36"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-1cc9bce4bde05289d7ce",
+        "P:S-55831de4792cb73004cb",
+        "P:S-edc9768558c9081b4ee3"
+      ],
+      "ledger_id": "L-03",
+      "paper_id": "10.1038/s41467-025-63033-w",
+      "residual_summary": "Resolved audit item: the introduction context, clay description, and DLS-distribution explanation are present in the final state.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-3a581ce325341b87d288",
+        "RR:SRC-R-b4dc1fa89238e90c5292",
+        "RR:SRC-R-7678975aac2325166829"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

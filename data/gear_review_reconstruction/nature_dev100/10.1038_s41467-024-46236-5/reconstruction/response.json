@@ -1,0 +1,377 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:cfe26ce271a6d14c5c705f502605a0da547038fb92cf812642e750722f846abe",
+  "input_sha256": "sha256:d9fee6beebaf81b6b2b6b1158cc6a53e0d0f1df2b2ce09d5ad280a5d9bfe5f81",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:5fdfc84d43c9d06a2aae175156a50f3753ed588bfb9d41674517d9355f165ef4",
+  "package_id": "RSP-df728534c03a23ee1b5a",
+  "paper_id": "10.1038/s41467-024-46236-5",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-46236-5",
+      "point_id": "N1",
+      "rationale": "The reviewer identified the incubation-associated helix-to-disorder switch in expanded polyalanine tracts as the potentially novel advance. The final paper provides direct-carbon NMR validation of alternative disordered conformations after incubation.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-f6c7af83b7618535"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-077c332d4976c7c61217"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N1"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-46236-5",
+      "point_id": "N2",
+      "rationale": "The reviewer distinguished the reported conformational switch from previously established polyalanine helicity, self-association, and condensate formation. The final paper reports these phenomena in the studied system, while the prior-art boundary requires external verification.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-f6c7af83b7618535"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-077c332d4976c7c61217"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-N2"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-46236-5",
+      "point_id": "S1",
+      "rationale": "The reviewer described NMR evidence for a polyalanine-expansion-favoured conformational change in oligomers. The final paper validates the alternative conformations using direct-carbon NMR experiments.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-d12354e99d92ef6d"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8f1363f914660de97b89"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-S1"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-46236-5",
+      "point_id": "S2",
+      "rationale": "The reviewer recognized evidence that expansion increases condensation or aggregation. The final paper reports length-dependent turbidity and microscopy evidence for phase de-mixing, with limited mobility in the condensates.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-d12354e99d92ef6d"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8f1363f914660de97b89"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-S2"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-46236-5",
+      "point_id": "W1",
+      "rationale": "The reviewer characterized the link between the oligomeric NMR observations and condensate properties as speculative. The final paper explicitly states that a direct correlation between alternative-conformation abundance and aggregation propensity is missing.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-d12354e99d92ef6d"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8f1363f914660de97b89"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W1"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-46236-5",
+      "point_id": "W2",
+      "rationale": "The reviewer found the mechanistic model insufficiently supported. The final paper frames the link between long PARMs, protein malfunction, and therapeutic targets as a postulate, preserving this limitation.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-d12354e99d92ef6d"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-4dd5b584815aef55756f"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-W2"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-2fb6890346198b985379",
+        "RR:SRC-R-2af3852364ce215b90f6"
+      ],
+      "paper_id": "10.1038/s41467-024-46236-5",
+      "point_id": "Q1",
+      "rationale": "The reviewer noted that other methods, including analytical ultracentrifugation, could determine the oligomerization state. The author response acknowledges that a quantitative state estimate is uncertain, and the final paper supports only a tendency to assemble; the residual question remains partially resolved.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-d12354e99d92ef6d"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-7bc832d3dcbbf7143f47"
+      ],
+      "round_ids": [
+        "round_3"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-Q1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-2ac59c10e8307357f504"
+      ],
+      "paper_id": "10.1038/s41467-024-46236-5",
+      "point_id": null,
+      "rationale": "The concern that the work claimed an uncharacterized liquid-to-solid transition was addressed by revising the framing to rapid formation of solid condensates. The final paper reports minimal condensate mobility rather than a liquid intermediate.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-d12354e99d92ef6d"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-905fa629631035996348"
+      ],
+      "round_ids": [
+        "round_2"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-9dc17301e8a0c6073e2d"
+      ],
+      "paper_id": "10.1038/s41467-024-46236-5",
+      "point_id": null,
+      "rationale": "The request for ATP and co-chaperone controls was addressed with ATP-containing HSP70 and DNAJB1 experiments. The final paper reports selective depletion of the disordered conformations by these chaperone conditions.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-f6c7af83b7618535"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-f88a73603d01ca71727e"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-A2"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-1e7bed32b87317d2789f",
+            "P:S-4950bfc23be5f2b39ccc"
+          ],
+          "external_verification_required": true,
+          "point_id": "N2",
+          "schema_version": "aspr_gear",
+          "severity": "major",
+          "suggested_action": "Differentiate the demonstrated incubation-associated conformational switch from established observations of polyalanine helicity, self-association, and condensate formation.",
+          "text": "The novelty is limited because polyalanine helicity, self-association, and condensate formation were identified as established background; the advance depends on the distinctness of the proposed conformational switch."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-3c3029ff563e91d0fecf"
+          ],
+          "external_verification_required": true,
+          "point_id": "N1",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "Define the novelty around the directly observed incubation-associated emergence of disordered conformations in expanded polyalanine tracts.",
+          "text": "The potentially distinctive contribution is the observation of an incubation-associated switch from helical to disordered conformations in expanded polyalanine tracts, validated with direct-carbon NMR."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-024-46236-5",
+    "questions": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-cba7f87155c4cce26e58"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Use an orthogonal quantitative approach to establish the oligomerization state of the NMR-visible species and relate it to the condensing population.",
+        "text": "What is the oligomerization state of the NMR-visible species, and how does it relate quantitatively to the species that form solid condensates?"
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-3c3029ff563e91d0fecf"
+        ],
+        "external_verification_required": false,
+        "point_id": "S1",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Retain the orthogonal direct-carbon NMR validation of the alternative conformations.",
+        "text": "The study provides NMR evidence for expansion-favoured conformational changes in oligomeric PHOX2B fragments and validates the alternative disordered conformations with direct-carbon detection."
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-3c3029ff563e91d0fecf",
+          "P:S-4950bfc23be5f2b39ccc"
+        ],
+        "external_verification_required": false,
+        "point_id": "S2",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "Retain the complementary turbidity, microscopy, and mobility measurements while maintaining their stated scope.",
+        "text": "The experimental series links longer pathogenic expansions to faster phase de-mixing and reports limited mobility in the resulting condensates."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-3c3029ff563e91d0fecf",
+        "P:S-4950bfc23be5f2b39ccc",
+        "P:S-ec6f44e20187b2c46638"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "This study uses NMR and condensate assays to examine how pathogenic PHOX2B polyalanine expansions relate to alternative conformations and rapid formation of solid condensates. The evidence supports an incubation-associated emergence of disordered conformations and length-dependent de-mixing. The novelty is strongest for the proposed conformational switch, while the direct coupling of that switch to aggregation and the disease-mechanistic interpretation remain limited."
+    },
+    "weaknesses": [
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-3c3029ff563e91d0fecf"
+        ],
+        "external_verification_required": false,
+        "point_id": "W1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Quantify the relationship between alternative-conformation abundance and aggregation or phase-transition propensity across conditions and variants.",
+        "text": "The causal link between the alternative conformations detected in NMR-visible species and aggregation or condensate formation remains unestablished; the paper explicitly notes that a direct correlation is missing."
+      },
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-ec6f44e20187b2c46638"
+        ],
+        "external_verification_required": false,
+        "point_id": "W2",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Test the connection between the observed phase transitions, PHOX2B functional loss, and disease-relevant cellular contexts.",
+        "text": "The extension from the in vitro phase-transition observations to PHOX2B malfunction and therapeutic targeting remains a postulate rather than a directly demonstrated disease mechanism."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [],
+      "final_paper_evidence_keys": [
+        "P:S-3c3029ff563e91d0fecf"
+      ],
+      "ledger_id": "L1",
+      "paper_id": "10.1038/s41467-024-46236-5",
+      "residual_summary": "A direct correlation between the alternative conformations and aggregation propensity remains missing.",
+      "resolution_status": "persists",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-8f1363f914660de97b89"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [],
+      "final_paper_evidence_keys": [
+        "P:S-ec6f44e20187b2c46638"
+      ],
+      "ledger_id": "L2",
+      "paper_id": "10.1038/s41467-024-46236-5",
+      "residual_summary": "The disease-mechanistic interpretation remains framed as a postulate.",
+      "resolution_status": "persists",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-4dd5b584815aef55756f"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-2fb6890346198b985379",
+        "RR:SRC-R-2af3852364ce215b90f6"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-cba7f87155c4cce26e58"
+      ],
+      "ledger_id": "L3",
+      "paper_id": "10.1038/s41467-024-46236-5",
+      "residual_summary": "The added analyses support assembly in solution but do not quantitatively establish the oligomerization state of the NMR-visible species.",
+      "resolution_status": "partially_resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-7bc832d3dcbbf7143f47"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-2ac59c10e8307357f504"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-4950bfc23be5f2b39ccc"
+      ],
+      "ledger_id": "L4",
+      "paper_id": "10.1038/s41467-024-46236-5",
+      "residual_summary": "The liquid-to-solid-transition framing was revised to rapid formation of solid condensates with minimal mobility.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-905fa629631035996348"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-9dc17301e8a0c6073e2d"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-8d76c9d1fe744aa1bd9b"
+      ],
+      "ledger_id": "L5",
+      "paper_id": "10.1038/s41467-024-46236-5",
+      "residual_summary": "ATP-containing HSP70 and DNAJB1 experiments were added to address the requested co-chaperone control.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-f88a73603d01ca71727e"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

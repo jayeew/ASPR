@@ -1,0 +1,462 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:a7cf295d62b25b8ce45d94e5334f61e896d6056198f370dc8e04e6bb0b8e22f3",
+  "input_sha256": "sha256:75682d2ffe0be06ab33b65b38f9f6405dbb2482966cd2a5474e262d21413eb08",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:877c087b43aa6f3cbfa9e93c007607a78527709fd6b7dc3e0ffdd89926b71d23",
+  "package_id": "RSP-30880a8c846d3fb72c83",
+  "paper_id": "10.1038/s41467-024-51552-x",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-51552-x",
+      "point_id": "NV-S1",
+      "rationale": "The reviewer identified the flexible pendant-linker design as the informative contribution. The final paper describes APBA's rotatable C–N bond and presents the APBA/BCA comparison and calculated binding energies.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-6a69e8aed8aac2e1"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-f51123d7a01ff418f9a7"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-NV-S1"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-51552-x",
+      "point_id": "NV-L1",
+      "rationale": "The reviewer characterized the work as tethering a known ligand-supported Pd(II) catalyst in a MOF and as an incremental, rather than ground-breaking, advance. The final paper likewise positions the work amid established MOF modification and single-atom-catalyst approaches.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-6a69e8aed8aac2e1"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-f51123d7a01ff418f9a7"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-NV-L1"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-51552-x",
+      "point_id": "ST-1",
+      "rationale": "The reviewer considered the characterization sufficient to support a proposed coordination environment. The final paper reports microscopy, elemental mapping, XPS, and EXAFS evidence for dispersed Pd coordinated to APBA.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-6a69e8aed8aac2e1"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-4a7304372de86bca7b62"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-ST-1"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-024-51552-x",
+      "point_id": "ST-2",
+      "rationale": "The reviewer described the catalysis experiments as reasonably comprehensive and noted the use of controls. The final paper reports a three-repeat averaged TON and the MOF-808 and molecular Pd-MAPB control results.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-6a69e8aed8aac2e1"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c2191023aceac744cea1"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-ST-2"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-5321e3eaaddb16f4c3cb"
+      ],
+      "paper_id": "10.1038/s41467-024-51552-x",
+      "point_id": "W-1",
+      "rationale": "The reviewer queried the observed Pd agglomeration. The response explains it as Pd(0) nanoparticle formation, and the final paper confirms nanoparticles after recycling; APBA is supported as delaying, not preventing, agglomeration.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-6dae3c6f341f06e3"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-a1edeae049d6e8dd64df"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-W-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-1f468820a388426b32cd"
+      ],
+      "paper_id": "10.1038/s41467-024-51552-x",
+      "point_id": "Q-1",
+      "rationale": "The reviewer requested stronger post-catalysis evidence that molecular Pd complexes remain rather than only small nanoparticles. The response and final paper add post-reaction XPS, but the final paper also documents nanoparticle formation and does not report the requested repeat EXAFS/XANES measurement.",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-6a69e8aed8aac2e1"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c59edf0763135367d383"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-Q-1"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-a8f71b275bcbdf67e88b",
+        "RR:SRC-R-288f4dc2b9dad14732ef"
+      ],
+      "paper_id": "10.1038/s41467-024-51552-x",
+      "point_id": null,
+      "rationale": "The requested TON definition and repeated averaging are supported in the final paper: TON is defined as product-to-catalyst molar ratio and the reported high TON is an average of three repeats.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-6a69e8aed8aac2e1",
+        "REV-6dae3c6f341f06e3"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-bb17d0b5304e1c64b380",
+        "RR:SRC-R-73d34e4ae0c16b846af5"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-AUDIT-TON"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-617d4f73072b9f3af0c8",
+        "RR:SRC-R-b5e4bdb31566bdd76afd"
+      ],
+      "paper_id": "10.1038/s41467-024-51552-x",
+      "point_id": null,
+      "rationale": "The final paper reports MOF-808 and molecular Pd-MAPB controls and quantifies BCA incorporation per Zr6 cluster, addressing the requested controls and linker-loading information.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-6a69e8aed8aac2e1"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c2191023aceac744cea1"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-AUDIT-CONTROLS"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-b4eee6c6fe13064c2ef1"
+      ],
+      "paper_id": "10.1038/s41467-024-51552-x",
+      "point_id": null,
+      "rationale": "The response states that Fig. 3e and 3f were replaced with more intuitive depictions, and the final paper contains the corresponding optimized complex structures and caption.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-6dae3c6f341f06e3"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-87f9096500ac06208d36"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-AUDIT-FIGURE"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-009b9c5a14ee29f3dce8",
+        "RR:SRC-R-09bd0f9035d1855a0fdc"
+      ],
+      "paper_id": "10.1038/s41467-024-51552-x",
+      "point_id": null,
+      "rationale": "The final introduction cites the antecedent APBA ligand core and literature on flexibility during metalation and coordination.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-6a69e8aed8aac2e1"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-0d570623c33e807371aa"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-AUDIT-CITATIONS"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-a0876f0e0b40c1b31f19",
+        "RR:SRC-R-e64c0446cc1cba5b7b24"
+      ],
+      "paper_id": "10.1038/s41467-024-51552-x",
+      "point_id": null,
+      "rationale": "The response states that synthetic conditions and proton assignments were added in the Supporting Information, but the supplied final-paper spans do not independently expose those detailed Supporting Information records.",
+      "resolution_status": "unverifiable",
+      "reviewer_id_hashes": [
+        "REV-1f70dda248786178"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e6abf122fde9983ce340",
+        "RR:SRC-R-84fa255f127f85c16b6a"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-AUDIT-REPRODUCIBILITY"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-b6b69de9787a5be6ad2c"
+      ],
+      "paper_id": "10.1038/s41467-024-51552-x",
+      "point_id": null,
+      "rationale": "The response states that the introduction was reconfigured; the final paper presents a focused introduction linking MOF functionalization, linker flexibility, and APBA design.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-1f70dda248786178"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-6627206d97a03afc4618"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "TR-AUDIT-INTRODUCTION"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-38602bd5009734e2a5e5",
+            "P:S-e41f9f6f8e06de187652"
+          ],
+          "external_verification_required": true,
+          "point_id": "NV-L1",
+          "schema_version": "aspr_gear",
+          "severity": "minor",
+          "suggested_action": "Frame the advance as a ligand-design and stabilization insight within established MOF-supported palladium catalysis.",
+          "text": "The conceptual advance is bounded by prior MOF-supported and ligand-supported Pd catalysis: the distinctive element is the flexible APBA pendant linker rather than the general heterogenization strategy."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-e41f9f6f8e06de187652",
+            "P:S-fbb19a486ae13ff7410f"
+          ],
+          "external_verification_required": true,
+          "point_id": "NV-S1",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "Retain the comparison that connects APBA flexibility to Pd stabilization.",
+          "text": "The flexible N,N′-bidentate APBA linker supplies a specific design insight: its rotatable C–N bond is proposed to improve Pd coordination relative to the BCA analogue and accommodate changing coordination environments."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-024-51552-x",
+    "questions": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-03e97fc14410896abc45"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Measure the spent catalyst with a coordination-sensitive method, such as repeat EXAFS/XANES, and quantify the retained molecular Pd fraction alongside nanoparticle formation.",
+        "text": "What fraction and coordination environment of Pd remains as anchored molecular complexes after catalysis? Post-reaction XPS supports residual Pd(II), while TEM/HRTEM also show Pd nanoparticles after recycling."
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-aaf4901da393a2cebedb",
+          "P:S-01eeba5a34114f6f62d1"
+        ],
+        "external_verification_required": false,
+        "point_id": "ST-1",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "None.",
+        "text": "Complementary TEM/HRTEM, HAADF-STEM/EDS, XPS, and EXAFS evidence supports APBA coordination of Pd and dispersed Pd species before catalysis."
+      },
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-b189de35ba695978df42"
+        ],
+        "external_verification_required": false,
+        "point_id": "ST-2",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "None.",
+        "text": "The catalytic assessment includes a three-repeat averaged high-TON measurement and informative controls: MOF-808 gives no product and the molecular Pd-MAPB complex is less favourable on the reported metric."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-e41f9f6f8e06de187652",
+        "P:S-b189de35ba695978df42",
+        "P:S-fbb19a486ae13ff7410f"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "The study replaces the MOF-808 modulator ligand with APBA to anchor palladium for Heck catalysis. It reports a flexible bidentate coordination design, comparison with a BCA analogue, atomically dispersed Pd before reaction, an averaged TON above 95,000, and recycling evidence. The review record supports this as a useful but bounded ligand-design contribution, with post-catalysis Pd speciation and agglomeration remaining the central residual evidence gap."
+    },
+    "weaknesses": [
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-03e97fc14410896abc45"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-1",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Qualify stability claims to distinguish delayed agglomeration from its prevention and report the associated loss of molecularly dispersed Pd.",
+        "text": "Pd nanoparticles are present after recycling, including an average 11.66 nm size for Pd@MOF-APBA. The evidence supports delayed agglomeration relative to Pd@MOF-808, but not complete suppression of agglomeration."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-a8f71b275bcbdf67e88b",
+        "RR:SRC-R-288f4dc2b9dad14732ef"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-b189de35ba695978df42"
+      ],
+      "ledger_id": "LEDGER-TON",
+      "paper_id": "10.1038/s41467-024-51552-x",
+      "residual_summary": "The final paper defines TON and reports three-repeat averaging; no retained residual issue.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-bb17d0b5304e1c64b380",
+        "RR:SRC-R-73d34e4ae0c16b846af5"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-617d4f73072b9f3af0c8",
+        "RR:SRC-R-b5e4bdb31566bdd76afd"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-b189de35ba695978df42"
+      ],
+      "ledger_id": "LEDGER-CONTROLS",
+      "paper_id": "10.1038/s41467-024-51552-x",
+      "residual_summary": "MOF and molecular-complex controls and BCA linker incorporation are reported; no retained residual issue.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-c2191023aceac744cea1"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-b4eee6c6fe13064c2ef1"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-fbb19a486ae13ff7410f"
+      ],
+      "ledger_id": "LEDGER-FIGURE-CLARITY",
+      "paper_id": "10.1038/s41467-024-51552-x",
+      "residual_summary": "The response describes revised Fig. 3e–f depictions and the final paper provides the optimized-complex caption.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-87f9096500ac06208d36"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-009b9c5a14ee29f3dce8",
+        "RR:SRC-R-09bd0f9035d1855a0fdc"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-7ee55fc9b0add215d64b"
+      ],
+      "ledger_id": "LEDGER-PRIOR-ART",
+      "paper_id": "10.1038/s41467-024-51552-x",
+      "residual_summary": "The requested antecedent-linker and flexible-MOF context is cited in the final introduction.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-0d570623c33e807371aa"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-a0876f0e0b40c1b31f19",
+        "RR:SRC-R-e64c0446cc1cba5b7b24"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-e41f9f6f8e06de187652"
+      ],
+      "ledger_id": "LEDGER-REPRODUCIBILITY",
+      "paper_id": "10.1038/s41467-024-51552-x",
+      "residual_summary": "The response locates detailed synthesis and NMR assignments in Supporting Information, but those details cannot be verified from the supplied final-paper spans.",
+      "resolution_status": "unverifiable",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e6abf122fde9983ce340",
+        "RR:SRC-R-84fa255f127f85c16b6a"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-b6b69de9787a5be6ad2c"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-38602bd5009734e2a5e5",
+        "P:S-7ee55fc9b0add215d64b"
+      ],
+      "ledger_id": "LEDGER-INTRODUCTION",
+      "paper_id": "10.1038/s41467-024-51552-x",
+      "residual_summary": "The final introduction presents the field context and rationale for APBA design.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-6627206d97a03afc4618"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

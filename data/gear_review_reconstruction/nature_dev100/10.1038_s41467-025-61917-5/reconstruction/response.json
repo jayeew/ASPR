@@ -1,0 +1,561 @@
+{
+  "contract": "reconstruction_session_response",
+  "conversation_hash": "sha256:8d1396032b12a25b9e4ca088a8440ad53495c7618512c9dd24d590c7533485df",
+  "input_sha256": "sha256:177594e82669eb6f51b6554a3b7c93580acfcc99d4ae4cfe266e020ab9fa592f",
+  "model_id": "gpt-5.6-terra",
+  "output_sha256": "sha256:71439f5138d6bfba5eddaf8da666a7aaf2453cd24c1a49fbbaf0cf2f09eaad8c",
+  "package_id": "RSP-283adf177523226bbd6a",
+  "paper_id": "10.1038/s41467-025-61917-5",
+  "prompt_sha256": "sha256:e728ef1a70e302c9f866bee07b6a96f80cea5ccce080ae200ca01727ef2aedf5",
+  "qa": null,
+  "reference_traces": [
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-61917-5",
+      "point_id": "N-001",
+      "rationale": "The reviewer identified AcRR1 as an additional genetic source for wheat yield. The final paper reports alien-gene expression in wheat, field yield gains, and links to grain number and heading in P:S-75f0fc331c85fbde0e93 and P:S-0ad0c8995ce2e7d82017.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-37bc135ac602a698"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-48b842a4ed01ac0d952c"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-001"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-61917-5",
+      "point_id": "N-002",
+      "rationale": "The reviewer asked for the causal basis of higher AcRR1 expression. The final paper states that expression differences may reflect remote regulation, gene interactions, or epigenetic modifications and that additional genes may contribute in WAT63b (P:S-fc6b6aa0809310159ec8 and P:S-543c9fcd3ad147ab6b68).",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-e086fe77cdabad86"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-fa6ba67024ca2c8d9b36"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-002"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-61917-5",
+      "point_id": "S-001",
+      "rationale": "The reviewer described field-grown wheat experiments in Fielder and KN199. The final paper reports high-seeding-rate field tests in both backgrounds and per-unit-area yield effects in P:S-21468f1d18d39952a58f and P:S-0ad0c8995ce2e7d82017.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-e086fe77cdabad86"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-2d7c75a9bcb6674e0649"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-003"
+    },
+    {
+      "author_response_keys": [],
+      "paper_id": "10.1038/s41467-025-61917-5",
+      "point_id": "S-002",
+      "rationale": "The reviewer characterized the study as combining genetic, molecular, transcriptional, and biochemical investigations. The final paper provides direct binding assays, ChIP-qPCR, and mutant evidence for TaWOX11-2D and TabHLH25-5B–TaFTs in P:S-5c26b8e03da904894e92, P:S-e9d6891d42f1a905f94e, and P:S-584632441e81b88d0de8.",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-e086fe77cdabad86"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-2d7c75a9bcb6674e0649"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-004"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-83ba939bc21c9088f51e"
+      ],
+      "paper_id": "10.1038/s41467-025-61917-5",
+      "point_id": "W-001",
+      "rationale": "The reviewer questioned attribution of the WAT63b translocation phenotype to AcRR1. The final discussion explicitly states that unknown genes in the 0.22–0.53 bin may also function in spike differentiation (P:S-fc6b6aa0809310159ec8).",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-37bc135ac602a698"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-e35c09077ec03eb03dd0"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-005"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f335b28686932fdfa933"
+      ],
+      "paper_id": "10.1038/s41467-025-61917-5",
+      "point_id": "W-002",
+      "rationale": "The reviewer raised the distinct rice OsRR24 phenotype and requested context for AcRR1 function. The final discussion includes the rice comparison but states that whether AcRR1 affects wheat fertility through anther or pistil development remains unclear (P:S-f74c9c1d470f8d0b9b91).",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-e086fe77cdabad86"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-1a7453edeee0514debd0"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-006"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-e768fae9f24fe2a94fc3"
+      ],
+      "paper_id": "10.1038/s41467-025-61917-5",
+      "point_id": "W-003",
+      "rationale": "The reviewer requested causal polymorphisms and natural variation for AcRR1. The final paper reports haplotype associations for wheat orthologs, while expression differences are attributed only provisionally to promoter sequence differences or remote regulation (P:S-fbbbd62abb5e4d1fe903, P:S-543c9fcd3ad147ab6b68, and P:S-fc6b6aa0809310159ec8).",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-e086fe77cdabad86"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-fa6ba67024ca2c8d9b36"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-007"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-54268a8bfac3f0707204"
+      ],
+      "paper_id": "10.1038/s41467-025-61917-5",
+      "point_id": "W-004",
+      "rationale": "The reviewer noted that promoter-GUS staining defines reporter activity rather than endogenous transcript distribution. The final paper specifies the 2875-bp reporter construct but still frames the spatial pattern as AcRR1 expression and only infers involvement in floret fertility (P:S-b1a245083c0ad9dd5988 and P:S-7640341d44e0a1759422).",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-e086fe77cdabad86"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-607401ea13950780300c",
+        "RR:SRC-R-51517314e400ca381ee6"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-008"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-e768fae9f24fe2a94fc3"
+      ],
+      "paper_id": "10.1038/s41467-025-61917-5",
+      "point_id": "Q-001",
+      "rationale": "The reviewer asked for the causal polymorphism underlying higher AcRR1 mRNA. The final paper leaves the mechanism open, citing remote regulation, gene interactions, or epigenetic modifications (P:S-fc6b6aa0809310159ec8).",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-e086fe77cdabad86"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-fa6ba67024ca2c8d9b36"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-009"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f335b28686932fdfa933"
+      ],
+      "paper_id": "10.1038/s41467-025-61917-5",
+      "point_id": "Q-002",
+      "rationale": "The reviewer asked how the wheat phenotype relates to the reported rice ortholog function. The final paper identifies anther and pistil developmental effects as unresolved (P:S-f74c9c1d470f8d0b9b91).",
+      "resolution_status": "persists",
+      "reviewer_id_hashes": [
+        "REV-e086fe77cdabad86"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-1a7453edeee0514debd0"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-010"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-35bf46f17c77535d0b80"
+      ],
+      "paper_id": "10.1038/s41467-025-61917-5",
+      "point_id": "Q-003",
+      "rationale": "The reviewer requested treatment of the other TaFT homoeologues. The final paper selects TaFT-B1 as a representative based on expression and promoter-motif similarity, while its F2 evidence establishes dependence on the TaFT set (P:S-584632441e81b88d0de8).",
+      "resolution_status": "partially_resolved",
+      "reviewer_id_hashes": [
+        "REV-be0f22bfc0e6f04e"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-d3e8b121b0ad1826daa3"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-011"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f335b28686932fdfa933",
+        "RR:SRC-R-fd495e4eabdaba3cb1ed"
+      ],
+      "paper_id": "10.1038/s41467-025-61917-5",
+      "point_id": null,
+      "rationale": "Audit-only resolved matter: prior OsRR24 work and phylogenetic-method detail were incorporated. Final-paper support is P:S-e13bf962620f47d83e5b and P:S-13b6d07c7c0601659e4d.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-e086fe77cdabad86"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-1a7453edeee0514debd0",
+        "RR:SRC-R-067bff921fa68335e0a1"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-012"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-0aa22e24034485d1e482"
+      ],
+      "paper_id": "10.1038/s41467-025-61917-5",
+      "point_id": null,
+      "rationale": "Audit-only resolved matter: field-density, per-unit-area yield, and plot design are specified in P:S-21468f1d18d39952a58f and P:S-0c576ce98b67e61d2013.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-37bc135ac602a698"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-5f92b95338a886474b05"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-013"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-c2e58ec2adc203df3d2c",
+        "RR:SRC-R-a3654570d6306a02bb3c"
+      ],
+      "paper_id": "10.1038/s41467-025-61917-5",
+      "point_id": null,
+      "rationale": "Audit-only resolved matter: primer information, antibody supplier/catalogue details, and ChIP conditions are reported in P:S-ce58f4171c2d5c237fac, P:S-bc3d0bd5933a699d7409, and P:S-fc3d0cbc7c04f13bbbec.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-be0f22bfc0e6f04e"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-444acd644149e9a93c20",
+        "RR:SRC-R-a71f371f296ff6824fe1",
+        "RR:SRC-R-455280154100e4331031"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-014"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-74bcbf3090cf335bfd8f"
+      ],
+      "paper_id": "10.1038/s41467-025-61917-5",
+      "point_id": null,
+      "rationale": "Audit-only resolved matter: the questioned Extended Data Fig. 6b GUS leaf images were removed; final qRT-PCR sampling and normalization details appear in P:S-ce58f4171c2d5c237fac.",
+      "resolution_status": "resolved",
+      "reviewer_id_hashes": [
+        "REV-be0f22bfc0e6f04e"
+      ],
+      "reviewer_quote_keys": [
+        "RR:SRC-R-b1abdee5a72fa174c32a",
+        "RR:SRC-R-2c179700f891ccfeac62"
+      ],
+      "round_ids": [
+        "round_1"
+      ],
+      "schema_version": "aspr_gear",
+      "trace_id": "T-015"
+    }
+  ],
+  "review": {
+    "novelty": {
+      "judgment": "mixed",
+      "limiting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-fc6b6aa0809310159ec8",
+            "P:S-543c9fcd3ad147ab6b68"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-002",
+          "schema_version": "aspr_gear",
+          "severity": "major",
+          "suggested_action": "Distinguish the transgenic AcRR1 result from the composite WAT63b translocation phenotype and state the unestablished regulatory basis.",
+          "text": "The contribution is limited by incomplete causal resolution: additional genes in the 6P interval may contribute to the WAT63b phenotype, and the elevated AcRR1 expression remains attributed only provisionally to remote regulation, gene interactions, or epigenetic modification."
+        }
+      ],
+      "schema_version": "aspr_gear",
+      "supporting_points": [
+        {
+          "aspect": "novelty_prior_art",
+          "evidence_keys": [
+            "P:S-75f0fc331c85fbde0e93",
+            "P:S-0ad0c8995ce2e7d82017",
+            "P:S-fc6b6aa0809310159ec8"
+          ],
+          "external_verification_required": true,
+          "point_id": "N-001",
+          "schema_version": "aspr_gear",
+          "severity": "none",
+          "suggested_action": "None; retained as the evidence-backed contribution.",
+          "text": "The work identifies an A. cristatum type-B response regulator as an alien source for increasing grain number and per-unit-area yield in wheat while advancing heading-related phenotypes."
+        }
+      ]
+    },
+    "paper_id": "10.1038/s41467-025-61917-5",
+    "questions": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-fc6b6aa0809310159ec8"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-001",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Resolve the causal basis of the expression difference with regulatory and functional comparisons.",
+        "text": "Which cis, remote-regulatory, interaction, or epigenetic mechanism produces the higher AcRR1 expression associated with the favorable phenotype?"
+      },
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-f74c9c1d470f8d0b9b91"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-002",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Define the affected reproductive tissues and developmental processes.",
+        "text": "Does AcRR1 increase wheat floret fertility through anther development, pistil development, or both?"
+      },
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-584632441e81b88d0de8"
+        ],
+        "external_verification_required": false,
+        "point_id": "Q-003",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Quantify the distinct contributions of TaFT-A1, TaFT-B1, and TaFT-D1 to the AcRR1 heading phenotype.",
+        "text": "What are the separate functional contributions of the three TaFT homoeologues to AcRR1-dependent early heading?"
+      }
+    ],
+    "schema_version": "aspr_gear",
+    "strengths": [
+      {
+        "aspect": "experiment_evidence",
+        "evidence_keys": [
+          "P:S-21468f1d18d39952a58f",
+          "P:S-0ad0c8995ce2e7d82017",
+          "P:S-0c576ce98b67e61d2013"
+        ],
+        "external_verification_required": false,
+        "point_id": "S-001",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "None; retained as evidence-backed experimental support.",
+        "text": "The yield phenotype is tested at high seeding rate in two wheat backgrounds, with per-unit-area yield assessments and a replicated randomized block design."
+      },
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-5c26b8e03da904894e92",
+          "P:S-e9d6891d42f1a905f94e",
+          "P:S-584632441e81b88d0de8"
+        ],
+        "external_verification_required": false,
+        "point_id": "S-002",
+        "schema_version": "aspr_gear",
+        "severity": "none",
+        "suggested_action": "None; retained as evidence-backed mechanistic support.",
+        "text": "The proposed network is supported by convergent direct-binding assays, ChIP-qPCR, transcriptional activation assays, and mutant or segregating-population evidence for TaWOX11-2D and the TabHLH25-5B–TaFT pathway."
+      }
+    ],
+    "summary": {
+      "evidence_keys": [
+        "P:S-75f0fc331c85fbde0e93",
+        "P:S-0ad0c8995ce2e7d82017",
+        "P:S-5c26b8e03da904894e92",
+        "P:S-fc6b6aa0809310159ec8"
+      ],
+      "schema_version": "aspr_gear",
+      "text": "The paper identifies AcRR1 from A. cristatum and reports increased grain number and field yield in transgenic wheat, with evidence linking AcRR1 to TaWOX11-2D, cytokinin-associated changes, and a TabHLH25-5B–TaFT heading pathway. The central residual limitations are the unresolved causal basis of AcRR1 expression and the incomplete separation of AcRR1-specific effects from other genes in the WAT63b translocation interval."
+    },
+    "weaknesses": [
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-fc6b6aa0809310159ec8"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-001",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Maintain explicit separation between AcRR1 transgenic effects and the WAT63b translocation phenotype.",
+        "text": "The WAT63b gain in grain number cannot be assigned to AcRR1 alone because the final discussion allows that unknown genes in the 0.22–0.53 6P interval also contribute."
+      },
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-f74c9c1d470f8d0b9b91"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-002",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Constrain the fertility mechanism to the directly supported level until the reproductive tissue target is established.",
+        "text": "The mechanism connecting AcRR1 to improved floret fertility remains incomplete: the paper states that effects on anther and pistil development have not been determined."
+      },
+      {
+        "aspect": "method",
+        "evidence_keys": [
+          "P:S-fbbbd62abb5e4d1fe903",
+          "P:S-543c9fcd3ad147ab6b68",
+          "P:S-fc6b6aa0809310159ec8"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-003",
+        "schema_version": "aspr_gear",
+        "severity": "major",
+        "suggested_action": "Separate haplotype association and expression differences from causal allelic evidence.",
+        "text": "Natural and regulatory variation is not causally resolved. The paper provides wheat-ortholog haplotype associations and timing or binding differences, but assigns AcRR1 expression divergence only to possible promoter or remote effects."
+      },
+      {
+        "aspect": "results_conclusion",
+        "evidence_keys": [
+          "P:S-b1a245083c0ad9dd5988",
+          "P:S-7640341d44e0a1759422"
+        ],
+        "external_verification_required": false,
+        "point_id": "W-004",
+        "schema_version": "aspr_gear",
+        "severity": "minor",
+        "suggested_action": "Describe the ProAcRR1:GUS pattern as promoter-reporter activity rather than endogenous transcript localization.",
+        "text": "Spatial inference from the ProAcRR1:GUS construct remains limited by the reporter design. The final manuscript specifies a 2875-bp upstream fragment but interprets the staining pattern as AcRR1 expression during floret development."
+      }
+    ]
+  },
+  "revision_ledger": [
+    {
+      "author_response_keys": [
+        "RR:SRC-R-f335b28686932fdfa933",
+        "RR:SRC-R-fd495e4eabdaba3cb1ed"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-e13bf962620f47d83e5b",
+        "P:S-13b6d07c7c0601659e4d"
+      ],
+      "ledger_id": "L-001",
+      "paper_id": "10.1038/s41467-025-61917-5",
+      "residual_summary": "Prior OsRR24 context and phylogenetic construction details are present in the final paper.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-1a7453edeee0514debd0",
+        "RR:SRC-R-067bff921fa68335e0a1"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-0aa22e24034485d1e482"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-21468f1d18d39952a58f",
+        "P:S-0c576ce98b67e61d2013"
+      ],
+      "ledger_id": "L-002",
+      "paper_id": "10.1038/s41467-025-61917-5",
+      "residual_summary": "The final paper specifies density, high-rate field testing, plot replication, and per-unit-area yield determination.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-5f92b95338a886474b05"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-c2e58ec2adc203df3d2c",
+        "RR:SRC-R-a3654570d6306a02bb3c"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-ce58f4171c2d5c237fac",
+        "P:S-bc3d0bd5933a699d7409",
+        "P:S-fc3d0cbc7c04f13bbbec"
+      ],
+      "ledger_id": "L-003",
+      "paper_id": "10.1038/s41467-025-61917-5",
+      "residual_summary": "Primer, antibody, and ChIP-method details are provided in the final methods.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-444acd644149e9a93c20",
+        "RR:SRC-R-a71f371f296ff6824fe1",
+        "RR:SRC-R-455280154100e4331031"
+      ],
+      "schema_version": "aspr_gear"
+    },
+    {
+      "author_response_keys": [
+        "RR:SRC-R-74bcbf3090cf335bfd8f"
+      ],
+      "final_paper_evidence_keys": [
+        "P:S-ce58f4171c2d5c237fac"
+      ],
+      "ledger_id": "L-004",
+      "paper_id": "10.1038/s41467-025-61917-5",
+      "residual_summary": "The questioned Extended Data GUS leaf images were removed; qRT-PCR sampling and normalization are specified.",
+      "resolution_status": "resolved",
+      "reviewer_quote_keys": [
+        "RR:SRC-R-b1abdee5a72fa174c32a",
+        "RR:SRC-R-2c179700f891ccfeac62"
+      ],
+      "schema_version": "aspr_gear"
+    }
+  ],
+  "schema_sha256": "sha256:19218afc757c9caf9368cf84781cdd8e4bbf6bd3179a089d741bafccc9e1b5f0",
+  "schema_version": "aspr_gear",
+  "session_kind": "reconstruction"
+}

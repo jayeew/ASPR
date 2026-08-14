@@ -15,8 +15,8 @@ PROJECT_ROOT = Path(__file__).resolve().parents[4]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from aspr.nature_multihorizon.artifact_store import hash_file, hash_json  # noqa: E402
-from aspr.nature_multihorizon.release import load_release  # noqa: E402
+from gear.nature_multihorizon.artifact_store import hash_file, hash_json  # noqa: E402
+from gear.nature_multihorizon.release import load_release  # noqa: E402
 from experiments.common.old.kg_perturbation_v2.renderers import render_figure  # noqa: E402
 from experiments.common.old.kg_perturbation_v2.run_figure import validate_figure_view  # noqa: E402
 

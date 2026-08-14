@@ -27,7 +27,7 @@ from scripts.nature_portfolio_v5 import (  # noqa: E402
     utc_now,
     write_json,
 )
-from aspr.env import getenv  # noqa: E402
+from gear.env import getenv  # noqa: E402
 
 
 def source_seed_rows() -> pd.DataFrame:
