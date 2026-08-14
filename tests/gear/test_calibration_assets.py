@@ -36,3 +36,18 @@ def test_registry_rejects_manifest_hash_drift(tmp_path):
     registry.write_text(json.dumps(original), encoding="utf-8")
     with pytest.raises(ValueError, match="manifest hash mismatch"):
         load_calibration_release(RELEASE_ALIAS, registry_path=registry)
+
+
+def test_config_loads_without_graph_assets(tmp_path):
+    config = load_config(
+        overrides={"calibration_registry": str(tmp_path / "missing_registry.json")}
+    )
+    assert config.calibration_registry == tmp_path / "missing_registry.json"
+
+
+def test_strict_asset_validation_fails_when_assets_missing(tmp_path):
+    with pytest.raises(FileNotFoundError):
+        load_config(
+            overrides={"calibration_registry": str(tmp_path / "missing_registry.json")},
+            validate_assets=True,
+        )

@@ -47,12 +47,28 @@
     "sandbox": "read-only"
   },
   "openai_compatible": null,
+  "aspr_qwen": {
+    "enabled": false,
+    "backend": "openai_compatible",
+    "model": "aspr-qwen-reviewer",
+    "base_url": "http://127.0.0.1:8000/v1",
+    "api_key_env": "ASPR_QWEN_API_KEY",
+    "timeout_seconds": 1800,
+    "required": false
+  },
   "retrieval": {
     "normal_max": 2,
     "contrastive_max": 1,
     "citation_expansion_max": 1,
     "fulltext_max": 12,
-    "provider_limit": 50
+    "provider_limit": 50,
+    "relation_cards_max": 24,
+    "total_actions_max": 48,
+    "openalex_pdf_enabled": false,
+    "openalex_pdf_max_downloads": 3,
+    "openalex_pdf_max_bytes": 25000000,
+    "openalex_pdf_max_pages": 100,
+    "openalex_pdf_max_characters": 30000
   },
   "allow_external_retrieval": true,
   "cache_dir": "data/gear_cache",

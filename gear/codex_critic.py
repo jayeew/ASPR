@@ -10,12 +10,12 @@ from typing import Any, Callable, List, Mapping, Optional
 from pydantic import ValidationError
 
 from .config import GearConfig, load_config
+from .contracts import PaperIR
 from .model_client import (
     JsonModelClient,
     ModelClientUnavailableError,
     build_json_model_client,
 )
-from .contracts import PaperIR
 from .review_contracts import (
     ContextClaim,
     ContextSpan,
@@ -24,6 +24,7 @@ from .review_contracts import (
     GraphReviewContext,
     NoveltyAssessment,
     NoveltyJudgment,
+    ReviewAspect,
     ReviewContextPack,
     ReviewSummary,
     StructuredReview,
@@ -34,10 +35,9 @@ Return one JSON object satisfying StructuredReview. Produce exactly five logical
 parts: summary, novelty, strengths, weaknesses, and questions. Do not output a
 rating, decision, recommendation, accept/reject language, reviewer identity, or
 source quote identity. Every scientific point must be atomic and cite supplied
-P:S-* paper evidence keys. Major points require evidence. The safe graph context
-may change inspection priority, retrieval budget, and wording confidence only; it
-cannot establish novelty, quality, causality, or acceptance and it is never an
-evidence key. Mark novelty/prior-art points external_verification_required=true.
+P:S-* paper evidence keys. Major points require evidence. You receive no Graph,
+ASPR-Qwen, prior-art relation, or human-review information. Mark novelty/prior-art
+points external_verification_required=true.
 The novelty judgment must be positive for supporting-only points, negative for
 limiting-only points, mixed for both, and not_discussed for neither.
 """
@@ -172,7 +172,7 @@ class CodexCliCritic:
         pack = build_review_context_pack(paper_ir, graph_context)
         user = json.dumps(
             {
-                "context": pack.model_dump(mode="json"),
+                "context": pack.model_dump(mode="json", exclude={"graph"}),
                 "output_schema": StructuredReview.model_json_schema(),
             },
             ensure_ascii=False,
@@ -181,9 +181,15 @@ class CodexCliCritic:
             payload = self._generate(CODEX_REVIEW_PROMPT, user)
             raw_review = payload.get("review", payload)
             review = StructuredReview.model_validate(raw_review)
+            self._force_novelty_external_verification(review)
             self._validate_review(review, paper_ir)
             return review
-        except (ModelClientUnavailableError, ValidationError, ValueError, TypeError) as exc:
+        except (
+            ModelClientUnavailableError,
+            ValidationError,
+            ValueError,
+            TypeError,
+        ) as exc:
             self.last_failures.append(f"codex_cli_unavailable_or_invalid:{exc}")
             return limited_review(paper_ir)
 
@@ -213,12 +219,22 @@ class CodexCliCritic:
         texts = [review.summary.text, *(point.text for point in review.all_points())]
         if any(FORBIDDEN_DECISION_TEXT.search(text) for text in texts):
             raise ValueError("Codex review contains decision/recommendation language")
-        novelty_points = [
-            *review.novelty.supporting_points,
-            *review.novelty.limiting_points,
-        ]
-        if any(not point.external_verification_required for point in novelty_points):
-            raise ValueError("novelty points must request external verification")
+
+    @staticmethod
+    def _force_novelty_external_verification(review: StructuredReview) -> None:
+        novelty_points = {
+            id(point): point
+            for point in [
+                *review.all_points(),
+                *review.novelty.supporting_points,
+                *review.novelty.limiting_points,
+            ]
+            if point.aspect == ReviewAspect.NOVELTY_PRIOR_ART
+            or point in review.novelty.supporting_points
+            or point in review.novelty.limiting_points
+        }
+        for point in novelty_points.values():
+            point.external_verification_required = True
 
 
 def stable_point_id(section: str, text: str) -> str:

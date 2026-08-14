@@ -5,16 +5,12 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+from collections.abc import Callable, Mapping, Sequence
 from datetime import date
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Mapping, Optional, Protocol, Sequence
+from typing import Any, Protocol
 
 from .config import GearConfig, load_config
-from .model_client import (
-    JsonModelClient,
-    ModelClientUnavailableError,
-    build_json_model_client,
-)
 from .contracts import (
     EvidenceLevel,
     EvidenceSpan,
@@ -26,6 +22,12 @@ from .contracts import (
     RetrievedSpan,
     RetrievedWork,
 )
+from .model_client import (
+    JsonModelClient,
+    ModelClientUnavailableError,
+    build_json_model_client,
+)
+
 RELATION_CLASSIFICATION_PROMPT = """Compare one target-paper claim span with one
 prior-work span. Return exactly one relation from DIRECT_ANTECEDENT,
 PARTIAL_ANTECEDENT, EXTENSION, PARALLEL, SUPPORT, CONFLICT, DISTANT, UNRESOLVED.
@@ -62,25 +64,25 @@ class SearchClient(Protocol):
         self,
         query: str,
         *,
-        provider: Optional[str] = None,
-        date_to: Optional[date] = None,
-        limit: Optional[int] = None,
-    ) -> List[Dict[str, Any]]: ...
+        provider: str | None = None,
+        date_to: date | None = None,
+        limit: int | None = None,
+    ) -> list[dict[str, Any]]: ...
 
     def fetch_neighbors(
         self,
         work_id: str,
         direction: str = "references",
         *,
-        limit: Optional[int] = None,
-    ) -> List[Dict[str, Any]]: ...
+        limit: int | None = None,
+    ) -> list[dict[str, Any]]: ...
 
 
 def _stable_id(prefix: str, payload: str) -> str:
     return prefix + hashlib.sha256(payload.encode("utf-8")).hexdigest()[:18]
 
 
-def _tokens(text: str) -> List[str]:
+def _tokens(text: str) -> list[str]:
     return [
         token.casefold()
         for token in TOKEN_PATTERN.findall(str(text or ""))
@@ -88,7 +90,7 @@ def _tokens(text: str) -> List[str]:
     ]
 
 
-def _parse_date(value: Any) -> Optional[date]:
+def _parse_date(value: Any) -> date | None:
     if isinstance(value, date):
         return value
     text = str(value or "").strip()
@@ -100,7 +102,7 @@ def _parse_date(value: Any) -> Optional[date]:
         return None
 
 
-def _parse_year(value: Any) -> Optional[int]:
+def _parse_year(value: Any) -> int | None:
     try:
         year = int(value)
     except (TypeError, ValueError):
@@ -111,7 +113,7 @@ def _parse_year(value: Any) -> Optional[int]:
 class QueryPlanner:
     """Produce bounded, reproducible lexical/mechanism query families."""
 
-    def plan(self, claim: PaperClaim) -> List[QuerySpec]:
+    def plan(self, claim: PaperClaim) -> list[QuerySpec]:
         terms = list(dict.fromkeys(_tokens(claim.text)))
         lexical = " ".join(terms[:10]) or claim.text[:180]
         mechanism_terms = [
@@ -139,7 +141,9 @@ class QueryPlanner:
         terms = [
             term
             for term in dict.fromkeys(_tokens(claim.text))
-            if not re.search(r"(?:net|bert|gpt|former|framework)$", term, flags=re.I)
+            if not re.search(
+                r"(?:net|bert|gpt|former|framework)$", term, flags=re.IGNORECASE
+            )
         ]
         query = " ".join(terms[:8]) or claim.text[:180]
         return QuerySpec(
@@ -150,21 +154,67 @@ class QueryPlanner:
         )
 
 
+class PriorPassageExtractor:
+    """Select one to three query-relevant passages instead of whole prior papers."""
+
+    def extract(
+        self,
+        text: str,
+        *,
+        query: str,
+        source: EvidenceLevel,
+        maximum: int = 3,
+    ) -> list[RetrievedSpan]:
+        chunks = [
+            chunk.strip()
+            for chunk in re.split(r"\n\s*\n|(?<=[.!?。！？])\s+", text)
+            if len(chunk.strip()) >= 40
+        ]
+        if not chunks and text.strip():
+            chunks = [text.strip()]
+        query_tokens = set(_tokens(query))
+        ranked = sorted(
+            chunks,
+            key=lambda chunk: (
+                len(query_tokens & set(_tokens(chunk)))
+                / max(len(query_tokens | set(_tokens(chunk))), 1),
+                len(chunk),
+            ),
+            reverse=True,
+        )[:maximum]
+        spans: list[RetrievedSpan] = []
+        for chunk in ranked:
+            passage = chunk[:4_000]
+            digest = hashlib.sha256(passage.encode("utf-8")).hexdigest()
+            spans.append(
+                RetrievedSpan(
+                    span_id="RS-" + digest[:18],
+                    text=passage,
+                    text_sha256=f"sha256:{digest}",
+                    source=source,
+                )
+            )
+        return spans
+
+
 class PriorArtService:
     """Retrieve candidates under a hard budget and pre-classification cutoff."""
 
     def __init__(
         self,
-        config: Optional[GearConfig] = None,
+        config: GearConfig | None = None,
         *,
-        search_client: Optional[SearchClient] = None,
+        search_client: SearchClient | None = None,
     ) -> None:
         self.config = config or load_config()
         self.search_client = search_client
         self.query_planner = QueryPlanner()
-        self.last_failures: List[str] = []
-        self.last_queries: List[str] = []
+        self.passage_extractor = PriorPassageExtractor()
+        self.last_failures: list[str] = []
+        self.last_queries: list[str] = []
         self.last_cache_hit = False
+        self._pdf_downloads_used = 0
+        self._pdf_text_cache: dict[str, str] = {}
 
     def _client(self) -> SearchClient:
         if self.search_client is not None:
@@ -175,7 +225,7 @@ class PriorArtService:
             s2_api_key = ""
             openalex_api_key = ""
             and_search = False
-            retrieval_provider = "semantic_scholar"
+            retrieval_provider = "openalex"
 
         self.search_client = OpenScholar(_Args())
         return self.search_client
@@ -187,11 +237,11 @@ class PriorArtService:
         budget: RetrievalBudget,
         *,
         family: LiteralQueryFamily = "normal",
-    ) -> List[RetrievedWork]:
+    ) -> list[RetrievedWork]:
         self.last_failures = []
         self.last_queries = []
         self.last_cache_hit = False
-        cache_hits: List[bool] = []
+        cache_hits: list[bool] = []
         if not self.config.allow_external_retrieval:
             self.last_failures.append("external_retrieval_disabled")
             if family == "contrastive":
@@ -213,7 +263,7 @@ class PriorArtService:
         remaining_slots = budget.fulltext_max - budget.fulltext_kept
         if remaining_slots <= 0:
             return []
-        works: Dict[str, RetrievedWork] = {}
+        works: dict[str, RetrievedWork] = {}
         for query in queries:
             self.last_queries.append(f"{query.query_id}:{query.query}")
             try:
@@ -245,7 +295,7 @@ class PriorArtService:
         claim: PaperClaim,
         cutoff: date,
         budget: RetrievalBudget,
-    ) -> List[RetrievedWork]:
+    ) -> list[RetrievedWork]:
         self.last_failures = []
         self.last_queries = []
         self.last_cache_hit = False
@@ -271,7 +321,7 @@ class PriorArtService:
         except Exception as exc:
             self.last_failures.append(f"citation_expansion:{exc}")
             return []
-        works: List[RetrievedWork] = []
+        works: list[RetrievedWork] = []
         for row in rows:
             work = self._normalize_work(row, query)
             if work is not None and self._eligible_before_cutoff(work, cutoff):
@@ -302,7 +352,7 @@ class PriorArtService:
         *,
         cutoff: date,
         limit: int,
-    ) -> tuple[List[Dict[str, Any]], bool]:
+    ) -> tuple[list[dict[str, Any]], bool]:
         client = self._client()
         provider = str(getattr(client, "retrieval_provider", type(client).__name__))
         path = self._cache_path(
@@ -341,7 +391,7 @@ class PriorArtService:
         *,
         cutoff: date,
         limit: int,
-    ) -> tuple[List[Dict[str, Any]], bool]:
+    ) -> tuple[list[dict[str, Any]], bool]:
         client = self._client()
         provider = str(getattr(client, "retrieval_provider", type(client).__name__))
         path = self._cache_path(
@@ -397,7 +447,7 @@ class PriorArtService:
         self,
         row: Mapping[str, Any],
         query: QuerySpec,
-    ) -> Optional[RetrievedWork]:
+    ) -> RetrievedWork | None:
         work_id = str(row.get("paperId") or row.get("id") or "").strip()
         title = str(row.get("title") or row.get("display_name") or "").strip()
         if not work_id or not title:
@@ -405,6 +455,8 @@ class PriorArtService:
         abstract = str(row.get("abstract") or "").strip()
         full_text = str(row.get("full_text") or row.get("fulltext") or "").strip()
         citation_context = str(row.get("citation_context") or "").strip()
+        if not abstract and not full_text and not citation_context:
+            full_text = self._openalex_pdf_text(work_id)
         authors_raw = row.get("authors") or []
         if isinstance(authors_raw, str):
             authors = [part.strip() for part in authors_raw.split(",") if part.strip()]
@@ -427,7 +479,7 @@ class PriorArtService:
             raw_external if isinstance(raw_external, dict) else {}
         )
         doi = str(row.get("doi") or external.get("DOI") or "").strip() or None
-        spans: List[RetrievedSpan] = []
+        spans: list[RetrievedSpan] = []
         evidence_text = full_text[:30_000] or abstract or citation_context
         evidence_level = (
             EvidenceLevel.FULLTEXT
@@ -437,15 +489,13 @@ class PriorArtService:
             )
         )
         if evidence_text:
-            digest = hashlib.sha256(evidence_text.encode("utf-8")).hexdigest()
-            spans.append(
-                RetrievedSpan(
-                    span_id="RS-" + digest[:18],
-                    text=evidence_text,
-                    text_sha256=f"sha256:{digest}",
-                    source=evidence_level,
-                )
+            spans = self.passage_extractor.extract(
+                evidence_text,
+                query=query.query,
+                source=evidence_level,
             )
+        if not spans:
+            return None
         return RetrievedWork(
             work_id=work_id,
             target_claim_id=query.claim_id,
@@ -462,6 +512,33 @@ class PriorArtService:
             retrieval_source=str(row.get("retrieval_source") or "unknown"),
         )
 
+    def _openalex_pdf_text(self, work_id: str) -> str:
+        limits = self.config.retrieval
+        if not limits.openalex_pdf_enabled or "openalex.org/" not in work_id.casefold():
+            return ""
+        if work_id in self._pdf_text_cache:
+            return self._pdf_text_cache[work_id]
+        if self._pdf_downloads_used >= limits.openalex_pdf_max_downloads:
+            return ""
+        fetch_pdf_text = getattr(self._client(), "fetch_pdf_text", None)
+        if not callable(fetch_pdf_text):
+            return ""
+        self._pdf_downloads_used += 1
+        try:
+            text = str(
+                fetch_pdf_text(
+                    work_id,
+                    max_bytes=limits.openalex_pdf_max_bytes,
+                    max_pages=limits.openalex_pdf_max_pages,
+                    max_characters=limits.openalex_pdf_max_characters,
+                )
+                or ""
+            ).strip()
+        except (OSError, RuntimeError, TypeError, ValueError):
+            text = ""
+        self._pdf_text_cache[work_id] = text
+        return text
+
 
 LiteralQueryFamily = str
 
@@ -471,14 +548,14 @@ class RelationClassifier:
 
     def __init__(
         self,
-        config: Optional[GearConfig] = None,
+        config: GearConfig | None = None,
         *,
-        generator: Optional[Callable[[str, str], Mapping[str, Any]]] = None,
+        generator: Callable[[str, str], Mapping[str, Any]] | None = None,
     ) -> None:
         self.config = config or load_config()
         self.client: JsonModelClient = build_json_model_client(self.config)
         self.generator = generator
-        self.last_failure: Optional[str] = None
+        self.last_failure: str | None = None
 
     def classify(
         self,
@@ -597,7 +674,7 @@ class RelationClassifier:
         temporal_valid: bool,
         temporal_unresolved: bool,
         rationale: str,
-        dimensions: Optional[Sequence[str]] = None,
+        dimensions: Sequence[str] | None = None,
     ) -> RelationCard:
         prior_span_id = prior.spans[0].span_id if prior.spans else None
         identity = (
@@ -631,4 +708,10 @@ class RelationClassifier:
         )
 
 
-__all__ = ["PriorArtService", "QueryPlanner", "RelationClassifier", "SearchClient"]
+__all__ = [
+    "PriorArtService",
+    "PriorPassageExtractor",
+    "QueryPlanner",
+    "RelationClassifier",
+    "SearchClient",
+]

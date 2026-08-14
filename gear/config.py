@@ -9,7 +9,7 @@ from typing import Any, Dict, List, Literal, Optional, Union
 from pydantic import Field, field_validator, model_validator
 
 from .contracts import StrictModel
-from .env import getenv
+from .env import getenv_runtime
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CONFIG = PROJECT_ROOT / "configs" / "gear" / "default.json"
@@ -34,6 +34,18 @@ class OpenAICompatibleEndpoint(StrictModel):
     timeout_seconds: int = 1800
 
 
+class ASPRQwenConfig(StrictModel):
+    """Optional graph-blind auxiliary reviewer endpoint."""
+
+    enabled: bool = False
+    backend: Literal["openai_compatible"] = "openai_compatible"
+    model: str = "aspr-qwen-reviewer"
+    base_url: str = "http://127.0.0.1:8000/v1"
+    api_key_env: str = "ASPR_QWEN_API_KEY"
+    timeout_seconds: int = 1800
+    required: bool = False
+
+
 class AssetPaths(StrictModel):
     official_run_manifest: Path
     official_model_json: Path
@@ -54,6 +66,13 @@ class RetrievalLimits(StrictModel):
     citation_expansion_max: int = Field(default=1, ge=0)
     fulltext_max: int = Field(default=12, ge=0)
     provider_limit: int = Field(default=50, ge=1)
+    relation_cards_max: int = Field(default=24, ge=1)
+    total_actions_max: int = Field(default=48, ge=1)
+    openalex_pdf_enabled: bool = False
+    openalex_pdf_max_downloads: int = Field(default=3, ge=0, le=12)
+    openalex_pdf_max_bytes: int = Field(default=25_000_000, ge=1_000_000)
+    openalex_pdf_max_pages: int = Field(default=100, ge=1)
+    openalex_pdf_max_characters: int = Field(default=30_000, ge=1_000)
 
 
 class GearConfig(StrictModel):
@@ -70,6 +89,7 @@ class GearConfig(StrictModel):
     model_backend: Literal["codex_cli", "openai_compatible"] = "codex_cli"
     codex_cli: CodexCliEndpoint
     openai_compatible: Optional[OpenAICompatibleEndpoint] = None
+    aspr_qwen: ASPRQwenConfig = Field(default_factory=ASPRQwenConfig)
     retrieval: RetrievalLimits = Field(default_factory=RetrievalLimits)
     allow_external_retrieval: bool = True
     cache_dir: Path
@@ -163,8 +183,9 @@ def load_config(
     path: Optional[Path] = None,
     *,
     overrides: Optional[Dict[str, Any]] = None,
+    validate_assets: bool = False,
 ) -> GearConfig:
-    """Load deterministic defaults and non-secret environment overrides."""
+    """Load configuration without touching heavyweight Graph assets by default."""
     payload = json.loads(DEFAULT_CONFIG.read_text(encoding="utf-8"))
     if path is not None and Path(path).resolve() != DEFAULT_CONFIG.resolve():
         override_payload = json.loads(Path(path).resolve().read_text(encoding="utf-8"))
@@ -178,12 +199,12 @@ def load_config(
         "timeout_seconds": "ASPR_GEAR_CODEX_TIMEOUT_SECONDS",
     }
     for field_name, environment_name in codex_env.items():
-        value = getenv(environment_name)
+        value = getenv_runtime(environment_name)
         if value:
             payload["codex_cli"][field_name] = (
                 int(value) if field_name == "timeout_seconds" else value
             )
-    backend = getenv("ASPR_GEAR_MODEL_BACKEND")
+    backend = getenv_runtime("ASPR_GEAR_MODEL_BACKEND")
     if backend:
         payload["model_backend"] = backend
     api_env = {
@@ -193,7 +214,7 @@ def load_config(
         "timeout_seconds": "ASPR_GEAR_API_TIMEOUT_SECONDS",
     }
     for field_name, environment_name in api_env.items():
-        value = getenv(environment_name)
+        value = getenv_runtime(environment_name)
         if value:
             api_payload = payload.get("openai_compatible")
             if not isinstance(api_payload, dict):
@@ -202,7 +223,7 @@ def load_config(
             api_payload[field_name] = (
                 int(value) if field_name == "timeout_seconds" else value
             )
-    retrieval_value = getenv("ASPR_GEAR_ALLOW_EXTERNAL_RETRIEVAL")
+    retrieval_value = getenv_runtime("ASPR_GEAR_ALLOW_EXTERNAL_RETRIEVAL")
     if retrieval_value:
         payload["allow_external_retrieval"] = retrieval_value.strip().casefold() in {
             "1",
@@ -216,31 +237,71 @@ def load_config(
         ("calibration_registry", "ASPR_GEAR_CALIBRATION_REGISTRY"),
         ("runtime_replay_manifest", "ASPR_GEAR_RUNTIME_REPLAY_MANIFEST"),
     ):
-        value = getenv(environment_name)
+        value = getenv_runtime(environment_name)
         if value:
             payload[field_name] = value
-    calibration_release = getenv("ASPR_GEAR_CALIBRATION_RELEASE")
+    calibration_release = getenv_runtime("ASPR_GEAR_CALIBRATION_RELEASE")
     if calibration_release:
         payload["calibration_release"] = calibration_release
+    qwen_env = {
+        "model": "ASPR_QWEN_MODEL",
+        "base_url": "ASPR_QWEN_BASE_URL",
+        "api_key_env": "ASPR_QWEN_API_KEY_ENV",
+        "timeout_seconds": "ASPR_QWEN_TIMEOUT_SECONDS",
+    }
+    for field_name, environment_name in qwen_env.items():
+        value = getenv_runtime(environment_name)
+        if value:
+            payload.setdefault("aspr_qwen", {})[field_name] = (
+                int(value) if field_name == "timeout_seconds" else value
+            )
+    qwen_enabled = getenv_runtime("ASPR_QWEN_ENABLED")
+    if qwen_enabled:
+        payload.setdefault("aspr_qwen", {})[
+            "enabled"
+        ] = qwen_enabled.strip().casefold() in {"1", "true", "yes", "on"}
     for field_name, environment_name in (
         ("normal_max", "ASPR_GEAR_RETRIEVAL_NORMAL_MAX"),
         ("contrastive_max", "ASPR_GEAR_RETRIEVAL_CONTRASTIVE_MAX"),
         ("citation_expansion_max", "ASPR_GEAR_RETRIEVAL_CITATION_MAX"),
         ("fulltext_max", "ASPR_GEAR_RETRIEVAL_EVIDENCE_MAX"),
     ):
-        value = getenv(environment_name)
+        value = getenv_runtime(environment_name)
+        if value:
+            payload["retrieval"][field_name] = int(value)
+    openalex_pdf_enabled = getenv_runtime("ASPR_GEAR_OPENALEX_PDF_ENABLED")
+    if openalex_pdf_enabled:
+        payload["retrieval"][
+            "openalex_pdf_enabled"
+        ] = openalex_pdf_enabled.strip().casefold() in {"1", "true", "yes", "on"}
+    for field_name, environment_name in (
+        ("openalex_pdf_max_downloads", "ASPR_GEAR_OPENALEX_PDF_MAX_DOWNLOADS"),
+        ("openalex_pdf_max_bytes", "ASPR_GEAR_OPENALEX_PDF_MAX_BYTES"),
+        ("openalex_pdf_max_pages", "ASPR_GEAR_OPENALEX_PDF_MAX_PAGES"),
+        (
+            "openalex_pdf_max_characters",
+            "ASPR_GEAR_OPENALEX_PDF_MAX_CHARACTERS",
+        ),
+    ):
+        value = getenv_runtime(environment_name)
         if value:
             payload["retrieval"][field_name] = int(value)
     config = GearConfig.model_validate(payload)
     if config.deprecated_fig4_to_fig10_used:
         raise ValueError("deprecated Fig.4-Fig.10 evidence cannot be enabled")
-    for asset in config.resolved_assets().model_dump().values():
-        config.validate_asset_path(Path(asset))
+    if validate_assets:
+        for asset in config.resolved_assets().model_dump().values():
+            checked = config.validate_asset_path(Path(asset))
+            if not checked.is_file():
+                raise FileNotFoundError(
+                    f"required calibration asset is missing: {checked}"
+                )
     return config
 
 
 __all__ = [
     "CodexCliEndpoint",
+    "ASPRQwenConfig",
     "GearConfig",
     "OpenAICompatibleEndpoint",
     "load_config",

@@ -46,6 +46,32 @@ class SearchFake:
         return []
 
 
+class MetadataOnlySearchFake:
+    retrieval_provider = "openalex"
+
+    def __init__(self):
+        self.pdf_calls = 0
+
+    def search_query(self, query, *, provider=None, date_to=None, limit=None):
+        return [
+            {
+                "paperId": "https://openalex.org/W1",
+                "title": "Metadata-only prior work",
+                "publication_date": "2000-01-01",
+                "year": 2000,
+                "abstract": "",
+                "retrieval_source": "openalex",
+            }
+        ]
+
+    def fetch_neighbors(self, work_id, direction="references", *, limit=None):
+        return []
+
+    def fetch_pdf_text(self, work_id, *, max_bytes, max_pages, max_characters):
+        self.pdf_calls += 1
+        return "Full-text evidence recovered from an OpenAlex Content PDF."
+
+
 def test_retrieval_budget_cache_and_cutoff_are_enforced(gear_config, paper_ir):
     config = gear_config.model_copy(update={"allow_external_retrieval": True})
     client = SearchFake()
@@ -80,6 +106,32 @@ def test_retrieval_budget_cache_and_cutoff_are_enforced(gear_config, paper_ir):
     )
     assert budget.fulltext_kept <= 12
     assert budget.contrastive_used <= budget.contrastive_max
+
+
+def test_metadata_only_candidates_are_ignored_without_pdf_fallback(
+    gear_config, paper_ir
+):
+    config = gear_config.model_copy(update={"allow_external_retrieval": True})
+    client = MetadataOnlySearchFake()
+    service = PriorArtService(config, search_client=client)
+    works = service.retrieve(paper_ir.claims[0], date(2010, 1, 1), RetrievalBudget())
+    assert works == []
+    assert client.pdf_calls == 0
+
+
+def test_enabled_pdf_fallback_recovers_fulltext_span(gear_config, paper_ir):
+    retrieval = gear_config.retrieval.model_copy(
+        update={"openalex_pdf_enabled": True, "openalex_pdf_max_downloads": 1}
+    )
+    config = gear_config.model_copy(
+        update={"allow_external_retrieval": True, "retrieval": retrieval}
+    )
+    client = MetadataOnlySearchFake()
+    service = PriorArtService(config, search_client=client)
+    works = service.retrieve(paper_ir.claims[0], date(2010, 1, 1), RetrievalBudget())
+    assert len(works) == 1
+    assert client.pdf_calls == 1
+    assert works[0].spans[0].source == EvidenceLevel.FULLTEXT
 
 
 def test_same_year_unknown_date_cannot_be_antecedent(gear_config, paper_ir):

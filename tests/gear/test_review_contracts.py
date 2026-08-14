@@ -91,3 +91,13 @@ def test_major_point_requires_evidence():
             text="The central experiment lacks a necessary control.",
             severity=PointSeverity.MAJOR,
         )
+
+
+def test_duplicate_evidence_keys_are_deduplicated_in_original_order():
+    point = ReviewPoint(
+        point_id="duplicate-evidence",
+        aspect=ReviewAspect.METHOD,
+        text="The method point cites two distinct manuscript spans.",
+        evidence_keys=["P:S-first", "P:S-second", "P:S-first"],
+    )
+    assert point.evidence_keys == ["P:S-first", "P:S-second"]

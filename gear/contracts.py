@@ -481,6 +481,10 @@ class ActionRecord(EvidenceModel):
     cache_hit: bool = False
     duration_ms: int = 0
     failure: Optional[str] = None
+    reason_code: Optional[str] = None
+    target_id: Optional[str] = None
+    budget_before: Optional[int] = None
+    budget_after: Optional[int] = None
     created_at: datetime = Field(default_factory=_utc_now)
 
 
@@ -488,4 +492,3 @@ class StateSnapshot(EvidenceModel):
     state_sha256: str
     state: Dict[str, Any]
     created_at: datetime = Field(default_factory=_utc_now)
-

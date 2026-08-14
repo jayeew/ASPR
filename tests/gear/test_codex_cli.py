@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 from gear.codex_cli import CodexCliJsonClient
@@ -13,6 +14,7 @@ def test_codex_cli_client_builds_ephemeral_schema_constrained_command() -> None:
         seen["command"] = command
         seen["prompt"] = prompt
         seen["root"] = root
+        seen["schema"] = json.loads((root / "response_schema.json").read_text())
         return '{"answer":"ok"}'
 
     client = CodexCliJsonClient(
@@ -40,5 +42,40 @@ def test_codex_cli_client_builds_ephemeral_schema_constrained_command() -> None:
     assert command[command.index("--sandbox") + 1] == "read-only"
     assert command[command.index("--model") + 1] == "gpt-5.6-terra"
     assert "--output-schema" in command
-    assert "model_reasoning_effort=\"high\"" in command
+    assert 'model_reasoning_effort="high"' in command
     assert "Return only the requested JSON object." in str(seen["prompt"])
+    schema = seen["schema"]
+    assert isinstance(schema, dict)
+    assert schema["required"] == ["answer"]
+    assert schema["additionalProperties"] is False
+
+
+def test_codex_cli_client_makes_optional_fields_explicitly_required() -> None:
+    seen: dict[str, object] = {}
+
+    def runner(command: list[str], prompt: str, root: Path) -> str:
+        seen["schema"] = json.loads((root / "response_schema.json").read_text())
+        return '{"answer":"ok","optional":null}'
+
+    client = CodexCliJsonClient(CodexCliEndpoint(executable="codex"), runner=runner)
+    client.generate_json(
+        system="Return JSON.",
+        user="Review this paper.",
+        response_schema={
+            "type": "object",
+            "properties": {
+                "answer": {"type": "string"},
+                "optional": {
+                    "type": ["string", "null"],
+                    "default": None,
+                },
+            },
+            "required": ["answer"],
+        },
+    )
+
+    schema = seen["schema"]
+    assert isinstance(schema, dict)
+    assert schema["required"] == ["answer", "optional"]
+    assert schema["additionalProperties"] is False
+    assert "default" not in schema["properties"]["optional"]

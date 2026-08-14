@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+from datetime import date
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -19,8 +20,8 @@ from .config import PROJECT_ROOT, AssetPaths, load_config
 from .contracts import PaperMetadata, ReviewRequest
 from .review_contracts import ReviewBundle, VerificationIssue
 from .review_pipeline import review_paper
-from .trace import EvidenceStore
 from .review_verifier import ReviewVerifier
+from .trace import EvidenceStore
 
 
 def _metadata(path: Optional[Path]) -> PaperMetadata:
@@ -34,6 +35,9 @@ def _review_command(args: argparse.Namespace) -> int:
     request = ReviewRequest(
         paper_path=args.paper,
         metadata=_metadata(args.metadata),
+        evaluation_date=(
+            date.fromisoformat(args.cutoff) if args.cutoff else date.today()
+        ),
     )
     bundle = review_paper(
         request,
@@ -56,9 +60,17 @@ def _validate_command(args: argparse.Namespace) -> int:
     payload = json.loads(raw)
     store = EvidenceStore(run_dir)
     bundle = ReviewBundle.model_validate(payload)
-    report = ReviewVerifier().verify(
-        bundle.structured_review, bundle.state, bundle.paper_ir, store
-    )
+    verifier = ReviewVerifier()
+    if bundle.state_v2 is not None:
+        report = verifier.verify_state(
+            bundle.structured_review, bundle.state_v2, bundle.paper_ir, store
+        )
+    elif bundle.state is not None:
+        report = verifier.verify(
+            bundle.structured_review, bundle.state, bundle.paper_ir, store
+        )
+    else:
+        raise ValueError("run bundle has no review state")
     manifest_failures = store.validate_manifest()
     if manifest_failures:
         manifest_issues = [
@@ -112,7 +124,7 @@ def _benchmark_command(args: argparse.Namespace) -> int:
 
 
 def _validate_assets_command(args: argparse.Namespace) -> int:
-    config = load_config(args.config)
+    config = load_config(args.config, validate_assets=True)
     report = CalibrationService(config).validate_official_replay(
         batch_size=args.batch_size
     )
@@ -136,7 +148,7 @@ def _promotion_sources(path: Path, config: Any) -> Dict[str, Path]:
 
 
 def _promote_calibration_command(args: argparse.Namespace) -> int:
-    config = load_config(args.config)
+    config = load_config(args.config, validate_assets=True)
     sources = _promotion_sources(args.source_config.resolve(), config)
     core_paths = AssetPaths.model_validate(
         {name: sources[name] for name in AssetPaths.model_fields}
@@ -170,7 +182,7 @@ def _promote_calibration_command(args: argparse.Namespace) -> int:
 
 
 def _show_calibration_command(args: argparse.Namespace) -> int:
-    config = load_config(args.config)
+    config = load_config(args.config, validate_assets=bool(args.verify))
     release = load_calibration_release(
         args.release or config.calibration_release,
         registry_path=config.resolve_path(config.calibration_registry),
@@ -208,6 +220,10 @@ def build_parser() -> argparse.ArgumentParser:
         help="Markdown manuscript (.md/.markdown) or PDF ingress adapter (.pdf)",
     )
     review.add_argument("--metadata", type=Path)
+    review.add_argument(
+        "--cutoff",
+        help="Evidence cutoff date in YYYY-MM-DD form; metadata dates take precedence.",
+    )
     review.add_argument("--output-dir", type=Path)
     review.add_argument("--config", type=Path)
     review.set_defaults(handler=_review_command)

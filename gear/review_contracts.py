@@ -17,6 +17,7 @@ from .contracts import (
     StrictModel,
     SubmissionCalibrationPacketV1,
 )
+from .graph_prior_contracts import GraphPriorResult
 
 SCHEMA_VERSION: Literal["aspr_gear"] = "aspr_gear"
 _WORD_RE = re.compile(r"[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)*|[\u3400-\u9fff]")
@@ -69,6 +70,30 @@ class PointValidationStatus(str, Enum):
     EXTERNALLY_VALIDATED = "externally_validated"
     UNRESOLVED = "unresolved"
     REJECTED = "rejected"
+
+
+class ReviewSource(str, Enum):
+    AGENT = "agent_reviewer"
+    ASPR_QWEN = "aspr_qwen"
+
+
+class ReviewPhase(str, Enum):
+    INITIALIZED = "initialized"
+    SOURCES_READY = "sources_ready"
+    FUSED = "fused"
+    EVIDENCE_GATHERING = "evidence_gathering"
+    EVIDENCE_FINALIZED = "evidence_finalized"
+    VERIFIED = "verified"
+    COMPILED = "compiled"
+
+
+class EvidenceAction(str, Enum):
+    SEARCH_PRIOR_ART = "search_prior_art"
+    COUNTERFACTUAL_SEARCH = "counterfactual_search"
+    CITATION_EXPAND = "citation_expand"
+    VERIFY_POINT = "verify_point"
+    STABILITY_TEST = "stability_test"
+    FINALIZE = "finalize"
 
 
 class ReviewSummary(ReviewModel):
@@ -180,6 +205,180 @@ class StructuredReview(ReviewModel):
         return self
 
 
+class PaperSpecificRubric(ReviewModel):
+    """Deterministic, generation-time rubric built only from PaperIR."""
+
+    paper_id: str
+    paper_type: str = "scientific_manuscript"
+    novelty_checks: List[str] = Field(default_factory=list)
+    methodology_checks: List[str] = Field(default_factory=list)
+    experiment_checks: List[str] = Field(default_factory=list)
+    reproducibility_checks: List[str] = Field(default_factory=list)
+
+
+class BranchReview(ReviewModel):
+    """Common graph-blind output contract for Agent and ASPR-Qwen."""
+
+    contract: Literal["aspr_branch_review_v2"] = "aspr_branch_review_v2"
+    paper_id: str
+    source: ReviewSource
+    model_id: str
+    prompt_sha256: str
+    input_sha256: str
+    graph_blind: Literal[True] = True
+    summary: ReviewSummary
+    novelty: NoveltyAssessment
+    strengths: List[ReviewPoint] = Field(default_factory=list)
+    weaknesses: List[ReviewPoint] = Field(default_factory=list)
+    questions: List[ReviewPoint] = Field(default_factory=list)
+    failures: List[str] = Field(default_factory=list)
+
+    def all_points(self) -> List[ReviewPoint]:
+        return [
+            *self.novelty.supporting_points,
+            *self.novelty.limiting_points,
+            *self.strengths,
+            *self.weaknesses,
+            *self.questions,
+        ]
+
+    @classmethod
+    def from_structured(
+        cls,
+        review: StructuredReview,
+        *,
+        source: ReviewSource,
+        model_id: str,
+        prompt_sha256: str,
+        input_sha256: str,
+        failures: Optional[List[str]] = None,
+    ) -> "BranchReview":
+        return cls(
+            paper_id=review.paper_id,
+            source=source,
+            model_id=model_id,
+            prompt_sha256=prompt_sha256,
+            input_sha256=input_sha256,
+            summary=review.summary,
+            novelty=review.novelty,
+            strengths=review.strengths,
+            weaknesses=review.weaknesses,
+            questions=review.questions,
+            failures=list(failures or []),
+        )
+
+
+class CanonicalReviewPoint(ReviewModel):
+    point_id: str
+    section: Literal[
+        "novelty_support", "novelty_limit", "strengths", "weaknesses", "questions"
+    ]
+    aspect: ReviewAspect
+    severity: PointSeverity
+    proposition: str
+    suggested_action: Optional[str] = None
+    source_point_ids: Dict[ReviewSource, List[str]] = Field(default_factory=dict)
+    paper_evidence_keys: List[str] = Field(default_factory=list)
+    relation_evidence_keys: List[str] = Field(default_factory=list)
+    agent_support: bool
+    qwen_support: Optional[bool] = None
+    qwen_conflict: bool = False
+    graph_tension: bool = False
+    novelty_claim_id: Optional[str] = None
+    requires_external_evidence: bool = False
+    validation_status: PointValidationStatus = PointValidationStatus.PENDING
+    stability_status: Literal["not_required", "pending", "stable", "unstable"] = (
+        "not_required"
+    )
+    validation_notes: List[str] = Field(default_factory=list)
+    normal_search_done: bool = False
+    counterfactual_search_done: bool = False
+    citation_expanded: bool = False
+    semantic_verified: bool = False
+    retained: bool = True
+
+
+class EvidenceBudget(ReviewModel):
+    normal_per_claim_max: int = Field(default=2, ge=0)
+    counterfactual_per_claim_max: int = Field(default=1, ge=0)
+    citation_per_claim_max: int = Field(default=1, ge=0)
+    relation_cards_max: int = Field(default=24, ge=1)
+    total_actions_max: int = Field(default=48, ge=1)
+    actions_used: int = Field(default=0, ge=0)
+
+    @model_validator(mode="after")
+    def bounded_actions(self) -> "EvidenceBudget":
+        if self.actions_used > self.total_actions_max:
+            raise ValueError("evidence action budget exceeded")
+        return self
+
+
+class ProcessFeatures(ReviewModel):
+    agent_review_available: bool = False
+    qwen_review_available: bool = False
+    graph_score_available: bool = False
+    retrieval_coverage: float = Field(default=0.0, ge=0.0, le=1.0)
+    independent_prior_count: int = Field(default=0, ge=0)
+    relation_conflict: bool = False
+    counterfactual_completed: bool = False
+    counterfactual_changed_judgment: bool = False
+    stability_passed: bool = False
+    graph_text_tension: bool = False
+    semantic_verifier_passed: bool = False
+    failure_count: int = Field(default=0, ge=0)
+
+
+class FusionMatch(ReviewModel):
+    agent_point_id: Optional[str] = None
+    qwen_point_id: Optional[str] = None
+    relation: Literal["SAME_POINT", "PARTIAL", "CONTRADICTORY", "NO_MATCH"]
+
+
+class FusionReport(ReviewModel):
+    contract: Literal["aspr_fusion_report_v2"] = "aspr_fusion_report_v2"
+    paper_id: str
+    matches: List[FusionMatch] = Field(default_factory=list)
+    canonical_point_ids: List[str] = Field(default_factory=list)
+    graph_tension_point_ids: List[str] = Field(default_factory=list)
+    failures: List[str] = Field(default_factory=list)
+
+
+class ReviewStateV2(ReviewModel):
+    contract: Literal["aspr_evidence_state_v2"] = "aspr_evidence_state_v2"
+    state_id: str
+    phase: ReviewPhase
+    paper_id: str
+    paper_sha256: str
+    cutoff_date: date
+    rubric: PaperSpecificRubric
+    branch_reviews: Dict[ReviewSource, BranchReview] = Field(default_factory=dict)
+    graph_prior_evidence_key: str
+    graph_prior: GraphPriorResult
+    canonical_points: Dict[str, CanonicalReviewPoint] = Field(default_factory=dict)
+    retrieved_work_evidence_keys: List[str] = Field(default_factory=list)
+    relation_evidence_keys: List[str] = Field(default_factory=list)
+    unresolved_target_ids: List[str] = Field(default_factory=list)
+    action_budget: EvidenceBudget = Field(default_factory=EvidenceBudget)
+    process_features: ProcessFeatures = Field(default_factory=ProcessFeatures)
+    failures: List[FailureRecord] = Field(default_factory=list)
+    finalized: bool = False
+
+    @model_validator(mode="after")
+    def state_invariants(self) -> "ReviewStateV2":
+        agent = self.branch_reviews.get(ReviewSource.AGENT)
+        if self.phase != ReviewPhase.INITIALIZED and agent is None:
+            raise ValueError("Agent Reviewer branch is required")
+        if any(key != point.point_id for key, point in self.canonical_points.items()):
+            raise ValueError("canonical point identity mismatch")
+        if self.finalized and self.phase not in {
+            ReviewPhase.EVIDENCE_FINALIZED,
+            ReviewPhase.VERIFIED,
+            ReviewPhase.COMPILED,
+        }:
+            raise ValueError("finalized state has an invalid phase")
+        return self
+
+
 class GraphReviewContext(ReviewModel):
     """Safe Fig.1-Fig.3 projection; opportunity/control never enter this model."""
 
@@ -288,25 +487,32 @@ class ReviewBundle(ReviewModel):
     contract: Literal["aspr_gear_review_bundle"] = "aspr_gear_review_bundle"
     status: ReviewStatus
     paper_ir: PaperIR
-    calibration: Union[CalibrationPacketV3, SubmissionCalibrationPacketV1]
-    graph_context: GraphReviewContext
+    calibration: Optional[Union[CalibrationPacketV3, SubmissionCalibrationPacketV1]] = (
+        None
+    )
+    graph_context: Optional[GraphReviewContext] = None
     critic: CriticRunMetadata
-    state: ReviewState
+    state: Optional[ReviewState] = None
     structured_review: StructuredReview
     review_markdown: str
     verification: VerificationReport
     output_files: Dict[str, str] = Field(default_factory=dict)
+    agent_review: Optional[BranchReview] = None
+    qwen_review: Optional[BranchReview] = None
+    graph_prior: Optional[GraphPriorResult] = None
+    fusion_report: Optional[FusionReport] = None
+    state_v2: Optional[ReviewStateV2] = None
+    process_diagnostic: Optional[ProcessFeatures] = None
 
 
 def _validate_evidence_keys(value: List[str]) -> List[str]:
-    if len(value) != len(set(value)):
-        raise ValueError("evidence_keys must be unique")
-    for key in value:
+    unique_keys = list(dict.fromkeys(value))
+    for key in unique_keys:
         if not re.fullmatch(r"(?:P:S-[A-Za-z0-9_-]+|R:[A-Za-z0-9:_-]+)", key):
             raise ValueError(
                 "review evidence keys must reference paper spans or validated relations"
             )
-    return value
+    return unique_keys
 
 
 __all__ = [
@@ -325,6 +531,17 @@ __all__ = [
     "ReviewPointState",
     "ReviewPoint",
     "ReviewState",
+    "ReviewSource",
+    "ReviewPhase",
+    "EvidenceAction",
+    "PaperSpecificRubric",
+    "BranchReview",
+    "CanonicalReviewPoint",
+    "EvidenceBudget",
+    "ProcessFeatures",
+    "FusionMatch",
+    "FusionReport",
+    "ReviewStateV2",
     "ReviewSummary",
     "StructuredReview",
     "SCHEMA_VERSION",

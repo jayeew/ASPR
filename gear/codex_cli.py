@@ -5,8 +5,10 @@ from __future__ import annotations
 import json
 import subprocess
 import tempfile
+from collections.abc import Callable, Mapping, Sequence
+from copy import deepcopy
 from pathlib import Path
-from typing import Any, Callable, Mapping, Optional, Sequence
+from typing import Any
 
 from .config import CodexCliEndpoint
 from .model_client import ModelClientUnavailableError
@@ -26,7 +28,7 @@ class CodexCliJsonClient:
         self,
         endpoint: CodexCliEndpoint,
         *,
-        runner: Optional[CodexRunner] = None,
+        runner: CodexRunner | None = None,
     ) -> None:
         self.endpoint = endpoint
         self.runner = runner
@@ -40,7 +42,7 @@ class CodexCliJsonClient:
         *,
         system: str,
         user: str,
-        response_schema: Optional[Mapping[str, Any]] = None,
+        response_schema: Mapping[str, Any] | None = None,
     ) -> dict[str, Any]:
         prompt = self._prompt(system, user)
         try:
@@ -54,7 +56,7 @@ class CodexCliJsonClient:
     def _run(
         self,
         prompt: str,
-        response_schema: Optional[Mapping[str, Any]],
+        response_schema: Mapping[str, Any] | None,
     ) -> str:
         with tempfile.TemporaryDirectory(prefix="gear-codex-") as directory:
             root = Path(directory)
@@ -85,7 +87,7 @@ class CodexCliJsonClient:
     def _command(
         self,
         root: Path,
-        response_schema: Optional[Mapping[str, Any]],
+        response_schema: Mapping[str, Any] | None,
     ) -> list[str]:
         command = [
             self.endpoint.executable,
@@ -104,7 +106,10 @@ class CodexCliJsonClient:
         if response_schema is not None:
             schema_path = root / "response_schema.json"
             schema_path.write_text(
-                json.dumps(response_schema, ensure_ascii=False), encoding="utf-8"
+                json.dumps(
+                    _strict_response_schema(response_schema), ensure_ascii=False
+                ),
+                encoding="utf-8",
             )
             command.extend(["--output-schema", str(schema_path)])
         command.append("-")
@@ -135,8 +140,34 @@ def _extract_json_object(text: str) -> dict[str, Any]:
             raise ValueError("CLI response does not contain a JSON object") from exc
         payload = json.loads(cleaned[start : end + 1])
     if not isinstance(payload, dict):
-        raise ValueError("CLI response must be a JSON object")
+        raise TypeError("CLI response must be a JSON object")
     return payload
+
+
+def _strict_response_schema(schema: Mapping[str, Any]) -> dict[str, Any]:
+    """Make a Pydantic-style schema acceptable to Codex strict JSON mode.
+
+    Codex requires every object property to appear in ``required``. Optional
+    contract fields remain nullable where the original schema permits it, but
+    must be explicitly emitted as ``null`` rather than omitted.
+    """
+    normalized = deepcopy(dict(schema))
+
+    def visit(value: Any) -> None:
+        if isinstance(value, dict):
+            value.pop("default", None)
+            properties = value.get("properties")
+            if isinstance(properties, dict):
+                value["required"] = list(properties)
+                value["additionalProperties"] = False
+            for child in value.values():
+                visit(child)
+        elif isinstance(value, list):
+            for child in value:
+                visit(child)
+
+    visit(normalized)
+    return normalized
 
 
 __all__ = ["CodexCLIUnavailableError", "CodexCliJsonClient", "CodexRunner"]

@@ -103,6 +103,20 @@ def getenv_system(name: str, default: str = "") -> str:
     return SYSTEM_ENV.get(name, default)
 
 
+def getenv_runtime(name: str, default: str = "") -> str:
+    """Read an explicit process/test override while ignoring project dotenv values."""
+    ensure_env_loaded()
+    value = os.getenv(name)
+    if value is None:
+        return default
+    dotenv_values: Dict[str, str] = {}
+    for path in DEFAULT_ENV_FILES:
+        dotenv_values.update(parse_env_file(path))
+    if name not in SYSTEM_ENV and dotenv_values.get(name) == value:
+        return default
+    return value
+
+
 def getenv_int(name: str, default: int) -> int:
     value = getenv(name, "")
     if value == "":

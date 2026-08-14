@@ -2,12 +2,18 @@
 
 from __future__ import annotations
 
-from typing import Iterable, List
+from typing import Dict, Iterable, List
 
 from .review_contracts import (
     NoveltyAssessment,
+    PointValidationStatus,
+    ReviewAspect,
+    ReviewPhase,
     ReviewPoint,
+    ReviewSource,
     ReviewState,
+    ReviewStateV2,
+    ReviewSummary,
     StructuredReview,
     infer_novelty_judgment,
 )
@@ -16,9 +22,7 @@ from .review_contracts import (
 def calibration_evidence_key(calibration: object, part: str) -> str:
     """Return the immutable evidence key for a calibration-packet component."""
     contract = str(getattr(calibration, "contract", ""))
-    prefix = (
-        "G:SCP" if contract == "aspr_submission_calibration_packet_v1" else "G:CP"
-    )
+    prefix = "G:SCP" if contract == "aspr_submission_calibration_packet_v1" else "G:CP"
     return f"{prefix}:{part}"
 
 
@@ -58,6 +62,93 @@ class ReviewCompiler:
             )
             output.append(point.model_copy(update={"evidence_keys": evidence_keys}))
         return output
+
+    def compile_v2(self, state: ReviewStateV2) -> StructuredReview:
+        if state.phase not in {
+            ReviewPhase.EVIDENCE_FINALIZED,
+            ReviewPhase.VERIFIED,
+            ReviewPhase.COMPILED,
+        }:
+            raise ValueError("V2 compiler requires evidence-finalized state")
+        points = [
+            point
+            for point in state.canonical_points.values()
+            if point.retained
+            and point.validation_status == PointValidationStatus.VALIDATED
+        ]
+        compiled: Dict[str, List[ReviewPoint]] = {
+            "novelty_support": [],
+            "novelty_limit": [],
+            "strengths": [],
+            "weaknesses": [],
+            "questions": [],
+        }
+        for point in points:
+            compiled[point.section].append(
+                ReviewPoint(
+                    point_id=point.point_id,
+                    aspect=point.aspect,
+                    text=point.proposition,
+                    severity=point.severity,
+                    suggested_action=point.suggested_action or "",
+                    evidence_keys=list(
+                        dict.fromkeys(
+                            [
+                                *point.paper_evidence_keys,
+                                *point.relation_evidence_keys,
+                            ]
+                        )
+                    ),
+                    external_verification_required=point.requires_external_evidence,
+                )
+            )
+        summary = _rebuild_summary(state, points)
+        supporting = compiled["novelty_support"]
+        limiting = compiled["novelty_limit"]
+        return StructuredReview(
+            paper_id=state.paper_id,
+            summary=summary,
+            novelty=NoveltyAssessment(
+                judgment=infer_novelty_judgment(supporting, limiting),
+                supporting_points=supporting,
+                limiting_points=limiting,
+            ),
+            strengths=compiled["strengths"],
+            weaknesses=compiled["weaknesses"],
+            questions=compiled["questions"],
+        )
+
+    def compile_verified(self, state: ReviewStateV2) -> StructuredReview:
+        if state.phase != ReviewPhase.VERIFIED:
+            raise ValueError("final compiler reads VERIFIED state only")
+        review = self.compile_v2(state)
+        state.phase = ReviewPhase.COMPILED
+        return review
+
+
+def _rebuild_summary(state: ReviewStateV2, points: list) -> ReviewSummary:
+    contribution = next(
+        (
+            point
+            for point in points
+            if point.aspect == ReviewAspect.CONTRIBUTION
+            and point.section in {"strengths", "novelty_support"}
+        ),
+        None,
+    )
+    if contribution is not None:
+        text = f"The manuscript's evidence-backed contribution is: {contribution.proposition}"
+        keys = list(contribution.paper_evidence_keys)
+    else:
+        text = (
+            "The manuscript was assessed from its stable paper spans; the summary "
+            f"reflects {len(points)} retained evidence-backed review point(s)."
+        )
+        agent = state.branch_reviews.get(ReviewSource.AGENT)
+        keys = list(agent.summary.evidence_keys) if agent is not None else []
+    if not keys:
+        raise ValueError("compiled summary requires at least one paper evidence key")
+    return ReviewSummary(text=text, evidence_keys=keys)
 
 
 def render_markdown(review: StructuredReview) -> str:

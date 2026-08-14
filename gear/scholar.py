@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import re
 from datetime import date
-from typing import Any, Dict, List, Optional
+from io import BytesIO
+from typing import Any
 
 import requests
 
@@ -12,7 +13,7 @@ from .env import getenv, getenv_int
 
 
 class OpenScholar:
-    """Minimal Semantic Scholar/OpenAlex client without the legacy reviewer."""
+    """Minimal OpenAlex-first bibliographic client without the legacy reviewer."""
 
     def __init__(self, args: Any) -> None:
         self.s2_api_key = str(getattr(args, "s2_api_key", "") or getenv("S2_API_KEY"))
@@ -27,7 +28,7 @@ class OpenScholar:
         self.retrieval_provider = (
             str(
                 getattr(args, "retrieval_provider", "")
-                or getenv("ASPR_RETRIEVAL_PROVIDER", "semantic_scholar")
+                or getenv("ASPR_RETRIEVAL_PROVIDER", "openalex")
             )
             .strip()
             .casefold()
@@ -39,11 +40,101 @@ class OpenScholar:
         self.openalex_url = getenv(
             "ASPR_OPENALEX_WORKS_URL", "https://api.openalex.org/works"
         )
+        self.openalex_content_url = getenv(
+            "ASPR_OPENALEX_CONTENT_URL", "https://content.openalex.org/works"
+        ).rstrip("/")
         self.search_limit = max(1, min(getenv_int("ASPR_S2_SEARCH_LIMIT", 100), 100))
         self.openalex_limit = max(
-            1, min(getenv_int("ASPR_OPENALEX_PER_PAGE", 100), 200)
+            1, min(getenv_int("ASPR_OPENALEX_PER_PAGE", 100), 100)
         )
-        self.last_query_audits: List[Dict[str, Any]] = []
+        self.last_query_audits: list[dict[str, Any]] = []
+
+    def fetch_pdf_text(
+        self,
+        work_id: str,
+        *,
+        max_bytes: int,
+        max_pages: int,
+        max_characters: int,
+    ) -> str:
+        """Download one bounded OpenAlex Content PDF and extract plain text."""
+        identifier = str(work_id or "").strip()
+        if not self._is_openalex(identifier):
+            return ""
+        suffix = identifier.rsplit("/", 1)[-1]
+        response = requests.get(
+            f"{self.openalex_content_url}/{suffix}.pdf",
+            params=self._openalex_key_params(),
+            headers={"Accept": "application/pdf"},
+            timeout=60,
+            stream=True,
+        )
+        self.last_query_audits.append(
+            {
+                "source": "openalex_content",
+                "work_id": identifier,
+                "status_code": response.status_code,
+            }
+        )
+        try:
+            if response.status_code != 200:
+                return ""
+            declared_size = int(response.headers.get("Content-Length") or 0)
+            if declared_size > max_bytes:
+                return ""
+            content = self._bounded_response_content(response, max_bytes=max_bytes)
+            if not content.startswith(b"%PDF"):
+                return ""
+            return self._extract_pdf_text(
+                content,
+                max_pages=max_pages,
+                max_characters=max_characters,
+            )
+        finally:
+            response.close()
+
+    @staticmethod
+    def _bounded_response_content(response: Any, *, max_bytes: int) -> bytes:
+        chunks: list[bytes] = []
+        size = 0
+        for chunk in response.iter_content(chunk_size=64 * 1024):
+            if not chunk:
+                continue
+            size += len(chunk)
+            if size > max_bytes:
+                return b""
+            chunks.append(chunk)
+        return b"".join(chunks)
+
+    @staticmethod
+    def _extract_pdf_text(
+        content: bytes,
+        *,
+        max_pages: int,
+        max_characters: int,
+    ) -> str:
+        from pypdf import PdfReader
+        from pypdf.errors import PdfReadError
+
+        try:
+            reader = PdfReader(BytesIO(content), strict=False)
+        except (OSError, PdfReadError, TypeError, ValueError):
+            return ""
+        parts: list[str] = []
+        size = 0
+        for page in reader.pages[:max_pages]:
+            try:
+                text = str(page.extract_text() or "").strip()
+            except (KeyError, OSError, PdfReadError, TypeError, ValueError):
+                continue
+            if not text:
+                continue
+            remaining = max_characters - size
+            if remaining <= 0:
+                break
+            parts.append(text[:remaining])
+            size += min(len(text), remaining)
+        return "\n\n".join(parts).strip()
 
     @staticmethod
     def _first_key(raw: str) -> str:
@@ -54,10 +145,10 @@ class OpenScholar:
         self,
         query: str,
         *,
-        provider: Optional[str] = None,
-        date_to: Optional[date] = None,
-        limit: Optional[int] = None,
-    ) -> List[Dict[str, Any]]:
+        provider: str | None = None,
+        date_to: date | None = None,
+        limit: int | None = None,
+    ) -> list[dict[str, Any]]:
         """Search with an API-level and local publication cutoff."""
         selected = str(provider or self.retrieval_provider).strip().casefold()
         if selected in {"openalex", "oa"}:
@@ -68,7 +159,7 @@ class OpenScholar:
             works = [self._format_semantic_scholar(item) for item in rows]
         return self._filter_cutoff(works, date_to)
 
-    def fetch_work(self, work_id: str) -> Dict[str, Any]:
+    def fetch_work(self, work_id: str) -> dict[str, Any]:
         """Fetch one work in the normalized GEAR retrieval schema."""
         identifier = str(work_id or "").strip()
         if not identifier:
@@ -99,17 +190,17 @@ class OpenScholar:
         work_id: str,
         direction: str = "references",
         *,
-        limit: Optional[int] = None,
-    ) -> List[Dict[str, Any]]:
+        limit: int | None = None,
+    ) -> list[dict[str, Any]]:
         """Fetch one bounded citation hop."""
         maximum = min(100, max(1, int(limit or 12)))
         identifier = str(work_id or "").strip()
         if self._is_openalex(identifier):
             if direction == "citations":
                 suffix = identifier.rsplit("/", 1)[-1]
-                params: Dict[str, Any] = {
+                params: dict[str, Any] = {
                     "filter": f"cites:{suffix}",
-                    "per-page": maximum,
+                    "per_page": maximum,
                     "sort": "publication_date:asc",
                     **self._openalex_key_params(),
                 }
@@ -148,16 +239,16 @@ class OpenScholar:
         ]
 
     def _search_openalex(
-        self, query: str, *, date_to: Optional[date], limit: Optional[int]
-    ) -> List[Dict[str, Any]]:
+        self, query: str, *, date_to: date | None, limit: int | None
+    ) -> list[dict[str, Any]]:
         filters = ["from_publication_date:1800-01-01"]
         if date_to is not None:
             filters.append(f"to_publication_date:{date_to.isoformat()}")
-        params: Dict[str, Any] = {
+        params: dict[str, Any] = {
             "search": str(query).strip(),
             "filter": ",".join(filters),
-            "sort": "cited_by_count:desc",
-            "per-page": min(200, max(1, int(limit or self.openalex_limit))),
+            "sort": "relevance_score:desc",
+            "per_page": min(100, max(1, int(limit or self.openalex_limit))),
             **self._openalex_key_params(),
         }
         response = requests.get(
@@ -175,8 +266,8 @@ class OpenScholar:
         return rows if isinstance(rows, list) else []
 
     def _search_semantic_scholar(
-        self, query: str, *, date_to: Optional[date], limit: Optional[int]
-    ) -> List[Dict[str, Any]]:
+        self, query: str, *, date_to: date | None, limit: int | None
+    ) -> list[dict[str, Any]]:
         terms = [str(query).strip()]
         separator = " + " if self.and_search else " | "
         formatted = separator.join(f'"{term}"' for term in terms if term)
@@ -221,20 +312,20 @@ class OpenScholar:
         )
         return fields + (",references.paperId" if include_references else "")
 
-    def _semantic_headers(self) -> Dict[str, str]:
+    def _semantic_headers(self) -> dict[str, str]:
         return {"x-api-key": self.s2_api_key} if self.s2_api_key else {}
 
-    def _openalex_key_params(self) -> Dict[str, str]:
+    def _openalex_key_params(self) -> dict[str, str]:
         return {"api_key": self.openalex_api_key} if self.openalex_api_key else {}
 
     @staticmethod
     def _is_openalex(identifier: str) -> bool:
         return "openalex.org/" in identifier.casefold() or bool(
-            re.fullmatch(r"W\d+", identifier, re.I)
+            re.fullmatch(r"W\d+", identifier, re.IGNORECASE)
         )
 
     @staticmethod
-    def _format_semantic_scholar(paper: Dict[str, Any]) -> Dict[str, Any]:
+    def _format_semantic_scholar(paper: dict[str, Any]) -> dict[str, Any]:
         external = paper.get("externalIds") or {}
         pdf = paper.get("openAccessPdf") or {}
         references = [
@@ -264,17 +355,17 @@ class OpenScholar:
         }
 
     @classmethod
-    def _format_openalex(cls, work: Dict[str, Any]) -> Dict[str, Any]:
+    def _format_openalex(cls, work: dict[str, Any]) -> dict[str, Any]:
         raw_ids = work.get("ids")
         raw_location = work.get("primary_location")
         raw_open_access = work.get("open_access")
-        ids: Dict[str, Any] = raw_ids if isinstance(raw_ids, dict) else {}
-        location: Dict[str, Any] = (
+        ids: dict[str, Any] = raw_ids if isinstance(raw_ids, dict) else {}
+        location: dict[str, Any] = (
             raw_location if isinstance(raw_location, dict) else {}
         )
         raw_source = location.get("source")
-        source: Dict[str, Any] = raw_source if isinstance(raw_source, dict) else {}
-        open_access: Dict[str, Any] = (
+        source: dict[str, Any] = raw_source if isinstance(raw_source, dict) else {}
+        open_access: dict[str, Any] = (
             raw_open_access if isinstance(raw_open_access, dict) else {}
         )
         authors = []
@@ -331,8 +422,8 @@ class OpenScholar:
 
     @staticmethod
     def _filter_cutoff(
-        works: List[Dict[str, Any]], cutoff: Optional[date]
-    ) -> List[Dict[str, Any]]:
+        works: list[dict[str, Any]], cutoff: date | None
+    ) -> list[dict[str, Any]]:
         if cutoff is None:
             return works
         eligible = []
