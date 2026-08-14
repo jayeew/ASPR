@@ -17,7 +17,7 @@ data/knowledge_corpus/
 outputs/
 data/gear_cache/
 data/calibration/releases/
-data/calibration/runtime_replay/fulltext16_v3/context_snapshot.joblib
+data/calibration/runtime_replay/fulltext16_v3/
 outputs/gear/runs/
 data/gear_peer_review_benchmark_v1/
 outputs/gear/review_alignment/
