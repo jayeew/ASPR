@@ -298,8 +298,12 @@ class CalibrationService:
             except KeyError:
                 pass
         try:
-            context, replay_report = self.load_approved_runtime_context()
             target = self._build_runtime_target(paper_ir, cutoff_date)
+            context, replay_report = self.load_approved_runtime_context()
+            if int(context.source_max_year) >= int(target.publication_year):
+                context = self.load_historical_runtime_context(
+                    int(target.publication_year)
+                )
             return self.eligible_inference(
                 target,
                 context,
@@ -606,6 +610,51 @@ class CalibrationService:
         self._runtime_manifest = manifest
         _RUNTIME_CONTEXT_CACHE[cache_key] = (context, report, manifest)
         return context, report
+
+    def load_historical_runtime_context(self, target_year: int) -> ContextSnapshot:
+        """Build a hash-pinned context ending before a historical review cutoff."""
+        _, _ = self.load_approved_runtime_context()
+        manifest = dict(self._runtime_manifest or {})
+        input_manifest = manifest.get("input_manifest") or {}
+        identity = json.dumps(
+            {
+                "runtime_replay_manifest": self.config.runtime_replay_manifest_sha256,
+                "target_year": int(target_year),
+                "builder": "runtime_context_before_target_year_v1",
+            },
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+        digest = hashlib.sha256(identity.encode("utf-8")).hexdigest()
+        cache_dir = self.config.resolve_path(self.config.cache_dir) / "graph_context"
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        cache_path = cache_dir / f"{digest}.joblib"
+        if cache_path.is_file():
+            try:
+                cached = joblib.load(cache_path)
+                if (
+                    isinstance(cached, ContextSnapshot)
+                    and int(cached.source_max_year) == int(target_year) - 1
+                ):
+                    return cached
+            except (OSError, EOFError, ValueError, TypeError):
+                pass
+        from .nature_multihorizon.runtime_replay_v3 import (
+            build_runtime_context_for_year,
+        )
+
+        context, built_manifest = build_runtime_context_for_year(
+            project_root=Path(__file__).resolve().parents[1],
+            official_matrix_path=self.paths.feature_matrix_16,
+            target_year=int(target_year),
+        )
+        expected_hashes = dict(input_manifest.get("source_hashes") or {})
+        if built_manifest["source_hashes"] != expected_hashes:
+            raise ValueError(
+                "historical context source hashes differ from replay release"
+            )
+        joblib.dump(context, cache_path)
+        return context
 
     def eligible_inference(
         self,

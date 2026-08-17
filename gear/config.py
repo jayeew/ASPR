@@ -9,7 +9,7 @@ from typing import Any, Dict, List, Literal, Optional, Union
 from pydantic import Field, field_validator, model_validator
 
 from .contracts import StrictModel
-from .env import getenv_runtime
+from .env import getenv, getenv_runtime
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CONFIG = PROJECT_ROOT / "configs" / "gear" / "default.json"
@@ -61,13 +61,30 @@ class AssetPaths(StrictModel):
 
 
 class RetrievalLimits(StrictModel):
-    normal_max: int = Field(default=2, ge=0)
+    normal_max: int = Field(default=4, ge=0)
     contrastive_max: int = Field(default=1, ge=0)
     citation_expansion_max: int = Field(default=1, ge=0)
     fulltext_max: int = Field(default=12, ge=0)
     provider_limit: int = Field(default=50, ge=1)
     relation_cards_max: int = Field(default=24, ge=1)
     total_actions_max: int = Field(default=48, ge=1)
+    scientific_query_enabled: bool = True
+    query_reasoning_effort: Literal["low", "medium", "high", "xhigh"] = "medium"
+    lexical_candidate_limit: int = Field(default=20, ge=1, le=100)
+    semantic_candidate_limit: int = Field(default=30, ge=1, le=50)
+    candidate_union_limit: int = Field(default=120, ge=20, le=500)
+    embedding_candidate_limit: int = Field(default=100, ge=10, le=200)
+    rerank_candidate_limit: int = Field(default=24, ge=1, le=100)
+    dual_rerank_top_k: int = Field(default=15, ge=1, le=50)
+    retained_candidates_per_claim: int = Field(default=10, ge=1, le=24)
+    per_family_retained_max: int = Field(default=3, ge=1, le=12)
+    minimum_comparable_candidates: int = Field(default=10, ge=1, le=24)
+    minimum_unique_candidates: int = Field(default=20, ge=1, le=120)
+    local_recall_enabled: bool = True
+    local_reranker_enabled: bool = True
+    recall_model_path: Path = Path("/home/jayee/models/bge-m3")
+    reranker_model_path: Path = Path("/home/jayee/models/OpenScholar_Reranker")
+    ranking_algorithm_fingerprint: str = "dual_view_bge_m3_openscholar_v1"
     openalex_pdf_enabled: bool = False
     openalex_pdf_max_downloads: int = Field(default=3, ge=0, le=12)
     openalex_pdf_max_bytes: int = Field(default=25_000_000, ge=1_000_000)
@@ -232,6 +249,13 @@ def load_config(
             "on",
         }
     for field_name, environment_name in (
+        ("recall_model_path", "ASPR_RECALL_MODEL_PATH"),
+        ("reranker_model_path", "ASPR_RERANKER_MODEL_PATH"),
+    ):
+        value = getenv(environment_name)
+        if value:
+            payload["retrieval"][field_name] = value
+    for field_name, environment_name in (
         ("cache_dir", "ASPR_GEAR_CACHE_DIR"),
         ("output_root", "ASPR_GEAR_OUTPUT_ROOT"),
         ("calibration_registry", "ASPR_GEAR_CALIBRATION_REGISTRY"),
@@ -265,6 +289,10 @@ def load_config(
         ("contrastive_max", "ASPR_GEAR_RETRIEVAL_CONTRASTIVE_MAX"),
         ("citation_expansion_max", "ASPR_GEAR_RETRIEVAL_CITATION_MAX"),
         ("fulltext_max", "ASPR_GEAR_RETRIEVAL_EVIDENCE_MAX"),
+        ("lexical_candidate_limit", "ASPR_GEAR_RETRIEVAL_LEXICAL_CANDIDATES"),
+        ("semantic_candidate_limit", "ASPR_GEAR_RETRIEVAL_SEMANTIC_CANDIDATES"),
+        ("rerank_candidate_limit", "ASPR_GEAR_RETRIEVAL_RERANK_CANDIDATES"),
+        ("retained_candidates_per_claim", "ASPR_GEAR_RETRIEVAL_RETAINED_PER_CLAIM"),
     ):
         value = getenv_runtime(environment_name)
         if value:

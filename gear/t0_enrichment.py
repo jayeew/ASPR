@@ -127,13 +127,10 @@ class OpenAlexT0Enricher:
         work: Dict[str, Any],
         evidence_date: Optional[date],
     ) -> int:
-        value = work.get("publication_year") if work else None
-        if value:
-            return int(value)
         boundary = (
-            paper_ir.metadata.publication_date
+            evidence_date
             or paper_ir.metadata.submission_date
-            or evidence_date
+            or paper_ir.metadata.publication_date
             or date.today()
         )
         return int(boundary.year)

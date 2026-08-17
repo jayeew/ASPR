@@ -162,12 +162,19 @@ def _load_targets(
     )
     papers["paper_id"] = papers["paper_id"].astype(str)
     papers = papers[papers["paper_id"].isin(official_ids)].copy()
-    works = pd.read_csv(
+    work_parts: List[pd.DataFrame] = []
+    for chunk in pd.read_csv(
         paths.target_works,
         usecols=["id", "title"],
         dtype={"id": "string", "title": "string"},
-    ).rename(columns={"id": "paper_id"})
-    works = works[works["paper_id"].isin(official_ids)]
+        chunksize=100_000,
+    ):
+        selected = chunk[chunk["id"].isin(official_ids)]
+        if not selected.empty:
+            work_parts.append(selected)
+    if not work_parts:
+        raise ValueError("runtime replay target titles are unavailable")
+    works = pd.concat(work_parts, ignore_index=True).rename(columns={"id": "paper_id"})
     metadata = pd.read_parquet(
         paths.target_metadata,
         columns=[
@@ -303,7 +310,61 @@ def build_runtime_fulltext16_matrix(
     return runtime, context, manifest
 
 
+def build_runtime_context_for_year(
+    *,
+    project_root: Path,
+    official_matrix_path: Path,
+    target_year: int,
+    paths: Optional[RuntimeReplayPaths] = None,
+) -> Tuple[ContextSnapshot, Dict[str, Any]]:
+    """Replay frozen source views only up to the year before a target."""
+    source_paths = paths or RuntimeReplayPaths.from_active_dataset(project_root)
+    for path in source_paths.values():
+        if not path.is_file():
+            raise FileNotFoundError(path)
+    official_ids = set(
+        pd.read_parquet(official_matrix_path, columns=["paper_id"])["paper_id"].astype(
+            str
+        )
+    )
+    targets = _load_targets(source_paths, official_ids)
+    eligible = targets[targets["publication_year"].astype(int) < int(target_year)]
+    if eligible.empty:
+        raise ValueError("historical runtime context has no strictly prior papers")
+    reference_lookup = _reference_lookup(source_paths.reference_metadata)
+    distances = annual_field_distances(
+        pd.read_parquet(source_paths.field_citation_events), [int(target_year)]
+    )
+    context = ContextSnapshot(
+        source_max_year=int(eligible["publication_year"].min()) - 1
+    )
+    for year, frame in eligible.groupby("publication_year", sort=True):
+        numeric_year = int(year)
+        for row in frame.itertuples(index=False):
+            _add_primary_work_to_coupling_context(
+                context,
+                str(row.paper_id),
+                numeric_year,
+                row.referenced_works,
+                reference_lookup,
+            )
+        _update_title_and_author_context(context, frame.itertuples(index=False))
+    context.source_max_year = int(target_year) - 1
+    context.field_distances = dict(distances.get(int(target_year), {}))
+    source_hashes = {
+        str(path.resolve()): _sha256_file(path) for path in source_paths.values()
+    }
+    manifest = {
+        "target_year": int(target_year),
+        "source_max_year": context.source_max_year,
+        "source_hashes": source_hashes,
+        "builder": "runtime_context_before_target_year_v1",
+    }
+    return context, manifest
+
+
 __all__ = [
     "RuntimeReplayPaths",
     "build_runtime_fulltext16_matrix",
+    "build_runtime_context_for_year",
 ]

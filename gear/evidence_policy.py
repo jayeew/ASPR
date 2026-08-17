@@ -63,60 +63,99 @@ def highest_risk_unresolved_target(
 def next_evidence_action(
     state: ReviewStateV2,
 ) -> Tuple[EvidenceAction, Optional[str], str]:
-    target = highest_risk_unresolved_target(state)
-    if target is None:
-        pending_stability = next(
-            (
-                point
-                for point in state.canonical_points.values()
-                if point.retained and point.stability_status == "pending"
+    candidates = [
+        point
+        for point in state.canonical_points.values()
+        if point.retained
+        and point.validation_status
+        not in {PointValidationStatus.VALIDATED, PointValidationStatus.REJECTED}
+    ]
+
+    def choose(items: list[CanonicalReviewPoint]) -> Optional[CanonicalReviewPoint]:
+        if not items:
+            return None
+        return sorted(
+            items,
+            key=lambda point: (
+                is_high_risk(point),
+                point.severity == PointSeverity.MAJOR,
+                point.requires_external_evidence,
+                point.point_id,
             ),
-            None,
-        )
-        if pending_stability is not None:
-            return (
-                EvidenceAction.STABILITY_TEST,
-                pending_stability.point_id,
-                "stability_pending",
-            )
-        return EvidenceAction.FINALIZE, None, "no_unresolved_target"
-    if not target.semantic_verified:
+            reverse=True,
+        )[0]
+
+    target = choose([point for point in candidates if not point.semantic_verified])
+    if target is not None:
         return (
             EvidenceAction.VERIFY_POINT,
             target.point_id,
             "paper_span_verification_required",
         )
-    if target.requires_external_evidence and not target.normal_search_done:
+    target = choose(
+        [
+            point
+            for point in candidates
+            if point.requires_external_evidence and not point.normal_search_done
+        ]
+    )
+    if target is not None:
         return EvidenceAction.SEARCH_PRIOR_ART, target.point_id, "external_evidence_gap"
-    if (
-        target.requires_external_evidence
-        and is_high_risk(target)
-        and not target.counterfactual_search_done
-    ):
+    target = choose(
+        [
+            point
+            for point in candidates
+            if point.requires_external_evidence
+            and is_high_risk(point)
+            and not point.counterfactual_search_done
+        ]
+    )
+    if target is not None:
         return (
             EvidenceAction.COUNTERFACTUAL_SEARCH,
             target.point_id,
             "high_risk_novelty_claim",
         )
-    if (
-        target.requires_external_evidence
-        and target.validation_status == PointValidationStatus.UNRESOLVED
-        and target.normal_search_done
-        and (target.counterfactual_search_done or not is_high_risk(target))
-        and not target.citation_expanded
-    ):
+    target = choose(
+        [
+            point
+            for point in candidates
+            if point.requires_external_evidence
+            and point.validation_status == PointValidationStatus.UNRESOLVED
+            and point.normal_search_done
+            and (point.counterfactual_search_done or not is_high_risk(point))
+            and not point.citation_expanded
+        ]
+    )
+    if target is not None:
         return (
             EvidenceAction.CITATION_EXPAND,
             target.point_id,
             "prior_search_unresolved",
         )
-    if target.stability_status == "pending":
+    target = choose(
+        [point for point in candidates if point.stability_status == "pending"]
+    )
+    if target is not None:
         return (
             EvidenceAction.STABILITY_TEST,
             target.point_id,
             "high_risk_stability_required",
         )
-    return EvidenceAction.VERIFY_POINT, target.point_id, "final_point_resolution"
+    pending_stability = choose(
+        [
+            point
+            for point in state.canonical_points.values()
+            if point.retained and point.stability_status == "pending"
+        ]
+    )
+    if pending_stability is not None:
+        return (
+            EvidenceAction.STABILITY_TEST,
+            pending_stability.point_id,
+            "stability_pending",
+        )
+    return EvidenceAction.FINALIZE, None, "no_unresolved_target"
 
 
 __all__ = [

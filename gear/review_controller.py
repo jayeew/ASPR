@@ -15,14 +15,14 @@ from .contracts import (
     RelationLabel,
     RetrievalBudget,
 )
+from .prior_art import PriorArtService, RelationClassifier
 from .review_contracts import (
     NoveltyJudgment,
     PointValidationStatus,
-    ReviewPointState,
     ReviewPoint,
+    ReviewPointState,
     ReviewState,
 )
-from .prior_art import PriorArtService, RelationClassifier
 from .trace import EvidenceStore
 
 ANTECEDENT_LABELS = {
@@ -127,7 +127,23 @@ class ReviewController:
             citation_expansion_max=self.config.retrieval.citation_expansion_max,
             fulltext_max=self.config.retrieval.fulltext_max,
         )
-        works = prior_art.retrieve(claim, state.cutoff_date, budget)
+        works = prior_art.retrieve(
+            claim,
+            state.cutoff_date,
+            budget,
+            target_span=span,
+            paper_ir=paper_ir,
+        )
+        if prior_art.last_frame is not None:
+            evidence_store.add_evidence(
+                f"QF:{claim.claim_id}",
+                "scientific_search_frame",
+                prior_art.last_frame,
+            )
+        for query in prior_art.last_query_specs:
+            evidence_store.add_evidence(f"Q:{query.query_id}", "retrieval_query", query)
+        for hit in prior_art.last_hits:
+            evidence_store.add_evidence(f"H:{hit.hit_id}", "retrieval_hit", hit)
         if prior_art.last_failures:
             for failure in prior_art.last_failures:
                 state.failure_ledger.append(
@@ -139,16 +155,41 @@ class ReviewController:
                 )
         relations = []
         for work in works:
-            work_key = f"W:{work.target_claim_id}:{work.work_id}"
-            evidence_store.add_evidence(work_key, "retrieved_work", work)
+            work_key = f"W:{work.work_id}"
+            evidence_store.add_evidence(
+                work_key,
+                "retrieved_work",
+                work.model_dump(
+                    mode="json",
+                    exclude={
+                        "target_claim_id",
+                        "retrieval_query_id",
+                        "source_query_ids",
+                        "spans",
+                    },
+                ),
+            )
             if work_key not in state.retrieved_work_evidence_keys:
                 state.retrieved_work_evidence_keys.append(work_key)
+            for prior_span in work.spans:
+                evidence_store.add_evidence(
+                    f"PS:{prior_span.span_id}",
+                    "prior_work_span",
+                    prior_span,
+                )
             card = relation_classifier.classify(
                 span,
                 work,
                 target_claim_id=claim.claim_id,
                 cutoff=state.cutoff_date,
             )
+            if card.relation_label == RelationLabel.DISTANT:
+                evidence_store.add_evidence(
+                    f"D:{card.relation_id}",
+                    "candidate_relation_rejection",
+                    card,
+                )
+                continue
             relation_key = f"R:{card.relation_id}"
             evidence_store.add_evidence(relation_key, "prior_relation", card)
             if relation_key not in state.relation_evidence_keys:

@@ -276,10 +276,20 @@ class CanonicalReviewPoint(ReviewModel):
     aspect: ReviewAspect
     severity: PointSeverity
     proposition: str
+    resolved_proposition: Optional[str] = None
     suggested_action: Optional[str] = None
     source_point_ids: Dict[ReviewSource, List[str]] = Field(default_factory=dict)
     paper_evidence_keys: List[str] = Field(default_factory=list)
     relation_evidence_keys: List[str] = Field(default_factory=list)
+    coverage_evidence_keys: List[str] = Field(default_factory=list)
+    novelty_resolution: Literal[
+        "not_applicable",
+        "antecedent_found",
+        "incremental_or_parallel",
+        "bounded_no_antecedent",
+        "inconclusive",
+        "search_failed",
+    ] = "not_applicable"
     agent_support: bool
     qwen_support: Optional[bool] = None
     qwen_conflict: bool = False
@@ -299,7 +309,7 @@ class CanonicalReviewPoint(ReviewModel):
 
 
 class EvidenceBudget(ReviewModel):
-    normal_per_claim_max: int = Field(default=2, ge=0)
+    normal_per_claim_max: int = Field(default=4, ge=0)
     counterfactual_per_claim_max: int = Field(default=1, ge=0)
     citation_per_claim_max: int = Field(default=1, ge=0)
     relation_cards_max: int = Field(default=24, ge=1)
@@ -508,9 +518,13 @@ class ReviewBundle(ReviewModel):
 def _validate_evidence_keys(value: List[str]) -> List[str]:
     unique_keys = list(dict.fromkeys(value))
     for key in unique_keys:
-        if not re.fullmatch(r"(?:P:S-[A-Za-z0-9_-]+|R:[A-Za-z0-9:_-]+)", key):
+        if not re.fullmatch(
+            r"(?:P:S-[A-Za-z0-9_-]+|R:[A-Za-z0-9:_-]+|COV:[A-Za-z0-9:_-]+)",
+            key,
+        ):
             raise ValueError(
-                "review evidence keys must reference paper spans or validated relations"
+                "review evidence keys must reference paper spans, relations, "
+                "or search coverage"
             )
     return unique_keys
 

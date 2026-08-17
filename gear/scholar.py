@@ -148,11 +148,17 @@ class OpenScholar:
         provider: str | None = None,
         date_to: date | None = None,
         limit: int | None = None,
+        search_mode: str = "text",
     ) -> list[dict[str, Any]]:
         """Search with an API-level and local publication cutoff."""
         selected = str(provider or self.retrieval_provider).strip().casefold()
         if selected in {"openalex", "oa"}:
-            rows = self._search_openalex(query, date_to=date_to, limit=limit)
+            rows = self._search_openalex(
+                query,
+                date_to=date_to,
+                limit=limit,
+                search_mode=search_mode,
+            )
             works = [self._format_openalex(item) for item in rows]
         else:
             rows = self._search_semantic_scholar(query, date_to=date_to, limit=limit)
@@ -164,8 +170,12 @@ class OpenScholar:
         identifier = str(work_id or "").strip()
         if not identifier:
             return {}
-        if self._is_openalex(identifier):
-            suffix = identifier.rsplit("/", 1)[-1]
+        if self._is_openalex(identifier) or self._looks_like_doi(identifier):
+            suffix = (
+                identifier.rsplit("/", 1)[-1]
+                if self._is_openalex(identifier)
+                else f"https://doi.org/{self._strip_doi(identifier)}"
+            )
             response = requests.get(
                 f"{self.openalex_url}/{suffix}",
                 params=self._openalex_key_params(),
@@ -239,18 +249,33 @@ class OpenScholar:
         ]
 
     def _search_openalex(
-        self, query: str, *, date_to: date | None, limit: int | None
+        self,
+        query: str,
+        *,
+        date_to: date | None,
+        limit: int | None,
+        search_mode: str,
     ) -> list[dict[str, Any]]:
-        filters = ["from_publication_date:1800-01-01"]
-        if date_to is not None:
-            filters.append(f"to_publication_date:{date_to.isoformat()}")
+        semantic = str(search_mode).strip().casefold() == "semantic"
+        filters = ["has_abstract:true", "is_retracted:false"]
+        if semantic:
+            if date_to is not None:
+                filters.append(f"publication_year:<{date_to.year + 1}")
+        else:
+            filters.append("from_publication_date:1800-01-01")
+            if date_to is not None:
+                filters.append(f"to_publication_date:{date_to.isoformat()}")
         params: dict[str, Any] = {
-            "search": str(query).strip(),
+            "search.semantic" if semantic else "search": str(query).strip()[:2000],
             "filter": ",".join(filters),
-            "sort": "relevance_score:desc",
-            "per_page": min(100, max(1, int(limit or self.openalex_limit))),
+            "per_page": min(
+                50 if semantic else 100,
+                max(1, int(limit or self.openalex_limit)),
+            ),
             **self._openalex_key_params(),
         }
+        if not semantic:
+            params["sort"] = "relevance_score:desc"
         response = requests.get(
             self.openalex_url,
             params=params,
@@ -258,9 +283,29 @@ class OpenScholar:
             timeout=60,
         )
         self.last_query_audits.append(
-            {"source": "openalex", "query": query, "status_code": response.status_code}
+            {
+                "source": "openalex",
+                "query": query,
+                "search_mode": "semantic" if semantic else "text",
+                "status_code": response.status_code,
+            }
         )
         if response.status_code != 200:
+            if semantic and response.status_code >= 500:
+                self.last_query_audits.append(
+                    {
+                        "source": "openalex",
+                        "query": query,
+                        "search_mode": "semantic_to_text_fallback",
+                        "status_code": response.status_code,
+                    }
+                )
+                return self._search_openalex(
+                    query,
+                    date_to=date_to,
+                    limit=limit,
+                    search_mode="text",
+                )
             raise RuntimeError(f"OpenAlex request failed: {response.status_code}")
         rows = response.json().get("results", [])
         return rows if isinstance(rows, list) else []
@@ -322,6 +367,12 @@ class OpenScholar:
     def _is_openalex(identifier: str) -> bool:
         return "openalex.org/" in identifier.casefold() or bool(
             re.fullmatch(r"W\d+", identifier, re.IGNORECASE)
+        )
+
+    @staticmethod
+    def _looks_like_doi(identifier: str) -> bool:
+        return bool(
+            re.match(r"^(?:https?://doi\.org/|doi:)?10\.\d{4,9}/\S+$", identifier, re.I)
         )
 
     @staticmethod
@@ -394,6 +445,17 @@ class OpenScholar:
             "fieldsOfStudy": [],
             "s2FieldsOfStudy": [],
             "referenced_works": list(work.get("referenced_works") or []),
+            "topics": [
+                str(item.get("display_name") or "")
+                for item in work.get("topics") or []
+                if isinstance(item, dict) and item.get("display_name")
+            ],
+            "keywords": [
+                str(item.get("display_name") or "")
+                for item in work.get("keywords") or []
+                if isinstance(item, dict) and item.get("display_name")
+            ],
+            "relevance_score": work.get("relevance_score"),
             "retrieval_source": "openalex",
         }
 

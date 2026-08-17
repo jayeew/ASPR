@@ -22,7 +22,7 @@ GEAR agent reviews ────┘
 | Review reconstruction | `experiments/gear/review_reconstruction/` | sealed human reference reviews | dataset releases only |
 | GEAR agent | `gear/` | evidence-traceable agent review runs | dataset/calibration releases only |
 | Figures | `experiments/fig01` … `experiments/fig10`, `experiments/common/new/` | figure tables, renders, audits | dataset/calibration releases only |
-| Consistency evaluation | `experiments/gear/evaluate_dev100_consistency.py` | blinded agent–human agreement metrics | pinned human-reference and agent-review releases |
+| Consistency evaluation | `scripts/run_gear_revision_audit.py` | three-paper revision-aware blinded agent–human audit | pinned human-reference and agent-review inputs |
 
 The reconstruction module remains graph-blind and must never consume a GEAR
 review artifact. The agent module must never consume reviewer reports or author

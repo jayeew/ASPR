@@ -31,6 +31,11 @@ GRAPH_SEMANTIC_TERMS = re.compile(
     re.I,
 )
 
+ABSOLUTE_PRIORITY_TERMS = re.compile(
+    r"\b(?:first|first-ever|unprecedented|unique|world-first)\b|首次|首个|前所未有|唯一",
+    re.I,
+)
+
 
 class ReviewVerifier:
     def __init__(
@@ -160,7 +165,8 @@ class ReviewVerifier:
                 issues.append(
                     self._issue(
                         "unverified_point_compiled",
-                        "Final review contains a point that was not retained and validated.",
+                        "Final review contains a point that was not retained and "
+                        "validated.",
                         point.point_id,
                     )
                 )
@@ -202,6 +208,17 @@ class ReviewVerifier:
                     self._issue(
                         "invalid_evidence_key",
                         f"Point contains invalid evidence keys: {invalid}",
+                        point.point_id,
+                    )
+                )
+            coverage_only_external = bool(
+                canonical.coverage_evidence_keys
+            ) and not bool(canonical.relation_evidence_keys)
+            if coverage_only_external and ABSOLUTE_PRIORITY_TERMS.search(point.text):
+                issues.append(
+                    self._issue(
+                        "coverage_overclaim",
+                        "Search coverage cannot support an absolute priority claim.",
                         point.point_id,
                     )
                 )
@@ -279,7 +296,8 @@ class ReviewVerifier:
                 issues.append(
                     self._issue(
                         "branch_input_unverifiable",
-                        f"{source.value} input payload was not retained for hash verification.",
+                        f"{source.value} input payload was not retained for hash "
+                        "verification.",
                     )
                 )
                 continue
@@ -331,7 +349,8 @@ class ReviewVerifier:
                 issues.append(
                     self._issue(
                         "relation_missing_paired_spans",
-                        f"Relation {key} lacks paired spans or difference dimensions: {missing}",
+                        f"Relation {key} lacks paired spans or difference "
+                        f"dimensions: {missing}",
                     )
                 )
             elif payload.get("temporal_valid") is not True:
@@ -420,7 +439,8 @@ class ReviewVerifier:
                 issues.append(
                     self._issue(
                         "graph_semantic_violation",
-                        "Visible review text uses graph fields as a scientific judgment.",
+                        "Visible review text uses graph fields as a scientific "
+                        "judgment.",
                         point.point_id,
                     )
                 )
@@ -443,7 +463,8 @@ class ReviewVerifier:
             issues.append(
                 self._issue(
                     "graph_semantic_violation",
-                    "Visible review summary uses graph fields as a scientific judgment.",
+                    "Visible review summary uses graph fields as a scientific "
+                    "judgment.",
                 )
             )
         return issues
@@ -461,10 +482,18 @@ class ReviewVerifier:
             for span in paper_ir.spans
             if f"P:{span.span_id}" in _review_evidence_keys(review)
         }
+        external_evidence: dict[str, Any] = {}
+        for point in review.all_points():
+            for key in point.evidence_keys:
+                if not key.startswith(("R:", "COV:")):
+                    continue
+                # The caller already validates these immutable evidence records.
+                external_evidence[key] = True
         user = json.dumps(
             {
                 "review": review.model_dump(mode="json"),
                 "paper_evidence": evidence,
+                "external_evidence_keys": external_evidence,
                 "output": {
                     "unsupported_point_ids": [],
                     "summary_supported": True,
@@ -474,7 +503,10 @@ class ReviewVerifier:
         )
         try:
             payload = self.semantic_checker(
-                "Judge only whether each review proposition is supported by its cited paper spans.",
+                "Judge manuscript assertions against cited paper spans. Treat clauses "
+                "explicitly describing audited prior-art search scope as externally "
+                "supported when they cite validated R: or COV: keys; do not require "
+                "those search-process clauses to appear in the manuscript.",
                 user,
             )
         except (RuntimeError, TypeError, ValueError) as exc:
@@ -529,6 +561,13 @@ class ReviewVerifier:
         if key.startswith("R:"):
             record = evidence_store.get(key)
             return bool(record and record.payload.get("temporal_valid") is True)
+        if key.startswith("COV:"):
+            record = evidence_store.get(key)
+            return bool(
+                record
+                and record.kind == "retrieval_coverage"
+                and record.payload.get("service_failed") is False
+            )
         return False
 
     @staticmethod

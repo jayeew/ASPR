@@ -67,10 +67,28 @@ class CodexAgentReviewer:
             ensure_ascii=False,
         )
         try:
-            payload = self._generate(AGENT_REVIEW_PROMPT, user)
-            structured = StructuredReview.model_validate(payload.get("review", payload))
-            CodexCliCritic._force_novelty_external_verification(structured)
-            CodexCliCritic._validate_review(structured, paper_ir)
+            last_error: ValidationError | ValueError | TypeError | None = None
+            for attempt in range(2):
+                prompt = AGENT_REVIEW_PROMPT
+                if attempt:
+                    allowed = sorted(f"P:{span.span_id}" for span in paper_ir.spans)
+                    prompt += (
+                        " The previous response violated the contract. Repair the "
+                        "entire review. Copy evidence keys exactly from this allowed "
+                        f"list and do not calculate new keys: {allowed}"
+                    )
+                payload = self._generate(prompt, user)
+                try:
+                    structured = StructuredReview.model_validate(
+                        payload.get("review", payload)
+                    )
+                    CodexCliCritic._force_novelty_external_verification(structured)
+                    CodexCliCritic._validate_review(structured, paper_ir)
+                    break
+                except (ValidationError, ValueError, TypeError) as exc:
+                    last_error = exc
+            else:
+                raise last_error or ValueError("Agent review output invalid")
         except (
             ModelClientUnavailableError,
             ValidationError,

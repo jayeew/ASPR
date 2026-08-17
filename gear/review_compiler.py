@@ -88,7 +88,7 @@ class ReviewCompiler:
                 ReviewPoint(
                     point_id=point.point_id,
                     aspect=point.aspect,
-                    text=point.proposition,
+                    text=point.resolved_proposition or point.proposition,
                     severity=point.severity,
                     suggested_action=point.suggested_action or "",
                     evidence_keys=list(
@@ -96,6 +96,7 @@ class ReviewCompiler:
                             [
                                 *point.paper_evidence_keys,
                                 *point.relation_evidence_keys,
+                                *point.coverage_evidence_keys,
                             ]
                         )
                     ),
@@ -137,7 +138,10 @@ def _rebuild_summary(state: ReviewStateV2, points: list) -> ReviewSummary:
         None,
     )
     if contribution is not None:
-        text = f"The manuscript's evidence-backed contribution is: {contribution.proposition}"
+        text = (
+            "The manuscript's evidence-backed contribution is: "
+            f"{contribution.proposition}"
+        )
         keys = list(contribution.paper_evidence_keys)
     else:
         text = (

@@ -178,12 +178,26 @@ class CodexCliCritic:
             ensure_ascii=False,
         )
         try:
-            payload = self._generate(CODEX_REVIEW_PROMPT, user)
-            raw_review = payload.get("review", payload)
-            review = StructuredReview.model_validate(raw_review)
-            self._force_novelty_external_verification(review)
-            self._validate_review(review, paper_ir)
-            return review
+            last_error: ValidationError | ValueError | TypeError | None = None
+            for attempt in range(2):
+                prompt = CODEX_REVIEW_PROMPT
+                if attempt:
+                    allowed = sorted(f"P:{span.span_id}" for span in paper_ir.spans)
+                    prompt += (
+                        " The previous response violated the contract. Repair the "
+                        "entire review. Evidence keys must be copied exactly from this "
+                        f"allowed list and no others: {allowed}"
+                    )
+                payload = self._generate(prompt, user)
+                try:
+                    raw_review = payload.get("review", payload)
+                    review = StructuredReview.model_validate(raw_review)
+                    self._force_novelty_external_verification(review)
+                    self._validate_review(review, paper_ir)
+                    return review
+                except (ValidationError, ValueError, TypeError) as exc:
+                    last_error = exc
+            raise last_error or ValueError("Codex review output invalid")
         except (
             ModelClientUnavailableError,
             ValidationError,

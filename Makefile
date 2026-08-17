@@ -26,9 +26,9 @@ gear-calibration-promote:
 	$(PYTHON) -m gear promote-calibration
 
 gear-lint:
-	$(PYTHON) -m black --check gear scripts/run_gear_reconstruction_sessions.py scripts/run_gear_consistency_judges.py experiments/gear tests/gear
-	$(PYTHON) -m ruff check --select E4,E7,E9,F,I gear scripts/run_gear_reconstruction_sessions.py scripts/run_gear_consistency_judges.py experiments/gear tests/gear
-	$(PYTHON) -m mypy --ignore-missing-imports --follow-imports=skip gear scripts/run_gear_reconstruction_sessions.py scripts/run_gear_consistency_judges.py experiments/gear
+	$(PYTHON) -m black --check gear scripts/run_gear_reconstruction_sessions.py scripts/run_gear_revision_audit.py experiments/gear tests/gear
+	$(PYTHON) -m ruff check --select E4,E7,E9,F,I gear scripts/run_gear_reconstruction_sessions.py scripts/run_gear_revision_audit.py experiments/gear tests/gear
+	$(PYTHON) -m mypy --ignore-missing-imports --follow-imports=skip gear scripts/run_gear_reconstruction_sessions.py scripts/run_gear_revision_audit.py experiments/gear
 
 gear-submission-train:
 	$(PYTHON) experiments/gear/train_submission_calibration.py \

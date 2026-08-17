@@ -112,8 +112,8 @@ class ReviewRequest(EvidenceModel):
     def evidence_date(self) -> date:
         """Resolve the prior-art boundary without exposing a user mode switch."""
         return (
-            self.metadata.publication_date
-            or self.metadata.submission_date
+            self.metadata.submission_date
+            or self.metadata.publication_date
             or self.evaluation_date
         )
 
@@ -121,10 +121,10 @@ class ReviewRequest(EvidenceModel):
     def evidence_date_source(
         self,
     ) -> Literal["publication_date", "submission_date", "evaluation_date"]:
-        if self.metadata.publication_date is not None:
-            return "publication_date"
         if self.metadata.submission_date is not None:
             return "submission_date"
+        if self.metadata.publication_date is not None:
+            return "publication_date"
         return "evaluation_date"
 
 
@@ -385,8 +385,77 @@ class SubmissionCalibrationPacketV1(EvidenceModel):
 class QuerySpec(EvidenceModel):
     query_id: str
     claim_id: str
-    family: Literal["lexical", "mechanism", "contrastive", "citation"]
+    family: Literal["lexical", "semantic", "contrastive", "citation"]
+    query_role: Literal[
+        "author_terminology",
+        "object_problem",
+        "mechanism_outcome",
+        "purpose_semantic",
+        "legacy_contrastive",
+        "author_citation",
+        "citation_neighbor",
+    ] = "object_problem"
     query: str
+    search_mode: Literal["text", "semantic", "direct_id"] = "text"
+    source_span_ids: List[str] = Field(default_factory=list)
+    anchor_fields: List[str] = Field(default_factory=list)
+    transformation: str = ""
+    parent_query_id: Optional[str] = None
+
+
+class ScientificSearchFrame(EvidenceModel):
+    """Paper-grounded scientific intent used only to formulate retrieval."""
+
+    target_object: List[str] = Field(default_factory=list)
+    task_problem: List[str] = Field(default_factory=list)
+    mechanism: List[str] = Field(default_factory=list)
+    population_input: List[str] = Field(default_factory=list)
+    outcome_observable: List[str] = Field(default_factory=list)
+    comparator: List[str] = Field(default_factory=list)
+    author_terms: List[str] = Field(default_factory=list)
+    brand_terms: List[str] = Field(default_factory=list)
+    legacy_terms: List[str] = Field(default_factory=list)
+    claimed_delta: str = ""
+    citation_seed_ids: List[str] = Field(default_factory=list)
+    source_span_ids: List[str] = Field(min_length=1)
+
+    @model_validator(mode="after")
+    def require_scientific_anchors(self) -> "ScientificSearchFrame":
+        groups = (
+            self.target_object,
+            self.task_problem,
+            self.mechanism,
+            self.population_input,
+            self.outcome_observable,
+        )
+        if sum(bool(group) for group in groups) < 2:
+            raise ValueError("scientific search frame requires at least two anchors")
+        return self
+
+
+class RetrievalHit(EvidenceModel):
+    hit_id: str
+    target_claim_id: str
+    work_id: str
+    query_id: str
+    query_family: str
+    search_mode: str
+    provider_rank: int = Field(ge=1)
+    provider_relevance: Optional[float] = None
+    fused_score: float = Field(default=0.0, ge=0.0)
+    selection_stage: Literal[
+        "retrieved",
+        "temporal_excluded",
+        "metadata_only",
+        "recall_filtered",
+        "rerank_filtered",
+        "compared",
+    ] = "retrieved"
+    gate_label: Optional[Literal["comparable", "partial", "distant"]] = None
+    matched_fields: List[str] = Field(default_factory=list)
+    gate_reason: str = ""
+    recall_score: Optional[float] = None
+    rerank_score: Optional[float] = None
 
 
 class RetrievedSpan(EvidenceModel):
@@ -414,8 +483,13 @@ class RetrievedWork(EvidenceModel):
     publication_year: Optional[int] = None
     doi: Optional[str] = None
     cited_work_ids: List[str] = Field(default_factory=list)
+    topics: List[str] = Field(default_factory=list)
+    keywords: List[str] = Field(default_factory=list)
     spans: List[RetrievedSpan] = Field(default_factory=list)
+    # Kept for in-process compatibility. EvidenceStore persists query provenance
+    # separately as RetrievalHit records, so this field is never part of W:*.
     retrieval_query_id: str
+    source_query_ids: List[str] = Field(default_factory=list)
     retrieval_source: str
 
 
@@ -430,10 +504,37 @@ class RelationCard(EvidenceModel):
     relation_label: RelationLabel
     evidence_level: EvidenceLevel
     difference_dimensions: List[str] = Field(min_length=1)
+    common_dimensions: List[str] = Field(default_factory=list)
     retrieval_query_id: str
+    source_query_ids: List[str] = Field(default_factory=list)
     rationale: str = ""
     temporal_valid: bool = False
     temporal_order_unresolved: bool = False
+
+
+class RetrievalCoverageCard(EvidenceModel):
+    """Auditable search coverage for one external-verification target."""
+
+    coverage_id: str
+    target_claim_id: str
+    cutoff_date: date
+    required_query_roles: List[str] = Field(default_factory=list)
+    completed_query_roles: List[str] = Field(default_factory=list)
+    query_ids: List[str] = Field(default_factory=list)
+    retrieved_count: int = Field(default=0, ge=0)
+    unique_eligible_count: int = Field(default=0, ge=0)
+    temporal_excluded_count: int = Field(default=0, ge=0)
+    metadata_only_count: int = Field(default=0, ge=0)
+    compared_work_ids: List[str] = Field(default_factory=list)
+    direct_or_partial_found: bool = False
+    whole_paper_ranking_completed: bool = False
+    purpose_ranking_completed: bool = False
+    ranker: str = ""
+    degraded: bool = False
+    service_failed: bool = False
+    exhaustive_provider_results: bool = False
+    coverage_sufficient: bool = False
+    advisory_notes: List[str] = Field(default_factory=list)
 
 
 class RetrievalBudget(EvidenceModel):
@@ -441,7 +542,7 @@ class RetrievalBudget(EvidenceModel):
     contrastive_used: int = Field(default=0, ge=0)
     citation_expansion_used: int = Field(default=0, ge=0)
     fulltext_kept: int = Field(default=0, ge=0)
-    normal_max: int = Field(default=2, ge=0)
+    normal_max: int = Field(default=4, ge=0)
     contrastive_max: int = Field(default=1, ge=0)
     citation_expansion_max: int = Field(default=1, ge=0)
     fulltext_max: int = Field(default=12, ge=0)
