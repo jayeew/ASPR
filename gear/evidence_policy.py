@@ -3,19 +3,18 @@
 from __future__ import annotations
 
 import re
-from typing import Optional, Tuple
 
 from .review_contracts import (
     CanonicalReviewPoint,
     EvidenceAction,
     PointSeverity,
     PointValidationStatus,
-    ReviewStateV2,
+    ReviewStateV3,
 )
 
 STRONG_CLAIM_RE = re.compile(
     r"\b(?:first|first-ever|unprecedented|breakthrough|paradigm shift)\b|首次|首个|突破",
-    re.I,
+    re.IGNORECASE,
 )
 
 
@@ -23,7 +22,6 @@ def is_high_risk(point: CanonicalReviewPoint) -> bool:
     return bool(
         STRONG_CLAIM_RE.search(point.proposition)
         or point.qwen_conflict
-        or point.graph_tension
         or (
             point.section.startswith("novelty_")
             and point.severity == PointSeverity.MAJOR
@@ -32,8 +30,8 @@ def is_high_risk(point: CanonicalReviewPoint) -> bool:
 
 
 def highest_risk_unresolved_target(
-    state: ReviewStateV2,
-) -> Optional[CanonicalReviewPoint]:
+    state: ReviewStateV3,
+) -> CanonicalReviewPoint | None:
     candidates = [
         point
         for point in state.canonical_points.values()
@@ -51,6 +49,8 @@ def highest_risk_unresolved_target(
     return sorted(
         candidates,
         key=lambda point: (
+            point.graph_tension_score,
+            point.graph_focus_weight,
             is_high_risk(point),
             point.severity == PointSeverity.MAJOR,
             point.requires_external_evidence,
@@ -61,8 +61,8 @@ def highest_risk_unresolved_target(
 
 
 def next_evidence_action(
-    state: ReviewStateV2,
-) -> Tuple[EvidenceAction, Optional[str], str]:
+    state: ReviewStateV3,
+) -> tuple[EvidenceAction, str | None, str]:
     candidates = [
         point
         for point in state.canonical_points.values()
@@ -71,12 +71,14 @@ def next_evidence_action(
         not in {PointValidationStatus.VALIDATED, PointValidationStatus.REJECTED}
     ]
 
-    def choose(items: list[CanonicalReviewPoint]) -> Optional[CanonicalReviewPoint]:
+    def choose(items: list[CanonicalReviewPoint]) -> CanonicalReviewPoint | None:
         if not items:
             return None
         return sorted(
             items,
             key=lambda point: (
+                point.graph_tension_score,
+                point.graph_focus_weight,
                 is_high_risk(point),
                 point.severity == PointSeverity.MAJOR,
                 point.requires_external_evidence,
@@ -107,7 +109,7 @@ def next_evidence_action(
             for point in candidates
             if point.requires_external_evidence
             and is_high_risk(point)
-            and not point.counterfactual_search_done
+            and point.counterfactual_search_count < 1
         ]
     )
     if target is not None:

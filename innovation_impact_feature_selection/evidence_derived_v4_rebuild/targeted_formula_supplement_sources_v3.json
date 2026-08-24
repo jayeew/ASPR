@@ -1,0 +1,35 @@
+{
+  "schema_version": "targeted_formula_supplement_sources_v3",
+  "frozen_at": "2026-07-30T09:55:00+00:00",
+  "scope": "Outcome-blind cited formula/validation supplements for already-existing canonical indicator families after terminal discovery round 12. These sources do not reopen discovery, alter K/Q/P, or create term or indicator families.",
+  "sources": [
+    {
+      "record_key": "doi:10.1007/s11192-021-04049-z",
+      "doi": "10.1007/s11192-021-04049-z",
+      "title": "Introducing a novelty indicator for scientific research: validating the knowledge-based combinatorial approach",
+      "fulltext_version_title": "A validation study of knowledge combinatorial novelty",
+      "fulltext_version_doi": "10.15108/dp190",
+      "version_relationship": "English institutional discussion-paper version by the same four authors that precedes the peer-reviewed article.",
+      "url": "https://nistep.repo.nii.ac.jp/record/6712/files/NISTEP-DP190-FullJ.pdf",
+      "source_landing_page": "https://nistep.repo.nii.ac.jp/records/6712",
+      "access_statement": "Author/institutional English discussion-paper version hosted by Japan's National Institute of Science and Technology Policy repository; used only as a cited formula and validation supplement.",
+      "license": "Institutional repository open full text; reuse status not asserted beyond evidence review.",
+      "expected_text": [
+        "A validation study of knowledge combinatorial novelty",
+        "Proposed measure of novelty",
+        "overlap score",
+        "Novelty",
+        "Matsumoto"
+      ],
+      "completion_route": "cited_formula_and_validation_supplement",
+      "target_existing_feature_ids": [
+        "EF0313"
+      ]
+    }
+  ],
+  "creates_new_search_records": false,
+  "creates_new_term_families": false,
+  "creates_new_indicator_families": false,
+  "alters_k_q_p": false,
+  "round_13": false
+}

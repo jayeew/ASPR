@@ -1,0 +1,6 @@
+{
+  "doi:10.12688/f1000research.19619.2": ["exclude", "E_NOT_PAPER_LEVEL", "The study analyzes researcher adoption and scholarly-communication practices rather than an individual paper-level target construct."],
+  "doi:10.1016/j.envsci.2020.12.005": ["exclude", "E_NOT_PAPER_LEVEL", "The framework assesses transdisciplinary integration as a research process rather than a construct measured for individual scientific papers."],
+  "doi:10.1136/bmj.301.6764.1333-c": ["uncertain", "E_INSUFFICIENT_METADATA", "The title suggests citation-index research-performance assessment, but absent metadata prevents verification of the unit, indicator definition, and timing."
+  ]
+}

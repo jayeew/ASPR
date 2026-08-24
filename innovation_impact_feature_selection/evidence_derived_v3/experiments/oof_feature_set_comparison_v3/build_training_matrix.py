@@ -702,15 +702,20 @@ def descriptor(
     """Construct a source-derived English descriptor for lexical matching."""
     row = library[feature_id]
     dimension = dimensions[feature_to_dimension[feature_id]]
-    aliases = " ".join(json.loads(row["alias_names_json"]))
-    required = " ".join(json.loads(row["required_data_json"]))
+    aliases_payload = json.loads(row.get("alias_names_json") or "[]")
+    required_payload = json.loads(row.get("required_data_json") or "[]")
+    if not isinstance(aliases_payload, list) or not isinstance(required_payload, list):
+        raise TypeError(f"{feature_id} descriptor list fields must be JSON arrays")
+    aliases = " ".join(str(value) for value in aliases_payload)
+    required = " ".join(str(value) for value in required_payload)
+    formula = row.get("formula") or row.get("formula_text") or ""
     return " ".join(
         (
             row["canonical_name_en"],
             aliases,
             dimension["label"],
             dimension["definition"],
-            row["formula"],
+            formula,
             required,
         )
     )

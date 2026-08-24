@@ -16,9 +16,11 @@ from .contracts import (
     ClaimStrength,
     ClaimType,
     EvidenceSpan,
+    EvidenceReadiness,
     MethodResultLedger,
     PageText,
     PaperClaim,
+    PaperQualityReport,
     PaperIR,
     ParseStatus,
     ReferenceEntry,
@@ -132,12 +134,38 @@ def _split_long_block(
 
 
 def _blocks_with_offsets(text: str) -> List[Tuple[int, int, str]]:
+    """Split headings before paragraphs while preserving exact page offsets."""
+    blocks: List[Tuple[int, int, str]] = []
+    heading_ranges: List[Tuple[int, int, str]] = []
+    cursor = 0
+    for raw_line in text.splitlines(keepends=True):
+        line_end = cursor + len(raw_line)
+        line = raw_line.rstrip("\r\n")
+        clean = line.strip()
+        if clean and HEADING_PATTERN.fullmatch(clean):
+            leading = len(line) - len(line.lstrip())
+            heading_ranges.append(
+                (cursor + leading, cursor + leading + len(clean), clean)
+            )
+        cursor = line_end
+    if heading_ranges:
+        region_start = 0
+        for start, end, heading in heading_ranges:
+            blocks.extend(_paragraph_blocks(text[region_start:start], region_start))
+            blocks.append((start, end, heading))
+            region_start = end
+        blocks.extend(_paragraph_blocks(text[region_start:], region_start))
+        return blocks
+    return _paragraph_blocks(text, 0)
+
+
+def _paragraph_blocks(text: str, base_offset: int) -> List[Tuple[int, int, str]]:
     blocks: List[Tuple[int, int, str]] = []
     for match in re.finditer(r"\S(?:.*?\S)?(?=\n\s*\n|\Z)", text, flags=re.S):
-        raw = match.group(0).strip()
+        raw = match.group(0)
         if not raw:
             continue
-        blocks.extend(_split_long_block(raw, match.start()))
+        blocks.extend(_split_long_block(raw, base_offset + match.start()))
     if len(blocks) <= 1 and "\n" in text:
         line_blocks: List[Tuple[int, int, str]] = []
         cursor = 0
@@ -147,7 +175,9 @@ def _blocks_with_offsets(text: str) -> List[Tuple[int, int, str]]:
             clean = line.strip()
             if len(clean) >= 20 or HEADING_PATTERN.match(clean):
                 leading = len(line) - len(line.lstrip())
-                line_blocks.extend(_split_long_block(clean, max(position, 0) + leading))
+                line_blocks.extend(
+                    _split_long_block(clean, base_offset + max(position, 0) + leading)
+                )
         if len(line_blocks) > len(blocks):
             blocks = line_blocks
     return blocks
@@ -160,8 +190,8 @@ def segment_pages(pages: Sequence[PageText], source_id: str) -> List[EvidenceSpa
     block_index = 0
     for page in pages:
         for start, end, block in _blocks_with_offsets(page.text):
-            if HEADING_PATTERN.match(block.strip()):
-                current_section = block.strip()
+            if HEADING_PATTERN.fullmatch(block.strip()):
+                current_section = re.sub(r"^#{1,6}\s*", "", block.strip())
             text_hash = _sha256_text(block)
             identity = f"{source_id}|{page.page}|{block_index}|{text_hash}"
             span_id = "S-" + hashlib.sha256(identity.encode("utf-8")).hexdigest()[:20]
@@ -447,6 +477,30 @@ class PaperCompiler:
         claims = [] if severe_garble else extract_claims(spans, self.config.max_claims)
         method_result = extract_method_result_ledger(spans)
         references = extract_references(spans)
+        sections = {item.section_path[0] for item in spans if item.section_path}
+        document_ratio = (
+            sum(item.section_path == ["Document"] for item in spans) / len(spans)
+            if spans
+            else 1.0
+        )
+        blocking = []
+        if status == ParseStatus.UNAVAILABLE:
+            readiness = EvidenceReadiness.UNAVAILABLE
+            blocking.append("paper_text_unavailable")
+        elif status != ParseStatus.READY:
+            readiness = EvidenceReadiness.LIMITED
+            blocking.append("paper_parse_degraded")
+        else:
+            readiness = EvidenceReadiness.READY
+        quality_report = PaperQualityReport(
+            evidence_readiness=readiness,
+            section_count=len(sections - {"Document"}),
+            document_only_ratio=document_ratio,
+            table_figure_anchor_count=len(method_result.figures_tables),
+            semantic_extraction_ready=False,
+            blocking_reasons=blocking,
+            advisories=(["document_only_sections"] if document_ratio > 0.80 else []),
+        )
         return PaperIR(
             paper_id=paper_id,
             paper_path=path,
@@ -462,6 +516,7 @@ class PaperCompiler:
             references=references,
             parse_status=status,
             quality_flags=flags,
+            quality_report=quality_report,
         )
 
 

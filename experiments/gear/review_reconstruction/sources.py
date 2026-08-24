@@ -43,17 +43,38 @@ class ReviewSourceSpan(ReviewModel):
 
 
 _PARAGRAPH_RE = re.compile(r"\S.*?(?=\n[ \t]*\n|\Z)", re.S)
-_REVIEWER_RE = re.compile(r"\b(?:reviewer|referee)\s*(?:#|no\.?\s*)?(\d+|[IVX]+)\b", re.I)
+_REVIEWER_RE = re.compile(
+    r"\b(?:reviewer|referee)\s*(?:#|no\.?\s*)?(\d+|[IVX]+)\b", re.I
+)
 _RESPONSE_RE = re.compile(
     r"\b(?:author\s+)?(?:response|reply|rebuttal)\b|\bresponses?\s+to\s+reviewers?\b",
     re.I,
 )
 _ROUND_RE = re.compile(r"\b(?:round|version|revision)\s*(\d+)\b", re.I)
 _AUTHOR_CUE_RE = re.compile(
-    r"^\s*(?:response|reply)\s*:|^\s*we\s+(?:thank|agree|have|added|revised|"
+    r"^\s*(?:response|reply)\s*:|^\s*(?:a\d+(?:\.\d+)*)\s*[:.)-]|"
+    r"^\s*we\s+(?:thank|would\s+like\s+to\s+thank|agree|have|added|revised|"
     r"clarified|changed|removed|corrected|addressed|performed|included)\b",
     re.I,
 )
+_REVIEWER_QUESTION_RE = re.compile(
+    r"^\s*(?:q|question)\s*\d+(?:\.\d+)*\s*[:.)-]",
+    re.I,
+)
+
+
+class SpeakerRoleAudit(ReviewModel):
+    """Deterministic role-separation signals for reconstruction eligibility."""
+
+    reviewer_span_count: int = Field(default=0, ge=0)
+    author_span_count: int = Field(default=0, ge=0)
+    reviewer_character_count: int = Field(default=0, ge=0)
+    author_character_count: int = Field(default=0, ge=0)
+    reviewer_question_count: int = Field(default=0, ge=0)
+    author_label_count: int = Field(default=0, ge=0)
+    generic_approval_count: int = Field(default=0, ge=0)
+    status: str = "automated_valid"
+    reasons: list[str] = Field(default_factory=list)
 
 
 def _sha256(text: str) -> str:
@@ -101,7 +122,11 @@ class NatureTransparentReviewParser:
                     elif re.search(r"\b(?:editor|decision)\b", heading, re.I):
                         kind = SourceKind.EDITORIAL
                         reviewer_id = None
-            if kind == SourceKind.REVIEWER_REPORT and _AUTHOR_CUE_RE.search(paragraph):
+            if _REVIEWER_QUESTION_RE.search(paragraph):
+                kind = SourceKind.REVIEWER_REPORT
+                if reviewer_id is None:
+                    reviewer_id = _stable_id("REV-", paper_id, "unattributed")
+            elif _AUTHOR_CUE_RE.search(paragraph):
                 kind = SourceKind.AUTHOR_RESPONSE
             digest = _sha256(paragraph)
             identity = (kind.value, reviewer_id or "", round_number, digest)
@@ -118,7 +143,8 @@ class NatureTransparentReviewParser:
                     source_path=source_path,
                     reviewer_id_hash=(
                         reviewer_id
-                        if kind in {SourceKind.REVIEWER_REPORT, SourceKind.AUTHOR_RESPONSE}
+                        if kind
+                        in {SourceKind.REVIEWER_REPORT, SourceKind.AUTHOR_RESPONSE}
                         else None
                     ),
                     round_id=f"round_{round_number}",
@@ -131,4 +157,46 @@ class NatureTransparentReviewParser:
         return spans
 
 
-__all__ = ["NatureTransparentReviewParser", "ReviewSourceSpan", "SourceKind"]
+def audit_source_roles(spans: list[ReviewSourceSpan]) -> SpeakerRoleAudit:
+    """Produce conservative, deterministic eligibility metadata for one source."""
+    reviewer = [row for row in spans if row.source_kind == SourceKind.REVIEWER_REPORT]
+    author = [row for row in spans if row.source_kind == SourceKind.AUTHOR_RESPONSE]
+    generic = sum(
+        bool(
+            re.search(
+                r"\b(?:thank you for all the corrections|nice job of responding|"
+                r"addressed my questions|no other concerns)\b",
+                row.text,
+                re.I,
+            )
+        )
+        for row in reviewer
+    )
+    reasons: list[str] = []
+    if not reviewer:
+        reasons.append("no_reviewer_spans")
+    if sum(len(row.text) for row in reviewer) < 1000:
+        reasons.append("reviewer_channel_too_short")
+    status = "automated_valid" if not reasons else "automated_limited"
+    return SpeakerRoleAudit(
+        reviewer_span_count=len(reviewer),
+        author_span_count=len(author),
+        reviewer_character_count=sum(len(row.text) for row in reviewer),
+        author_character_count=sum(len(row.text) for row in author),
+        reviewer_question_count=sum(
+            bool(_REVIEWER_QUESTION_RE.search(row.text)) for row in reviewer
+        ),
+        author_label_count=sum(bool(_AUTHOR_CUE_RE.search(row.text)) for row in author),
+        generic_approval_count=generic,
+        status=status,
+        reasons=reasons,
+    )
+
+
+__all__ = [
+    "NatureTransparentReviewParser",
+    "ReviewSourceSpan",
+    "SourceKind",
+    "SpeakerRoleAudit",
+    "audit_source_roles",
+]

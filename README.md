@@ -95,29 +95,14 @@ experiments, and consistency evaluation are separate modules. They exchange only
 immutable, hash-verified releases through `artifact_store/`; see
 [module architecture](docs/module_architecture.md).
 
-## Nature review reconstruction and consistency evaluation
+## Review reconstruction and Agent comparison
 
-The unique reconstructed reference dataset is kept in two complementary places:
-
-- `data/gear_review_reconstruction/nature_dev100`: original session packages,
-  source provenance, and imported sealed responses.
-- `outputs/gear/reconstruction/nature_dev100`: one-pass reconstruction release
-  artifacts and the batch manifest.
-
-Each paper is reconstructed in an isolated Codex CLI session. Reviewer reports
-provide opinions; author responses only set resolution status. Every retained
-point has a reviewer-quote trace and final-paper `P:S-*` evidence. Resolved and
-unverifiable items remain only in the trace and revision ledger.
-
-```bash
-python3 -m experiments.gear.review_reconstruction build-batch \
-  --manifest /path/to/manifest.jsonl \
-  --dataset-id nature_dev100 \
-  --output-dir outputs/gear/reconstruction/nature_dev100
-
-python3 -m experiments.gear.review_reconstruction validate-response \
-  --package /path/to/package.json --response /path/to/response.json
-```
+Human reconstruction synthesizes all reviewer rounds and author replies into the
+same `StructuredReview` contract emitted by the Agent. Resolved concerns are not
+retained as final weaknesses. Both sides are published as immutable artifacts
+and joined directly by `paper_id`; see
+[module architecture](docs/module_architecture.md) for runnable reconstruction,
+Agent export, publication, and comparison commands.
 
 The legacy dev100 consistency workflow uses blinded one-to-one atomic-point matching and
 reports precision, recall, F1, novelty agreement, evidence validity, and

@@ -1,0 +1,201 @@
+{
+  "schema_version": "targeted_formula_local_derivation_addendum_v3",
+  "frozen_at": "2026-07-30T09:31:00+00:00",
+  "scope": "Read-only implementation and data-quality evidence for H2 adjudication of the 23 already-frozen targeted formula rows.",
+  "purpose": "Resolve the H1-identified distinction between a similarly named local column and a demonstrably equivalent deterministic derivation. This addendum can establish local implementation details but cannot authorize a literature formula, change a source claim, create a new family, or rescue a construct mismatch.",
+  "integrity_guards": {
+    "changes_K_Q_P": false,
+    "creates_search_records": false,
+    "creates_term_families": false,
+    "creates_indicator_families": false,
+    "starts_round_13": false,
+    "uses_model_outcomes": false,
+    "uses_future_citation_labels": false,
+    "modifies_aspr_business_code": false,
+    "target_count_influence": false
+  },
+  "authorized_read_only_implementation_files": [
+    {
+      "path": "/home/jayee/workspace/ASPR/gear/nature_multihorizon/features_v6.py",
+      "sha256": "1fd04f8990f214b9d888223208d53942a8cd1371774e85ccbaa77b7b61c635ba",
+      "functions": [
+        "field_variety",
+        "field_disparity_mean",
+        "rao_stirling_integration",
+        "cosine_distance_profiles"
+      ]
+    },
+    {
+      "path": "/home/jayee/workspace/ASPR/gear/nature_multihorizon/features_v6_1.py",
+      "sha256": "ef27477989ad45b0ab5eb0a108a033662191508a56ed4dcc2a1fe5442539c9a3",
+      "functions": [
+        "field_gini_balance",
+        "field_relative_variety",
+        "div_index"
+      ]
+    },
+    {
+      "path": "/home/jayee/workspace/ASPR/gear/nature_multihorizon/feature_materializer_v6.py",
+      "sha256": "de9c0c712ad89a5c0683e74350af8ed2e59c9c42c809a0f5f58c522b6eaa09b8",
+      "functions": [
+        "annual_field_distances"
+      ]
+    },
+    {
+      "path": "/home/jayee/workspace/ASPR/gear/nature_multihorizon/materialize_v6_1.py",
+      "sha256": "030d25221b550dfd2a446fe8a65b3f2999a435a58ff0fa3f348cba4514e473da",
+      "functions": [
+        "build_reference_overlap_features",
+        "build_candidate_innovation_features",
+        "_title_word_counts",
+        "materialize_reference_overlap_extension"
+      ]
+    },
+    {
+      "path": "/home/jayee/workspace/ASPR/gear/nature_multihorizon/prediction_features_v6.py",
+      "sha256": "4194f81320676a9fdc7ce2b9742569e230c67d0f805a07e5a2b151287b96b807",
+      "functions": [
+        "build_t0_bibliographic_coupling_features"
+      ]
+    },
+    {
+      "path": "/home/jayee/workspace/ASPR/gear/nature_multihorizon/openalex_controls_v6_1.py",
+      "sha256": "94787c429bdfad0bf343a34eab3ecef1fcbd1a7e0b37c6947d17d374333a62e8",
+      "functions": [
+        "_target_metadata"
+      ]
+    },
+    {
+      "path": "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived_v3/materialize_backward_citation_age_v3.py",
+      "sha256": "2d8d14f17d7ef7d25f49fee8f6967630e6451a7bf48c54f71e948350e15ff727",
+      "functions": [
+        "compute_backward_citation_age"
+      ]
+    },
+    {
+      "path": "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived_v3/materialize_candidate_t0_features_v3.py",
+      "sha256": "e0370a56dd28f02aab706e83e870fc330577604cdd9b7e8a377872e80ffa0bfb",
+      "functions": [
+        "build_matrix",
+        "audit_matrix"
+      ]
+    }
+  ],
+  "authorized_frozen_manifests_and_audits": [
+    {
+      "path": "/home/jayee/workspace/ASPR/data/knowledge_corpus/nature_multihorizon_v6_1_local/reference_overlap_extension_manifest.json",
+      "sha256": "ca2a097be4b4b4cc017bd9c834d72efbd563e579f1bd0668a952a2702ac819ef"
+    },
+    {
+      "path": "/home/jayee/workspace/ASPR/data/knowledge_corpus/nature_multihorizon_v6_1_local/v6_1_materialization_manifest.json",
+      "sha256": "db413cb04ff1466e256f11a274f72a8ebc407856cdef8f424c99ab0ab89cebd5"
+    },
+    {
+      "path": "/home/jayee/workspace/ASPR/data/knowledge_corpus/nature_multihorizon_v6_1_local/target_openalex_metadata_manifest.json",
+      "sha256": "835761e388bf52b3700392975f4af9631a6815e913860c3901e1ab38a399c96c"
+    },
+    {
+      "path": "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived_v3/outputs/candidate_t0_feature_matrix_v3/candidate_t0_feature_matrix_v3_report.json",
+      "sha256": "02761d733402aa7ce90b0dcdf27447ddaba631da6551b448cd4de350bdde63ee"
+    },
+    {
+      "path": "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived_v3/outputs/candidate_t0_feature_matrix_v3/candidate_t0_feature_matrix_v3_input_snapshot.json",
+      "sha256": "5537a519bbeccd4e0989f95acdf562654840ebc6acc70d9411e8f835330e2466"
+    },
+    {
+      "path": "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived_v3/outputs/candidate_t0_feature_matrix_v3/candidate_t0_feature_matrix_v3_test.json",
+      "sha256": "82aa947cc5d98ebacff8f555bae87fe424419a7b1265f1f2e8b8681a74d4e1fb"
+    },
+    {
+      "path": "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived_v3/outputs/operationalizations/backward_citation_age_mean_v3_input_snapshot.json",
+      "sha256": "bf57527df11175dbf5bb96f27409b1ceb2499e55410675e5a573e8e5b7f55795"
+    },
+    {
+      "path": "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived_v3/outputs/operationalizations/backward_citation_age_mean_v3_test.json",
+      "sha256": "ffe3286fb5f19a269bc0dfa1122516d84b0d4a53ea2eb022ed63c328f87ce9f2"
+    }
+  ],
+  "feature_specific_implementation_facts": {
+    "TFC001": {
+      "local_formula": "1 - mean Jaccard overlap between the focal reference set and prior comparison-paper reference sets.",
+      "comparison_rule": "Only strictly prior papers with the same OpenAlex primary field and at least one co-cited focal reference enter the comparison set.",
+      "actual_local_parameters": {
+        "reference_window_years": "all_prior",
+        "cociting_window_years": "all_prior"
+      },
+      "mandatory_h2_check": "Approve only if the frozen English source explicitly defines the all-reference/all-co-citing variant as a valid source variant. Do not rewrite the local implementation as the 10-year/3-year variant."
+    },
+    "TFC006": {
+      "local_formula": "Number of distinct nonmissing reference field IDs.",
+      "missingness_evidence": "field_mapping_coverage and valid_reference_count are retained."
+    },
+    "TFC007": {
+      "local_formula": "One minus Gini across occupied reference-field counts.",
+      "single_category_rule": "A single occupied category has balance 1 within observed support."
+    },
+    "TFC008": {
+      "local_formula": "Mean one-minus-cosine distance over unordered occupied reference-field pairs.",
+      "distance_time_window": "For a focal year y, field profiles use citation events from y-5 through y-1 only."
+    },
+    "TFC009_and_TFC011": {
+      "local_formula": "Twice the sum over unordered field pairs of p_a * p_b * d_ab, algebraically equal to the ordered-pair Rao-Stirling sum.",
+      "distance_time_window": "For a focal year y, field profiles use citation events from y-5 through y-1 only."
+    },
+    "TFC010": {
+      "local_formula": "relative variety * one-minus-Gini * prior-window mean field disparity.",
+      "local_parameters": {
+        "field_taxonomy_size": 26,
+        "distance_window_years": 5
+      },
+      "mandatory_h2_check": "The local formula is an explicitly adapted T0 implementation. Reject exact correspondence if the source requires the fixed 2015 JCR universe or a post-focal distance matrix."
+    },
+    "TFC012": {
+      "local_formula": "Mean of focal publication year minus reference year over references with known nonfuture years.",
+      "zero_and_missing_rule": "Same-year age is valid zero; no valid reference year is missing, not zero."
+    },
+    "TFC013": {
+      "local_formula": "Number of strictly prior bibliographic-coupling neighbors divided by the number of valid focal references.",
+      "edge_rule": "An unweighted edge requires at least one shared reference."
+    },
+    "TFC014_and_TFC015": {
+      "local_formula": "OpenAlex paper authors_count, with zero treated as missing in the v3 candidate operationalization.",
+      "audit": "log1p author count agrees with the frozen control field to floating-point precision."
+    },
+    "TFC016": {
+      "local_formula": "Whitespace-split focal title word count; an empty title is missing."
+    },
+    "TFC017": {
+      "local_formula": "Count of unique focal paper-reference edges; the raw count is retained and log1p is a separate transform.",
+      "audit": "log1p raw edge count agrees with the frozen control field to floating-point precision."
+    },
+    "TFC018": {
+      "data_quality_failure": "openalex_institution_count is row-wise identical to openalex_author_count for all 118059 candidate rows.",
+      "mandatory_h2_decision": "The field cannot support an institutional-breadth formula and must not be approved."
+    },
+    "TFC019_and_TFC020": {
+      "local_formula": "Distinct author-affiliation country count; international collaboration is one only when the known count exceeds one.",
+      "zero_and_missing_rule": "A frozen count of zero is treated as missing country metadata, not as observed single-country collaboration."
+    },
+    "TFC021": {
+      "local_formula": "Stable categorical source_id with source_display_name as label."
+    },
+    "TFC022": {
+      "local_formula": "Raw focal publication calendar year."
+    },
+    "TFC023": {
+      "mandatory_h2_check": "Do not equate OpenAlex field levels with a source-specific manual taxonomy without explicit crosswalk evidence."
+    }
+  },
+  "candidate_matrix_audit": {
+    "row_count": 118059,
+    "column_count": 27,
+    "matrix_sha256": "ce26155d2fa36b8c2a21efb40a42efd9f622ea1286a6868bc9d66a22e149bbb7",
+    "fatal_failures": [],
+    "feature_level_exclusions": [
+      "document_type:constant",
+      "work_type:constant",
+      "institution_count:exact_duplicate_of_author_count"
+    ],
+    "model_outcomes_used": false
+  }
+}

@@ -12,8 +12,8 @@ from typing import Any
 
 from gear.config import GearConfig, load_config
 from gear.contracts import PaperMetadata, ReviewRequest
-from gear.review_contracts import ContextClaim, ContextSpan
 from gear.paper_compiler import PaperCompiler
+from gear.review_contracts import ContextClaim, ContextSpan
 from gear.trace import sha256_file, sha256_value
 
 from .contracts import (
@@ -23,7 +23,7 @@ from .contracts import (
     ReviewSourceExcerpt,
     ReviewSourceRole,
 )
-from .sources import NatureTransparentReviewParser, SourceKind
+from .sources import NatureTransparentReviewParser, SourceKind, audit_source_roles
 
 RECONSTRUCTION_INSTRUCTIONS = """Reconstruct the final-state peer review for one paper.
 Use reviewer_report spans as the only source of review opinions. Author responses may
@@ -47,6 +47,11 @@ GENERIC_PUBLICATION_RE = re.compile(
     r"recommend(?:ed|ation)?\s+(?:this\s+)?(?:paper\s+)?(?:for\s+)?rejection)\b",
     re.IGNORECASE,
 )
+GENERIC_APPROVAL_RE = re.compile(
+    r"\b(?:thank you for all the corrections|nice job of responding|"
+    r"addressed my questions|no other concerns|suitable for publication)\b",
+    re.IGNORECASE,
+)
 
 
 def build_reconstruction_package(
@@ -67,6 +72,7 @@ def build_reconstruction_package(
         ReviewRequest(paper_path=paper_path, metadata=metadata)
     )
     parsed = NatureTransparentReviewParser().parse(paper_ir.paper_id, review_path)
+    speaker_role_audit = audit_source_roles(parsed).model_dump(mode="json")
     reviewer_spans = [
         _source_excerpt(span)
         for span in parsed
@@ -110,6 +116,7 @@ def build_reconstruction_package(
         review_source_sha256=sha256_file(review_path),
         reviewer_spans=reviewer_spans,
         author_spans=author_spans,
+        speaker_role_audit=speaker_role_audit,
         instructions=RECONSTRUCTION_INSTRUCTIONS,
     )
     return package, paper_ir
@@ -165,6 +172,10 @@ def validate_session_response(
         ):
             raise ValueError("trace reviewer IDs do not follow reviewer quotes")
         if trace.point_id:
+            if all(GENERIC_APPROVAL_RE.search(row.text) for row in quote_rows):
+                raise ValueError(
+                    "generic reviewer approval cannot entail a reconstructed point"
+                )
             traced_ids.add(trace.point_id)
     if traced_ids != point_ids:
         raise ValueError("every retained review point requires exactly trace coverage")
@@ -231,9 +242,7 @@ def import_session_response(
     )
     validate_session_response(package, response)
     target = (
-        Path(output_dir).resolve()
-        / _safe_id(package.paper_id)
-        / package.session_kind
+        Path(output_dir).resolve() / _safe_id(package.paper_id) / package.session_kind
     )
     target.mkdir(parents=True, exist_ok=True)
     frozen = response.model_dump_json(indent=2) + "\n"
@@ -278,6 +287,7 @@ def _build_package(
     review_source_sha256: str,
     reviewer_spans: list[ReviewSourceExcerpt],
     author_spans: list[ReviewSourceExcerpt],
+    speaker_role_audit: dict[str, object],
     instructions: str,
 ) -> ReconstructionSessionPackage:
     prompt_sha256 = sha256_value(instructions.strip())
@@ -287,6 +297,7 @@ def _build_package(
         review_source_sha256=review_source_sha256,
         reviewer_spans=reviewer_spans,
         author_spans=author_spans,
+        speaker_role_audit=speaker_role_audit,
         instructions=instructions,
         prompt_sha256=prompt_sha256,
         schema_sha256=schema_sha256,
@@ -309,6 +320,7 @@ def validate_session_package(package: ReconstructionSessionPackage) -> None:
         review_source_sha256=package.review_source_sha256,
         reviewer_spans=package.reviewer_spans,
         author_spans=package.author_response_spans,
+        speaker_role_audit=package.speaker_role_audit,
         instructions=package.instructions,
         prompt_sha256=prompt_sha256,
         schema_sha256=schema_sha256,
@@ -331,6 +343,7 @@ def _package_core(
     review_source_sha256: str,
     reviewer_spans: list[ReviewSourceExcerpt],
     author_spans: list[ReviewSourceExcerpt],
+    speaker_role_audit: dict[str, object],
     instructions: str,
     prompt_sha256: str,
     schema_sha256: str,
@@ -345,6 +358,7 @@ def _package_core(
         "paper_context": paper_context,
         "reviewer_spans": reviewer_spans,
         "author_response_spans": author_spans,
+        "speaker_role_audit": speaker_role_audit,
         "instructions": instructions.strip(),
     }
 

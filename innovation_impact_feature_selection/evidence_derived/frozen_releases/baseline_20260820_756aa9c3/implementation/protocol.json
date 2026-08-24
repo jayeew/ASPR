@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0.0",
+  "protocol_id": "evidence-derived-simplified-4sets-20260728",
+  "cutoff_date": "2026-07-28",
+  "language": "en",
+  "eligible_work_types": ["article", "conference-paper", "review"],
+  "maximum_information_time": "T0",
+  "maximum_saturation_rounds": 15,
+  "saturation_stop_rule": "first_fully_reviewed_zero_term_and_zero_indicator_round_or_round_15",
+  "bootstrap_query": "(paper OR article OR publication OR \"scientific work\") AND (novelty OR innovation OR \"potential impact\" OR \"citation impact\" OR \"research quality\" OR \"scientific influence\") AND (measure OR indicator OR metric OR feature OR predictor OR determinant OR validation OR review)",
+  "data_mapping_values": ["direct", "derivable", "unavailable"],
+  "hard_gates": ["H1_SCOPE", "H2_T0", "H3_REPRODUCIBILITY", "H4_COMPUTABILITY", "H5_VALIDITY_ETHICS", "H6_DATA_INTEGRITY"],
+  "evidence_tiers": ["A", "B", "C"],
+  "feature_sets": ["strict", "primary", "expanded", "broad_t0"],
+  "no_numeric_quota": true,
+  "outcome_blind_selection": true
+}

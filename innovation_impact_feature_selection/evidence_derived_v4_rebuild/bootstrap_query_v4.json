@@ -1,0 +1,13 @@
+{
+  "schema_version": "4.0.0",
+  "logical_query_id": "B0001_DOMAIN_AGNOSTIC_BOOTSTRAP",
+  "object_terms": ["paper", "article", "publication", "scientific work"],
+  "target_terms": ["novelty", "innovation", "potential impact", "citation impact", "research quality", "scientific influence"],
+  "evidence_terms": ["measure", "indicator", "metric", "feature", "predictor", "determinant", "validation", "review"],
+  "filters": {
+    "to_publication_date": "2026-08-19",
+    "language_filter": null,
+    "language_screening_rule": "English eligibility is applied after retrieval so language exclusions stay in the PRISMA denominator.",
+    "types": ["article", "review"]
+  }
+}

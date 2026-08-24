@@ -1,0 +1,17 @@
+{
+  "amendment_id": "aspr-v4-search-frame-rederivation-press-fk-20260819",
+  "status": "approved",
+  "approved_by": "project_owner",
+  "scope": "implementation_reproducibility",
+  "authorized_old_source_ids": [
+    "code_coding_v4_search_frame_rederivation_fk"
+  ],
+  "original_hashes_retained": true,
+  "reason": "When replacing a derived search frame after fully adjudicated recall-repair terms, clear the dependent PRESS revision cache before its parent logical queries. This is a referential-integrity repair only.",
+  "constraints": [
+    "No PRESS decision artifact is changed or deleted; the cache is regenerated for the new frame.",
+    "No raw term, independent coding, seed, indicator, or model result changes.",
+    "New queries still require a new independent PRESS review and seed recall validation."
+  ],
+  "approved_at": "2026-08-19T05:30:00+00:00"
+}

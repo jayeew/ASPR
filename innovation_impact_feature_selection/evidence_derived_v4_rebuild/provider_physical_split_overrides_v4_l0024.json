@@ -1,0 +1,20 @@
+{
+  "amendment_id": "PROVIDER_PHYSICAL_SPLIT_OPENALEX_500_L0024_V4",
+  "created_at": "2026-07-30T03:48:00Z",
+  "maximum_physical_expression_length": 500,
+  "observed_failures": [
+    {
+      "attempt_count": 2,
+      "error": "HTTPError status=500",
+      "physical_query_id": "L0024__P001"
+    },
+    {
+      "attempt_count": 2,
+      "error": "HTTPError status=500",
+      "physical_query_id": "L0024__P002"
+    }
+  ],
+  "rationale": "After the first provider-only split, two L0024 requests below 1000 characters still repeatedly returned OpenAlex HTTP 500. Re-splitting only L0024 at 500 characters preserves its exact logical term union, object block, context block, filters, and PRESS-reviewed semantics.",
+  "source_frame_hash": "a0ed49b5fa297597e787d2bb26c106959fedfcefc1d8947cf078b715765b9d34",
+  "source_frame_version": 4
+}

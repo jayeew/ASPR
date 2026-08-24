@@ -1,0 +1,6 @@
+{
+  "doi:10.1002/nur.21519": ["exclude", "E_WRONG_DOCUMENT_TYPE", "The record is an editorial about a journal's role and review standards rather than an eligible substantive measurement or validation article."],
+  "doi:10.2478/jdis-2025-0039": ["include", "", "The study validates work-level bibliographic metadata against full text and measures discoverability and citation outcomes for individual gray-literature records."],
+  "doi:10.5465/256856": ["uncertain", "E_INSUFFICIENT_METADATA", "The title suggests a paper-level study of peer review and manuscript outcomes, but absent metadata prevents verification of the measured criteria and evidence."
+  ]
+}

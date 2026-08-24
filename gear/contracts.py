@@ -28,12 +28,19 @@ class EvidenceModel(StrictModel):
     """Base for serialized evidence and state objects."""
 
     schema_version: Literal["aspr_gear"] = SCHEMA_VERSION
+    schema_revision: Literal["evidence_state_delta_v2"] = "evidence_state_delta_v2"
 
 
 class ParseStatus(str, Enum):
     READY = "ready"
     DEGRADED = "parse_degraded"
     UNAVAILABLE = "parse_unavailable"
+
+
+class EvidenceReadiness(str, Enum):
+    READY = "ready"
+    LIMITED = "limited"
+    UNAVAILABLE = "unavailable"
 
 
 class ClaimType(str, Enum):
@@ -59,6 +66,8 @@ class CalibrationMode(str, Enum):
 
 
 class RelationLabel(str, Enum):
+    BACKGROUND = "BACKGROUND"
+    BUILDING_BLOCK = "BUILDING_BLOCK"
     DIRECT_ANTECEDENT = "DIRECT_ANTECEDENT"
     PARTIAL_ANTECEDENT = "PARTIAL_ANTECEDENT"
     EXTENSION = "EXTENSION"
@@ -185,6 +194,18 @@ class MethodResultLedger(EvidenceModel):
     figures_tables: List[str] = Field(default_factory=list)
 
 
+class PaperQualityReport(EvidenceModel):
+    """Observable PaperIR quality gates; never infer quality from completion alone."""
+
+    evidence_readiness: EvidenceReadiness = EvidenceReadiness.READY
+    section_count: int = Field(default=0, ge=0)
+    document_only_ratio: float = Field(default=0.0, ge=0.0, le=1.0)
+    table_figure_anchor_count: int = Field(default=0, ge=0)
+    semantic_extraction_ready: bool = False
+    blocking_reasons: List[str] = Field(default_factory=list)
+    advisories: List[str] = Field(default_factory=list)
+
+
 class ClaimLedger(EvidenceModel):
     novelty_claim_ids: List[str] = Field(default_factory=list)
     method_claim_ids: List[str] = Field(default_factory=list)
@@ -213,6 +234,7 @@ class PaperIR(EvidenceModel):
     references: List[ReferenceEntry] = Field(default_factory=list)
     parse_status: ParseStatus
     quality_flags: List[str] = Field(default_factory=list)
+    quality_report: PaperQualityReport = Field(default_factory=PaperQualityReport)
 
     def span_map(self) -> Dict[str, EvidenceSpan]:
         return {span.span_id: span for span in self.spans}
@@ -260,7 +282,7 @@ class PaperIR(EvidenceModel):
         method_result_span_ids = {
             span_id
             for field_name in type(self.method_result_ledger).model_fields
-            if field_name != "schema_version"
+            if field_name not in {"schema_version", "schema_revision"}
             for span_id in getattr(self.method_result_ledger, field_name)
         }
         if not ledger_span_ids.issubset(
@@ -394,6 +416,8 @@ class QuerySpec(EvidenceModel):
         "legacy_contrastive",
         "author_citation",
         "citation_neighbor",
+        "graph_focus",
+        "graph_seed",
     ] = "object_problem"
     query: str
     search_mode: Literal["text", "semantic", "direct_id"] = "text"
@@ -418,6 +442,14 @@ class ScientificSearchFrame(EvidenceModel):
     claimed_delta: str = ""
     citation_seed_ids: List[str] = Field(default_factory=list)
     source_span_ids: List[str] = Field(min_length=1)
+
+    @field_validator("claimed_delta", mode="before")
+    @classmethod
+    def normalize_claimed_delta(cls, value: object) -> str:
+        """Accept a model's enumerated deltas as one retrieval description."""
+        if isinstance(value, list):
+            return "; ".join(str(item).strip() for item in value if str(item).strip())
+        return str(value or "").strip()
 
     @model_validator(mode="after")
     def require_scientific_anchors(self) -> "ScientificSearchFrame":
@@ -510,6 +542,8 @@ class RelationCard(EvidenceModel):
     rationale: str = ""
     temporal_valid: bool = False
     temporal_order_unresolved: bool = False
+    essential_facet_coverage: float = Field(default=0.0, ge=0.0, le=1.0)
+    independent_verification_passed: bool = False
 
 
 class RetrievalCoverageCard(EvidenceModel):

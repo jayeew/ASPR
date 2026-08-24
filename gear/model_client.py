@@ -31,7 +31,10 @@ def build_json_model_client(config: GearConfig) -> JsonModelClient:
     if config.model_backend == "codex_cli":
         from .codex_cli import CodexCliJsonClient
 
-        return CodexCliJsonClient(config.codex_cli)
+        return CodexCliJsonClient(
+            config.codex_cli,
+            cache_dir=config.resolve_path(config.cache_dir) / "model_responses",
+        )
     if config.openai_compatible is None:
         raise ModelClientUnavailableError(
             "openai_compatible configuration is missing for API mode"

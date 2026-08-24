@@ -1,0 +1,21 @@
+{
+  "checkpoint_count": 84,
+  "checks": {
+    "artifact_hashes": true,
+    "canonical_contract": true,
+    "checkpoint_layout": true,
+    "fold_and_row_coverage": true,
+    "frozen_lineage": true,
+    "metric_coverage": true,
+    "metric_values_recomputed": true,
+    "model_comparison": true,
+    "only_hgb": true,
+    "paper_score_alignment": true,
+    "sets_share_papers_folds_labels": true,
+    "unique_oof_keys": true
+  },
+  "contract": "evidence_derived_canonical_hgb_oof_validation_v1",
+  "metric_rows": 12,
+  "passed": true,
+  "prediction_rows": 3739712
+}

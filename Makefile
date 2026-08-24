@@ -1,4 +1,4 @@
-.PHONY: gear-review gear-test gear-validate gear-lint gear-submission-train gear-calibration-show gear-calibration-promote gear-reconstruction-help gear-reconstruction-test artifact-help dataset-help figures-help
+.PHONY: gear-review gear-test gear-validate gear-lint gear-submission-train gear-calibration-show gear-calibration-promote gear-reconstruction-help gear-reconstruction-test gear-module-help artifact-help dataset-help figures-help
 
 PYTHON ?= python3
 GEAR_PAPER ?=
@@ -43,6 +43,9 @@ gear-reconstruction-test:
 		tests/gear/test_runtime.py \
 		tests/gear/test_reconstruction.py \
 		tests/gear/test_evaluation.py
+
+gear-module-help:
+	$(PYTHON) -m gear.module_cli --help
 
 artifact-help:
 	$(PYTHON) -m artifact_store --help

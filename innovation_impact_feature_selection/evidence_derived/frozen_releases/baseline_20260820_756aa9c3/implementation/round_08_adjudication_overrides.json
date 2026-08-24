@@ -1,0 +1,10 @@
+{
+  "openalex:w83526259": ["exclude", "E_NOT_METRIC_PREDICTOR_VALIDATION", "The article discusses editorial and journal safeguards against misconduct but does not define or validate an individual-paper indicator for the target constructs."],
+  "doi:10.1080/14768320500230185": ["include", "", "The review evaluates methodological and reporting characteristics of individual qualitative-research publications and is eligible as research-quality evidence."],
+  "doi:10.1518/001872005775570970": ["include", "", "The bibliometric study supplies publication-impact indicators and article-level authorship patterns and is eligible for impact-indicator discovery."],
+  "doi:10.1017/s1481803500008654": ["include", "", "The article directly provides critical-appraisal criteria for the quality, synthesis, and interpretation of systematic-review papers."],
+  "doi:10.1155/2013/708251": ["include", "", "The study computes blinding effectiveness for individual randomized-trial reports and evaluates associated design characteristics, supplying research-quality indicator evidence."],
+  "doi:10.1097/eja.0000000000000186": ["include", "", "The article defines concrete criteria for judging reliability of individual systematic reviews and meta-analyses."],
+  "doi:10.1016/j.jclinepi.2020.07.013": ["include", "", "The citation analysis measures paper-level impact of individual health-research reporting guidelines."
+  ]
+}

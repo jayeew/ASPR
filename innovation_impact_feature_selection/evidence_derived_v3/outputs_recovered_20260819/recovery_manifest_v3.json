@@ -1,0 +1,48 @@
+{
+  "counts": {
+    "broad_t0_features": 221,
+    "candidate_dimensions": 66,
+    "exact_broad_t0_dimension_mappings": 221,
+    "fulltext_features": 16,
+    "indicator_families": 432,
+    "primary_source_features": 154,
+    "reconstructed_excluded_dimension_mappings": 211,
+    "strict_features": 7
+  },
+  "exactly_recovered": [
+    "432 feature IDs, English labels, scope roles, article/T0/future flags",
+    "66 candidate dimension IDs and labels",
+    "nested 7/16/154/221 feature memberships",
+    "nested 4/10/48/55 dimension memberships",
+    "221 Broad-T0 feature-to-dimension mappings"
+  ],
+  "files": {
+    "candidate_dimensions_v3.csv": {
+      "sha256": "sha256:64bad3d877b27b7df072841ed1017cffd719348603e330caf683c40035a1a71b",
+      "size_bytes": 19687
+    },
+    "complete_indicator_library_v3.csv": {
+      "sha256": "sha256:cbfee41d2f148a7f7ff3a0fdc4345a17794946b035802a169698a70643bc96d8",
+      "size_bytes": 84325
+    },
+    "feature_gate_decisions_v3.csv": {
+      "sha256": "sha256:656b15059b30699ffea4860fa6e6e5b6005ef16c028acdb316042296762b9ee3",
+      "size_bytes": 406700
+    },
+    "feature_sets_recovered_v3.json": {
+      "sha256": "sha256:9dce10e176fc1b6914ad05e130782dfe4080fee8d0bb3c2c1fee39b5feb451fa",
+      "size_bytes": 15193
+    }
+  },
+  "not_original_bytes": [
+    "the original SQLite database and source-location evidence fields",
+    "the original full 14-gate row values outside membership-defining gates",
+    "211 feature-to-dimension mappings excluded from Broad T0",
+    "candidate dimension full definitions"
+  ],
+  "session_logs": [
+    "/mnt/c/Users/jayee/.codex/sessions/2026/07/28/rollout-2026-07-28T13-18-13-019fa728-bf6c-7453-9af8-9ade78756aae.jsonl",
+    "/mnt/c/Users/jayee/.codex/sessions/2026/07/31/rollout-2026-07-31T10-03-27-019fb5e9-8230-7c10-b868-1b8a386b40c2.jsonl"
+  ],
+  "status": "RECOVERED_WITH_DISCLOSED_LIMITATION"
+}

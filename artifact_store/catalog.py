@@ -6,10 +6,13 @@ from collections.abc import Mapping
 
 MODULE_DEPENDENCIES: Mapping[str, frozenset[str]] = {
     "datasets": frozenset(),
+    "indicator_definition": frozenset({"datasets"}),
+    "aspr_scoring": frozenset({"datasets", "indicator_definition"}),
     "review_reconstruction": frozenset({"datasets"}),
-    "gear_agent": frozenset({"datasets"}),
+    "gear_agent": frozenset({"datasets", "indicator_definition", "aspr_scoring"}),
     "figures": frozenset({"datasets"}),
     "consistency_evaluation": frozenset({"review_reconstruction", "gear_agent"}),
+    "review_evaluation": frozenset({"review_reconstruction", "gear_agent"}),
 }
 
 

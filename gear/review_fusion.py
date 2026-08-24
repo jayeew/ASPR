@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import hashlib
-from typing import Dict, Optional
+from typing import Literal
 
 from .point_matcher import PointMatcher, branch_sections
 from .review_contracts import (
@@ -11,25 +11,25 @@ from .review_contracts import (
     CanonicalReviewPoint,
     FusionReport,
     NoveltyJudgment,
-    ReviewAspect,
     PointValidationStatus,
+    ReviewAspect,
     ReviewPhase,
     ReviewPoint,
     ReviewSource,
-    ReviewStateV2,
+    ReviewStateV3,
 )
 
 
 class ReviewFusion:
-    def __init__(self, *, matcher: Optional[PointMatcher] = None) -> None:
+    def __init__(self, *, matcher: PointMatcher | None = None) -> None:
         self.matcher = matcher or PointMatcher()
 
     def fuse(
         self,
-        state: ReviewStateV2,
+        state: ReviewStateV3,
         agent: BranchReview,
-        qwen: Optional[BranchReview] = None,
-    ) -> tuple[ReviewStateV2, FusionReport]:
+        qwen: BranchReview | None = None,
+    ) -> tuple[ReviewStateV3, FusionReport]:
         if agent.source != ReviewSource.AGENT:
             raise ValueError("fusion requires Agent Reviewer as the primary branch")
         if agent.paper_id != state.paper_id:
@@ -44,26 +44,50 @@ class ReviewFusion:
         if qwen is not None:
             matches = self.matcher.match(agent, qwen)
             self._merge_qwen(canonical, agent, qwen, matches)
-        tension_ids = self._mark_graph_tension(canonical, agent, state)
+        tension_scores, focus_weights, triggered = self._apply_graph_calibration(
+            canonical, agent, state
+        )
         failures = [*agent.failures, *(qwen.failures if qwen is not None else [])]
         report = FusionReport(
             paper_id=state.paper_id,
             matches=matches,
             canonical_point_ids=list(canonical),
-            graph_tension_point_ids=tension_ids,
+            graph_tension_scores=tension_scores,
+            graph_focus_weights=focus_weights,
+            graph_triggered_actions=triggered,
+            graph_guided_point_ids=[
+                point_id
+                for point_id, point in canonical.items()
+                if state.graph_result is not None
+                and (
+                    state.graph_result.seed_work_ids or state.graph_result.search_terms
+                )
+                and point.section.startswith("novelty_")
+            ],
+            graph_query_replacements={
+                point_id: "author_terminology->graph_focus"
+                for point_id, point in canonical.items()
+                if state.graph_result is not None
+                and state.graph_result.search_terms
+                and point.section.startswith("novelty_")
+            },
             failures=failures,
         )
         updated = state.model_copy(
             update={
                 "phase": ReviewPhase.FUSED,
                 "branch_reviews": branches,
+                "novelty_direction": agent.novelty.judgment,
+                "novelty_direction_confidence": agent.novelty.confidence,
                 "canonical_points": canonical,
                 "unresolved_target_ids": list(canonical),
                 "process_features": state.process_features.model_copy(
                     update={
                         "agent_review_available": not agent.failures,
                         "qwen_review_available": qwen is not None and not qwen.failures,
-                        "graph_text_tension": bool(tension_ids),
+                        "graph_text_tension": any(
+                            point.graph_tension for point in canonical.values()
+                        ),
                         "failure_count": len(failures),
                     }
                 ),
@@ -72,9 +96,9 @@ class ReviewFusion:
         return updated, report
 
     @staticmethod
-    def _agent_candidates(agent: BranchReview) -> Dict[str, CanonicalReviewPoint]:
+    def _agent_candidates(agent: BranchReview) -> dict[str, CanonicalReviewPoint]:
         sections = branch_sections(agent)
-        output: Dict[str, CanonicalReviewPoint] = {}
+        output: dict[str, CanonicalReviewPoint] = {}
         for point in agent.all_points():
             canonical_id = _canonical_id(point)
             output[canonical_id] = _canonical_point(
@@ -84,7 +108,7 @@ class ReviewFusion:
 
     @staticmethod
     def _merge_qwen(
-        canonical: Dict[str, CanonicalReviewPoint],
+        canonical: dict[str, CanonicalReviewPoint],
         agent: BranchReview,
         qwen: BranchReview,
         matches: list,
@@ -125,29 +149,53 @@ class ReviewFusion:
             )
 
     @staticmethod
-    def _mark_graph_tension(
-        canonical: Dict[str, CanonicalReviewPoint],
+    def _apply_graph_calibration(
+        canonical: dict[str, CanonicalReviewPoint],
         agent: BranchReview,
-        state: ReviewStateV2,
-    ) -> list[str]:
-        score = state.graph_prior.score_0_100
-        if score is None:
-            return []
-        tension = (
-            score <= 10.0 and agent.novelty.judgment == NoveltyJudgment.POSITIVE
-        ) or (
-            score >= 90.0
-            and agent.novelty.judgment
-            in {NoveltyJudgment.NEGATIVE, NoveltyJudgment.MIXED}
+        state: ReviewStateV3,
+    ) -> tuple[dict[str, float], dict[str, float], dict[str, list[str]]]:
+        graph = state.graph_result
+        if graph is None:
+            return {}, {}, {}
+        direction = (graph.score_0_100 - 50.0) / 50.0
+        axis = {
+            NoveltyJudgment.POSITIVE: 1.0,
+            NoveltyJudgment.NEGATIVE: -1.0,
+            NoveltyJudgment.MIXED: 0.0,
+            NoveltyJudgment.UNCERTAIN: 0.0,
+            NoveltyJudgment.NOT_DISCUSSED: 0.0,
+        }[agent.novelty.judgment]
+        tension = min(
+            1.0,
+            graph.feature_coverage * abs(direction) * abs(direction - axis) / 2.0,
         )
-        if not tension:
-            return []
-        point_ids = []
+        expected_diffusion = (
+            graph.feature_coverage * graph.p_uptake * graph.conditional_diffusion
+        )
+        diffusion_weight = graph.feature_coverage * graph.conditional_diffusion
+        tension_scores: dict[str, float] = {}
+        focus_weights: dict[str, float] = {}
+        triggered: dict[str, list[str]] = {}
         for point_id, point in canonical.items():
+            point.graph_focus_weight = (
+                expected_diffusion
+                if point.aspect
+                in {
+                    ReviewAspect.CONTRIBUTION,
+                    ReviewAspect.METHOD,
+                    ReviewAspect.OTHER,
+                }
+                else diffusion_weight
+            )
+            focus_weights[point_id] = point.graph_focus_weight
             if point.section.startswith("novelty_"):
-                point.graph_tension = True
-                point_ids.append(point_id)
-        return point_ids
+                point.graph_tension_score = tension
+                point.graph_extra_counterfactual_actions = 0
+                point.graph_tension = tension > 0
+                tension_scores[point_id] = tension
+                if graph.seed_work_ids or graph.search_terms:
+                    triggered[point_id] = ["graph_guided_query_replacement"]
+        return tension_scores, focus_weights, triggered
 
 
 def _canonical_id(point: ReviewPoint) -> str:
@@ -160,16 +208,20 @@ def _canonical_id(point: ReviewPoint) -> str:
 def _canonical_point(
     canonical_id: str,
     point: ReviewPoint,
-    section: str,
+    section: Literal[
+        "novelty_support", "novelty_limit", "strengths", "weaknesses", "questions"
+    ],
     source: ReviewSource,
 ) -> CanonicalReviewPoint:
     agent = source == ReviewSource.AGENT
     return CanonicalReviewPoint(
         point_id=canonical_id,
         section=section,
+        initial_section=section,
         aspect=point.aspect,
         severity=point.severity,
         proposition=point.text,
+        novelty_confidence=point.confidence,
         suggested_action=point.suggested_action or None,
         source_point_ids={source: [point.point_id]},
         paper_evidence_keys=[

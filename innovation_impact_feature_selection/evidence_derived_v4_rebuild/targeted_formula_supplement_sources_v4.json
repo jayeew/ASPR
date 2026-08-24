@@ -1,0 +1,48 @@
+{
+  "schema_version": "targeted_formula_supplement_sources_v3",
+  "frozen_at": "2026-08-19T09:20:00+00:00",
+  "scope": "Outcome-blind, English, open-access formula corroboration for existing v4 candidate families. These two already-indexed records add no search term, search domain, logical query, physical query, or indicator family; their only purpose is to test the independently supported-construct hard gate.",
+  "sources": [
+    {
+      "record_key": "doi:10.1007/s11192-023-04822-2",
+      "doi": "10.1007/s11192-023-04822-2",
+      "title": "Quantifying and addressing uncertainty in the measurement of interdisciplinarity",
+      "fulltext_version_title": "Quantifying and addressing uncertainty in the measurement of interdisciplinarity",
+      "fulltext_version_doi": "10.1007/s11192-023-04822-2",
+      "version_relationship": "Peer-reviewed English published version.",
+      "url": "https://link.springer.com/content/pdf/10.1007/s11192-023-04822-2.pdf",
+      "source_landing_page": "https://doi.org/10.1007/s11192-023-04822-2",
+      "access_statement": "OpenAlex identifies the published English version as open access under CC-BY.",
+      "license": "CC-BY",
+      "expected_text": [
+        "Quantifying and addressing uncertainty in the measurement of interdisciplinarity",
+        "Rao-Stirling"
+      ],
+      "completion_route": "independent_construct_corroboration",
+      "target_existing_feature_ids": ["EF0007"]
+    },
+    {
+      "record_key": "doi:10.1007/s11192-022-04336-3",
+      "doi": "10.1007/s11192-022-04336-3",
+      "title": "Diversity and interdisciplinarity: Should variety, balance and disparity be combined as a product or better as a sum? An information-theoretical and statistical estimation approach",
+      "fulltext_version_title": "Diversity and interdisciplinarity: Should variety, balance and disparity be combined as a product or better as a sum? An information-theoretical and statistical estimation approach",
+      "fulltext_version_doi": "10.1007/s11192-022-04336-3",
+      "version_relationship": "Peer-reviewed English published version.",
+      "url": "https://link.springer.com/content/pdf/10.1007/s11192-022-04336-3.pdf",
+      "source_landing_page": "https://doi.org/10.1007/s11192-022-04336-3",
+      "access_statement": "OpenAlex identifies the published English version as open access under CC-BY.",
+      "license": "CC-BY",
+      "expected_text": [
+        "Diversity and interdisciplinarity",
+        "Rao-Stirling"
+      ],
+      "completion_route": "independent_construct_corroboration",
+      "target_existing_feature_ids": ["EF0002", "EF0004", "EF0007", "EF0008", "EF0009"]
+    }
+  ],
+  "creates_new_search_records": false,
+  "creates_new_term_families": false,
+  "creates_new_indicator_families": false,
+  "alters_k_q_p": false,
+  "round_13": false
+}

@@ -1,0 +1,20 @@
+{
+  "schema_version": "3.0.0",
+  "amendment_id": "aspr-v3-search-frame-round12-pragmatic-stop-20260730",
+  "status": "approved",
+  "approved_at": "2026-07-30T09:43:00+08:00",
+  "approved_by": "project_owner",
+  "scope": "search_frame_discovery",
+  "terminal_iteration": 12,
+  "original_stop_rule": "three consecutive H2-approved rounds with zero new non-redundant English term families and zero new canonical indicator families",
+  "replacement_stop_basis": "retrospective_owner_pragmatic_stop",
+  "reason": "The project owner directed round 12 to be the terminal search-frame discovery round because the expected marginal information gain of further deterministic batches was judged too small for the execution cost.",
+  "reporting_requirement": "Report this as a retrospective protocol deviation and retain the computed round-12 endpoint counts. Do not describe the stopping result as dual-zero unless the adjudicated database counts are in fact both zero.",
+  "integrity_guards": {
+    "actual_endpoint_counts_must_be_retained": true,
+    "dual_zero_claim_requires_computed_dual_zero": true,
+    "protocol_deviation_must_be_disclosed": true,
+    "round12_decisions_must_not_be_changed_to_create_zero": true,
+    "later_search_frame_discovery_rounds_must_not_be_started": true
+  }
+}

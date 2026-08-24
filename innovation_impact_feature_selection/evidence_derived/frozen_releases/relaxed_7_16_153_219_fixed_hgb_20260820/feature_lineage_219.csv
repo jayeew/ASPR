@@ -1,0 +1,220 @@
+matrix_field,matrix_dtype,row_count,missing_count,missing_rate,unique_count,legacy_feature_id,legacy_name,legacy_formula,legacy_use,no_selection_decision
+EF0001,float,411490,0,0.0,402868,EF0001,Abstract-availability predictor,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0002,float,411490,0,0.0,436,EF0002,Abstract information entropy,H(X) = -Σ_j p_j log2(p_j).,data_mapping_candidate_only,True
+EF0004,float,411490,0,0.0,49,EF0004,Abstract length,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0007,float,411490,0,0.0,402968,EF0007,Abstract reporting completeness,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0008,float,411490,0,0.0,402681,EF0008,Abstract rhetorical-move structure,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0009,float,411490,0,0.0,401591,EF0009,Abstract rhetorical moves,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0014,float,411490,0,0.0,405,EF0014,Academic program/institution,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0015,float,411490,0,0.0,463,EF0015,Access-status control,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0016,float,411490,0,0.0,400796,EF0016,Accessible scientific writing,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0017,float,411490,0,0.0,298220,EF0017,Additive entropy diversity index,dive = H_variety + H_balance - I_disparity,data_mapping_candidate_only,True
+EF0019,float,411490,0,0.0,53,EF0019,Affiliated-country size,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0021,float,411490,0,0.0,403046,EF0021,Analytic feature selection,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0023,float,411490,0,0.0,401541,EF0023,Animal age and sex reporting,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0024,float,411490,0,0.0,402363,EF0024,Article annotation content,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0027,float,411490,0,0.0,402265,EF0027,Article publishing charge,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0028,float,411490,0,0.0,403636,EF0028,Article structural-element counts,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0031,float,411490,0,0.0,1564,EF0031,Article topic,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0032,float,411490,0,0.0,372,EF0032,Author academic qualification,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0033,float,411490,0,0.0,53,EF0033,Author-affiliation country diversity,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0034,float,411490,0,0.0,53,EF0034,Author affiliation geography/institution,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0037,float,411490,0,0.0,372,EF0037,Author career stage,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0038,float,411490,0,0.0,396,EF0038,Author count,Not available without verified full text.,data_mapping_candidate_only,True
+EF0039,float,411490,0,0.0,53,EF0039,Author country,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0040,float,411490,0,0.0,53,EF0040,Author-country development-level control,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0042,float,411490,0,0.0,403025,EF0042,Author gender,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0043,float,411490,0,0.0,402671,EF0043,Author identity cue,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0044,float,411490,0,0.0,403478,EF0044,Author order predictor,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0045,float,411490,0,0.0,372,EF0045,Author publication history,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0046,float,411490,0,0.0,53,EF0046,Author-team ethnic diversity,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0048,float,411490,0,0.0,396,EF0048,Author-tenure-status adjustment covariate,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0049,float,411490,0,0.0,372,EF0049,Author-topic-expertise-proximity predictor,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0050,float,411490,0,0.0,403233,EF0050,Authorship characteristics,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0051,float,411490,0,0.0,53,EF0051,Authorship-country opportunity context,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0052,float,411490,0,0.0,44467,EF0052,Backward-citation age,Age distribution of works cited by the focal article.,data_mapping_candidate_only,True
+EF0057,float,411490,0,0.0,403577,EF0057,Biological plausibility,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0062,float,411490,0,0.0,403301,EF0062,Case-report clinical content,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0063,float,411490,0,0.0,405,EF0063,Centre-of-Excellence funding/affiliation,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0070,float,411490,0,0.0,68532,EF0070,Citation-network neighborhood,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0074,float,411490,0,0.0,309499,EF0074,Cited-reference disciplinary composition,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0076,float,411490,0,0.0,403566,EF0076,Clinical research status,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0077,float,411490,0,0.0,2,EF0077,Co-authorship,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0078,float,411490,0,0.0,5293,EF0078,Co-authorship network structure,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0079,float,411490,0,0.0,372,EF0079,Coauthor career-age difference,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0080,float,411490,0,0.0,21294,EF0080,Coauthorship-network centrality,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0082,float,411490,0,0.0,5293,EF0082,Collaboration-network algebraic connectivity,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0083,float,411490,0,0.0,11378,EF0083,Collaboration-network clustering coefficient,C_i = 2T(i) / [k_i(k_i - 1)].,data_mapping_candidate_only,True
+EF0084,float,411490,0,0.0,21294,EF0084,Collaboration-network eigenvector centrality,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0085,float,411490,0,0.0,5293,EF0085,Collaboration-network knowledge density,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0086,float,411490,0,0.0,2,EF0086,Collaboration type,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0089,float,411490,0,0.0,402812,EF0089,Conflict-of-interest disclosure,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0093,float,411490,0,0.0,401870,EF0093,CONSORT reporting adherence,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0094,float,411490,0,0.0,402864,EF0094,Construct validity,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0099,float,411490,0,0.0,2,EF0099,COVID-19 topic,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0102,float,411490,0,0.0,402540,EF0102,Data accessibility,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0106,float,411490,0,0.0,402464,EF0106,Data findability and reusability,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0109,float,411490,0,0.0,402852,EF0109,Data-reuse documentation,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0110,float,411490,0,0.0,402850,EF0110,De-implementation recommendation,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0111,float,411490,0,0.0,400640,EF0111,Dense prose style,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0113,float,411490,0,0.0,403124,EF0113,Diagnostic-tool accuracy,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0115,float,411490,0,0.0,287951,EF0115,Disciplinary diversity,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0116,float,411490,0,0.0,401231,EF0116,Disciplinary terminology,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0117,float,411490,0,0.0,287951,EF0117,DIV interdisciplinarity,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0121,float,411490,0,0.0,402135,EF0121,Economic-evaluation presence,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0124,float,411490,0,0.0,403249,EF0124,Educational setting,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0127,float,411490,0,0.0,403040,EF0127,Empirical-study status,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0128,float,411490,0,0.0,403212,EF0128,Endpoint-assessment breadth,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0129,float,411490,0,0.0,19190,EF0129,Entropy balance component,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0130,float,411490,0,0.0,300536,EF0130,Entropy variety component,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0131,float,411490,0,0.0,402666,EF0131,Evaluated study-design attributes,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0134,float,411490,0,0.0,402086,EF0134,Evidence consistency,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0135,float,411490,0,0.0,401958,EF0135,Evidence directness,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0136,float,411490,0,0.0,402199,EF0136,Evidence dose-response,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0137,float,411490,0,0.0,402720,EF0137,Evidence generalizability,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0140,float,411490,0,0.0,401135,EF0140,Evidence-strength level,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0148,float,411490,0,0.0,1564,EF0148,Field-year normalization stratum,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0149,float,411490,0,0.0,405,EF0149,Firm affiliation,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0151,float,411490,0,0.0,402443,EF0151,First-author primary-language predictor,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0155,float,411490,0,0.0,401679,EF0155,Funding duration,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0159,float,411490,0,0.0,401500,EF0159,Funding status,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0160,float,411490,0,0.0,401187,EF0160,Funding status/source,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0162,float,411490,0,0.0,403062,EF0162,Gold-standard comparison,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0164,float,411490,0,0.0,463,EF0164,Hybrid-discipline status,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0165,float,411490,0,0.0,403436,EF0165,Imaging-protocol documentation,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0166,float,411490,0,0.0,403184,EF0166,Impact threshold of a confounding variable,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0173,float,411490,0,0.0,214358,EF0173,Innovation inertia,,data_mapping_candidate_only,True
+EF0180,float,411490,0,0.0,401459,EF0180,Interactional metadiscourse,,data_mapping_candidate_only,True
+EF0182,float,411490,0,0.0,287951,EF0182,Interdisciplinarity-estimate uncertainty,,data_mapping_candidate_only,True
+EF0186,float,411490,0,0.0,2,EF0186,International collaboration,,data_mapping_candidate_only,True
+EF0187,float,411490,0,0.0,2,EF0187,International collaboration leadership,,data_mapping_candidate_only,True
+EF0188,float,411490,0,0.0,53,EF0188,International collaboration scale,,data_mapping_candidate_only,True
+EF0189,float,411490,0,0.0,2,EF0189,International study design,,data_mapping_candidate_only,True
+EF0190,float,411490,0,0.0,53,EF0190,International-team country composition,,data_mapping_candidate_only,True
+EF0191,float,411490,0,0.0,403231,EF0191,Ischemia-model type,,data_mapping_candidate_only,True
+EF0196,float,411490,0,0.0,463,EF0196,Journal disciplinary scope,,data_mapping_candidate_only,True
+EF0197,large_string,411490,0,0.0,42,EF0197,Journal identity,,data_mapping_candidate_only,True
+EF0200,float,411490,0,0.0,463,EF0200,Journal prestige,,data_mapping_candidate_only,True
+EF0201,float,411490,0,0.0,463,EF0201,Journal quartile,,data_mapping_candidate_only,True
+EF0202,float,411490,0,0.0,463,EF0202,Journal reporting-instruction strength,,data_mapping_candidate_only,True
+EF0204,float,411490,0,0.0,463,EF0204,Journal-type predictor,,data_mapping_candidate_only,True
+EF0207,float,411490,0,0.0,42,EF0207,Keyword count,,data_mapping_candidate_only,True
+EF0209,float,411490,0,0.0,287951,EF0209,Knowledge-base interdisciplinarity,,data_mapping_candidate_only,True
+EF0211,float,411490,0,0.0,309499,EF0211,Knowledge-combination conventionality,,data_mapping_candidate_only,True
+EF0213,float,411490,0,0.0,1564,EF0213,Latent article topic,,data_mapping_candidate_only,True
+EF0215,float,411490,0,0.0,402995,EF0215,Librarian involvement,,data_mapping_candidate_only,True
+EF0216,float,411490,0,0.0,399766,EF0216,Linguistic features,,data_mapping_candidate_only,True
+EF0217,float,411490,0,0.0,403039,EF0217,Longitudinal imaging assessment,,data_mapping_candidate_only,True
+EF0221,float,411490,0,0.0,401017,EF0221,Mean dependency distance,,data_mapping_candidate_only,True
+EF0224,float,411490,0,0.0,402147,EF0224,Meta-analysis reporting standards,,data_mapping_candidate_only,True
+EF0228,float,411490,0,0.0,403012,EF0228,Methodological quality,,data_mapping_candidate_only,True
+EF0229,float,411490,0,0.0,403435,EF0229,Methodological-quality predictor,,data_mapping_candidate_only,True
+EF0230,float,411490,0,0.0,402858,EF0230,Methodological-quality score,,data_mapping_candidate_only,True
+EF0231,float,411490,0,0.0,403328,EF0231,MMR question-method alignment,,data_mapping_candidate_only,True
+EF0232,float,411490,0,0.0,405,EF0232,Multi-institutional collaboration,,data_mapping_candidate_only,True
+EF0234,float,411490,0,0.0,405,EF0234,Multicenter study breadth,,data_mapping_candidate_only,True
+EF0235,float,411490,0,0.0,111703,EF0235,Mutual-information disparity component,,data_mapping_candidate_only,True
+EF0237,float,411490,0,0.0,463,EF0237,Nature Index journal status,,data_mapping_candidate_only,True
+EF0238,float,411490,0,0.0,68532,EF0238,Network centrality,,data_mapping_candidate_only,True
+EF0239,float,411490,0,0.0,1427,EF0239,Network giant-component opportunity context,,data_mapping_candidate_only,True
+EF0240,float,411490,0,0.0,258,EF0240,New-concept birth metric,,data_mapping_candidate_only,True
+EF0241,float,411490,0,0.0,402812,EF0241,Non-radiomic feature integration,,data_mapping_candidate_only,True
+EF0245,float,411490,0,0.0,401223,EF0245,Objective writing style,,data_mapping_candidate_only,True
+EF0246,float,411490,0,0.0,402801,EF0246,Omega reliability coefficients,,data_mapping_candidate_only,True
+EF0249,float,411490,0,0.0,403172,EF0249,ORCID-identifier availability,,data_mapping_candidate_only,True
+EF0250,float,411490,0,0.0,403019,EF0250,ORCID-identifier opportunity context,,data_mapping_candidate_only,True
+EF0251,float,411490,0,0.0,402907,EF0251,Outcome-measure validation status,,data_mapping_candidate_only,True
+EF0257,float,411490,0,0.0,287951,EF0257,Paper interdisciplinarity,,data_mapping_candidate_only,True
+EF0258,float,411490,0,0.0,68532,EF0258,Paper knowledge-network structure,,data_mapping_candidate_only,True
+EF0259,float,411490,0,0.0,300536,EF0259,Paper knowledge synergy,,data_mapping_candidate_only,True
+EF0260,float,411490,0,0.0,287951,EF0260,Paper multidisciplinarity,,data_mapping_candidate_only,True
+EF0266,float,411490,0,0.0,403369,EF0266,Participant-demographics control,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0267,float,411490,0,0.0,402846,EF0267,Patient-selection reporting,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0271,float,411490,0,0.0,402645,EF0271,Phantom-study validation,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0272,float,411490,0,0.0,402884,EF0272,Pharmaceutical-funding control,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0273,float,411490,0,0.0,402845,EF0273,Phenotypic feature validation,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0276,float,411490,0,0.0,403338,EF0276,Prespecified outcome and effect measurement,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0279,float,411490,0,0.0,403499,EF0279,Primary-outcome type,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0280,float,411490,0,0.0,372,EF0280,Prior-author h-index,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0281,float,411490,0,0.0,372,EF0281,Prior-author-impact opportunity context,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0282,float,411490,0,0.0,1006,EF0282,Prior-coauthorship count,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0283,float,411490,0,0.0,7376,EF0283,Prior-coauthorship strength,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0284,float,411490,0,0.0,5293,EF0284,Prior-collaboration continuity,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0287,float,411490,0,0.0,309499,EF0287,Prior-knowledge engagement,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0288,float,411490,0,0.0,372,EF0288,Prior publication count,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0289,float,411490,0,0.0,309499,EF0289,Prior-work-combination conventionality predictor,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0299,float,411490,0,0.0,403333,EF0299,Public study-protocol availability,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0300,float,411490,0,0.0,403589,EF0300,Publication and funding bias,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0301,float,411490,0,0.0,372,EF0301,Publication-based trial leadership,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0303,float,411490,0,0.0,53,EF0303,Publication geographic origin,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0306,float,411490,0,0.0,43,EF0306,Publication recency,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0307,float,411490,0,0.0,43,EF0307,Publication year,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0308,float,411490,0,0.0,402728,EF0308,Randomization status,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0309,float,411490,0,0.0,300536,EF0309,Rao-Stirling diversity,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0310,float,411490,0,0.0,401191,EF0310,Reader cognitive load,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0311,float,411490,0,0.0,279,EF0311,Reference accuracy,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0312,float,411490,0,0.0,19190,EF0312,Reference balance,Not available without verified full text.,data_mapping_candidate_only,True
+EF0314,float,411490,0,0.0,267,EF0314,Reference count,Not available without verified full text.,data_mapping_candidate_only,True
+EF0315,float,411490,0,0.0,111703,EF0315,Reference disparity,Not available without verified full text.,data_mapping_candidate_only,True
+EF0316,float,411490,0,0.0,287951,EF0316,Reference diversity,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0317,float,411490,0,0.0,279,EF0317,Reference-list characteristics,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0318,float,411490,0,0.0,19,EF0318,Reference variety,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0319,float,411490,0,0.0,5771,EF0319,Relative algebraic connectivity,AC = λ2(L) / λn(L).,data_mapping_candidate_only,True
+EF0320,float,411490,0,0.0,402925,EF0320,Reported effect size,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0322,float,411490,0,0.0,402004,EF0322,Reporting-guideline adherence,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0323,float,411490,0,0.0,401828,EF0323,Reporting quality,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0327,float,411490,0,0.0,2,EF0327,Research collaboration,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0328,float,411490,0,0.0,1564,EF0328,Research-community-size context,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0329,float,411490,0,0.0,403490,EF0329,Research-data sharing status,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0331,float,411490,0,0.0,463,EF0331,Research field,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0334,float,411490,0,0.0,403475,EF0334,Research governance and ethics reporting,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0336,float,411490,0,0.0,403762,EF0336,Research integrity,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0337,float,411490,0,0.0,403547,EF0337,Research-location traditionality,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0338,float,411490,0,0.0,5293,EF0338,Research-network involvement,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0340,float,411490,0,0.0,214358,EF0340,Research-pivot distance,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0342,float,411490,0,0.0,403730,EF0342,Research quality control,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0343,float,411490,0,0.0,402574,EF0343,Research-question framing,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0344,float,411490,0,0.0,402827,EF0344,Research-question type,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0345,float,411490,0,0.0,403563,EF0345,Research-site control,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0349,float,411490,0,0.0,402509,EF0349,Review conceptual-definition ambiguity,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0350,float,411490,0,0.0,402047,EF0350,Review conceptual/methodological/practical inconsistency,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0352,float,411490,0,0.0,403658,EF0352,Review data-extraction/synthesis adequacy,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0356,float,411490,0,0.0,402220,EF0356,Review-methodological consistency,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0357,float,411490,0,0.0,402589,EF0357,Review practical challenges,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0360,float,411490,0,0.0,402733,EF0360,Review protocol/reporting consistency,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0361,float,411490,0,0.0,403109,EF0361,Review quality-appraisal adequacy,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0363,float,411490,0,0.0,403440,EF0363,Review rigor/replicability/documentation barriers,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0365,float,411490,0,0.0,402917,EF0365,Review search strategy,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0366,float,411490,0,0.0,402888,EF0366,Review search-strategy transparency,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0371,float,411490,0,0.0,403148,EF0371,Risk of bias,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0375,float,411490,0,0.0,401899,EF0375,Scientific-validity assessment framework,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0376,float,411490,0,0.0,400869,EF0376,Scientific writing,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0377,float,411490,0,0.0,402306,EF0377,SCOTI score,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0378,float,411490,0,0.0,403111,EF0378,Search-method reporting quality,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0381,float,411490,0,0.0,5293,EF0381,Social-network-analysis measures,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0383,float,411490,0,0.0,402032,EF0383,Species-interaction reporting completeness,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0388,float,411490,0,0.0,403013,EF0388,Statistical precision,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0389,float,411490,0,0.0,402348,EF0389,Statistical significance of results,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0390,float,411490,0,0.0,402752,EF0390,Study design,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0391,float,411490,0,0.0,403792,EF0391,Study-design adjustment covariate,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0392,float,411490,0,0.0,402716,EF0392,Study design and quality,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0393,float,411490,0,0.0,53,EF0393,Study geographic region,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0396,float,411490,0,0.0,403364,EF0396,Study sample characteristics,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0397,float,411490,0,0.0,2494,EF0397,Study sample size,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0398,float,411490,0,0.0,403398,EF0398,Study sampling location,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0399,float,411490,0,0.0,53,EF0399,Study-site environmental context,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0401,float,411490,0,0.0,402909,EF0401,Study sponsor identity,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0403,float,411490,0,0.0,402784,EF0403,Subject-classification code,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0405,float,411490,0,0.0,401593,EF0405,Surgical innovation reporting,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0407,float,411490,0,0.0,403518,EF0407,Systematic-review methodology,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0408,float,411490,0,0.0,403121,EF0408,Systematic-review methodology predictor,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0409,float,411490,0,0.0,403123,EF0409,Systematic-review quality,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0410,float,411490,0,0.0,402863,EF0410,Systematic-review reporting quality,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0415,float,411490,0,0.0,403237,EF0415,Technique-description reporting,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0418,float,411490,0,0.0,1564,EF0418,Theoretical perspective,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0419,float,411490,0,0.0,49,EF0419,Title length,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0420,float,411490,0,0.0,39,EF0420,Title punctuation,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0426,float,411490,0,0.0,214358,EF0426,Topic redundancy,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0427,float,411490,0,0.0,287951,EF0427,Topical diversity,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0428,float,411490,0,0.0,53,EF0428,Trial-enrolment geography,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True
+EF0432,float,411490,0,0.0,400506,EF0432,Writing-component frequency,Not explicitly reported for this mention in the verified evidence.,data_mapping_candidate_only,True

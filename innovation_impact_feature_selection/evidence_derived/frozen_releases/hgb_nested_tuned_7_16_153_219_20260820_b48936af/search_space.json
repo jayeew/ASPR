@@ -1,0 +1,64 @@
+{
+  "contract": "evidence_derived_hgb_nested_search_space_v1",
+  "inner_temporal_folds": 4,
+  "parameters": [
+    {
+      "l2_regularization": 10.0,
+      "learning_rate": 0.05,
+      "max_depth": 3,
+      "max_iter": 150,
+      "max_leaf_nodes": 15,
+      "min_samples_leaf": 50,
+      "parameter_id": "compact"
+    },
+    {
+      "l2_regularization": 10.0,
+      "learning_rate": 0.05,
+      "max_depth": 4,
+      "max_iter": 200,
+      "max_leaf_nodes": 31,
+      "min_samples_leaf": 50,
+      "parameter_id": "medium"
+    },
+    {
+      "l2_regularization": 30.0,
+      "learning_rate": 0.03,
+      "max_depth": 3,
+      "max_iter": 300,
+      "max_leaf_nodes": 15,
+      "min_samples_leaf": 100,
+      "parameter_id": "shallow_smooth"
+    },
+    {
+      "l2_regularization": 10.0,
+      "learning_rate": 0.03,
+      "max_depth": 4,
+      "max_iter": 300,
+      "max_leaf_nodes": 31,
+      "min_samples_leaf": 50,
+      "parameter_id": "medium_slow"
+    },
+    {
+      "l2_regularization": 3.0,
+      "learning_rate": 0.05,
+      "max_depth": 5,
+      "max_iter": 250,
+      "max_leaf_nodes": 31,
+      "min_samples_leaf": 30,
+      "parameter_id": "medium_flexible"
+    },
+    {
+      "l2_regularization": 30.0,
+      "learning_rate": 0.03,
+      "max_depth": 6,
+      "max_iter": 300,
+      "max_leaf_nodes": 63,
+      "min_samples_leaf": 50,
+      "parameter_id": "large_regularized"
+    }
+  ],
+  "search_space_hash": "b48936affe5158102dafd114d4ee5c4056766e6a86d8f097b942f54c4a07f780",
+  "selection_objective": "spearman(expected, realized) - 0.10 * uptake_brier",
+  "selection_scope": "per_horizon_per_outer_fold_primary16_inner_temporal_oof",
+  "shared_across_feature_sets_after_selection": true
+}

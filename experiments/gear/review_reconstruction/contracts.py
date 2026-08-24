@@ -10,8 +10,8 @@ from pydantic import Field, field_validator, model_validator
 from gear.review_contracts import (
     ContextClaim,
     ContextSpan,
-    StructuredReview,
     ReviewModel,
+    StructuredReview,
 )
 
 
@@ -39,9 +39,7 @@ class ReviewSourceExcerpt(ReviewModel):
 
 
 class ReconstructionPaperContext(ReviewModel):
-    contract: Literal["reconstruction_paper_context"] = (
-        "reconstruction_paper_context"
-    )
+    contract: Literal["reconstruction_paper_context"] = "reconstruction_paper_context"
     paper_id: str
     paper_sha256: str
     claims: List[ContextClaim]
@@ -109,6 +107,7 @@ class ReconstructionSessionPackage(ReviewModel):
     paper_context: ReconstructionPaperContext
     reviewer_spans: List[ReviewSourceExcerpt]
     author_response_spans: List[ReviewSourceExcerpt]
+    speaker_role_audit: dict[str, object] = Field(default_factory=dict)
     instructions: str
 
     @model_validator(mode="after")

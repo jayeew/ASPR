@@ -1,0 +1,13 @@
+{
+  "contract": "gear_evaluator_config_v1",
+  "backend": "codex_cli",
+  "codex_cli": {
+    "executable": "codex",
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "medium",
+    "timeout_seconds": 1800,
+    "sandbox": "read-only"
+  },
+  "openai_compatible": null,
+  "cache_dir": "../../data/gear_cache"
+}

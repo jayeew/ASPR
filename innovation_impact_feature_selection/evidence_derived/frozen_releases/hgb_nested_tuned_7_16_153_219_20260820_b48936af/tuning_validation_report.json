@@ -1,0 +1,12 @@
+{
+  "checkpoint_count": 84,
+  "checks": {
+    "all_84_outer_checkpoints_present": true,
+    "one_primary_inner_search_per_horizon_outer_fold": true,
+    "same_selected_parameter_applied_to_all_four_sets": true,
+    "search_space_hash_matches": true
+  },
+  "contract": "evidence_derived_hgb_nested_tuning_validation_v1",
+  "passed": true,
+  "selection_ledger_count": 21
+}

@@ -1,0 +1,22 @@
+{
+  "contract": "evidence_derived_relaxed_nested_protocol_v1",
+  "counts": {
+    "broad_t0": 219,
+    "expanded": 153,
+    "primary": 16,
+    "strict_training": 7
+  },
+  "excluded_constant_fields": [
+    "EF0118",
+    "EF0304"
+  ],
+  "feature_sets": [
+    "strict",
+    "primary",
+    "expanded",
+    "broad_t0"
+  ],
+  "historical_performance_informed": true,
+  "interpretation": "exploratory_model_development_not_new_confirmatory_selection",
+  "outcome_columns_used": false
+}

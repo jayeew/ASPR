@@ -5,7 +5,8 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-from typing import Any, Callable, List, Mapping, Optional
+from collections.abc import Callable, Mapping
+from typing import Any
 
 from pydantic import ValidationError
 
@@ -38,14 +39,16 @@ source quote identity. Every scientific point must be atomic and cite supplied
 P:S-* paper evidence keys. Major points require evidence. You receive no Graph,
 ASPR-Qwen, prior-art relation, or human-review information. Mark novelty/prior-art
 points external_verification_required=true.
-The novelty judgment must be positive for supporting-only points, negative for
-limiting-only points, mixed for both, and not_discussed for neither.
+Set novelty.verification_status=not_assessed. Judge novelty direction independently;
+use mixed only when material supporting and limiting considerations genuinely
+balance, not merely because both point types are present. Later retrieval may lower
+confidence, but it does not retroactively replace this graph-blind direction.
 """
 
 FORBIDDEN_DECISION_TEXT = re.compile(
-    r"\b(?:accept(?:ed|ance)?|reject(?:ed|ion)?|major revision|minor revision|"
+    r"\b(?:accept(?:ed|ance)?|reject(?:ed)?|major revision|minor revision|"
     r"recommendation|rating|score\s*[=:])\b",
-    re.I,
+    re.IGNORECASE,
 )
 
 
@@ -57,7 +60,7 @@ def build_review_context_pack(
 ) -> ReviewContextPack:
     """Select stable claim/method/result spans without raw review material."""
     span_map = paper_ir.span_map()
-    selected: List[str] = []
+    selected: list[str] = []
     for claim in paper_ir.claims:
         if claim.span_id not in selected:
             selected.append(claim.span_id)
@@ -135,15 +138,15 @@ class CodexCliCritic:
 
     def __init__(
         self,
-        config: Optional[GearConfig] = None,
+        config: GearConfig | None = None,
         *,
-        generator: Optional[Callable[[str, str], Mapping[str, Any]]] = None,
-        client: Optional[JsonModelClient] = None,
+        generator: Callable[[str, str], Mapping[str, Any]] | None = None,
+        client: JsonModelClient | None = None,
     ) -> None:
         self.config = config or load_config()
         self.client = client or build_json_model_client(self.config)
         self.generator = generator
-        self.last_failures: List[str] = []
+        self.last_failures: list[str] = []
         self.model_name = self.config.codex_cli.model
 
     @property
@@ -258,8 +261,8 @@ def stable_point_id(section: str, text: str) -> str:
 
 __all__ = [
     "CODEX_REVIEW_PROMPT",
-    "CodexCliCritic",
     "FORBIDDEN_DECISION_TEXT",
+    "CodexCliCritic",
     "build_review_context_pack",
     "limited_review",
     "stable_point_id",

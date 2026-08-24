@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Dict, List, Literal, Optional, Union
+from typing import Any, Literal
 
 from pydantic import Field, field_validator, model_validator
 
@@ -99,13 +99,14 @@ class GearConfig(StrictModel):
     deprecated_fig4_to_fig10_used: bool = False
     calibration_registry: Path
     calibration_release: str
+    graph_results_path: Path | None = None
     runtime_replay_manifest: Path
     runtime_replay_manifest_sha256: str
-    allowed_asset_roots: List[Path]
-    denied_path_fragments: List[str]
+    allowed_asset_roots: list[Path]
+    denied_path_fragments: list[str]
     model_backend: Literal["codex_cli", "openai_compatible"] = "codex_cli"
     codex_cli: CodexCliEndpoint
-    openai_compatible: Optional[OpenAICompatibleEndpoint] = None
+    openai_compatible: OpenAICompatibleEndpoint | None = None
     aspr_qwen: ASPRQwenConfig = Field(default_factory=ASPRQwenConfig)
     retrieval: RetrievalLimits = Field(default_factory=RetrievalLimits)
     allow_external_retrieval: bool = True
@@ -119,7 +120,7 @@ class GearConfig(StrictModel):
     max_claims: int = 12
 
     @model_validator(mode="after")
-    def selected_model_backend_is_configured(self) -> "GearConfig":
+    def selected_model_backend_is_configured(self) -> GearConfig:
         if self.model_backend == "openai_compatible" and self.openai_compatible is None:
             raise ValueError("openai_compatible configuration is required for API mode")
         return self
@@ -138,7 +139,7 @@ class GearConfig(StrictModel):
             raise ValueError("current_fig1_3_only cannot be disabled")
         return value
 
-    def resolve_path(self, value: Union[Path, str]) -> Path:
+    def resolve_path(self, value: Path | str) -> Path:
         path = Path(value)
         return path if path.is_absolute() else (PROJECT_ROOT / path).resolve()
 
@@ -186,7 +187,7 @@ def _is_relative_to(path: Path, root: Path) -> bool:
     return True
 
 
-def _recursive_update(base: Dict[str, Any], update: Dict[str, Any]) -> Dict[str, Any]:
+def _recursive_update(base: dict[str, Any], update: dict[str, Any]) -> dict[str, Any]:
     result = dict(base)
     for key, value in update.items():
         if isinstance(value, dict) and isinstance(result.get(key), dict):
@@ -197,9 +198,9 @@ def _recursive_update(base: Dict[str, Any], update: Dict[str, Any]) -> Dict[str,
 
 
 def load_config(
-    path: Optional[Path] = None,
+    path: Path | None = None,
     *,
-    overrides: Optional[Dict[str, Any]] = None,
+    overrides: dict[str, Any] | None = None,
     validate_assets: bool = False,
 ) -> GearConfig:
     """Load configuration without touching heavyweight Graph assets by default."""
@@ -267,6 +268,9 @@ def load_config(
     calibration_release = getenv_runtime("ASPR_GEAR_CALIBRATION_RELEASE")
     if calibration_release:
         payload["calibration_release"] = calibration_release
+    graph_results_path = getenv_runtime("ASPR_GEAR_GRAPH_RESULTS_PATH")
+    if graph_results_path:
+        payload["graph_results_path"] = graph_results_path
     qwen_env = {
         "model": "ASPR_QWEN_MODEL",
         "base_url": "ASPR_QWEN_BASE_URL",
@@ -328,8 +332,8 @@ def load_config(
 
 
 __all__ = [
-    "CodexCliEndpoint",
     "ASPRQwenConfig",
+    "CodexCliEndpoint",
     "GearConfig",
     "OpenAICompatibleEndpoint",
     "load_config",

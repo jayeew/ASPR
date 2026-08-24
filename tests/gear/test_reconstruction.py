@@ -15,6 +15,10 @@ from experiments.gear.review_reconstruction.sessions import (
     validate_session_response,
     write_session_handoff,
 )
+from experiments.gear.review_reconstruction.sources import (
+    NatureTransparentReviewParser,
+    SourceKind,
+)
 from gear.review_contracts import (
     NoveltyAssessment,
     NoveltyJudgment,
@@ -92,6 +96,7 @@ def test_role_separation_and_hash_bound_response(sample_md, tmp_path, gear_confi
     )
     assert package.reviewer_spans
     assert package.author_response_spans
+    assert package.speaker_role_audit["status"] == "automated_limited"
     response = _response(package)
     validate_session_response(package, response)
     handoff = write_session_handoff(package, paper_ir, tmp_path / "handoff")
@@ -171,6 +176,58 @@ def test_domain_specific_rejection_term_is_not_decision_language(
         update={"output_sha256": sha256_value(technical.hash_payload())}
     )
     validate_session_response(package, technical)
+
+
+def test_question_after_author_answer_returns_to_reviewer(tmp_path):
+    review = tmp_path / "roles.md"
+    review.write_text(
+        "# Reviewer 1\n\nQ1. Please justify the baseline.\n\n"
+        "A1. We agree and added a baseline.\n\n"
+        "Q2. Please report uncertainty intervals.\n",
+        encoding="utf-8",
+    )
+    spans = NatureTransparentReviewParser().parse("paper", review)
+    kinds = [span.source_kind for span in spans]
+
+    assert kinds == [
+        SourceKind.REVIEWER_REPORT,
+        SourceKind.REVIEWER_REPORT,
+        SourceKind.AUTHOR_RESPONSE,
+        SourceKind.REVIEWER_REPORT,
+    ]
+
+
+def test_generic_reviewer_approval_cannot_support_a_scientific_point(
+    sample_md, tmp_path, gear_config
+):
+    review = tmp_path / "generic.md"
+    review.write_text(
+        "# Reviewer 1\n\nThe authors have addressed my questions and I have no other concerns.",
+        encoding="utf-8",
+    )
+    package, _ = build_reconstruction_package(
+        {"paper_path": str(sample_md), "review_path": str(review)},
+        config=gear_config,
+    )
+    response = _response(package)
+    approval = next(
+        span
+        for span in package.reviewer_spans
+        if "addressed my questions" in span.text.casefold()
+    )
+    trace = response.reference_traces[0].model_copy(
+        update={
+            "reviewer_quote_keys": [approval.source_key],
+            "round_ids": [approval.round_id],
+            "reviewer_id_hashes": [approval.reviewer_id_hash],
+        }
+    )
+    response = response.model_copy(update={"reference_traces": [trace]})
+    response = response.model_copy(
+        update={"output_sha256": sha256_value(response.hash_payload())}
+    )
+    with pytest.raises(ValueError, match="generic reviewer approval"):
+        validate_session_response(package, response)
 
 
 @pytest.mark.parametrize(

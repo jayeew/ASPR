@@ -1,0 +1,207 @@
+{
+  "repair_set_id": "SEED_RECALL_REPAIR_SET_V3_20260730",
+  "source_frame_hash": "918f663a805285254587297fd8cd2750299fd91b01da10c0134b0ae67674dd7a",
+  "source_frame_version": 5,
+  "repairs": [
+    {
+      "repair_id": "SRR001",
+      "logical_query_id": "L0040",
+      "seed_ids": [
+        "WU2019",
+        "WUCHTY2007"
+      ],
+      "domain_terms": [
+        "small teams disrupt",
+        "large teams develop",
+        "dominance of teams",
+        "production of knowledge"
+      ],
+      "object_terms": [
+        "science",
+        "technology",
+        "research",
+        "papers",
+        "knowledge"
+      ],
+      "context_terms": [
+        "disrupt",
+        "develop",
+        "impact",
+        "production"
+      ]
+    },
+    {
+      "repair_id": "SRR002",
+      "logical_query_id": "L0060",
+      "seed_ids": [
+        "GUAN2017"
+      ],
+      "domain_terms": [
+        "collaboration and knowledge networks"
+      ],
+      "object_terms": [
+        "knowledge networks"
+      ],
+      "context_terms": [
+        "citations",
+        "impact"
+      ]
+    },
+    {
+      "repair_id": "SRR003",
+      "logical_query_id": "L0065",
+      "seed_ids": [
+        "JANNOT2013"
+      ],
+      "domain_terms": [
+        "citation bias",
+        "statistically significant studies"
+      ],
+      "object_terms": [
+        "studies",
+        "research"
+      ],
+      "context_terms": [
+        "bias"
+      ]
+    },
+    {
+      "repair_id": "SRR004",
+      "logical_query_id": "L0071",
+      "seed_ids": [
+        "H2VAL_FARSHAD_2013"
+      ],
+      "domain_terms": [
+        "scientific and nonscientific factors",
+        "citation rates"
+      ],
+      "object_terms": [
+        "articles"
+      ],
+      "context_terms": [
+        "factors",
+        "citation"
+      ]
+    },
+    {
+      "repair_id": "SRR005",
+      "logical_query_id": "L0086",
+      "seed_ids": [
+        "DAVIS2011_OA"
+      ],
+      "domain_terms": [
+        "open access publishing",
+        "readership"
+      ],
+      "object_terms": [
+        "journal publishing",
+        "articles",
+        "journal"
+      ],
+      "context_terms": [
+        "readership",
+        "citations"
+      ]
+    },
+    {
+      "repair_id": "SRR006",
+      "logical_query_id": "L0143",
+      "seed_ids": [
+        "STIRLING2007"
+      ],
+      "domain_terms": [
+        "framework for analysing diversity",
+        "scientific and technological diversity"
+      ],
+      "object_terms": [
+        "science",
+        "research"
+      ],
+      "context_terms": [
+        "framework",
+        "analysis",
+        "diversity"
+      ]
+    },
+    {
+      "repair_id": "SRR007",
+      "logical_query_id": "L0154",
+      "seed_ids": [
+        "LEYDESDORFF2019"
+      ],
+      "domain_terms": [
+        "Rao-Stirling diversity",
+        "relative variety",
+        "Gini coefficient"
+      ],
+      "object_terms": [
+        "journal",
+        "journals"
+      ],
+      "context_terms": [
+        "measurement",
+        "diversity"
+      ]
+    },
+    {
+      "repair_id": "SRR008",
+      "logical_query_id": "L0163",
+      "seed_ids": [
+        "UZZI2013"
+      ],
+      "domain_terms": [
+        "atypical combinations",
+        "unusual combinations"
+      ],
+      "object_terms": [
+        "papers",
+        "science"
+      ],
+      "context_terms": [
+        "impact",
+        "innovativeness",
+        "novelty"
+      ]
+    },
+    {
+      "repair_id": "SRR009",
+      "logical_query_id": "L0182",
+      "seed_ids": [
+        "BORNMANN2019_NOVELTY_VALIDATION"
+      ],
+      "domain_terms": [
+        "bibliometric novelty indicators",
+        "unusual combinations of cited references"
+      ],
+      "object_terms": [
+        "study"
+      ],
+      "context_terms": [
+        "validation",
+        "indicator",
+        "measure"
+      ]
+    },
+    {
+      "repair_id": "SRR010",
+      "logical_query_id": "L0333",
+      "seed_ids": [
+        "LETCHFORD2016_ABSTRACT"
+      ],
+      "domain_terms": [
+        "simple paper abstracts",
+        "paper abstracts"
+      ],
+      "object_terms": [
+        "papers",
+        "abstract",
+        "abstracts"
+      ],
+      "context_terms": [
+        "citations",
+        "impact",
+        "advantage"
+      ]
+    }
+  ]
+}

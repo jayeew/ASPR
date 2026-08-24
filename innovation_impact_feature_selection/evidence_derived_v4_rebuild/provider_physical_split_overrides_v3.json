@@ -1,0 +1,30 @@
+{
+  "amendment_id": "PROVIDER_PHYSICAL_SPLIT_OPENALEX_500_V3",
+  "created_at": "2026-07-30T03:36:00Z",
+  "maximum_physical_expression_length": 1000,
+  "observed_failures": [
+    {
+      "attempt_count": 2,
+      "error": "HTTPError status=500",
+      "physical_query_id": "L0024__P001"
+    },
+    {
+      "attempt_count": 2,
+      "error": "HTTPError status=500",
+      "physical_query_id": "L0030__P002"
+    },
+    {
+      "attempt_count": 2,
+      "error": "HTTPError status=500",
+      "physical_query_id": "L0083__P001"
+    },
+    {
+      "attempt_count": 2,
+      "error": "HTTPError status=500",
+      "physical_query_id": "L0273__P001"
+    }
+  ],
+  "rationale": "Four long OpenAlex search requests repeatedly returned provider HTTP 500 responses. Re-splitting only their parent logical queries changes API request packaging but preserves the exact logical term union, object block, context block, filters, and PRESS-reviewed semantics.",
+  "source_frame_hash": "eaffdd426d80e0eb1631f35b32026812140ca982d46b1ea41d2af602ee5a562a",
+  "source_frame_version": 3
+}

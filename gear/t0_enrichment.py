@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import date
+from time import sleep
 from typing import Any, Dict, Iterable, Optional, Tuple
 from urllib.parse import quote
 
@@ -145,7 +146,7 @@ class OpenAlexT0Enricher:
                 "select": "id,publication_year,primary_topic",
                 **self._key_params(),
             }
-            response = requests.get(
+            response = self._get(
                 self.base_url,
                 params=params,
                 headers={
@@ -173,7 +174,7 @@ class OpenAlexT0Enricher:
 
     def _fetch_one(self, identifier: str) -> Dict[str, Any]:
         suffix = quote(str(identifier), safe=":/")
-        response = requests.get(
+        response = self._get(
             f"{self.base_url}/{suffix}",
             params=self._key_params(),
             headers={"Accept": "application/json", "Accept-Encoding": "gzip, deflate"},
@@ -184,6 +185,20 @@ class OpenAlexT0Enricher:
         response.raise_for_status()
         payload = response.json()
         return payload if isinstance(payload, dict) else {}
+
+    def _get(self, url: str, **kwargs: Any) -> requests.Response:
+        """Retry transient transport failures without relaxing exact identity rules."""
+        last_error: Optional[requests.RequestException] = None
+        for attempt in range(3):
+            try:
+                return requests.get(url, **kwargs)
+            except requests.RequestException as exc:
+                last_error = exc
+                if attempt < 2:
+                    sleep(1 + attempt)
+        if last_error is None:
+            raise RuntimeError("OpenAlex request did not execute")
+        raise last_error
 
     def _key_params(self) -> Dict[str, str]:
         return {"api_key": self.api_key} if self.api_key else {}

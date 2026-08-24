@@ -1,0 +1,20 @@
+{
+  "amendment_id": "v3_coverage_floor_v4",
+  "effective_date": "2026-08-19",
+  "status": "active",
+  "purpose": "Prevent an under-retrieved v4 census from being frozen merely because the first legal-open-fulltext route was narrow, without reintroducing v3's label-to-proxy duplication as if it were independent source evidence.",
+  "historical_comparator": {
+    "artifact": "outputs/v3_coverage_anchor/complete_indicator_library_v3.csv",
+    "indicator_family_count": 432,
+    "candidate_dimension_count": 66,
+    "role": "mandatory discovery-coverage benchmark; never formula, operationalization, or selection authority"
+  },
+  "rules": {
+    "discovery_coverage_floor": "Before dimensions or feature decisions can be frozen, all 432 historical discovery labels must receive a material v4 reconciliation. A historical label may seed discovery but cannot itself become a v4 family without a new English source record and a recorded evidence status.",
+    "dimension_coverage_floor": "Before dimensions can be frozen, all 66 historical dimension labels must be reconciled through their member labels. A lower number of v4 canonical dimensions is allowed only for a documented H2-approved many-to-one merge showing the same construct, role, information source, and T0 boundary.",
+    "coverage_dispositions": "All 432 comparator labels must have an auditable final reconciliation: recovered_v4_family, documented_merge, h2_scope_exclusion, or unresolved_source_gap. An unresolved gap blocks final selection and training freeze.",
+    "selection_interpretation": "This is a coverage-completeness condition, not a numerical quota for canonical families or dimensions. Final selected features and retained formal dimensions follow the published T0, formula, provenance, data, and non-constant gates; they are never padded to a historical count.",
+    "prohibited_shortcut": "Do not copy v3 labels, formulas, feature membership, pattern-matched proxies, or lexical surrogates into v4 as if they were new source evidence. Do not use model performance to satisfy a floor."
+  },
+  "freeze_effect": "The current 9-family/1-dimension intermediate branch remains invalidated. No complete_indicator_library.csv, candidate_dimensions.csv, feature_gate_decisions.csv, feature matrix, HGB model, or OOF output may be frozen until this amendment's coverage gate passes."
+}

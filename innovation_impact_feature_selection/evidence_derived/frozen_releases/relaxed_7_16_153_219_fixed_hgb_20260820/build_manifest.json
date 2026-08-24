@@ -1,0 +1,26 @@
+{
+  "artifacts": {
+    "audit_report.md": "796af1d4e5577b1951d20c07e5eb50577150f641dd8aa06883635b21ea8a73ff",
+    "feature_lineage_219.csv": "5dce537d42ef62576478bc8ed63c4126acb8d6dc59433ca35adf84db58606fdb",
+    "final_feature_sets.json": "2e8c9fc2aa1d7556e108ca4520f3ae56643accd5754a367d122fa16f52c42112",
+    "final_training_features_broad_t0.parquet": "9a4e9b3653857c4594c7e16675ca45945181da0b1636fa6e598ddc639cb083bd",
+    "final_training_features_expanded.parquet": "a709862e47f38740bdfce0999a9a3599f182df6554c033983eda2d995c8e9127",
+    "final_training_features_primary.parquet": "8da0fb900f5007bb0eb6cc6a34e138cfe9f6c414b154dc9107a3976c0d13d5c6",
+    "final_training_features_strict.parquet": "c69b8b0ed592e941f1246e76cedd5a183a631fb2be7e0dfcf62643ba81912583",
+    "hgb_uncapped_v2.json": "ae3a676df4f9417b76768a9f802803a10ae4e138ccffc4d34c2a201d449b4361",
+    "relaxed_protocol.json": "9d46d79caa1cfcfd6b3cb651ced29a1699fcd38fb9f74099a40b99d08c5daf15",
+    "training_matrix_manifest.json": "2a1be5cc27f46d9e777ccae3f1f69b0ae043cb35c18572e6313fea3ab9025ac5"
+  },
+  "contract": "relaxed_7_16_153_219_build_v1",
+  "counts": {
+    "broad_t0": 219,
+    "expanded": 153,
+    "primary": 16,
+    "strict_training": 7
+  },
+  "freeze_hash": "a57347c4cf654774235b3f6c70e3d585b782291f7a3364f2d7b60bac1b343509",
+  "output": "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived/experiments/relaxed_7_16_153_219_20260820",
+  "protocol_hash": "628efb7d581e3d3e03b8791f576b858d49b3048f5d57fba1b875ee35d92e5dad",
+  "row_count": 411490,
+  "source_sha256": "93969f7f7684014e9006816de212d469f042d5699f62b3be454d054fe2f23887"
+}

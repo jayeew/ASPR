@@ -1,0 +1,171 @@
+{
+  "schema_version": "3.4.0",
+  "protocol_id": "aspr-evidence-derived-innovation-impact-v3-2026-07-28",
+  "cutoff_date": "2026-07-28",
+  "from_date": null,
+  "date_policy": "No lower publication-date limit is imposed; only the frozen cutoff date is applied.",
+  "language": "en",
+  "language_policy": "English publications only; non-English records remain in the retrieval denominator and are excluded with E_LANGUAGE_NON_ENGLISH.",
+  "work_types": [
+    "article",
+    "review"
+  ],
+  "objective": "Derive publication-time scientific-paper innovation and potential-impact feature dimensions and indicators without preset dimension, query, or indicator counts.",
+  "count_symbols": {
+    "K": "non-redundant evidence-derived search concept domains",
+    "Q": "non-redundant logical query families",
+    "P": "provider-executable physical queries",
+    "M": "candidate model dimensions derived from canonical indicator families",
+    "D": "formally retained predictive dimensions",
+    "F": "finally retained indicator families"
+  },
+  "count_rule": "K, Q, P, M, D, and F are outputs. No numeric quota or equal allocation per domain is permitted.",
+  "maximum_information_time": "publication time T0",
+  "excluded_predictor_information": [
+    "post-publication citations",
+    "post-publication altmetrics",
+    "future disruption",
+    "future diffusion",
+    "future attention",
+    "outcome-based feature admission"
+  ],
+  "providers": {
+    "OpenAlex": "deterministic stratified evidence-saturation discovery, seed validation, and citation chaining",
+    "Crossref": "DOI and bibliographic validation only"
+  },
+  "retrieval_design": {
+    "bootstrap": "deterministic sequential stratified sampling under saturation_protocol_v3.json",
+    "formal": "deterministic sequential stratified sampling plus complete seed and citation-network retrieval until dual novelty saturation",
+    "claim_boundary": "This is a saturation-based systematic evidence map, not an exhaustive census of every broad-query hit.",
+    "top_k_prohibited": true,
+    "relevance_rank_cutoff_prohibited": true,
+    "h2_required_to_stop": true
+  },
+  "crossref_validation": {
+    "normalized_title_similarity_threshold": 0.85,
+    "year_rule": "A year difference is retained as validated_date_variant when the DOI endpoint, normalized title similarity >=0.85, and document type all agree; it is an identity conflict only when DOI, title, or type also conflicts",
+    "type_rule": "OpenAlex article maps to Crossref journal-article or proceedings-article; OpenAlex review maps to journal-article",
+    "effect": "Only DOI/title/type identity conflicts and provider errors create a human queue; date variants remain explicit but do not exclude a record",
+    "network_concurrency": "At most four Crossref DOI metadata requests run concurrently; assessments are persisted by the main thread in frozen record order.",
+    "optional_polite_pool_contact": "CROSSREF_MAILTO environment variable; never persisted",
+    "resume_rule": "Each record commits independently; validated, resolved, and queued-conflict records are not fetched again"
+  },
+  "open_fulltext_acquisition": {
+    "eligibility": "The OpenAlex location must explicitly report is_oa=true and expose a public HTTP(S) PDF URL",
+    "location_refresh": "Only finally included English sources receive a resumable primary/best/all-location refresh; key values are never persisted",
+    "automation_boundary": "Acquisition prepares and hashes candidate evidence only; it cannot verify English language, formulas, construct validity, or final inclusion",
+    "safety": "Downloads are bounded, must have a PDF signature, are written atomically, and record final URL, content type, access statement, byte count, and SHA-256",
+    "content_verification": "A verified UTF-8/PDF evidence file must contain both the normalized English construct/formula evidence span and the recorded author/affiliation evidence span; a reproducible formula must identify a page, table, equation, appendix, or section",
+    "resume_rule": "A downloaded candidate is skipped only when its URL, local file, and SHA-256 still agree; failed attempts require an explicit retry"
+  },
+  "indicator_review_provenance": {
+    "h1_boundary": "H1 source dispositions and mention payloads are stored as independent blind review records before any H2 adjudication can be imported",
+    "h2_boundary": "H2 may adjudicate only an existing H1 source review and H1 mention identity; H2 decisions are stored separately and then resolve the operational mention row",
+    "immutability": "An H1 review cannot be overwritten after its H2 adjudication exists; source CSV snapshots and normalized per-role records are both retained",
+    "citation_boundary": "Indicator sources enter citation tracking only after a separate H2 source review"
+  },
+  "redundancy_selection": {
+    "ordering": "frozen source-role priority, closed-vocabulary evidence strength, audited data readiness, evidenced 0-1 stability score, deterministic feature ID",
+    "priority_source": "screening_rules_v3.json selection_priority_by_source_role; reviewers cannot choose another numeric value",
+    "stability_provenance": "Every stability score requires a stability_basis describing the source/audit statistic and normalization; absent quantitative evidence is zero"
+  },
+  "bootstrap": {
+    "domain_agnostic": true,
+    "development_seed_source": "../expanded_review_v2/outputs/literature_evidence_v2.json",
+    "development_seed_term_policy": "Metric phrases copied from v2 formula_authorization are development_seed_hint records only; they may expand synonyms but cannot independently establish a domain or logical query. Authorizing development-seed terms must be re-extracted verbatim from a hydrated English title or abstract.",
+    "pilot_source": "../expanded_review_v2/outputs/expanded_search.sqlite3",
+    "pilot_role": "supplementary term discovery only",
+    "object_terms": [
+      "paper",
+      "article",
+      "publication",
+      "scientific work"
+    ],
+    "target_terms": [
+      "novelty",
+      "innovation",
+      "potential impact",
+      "citation impact",
+      "research quality",
+      "scientific influence"
+    ],
+    "evidence_terms": [
+      "measure",
+      "indicator",
+      "metric",
+      "feature",
+      "predictor",
+      "determinant",
+      "validation",
+      "review"
+    ]
+  },
+  "reviewers": {
+    "primary_roles": [
+      "AI",
+      "H1"
+    ],
+    "adjudicator_role": "H2",
+    "h2_required_for": [
+      "all AI-H1 disagreements",
+      "all included and uncertain literature records",
+      "a DOI-hash deterministic 10 percent sample of concordant exclusions",
+      "all search-domain merge and split decisions",
+      "all candidate-dimension merge and split decisions",
+      "all final indicators"
+    ],
+    "agreement_metrics": [
+      "raw agreement",
+      "Cohen kappa",
+      "Gwet AC1"
+    ],
+    "import_enforcement": "Each screening, term-coding, and dimension-coding import contains exactly one reviewer role; H2 is rejected until AI and H1 records exist, and primary records cannot be overwritten after H2 adjudication",
+    "human_authorship_policy": "H1 and H2 decisions require human review and adoption. A worksheet that originated as an automated draft is admissible only when the project owner explicitly attests that a human reviewed and adopted the exact hashed file; the import snapshot is then labelled review_import_human_attested_automated_draft. Such a file is treated as an H1/H2 decision but is not described as an originally manual or independently generated blind draft. Unreviewed automated H1/H2 files remain invalid. Human-task regeneration refuses to overwrite nonblank work, and imports reject the quarantine path and registered hashes of invalidated unreviewed artifacts.",
+    "human_review_attestation": "HUMAN_REVIEW_ATTESTATION_20260729.json",
+    "agreement_reporting_boundary": "Agreement involving an attested human-reviewed automated draft may be calculated for workflow reconciliation, but must be labelled as concordance with the adopted reviewed draft and cannot substantiate independent blind manual generation."
+  },
+  "formal_search_frame_gates": [
+    "all active raw terms have a final coded disposition",
+    "every retained domain and logical query family has at least one directly source-verified evidence term; v2 pilot terms and development_seed_hint terms cannot independently authorize either",
+    "at least one eligible English H2-supplied hidden validation seed is registered",
+    "H2 completes an independent review search plus backward and forward citation tracking, and the union of all route-level eligible DOI lists exactly equals the imported eligible English hidden-validation seed set",
+    "all indexable English development and validation seeds are recalled or have a documented provider-level non-indexability reason",
+    "every active logical query family passes PRESS review by H2",
+    "zero-hit and logically redundant query families are archived with reasons",
+    "all physical queries map to a logical query family"
+  ],
+  "formal_completion_gates": [
+    "all frozen deterministic discovery batches selected before the H2-approved stopping round are completely retrieved",
+    "every retrieved record has a final screening disposition",
+    "all screening disagreements and H2 audit records are complete",
+    "all selected indicators have verified English full-text formula evidence with lawful source/access metadata and a frozen evidence-file SHA-256",
+    "H1 dispositions every included source and extracts indicator mentions; H2 reviews every source disposition and approves or excludes every retained mention",
+    "all selected indicators pass every hard gate",
+    "each retained predictive dimension has at least one selected indicator and support from two H2-verified normalized research-group identities whose author or affiliation evidence spans occur in frozen English full texts",
+    "H2 has separately approved at least three consecutive fully reviewed dual-zero rounds in the search-frame discovery phase and, after K/Q/P retrieval, in the formal indicator-discovery phase",
+    "all counts and source files have frozen hashes"
+  ],
+  "literature_exclusion_reasons": {
+    "E_LANGUAGE_NON_ENGLISH": "Non-English title, abstract, or required full text",
+    "E_NOT_PAPER_LEVEL_INNOVATION_OR_POTENTIAL_IMPACT": "Does not study article-level innovation or potential scholarly impact",
+    "E_FUTURE_OUTCOME_ONLY": "Discusses only post-publication outcomes without T0 predictors",
+    "E_NOT_ARTICLE_LEVEL": "Unit of analysis is not an individual scientific paper",
+    "E_NOT_INDICATOR_PREDICTOR_VALIDATION": "No indicator, predictor, determinant, definition, or validation evidence",
+    "E_DUPLICATE": "Duplicate record under DOI, OpenAlex ID, or normalized title-year identity",
+    "E_INSUFFICIENT_METADATA": "Title and abstract are insufficient for an eligibility decision"
+  },
+  "standards": [
+    {
+      "name": "PRISMA-S",
+      "doi": "10.1186/s13643-020-01542-z"
+    },
+    {
+      "name": "PRESS 2015",
+      "doi": "10.1016/j.jclinepi.2016.01.021"
+    },
+    {
+      "name": "Cochrane Handbook Chapter 4",
+      "url": "https://www.cochrane.org/authors/handbooks-and-manuals/handbook/current/chapter-04"
+    }
+  ]
+}

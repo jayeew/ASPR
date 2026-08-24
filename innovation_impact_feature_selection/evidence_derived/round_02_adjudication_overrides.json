@@ -1,0 +1,17 @@
+{
+  "doi:10.4187/respcare.08530510": ["exclude", "E_WRONG_DOCUMENT_TYPE", "The record is a book notice and lacks an abstract establishing eligible paper-level evidence."],
+  "doi:10.1016/j.joi.2007.04.001": ["include", "", "This is a directly relevant critical review of open-access status and paper-level citation impact; citation impact is retained as an outcome or validation construct, not a T0 input."],
+  "doi:10.1097/01258363-200709000-00007": ["exclude", "E_NOT_INNOVATION_OR_T0_IMPACT", "The record critiques a clinical review about birth settings and does not study paper-level scientific innovation, research quality, or scholarly impact."],
+  "doi:10.1371/journal.pone.0126938": ["exclude", "E_NOT_PAPER_LEVEL", "The unit being predicted is a grant application evaluated by NIH peer review, not an individual scientific paper."],
+  "doi:10.1126/science.aal4217": ["include", "", "The review maps data-driven prediction problems and indicators in the science of science and is eligible as search-frame and predictor-discovery evidence."],
+  "doi:10.1108/ajim-09-2016-0159": ["exclude", "E_NOT_INNOVATION_OR_T0_IMPACT", "The outcome is compliance with journal data-sharing mandates, not paper-level innovation potential, research quality, or scholarly impact."],
+  "doi:10.1186/1472-6947-12-33": ["exclude", "E_NOT_INNOVATION_OR_T0_IMPACT", "The model prioritizes records for systematic-review updating; this operational relevance outcome is outside the target constructs."],
+  "doi:10.1103/physrevresearch.2.013181": ["exclude", "E_FUTURE_OUTCOME_ONLY", "The record measures cumulative post-publication knowledge spreading in citation networks without establishing a publication-time paper indicator."],
+  "doi:10.1016/j.patrec.2021.07.009": ["include", "", "The study predicts paper-level citation impact from textual features; the text is available at publication and later citations are treated only as the outcome."],
+  "doi:10.1001/jama.270.17.2096": ["include", "", "The article supplies paper-level critical-appraisal guidance and is eligible as research-quality construct and indicator-discovery evidence despite truncated metadata."],
+  "doi:10.1016/j.respol.2016.11.004": ["uncertain", "E_INSUFFICIENT_METADATA", "The title is directly relevant to citation-impact determinants, but the missing abstract prevents verification of unit, predictors, and timing."],
+  "doi:10.1016/j.respol.2017.06.006": ["uncertain", "E_INSUFFICIENT_METADATA", "The title is directly relevant to novelty indicators and bias, but the missing abstract prevents verification of the empirical evidence and operational definitions."],
+  "doi:10.1007/s11192-024-04973-w": ["exclude", "E_NOT_PAPER_LEVEL", "The study concerns country-level political tensions and aggregate scientific productivity or knowledge combinations rather than a paper-level construct."],
+  "doi:10.3310/hta2130": ["exclude", "E_NOT_INNOVATION_OR_T0_IMPACT", "The review addresses study-design choice for treatment-effect evidence and does not establish the target paper-level innovation or impact constructs."
+  ]
+}

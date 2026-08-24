@@ -1,0 +1,20 @@
+{
+  "schema_version": "4.0.0",
+  "amendment_id": "aspr-v4-search-frame-round15-pragmatic-stop-20260819",
+  "status": "approved",
+  "approved_at": "2026-08-19T06:15:00+08:00",
+  "approved_by": "project_owner",
+  "scope": "search_frame_discovery",
+  "terminal_iteration": 15,
+  "original_stop_rule": "three consecutive H2-approved rounds with zero new non-redundant English term families and zero new canonical indicator families",
+  "replacement_stop_basis": "retrospective_owner_pragmatic_stop",
+  "reason": "The project owner extended the initial twelve-round operational cap to round fifteen and then designated the expanded cap as terminal because further deterministic bootstrap batches had diminishing marginal value.",
+  "reporting_requirement": "Report this as a retrospective protocol deviation and retain computed round-15 endpoint counts. Do not describe the stopping result as dual-zero unless the adjudicated database counts are in fact both zero.",
+  "integrity_guards": {
+    "actual_endpoint_counts_must_be_retained": true,
+    "dual_zero_claim_requires_computed_dual_zero": true,
+    "protocol_deviation_must_be_disclosed": true,
+    "round12_decisions_must_not_be_changed_to_create_zero": true,
+    "later_search_frame_discovery_rounds_must_not_be_started": true
+  }
+}

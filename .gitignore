@@ -16,8 +16,11 @@ __pycache__/
 data/knowledge_corpus/
 outputs/
 data/gear_cache/
+data/cache/
 data/calibration/releases/
 data/calibration/runtime_replay/fulltext16_v3/
+# Large, reproducible frozen-release result matrices remain local artifacts.
+innovation_impact_feature_selection/evidence_derived/frozen_releases/**/*.parquet
 outputs/gear/runs/
 data/gear_peer_review_benchmark_v1/
 outputs/gear/review_alignment/

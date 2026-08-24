@@ -143,7 +143,10 @@ def build_blind_match_package(
         instructions=(
             "Blindly label each candidate pair SAME_POINT, PARTIAL_POINT, "
             "CONTRADICTORY, or NO_MATCH. SAME_POINT requires the same atomic "
-            "scientific proposition and direction; style overlap is insufficient."
+            "scientific proposition and direction; style overlap is insufficient. "
+            "PARTIAL_POINT means the same actionable scientific concern with "
+            "different granularity, boundary, or evidence scope; identical wording "
+            "is not required."
         ),
     )
 

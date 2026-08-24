@@ -13,9 +13,9 @@ from collections import Counter
 from collections.abc import Sequence
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Literal
+from typing import Any, Literal, cast
 
-from pydantic import Field, model_validator
+from pydantic import Field, ValidationError, model_validator
 from scipy.optimize import linear_sum_assignment
 
 from experiments.gear.review_reconstruction.contracts import (
@@ -41,7 +41,8 @@ BLIND_JUDGE_PROMPT = (
     "You are a blinded scientific-review evaluator. Compare every listed L/R pair. "
     "SAME_POINT means the same atomic proposition and direction; PARTIAL_POINT means "
     "a material overlap; CONTRADICTORY means opposite direction; otherwise NO_MATCH. "
-    "Return every pair exactly once. Do not infer source identity or use writing style."
+    "The pairs array is exhaustive: return every listed pair exactly once and no other "
+    "pair. Do not infer source identity or use writing style."
 )
 
 
@@ -205,6 +206,11 @@ def agent_availability(case: RevisionAuditCase) -> dict[str, Any]:
     if missing:
         return result
     try:
+        raw_bundle = json.loads((run / "review_bundle.json").read_text(encoding="utf-8"))
+        if raw_bundle.get("schema_revision") != "evidence_state_delta_v2":
+            result["schema_revision"] = raw_bundle.get("schema_revision")
+            result["rejection_reason"] = "unsupported_schema_revision"
+            return result
         review = StructuredReview.model_validate_json(
             (run / "review.json").read_text(encoding="utf-8")
         )
@@ -340,13 +346,18 @@ def build_blind_package(
     kind: str,
     chunk: int,
 ) -> dict[str, Any]:
-    pairs = [(a.point_id, b.point_id) for a in left for b in right]
-    size = 48
-    selected = pairs[chunk * size : (chunk + 1) * size]
-    if not selected:
+    if not right:
+        raise ValueError("blind package requires at least one right-side point")
+    left_per_chunk = max(1, 48 // len(right))
+    start = chunk * left_per_chunk
+    selected_left = list(left[start : start + left_per_chunk])
+    if not selected_left:
         raise ValueError("blind package chunk has no pairs")
-    left_ids = {item[0] for item in selected}
-    right_ids = {item[1] for item in selected}
+    selected = [
+        (row.point_id, column.point_id) for row in selected_left for column in right
+    ]
+    left_ids = {point.point_id for point in selected_left}
+    right_ids = {point.point_id for point in right}
     identity = sha256_value(
         {
             "paper": case.paper_id,
@@ -389,6 +400,14 @@ def build_blind_package(
     }
 
 
+def blind_package_count(left_count: int, right_count: int) -> int:
+    """Return complete rectangular blinded-comparison package count."""
+    if left_count <= 0 or right_count <= 0:
+        return 0
+    left_per_chunk = max(1, 48 // right_count)
+    return (left_count + left_per_chunk - 1) // left_per_chunk
+
+
 def judge_package(package: dict[str, Any], config: GearConfig) -> dict[str, Any]:
     client = build_json_model_client(config)
     schema = BlindJudgeResponse.model_json_schema()
@@ -396,14 +415,31 @@ def judge_package(package: dict[str, Any], config: GearConfig) -> dict[str, Any]
         key: package[key]
         for key in ("task_id", "paper_id_hash", "kind", "left", "right", "pairs")
     }
-    payload = client.generate_json(
-        system=BLIND_JUDGE_PROMPT,
-        user=json.dumps(public, ensure_ascii=False),
-        response_schema=schema,
-    )
-    payload["task_id"] = package["task_id"]
-    payload["model_id"] = client.model_name
-    response = BlindJudgeResponse.model_validate(payload)
+    response: BlindJudgeResponse | None = None
+    last_error: ValidationError | ValueError | TypeError | None = None
+    for attempt in range(2):
+        system = BLIND_JUDGE_PROMPT
+        if attempt:
+            system += (
+                " The prior response was invalid. Return the requested decisions "
+                "object, not a JSON Schema or explanation."
+            )
+        try:
+            payload = client.generate_json(
+                system=system,
+                user=json.dumps(public, ensure_ascii=False),
+                response_schema=schema,
+            )
+            payload["task_id"] = package["task_id"]
+            payload["model_id"] = client.model_name
+            response = BlindJudgeResponse.model_validate(payload)
+            break
+        except (ValidationError, ValueError, TypeError) as exc:
+            last_error = exc
+    if response is None:
+        raise ValueError(
+            f"blind judge returned no valid decision response: {last_error}"
+        )
     observed = {(row.left_id, row.right_id) for row in response.decisions}
     expected = {tuple(pair) for pair in package["pairs"]}
     if observed != expected or len(observed) != len(response.decisions):
@@ -573,7 +609,10 @@ def _point_from_review(point: ReviewPoint, section: str, **kwargs: Any) -> Audit
 def _blind_point(point: AuditPoint, blind_id: str) -> dict[str, Any]:
     return BlindPoint(
         blind_id=blind_id,
-        section=point.section,
+        section=cast(
+            Literal["novelty", "strengths", "weaknesses", "questions", "resolved"],
+            point.section,
+        ),
         aspect=point.aspect,
         severity=point.severity,
         text=point.text,
@@ -649,8 +688,8 @@ def _prf(matched: float, candidate: int, reference: int) -> dict[str, float | No
 
 
 __all__ = [
-    "PILOT_IDS",
     "BLIND_JUDGE_PROMPT",
+    "PILOT_IDS",
     "RevisionAuditCase",
     "RevisionAuditManifest",
     "agent_availability",

@@ -1,0 +1,12 @@
+{
+  "doi:10.1016/j.joi.2010.03.002": ["include", "", "The SJR venue-prestige indicator is observable at publication and can be attached to an individual paper as a T0 visibility or control feature."],
+  "doi:10.29173/istl2512": ["include", "", "The annotated bibliography directly synthesizes evidence on article open-access status and citation impact and is eligible for search and indicator discovery."],
+  "doi:10.1186/s13063-015-0918-4": ["include", "", "The article defines trial-design characteristics observable by publication and is eligible as paper-level method and evidence-strength guidance."],
+  "doi:10.1111/1467-8489.12216": ["exclude", "E_NOT_PAPER_LEVEL", "The outcome is disciplinary labor-market return to research quality rather than a construct predicted for an individual paper."],
+  "doi:10.1080/1743727x.2016.1146668": ["include", "", "The paper proposes systematic-review characteristics intended to improve later policy uptake, supplying eligible T0 paper-feature and impact evidence."],
+  "doi:10.1258/jrsm.2011.110005": ["include", "", "The systematic review inventories research-performance indicators and their measurement properties, making it eligible for broad indicator discovery even if some indicators use aggregate units."],
+  "doi:10.17528/cifor/004382": ["exclude", "E_WRONG_DOCUMENT_TYPE", "This is a systematic-review protocol without completed indicator synthesis or validation results."],
+  "doi:10.15291/pubmet.3953": ["include", "", "The study measures linguistic and semantic characteristics of individual articles and peer-review reports and relates them to review outcomes."],
+  "doi:10.1371/journal.pone.0316890": ["include", "", "The analysis links publication-time coauthor diversity characteristics of individual papers to article impact outcomes."
+  ]
+}

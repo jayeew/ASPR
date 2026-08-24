@@ -49,23 +49,15 @@ def test_contract_rejects_recommendation_and_extra_fields():
         StructuredReview.model_validate(payload)
 
 
-def test_novelty_four_state_is_derived_from_points():
+def test_novelty_direction_is_independent_from_verification_points():
     support = _point(0, aspect=ReviewAspect.NOVELTY_PRIOR_ART)
     limit = _point(1, aspect=ReviewAspect.NOVELTY_PRIOR_ART)
-    with pytest.raises(ValidationError):
-        NoveltyAssessment(
-            judgment=NoveltyJudgment.POSITIVE,
-            supporting_points=[support],
-            limiting_points=[limit],
-        )
-    assert (
-        NoveltyAssessment(
-            judgment=NoveltyJudgment.MIXED,
-            supporting_points=[support],
-            limiting_points=[limit],
-        ).judgment
-        == NoveltyJudgment.MIXED
+    assessment = NoveltyAssessment(
+        judgment=NoveltyJudgment.POSITIVE,
+        supporting_points=[support],
+        limiting_points=[limit],
     )
+    assert assessment.judgment == NoveltyJudgment.POSITIVE
 
 
 def test_contract_enforces_point_and_word_limits():

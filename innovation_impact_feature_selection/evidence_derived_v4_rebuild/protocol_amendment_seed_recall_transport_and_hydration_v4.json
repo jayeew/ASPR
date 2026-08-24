@@ -1,0 +1,19 @@
+{
+  "amendment_id": "aspr-v4-seed-recall-transport-hydration-20260819",
+  "status": "approved",
+  "approved_by": "project_owner",
+  "scope": "implementation_reproducibility",
+  "authorized_old_source_ids": [
+    "code_providers_v4",
+    "code_coding_v4",
+    "code_pipeline_v4"
+  ],
+  "original_hashes_retained": true,
+  "reason": "Retry transient OpenAlex transport disconnects and persist the already-disclosed, indexable H2 validation-seed metadata for auditable query-term recall repair. Neither change alters inclusion criteria, term decisions, dimensions, indicators, nor the existing search-frame results.",
+  "constraints": [
+    "Hydration creates no query hit and cannot satisfy a missed-query recall check.",
+    "Repair terms require independent review and H2 adjudication before import.",
+    "Future citations and other post-publication outcomes remain ineligible as T0 features."
+  ],
+  "approved_at": "2026-08-19T05:15:00+00:00"
+}

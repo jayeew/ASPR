@@ -50,3 +50,18 @@ def test_pdf_is_adapted_to_markdown(gear_config, sample_pdf):
     assert paper.source_format == "pdf"
     assert "<!-- GEAR_PAGE: 1 -->" in paper.markdown
     assert len(paper.pages) == 2
+
+
+def test_heading_with_trailing_space_creates_real_section_path():
+    from gear.contracts import PageText
+    from gear.paper_compiler import segment_pages
+
+    page = PageText(
+        page=1,
+        text="## Results \n\nThe experiment improves accuracy against the baseline.",
+    )
+    spans = segment_pages([page], "source")
+
+    result = next(span for span in spans if span.text.startswith("The experiment"))
+    assert result.section_path == ["Results"]
+    assert page.text[result.char_start : result.char_end] == result.text

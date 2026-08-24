@@ -1,0 +1,11 @@
+{
+  "doi:10.1007/s11245-019-09667-0": ["include", "", "The article directly identifies alignment between research and statistical hypotheses as a paper-level research-validity criterion and is eligible for construct and indicator discovery."],
+  "doi:10.1016/j.joi.2013.11.005": ["exclude", "E_FUTURE_OUTCOME_ONLY", "The proposed prediction explicitly depends on citation-impact percentiles observed after publication and does not establish an eligible T0 input."],
+  "doi:10.1136/bmj.c221": ["include", "", "The article provides paper-level rationale, conduct, and reporting criteria for individual-participant-data meta-analyses and is eligible as research-quality guidance."],
+  "doi:10.1007/s11192-021-03888-0": ["include", "", "This meta-analysis directly evaluates paper-level collaboration as a publication-time predictor of later citation impact."],
+  "doi:10.1007/s11192-017-2583-8": ["include", "", "The title directly identifies funding as a paper-level predictor and citation impact as the outcome across disciplines; it is eligible for predictor discovery."],
+  "doi:10.1007/s11192-018-2988-z": ["include", "", "The study directly validates altmetrics against research-quality assessment and is eligible as measurement and validation evidence."],
+  "doi:10.1016/j.inffus.2023.101830": ["include", "", "The review directly covers automated scholarly-paper review concepts and technologies and is eligible for paper-quality construct and indicator discovery."],
+  "openalex:w2037256959": ["exclude", "E_INSUFFICIENT_METADATA", "The title suggests general guidance for interpreting systematic reviews, but the supplied metadata does not establish extractable target constructs or indicators."
+  ]
+}

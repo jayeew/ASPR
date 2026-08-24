@@ -1,0 +1,50 @@
+{
+  "protocol_id": "INDEPENDENT_CODEX_TERM_ADJUDICATION_PROTOCOL_V3_20260729",
+  "purpose": "Freeze H2 term adjudication together with prior-round label alignment so synonymous constructs are not miscounted as saturation novelty.",
+  "components": [
+    {
+      "path": "INDEPENDENT_CODEX_TERM_CODING_BRIEF_V3.md",
+      "sha256": "365e081397b77a56ac9090bf094ce213effc709fa66cab8981489b4d2a1f987e",
+      "role": "term_coding_and_adjudication_brief"
+    }
+  ],
+  "required_row_roles": [
+    {
+      "field": "coder_role",
+      "value": "H2"
+    },
+    {
+      "field": "reviewer_role",
+      "value": "H2"
+    }
+  ],
+  "decision_vocabulary": [
+    "include",
+    "exclude"
+  ],
+  "term_relation_vocabulary": [
+    "canonical",
+    "synonym",
+    "abbreviation",
+    "full_form",
+    "historical_name",
+    "morphological_variant",
+    "parameter_variant"
+  ],
+  "prior_round_reference": {
+    "through_round": 4,
+    "path": "outputs/codebook_references/rounds_01_04_h2_term_codebook.csv",
+    "sha256": "63f73d9e2abeca71d49a3dc2b7c22a7e121a4a258b1e597a64248968a78c23b5",
+    "rows": 826,
+    "term_families": 143,
+    "query_families": 143,
+    "export_manifest_path": "outputs/codebook_references/rounds_01_04_h2_codebooks.manifest.json",
+    "export_manifest_sha256": "bc30144fba95a1e64ee60217515c68d1fb08ee5e0e879aa8d34c928d13b8096f"
+  },
+  "independence_order": "First adjudicate inclusion, construct, role, and T0 or validation boundary from the supplied round worksheet. Only then consult the frozen prior-round reference for label alignment.",
+  "alignment_rule": "Reuse an existing term_family_label, search_domain_label, and query_family_label only when the theoretical object, explanatory or validation role, and T0 boundary are substantively identical. Data-source, threshold, transformation, time-window, abbreviation, and lexical variants alone do not create a new family. Create a new label only for a genuinely non-redundant construct or retrieval purpose, and explain why it cannot map to the frozen codebook.",
+  "decision_protection": "The reference cannot be used to copy an inclusion decision, override source evidence, or change a future-outcome boundary. It contains no model dimensions, selected features, or performance outcomes.",
+  "novelty_rule": "Round novelty is computed only after H2 label alignment against all finalized earlier rounds. A renamed synonym is not a new term family or query family.",
+  "provenance_rule": "For artifacts governed by this composite protocol, row-level independent_ai_prompt_sha256 and manifest prompt_sha256 must equal the SHA-256 of this JSON file. The manifest must record the reference paths and hashes plus counts of rows mapped to existing labels and rows creating justified new labels.",
+  "local_models_forbidden": true
+}

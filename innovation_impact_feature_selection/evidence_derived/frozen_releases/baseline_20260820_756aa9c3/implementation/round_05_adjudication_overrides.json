@@ -1,0 +1,19 @@
+{
+  "doi:10.1016/s0140-6736(09)61086-2": ["exclude", "E_NOT_INNOVATION_OR_T0_IMPACT", "Surgical innovation is the clinical intervention being evaluated, not scientific-paper innovation or T0 scholarly impact."],
+  "doi:10.1002/sim.2050": ["exclude", "E_NOT_INNOVATION_OR_T0_IMPACT", "The paper concerns statistical heterogeneity of patient time-to-event outcomes, not a target paper-level construct."],
+  "doi:10.1186/1475-2875-5-122": ["exclude", "E_NOT_INNOVATION_OR_T0_IMPACT", "This domain review concerns genotyping in antimalarial trials rather than scientific-paper innovation, research quality, or impact."],
+  "openalex:w3003686955": ["include", "", "The bibliometric analysis evaluates citation impact and cross-source agreement for individual classic papers, so the paper is the measurement unit."],
+  "doi:10.1093/reseval/rvx035": ["include", "", "The study evaluates article open-access status as a publication characteristic associated with paper-level citation impact."],
+  "doi:10.14569/ijacsa.2016.070268": ["exclude", "E_NOT_METRIC_PREDICTOR_VALIDATION", "The benchmarking platform discusses infrastructure and practice but does not establish a target paper-level indicator or validation."],
+  "doi:10.1093/neuonc/now107": ["include", "", "The systematic review measures reporting completeness and quality for individual published studies and is eligible as research-quality indicator evidence."],
+  "doi:10.1186/2046-4053-2-21": ["exclude", "E_WRONG_DOCUMENT_TYPE", "This is a study protocol without completed measurement or validation results."],
+  "openalex:w2801456331": ["exclude", "E_NOT_PAPER_LEVEL", "The dashboard review focuses on analytics for academics and organizational decision making rather than a paper-level target construct."],
+  "doi:10.1007/s10639-022-11058-9": ["exclude", "E_NOT_PAPER_LEVEL", "The bibliometric analysis evaluates the virtual-laboratory field over decades rather than defining or predicting a construct for individual papers."],
+  "doi:10.1145/3519031": ["exclude", "E_NOT_METRIC_PREDICTOR_VALIDATION", "Conference-name entity resolution is a metadata-integrity problem but is not evidence for a target paper-level innovation, quality, or impact indicator."],
+  "doi:10.1111/faam.12367": ["exclude", "E_NOT_PAPER_LEVEL", "The study examines university-level performance measurement practices and their effects, not an individual-paper construct."],
+  "doi:10.1145/3600211.3604686": ["exclude", "E_NOT_INNOVATION_OR_T0_IMPACT", "The review concerns ethics of generative-audio systems, not measurement or prediction of scientific-paper innovation or impact."],
+  "doi:10.1136/bmj.316.7138.1166": ["exclude", "E_NOT_METRIC_PREDICTOR_VALIDATION", "The article compares literature-search databases but does not define, predict, or validate a target individual-paper construct."],
+  "doi:10.1136/bmj.309.6954.597": ["exclude", "E_NOT_METRIC_PREDICTOR_VALIDATION", "General rationale for systematic reviews does not establish an eligible paper-level innovation, quality, or impact indicator."],
+  "doi:10.1111/j.1875-595x.2008.tb00171.x": ["exclude", "E_NOT_INNOVATION_OR_T0_IMPACT", "This domain-specific overview of orthodontic systematic reviews does not establish the target paper-level constructs."
+  ]
+}

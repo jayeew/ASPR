@@ -1,0 +1,80 @@
+{
+  "protocol_id": "INDEPENDENT_CODEX_PRESS_REVISION_PROTOCOL_V3_20260730_FRAME2_SECOND_PASS",
+  "purpose": "Independently resolve the seven frame-2 logical families that remained revise after second-pass PRESS review, using source-supported query-surface corrections or explicit unsupported-family archives.",
+  "source_frame": {
+    "frame_version": 2,
+    "frame_sha256": "5ae6d5bf06861217260beec62566c3bd222b7a40539cc717dd16ab190347bec4",
+    "active_counts_before_revision": {
+      "K": 42,
+      "Q": 354,
+      "P": 371
+    },
+    "pending_revision_rows": 7,
+    "counts_are_outputs_not_quotas": true
+  },
+  "authorized_input": {
+    "path": "outputs/human_tasks/press_query_revisions_H2_v2_enriched.csv",
+    "sha256": "424a75cd32e4cd7c0fce5be4130029d0772bb1b32fa651d44d5dcb05509cd699",
+    "rows": 7,
+    "unique_key": "logical_query_id"
+  },
+  "source_press_review": {
+    "path": "outputs/independent_codex_review_v3/press_review_H2_v2_REVIEWED.csv",
+    "sha256": "d807c2f62956339d0d38934a2eb254c4989c838ccaeb1efab052cc16ea332c00",
+    "manifest_path": "outputs/independent_codex_review_v3/press_review_H2_v2_REVIEWED.manifest.json",
+    "manifest_sha256": "91cef56db1606fe7d0e0a2ae57c005caa7dadd5f3b7c810865b4f883b0a10082",
+    "revise_rows": 7
+  },
+  "revision_decisions": {
+    "replace_terms": "Return the complete final OR-term list as revised_domain_terms_json. Preserve only source-supported terms. Remove or qualify the exact defect identified in press_notes. Evidence spans and source_title inside term_evidence_json are authorizing English title/abstract evidence.",
+    "archive_unsupported": "Use when the supplied direct English title/abstract evidence cannot authorize a construct-specific independent retrieval phrase under the three-block query structure, including a subtype already recoverable through a broader source-supported framework family. revised_domain_terms_json must be an empty JSON list and the rationale must identify the evidence or query-structure insufficiency."
+  },
+  "normalization_rules": [
+    "Do not insert Boolean operators into a term string; each JSON value is one complete OR alternative.",
+    "Do not retain a generic metric noun when it fails to identify the source framework or construct role.",
+    "A source title is direct English evidence only for wording actually present in that title; it does not authorize unrelated synonyms.",
+    "For damaged numeric comparisons, either retain a directly supported nonnumeric construct phrase or use an unambiguous lexical rendering whose value is exactly the source threshold.",
+    "Archive rather than force a phrase when the required framework boundary cannot be represented faithfully by the three-block OR-term schema.",
+    "Deduplicate case-insensitively and do not use target counts, model outcomes, downstream dimensions, or feature performance."
+  ],
+  "protected_fields": "Every input field except revision_decision, revised_domain_terms_json, revision_rationale, and independent-review provenance must remain byte-identical and in the same row order.",
+  "reviewer": {
+    "reviewer_role": "H2",
+    "review_each_row_individually": true,
+    "forbid_qwen_ollama_local_models_and_external_llm_apis": true,
+    "do_not_read_downstream_dimensions_features_or_model_results": true
+  },
+  "required_provenance_fields": [
+    "draft_method",
+    "independent_ai_review_status",
+    "independent_ai_reviewer_id",
+    "independent_ai_reviewed_at",
+    "independent_ai_review_action",
+    "independent_ai_review_note",
+    "independent_ai_run_id",
+    "independent_ai_model",
+    "independent_ai_prompt_sha256"
+  ],
+  "registration_manifest_schema": {
+    "required_top_level_fields": [
+      "run_id",
+      "artifact_path",
+      "artifact_sha256",
+      "input_path",
+      "input_sha256",
+      "reviewer_role",
+      "reviewer_id",
+      "model",
+      "model_digest",
+      "prompt_sha256",
+      "parameters",
+      "item_count",
+      "completed_at",
+      "status"
+    ],
+    "reviewer_role": "H2",
+    "item_count": 7,
+    "status": "complete",
+    "prompt_sha256_must_equal_this_protocol": true
+  }
+}

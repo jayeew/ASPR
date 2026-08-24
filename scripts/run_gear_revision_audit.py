@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# ruff: noqa: E402
 """Run the fixed three-paper Nature revision-aware audit pilot."""
 
 from __future__ import annotations
@@ -21,26 +20,31 @@ from experiments.gear.revision_audit import (
     PILOT_IDS,
     RevisionAuditCase,
     RevisionAuditManifest,
+    _load_human_response,
     agent_availability,
     agent_points,
+    blind_package_count,
     build_blind_package,
     human_points,
     judge_package,
     load_manifest,
-    _load_human_response,
     preflight,
     rubric_set,
     score_pairs,
     score_rubrics,
-)  # noqa: E402
-from gear.config import load_config  # noqa: E402
-from gear.contracts import PaperMetadata, ReviewRequest  # noqa: E402
-from gear.review_contracts import StructuredReview  # noqa: E402
-from gear.review_pipeline import review_paper  # noqa: E402
-from gear.trace import sha256_file, sha256_value  # noqa: E402
+)
+from gear.config import load_config
+from gear.contracts import PaperMetadata, ReviewRequest
+from gear.review_contracts import StructuredReview
+from gear.review_pipeline import review_paper
+from gear.trace import sha256_file, sha256_value
 
 DEFAULT_MANIFEST = Path("configs/gear/nature_revision_audit_pilot3.json")
-DEFAULT_OUTPUT = Path("outputs/gear/revision_audit/nature_pilot3")
+DEFAULT_OUTPUT = Path("outputs/gear/revision_audit/nature_pilot3_esd2_rerun6")
+
+
+def _progress(message: str) -> None:
+    print(f"[GEAR-AUDIT] {message}", flush=True)
 
 
 def _write(path: Path, value: Any) -> None:
@@ -71,7 +75,8 @@ def run_agent(
 ) -> dict[str, Any]:
     config = _config(config_path)
     rows = []
-    for case in manifest.cases:
+    for index, case in enumerate(manifest.cases, start=1):
+        _progress(f"Agent 审稿 {index}/3 开始：{case.paper_id}")
         if case.agent_run_dir.exists() and any(case.agent_run_dir.iterdir()):
             raise RuntimeError(
                 f"pilot agent output already exists and cannot be reused: {case.agent_run_dir}"
@@ -89,6 +94,10 @@ def run_agent(
                 "output_dir": str(case.agent_run_dir),
             }
         )
+        _progress(
+            f"Agent 审稿 {index}/3 完成：{case.paper_id}；"
+            f"状态={bundle.status.value}，验证通过={bundle.verification.passed}"
+        )
     result = {
         "contract": "revision_audit_agent_run",
         "model": "gpt-5.6-terra",
@@ -100,7 +109,7 @@ def run_agent(
 
 
 def prepare_judges(manifest: RevisionAuditManifest, output: Path) -> dict[str, Any]:
-    entries = []
+    entries: list[dict[str, Any]] = []
     for case in manifest.cases:
         health = agent_availability(case)
         if not health["available"]:
@@ -113,7 +122,7 @@ def prepare_judges(manifest: RevisionAuditManifest, output: Path) -> dict[str, A
         for kind, left in (("retained", human), ("resolved", resolved)):
             if not left or not agent:
                 continue
-            chunks = (len(left) * len(agent) + 47) // 48
+            chunks = blind_package_count(len(left), len(agent))
             for chunk in range(chunks):
                 package = build_blind_package(case, left, agent, kind=kind, chunk=chunk)
                 target = (
@@ -150,7 +159,7 @@ def prepare_judges(manifest: RevisionAuditManifest, output: Path) -> dict[str, A
         if not agent_availability(other)["available"]:
             continue
         agent = agent_points(other)
-        chunks = (len(human) * len(agent) + 47) // 48
+        chunks = blind_package_count(len(human), len(agent))
         for chunk in range(chunks):
             package = build_blind_package(
                 case, human, agent, kind="wrong_paper", chunk=chunk
@@ -635,26 +644,84 @@ def main() -> int:
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--config", type=Path)
+    parser.add_argument("--judge-config", type=Path)
+    parser.add_argument("--resume", action="store_true")
+    parser.add_argument(
+        "--agent-output-root",
+        type=Path,
+        help="Rebase per-paper agent artifacts beneath this run-specific directory.",
+    )
     args = parser.parse_args()
+    raw_manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
+    if raw_manifest.get("contract") == "gear_evaluation_manifest_v1":
+        from experiments.gear.evaluation.runner import EvaluationRunner
+
+        if args.judge_config is None:
+            raise ValueError("unified evaluation requires --judge-config")
+        command_map = {
+            "run-agent": "run-clean",
+            "build-rubrics": "prepare-judges",
+            "score-rubrics": "run-judges",
+            "evaluate": "score",
+        }
+        EvaluationRunner(
+            manifest_path=args.manifest,
+            judge_config_path=args.judge_config,
+            output_dir=args.output_dir,
+            resume=args.resume,
+        ).run(command_map.get(args.command, args.command))
+        return 0
     manifest = load_manifest(args.manifest)
     output = args.output_dir.resolve()
+    if args.agent_output_root is not None:
+        root = args.agent_output_root.resolve()
+        manifest = manifest.model_copy(
+            update={
+                "cases": [
+                    case.model_copy(
+                        update={
+                            "agent_run_dir": root
+                            / "agent_runs"
+                            / case.paper_id.replace("/", "_")
+                        }
+                    )
+                    for case in manifest.cases
+                ]
+            }
+        )
     output.mkdir(parents=True, exist_ok=True)
     if args.command in {"preflight", "all"}:
+        _progress("输入预检开始")
         _write(output / "input_audit.json", preflight(manifest))
+        _progress("输入预检完成")
     if args.command in {"run-agent", "all"}:
+        _progress("三篇 Agent 审稿开始")
         run_agent(manifest, output, args.config)
+        _progress("三篇 Agent 审稿完成")
     if args.command in {"prepare-judges", "all"}:
+        _progress("盲评包准备开始")
         prepare_judges(manifest, output)
+        _progress("盲评包准备完成")
     if args.command in {"run-judges", "all"}:
+        _progress("盲评匹配开始")
         run_judges(manifest, output, args.config)
+        _progress("盲评匹配完成")
     if args.command in {"build-rubrics", "all"}:
+        _progress("评测量表构建开始")
         build_rubrics(manifest, output, args.config)
+        _progress("评测量表构建完成")
     if args.command in {"score-rubrics", "all"}:
+        _progress("量表评分开始")
         run_rubric_scores(manifest, output, args.config)
+        _progress("量表评分完成")
     if args.command in {"evaluate", "all"}:
+        _progress("三篇结果汇总评测开始")
         evaluate(manifest, output)
+        _progress("三篇结果汇总评测完成")
     if args.command in {"report", "all"}:
+        _progress("报告生成开始")
         report(manifest, output)
+        _progress("报告生成完成")
     return 0
 
 

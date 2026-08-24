@@ -1,0 +1,6 @@
+{
+  "doi:10.1002/sim.918": ["exclude", "E_NOT_INNOVATION_OR_T0_IMPACT", "The methodological paper concerns synthesis of patient outcomes and does not define a target innovation, research-quality, or scholarly-impact construct for individual papers."],
+  "openalex:w2346635403": ["exclude", "E_WRONG_DOCUMENT_TYPE", "The abstract explicitly identifies the record as a thesis, which is outside the frozen eligible document types."],
+  "openalex:w4413969327": ["include", "", "The study measures predatory-journal status for individual articles as a publication-level quality indicator, despite reporting aggregate field results."
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "amendment_id": "aspr-v4-renderer-punctuation-preservation-20260819",
+  "status": "approved",
+  "approved_by": "project_owner",
+  "scope": "implementation_reproducibility",
+  "authorized_old_source_ids": [
+    "code_common_v4",
+    "code_coding_v4_search_frame_rederivation_press_fk",
+    "code_pipeline_v4_seed_recall_transport_hydration"
+  ],
+  "original_hashes_retained": true,
+  "reason": "Preserve source-exact punctuation, hyphenation, case display, and special symbols when rendering OpenAlex Boolean terms; version the resulting physical-query identities without changing any evidence, coding, or PRESS decision.",
+  "constraints": [
+    "The repair only re-renders existing active term lists.",
+    "All re-rendered expressions require new PRESS and seed-recall validation.",
+    "No future outcome becomes a T0 feature by this change."
+  ],
+  "approved_at": "2026-08-19T05:35:00+00:00"
+}

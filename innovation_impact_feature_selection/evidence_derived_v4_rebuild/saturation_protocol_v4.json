@@ -1,0 +1,31 @@
+{
+  "schema_version": "4.0.0",
+  "protocol_id": "aspr-evidence-saturation-v4-2026-08-19",
+  "purpose": "Evidence-saturation discovery of English terminology and T0 paper innovation/potential-impact indicators; not an exhaustive broad-query census.",
+  "design": "deterministic sequential stratified sampling with dual novelty saturation",
+  "snapshot": {
+    "root": "/home/jayee/workspace/FabCitation/openalex-snapshot",
+    "works_manifest": "/home/jayee/workspace/FabCitation/openalex-snapshot/data/works/manifest",
+    "works_id_index": "/home/jayee/workspace/FabCitation/openalex_snapshot_reference_check_results/analysis_state.db",
+    "role": "optional provenance and local indexability check; OpenAlex API is authoritative for live retrieval"
+  },
+  "api": {"key_source": "OPENALEX_API_KEYS or OPENALEX_API_KEY environment variables", "secrets_persisted": false, "per_page": 100, "concurrency": 4, "seed_recall_doi_batch_size": 40, "citation_backward_id_batch_size": 100, "citation_forward_source_batch_size": 50, "stop_before_remaining_usd": 0.001, "resume_after_utc_reset": true},
+  "sampling": {
+    "random_seed_namespace": "ASPR_EVIDENCE_SATURATION_V4_20260819",
+    "maximum_openalex_sample_per_query": 1200,
+    "base_sample_per_stratum": 800,
+    "target_oversample_per_stratum": 500,
+    "evidence_oversample_per_stratum": 400,
+    "records_per_stratum_per_review_round": 8,
+    "records_per_stratum_by_role": {"base_year_type": 8, "target_oversample": 8, "evidence_oversample": 8, "development_citation_network": 8, "citation_tracking_network": 8, "formal_search_family": 8},
+    "publication_year_bands": [{"label":"before_2000","from_year":null,"to_year":1999},{"label":"2000_2009","from_year":2000,"to_year":2009},{"label":"2010_2015","from_year":2010,"to_year":2015},{"label":"2016_2020","from_year":2016,"to_year":2020},{"label":"2021_cutoff","from_year":2021,"to_year":2026}],
+    "work_types": ["article", "review"],
+    "base_strata": "publication-year band by work type",
+    "target_oversampling": "one stratum per frozen bootstrap target term and work type",
+    "evidence_oversampling": "one stratum per frozen bootstrap evidence term and work type",
+    "field_or_domain_stratification": false,
+    "reason_no_field_strata": "Search domains are evidence outputs and cannot be used as a sampling stratum."
+  },
+  "sequential_review": {"round_unit":"next deterministic batch from every active stratum","phases":["search_frame_discovery","formal_indicator_discovery"],"phase_reset_rule":"dual-zero counter resets after the formal frame freezes","minimum_consecutive_zero_novelty_rounds":3,"novelty_endpoints":["new non-redundant English canonical search-term family","new canonical indicator family"],"automatic_stop_allowed":false,"required_stop_approver":"H2","additional_stop_gates":["all indexable development and hidden seeds recalled","PRESS has no unresolved issue","all AI-H1 disagreements adjudicated","citation tracking produces no new endpoint in required rounds"]},
+  "claim_boundary": {"allowed":"systematic evidence map continued to terminology-and-indicator saturation","not_allowed":"exhaustive census of all broad-query hits","prevalence_estimation":false,"language_bias_statement_required":true}
+}

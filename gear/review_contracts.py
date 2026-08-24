@@ -5,19 +5,18 @@ from __future__ import annotations
 import re
 from datetime import date
 from enum import Enum
-from typing import Dict, List, Literal, Optional, Union
+from typing import Any, Literal
 
 from pydantic import ConfigDict, Field, field_validator, model_validator
 
 from .contracts import (
-    CalibrationPacketV3,
     FailureRecord,
     PaperIR,
     ReviewStatus,
     StrictModel,
-    SubmissionCalibrationPacketV1,
 )
-from .graph_prior_contracts import GraphPriorResult
+from .graph_prior import graph_result_v4
+from .graph_prior_contracts import GraphPriorResult, GraphResultV4
 
 SCHEMA_VERSION: Literal["aspr_gear"] = "aspr_gear"
 _WORD_RE = re.compile(r"[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)*|[\u3400-\u9fff]")
@@ -33,6 +32,7 @@ class ReviewModel(StrictModel):
 
     model_config = ConfigDict(extra="forbid", validate_assignment=True)
     schema_version: Literal["aspr_gear"] = SCHEMA_VERSION
+    schema_revision: Literal["evidence_state_delta_v2"] = "evidence_state_delta_v2"
 
 
 class ReviewAspect(str, Enum):
@@ -49,13 +49,24 @@ class PointSeverity(str, Enum):
     NONE = "none"
     MINOR = "minor"
     MAJOR = "major"
+    CRITICAL = "critical"
 
 
 class NoveltyJudgment(str, Enum):
     POSITIVE = "positive"
     MIXED = "mixed"
     NEGATIVE = "negative"
+    UNCERTAIN = "uncertain"
     NOT_DISCUSSED = "not_discussed"
+
+
+class NoveltyVerificationStatus(str, Enum):
+    """Evidence status for a novelty direction, kept separate from direction."""
+
+    VERIFIED = "verified"
+    PARTIALLY_VERIFIED = "partially_verified"
+    INSUFFICIENT_COVERAGE = "insufficient_coverage"
+    NOT_ASSESSED = "not_assessed"
 
 
 class CriticSource(str, Enum):
@@ -98,7 +109,7 @@ class EvidenceAction(str, Enum):
 
 class ReviewSummary(ReviewModel):
     text: str = Field(min_length=1)
-    evidence_keys: List[str] = Field(min_length=1)
+    evidence_keys: list[str] = Field(min_length=1)
 
     @field_validator("text")
     @classmethod
@@ -109,7 +120,7 @@ class ReviewSummary(ReviewModel):
 
     @field_validator("evidence_keys")
     @classmethod
-    def summary_evidence(cls, value: List[str]) -> List[str]:
+    def summary_evidence(cls, value: list[str]) -> list[str]:
         return _validate_evidence_keys(value)
 
 
@@ -119,7 +130,9 @@ class ReviewPoint(ReviewModel):
     text: str = Field(min_length=1)
     severity: PointSeverity = PointSeverity.NONE
     suggested_action: str = ""
-    evidence_keys: List[str] = Field(default_factory=list)
+    why_it_matters: str = ""
+    confidence: float | None = Field(default=None, ge=0.0, le=1.0)
+    evidence_keys: list[str] = Field(default_factory=list)
     external_verification_required: bool = False
 
     @field_validator("text")
@@ -131,29 +144,40 @@ class ReviewPoint(ReviewModel):
 
     @field_validator("evidence_keys")
     @classmethod
-    def point_evidence(cls, value: List[str]) -> List[str]:
+    def point_evidence(cls, value: list[str]) -> list[str]:
         return _validate_evidence_keys(value)
 
     @model_validator(mode="after")
-    def major_requires_evidence(self) -> "ReviewPoint":
-        if self.severity == PointSeverity.MAJOR and not self.evidence_keys:
-            raise ValueError("major review points require evidence_keys")
+    def major_requires_evidence(self) -> ReviewPoint:
+        if (
+            self.severity in {PointSeverity.MAJOR, PointSeverity.CRITICAL}
+            and not self.evidence_keys
+        ):
+            raise ValueError("major and critical review points require evidence_keys")
         return self
 
 
 class NoveltyAssessment(ReviewModel):
     judgment: NoveltyJudgment
-    supporting_points: List[ReviewPoint] = Field(default_factory=list, max_length=3)
-    limiting_points: List[ReviewPoint] = Field(default_factory=list, max_length=3)
+    verification_status: NoveltyVerificationStatus = (
+        NoveltyVerificationStatus.NOT_ASSESSED
+    )
+    confidence: float | None = Field(default=None, ge=0.0, le=1.0)
+    supporting_points: list[ReviewPoint] = Field(default_factory=list, max_length=3)
+    limiting_points: list[ReviewPoint] = Field(default_factory=list, max_length=3)
+    uncertain_points: list[ReviewPoint] = Field(default_factory=list, max_length=3)
 
     @model_validator(mode="after")
-    def deterministic_judgment(self) -> "NoveltyAssessment":
-        expected = infer_novelty_judgment(self.supporting_points, self.limiting_points)
-        if self.judgment != expected:
-            raise ValueError(
-                f"novelty judgment must be {expected.value} for the supplied points"
-            )
-        for point in [*self.supporting_points, *self.limiting_points]:
+    def validate_novelty_points(self) -> NoveltyAssessment:
+        # Direction is an assessment, while the point lists are the evidence that
+        # survived verification.  They deliberately need not imply the same enum:
+        # incomplete retrieval may soften or remove a point without erasing the
+        # graph-blind reviewer's original direction.
+        for point in [
+            *self.supporting_points,
+            *self.limiting_points,
+            *self.uncertain_points,
+        ]:
             if point.aspect not in {
                 ReviewAspect.CONTRIBUTION,
                 ReviewAspect.NOVELTY_PRIOR_ART,
@@ -163,15 +187,23 @@ class NoveltyAssessment(ReviewModel):
 
 
 def infer_novelty_judgment(
-    supporting_points: List[ReviewPoint],
-    limiting_points: List[ReviewPoint],
+    supporting_points: list[ReviewPoint],
+    limiting_points: list[ReviewPoint],
+    uncertain_points: list[ReviewPoint] | None = None,
 ) -> NoveltyJudgment:
+    uncertain_points = uncertain_points or []
     if supporting_points and limiting_points:
+        return NoveltyJudgment.MIXED
+    if supporting_points and uncertain_points:
+        return NoveltyJudgment.MIXED
+    if limiting_points and uncertain_points:
         return NoveltyJudgment.MIXED
     if supporting_points:
         return NoveltyJudgment.POSITIVE
     if limiting_points:
         return NoveltyJudgment.NEGATIVE
+    if uncertain_points:
+        return NoveltyJudgment.UNCERTAIN
     return NoveltyJudgment.NOT_DISCUSSED
 
 
@@ -181,21 +213,22 @@ class StructuredReview(ReviewModel):
     paper_id: str = Field(min_length=1)
     summary: ReviewSummary
     novelty: NoveltyAssessment
-    strengths: List[ReviewPoint] = Field(default_factory=list)
-    weaknesses: List[ReviewPoint] = Field(default_factory=list)
-    questions: List[ReviewPoint] = Field(default_factory=list)
+    strengths: list[ReviewPoint] = Field(default_factory=list)
+    weaknesses: list[ReviewPoint] = Field(default_factory=list)
+    questions: list[ReviewPoint] = Field(default_factory=list)
 
-    def all_points(self) -> List[ReviewPoint]:
+    def all_points(self) -> list[ReviewPoint]:
         return [
             *self.novelty.supporting_points,
             *self.novelty.limiting_points,
+            *self.novelty.uncertain_points,
             *self.strengths,
             *self.weaknesses,
             *self.questions,
         ]
 
     @model_validator(mode="after")
-    def review_limits(self) -> "StructuredReview":
+    def review_limits(self) -> StructuredReview:
         points = self.all_points()
         if len(points) > 24:
             raise ValueError("StructuredReview permits at most 24 atomic points")
@@ -210,10 +243,10 @@ class PaperSpecificRubric(ReviewModel):
 
     paper_id: str
     paper_type: str = "scientific_manuscript"
-    novelty_checks: List[str] = Field(default_factory=list)
-    methodology_checks: List[str] = Field(default_factory=list)
-    experiment_checks: List[str] = Field(default_factory=list)
-    reproducibility_checks: List[str] = Field(default_factory=list)
+    novelty_checks: list[str] = Field(default_factory=list)
+    methodology_checks: list[str] = Field(default_factory=list)
+    experiment_checks: list[str] = Field(default_factory=list)
+    reproducibility_checks: list[str] = Field(default_factory=list)
 
 
 class BranchReview(ReviewModel):
@@ -228,15 +261,16 @@ class BranchReview(ReviewModel):
     graph_blind: Literal[True] = True
     summary: ReviewSummary
     novelty: NoveltyAssessment
-    strengths: List[ReviewPoint] = Field(default_factory=list)
-    weaknesses: List[ReviewPoint] = Field(default_factory=list)
-    questions: List[ReviewPoint] = Field(default_factory=list)
-    failures: List[str] = Field(default_factory=list)
+    strengths: list[ReviewPoint] = Field(default_factory=list)
+    weaknesses: list[ReviewPoint] = Field(default_factory=list)
+    questions: list[ReviewPoint] = Field(default_factory=list)
+    failures: list[str] = Field(default_factory=list)
 
-    def all_points(self) -> List[ReviewPoint]:
+    def all_points(self) -> list[ReviewPoint]:
         return [
             *self.novelty.supporting_points,
             *self.novelty.limiting_points,
+            *self.novelty.uncertain_points,
             *self.strengths,
             *self.weaknesses,
             *self.questions,
@@ -251,8 +285,8 @@ class BranchReview(ReviewModel):
         model_id: str,
         prompt_sha256: str,
         input_sha256: str,
-        failures: Optional[List[str]] = None,
-    ) -> "BranchReview":
+        failures: list[str] | None = None,
+    ) -> BranchReview:
         return cls(
             paper_id=review.paper_id,
             source=source,
@@ -273,15 +307,21 @@ class CanonicalReviewPoint(ReviewModel):
     section: Literal[
         "novelty_support", "novelty_limit", "strengths", "weaknesses", "questions"
     ]
+    initial_section: (
+        Literal[
+            "novelty_support", "novelty_limit", "strengths", "weaknesses", "questions"
+        ]
+        | None
+    ) = None
     aspect: ReviewAspect
     severity: PointSeverity
     proposition: str
-    resolved_proposition: Optional[str] = None
-    suggested_action: Optional[str] = None
-    source_point_ids: Dict[ReviewSource, List[str]] = Field(default_factory=dict)
-    paper_evidence_keys: List[str] = Field(default_factory=list)
-    relation_evidence_keys: List[str] = Field(default_factory=list)
-    coverage_evidence_keys: List[str] = Field(default_factory=list)
+    resolved_proposition: str | None = None
+    suggested_action: str | None = None
+    source_point_ids: dict[ReviewSource, list[str]] = Field(default_factory=dict)
+    paper_evidence_keys: list[str] = Field(default_factory=list)
+    relation_evidence_keys: list[str] = Field(default_factory=list)
+    coverage_evidence_keys: list[str] = Field(default_factory=list)
     novelty_resolution: Literal[
         "not_applicable",
         "antecedent_found",
@@ -290,19 +330,27 @@ class CanonicalReviewPoint(ReviewModel):
         "inconclusive",
         "search_failed",
     ] = "not_applicable"
+    contribution_id: str | None = None
+    residual_delta: list[str] = Field(default_factory=list)
+    shared_base: list[str] = Field(default_factory=list)
+    novelty_confidence: float | None = Field(default=None, ge=0.0, le=1.0)
     agent_support: bool
-    qwen_support: Optional[bool] = None
+    qwen_support: bool | None = None
     qwen_conflict: bool = False
     graph_tension: bool = False
-    novelty_claim_id: Optional[str] = None
+    graph_tension_score: float = Field(default=0.0, ge=0.0, le=1.0)
+    graph_focus_weight: float = Field(default=0.0, ge=0.0, le=1.0)
+    graph_extra_counterfactual_actions: int = Field(default=0, ge=0, le=2)
+    novelty_claim_id: str | None = None
     requires_external_evidence: bool = False
     validation_status: PointValidationStatus = PointValidationStatus.PENDING
     stability_status: Literal["not_required", "pending", "stable", "unstable"] = (
         "not_required"
     )
-    validation_notes: List[str] = Field(default_factory=list)
+    validation_notes: list[str] = Field(default_factory=list)
     normal_search_done: bool = False
     counterfactual_search_done: bool = False
+    counterfactual_search_count: int = Field(default=0, ge=0)
     citation_expanded: bool = False
     semantic_verified: bool = False
     retained: bool = True
@@ -317,7 +365,7 @@ class EvidenceBudget(ReviewModel):
     actions_used: int = Field(default=0, ge=0)
 
     @model_validator(mode="after")
-    def bounded_actions(self) -> "EvidenceBudget":
+    def bounded_actions(self) -> EvidenceBudget:
         if self.actions_used > self.total_actions_max:
             raise ValueError("evidence action budget exceeded")
         return self
@@ -339,18 +387,22 @@ class ProcessFeatures(ReviewModel):
 
 
 class FusionMatch(ReviewModel):
-    agent_point_id: Optional[str] = None
-    qwen_point_id: Optional[str] = None
+    agent_point_id: str | None = None
+    qwen_point_id: str | None = None
     relation: Literal["SAME_POINT", "PARTIAL", "CONTRADICTORY", "NO_MATCH"]
 
 
 class FusionReport(ReviewModel):
-    contract: Literal["aspr_fusion_report_v2"] = "aspr_fusion_report_v2"
+    contract: Literal["aspr_fusion_report_v3"] = "aspr_fusion_report_v3"
     paper_id: str
-    matches: List[FusionMatch] = Field(default_factory=list)
-    canonical_point_ids: List[str] = Field(default_factory=list)
-    graph_tension_point_ids: List[str] = Field(default_factory=list)
-    failures: List[str] = Field(default_factory=list)
+    matches: list[FusionMatch] = Field(default_factory=list)
+    canonical_point_ids: list[str] = Field(default_factory=list)
+    graph_tension_scores: dict[str, float] = Field(default_factory=dict)
+    graph_focus_weights: dict[str, float] = Field(default_factory=dict)
+    graph_triggered_actions: dict[str, list[str]] = Field(default_factory=dict)
+    graph_guided_point_ids: list[str] = Field(default_factory=list)
+    graph_query_replacements: dict[str, str] = Field(default_factory=dict)
+    failures: list[str] = Field(default_factory=list)
 
 
 class ReviewStateV2(ReviewModel):
@@ -361,23 +413,74 @@ class ReviewStateV2(ReviewModel):
     paper_sha256: str
     cutoff_date: date
     rubric: PaperSpecificRubric
-    branch_reviews: Dict[ReviewSource, BranchReview] = Field(default_factory=dict)
+    branch_reviews: dict[ReviewSource, BranchReview] = Field(default_factory=dict)
     graph_prior_evidence_key: str
     graph_prior: GraphPriorResult
-    canonical_points: Dict[str, CanonicalReviewPoint] = Field(default_factory=dict)
-    retrieved_work_evidence_keys: List[str] = Field(default_factory=list)
-    relation_evidence_keys: List[str] = Field(default_factory=list)
-    unresolved_target_ids: List[str] = Field(default_factory=list)
+    canonical_points: dict[str, CanonicalReviewPoint] = Field(default_factory=dict)
+    retrieved_work_evidence_keys: list[str] = Field(default_factory=list)
+    relation_evidence_keys: list[str] = Field(default_factory=list)
+    unresolved_target_ids: list[str] = Field(default_factory=list)
     action_budget: EvidenceBudget = Field(default_factory=EvidenceBudget)
     process_features: ProcessFeatures = Field(default_factory=ProcessFeatures)
-    failures: List[FailureRecord] = Field(default_factory=list)
+    failures: list[FailureRecord] = Field(default_factory=list)
     finalized: bool = False
 
     @model_validator(mode="after")
-    def state_invariants(self) -> "ReviewStateV2":
+    def state_invariants(self) -> ReviewStateV2:
         agent = self.branch_reviews.get(ReviewSource.AGENT)
         if self.phase != ReviewPhase.INITIALIZED and agent is None:
             raise ValueError("Agent Reviewer branch is required")
+        if any(key != point.point_id for key, point in self.canonical_points.items()):
+            raise ValueError("canonical point identity mismatch")
+        if self.finalized and self.phase not in {
+            ReviewPhase.EVIDENCE_FINALIZED,
+            ReviewPhase.VERIFIED,
+            ReviewPhase.COMPILED,
+        }:
+            raise ValueError("finalized state has an invalid phase")
+        return self
+
+
+class ReviewStateV3(ReviewModel):
+    contract: Literal["aspr_evidence_state_v3"] = "aspr_evidence_state_v3"
+    state_id: str
+    phase: ReviewPhase
+    paper_id: str
+    paper_sha256: str
+    cutoff_date: date
+    rubric: PaperSpecificRubric
+    branch_reviews: dict[ReviewSource, BranchReview] = Field(default_factory=dict)
+    graph_result_evidence_key: str | None = None
+    graph_result: GraphResultV4 | None = None
+    novelty_direction: NoveltyJudgment | None = None
+    novelty_verification_status: NoveltyVerificationStatus = (
+        NoveltyVerificationStatus.NOT_ASSESSED
+    )
+    novelty_direction_confidence: float | None = Field(default=None, ge=0.0, le=1.0)
+    canonical_points: dict[str, CanonicalReviewPoint] = Field(default_factory=dict)
+    retrieved_work_evidence_keys: list[str] = Field(default_factory=list)
+    relation_evidence_keys: list[str] = Field(default_factory=list)
+    unresolved_target_ids: list[str] = Field(default_factory=list)
+    action_budget: EvidenceBudget = Field(default_factory=EvidenceBudget)
+    process_features: ProcessFeatures = Field(default_factory=ProcessFeatures)
+    failures: list[FailureRecord] = Field(default_factory=list)
+    finalized: bool = False
+
+    @field_validator("graph_result", mode="before")
+    @classmethod
+    def migrate_graph_result(cls, value: Any) -> Any:
+        return None if value is None else graph_result_v4(value)
+
+    @model_validator(mode="after")
+    def state_invariants(self) -> ReviewStateV3:
+        agent = self.branch_reviews.get(ReviewSource.AGENT)
+        if self.phase != ReviewPhase.INITIALIZED and agent is None:
+            raise ValueError("Agent Reviewer branch is required")
+        if (
+            self.graph_result is not None
+            and self.graph_result.paper_id != self.paper_id
+        ):
+            raise ValueError("Graph result paper_id mismatch")
         if any(key != point.point_id for key, point in self.canonical_points.items()):
             raise ValueError("canonical point identity mismatch")
         if self.finalized and self.phase not in {
@@ -394,21 +497,21 @@ class GraphReviewContext(ReviewModel):
 
     contract: Literal["graph_review_context"] = "graph_review_context"
     paper_id: str
-    substantive_innovation: Dict[str, Union[float, int, str, bool, None]] = Field(
+    substantive_innovation: dict[str, float | int | str | bool | None] = Field(
         default_factory=dict
     )
-    t0_potential: Dict[str, Union[float, int, str, bool, None]] = Field(
+    t0_potential: dict[str, float | int | str | bool | None] = Field(
         default_factory=dict
     )
-    p_uptake: Optional[float] = Field(default=None, ge=0.0, le=1.0)
-    conditional_diffusion: Optional[float] = Field(default=None, ge=0.0, le=1.0)
-    d5_percentile: Optional[float] = Field(default=None, ge=0.0, le=100.0)
+    p_uptake: float | None = Field(default=None, ge=0.0, le=1.0)
+    conditional_diffusion: float | None = Field(default=None, ge=0.0, le=1.0)
+    d5_percentile: float | None = Field(default=None, ge=0.0, le=100.0)
     applicability_mode: str
     feature_coverage: float = Field(ge=0.0, le=1.0)
-    overall_oof_spearman: Optional[float] = None
-    fold_oof_spearman: Optional[float] = None
-    domain_oof_spearman: Optional[float] = None
-    drift_flags: List[str] = Field(default_factory=list)
+    overall_oof_spearman: float | None = None
+    fold_oof_spearman: float | None = None
+    domain_oof_spearman: float | None = None
+    drift_flags: list[str] = Field(default_factory=list)
     limited: bool = False
 
 
@@ -416,7 +519,7 @@ class ContextSpan(ReviewModel):
     evidence_key: str
     span_id: str
     page: int = Field(ge=1)
-    section_path: List[str] = Field(default_factory=list)
+    section_path: list[str] = Field(default_factory=list)
     text: str
     text_sha256: str
 
@@ -432,8 +535,8 @@ class ReviewContextPack(ReviewModel):
     contract: Literal["review_context_pack"] = "review_context_pack"
     paper_id: str
     paper_sha256: str
-    claims: List[ContextClaim]
-    spans: List[ContextSpan]
+    claims: list[ContextClaim]
+    spans: list[ContextSpan]
     graph: GraphReviewContext
 
 
@@ -441,9 +544,9 @@ class ReviewPointState(ReviewModel):
     point_id: str
     status: PointValidationStatus = PointValidationStatus.PENDING
     retained: bool = True
-    evidence_keys: List[str] = Field(default_factory=list)
-    relation_evidence_keys: List[str] = Field(default_factory=list)
-    validation_notes: List[str] = Field(default_factory=list)
+    evidence_keys: list[str] = Field(default_factory=list)
+    relation_evidence_keys: list[str] = Field(default_factory=list)
+    validation_notes: list[str] = Field(default_factory=list)
 
 
 class ReviewState(ReviewModel):
@@ -454,15 +557,15 @@ class ReviewState(ReviewModel):
     cutoff_date: date
     draft_review: StructuredReview
     graph_context: GraphReviewContext
-    point_states: Dict[str, ReviewPointState]
-    retrieved_work_evidence_keys: List[str] = Field(default_factory=list)
-    relation_evidence_keys: List[str] = Field(default_factory=list)
-    graph_text_tension_point_ids: List[str] = Field(default_factory=list)
-    failure_ledger: List[FailureRecord] = Field(default_factory=list)
+    point_states: dict[str, ReviewPointState]
+    retrieved_work_evidence_keys: list[str] = Field(default_factory=list)
+    relation_evidence_keys: list[str] = Field(default_factory=list)
+    graph_text_tension_point_ids: list[str] = Field(default_factory=list)
+    failure_ledger: list[FailureRecord] = Field(default_factory=list)
     finalized: bool = False
 
     @model_validator(mode="after")
-    def validate_point_links(self) -> "ReviewState":
+    def validate_point_links(self) -> ReviewState:
         point_ids = {point.point_id for point in self.draft_review.all_points()}
         if set(self.point_states) != point_ids:
             raise ValueError("ReviewState point keys differ from draft review")
@@ -480,42 +583,43 @@ class VerificationIssue(ReviewModel):
     issue_id: str
     code: str
     message: str
-    point_id: Optional[str] = None
+    point_id: str | None = None
     repairable: bool = False
 
 
 class VerificationReport(ReviewModel):
     passed: bool
     limited: bool = False
-    issues: List[VerificationIssue] = Field(default_factory=list)
+    issues: list[VerificationIssue] = Field(default_factory=list)
     semantic_verification_available: bool = False
     graph_semantic_violation_count: int = Field(default=0, ge=0)
     unsupported_major_count: int = Field(default=0, ge=0)
 
 
 class ReviewBundle(ReviewModel):
-    contract: Literal["aspr_gear_review_bundle"] = "aspr_gear_review_bundle"
+    contract: Literal["aspr_gear_review_bundle_v3"] = "aspr_gear_review_bundle_v3"
     status: ReviewStatus
     paper_ir: PaperIR
-    calibration: Optional[Union[CalibrationPacketV3, SubmissionCalibrationPacketV1]] = (
-        None
-    )
-    graph_context: Optional[GraphReviewContext] = None
     critic: CriticRunMetadata
-    state: Optional[ReviewState] = None
     structured_review: StructuredReview
     review_markdown: str
     verification: VerificationReport
-    output_files: Dict[str, str] = Field(default_factory=dict)
-    agent_review: Optional[BranchReview] = None
-    qwen_review: Optional[BranchReview] = None
-    graph_prior: Optional[GraphPriorResult] = None
-    fusion_report: Optional[FusionReport] = None
-    state_v2: Optional[ReviewStateV2] = None
-    process_diagnostic: Optional[ProcessFeatures] = None
+    output_files: dict[str, str] = Field(default_factory=dict)
+    agent_review: BranchReview | None = None
+    qwen_review: BranchReview | None = None
+    graph_result: GraphResultV4 | None = None
+    fusion_report: FusionReport | None = None
+    state_v3: ReviewStateV3 | None = None
+    process_diagnostic: dict[str, Any] | None = None
+    grounding_report: dict[str, Any] | None = None
+
+    @field_validator("graph_result", mode="before")
+    @classmethod
+    def migrate_graph_result(cls, value: Any) -> Any:
+        return None if value is None else graph_result_v4(value)
 
 
-def _validate_evidence_keys(value: List[str]) -> List[str]:
+def _validate_evidence_keys(value: list[str]) -> list[str]:
     unique_keys = list(dict.fromkeys(value))
     for key in unique_keys:
         if not re.fullmatch(
@@ -530,35 +634,37 @@ def _validate_evidence_keys(value: List[str]) -> List[str]:
 
 
 __all__ = [
+    "SCHEMA_VERSION",
+    "BranchReview",
+    "CanonicalReviewPoint",
     "ContextClaim",
     "ContextSpan",
     "CriticRunMetadata",
     "CriticSource",
+    "EvidenceAction",
+    "EvidenceBudget",
+    "FusionMatch",
+    "FusionReport",
     "GraphReviewContext",
     "NoveltyAssessment",
     "NoveltyJudgment",
+    "NoveltyVerificationStatus",
+    "PaperSpecificRubric",
     "PointSeverity",
     "PointValidationStatus",
+    "ProcessFeatures",
     "ReviewAspect",
     "ReviewBundle",
     "ReviewContextPack",
-    "ReviewPointState",
-    "ReviewPoint",
-    "ReviewState",
-    "ReviewSource",
     "ReviewPhase",
-    "EvidenceAction",
-    "PaperSpecificRubric",
-    "BranchReview",
-    "CanonicalReviewPoint",
-    "EvidenceBudget",
-    "ProcessFeatures",
-    "FusionMatch",
-    "FusionReport",
+    "ReviewPoint",
+    "ReviewPointState",
+    "ReviewSource",
+    "ReviewState",
     "ReviewStateV2",
+    "ReviewStateV3",
     "ReviewSummary",
     "StructuredReview",
-    "SCHEMA_VERSION",
     "VerificationIssue",
     "VerificationReport",
     "infer_novelty_judgment",

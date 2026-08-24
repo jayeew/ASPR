@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-import json
-from typing import Any, Dict, List, Protocol
+from collections.abc import Mapping
+from typing import Any, Protocol
 
 from ..contracts import PaperIR
 from ..review_contracts import BranchReview, PaperSpecificRubric
@@ -14,6 +14,7 @@ GRAPH_FORBIDDEN_FIELDS = {
     "score_0_100",
     "graph_context",
     "graph_prior",
+    "graph_result",
     "p_uptake",
     "conditional_diffusion",
     "d5_percentile",
@@ -24,8 +25,8 @@ GRAPH_FORBIDDEN_FIELDS = {
 
 class AgentReviewer(Protocol):
     model_name: str
-    last_failures: List[str]
-    last_payload: Dict[str, Any]
+    last_failures: list[str]
+    last_payload: dict[str, Any]
 
     def review(
         self, paper_ir: PaperIR, rubric: PaperSpecificRubric
@@ -37,14 +38,14 @@ def build_graph_blind_payload(
     rubric: PaperSpecificRubric,
     *,
     max_spans: int = 60,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     span_map = paper_ir.span_map()
-    selected: List[str] = []
+    selected: list[str] = []
     for claim in paper_ir.claims:
         if claim.span_id not in selected:
             selected.append(claim.span_id)
     for field_name in type(paper_ir.method_result_ledger).model_fields:
-        if field_name == "schema_version":
+        if field_name in {"schema_version", "schema_revision"}:
             continue
         for span_id in getattr(paper_ir.method_result_ledger, field_name):
             if span_id in span_map and span_id not in selected:
@@ -82,16 +83,28 @@ def build_graph_blind_payload(
     return payload
 
 
-def assert_graph_blind_payload(payload: Dict[str, Any]) -> None:
-    serialized = json.dumps(payload, ensure_ascii=False, sort_keys=True).casefold()
-    leaked = sorted(field for field in GRAPH_FORBIDDEN_FIELDS if field in serialized)
+def assert_graph_blind_payload(payload: dict[str, Any]) -> None:
+    leaked: set[str] = set()
+
+    def visit(value: Any) -> None:
+        if isinstance(value, Mapping):
+            for key, child in value.items():
+                normalized = str(key).casefold()
+                if normalized in GRAPH_FORBIDDEN_FIELDS:
+                    leaked.add(normalized)
+                visit(child)
+        elif isinstance(value, list):
+            for child in value:
+                visit(child)
+
+    visit(payload)
     if leaked:
-        raise ValueError(f"reviewer payload contains Graph fields: {leaked}")
+        raise ValueError(f"reviewer payload contains Graph fields: {sorted(leaked)}")
 
 
 __all__ = [
-    "AgentReviewer",
     "GRAPH_FORBIDDEN_FIELDS",
+    "AgentReviewer",
     "assert_graph_blind_payload",
     "build_graph_blind_payload",
 ]

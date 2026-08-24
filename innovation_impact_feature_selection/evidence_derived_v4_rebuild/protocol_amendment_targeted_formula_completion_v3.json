@@ -1,0 +1,88 @@
+{
+  "schema_version": "3.0.0",
+  "amendment_id": "aspr-v3-targeted-formula-completion-20260730",
+  "status": "frozen_before_dimensions_and_selection",
+  "frozen_at": "2026-07-30T08:25:00+00:00",
+  "scope": "Formula-provenance completion for canonical indicator families already present after terminal round 12.",
+  "trigger": {
+    "canonical_indicator_family_count": 432,
+    "h2_reviewed_source_count": 363,
+    "observation": "The first full-text census retained many article-level T0 candidate families whose source passages named a deterministic count, composition, or diversity indicator, but whose extraction fields remained generic placeholders because the formula neighborhood was not captured. Applying the final formula gate directly would conflate extraction non-recovery with absence of a reproducible source definition.",
+    "decision_timing": "Frozen before candidate dimensions, local data correspondence adjudication, final hard-gate decisions, final feature counts, and all model outcomes."
+  },
+  "does_not_reopen": [
+    "Search-domain derivation or K.",
+    "Logical or physical search queries or Q/P.",
+    "Formal retrieval or literature screening.",
+    "Term or canonical indicator-family discovery.",
+    "Round-12 saturation endpoints or the decision that round 12 is terminal."
+  ],
+  "eligibility_rule": {
+    "unit": "One existing canonical indicator family.",
+    "include_all_when": [
+      "The family already exists in the H2-adjudicated terminal indicator library.",
+      "An outcome-blind inventory of frozen local inputs identifies a possible exact mathematical correspondence or deterministic derivation.",
+      "The family is within direct innovation, T0 substantive potential, T0 opportunity, or context-control scope.",
+      "The candidate correspondence does not rely on a desired feature or dimension count."
+    ],
+    "exclude_when": [
+      "Only a similarly named but mathematically different local feature exists.",
+      "Required input is absent or only available after publication.",
+      "The only evidence is a review or a future outcome.",
+      "The family is selected only because it improves model performance."
+    ]
+  },
+  "source_completion_routes": [
+    {
+      "priority": 1,
+      "route": "reopen_already_frozen_included_fulltext",
+      "description": "Re-examine exact method, equation, table, or variable-definition neighborhoods in lawful English full text already frozen for an included source."
+    },
+    {
+      "priority": 2,
+      "route": "acquire_missing_open_fulltext_for_included_source",
+      "description": "Acquire and hash lawful English open full text for an already included source whose H2 disposition was candidate_fulltext_missing or fulltext_unavailable."
+    },
+    {
+      "priority": 3,
+      "route": "cited_mathematical_foundation_supplement",
+      "description": "When an included application explicitly attributes its formula to a cited foundational paper, acquire and hash that English primary/foundational source solely to authorize the existing family. This route cannot create a new family or change the search frame and is reported separately from saturation retrieval."
+    }
+  ],
+  "review_design": {
+    "primary_ai": "Creates an outcome-blind local-input correspondence inventory and a source-linked extraction draft.",
+    "H1": "Independently verifies every proposed correspondence and extracts exact formula evidence without seeing primary or H2 decisions.",
+    "H2": "Adjudicates all H1 proposals, including exclusions, source roles, construct equivalence, T0 boundary, formula fields, and research-team provenance.",
+    "prohibited": [
+      "Qwen or Ollama",
+      "local or external LLM APIs",
+      "model outcomes or prediction performance",
+      "feature-count or dimension-count targets"
+    ]
+  },
+  "formula_evidence_requirements": [
+    "Exact canonical family already present before this amendment.",
+    "Original definition, original application, or mathematical foundation; a review cannot authorize a formula.",
+    "Lawful hashed English full text.",
+    "Exact page, equation, table, appendix, or section and a verifiable English evidence span.",
+    "Source-supported deterministic formula or algorithm, units, parameters, direction, required inputs, and maximum information time.",
+    "Source non-reporting of missing behavior remains 'Not reported' and is never rewritten as a source claim.",
+    "Research group is taken from author/affiliation evidence in the same frozen source.",
+    "H1 extraction and H2 approval are stored separately."
+  ],
+  "downstream_rule": {
+    "operationalization": "Only H2-approved formula-complete families proceed to the separately reviewed project-operationalization layer.",
+    "data_audit": "Every canonical family still receives an explicit local-data disposition, including no-match and construct-mismatch exclusions.",
+    "dimensions": "Candidate dimensions remain derived only after formula completion and indicator coding; no dimension is predeclared.",
+    "selection": "All original hard gates, redundancy rules, two-team dimension support, T0 restrictions, and outcome blindness remain unchanged."
+  },
+  "reporting": [
+    "Report this as targeted formula-provenance completion, not as search round 13.",
+    "Report the number of all families reviewed for local correspondence, the number sent to formula completion, and every inclusion/exclusion reason.",
+    "Separate already-included source evidence from cited-foundation supplements.",
+    "Retain the actual round-12 raw novelty counts and the owner-defined terminal stopping decision."
+  ],
+  "target_count_influence": false,
+  "model_outcomes_used": false,
+  "future_information_allowed": false
+}

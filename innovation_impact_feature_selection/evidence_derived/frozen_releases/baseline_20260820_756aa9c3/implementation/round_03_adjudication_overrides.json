@@ -1,0 +1,13 @@
+{
+  "doi:10.1136/bmj.39048.407928.be": ["exclude", "E_NOT_INNOVATION_OR_T0_IMPACT", "The animal-versus-clinical treatment-effect comparison concerns translational clinical evidence, not the target paper-level innovation, research-quality, or scholarly-impact construct."],
+  "doi:10.7326/0003-4819-148-9-200805060-00023": ["exclude", "E_NOT_INNOVATION_OR_T0_IMPACT", "The article addresses search completeness for a particular document format in systematic reviews, not a target paper-level innovation or impact construct."],
+  "doi:10.1111/j.1467-789x.2008.00504.x": ["exclude", "E_NOT_INNOVATION_OR_T0_IMPACT", "This is a domain-specific critique of a breastfeeding and obesity review, not evidence about scientific-paper innovation, general research quality, or impact."],
+  "doi:10.1186/1478-4505-7-s1-s10": ["exclude", "E_NOT_INNOVATION_OR_T0_IMPACT", "The record concerns equity in health-policy use of review findings rather than the target paper-level constructs."],
+  "doi:10.1111/j.1479-6988.2007.00074.x": ["exclude", "E_NOT_INNOVATION_OR_T0_IMPACT", "This domain-specific clinical critique does not define or validate the target paper-level innovation, research-quality, or impact constructs."],
+  "doi:10.1007/s11192-013-1181-7": ["include", "", "The title directly identifies paper-level domestic/international co-publication status as a predictor of citation impact; it is eligible for search-frame and indicator discovery, with later citations treated as the outcome."],
+  "doi:10.2196/jmir.5082": ["exclude", "E_NOT_INNOVATION_OR_T0_IMPACT", "The study evaluates efficacy and external validity of a health intervention, not validity or impact of scientific papers."],
+  "doi:10.1093/hropen/hoz010": ["exclude", "E_NOT_INNOVATION_OR_T0_IMPACT", "The record reviews validation of fertility databases, not paper-level scientific innovation, research quality, or scholarly impact."],
+  "doi:10.1136/bmj.310.6981.741a": ["exclude", "E_INSUFFICIENT_METADATA", "The title could concern review-search quality, but the supplied abstract is mismatched; the target unit and eligible indicators cannot be verified."],
+  "doi:10.1111/ceo.14109": ["uncertain", "E_INSUFFICIENT_METADATA", "The title is directly relevant to paper-level disruptiveness, but the available metadata does not establish the indicator definition, computation, or temporal boundary."
+  ]
+}

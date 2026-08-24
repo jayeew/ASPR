@@ -1,0 +1,226 @@
+{
+  "schema_version": "targeted_formula_completion_targets_v3",
+  "frozen_at": "2026-07-30T10:10:00+00:00",
+  "scope": "Outcome-blind formula completion for existing canonical families whose constructs have plausible exact T0 correspondence to the frozen local inventory. The target list is a verification queue, not an inclusion list.",
+  "selection_basis": [
+    "existing canonical family before formula completion",
+    "formula or operational definition located in an English full text",
+    "AI or independent H1 data-correspondence review routed the family to exact/derivable/formula-completion review",
+    "at least one frozen local T0 field or deterministic derivation plausibly matches the source construct",
+    "no future citation, attention, diffusion, disruption, or model outcome is used"
+  ],
+  "targets": [
+    {
+      "target_id": "TFC001",
+      "feature_id": "EF0313",
+      "record_key": "doi:10.1007/s11192-021-04049-z",
+      "source_scope": "cited_formula_and_validation_supplement",
+      "local_source_ids": ["innovation_candidate_features", "historical_paper_references", "paper_references"],
+      "local_columns": ["innovation_candidate_features:reference_overlap_novelty_t0", "innovation_candidate_features:reference_overlap_comparison_count", "innovation_candidate_features:reference_overlap_reference_count"],
+      "verification_question": "Does the English source fully specify the paper-level one-minus-mean reference-overlap novelty measure, same-domain comparison rule, and citation-window parameters represented by the frozen local feature?"
+    },
+    {
+      "target_id": "TFC002",
+      "feature_id": "EF0017",
+      "record_key": "doi:10.1007/s11192-022-04336-3",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["innovation_candidate_features", "paper_references", "reference_metadata"],
+      "local_columns": ["innovation_candidate_features:field_shannon_entropy", "innovation_candidate_features:field_variety", "innovation_candidate_features:field_pielou_evenness", "innovation_candidate_features:field_disparity_cosine_mean"],
+      "verification_question": "Can the source's additive entropy diversity indicator be reproduced exactly from the frozen local fields, or does it require an unavailable mutual-information term?"
+    },
+    {
+      "target_id": "TFC003",
+      "feature_id": "EF0129",
+      "record_key": "doi:10.1007/s11192-022-04336-3",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["innovation_candidate_features"],
+      "local_columns": ["innovation_candidate_features:field_shannon_entropy", "innovation_candidate_features:field_pielou_evenness", "innovation_candidate_features:field_gini_balance"],
+      "verification_question": "Does any frozen local balance field implement the exact entropy-balance component defined in the source?"
+    },
+    {
+      "target_id": "TFC004",
+      "feature_id": "EF0130",
+      "record_key": "doi:10.1007/s11192-022-04336-3",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["innovation_candidate_features"],
+      "local_columns": ["innovation_candidate_features:field_variety", "innovation_candidate_features:field_shannon_entropy", "innovation_candidate_features:field_hill_q0"],
+      "verification_question": "Does a frozen local field implement the exact entropy-variety component defined in the source?"
+    },
+    {
+      "target_id": "TFC005",
+      "feature_id": "EF0235",
+      "record_key": "doi:10.1007/s11192-022-04336-3",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["paper_references", "reference_metadata", "innovation_candidate_features"],
+      "local_columns": ["paper_references:reference_id", "reference_metadata:field_id", "reference_metadata:source_id", "innovation_candidate_features:field_shannon_entropy"],
+      "verification_question": "Can the source's mutual-information disparity component be exactly derived from the frozen reference-level fields?"
+    },
+    {
+      "target_id": "TFC006",
+      "feature_id": "EF0318",
+      "record_key": "doi:10.1371/journal.pone.0127298",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["innovation_candidate_features", "paper_references", "reference_metadata"],
+      "local_columns": ["innovation_candidate_features:field_variety", "innovation_candidate_features:valid_reference_count", "innovation_candidate_features:field_mapping_coverage"],
+      "verification_question": "Does field_variety exactly implement the source's number-of-referenced-categories variety measure at paper level?"
+    },
+    {
+      "target_id": "TFC007",
+      "feature_id": "EF0312",
+      "record_key": "doi:10.1371/journal.pone.0127298",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["innovation_candidate_features", "paper_references", "reference_metadata"],
+      "local_columns": ["innovation_candidate_features:field_gini_balance", "innovation_candidate_features:valid_reference_count", "innovation_candidate_features:field_mapping_coverage"],
+      "verification_question": "Does field_gini_balance exactly implement the source's one-minus-Gini reference-balance measure?"
+    },
+    {
+      "target_id": "TFC008",
+      "feature_id": "EF0315",
+      "record_key": "doi:10.1371/journal.pone.0127298",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["innovation_candidate_features", "field_citation_events", "paper_references", "reference_metadata"],
+      "local_columns": ["innovation_candidate_features:field_disparity_cosine_mean", "innovation_candidate_features:valid_reference_count", "innovation_candidate_features:field_mapping_coverage"],
+      "verification_question": "Does field_disparity_cosine_mean exactly implement the source's mean pairwise one-minus-cosine category disparity?"
+    },
+    {
+      "target_id": "TFC009",
+      "feature_id": "EF0309",
+      "record_key": "doi:10.1371/journal.pone.0127298",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["innovation_candidate_features", "field_citation_events", "paper_references", "reference_metadata"],
+      "local_columns": ["innovation_candidate_features:rao_stirling_integration", "innovation_candidate_features:valid_reference_count", "innovation_candidate_features:field_mapping_coverage"],
+      "verification_question": "Does rao_stirling_integration exactly implement the source's paper-level Rao-Stirling formula?"
+    },
+    {
+      "target_id": "TFC010",
+      "feature_id": "EF0117",
+      "record_key": "doi:10.1057/s41599-023-02475-3",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["innovation_candidate_features"],
+      "local_columns": ["innovation_candidate_features:field_div_index", "innovation_candidate_features:field_variety", "innovation_candidate_features:field_gini_balance", "innovation_candidate_features:field_disparity_cosine_mean"],
+      "verification_question": "Does field_div_index exactly implement the source's DIV product with the same variety denominator, balance definition, and disparity definition?"
+    },
+    {
+      "target_id": "TFC011",
+      "feature_id": "EF0309",
+      "record_key": "doi:10.1007/s11192-023-04822-2",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["innovation_candidate_features", "field_citation_events", "paper_references", "reference_metadata"],
+      "local_columns": ["innovation_candidate_features:rao_stirling_integration", "innovation_candidate_features:valid_reference_count", "innovation_candidate_features:field_mapping_coverage"],
+      "verification_question": "Does this independent team's Rao-Stirling definition corroborate the exact source formula and its uncertainty limitations?"
+    },
+    {
+      "target_id": "TFC012",
+      "feature_id": "EF0052",
+      "record_key": "doi:10.1371/journal.pone.0200597",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["papers_common", "paper_references", "reference_metadata"],
+      "local_columns": ["papers_common:publication_year", "paper_references:reference_id", "reference_metadata:reference_year"],
+      "verification_question": "Does the source define BCiteAge as the focal paper's mean backward-citation age, matching publication_year minus cited-work year?"
+    },
+    {
+      "target_id": "TFC013",
+      "feature_id": "EF0238",
+      "record_key": "doi:10.1371/journal.pone.0099502",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["opportunity_features", "paper_references", "historical_paper_references"],
+      "local_columns": ["opportunity_features:bc_degree_per_reference_t0", "opportunity_features:eligible_prior_paper_count", "opportunity_features:bc_reference_coverage"],
+      "verification_question": "Does bc_degree_per_reference_t0 exactly implement the source's paper bibliographic-coupling degree divided by focal reference count, using only publication-time network information?"
+    },
+    {
+      "target_id": "TFC014",
+      "feature_id": "EF0038",
+      "record_key": "doi:10.1007/s11192-016-2081-4",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["target_openalex_metadata"],
+      "local_columns": ["target_openalex_metadata:openalex_author_count"],
+      "verification_question": "Does the source use the distinct number of named authors at paper level, matching the frozen OpenAlex author count?"
+    },
+    {
+      "target_id": "TFC015",
+      "feature_id": "EF0038",
+      "record_key": "doi:10.7759/cureus.35164",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["target_openalex_metadata"],
+      "local_columns": ["target_openalex_metadata:openalex_author_count"],
+      "verification_question": "Does this independent team corroborate the distinct paper author-count operational definition?"
+    },
+    {
+      "target_id": "TFC016",
+      "feature_id": "EF0419",
+      "record_key": "doi:10.1186/s40634-023-00631-x",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["control_features"],
+      "local_columns": ["control_features:title_word_count"],
+      "verification_question": "Does the source explicitly operationalize title length as the number of words, exactly matching title_word_count?"
+    },
+    {
+      "target_id": "TFC017",
+      "feature_id": "EF0314",
+      "record_key": "doi:10.1186/s40634-023-00631-x",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["paper_references", "control_features"],
+      "local_columns": ["paper_references:reference_id", "control_features:log_reference_count"],
+      "verification_question": "Does the source operationalize reference count as the number of references in the focal paper, allowing exact raw count and a preregistered log1p transform?"
+    },
+    {
+      "target_id": "TFC018",
+      "feature_id": "EF0174",
+      "record_key": "doi:10.7759/cureus.35164",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["target_openalex_metadata"],
+      "local_columns": ["target_openalex_metadata:openalex_institution_count"],
+      "verification_question": "Does the source's number-of-centres construct match distinct author-affiliation institutions, and is the frozen field valid rather than an author-count duplicate?"
+    },
+    {
+      "target_id": "TFC019",
+      "feature_id": "EF0188",
+      "record_key": "doi:10.7759/cureus.35164",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["target_openalex_metadata"],
+      "local_columns": ["target_openalex_metadata:openalex_country_count"],
+      "verification_question": "Does the source's number-of-countries measure match the distinct author-affiliation country count?"
+    },
+    {
+      "target_id": "TFC020",
+      "feature_id": "EF0186",
+      "record_key": "doi:10.3389/frma.2018.00003",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["target_openalex_metadata"],
+      "local_columns": ["target_openalex_metadata:openalex_country_count"],
+      "verification_question": "Does the source define international collaboration at paper level by international affiliations/coauthorship, reproducible as distinct affiliation-country count greater than one?"
+    },
+    {
+      "target_id": "TFC021",
+      "feature_id": "EF0197",
+      "record_key": "doi:10.1186/s40634-023-00631-x",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["papers_common"],
+      "local_columns": ["papers_common:source_id", "papers_common:source_display_name"],
+      "verification_question": "Does the source use focal journal identity as a paper-level contextual predictor, matching the frozen source identifier?"
+    },
+    {
+      "target_id": "TFC022",
+      "feature_id": "EF0307",
+      "record_key": "doi:10.7759/cureus.35164",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["papers_common"],
+      "local_columns": ["papers_common:publication_year"],
+      "verification_question": "Does the source use the focal paper's publication year as a reproducible context/control variable?"
+    },
+    {
+      "target_id": "TFC023",
+      "feature_id": "EF0331",
+      "record_key": "doi:10.1186/s40634-023-00631-x",
+      "source_scope": "formal_included_source",
+      "local_source_ids": ["papers_common"],
+      "local_columns": ["papers_common:primary_field", "papers_common:openalex_primary_field", "papers_common:openalex_primary_subfield"],
+      "verification_question": "Does the source's study/research field construct support a focal-paper field stratum, and which frozen classification level is construct-equivalent?"
+    }
+  ],
+  "target_count_is_not_a_selection_quota": true,
+  "creates_new_search_records": false,
+  "creates_new_term_families": false,
+  "creates_new_indicator_families": false,
+  "round_13": false
+}

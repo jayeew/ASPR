@@ -1,0 +1,17 @@
+{
+  "doi:10.1016/j.ipm.2005.05.008": ["exclude", "E_NOT_PAPER_LEVEL", "The framework concerns data warehousing and digital-library services rather than a target construct measured for individual scientific papers."],
+  "doi:10.1016/s0313-5926(09)50048-3": ["exclude", "E_NOT_PAPER_LEVEL", "The title concerns system-wide impacts of access to research findings, while absent metadata prevents establishing an individual-paper unit."],
+  "doi:10.1098/rsif.2007.0213": ["exclude", "E_NOT_PAPER_LEVEL", "The diversity framework is defined for science, technology, and societal portfolios rather than individual papers."],
+  "doi:10.1016/j.respol.2017.08.002": ["exclude", "E_NOT_PAPER_LEVEL", "The study explains researcher journal-choice behavior and does not define a target construct for individual papers."],
+  "doi:10.4102/td.v10i1.15": ["exclude", "E_NOT_PAPER_LEVEL", "The article assesses regional research-performance indicators rather than paper-level innovation potential or impact."],
+  "doi:10.1111/ans.14108": ["exclude", "E_FUTURE_OUTCOME_ONLY", "The outcome is whether a conference abstract later becomes a journal publication, not paper-level innovation, research quality, or scholarly impact."],
+  "doi:10.1111/ecin.12455": ["exclude", "E_NOT_PAPER_LEVEL", "The outcome is reward in the academic labor market and the evaluated unit is the researcher, not an individual paper."],
+  "doi:10.1093/ntr/nty225": ["exclude", "E_NOT_INNOVATION_OR_T0_IMPACT", "Study characteristics explain a clinical treatment-effect outcome rather than scientific-paper innovation, quality, or impact."],
+  "doi:10.1162/qss_a_00253": ["exclude", "E_NOT_INNOVATION_OR_T0_IMPACT", "The modeled outcome is the choice to publish open access, not a target paper-level innovation, research-quality, or scholarly-impact construct."],
+  "doi:10.1007/s11192-020-03431-7": ["include", "", "The scientometric research agenda identifies review-article characteristics and measurement dimensions and is eligible for search-frame and indicator discovery."],
+  "doi:10.22323/2.21050201": ["include", "", "The study evaluates paper-level scientific-finding plausibility and institutional or funding cues, providing construct-validity and bias evidence for research-quality assessment."],
+  "doi:10.2307/2669655": ["include", "", "The annotated statistical-reporting guidelines directly define paper-level research-reporting quality criteria."],
+  "doi:10.1002/(sici)1097-0258(19961230)15:24<2733::aid-sim562>3.0.co;2-0": ["exclude", "E_NOT_INNOVATION_OR_T0_IMPACT", "This statistical method for meta-analysis addresses evidence synthesis rather than the target paper-level constructs."],
+  "doi:10.1016/s0031-9406(05)66175-5": ["uncertain", "E_INSUFFICIENT_METADATA", "The title suggests methodological quality criteria for systematic reviews, but available metadata does not establish the criteria or validation evidence."
+  ]
+}

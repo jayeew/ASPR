@@ -6,26 +6,26 @@
   "cases": [
     {
       "paper_id": "10.1038/s41467-023-36025-x",
-      "manuscript_path": "../../outputs/gear/nature_dev100_terra_medium_smoke/inputs/10.1038_s41467-023-36025-x/paper.md",
-      "metadata_path": "../../outputs/gear/nature_dev100_terra_medium_smoke/inputs/10.1038_s41467-023-36025-x/metadata.json",
+      "manuscript_path": "../../data/nature_markdown/paper/s41467-023-36025-x.md",
+      "metadata_path": "pilot3_metadata/s41467-023-36025-x.json",
       "reconstruction_dir": "../../data/gear_review_reconstruction/nature_dev100/10.1038_s41467-023-36025-x/reconstruction",
-      "agent_run_dir": "../../outputs/gear/revision_audit/nature_pilot3/agent_runs/10.1038_s41467-023-36025-x",
+      "agent_run_dir": "../../outputs/gear/revision_audit/nature_pilot3_esd2_rerun6/agent_runs/10.1038_s41467-023-36025-x",
       "cutoff_date": "2021-07-14"
     },
     {
       "paper_id": "10.1038/s41467-023-43541-3",
-      "manuscript_path": "../../outputs/gear/nature_dev100_terra_medium_smoke/inputs/10.1038_s41467-023-43541-3/paper.md",
-      "metadata_path": "../../outputs/gear/nature_dev100_terra_medium_smoke/inputs/10.1038_s41467-023-43541-3/metadata.json",
+      "manuscript_path": "../../data/nature_markdown/paper/s41467-023-43541-3.md",
+      "metadata_path": "pilot3_metadata/s41467-023-43541-3.json",
       "reconstruction_dir": "../../data/gear_review_reconstruction/nature_dev100/10.1038_s41467-023-43541-3/reconstruction",
-      "agent_run_dir": "../../outputs/gear/revision_audit/nature_pilot3/agent_runs/10.1038_s41467-023-43541-3",
+      "agent_run_dir": "../../outputs/gear/revision_audit/nature_pilot3_esd2_rerun6/agent_runs/10.1038_s41467-023-43541-3",
       "cutoff_date": "2023-03-14"
     },
     {
       "paper_id": "10.1038/s41467-024-51536-x",
-      "manuscript_path": "../../outputs/gear/nature_dev100_terra_medium_smoke/inputs/10.1038_s41467-024-51536-x/paper.md",
-      "metadata_path": "../../outputs/gear/nature_dev100_terra_medium_smoke/inputs/10.1038_s41467-024-51536-x/metadata.json",
+      "manuscript_path": "../../data/nature_markdown/paper/s41467-024-51536-x.md",
+      "metadata_path": "pilot3_metadata/s41467-024-51536-x.json",
       "reconstruction_dir": "../../data/gear_review_reconstruction/nature_dev100/10.1038_s41467-024-51536-x/reconstruction",
-      "agent_run_dir": "../../outputs/gear/revision_audit/nature_pilot3/agent_runs/10.1038_s41467-024-51536-x",
+      "agent_run_dir": "../../outputs/gear/revision_audit/nature_pilot3_esd2_rerun6/agent_runs/10.1038_s41467-024-51536-x",
       "cutoff_date": "2024-03-09"
     }
   ]

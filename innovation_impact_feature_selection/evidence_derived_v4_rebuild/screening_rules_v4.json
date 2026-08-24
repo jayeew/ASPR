@@ -1,0 +1,23 @@
+{
+  "schema_version": "4.0.0",
+  "hard_gates": {
+    "G01_IN_SCOPE_ROLE": {"field":"scope_role","allowed":["direct_innovation","t0_substantive","t0_opportunity","context_control"]},
+    "G02_ARTICLE_LEVEL": {"field":"article_level","equals":true},
+    "G03_PRIMARY_OR_FOUNDATIONAL_EVIDENCE": {"field":"primary_or_foundational_evidence","equals":true},
+    "G04_REPRODUCIBLE_DEFINITION": {"field":"formula_reproducible","equals":true},
+    "G05_PUBLICATION_TIME": {"field":"t0_computable","equals":true},
+    "G06_NO_FUTURE_INFORMATION": {"field":"requires_future","equals":false},
+    "G07_LOCAL_DATA_READY": {"field":"data_status","allowed":["materialized_audited","derivable_from_audited_inputs"]},
+    "G08_BIAS_GUARDRAIL": {"field":"bias_policy","allowed":["allowed_core","allowed_opportunity","allowed_context","sensitivity_only"]},
+    "G09_NO_FATAL_VALIDITY_CONCERN": {"field":"fatal_validity_concern","equals":false},
+    "G10_OUTCOME_BLIND_SELECTION": {"field":"uses_outcome_for_selection","equals":false},
+    "G11_QUALITY_AUDIT": {"field":"quality_audit_status","allowed":["pass","derivable_inputs_pass"]},
+    "G12_NONCONSTANT": {"field":"nonconstant","equals":true},
+    "G13_ENGLISH_FULLTEXT_FORMULA_EVIDENCE": {"field":"english_fulltext_verified","equals":true},
+    "G14_SECOND_AI_APPROVAL": {"field":"h2_approved","equals":true}
+  },
+  "redundancy_tiebreak": ["selection_priority_ascending","evidence_strength_descending","data_readiness_descending","stability_descending","feature_id_ascending"],
+  "selection_priority_by_source_role": {"original_definition":0,"mathematical_foundation":1,"original_application":2,"validation":3,"review_discovery":4},
+  "dimension_retention": {"minimum_selected_indicators":1,"minimum_independent_research_groups":2,"context_controls_count_as_predictive_dimensions":false,"h2_approval_required":true},
+  "no_numeric_quota": true
+}

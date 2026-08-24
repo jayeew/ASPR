@@ -1,0 +1,25 @@
+{
+  "schema_version": "protocol_amendment_v4_operational_equivalence",
+  "status": "active_before_re-adjudication",
+  "scope": "Permits audited exact representation transforms for source-authorized T0 formulas; it does not permit construct proxies or outcome-derived fields.",
+  "authority": "The frozen v4 gate allows data that are already present or can be stably derived from audited T0 inputs. This amendment makes the evidence test explicit.",
+  "admissibility_rules": [
+    "The literature formula and target quantity must be identical, including numerator, denominator, unit and time boundary.",
+    "A deterministic, outcome-blind derivation from allowed local T0 inputs must reproduce a trusted stored representation with exact numeric equality over the audited overlap.",
+    "The derivation transform, input hashes, overlap size, equality rate, coverage and missing rule must be recorded.",
+    "Rows outside audited coverage remain missing; they are never silently treated as zero.",
+    "A field that is merely correlated with, adjacent to, or a different metadata representation of the source construct remains prohibited."
+  ],
+  "initially_eligible_quantities": [
+    "author_count = expm1(log_author_count), subject to the operational-equivalence audit",
+    "reference_count = expm1(log_reference_count), subject to the operational-equivalence audit"
+  ],
+  "explicitly_not_authorized": [
+    "institution_count as organization-count proxy",
+    "country_count as author-country diversity proxy",
+    "metadata fields as a proxy for data-availability statements",
+    "precomputed page/title/peer-review variables without source-matched coding and missing rules",
+    "future citations, future attention, future disruption or post-T0 indexing"
+  ],
+  "required_next_step": "Independent AI/H1 evidence is retained; H2 must re-adjudicate only affected candidates against the completed operational_equivalence_audit_v4.json."
+}

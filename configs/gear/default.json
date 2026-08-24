@@ -6,6 +6,7 @@
   "model_backend": "codex_cli",
   "calibration_registry": "configs/gear/calibration_registry.json",
   "calibration_release": "prepublication_graph_v3:d5_fulltext16",
+  "graph_results_path": null,
   "runtime_replay_manifest": "data/calibration/runtime_replay/fulltext16_v3/runtime_replay_manifest.json",
   "runtime_replay_manifest_sha256": "sha256:3297bc423e2c729b3463c2ba15c8631c511fda2d95ea1bdb71147a74460d3cfe",
   "allowed_asset_roots": [

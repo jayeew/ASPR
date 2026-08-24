@@ -8,7 +8,8 @@ environment variable and are never persisted in review artifacts or logs.
 from __future__ import annotations
 
 import json
-from typing import Any, Callable, Mapping, Optional
+from collections.abc import Callable, Mapping
+from typing import Any
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
@@ -26,7 +27,7 @@ class OpenAICompatibleJsonClient:
         self,
         endpoint: OpenAICompatibleEndpoint,
         *,
-        requester: Optional[HttpRequester] = None,
+        requester: HttpRequester | None = None,
     ) -> None:
         self.endpoint = endpoint
         self.requester = requester or _request_bytes
@@ -73,14 +74,22 @@ class OpenAICompatibleJsonClient:
             response = json.loads(raw.decode("utf-8"))
             content = response["choices"][0]["message"]["content"]
             return _json_object(content)
-        except (HTTPError, URLError, KeyError, TypeError, UnicodeDecodeError, ValueError) as exc:
+        except (
+            HTTPError,
+            URLError,
+            KeyError,
+            TimeoutError,
+            TypeError,
+            UnicodeDecodeError,
+            ValueError,
+        ) as exc:
             raise ModelClientUnavailableError(
                 f"OpenAI-compatible API request failed for {self.endpoint.model}: {exc}"
             ) from exc
 
 
 def _request_bytes(request: Request, timeout_seconds: int) -> bytes:
-    with urlopen(request, timeout=timeout_seconds) as response:  # noqa: S310
+    with urlopen(request, timeout=timeout_seconds) as response:
         return response.read()
 
 
@@ -108,7 +117,7 @@ def _json_object(content: Any) -> dict[str, Any]:
             text = text[:-3].rstrip()
     value = json.loads(text)
     if not isinstance(value, dict):
-        raise ValueError("API response content is not a JSON object")
+        raise TypeError("API response content is not a JSON object")
     return value
 
 

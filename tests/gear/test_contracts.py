@@ -42,8 +42,8 @@ def test_evidence_date_is_derived_from_metadata(sample_pdf):
         metadata={"publication_date": "2020-01-02", "submission_date": "2019-12-01"},
         evaluation_date=date(2026, 8, 10),
     )
-    assert request.evidence_date == date(2020, 1, 2)
-    assert request.evidence_date_source == "publication_date"
+    assert request.evidence_date == date(2019, 12, 1)
+    assert request.evidence_date_source == "submission_date"
 
 
 def test_evidence_store_rejects_semantic_overwrite(tmp_path):

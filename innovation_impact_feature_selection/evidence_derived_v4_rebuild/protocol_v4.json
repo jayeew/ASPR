@@ -1,0 +1,51 @@
+{
+  "schema_version": "4.0.0",
+  "protocol_id": "aspr-evidence-driven-innovation-impact-v4-2026-08-19",
+  "cutoff_date": "2026-08-19",
+  "date_policy": "No lower publication-date limit; the frozen cutoff is the only publication-date limit.",
+  "language": "en",
+  "language_policy": "English publications only. Non-English records remain in the retrieval denominator and are excluded as E_LANGUAGE_NON_ENGLISH.",
+  "work_types": ["article", "review"],
+  "objective": "Rebuild, from bibliographic discovery through materialized features and HGB OOF predictions, publication-time paper-innovation and potential-impact features without preset K/Q/P/M/D/F counts.",
+  "count_symbols": {
+    "K": "non-redundant evidence-derived search concept domains",
+    "Q": "non-redundant logical query families",
+    "P": "provider-executable physical queries",
+    "M": "candidate model dimensions from canonical indicator families",
+    "D": "formally retained dimensions",
+    "F": "formally retained indicator families"
+  },
+  "count_rule": "K, Q, P, M, D and F are outputs. No numeric quota, domain quota, or model-performance-based admission is allowed.",
+  "maximum_information_time": "publication time T0",
+  "excluded_predictor_information": ["post-publication citations", "post-publication altmetrics", "future disruption", "future diffusion", "future attention", "outcome-based feature admission"],
+  "providers": {
+    "OpenAlex": "discovery, recall validation, formal retrieval and citation chaining",
+    "Crossref": "DOI and bibliographic validation only"
+  },
+  "bootstrap": {
+    "domain_agnostic": true,
+    "object_terms": ["paper", "article", "publication", "scientific work"],
+    "target_terms": ["novelty", "innovation", "potential impact", "citation impact", "research quality", "scientific influence"],
+    "evidence_terms": ["measure", "indicator", "metric", "feature", "predictor", "determinant", "validation", "review"]
+  },
+  "reviewers": {
+    "primary_roles": ["AI", "H1"],
+    "adjudicator_role": "H2",
+    "h2_required_for": ["all AI-H1 disagreements", "all included and uncertain literature records", "a DOI-hash deterministic 10 percent sample of concordant exclusions", "all domain and dimension merge/split decisions", "all final indicators"],
+    "agreement_metrics": ["raw agreement", "Cohen kappa", "Gwet AC1"],
+    "independence_rule": "AI, H1 and H2 outputs must be separately versioned review artifacts. A reviewer may not inspect a primary review before submitting its own blind review. Local Qwen outputs are prohibited."
+  },
+  "formal_search_frame_gates": ["all active terms have a final coded disposition", "each retained domain and query has directly source-verified English evidence", "at least one hidden validation seed is independently supplied", "all indexable English development and hidden seeds are recalled or have provider-level reasons", "all active query families pass PRESS", "zero-hit and redundant families are archived with reasons", "all physical requests map to one logical query"],
+  "formal_completion_gates": ["all selected deterministic discovery batches are retrieved", "all retrieved records have a final disposition", "all disagreements and H2 audits are complete", "each final indicator has English full-text formula or operational-definition evidence", "each final indicator passes all hard gates", "each retained predictive dimension has at least one final indicator and two independently verified research groups", "three consecutive fully reviewed dual-zero novelty rounds after the formal frame", "all frozen inputs and outputs have hashes"],
+  "literature_exclusion_reasons": {
+    "E_LANGUAGE_NON_ENGLISH": "Non-English title, abstract, or required full text",
+    "E_NOT_PAPER_LEVEL_INNOVATION_OR_POTENTIAL_IMPACT": "Does not study article-level innovation or potential scholarly impact",
+    "E_FUTURE_OUTCOME_ONLY": "Only post-publication outcomes; no T0 characteristic",
+    "E_NOT_ARTICLE_LEVEL": "Unit is not an individual scientific paper",
+    "E_NOT_INDICATOR_PREDICTOR_VALIDATION": "No indicator, predictor, determinant, definition, or validation evidence",
+    "E_DUPLICATE": "Duplicate DOI, OpenAlex ID, or normalized title-year identity",
+    "E_INSUFFICIENT_METADATA": "Title and abstract insufficient for a decision"
+  },
+  "standards": ["PRISMA-S", "PRESS 2015", "Cochrane Handbook Chapter 4"],
+  "v4_independence": "v3 code may be used as an implementation template only. No v3 database, recovered result, term assignment, screening decision, dimension mapping, indicator definition, or feature membership is imported as v4 evidence or decision."
+}

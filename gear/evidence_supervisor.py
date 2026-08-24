@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import hashlib
+import inspect
 import re
 import time
+from typing import Any
 
 from .config import GearConfig, load_config
 from .contracts import (
@@ -27,12 +29,20 @@ from .review_contracts import (
     PointSeverity,
     PointValidationStatus,
     ReviewPhase,
-    ReviewStateV2,
+    ReviewStateV3,
 )
 from .trace import EvidenceStore, sha256_value
 
-ANTECEDENTS = {RelationLabel.DIRECT_ANTECEDENT, RelationLabel.PARTIAL_ANTECEDENT}
-LIMITING = {*ANTECEDENTS, RelationLabel.EXTENSION}
+DIRECT_ANTECEDENTS = {RelationLabel.DIRECT_ANTECEDENT}
+CONTEXTUAL_RELATIONS = {
+    RelationLabel.BACKGROUND,
+    RelationLabel.BUILDING_BLOCK,
+    RelationLabel.PARTIAL_ANTECEDENT,
+    RelationLabel.EXTENSION,
+    RelationLabel.PARALLEL,
+    RelationLabel.SUPPORT,
+}
+LIMITING = {*DIRECT_ANTECEDENTS, RelationLabel.EXTENSION}
 
 
 class EvidenceSupervisor:
@@ -45,13 +55,13 @@ class EvidenceSupervisor:
 
     def resolve(
         self,
-        state: ReviewStateV2,
+        state: ReviewStateV3,
         paper_ir: PaperIR,
         evidence_store: EvidenceStore,
         *,
         prior_art: PriorArtService | None = None,
         relation_classifier: RelationClassifier | None = None,
-    ) -> ReviewStateV2:
+    ) -> ReviewStateV3:
         state.phase = ReviewPhase.EVIDENCE_GATHERING
         while not state.finalized:
             if (
@@ -76,17 +86,24 @@ class EvidenceSupervisor:
                 )
             except (OSError, RuntimeError, TypeError, ValueError) as exc:
                 failure = f"{type(exc).__name__}:{exc}"
-                state.failures.append(
-                    FailureRecord(
-                        stage=f"evidence_supervisor:{action.value}",
-                        reason=failure,
-                        claim_id=target_id,
-                    )
-                )
                 if target_id is not None and target_id in state.canonical_points:
                     point = state.canonical_points[target_id]
-                    point.validation_status = PointValidationStatus.UNRESOLVED
                     point.validation_notes.append(failure)
+                    if action in {
+                        EvidenceAction.SEARCH_PRIOR_ART,
+                        EvidenceAction.COUNTERFACTUAL_SEARCH,
+                        EvidenceAction.CITATION_EXPAND,
+                    }:
+                        self._downgrade_external_gap(point, action)
+                    else:
+                        state.failures.append(
+                            FailureRecord(
+                                stage=f"evidence_supervisor:{action.value}",
+                                reason=failure,
+                                claim_id=target_id,
+                            )
+                        )
+                        point.validation_status = PointValidationStatus.UNRESOLVED
             state.action_budget.actions_used = before + 1
             self._trace_action(
                 evidence_store,
@@ -106,7 +123,7 @@ class EvidenceSupervisor:
         self,
         action: EvidenceAction,
         target_id: str | None,
-        state: ReviewStateV2,
+        state: ReviewStateV3,
         paper_ir: PaperIR,
         store: EvidenceStore,
         prior_art: PriorArtService | None,
@@ -160,7 +177,7 @@ class EvidenceSupervisor:
         self,
         action: EvidenceAction,
         point: CanonicalReviewPoint,
-        state: ReviewStateV2,
+        state: ReviewStateV3,
         paper_ir: PaperIR,
         store: EvidenceStore,
         prior_art: PriorArtService | None,
@@ -180,7 +197,10 @@ class EvidenceSupervisor:
             if action == EvidenceAction.SEARCH_PRIOR_ART:
                 point.normal_search_done = True
             else:
-                point.counterfactual_search_done = True
+                point.counterfactual_search_count += 1
+                point.counterfactual_search_done = (
+                    point.counterfactual_search_count >= 1
+                )
             return
         claim, span = _claim_and_span(point, paper_ir)
         budget = self._budget(point.point_id, state)
@@ -189,14 +209,25 @@ class EvidenceSupervisor:
             if action == EvidenceAction.COUNTERFACTUAL_SEARCH
             else "normal"
         )
-        works = prior_art.retrieve(
-            claim,
-            state.cutoff_date,
-            budget,
-            family=family,
-            target_span=span,
-            paper_ir=paper_ir,
-        )
+        retrieve_kwargs: dict[str, Any] = {
+            "family": family,
+            "target_span": span,
+            "paper_ir": paper_ir,
+        }
+        parameters = inspect.signature(prior_art.retrieve).parameters
+        if "graph_seed_work_ids" in parameters:
+            retrieve_kwargs["graph_seed_work_ids"] = (
+                state.graph_result.seed_work_ids
+                if state.graph_result is not None
+                else ()
+            )
+        if "graph_search_terms" in parameters:
+            retrieve_kwargs["graph_search_terms"] = (
+                state.graph_result.search_terms
+                if state.graph_result is not None
+                else ()
+            )
+        works = prior_art.retrieve(claim, state.cutoff_date, budget, **retrieve_kwargs)
         self._store_retrieval_audit(claim, prior_art, store)
         self._record_retrieval_outcome(point, state, prior_art)
         self._works.setdefault(point.point_id, []).extend(works)
@@ -204,13 +235,14 @@ class EvidenceSupervisor:
         if action == EvidenceAction.SEARCH_PRIOR_ART:
             point.normal_search_done = True
         else:
-            point.counterfactual_search_done = True
+            point.counterfactual_search_count += 1
+            point.counterfactual_search_done = point.counterfactual_search_count >= 1
         self._store_coverage(point, state, claim, prior_art, store)
 
     def _citation(
         self,
         point: CanonicalReviewPoint,
-        state: ReviewStateV2,
+        state: ReviewStateV3,
         paper_ir: PaperIR,
         store: EvidenceStore,
         prior_art: PriorArtService | None,
@@ -234,7 +266,7 @@ class EvidenceSupervisor:
     def _classify(
         self,
         point: CanonicalReviewPoint,
-        state: ReviewStateV2,
+        state: ReviewStateV3,
         span: EvidenceSpan,
         claim: PaperClaim,
         works: list[RetrievedWork],
@@ -310,26 +342,44 @@ class EvidenceSupervisor:
                 labels.add(RelationLabel(str(payload.get("relation_label"))))
             except ValueError:
                 continue
-        if point.section == "novelty_support" and labels & ANTECEDENTS:
+        if point.section == "novelty_support" and self._complete_direct_antecedent(
+            point, store
+        ):
             point.section = "novelty_limit"
             point.novelty_resolution = "antecedent_found"
             point.validation_status = PointValidationStatus.EXTERNALLY_VALIDATED
             point.resolved_proposition = (
-                "Prior literature contains a direct or partial antecedent to this "
-                "novelty claim; the defensible contribution is the technical "
+                "Prior literature contains a direct antecedent covering the "
+                "essential facets of this novelty claim; the defensible contribution is the technical "
                 f"difference stated in the paired evidence for: {point.proposition}"
             )
             point.validation_notes.append(
-                "direct_antecedent_reclassified_as_novelty_limit"
+                "complete_direct_antecedent_reclassified_as_novelty_limit"
+            )
+        elif point.section == "novelty_support" and labels & DIRECT_ANTECEDENTS:
+            point.novelty_resolution = "inconclusive"
+            point.validation_status = PointValidationStatus.VALIDATED
+            point.novelty_confidence = min(point.novelty_confidence or 1.0, 0.45)
+            point.resolved_proposition = (
+                "A retrieved work may be a direct antecedent, but essential-facet "
+                "coverage and independent verification are incomplete. The authors "
+                f"should clarify the residual delta: {point.proposition}"
+            )
+            point.validation_notes.append("direct_antecedent_not_fully_verified")
+        elif point.section == "novelty_support" and labels & CONTEXTUAL_RELATIONS:
+            point.novelty_resolution = "incremental_or_parallel"
+            point.validation_status = PointValidationStatus.EXTERNALLY_VALIDATED
+            point.resolved_proposition = (
+                "The contribution retains a bounded residual delta beyond its "
+                f"shared prior-art base: {point.proposition}"
+            )
+            point.validation_notes.append(
+                "residual_delta_retained_after_partial_relation"
             )
         elif point.section == "novelty_limit" and labels & LIMITING:
             point.novelty_resolution = "antecedent_found"
             point.validation_status = PointValidationStatus.EXTERNALLY_VALIDATED
-        elif labels & {
-            RelationLabel.EXTENSION,
-            RelationLabel.PARALLEL,
-            RelationLabel.SUPPORT,
-        }:
+        elif labels & CONTEXTUAL_RELATIONS:
             point.novelty_resolution = "incremental_or_parallel"
             point.validation_status = PointValidationStatus.EXTERNALLY_VALIDATED
             point.resolved_proposition = (
@@ -346,7 +396,7 @@ class EvidenceSupervisor:
     @staticmethod
     def _stability(
         point: CanonicalReviewPoint,
-        state: ReviewStateV2,
+        state: ReviewStateV3,
         store: EvidenceStore,
     ) -> None:
         # Graph-removal invariant holds because Graph never contributes relation labels.
@@ -362,10 +412,7 @@ class EvidenceSupervisor:
                 and payload.get("prior_work_id")
             ):
                 valid_work_ids.add(str(payload["prior_work_id"]))
-                if payload.get("relation_label") in {
-                    "DIRECT_ANTECEDENT",
-                    "PARTIAL_ANTECEDENT",
-                }:
+                if payload.get("relation_label") == "DIRECT_ANTECEDENT":
                     antecedent_work_ids.add(str(payload["prior_work_id"]))
                     for query_id in payload.get("source_query_ids") or []:
                         query_record = store.get(f"Q:{query_id}")
@@ -377,7 +424,6 @@ class EvidenceSupervisor:
         if point.novelty_resolution == "antecedent_found":
             stable = len(antecedent_work_ids) >= 2 or len(antecedent_query_roles) >= 2
             if not stable and coverage and coverage.get("service_failed") is False:
-                point.section = "questions"
                 point.novelty_resolution = "inconclusive"
                 point.resolved_proposition = (
                     "One retrieved source suggests a possible antecedent, but the "
@@ -386,14 +432,15 @@ class EvidenceSupervisor:
                     "with that nearest work and state the technical difference."
                 )
                 point.validation_status = PointValidationStatus.VALIDATED
+                point.novelty_confidence = min(point.novelty_confidence or 1.0, 0.45)
                 point.stability_status = "not_required"
                 point.validation_notes.append(
                     "single_antecedent_downgraded_to_question"
                 )
                 return
         elif coverage and coverage.get("service_failed") is True:
-            point.novelty_resolution = "search_failed"
-            stable = False
+            EvidenceSupervisor._downgrade_external_gap(point, None)
+            return
         elif coverage and coverage.get("coverage_sufficient") is True:
             point.novelty_resolution = "bounded_no_antecedent"
             point.resolved_proposition = (
@@ -405,7 +452,6 @@ class EvidenceSupervisor:
             point.validation_status = PointValidationStatus.EXTERNALLY_VALIDATED
             stable = True
         elif point.requires_external_evidence and coverage:
-            point.section = "questions"
             point.novelty_resolution = "inconclusive"
             point.resolved_proposition = (
                 "The audited search did not provide enough evidence-bearing prior "
@@ -414,6 +460,7 @@ class EvidenceSupervisor:
                 f"{_without_absolute_priority(point.proposition)}"
             )
             point.validation_status = PointValidationStatus.VALIDATED
+            point.novelty_confidence = min(point.novelty_confidence or 1.0, 0.35)
             point.stability_status = "not_required"
             point.validation_notes.append(
                 "insufficient_coverage_downgraded_to_question"
@@ -443,31 +490,78 @@ class EvidenceSupervisor:
         return dict(record.payload) if record is not None else {}
 
     @staticmethod
+    def _complete_direct_antecedent(
+        point: CanonicalReviewPoint,
+        store: EvidenceStore,
+    ) -> bool:
+        """Return true only for independently confirmed full-facet antecedence."""
+        for key in point.relation_evidence_keys:
+            record = store.get(key)
+            payload = record.payload if record is not None else {}
+            if (
+                payload.get("temporal_valid") is True
+                and payload.get("relation_label") == "DIRECT_ANTECEDENT"
+                and float(payload.get("essential_facet_coverage", 0.0)) >= 1.0
+                and payload.get("independent_verification_passed") is True
+            ):
+                return True
+        return False
+
+    @staticmethod
     def _record_retrieval_outcome(
         point: CanonicalReviewPoint,
-        state: ReviewStateV2,
+        state: ReviewStateV3,
         prior_art: PriorArtService,
     ) -> None:
         if getattr(prior_art, "last_service_failed", False):
-            point.novelty_resolution = "search_failed"
-            point.validation_notes.append("prior_art_service_failed")
-            for reason in getattr(prior_art, "last_failures", []):
+            point.validation_notes.append("prior_art_service_failed_downgraded")
+            if not any(
+                failure.reason == "retrieval_unavailable"
+                and failure.claim_id == point.point_id
+                for failure in state.failures
+            ):
                 state.failures.append(
                     FailureRecord(
                         stage="prior_art",
-                        reason=str(reason),
+                        reason="retrieval_unavailable",
                         claim_id=point.point_id,
                     )
                 )
+            for reason in getattr(prior_art, "last_failures", []):
+                point.validation_notes.append(f"prior_art_advisory:{reason}")
         else:
             point.validation_notes.extend(
                 str(note) for note in getattr(prior_art, "last_advisories", [])
             )
 
     @staticmethod
+    def _downgrade_external_gap(
+        point: CanonicalReviewPoint, action: EvidenceAction | None
+    ) -> None:
+        """Keep an auditable manuscript-grounded question when search is unavailable."""
+        if action == EvidenceAction.SEARCH_PRIOR_ART:
+            point.normal_search_done = True
+        elif action == EvidenceAction.COUNTERFACTUAL_SEARCH:
+            point.counterfactual_search_count += 1
+            point.counterfactual_search_done = point.counterfactual_search_count >= 1
+        elif action == EvidenceAction.CITATION_EXPAND:
+            point.citation_expanded = True
+        if point.requires_external_evidence:
+            point.novelty_resolution = "inconclusive"
+            point.novelty_confidence = min(point.novelty_confidence or 1.0, 0.30)
+            point.resolved_proposition = (
+                "The manuscript-grounded contribution requires clearer comparison "
+                "with the nearest prior work; external retrieval was incomplete, "
+                f"so no priority conclusion is asserted: {_without_absolute_priority(point.proposition)}"
+            )
+        point.validation_status = PointValidationStatus.VALIDATED
+        point.stability_status = "not_required"
+        point.validation_notes.append("external_retrieval_gap_downgraded_to_question")
+
+    @staticmethod
     def _store_coverage(
         point: CanonicalReviewPoint,
-        state: ReviewStateV2,
+        state: ReviewStateV3,
         claim: PaperClaim,
         prior_art: PriorArtService,
         store: EvidenceStore,
@@ -478,10 +572,7 @@ class EvidenceSupervisor:
         direct_found = False
         for key in point.relation_evidence_keys:
             record = store.get(key)
-            if record and record.payload.get("relation_label") in {
-                "DIRECT_ANTECEDENT",
-                "PARTIAL_ANTECEDENT",
-            }:
+            if record and record.payload.get("relation_label") == "DIRECT_ANTECEDENT":
                 direct_found = True
                 break
         card = build(
@@ -494,11 +585,11 @@ class EvidenceSupervisor:
         store.add_evidence(key, "retrieval_coverage", card)
         point.coverage_evidence_keys = [key]
 
-    def _budget(self, point_id: str, state: ReviewStateV2) -> RetrievalBudget:
+    def _budget(self, point_id: str, state: ReviewStateV3) -> RetrievalBudget:
         if point_id not in self._budgets:
             self._budgets[point_id] = RetrievalBudget(
                 normal_max=state.action_budget.normal_per_claim_max,
-                contrastive_max=state.action_budget.counterfactual_per_claim_max,
+                contrastive_max=(state.action_budget.counterfactual_per_claim_max),
                 citation_expansion_max=state.action_budget.citation_per_claim_max,
                 fulltext_max=min(
                     self.config.retrieval.fulltext_max,
@@ -508,12 +599,11 @@ class EvidenceSupervisor:
         return self._budgets[point_id]
 
     @staticmethod
-    def _finalize(state: ReviewStateV2) -> None:
+    def _finalize(state: ReviewStateV3) -> None:
         for point in state.canonical_points.values():
             if point.validation_status == PointValidationStatus.UNRESOLVED:
                 point.validation_notes.append("finalized_unresolved")
-                if point.severity == PointSeverity.MAJOR:
-                    point.retained = False
+                point.retained = False
             if point.validation_status == PointValidationStatus.EXTERNALLY_VALIDATED:
                 point.validation_status = PointValidationStatus.VALIDATED
         state.unresolved_target_ids = [
@@ -526,22 +616,35 @@ class EvidenceSupervisor:
         state.finalized = True
 
     @staticmethod
-    def _exhaust(state: ReviewStateV2) -> None:
+    def _exhaust(state: ReviewStateV3) -> None:
         for point in state.canonical_points.values():
             if point.validation_status not in {
                 PointValidationStatus.VALIDATED,
                 PointValidationStatus.REJECTED,
             }:
-                point.validation_status = PointValidationStatus.UNRESOLVED
                 point.validation_notes.append("evidence_action_budget_exhausted")
-                if point.severity == PointSeverity.MAJOR:
+                if (point.initial_section or point.section).startswith("novelty_"):
+                    point.validation_status = PointValidationStatus.VALIDATED
+                    point.novelty_resolution = "inconclusive"
+                    point.stability_status = "not_required"
+                    point.novelty_confidence = min(
+                        point.novelty_confidence or 1.0, 0.30
+                    )
+                    point.resolved_proposition = (
+                        "The graph-blind review direction remains provisional because "
+                        "the evidence-action budget did not permit a complete prior-art "
+                        f"check: {_without_absolute_priority(point.proposition)}"
+                    )
+                else:
+                    point.validation_status = PointValidationStatus.UNRESOLVED
+                if (
+                    point.severity == PointSeverity.MAJOR
+                    and point.validation_status == PointValidationStatus.UNRESOLVED
+                ):
                     point.retained = False
-        state.failures.append(
-            FailureRecord(stage="evidence_supervisor", reason="action_budget_exhausted")
-        )
         EvidenceSupervisor._finalize(state)
 
-    def _update_process_features(self, state: ReviewStateV2) -> None:
+    def _update_process_features(self, state: ReviewStateV3) -> None:
         external = [
             point
             for point in state.canonical_points.values()
@@ -593,7 +696,7 @@ class EvidenceSupervisor:
         reason: str,
         before: int,
         after: int,
-        state: ReviewStateV2,
+        state: ReviewStateV3,
         started: float,
         failure: str | None,
     ) -> None:
@@ -661,7 +764,7 @@ def _without_absolute_priority(text: str) -> str:
         r"首次|首个|前所未有|唯一",
         "claimed",
         str(text),
-        flags=re.I,
+        flags=re.IGNORECASE,
     )
     return re.sub(r"\s+", " ", cleaned).strip()
 

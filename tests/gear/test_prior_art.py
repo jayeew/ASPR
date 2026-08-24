@@ -10,6 +10,7 @@ from gear.contracts import (
     RetrievalBudget,
     RetrievedSpan,
     RetrievedWork,
+    ScientificSearchFrame,
 )
 from gear.prior_art import PriorArtService, RelationClassifier
 
@@ -485,3 +486,13 @@ def test_relation_classifier_selects_most_relevant_prior_span(gear_config, paper
     )
     assert card.prior_span_id == "RS-relevant"
     assert card.source_query_ids == ["QRY-one", "QRY-two"]
+
+
+def test_scientific_search_frame_normalizes_list_delta() -> None:
+    frame = ScientificSearchFrame(
+        target_object=["tumor"],
+        task_problem=["response"],
+        claimed_delta=["first mechanism", "second result"],
+        source_span_ids=["S-1"],
+    )
+    assert frame.claimed_delta == "first mechanism; second result"

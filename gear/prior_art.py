@@ -243,12 +243,30 @@ class QueryPlanner:
             raise ValueError("search frame contains reviewer rhetoric")
         return frame
 
-    def plan(self, claim: PaperClaim, frame: ScientificSearchFrame) -> list[QuerySpec]:
+    def plan(
+        self,
+        claim: PaperClaim,
+        frame: ScientificSearchFrame,
+        graph_search_terms: Sequence[str] = (),
+    ) -> list[QuerySpec]:
+        graph_query = (
+            " ".join(
+                dict.fromkeys(
+                    [
+                        *frame.target_object[:2],
+                        *frame.task_problem[:2],
+                        *graph_search_terms[:8],
+                    ]
+                )
+            ).strip()
+            if graph_search_terms
+            else ""
+        )
         planned = [
             (
                 "lexical",
-                "author_terminology",
-                self._role_query(frame, "author"),
+                "graph_focus" if graph_query else "author_terminology",
+                graph_query or self._role_query(frame, "author"),
                 "text",
             ),
             ("lexical", "object_problem", self._role_query(frame, "object"), "text"),
@@ -291,6 +309,8 @@ class QueryPlanner:
                             "legacy_contrastive",
                             "author_citation",
                             "citation_neighbor",
+                            "graph_focus",
+                            "graph_seed",
                         ],
                         role,
                     ),
@@ -423,6 +443,8 @@ class QueryPlanner:
             "legacy_contrastive",
             "author_citation",
             "citation_neighbor",
+            "graph_focus",
+            "graph_seed",
         ] = "object_problem",
         transformation: str = "",
     ) -> QuerySpec:
@@ -551,6 +573,8 @@ class PriorArtService:
         family: LiteralQueryFamily = "normal",
         target_span: EvidenceSpan | None = None,
         paper_ir: PaperIR | None = None,
+        graph_seed_work_ids: Sequence[str] = (),
+        graph_search_terms: Sequence[str] = (),
     ) -> list[RetrievedWork]:
         self.last_failures = []
         self.last_queries = []
@@ -586,20 +610,37 @@ class PriorArtService:
                 remaining = budget.normal_max - budget.normal_used
                 if remaining <= 0:
                     return []
-                queries = self.query_planner.plan(claim, frame)[:remaining]
+                queries = self.query_planner.plan(claim, frame, graph_search_terms)[
+                    :remaining
+                ]
                 budget.normal_used += len(queries)
         except (ModelClientUnavailableError, TypeError, ValueError) as exc:
-            reason = f"scientific_query_planning:{exc}"
             existing_coverage = self._coverage_state.get(claim.claim_id)
             if family == "contrastive" and existing_coverage is not None:
                 advisory = f"contrastive_query_coverage_gap:{exc}"
                 self.last_advisories.append(advisory)
                 existing_coverage["advisories"].append(advisory)
                 existing_coverage["exhaustive"] = False
+                return []
+            if target_span is not None:
+                frame = self._fallback_frame(claim, target_span, paper_ir)
+                self._frames[claim.claim_id] = frame
+                self.last_frame = frame
+                self.last_advisories.append(f"query_planner_degraded:{exc}")
+                if family == "contrastive":
+                    queries = [self.query_planner.contrastive(claim, frame)]
+                    budget.contrastive_used += 1
+                else:
+                    remaining = budget.normal_max - budget.normal_used
+                    queries = self.query_planner.plan(claim, frame, graph_search_terms)[
+                        :remaining
+                    ]
+                    budget.normal_used += len(queries)
             else:
+                reason = f"scientific_query_planning:{exc}"
                 self.last_failures.append(reason)
                 self.last_service_failed = True
-            return []
+                return []
         self.last_query_specs = list(queries)
         remaining_slots = budget.fulltext_max - budget.fulltext_kept
         if remaining_slots <= 0:
@@ -695,6 +736,15 @@ class PriorArtService:
             self.last_service_failed = True
             coverage["service_failed"] = True
         if family != "contrastive":
+            self._add_graph_seeds(
+                graph_seed_work_ids,
+                frame,
+                claim,
+                cutoff,
+                works,
+                raw_hits,
+                fused_scores,
+            )
             self._add_citation_seeds(
                 frame,
                 claim,
@@ -926,6 +976,24 @@ class PriorArtService:
             )
         return self.query_planner.build_frame(claim, target_span, paper_ir)
 
+    @staticmethod
+    def _fallback_frame(
+        claim: PaperClaim,
+        target_span: EvidenceSpan,
+        paper_ir: PaperIR | None,
+    ) -> ScientificSearchFrame:
+        title = paper_ir.metadata.title if paper_ir is not None else ""
+        terms = list(
+            dict.fromkeys(_tokens(f"{title} {claim.text} {target_span.text}"))
+        )[:12]
+        midpoint = max(2, len(terms) // 2)
+        return ScientificSearchFrame(
+            target_object=[" ".join(terms[:midpoint])],
+            task_problem=[" ".join(terms[midpoint:])],
+            author_terms=terms,
+            source_span_ids=[target_span.span_id],
+        )
+
     def _candidate_limit(self, query: QuerySpec) -> int:
         if query.search_mode == "semantic":
             return self.config.retrieval.semantic_candidate_limit
@@ -989,11 +1057,53 @@ class PriorArtService:
             self.last_queries.append(f"{query.query_id}:{query.query}")
             self.last_query_specs.append(query)
             try:
-                row = fetch(identifier)
+                row, cache_hit = self._cached_work(identifier)
+                self.last_cache_hit = self.last_cache_hit or cache_hit
             except (OSError, RuntimeError, TypeError, ValueError) as exc:
                 self.last_failures.append(f"{query.query_id}:{exc}")
                 continue
             if not isinstance(row, dict):
+                continue
+            work = self._normalize_work(row, query)
+            if work is None or not self._eligible_before_cutoff(work, cutoff):
+                continue
+            works.setdefault(work.work_id, work)
+            raw_hits.append((query, rank, work.work_id, None))
+            fused_scores[work.work_id] += 0.1 + 1.0 / (60.0 + rank)
+
+    def _add_graph_seeds(
+        self,
+        seed_work_ids: Sequence[str],
+        frame: ScientificSearchFrame,
+        claim: PaperClaim,
+        cutoff: date,
+        works: dict[str, RetrievedWork],
+        raw_hits: list[tuple[QuerySpec, int, str, float | None]],
+        fused_scores: dict[str, float],
+    ) -> None:
+        fetch = getattr(self._client(), "fetch_work", None)
+        if not callable(fetch):
+            return
+        for rank, work_id in enumerate(dict.fromkeys(seed_work_ids), 1):
+            query = self.query_planner._spec(
+                claim,
+                frame,
+                "citation",
+                str(work_id),
+                "direct_id",
+                query_role="graph_seed",
+                transformation="graph_coupling_seed",
+            )
+            self.last_queries.append(f"{query.query_id}:{query.query}")
+            self.last_query_specs.append(query)
+            try:
+                row, cache_hit = self._cached_work(str(work_id))
+                self.last_cache_hit = self.last_cache_hit or cache_hit
+            except (OSError, RuntimeError, TypeError, ValueError) as exc:
+                self.last_advisories.append(f"graph_seed_unavailable:{work_id}:{exc}")
+                continue
+            if not isinstance(row, dict):
+                self.last_advisories.append(f"graph_seed_unavailable:{work_id}")
                 continue
             work = self._normalize_work(row, query)
             if work is None or not self._eligible_before_cutoff(work, cutoff):
@@ -1069,10 +1179,28 @@ class PriorArtService:
                 self.last_advisories.append(
                     f"local_ranker_degraded:{type(exc).__name__}:{exc}"
                 )
-        ranked, scores = self._codex_global_rank(frame, works)
-        self.last_ranker = "codex:gpt-5.6-terra:medium"
-        self.last_ranking_completed = (True, True)
-        return ranked, scores
+        try:
+            ranked, scores = self._codex_global_rank(frame, works)
+            self.last_ranker = "codex:gpt-5.6-terra:medium"
+            self.last_ranking_completed = (True, True)
+            return ranked, scores
+        except (ModelClientUnavailableError, TypeError, ValueError) as exc:
+            self.last_advisories.append(f"global_ranker_degraded:{exc}")
+            tokens = set(_tokens(self._purpose_view(frame)))
+            ranked = sorted(
+                works,
+                key=lambda work: len(
+                    tokens & set(_tokens(f"{work.title} {work.abstract}"))
+                ),
+                reverse=True,
+            )[: limits.rerank_candidate_limit]
+            scores = {
+                work.work_id: (1.0 / (index + 1), 1.0 / (index + 1))
+                for index, work in enumerate(ranked)
+            }
+            self.last_ranker = "deterministic_overlap"
+            self.last_ranking_completed = (True, True)
+            return ranked, scores
 
     def _codex_global_rank(
         self,
@@ -1496,6 +1624,35 @@ class PriorArtService:
             encoding="utf-8",
         )
         return eligible, False
+
+    def _cached_work(self, work_id: str) -> tuple[dict[str, Any], bool]:
+        client = self._client()
+        fetch = getattr(client, "fetch_work", None)
+        if not callable(fetch):
+            return {}, False
+        provider = str(getattr(client, "retrieval_provider", type(client).__name__))
+        path = self._cache_path(
+            {
+                "operation": "fetch_work",
+                "query": work_id,
+                "provider": provider,
+            }
+        )
+        if path.is_file():
+            try:
+                payload = json.loads(path.read_text(encoding="utf-8"))
+                if isinstance(payload, dict):
+                    return dict(payload), True
+            except (OSError, json.JSONDecodeError):
+                pass
+        row = fetch(work_id)
+        if not isinstance(row, dict):
+            return {}, False
+        path.write_text(
+            json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        return row, False
 
     @staticmethod
     def _eligible_before_cutoff(work: RetrievedWork, cutoff: date) -> bool:

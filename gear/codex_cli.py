@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import subprocess
 import tempfile
@@ -29,9 +30,12 @@ class CodexCliJsonClient:
         endpoint: CodexCliEndpoint,
         *,
         runner: CodexRunner | None = None,
+        cache_dir: Path | None = None,
     ) -> None:
         self.endpoint = endpoint
         self.runner = runner
+        self.cache_dir = Path(cache_dir).resolve() if cache_dir is not None else None
+        self.last_cache_hit = False
 
     @property
     def model_name(self) -> str:
@@ -45,13 +49,50 @@ class CodexCliJsonClient:
         response_schema: Mapping[str, Any] | None = None,
     ) -> dict[str, Any]:
         prompt = self._prompt(system, user)
+        cache_path = self._cache_path(prompt, response_schema)
+        self.last_cache_hit = False
         try:
+            if cache_path is not None and cache_path.is_file():
+                cached = _extract_json_object(cache_path.read_text(encoding="utf-8"))
+                self.last_cache_hit = True
+                return cached
             raw = self._run(prompt, response_schema)
-            return _extract_json_object(raw)
+            payload = _extract_json_object(raw)
+            if cache_path is not None:
+                cache_path.parent.mkdir(parents=True, exist_ok=True)
+                temporary = cache_path.with_suffix(".tmp")
+                temporary.write_text(
+                    json.dumps(payload, ensure_ascii=False, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+                temporary.replace(cache_path)
+            return payload
         except (OSError, ValueError, subprocess.SubprocessError) as exc:
             raise CodexCLIUnavailableError(
                 f"Codex CLI session failed for {self.endpoint.model}: {exc}"
             ) from exc
+
+    def _cache_path(
+        self,
+        prompt: str,
+        response_schema: Mapping[str, Any] | None,
+    ) -> Path | None:
+        if self.cache_dir is None or self.runner is not None:
+            return None
+        identity = json.dumps(
+            {
+                "contract": "gear_codex_response_cache_v1",
+                "model": self.endpoint.model,
+                "reasoning_effort": self.endpoint.reasoning_effort,
+                "prompt": prompt,
+                "response_schema": response_schema,
+            },
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+        digest = hashlib.sha256(identity.encode("utf-8")).hexdigest()
+        return self.cache_dir / f"{digest}.json"
 
     def _run(
         self,

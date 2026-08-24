@@ -1,0 +1,36 @@
+{
+  "artifacts": {
+    "comparison_vs_fixed": "comparison_vs_fixed.csv",
+    "model_comparison": "model_comparison.csv",
+    "oof_domain_metrics": "oof_domain_metrics.csv",
+    "oof_fold_metrics": "oof_fold_metrics.csv",
+    "oof_metrics": "oof_metrics.csv",
+    "oof_predictions": "oof_predictions.parquet",
+    "paper_scores": "paper_scores.parquet",
+    "results": "RESULTS.md",
+    "run_manifest": "run_manifest.json",
+    "selected_parameters": "selected_parameters_by_outer_fold.csv",
+    "validation_report": "validation_report.json"
+  },
+  "best_models": {
+    "3": {
+      "feature_count": 16,
+      "model_id": "primary",
+      "spearman": 0.718465
+    },
+    "5": {
+      "feature_count": 16,
+      "model_id": "primary",
+      "spearman": 0.739570
+    },
+    "8": {
+      "feature_count": 219,
+      "model_id": "broad_t0",
+      "spearman": 0.775562
+    }
+  },
+  "contract": "evidence_derived_current_release_v1",
+  "default": true,
+  "release_id": "hgb_nested_tuned_7_16_153_219_20260820_b48936af",
+  "release_path": "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived/frozen_releases/hgb_nested_tuned_7_16_153_219_20260820_b48936af"
+}

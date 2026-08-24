@@ -1,0 +1,17 @@
+{
+  "amendment_id": "aspr-v4-search-frame-rederivation-fk-20260819",
+  "status": "approved",
+  "approved_by": "project_owner",
+  "scope": "implementation_reproducibility",
+  "authorized_old_source_ids": [
+    "code_coding_v4_seed_recall_transport_hydration"
+  ],
+  "original_hashes_retained": true,
+  "reason": "When a fully adjudicated seed-recall repair requires a new search-frame version, clear only the dependent seed-recall cache rows before replacing physical query rows. This repairs referential integrity and cannot alter raw terms, coding decisions, seed records, or final-feature eligibility.",
+  "constraints": [
+    "The cache is recomputed by validate-search-frame for every new physical query hash.",
+    "No literature, coding, domain, indicator, or model result is deleted.",
+    "The H2-approved term coding remains the sole basis for the new frame."
+  ],
+  "approved_at": "2026-08-19T05:28:00+00:00"
+}

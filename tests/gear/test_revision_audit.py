@@ -5,6 +5,7 @@ from datetime import date
 from experiments.gear.revision_audit import (
     AuditPoint,
     RevisionAuditCase,
+    blind_package_count,
     build_blind_package,
     score_pairs,
 )
@@ -91,3 +92,26 @@ def test_blind_package_uses_opaque_ids() -> None:
     assert "human-private-id" not in str(package["left"])
     assert "ai-private-id" not in str(package["right"])
     assert package["mapping"]
+
+
+def test_blind_package_is_complete_rectangle() -> None:
+    case = RevisionAuditCase(
+        paper_id="10.1038/s41467-023-36025-x",
+        manuscript_path="paper.md",
+        metadata_path="metadata.json",
+        reconstruction_dir="reconstruction",
+        agent_run_dir="agent",
+        cutoff_date="2021-07-14",
+    )
+    left = [_point(f"H-{index}") for index in range(7)]
+    right = [_point(f"A-{index}") for index in range(10)]
+    assert blind_package_count(len(left), len(right)) == 2
+    package = build_blind_package(case, left, right, kind="retained", chunk=0)
+    assert len(package["left"]) == 4
+    assert len(package["right"]) == 10
+    assert len(package["pairs"]) == 40
+    assert set(map(tuple, package["pairs"])) == {
+        (left_item["blind_id"], right_item["blind_id"])
+        for left_item in package["left"]
+        for right_item in package["right"]
+    }

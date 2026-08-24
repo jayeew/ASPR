@@ -1,0 +1,6 @@
+{
+  "doi:10.1371/journal.pone.0051928": ["exclude", "E_NOT_PAPER_LEVEL", "The measured unit is the journal's misconduct policy rather than an individual paper-level innovation, quality, or impact construct."],
+  "doi:10.1002/cesm.12050": ["exclude", "E_NOT_PAPER_LEVEL", "The study measures journal author-instruction policies rather than features or outcomes of individual scientific papers."],
+  "doi:10.14573/altex.2106111": ["exclude", "E_NOT_METRIC_PREDICTOR_VALIDATION", "The article recommends editorial actions but does not define or validate a computable individual-paper indicator."
+  ]
+}

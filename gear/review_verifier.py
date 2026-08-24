@@ -5,7 +5,8 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-from typing import Any, Callable, List, Mapping, Optional
+from collections.abc import Callable, Mapping
+from typing import Any
 
 from .codex_critic import FORBIDDEN_DECISION_TEXT
 from .config import GearConfig, load_config
@@ -17,7 +18,7 @@ from .review_contracts import (
     ReviewPhase,
     ReviewSource,
     ReviewState,
-    ReviewStateV2,
+    ReviewStateV3,
     StructuredReview,
     VerificationIssue,
     VerificationReport,
@@ -28,21 +29,21 @@ GRAPH_SEMANTIC_TERMS = re.compile(
     r"\b(?:ASPR score|p[_ -]?uptake|conditional[_ -]?diffusion|"
     r"D5 percentile|OOF(?: spearman)?|EF\d{4}|opportunity field|"
     r"context[- ]control field)\b",
-    re.I,
+    re.IGNORECASE,
 )
 
 ABSOLUTE_PRIORITY_TERMS = re.compile(
     r"\b(?:first|first-ever|unprecedented|unique|world-first)\b|首次|首个|前所未有|唯一",
-    re.I,
+    re.IGNORECASE,
 )
 
 
 class ReviewVerifier:
     def __init__(
         self,
-        config: Optional[GearConfig] = None,
+        config: GearConfig | None = None,
         *,
-        semantic_checker: Optional[Callable[[str, str], Mapping[str, Any]]] = None,
+        semantic_checker: Callable[[str, str], Mapping[str, Any]] | None = None,
     ) -> None:
         self.config = config or load_config()
         client = build_json_model_client(self.config)
@@ -94,14 +95,20 @@ class ReviewVerifier:
     def verify_state(
         self,
         review: StructuredReview,
-        state: ReviewStateV2,
+        state: ReviewStateV3,
         paper_ir: PaperIR,
         evidence_store: EvidenceStore,
     ) -> VerificationReport:
         issues = self._deterministic_v2_issues(review, state, paper_ir, evidence_store)
         semantic_available = self.semantic_checker is not None
+        semantic_success = False
         if semantic_available:
-            issues.extend(self._semantic_issues(review, paper_ir))
+            semantic_issues = self._semantic_issues(review, paper_ir)
+            issues.extend(semantic_issues)
+            semantic_success = not any(
+                issue.code in {"semantic_verifier_failed", "semantic_verifier_invalid"}
+                for issue in semantic_issues
+            )
         else:
             issues.append(
                 self._issue(
@@ -109,14 +116,19 @@ class ReviewVerifier:
                     "Semantic paper-span support verification was not available.",
                 )
             )
+        non_blocking_semantic_codes = {
+            "semantic_verifier_unavailable",
+            "semantic_verifier_failed",
+            "semantic_verifier_invalid",
+        }
         hard = [
-            issue for issue in issues if issue.code != "semantic_verifier_unavailable"
+            issue for issue in issues if issue.code not in non_blocking_semantic_codes
         ]
         report = VerificationReport(
             passed=not hard,
-            limited=not semantic_available,
+            limited=not semantic_success,
             issues=issues,
-            semantic_verification_available=semantic_available,
+            semantic_verification_available=semantic_success,
             graph_semantic_violation_count=sum(
                 issue.code == "graph_semantic_violation" for issue in issues
             ),
@@ -126,17 +138,17 @@ class ReviewVerifier:
         )
         if report.passed:
             state.phase = ReviewPhase.VERIFIED
-            state.process_features.semantic_verifier_passed = semantic_available
+            state.process_features.semantic_verifier_passed = semantic_success
         return report
 
     def _deterministic_v2_issues(
         self,
         review: StructuredReview,
-        state: ReviewStateV2,
+        state: ReviewStateV3,
         paper_ir: PaperIR,
         evidence_store: EvidenceStore,
-    ) -> List[VerificationIssue]:
-        issues: List[VerificationIssue] = []
+    ) -> list[VerificationIssue]:
+        issues: list[VerificationIssue] = []
         if review.paper_id != state.paper_id or review.paper_id != paper_ir.paper_id:
             issues.append(
                 self._issue("paper_identity_mismatch", "V2 paper IDs differ.")
@@ -144,7 +156,7 @@ class ReviewVerifier:
         if state.paper_sha256 != paper_ir.paper_sha256:
             issues.append(self._issue("paper_hash_mismatch", "V2 paper hashes differ."))
         issues.extend(self._branch_independence_issues(state, evidence_store))
-        issues.extend(self._relation_issues(state, evidence_store))
+        issues.extend(self._relation_issues(state, evidence_store, paper_ir))
         visible = [review.summary.text]
         for point in review.all_points():
             visible.extend([point.text, point.suggested_action])
@@ -265,13 +277,14 @@ class ReviewVerifier:
 
     def _branch_independence_issues(
         self,
-        state: ReviewStateV2,
+        state: ReviewStateV3,
         evidence_store: EvidenceStore,
-    ) -> List[VerificationIssue]:
-        issues: List[VerificationIssue] = []
+    ) -> list[VerificationIssue]:
+        issues: list[VerificationIssue] = []
         forbidden = (
             "graph_context",
             "graph_prior",
+            "graph_result",
             "aspr_score_0_100",
             "score_0_100",
             "p_uptake",
@@ -323,17 +336,18 @@ class ReviewVerifier:
 
     def _relation_issues(
         self,
-        state: ReviewStateV2,
+        state: ReviewStateV3,
         evidence_store: EvidenceStore,
-    ) -> List[VerificationIssue]:
-        issues: List[VerificationIssue] = []
+        paper_ir: PaperIR,
+    ) -> list[VerificationIssue]:
+        issues: list[VerificationIssue] = []
         relevant_keys = {
-            key
+            key: point.point_id
             for point in state.canonical_points.values()
             if point.retained
             for key in point.relation_evidence_keys
         }
-        for key in relevant_keys:
+        for key, point_id in relevant_keys.items():
             record = evidence_store.get(key)
             payload = record.payload if record is not None else {}
             missing = [
@@ -351,6 +365,15 @@ class ReviewVerifier:
                         "relation_missing_paired_spans",
                         f"Relation {key} lacks paired spans or difference "
                         f"dimensions: {missing}",
+                        point_id,
+                    )
+                )
+            elif payload.get("target_span_id") not in paper_ir.span_map():
+                issues.append(
+                    self._issue(
+                        "relation_target_span_mismatch",
+                        f"Relation {key} targets a span outside the current PaperIR.",
+                        point_id,
                     )
                 )
             elif payload.get("temporal_valid") is not True:
@@ -358,13 +381,14 @@ class ReviewVerifier:
                     self._issue(
                         "relation_temporal_invalid",
                         f"Relation {key} is not valid before the cutoff.",
+                        point_id,
                     )
                 )
         return issues
 
     @staticmethod
     def reject_failed_points(
-        state: ReviewStateV2,
+        state: ReviewStateV3,
         report: VerificationReport,
     ) -> int:
         """Apply the only allowed repair: delete points named by verifier issues."""
@@ -387,8 +411,8 @@ class ReviewVerifier:
         state: ReviewState,
         paper_ir: PaperIR,
         evidence_store: EvidenceStore,
-    ) -> List[VerificationIssue]:
-        issues: List[VerificationIssue] = []
+    ) -> list[VerificationIssue]:
+        issues: list[VerificationIssue] = []
         if review.paper_id != paper_ir.paper_id or review.paper_id != state.paper_id:
             issues.append(
                 self._issue(
@@ -473,7 +497,7 @@ class ReviewVerifier:
         self,
         review: StructuredReview,
         paper_ir: PaperIR,
-    ) -> List[VerificationIssue]:
+    ) -> list[VerificationIssue]:
         if self.semantic_checker is None:
             return []
         self.semantic_calls += 1
@@ -525,7 +549,7 @@ class ReviewVerifier:
                 )
             ]
         point_map = {point.point_id: point for point in review.all_points()}
-        issues: List[VerificationIssue] = []
+        issues: list[VerificationIssue] = []
         for point_id in sorted({str(item) for item in raw_ids} & set(point_map)):
             code = (
                 "unsupported_major"
@@ -574,7 +598,7 @@ class ReviewVerifier:
     def _issue(
         code: str,
         message: str,
-        point_id: Optional[str] = None,
+        point_id: str | None = None,
     ) -> VerificationIssue:
         identity = f"{code}|{point_id}|{message}"
         return VerificationIssue(

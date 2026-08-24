@@ -70,6 +70,26 @@ def test_openai_compatible_client_fails_closed_without_key(
         client.generate_json(system="system", user="user")
 
 
+def test_openai_compatible_client_wraps_socket_timeout(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("TEST_TIMEOUT_KEY", "test-secret")
+
+    def requester(_request: Request, _timeout: int) -> bytes:
+        raise TimeoutError("socket timed out")
+
+    client = OpenAICompatibleJsonClient(
+        OpenAICompatibleEndpoint(
+            base_url="https://api.example.test/v1",
+            model="provider-model",
+            api_key_env="TEST_TIMEOUT_KEY",
+        ),
+        requester=requester,
+    )
+    with pytest.raises(ModelClientUnavailableError, match="socket timed out"):
+        client.generate_json(system="system", user="user")
+
+
 def test_deepseek_config_merges_with_default_assets() -> None:
     config = load_config(Path("configs/gear/deepseek.example.json"))
     assert config.model_backend == "openai_compatible"

@@ -1,0 +1,10 @@
+{
+  "doi:10.1161/01.str.32.6.1430": ["exclude", "E_NOT_METRIC_PREDICTOR_VALIDATION", "The clinical terminology standard does not establish a validated, general paper-level innovation, quality, or impact indicator."],
+  "doi:10.1038/embor.2009.235": ["exclude", "E_WRONG_DOCUMENT_TYPE", "The record is a commentary or editorial item rather than an eligible substantive article or review under the frozen document-type rule."],
+  "doi:10.1097/01.blo.0000141657.18423.0c": ["exclude", "E_WRONG_DOCUMENT_TYPE", "The record is an editorial discussion of publication ethics rather than an eligible substantive measurement or validation study."],
+  "doi:10.1016/j.joi.2018.01.009": ["include", "", "The study validates a bibliographic source's measurement of article citation impact for in-press papers; this is eligible measurement evidence, while any post-T0 citation feature remains excluded from training."],
+  "doi:10.1088/2632-072x/ac24f1": ["exclude", "E_FUTURE_OUTCOME_ONLY", "Citation-trajectory diffusion requires observations accumulated after publication and does not establish an eligible T0 feature."],
+  "doi:10.3390/jcm12216809": ["include", "", "The review identifies image documentation and data accessibility as observable publication features supporting research-quality and reproducibility assessment."],
+  "doi:10.1177/016555158300600105": ["include", "", "The review synthesizes bibliometric definitions and measures of research collaboration, including paper-level coauthorship features relevant to T0 indicator discovery."
+  ]
+}

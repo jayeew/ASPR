@@ -1,0 +1,6 @@
+{
+  "doi:10.1007/s00167-023-07595-6": ["exclude", "E_NOT_METRIC_PREDICTOR_VALIDATION", "The article offers reviewer advice but does not define or validate a reproducible paper-level target indicator."],
+  "doi:10.1136/bmjopen-2020-044794": ["exclude", "E_WRONG_DOCUMENT_TYPE", "This is a systematic-review protocol without completed measurement or association results."],
+  "doi:10.1002/asi.4630300509": ["exclude", "E_FUTURE_OUTCOME_ONLY", "The study models citation ageing and obsolescence from post-publication trajectories and does not establish a T0 paper feature."
+  ]
+}

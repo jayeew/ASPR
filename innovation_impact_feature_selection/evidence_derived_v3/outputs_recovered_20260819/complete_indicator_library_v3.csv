@@ -1,0 +1,433 @@
+feature_id,canonical_name_en,scope_role,maximum_information_time,formula_text,article_level,publication_time_computable,uses_future_information,english_fulltext_verified,dimension_id,dimension_mapping_provenance,recovery_provenance
+EF0001,Abstract-availability predictor,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD001,session_exact_broad_t0,codex_session_log_structured_output
+EF0002,Abstract information entropy,t0_substantive,T0,H(X) = -Σ_j p_j log2(p_j).,1,1,0,0,CD002,session_exact_broad_t0,codex_session_log_structured_output
+EF0003,Abstract language availability,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD054,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0004,Abstract length,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD002,session_exact_broad_t0,codex_session_log_structured_output
+EF0005,Abstract length and complexity,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD002,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0006,Abstract readability measure,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD001,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0007,Abstract reporting completeness,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD001,session_exact_broad_t0,codex_session_log_structured_output
+EF0008,Abstract rhetorical-move structure,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD003,session_exact_broad_t0,codex_session_log_structured_output
+EF0009,Abstract rhetorical moves,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD003,session_exact_broad_t0,codex_session_log_structured_output
+EF0010,Abstract structure,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD005,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0011,Abstract stylistic features,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD001,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0012,Abstract text content,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD001,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0013,Abstract word-limit policy,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD002,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0014,Academic program/institution,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD006,session_exact_broad_t0,codex_session_log_structured_output
+EF0015,Access-status control,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD041,session_exact_broad_t0,codex_session_log_structured_output
+EF0016,Accessible scientific writing,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD053,session_exact_broad_t0,codex_session_log_structured_output
+EF0017,Additive entropy diversity index,direct_innovation,T0,dive = H_variety + H_balance - I_disparity,1,1,0,1,CD029,session_exact_broad_t0,codex_session_log_structured_output
+EF0018,Advisor commitment and communication,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD002,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0019,Affiliated-country size,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD006,session_exact_broad_t0,codex_session_log_structured_output
+EF0020,AMSTAR 2 assessment,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD056,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0021,Analytic feature selection,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD056,session_exact_broad_t0,codex_session_log_structured_output
+EF0022,Anecdotal-only evaluation practice,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD021,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0023,Animal age and sex reporting,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD047,session_exact_broad_t0,codex_session_log_structured_output
+EF0024,Article annotation content,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD026,session_exact_broad_t0,codex_session_log_structured_output
+EF0025,Article length,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD005,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0026,Article-production-quality predictor,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD005,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0027,Article publishing charge,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD004,session_exact_broad_t0,codex_session_log_structured_output
+EF0028,Article structural-element counts,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD005,session_exact_broad_t0,codex_session_log_structured_output
+EF0029,Article structure,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD005,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0030,Article-title features,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD005,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0031,Article topic,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD063,session_exact_broad_t0,codex_session_log_structured_output
+EF0032,Author academic qualification,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD007,session_exact_broad_t0,codex_session_log_structured_output
+EF0033,Author-affiliation country diversity,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD006,session_exact_broad_t0,codex_session_log_structured_output
+EF0034,Author affiliation geography/institution,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD006,session_exact_broad_t0,codex_session_log_structured_output
+EF0035,Author-authority cue,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD009,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0036,Author career age,context_control,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD007,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0037,Author career stage,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD007,session_exact_broad_t0,codex_session_log_structured_output
+EF0038,Author count,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,1,CD010,session_exact_broad_t0,codex_session_log_structured_output
+EF0039,Author country,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD006,session_exact_broad_t0,codex_session_log_structured_output
+EF0040,Author-country development-level control,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD006,session_exact_broad_t0,codex_session_log_structured_output
+EF0041,Author disciplinary diversity (DDA),direct_innovation,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD061,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0042,Author gender,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD009,session_exact_broad_t0,codex_session_log_structured_output
+EF0043,Author identity cue,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD009,session_exact_broad_t0,codex_session_log_structured_output
+EF0044,Author order predictor,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD009,session_exact_broad_t0,codex_session_log_structured_output
+EF0045,Author publication history,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD007,session_exact_broad_t0,codex_session_log_structured_output
+EF0046,Author-team ethnic diversity,direct_innovation,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD061,session_exact_broad_t0,codex_session_log_structured_output
+EF0047,Author tenure status,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD007,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0048,Author-tenure-status adjustment covariate,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD010,session_exact_broad_t0,codex_session_log_structured_output
+EF0049,Author-topic-expertise-proximity predictor,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD007,session_exact_broad_t0,codex_session_log_structured_output
+EF0050,Authorship characteristics,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD009,session_exact_broad_t0,codex_session_log_structured_output
+EF0051,Authorship-country opportunity context,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD008,session_exact_broad_t0,codex_session_log_structured_output
+EF0052,Backward-citation age,t0_substantive,T0,Age distribution of works cited by the focal article.,1,1,0,1,CD045,session_exact_broad_t0,codex_session_log_structured_output
+EF0053,Basic/applied research control,context_control,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD048,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0054,Between-study heterogeneity,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD057,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0055,Bibliometric indicator,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD005,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0056,Biological justification,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD019,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0057,Biological plausibility,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD019,session_exact_broad_t0,codex_session_log_structured_output
+EF0058,Biomedical study-subject context,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD057,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0059,Blinded outcome assessment,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD037,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0060,Blinded peer-review process,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD038,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0061,Boolean search specification,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD037,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0062,Case-report clinical content,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD019,session_exact_broad_t0,codex_session_log_structured_output
+EF0063,Centre-of-Excellence funding/affiliation,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD027,session_exact_broad_t0,codex_session_log_structured_output
+EF0064,CHEERS reporting adherence,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD047,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0065,Citation bias,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD011,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0066,Citation-context category,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD013,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0067,Citation integrity,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD013,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0068,Citation metadata-error type,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD013,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0069,Citation-motive taxonomy,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD013,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0070,Citation-network neighborhood,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD012,session_exact_broad_t0,codex_session_log_structured_output
+EF0071,Citation-reason category,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD013,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0072,Citation structural diversity,direct_innovation,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD013,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0073,Cited-knowledge-recency predictor,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD045,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0074,Cited-reference disciplinary composition,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD044,session_exact_broad_t0,codex_session_log_structured_output
+EF0075,Cited-reference prior impact,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD046,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0076,Clinical research status,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD057,session_exact_broad_t0,codex_session_log_structured_output
+EF0077,Co-authorship,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD014,session_exact_broad_t0,codex_session_log_structured_output
+EF0078,Co-authorship network structure,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD015,session_exact_broad_t0,codex_session_log_structured_output
+EF0079,Coauthor career-age difference,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD014,session_exact_broad_t0,codex_session_log_structured_output
+EF0080,Coauthorship-network centrality,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD015,session_exact_broad_t0,codex_session_log_structured_output
+EF0081,Collaboration heterogeneity,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD015,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0082,Collaboration-network algebraic connectivity,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD015,session_exact_broad_t0,codex_session_log_structured_output
+EF0083,Collaboration-network clustering coefficient,t0_opportunity,T0,C_i = 2T(i) / [k_i(k_i - 1)].,1,1,0,1,CD015,session_exact_broad_t0,codex_session_log_structured_output
+EF0084,Collaboration-network eigenvector centrality,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD015,session_exact_broad_t0,codex_session_log_structured_output
+EF0085,Collaboration-network knowledge density,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD015,session_exact_broad_t0,codex_session_log_structured_output
+EF0086,Collaboration type,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD014,session_exact_broad_t0,codex_session_log_structured_output
+EF0087,Conference/meeting venue,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD041,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0088,Conference presentation format,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD005,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0089,Conflict-of-interest disclosure,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD020,session_exact_broad_t0,codex_session_log_structured_output
+EF0090,Confounding,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD016,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0091,Confounding by indication,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD016,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0092,Confounding control,context_control,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD016,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0093,CONSORT reporting adherence,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD047,session_exact_broad_t0,codex_session_log_structured_output
+EF0094,Construct validity,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD033,session_exact_broad_t0,codex_session_log_structured_output
+EF0095,Core outcome set,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD037,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0096,Corresponding-authorship status,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD009,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0097,Country-field stratum,context_control,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD063,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0098,Country similarity,context_control,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD033,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0099,COVID-19 topic,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD065,session_exact_broad_t0,codex_session_log_structured_output
+EF0100,Criterion-measure-use indicator,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD013,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0101,Data-access restriction control,context_control,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD017,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0102,Data accessibility,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD018,session_exact_broad_t0,codex_session_log_structured_output
+EF0103,Data availability,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD001,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0104,Data-availability statement category,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD001,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0105,Data-availability statement presence,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD001,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0106,Data findability and reusability,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD018,session_exact_broad_t0,codex_session_log_structured_output
+EF0107,Data format,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD017,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0108,Data licensing,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD017,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0109,Data-reuse documentation,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD018,session_exact_broad_t0,codex_session_log_structured_output
+EF0110,De-implementation recommendation,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD019,session_exact_broad_t0,codex_session_log_structured_output
+EF0111,Dense prose style,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD053,session_exact_broad_t0,codex_session_log_structured_output
+EF0112,Diagnostic-estimate extremity,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD013,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0113,Diagnostic-tool accuracy,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD033,session_exact_broad_t0,codex_session_log_structured_output
+EF0114,Digital dissemination channel,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD004,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0115,Disciplinary diversity,direct_innovation,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD029,session_exact_broad_t0,codex_session_log_structured_output
+EF0116,Disciplinary terminology,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD053,session_exact_broad_t0,codex_session_log_structured_output
+EF0117,DIV interdisciplinarity,direct_innovation,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD029,session_exact_broad_t0,codex_session_log_structured_output
+EF0118,Document type,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD066,session_exact_broad_t0,codex_session_log_structured_output
+EF0119,DOI-presence opportunity context,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD065,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0120,Early-access timing,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD017,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0121,Economic-evaluation presence,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD019,session_exact_broad_t0,codex_session_log_structured_output
+EF0122,Economic value-for-money measure,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD015,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0123,Economics writing style,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD053,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0124,Educational setting,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD057,session_exact_broad_t0,codex_session_log_structured_output
+EF0125,Effect size,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD055,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0126,Ego-centric coauthorship network,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD015,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0127,Empirical-study status,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD057,session_exact_broad_t0,codex_session_log_structured_output
+EF0128,Endpoint-assessment breadth,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD037,session_exact_broad_t0,codex_session_log_structured_output
+EF0129,Entropy balance component,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD031,session_exact_broad_t0,codex_session_log_structured_output
+EF0130,Entropy variety component,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD031,session_exact_broad_t0,codex_session_log_structured_output
+EF0131,Evaluated study-design attributes,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD056,session_exact_broad_t0,codex_session_log_structured_output
+EF0132,Evaluation criteria,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD021,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0133,Evidence applicability,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD022,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0134,Evidence consistency,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD022,session_exact_broad_t0,codex_session_log_structured_output
+EF0135,Evidence directness,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD022,session_exact_broad_t0,codex_session_log_structured_output
+EF0136,Evidence dose-response,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD022,session_exact_broad_t0,codex_session_log_structured_output
+EF0137,Evidence generalizability,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD022,session_exact_broad_t0,codex_session_log_structured_output
+EF0138,Evidence relevance,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD022,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0139,Evidence reliability,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD022,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0140,Evidence-strength level,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD022,session_exact_broad_t0,codex_session_log_structured_output
+EF0141,Experimental control,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD046,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0142,Experimental platform,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD046,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0143,Experimental scalability,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD022,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0144,Experimental study design,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD057,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0145,Exposure identification validity,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD033,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0146,External validity,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD033,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0147,Field citation intensity,context_control,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD013,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0148,Field-year normalization stratum,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD063,session_exact_broad_t0,codex_session_log_structured_output
+EF0149,Firm affiliation,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD027,session_exact_broad_t0,codex_session_log_structured_output
+EF0150,First-author career experience,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD007,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0151,First-author primary-language predictor,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD008,session_exact_broad_t0,codex_session_log_structured_output
+EF0152,Focused review question,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD038,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0153,Fragility Index,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD006,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0154,Funding availability,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD001,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0155,Funding duration,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD024,session_exact_broad_t0,codex_session_log_structured_output
+EF0156,Funding intensity,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD023,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0157,Funding-source category,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD024,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0158,Funding-source reporting,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD024,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0159,Funding status,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD024,session_exact_broad_t0,codex_session_log_structured_output
+EF0160,Funding status/source,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD024,session_exact_broad_t0,codex_session_log_structured_output
+EF0161,Generalist interdisciplinarity,direct_innovation,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD028,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0162,Gold-standard comparison,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD033,session_exact_broad_t0,codex_session_log_structured_output
+EF0163,Hardy-Weinberg-equilibrium reporting/testing,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD047,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0164,Hybrid-discipline status,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD066,session_exact_broad_t0,codex_session_log_structured_output
+EF0165,Imaging-protocol documentation,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD034,session_exact_broad_t0,codex_session_log_structured_output
+EF0166,Impact threshold of a confounding variable,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD011,session_exact_broad_t0,codex_session_log_structured_output
+EF0167,Implementation reporting quality,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD047,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0168,Included-study quality predictor,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD025,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0169,Industry-academic collaboration,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD014,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0170,Industry-collaboration comparison group,context_control,unverified_without_fulltext,,1,0,0,0,CD015,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0171,Industry funding,t0_opportunity,unverified_without_fulltext,,1,0,0,0,CD023,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0172,Initial article information,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD005,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0173,Innovation inertia,t0_opportunity,T0,,1,1,0,0,CD065,session_exact_broad_t0,codex_session_log_structured_output
+EF0174,Institutional-collaboration breadth,t0_opportunity,unverified_without_fulltext,,1,0,0,0,CD014,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0175,Institutional prestige,t0_opportunity,unverified_without_fulltext,,1,0,0,0,CD027,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0176,Institutional research support,t0_opportunity,unverified_without_fulltext,,1,0,0,0,CD027,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0177,Integrationist interdisciplinarity,direct_innovation,unverified_without_fulltext,,1,0,0,0,CD028,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0178,Intended impact audience,t0_opportunity,unverified_without_fulltext,,1,0,0,0,CD047,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0179,Inter-reviewer reliability measure,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD033,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0180,Interactional metadiscourse,t0_substantive,T0,,1,1,0,0,CD053,session_exact_broad_t0,codex_session_log_structured_output
+EF0181,Interdisciplinarity assessment pathway completeness,direct_innovation,unverified_without_fulltext,,1,0,0,0,CD028,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0182,Interdisciplinarity-estimate uncertainty,direct_innovation,T0,,1,1,0,0,CD028,session_exact_broad_t0,codex_session_log_structured_output
+EF0183,Interdisciplinary collaboration,direct_innovation,unverified_without_fulltext,,1,0,0,0,CD030,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0184,Interdisciplinary committee composition,direct_innovation,unverified_without_fulltext,,1,0,0,0,CD030,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0185,Interdisciplinary-journal status,direct_innovation,unverified_without_fulltext,,1,0,0,0,CD030,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0186,International collaboration,t0_opportunity,T0,,1,1,0,1,CD014,session_exact_broad_t0,codex_session_log_structured_output
+EF0187,International collaboration leadership,t0_opportunity,T0,,1,1,0,0,CD014,session_exact_broad_t0,codex_session_log_structured_output
+EF0188,International collaboration scale,t0_opportunity,T0,,1,1,0,1,CD014,session_exact_broad_t0,codex_session_log_structured_output
+EF0189,International study design,t0_opportunity,T0,,1,1,0,0,CD058,session_exact_broad_t0,codex_session_log_structured_output
+EF0190,International-team country composition,t0_opportunity,T0,,1,1,0,0,CD014,session_exact_broad_t0,codex_session_log_structured_output
+EF0191,Ischemia-model type,t0_substantive,T0,,1,1,0,0,CD019,session_exact_broad_t0,codex_session_log_structured_output
+EF0192,Journal abstract/keyword policy,t0_opportunity,unverified_without_fulltext,,1,0,0,0,CD002,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0193,Journal acceptance status,t0_opportunity,unverified_without_fulltext,,1,0,0,0,CD041,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0194,Journal and document properties,t0_opportunity,unverified_without_fulltext,,1,0,0,0,CD066,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0195,Journal data-sharing policy,t0_opportunity,unverified_without_fulltext,,1,0,0,0,CD017,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0196,Journal disciplinary scope,t0_opportunity,T0,,1,1,0,0,CD066,session_exact_broad_t0,codex_session_log_structured_output
+EF0197,Journal identity,context_control,T0,,1,1,0,1,CD041,session_exact_broad_t0,codex_session_log_structured_output
+EF0198,Journal impact factor,t0_opportunity,unverified_without_fulltext,,1,0,0,0,CD066,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0199,Journal keyword-frequency context,t0_opportunity,unverified_without_fulltext,,1,0,0,0,CD062,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0200,Journal prestige,t0_opportunity,T0,,1,1,0,0,CD066,session_exact_broad_t0,codex_session_log_structured_output
+EF0201,Journal quartile,t0_opportunity,T0,,1,1,0,0,CD066,session_exact_broad_t0,codex_session_log_structured_output
+EF0202,Journal reporting-instruction strength,t0_opportunity,T0,,1,1,0,0,CD043,session_exact_broad_t0,codex_session_log_structured_output
+EF0203,Journal-scope relevance,t0_opportunity,unverified_without_fulltext,,1,0,0,0,CD019,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0204,Journal-type predictor,t0_opportunity,T0,,1,1,0,0,CD066,session_exact_broad_t0,codex_session_log_structured_output
+EF0205,Journal/venue-type context,t0_opportunity,unverified_without_fulltext,,1,0,0,0,CD041,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0206,Key-term association strength,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD063,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0207,Keyword count,t0_substantive,T0,,1,1,0,0,CD062,session_exact_broad_t0,codex_session_log_structured_output
+EF0208,Keyword design,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD062,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0209,Knowledge-base interdisciplinarity,direct_innovation,T0,,1,1,0,0,CD029,session_exact_broad_t0,codex_session_log_structured_output
+EF0210,Knowledge-claim count,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD031,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0211,Knowledge-combination conventionality,t0_substantive,T0,,1,1,0,0,CD031,session_exact_broad_t0,codex_session_log_structured_output
+EF0212,Knowledge-graph dynamics,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD031,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0213,Latent article topic,t0_opportunity,T0,,1,1,0,0,CD065,session_exact_broad_t0,codex_session_log_structured_output
+EF0214,Lay-summary availability,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD001,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0215,Librarian involvement,t0_substantive,T0,,1,1,0,0,CD059,session_exact_broad_t0,codex_session_log_structured_output
+EF0216,Linguistic features,t0_substantive,T0,,1,1,0,0,CD053,session_exact_broad_t0,codex_session_log_structured_output
+EF0217,Longitudinal imaging assessment,t0_substantive,T0,,1,1,0,0,CD056,session_exact_broad_t0,codex_session_log_structured_output
+EF0218,Machine-readable data metadata,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD017,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0219,Manuscript length policy,t0_opportunity,unverified_without_fulltext,,1,0,0,0,CD002,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0220,Manuscript theoretical grounding,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD049,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0221,Mean dependency distance,t0_substantive,T0,,1,1,0,0,CD053,session_exact_broad_t0,codex_session_log_structured_output
+EF0222,Mendelian-randomization sensitivity diagnostic,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD011,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0223,MeSH topic feature,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD063,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0224,Meta-analysis reporting standards,t0_substantive,T0,,1,1,0,0,CD047,session_exact_broad_t0,codex_session_log_structured_output
+EF0225,Meta-analytic estimate precision,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD055,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0226,Methodological-innovation adaptation source,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD035,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0227,Methodological middle spaces,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD035,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0228,Methodological quality,t0_substantive,T0,,1,1,0,0,CD056,session_exact_broad_t0,codex_session_log_structured_output
+EF0229,Methodological-quality predictor,t0_substantive,T0,,1,1,0,0,CD056,session_exact_broad_t0,codex_session_log_structured_output
+EF0230,Methodological-quality score,t0_substantive,T0,,1,1,0,0,CD056,session_exact_broad_t0,codex_session_log_structured_output
+EF0231,MMR question-method alignment,t0_substantive,T0,,1,1,0,0,CD049,session_exact_broad_t0,codex_session_log_structured_output
+EF0232,Multi-institutional collaboration,t0_opportunity,T0,,1,1,0,0,CD014,session_exact_broad_t0,codex_session_log_structured_output
+EF0233,Multi-reviewer consensus process,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD038,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0234,Multicenter study breadth,t0_opportunity,T0,,1,1,0,0,CD058,session_exact_broad_t0,codex_session_log_structured_output
+EF0235,Mutual-information disparity component,t0_substantive,T0,,1,1,0,0,CD031,session_exact_broad_t0,codex_session_log_structured_output
+EF0236,National collaboration,t0_opportunity,unverified_without_fulltext,,1,0,0,0,CD014,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0237,Nature Index journal status,t0_opportunity,T0,,1,1,0,0,CD066,session_exact_broad_t0,codex_session_log_structured_output
+EF0238,Network centrality,t0_opportunity,unverified_without_fulltext,,1,0,0,1,CD012,session_exact_broad_t0,codex_session_log_structured_output
+EF0239,Network giant-component opportunity context,t0_opportunity,T0,,1,1,0,0,CD015,session_exact_broad_t0,codex_session_log_structured_output
+EF0240,New-concept birth metric,direct_innovation,T0,,1,1,0,1,CD032,session_exact_broad_t0,codex_session_log_structured_output
+EF0241,Non-radiomic feature integration,t0_substantive,T0,,1,1,0,0,CD035,session_exact_broad_t0,codex_session_log_structured_output
+EF0242,Novelty followership,direct_innovation,unverified_without_fulltext,,1,0,0,0,CD036,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0243,Novelty followership window,context_control,unverified_without_fulltext,,1,0,0,0,CD036,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0244,Novelty-status comparison group,context_control,unverified_without_fulltext,,1,0,0,0,CD036,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0245,Objective writing style,t0_substantive,T0,,1,1,0,0,CD053,session_exact_broad_t0,codex_session_log_structured_output
+EF0246,Omega reliability coefficients,t0_substantive,T0,,1,1,0,0,CD033,session_exact_broad_t0,codex_session_log_structured_output
+EF0247,Open-access status,t0_opportunity,unverified_without_fulltext,,1,0,0,0,CD017,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0248,Open-science practice,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD021,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0249,ORCID-identifier availability,t0_opportunity,T0,,1,1,0,0,CD009,session_exact_broad_t0,codex_session_log_structured_output
+EF0250,ORCID-identifier opportunity context,t0_opportunity,T0,,1,1,0,0,CD009,session_exact_broad_t0,codex_session_log_structured_output
+EF0251,Outcome-measure validation status,t0_substantive,T0,,1,1,0,0,CD033,session_exact_broad_t0,codex_session_log_structured_output
+EF0252,Outcome measurement granularity,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD033,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0253,Outcome-reporting heterogeneity,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD047,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0254,Paper content diversity,direct_innovation,unverified_without_fulltext,,1,0,0,0,CD061,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0255,Paper evaluation method,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD021,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0256,Paper integrity,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD048,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0257,Paper interdisciplinarity,direct_innovation,T0,,1,1,0,0,CD029,session_exact_broad_t0,codex_session_log_structured_output
+EF0258,Paper knowledge-network structure,t0_opportunity,T0,,1,1,0,0,CD012,session_exact_broad_t0,codex_session_log_structured_output
+EF0259,Paper knowledge synergy,t0_substantive,T0,,1,1,0,0,CD031,session_exact_broad_t0,codex_session_log_structured_output
+EF0260,Paper multidisciplinarity,t0_substantive,T0,,1,1,0,0,CD031,session_exact_broad_t0,codex_session_log_structured_output
+EF0261,Paper novelty,direct_innovation,unverified_without_fulltext,,1,0,0,0,CD052,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0262,Paper originality,direct_innovation,unverified_without_fulltext,,1,0,0,0,CD052,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0263,Paper research risk,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD048,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0264,Paper significance,t0_substantive,unverified_without_fulltext,,1,0,0,0,CD025,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0265,Paper-topic-recombination measure,direct_innovation,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD063,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0266,Participant-demographics control,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD057,session_exact_broad_t0,codex_session_log_structured_output
+EF0267,Patient-selection reporting,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD051,session_exact_broad_t0,codex_session_log_structured_output
+EF0268,Peer-review process,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD038,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0269,Peer-reviewed English-language publication control,context_control,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD042,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0270,Peer reviewer rating,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD038,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0271,Phantom-study validation,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD033,session_exact_broad_t0,codex_session_log_structured_output
+EF0272,Pharmaceutical-funding control,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD023,session_exact_broad_t0,codex_session_log_structured_output
+EF0273,Phenotypic feature validation,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD033,session_exact_broad_t0,codex_session_log_structured_output
+EF0274,Pleiotropy bias,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD011,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0275,Preclinical sex inclusion,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD055,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0276,Prespecified outcome and effect measurement,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD037,session_exact_broad_t0,codex_session_log_structured_output
+EF0277,Prespecified review analysis plan,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD038,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0278,Prespecified review protocol,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD059,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0279,Primary-outcome type,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD037,session_exact_broad_t0,codex_session_log_structured_output
+EF0280,Prior-author h-index,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD007,session_exact_broad_t0,codex_session_log_structured_output
+EF0281,Prior-author-impact opportunity context,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD007,session_exact_broad_t0,codex_session_log_structured_output
+EF0282,Prior-coauthorship count,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD015,session_exact_broad_t0,codex_session_log_structured_output
+EF0283,Prior-coauthorship strength,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD015,session_exact_broad_t0,codex_session_log_structured_output
+EF0284,Prior-collaboration continuity,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD015,session_exact_broad_t0,codex_session_log_structured_output
+EF0285,Prior data-reuse experience,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD017,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0286,Prior data-sharing experience,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD017,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0287,Prior-knowledge engagement,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD044,session_exact_broad_t0,codex_session_log_structured_output
+EF0288,Prior publication count,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD007,session_exact_broad_t0,codex_session_log_structured_output
+EF0289,Prior-work-combination conventionality predictor,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD044,session_exact_broad_t0,codex_session_log_structured_output
+EF0290,PRISMA adherence,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD047,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0291,PRISMA reporting adherence,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD047,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0292,Program-evaluation study purpose,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD021,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0293,Protocol-defined search yield,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD059,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0294,Public-access mandate,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD017,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0295,Public full-text availability,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD001,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0296,Public-funding status,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD024,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0297,Public involvement,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD039,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0298,Public-involvement mandate,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD039,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0299,Public study-protocol availability,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD018,session_exact_broad_t0,codex_session_log_structured_output
+EF0300,Publication and funding bias,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD040,session_exact_broad_t0,codex_session_log_structured_output
+EF0301,Publication-based trial leadership,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD007,session_exact_broad_t0,codex_session_log_structured_output
+EF0302,Publication-data linkage,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD041,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0303,Publication geographic origin,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD042,session_exact_broad_t0,codex_session_log_structured_output
+EF0304,Publication language,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD041,session_exact_broad_t0,codex_session_log_structured_output
+EF0305,Publication-language predictor,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD042,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0306,Publication recency,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD041,session_exact_broad_t0,codex_session_log_structured_output
+EF0307,Publication year,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,1,CD041,session_exact_broad_t0,codex_session_log_structured_output
+EF0308,Randomization status,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD056,session_exact_broad_t0,codex_session_log_structured_output
+EF0309,Rao-Stirling diversity,direct_innovation,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,1,CD031,session_exact_broad_t0,codex_session_log_structured_output
+EF0310,Reader cognitive load,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD053,session_exact_broad_t0,codex_session_log_structured_output
+EF0311,Reference accuracy,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD013,session_exact_broad_t0,codex_session_log_structured_output
+EF0312,Reference balance,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,1,CD031,session_exact_broad_t0,codex_session_log_structured_output
+EF0313,Reference-combination novelty,direct_innovation,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD046,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0314,Reference count,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,1,CD046,session_exact_broad_t0,codex_session_log_structured_output
+EF0315,Reference disparity,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,1,CD031,session_exact_broad_t0,codex_session_log_structured_output
+EF0316,Reference diversity,direct_innovation,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD029,session_exact_broad_t0,codex_session_log_structured_output
+EF0317,Reference-list characteristics,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD013,session_exact_broad_t0,codex_session_log_structured_output
+EF0318,Reference variety,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,1,CD031,session_exact_broad_t0,codex_session_log_structured_output
+EF0319,Relative algebraic connectivity,t0_opportunity,T0,AC = λ2(L) / λn(L).,1,1,0,1,CD015,session_exact_broad_t0,codex_session_log_structured_output
+EF0320,Reported effect size,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD055,session_exact_broad_t0,codex_session_log_structured_output
+EF0321,Reporting bias,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD047,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0322,Reporting-guideline adherence,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD047,session_exact_broad_t0,codex_session_log_structured_output
+EF0323,Reporting quality,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD047,session_exact_broad_t0,codex_session_log_structured_output
+EF0324,Reproducibility/replicability,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD048,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0325,Research-advisor capacity,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD027,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0326,Research-code sharing status,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD018,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0327,Research collaboration,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD014,session_exact_broad_t0,codex_session_log_structured_output
+EF0328,Research-community-size context,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD065,session_exact_broad_t0,codex_session_log_structured_output
+EF0329,Research-data sharing status,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD018,session_exact_broad_t0,codex_session_log_structured_output
+EF0330,Research difficulty,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD048,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0331,Research field,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD066,session_exact_broad_t0,codex_session_log_structured_output
+EF0332,Research-gap feasibility,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD048,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0333,Research-gap novelty opportunity,direct_innovation,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD048,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0334,Research governance and ethics reporting,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD020,session_exact_broad_t0,codex_session_log_structured_output
+EF0335,Research infrastructure,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD048,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0336,Research integrity,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD048,session_exact_broad_t0,codex_session_log_structured_output
+EF0337,Research-location traditionality,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD027,session_exact_broad_t0,codex_session_log_structured_output
+EF0338,Research-network involvement,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD015,session_exact_broad_t0,codex_session_log_structured_output
+EF0339,Research originality and plagiarism,direct_innovation,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD048,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0340,Research-pivot distance,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD064,session_exact_broad_t0,codex_session_log_structured_output
+EF0341,Research quality,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD048,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0342,Research quality control,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD048,session_exact_broad_t0,codex_session_log_structured_output
+EF0343,Research-question framing,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD049,session_exact_broad_t0,codex_session_log_structured_output
+EF0344,Research-question type,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD049,session_exact_broad_t0,codex_session_log_structured_output
+EF0345,Research-site control,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD057,session_exact_broad_t0,codex_session_log_structured_output
+EF0346,Research type,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD048,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0347,Researcher-participant role overlap,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD048,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0348,Researcher reflexivity,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD020,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0349,Review conceptual-definition ambiguity,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD049,session_exact_broad_t0,codex_session_log_structured_output
+EF0350,Review conceptual/methodological/practical inconsistency,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD060,session_exact_broad_t0,codex_session_log_structured_output
+EF0351,Review data-extraction standardization,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD060,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0352,Review data-extraction/synthesis adequacy,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD060,session_exact_broad_t0,codex_session_log_structured_output
+EF0353,Review eligibility criteria,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD050,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0354,Review evidence synthesis,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD060,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0355,Review heterogeneity assessment,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD050,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0356,Review-methodological consistency,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD060,session_exact_broad_t0,codex_session_log_structured_output
+EF0357,Review practical challenges,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD060,session_exact_broad_t0,codex_session_log_structured_output
+EF0358,Review protocol adherence,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD059,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0359,Review protocol registration timing,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD059,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0360,Review protocol/reporting consistency,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD059,session_exact_broad_t0,codex_session_log_structured_output
+EF0361,Review quality-appraisal adequacy,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD060,session_exact_broad_t0,codex_session_log_structured_output
+EF0362,Review registration,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD060,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0363,Review rigor/replicability/documentation barriers,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD060,session_exact_broad_t0,codex_session_log_structured_output
+EF0364,Review search-source breadth,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD059,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0365,Review search strategy,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD059,session_exact_broad_t0,codex_session_log_structured_output
+EF0366,Review search-strategy transparency,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD059,session_exact_broad_t0,codex_session_log_structured_output
+EF0367,Review selection-process bias,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD050,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0368,Reviewer methodological training,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD035,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0369,Reviewer subjectivity,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD050,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0370,Rise of research teams,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD048,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0371,Risk of bias,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD011,session_exact_broad_t0,codex_session_log_structured_output
+EF0372,Scientific creativity,direct_innovation,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD052,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0373,Scientific novelty,direct_innovation,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD052,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0374,Scientific paper quality,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD025,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0375,Scientific-validity assessment framework,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD033,session_exact_broad_t0,codex_session_log_structured_output
+EF0376,Scientific writing,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD053,session_exact_broad_t0,codex_session_log_structured_output
+EF0377,SCOTI score,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD056,session_exact_broad_t0,codex_session_log_structured_output
+EF0378,Search-method reporting quality,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD059,session_exact_broad_t0,codex_session_log_structured_output
+EF0379,Selection-bias risk,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD050,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0380,Shared-data content,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD017,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0381,Social-network-analysis measures,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD015,session_exact_broad_t0,codex_session_log_structured_output
+EF0382,Socioeconomic-benefit quantification,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD019,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0383,Species-interaction reporting completeness,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD047,session_exact_broad_t0,codex_session_log_structured_output
+EF0384,Spin bias,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD011,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0385,Statistical-analysis and reporting error burden,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD055,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0386,Statistical-analysis validity,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD055,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0387,Statistical power,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD055,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0388,Statistical precision,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD055,session_exact_broad_t0,codex_session_log_structured_output
+EF0389,Statistical significance of results,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD055,session_exact_broad_t0,codex_session_log_structured_output
+EF0390,Study design,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD057,session_exact_broad_t0,codex_session_log_structured_output
+EF0391,Study-design adjustment covariate,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD057,session_exact_broad_t0,codex_session_log_structured_output
+EF0392,Study design and quality,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD056,session_exact_broad_t0,codex_session_log_structured_output
+EF0393,Study geographic region,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD057,session_exact_broad_t0,codex_session_log_structured_output
+EF0394,Study measurement-tool type,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD033,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0395,Study quality,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD025,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0396,Study sample characteristics,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD051,session_exact_broad_t0,codex_session_log_structured_output
+EF0397,Study sample size,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD051,session_exact_broad_t0,codex_session_log_structured_output
+EF0398,Study sampling location,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD051,session_exact_broad_t0,codex_session_log_structured_output
+EF0399,Study-site environmental context,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD058,session_exact_broad_t0,codex_session_log_structured_output
+EF0400,Study spatial scale,context_control,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD058,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0401,Study sponsor identity,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD023,session_exact_broad_t0,codex_session_log_structured_output
+EF0402,Study validity,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD033,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0403,Subject-classification code,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD026,session_exact_broad_t0,codex_session_log_structured_output
+EF0404,Surgeon expertise and training,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD035,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0405,Surgical innovation reporting,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD047,session_exact_broad_t0,codex_session_log_structured_output
+EF0406,Systematic-review methodological quality,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD060,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0407,Systematic-review methodology,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD060,session_exact_broad_t0,codex_session_log_structured_output
+EF0408,Systematic-review methodology predictor,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD060,session_exact_broad_t0,codex_session_log_structured_output
+EF0409,Systematic-review quality,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD060,session_exact_broad_t0,codex_session_log_structured_output
+EF0410,Systematic-review reporting quality,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD060,session_exact_broad_t0,codex_session_log_structured_output
+EF0411,Systematic-review rigor,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD059,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0412,Systematic-review risk of bias,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD060,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0413,Teacher-education manuscript quality,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD025,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0414,Team expertise,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD061,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0415,Technique-description reporting,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD034,session_exact_broad_t0,codex_session_log_structured_output
+EF0416,Tenure-system context,t0_opportunity,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD041,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0417,Tenure timing,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD017,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0418,Theoretical perspective,context_control,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD063,session_exact_broad_t0,codex_session_log_structured_output
+EF0419,Title length,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD062,session_exact_broad_t0,codex_session_log_structured_output
+EF0420,Title punctuation,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD062,session_exact_broad_t0,codex_session_log_structured_output
+EF0421,Title syntactic form,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD062,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0422,Title writing quality,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD053,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0423,Topic interdisciplinarity,direct_innovation,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD028,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0424,Topic interdisciplinarity measure,direct_innovation,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD028,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0425,Topic orientation,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD063,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0426,Topic redundancy,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD064,session_exact_broad_t0,codex_session_log_structured_output
+EF0427,Topical diversity,direct_innovation,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD029,session_exact_broad_t0,codex_session_log_structured_output
+EF0428,Trial-enrolment geography,t0_opportunity,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD058,session_exact_broad_t0,codex_session_log_structured_output
+EF0429,User-based evaluation practice,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD021,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0430,Winner's-curse bias,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD011,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0431,Writing clarity,t0_substantive,unverified_without_fulltext,Not available without verified full text.,1,0,0,0,CD053,deterministic_reconstruction_excluded_from_broad_t0,codex_session_log_structured_output
+EF0432,Writing-component frequency,t0_substantive,T0,Not explicitly reported for this mention in the verified evidence.,1,1,0,0,CD053,session_exact_broad_t0,codex_session_log_structured_output

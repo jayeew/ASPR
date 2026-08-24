@@ -1,0 +1,26 @@
+{
+  "protocol_id": "INDEPENDENT_CODEX_OPERATIONALIZATION_H1_PROTOCOL_V3_20260730",
+  "purpose": "Blind independent H1 review of literature-to-data operationalizations without rewriting source evidence.",
+  "scope": {
+    "allowed_inputs": "The exported blind H1 worksheet, its cited frozen English formula evidence, frozen local input schema and snapshots, exact implementation files, and deterministic edge-case tests.",
+    "forbidden_inputs": "Primary-AI or H2 decisions, comparison columns, candidate dimensions, selected features, target counts, prediction outcomes, model performance, Qwen/Ollama, local model output, and external LLM APIs.",
+    "no_target_indicator_or_dimension_count": true
+  },
+  "rules": [
+    "Independently inspect every exported family and preserve every protected literature-evidence field byte-for-byte.",
+    "Treat source_reported_missing_rule as a source claim that may remain not reported; place project choices only in protocol_missing_rule and the four operational boundary fields.",
+    "Approve only when input columns, implementation path and hash, test artifact and hash, input snapshot and hash, missing behavior, denominator-zero behavior, empty-set behavior, coverage behavior, transform, and units are complete and mutually consistent.",
+    "Reject rather than infer when the local implementation does not match the H2-approved literature formula or when a test does not cover a stated boundary.",
+    "Use no outcome, label, downstream model result, or desired feature count."
+  ],
+  "decisions": [
+    "approve",
+    "exclude"
+  ],
+  "provenance": {
+    "reviewer_role": "H1",
+    "row_level_independent_ai_provenance_required": true,
+    "registration_manifest_required": true,
+    "prompt_sha256_must_equal_this_protocol": true
+  }
+}

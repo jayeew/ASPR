@@ -31,6 +31,9 @@ from gear.nature_multihorizon.modeling_v6 import (  # noqa: E402
     safe_spearman,
 )
 from gear.nature_multihorizon.modeling_v6_1 import run_fixed_medium_oof  # noqa: E402
+from innovation_impact_feature_selection.evidence_derived.release_registry import (  # noqa: E402
+    current_artifact,
+)
 from innovation_impact_feature_selection.evidence_derived_v3.experiments.oof_feature_set_comparison_v3 import (  # noqa: E402
     run_hgb_comparison,
 )
@@ -39,11 +42,7 @@ FEATURE_SET_ID = "submission_safe_15"
 FORBIDDEN_FEATURES = {"EF0197"}
 DEFAULT_CONFIG = PROJECT_ROOT / "configs/nature_multihorizon/hgb_uncapped_v2.json"
 DEFAULT_OUTPUT = PROJECT_ROOT / "outputs/gear/submission_calibration"
-OFFICIAL_OUTPUT = (
-    PROJECT_ROOT
-    / "innovation_impact_feature_selection/evidence_derived_v3/experiments/"
-    "oof_feature_set_comparison_v3/outputs/hgb_uncapped_v2"
-)
+OFFICIAL_MODEL_ID = "primary"
 
 
 def sha256_file(path: Path) -> str:
@@ -91,20 +90,20 @@ def _metric_rows(predictions: pd.DataFrame) -> tuple[float, Dict[int, float]]:
 
 
 def _official_metrics() -> tuple[float, Dict[int, float]]:
-    overall = pd.read_csv(OFFICIAL_OUTPUT / "oof_metrics.csv")
-    folds = pd.read_csv(OFFICIAL_OUTPUT / "oof_fold_metrics.csv")
+    overall = pd.read_csv(current_artifact("oof_metrics"))
+    folds = pd.read_csv(current_artifact("oof_fold_metrics"))
     selector = (
         overall["horizon"].eq(5)
         & overall["model_family"].eq("hgb")
-        & overall["model_id"].eq("fulltext_16")
+        & overall["model_id"].eq(OFFICIAL_MODEL_ID)
     )
     fold_selector = (
         folds["horizon"].eq(5)
         & folds["model_family"].eq("hgb")
-        & folds["model_id"].eq("fulltext_16")
+        & folds["model_id"].eq(OFFICIAL_MODEL_ID)
     )
     if selector.sum() != 1 or not fold_selector.any():
-        raise ValueError("official Full-text 16 OOF metrics are incomplete")
+        raise ValueError("current official Primary16 OOF metrics are incomplete")
     return (
         float(overall.loc[selector, "spearman"].iloc[0]),
         {

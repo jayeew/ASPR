@@ -86,6 +86,10 @@ def _located_points(review: BranchReview) -> List[_LocatedPoint]:
             _LocatedPoint("novelty_limit", point)
             for point in review.novelty.limiting_points
         ),
+        *(
+            _LocatedPoint("questions", point)
+            for point in review.novelty.uncertain_points
+        ),
         *(_LocatedPoint("strengths", point) for point in review.strengths),
         *(_LocatedPoint("weaknesses", point) for point in review.weaknesses),
         *(_LocatedPoint("questions", point) for point in review.questions),

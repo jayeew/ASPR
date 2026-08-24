@@ -2,13 +2,27 @@
 
 from __future__ import annotations
 
+import json
 from typing import Any, Callable, Dict, List, Mapping, Optional
 
 from pydantic import ValidationError
 
-from .contracts import ClaimStrength, PaperClaim, PaperIR
+from .config import GearConfig
+from .contracts import (
+    ClaimStrength,
+    PaperClaim,
+    PaperIR,
+    StrictModel,
+)
+from .model_client import ModelClientUnavailableError, build_json_model_client
 from .paper_compiler import build_claim_ledger
 from .review_contracts import PaperSpecificRubric
+
+
+class ClaimExtractionResponse(StrictModel):
+    """Schema-constrained response returned by the semantic claim extractor."""
+
+    claims: list[PaperClaim]
 
 
 class HybridPaperExtractor:
@@ -42,7 +56,7 @@ class HybridPaperExtractor:
                         "claim_id": "",
                         "claim_type": "novelty_claim",
                         "span_id": "S-*",
-                        "text": "exact or entailed atomic claim",
+                        "text": "atomic claim grounded in the referenced span",
                         "strength": "moderate",
                         "dependency_span_ids": [],
                         "required_evidence": [],
@@ -54,34 +68,46 @@ class HybridPaperExtractor:
             raw = self.generator(payload)
             claims = [PaperClaim.model_validate(item) for item in raw.get("claims", [])]
             self._validate_claim_spans(claims, paper_ir)
-        except (ValidationError, ValueError, TypeError, KeyError) as exc:
-            return self._degraded_fallback(
-                paper_ir, f"semantic_extraction_failed:{type(exc).__name__}"
-            )
+        except (
+            ModelClientUnavailableError,
+            ValidationError,
+            ValueError,
+            TypeError,
+            KeyError,
+        ) as exc:
+            return self._degraded_fallback(paper_ir, _extraction_failure_reason(exc))
         if not claims:
             return self._degraded_fallback(paper_ir, "semantic_extraction_empty")
+        report = paper_ir.quality_report.model_copy(
+            update={"semantic_extraction_ready": True}
+        )
         return paper_ir.model_copy(
             update={
                 "claims": claims,
                 "claim_ledger": build_claim_ledger(
                     claims, paper_ir.method_result_ledger, paper_ir.references
                 ),
+                "quality_report": report,
             }
         )
 
     @staticmethod
     def _validate_claim_spans(claims: List[PaperClaim], paper_ir: PaperIR) -> None:
+        """Validate references, not wording identity.
+
+        Semantic extraction is allowed to condense or paraphrase a supplied span.
+        The immutable span ID remains the evidence anchor; requiring the generated
+        claim text to be a byte-for-byte substring rejected otherwise valid atomic
+        claims and added no grounding guarantee beyond that anchor.
+        """
         span_map = paper_ir.span_map()
         for claim in claims:
-            span = span_map.get(claim.span_id)
-            if span is None:
+            if claim.span_id not in span_map:
                 raise ValueError(
                     f"semantic claim references unknown span: {claim.span_id}"
                 )
-            if not claim.text.strip() or claim.text.strip() not in span.text:
-                raise ValueError(
-                    f"semantic claim text does not resolve inside span: {claim.claim_id}"
-                )
+            if not claim.text.strip():
+                raise ValueError(f"semantic claim text is empty: {claim.claim_id}")
             if any(span_id not in span_map for span_id in claim.dependency_span_ids):
                 raise ValueError(
                     f"semantic claim dependency references unknown span: {claim.claim_id}"
@@ -94,7 +120,49 @@ class HybridPaperExtractor:
                 [*paper_ir.quality_flags, f"semantic_extraction_degraded:{reason}"]
             )
         )
-        return paper_ir.model_copy(update={"quality_flags": flags})
+        report = paper_ir.quality_report.model_copy(
+            update={
+                "semantic_extraction_ready": False,
+                "advisories": list(
+                    dict.fromkeys(
+                        [
+                            *paper_ir.quality_report.advisories,
+                            "semantic_extraction_degraded",
+                        ]
+                    )
+                ),
+            }
+        )
+        return paper_ir.model_copy(
+            update={"quality_flags": flags, "quality_report": report}
+        )
+
+
+def configured_paper_extractor(config: GearConfig) -> HybridPaperExtractor:
+    """Build a model-backed extractor without creating a client at import time."""
+    client: Any = None
+
+    def generate(payload: Dict[str, Any]) -> Mapping[str, Any]:
+        nonlocal client
+        if client is None:
+            client = build_json_model_client(config)
+        return client.generate_json(
+            system=(
+                "Extract only atomic manuscript claims grounded in supplied spans. "
+                "Concise paraphrases are allowed. Preserve the supporting span_id; "
+                "do not infer missing facts or use outside knowledge."
+            ),
+            user=json.dumps(payload, ensure_ascii=False),
+            response_schema=ClaimExtractionResponse.model_json_schema(),
+        )
+
+    return HybridPaperExtractor(generator=generate)
+
+
+def _extraction_failure_reason(exc: Exception) -> str:
+    detail = " ".join(str(exc).split())[:240]
+    suffix = f":{detail}" if detail else ""
+    return f"semantic_extraction_failed:{type(exc).__name__}{suffix}"
 
 
 class PaperRubricBuilder:
@@ -134,4 +202,9 @@ class PaperRubricBuilder:
         )
 
 
-__all__ = ["HybridPaperExtractor", "PaperRubricBuilder"]
+__all__ = [
+    "ClaimExtractionResponse",
+    "HybridPaperExtractor",
+    "PaperRubricBuilder",
+    "configured_paper_extractor",
+]
