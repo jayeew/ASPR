@@ -1,10 +1,16 @@
 from __future__ import annotations
 
-from gear.evidence_supervisor import EvidenceSupervisor
-from gear.graph_prior_contracts import GraphResultV3
+from gear.contracts import RetrievedWork
+from gear.evidence_supervisor import EvidenceSupervisor, build_retrieval_claim
+from gear.graph_prior_contracts import (
+    GraphClaimGuidanceV1,
+    GraphMissionV1,
+    GraphResultV3,
+)
 from gear.paper_extraction import PaperRubricBuilder
 from gear.review_contracts import (
     BranchReview,
+    CanonicalReviewPoint,
     NoveltyAssessment,
     NoveltyJudgment,
     PointSeverity,
@@ -17,6 +23,149 @@ from gear.review_fusion import ReviewFusion
 from gear.review_state import initialize_review_state_v3
 from gear.trace import EvidenceStore
 from tests.gear.fakes import EmptyPriorArt, UnusedRelationClassifier
+
+
+def test_low_coverage_graph_seed_uses_claim_fallback(tmp_path) -> None:
+    point = CanonicalReviewPoint(
+        point_id="CP-graph",
+        section="novelty_support",
+        initial_section="novelty_support",
+        aspect=ReviewAspect.NOVELTY_PRIOR_ART,
+        severity=PointSeverity.MINOR,
+        proposition="A bounded scientific contribution.",
+        agent_support=True,
+        retained=True,
+        relation_evidence_keys=["R:low"],
+    )
+    store = EvidenceStore(tmp_path / "topology-value")
+    store.add_evidence(
+        "Q:graph",
+        "retrieval_query",
+        {"query_role": "graph_seed"},
+    )
+    store.add_evidence(
+        "R:low",
+        "relation_card",
+        {
+            "temporal_valid": True,
+            "relation_label": "PARALLEL",
+            "prior_work_id": "W-low",
+            "essential_facet_coverage": 0.2,
+            "source_query_ids": ["graph"],
+            "common_dimensions": ["generic method"],
+            "difference_dimensions": ["different scientific target"],
+        },
+    )
+
+    assert EvidenceSupervisor._topology_seed_has_value(point, store) is False
+
+    store.add_evidence(
+        "R:high",
+        "relation_card",
+        {
+            "temporal_valid": True,
+            "relation_label": "PARALLEL",
+            "prior_work_id": "W-high",
+            "essential_facet_coverage": 0.5,
+            "source_query_ids": ["graph"],
+            "common_dimensions": ["shared mechanism"],
+            "difference_dimensions": ["different implementation"],
+        },
+    )
+    point.relation_evidence_keys = ["R:high"]
+    assert EvidenceSupervisor._topology_seed_has_value(point, store) is True
+
+
+def test_graph_seed_candidate_is_recognized_for_classification_priority(
+    tmp_path,
+) -> None:
+    store = EvidenceStore(tmp_path / "graph-candidate-priority")
+    store.add_evidence(
+        "Q:graph",
+        "retrieval_query",
+        {"query_role": "graph_seed"},
+    )
+    work = RetrievedWork(
+        work_id="W-graph",
+        target_claim_id="C-1",
+        title="Relevant graph anchor",
+        retrieval_query_id="graph",
+        source_query_ids=["graph"],
+        retrieval_source="test",
+    )
+
+    assert EvidenceSupervisor._work_has_query_role(work, store, "graph_seed")
+    assert not EvidenceSupervisor._work_has_query_role(work, store, "citation_neighbor")
+
+
+def test_topology_does_not_reorder_score_profile_query_roles() -> None:
+    guidance = GraphClaimGuidanceV1(
+        review_point_id="CP-order",
+        claim_id="C-order",
+        claim_relevance=1.0,
+        allocated_local_query_slots=1,
+        allocated_remote_query_slots=2,
+        missions=[
+            GraphMissionV1(
+                mission_id="GM-order",
+                mission_type="remote_rescue",
+                origin="rescue",
+                target_claim_id="C-order",
+                orientation="rescue",
+                query_roles=[
+                    "purpose_semantic",
+                    "mechanism_outcome",
+                    "author_terminology",
+                    "object_problem",
+                ],
+                stop_rule="test",
+            )
+        ],
+    )
+
+    topology_roles = EvidenceSupervisor._allowed_query_roles(
+        guidance,
+        prefer_profile=True,
+    )
+    profile_roles = EvidenceSupervisor._allowed_query_roles(
+        guidance,
+        prefer_profile=False,
+    )
+
+    assert topology_roles == profile_roles == [
+        "purpose_semantic",
+        "mechanism_outcome",
+        "author_terminology",
+        "object_problem",
+    ]
+
+
+def test_retrieval_claim_avoids_reference_target_span(paper_ir) -> None:
+    reference_span_ids = {reference.source_span_id for reference in paper_ir.references}
+    assert reference_span_ids
+    scientific_claim = next(
+        claim for claim in paper_ir.claims if claim.span_id not in reference_span_ids
+    )
+    reference_span_id = next(iter(reference_span_ids))
+    point = CanonicalReviewPoint(
+        point_id="CP-reanchor",
+        section="novelty_limit",
+        initial_section="novelty_limit",
+        aspect=ReviewAspect.NOVELTY_PRIOR_ART,
+        severity=PointSeverity.MINOR,
+        proposition="The closest antecedents need to be delimited.",
+        agent_support=True,
+        retained=True,
+        paper_evidence_keys=[f"P:{reference_span_id}"],
+    )
+
+    claim, span = build_retrieval_claim(point, paper_ir)
+
+    assert span.span_id not in reference_span_ids
+    assert claim.span_id == span.span_id
+    assert f"P:{span.span_id}" in point.paper_evidence_keys
+    assert "retrieval_target_span_reanchored" in point.validation_notes
+    assert scientific_claim.span_id in paper_ir.span_map()
 
 
 def test_strong_first_claim_triggers_counterfactual_search(
@@ -131,7 +280,7 @@ def test_continuous_graph_tension_adds_counterfactual_searches(
     )
 
     canonical = next(iter(state.canonical_points.values()))
-    assert canonical.graph_tension_score == 0.855
+    assert canonical.graph_tension_score == 0.0
     assert canonical.graph_extra_counterfactual_actions == 0
     assert canonical.counterfactual_search_count == 1
     assert prior_art.families.count("contrastive") == 1

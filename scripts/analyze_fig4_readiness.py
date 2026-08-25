@@ -22,16 +22,14 @@ from sklearn.metrics import (
 from sklearn.model_selection import RepeatedStratifiedKFold
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_EVALUATION = (
-    PROJECT_ROOT / "outputs/gear/evaluation/nature_dev100_v1_20260824"
-)
+DEFAULT_EVALUATION = PROJECT_ROOT / "outputs/gear/evaluation/nature_dev100_v1_20260824"
 DEFAULT_HUMAN = (
     PROJECT_ROOT
     / "outputs/gear/human_review_reconstruction/nature_dev100_human_v2_20260824"
 )
 DEFAULT_GRAPH = (
     PROJECT_ROOT
-    / "outputs/gear/aspr_scoring/work_nature_dev100_20260821/graph_results.jsonl"
+    / "outputs/gear/aspr_scoring/work_nature_dev100_20260821/graph_runtime_packets.jsonl"
 )
 DEFAULT_MANIFEST = (
     PROJECT_ROOT
@@ -157,9 +155,11 @@ def _threshold_metrics(
     )
     return {
         "threshold": float(threshold),
-        "orientation": "higher_score_predicts_positive"
-        if high_positive
-        else "lower_score_predicts_positive",
+        "orientation": (
+            "higher_score_predicts_positive"
+            if high_positive
+            else "lower_score_predicts_positive"
+        ),
         "accuracy": float(accuracy_score(labels, predictions)),
         "balanced_accuracy": float(balanced_accuracy_score(labels, predictions)),
         "macro_f1": float(f1_score(labels, predictions, average="macro")),
@@ -189,9 +189,7 @@ def _best_threshold(
 def _cross_validated_threshold(
     scores: np.ndarray, labels: np.ndarray, *, high_positive: bool
 ) -> dict[str, Any]:
-    splitter = RepeatedStratifiedKFold(
-        n_splits=5, n_repeats=20, random_state=20260824
-    )
+    splitter = RepeatedStratifiedKFold(n_splits=5, n_repeats=20, random_state=20260824)
     rows = []
     thresholds = []
     for train, test in splitter.split(scores, labels):
@@ -247,9 +245,11 @@ def _threshold_curve(scores: np.ndarray, labels: np.ndarray) -> list[dict[str, A
             output.append(
                 {
                     "threshold": threshold,
-                    "orientation": "Higher score → positive"
-                    if high_positive
-                    else "Lower score → positive",
+                    "orientation": (
+                        "Higher score → positive"
+                        if high_positive
+                        else "Lower score → positive"
+                    ),
                     "balanced_accuracy": row["balanced_accuracy"],
                     "accuracy": row["accuracy"],
                 }
@@ -270,9 +270,7 @@ def _report_artifact(
             "human_concern_coverage": paper_macro["human_concern_coverage"],
             "major_support_precision": paper_macro["major_support_precision"],
             "aspr_auc": summary["aspr_auc_higher_predicts_positive"],
-            "directional_coverage": metrics["novelty_judgment"][
-                "directional_coverage"
-            ],
+            "directional_coverage": metrics["novelty_judgment"]["directional_coverage"],
         }
     ]
     aggregate = ablation["aggregate"]["full-score_only"]
@@ -354,7 +352,11 @@ def _report_artifact(
             "dataset": "headline",
             "sourceId": source["id"],
             "metrics": [
-                {"label": "Completed clean runs", "field": "completed_coverage", "format": "percent"}
+                {
+                    "label": "Completed clean runs",
+                    "field": "completed_coverage",
+                    "format": "percent",
+                }
             ],
         },
         {
@@ -363,7 +365,11 @@ def _report_artifact(
             "dataset": "headline",
             "sourceId": source["id"],
             "metrics": [
-                {"label": "Human concern coverage", "field": "human_concern_coverage", "format": "percent"}
+                {
+                    "label": "Human concern coverage",
+                    "field": "human_concern_coverage",
+                    "format": "percent",
+                }
             ],
         },
         {
@@ -372,7 +378,11 @@ def _report_artifact(
             "dataset": "headline",
             "sourceId": source["id"],
             "metrics": [
-                {"label": "Major support precision", "field": "major_support_precision", "format": "percent"}
+                {
+                    "label": "Major support precision",
+                    "field": "major_support_precision",
+                    "format": "percent",
+                }
             ],
         },
         {
@@ -381,7 +391,11 @@ def _report_artifact(
             "dataset": "headline",
             "sourceId": source["id"],
             "metrics": [
-                {"label": "ASPR novelty-direction AUC", "field": "aspr_auc", "format": "number"}
+                {
+                    "label": "ASPR novelty-direction AUC",
+                    "field": "aspr_auc",
+                    "format": "number",
+                }
             ],
         },
         {
@@ -390,7 +404,11 @@ def _report_artifact(
             "dataset": "headline",
             "sourceId": source["id"],
             "metrics": [
-                {"label": "Final directional coverage", "field": "directional_coverage", "format": "percent"}
+                {
+                    "label": "Final directional coverage",
+                    "field": "directional_coverage",
+                    "format": "percent",
+                }
             ],
         },
     ]
@@ -404,10 +422,23 @@ def _report_artifact(
             "sourceId": source["id"],
             "encodings": {
                 "x": {"field": "family", "type": "nominal", "label": "Review family"},
-                "y": {"field": "coverage", "type": "quantitative", "label": "Coverage", "format": "percent"},
-                "color": {"field": "measure", "type": "nominal", "label": "Match definition"},
+                "y": {
+                    "field": "coverage",
+                    "type": "quantitative",
+                    "label": "Coverage",
+                    "format": "percent",
+                },
+                "color": {
+                    "field": "measure",
+                    "type": "nominal",
+                    "label": "Match definition",
+                },
                 "tooltip": [
-                    {"field": "reference_points", "type": "quantitative", "label": "Human points"}
+                    {
+                        "field": "reference_points",
+                        "type": "quantitative",
+                        "label": "Human points",
+                    }
                 ],
             },
             "yAxisTitle": "Human-point coverage",
@@ -422,9 +453,21 @@ def _report_artifact(
             "dataset": "novelty_confusion",
             "sourceId": source["id"],
             "encodings": {
-                "x": {"field": "human_novelty", "type": "nominal", "label": "Human judgment"},
-                "y": {"field": "paper_count", "type": "quantitative", "label": "Papers"},
-                "color": {"field": "final_novelty", "type": "nominal", "label": "Final GEAR judgment"},
+                "x": {
+                    "field": "human_novelty",
+                    "type": "nominal",
+                    "label": "Human judgment",
+                },
+                "y": {
+                    "field": "paper_count",
+                    "type": "quantitative",
+                    "label": "Papers",
+                },
+                "color": {
+                    "field": "final_novelty",
+                    "type": "nominal",
+                    "label": "Final GEAR judgment",
+                },
             },
             "yAxisTitle": "Paper count",
             "valueFormat": "number",
@@ -439,8 +482,16 @@ def _report_artifact(
             "sourceId": source["id"],
             "encodings": {
                 "x": {"field": "stage", "type": "ordinal", "label": "Stage"},
-                "y": {"field": "point_count", "type": "quantitative", "label": "Points"},
-                "color": {"field": "point_bucket", "type": "nominal", "label": "Novelty bucket"},
+                "y": {
+                    "field": "point_count",
+                    "type": "quantitative",
+                    "label": "Points",
+                },
+                "color": {
+                    "field": "point_bucket",
+                    "type": "nominal",
+                    "label": "Novelty bucket",
+                },
             },
             "yAxisTitle": "Novelty point count",
             "valueFormat": "number",
@@ -454,9 +505,21 @@ def _report_artifact(
             "dataset": "score_distribution",
             "sourceId": source["id"],
             "encodings": {
-                "x": {"field": "score_bin", "type": "ordinal", "label": "ASPR score bin"},
-                "y": {"field": "paper_count", "type": "quantitative", "label": "Papers"},
-                "color": {"field": "human_novelty", "type": "nominal", "label": "Human novelty"},
+                "x": {
+                    "field": "score_bin",
+                    "type": "ordinal",
+                    "label": "ASPR score bin",
+                },
+                "y": {
+                    "field": "paper_count",
+                    "type": "quantitative",
+                    "label": "Papers",
+                },
+                "color": {
+                    "field": "human_novelty",
+                    "type": "nominal",
+                    "label": "Human novelty",
+                },
             },
             "yAxisTitle": "Paper count",
             "valueFormat": "number",
@@ -470,9 +533,21 @@ def _report_artifact(
             "dataset": "threshold_curve",
             "sourceId": source["id"],
             "encodings": {
-                "x": {"field": "threshold", "type": "quantitative", "label": "ASPR threshold"},
-                "y": {"field": "balanced_accuracy", "type": "quantitative", "label": "Balanced accuracy"},
-                "color": {"field": "orientation", "type": "nominal", "label": "Threshold orientation"},
+                "x": {
+                    "field": "threshold",
+                    "type": "quantitative",
+                    "label": "ASPR threshold",
+                },
+                "y": {
+                    "field": "balanced_accuracy",
+                    "type": "quantitative",
+                    "label": "Balanced accuracy",
+                },
+                "color": {
+                    "field": "orientation",
+                    "type": "nominal",
+                    "label": "Threshold orientation",
+                },
             },
             "referenceLines": [{"value": 0.5, "label": "Chance balance"}],
             "yAxisTitle": "Balanced accuracy",
@@ -494,7 +569,11 @@ def _report_artifact(
                 {"field": "rule", "label": "Rule", "type": "text"},
                 {"field": "threshold", "label": "Threshold", "format": "number"},
                 {"field": "accuracy", "label": "Accuracy", "format": "percent"},
-                {"field": "balanced_accuracy", "label": "Balanced accuracy", "format": "percent"},
+                {
+                    "field": "balanced_accuracy",
+                    "label": "Balanced accuracy",
+                    "format": "percent",
+                },
                 {"field": "macro_f1", "label": "Macro-F1", "format": "number"},
             ],
         },
@@ -509,7 +588,12 @@ def _report_artifact(
             "layout": "full",
             "columns": [
                 {"field": "metric", "label": "Metric", "type": "text"},
-                {"field": "mean_delta", "label": "Mean delta", "format": "number", "movement": True},
+                {
+                    "field": "mean_delta",
+                    "label": "Mean delta",
+                    "format": "number",
+                    "movement": True,
+                },
                 {"field": "ci_low", "label": "CI low", "format": "number"},
                 {"field": "ci_high", "label": "CI high", "format": "number"},
                 {"field": "n", "label": "Papers", "format": "number"},
@@ -517,45 +601,94 @@ def _report_artifact(
         },
     ]
     blocks = [
-        {"id": "title", "type": "markdown", "body": "# GEAR Fig.4 readiness: effectiveness, alignment, and ASPR calibration"},
+        {
+            "id": "title",
+            "type": "markdown",
+            "body": "# GEAR Fig.4 readiness: effectiveness, alignment, and ASPR calibration",
+        },
         {
             "id": "technical_summary",
             "type": "markdown",
             "sourceId": source["id"],
             "body": "## Technical summary\n\n- **The current data support a GEAR effectiveness panel based on semantic concern coverage and evidence support.** Human-concern coverage is 62.4%, major-support precision is 78.9%, and all 100 clean runs completed.\n- **The current data do not support a claim that final GEAR novelty direction agrees with Nature reviewers.** Directional coverage is 1%, because post-review verification removes or downgrades almost every directional novelty point.\n- **Graph hints demonstrably improve evidence discovery, but not final review quality.** They add verified relations and independent prior works without increasing unsupported-major or leakage counts; quality deltas remain near zero with intervals crossing zero.\n- **A raw ASPR threshold should not be presented as a novelty verdict.** Higher ASPR predicts human positive versus mixed novelty with AUC 0.437, below chance orientation and with a bootstrap interval spanning 0.5.",
         },
-        {"id": "headline_metrics", "type": "metric-strip", "cardIds": ["completion", "concern_coverage", "major_support", "aspr_auc", "directional_coverage"]},
+        {
+            "id": "headline_metrics",
+            "type": "metric-strip",
+            "cardIds": [
+                "completion",
+                "concern_coverage",
+                "major_support",
+                "aspr_auc",
+                "directional_coverage",
+            ],
+        },
         {
             "id": "alignment_finding",
             "type": "markdown",
             "sourceId": source["id"],
             "body": "## Semantic overlap is strongest for evidence, but exact novelty reproduction remains low\n\nSoft one-to-one coverage reaches 84.5% for evidence, 74.1% for the significance proxy, 70.9% for novelty, and 69.4% for limitations/concerns. Weighted coverage is materially lower, showing that many matches share the same scientific concern but differ in granularity or evidentiary scope. The significance result is provisional because the current review contract has no native significance/impact field.",
         },
-        {"id": "alignment_chart", "type": "chart", "chartId": "alignment_family", "layout": "full"},
+        {
+            "id": "alignment_chart",
+            "type": "chart",
+            "chartId": "alignment_family",
+            "layout": "full",
+        },
         {
             "id": "direction_finding",
             "type": "markdown",
             "sourceId": source["id"],
             "body": "## Verification collapses directional novelty into uncertainty\n\nThe graph-blind Reviewer initially produced `mixed` for all 100 papers, with 109 supporting, 108 limiting, and 61 uncertain novelty points. Evidence supervision then left 163 novelty points unresolved and unretained, while 114 were retained as inconclusive questions. The final output contains 60 `uncertain`, 39 `not_discussed`, and only one `mixed` judgment. This is a pipeline-state transition, not evidence that the Reviewer saw no novelty.",
         },
-        {"id": "confusion_chart", "type": "chart", "chartId": "novelty_confusion", "layout": "full"},
-        {"id": "transition_chart", "type": "chart", "chartId": "novelty_transition", "layout": "full"},
+        {
+            "id": "confusion_chart",
+            "type": "chart",
+            "chartId": "novelty_confusion",
+            "layout": "full",
+        },
+        {
+            "id": "transition_chart",
+            "type": "chart",
+            "chartId": "novelty_transition",
+            "layout": "full",
+        },
         {
             "id": "threshold_finding",
             "type": "markdown",
             "sourceId": source["id"],
             "body": "## No ASPR cutoff is accurate enough to determine novelty color\n\nHuman labels are 61 positive and 39 mixed. Positive papers have a lower mean ASPR score (83.93) than mixed papers (85.77), and the difference is not significant (Mann–Whitney p=0.292). The intuitive in-sample cutoff near 80.2 reaches 60.0% accuracy and 55.7% balanced accuracy, below the 61.0% accuracy of always predicting positive. Repeated cross-validation yields only 54.2% balanced accuracy. The reverse cutoff looks better in-sample but drops to 52.4% balanced accuracy in cross-validation and conflicts with ASPR's propagation interpretation.",
         },
-        {"id": "score_chart", "type": "chart", "chartId": "aspr_distribution", "layout": "full"},
-        {"id": "threshold_chart", "type": "chart", "chartId": "threshold_curve", "layout": "full"},
-        {"id": "threshold_table", "type": "table", "tableId": "threshold_summary", "layout": "full"},
+        {
+            "id": "score_chart",
+            "type": "chart",
+            "chartId": "aspr_distribution",
+            "layout": "full",
+        },
+        {
+            "id": "threshold_chart",
+            "type": "chart",
+            "chartId": "threshold_curve",
+            "layout": "full",
+        },
+        {
+            "id": "threshold_table",
+            "type": "table",
+            "tableId": "threshold_summary",
+            "layout": "full",
+        },
         {
             "id": "graph_finding",
             "type": "markdown",
             "sourceId": source["id"],
             "body": "## Graph supports a retrieval-efficiency claim, not a novelty-accuracy claim\n\nCompared with score-only, full Graph hints add 1.70 verified relations and 0.77 independent prior works per paper; 62% of papers change their verified relation set. Analytical Quality changes by -0.004 and major-support precision by -0.0235, with both intervals crossing zero. ASPR score itself is uncorrelated with relation gain (Spearman ρ=-0.032, p=0.750), while p_uptake is nearly saturated at 0.998 and feature coverage is 1.0 for every paper. The useful component is currently the seed-work guidance, not the scalar score.",
         },
-        {"id": "graph_table", "type": "table", "tableId": "graph_effects", "layout": "full"},
+        {
+            "id": "graph_table",
+            "type": "table",
+            "tableId": "graph_effects",
+            "layout": "full",
+        },
         {
             "id": "definitions",
             "type": "markdown",
@@ -602,7 +735,7 @@ def _report_artifact(
 
 
 def _novelty_stage_diagnostics(
-    manifest: dict[str, Any]
+    manifest: dict[str, Any],
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     initial_judgments: Counter[str] = Counter()
     final_judgments: Counter[str] = Counter()
@@ -725,7 +858,9 @@ def main() -> int:
         for row in judge_rows
         if row["kind"] == "matches"
     }
-    scores = np.array([float(graph[row["paper_id"]]["score_0_100"]) for row in human_rows])
+    scores = np.array(
+        [float(graph[row["paper_id"]]["score_0_100"]) for row in human_rows]
+    )
     labels = np.array(
         [int(row["novelty"]["judgment"] == "positive") for row in human_rows]
     )
@@ -737,7 +872,9 @@ def main() -> int:
     reverse_best = _best_threshold(scores, labels, high_positive=False)
     stage, transition_rows = _novelty_stage_diagnostics(manifest)
     family_rows = _family_coverage(human, decisions, case_to_paper)
-    ablation = json.loads((args.evaluation_dir / "graph_ablation_metrics.json").read_text())
+    ablation = json.loads(
+        (args.evaluation_dir / "graph_ablation_metrics.json").read_text()
+    )
     metrics = json.loads((args.evaluation_dir / "metrics.json").read_text())
 
     score_distribution = []
@@ -816,9 +953,9 @@ def main() -> int:
     _write_json(output_dir / "report_datasets.json", artifact["snapshot"]["datasets"])
     source_path = output_dir / "source.sql"
     source_relative = source_path.relative_to(PROJECT_ROOT).as_posix()
-    dataset_relative = (output_dir / "report_datasets.json").relative_to(
-        PROJECT_ROOT
-    ).as_posix()
+    dataset_relative = (
+        (output_dir / "report_datasets.json").relative_to(PROJECT_ROOT).as_posix()
+    )
     dataset_names = artifact["snapshot"]["datasets"].keys()
     source_path.write_text(
         "-- DuckDB SQL for the reviewed Fig.4 diagnostic snapshot.\n"

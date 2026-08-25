@@ -20,6 +20,7 @@ from experiments.gear.evaluation.faults import perturb_manuscript
 from experiments.gear.evaluation.graph_ablation import (
     graph_tension,
     graph_variants,
+    shuffled_graph_components,
     shuffled_graph_results,
     tension_band,
 )
@@ -41,7 +42,11 @@ from experiments.gear.review_reconstruction.evaluation import (
     PointMatchDecision,
     build_blind_match_package,
 )
-from gear.graph_prior_contracts import GraphResultV4
+from gear.graph_prior_contracts import (
+    GraphResultV4,
+    GraphRuntimePacketV1,
+    GraphTopologySeedV1,
+)
 from gear.review_contracts import (
     NoveltyAssessment,
     NoveltyJudgment,
@@ -110,13 +115,40 @@ def test_graph_variants_are_legal_and_shuffled_keeps_target_id() -> None:
     variants = {row.name: row.result for row in graph_variants(first)}
     assert variants["neutral"].score_0_100 == 50.0
     assert variants["score_only"].p_uptake == first.p_uptake
-    assert variants["score_only"].search_terms == []
-    assert variants["guidance_only"].score_0_100 == 50.0
-    assert variants["guidance_only"].search_terms == first.search_terms
+    assert variants["score_only"].topology_seeds == []
+    assert variants["score_profile"].topology_seeds == []
     shuffled = shuffled_graph_results([first, second])
     assert shuffled["p1"].paper_id == "p1"
     assert shuffled["p1"].score_0_100 == second.score_0_100
-    assert shuffled["p1"].seed_work_ids == second.seed_work_ids
+
+
+def test_random_topology_replaces_executed_title_and_identity() -> None:
+    def packet(paper_id: str, work_id: str, title: str) -> GraphRuntimePacketV1:
+        return GraphRuntimePacketV1(
+            paper_id=paper_id,
+            score_0_100=80,
+            raw_expected_diffusion=0.5,
+            p_uptake=0.8,
+            conditional_diffusion=0.6,
+            topology_seeds=[
+                GraphTopologySeedV1(
+                    work_id=work_id,
+                    title=title,
+                    publication_year=2020,
+                    anchor_field_ids=["field"],
+                )
+            ],
+        )
+
+    first = packet("p1", "W1", "Real topology title")
+    second = packet("p2", "W2", "Matched donor title")
+
+    random_seed = shuffled_graph_components([first, second])["p1"][
+        "random_matched_topology"
+    ].topology_seeds[0]
+
+    assert random_seed.work_id == "W2"
+    assert random_seed.title == "Matched donor title"
 
 
 def test_weighted_alignment_counts_partial_as_half() -> None:
@@ -173,6 +205,87 @@ def test_graph_action_metrics_reads_compact_bundle_fusion(tmp_path) -> None:
     metrics = graph_action_metrics(tmp_path)
     assert metrics["graph_trigger_compliance"] == 1.0
     assert metrics["graph_evidence_yield"] == 1.0
+
+
+def test_graph_seed_rates_are_query_level_and_bounded(tmp_path) -> None:
+    store = EvidenceStore(tmp_path)
+    store.add_evidence(
+        "Q:q1", "retrieval_query", {"query_id": "q1", "query_role": "graph_seed"}
+    )
+    store.add_evidence(
+        "G:LEDGER",
+        "resource_ledger",
+        {
+            "logical_provider_searches": 1,
+            "logical_direct_fetches": 0,
+            "logical_neighbor_expansions": 0,
+        },
+    )
+    for index in range(3):
+        store.add_evidence(
+            f"H:h{index}",
+            "retrieval_hit",
+            {
+                "query_id": "q1",
+                "work_id": f"W{index}",
+                "selection_stage": "compared" if index == 0 else "recall_filtered",
+                "gate_label": "partial" if index == 0 else None,
+            },
+        )
+    store.add_evidence(
+        "R:r1",
+        "prior_relation",
+        {
+            "prior_work_id": "W0",
+            "source_query_ids": ["q1"],
+            "temporal_valid": True,
+            "relation_label": "PARALLEL",
+            "essential_facet_coverage": 0.5,
+            "common_dimensions": ["shared mechanism"],
+            "difference_dimensions": ["different implementation"],
+        },
+    )
+
+    metrics = graph_action_metrics(tmp_path)
+
+    assert metrics["graph_seed_fetch_rate"] == 1.0
+    assert metrics["graph_seed_comparable_rate"] == 1.0
+    assert metrics["graph_seed_verified_relation_yield"] == 1
+
+
+def test_low_facet_parallel_is_not_claim_relevant_graph_yield(tmp_path) -> None:
+    store = EvidenceStore(tmp_path)
+    store.add_evidence(
+        "Q:q1", "retrieval_query", {"query_id": "q1", "query_role": "graph_seed"}
+    )
+    store.add_evidence(
+        "G:LEDGER",
+        "resource_ledger",
+        {
+            "logical_provider_searches": 1,
+            "logical_direct_fetches": 0,
+            "logical_neighbor_expansions": 0,
+        },
+    )
+    store.add_evidence(
+        "R:r1",
+        "prior_relation",
+        {
+            "relation_id": "r1",
+            "prior_work_id": "W0",
+            "source_query_ids": ["q1"],
+            "temporal_valid": True,
+            "relation_label": "PARALLEL",
+            "essential_facet_coverage": 0.2,
+            "common_dimensions": ["generic method"],
+            "difference_dimensions": ["unrelated phenotype"],
+        },
+    )
+
+    metrics = graph_action_metrics(tmp_path)
+
+    assert metrics["graph_seed_verified_relation_yield"] == 0
+    assert metrics["claim_relevant_verified_relation_yield"] == 0.0
 
 
 def test_metrics_do_not_invent_empty_perfection() -> None:

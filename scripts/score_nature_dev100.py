@@ -30,7 +30,7 @@ if str(PROJECT_ROOT := Path(__file__).resolve().parents[1]) not in sys.path:
 
 from gear.calibration import FEATURE_NAMES, _load_official_joblib, sha256_file
 from gear.contracts import PaperMetadata, ReviewRequest
-from gear.graph_prior import build_graph_search_hints
+from gear.graph_prior import build_graph_topology_seeds, graph_runtime_packet
 from gear.nature_multihorizon.runtime_replay_v3 import build_runtime_context_for_year
 from gear.nature_multihorizon.t0_runtime_v3 import (
     ContextSnapshot,
@@ -55,6 +55,19 @@ METADATA_PATH = PROJECT_ROOT / (
     "papers_primary_articles.parquet"
 )
 RUNTIME_DIR = PROJECT_ROOT / "data/calibration/runtime_replay/fulltext16_v3"
+
+
+def _packet_profile(values: dict[str, Any]) -> tuple[dict[str, Any], list[str]]:
+    profile = {name: values.get(name) for name in FEATURE_NAMES}
+    if isinstance(profile.get("EF0197"), str):
+        profile["EF0197"] = None
+    missing = [
+        name for name, value in profile.items() if value is None or pd.isna(value)
+    ]
+    return (
+        {name: None if name in missing else value for name, value in profile.items()},
+        missing,
+    )
 
 
 def _dev100_dois() -> list[str]:
@@ -130,6 +143,7 @@ def _score_one(
     context: ContextSnapshot,
     model_bundle: dict[str, Any],
     reference: np.ndarray,
+    historical_thresholds: dict[str, tuple[float, float]],
 ) -> tuple[dict[str, Any], dict[str, Any]]:
     work = _openalex_work(doi)
     publication_year = int(work["publication_year"])
@@ -144,7 +158,7 @@ def _score_one(
         ReviewRequest(paper_path=_paper_path(doi), metadata=metadata)
     )
     target = enricher.build_target(paper, evidence_date=metadata.publication_date)
-    seed_work_ids, search_terms = build_graph_search_hints(target, context)
+    topology_seeds = build_graph_topology_seeds(target, context)
     values = materialize_fulltext16(target, context)
     feature_frame = coerce_fulltext16_storage_schema(
         pd.DataFrame([{key: values.get(key) for key in FEATURE_NAMES}])
@@ -164,6 +178,7 @@ def _score_one(
         "registered_model_asset_missing",
         "full_cohort_score_replay_passed",
     ]
+    packet_values, missing_features = _packet_profile(values)
     record = {
         "paper_id": paper_id,
         "source_paper_id": doi.replace("10.1038/", ""),
@@ -176,7 +191,7 @@ def _score_one(
         "raw_prediction_score": raw,
         "p_uptake": uptake,
         "conditional_diffusion": conditional,
-        "feature_coverage": 1.0,
+        "feature_coverage": 1.0 - len(missing_features) / len(FEATURE_NAMES),
         "status": "development_replay",
         "model_version": "pgc-v3-d5-fulltext16-prediction-replay",
         "quality_flags": ";".join(flags),
@@ -198,10 +213,10 @@ def _score_one(
         "metadata_observed": target.metadata_observed,
     }
     return record, {
-        "features": features,
+        "features": {**features, **packet_values},
         "source": source,
-        "seed_work_ids": seed_work_ids,
-        "search_terms": search_terms,
+        "topology_seeds": [seed.model_dump(mode="json") for seed in topology_seeds],
+        "historical_bands": _historical_bands(values, historical_thresholds),
     }
 
 
@@ -219,8 +234,39 @@ def _reference_scores() -> np.ndarray:
     return np.sort(values)
 
 
+def _historical_thresholds() -> dict[str, tuple[float, float]]:
+    matrix = pd.read_parquet(MATRIX_PATH, columns=list(FEATURE_NAMES))
+    thresholds: dict[str, tuple[float, float]] = {}
+    for name in FEATURE_NAMES[:7]:
+        values = pd.to_numeric(matrix[name], errors="coerce").dropna()
+        if len(values) >= 30:
+            thresholds[name] = (
+                float(values.quantile(0.1)),
+                float(values.quantile(0.9)),
+            )
+    return thresholds
+
+
+def _historical_bands(
+    values: dict[str, Any], thresholds: dict[str, tuple[float, float]]
+) -> dict[str, str]:
+    bands: dict[str, str] = {}
+    for name, (low, high) in thresholds.items():
+        value = values.get(name)
+        bands[name] = (
+            "unavailable"
+            if value is None
+            else (
+                "low_extreme"
+                if float(value) <= low
+                else "high_extreme" if float(value) >= high else "typical"
+            )
+        )
+    return bands
+
+
 def _emit_graph_results_from_existing(output: Path, workers: int) -> None:
-    """Add V4 search hints to an existing score release without rescoring."""
+    """Publish runtime packets from an existing score release without rescoring."""
     score_path = output / "paper_scores.parquet"
     context_path = output / "rebuilt_context_snapshot.joblib"
     if not score_path.is_file() or not context_path.is_file():
@@ -229,6 +275,20 @@ def _emit_graph_results_from_existing(output: Path, workers: int) -> None:
     if not isinstance(context, ContextSnapshot) or context.source_max_year != 2022:
         raise ValueError("Unexpected cached runtime context")
     records = pd.read_parquet(score_path).to_dict("records")
+    target_path = output / "graph_runtime_packets.jsonl"
+    prior_seed_metadata: dict[str, Any] = {}
+    if target_path.is_file():
+        for line in target_path.read_text(encoding="utf-8").splitlines():
+            if not line.strip():
+                continue
+            packet = graph_runtime_packet(json.loads(line))
+            for seed in packet.topology_seeds:
+                prior_seed_metadata[seed.work_id] = seed
+    feature_rows = {
+        str(row["openalex_id"]): row
+        for row in pd.read_parquet(output / "score_features.parquet").to_dict("records")
+    }
+    thresholds = _historical_thresholds()
 
     def build(record: dict[str, Any]) -> dict[str, Any]:
         compiler = PaperCompiler()
@@ -243,28 +303,191 @@ def _emit_graph_results_from_existing(output: Path, workers: int) -> None:
             ReviewRequest(paper_path=_paper_path(str(record["doi"])), metadata=metadata)
         )
         target = enricher.build_target(paper, evidence_date=metadata.publication_date)
-        seed_work_ids, search_terms = build_graph_search_hints(target, context)
+        topology_seeds = build_graph_topology_seeds(target, context)
+        topology_seeds = [
+            seed.model_copy(
+                update={
+                    "title": (
+                        prior_seed_metadata[seed.work_id].title
+                        if seed.work_id in prior_seed_metadata
+                        else seed.title
+                    ),
+                    "publication_year": (
+                        seed.publication_year
+                        or (
+                            prior_seed_metadata[seed.work_id].publication_year
+                            if seed.work_id in prior_seed_metadata
+                            else None
+                        )
+                    ),
+                    "anchor_field_ids": sorted(
+                        {
+                            *seed.anchor_field_ids,
+                            *(
+                                prior_seed_metadata[seed.work_id].anchor_field_ids
+                                if seed.work_id in prior_seed_metadata
+                                else []
+                            ),
+                        }
+                    ),
+                }
+            )
+            for seed in topology_seeds
+        ]
+        values = {
+            name: feature_rows[str(record["openalex_id"])].get(name)
+            for name in FEATURE_NAMES
+        }
+        values, missing = _packet_profile(values)
         return {
-            "contract": "aspr_graph_result_v4",
+            "contract": "aspr_graph_runtime_packet_v1",
             "paper_id": record["openalex_id"],
+            "score_semantics": "prospective_structural_innovation_percentile",
             "score_0_100": record["aspr_score"],
+            "raw_expected_diffusion": record.get("raw_prediction_score"),
             "p_uptake": record["p_uptake"],
             "conditional_diffusion": record["conditional_diffusion"],
-            "feature_coverage": record["feature_coverage"],
-            "seed_work_ids": seed_work_ids,
-            "search_terms": search_terms,
+            "feature_version": "fulltext16_v3",
+            "feature_values": values,
+            "historical_bands": _historical_bands(values, thresholds),
+            "missing_feature_ids": missing,
+            "diagnostic_flags": [
+                flag
+                for flag in str(record.get("quality_flags") or "").split(";")
+                if flag and flag != "topology_metadata_incomplete_v4_migration"
+            ]
+            + ["topology_coupling_rebuilt"],
+            "topology_seeds": [seed.model_dump(mode="json") for seed in topology_seeds],
         }
 
-    target_path = output / "graph_results.jsonl"
+    temporary = target_path.with_suffix(".jsonl.tmp")
     with (
-        target_path.open("w", encoding="utf-8") as handle,
+        temporary.open("w", encoding="utf-8") as handle,
         concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool,
     ):
         for index, (record, result) in enumerate(
             zip(records, pool.map(build, records), strict=True), start=1
         ):
             handle.write(json.dumps(result, ensure_ascii=False) + "\n")
-            print(f"[{index}/{len(records)}] {record['doi']} hints", flush=True)
+            print(f"[{index}/{len(records)}] {record['doi']} packet", flush=True)
+    temporary.replace(target_path)
+
+
+def _migrate_v4_packets_offline(output: Path) -> None:
+    """Combine frozen V4 seeds and local score/features without network calls."""
+    legacy_path = output / "graph_results.jsonl"
+    if not legacy_path.is_file():
+        raise FileNotFoundError(legacy_path)
+    legacy = {
+        packet.paper_id: packet
+        for packet in (
+            graph_runtime_packet(json.loads(line))
+            for line in legacy_path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        )
+    }
+    scores = pd.read_parquet(output / "paper_scores.parquet").to_dict("records")
+    features = {
+        str(row["openalex_id"]): row
+        for row in pd.read_parquet(output / "score_features.parquet").to_dict("records")
+    }
+    thresholds = _historical_thresholds()
+    target = output / "graph_runtime_packets.jsonl"
+    temporary = target.with_suffix(".jsonl.tmp")
+    with temporary.open("w", encoding="utf-8") as handle:
+        for record in scores:
+            paper_id = str(record["openalex_id"])
+            profile, missing = _packet_profile(features[paper_id])
+            seed_packet = legacy.get(paper_id)
+            packet = {
+                "contract": "aspr_graph_runtime_packet_v1",
+                "paper_id": paper_id,
+                "score_semantics": "prospective_structural_innovation_percentile",
+                "score_0_100": record["aspr_score"],
+                "raw_expected_diffusion": record.get("raw_prediction_score"),
+                "p_uptake": record["p_uptake"],
+                "conditional_diffusion": record["conditional_diffusion"],
+                "feature_version": "fulltext16_v3",
+                "feature_values": profile,
+                "historical_bands": _historical_bands(profile, thresholds),
+                "missing_feature_ids": missing,
+                "diagnostic_flags": [
+                    *str(record.get("quality_flags") or "").split(";"),
+                    "topology_metadata_incomplete_v4_migration",
+                ],
+                "topology_seeds": (
+                    [
+                        seed.model_dump(mode="json")
+                        for seed in seed_packet.topology_seeds
+                    ]
+                    if seed_packet is not None
+                    else []
+                ),
+            }
+            handle.write(json.dumps(packet, ensure_ascii=False) + "\n")
+    temporary.replace(target)
+
+
+def _enrich_topology_metadata(output: Path) -> None:
+    """Batch-resolve seed titles/years; no scoring or model call is performed."""
+    target = output / "graph_runtime_packets.jsonl"
+    rows = [
+        graph_runtime_packet(json.loads(line))
+        for line in target.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
+    work_ids = sorted(
+        {
+            seed.work_id.rsplit("/", 1)[-1].upper()
+            for packet in rows
+            for seed in packet.topology_seeds
+        }
+    )
+    metadata: dict[str, dict[str, Any]] = {}
+    for start in range(0, len(work_ids), 40):
+        response = requests.get(
+            "https://api.openalex.org/works",
+            params={
+                "filter": f"openalex_id:{'|'.join(work_ids[start:start + 40])}",
+                "select": "id,display_name,publication_year,primary_topic",
+                "per-page": 40,
+            },
+            headers={"Accept-Encoding": "gzip, deflate"},
+            timeout=60,
+        )
+        response.raise_for_status()
+        for item in response.json().get("results", []):
+            metadata[str(item.get("id") or "").rsplit("/", 1)[-1].upper()] = item
+    temporary = target.with_suffix(".jsonl.tmp")
+    with temporary.open("w", encoding="utf-8") as handle:
+        for packet in rows:
+            seeds = []
+            for seed in packet.topology_seeds:
+                item = metadata.get(seed.work_id.rsplit("/", 1)[-1].upper(), {})
+                topic = item.get("primary_topic") or {}
+                field = (topic.get("field") or {}).get("id")
+                seeds.append(
+                    seed.model_copy(
+                        update={
+                            "title": str(item.get("display_name") or seed.title),
+                            "publication_year": item.get("publication_year")
+                            or seed.publication_year,
+                            "anchor_field_ids": list(
+                                dict.fromkeys(
+                                    [
+                                        *seed.anchor_field_ids,
+                                        *([field] if field else []),
+                                    ]
+                                )
+                            ),
+                        }
+                    )
+                )
+            handle.write(
+                packet.model_copy(update={"topology_seeds": seeds}).model_dump_json()
+                + "\n"
+            )
+    temporary.replace(target)
 
 
 def main() -> int:
@@ -276,12 +499,22 @@ def main() -> int:
         default=PROJECT_ROOT / "outputs/gear/aspr_scoring/nature_dev100",
     )
     parser.add_argument("--graph-results-only", action="store_true")
+    parser.add_argument("--offline-migrate-v4", action="store_true")
+    parser.add_argument("--enrich-topology-metadata", action="store_true")
     parser.add_argument("--workers", type=int, default=4)
     args = parser.parse_args()
     output = args.output_dir.resolve()
+    if args.enrich_topology_metadata:
+        _enrich_topology_metadata(output)
+        print(output / "graph_runtime_packets.jsonl")
+        return 0
+    if args.offline_migrate_v4:
+        _migrate_v4_packets_offline(output)
+        print(output / "graph_runtime_packets.jsonl")
+        return 0
     if args.graph_results_only:
         _emit_graph_results_from_existing(output, max(1, args.workers))
-        print(output / "graph_results.jsonl")
+        print(output / "graph_runtime_packets.jsonl")
         return 0
     if output.exists() and (output / "paper_scores.parquet").exists():
         raise FileExistsError(output)
@@ -339,38 +572,51 @@ def main() -> int:
     score_path = MODEL_DIR / "official_aspr_scores.parquet"
     model_bundle = _load_official_joblib(model_path)
     reference = _reference_scores()
+    historical_thresholds = _historical_thresholds()
     compiler = PaperCompiler()
     enricher = OpenAlexT0Enricher()
     records: list[dict[str, Any]] = []
     features: list[dict[str, Any]] = []
     sources: list[dict[str, Any]] = []
-    graph_hints: dict[str, tuple[list[str], list[str]]] = {}
+    graph_packets: dict[str, dict[str, Any]] = {}
     for index, doi in enumerate(_dev100_dois(), start=1):
         record, extras = _score_one(
-            doi, compiler, enricher, context, model_bundle, reference
+            doi,
+            compiler,
+            enricher,
+            context,
+            model_bundle,
+            reference,
+            historical_thresholds,
         )
         records.append(record)
         features.append(extras["features"])
         sources.append(extras["source"])
-        graph_hints[record["openalex_id"]] = (
-            extras["seed_work_ids"],
-            extras["search_terms"],
-        )
+        graph_packets[record["openalex_id"]] = extras
         print(f"[{index}/100] {doi} score={record['aspr_score']:.6f}", flush=True)
     pd.DataFrame(records).to_parquet(output / "paper_scores.parquet", index=False)
     pd.DataFrame(features).to_parquet(output / "score_features.parquet", index=False)
-    with (output / "graph_results.jsonl").open("w", encoding="utf-8") as handle:
+    with (output / "graph_runtime_packets.jsonl").open("w", encoding="utf-8") as handle:
         for record in records:
-            seed_work_ids, search_terms = graph_hints[record["openalex_id"]]
+            extras = graph_packets[record["openalex_id"]]
+            feature_values = {
+                name: extras["features"].get(name) for name in FEATURE_NAMES
+            }
+            feature_values, missing = _packet_profile(feature_values)
             graph_result = {
-                "contract": "aspr_graph_result_v4",
+                "contract": "aspr_graph_runtime_packet_v1",
                 "paper_id": record["openalex_id"],
+                "score_semantics": "prospective_structural_innovation_percentile",
                 "score_0_100": record["aspr_score"],
+                "raw_expected_diffusion": record["raw_prediction_score"],
                 "p_uptake": record["p_uptake"],
                 "conditional_diffusion": record["conditional_diffusion"],
-                "feature_coverage": record["feature_coverage"],
-                "seed_work_ids": seed_work_ids,
-                "search_terms": search_terms,
+                "feature_version": "fulltext16_v3",
+                "feature_values": feature_values,
+                "historical_bands": extras["historical_bands"],
+                "missing_feature_ids": missing,
+                "diagnostic_flags": record["quality_flags"].split(";"),
+                "topology_seeds": extras["topology_seeds"],
             }
             handle.write(json.dumps(graph_result, ensure_ascii=False) + "\n")
     (output / "source_manifest.json").write_text(

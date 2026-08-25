@@ -6,7 +6,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from .contracts import PaperIR
-from .graph_prior_contracts import GraphPriorResult, GraphResultV4
+from .graph_prior_contracts import GraphPriorResult, GraphRuntimePacketV1
 from .paper_extraction import PaperRubricBuilder
 from .review_contracts import (
     BranchReview,
@@ -27,7 +27,7 @@ from .review_contracts import (
 def graph_result_from_v2(
     graph_prior: GraphPriorResult,
     calibration: Mapping[str, Any] | None = None,
-) -> GraphResultV4 | None:
+) -> GraphRuntimePacketV1 | None:
     """Migrate only complete V2 data; never invent missing Graph components."""
     forecast = dict((calibration or {}).get("forecast") or {})
     values = {
@@ -37,12 +37,13 @@ def graph_result_from_v2(
     }
     if any(value is None for value in values.values()):
         return None
-    return GraphResultV4(
+    return GraphRuntimePacketV1(
         paper_id=graph_prior.paper_id,
         score_0_100=float(values["score_0_100"]),
         p_uptake=float(values["p_uptake"]),
         conditional_diffusion=float(values["conditional_diffusion"]),
-        feature_coverage=graph_prior.feature_coverage,
+        raw_expected_diffusion=float(values["p_uptake"])
+        * float(values["conditional_diffusion"]),
     )
 
 

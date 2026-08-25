@@ -10,8 +10,8 @@ from pydantic import Field, field_validator, model_validator
 
 from gear.config import CodexCliEndpoint, OpenAICompatibleEndpoint
 from gear.contracts import ReviewStatus, StrictModel
-from gear.graph_prior import graph_result_v4
-from gear.graph_prior_contracts import GraphResultV4
+from gear.graph_prior import graph_runtime_packet
+from gear.graph_prior_contracts import GraphRuntimePacketV1
 from gear.review_contracts import PointSeverity, ReviewAspect
 
 EvaluationTrack = Literal[
@@ -23,7 +23,15 @@ EvaluationTrack = Literal[
     "graph_ablation",
     "efficiency",
 ]
-GraphVariantName = Literal["full", "neutral", "score_only", "guidance_only", "shuffled"]
+GraphVariantName = Literal[
+    "neutral",
+    "score_only",
+    "score_profile",
+    "full",
+    "shuffled_score",
+    "shuffled_profile",
+    "random_matched_topology",
+]
 
 
 class EvaluationCase(StrictModel):
@@ -32,14 +40,14 @@ class EvaluationCase(StrictModel):
     manuscript_path: Path
     metadata_path: Path
     cutoff_date: date
-    graph_result: GraphResultV4
+    graph_result: GraphRuntimePacketV1
     clean_run_dir: Path | None = None
     prior_art_gold_path: Path | None = None
 
     @field_validator("graph_result", mode="before")
     @classmethod
-    def migrate_graph_result(cls, value: object) -> GraphResultV4:
-        return graph_result_v4(value)  # type: ignore[arg-type]
+    def migrate_graph_result(cls, value: object) -> GraphRuntimePacketV1:
+        return graph_runtime_packet(value)  # type: ignore[arg-type]
 
     @model_validator(mode="after")
     def graph_identity(self) -> EvaluationCase:
@@ -234,12 +242,12 @@ class FaultScenarioV1(StrictModel):
 
 class GraphAblationVariant(StrictModel):
     name: GraphVariantName
-    result: GraphResultV4
+    result: GraphRuntimePacketV1
 
     @field_validator("result", mode="before")
     @classmethod
-    def migrate_graph_result(cls, value: object) -> GraphResultV4:
-        return graph_result_v4(value)  # type: ignore[arg-type]
+    def migrate_graph_result(cls, value: object) -> GraphRuntimePacketV1:
+        return graph_runtime_packet(value)  # type: ignore[arg-type]
 
 
 class EvaluationContextPack(StrictModel):

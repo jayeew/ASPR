@@ -12,7 +12,27 @@ from gear.contracts import (
     RetrievedWork,
     ScientificSearchFrame,
 )
+from gear.graph_prior_contracts import GraphResourceCapsV1, ResourceLedgerV1
 from gear.prior_art import PriorArtService, RelationClassifier
+
+
+def test_graph_direct_fetches_replace_provider_slots() -> None:
+    ledger = ResourceLedgerV1(
+        paper_id="p",
+        caps=GraphResourceCapsV1(provider_searches=8, direct_fetches=2),
+    )
+
+    remaining = PriorArtService._reserve_graph_seed_slots(
+        4, ["W1", "W1", "W2", "W3"], ledger
+    )
+
+    assert remaining == 2
+
+    with_traversal = PriorArtService._reserve_graph_seed_slots(
+        4, ["W1", "W2"], ledger, neighbor_slots=1
+    )
+
+    assert with_traversal == 1
 
 
 class SearchFake:
@@ -54,6 +74,51 @@ class SearchFake:
     def fetch_neighbors(self, work_id, direction="references", *, limit=None):
         self.neighbor_calls += 1
         return []
+
+
+class GraphSeedSearchFake(SearchFake):
+    def __init__(self):
+        super().__init__()
+        self.fetch_calls = 0
+
+    def fetch_work(self, work_id):
+        self.fetch_calls += 1
+        return {
+            "paperId": work_id,
+            "title": "Exact topology seed",
+            "publication_date": "2000-01-01",
+            "year": 2000,
+            "abstract": "A prior topology anchor for evidence controllers.",
+        }
+
+    def search_query(
+        self,
+        query,
+        *,
+        provider=None,
+        date_to=None,
+        limit=None,
+        search_mode="text",
+    ):
+        rows = super().search_query(
+            query,
+            provider=provider,
+            date_to=date_to,
+            limit=limit,
+            search_mode=search_mode,
+        )
+        if query == "Topology guided evidence controller antecedents":
+            rows = [
+                {
+                    "paperId": "W-seed",
+                    "title": "Topology guided evidence controller antecedents",
+                    "publication_date": "2000-01-01",
+                    "year": 2000,
+                    "abstract": "A claim-aligned topology anchor.",
+                },
+                *rows,
+            ]
+        return rows[: int(limit or len(rows))]
 
 
 class MetadataOnlySearchFake:
@@ -177,15 +242,15 @@ def test_retrieval_budget_cache_and_cutoff_are_enforced(gear_config, paper_ir):
     first_call_count = client.search_calls
 
     cached_budget = RetrievalBudget()
-    cached = service.retrieve(
+    repeated = service.retrieve(
         claim,
         date(2010, 1, 1),
         cached_budget,
         target_span=paper_ir.span_map()[claim.span_id],
         paper_ir=paper_ir,
     )
-    assert cached
-    assert service.last_cache_hit is True
+    assert repeated == []
+    assert service.last_cache_hit is False
     assert client.search_calls == first_call_count
 
     changed_cutoff_budget = RetrievalBudget()
@@ -210,6 +275,190 @@ def test_retrieval_budget_cache_and_cutoff_are_enforced(gear_config, paper_ir):
     assert budget.contrastive_used <= budget.contrastive_max
 
 
+def test_titled_graph_seed_replaces_query_without_direct_fetch(
+    gear_config, paper_ir
+) -> None:
+    client = GraphSeedSearchFake()
+    service = service_with_model(
+        gear_config.model_copy(update={"allow_external_retrieval": True}), client
+    )
+    ledger = ResourceLedgerV1(
+        paper_id=paper_ir.paper_id,
+        caps=GraphResourceCapsV1(provider_searches=4, direct_fetches=2),
+    )
+    claim = paper_ir.claims[0]
+
+    service.retrieve(
+        claim,
+        date(2010, 1, 1),
+        RetrievalBudget(normal_max=4),
+        target_span=paper_ir.span_map()[claim.span_id],
+        paper_ir=paper_ir,
+        graph_seed_work_ids=["W-seed"],
+        graph_seed_searches=[
+            ("W-seed", "Topology guided evidence controller antecedents")
+        ],
+        allowed_query_roles=[
+            "author_terminology",
+            "object_problem",
+            "mechanism_outcome",
+            "purpose_semantic",
+        ],
+        resource_ledger=ledger,
+    )
+
+    graph_queries = [
+        query
+        for query in service.last_query_specs
+        if query.transformation.startswith("graph_claim_aligned_topology_search:")
+    ]
+    assert len(graph_queries) == 1
+    assert graph_queries[0].search_mode == "semantic"
+    assert ":W-seed:" in graph_queries[0].transformation
+    assert graph_queries[0].query_role == "purpose_semantic"
+    assert "Topology guided evidence controller antecedents" in graph_queries[0].query
+    assert any(
+        term.casefold() in graph_queries[0].query.casefold()
+        for term in service.last_frame.target_object
+    )
+    assert ledger.logical_provider_searches == 4
+    assert ledger.logical_direct_fetches == 0
+    assert client.search_calls == 4
+    assert client.fetch_calls == 0
+    assert service.last_graph_seed_works == []
+
+
+def test_titleless_graph_seed_keeps_legacy_direct_fetch(gear_config, paper_ir) -> None:
+    client = GraphSeedSearchFake()
+    service = service_with_model(
+        gear_config.model_copy(update={"allow_external_retrieval": True}), client
+    )
+    ledger = ResourceLedgerV1(
+        paper_id=paper_ir.paper_id,
+        caps=GraphResourceCapsV1(provider_searches=4, direct_fetches=2),
+    )
+    claim = paper_ir.claims[0]
+
+    service.retrieve(
+        claim,
+        date(2010, 1, 1),
+        RetrievalBudget(normal_max=4),
+        target_span=paper_ir.span_map()[claim.span_id],
+        paper_ir=paper_ir,
+        graph_seed_work_ids=["W-seed"],
+        allowed_query_roles=[
+            "author_terminology",
+            "object_problem",
+            "mechanism_outcome",
+            "purpose_semantic",
+        ],
+        resource_ledger=ledger,
+    )
+
+    assert ledger.logical_provider_searches == 3
+    assert ledger.logical_direct_fetches == 1
+    assert client.fetch_calls == 1
+
+
+def test_resource_ledger_caps_real_provider_calls_and_remote_role_order(
+    gear_config, paper_ir
+) -> None:
+    client = SearchFake()
+    service = service_with_model(
+        gear_config.model_copy(update={"allow_external_retrieval": True}), client
+    )
+    ledger = ResourceLedgerV1(
+        paper_id=paper_ir.paper_id,
+        caps=GraphResourceCapsV1(provider_searches=2),
+    )
+    claim = paper_ir.claims[0]
+    service.retrieve(
+        claim,
+        date(2010, 1, 1),
+        RetrievalBudget(normal_max=4),
+        target_span=paper_ir.span_map()[claim.span_id],
+        paper_ir=paper_ir,
+        allowed_query_roles=[
+            "mechanism_outcome",
+            "purpose_semantic",
+            "author_terminology",
+            "object_problem",
+        ],
+        resource_ledger=ledger,
+    )
+    assert [query.query_role for query in service.last_query_specs] == [
+        "mechanism_outcome",
+        "purpose_semantic",
+    ]
+    assert ledger.logical_provider_searches == 2
+    assert ledger.network_provider_attempts == 2
+    assert client.search_calls == 2
+
+
+def test_fulltext_cap_consumes_planned_logical_slots_without_network(
+    gear_config, paper_ir
+) -> None:
+    client = SearchFake()
+    service = service_with_model(
+        gear_config.model_copy(update={"allow_external_retrieval": True}), client
+    )
+    ledger = ResourceLedgerV1(
+        paper_id=paper_ir.paper_id,
+        caps=GraphResourceCapsV1(provider_searches=2),
+    )
+    claim = paper_ir.claims[0]
+
+    works = service.retrieve(
+        claim,
+        date(2010, 1, 1),
+        RetrievalBudget(normal_max=2, fulltext_max=1, fulltext_kept=1),
+        target_span=paper_ir.span_map()[claim.span_id],
+        paper_ir=paper_ir,
+        allowed_query_roles=["author_terminology", "object_problem"],
+        resource_ledger=ledger,
+    )
+
+    assert works == []
+    assert ledger.logical_provider_searches == 2
+    assert ledger.network_provider_attempts == 0
+    assert client.search_calls == 0
+
+
+def test_neighbor_query_id_includes_traversal_direction(gear_config, paper_ir) -> None:
+    service = service_with_model(
+        gear_config.model_copy(update={"allow_external_retrieval": True}),
+        SearchFake(),
+    )
+    claim = paper_ir.claims[0]
+    seed = service.retrieve(
+        claim,
+        date(2010, 1, 1),
+        RetrievalBudget(),
+        target_span=paper_ir.span_map()[claim.span_id],
+        paper_ir=paper_ir,
+    )[0]
+    expansion_budget = RetrievalBudget(citation_expansion_max=2)
+
+    service.expand_neighbors(
+        seed,
+        claim,
+        date(2010, 1, 1),
+        expansion_budget,
+        direction="references",
+    )
+    references_id = service.last_query_specs[0].query_id
+    service.expand_neighbors(
+        seed,
+        claim,
+        date(2010, 1, 1),
+        expansion_budget,
+        direction="citations",
+    )
+    citations_id = service.last_query_specs[0].query_id
+
+    assert references_id != citations_id
+
+
 def test_redundant_contrastive_query_is_coverage_gap_not_service_failure(
     gear_config, paper_ir
 ):
@@ -229,6 +478,7 @@ def test_redundant_contrastive_query_is_coverage_gap_not_service_failure(
     claim = paper_ir.claims[0]
     span = paper_ir.span_map()[claim.span_id]
     budget = RetrievalBudget()
+    ledger = ResourceLedgerV1(paper_id=paper_ir.paper_id)
 
     assert service.retrieve(
         claim,
@@ -244,6 +494,7 @@ def test_redundant_contrastive_query_is_coverage_gap_not_service_failure(
         family="contrastive",
         target_span=span,
         paper_ir=paper_ir,
+        resource_ledger=ledger,
     )
 
     assert works == []
@@ -252,6 +503,8 @@ def test_redundant_contrastive_query_is_coverage_gap_not_service_failure(
     assert service.last_advisories == [
         "contrastive_query_coverage_gap:contrastive query did not change the search intent"
     ]
+    assert ledger.logical_provider_searches == 1
+    assert ledger.network_provider_attempts == 0
     coverage = service.coverage_card(
         claim.claim_id,
         date(2010, 1, 1),
@@ -437,6 +690,53 @@ def test_relation_without_difference_dimensions_fails_closed(gear_config, paper_
     assert (
         classifier.last_failure == "relation_classifier_missing_difference_dimensions"
     )
+
+
+def test_direct_antecedent_requires_facet_coverage_and_independent_pass(
+    gear_config, paper_ir
+):
+    claim = paper_ir.claims[0]
+    target = paper_ir.span_map()[claim.span_id]
+    text = "An earlier controller implements every essential target facet."
+    prior = RetrievedWork(
+        work_id="W-confirmed",
+        target_claim_id=claim.claim_id,
+        title="Earlier complete controller",
+        publication_date=date(2000, 1, 1),
+        spans=[
+            RetrievedSpan(
+                span_id="RS-confirmed",
+                text=text,
+                text_sha256="sha256:"
+                + hashlib.sha256(text.encode("utf-8")).hexdigest(),
+                source=EvidenceLevel.FULLTEXT,
+            )
+        ],
+        retrieval_query_id="QRY-confirmed",
+        retrieval_source="fake",
+    )
+
+    def generate(system, user):
+        if "Independently try to falsify" in system:
+            return {"confirmed": True, "missing_facets": [], "rationale": "complete"}
+        return {
+            "relation_label": "DIRECT_ANTECEDENT",
+            "common_dimensions": ["mechanism", "outcome"],
+            "difference_dimensions": ["implementation detail"],
+            "essential_facet_coverage": 1.0,
+            "rationale": "All essential facets precede the target.",
+        }
+
+    card = RelationClassifier(gear_config, generator=generate).classify(
+        target,
+        prior,
+        target_claim_id=claim.claim_id,
+        cutoff=date(2010, 1, 1),
+    )
+
+    assert card.relation_label == RelationLabel.DIRECT_ANTECEDENT
+    assert card.essential_facet_coverage == 1.0
+    assert card.independent_verification_passed is True
 
 
 def test_relation_classifier_selects_most_relevant_prior_span(gear_config, paper_ir):

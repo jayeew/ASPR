@@ -36,7 +36,7 @@ def test_v2_state_migrates_only_complete_graph_components(
     assert migrated.contract == "aspr_evidence_state_v3"
     assert migrated.graph_result is not None
     assert migrated.graph_result.score_0_100 == 82.5
-    assert migrated.graph_result.feature_coverage == 0.75
+    assert migrated.graph_result.feature_coverage == 1.0
 
 
 def test_v2_state_does_not_invent_missing_graph_components(

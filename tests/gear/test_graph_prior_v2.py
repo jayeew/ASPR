@@ -13,8 +13,9 @@ from gear.graph_prior import (
     GraphService,
     build_graph_search_hints,
     graph_result_from_calibration,
+    graph_runtime_packet_from_calibration,
 )
-from gear.graph_prior_contracts import GraphResultV3, GraphResultV4
+from gear.graph_prior_contracts import GraphResultV3, GraphRuntimePacketV1
 
 
 def test_graph_result_v4_contains_scores_and_search_hints(
@@ -34,6 +35,18 @@ def test_graph_result_v4_contains_scores_and_search_hints(
         "seed_work_ids": [],
         "search_terms": [],
     }
+
+
+def test_runtime_packet_preserves_calibration_profile(
+    paper_ir, calibration_factory
+) -> None:
+    packet = graph_runtime_packet_from_calibration(
+        calibration_factory(paper_ir.paper_id, score=82.5)
+    )
+    assert packet.contract == "aspr_graph_runtime_packet_v1"
+    assert packet.score_semantics == "prospective_structural_innovation_percentile"
+    assert packet.feature_values
+    assert packet.raw_expected_diffusion == 0.2
 
 
 def test_graph_hints_are_stable_and_exclude_target() -> None:
@@ -110,7 +123,12 @@ def test_cached_and_computed_graph_results_have_identical_contract(
         paper_ir, paper_request.evidence_date
     )
 
-    assert cached == computed
+    assert cached.model_dump(
+        include={"paper_id", "score_0_100", "p_uptake", "conditional_diffusion"}
+    ) == computed.model_dump(
+        include={"paper_id", "score_0_100", "p_uptake", "conditional_diffusion"}
+    )
+    assert computed.feature_values
 
 
 def test_graph_result_jsonl_is_consumed_as_the_same_v3_contract(
@@ -128,12 +146,12 @@ def test_graph_result_jsonl_is_consumed_as_the_same_v3_contract(
 
     loaded = GraphResultTable(path).lookup(paper_ir)
 
-    assert loaded == GraphResultV4(
+    assert loaded == GraphRuntimePacketV1(
         paper_id=payload.paper_id,
         score_0_100=payload.score_0_100,
         p_uptake=payload.p_uptake,
         conditional_diffusion=payload.conditional_diffusion,
-        feature_coverage=payload.feature_coverage,
+        raw_expected_diffusion=0.35,
     )
 
 

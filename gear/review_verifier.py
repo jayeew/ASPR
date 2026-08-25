@@ -157,6 +157,7 @@ class ReviewVerifier:
             issues.append(self._issue("paper_hash_mismatch", "V2 paper hashes differ."))
         issues.extend(self._branch_independence_issues(state, evidence_store))
         issues.extend(self._relation_issues(state, evidence_store, paper_ir))
+        issues.extend(self._correction_issues(state, evidence_store))
         visible = [review.summary.text]
         for point in review.all_points():
             visible.extend([point.text, point.suggested_action])
@@ -271,6 +272,87 @@ class ReviewVerifier:
                 self._issue(
                     "deleted_point_in_summary",
                     "Summary retained the proposition of a deleted point.",
+                )
+            )
+        return issues
+
+    def _correction_issues(
+        self, state: ReviewStateV3, evidence_store: EvidenceStore
+    ) -> list[VerificationIssue]:
+        issues: list[VerificationIssue] = []
+        corrected_points: set[str] = set()
+        direction_events: list[dict[str, Any]] = []
+        for key in state.correction_event_evidence_keys:
+            record = evidence_store.get(key)
+            if record is None or record.kind != "review_correction_event":
+                issues.append(
+                    self._issue(
+                        "correction_event_missing", f"Missing correction event: {key}"
+                    )
+                )
+                continue
+            payload = record.payload
+            if payload.get("before_direction") != payload.get("after_direction"):
+                direction_events.append(payload)
+            corrected_points.add(str(payload.get("point_id") or ""))
+            relation_ids = payload.get("trigger_relation_ids") or []
+            if not relation_ids:
+                issues.append(
+                    self._issue(
+                        "graph_only_correction",
+                        "Substantive correction lacks a verified relation.",
+                        payload.get("point_id"),
+                    )
+                )
+                continue
+            for relation_id in relation_ids:
+                relation = evidence_store.get(f"R:{relation_id}")
+                relation_payload = relation.payload if relation is not None else {}
+                if relation_payload.get(
+                    "temporal_valid"
+                ) is not True or relation_payload.get("relation_label") in {
+                    "DISTANT",
+                    "UNRESOLVED",
+                    None,
+                }:
+                    issues.append(
+                        self._issue(
+                            "correction_relation_invalid",
+                            f"Correction relation is not verified: {relation_id}",
+                            payload.get("point_id"),
+                        )
+                    )
+        for point in state.canonical_points.values():
+            changed = (
+                point.initial_section is not None
+                and point.section != point.initial_section
+            ) or point.novelty_resolution in {
+                "antecedent_found",
+                "incremental_or_parallel",
+            }
+            if changed and point.point_id not in corrected_points:
+                issues.append(
+                    self._issue(
+                        "correction_event_missing",
+                        "Substantive point change lacks an auditable correction event.",
+                        point.point_id,
+                    )
+                )
+        agent = state.branch_reviews.get(ReviewSource.AGENT)
+        if (
+            agent is not None
+            and state.novelty_direction is not None
+            and state.novelty_direction != agent.novelty.judgment
+            and not any(
+                event.get("after_direction") == state.novelty_direction.value
+                for event in direction_events
+            )
+        ):
+            issues.append(
+                self._issue(
+                    "direction_correction_missing",
+                    "Final novelty direction differs from the Graph-blind Reviewer "
+                    "without a relation-mediated correction event.",
                 )
             )
         return issues

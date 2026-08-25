@@ -27,6 +27,7 @@ from .contracts import (
     RetrievedWork,
     ScientificSearchFrame,
 )
+from .graph_prior_contracts import ResourceLedgerV1
 from .local_ranking import LocalScientificRanker
 from .model_client import (
     JsonModelClient,
@@ -37,7 +38,17 @@ from .model_client import (
 RELATION_CLASSIFICATION_PROMPT = """Compare one target-paper claim span with one
 prior-work span. Return exactly one relation from DIRECT_ANTECEDENT,
 PARTIAL_ANTECEDENT, EXTENSION, PARALLEL, SUPPORT, CONFLICT, DISTANT, UNRESOLVED.
-Similarity alone is not antecedence. Cite both supplied span IDs."""
+Similarity alone is not antecedence. Return common_dimensions,
+difference_dimensions, and essential_facet_coverage from 0 to 1, defined as the
+fraction of the target claim's essential scientific facets explicitly present in
+the prior span. DIRECT_ANTECEDENT requires coverage at least 0.9; otherwise use
+PARTIAL_ANTECEDENT. Cite both supplied span IDs."""
+
+DIRECT_ANTECEDENT_VERIFICATION_PROMPT = """Independently try to falsify a proposed
+direct antecedent using only the supplied paired spans. Confirm only when the prior
+span explicitly covers every essential target facet and any remaining difference is
+non-essential to the claimed contribution. Return JSON with confirmed (boolean),
+missing_facets (list of strings), and rationale. Similarity is not confirmation."""
 
 SEARCH_FRAME_PROMPT = """Convert the paper-grounded novelty verification target into
 a scientific literature search frame. Use the manuscript title and supplied spans as
@@ -247,26 +258,12 @@ class QueryPlanner:
         self,
         claim: PaperClaim,
         frame: ScientificSearchFrame,
-        graph_search_terms: Sequence[str] = (),
     ) -> list[QuerySpec]:
-        graph_query = (
-            " ".join(
-                dict.fromkeys(
-                    [
-                        *frame.target_object[:2],
-                        *frame.task_problem[:2],
-                        *graph_search_terms[:8],
-                    ]
-                )
-            ).strip()
-            if graph_search_terms
-            else ""
-        )
         planned = [
             (
                 "lexical",
-                "graph_focus" if graph_query else "author_terminology",
-                graph_query or self._role_query(frame, "author"),
+                "author_terminology",
+                self._role_query(frame, "author"),
                 "text",
             ),
             ("lexical", "object_problem", self._role_query(frame, "object"), "text"),
@@ -545,6 +542,7 @@ class PriorArtService:
         self.last_service_failed = False
         self.last_ranker = ""
         self.last_ranking_completed = (False, False)
+        self.last_graph_seed_works: list[RetrievedWork] = []
         self._pdf_downloads_used = 0
         self._pdf_text_cache: dict[str, str] = {}
         self._frames: dict[str, ScientificSearchFrame] = {}
@@ -574,7 +572,11 @@ class PriorArtService:
         target_span: EvidenceSpan | None = None,
         paper_ir: PaperIR | None = None,
         graph_seed_work_ids: Sequence[str] = (),
-        graph_search_terms: Sequence[str] = (),
+        graph_seed_searches: Sequence[tuple[str, str]] = (),
+        graph_neighbor_slots: int = 0,
+        allowed_query_roles: Sequence[str] = (),
+        max_provider_queries: int | None = None,
+        resource_ledger: ResourceLedgerV1 | None = None,
     ) -> list[RetrievedWork]:
         self.last_failures = []
         self.last_queries = []
@@ -586,7 +588,15 @@ class PriorArtService:
         self.last_service_failed = False
         self.last_ranker = ""
         self.last_ranking_completed = (False, False)
+        self.last_graph_seed_works = []
         cache_hits: list[bool] = []
+        graph_seed_searches = self._normalize_graph_seed_searches(graph_seed_searches)
+        searched_seed_ids = {work_id for work_id, _ in graph_seed_searches}
+        direct_graph_seed_ids = [
+            work_id
+            for work_id in dict.fromkeys(graph_seed_work_ids)
+            if work_id not in searched_seed_ids
+        ]
         if not self.config.allow_external_retrieval:
             self.last_failures.append("external_retrieval_disabled")
             self.last_service_failed = True
@@ -595,6 +605,15 @@ class PriorArtService:
             else:
                 budget.normal_used = budget.normal_max
             return []
+        existing_coverage = self._coverage_state.get(claim.claim_id)
+        if (
+            existing_coverage is not None
+            and existing_coverage.get("cutoff_date") != cutoff.isoformat()
+        ):
+            # Query coverage is reusable only within the same evidence cutoff.
+            # A later evaluation date is a different retrieval problem even
+            # when the scientific claim text is identical.
+            self._coverage_state.pop(claim.claim_id, None)
         try:
             frame = self._frames.get(claim.claim_id)
             if frame is None:
@@ -610,9 +629,43 @@ class PriorArtService:
                 remaining = budget.normal_max - budget.normal_used
                 if remaining <= 0:
                     return []
-                queries = self.query_planner.plan(claim, frame, graph_search_terms)[
-                    :remaining
+                queries = self.query_planner.plan(claim, frame)
+                if allowed_query_roles:
+                    order = {
+                        role: index for index, role in enumerate(allowed_query_roles)
+                    }
+                    queries = sorted(
+                        (query for query in queries if query.query_role in order),
+                        key=lambda query: order[query.query_role],
+                    )
+                prior_query_ids = set(
+                    self._coverage_state.get(claim.claim_id, {}).get("query_ids", set())
+                )
+                queries = [
+                    query for query in queries if query.query_id not in prior_query_ids
                 ]
+                if resource_ledger is not None:
+                    remaining = min(
+                        remaining,
+                        resource_ledger.caps.provider_searches
+                        - resource_ledger.logical_provider_searches,
+                    )
+                if max_provider_queries is not None:
+                    remaining = min(remaining, max(0, max_provider_queries))
+                remaining = self._reserve_graph_seed_slots(
+                    remaining,
+                    direct_graph_seed_ids,
+                    resource_ledger,
+                    neighbor_slots=graph_neighbor_slots,
+                )
+                queries = self._merge_graph_seed_searches(
+                    claim,
+                    frame,
+                    queries,
+                    graph_seed_searches,
+                    prior_query_ids,
+                    remaining=max(0, remaining),
+                )
                 budget.normal_used += len(queries)
         except (ModelClientUnavailableError, TypeError, ValueError) as exc:
             existing_coverage = self._coverage_state.get(claim.claim_id)
@@ -621,6 +674,15 @@ class PriorArtService:
                 self.last_advisories.append(advisory)
                 existing_coverage["advisories"].append(advisory)
                 existing_coverage["exhaustive"] = False
+                budget.contrastive_used += 1
+                if (
+                    resource_ledger is not None
+                    and resource_ledger.logical_provider_searches
+                    < resource_ledger.caps.provider_searches
+                ):
+                    # The planned logical request consumed its slot even though
+                    # local intent deduplication prevented a network attempt.
+                    resource_ledger.logical_provider_searches += 1
                 return []
             if target_span is not None:
                 frame = self._fallback_frame(claim, target_span, paper_ir)
@@ -632,9 +694,48 @@ class PriorArtService:
                     budget.contrastive_used += 1
                 else:
                     remaining = budget.normal_max - budget.normal_used
-                    queries = self.query_planner.plan(claim, frame, graph_search_terms)[
-                        :remaining
+                    queries = self.query_planner.plan(claim, frame)
+                    if allowed_query_roles:
+                        order = {
+                            role: index
+                            for index, role in enumerate(allowed_query_roles)
+                        }
+                        queries = sorted(
+                            (query for query in queries if query.query_role in order),
+                            key=lambda query: order[query.query_role],
+                        )
+                    prior_query_ids = set(
+                        self._coverage_state.get(claim.claim_id, {}).get(
+                            "query_ids", set()
+                        )
+                    )
+                    queries = [
+                        query
+                        for query in queries
+                        if query.query_id not in prior_query_ids
                     ]
+                    if resource_ledger is not None:
+                        remaining = min(
+                            remaining,
+                            resource_ledger.caps.provider_searches
+                            - resource_ledger.logical_provider_searches,
+                        )
+                    if max_provider_queries is not None:
+                        remaining = min(remaining, max(0, max_provider_queries))
+                    remaining = self._reserve_graph_seed_slots(
+                        remaining,
+                        direct_graph_seed_ids,
+                        resource_ledger,
+                        neighbor_slots=graph_neighbor_slots,
+                    )
+                    queries = self._merge_graph_seed_searches(
+                        claim,
+                        frame,
+                        queries,
+                        graph_seed_searches,
+                        prior_query_ids,
+                        remaining=max(0, remaining),
+                    )
                     budget.normal_used += len(queries)
             else:
                 reason = f"scientific_query_planning:{exc}"
@@ -644,6 +745,16 @@ class PriorArtService:
         self.last_query_specs = list(queries)
         remaining_slots = budget.fulltext_max - budget.fulltext_kept
         if remaining_slots <= 0:
+            if resource_ledger is not None:
+                available = max(
+                    0,
+                    resource_ledger.caps.provider_searches
+                    - resource_ledger.logical_provider_searches,
+                )
+                resource_ledger.logical_provider_searches += min(
+                    len(queries), available
+                )
+            self.last_advisories.append("fulltext_candidate_cap_prevented_request")
             return []
         works: dict[str, RetrievedWork] = {}
         raw_hits: list[tuple[QuerySpec, int, str, float | None]] = []
@@ -651,6 +762,7 @@ class PriorArtService:
         coverage = self._coverage_state.setdefault(
             claim.claim_id,
             {
+                "cutoff_date": cutoff.isoformat(),
                 "roles": set(),
                 "query_ids": set(),
                 "retrieved": 0,
@@ -669,6 +781,9 @@ class PriorArtService:
         )
         for query in queries:
             self.last_queries.append(f"{query.query_id}:{query.query}")
+            if resource_ledger is not None:
+                resource_ledger.logical_provider_searches += 1
+                resource_ledger.network_provider_attempts += 1
             try:
                 rows, cache_hit = self._cached_search(
                     query.query,
@@ -677,6 +792,9 @@ class PriorArtService:
                     search_mode=query.search_mode,
                 )
                 cache_hits.append(cache_hit)
+                if resource_ledger is not None and cache_hit:
+                    resource_ledger.cache_hits += 1
+                    resource_ledger.network_provider_attempts -= 1
             except (OSError, RuntimeError, TypeError, ValueError) as exc:
                 self.last_failures.append(f"{query.query_id}:{exc}")
                 continue
@@ -737,23 +855,29 @@ class PriorArtService:
             coverage["service_failed"] = True
         if family != "contrastive":
             self._add_graph_seeds(
-                graph_seed_work_ids,
+                direct_graph_seed_ids,
                 frame,
                 claim,
                 cutoff,
                 works,
                 raw_hits,
                 fused_scores,
+                resource_ledger,
             )
-            self._add_citation_seeds(
-                frame,
-                claim,
-                paper_ir,
-                cutoff,
-                works,
-                raw_hits,
-                fused_scores,
-            )
+            # Guided execution explicitly allocates every query slot.  Legacy
+            # manuscript-citation direct fetches are retained only for callers
+            # without an allowlist; otherwise they would silently add cost.
+            if not allowed_query_roles or "author_citation" in allowed_query_roles:
+                self._add_citation_seeds(
+                    frame,
+                    claim,
+                    paper_ir,
+                    cutoff,
+                    works,
+                    raw_hits,
+                    fused_scores,
+                    resource_ledger,
+                )
         coverage["eligible_ids"].update(works)
         candidate_union = sorted(
             works.values(),
@@ -809,10 +933,35 @@ class PriorArtService:
                 self.config.retrieval.retained_candidates_per_claim,
             ),
         )
+        if resource_ledger is not None:
+            available = max(
+                0,
+                resource_ledger.caps.fulltext_candidates
+                - resource_ledger.fulltext_candidates_retained,
+            )
+            selected = selected[:available]
+            resource_ledger.fulltext_candidates_retained += len(selected)
         coverage["compared_ids"].update(work.work_id for work in selected)
         budget.fulltext_kept += len(selected)
         self.last_cache_hit = bool(cache_hits) and all(cache_hits)
         return selected
+
+    def prepare_search_frame(
+        self,
+        claim: PaperClaim,
+        target_span: EvidenceSpan,
+        paper_ir: PaperIR,
+    ) -> ScientificSearchFrame:
+        """Prepare and cache the same frame later consumed by retrieval."""
+        cached = self._frames.get(claim.claim_id)
+        if cached is not None:
+            return cached
+        try:
+            frame = self._search_frame(claim, target_span, paper_ir)
+        except (ModelClientUnavailableError, TypeError, ValueError):
+            frame = self._fallback_frame(claim, target_span, paper_ir)
+        self._frames[claim.claim_id] = frame
+        return frame
 
     def coverage_card(
         self,
@@ -883,6 +1032,9 @@ class PriorArtService:
         claim: PaperClaim,
         cutoff: date,
         budget: RetrievalBudget,
+        *,
+        direction: Literal["references", "citations"] = "references",
+        resource_ledger: ResourceLedgerV1 | None = None,
     ) -> list[RetrievedWork]:
         self.last_failures = []
         self.last_queries = []
@@ -892,12 +1044,23 @@ class PriorArtService:
         self.last_cache_hit = False
         if budget.citation_expansion_used >= budget.citation_expansion_max:
             return []
+        if resource_ledger is not None:
+            if (
+                resource_ledger.logical_neighbor_expansions
+                >= resource_ledger.caps.neighbor_expansions
+            ):
+                return []
+            resource_ledger.logical_neighbor_expansions += 1
+            resource_ledger.network_neighbor_attempts += 1
         budget.citation_expansion_used += 1
         remaining_slots = budget.fulltext_max - budget.fulltext_kept
         if remaining_slots <= 0:
             return []
         query = QuerySpec(
-            query_id=_stable_id("QRY-", f"{claim.claim_id}|citation|{seed.work_id}"),
+            query_id=_stable_id(
+                "QRY-",
+                f"{claim.claim_id}|citation_neighbor|{direction}|{seed.work_id}",
+            ),
             claim_id=claim.claim_id,
             family="citation",
             query_role="citation_neighbor",
@@ -905,7 +1068,7 @@ class PriorArtService:
             search_mode="direct_id",
             source_span_ids=[claim.span_id],
             anchor_fields=["citation_neighbor"],
-            transformation="backward_citation_expansion",
+            transformation=f"{direction}_citation_expansion",
         )
         self.last_queries = [f"{query.query_id}:{query.query}"]
         self.last_query_specs = [query]
@@ -914,7 +1077,11 @@ class PriorArtService:
                 seed.work_id,
                 cutoff=cutoff,
                 limit=remaining_slots,
+                direction=direction,
             )
+            if resource_ledger is not None and self.last_cache_hit:
+                resource_ledger.cache_hits += 1
+                resource_ledger.network_neighbor_attempts -= 1
         except (OSError, RuntimeError, TypeError, ValueError) as exc:
             self.last_failures.append(f"citation_expansion:{exc}")
             return []
@@ -950,6 +1117,14 @@ class PriorArtService:
                 self.config.retrieval.retained_candidates_per_claim,
             ),
         )
+        if resource_ledger is not None:
+            available = max(
+                0,
+                resource_ledger.caps.fulltext_candidates
+                - resource_ledger.fulltext_candidates_retained,
+            )
+            works = works[:available]
+            resource_ledger.fulltext_candidates_retained += len(works)
         budget.fulltext_kept += len(works)
         return works
 
@@ -1008,6 +1183,7 @@ class PriorArtService:
         works: dict[str, RetrievedWork],
         raw_hits: list[tuple[QuerySpec, int, str, float | None]],
         fused_scores: dict[str, float],
+        resource_ledger: ResourceLedgerV1 | None = None,
     ) -> None:
         if paper_ir is None or not frame.citation_seed_ids:
             return
@@ -1018,6 +1194,11 @@ class PriorArtService:
         target_dois = self._target_dois(paper_ir)
         seen_dois: set[str] = set()
         for rank, reference_id in enumerate(frame.citation_seed_ids[:20], 1):
+            if resource_ledger is not None and (
+                resource_ledger.logical_direct_fetches
+                >= resource_ledger.caps.direct_fetches
+            ):
+                break
             reference = reference_map.get(reference_id)
             if reference is None:
                 continue
@@ -1056,9 +1237,15 @@ class PriorArtService:
             )
             self.last_queries.append(f"{query.query_id}:{query.query}")
             self.last_query_specs.append(query)
+            if resource_ledger is not None:
+                resource_ledger.logical_direct_fetches += 1
+                resource_ledger.network_direct_fetch_attempts += 1
             try:
                 row, cache_hit = self._cached_work(identifier)
                 self.last_cache_hit = self.last_cache_hit or cache_hit
+                if resource_ledger is not None and cache_hit:
+                    resource_ledger.cache_hits += 1
+                    resource_ledger.network_direct_fetch_attempts -= 1
             except (OSError, RuntimeError, TypeError, ValueError) as exc:
                 self.last_failures.append(f"{query.query_id}:{exc}")
                 continue
@@ -1080,11 +1267,20 @@ class PriorArtService:
         works: dict[str, RetrievedWork],
         raw_hits: list[tuple[QuerySpec, int, str, float | None]],
         fused_scores: dict[str, float],
+        resource_ledger: ResourceLedgerV1 | None = None,
     ) -> None:
         fetch = getattr(self._client(), "fetch_work", None)
         if not callable(fetch):
             return
         for rank, work_id in enumerate(dict.fromkeys(seed_work_ids), 1):
+            if resource_ledger is not None:
+                if (
+                    resource_ledger.logical_direct_fetches
+                    >= resource_ledger.caps.direct_fetches
+                ):
+                    break
+                resource_ledger.logical_direct_fetches += 1
+                resource_ledger.network_direct_fetch_attempts += 1
             query = self.query_planner._spec(
                 claim,
                 frame,
@@ -1099,6 +1295,9 @@ class PriorArtService:
             try:
                 row, cache_hit = self._cached_work(str(work_id))
                 self.last_cache_hit = self.last_cache_hit or cache_hit
+                if resource_ledger is not None and cache_hit:
+                    resource_ledger.cache_hits += 1
+                    resource_ledger.network_direct_fetch_attempts -= 1
             except (OSError, RuntimeError, TypeError, ValueError) as exc:
                 self.last_advisories.append(f"graph_seed_unavailable:{work_id}:{exc}")
                 continue
@@ -1108,9 +1307,115 @@ class PriorArtService:
             work = self._normalize_work(row, query)
             if work is None or not self._eligible_before_cutoff(work, cutoff):
                 continue
+            self.last_graph_seed_works.append(work)
             works.setdefault(work.work_id, work)
             raw_hits.append((query, rank, work.work_id, None))
             fused_scores[work.work_id] += 0.1 + 1.0 / (60.0 + rank)
+
+    @staticmethod
+    def _normalize_graph_seed_searches(
+        values: Sequence[tuple[str, str]],
+    ) -> list[tuple[str, str]]:
+        """Keep one usable, deterministic title query per topology seed."""
+        normalized: list[tuple[str, str]] = []
+        seen: set[str] = set()
+        for raw_work_id, raw_title in values:
+            work_id = str(raw_work_id).strip()
+            title = " ".join(str(raw_title).split())
+            if not work_id or not title or work_id in seen:
+                continue
+            seen.add(work_id)
+            normalized.append((work_id, title[:420]))
+        return normalized
+
+    def _merge_graph_seed_searches(
+        self,
+        claim: PaperClaim,
+        frame: ScientificSearchFrame,
+        regular_queries: Sequence[QuerySpec],
+        seed_searches: Sequence[tuple[str, str]],
+        prior_query_ids: set[str],
+        *,
+        remaining: int,
+    ) -> list[QuerySpec]:
+        """Inject topology into scheduled claim queries without losing intent."""
+        if remaining <= 0:
+            return []
+        selected = list(regular_queries[:remaining])
+        seen_query_ids: set[str] = set()
+        for offset, (work_id, title) in enumerate(seed_searches[:remaining]):
+            base_index = len(selected) - 1 - offset
+            if base_index >= 0:
+                base = selected[base_index]
+            else:
+                base = self.query_planner._spec(
+                    claim,
+                    frame,
+                    "semantic",
+                    self.query_planner._semantic_query(frame, contrastive=False),
+                    "semantic",
+                    query_role="purpose_semantic",
+                )
+            query_text = self._claim_aligned_topology_query(base.query, title)
+            query = self.query_planner._spec(
+                claim,
+                frame,
+                "semantic",
+                query_text,
+                "semantic",
+                query_role=base.query_role,
+                transformation=(
+                    f"graph_claim_aligned_topology_search:{work_id}:"
+                    f"{base.query_role}"
+                ),
+            )
+            if query.query_id in prior_query_ids or query.query_id in seen_query_ids:
+                continue
+            seen_query_ids.add(query.query_id)
+            if base_index >= 0:
+                selected[base_index] = query
+            elif len(selected) < remaining:
+                selected.append(query)
+        return selected[:remaining]
+
+    @staticmethod
+    def _claim_aligned_topology_query(base_query: str, seed_title: str) -> str:
+        """Bound a hybrid semantic query while retaining both scientific inputs."""
+
+        base = " ".join(str(base_query).split())
+        seed = " ".join(str(seed_title).split())
+        base_words = base.split()[:48]
+        seed_words = seed.split()[:24]
+        return " ".join([*base_words, *seed_words])[:700].strip()
+
+    @staticmethod
+    def _reserve_graph_seed_slots(
+        provider_slots: int,
+        seed_work_ids: Sequence[str],
+        resource_ledger: ResourceLedgerV1 | None,
+        *,
+        neighbor_slots: int = 0,
+    ) -> int:
+        """Make Graph direct fetches and traversal replace provider queries."""
+        requested = len(dict.fromkeys(seed_work_ids))
+        if resource_ledger is not None:
+            requested = min(
+                requested,
+                max(
+                    0,
+                    resource_ledger.caps.direct_fetches
+                    - resource_ledger.logical_direct_fetches,
+                ),
+            )
+            neighbor_slots = min(
+                max(0, neighbor_slots),
+                max(
+                    0,
+                    resource_ledger.caps.neighbor_expansions
+                    - resource_ledger.logical_neighbor_expansions,
+                ),
+            )
+        return max(0, provider_slots - requested - max(0, neighbor_slots))
 
     @staticmethod
     def _target_dois(paper_ir: PaperIR) -> set[str]:
@@ -1581,6 +1886,7 @@ class PriorArtService:
         *,
         cutoff: date,
         limit: int,
+        direction: Literal["references", "citations"] = "references",
     ) -> tuple[list[dict[str, Any]], bool]:
         client = self._client()
         provider = str(getattr(client, "retrieval_provider", type(client).__name__))
@@ -1590,7 +1896,7 @@ class PriorArtService:
                 "query": work_id,
                 "cutoff": cutoff.isoformat(),
                 "provider": provider,
-                "direction": "references",
+                "direction": direction,
                 "limit": int(limit),
             }
         )
@@ -1605,7 +1911,7 @@ class PriorArtService:
                 pass
         rows = client.fetch_neighbors(
             work_id,
-            "references",
+            direction,
             limit=limit,
         )
         eligible = []
@@ -1829,7 +2135,9 @@ class RelationClassifier:
                 "prior_work": prior.model_dump(mode="json"),
                 "output": {
                     "relation_label": "one allowed label",
+                    "common_dimensions": [],
                     "difference_dimensions": [],
+                    "essential_facet_coverage": "number from 0 to 1",
                     "rationale": "paired-span rationale",
                 },
             },
@@ -1848,6 +2156,13 @@ class RelationClassifier:
             dimensions = [
                 str(item) for item in payload.get("difference_dimensions") or []
             ]
+            common_dimensions = [
+                str(item) for item in payload.get("common_dimensions") or []
+            ]
+            facet_coverage = min(
+                1.0,
+                max(0.0, float(payload.get("essential_facet_coverage", 0.0))),
+            )
             rationale = str(payload.get("rationale") or "")
             if label != RelationLabel.UNRESOLVED and not dimensions:
                 self.last_failure = "relation_classifier_missing_difference_dimensions"
@@ -1857,6 +2172,13 @@ class RelationClassifier:
                     "The classifier omitted the required difference dimensions; "
                     "the relation is unresolved."
                 )
+            elif label == RelationLabel.DIRECT_ANTECEDENT and facet_coverage < 0.9:
+                self.last_failure = "direct_antecedent_facet_coverage_incomplete"
+                label = RelationLabel.PARTIAL_ANTECEDENT
+                rationale = (
+                    "The paired evidence does not cover enough essential facets "
+                    f"for direct antecedence. {rationale}"
+                ).strip()
         except (ModelClientUnavailableError, ValueError, TypeError) as exc:
             self.last_failure = str(exc)
             target_tokens = set(_tokens(claim_span.text))
@@ -1866,9 +2188,16 @@ class RelationClassifier:
             )
             label = RelationLabel.DISTANT if overlap < 0.1 else RelationLabel.UNRESOLVED
             dimensions = ["lexical_scope"]
+            common_dimensions = []
+            facet_coverage = 0.0
             rationale = (
                 "Relation model unavailable; lexical overlap is not treated as "
                 "antecedence."
+            )
+        independently_verified = False
+        if label == RelationLabel.DIRECT_ANTECEDENT:
+            independently_verified = self._verify_direct_antecedent(
+                claim_span, prior_span
             )
         return self._card(
             claim_span,
@@ -1881,7 +2210,49 @@ class RelationClassifier:
             rationale,
             dimensions,
             prior_span=prior_span,
+            common_dimensions=common_dimensions,
+            essential_facet_coverage=facet_coverage,
+            independent_verification_passed=independently_verified,
         )
+
+    def _verify_direct_antecedent(
+        self, claim_span: EvidenceSpan, prior_span: RetrievedSpan
+    ) -> bool:
+        user = json.dumps(
+            {
+                "target_span": claim_span.model_dump(mode="json"),
+                "prior_span": prior_span.model_dump(mode="json"),
+            },
+            ensure_ascii=False,
+        )
+        try:
+            payload = (
+                self.generator(DIRECT_ANTECEDENT_VERIFICATION_PROMPT, user)
+                if self.generator is not None
+                else self._client().generate_json(
+                    system=DIRECT_ANTECEDENT_VERIFICATION_PROMPT,
+                    user=user,
+                    response_schema={
+                        "type": "object",
+                        "additionalProperties": False,
+                        "properties": {
+                            "confirmed": {"type": "boolean"},
+                            "missing_facets": {
+                                "type": "array",
+                                "items": {"type": "string"},
+                            },
+                            "rationale": {"type": "string"},
+                        },
+                        "required": ["confirmed", "missing_facets", "rationale"],
+                    },
+                )
+            )
+            return payload.get("confirmed") is True and not (
+                payload.get("missing_facets") or []
+            )
+        except (ModelClientUnavailableError, TypeError, ValueError) as exc:
+            self.last_failure = f"direct_antecedent_verification:{exc}"
+            return False
 
     @staticmethod
     def _best_prior_span(
@@ -1924,6 +2295,9 @@ class RelationClassifier:
         rationale: str,
         dimensions: Sequence[str] | None = None,
         prior_span: RetrievedSpan | None = None,
+        common_dimensions: Sequence[str] | None = None,
+        essential_facet_coverage: float = 0.0,
+        independent_verification_passed: bool = False,
     ) -> RelationCard:
         selected_span = prior_span or (prior.spans[0] if prior.spans else None)
         prior_span_id = selected_span.span_id if selected_span else None
@@ -1951,6 +2325,7 @@ class RelationClassifier:
             relation_label=label,
             evidence_level=level,
             difference_dimensions=normalized_dimensions,
+            common_dimensions=list(common_dimensions or []),
             retrieval_query_id=prior.retrieval_query_id,
             source_query_ids=list(
                 dict.fromkeys([prior.retrieval_query_id, *prior.source_query_ids])
@@ -1958,6 +2333,8 @@ class RelationClassifier:
             rationale=rationale,
             temporal_valid=temporal_valid,
             temporal_order_unresolved=temporal_unresolved,
+            essential_facet_coverage=essential_facet_coverage,
+            independent_verification_passed=independent_verification_passed,
         )
 
 

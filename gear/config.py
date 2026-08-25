@@ -92,6 +92,29 @@ class RetrievalLimits(StrictModel):
     openalex_pdf_max_characters: int = Field(default=30_000, ge=1_000)
 
 
+class GraphGuidanceConfig(StrictModel):
+    policy_version: str = "score_profile_topology_v22_claim_aligned"
+    shadow: bool = False
+    profile_enabled: bool = True
+    topology_enabled: bool = True
+    provider_searches: int = Field(default=8, ge=0)
+    direct_fetches: int = Field(default=8, ge=0)
+    neighbor_expansions: int = Field(default=2, ge=0)
+    fulltext_candidates: int = Field(default=12, ge=0)
+    relation_classifications: int = Field(default=12, ge=0)
+    mission_feature_allowlist: list[str] = Field(
+        default_factory=lambda: [
+            "EF0017",
+            "EF0052",
+            "EF0240",
+            "EF0309",
+            "EF0312",
+            "EF0315",
+            "EF0318",
+        ]
+    )
+
+
 class GearConfig(StrictModel):
     config_version: str
     evidence_policy: str
@@ -109,12 +132,12 @@ class GearConfig(StrictModel):
     openai_compatible: OpenAICompatibleEndpoint | None = None
     aspr_qwen: ASPRQwenConfig = Field(default_factory=ASPRQwenConfig)
     retrieval: RetrievalLimits = Field(default_factory=RetrievalLimits)
+    graph_guidance: GraphGuidanceConfig = Field(default_factory=GraphGuidanceConfig)
     allow_external_retrieval: bool = True
     cache_dir: Path
     output_root: Path
     minimum_pdf_characters: int = 1500
     minimum_nonempty_page_ratio: float = 0.5
-    high_aspr_threshold: float = 90.0
     profile_low_quantile: float = 0.1
     profile_high_quantile: float = 0.9
     max_claims: int = 12
@@ -223,8 +246,9 @@ def load_config(
                 int(value) if field_name == "timeout_seconds" else value
             )
     backend = getenv_runtime("ASPR_GEAR_MODEL_BACKEND")
-    if backend:
-        payload["model_backend"] = backend
+    explicit_api_endpoint = getenv_runtime("ASPR_GEAR_API_BASE_URL")
+    if backend or explicit_api_endpoint:
+        payload["model_backend"] = backend or "openai_compatible"
     api_env = {
         "base_url": "ASPR_GEAR_API_BASE_URL",
         "model": "ASPR_GEAR_API_MODEL",

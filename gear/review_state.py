@@ -6,8 +6,12 @@ import hashlib
 from datetime import date
 
 from .contracts import PaperIR
-from .graph_prior_contracts import GraphPriorResult, GraphResultV4
-from .graph_prior import graph_result_v4
+from .graph_prior import graph_runtime_packet
+from .graph_prior_contracts import (
+    GraphPriorResult,
+    GraphRuntimePacketV1,
+    ResourceLedgerV1,
+)
 from .review_contracts import (
     EvidenceBudget,
     GraphReviewContext,
@@ -89,14 +93,14 @@ def initialize_review_state_v2(
 def initialize_review_state_v3(
     paper_ir: PaperIR,
     rubric: PaperSpecificRubric,
-    graph_result: GraphResultV4 | None,
+    graph_result: GraphRuntimePacketV1 | None,
     cutoff_date: date,
     *,
     graph_result_evidence_key: str = "G:RESULT",
     action_budget: EvidenceBudget | None = None,
 ) -> ReviewStateV3:
     if graph_result is not None:
-        graph_result = graph_result_v4(graph_result)
+        graph_result = graph_runtime_packet(graph_result)
     if rubric.paper_id != paper_ir.paper_id:
         raise ValueError("V3 state inputs must refer to the same paper")
     if graph_result is not None and graph_result.paper_id != paper_ir.paper_id:
@@ -118,8 +122,11 @@ def initialize_review_state_v3(
             graph_result_evidence_key if graph_result is not None else None
         ),
         graph_result=graph_result,
+        resource_ledger=ResourceLedgerV1(paper_id=paper_ir.paper_id),
         action_budget=action_budget or EvidenceBudget(),
-        process_features=ProcessFeatures(graph_score_available=graph_result is not None),
+        process_features=ProcessFeatures(
+            graph_score_available=graph_result is not None
+        ),
     )
 
 

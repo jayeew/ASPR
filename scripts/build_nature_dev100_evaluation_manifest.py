@@ -16,9 +16,14 @@ if str(PROJECT_ROOT := Path(__file__).resolve().parents[1]) not in sys.path:
 
 from experiments.gear.evaluation.contracts import EvaluationManifestV1
 from gear.contracts import PaperMetadata
-from gear.graph_prior_contracts import GraphResultV4
+from gear.graph_prior import graph_runtime_packet
 
 RECEIVED = re.compile(r"\bReceived:\s*(\d{1,2}\s+[A-Za-z]+\s+\d{4})\b")
+
+
+def _packet_path(scoring: Path) -> Path:
+    current = scoring / "graph_runtime_packets.jsonl"
+    return current if current.is_file() else scoring / "graph_results.jsonl"
 
 
 def _submission_date(text: str) -> str:
@@ -53,8 +58,8 @@ def main() -> int:
     graphs = {
         row.paper_id: row
         for row in (
-            GraphResultV4.model_validate_json(line)
-            for line in (scoring / "graph_results.jsonl").read_text().splitlines()
+            graph_runtime_packet(json.loads(line))
+            for line in _packet_path(scoring).read_text().splitlines()
             if line.strip()
         )
     }
@@ -123,12 +128,12 @@ def main() -> int:
         json.dumps({"cases": benchmark_cases}, ensure_ascii=False, indent=2) + "\n"
     )
     runtime_config = {
-        "graph_results_path": str((scoring / "graph_results.jsonl").resolve()),
+        "graph_results_path": str(_packet_path(scoring).resolve()),
         "max_claims": 8,
         "retrieval": {
             "normal_max": 2,
             "contrastive_max": 1,
-            "citation_expansion_max": 0,
+            "citation_expansion_max": 1,
             "fulltext_max": 6,
             "provider_limit": 30,
             "relation_cards_max": 8,

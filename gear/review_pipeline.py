@@ -17,14 +17,15 @@ from .contracts import (
     ReviewRequest,
     ReviewStatus,
 )
-from .evidence_supervisor import EvidenceSupervisor
+from .evidence_supervisor import EvidenceSupervisor, build_retrieval_claim
+from .graph_guidance import GraphGuidancePlanner, is_graph_guidance_target
 from .graph_prior import (
     GraphScorer,
     GraphService,
     GraphUnavailableError,
-    graph_result_v4,
+    graph_runtime_packet,
 )
-from .graph_prior_contracts import GraphResultV4
+from .graph_prior_contracts import GraphResourceCapsV1, GraphRuntimePacketV1
 from .grounding import GroundingWorkflow
 from .paper_compiler import PaperCompiler
 from .paper_extraction import (
@@ -168,11 +169,11 @@ def review_paper(
     _append_stage(store, "paper_review_compiler", request, paper_ir, started)
     rubric = PaperRubricBuilder().build(paper_ir)
     started = time.monotonic()
-    graph_result: GraphResultV4 | None = None
+    graph_result: GraphRuntimePacketV1 | None = None
     graph_failure: str | None = None
     try:
         candidate = graph_scorer.score(paper_ir, request.evidence_date)
-        graph_result = graph_result_v4(candidate)
+        graph_result = graph_runtime_packet(candidate)
         if graph_result.paper_id != paper_ir.paper_id:
             raise ValueError("Graph result paper_id mismatch")
     except (GraphUnavailableError, OSError, RuntimeError, TypeError, ValueError) as exc:
@@ -271,6 +272,43 @@ def review_paper(
     state_v3, fusion_report = fusion.fuse(state_v3, agent_branch, qwen_branch)
     store.add_evidence("F:FUSION", "review_fusion", fusion_report)
     _append_stage(store, "review_fusion", agent_branch, fusion_report, started)
+    if state_v3.graph_result is not None:
+        guidance_config = resolved_config.graph_guidance
+        search_frames = {}
+        prepare_search_frame = getattr(prior_art, "prepare_search_frame", None)
+        for point in state_v3.canonical_points.values():
+            if not (is_graph_guidance_target(point) and callable(prepare_search_frame)):
+                continue
+            try:
+                claim, target_span = build_retrieval_claim(point, paper_ir)
+                frame = prepare_search_frame(claim, target_span, paper_ir)
+                search_frames[point.point_id] = frame
+                store.add_evidence(
+                    f"QF:{claim.claim_id}", "scientific_search_frame", frame
+                )
+            except (TypeError, ValueError) as exc:
+                point.validation_notes.append(
+                    f"graph_claim_alignment_frame_degraded:{exc}"
+                )
+        guidance_plan = GraphGuidancePlanner(
+            resource_caps=GraphResourceCapsV1(
+                provider_searches=guidance_config.provider_searches,
+                direct_fetches=guidance_config.direct_fetches,
+                neighbor_expansions=guidance_config.neighbor_expansions,
+                fulltext_candidates=guidance_config.fulltext_candidates,
+                relation_classifications=guidance_config.relation_classifications,
+            ),
+            policy_version=guidance_config.policy_version,
+        ).plan(
+            state_v3,
+            search_frames=search_frames,
+            enable_profile=guidance_config.profile_enabled,
+            enable_topology=guidance_config.topology_enabled,
+        )
+        state_v3.graph_guidance_plan = guidance_plan
+        if state_v3.resource_ledger is not None:
+            state_v3.resource_ledger.caps = guidance_plan.resource_caps
+        store.add_evidence("G:PLAN", "graph_guidance_plan", guidance_plan)
     if full_artifacts:
         store.snapshot_state(state_v3)
     started = time.monotonic()
@@ -281,6 +319,8 @@ def review_paper(
         prior_art=prior_art,
         relation_classifier=relation_classifier,
     )
+    if state_v3.resource_ledger is not None:
+        store.add_evidence("G:LEDGER", "resource_ledger", state_v3.resource_ledger)
     _append_stage(store, "evidence_supervisor", fusion_report, state_v3, started)
     if full_artifacts:
         store.snapshot_state(state_v3)
@@ -401,7 +441,7 @@ def _register_initial_evidence(
 
 
 def _legacy_graph_context(
-    paper_id: str, graph_result: GraphResultV4 | None
+    paper_id: str, graph_result: GraphRuntimePacketV1 | None
 ) -> GraphReviewContext:
     """Compatibility-only projection for an injected legacy reviewer."""
     return GraphReviewContext(
@@ -421,7 +461,7 @@ def _legacy_graph_context(
 
 def _bundle_status_v3(
     paper_ir: Any,
-    graph_result: GraphResultV4 | None,
+    graph_result: GraphRuntimePacketV1 | None,
     agent: BranchReview,
     qwen: BranchReview | None,
     config: GearConfig,
@@ -480,7 +520,7 @@ def _persist_bundle(
         ):
             paths.pop(name)
     if bundle.graph_result is not None:
-        paths["graph_result"] = target_dir / "graph_result.json"
+        paths["graph_runtime_packet"] = target_dir / "graph_runtime_packet.json"
     if bundle.qwen_review is not None and full_artifacts:
         paths["qwen_review"] = target_dir / "qwen_review.json"
     output_files = {name: str(path) for name, path in paths.items()}
@@ -494,7 +534,7 @@ def _persist_bundle(
     if bundle.agent_review is not None and "agent_review" in paths:
         _write_model(paths["agent_review"], bundle.agent_review)
     if bundle.graph_result is not None:
-        _write_model(paths["graph_result"], bundle.graph_result)
+        _write_model(paths["graph_runtime_packet"], bundle.graph_result)
     if bundle.fusion_report is not None and "fusion_report" in paths:
         _write_model(paths["fusion_report"], bundle.fusion_report)
     if bundle.state_v3 is not None and "review_state" in paths:

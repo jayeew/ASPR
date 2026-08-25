@@ -18,7 +18,8 @@ from experiments.gear.review_reconstruction.evaluation import (
 )
 from gear.config import load_config
 from gear.contracts import PaperMetadata, ReviewRequest
-from gear.graph_prior_contracts import GraphResultV4
+from gear.graph_guidance import GRAPH_GUIDANCE_POLICY_VERSION
+from gear.graph_prior_contracts import GraphRuntimePacketV1
 from gear.review_contracts import StructuredReview
 from gear.review_pipeline import ServiceRegistry, review_paper
 from gear.review_verifier import ReviewVerifier
@@ -39,10 +40,8 @@ from .efficiency import (
 )
 from .graph_ablation import (
     assert_branch_isolation,
-    graph_tension,
     graph_variants,
-    shuffled_graph_results,
-    tension_band,
+    shuffled_graph_components,
 )
 from .judges import (
     judge_point_support,
@@ -74,6 +73,19 @@ STAGES = (
 )
 
 
+def _logical_retrieval_total(ledger: Any) -> int | None:
+    if ledger is None:
+        return None
+    return sum(
+        int(getattr(ledger, field, 0) or 0)
+        for field in (
+            "logical_provider_searches",
+            "logical_direct_fetches",
+            "logical_neighbor_expansions",
+        )
+    )
+
+
 def _aggregate_graph_deltas(
     rows: list[dict[str, Any]], *, samples: int, seed: int
 ) -> dict[str, dict[str, Any]]:
@@ -87,8 +99,7 @@ def _aggregate_graph_deltas(
                 key
                 for row in comparison_rows
                 for key, value in row.items()
-                if key.endswith(("_delta", "_rate"))
-                and isinstance(value, (int, float))
+                if key.endswith(("_delta", "_rate")) and isinstance(value, (int, float))
             }
         )
         output[comparison] = {}
@@ -114,10 +125,10 @@ def _aggregate_graph_deltas(
 
 
 class StaticGraphScorer:
-    def __init__(self, result: GraphResultV4) -> None:
+    def __init__(self, result: GraphRuntimePacketV1) -> None:
         self.result = result
 
-    def score(self, paper_ir: Any, cutoff: Any) -> GraphResultV4:
+    def score(self, paper_ir: Any, cutoff: Any) -> GraphRuntimePacketV1:
         del cutoff
         return self.result.model_copy(update={"paper_id": paper_ir.paper_id})
 
@@ -172,27 +183,28 @@ class EvaluationRunner:
                     )
 
     def run_clean(self) -> None:
-        records = []
-        for case in self.manifest.cases:
-            target = self.output_dir / "clean_runs" / case.case_id
-            if case.clean_run_dir is not None:
-                bundle = load_review_bundle(case.clean_run_dir)
-                run_dir = case.clean_run_dir
-                reused = True
-            else:
-                bundle = self._run_case(case, case.graph_result, target)
-                run_dir = target
-                reused = False
-            records.append(
-                {
-                    "case_id": case.case_id,
-                    "paper_id": case.paper_id,
-                    "run_dir": str(run_dir),
-                    "status": bundle.status.value,
-                    "reused": reused,
-                }
-            )
+        with ThreadPoolExecutor(max_workers=self.workers) as pool:
+            records = list(pool.map(self._run_clean_case, self.manifest.cases))
         self._write_json("clean_runs.json", records)
+
+    def _run_clean_case(self, case: Any) -> dict[str, Any]:
+        target = self.output_dir / "clean_runs" / case.case_id
+        if case.clean_run_dir is not None:
+            bundle = load_review_bundle(case.clean_run_dir)
+            run_dir = case.clean_run_dir
+            reused = True
+        else:
+            existed = (target / "review_bundle.json").is_file()
+            bundle = self._run_case(case, case.graph_result, target)
+            run_dir = target
+            reused = self.resume and existed
+        return {
+            "case_id": case.case_id,
+            "paper_id": case.paper_id,
+            "run_dir": str(run_dir),
+            "status": bundle.status.value,
+            "reused": reused,
+        }
 
     def run_faults(self) -> None:
         from .faults import default_fault_scenarios, run_contract_fault_matrix
@@ -279,14 +291,14 @@ class EvaluationRunner:
         self._write_jsonl("fault_results.jsonl", rows)
 
     def run_graph_ablations(self) -> None:
-        shuffled = shuffled_graph_results(
+        controls = shuffled_graph_components(
             [case.graph_result for case in self.manifest.cases]
         )
         rows: list[dict[str, Any]] = []
         isolation: dict[str, dict[str, dict[str, object]]] = defaultdict(dict)
         with ThreadPoolExecutor(max_workers=self.workers) as pool:
             results = pool.map(
-                lambda case: self._run_ablation_case(case, shuffled[case.paper_id]),
+                lambda case: self._run_ablation_case(case, controls[case.paper_id]),
                 self.manifest.cases,
             )
             for case_rows, payloads in results:
@@ -297,17 +309,21 @@ class EvaluationRunner:
         self._write_jsonl("graph_ablation_results.jsonl", rows)
 
     def _run_ablation_case(
-        self, case: Any, shuffled: GraphResultV4
+        self, case: Any, controls: dict[str, GraphRuntimePacketV1]
     ) -> tuple[list[dict[str, Any]], dict[str, dict[str, object]]]:
         variants = graph_variants(case.graph_result)
-        variants.append(type(variants[0])(name="shuffled", result=shuffled))
+        variants.extend(
+            type(variants[0])(name=name, result=result)
+            for name, result in controls.items()
+        )
         rows: list[dict[str, Any]] = []
         payloads: dict[str, dict[str, object]] = {}
+        ledgers: dict[str, Any] = {}
         clean_dir = self._clean_run_map()[case.case_id]
         clean_bundle = load_review_bundle(clean_dir)
         for variant in variants:
             target = self.output_dir / "graph_ablations" / variant.name / case.case_id
-            if variant.name == "full":
+            if variant.name == "full" and _current_guidance_bundle(clean_bundle):
                 target, bundle = clean_dir, clean_bundle
             else:
                 bundle = self._run_ablation_variant(
@@ -316,9 +332,9 @@ class EvaluationRunner:
             branch, state = bundle.agent_review, bundle.state_v3
             if branch is None or state is None:
                 raise ValueError("ablation run lacks Agent branch or ReviewStateV3")
+            ledgers[variant.name] = state.resource_ledger
             candidates = sorted(
-                (point.point_id, point.proposition)
-                for point in state.canonical_points.values()
+                (point.point_id, point.text) for point in branch.all_points()
             )
             payloads[variant.name] = {
                 "agent_input_sha256": branch.input_sha256,
@@ -336,12 +352,46 @@ class EvaluationRunner:
                     **payloads[variant.name],
                 }
             )
+        cap_payloads = {
+            sha256_value(ledger.caps)
+            for ledger in ledgers.values()
+            if ledger is not None
+        }
+        if len(cap_payloads) != 1:
+            raise ValueError("Graph ablation resource caps are not identical")
+        if {"full", "random_matched_topology"} <= ledgers.keys():
+            full = ledgers["full"]
+            random = ledgers["random_matched_topology"]
+            full_total = _logical_retrieval_total(full)
+            random_total = _logical_retrieval_total(random)
+            matched = bool(
+                full is not None and random is not None and full_total == random_total
+            )
+            for row in rows:
+                if row["variant"] == "random_matched_topology":
+                    row["full_random_resource_matched"] = matched
+                    row["full_direct_fetches"] = (
+                        full.logical_direct_fetches if full is not None else None
+                    )
+                    row["random_direct_fetches"] = (
+                        random.logical_direct_fetches if random is not None else None
+                    )
+                    row["full_neighbor_expansions"] = (
+                        full.logical_neighbor_expansions if full is not None else None
+                    )
+                    row["random_neighbor_expansions"] = (
+                        random.logical_neighbor_expansions
+                        if random is not None
+                        else None
+                    )
+                    row["full_logical_retrieval_requests"] = full_total
+                    row["random_logical_retrieval_requests"] = random_total
         return rows, payloads
 
     def _run_ablation_variant(
         self,
         case: Any,
-        graph: GraphResultV4,
+        graph: GraphRuntimePacketV1,
         target: Path,
         clean_bundle: Any,
         clean_dir: Path,
@@ -471,9 +521,7 @@ class EvaluationRunner:
                 values["revision"] = judge_revision_issues(
                     client, case.paper_id, labels, bundle.structured_review
                 )
-            other = self.manifest.cases[
-                (case_index + 1) % len(self.manifest.cases)
-            ]
+            other = self.manifest.cases[(case_index + 1) % len(self.manifest.cases)]
             values["wrong_paper_support"] = judge_point_support(
                 client,
                 bundle.structured_review,
@@ -805,14 +853,19 @@ class EvaluationRunner:
             text.extend(["", "## Graph ablation", ""])
             for comparison in (
                 "full-score_only",
-                "guidance_only-neutral",
-                "full-neutral",
-                "shuffled-full",
+                "full-score_profile",
+                "score_only-neutral",
+                "score_profile-score_only",
+                "full-random_matched_topology",
+                "full-shuffled_score",
+                "full-shuffled_profile",
             ):
                 aggregate = graph_metrics.get("aggregate", {}).get(comparison, {})
                 text.append(f"- `{comparison}`:")
                 for key in (
                     "relation_count_delta",
+                    "claim_relevant_verified_relation_yield_delta",
+                    "relation_to_material_correction_rate_delta",
                     "independent_prior_count_delta",
                     "analytical_quality_delta",
                     "major_support_precision_delta",
@@ -892,16 +945,36 @@ class EvaluationRunner:
                 "unsupported_major_count": bundle.verification.unsupported_major_count,
                 "graph_semantic_violation": bundle.verification.graph_semantic_violation_count,
             }
-            axis_map = {"positive": 1, "mixed": 0, "negative": -1}
-            axis = axis_map.get(review.novelty.judgment.value, 0)
-            graph_payload = row["graph_result"]
-            tension = graph_tension(
-                float(graph_payload["score_0_100"]),
-                float(graph_payload["feature_coverage"]),
-                axis,
+            human_direction = human[row["paper_id"]].novelty.judgment
+            final_direction = review.novelty.judgment
+            direction_metrics = novelty_direction_metrics(
+                [human_direction], [final_direction]
             )
-            row["tension"] = tension
-            row["tension_band"] = tension_band(tension)
+            row["metrics"].update(
+                {
+                    "novelty_direction_exact_match": direction_metrics[
+                        "judgment_accuracy"
+                    ],
+                    "novelty_direction_agreement": direction_metrics[
+                        "novelty_direction_agreement"
+                    ],
+                }
+            )
+            row["human_novelty_direction"] = human_direction.value
+            row["initial_novelty_direction"] = (
+                bundle.agent_review.novelty.judgment.value
+                if bundle.agent_review is not None
+                else None
+            )
+            row["final_novelty_direction"] = final_direction.value
+            graph_payload = row["graph_result"]
+            score_fraction = float(graph_payload["score_0_100"]) / 100.0
+            row["score_fraction"] = score_fraction
+            row["score_band"] = (
+                "low"
+                if score_fraction < 0.25
+                else "medium" if score_fraction < 0.75 else "high"
+            )
             prefix = f"ablation/{row['variant']}"
             kinds = decisions.get(row["case_id"], {})
             required = {
@@ -957,6 +1030,10 @@ class EvaluationRunner:
         deltas = []
         keys = (
             "relation_count",
+            "claim_relevant_verified_relation_yield",
+            "relation_to_material_correction_rate",
+            "logical_retrieval_requests",
+            "network_retrieval_attempts",
             "independent_prior_count",
             "evidence_action_count",
             "unsupported_major_count",
@@ -967,14 +1044,34 @@ class EvaluationRunner:
             "major_support_precision",
             "novelty_reasoning_strict_f1",
             "novelty_reasoning_soft_f1",
+            "novelty_direction_exact_match",
+            "novelty_direction_agreement",
         )
         for case_id, variants in by_case.items():
             for left_name, right_name in (
+                ("score_only", "neutral"),
+                ("score_profile", "score_only"),
                 ("full", "score_only"),
-                ("guidance_only", "neutral"),
-                ("full", "neutral"),
+                ("full", "score_profile"),
+                ("full", "random_matched_topology"),
+                ("full", "shuffled_score"),
+                ("full", "shuffled_profile"),
             ):
                 if not {left_name, right_name} <= variants.keys():
+                    continue
+                if (
+                    right_name == "random_matched_topology"
+                    and variants[right_name].get("full_random_resource_matched")
+                    is not True
+                ):
+                    not_measured.append(
+                        {
+                            "case_id": case_id,
+                            "track": "graph_ablation",
+                            "metric": "full-random_matched_topology",
+                            "reason": "total logical retrieval resources were not matched",
+                        }
+                    )
                     continue
                 delta: dict[str, Any] = {
                     "case_id": case_id,
@@ -988,15 +1085,17 @@ class EvaluationRunner:
                         if left is not None and right is not None
                         else None
                     )
-                relation_delta = delta.get("relation_count_delta")
                 delta["graph_guided_decision_change_rate"] = (
-                    1.0 if relation_delta not in {None, 0.0} else 0.0
+                    1.0
+                    if variants[left_name].get("final_novelty_direction")
+                    != variants[right_name].get("final_novelty_direction")
+                    else 0.0
                 )
                 deltas.append(delta)
-            if "shuffled" in variants:
+            if "shuffled_score" in variants:
                 shuffled_harm: dict[str, Any] = {
                     "case_id": case_id,
-                    "comparison": "shuffled-full",
+                    "comparison": "shuffled_score-full",
                 }
                 for key in (
                     "analytical_quality",
@@ -1004,7 +1103,7 @@ class EvaluationRunner:
                     "novelty_reasoning_soft_f1",
                     "unsupported_major_count",
                 ):
-                    shuffled_value = variants["shuffled"]["metrics"].get(key)
+                    shuffled_value = variants["shuffled_score"]["metrics"].get(key)
                     full_value = variants["full"]["metrics"].get(key)
                     shuffled_harm[f"{key}_delta"] = (
                         float(shuffled_value) - float(full_value)
@@ -1013,7 +1112,9 @@ class EvaluationRunner:
                     )
                 deltas.append(shuffled_harm)
         self._write_jsonl("graph_ablation_results.jsonl", rows)
-        harm_rows = [row for row in deltas if row["comparison"] == "shuffled-full"]
+        harm_rows = [
+            row for row in deltas if row["comparison"] == "shuffled_score-full"
+        ]
         harm_flags = [
             (row.get("unsupported_major_count_delta") or 0) > 0
             or any(
@@ -1029,7 +1130,7 @@ class EvaluationRunner:
         high_tension_cases = {
             row["case_id"]
             for row in rows
-            if row["variant"] == "full" and row["tension_band"] == "high"
+            if row["variant"] == "full" and row["score_band"] == "high"
         }
         high_deltas = [
             row
@@ -1089,9 +1190,13 @@ class EvaluationRunner:
         )
         self._write_json("not_measured.json", not_measured)
 
-    def _run_case(self, case: Any, graph: GraphResultV4, target: Path) -> Any:
+    def _run_case(self, case: Any, graph: GraphRuntimePacketV1, target: Path) -> Any:
         if self.resume and (target / "review_bundle.json").is_file():
             bundle = load_review_bundle(target)
+            if not _current_guidance_bundle(bundle):
+                raise ValueError(
+                    f"cached run predates GraphRuntimePacket/GuidancePlan: {target}"
+                )
             failures = EvidenceStore(target).validate_manifest()
             if failures or not bundle.verification.passed:
                 raise ValueError(f"cached run failed validation: {target}: {failures}")
@@ -1385,6 +1490,18 @@ def _decision_rows(
 
 def _render_metric(value: Any) -> str:
     return "not measured" if value is None else f"{float(value):.4f}"
+
+
+def _current_guidance_bundle(bundle: Any) -> bool:
+    state = getattr(bundle, "state_v3", None)
+    graph = getattr(bundle, "graph_result", None)
+    return bool(
+        state is not None
+        and state.graph_guidance_plan is not None
+        and state.graph_guidance_plan.policy_version == GRAPH_GUIDANCE_POLICY_VERSION
+        and graph is not None
+        and graph.contract == "aspr_graph_runtime_packet_v1"
+    )
 
 
 __all__ = ["STAGES", "EvaluationRunner", "StaticGraphScorer"]

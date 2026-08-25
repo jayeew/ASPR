@@ -132,7 +132,7 @@ def test_pipeline_outputs_only_five_part_contract(
     assert "graph calibration" not in bundle.review_markdown.casefold()
     assert bundle.graph_result is not None
     assert bundle.state_v3 is not None
-    assert (output / "graph_result.json").is_file()
+    assert (output / "graph_runtime_packet.json").is_file()
     assert not (output / "graph_prior.json").exists()
     assert not (output / "graph_prior_audit.json").exists()
     serialized_bundle = json.loads(

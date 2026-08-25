@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import os
 import re
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_ENV_FILES = (PROJECT_ROOT / ".env", PROJECT_ROOT / ".env.local")
@@ -12,7 +12,7 @@ _LOADED = False
 
 
 def _strip_inline_comment(value: str) -> str:
-    quote: Optional[str] = None
+    quote: str | None = None
     escaped = False
     for idx, char in enumerate(value):
         if escaped:
@@ -40,9 +40,9 @@ def _unquote(value: str) -> str:
     return value.replace("\\n", "\n").replace("\\t", "\t")
 
 
-def parse_env_file(path: Path) -> Dict[str, str]:
+def parse_env_file(path: Path) -> dict[str, str]:
     """Parse a small dotenv-compatible KEY=VALUE file."""
-    values: Dict[str, str] = {}
+    values: dict[str, str] = {}
     if not path.exists():
         return values
     for raw_line in path.read_text(encoding="utf-8").splitlines():
@@ -62,8 +62,8 @@ def parse_env_file(path: Path) -> Dict[str, str]:
 
 
 def load_env(
-    paths: Optional[Iterable[Path]] = None, override: bool = False
-) -> Dict[str, str]:
+    paths: Iterable[Path] | None = None, override: bool = False
+) -> dict[str, str]:
     """Load project .env files into os.environ.
 
     Existing process environment values win by default. `.env.local` is loaded
@@ -71,7 +71,7 @@ def load_env(
     exported by the shell.
     """
     global _LOADED
-    loaded: Dict[str, str] = {}
+    loaded: dict[str, str] = {}
     original_env = set(os.environ)
     env_paths = tuple(paths or DEFAULT_ENV_FILES)
     for path in env_paths:
@@ -109,7 +109,7 @@ def getenv_runtime(name: str, default: str = "") -> str:
     value = os.getenv(name)
     if value is None:
         return default
-    dotenv_values: Dict[str, str] = {}
+    dotenv_values: dict[str, str] = {}
     for path in DEFAULT_ENV_FILES:
         dotenv_values.update(parse_env_file(path))
     if name not in SYSTEM_ENV and dotenv_values.get(name) == value:
@@ -144,7 +144,7 @@ def getenv_bool(name: str, default: bool = False) -> bool:
     return value.strip().lower() in {"1", "true", "yes", "y", "on"}
 
 
-def getenv_list(name: str, default: Optional[List[str]] = None) -> List[str]:
+def getenv_list(name: str, default: list[str] | None = None) -> list[str]:
     value = getenv(name, "")
     if not value:
         return list(default or [])

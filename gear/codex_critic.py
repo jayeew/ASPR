@@ -39,10 +39,14 @@ source quote identity. Every scientific point must be atomic and cite supplied
 P:S-* paper evidence keys. Major points require evidence. You receive no Graph,
 ASPR-Qwen, prior-art relation, or human-review information. Mark novelty/prior-art
 points external_verification_required=true.
-Set novelty.verification_status=not_assessed. Judge novelty direction independently;
-use mixed only when material supporting and limiting considerations genuinely
-balance, not merely because both point types are present. Later retrieval may lower
-confidence, but it does not retroactively replace this graph-blind direction.
+Set novelty.verification_status=not_assessed. Judge novelty direction independently.
+Pending retrieval must never by itself produce uncertain or not_discussed; reserve
+those values for a genuinely unassessable or absent novelty discussion. A need for
+external prior-art retrieval is a verification gap, not a novelty direction. Use
+mixed only when manuscript-internal evidence already establishes material overlap
+or genuinely opposing novelty considerations; otherwise use positive provisionally
+for an identifiable residual contribution and lower confidence. Later retrieval may
+change direction only through an explicit verified correction event.
 """
 
 FORBIDDEN_DECISION_TEXT = re.compile(

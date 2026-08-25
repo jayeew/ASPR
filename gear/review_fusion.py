@@ -10,7 +10,6 @@ from .review_contracts import (
     BranchReview,
     CanonicalReviewPoint,
     FusionReport,
-    NoveltyJudgment,
     PointValidationStatus,
     ReviewAspect,
     ReviewPhase,
@@ -44,33 +43,11 @@ class ReviewFusion:
         if qwen is not None:
             matches = self.matcher.match(agent, qwen)
             self._merge_qwen(canonical, agent, qwen, matches)
-        tension_scores, focus_weights, triggered = self._apply_graph_calibration(
-            canonical, agent, state
-        )
         failures = [*agent.failures, *(qwen.failures if qwen is not None else [])]
         report = FusionReport(
             paper_id=state.paper_id,
             matches=matches,
             canonical_point_ids=list(canonical),
-            graph_tension_scores=tension_scores,
-            graph_focus_weights=focus_weights,
-            graph_triggered_actions=triggered,
-            graph_guided_point_ids=[
-                point_id
-                for point_id, point in canonical.items()
-                if state.graph_result is not None
-                and (
-                    state.graph_result.seed_work_ids or state.graph_result.search_terms
-                )
-                and point.section.startswith("novelty_")
-            ],
-            graph_query_replacements={
-                point_id: "author_terminology->graph_focus"
-                for point_id, point in canonical.items()
-                if state.graph_result is not None
-                and state.graph_result.search_terms
-                and point.section.startswith("novelty_")
-            },
             failures=failures,
         )
         updated = state.model_copy(
@@ -85,9 +62,7 @@ class ReviewFusion:
                     update={
                         "agent_review_available": not agent.failures,
                         "qwen_review_available": qwen is not None and not qwen.failures,
-                        "graph_text_tension": any(
-                            point.graph_tension for point in canonical.values()
-                        ),
+                        "graph_text_tension": False,
                         "failure_count": len(failures),
                     }
                 ),
@@ -147,55 +122,6 @@ class ReviewFusion:
                     [*canonical_point.paper_evidence_keys, *qwen_point.evidence_keys]
                 )
             )
-
-    @staticmethod
-    def _apply_graph_calibration(
-        canonical: dict[str, CanonicalReviewPoint],
-        agent: BranchReview,
-        state: ReviewStateV3,
-    ) -> tuple[dict[str, float], dict[str, float], dict[str, list[str]]]:
-        graph = state.graph_result
-        if graph is None:
-            return {}, {}, {}
-        direction = (graph.score_0_100 - 50.0) / 50.0
-        axis = {
-            NoveltyJudgment.POSITIVE: 1.0,
-            NoveltyJudgment.NEGATIVE: -1.0,
-            NoveltyJudgment.MIXED: 0.0,
-            NoveltyJudgment.UNCERTAIN: 0.0,
-            NoveltyJudgment.NOT_DISCUSSED: 0.0,
-        }[agent.novelty.judgment]
-        tension = min(
-            1.0,
-            graph.feature_coverage * abs(direction) * abs(direction - axis) / 2.0,
-        )
-        expected_diffusion = (
-            graph.feature_coverage * graph.p_uptake * graph.conditional_diffusion
-        )
-        diffusion_weight = graph.feature_coverage * graph.conditional_diffusion
-        tension_scores: dict[str, float] = {}
-        focus_weights: dict[str, float] = {}
-        triggered: dict[str, list[str]] = {}
-        for point_id, point in canonical.items():
-            point.graph_focus_weight = (
-                expected_diffusion
-                if point.aspect
-                in {
-                    ReviewAspect.CONTRIBUTION,
-                    ReviewAspect.METHOD,
-                    ReviewAspect.OTHER,
-                }
-                else diffusion_weight
-            )
-            focus_weights[point_id] = point.graph_focus_weight
-            if point.section.startswith("novelty_"):
-                point.graph_tension_score = tension
-                point.graph_extra_counterfactual_actions = 0
-                point.graph_tension = tension > 0
-                tension_scores[point_id] = tension
-                if graph.seed_work_ids or graph.search_terms:
-                    triggered[point_id] = ["graph_guided_query_replacement"]
-        return tension_scores, focus_weights, triggered
 
 
 def _canonical_id(point: ReviewPoint) -> str:

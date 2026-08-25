@@ -29,6 +29,33 @@ def is_high_risk(point: CanonicalReviewPoint) -> bool:
     )
 
 
+def _has_topology_mission(state: ReviewStateV3, point_id: str) -> bool:
+    plan = state.graph_guidance_plan
+    if plan is None:
+        return False
+    return any(
+        guidance.review_point_id == point_id
+        and any(
+            mission.origin == "topology" and mission.traversal != "none"
+            for mission in guidance.missions
+        )
+        for guidance in plan.claim_guidance
+    )
+
+
+def _has_counterfactual_mission(state: ReviewStateV3, point_id: str) -> bool:
+    plan = state.graph_guidance_plan
+    if plan is None:
+        return True
+    return any(
+        guidance.review_point_id == point_id
+        and any(
+            "legacy_contrastive" in mission.query_roles for mission in guidance.missions
+        )
+        for guidance in plan.claim_guidance
+    )
+
+
 def highest_risk_unresolved_target(
     state: ReviewStateV3,
 ) -> CanonicalReviewPoint | None:
@@ -46,7 +73,7 @@ def highest_risk_unresolved_target(
     ]
     if not candidates:
         return None
-    return sorted(
+    return max(
         candidates,
         key=lambda point: (
             point.graph_tension_score,
@@ -56,8 +83,7 @@ def highest_risk_unresolved_target(
             point.requires_external_evidence,
             point.point_id,
         ),
-        reverse=True,
-    )[0]
+    )
 
 
 def next_evidence_action(
@@ -74,7 +100,7 @@ def next_evidence_action(
     def choose(items: list[CanonicalReviewPoint]) -> CanonicalReviewPoint | None:
         if not items:
             return None
-        return sorted(
+        return max(
             items,
             key=lambda point: (
                 point.graph_tension_score,
@@ -84,8 +110,7 @@ def next_evidence_action(
                 point.requires_external_evidence,
                 point.point_id,
             ),
-            reverse=True,
-        )[0]
+        )
 
     target = choose([point for point in candidates if not point.semantic_verified])
     if target is not None:
@@ -108,7 +133,27 @@ def next_evidence_action(
             point
             for point in candidates
             if point.requires_external_evidence
-            and is_high_risk(point)
+            and _has_topology_mission(state, point.point_id)
+            and point.normal_search_done
+            and not point.citation_expanded
+        ]
+    )
+    if target is not None:
+        return (
+            EvidenceAction.CITATION_EXPAND,
+            target.point_id,
+            "graph_topology_traversal",
+        )
+    target = choose(
+        [
+            point
+            for point in candidates
+            if point.requires_external_evidence
+            and (
+                _has_counterfactual_mission(state, point.point_id)
+                if state.graph_guidance_plan is not None
+                else is_high_risk(point)
+            )
             and point.counterfactual_search_count < 1
         ]
     )
@@ -123,6 +168,7 @@ def next_evidence_action(
             point
             for point in candidates
             if point.requires_external_evidence
+            and state.graph_guidance_plan is None
             and point.validation_status == PointValidationStatus.UNRESOLVED
             and point.normal_search_done
             and (point.counterfactual_search_done or not is_high_risk(point))
@@ -143,19 +189,6 @@ def next_evidence_action(
             EvidenceAction.STABILITY_TEST,
             target.point_id,
             "high_risk_stability_required",
-        )
-    pending_stability = choose(
-        [
-            point
-            for point in state.canonical_points.values()
-            if point.retained and point.stability_status == "pending"
-        ]
-    )
-    if pending_stability is not None:
-        return (
-            EvidenceAction.STABILITY_TEST,
-            pending_stability.point_id,
-            "stability_pending",
         )
     return EvidenceAction.FINALIZE, None, "no_unresolved_target"
 

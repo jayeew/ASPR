@@ -85,7 +85,7 @@ def test_fusion_forces_external_evidence_for_misplaced_novelty_point(
     assert point.requires_external_evidence is True
 
 
-def test_graph_calibration_uses_continuous_tension_and_focus_weights(
+def test_fusion_is_graph_blind_and_has_no_calibration_side_effects(
     paper_ir, paper_request
 ) -> None:
     span_key = f"P:{paper_ir.spans[0].span_id}"
@@ -129,17 +129,15 @@ def test_graph_calibration_uses_continuous_tension_and_focus_weights(
         for point in fused.canonical_points.values()
         if point.aspect == ReviewAspect.METHOD
     )
-    assert novelty.graph_tension_score == 0.855
+    assert novelty.graph_tension_score == 0.0
     assert novelty.graph_extra_counterfactual_actions == 0
-    assert novelty.graph_focus_weight == 0.6
-    assert method.graph_focus_weight == 0.48
-    assert report.graph_tension_scores[novelty.point_id] == 0.855
+    assert novelty.graph_focus_weight == 0.0
+    assert method.graph_focus_weight == 0.0
+    assert report.graph_tension_scores == {}
     assert report.graph_triggered_actions == {}
 
 
-def test_feature_coverage_scales_influence_without_disabling_graph(
-    paper_ir, paper_request
-) -> None:
+def test_legacy_coverage_does_not_modify_fused_points(paper_ir, paper_request) -> None:
     span_key = f"P:{paper_ir.spans[0].span_id}"
     branch = _branch(paper_ir, ReviewSource.AGENT)
     branch.novelty = NoveltyAssessment(
@@ -165,7 +163,7 @@ def test_feature_coverage_scales_influence_without_disabling_graph(
 
     point = next(iter(fused.canonical_points.values()))
     assert fused.process_features.graph_score_available is True
-    assert point.graph_tension_score == 0.4275
+    assert point.graph_tension_score == 0.0
     assert point.graph_extra_counterfactual_actions == 0
 
 

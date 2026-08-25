@@ -1,0 +1,12 @@
+{
+  "contract": "gear_evaluator_config_v1",
+  "backend": "openai_compatible",
+  "codex_cli": null,
+  "openai_compatible": {
+    "base_url": "https://token.sensenova.cn/v1",
+    "model": "sensenova-6.8-flash-lite",
+    "api_key_env": "SENSENOVA_API_KEY",
+    "timeout_seconds": 1800
+  },
+  "cache_dir": "../../data/gear_cache"
+}

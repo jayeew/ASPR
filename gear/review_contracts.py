@@ -15,8 +15,13 @@ from .contracts import (
     ReviewStatus,
     StrictModel,
 )
-from .graph_prior import graph_result_v4
-from .graph_prior_contracts import GraphPriorResult, GraphResultV4
+from .graph_prior import graph_runtime_packet
+from .graph_prior_contracts import (
+    GraphGuidancePlanV1,
+    GraphPriorResult,
+    GraphRuntimePacketV1,
+    ResourceLedgerV1,
+)
 
 SCHEMA_VERSION: Literal["aspr_gear"] = "aspr_gear"
 _WORD_RE = re.compile(r"[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)*|[\u3400-\u9fff]")
@@ -356,6 +361,31 @@ class CanonicalReviewPoint(ReviewModel):
     retained: bool = True
 
 
+class ReviewCorrectionEventV1(ReviewModel):
+    contract: Literal["aspr_review_correction_event_v1"] = (
+        "aspr_review_correction_event_v1"
+    )
+    point_id: str
+    before_text: str
+    after_text: str
+    before_section: str
+    after_section: str
+    before_direction: NoveltyJudgment | None = None
+    after_direction: NoveltyJudgment | None = None
+    trigger_relation_ids: list[str]
+    trigger_mission_ids: list[str] = Field(default_factory=list)
+    correction_type: Literal[
+        "direct_antecedent_challenge",
+        "partial_antecedent_refinement",
+        "residual_novelty_refinement",
+        "attribution_scope_refinement",
+        "confidence_downgrade",
+        "confidence_upgrade",
+        "prior_work_added_only",
+    ]
+    confidence_change: float = Field(ge=-1.0, le=1.0)
+
+
 class EvidenceBudget(ReviewModel):
     normal_per_claim_max: int = Field(default=4, ge=0)
     counterfactual_per_claim_max: int = Field(default=1, ge=0)
@@ -451,15 +481,28 @@ class ReviewStateV3(ReviewModel):
     rubric: PaperSpecificRubric
     branch_reviews: dict[ReviewSource, BranchReview] = Field(default_factory=dict)
     graph_result_evidence_key: str | None = None
-    graph_result: GraphResultV4 | None = None
+    graph_result: GraphRuntimePacketV1 | None = None
+    graph_guidance_plan: GraphGuidancePlanV1 | None = None
+    resource_ledger: ResourceLedgerV1 | None = None
     novelty_direction: NoveltyJudgment | None = None
     novelty_verification_status: NoveltyVerificationStatus = (
         NoveltyVerificationStatus.NOT_ASSESSED
     )
     novelty_direction_confidence: float | None = Field(default=None, ge=0.0, le=1.0)
+    aspr_evidence_assessments: dict[
+        str,
+        Literal[
+            "NOT_CHALLENGED",
+            "CHALLENGED",
+            "REFINED",
+            "INCONCLUSIVE",
+            "NOT_APPLICABLE",
+        ],
+    ] = Field(default_factory=dict)
     canonical_points: dict[str, CanonicalReviewPoint] = Field(default_factory=dict)
     retrieved_work_evidence_keys: list[str] = Field(default_factory=list)
     relation_evidence_keys: list[str] = Field(default_factory=list)
+    correction_event_evidence_keys: list[str] = Field(default_factory=list)
     unresolved_target_ids: list[str] = Field(default_factory=list)
     action_budget: EvidenceBudget = Field(default_factory=EvidenceBudget)
     process_features: ProcessFeatures = Field(default_factory=ProcessFeatures)
@@ -469,7 +512,7 @@ class ReviewStateV3(ReviewModel):
     @field_validator("graph_result", mode="before")
     @classmethod
     def migrate_graph_result(cls, value: Any) -> Any:
-        return None if value is None else graph_result_v4(value)
+        return None if value is None else graph_runtime_packet(value)
 
     @model_validator(mode="after")
     def state_invariants(self) -> ReviewStateV3:
@@ -607,7 +650,7 @@ class ReviewBundle(ReviewModel):
     output_files: dict[str, str] = Field(default_factory=dict)
     agent_review: BranchReview | None = None
     qwen_review: BranchReview | None = None
-    graph_result: GraphResultV4 | None = None
+    graph_result: GraphRuntimePacketV1 | None = None
     fusion_report: FusionReport | None = None
     state_v3: ReviewStateV3 | None = None
     process_diagnostic: dict[str, Any] | None = None
@@ -616,7 +659,7 @@ class ReviewBundle(ReviewModel):
     @field_validator("graph_result", mode="before")
     @classmethod
     def migrate_graph_result(cls, value: Any) -> Any:
-        return None if value is None else graph_result_v4(value)
+        return None if value is None else graph_runtime_packet(value)
 
 
 def _validate_evidence_keys(value: list[str]) -> list[str]:
