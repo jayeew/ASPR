@@ -79,10 +79,19 @@ class RetrievalLimits(StrictModel):
 
 
 class GraphGuidanceConfig(StrictModel):
-    policy_version: str = "claim_linked_citation_rank1_v3"
+    policy_version: str = "primary16_forecast_calibration_v1"
     shadow: bool = False
     score_routing_enabled: bool = False
     topology_enabled: bool = True
+    calibration_enabled: bool = False
+    calibration_variant: Literal[
+        "neutral",
+        "topology_only",
+        "scalar_score",
+        "hgb_analog",
+        "full_calibrated",
+        "shuffled_hgb",
+    ] = "topology_only"
     provider_searches: int = Field(default=8, ge=0)
     direct_fetches: int = Field(default=8, ge=0)
     neighbor_expansions: int = Field(default=2, ge=0)
@@ -97,6 +106,7 @@ class GearConfig(StrictModel):
     deprecated_fig4_to_fig10_used: bool = False
     forecast_release_manifest: Path
     forecast_runtime_manifest: Path | None = None
+    forecast_anatomy_manifest: Path | None = None
     graph_results_path: Path | None = None
     allowed_asset_roots: list[Path]
     denied_path_fragments: list[str]
@@ -147,6 +157,13 @@ class GearConfig(StrictModel):
             return None
         return self.validate_asset_path(
             self.resolve_path(self.forecast_runtime_manifest)
+        )
+
+    def resolved_forecast_anatomy_manifest(self) -> Path | None:
+        if self.forecast_anatomy_manifest is None:
+            return None
+        return self.validate_asset_path(
+            self.resolve_path(self.forecast_anatomy_manifest)
         )
 
     def validate_asset_path(self, value: Path) -> Path:
@@ -305,12 +322,16 @@ def load_config(
         raise ValueError("deprecated Fig.4-Fig.10 evidence cannot be enabled")
     if validate_assets:
         from .diffusion_forecast import ForecastRelease, RuntimeFeatureRelease
+        from .graph_calibration import load_forecast_analog_index
 
         release = ForecastRelease(config.resolved_forecast_release_manifest())
         release.verify()
         runtime_manifest = config.resolved_forecast_runtime_manifest()
         if runtime_manifest is not None:
             RuntimeFeatureRelease(runtime_manifest).verify(release)
+        anatomy_manifest = config.resolved_forecast_anatomy_manifest()
+        if anatomy_manifest is not None:
+            load_forecast_analog_index(anatomy_manifest)
     return config
 
 

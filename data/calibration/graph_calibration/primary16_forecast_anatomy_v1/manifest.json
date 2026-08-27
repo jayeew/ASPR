@@ -1,0 +1,57 @@
+{
+  "contract": "gear_primary16_forecast_anatomy_release_v1",
+  "release_id": "gear-d5-primary16-948a4f87086c",
+  "feature_protocol_version": "evidence-derived-primary16-d5-tuned-1",
+  "roles": {
+    "substantive_innovation": [
+      "EF0017",
+      "EF0052",
+      "EF0240"
+    ],
+    "t0_potential": [
+      "EF0309",
+      "EF0312",
+      "EF0315",
+      "EF0318"
+    ],
+    "opportunity": [
+      "EF0083",
+      "EF0186",
+      "EF0188",
+      "EF0238",
+      "EF0319"
+    ],
+    "context": [
+      "EF0038",
+      "EF0197",
+      "EF0307",
+      "EF0314"
+    ]
+  },
+  "source_snapshot_id": "primary16_training_features_plus_frozen_metadata_v1",
+  "source_snapshot_sha256": "sha256:887f7c65cf4680cdcf3762e287c6a8e65593e82d4efe5d32facc23c52a14acb9",
+  "feature_snapshot_sha256": "sha256:bcc85063fd2984d1b9f7fc35fbd823891fd8c351c84480e5f940050731839052",
+  "metadata_snapshot_sha256": "sha256:145acc28fe6c5cc316280c000294f98957f0b724d8abb6f58e7d309bcb783040",
+  "row_count": 411490,
+  "baseline_policy": "frozen_same_openalex_field_median_mode_global_fallback",
+  "uses_review_or_relation_labels": false,
+  "uses_future_citation_outcomes": false,
+  "assets": {
+    "anatomy_index": {
+      "file": "anatomy_index.parquet",
+      "sha256": "sha256:e95287543e0256a2ce5d50f5faf3cf419d49827c2c9d7dfc71535303517274b9"
+    },
+    "field_baselines": {
+      "file": "field_baselines.parquet",
+      "sha256": "sha256:e8364f126192c4936e63bf69cd304624e1f924bf2c262eb09c7f1a467165832d"
+    },
+    "training_anatomy": {
+      "file": "training_anatomy.parquet",
+      "sha256": "sha256:983a77f587414ffbc6bc359b5558d25ddf7a70e96844bb8585c54335a0007d04"
+    },
+    "feature_registry": {
+      "file": "feature_registry.json",
+      "sha256": "sha256:63b66dd9f8ef050c70f9066030856fc06352fc21f9a73078f805e14a91ca566c"
+    }
+  }
+}

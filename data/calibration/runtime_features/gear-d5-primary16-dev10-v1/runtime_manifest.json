@@ -19,6 +19,10 @@
     "target_snapshot": {
       "file": "target_openalex_snapshot.json",
       "sha256": "sha256:4a38f22e2be37aee21a065f1e4b0580e0dca7f28da6d5a8aaf1f07010ff22841"
+    },
+    "runtime_anatomy_table": {
+      "file": "runtime_anatomy_table.parquet",
+      "sha256": "sha256:b1b6e8f370dde649da21592afd6247a35bfe946fc468b8d6fe890128c1f1e80e"
     }
   },
   "classification_source": "evidence_derived_primary16_runtime_v3",
@@ -59,5 +63,6 @@
   "release_id": "gear-d5-primary16-948a4f87086c",
   "source_max_year": 2022,
   "target_count": 10,
-  "target_features_recomputed": true
+  "target_features_recomputed": true,
+  "anatomy_release_manifest": "/home/jayee/workspace/ASPR/data/calibration/graph_calibration/primary16_forecast_anatomy_v1/manifest.json"
 }

@@ -44,6 +44,76 @@ class InfluenceForecast(StrictModel):
         return self
 
 
+class ForecastAnatomy(StrictModel):
+    """Non-evidentiary decomposition of a frozen Primary16 HGB forecast."""
+
+    contract: Literal["gear_forecast_anatomy_v1"] = "gear_forecast_anatomy_v1"
+    paper_id: str
+    target_field: str | None = None
+    uptake_percentile: float | None = Field(default=None, ge=0.0, le=100.0)
+    conditional_diffusion_percentile: float | None = Field(
+        default=None, ge=0.0, le=100.0
+    )
+    expected_diffusion_percentile: float | None = Field(default=None, ge=0.0, le=100.0)
+    uptake_role_contributions: dict[str, float] = Field(default_factory=dict)
+    conditional_role_contributions: dict[str, float] = Field(default_factory=dict)
+    role_coverage: dict[str, float] = Field(default_factory=dict)
+    baseline_id: str | None = None
+    feature_input_sha256: str | None = None
+    anatomy_release_id: str | None = None
+    limited: bool = False
+
+    @model_validator(mode="after")
+    def role_sets_are_complete_when_available(self) -> ForecastAnatomy:
+        roles = {"substantive_innovation", "t0_potential", "opportunity", "context"}
+        if not self.limited:
+            if set(self.uptake_role_contributions) != roles:
+                raise ValueError("uptake anatomy lacks a Primary16 role")
+            if set(self.conditional_role_contributions) != roles:
+                raise ValueError("conditional anatomy lacks a Primary16 role")
+            if set(self.role_coverage) != roles:
+                raise ValueError("anatomy lacks role coverage")
+        return self
+
+
+class CalibrationTension(StrictModel):
+    """A process-only safeguard; it is never review evidence."""
+
+    kind: Literal["opportunity_dominant", "integration_dominant"]
+    active: bool
+    score: float = Field(ge=0.0, le=1.0)
+    review_effect: Literal["antecedent_attribution_check", "cross_field_bridge_check"]
+    non_evidentiary: Literal[True] = True
+
+
+class AnalogSeed(StrictModel):
+    """A cutoff-safe HGB-conditioned candidate entrance, not evidence."""
+
+    claim_id: str
+    work_id: str
+    title: str
+    lane: Literal["local_adoption", "cross_field_bridge"]
+    semantic_score: float = Field(ge=0.0, le=1.0)
+    anatomy_score: float = Field(ge=0.0, le=1.0)
+    combined_score: float = Field(ge=0.0, le=1.0)
+    publication_year: int = Field(ge=1500)
+    cutoff_date: date
+    source_snapshot_id: str
+    source_snapshot_sha256: str
+    text_sha256: str | None = None
+    text_version: str | None = None
+    cutoff_valid: bool
+    non_evidentiary: Literal[True] = True
+
+    @model_validator(mode="after")
+    def is_conservatively_pre_cutoff(self) -> AnalogSeed:
+        if not self.cutoff_valid:
+            raise ValueError("analog seed is not cutoff valid")
+        if self.publication_year >= self.cutoff_date.year:
+            raise ValueError("year-only analog seed is not conservatively pre-cutoff")
+        return self
+
+
 class TopologySeed(StrictModel):
     """Point-in-time candidate entrance; it is not review evidence."""
 
@@ -77,6 +147,8 @@ class GraphRuntimePacket(StrictModel):
     paper_id: str
     cutoff_date: date
     forecast: InfluenceForecast
+    forecast_anatomy: ForecastAnatomy | None = None
+    calibration_tensions: list[CalibrationTension] = Field(default_factory=list)
     topology_seeds: list[TopologySeed] = Field(default_factory=list)
     diagnostics: list[str] = Field(default_factory=list)
 
@@ -141,7 +213,7 @@ class GraphResourceCaps(StrictModel):
 
 class RoutedCandidate(StrictModel):
     candidate_id: str
-    pool: Literal["local", "remote", "topology"]
+    pool: Literal["local", "remote", "topology", "analog"]
     pool_rank: int = Field(ge=0)
     final_rank: int | None = Field(default=None, ge=0)
     semantic_relevance: float = Field(ge=0.0, le=1.0)
@@ -152,7 +224,14 @@ class RoutedCandidate(StrictModel):
 class RetrievalRoutingPlan(StrictModel):
     contract: Literal["gear_retrieval_routing_plan"] = "gear_retrieval_routing_plan"
     paper_id: str
-    variant: Literal["neutral", "score", "score_topology", "placebo_graph"]
+    variant: Literal[
+        "neutral",
+        "topology_only",
+        "scalar_score",
+        "hgb_analog",
+        "full_calibrated",
+        "shuffled_hgb",
+    ]
     draft_sha256: str
     resource_caps: GraphResourceCaps = Field(default_factory=GraphResourceCaps)
     q_effective: float = Field(ge=0.0, le=1.0)
@@ -179,7 +258,7 @@ class RetrievalMission(StrictModel):
         "remote_mechanism_analogue",
         "topology_seed",
     ]
-    origin: Literal["score", "topology"]
+    origin: Literal["score", "topology", "calibration"]
     target_claim_id: str
     orientation: Literal["neutral"]
     query_roles: list[str] = Field(default_factory=list)
@@ -196,6 +275,7 @@ class ClaimGuidance(StrictModel):
     allocated_local_query_slots: int = Field(ge=0)
     allocated_remote_query_slots: int = Field(ge=0)
     missions: list[RetrievalMission] = Field(default_factory=list)
+    analog_seeds: list[AnalogSeed] = Field(default_factory=list, max_length=2)
 
 
 class RetrievalGuidancePlan(StrictModel):
@@ -228,7 +308,10 @@ class ResourceLedger(StrictModel):
 
 
 __all__ = [
+    "AnalogSeed",
+    "CalibrationTension",
     "ClaimGuidance",
+    "ForecastAnatomy",
     "GraphResourceCaps",
     "GraphRuntimePacket",
     "InfluenceForecast",

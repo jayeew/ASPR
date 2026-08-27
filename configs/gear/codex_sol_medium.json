@@ -6,8 +6,9 @@
   "model_backend": "codex_cli",
   "forecast_release_manifest": "data/calibration/releases/gear-d5-primary16-current/release_manifest.json",
   "forecast_runtime_manifest": "data/calibration/runtime_features/gear-d5-primary16-dev10-v1/runtime_manifest.json",
+  "forecast_anatomy_manifest": "data/calibration/graph_calibration/primary16_forecast_anatomy_v1/manifest.json",
   "graph_results_path": null,
-  "allowed_asset_roots": ["data/calibration/releases", "data/calibration/runtime_features"],
+  "allowed_asset_roots": ["data/calibration/releases", "data/calibration/runtime_features", "data/calibration/graph_calibration"],
   "denied_path_fragments": ["/fig04/", "/fig4/", "/fig05/", "/fig5/", "/fig06/", "/fig6/", "/fig07/", "/fig7/", "/fig08/", "/fig8/", "/fig09/", "/fig9/", "/fig10/", "kg_perturbation_fig4", "kg_perturbation_fig10", "review_innovation_opinions_v1"],
   "codex_cli": {
     "executable": "codex",
@@ -25,6 +26,19 @@
     "api_key_env": "ASPR_QWEN_API_KEY",
     "timeout_seconds": 1800,
     "required": false
+  },
+  "graph_guidance": {
+    "policy_version": "primary16_forecast_calibration_v1",
+    "shadow": false,
+    "score_routing_enabled": false,
+    "topology_enabled": true,
+    "calibration_enabled": true,
+    "calibration_variant": "full_calibrated",
+    "provider_searches": 8,
+    "direct_fetches": 8,
+    "neighbor_expansions": 2,
+    "fulltext_candidates": 12,
+    "relation_classifications": 12
   },
   "retrieval": {
     "normal_max": 4,
@@ -57,7 +71,7 @@
     "openalex_pdf_max_pages": 100,
     "openalex_pdf_max_characters": 30000
   },
-  "allow_external_retrieval": false,
+  "allow_external_retrieval": true,
   "cache_dir": "data/gear_cache/quick_gate_sol_medium",
   "output_root": "outputs/gear/quick_gate/runs",
   "minimum_pdf_characters": 1500,

@@ -5,7 +5,8 @@ from __future__ import annotations
 import hashlib
 import math
 from collections import Counter
-from typing import Literal, Sequence
+from collections.abc import Sequence
+from typing import Literal
 
 from pydantic import Field, model_validator
 
@@ -13,7 +14,14 @@ from gear.contracts import StrictModel
 
 IssueStatus = Literal["persists", "partially_resolved", "resolved", "unverifiable"]
 RelationLabel = Literal["DIRECT", "PARTIAL", "PARALLEL", "DISTANT", "UNVERIFIABLE"]
-Variant = Literal["neutral", "score", "score_topology", "placebo_graph"]
+Variant = Literal[
+    "neutral",
+    "topology_only",
+    "scalar_score",
+    "hgb_analog",
+    "full_calibrated",
+    "shuffled_hgb",
+]
 
 RELATION_GAIN: dict[str, int] = {
     "DIRECT": 3,
@@ -60,7 +68,7 @@ class AuditCandidate(StrictModel):
 
 
 class BlindedVariant(StrictModel):
-    alias: Literal["A", "B", "C", "D"]
+    alias: Literal["A", "B", "C", "D", "E", "F"]
     candidates: list[AuditCandidate]
 
 
@@ -68,13 +76,13 @@ class BlindedAuditPack(StrictModel):
     contract: Literal["gear_blinded_graph_audit_pack"] = "gear_blinded_graph_audit_pack"
     paper_id: str
     issue_ids: list[str] = Field(min_length=1)
-    variants: list[BlindedVariant] = Field(min_length=4, max_length=4)
+    variants: list[BlindedVariant] = Field(min_length=6, max_length=6)
     sealed_variant_key_sha256: str
 
     @model_validator(mode="after")
     def unique_aliases(self) -> BlindedAuditPack:
-        if {row.alias for row in self.variants} != {"A", "B", "C", "D"}:
-            raise ValueError("audit pack must contain four blinded aliases")
+        if {row.alias for row in self.variants} != {"A", "B", "C", "D", "E", "F"}:
+            raise ValueError("audit pack must contain six blinded aliases")
         return self
 
 
@@ -95,6 +103,8 @@ class HumanVariantJudgment(StrictModel):
     issue_recall: float = Field(ge=0.0, le=1.0)
     major_evidence_precision: float = Field(ge=0.0, le=1.0)
     resolved_resurrection: int = Field(default=0, ge=0)
+    hgb_analog_valid_relation_count: int = Field(default=0, ge=0)
+    final_review_comparison_to_topology: Literal["win", "tie", "loss"] = "tie"
 
 
 class HumanVariantMetrics(StrictModel):
@@ -108,6 +118,8 @@ class HumanVariantMetrics(StrictModel):
     major_evidence_precision: float = Field(ge=0.0, le=1.0)
     resolved_resurrection: int = Field(ge=0)
     safety_violations: int = Field(ge=0)
+    hgb_analog_valid_relation_count: int = Field(ge=0)
+    final_review_comparison_to_topology: Literal["win", "tie", "loss"]
 
 
 def stable_key(value: str, salt: str) -> str:
@@ -232,77 +244,115 @@ def rank_metrics(judgment: HumanVariantJudgment) -> HumanVariantMetrics:
             + judgment.post_cutoff_evidence
             + sum(row.wrong_paper_contamination for row in judgment.judgments)
         ),
+        hgb_analog_valid_relation_count=judgment.hgb_analog_valid_relation_count,
+        final_review_comparison_to_topology=(
+            judgment.final_review_comparison_to_topology
+        ),
     )
 
 
 def quick_gate_passes(rows: Sequence[HumanVariantMetrics]) -> bool:
     grouped = _group(rows)
-    if set(grouped) != {"neutral", "score", "score_topology", "placebo_graph"}:
-        raise ValueError("quick gate requires all four variants")
-    papers = set(grouped["neutral"])
+    required = {
+        "neutral",
+        "topology_only",
+        "scalar_score",
+        "hgb_analog",
+        "full_calibrated",
+        "shuffled_hgb",
+    }
+    if set(grouped) != required:
+        raise ValueError("quick gate requires all six calibration variants")
+    papers = set(grouped["topology_only"])
     if len(papers) != 3 or any(set(grouped[name]) != papers for name in grouped):
         raise ValueError("quick gate requires the same three papers in every variant")
     ndcg_wins = sum(
-        grouped["score_topology"][paper].ndcg_at_10
-        > grouped["neutral"][paper].ndcg_at_10
+        grouped["full_calibrated"][paper].ndcg_at_10
+        > grouped["topology_only"][paper].ndcg_at_10
         for paper in papers
     )
     unique_valid = sum(
-        grouped["score_topology"][paper].valid_relation_count
-        > grouped["neutral"][paper].valid_relation_count
+        grouped["full_calibrated"][paper].hgb_analog_valid_relation_count
+        > grouped["topology_only"][paper].hgb_analog_valid_relation_count
+        for paper in papers
+    )
+    shuffled_wins = sum(
+        grouped["full_calibrated"][paper].ndcg_at_10
+        > grouped["shuffled_hgb"][paper].ndcg_at_10
+        for paper in papers
+    )
+    review_non_losses = sum(
+        grouped["full_calibrated"][paper].final_review_comparison_to_topology
+        in {"win", "tie"}
+        for paper in papers
+    )
+    review_wins = sum(
+        grouped["full_calibrated"][paper].final_review_comparison_to_topology == "win"
         for paper in papers
     )
     return (
         ndcg_wins >= 2
         and unique_valid >= 2
+        and shuffled_wins >= 2
+        and review_non_losses >= 2
+        and review_wins >= 1
         and all(row.safety_violations == 0 for row in rows)
     )
 
 
 def engineering_gate(rows: Sequence[HumanVariantMetrics]) -> dict[str, bool]:
     grouped = _group(rows)
-    papers = set(grouped.get("neutral", {}))
+    papers = set(grouped.get("topology_only", {}))
     if len(papers) != 10 or any(
         set(grouped.get(name, {})) != papers
-        for name in ("score", "score_topology", "placebo_graph")
+        for name in (
+            "neutral",
+            "scalar_score",
+            "hgb_analog",
+            "full_calibrated",
+            "shuffled_hgb",
+        )
     ):
-        raise ValueError("engineering gate requires four variants for ten papers")
-    score_delta = [
-        grouped["score"][paper].ndcg_at_10 - grouped["neutral"][paper].ndcg_at_10
+        raise ValueError("engineering gate requires six variants for ten papers")
+    calibrated_delta = [
+        grouped["full_calibrated"][paper].ndcg_at_10
+        - grouped["topology_only"][paper].ndcg_at_10
         for paper in papers
     ]
-    topology_delta = [
-        grouped["score_topology"][paper].ndcg_at_10 - grouped["score"][paper].ndcg_at_10
+    shuffled_delta = [
+        grouped["shuffled_hgb"][paper].ndcg_at_10
+        - grouped["topology_only"][paper].ndcg_at_10
         for paper in papers
     ]
-    placebo_delta = [
-        grouped["placebo_graph"][paper].ndcg_at_10 - grouped["score"][paper].ndcg_at_10
-        for paper in papers
-    ]
-    score_default = (
-        _median(score_delta) > 0.0
-        and sum(value >= 0.0 for value in score_delta) >= 7
-        and _median_metric(grouped["score"], "precision_at_5")
-        >= _median_metric(grouped["neutral"], "precision_at_5")
-        and _median_metric(grouped["score"], "major_evidence_precision")
-        >= _median_metric(grouped["neutral"], "major_evidence_precision")
-        and _median_metric(grouped["score"], "issue_recall")
-        >= _median_metric(grouped["neutral"], "issue_recall")
-    )
-    unique_topology = sum(
-        grouped["score_topology"][paper].valid_relation_count
-        > grouped["score"][paper].valid_relation_count
-        or grouped["score_topology"][paper].material_change_count
-        > grouped["score"][paper].material_change_count
+    unique_analog = sum(
+        grouped["full_calibrated"][paper].hgb_analog_valid_relation_count
+        > grouped["topology_only"][paper].hgb_analog_valid_relation_count
         for paper in papers
     )
-    topology_default = (
-        _median(topology_delta) > 0.0
-        and unique_topology >= 3
-        and _median(placebo_delta) < _median(topology_delta)
+    review_wins = sum(
+        grouped["full_calibrated"][paper].final_review_comparison_to_topology == "win"
+        for paper in papers
+    )
+    review_losses = sum(
+        grouped["full_calibrated"][paper].final_review_comparison_to_topology == "loss"
+        for paper in papers
+    )
+    full_default = (
+        _median(calibrated_delta) > 0.0
+        and sum(value >= 0.0 for value in calibrated_delta) >= 7
+        and unique_analog >= 3
+        and _median(calibrated_delta) > _median(shuffled_delta)
+        and review_wins >= 5
+        and review_losses <= 2
+        and _median_metric(grouped["full_calibrated"], "precision_at_5")
+        >= _median_metric(grouped["topology_only"], "precision_at_5")
+        and _median_metric(grouped["full_calibrated"], "major_evidence_precision")
+        >= _median_metric(grouped["topology_only"], "major_evidence_precision")
+        and _median_metric(grouped["full_calibrated"], "issue_recall")
+        >= _median_metric(grouped["topology_only"], "issue_recall")
         and all(row.safety_violations == 0 for row in rows)
     )
-    return {"score_default": score_default, "topology_default": topology_default}
+    return {"full_calibrated_default": full_default}
 
 
 def _group(

@@ -1,8 +1,9 @@
 {
-  "contract": "gear_nature_graph_gate_v2",
+  "contract": "gear_primary16_graph_calibration_gate_v1",
   "dataset_scope": "nature_only",
   "status": "awaiting_traceable_human_reconstruction",
   "forecast_release_manifest": "../../data/calibration/releases/gear-d5-primary16-current/release_manifest.json",
+  "forecast_anatomy_manifest": "../../data/calibration/graph_calibration/primary16_forecast_anatomy_v1/manifest.json",
   "required_issue_aspects": ["novelty_prior_art", "contribution"],
   "required_issue_trace": [
     "reviewer_quote",
@@ -10,7 +11,7 @@
     "round_id",
     "final_paper_evidence"
   ],
-  "variants": ["neutral", "score", "score_topology", "placebo_graph"],
+  "variants": ["neutral", "topology_only", "scalar_score", "hgb_analog", "full_calibrated", "shuffled_hgb"],
   "resource_caps": {
     "logical_searches": 8,
     "direct_fetches": 8,
@@ -23,6 +24,13 @@
   "selection_seed": "stable-paper-hash",
   "blind_hgb_score": true,
   "blind_variant_name": true,
+  "blind_forecast_anatomy": true,
+  "relation_judge": {
+    "backend": "codex_cli",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "medium",
+    "reuse_same_candidate_judgment_across_variants": true
+  },
   "allow_live_openalex_for_historical_case": false,
   "allow_unverified_topology_as_evidence": false
 }

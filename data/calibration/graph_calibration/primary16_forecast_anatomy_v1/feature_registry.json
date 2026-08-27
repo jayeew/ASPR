@@ -1,0 +1,35 @@
+{
+  "categorical_feature_names": [
+    "EF0197"
+  ],
+  "contract": "gear_d5_primary16_feature_registry",
+  "feature_names": [
+    "EF0017",
+    "EF0038",
+    "EF0052",
+    "EF0083",
+    "EF0186",
+    "EF0188",
+    "EF0197",
+    "EF0238",
+    "EF0240",
+    "EF0307",
+    "EF0309",
+    "EF0312",
+    "EF0314",
+    "EF0315",
+    "EF0318",
+    "EF0319"
+  ],
+  "horizon_years": 5,
+  "model_id": "primary16",
+  "outcome": "future_5y_scholarly_diffusion",
+  "protocol_version": "evidence-derived-primary16-d5-tuned-1",
+  "source_fig2_sets": {
+    "broad_t0": 219,
+    "expanded": 153,
+    "primary": 16,
+    "strict": 7
+  },
+  "source_release": "hgb_nested_tuned_7_16_153_219_20260820_b48936af"
+}

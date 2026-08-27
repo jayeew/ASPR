@@ -31,13 +31,13 @@ def forecast(score: float, coverage: float = 1.0) -> InfluenceForecast:
     )
 
 
-def test_routing_requires_reliable_noncentral_forecast() -> None:
+def test_routing_continuously_shrinks_forecast_toward_neutral() -> None:
     local, remote, effective = routing_weights(forecast(100.0, 0.5), use_score=True)
-    assert (local, remote, effective) == pytest.approx((0.5, 0.5, 0.5))
+    assert (local, remote, effective) == pytest.approx((0.375, 0.625, 0.75))
     strong = routing_weights(forecast(100.0), use_score=True)
     assert strong == pytest.approx((0.25, 0.75, 1.0))
     central = routing_weights(forecast(55.0), use_score=True)
-    assert central == pytest.approx((0.5, 0.5, 0.5))
+    assert central == pytest.approx((0.475, 0.525, 0.55))
     neutral = routing_weights(None, use_score=True)
     assert neutral == pytest.approx((0.5, 0.5, 0.5))
 

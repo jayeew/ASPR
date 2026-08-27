@@ -257,6 +257,11 @@ def _existing_case_result(output: Path) -> dict[str, Any] | None:
 def _validate_assets_command(args: argparse.Namespace) -> int:
     config = load_config(args.config, validate_assets=True)
     report = validate_runtime_replay(config.resolved_forecast_release_manifest())
+    anatomy_manifest = config.resolved_forecast_anatomy_manifest()
+    if anatomy_manifest is not None:
+        anatomy = json.loads(anatomy_manifest.read_text(encoding="utf-8"))
+        report["forecast_anatomy_release_id"] = anatomy.get("release_id")
+        report["forecast_anatomy_rows"] = anatomy.get("row_count")
     print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
     return 0 if report["passed"] else 1
 

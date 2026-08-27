@@ -29,7 +29,9 @@ def case(index: int, status: str = "persists") -> AuditEligibleCase:
     )
 
 
-def judgment(paper_id: str, variant: str, gain: bool) -> HumanVariantJudgment:
+def judgment(
+    paper_id: str, variant: str, gain: bool, *, review: str = "tie"
+) -> HumanVariantJudgment:
     return HumanVariantJudgment(
         paper_id=paper_id,
         variant=variant,
@@ -43,6 +45,8 @@ def judgment(paper_id: str, variant: str, gain: bool) -> HumanVariantJudgment:
         ],
         issue_recall=1.0 if gain else 0.0,
         major_evidence_precision=1.0,
+        hgb_analog_valid_relation_count=int(gain and variant == "full_calibrated"),
+        final_review_comparison_to_topology=review,
     )
 
 
@@ -64,9 +68,18 @@ def test_human_metrics_and_quick_gate_require_two_of_three_real_wins() -> None:
         rows.extend(
             [
                 rank_metrics(judgment(paper_id, "neutral", False)),
-                rank_metrics(judgment(paper_id, "score", index < 2)),
-                rank_metrics(judgment(paper_id, "score_topology", index < 2)),
-                rank_metrics(judgment(paper_id, "placebo_graph", False)),
+                rank_metrics(judgment(paper_id, "topology_only", False)),
+                rank_metrics(judgment(paper_id, "scalar_score", index < 2)),
+                rank_metrics(judgment(paper_id, "hgb_analog", index < 2)),
+                rank_metrics(
+                    judgment(
+                        paper_id,
+                        "full_calibrated",
+                        index < 2,
+                        review="win" if index == 0 else "tie",
+                    )
+                ),
+                rank_metrics(judgment(paper_id, "shuffled_hgb", False)),
             ]
         )
     assert quick_gate_passes(rows)

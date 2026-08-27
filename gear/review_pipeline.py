@@ -19,6 +19,7 @@ from .contracts import (
 )
 from .diffusion_forecast import DiffusionForecastService
 from .evidence_supervisor import EvidenceSupervisor, build_retrieval_claim
+from .graph_calibration import load_forecast_analog_index
 from .graph_guidance import GraphGuidancePlanner, is_graph_guidance_target
 from .graph_prior_contracts import (
     GraphResourceCaps,
@@ -39,6 +40,7 @@ from .review_contracts import (
     CriticRunMetadata,
     CriticSource,
     EvidenceBudget,
+    InfluenceContextCard,
     ReviewBundle,
     ReviewPhase,
     StructuredReview,
@@ -183,6 +185,10 @@ def review_paper(
             total_actions_max=resolved_config.retrieval.total_actions_max,
         ),
     )
+    influence_context = _influence_context_card(graph_result)
+    if influence_context is not None:
+        state.influence_context_evidence_key = "G:INFLUENCE"
+        store.add_evidence("G:INFLUENCE", "influence_context_card", influence_context)
     started = time.monotonic()
     if agent_reviewer is None:
         raise RuntimeError("required Agent Reviewer was not configured")
@@ -235,6 +241,17 @@ def review_paper(
     _append_stage(store, "review_fusion", agent_branch, fusion_report, started)
     if state.graph_result is not None:
         guidance_config = resolved_config.graph_guidance
+        analog_index = None
+        if guidance_config.calibration_enabled:
+            try:
+                anatomy_manifest = resolved_config.resolved_forecast_anatomy_manifest()
+                if anatomy_manifest is None:
+                    raise ValueError("forecast_anatomy_manifest_missing")
+                analog_index = load_forecast_analog_index(anatomy_manifest)
+            except (OSError, TypeError, ValueError) as exc:
+                state.graph_result.diagnostics.append(
+                    f"forecast_analog_unavailable:{type(exc).__name__}"
+                )
         search_frames = {}
         prepare_search_frame = getattr(prior_art, "prepare_search_frame", None)
         for point in state.canonical_points.values():
@@ -260,11 +277,25 @@ def review_paper(
                 relation_classifications=guidance_config.relation_classifications,
             ),
             policy_version=guidance_config.policy_version,
+            analog_index=analog_index,
         ).plan(
             state,
             search_frames=search_frames,
             enable_score_routing=guidance_config.score_routing_enabled,
             enable_topology=guidance_config.topology_enabled,
+            calibration_variant=(
+                guidance_config.calibration_variant
+                if guidance_config.calibration_enabled
+                else (
+                    "scalar_score"
+                    if guidance_config.score_routing_enabled
+                    else (
+                        "topology_only"
+                        if guidance_config.topology_enabled
+                        else "neutral"
+                    )
+                )
+            ),
         )
         state.graph_guidance_plan = guidance_plan
         if state.resource_ledger is not None:
@@ -346,6 +377,7 @@ def review_paper(
         agent_review=agent_branch,
         qwen_review=qwen_branch,
         graph_result=graph_result,
+        influence_context=influence_context,
         fusion_report=fusion_report,
         state=state,
         process_diagnostic=diagnostic.model_dump(mode="json"),
@@ -374,6 +406,42 @@ def _graph_scorer(
     return DiffusionForecastService(
         config.resolved_forecast_release_manifest(),
         config.resolved_forecast_runtime_manifest(),
+        config.resolved_forecast_anatomy_manifest(),
+    )
+
+
+def _influence_context_card(
+    packet: GraphRuntimePacket | None,
+) -> InfluenceContextCard | None:
+    """Project forecast anatomy into a display-only, non-evidentiary card."""
+
+    if packet is None:
+        return None
+    anatomy = packet.forecast_anatomy
+    if anatomy is None:
+        return InfluenceContextCard(
+            paper_id=packet.paper_id,
+            forecast_percentile=packet.forecast.prospective_5y_diffusion_percentile,
+            applicability="forecast_available_anatomy_unavailable",
+            limited=True,
+        )
+    return InfluenceContextCard(
+        paper_id=packet.paper_id,
+        forecast_percentile=anatomy.expected_diffusion_percentile,
+        uptake_percentile=anatomy.uptake_percentile,
+        conditional_diffusion_percentile=anatomy.conditional_diffusion_percentile,
+        anatomy_roles={
+            "uptake": anatomy.uptake_role_contributions,
+            "conditional_diffusion": anatomy.conditional_role_contributions,
+        },
+        role_coverage=anatomy.role_coverage,
+        tensions=[item.kind for item in packet.calibration_tensions if item.active],
+        applicability=(
+            "forecast_anatomy_limited"
+            if anatomy.limited
+            else "frozen_primary16_hgb_process_context"
+        ),
+        limited=anatomy.limited,
     )
 
 
@@ -459,6 +527,8 @@ def _persist_bundle(
             paths.pop(name)
     if bundle.graph_result is not None:
         paths["graph_runtime_packet"] = target_dir / "graph_runtime_packet.json"
+    if bundle.influence_context is not None:
+        paths["influence_context"] = target_dir / "influence_context.json"
     if bundle.qwen_review is not None and full_artifacts:
         paths["qwen_review"] = target_dir / "qwen_review.json"
     output_files = {name: str(path) for name, path in paths.items()}
@@ -473,6 +543,8 @@ def _persist_bundle(
         _write_model(paths["agent_review"], bundle.agent_review)
     if bundle.graph_result is not None:
         _write_model(paths["graph_runtime_packet"], bundle.graph_result)
+    if bundle.influence_context is not None:
+        _write_model(paths["influence_context"], bundle.influence_context)
     if bundle.fusion_report is not None and "fusion_report" in paths:
         _write_model(paths["fusion_report"], bundle.fusion_report)
     if bundle.state is not None and "review_state" in paths:

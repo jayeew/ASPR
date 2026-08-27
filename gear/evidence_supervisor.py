@@ -297,7 +297,7 @@ class EvidenceSupervisor:
             [
                 work_id
                 for mission in guidance.missions
-                if mission.origin == "topology"
+                if mission.origin in {"topology", "calibration"}
                 for work_id in mission.seed_work_ids
             ]
             if guidance is not None
@@ -359,30 +359,42 @@ class EvidenceSupervisor:
         local: list[RetrievedWork] = []
         remote: list[RetrievedWork] = []
         topology: list[RetrievedWork] = []
+        analog: list[RetrievedWork] = []
         claim_linked: list[RetrievedWork] = []
-        pools: dict[str, Literal["local", "remote", "topology"]] = {}
+        pools: dict[str, Literal["local", "remote", "topology", "analog"]] = {}
         guidance = _claim_guidance(state, point.point_id)
         topology_active = bool(
             guidance
             and any(mission.origin == "topology" for mission in guidance.missions)
         )
+        analog_ids = {
+            seed.work_id
+            for seed in (guidance.analog_seeds if guidance is not None else [])
+        }
         for work in works:
             is_author_citation = topology_active and self._work_has_query_role(
                 work, store, "author_citation"
             )
             is_graph_seed = self._work_has_query_role(work, store, "graph_seed")
-            is_topology = is_author_citation or is_graph_seed
-            is_local = not is_topology and any(
+            is_analog = work.work_id in analog_ids
+            is_topology = (is_author_citation or is_graph_seed) and not is_analog
+            is_local = not (is_topology or is_analog) and any(
                 self._work_has_query_role(work, store, role) for role in local_roles
             )
-            pool: Literal["local", "remote", "topology"] = (
-                "topology" if is_topology else "local" if is_local else "remote"
+            pool: Literal["local", "remote", "topology", "analog"] = (
+                "analog"
+                if is_analog
+                else "topology" if is_topology else "local" if is_local else "remote"
             )
             pools[work.work_id] = pool
             target_pool = (
                 claim_linked
                 if is_author_citation
-                else topology if is_graph_seed else local if is_local else remote
+                else (
+                    analog
+                    if is_analog
+                    else topology if is_graph_seed else local if is_local else remote
+                )
             )
             target_pool.append(work)
         forecast = (
@@ -390,7 +402,10 @@ class EvidenceSupervisor:
         )
         local_weight, remote_weight, q_effective = routing_weights(
             forecast,
-            use_score=self.config.graph_guidance.score_routing_enabled,
+            use_score=(
+                self.config.graph_guidance.score_routing_enabled
+                or self.config.graph_guidance.calibration_variant == "scalar_score"
+            ),
         )
         limit = (
             state.resource_ledger.caps.relation_classifications
@@ -409,26 +424,22 @@ class EvidenceSupervisor:
             *baseline,
             *claim_linked[1:],
             *topology,
+            *analog,
         ]
         agent = state.branch_reviews.get(ReviewSource.AGENT)
         draft_hash = sha256_value(agent) if agent is not None else sha256_value({})
-        placebo = bool(
-            state.graph_result is not None
-            and "evaluation_placebo_graph" in state.graph_result.diagnostics
-        )
-        variant: Literal["neutral", "score", "score_topology", "placebo_graph"] = (
-            "placebo_graph"
-            if placebo
-            else (
-                "score_topology"
-                if topology_active
-                else (
-                    "score"
-                    if self.config.graph_guidance.score_routing_enabled
-                    else "neutral"
-                )
-            )
-        )
+        controller = getattr(state.graph_guidance_plan, "controller_state", {})
+        variant = str(controller.get("calibration_variant", "neutral"))
+        allowed_variants = {
+            "neutral",
+            "topology_only",
+            "scalar_score",
+            "hgb_analog",
+            "full_calibrated",
+            "shuffled_hgb",
+        }
+        if variant not in allowed_variants:
+            variant = "neutral"
         rank = {work.work_id: index for index, work in enumerate(ordered)}
         relevance = {
             work.work_id: self._work_relevance(
@@ -438,7 +449,17 @@ class EvidenceSupervisor:
         }
         plan = RetrievalRoutingPlan(
             paper_id=state.paper_id,
-            variant=variant,
+            variant=cast(
+                Literal[
+                    "neutral",
+                    "topology_only",
+                    "scalar_score",
+                    "hgb_analog",
+                    "full_calibrated",
+                    "shuffled_hgb",
+                ],
+                variant,
+            ),
             draft_sha256=draft_hash,
             resource_caps=(
                 state.resource_ledger.caps
@@ -458,7 +479,7 @@ class EvidenceSupervisor:
                         else (
                             [*claim_linked, *topology]
                             if pools[work.work_id] == "topology"
-                            else remote
+                            else (analog if pools[work.work_id] == "analog" else remote)
                         )
                     ).index(work),
                     final_rank=rank[work.work_id],
@@ -471,9 +492,13 @@ class EvidenceSupervisor:
                             "topology_admitted_after_candidate_gate"
                             if pools[work.work_id] == "topology"
                             else (
-                                "selected_by_equal_budget_interleave"
-                                if rank[work.work_id] < limit
-                                else "relation_classification_cap_reached"
+                                "hgb_anatomy_analog_after_semantic_gate"
+                                if pools[work.work_id] == "analog"
+                                else (
+                                    "selected_by_equal_budget_interleave"
+                                    if rank[work.work_id] < limit
+                                    else "relation_classification_cap_reached"
+                                )
                             )
                         )
                     ),
@@ -504,12 +529,20 @@ class EvidenceSupervisor:
             for mission in (guidance.missions if guidance is not None else [])
             if mission.origin == "topology"
         ]
-        if topology and all(mission.traversal == "none" for mission in topology):
+        calibration = [
+            mission
+            for mission in (guidance.missions if guidance is not None else [])
+            if mission.origin == "calibration" and mission.seed_work_ids
+        ]
+        seed_missions = [*topology, *calibration]
+        if seed_missions and all(
+            mission.traversal == "none" for mission in seed_missions
+        ):
             point.validation_notes.append("topology_neighbor_expansion_not_requested")
             return
         seeds = (
             self._topology_anchors.get(point.point_id, [])
-            if topology
+            if seed_missions
             else self._works.get(point.point_id, [])
         )
         if prior_art is None or classifier is None:
@@ -533,7 +566,7 @@ class EvidenceSupervisor:
             point.validation_notes.append("citation_expansion_has_no_seed")
             return
         requested_ids = {
-            work_id for mission in topology for work_id in mission.seed_work_ids
+            work_id for mission in seed_missions for work_id in mission.seed_work_ids
         }
         selected_seeds = [
             seed for seed in seeds if not requested_ids or seed.work_id in requested_ids

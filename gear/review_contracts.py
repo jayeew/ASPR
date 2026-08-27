@@ -452,6 +452,7 @@ class ReviewState(ReviewModel):
     rubric: PaperSpecificRubric
     branch_reviews: dict[ReviewSource, BranchReview] = Field(default_factory=dict)
     graph_result_evidence_key: str | None = None
+    influence_context_evidence_key: str | None = None
     graph_result: GraphRuntimePacket | None = None
     graph_guidance_plan: RetrievalGuidancePlan | None = None
     retrieval_routing_plans: dict[str, RetrievalRoutingPlan] = Field(
@@ -533,6 +534,26 @@ class GraphReviewContext(ReviewModel):
     limited: bool = False
 
 
+class InfluenceContextCard(ReviewModel):
+    """Non-evidentiary HGB explanation displayed beside review evidence."""
+
+    contract: Literal["gear_influence_context_card_v1"] = (
+        "gear_influence_context_card_v1"
+    )
+    paper_id: str
+    forecast_percentile: float | None = Field(default=None, ge=0.0, le=100.0)
+    uptake_percentile: float | None = Field(default=None, ge=0.0, le=100.0)
+    conditional_diffusion_percentile: float | None = Field(
+        default=None, ge=0.0, le=100.0
+    )
+    anatomy_roles: dict[str, dict[str, float]] = Field(default_factory=dict)
+    role_coverage: dict[str, float] = Field(default_factory=dict)
+    tensions: list[str] = Field(default_factory=list)
+    applicability: str
+    limited: bool = False
+    non_evidentiary: Literal[True] = True
+
+
 class ContextSpan(ReviewModel):
     evidence_key: str
     span_id: str
@@ -592,6 +613,7 @@ class ReviewBundle(ReviewModel):
     agent_review: BranchReview | None = None
     qwen_review: BranchReview | None = None
     graph_result: GraphRuntimePacket | None = None
+    influence_context: InfluenceContextCard | None = None
     fusion_report: FusionReport | None = None
     state: ReviewState | None = None
     process_diagnostic: dict[str, Any] | None = None
@@ -630,6 +652,7 @@ __all__ = [
     "FusionMatch",
     "FusionReport",
     "GraphReviewContext",
+    "InfluenceContextCard",
     "NoveltyAssessment",
     "NoveltyEvidenceStatus",
     "NoveltyJudgment",

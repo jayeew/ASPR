@@ -8,7 +8,10 @@ from collections.abc import Mapping, Sequence
 from typing import Literal, TypeVar
 
 from .contracts import ScientificSearchFrame
+from .graph_calibration import ForecastAnalogIndex
 from .graph_prior_contracts import (
+    AnalogSeed,
+    CalibrationTension,
     ClaimGuidance,
     GraphResourceCaps,
     GraphRuntimePacket,
@@ -19,10 +22,8 @@ from .graph_prior_contracts import (
 )
 from .review_contracts import CanonicalReviewPoint, ReviewAspect, ReviewState
 
-GRAPH_GUIDANCE_POLICY_VERSION = "claim_linked_citation_rank1_v3"
+GRAPH_GUIDANCE_POLICY_VERSION = "primary16_forecast_calibration_v1"
 MAX_TOPOLOGY_GUIDED_CLAIMS = 2
-MIN_ROUTING_FEATURE_COVERAGE = 0.8
-MIN_ROUTING_CENTER_DISTANCE = 0.1
 GENERIC_SCIENTIFIC_TOKENS = {
     "analysis",
     "approach",
@@ -61,7 +62,7 @@ MissionType = Literal[
     "remote_mechanism_analogue",
     "topology_seed",
 ]
-MissionOrigin = Literal["score", "topology"]
+MissionOrigin = Literal["score", "topology", "calibration"]
 MissionOrientation = Literal["neutral"]
 Traversal = Literal["none", "references", "citations"]
 CandidateT = TypeVar("CandidateT")
@@ -88,11 +89,6 @@ def routing_weights(
     else:
         q = forecast.prospective_5y_diffusion_percentile / 100.0
         q_effective = 0.5 + forecast.feature_coverage * (q - 0.5)
-        if (
-            forecast.feature_coverage < MIN_ROUTING_FEATURE_COVERAGE
-            or abs(q_effective - 0.5) < MIN_ROUTING_CENTER_DISTANCE
-        ):
-            q_effective = 0.5
     remote_weight = 0.25 + 0.5 * q_effective
     return 1.0 - remote_weight, remote_weight, q_effective
 
@@ -172,9 +168,11 @@ class GraphGuidancePlanner:
         *,
         resource_caps: GraphResourceCaps | None = None,
         policy_version: str = GRAPH_GUIDANCE_POLICY_VERSION,
+        analog_index: ForecastAnalogIndex | None = None,
     ) -> None:
         self.resource_caps = resource_caps or GraphResourceCaps()
         self.policy_version = policy_version
+        self.analog_index = analog_index
 
     def plan(
         self,
@@ -183,6 +181,14 @@ class GraphGuidancePlanner:
         search_frames: Mapping[str, ScientificSearchFrame] | None = None,
         enable_score_routing: bool = False,
         enable_topology: bool = True,
+        calibration_variant: Literal[
+            "neutral",
+            "topology_only",
+            "scalar_score",
+            "hgb_analog",
+            "full_calibrated",
+            "shuffled_hgb",
+        ] = "topology_only",
     ) -> RetrievalGuidancePlan:
         packet = state.graph_result
         if packet is None:
@@ -204,10 +210,23 @@ class GraphGuidancePlanner:
             self.resource_caps.provider_searches,
             max(3, 3 * len(points)),
         )
+        scalar_score = enable_score_routing or calibration_variant == "scalar_score"
+        topology_enabled = enable_topology and calibration_variant in {
+            "topology_only",
+            "hgb_analog",
+            "full_calibrated",
+            "shuffled_hgb",
+        }
+        analog_enabled = calibration_variant in {
+            "hgb_analog",
+            "full_calibrated",
+            "shuffled_hgb",
+        }
+        full_calibration = calibration_variant == "full_calibrated"
         local, remote, q_effective = score_controller(
             packet,
             executable_slots,
-            enabled=enable_score_routing,
+            enabled=scalar_score,
         )
         weights = [_guidance_weight(point) for point in points]
         local_alloc, remote_alloc = _allocate_geometry(local, remote, weights)
@@ -216,15 +235,47 @@ class GraphGuidancePlanner:
         guidance = []
         topology_claims_used = 0
         for index, point in enumerate(points):
+            frame = frames.get(point.point_id)
+            analog_seeds = (
+                self.analog_index.select(
+                    packet.forecast_anatomy,
+                    claim_id=point.novelty_claim_id or point.point_id,
+                    terms=_frame_terms(frame),
+                    cutoff_date=state.cutoff_date,
+                    target_field=(
+                        packet.forecast_anatomy.target_field
+                        if packet.forecast_anatomy is not None
+                        else None
+                    ),
+                    shuffled=calibration_variant == "shuffled_hgb",
+                )
+                if analog_enabled and self.analog_index is not None
+                else []
+            )
+            tension = (
+                next(
+                    (item for item in packet.calibration_tensions if item.active), None
+                )
+                if full_calibration
+                else None
+            )
+            if tension is not None:
+                point.graph_tension = True
+                point.graph_tension_score = tension.score
+                point.validation_notes.append(
+                    f"calibration_tension:{tension.kind}:{tension.review_effect}"
+                )
             claim_guidance = self._claim_guidance(
                 point,
                 packet,
-                frames.get(point.point_id),
+                frame,
                 local_alloc[index],
                 remote_alloc[index],
                 q_effective,
-                enable_topology and topology_claims_used < MAX_TOPOLOGY_GUIDED_CLAIMS,
+                topology_enabled and topology_claims_used < MAX_TOPOLOGY_GUIDED_CLAIMS,
                 seed_usage,
+                analog_seeds=analog_seeds,
+                tension=tension,
             )
             if any(mission.origin == "topology" for mission in claim_guidance.missions):
                 topology_claims_used += 1
@@ -236,7 +287,8 @@ class GraphGuidancePlanner:
             controller_state={
                 "score_0_100": packet.score_0_100,
                 "score_semantics": "prospective_5y_diffusion_percentile",
-                "score_routing_active": enable_score_routing,
+                "score_routing_active": scalar_score,
+                "calibration_variant": calibration_variant,
                 "feature_reliability": packet.feature_coverage,
                 "q_effective": q_effective,
                 "executable_query_slots": executable_slots,
@@ -258,6 +310,9 @@ class GraphGuidancePlanner:
         q_effective: float,
         enable_topology: bool,
         seed_usage: dict[str, int],
+        *,
+        analog_seeds: Sequence[AnalogSeed],
+        tension: CalibrationTension | None,
     ) -> ClaimGuidance:
         claim_id = point.novelty_claim_id or point.point_id
         missions = _score_missions(
@@ -291,6 +346,10 @@ class GraphGuidancePlanner:
                     q_effective=q_effective,
                 )
             )
+        if analog_seeds:
+            missions.extend(_analog_missions(claim_id, analog_seeds))
+        if tension is not None:
+            missions.append(_tension_mission(claim_id, tension))
         return ClaimGuidance(
             review_point_id=point.point_id,
             claim_id=claim_id,
@@ -298,6 +357,7 @@ class GraphGuidancePlanner:
             allocated_local_query_slots=local_slots,
             allocated_remote_query_slots=remote_slots,
             missions=_deduplicate_missions(missions),
+            analog_seeds=list(analog_seeds),
         )
 
 
@@ -426,6 +486,57 @@ def _citation_topology_mission(claim_id: str) -> RetrievalMission:
         "none",
         "one_semantically_admitted_claim_citation_or_citation_pool_exhausted",
     )
+
+
+def _analog_missions(
+    claim_id: str, seeds: Sequence[AnalogSeed]
+) -> list[RetrievalMission]:
+    return [
+        _mission(
+            claim_id,
+            "topology_seed",
+            "calibration",
+            "neutral",
+            ["graph_seed"],
+            "references",
+            "one_cutoff_safe_hgb_analog_or_analog_pool_exhausted",
+        ).model_copy(update={"seed_work_ids": [seed.work_id for seed in seeds]})
+    ]
+
+
+def _tension_mission(claim_id: str, tension: CalibrationTension) -> RetrievalMission:
+    effect = tension.review_effect
+    role = (
+        "object_problem"
+        if effect == "antecedent_attribution_check"
+        else "mechanism_outcome"
+    )
+    return _mission(
+        claim_id,
+        (
+            "local_nearest_antecedent"
+            if role == "object_problem"
+            else "remote_mechanism_analogue"
+        ),
+        "calibration",
+        "neutral",
+        [role],
+        "none",
+        "calibration_tension_checked",
+    )
+
+
+def _frame_terms(frame: ScientificSearchFrame | None) -> list[str]:
+    if frame is None:
+        return []
+    values = [
+        *frame.target_object,
+        *frame.task_problem,
+        *frame.mechanism,
+        *frame.outcome_observable,
+        *frame.author_terms,
+    ]
+    return [token for value in values for token in _tokens(value)][:24]
 
 
 def _mission(

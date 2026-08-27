@@ -6,10 +6,12 @@
   "model_backend": "codex_cli",
   "forecast_release_manifest": "data/calibration/releases/gear-d5-primary16-current/release_manifest.json",
   "forecast_runtime_manifest": "data/calibration/runtime_features/gear-d5-primary16-dev10-v1/runtime_manifest.json",
+  "forecast_anatomy_manifest": "data/calibration/graph_calibration/primary16_forecast_anatomy_v1/manifest.json",
   "graph_results_path": null,
   "allowed_asset_roots": [
     "data/calibration/releases",
-    "data/calibration/runtime_features"
+    "data/calibration/runtime_features",
+    "data/calibration/graph_calibration"
   ],
   "denied_path_fragments": [
     "/fig04/",
@@ -54,10 +56,12 @@
     "required": false
   },
   "graph_guidance": {
-    "policy_version": "claim_linked_citation_rank1_v3",
+    "policy_version": "primary16_forecast_calibration_v1",
     "shadow": false,
     "score_routing_enabled": false,
     "topology_enabled": true,
+    "calibration_enabled": false,
+    "calibration_variant": "topology_only",
     "provider_searches": 8,
     "direct_fetches": 8,
     "neighbor_expansions": 2,

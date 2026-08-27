@@ -17,6 +17,9 @@ MANIFEST = Path(
 RUNTIME_MANIFEST = Path(
     "data/calibration/runtime_features/gear-d5-primary16-dev10-v1/runtime_manifest.json"
 ).resolve()
+ANATOMY_MANIFEST = Path(
+    "data/calibration/graph_calibration/primary16_forecast_anatomy_v1/manifest.json"
+).resolve()
 
 
 def test_release_hashes_folds_percentiles_and_runtime_replay() -> None:
@@ -50,13 +53,16 @@ def test_exact_lookup_uses_future_diffusion_semantics(paper_ir) -> None:
             "metadata": paper_ir.metadata.model_copy(update={"openalex_id": paper_id}),
         }
     )
-    packet = DiffusionForecastService(MANIFEST).score(
+    packet = DiffusionForecastService(
+        MANIFEST, anatomy_manifest_path=ANATOMY_MANIFEST
+    ).score(
         target, date(int(row["publication_year"]) + 1, 1, 1)
     )
     assert packet.forecast.status == "available"
     assert packet.forecast.prospective_5y_diffusion_percentile is not None
     assert packet.forecast.release_id == "gear-d5-primary16-948a4f87086c"
     assert packet.topology_seeds == []
+    assert packet.forecast_anatomy is not None
 
 
 def test_unknown_paper_fails_closed_to_explicit_limited_packet(paper_ir) -> None:
@@ -93,6 +99,9 @@ def test_recent_quick_gate_papers_recompute_frozen_features(paper_ir) -> None:
         assert "runtime_feature_inference" in packet.diagnostics
         assert "target_primary16_recomputed" in packet.diagnostics
         assert "frozen_primary16_hgb_reused" in packet.diagnostics
+        assert packet.forecast_anatomy is not None
+        assert packet.forecast_anatomy.paper_id == paper_id
+        assert packet.forecast_anatomy.anatomy_release_id == packet.forecast.release_id
 
 
 def test_post_2022_target_cannot_use_training_score_lookup(paper_ir) -> None:

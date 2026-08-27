@@ -13,6 +13,11 @@ import pandas as pd
 from pydantic import Field
 
 from .contracts import PaperIR, StrictModel
+from .graph_calibration import (
+    anatomy_from_row,
+    calibration_tensions,
+    load_forecast_analog_index,
+)
 from .graph_prior_contracts import GraphRuntimePacket, InfluenceForecast
 
 
@@ -70,6 +75,7 @@ class RuntimeFeatureManifest(StrictModel):
     network_used_for_target_freeze: bool
     created_at_utc: str
     assets: dict[str, RuntimeFeatureAsset]
+    anatomy_release_manifest: str | None = None
 
 
 class ForecastRelease:
@@ -181,6 +187,7 @@ class DiffusionForecastService:
         self,
         manifest_path: Path,
         runtime_manifest_path: Path | None = None,
+        anatomy_manifest_path: Path | None = None,
     ) -> None:
         self.manifest_path = Path(manifest_path).resolve()
         self.runtime_manifest_path = (
@@ -188,8 +195,16 @@ class DiffusionForecastService:
             if runtime_manifest_path is not None
             else None
         )
+        self.anatomy_manifest_path = (
+            Path(anatomy_manifest_path).resolve()
+            if anatomy_manifest_path is not None
+            else None
+        )
         self._release: ForecastRelease | None = None
         self._scores: pd.DataFrame | None = None
+        self._runtime_anatomy: pd.DataFrame | None = None
+        self._release_anatomy: pd.DataFrame | None = None
+        self._anatomy_load_failure: str | None = None
 
     def _load(self) -> tuple[ForecastRelease, pd.DataFrame]:
         if self._release is None:
@@ -197,6 +212,13 @@ class DiffusionForecastService:
             self._release.verify()
             self._scores = pd.read_parquet(self._release.path("score_table"))
             self._scores["feature_source"] = "release_score_table"
+            if self.anatomy_manifest_path is not None:
+                try:
+                    self._release_anatomy = load_forecast_analog_index(
+                        self.anatomy_manifest_path
+                    ).table()
+                except (OSError, TypeError, ValueError) as exc:
+                    self._anatomy_load_failure = type(exc).__name__
             if self.runtime_manifest_path is not None:
                 runtime = RuntimeFeatureRelease(self.runtime_manifest_path)
                 runtime.verify(self._release)
@@ -204,6 +226,10 @@ class DiffusionForecastService:
                 self._scores = pd.concat(
                     [self._scores, runtime_scores], ignore_index=True, sort=False
                 )
+                if "runtime_anatomy_table" in runtime.manifest.assets:
+                    self._runtime_anatomy = pd.read_parquet(
+                        runtime.path("runtime_anatomy_table")
+                    )
         assert self._scores is not None
         return self._release, self._scores
 
@@ -268,6 +294,29 @@ class DiffusionForecastService:
                 )
                 if int(source_max_year) < cutoff_date.year - 1:
                     diagnostics.append("historical_context_limited")
+            anatomy = None
+            tensions = []
+            anatomy_table = (
+                self._runtime_anatomy if runtime_inference else self._release_anatomy
+            )
+            if anatomy_table is not None:
+                anatomy_rows = anatomy_table.loc[
+                    anatomy_table["paper_id"]
+                    .astype(str)
+                    .map(_normalize)
+                    .isin(identifiers)
+                ]
+                if len(anatomy_rows) == 1:
+                    anatomy = anatomy_from_row(anatomy_rows.iloc[0].to_dict())
+                    tensions = calibration_tensions(anatomy)
+                    diagnostics.append("forecast_anatomy_available")
+                    if anatomy.limited:
+                        diagnostics.append("forecast_anatomy_limited")
+            elif self.anatomy_manifest_path is not None:
+                diagnostics.append(
+                    "forecast_anatomy_unavailable:"
+                    + (self._anatomy_load_failure or "target_missing")
+                )
             return GraphRuntimePacket(
                 paper_id=paper_ir.paper_id,
                 cutoff_date=cutoff_date,
@@ -293,6 +342,8 @@ class DiffusionForecastService:
                     ].sha256,
                     diagnostics=diagnostics,
                 ),
+                forecast_anatomy=anatomy,
+                calibration_tensions=tensions,
                 diagnostics=diagnostics,
             )
         except (FileNotFoundError, KeyError, OSError, TypeError, ValueError) as exc:
