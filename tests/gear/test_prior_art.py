@@ -12,27 +12,123 @@ from gear.contracts import (
     RetrievedWork,
     ScientificSearchFrame,
 )
-from gear.graph_prior_contracts import GraphResourceCapsV1, ResourceLedgerV1
-from gear.prior_art import PriorArtService, RelationClassifier
+from gear.graph_prior_contracts import GraphResourceCaps, ResourceLedger
+from gear.prior_art import PriorArtService, RelationClassifier, _citation_numbers
 
 
-def test_graph_direct_fetches_replace_provider_slots() -> None:
-    ledger = ResourceLedgerV1(
+def test_target_span_citation_numbers_are_claim_specific() -> None:
+    assert _citation_numbers(
+        "Prior work [2, 5-7] differs; value [0] is not a cite"
+    ) == {
+        2,
+        5,
+        6,
+        7,
+    }
+
+
+def test_graph_direct_fetches_do_not_delete_provider_baseline() -> None:
+    ledger = ResourceLedger(
         paper_id="p",
-        caps=GraphResourceCapsV1(provider_searches=8, direct_fetches=2),
+        caps=GraphResourceCaps(provider_searches=8, direct_fetches=2),
     )
 
     remaining = PriorArtService._reserve_graph_seed_slots(
         4, ["W1", "W1", "W2", "W3"], ledger
     )
 
-    assert remaining == 2
+    assert remaining == 4
 
     with_traversal = PriorArtService._reserve_graph_seed_slots(
         4, ["W1", "W2"], ledger, neighbor_slots=1
     )
 
-    assert with_traversal == 1
+    assert with_traversal == 4
+
+
+def test_safe_graph_selection_prioritizes_gated_citation_and_rejects_weak_seed() -> (
+    None
+):
+    def work(work_id: str) -> RetrievedWork:
+        return RetrievedWork(
+            work_id=work_id,
+            target_claim_id="C",
+            title=work_id,
+            retrieval_query_id="Q",
+            source_query_ids=["Q"],
+            retrieval_source="test",
+        )
+
+    baseline = [work(f"B{index}") for index in range(8)]
+    weak = work("G-weak")
+    broad_only = work("G-broad")
+    strong = work("G-strong")
+    ranked = [weak, broad_only, strong, *baseline]
+    decisions = {
+        **{
+            row.work_id: {
+                "verdict": "comparable",
+                "matched_fields": ["target_object", "task_problem"],
+                "score": 0.5,
+            }
+            for row in baseline
+        },
+        "G-weak": {
+            "verdict": "distant",
+            "matched_fields": [],
+            "score": 0.9,
+        },
+        "G-broad": {
+            "verdict": "comparable",
+            "matched_fields": ["target_object", "task_problem", "mechanism"],
+            "score": 0.95,
+            "claim_alignment": 0.4,
+            "essential_claim_facets": ["same broad object"],
+        },
+        "G-strong": {
+            "verdict": "comparable",
+            "matched_fields": ["target_object", "task_problem"],
+            "score": 0.8,
+            "claim_alignment": 0.9,
+            "essential_claim_facets": ["same mechanism and outcome"],
+        },
+    }
+
+    selected = PriorArtService._safe_candidate_selection(
+        ranked,
+        decisions,
+        {"G-weak", "G-broad", "G-strong"},
+        author_citation_ids={"G-strong"},
+        maximum=8,
+    )
+
+    assert selected[0].work_id == "G-strong"
+    assert [row.work_id for row in selected[1:6]] == ["B0", "B1", "B2", "B3", "B4"]
+    assert "G-strong" in {row.work_id for row in selected}
+    assert "G-weak" not in {row.work_id for row in selected}
+    assert "G-broad" not in {row.work_id for row in selected}
+
+
+def test_declared_citation_can_fill_missing_openalex_abstract(
+    gear_config, monkeypatch
+) -> None:
+    service = PriorArtService(gear_config)
+    monkeypatch.setattr(
+        service,
+        "_fetch_doi_abstract",
+        lambda doi: (
+            "A substantive DOI-indexed abstract.",
+            "europe_pmc_abstract",
+        ),
+    )
+
+    row, cache_hit = service._enrich_exact_citation(
+        {"paperId": "W1", "title": "Prior work"}, "10.1000/example"
+    )
+
+    assert cache_hit is False
+    assert row["abstract"] == "A substantive DOI-indexed abstract."
+    assert row["retrieval_source"] == "europe_pmc_abstract"
 
 
 class SearchFake:
@@ -182,6 +278,8 @@ def comparable_candidates(_system, user):
                 "verdict": "comparable",
                 "matched_fields": ["target_object", "mechanism"],
                 "score": 0.9,
+                "claim_alignment": 0.9,
+                "essential_claim_facets": ["same mechanism and outcome"],
                 "reason": "The abstract describes the same object and mechanism.",
             }
             for item in request["candidates"]
@@ -275,16 +373,16 @@ def test_retrieval_budget_cache_and_cutoff_are_enforced(gear_config, paper_ir):
     assert budget.contrastive_used <= budget.contrastive_max
 
 
-def test_titled_graph_seed_replaces_query_without_direct_fetch(
+def test_graph_seed_preserves_queries_and_uses_direct_fetch(
     gear_config, paper_ir
 ) -> None:
     client = GraphSeedSearchFake()
     service = service_with_model(
         gear_config.model_copy(update={"allow_external_retrieval": True}), client
     )
-    ledger = ResourceLedgerV1(
+    ledger = ResourceLedger(
         paper_id=paper_ir.paper_id,
-        caps=GraphResourceCapsV1(provider_searches=4, direct_fetches=2),
+        caps=GraphResourceCaps(provider_searches=4, direct_fetches=2),
     )
     claim = paper_ir.claims[0]
 
@@ -295,9 +393,6 @@ def test_titled_graph_seed_replaces_query_without_direct_fetch(
         target_span=paper_ir.span_map()[claim.span_id],
         paper_ir=paper_ir,
         graph_seed_work_ids=["W-seed"],
-        graph_seed_searches=[
-            ("W-seed", "Topology guided evidence controller antecedents")
-        ],
         allowed_query_roles=[
             "author_terminology",
             "object_problem",
@@ -307,25 +402,11 @@ def test_titled_graph_seed_replaces_query_without_direct_fetch(
         resource_ledger=ledger,
     )
 
-    graph_queries = [
-        query
-        for query in service.last_query_specs
-        if query.transformation.startswith("graph_claim_aligned_topology_search:")
-    ]
-    assert len(graph_queries) == 1
-    assert graph_queries[0].search_mode == "semantic"
-    assert ":W-seed:" in graph_queries[0].transformation
-    assert graph_queries[0].query_role == "purpose_semantic"
-    assert "Topology guided evidence controller antecedents" in graph_queries[0].query
-    assert any(
-        term.casefold() in graph_queries[0].query.casefold()
-        for term in service.last_frame.target_object
-    )
     assert ledger.logical_provider_searches == 4
-    assert ledger.logical_direct_fetches == 0
+    assert ledger.logical_direct_fetches == 1
     assert client.search_calls == 4
-    assert client.fetch_calls == 0
-    assert service.last_graph_seed_works == []
+    assert client.fetch_calls == 1
+    assert len(service.last_graph_seed_works) == 1
 
 
 def test_titleless_graph_seed_keeps_legacy_direct_fetch(gear_config, paper_ir) -> None:
@@ -333,9 +414,9 @@ def test_titleless_graph_seed_keeps_legacy_direct_fetch(gear_config, paper_ir) -
     service = service_with_model(
         gear_config.model_copy(update={"allow_external_retrieval": True}), client
     )
-    ledger = ResourceLedgerV1(
+    ledger = ResourceLedger(
         paper_id=paper_ir.paper_id,
-        caps=GraphResourceCapsV1(provider_searches=4, direct_fetches=2),
+        caps=GraphResourceCaps(provider_searches=4, direct_fetches=2),
     )
     claim = paper_ir.claims[0]
 
@@ -355,7 +436,7 @@ def test_titleless_graph_seed_keeps_legacy_direct_fetch(gear_config, paper_ir) -
         resource_ledger=ledger,
     )
 
-    assert ledger.logical_provider_searches == 3
+    assert ledger.logical_provider_searches == 4
     assert ledger.logical_direct_fetches == 1
     assert client.fetch_calls == 1
 
@@ -367,9 +448,9 @@ def test_resource_ledger_caps_real_provider_calls_and_remote_role_order(
     service = service_with_model(
         gear_config.model_copy(update={"allow_external_retrieval": True}), client
     )
-    ledger = ResourceLedgerV1(
+    ledger = ResourceLedger(
         paper_id=paper_ir.paper_id,
-        caps=GraphResourceCapsV1(provider_searches=2),
+        caps=GraphResourceCaps(provider_searches=2),
     )
     claim = paper_ir.claims[0]
     service.retrieve(
@@ -402,9 +483,9 @@ def test_fulltext_cap_consumes_planned_logical_slots_without_network(
     service = service_with_model(
         gear_config.model_copy(update={"allow_external_retrieval": True}), client
     )
-    ledger = ResourceLedgerV1(
+    ledger = ResourceLedger(
         paper_id=paper_ir.paper_id,
-        caps=GraphResourceCapsV1(provider_searches=2),
+        caps=GraphResourceCaps(provider_searches=2),
     )
     claim = paper_ir.claims[0]
 
@@ -478,7 +559,7 @@ def test_redundant_contrastive_query_is_coverage_gap_not_service_failure(
     claim = paper_ir.claims[0]
     span = paper_ir.span_map()[claim.span_id]
     budget = RetrievalBudget()
-    ledger = ResourceLedgerV1(paper_id=paper_ir.paper_id)
+    ledger = ResourceLedger(paper_id=paper_ir.paper_id)
 
     assert service.retrieve(
         claim,

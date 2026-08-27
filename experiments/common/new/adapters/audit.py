@@ -72,13 +72,13 @@ def _audit_fig2_evidence_v3(
     membership_sources = [
         Path(path)
         for path in bundle.source_paths
-        if Path(path).name in {"feature_sets.json", "operationalization_audit.csv"}
+        if Path(path).name in {"run_manifest.json", "recovery_manifest_v3.json"}
     ]
     _check(
         checks,
         "feature_set_membership_reads_metadata_not_outcome_results",
         {path.name for path in membership_sources}
-        == {"feature_sets.json", "operationalization_audit.csv"}
+        == {"run_manifest.json", "recovery_manifest_v3.json"}
         and "no prediction, outcome, fold or metric table is read"
         in str(bundle.chart_contract.get("feature_set_source_policy", "")).lower(),
         [str(path) for path in membership_sources],
@@ -262,19 +262,19 @@ def _audit_fig2_evidence_v3(
         == [
             {"feature_count": 7, "dimension_count": 4, "incremental_count": 7},
             {"feature_count": 16, "dimension_count": 10, "incremental_count": 9},
-            {"feature_count": 154, "dimension_count": 48, "incremental_count": 138},
-            {"feature_count": 221, "dimension_count": 55, "incremental_count": 67},
+            {"feature_count": 153, "dimension_count": 48, "incremental_count": 137},
+            {"feature_count": 219, "dimension_count": 55, "incremental_count": 66},
         ]
         and operation.groupby("set_id")["feature_count"].sum().to_dict()
-        == {"strict_7": 7, "fulltext_16": 16, "source_154": 154, "ultrarelaxed_221": 221},
+        == {"strict_7": 7, "fulltext_16": 16, "source_154": 153, "ultrarelaxed_221": 219},
         feature_sets[["set_id", "feature_count", "dimension_count", "incremental_count"]].to_dict("records"),
     )
     source_tiers = operation.loc[operation["set_id"].eq("source_154")].sort_values("tier_order")
     _check(
         checks,
-        "source154_operationalisation_range_exact",
-        source_tiers["feature_count"].astype(int).tolist() == [12, 4, 79, 59]
-        and int(source_tiers["feature_count"].sum()) == 154,
+        "source153_operationalisation_range_exact",
+        source_tiers["feature_count"].astype(int).tolist() == [12, 4, 78, 59]
+        and int(source_tiers["feature_count"].sum()) == 153,
         source_tiers[["tier", "feature_count"]].to_dict("records"),
     )
     broad_tiers = operation.loc[
@@ -282,9 +282,9 @@ def _audit_fig2_evidence_v3(
     ].sort_values("tier_order")
     _check(
         checks,
-        "broad221_operationalisation_range_exact",
-        broad_tiers["feature_count"].astype(int).tolist() == [12, 4, 90, 115]
-        and int(broad_tiers["feature_count"].sum()) == 221,
+        "broad219_operationalisation_range_exact",
+        broad_tiers["feature_count"].astype(int).tolist() == [12, 4, 88, 115]
+        and int(broad_tiers["feature_count"].sum()) == 219,
         broad_tiers[["tier", "feature_count"]].to_dict("records"),
     )
     _check(
@@ -292,9 +292,9 @@ def _audit_fig2_evidence_v3(
         "exclusive_tiers_sum_to_indicator_universe",
         mapping["tier"].value_counts().to_dict()
         == {
-            "excluded": 211,
-            "source_only": 138,
-            "broad_t0_only": 67,
+            "excluded": 213,
+            "source_only": 137,
+            "broad_t0_only": 66,
             "fulltext_only": 9,
             "strict_core": 7,
         }

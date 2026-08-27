@@ -1,13 +1,13 @@
 {
   "schema_version": "1.0.0",
-  "figure_version": "fig3-aspr-performance-landscape-v15-uncapped-v2",
+  "figure_version": "fig3-evidence-derived-tuned-7-16-153-219-v1",
   "baseline_svg_sha256": "02646f85c5190fbf9d8cde51c9ae0a364eb89808863fa2a6242410f8a7bd25d1",
   "frozen_panel_sha256": {},
-  "calibration_release": "prepublication_graph_v3:d5_fulltext16",
+  "calibration_release": "hgb_nested_tuned_7_16_153_219_20260820_b48936af",
   "model_config": "configs/nature_multihorizon/hgb_uncapped_v2.json",
   "output_dir": "outputs/fig03/new",
   "primary_horizon": 5,
-  "primary_model_id": "fulltext_16",
+  "primary_model_id": "primary",
   "model_family": "hgb",
   "horizons": [3, 5, 8],
   "mature_year_max": {
@@ -28,10 +28,10 @@
   "ridgeline_z_max": 0.90,
   "minimum_font_size_pt": 6.5,
   "model_sets": [
-    {"id": "strict_7", "label": "Strict 7"},
-    {"id": "fulltext_16", "label": "Full-text 16"},
-    {"id": "source_154", "label": "Primary 154"},
-    {"id": "ultrarelaxed_221", "label": "Broad T0 221"}
+    {"id": "strict", "label": "Strict 7"},
+    {"id": "primary", "label": "Primary 16"},
+    {"id": "expanded", "label": "Expanded 153"},
+    {"id": "broad_t0", "label": "Broad T0 219"}
   ],
   "domain_order": [
     {"id": "clinical_health", "label": "Clinical health"},
@@ -47,7 +47,7 @@
     {"id": "materials_nanoscience", "label": "Materials & nanoscience"},
     {"id": "neuroscience", "label": "Neuroscience"}
   ],
-  "domain_display_order_method": "Descending mean reliable D5 Full-text 16 annual-window Spearman; display only; frozen values unchanged",
+  "domain_display_order_method": "Descending mean reliable D5 Primary 16 annual-window Spearman; display only",
   "domain_display_order": [
     {"id": "chemistry", "label": "Chemistry"},
     {"id": "earth_climate_environment", "label": "Earth, climate & environment"},

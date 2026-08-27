@@ -164,6 +164,8 @@ def validate_session_response(
             raise ValueError("reference trace contains unknown/non-reviewer quote key")
         if not set(trace.author_response_keys).issubset(author_map):
             raise ValueError("reference trace contains unknown author-response key")
+        if not set(trace.final_paper_evidence_keys).issubset(paper_keys):
+            raise ValueError("reference trace contains unknown final-paper evidence")
         quote_rows = [reviewer_map[key] for key in trace.reviewer_quote_keys]
         if not set(trace.round_ids).issubset({row.round_id for row in quote_rows}):
             raise ValueError("trace round IDs do not follow reviewer quotes")
@@ -467,6 +469,7 @@ def _response_template(package: ReconstructionSessionPackage) -> dict[str, Any]:
                 "author_response_keys": [],
                 "round_ids": ["FILL_ROUND_ID"],
                 "reviewer_id_hashes": ["FILL_REVIEWER_ID_HASH"],
+                "final_paper_evidence_keys": ["P:S-FILL"],
                 "resolution_status": "persists",
                 "rationale": "FILL",
             }

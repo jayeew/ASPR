@@ -1,0 +1,63 @@
+{
+  "assets": {
+    "context_manifests": {
+      "file": "context_manifests.json",
+      "sha256": "sha256:7173f5be18132bc305515cde29dbe6990bc6c2166056818444677e30f0fbc2f9"
+    },
+    "reference_snapshot": {
+      "file": "reference_openalex_snapshot.json",
+      "sha256": "sha256:0e92662fcf56768a1d6da6e9f44705e16237aea0d41705e26656677cc0f2bf14"
+    },
+    "runtime_feature_table": {
+      "file": "runtime_feature_table.parquet",
+      "sha256": "sha256:251b8760e0a6a0fb0e4a15912fa40b7dfc6b211a3b3c1cfdf4e2d0832775e715"
+    },
+    "runtime_score_table": {
+      "file": "runtime_score_table.parquet",
+      "sha256": "sha256:8ba394b85ba4156849083a2d961b0cb20d37773e8555e15834aed0273d3ffdbb"
+    },
+    "target_snapshot": {
+      "file": "target_openalex_snapshot.json",
+      "sha256": "sha256:4a38f22e2be37aee21a065f1e4b0580e0dca7f28da6d5a8aaf1f07010ff22841"
+    }
+  },
+  "classification_source": "evidence_derived_primary16_runtime_v3",
+  "contract": "gear_d5_runtime_feature_release",
+  "created_at_utc": "2026-08-27T07:48:20+00:00",
+  "feature_names": [
+    "EF0017",
+    "EF0038",
+    "EF0052",
+    "EF0083",
+    "EF0186",
+    "EF0188",
+    "EF0197",
+    "EF0238",
+    "EF0240",
+    "EF0307",
+    "EF0309",
+    "EF0312",
+    "EF0314",
+    "EF0315",
+    "EF0318",
+    "EF0319"
+  ],
+  "feature_protocol_version": "evidence-derived-primary16-d5-tuned-1",
+  "feature_time_basis": "review_cutoff_primary16_t0",
+  "frozen_context_max_year": 2022,
+  "future_citation_counts_used": false,
+  "historical_context_limited_for": [
+    "https://openalex.org/W4401806625",
+    "https://openalex.org/W4404334796",
+    "https://openalex.org/W4410080721",
+    "https://openalex.org/W4413257773",
+    "https://openalex.org/W4415618618"
+  ],
+  "model_refit": false,
+  "network_used_for_target_freeze": true,
+  "post_context_target_policy": "recompute_primary16_then_frozen_hgb",
+  "release_id": "gear-d5-primary16-948a4f87086c",
+  "source_max_year": 2022,
+  "target_count": 10,
+  "target_features_recomputed": true
+}

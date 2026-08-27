@@ -19,14 +19,15 @@ from experiments.gear.review_reconstruction.contracts import (
     ReconstructionSessionPackage,
     ReconstructionSessionResponse,
 )
-from experiments.gear.review_reconstruction.sessions import validate_session_response
+from experiments.gear.review_reconstruction.sessions import (
+    GENERIC_APPROVAL_RE,
+    validate_session_response,
+)
 from gear.config import GearConfig, load_config
 from gear.model_client import ModelClientUnavailableError, build_json_model_client
 from gear.trace import sha256_value
 
-DEFAULT_ROOT = Path(
-    "outputs/gear/reconstruction/nature_dev100"
-)
+DEFAULT_ROOT = Path("outputs/gear/reconstruction/nature_dev100")
 
 
 def _strict_schema(
@@ -78,6 +79,7 @@ def _constrain_schema_to_package(
     enum_items("ReviewPoint", "evidence_keys", paper_keys)
     enum_items("ReferenceTrace", "reviewer_quote_keys", reviewer_keys)
     enum_items("ReferenceTrace", "author_response_keys", author_keys)
+    enum_items("ReferenceTrace", "final_paper_evidence_keys", paper_keys)
     enum_items("ReferenceTrace", "reviewer_id_hashes", reviewer_ids)
     enum_items("ReferenceTrace", "round_ids", round_ids)
     enum_items("RevisionLedgerEntry", "reviewer_quote_keys", reviewer_keys)
@@ -146,9 +148,7 @@ def _normalize_response(
     package = json.loads(package_path.read_text(encoding="utf-8"))
     reviewer_map = {row["source_key"]: row for row in package["reviewer_spans"]}
     author_keys = {row["source_key"] for row in package["author_response_spans"]}
-    paper_keys = {
-        row["evidence_key"] for row in package["paper_context"]["spans"]
-    }
+    paper_keys = {row["evidence_key"] for row in package["paper_context"]["spans"]}
 
     def resolve_keys(values: list[str], allowed: set[str]) -> list[str]:
         resolved: list[str] = []
@@ -179,6 +179,34 @@ def _normalize_response(
             "unverifiable",
         }:
             trace["resolution_status"] = "persists"
+    rejected_point_ids = {
+        str(trace["point_id"])
+        for trace in payload["reference_traces"]
+        if trace.get("point_id")
+        and trace["reviewer_quote_keys"]
+        and all(
+            GENERIC_APPROVAL_RE.search(reviewer_map[key]["text"])
+            for key in trace["reviewer_quote_keys"]
+        )
+    }
+    payload["reference_traces"] = [
+        trace
+        for trace in payload["reference_traces"]
+        if str(trace.get("point_id")) not in rejected_point_ids
+    ]
+    review = payload["review"]
+    for section in ("strengths", "weaknesses", "questions"):
+        review[section] = [
+            point
+            for point in review[section]
+            if str(point.get("point_id")) not in rejected_point_ids
+        ]
+    for section in ("supporting_points", "limiting_points", "uncertain_points"):
+        review["novelty"][section] = [
+            point
+            for point in review["novelty"][section]
+            if str(point.get("point_id")) not in rejected_point_ids
+        ]
     summary = payload["review"]["summary"]
     summary["evidence_keys"] = resolve_keys(summary["evidence_keys"], paper_keys)
     for point in payload["review"]["strengths"]:
@@ -190,15 +218,21 @@ def _normalize_response(
     novelty["judgment"] = (
         "mixed"
         if novelty["supporting_points"] and novelty["limiting_points"]
-        else "positive"
-        if novelty["supporting_points"]
-        else "negative"
-        if novelty["limiting_points"]
-        else "not_discussed"
+        else (
+            "positive"
+            if novelty["supporting_points"]
+            else "negative" if novelty["limiting_points"] else "not_discussed"
+        )
     )
-    for point in [*novelty["supporting_points"], *novelty["limiting_points"]]:
+    for point in [
+        *novelty["supporting_points"],
+        *novelty["limiting_points"],
+        *novelty["uncertain_points"],
+    ]:
         point["evidence_keys"] = resolve_keys(point["evidence_keys"], paper_keys)
         point["external_verification_required"] = True
+        if point.get("aspect") not in {"contribution", "novelty_prior_art"}:
+            point["aspect"] = "novelty_prior_art"
     for entry in payload["revision_ledger"]:
         entry["reviewer_quote_keys"] = resolve_keys(
             entry["reviewer_quote_keys"], set(reviewer_map)
@@ -252,7 +286,8 @@ def _run_one(
             response = ReconstructionSessionResponse.model_validate(payload)
             validate_session_response(package, response)
             (session_dir / "response.json").write_text(
-                json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+                json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True)
+                + "\n",
                 encoding="utf-8",
             )
             log_path.write_text(
@@ -269,7 +304,13 @@ def _run_one(
                 "novelty": response.review.novelty.judgment.value,
                 "ledger_count": len(response.revision_ledger),
             }
-        except (KeyError, OSError, TypeError, ValueError, ModelClientUnavailableError) as exc:
+        except (
+            KeyError,
+            OSError,
+            TypeError,
+            ValueError,
+            ModelClientUnavailableError,
+        ) as exc:
             last_error = f"{type(exc).__name__}: {exc}"
             with log_path.open("a", encoding="utf-8") as handle:
                 handle.write(f"\n[parent-validation-error]\n{last_error}\n")
@@ -322,9 +363,11 @@ def main() -> int:
     status = {
         "model_backend": config.model_backend,
         "model_id": build_json_model_client(config).model_name,
-        "reasoning_effort": config.codex_cli.reasoning_effort
-        if config.model_backend == "codex_cli"
-        else None,
+        "reasoning_effort": (
+            config.codex_cli.reasoning_effort
+            if config.model_backend == "codex_cli"
+            else None
+        ),
         "kind": "reconstruction",
         "session_count": len(sessions),
         "completed": sum(row["status"] == "completed" for row in results),

@@ -46,20 +46,6 @@ class ASPRQwenConfig(StrictModel):
     required: bool = False
 
 
-class AssetPaths(StrictModel):
-    official_run_manifest: Path
-    official_model_json: Path
-    official_model_joblib: Path
-    official_score_table: Path
-    feature_matrix_16: Path
-    matrix_manifest: Path
-    matrix_input_snapshot: Path
-    paper_metadata: Path
-    oof_metrics: Path
-    oof_fold_metrics: Path
-    oof_domain_metrics: Path
-
-
 class RetrievalLimits(StrictModel):
     normal_max: int = Field(default=4, ge=0)
     contrastive_max: int = Field(default=1, ge=0)
@@ -93,26 +79,15 @@ class RetrievalLimits(StrictModel):
 
 
 class GraphGuidanceConfig(StrictModel):
-    policy_version: str = "score_profile_topology_v22_claim_aligned"
+    policy_version: str = "claim_linked_citation_rank1_v3"
     shadow: bool = False
-    profile_enabled: bool = True
+    score_routing_enabled: bool = False
     topology_enabled: bool = True
     provider_searches: int = Field(default=8, ge=0)
     direct_fetches: int = Field(default=8, ge=0)
     neighbor_expansions: int = Field(default=2, ge=0)
     fulltext_candidates: int = Field(default=12, ge=0)
     relation_classifications: int = Field(default=12, ge=0)
-    mission_feature_allowlist: list[str] = Field(
-        default_factory=lambda: [
-            "EF0017",
-            "EF0052",
-            "EF0240",
-            "EF0309",
-            "EF0312",
-            "EF0315",
-            "EF0318",
-        ]
-    )
 
 
 class GearConfig(StrictModel):
@@ -120,11 +95,9 @@ class GearConfig(StrictModel):
     evidence_policy: str
     current_fig1_3_only: bool = True
     deprecated_fig4_to_fig10_used: bool = False
-    calibration_registry: Path
-    calibration_release: str
+    forecast_release_manifest: Path
+    forecast_runtime_manifest: Path | None = None
     graph_results_path: Path | None = None
-    runtime_replay_manifest: Path
-    runtime_replay_manifest_sha256: str
     allowed_asset_roots: list[Path]
     denied_path_fragments: list[str]
     model_backend: Literal["codex_cli", "openai_compatible"] = "codex_cli"
@@ -138,8 +111,6 @@ class GearConfig(StrictModel):
     output_root: Path
     minimum_pdf_characters: int = 1500
     minimum_nonempty_page_ratio: float = 0.5
-    profile_low_quantile: float = 0.1
-    profile_high_quantile: float = 0.9
     max_claims: int = 12
 
     @model_validator(mode="after")
@@ -166,27 +137,17 @@ class GearConfig(StrictModel):
         path = Path(value)
         return path if path.is_absolute() else (PROJECT_ROOT / path).resolve()
 
-    def resolved_assets(self) -> AssetPaths:
-        from .calibration_assets import load_calibration_release
-
-        release = load_calibration_release(
-            self.calibration_release,
-            registry_path=self.resolve_path(self.calibration_registry),
-        )
-        return AssetPaths.model_validate(release.core_paths())
-
-    def resolved_calibration_release(self) -> Any:
-        """Return the public release object for experiments needing extra assets."""
-        from .calibration_assets import load_calibration_release
-
-        return load_calibration_release(
-            self.calibration_release,
-            registry_path=self.resolve_path(self.calibration_registry),
+    def resolved_forecast_release_manifest(self) -> Path:
+        return self.validate_asset_path(
+            self.resolve_path(self.forecast_release_manifest)
         )
 
-    def resolved_runtime_replay_manifest(self) -> Path:
-        """Resolve the separately frozen online-materialization replay gate."""
-        return self.validate_asset_path(self.resolve_path(self.runtime_replay_manifest))
+    def resolved_forecast_runtime_manifest(self) -> Path | None:
+        if self.forecast_runtime_manifest is None:
+            return None
+        return self.validate_asset_path(
+            self.resolve_path(self.forecast_runtime_manifest)
+        )
 
     def validate_asset_path(self, value: Path) -> Path:
         path = self.resolve_path(value)
@@ -283,15 +244,12 @@ def load_config(
     for field_name, environment_name in (
         ("cache_dir", "ASPR_GEAR_CACHE_DIR"),
         ("output_root", "ASPR_GEAR_OUTPUT_ROOT"),
-        ("calibration_registry", "ASPR_GEAR_CALIBRATION_REGISTRY"),
-        ("runtime_replay_manifest", "ASPR_GEAR_RUNTIME_REPLAY_MANIFEST"),
+        ("forecast_release_manifest", "ASPR_GEAR_FORECAST_RELEASE_MANIFEST"),
+        ("forecast_runtime_manifest", "ASPR_GEAR_FORECAST_RUNTIME_MANIFEST"),
     ):
         value = getenv_runtime(environment_name)
         if value:
             payload[field_name] = value
-    calibration_release = getenv_runtime("ASPR_GEAR_CALIBRATION_RELEASE")
-    if calibration_release:
-        payload["calibration_release"] = calibration_release
     graph_results_path = getenv_runtime("ASPR_GEAR_GRAPH_RESULTS_PATH")
     if graph_results_path:
         payload["graph_results_path"] = graph_results_path
@@ -346,12 +304,13 @@ def load_config(
     if config.deprecated_fig4_to_fig10_used:
         raise ValueError("deprecated Fig.4-Fig.10 evidence cannot be enabled")
     if validate_assets:
-        for asset in config.resolved_assets().model_dump().values():
-            checked = config.validate_asset_path(Path(asset))
-            if not checked.is_file():
-                raise FileNotFoundError(
-                    f"required calibration asset is missing: {checked}"
-                )
+        from .diffusion_forecast import ForecastRelease, RuntimeFeatureRelease
+
+        release = ForecastRelease(config.resolved_forecast_release_manifest())
+        release.verify()
+        runtime_manifest = config.resolved_forecast_runtime_manifest()
+        if runtime_manifest is not None:
+            RuntimeFeatureRelease(runtime_manifest).verify(release)
     return config
 
 

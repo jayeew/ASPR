@@ -17,6 +17,7 @@ from gear.trace import sha256_value
 
 from .client import CachedEvaluatorClient
 from .contracts import (
+    BlindReviewPreferenceV1,
     EvaluationContextPack,
     PointSupportResponseV1,
     RevisionIssueLabel,
@@ -96,6 +97,40 @@ def score_review_quality(
             raise ValueError("false-claim risk score must be non-positive")
         if row.title != RUBRIC_TITLES[-1] and row.score < 0:
             raise ValueError("positive rubric score must be non-negative")
+    return result
+
+
+def judge_blind_review_preference(
+    client: CachedEvaluatorClient,
+    context: EvaluationContextPack,
+    review_a: StructuredReview,
+    review_b: StructuredReview,
+) -> BlindReviewPreferenceV1:
+    """Choose the more useful evidence-grounded review without variant names."""
+
+    user = json.dumps(
+        {
+            "task": "Choose the more useful scientific review, or TIE.",
+            "rules": [
+                "Prefer specific, correct, evidence-grounded and actionable critique.",
+                "Penalize unsupported claims and irrelevant prior-work comparisons.",
+                "Do not infer which system produced either review.",
+            ],
+            "paper_id": context.paper_id,
+            "manuscript_context": context.model_dump(mode="json"),
+            "review_A": review_a.model_dump(mode="json"),
+            "review_B": review_b.model_dump(mode="json"),
+        },
+        ensure_ascii=False,
+        sort_keys=True,
+    )
+    result = client.generate_model(
+        system=JUDGE_SYSTEM,
+        user=user,
+        response_model=BlindReviewPreferenceV1,
+    )
+    if result.paper_id != context.paper_id:
+        raise ValueError("preference judge paper_id mismatch")
     return result
 
 
@@ -223,13 +258,12 @@ def judge_revision_issues(
         )
         for issue_id, point_id in sorted(expected - observed)
     )
-    return result.model_copy(
-        update={"paper_id": paper_id, "decisions": decisions}
-    )
+    return result.model_copy(update={"paper_id": paper_id, "decisions": decisions})
 
 
 __all__ = [
     "fixed_rubric",
+    "judge_blind_review_preference",
     "judge_point_support",
     "judge_revision_issues",
     "judge_semantic_matches",

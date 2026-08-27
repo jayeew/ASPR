@@ -5,24 +5,24 @@ from __future__ import annotations
 import hashlib
 import re
 from collections.abc import Mapping, Sequence
-from typing import Literal
+from typing import Literal, TypeVar
 
 from .contracts import ScientificSearchFrame
 from .graph_prior_contracts import (
-    GraphClaimGuidanceV1,
-    GraphGuidancePlanV1,
-    GraphMissionV1,
-    GraphResourceCapsV1,
-    GraphRuntimePacketV1,
-    GraphTopologySeedV1,
+    ClaimGuidance,
+    GraphResourceCaps,
+    GraphRuntimePacket,
+    InfluenceForecast,
+    RetrievalGuidancePlan,
+    RetrievalMission,
+    TopologySeed,
 )
-from .review_contracts import CanonicalReviewPoint, ReviewAspect, ReviewStateV3
+from .review_contracts import CanonicalReviewPoint, ReviewAspect, ReviewState
 
-STRUCTURAL_DIVERSITY = {"EF0017", "EF0309", "EF0312", "EF0315", "EF0318"}
-HISTORICAL_DEPTH = "EF0052"
-TERMINOLOGY_EMERGENCE = "EF0240"
-GRAPH_GUIDANCE_POLICY_VERSION = "score_profile_topology_v22_claim_aligned"
+GRAPH_GUIDANCE_POLICY_VERSION = "claim_linked_citation_rank1_v3"
 MAX_TOPOLOGY_GUIDED_CLAIMS = 2
+MIN_ROUTING_FEATURE_COVERAGE = 0.8
+MIN_ROUTING_CENTER_DISTANCE = 0.1
 GENERIC_SCIENTIFIC_TOKENS = {
     "analysis",
     "approach",
@@ -59,30 +59,94 @@ ABSOLUTE_PRIORITY_RE = re.compile(
 MissionType = Literal[
     "local_nearest_antecedent",
     "remote_mechanism_analogue",
-    "terminology_free_counterfactual",
-    "reference_structure_diversity",
-    "historical_lineage",
-    "recent_direct_predecessor",
-    "terminology_lineage",
     "topology_seed",
-    "remote_rescue",
 ]
-MissionOrigin = Literal["score", "profile", "topology", "rescue"]
-MissionOrientation = Literal["falsification", "rescue", "neutral"]
+MissionOrigin = Literal["score", "topology"]
+MissionOrientation = Literal["neutral"]
 Traversal = Literal["none", "references", "citations"]
+CandidateT = TypeVar("CandidateT")
+
+
+def routing_weights(
+    forecast: InfluenceForecast | None,
+    *,
+    use_score: bool,
+) -> tuple[float, float, float]:
+    """Return frozen equal-budget routing weights.
+
+    Coverage shrinks the forecast toward the neutral midpoint.  An unavailable
+    forecast and the neutral arm are identical by construction.
+    """
+
+    if (
+        not use_score
+        or forecast is None
+        or forecast.status != "available"
+        or forecast.prospective_5y_diffusion_percentile is None
+    ):
+        q_effective = 0.5
+    else:
+        q = forecast.prospective_5y_diffusion_percentile / 100.0
+        q_effective = 0.5 + forecast.feature_coverage * (q - 0.5)
+        if (
+            forecast.feature_coverage < MIN_ROUTING_FEATURE_COVERAGE
+            or abs(q_effective - 0.5) < MIN_ROUTING_CENTER_DISTANCE
+        ):
+            q_effective = 0.5
+    remote_weight = 0.25 + 0.5 * q_effective
+    return 1.0 - remote_weight, remote_weight, q_effective
+
+
+def weighted_interleave(
+    local: Sequence[CandidateT],
+    remote: Sequence[CandidateT],
+    *,
+    local_weight: float,
+    remote_weight: float,
+    limit: int,
+) -> list[CandidateT]:
+    """Deterministically reorder two already-ranked pools without changing them."""
+
+    if limit < 0 or local_weight < 0.0 or remote_weight < 0.0:
+        raise ValueError("interleaving limit and weights must be non-negative")
+    if local_weight + remote_weight <= 0.0:
+        raise ValueError("at least one interleaving weight must be positive")
+    output: list[CandidateT] = []
+    local_index = 0
+    remote_index = 0
+    local_credit = 0.0
+    remote_credit = 0.0
+    while len(output) < limit and (
+        local_index < len(local) or remote_index < len(remote)
+    ):
+        local_credit += local_weight
+        remote_credit += remote_weight
+        choose_remote = remote_credit > local_credit
+        if local_index >= len(local):
+            choose_remote = True
+        elif remote_index >= len(remote):
+            choose_remote = False
+        if choose_remote:
+            output.append(remote[remote_index])
+            remote_index += 1
+            remote_credit -= 1.0
+        else:
+            output.append(local[local_index])
+            local_index += 1
+            local_credit -= 1.0
+    return output
 
 
 def score_controller(
-    packet: GraphRuntimePacketV1, query_slots: int = 8
+    packet: GraphRuntimePacket,
+    query_slots: int = 8,
+    *,
+    enabled: bool = False,
 ) -> tuple[int, int, float]:
-    """Map ASPR continuously to local/remote geometry without a novelty axis."""
-    reliability = 1.0 - len(set(packet.missing_feature_ids)) / 16.0
-    reliability = min(1.0, max(0.0, reliability))
-    q = packet.score_0_100 / 100.0
-    q_effective = 0.5 + reliability * (q - 0.5)
-    remote = round(query_slots * (0.25 + 0.50 * q_effective))
-    remote = min(query_slots - 1, max(1, remote))
-    return query_slots - remote, remote, q_effective
+    """Return matched local/remote geometry; forecast routing is opt-in only."""
+    _, _, q_effective = routing_weights(packet.forecast, use_score=enabled)
+    local = query_slots // 2
+    return local, query_slots - local, q_effective
 
 
 def is_graph_guidance_target(point: CanonicalReviewPoint) -> bool:
@@ -106,20 +170,20 @@ class GraphGuidancePlanner:
     def __init__(
         self,
         *,
-        resource_caps: GraphResourceCapsV1 | None = None,
+        resource_caps: GraphResourceCaps | None = None,
         policy_version: str = GRAPH_GUIDANCE_POLICY_VERSION,
     ) -> None:
-        self.resource_caps = resource_caps or GraphResourceCapsV1()
+        self.resource_caps = resource_caps or GraphResourceCaps()
         self.policy_version = policy_version
 
     def plan(
         self,
-        state: ReviewStateV3,
+        state: ReviewState,
         *,
         search_frames: Mapping[str, ScientificSearchFrame] | None = None,
-        enable_profile: bool = True,
+        enable_score_routing: bool = False,
         enable_topology: bool = True,
-    ) -> GraphGuidancePlanV1:
+    ) -> RetrievalGuidancePlan:
         packet = state.graph_result
         if packet is None:
             raise ValueError("Graph guidance requires a runtime packet")
@@ -140,16 +204,15 @@ class GraphGuidancePlanner:
             self.resource_caps.provider_searches,
             max(3, 3 * len(points)),
         )
-        local, remote, q_effective = score_controller(packet, executable_slots)
+        local, remote, q_effective = score_controller(
+            packet,
+            executable_slots,
+            enabled=enable_score_routing,
+        )
         weights = [_guidance_weight(point) for point in points]
         local_alloc, remote_alloc = _allocate_geometry(local, remote, weights)
         frames = search_frames or {}
         seed_usage: dict[str, int] = {}
-        profile_count = len(_profile_missions(packet, "PROFILE-PROBE"))
-        profile_assignment_count = min(
-            profile_count,
-            (1 if len(points) == 1 else max(0, len(points) - 1)),
-        )
         guidance = []
         topology_claims_used = 0
         for index, point in enumerate(points):
@@ -160,22 +223,20 @@ class GraphGuidancePlanner:
                 local_alloc[index],
                 remote_alloc[index],
                 q_effective,
-                enable_profile,
                 enable_topology and topology_claims_used < MAX_TOPOLOGY_GUIDED_CLAIMS,
                 seed_usage,
-                profile_mission_index=(
-                    index if index < profile_assignment_count else None
-                ),
             )
             if any(mission.origin == "topology" for mission in claim_guidance.missions):
                 topology_claims_used += 1
             guidance.append(claim_guidance)
-        return GraphGuidancePlanV1(
+        return RetrievalGuidancePlan(
             paper_id=state.paper_id,
             policy_version=self.policy_version,
             source_packet_evidence_key=state.graph_result_evidence_key or "G:RESULT",
             controller_state={
                 "score_0_100": packet.score_0_100,
+                "score_semantics": "prospective_5y_diffusion_percentile",
+                "score_routing_active": enable_score_routing,
                 "feature_reliability": packet.feature_coverage,
                 "q_effective": q_effective,
                 "executable_query_slots": executable_slots,
@@ -190,16 +251,14 @@ class GraphGuidancePlanner:
     def _claim_guidance(
         self,
         point: CanonicalReviewPoint,
-        packet: GraphRuntimePacketV1,
+        packet: GraphRuntimePacket,
         frame: ScientificSearchFrame | None,
         local_slots: int,
         remote_slots: int,
         q_effective: float,
-        enable_profile: bool,
         enable_topology: bool,
         seed_usage: dict[str, int],
-        profile_mission_index: int | None,
-    ) -> GraphClaimGuidanceV1:
+    ) -> ClaimGuidance:
         claim_id = point.novelty_claim_id or point.point_id
         missions = _score_missions(
             claim_id,
@@ -208,10 +267,6 @@ class GraphGuidancePlanner:
             q_effective=q_effective,
             section=point.section,
         )
-        if enable_profile and profile_mission_index is not None:
-            profile_missions = _profile_missions(packet, claim_id)
-            if profile_mission_index < len(profile_missions):
-                missions.append(profile_missions[profile_mission_index])
         assigned, relevance = (
             _assign_seeds(packet.topology_seeds, point, frame, seed_usage)
             if enable_topology and is_prior_art_direction_claim(point)
@@ -219,6 +274,14 @@ class GraphGuidancePlanner:
         )
         for seed in assigned:
             seed_usage[seed.work_id] = seed_usage.get(seed.work_id, 0) + 1
+        claim_citations_available = bool(frame and frame.citation_seed_ids)
+        if (
+            enable_topology
+            and claim_citations_available
+            and is_prior_art_direction_claim(point)
+        ):
+            missions.append(_citation_topology_mission(claim_id))
+            relevance = max(relevance, 1.0)
         if assigned:
             missions.extend(
                 _topology_missions(
@@ -228,7 +291,7 @@ class GraphGuidancePlanner:
                     q_effective=q_effective,
                 )
             )
-        return GraphClaimGuidanceV1(
+        return ClaimGuidance(
             review_point_id=point.point_id,
             claim_id=claim_id,
             claim_relevance=relevance,
@@ -245,31 +308,26 @@ def _score_missions(
     *,
     q_effective: float,
     section: str,
-) -> list[GraphMissionV1]:
-    local_mission: GraphMissionV1 | None = None
-    remote_mission: GraphMissionV1 | None = None
+) -> list[RetrievalMission]:
+    local_mission: RetrievalMission | None = None
+    remote_mission: RetrievalMission | None = None
     if local:
         local_mission = _mission(
             claim_id,
             "local_nearest_antecedent",
             "score",
-            "falsification",
+            "neutral",
             ["author_terminology", "object_problem"],
             "none",
             "local_slots_exhausted_or_direct_antecedent",
         )
     if remote:
-        rescue = q_effective >= 0.5 and section == "novelty_support"
         remote_mission = _mission(
             claim_id,
-            "remote_rescue" if rescue else "remote_mechanism_analogue",
-            "rescue" if rescue else "score",
-            "rescue" if rescue else "neutral",
-            (
-                ["purpose_semantic", "mechanism_outcome"]
-                if rescue
-                else ["mechanism_outcome", "purpose_semantic"]
-            ),
+            "remote_mechanism_analogue",
+            "score",
+            "neutral",
+            ["mechanism_outcome", "purpose_semantic"],
             "none",
             "remote_slots_exhausted_or_comparable_relation",
         )
@@ -285,87 +343,17 @@ def _score_missions(
     return [mission for mission in ordered if mission is not None]
 
 
-def _profile_missions(
-    packet: GraphRuntimePacketV1, claim_id: str
-) -> list[GraphMissionV1]:
-    bands = packet.historical_bands
-    missions: list[GraphMissionV1] = []
-    diversity_bands = {bands.get(name, "").casefold() for name in STRUCTURAL_DIVERSITY}
-    if diversity_bands & {"high", "upper", "above", "high_band", "high_extreme"}:
-        missions.append(
-            _mission(
-                claim_id,
-                "reference_structure_diversity",
-                "profile",
-                "falsification",
-                ["mechanism_outcome"],
-                "none",
-                "one_comparable_relation",
-            )
-        )
-    elif diversity_bands & {"low", "lower", "below", "low_band", "low_extreme"}:
-        missions.append(
-            _mission(
-                claim_id,
-                "reference_structure_diversity",
-                "profile",
-                "neutral",
-                ["object_problem"],
-                "none",
-                "one_local_predecessor",
-            )
-        )
-    depth = bands.get(HISTORICAL_DEPTH, "").casefold()
-    if depth in {"high", "upper", "above", "high_band", "high_extreme"}:
-        missions.append(
-            _mission(
-                claim_id,
-                "historical_lineage",
-                "profile",
-                "neutral",
-                ["author_citation"],
-                "references",
-                "one_historical_lineage",
-            )
-        )
-    elif depth in {"low", "lower", "below", "low_band", "low_extreme"}:
-        missions.append(
-            _mission(
-                claim_id,
-                "recent_direct_predecessor",
-                "profile",
-                "falsification",
-                ["object_problem"],
-                "none",
-                "one_recent_predecessor",
-            )
-        )
-    emergence = bands.get(TERMINOLOGY_EMERGENCE, "").casefold()
-    if emergence in {"high", "upper", "above", "high_band", "high_extreme"}:
-        missions.append(
-            _mission(
-                claim_id,
-                "terminology_lineage",
-                "profile",
-                "neutral",
-                ["author_terminology"],
-                "references",
-                "one_terminology_lineage",
-            )
-        )
-    return missions
-
-
 def _assign_seeds(
-    seeds: Sequence[GraphTopologySeedV1],
+    seeds: Sequence[TopologySeed],
     point: CanonicalReviewPoint,
     frame: ScientificSearchFrame | None,
     seed_usage: Mapping[str, int],
-) -> tuple[list[GraphTopologySeedV1], float]:
+) -> tuple[list[TopologySeed], float]:
     groups = _frame_groups(frame)
     point_tokens = _tokens(point.proposition)
     scientific_tokens = set().union(*groups) if groups else point_tokens
-    ranked: list[tuple[float, int, str, GraphTopologySeedV1]] = []
+    claim_citation_ids = set(frame.citation_seed_ids) if frame is not None else set()
+    ranked: list[tuple[float, int, str, TopologySeed]] = []
     for seed in seeds:
         if seed_usage.get(seed.work_id, 0) >= 1:
             continue
@@ -374,12 +362,23 @@ def _assign_seeds(
         overlap = len(distinctive_overlap)
         matched_groups = sum(len(seed_tokens & group) >= 1 for group in groups if group)
         group_ratio = matched_groups / len(groups) if groups else 0.0
-        relevance = min(1.0, 0.75 * min(1.0, overlap / 4.0) + 0.25 * group_ratio)
-        # One generic scientific word was enough to saturate the old score and
-        # routed unrelated graph anchors into every claim.  Direct fetches now
-        # require two claim-specific lexical anchors; semantic provider queries
-        # remain the fallback for terminology mismatch.
-        if overlap >= 2:
+        citation_overlap = len(claim_citation_ids & set(seed.shared_reference_ids))
+        citation_anchor = min(1.0, citation_overlap / 2.0)
+        relevance = min(
+            1.0,
+            0.55 * min(1.0, overlap / 4.0)
+            + 0.25 * group_ratio
+            + 0.20 * citation_anchor,
+        )
+        # Topology is only an entrance.  A seed must align with at least two
+        # independent claim-frame groups and three distinctive title tokens
+        # before it is allowed to consume even a direct-fetch opportunity.
+        claim_linked = (
+            citation_overlap >= 1 and overlap >= 2 and matched_groups >= 1
+            if claim_citation_ids
+            else overlap >= 3 and matched_groups >= 2
+        )
+        if claim_linked and seed.shared_reference_count >= 2:
             ranked.append((relevance, seed.shared_reference_count, seed.work_id, seed))
     ranked.sort(key=lambda item: (-item[0], -item[1], item[2]))
     selected = [item[3] for item in ranked[:1]]
@@ -388,26 +387,19 @@ def _assign_seeds(
 
 def _topology_missions(
     claim_id: str,
-    seeds: Sequence[GraphTopologySeedV1],
+    seeds: Sequence[TopologySeed],
     *,
     section: str,
     q_effective: float,
-) -> list[GraphMissionV1]:
+) -> list[RetrievalMission]:
     if not seeds:
         return []
-    # Falsification follows an anchor's antecedent chain; only a supporting
-    # claim with sufficiently high prospective diffusion follows forward
-    # citations for rescue.  Score changes search geometry, never polarity.
     # A title-directed provider search explores the seed's local literature
     # neighborhood inside the same logical request.  The dev10 audit found no
     # verified-relation yield from an additional one-hop traversal, so the
     # default policy spends that matched slot on claim-level search breadth.
     traversal: Traversal = "none"
     orientation: MissionOrientation = "neutral"
-    if section == "novelty_support" and q_effective >= 0.5:
-        orientation = "rescue"
-    elif section == "novelty_limit":
-        orientation = "falsification"
     mission = _mission(
         claim_id,
         "topology_seed",
@@ -422,6 +414,20 @@ def _topology_missions(
     ]
 
 
+def _citation_topology_mission(claim_id: str) -> RetrievalMission:
+    """Use exact manuscript citations as the first claim-verification entrance."""
+
+    return _mission(
+        claim_id,
+        "topology_seed",
+        "topology",
+        "neutral",
+        ["author_citation"],
+        "none",
+        "one_semantically_admitted_claim_citation_or_citation_pool_exhausted",
+    )
+
+
 def _mission(
     claim_id: str,
     mission_type: MissionType,
@@ -430,10 +436,10 @@ def _mission(
     query_roles: list[str],
     traversal: Traversal,
     stop_rule: str,
-) -> GraphMissionV1:
+) -> RetrievalMission:
     identity = f"{claim_id}|{mission_type}|{origin}|{','.join(query_roles)}|{traversal}"
     mission_id = "GM-" + hashlib.sha256(identity.encode("utf-8")).hexdigest()[:18]
-    return GraphMissionV1(
+    return RetrievalMission(
         mission_id=mission_id,
         mission_type=mission_type,
         origin=origin,
@@ -441,21 +447,13 @@ def _mission(
         orientation=orientation,
         query_roles=query_roles,
         traversal=traversal,
-        expected_relation_types=(
-            ["EXTENSION", "PARALLEL", "SUPPORT"]
-            if orientation == "rescue"
-            else (
-                ["DIRECT_ANTECEDENT", "PARTIAL_ANTECEDENT", "BUILDING_BLOCK"]
-                if orientation == "falsification"
-                else [
-                    "DIRECT_ANTECEDENT",
-                    "PARTIAL_ANTECEDENT",
-                    "EXTENSION",
-                    "PARALLEL",
-                    "SUPPORT",
-                ]
-            )
-        ),
+        expected_relation_types=[
+            "DIRECT_ANTECEDENT",
+            "PARTIAL_ANTECEDENT",
+            "EXTENSION",
+            "PARALLEL",
+            "SUPPORT",
+        ],
         stop_rule=stop_rule,
     )
 
@@ -586,7 +584,9 @@ def _tokens(value: str) -> set[str]:
     }
 
 
-def _deduplicate_missions(missions: Sequence[GraphMissionV1]) -> list[GraphMissionV1]:
+def _deduplicate_missions(
+    missions: Sequence[RetrievalMission],
+) -> list[RetrievalMission]:
     return list({mission.mission_id: mission for mission in missions}.values())
 
 

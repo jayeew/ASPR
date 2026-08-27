@@ -18,7 +18,6 @@ from .review_contracts import (
     ReviewPhase,
     ReviewSource,
     ReviewState,
-    ReviewStateV3,
     StructuredReview,
     VerificationIssue,
     VerificationReport,
@@ -95,7 +94,7 @@ class ReviewVerifier:
     def verify_state(
         self,
         review: StructuredReview,
-        state: ReviewStateV3,
+        state: ReviewState,
         paper_ir: PaperIR,
         evidence_store: EvidenceStore,
     ) -> VerificationReport:
@@ -144,7 +143,7 @@ class ReviewVerifier:
     def _deterministic_v2_issues(
         self,
         review: StructuredReview,
-        state: ReviewStateV3,
+        state: ReviewState,
         paper_ir: PaperIR,
         evidence_store: EvidenceStore,
     ) -> list[VerificationIssue]:
@@ -277,7 +276,7 @@ class ReviewVerifier:
         return issues
 
     def _correction_issues(
-        self, state: ReviewStateV3, evidence_store: EvidenceStore
+        self, state: ReviewState, evidence_store: EvidenceStore
     ) -> list[VerificationIssue]:
         issues: list[VerificationIssue] = []
         corrected_points: set[str] = set()
@@ -359,7 +358,7 @@ class ReviewVerifier:
 
     def _branch_independence_issues(
         self,
-        state: ReviewStateV3,
+        state: ReviewState,
         evidence_store: EvidenceStore,
     ) -> list[VerificationIssue]:
         issues: list[VerificationIssue] = []
@@ -418,7 +417,7 @@ class ReviewVerifier:
 
     def _relation_issues(
         self,
-        state: ReviewStateV3,
+        state: ReviewState,
         evidence_store: EvidenceStore,
         paper_ir: PaperIR,
     ) -> list[VerificationIssue]:
@@ -470,7 +469,7 @@ class ReviewVerifier:
 
     @staticmethod
     def reject_failed_points(
-        state: ReviewStateV3,
+        state: ReviewState,
         report: VerificationReport,
     ) -> int:
         """Apply the only allowed repair: delete points named by verifier issues."""

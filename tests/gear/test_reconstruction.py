@@ -67,6 +67,7 @@ def _response(package):
         paper_id=package.paper_id,
         point_id=point.point_id,
         reviewer_quote_keys=[quote.source_key],
+        final_paper_evidence_keys=[evidence],
         round_ids=[quote.round_id],
         reviewer_id_hashes=[quote.reviewer_id_hash],
         resolution_status=ResolutionStatus.PERSISTS,

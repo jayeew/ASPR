@@ -76,8 +76,16 @@ def _audit_score(
     checks: list[dict[str, Any]],
 ) -> None:
     row = score.iloc[0]
-    score_path = calibration_source_dir(config) / "official_aspr_scores.parquet"
-    expected_count = len(pd.read_parquet(score_path, columns=["paper_id"]))
+    score_path = calibration_source_dir(config) / "paper_scores.parquet"
+    scores = pd.read_parquet(
+        score_path, columns=["paper_id", "horizon", "model_id"]
+    )
+    expected_count = len(
+        scores[
+            scores["horizon"].eq(int(config["primary_horizon"]))
+            & scores["model_id"].eq(str(config["primary_model_id"]))
+        ]
+    )
     _check(
         checks,
         "official_score_count",
@@ -99,7 +107,7 @@ def _audit_score(
     )
     formal = (
         str(row["official_model_family"]) == "hgb"
-        and str(row["official_feature_set"]) == "fulltext_16"
+        and str(row["official_feature_set"]) == "primary"
     )
     _check(
         checks,
@@ -128,7 +136,7 @@ def _audit_deciles(
         "twelve_combination_fold_local_deciles",
         observed_horizons == [3, 5, 8]
         and observed_models
-        == ["fulltext_16", "source_154", "strict_7", "ultrarelaxed_221"]
+        == ["broad_t0", "expanded", "primary", "strict"]
         and len(combination_deciles) == 12
         and all(values == expected_deciles for values in combination_deciles.values()),
         f"horizons={observed_horizons}; models={observed_models}; combinations={len(combination_deciles)}",
@@ -157,7 +165,7 @@ def _audit_deciles(
     observed_n = {
         int(horizon): int(group["n"].sum())
         for horizon, group in deciles.loc[
-            deciles["model_id"].eq("fulltext_16")
+            deciles["model_id"].eq("primary")
         ].groupby("horizon")
     }
     _check(
@@ -167,7 +175,7 @@ def _audit_deciles(
         f"n={observed_n}",
     )
     primary = deciles.loc[
-        deciles["horizon"].eq(5) & deciles["model_id"].eq("fulltext_16")
+        deciles["horizon"].eq(5) & deciles["model_id"].eq("primary")
     ]
     top = primary.loc[primary["prediction_decile"].eq(10)].iloc[0]
     low = primary.loc[primary["prediction_decile"].eq(1)].iloc[0]
@@ -271,11 +279,11 @@ def _audit_landscape(
         f"D5 late={len(late_d5)}; D8 late={len(late_d8)}",
     )
     overall = landscape[["horizon", "model_id", "overall_spearman"]].drop_duplicates()
-    formal = overall[overall["horizon"].eq(5) & overall["model_id"].eq("fulltext_16")]
+    formal = overall[overall["horizon"].eq(5) & overall["model_id"].eq("primary")]
     metrics = pd.read_csv(calibration_source_dir(config) / "oof_metrics.csv")
     source_formal = metrics[
         metrics["horizon"].eq(5)
-        & metrics["model_id"].eq("fulltext_16")
+        & metrics["model_id"].eq("primary")
         & metrics["model_family"].eq(str(config["model_family"]))
     ]
     formal_ok = bool(
@@ -326,7 +334,7 @@ def _audit_domain_display_order(
     )
     selected = landscape[
         landscape["horizon"].eq(5)
-        & landscape["model_id"].eq("fulltext_16")
+        & landscape["model_id"].eq("primary")
         & landscape["status"].eq("reliable")
     ]
     means = selected.groupby("domain12")["spearman"].mean()
@@ -336,7 +344,7 @@ def _audit_domain_display_order(
         checks,
         "domain_display_order_performance_ranked",
         descending,
-        "mean reliable D5 Full-text 16 annual-window rho descends top-to-bottom",
+        "mean reliable D5 Primary 16 annual-window rho descends top-to-bottom",
     )
 
 

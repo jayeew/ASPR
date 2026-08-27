@@ -1,0 +1,50 @@
+[
+  {
+    "builder": "runtime_context_before_target_year_v1",
+    "source_hashes": {
+      "/home/jayee/workspace/ASPR/data/knowledge_corpus/nature_multihorizon_v6_1_uncapped_v2/field_citation_events_aggregated.parquet": "sha256:e806f8715794ee81f592bd6f0f157510fbad134b830f981ee9fe52de0710918c",
+      "/home/jayee/workspace/ASPR/data/knowledge_corpus/nature_multihorizon_v6_1_uncapped_v2/papers_primary_articles.parquet": "sha256:712d8f640765380bd41d5e9438ede64041b033681707612931e6fffe66338d08",
+      "/home/jayee/workspace/ASPR/data/knowledge_corpus/nature_multihorizon_v6_1_uncapped_v2/reference_metadata.parquet": "sha256:0deb1ce6d7991a512ef9ddc292fabf7f360df873e28d5054b074481b4a095c31",
+      "/home/jayee/workspace/ASPR/data/knowledge_corpus/nature_multihorizon_v6_1_uncapped_v2/target_openalex_metadata.parquet": "sha256:407932b3d5d6ab62541315f057b72591c4dad37269bbce4332728893c97b9a1f",
+      "/mnt/d/aspr_nature_portfolio_v5/openalex_outputs/uncapped_aspr_v2/nature_target_works.csv": "sha256:145acc28fe6c5cc316280c000294f98957f0b724d8abb6f58e7d309bcb783040"
+    },
+    "source_max_year": 2021,
+    "target_year": 2022
+  },
+  {
+    "builder": "runtime_context_before_target_year_v1",
+    "source_hashes": {
+      "/home/jayee/workspace/ASPR/data/knowledge_corpus/nature_multihorizon_v6_1_uncapped_v2/field_citation_events_aggregated.parquet": "sha256:e806f8715794ee81f592bd6f0f157510fbad134b830f981ee9fe52de0710918c",
+      "/home/jayee/workspace/ASPR/data/knowledge_corpus/nature_multihorizon_v6_1_uncapped_v2/papers_primary_articles.parquet": "sha256:712d8f640765380bd41d5e9438ede64041b033681707612931e6fffe66338d08",
+      "/home/jayee/workspace/ASPR/data/knowledge_corpus/nature_multihorizon_v6_1_uncapped_v2/reference_metadata.parquet": "sha256:0deb1ce6d7991a512ef9ddc292fabf7f360df873e28d5054b074481b4a095c31",
+      "/home/jayee/workspace/ASPR/data/knowledge_corpus/nature_multihorizon_v6_1_uncapped_v2/target_openalex_metadata.parquet": "sha256:407932b3d5d6ab62541315f057b72591c4dad37269bbce4332728893c97b9a1f",
+      "/mnt/d/aspr_nature_portfolio_v5/openalex_outputs/uncapped_aspr_v2/nature_target_works.csv": "sha256:145acc28fe6c5cc316280c000294f98957f0b724d8abb6f58e7d309bcb783040"
+    },
+    "source_max_year": 2022,
+    "target_year": 2023
+  },
+  {
+    "builder": "runtime_context_before_target_year_v1",
+    "source_hashes": {
+      "/home/jayee/workspace/ASPR/data/knowledge_corpus/nature_multihorizon_v6_1_uncapped_v2/field_citation_events_aggregated.parquet": "sha256:e806f8715794ee81f592bd6f0f157510fbad134b830f981ee9fe52de0710918c",
+      "/home/jayee/workspace/ASPR/data/knowledge_corpus/nature_multihorizon_v6_1_uncapped_v2/papers_primary_articles.parquet": "sha256:712d8f640765380bd41d5e9438ede64041b033681707612931e6fffe66338d08",
+      "/home/jayee/workspace/ASPR/data/knowledge_corpus/nature_multihorizon_v6_1_uncapped_v2/reference_metadata.parquet": "sha256:0deb1ce6d7991a512ef9ddc292fabf7f360df873e28d5054b074481b4a095c31",
+      "/home/jayee/workspace/ASPR/data/knowledge_corpus/nature_multihorizon_v6_1_uncapped_v2/target_openalex_metadata.parquet": "sha256:407932b3d5d6ab62541315f057b72591c4dad37269bbce4332728893c97b9a1f",
+      "/mnt/d/aspr_nature_portfolio_v5/openalex_outputs/uncapped_aspr_v2/nature_target_works.csv": "sha256:145acc28fe6c5cc316280c000294f98957f0b724d8abb6f58e7d309bcb783040"
+    },
+    "source_max_year": 2022,
+    "target_year": 2024
+  },
+  {
+    "builder": "runtime_context_before_target_year_v1",
+    "source_hashes": {
+      "/home/jayee/workspace/ASPR/data/knowledge_corpus/nature_multihorizon_v6_1_uncapped_v2/field_citation_events_aggregated.parquet": "sha256:e806f8715794ee81f592bd6f0f157510fbad134b830f981ee9fe52de0710918c",
+      "/home/jayee/workspace/ASPR/data/knowledge_corpus/nature_multihorizon_v6_1_uncapped_v2/papers_primary_articles.parquet": "sha256:712d8f640765380bd41d5e9438ede64041b033681707612931e6fffe66338d08",
+      "/home/jayee/workspace/ASPR/data/knowledge_corpus/nature_multihorizon_v6_1_uncapped_v2/reference_metadata.parquet": "sha256:0deb1ce6d7991a512ef9ddc292fabf7f360df873e28d5054b074481b4a095c31",
+      "/home/jayee/workspace/ASPR/data/knowledge_corpus/nature_multihorizon_v6_1_uncapped_v2/target_openalex_metadata.parquet": "sha256:407932b3d5d6ab62541315f057b72591c4dad37269bbce4332728893c97b9a1f",
+      "/mnt/d/aspr_nature_portfolio_v5/openalex_outputs/uncapped_aspr_v2/nature_target_works.csv": "sha256:145acc28fe6c5cc316280c000294f98957f0b724d8abb6f58e7d309bcb783040"
+    },
+    "source_max_year": 2022,
+    "target_year": 2025
+  }
+]

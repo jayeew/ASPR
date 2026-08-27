@@ -1,6 +1,6 @@
 {
-  "schema_version": "fig2-evidence-derived-v3-2",
-  "evidence_version": "evidence_derived_v3",
+  "schema_version": "fig2-evidence-derived-tuned-repair-1",
+  "evidence_version": "evidence_derived_tuned_7_16_153_219",
   "expected_counts": {
     "K": 42,
     "Q": 336,
@@ -208,8 +208,8 @@
   "feature_set_labels": {
     "strict_7": "Strict audited core",
     "fulltext_16": "Full-text evidence set",
-    "source_154": "Source-grounded T0 expansion",
-    "ultrarelaxed_221": "Broad T0 sensitivity set"
+    "source_154": "Expanded evidence-derived set (153)",
+    "ultrarelaxed_221": "Broad T0 sensitivity set (219)"
   },
   "feature_set_rules": {
     "strict_7": "All 14 hard gates",
@@ -220,7 +220,7 @@
   "feature_set_meanings": {
     "strict_7": "strict audited baseline",
     "fulltext_16": "intermediate evidence tier",
-    "source_154": "primary scalable modeling set",
+    "source_154": "expanded evidence-derived modeling set",
     "ultrarelaxed_221": "broad sensitivity upper bound"
   },
   "operationalization_tier_order": [

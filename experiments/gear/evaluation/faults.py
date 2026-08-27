@@ -8,7 +8,7 @@ from collections.abc import Mapping
 from typing import Any
 
 from gear.contracts import ReviewStatus
-from gear.graph_prior_contracts import GraphRuntimePacketV1
+from gear.graph_prior_contracts import GraphRuntimePacket
 from gear.review_contracts import BranchReview
 
 from .contracts import EvaluationManifestV1, FaultScenarioV1
@@ -202,7 +202,7 @@ class FixedQwenReviewer:
 
 
 class FaultGraphScorer:
-    def __init__(self, result: GraphRuntimePacketV1, kind: str) -> None:
+    def __init__(self, result: GraphRuntimePacket, kind: str) -> None:
         self.result = result
         self.kind = kind
 

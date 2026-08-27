@@ -10,8 +10,7 @@ from pydantic import Field, field_validator, model_validator
 
 from gear.config import CodexCliEndpoint, OpenAICompatibleEndpoint
 from gear.contracts import ReviewStatus, StrictModel
-from gear.graph_prior import graph_runtime_packet
-from gear.graph_prior_contracts import GraphRuntimePacketV1
+from gear.graph_prior_contracts import GraphRuntimePacket
 from gear.review_contracts import PointSeverity, ReviewAspect
 
 EvaluationTrack = Literal[
@@ -25,12 +24,9 @@ EvaluationTrack = Literal[
 ]
 GraphVariantName = Literal[
     "neutral",
-    "score_only",
-    "score_profile",
-    "full",
-    "shuffled_score",
-    "shuffled_profile",
-    "random_matched_topology",
+    "score",
+    "score_topology",
+    "placebo_graph",
 ]
 
 
@@ -40,19 +36,26 @@ class EvaluationCase(StrictModel):
     manuscript_path: Path
     metadata_path: Path
     cutoff_date: date
-    graph_result: GraphRuntimePacketV1
+    graph_result: GraphRuntimePacket
+    placebo_graph_result: GraphRuntimePacket
     clean_run_dir: Path | None = None
     prior_art_gold_path: Path | None = None
 
-    @field_validator("graph_result", mode="before")
+    @field_validator("graph_result", "placebo_graph_result", mode="before")
     @classmethod
-    def migrate_graph_result(cls, value: object) -> GraphRuntimePacketV1:
-        return graph_runtime_packet(value)  # type: ignore[arg-type]
+    def migrate_graph_result(cls, value: object) -> GraphRuntimePacket:
+        return GraphRuntimePacket.model_validate(value)
 
     @model_validator(mode="after")
     def graph_identity(self) -> EvaluationCase:
         if self.graph_result.paper_id != self.paper_id:
             raise ValueError("evaluation case Graph paper_id mismatch")
+        if self.placebo_graph_result.paper_id == self.paper_id:
+            raise ValueError("placebo Graph packet must come from another paper")
+        if self.placebo_graph_result.cutoff_date != self.cutoff_date:
+            raise ValueError(
+                "placebo Graph packet must be matched to the target cutoff"
+            )
         return self
 
 
@@ -174,6 +177,16 @@ class PointSupportResponseV1(StrictModel):
         return self
 
 
+class BlindReviewPreferenceV1(StrictModel):
+    contract: Literal["gear_blind_review_preference_v1"] = (
+        "gear_blind_review_preference_v1"
+    )
+    paper_id: str
+    preferred: Literal["A", "B", "TIE"]
+    confidence: float = Field(ge=0.0, le=1.0)
+    rationale: str = ""
+
+
 class RubricDefinition(StrictModel):
     title: str
     description: str
@@ -242,12 +255,12 @@ class FaultScenarioV1(StrictModel):
 
 class GraphAblationVariant(StrictModel):
     name: GraphVariantName
-    result: GraphRuntimePacketV1
+    result: GraphRuntimePacket
 
     @field_validator("result", mode="before")
     @classmethod
-    def migrate_graph_result(cls, value: object) -> GraphRuntimePacketV1:
-        return graph_runtime_packet(value)  # type: ignore[arg-type]
+    def migrate_graph_result(cls, value: object) -> GraphRuntimePacket:
+        return GraphRuntimePacket.model_validate(value)
 
 
 class EvaluationContextPack(StrictModel):
@@ -265,6 +278,7 @@ class NotMeasuredRecord(StrictModel):
 
 
 __all__ = [
+    "BlindReviewPreferenceV1",
     "EvaluationCase",
     "EvaluationContextPack",
     "EvaluationManifestV1",

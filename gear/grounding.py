@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import hashlib
 from dataclasses import dataclass
-from typing import Literal
+from typing import Literal, cast
 
 from pydantic import Field
 
@@ -109,14 +109,17 @@ class GroundingWorkflow:
         ):
             if len(cards) >= self.max_contributions:
                 break
-            novelty_type = {
-                ClaimType.NOVELTY: "conceptual",
-                ClaimType.METHOD: "method",
-                ClaimType.RESULT: "empirical",
-                ClaimType.CAUSAL: "empirical",
-                ClaimType.SCOPE: "application",
-                ClaimType.SIGNIFICANCE: "application",
-            }[claim.claim_type]
+            novelty_type = cast(
+                Literal["conceptual", "method", "application", "empirical", "resource"],
+                {
+                    ClaimType.NOVELTY: "conceptual",
+                    ClaimType.METHOD: "method",
+                    ClaimType.RESULT: "empirical",
+                    ClaimType.CAUSAL: "empirical",
+                    ClaimType.SCOPE: "application",
+                    ClaimType.SIGNIFICANCE: "application",
+                }[claim.claim_type],
+            )
             identity = f"{paper_ir.paper_id}|{claim.claim_id}"
             cards.append(
                 ContributionCard(

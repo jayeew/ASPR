@@ -4,8 +4,8 @@ import hashlib
 
 from reportlab.pdfgen import canvas
 
-from gear.contracts import PaperMetadata, ParseStatus, ReviewRequest
-from gear.paper_compiler import PaperCompiler
+from gear.contracts import EvidenceSpan, PaperMetadata, ParseStatus, ReviewRequest
+from gear.paper_compiler import PaperCompiler, extract_references
 
 
 def test_markdown_spans_are_stable_and_hash_addressable(gear_config, paper_request):
@@ -65,3 +65,65 @@ def test_heading_with_trailing_space_creates_real_section_path():
     result = next(span for span in spans if span.text.startswith("The experiment"))
     assert result.section_path == ["Results"]
     assert page.text[result.char_start : result.char_end] == result.text
+
+
+def test_reference_chunks_are_split_and_continuations_are_preserved():
+    def span(span_id: str, text: str) -> EvidenceSpan:
+        return EvidenceSpan(
+            span_id=span_id,
+            source_id="source",
+            page=1,
+            section_path=["References"],
+            char_start=0,
+            char_end=len(text),
+            text=text,
+            text_sha256=("sha256:" + hashlib.sha256(text.encode("utf-8")).hexdigest()),
+        )
+
+    references = extract_references(
+        [
+            span(
+                "S1",
+                "1. Alpha, A. First method. Journal 10, 1-9 (2019).\n\n"
+                "2. Beta, B. A long second method with DOI 10.1234/example",
+            ),
+            span(
+                "S2",
+                "continued in the next PDF chunk (2020).\n\n"
+                "3. Gamma, C. Third method. Journal 12, 2-8 (2021). "
+                "https://doi.org/10.9999/manuscript",
+            ),
+        ],
+        manuscript_doi="10.9999/manuscript",
+    )
+
+    assert [item.citation_number for item in references] == [1, 2, 3]
+    assert references[1].doi == "10.1234/example"
+    assert "continued in the next PDF chunk" in references[1].raw_text
+    assert references[1].publication_year == 2020
+    assert references[2].doi is None
+
+
+def test_reference_titles_enable_exact_citation_graph_anchors():
+    text = (
+        "7. Sangwan, V. K. et al. Multi-terminal memtransistors from "
+        "polycrystalline monolayer molybdenum disulfide. Nature 554, "
+        "500–504 (2018)."
+    )
+    span = EvidenceSpan(
+        span_id="S-ref",
+        source_id="source",
+        page=1,
+        section_path=["References"],
+        char_start=0,
+        char_end=len(text),
+        text=text,
+        text_sha256=("sha256:" + hashlib.sha256(text.encode()).hexdigest()),
+    )
+
+    references = extract_references([span])
+
+    assert references[0].title == (
+        "Multi-terminal memtransistors from polycrystalline monolayer "
+        "molybdenum disulfide"
+    )

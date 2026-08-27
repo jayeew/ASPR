@@ -7,7 +7,7 @@ import inspect
 import re
 import time
 from collections.abc import Mapping
-from typing import Any, Literal
+from typing import Any, Literal, cast
 
 from .config import GearConfig, load_config
 from .contracts import (
@@ -23,19 +23,29 @@ from .contracts import (
     RetrievedWork,
 )
 from .evidence_policy import is_high_risk, next_evidence_action
-from .graph_guidance import is_absolute_priority_claim, is_prior_art_direction_claim
-from .graph_prior_contracts import GraphClaimGuidanceV1
+from .graph_guidance import (
+    is_absolute_priority_claim,
+    is_prior_art_direction_claim,
+    routing_weights,
+    weighted_interleave,
+)
+from .graph_prior_contracts import (
+    ClaimGuidance,
+    GraphResourceCaps,
+    RetrievalRoutingPlan,
+    RoutedCandidate,
+)
 from .prior_art import PriorArtService, RelationClassifier
 from .review_contracts import (
     CanonicalReviewPoint,
     EvidenceAction,
-    NoveltyJudgment,
     PointSeverity,
     PointValidationStatus,
     ReviewAspect,
     ReviewCorrectionEventV1,
     ReviewPhase,
-    ReviewStateV3,
+    ReviewSource,
+    ReviewState,
 )
 from .trace import EvidenceStore, sha256_value
 
@@ -86,7 +96,7 @@ def relation_payload_is_claim_relevant(payload: Mapping[str, Any]) -> bool:
     )
 
 
-def _claim_guidance(state: ReviewStateV3, point_id: str) -> GraphClaimGuidanceV1 | None:
+def _claim_guidance(state: ReviewState, point_id: str) -> ClaimGuidance | None:
     plan = getattr(state, "graph_guidance_plan", None)
     if plan is None:
         return None
@@ -111,13 +121,13 @@ class EvidenceSupervisor:
 
     def resolve(
         self,
-        state: ReviewStateV3,
+        state: ReviewState,
         paper_ir: PaperIR,
         evidence_store: EvidenceStore,
         *,
         prior_art: PriorArtService | None = None,
         relation_classifier: RelationClassifier | None = None,
-    ) -> ReviewStateV3:
+    ) -> ReviewState:
         state.phase = ReviewPhase.EVIDENCE_GATHERING
         while not state.finalized:
             action, target_id, reason = next_evidence_action(state)
@@ -186,14 +196,13 @@ class EvidenceSupervisor:
         self,
         action: EvidenceAction,
         target_id: str | None,
-        state: ReviewStateV3,
+        state: ReviewState,
         paper_ir: PaperIR,
         store: EvidenceStore,
         prior_art: PriorArtService | None,
         classifier: RelationClassifier | None,
     ) -> None:
         if action == EvidenceAction.FINALIZE:
-            self._apply_cross_point_limiting_consensus(state, store)
             self._finalize(state)
             return
         if target_id is None:
@@ -241,7 +250,7 @@ class EvidenceSupervisor:
         self,
         action: EvidenceAction,
         point: CanonicalReviewPoint,
-        state: ReviewStateV3,
+        state: ReviewState,
         paper_ir: PaperIR,
         store: EvidenceStore,
         prior_art: PriorArtService | None,
@@ -296,17 +305,9 @@ class EvidenceSupervisor:
         )
         if "graph_seed_work_ids" in parameters:
             retrieve_kwargs["graph_seed_work_ids"] = graph_seed_work_ids
-        if "graph_seed_searches" in parameters and state.graph_result is not None:
-            seed_titles = {
-                seed.work_id: seed.title
-                for seed in state.graph_result.topology_seeds
-                if seed.title
-            }
-            retrieve_kwargs["graph_seed_searches"] = [
-                (work_id, seed_titles[work_id])
-                for work_id in graph_seed_work_ids
-                if work_id in seed_titles
-            ]
+        # Do not replace a claim-level semantic query with a seed-title query.
+        # Direct seed fetches remain available under the separate fixed cap and
+        # must pass the candidate comparability gate before verification.
         if "graph_neighbor_slots" in parameters:
             retrieve_kwargs["graph_neighbor_slots"] = (
                 sum(
@@ -320,15 +321,11 @@ class EvidenceSupervisor:
                 else 0
             )
         if "allowed_query_roles" in parameters and guidance is not None:
-            retrieve_kwargs["allowed_query_roles"] = self._allowed_query_roles(
-                guidance,
-                prefer_profile=any(
-                    mission.origin == "topology" for mission in guidance.missions
-                ),
-            )
+            retrieve_kwargs["allowed_query_roles"] = self._allowed_query_roles(guidance)
         if "resource_ledger" in parameters:
             retrieve_kwargs["resource_ledger"] = state.resource_ledger
         works = prior_art.retrieve(claim, state.cutoff_date, budget, **retrieve_kwargs)
+        works = self._route_works(point, state, works, store)
         anchors = list(getattr(prior_art, "last_graph_seed_works", []))
         if anchors:
             existing = {
@@ -349,10 +346,148 @@ class EvidenceSupervisor:
             point.counterfactual_search_done = point.counterfactual_search_count >= 1
         self._store_coverage(point, state, claim, prior_art, store)
 
+    def _route_works(
+        self,
+        point: CanonicalReviewPoint,
+        state: ReviewState,
+        works: list[RetrievedWork],
+        store: EvidenceStore,
+    ) -> list[RetrievedWork]:
+        """Prioritize semantically admitted claim citations under a fixed cap."""
+
+        local_roles = {"author_terminology", "object_problem"}
+        local: list[RetrievedWork] = []
+        remote: list[RetrievedWork] = []
+        topology: list[RetrievedWork] = []
+        claim_linked: list[RetrievedWork] = []
+        pools: dict[str, Literal["local", "remote", "topology"]] = {}
+        guidance = _claim_guidance(state, point.point_id)
+        topology_active = bool(
+            guidance
+            and any(mission.origin == "topology" for mission in guidance.missions)
+        )
+        for work in works:
+            is_author_citation = topology_active and self._work_has_query_role(
+                work, store, "author_citation"
+            )
+            is_graph_seed = self._work_has_query_role(work, store, "graph_seed")
+            is_topology = is_author_citation or is_graph_seed
+            is_local = not is_topology and any(
+                self._work_has_query_role(work, store, role) for role in local_roles
+            )
+            pool: Literal["local", "remote", "topology"] = (
+                "topology" if is_topology else "local" if is_local else "remote"
+            )
+            pools[work.work_id] = pool
+            target_pool = (
+                claim_linked
+                if is_author_citation
+                else topology if is_graph_seed else local if is_local else remote
+            )
+            target_pool.append(work)
+        forecast = (
+            state.graph_result.forecast if state.graph_result is not None else None
+        )
+        local_weight, remote_weight, q_effective = routing_weights(
+            forecast,
+            use_score=self.config.graph_guidance.score_routing_enabled,
+        )
+        limit = (
+            state.resource_ledger.caps.relation_classifications
+            if state.resource_ledger is not None
+            else 12
+        )
+        baseline = weighted_interleave(
+            local,
+            remote,
+            local_weight=local_weight,
+            remote_weight=remote_weight,
+            limit=len(works),
+        )
+        ordered = [
+            *claim_linked[:1],
+            *baseline,
+            *claim_linked[1:],
+            *topology,
+        ]
+        agent = state.branch_reviews.get(ReviewSource.AGENT)
+        draft_hash = sha256_value(agent) if agent is not None else sha256_value({})
+        placebo = bool(
+            state.graph_result is not None
+            and "evaluation_placebo_graph" in state.graph_result.diagnostics
+        )
+        variant: Literal["neutral", "score", "score_topology", "placebo_graph"] = (
+            "placebo_graph"
+            if placebo
+            else (
+                "score_topology"
+                if topology_active
+                else (
+                    "score"
+                    if self.config.graph_guidance.score_routing_enabled
+                    else "neutral"
+                )
+            )
+        )
+        rank = {work.work_id: index for index, work in enumerate(ordered)}
+        relevance = {
+            work.work_id: self._work_relevance(
+                work, store, rank[work.work_id], len(works)
+            )
+            for work in works
+        }
+        plan = RetrievalRoutingPlan(
+            paper_id=state.paper_id,
+            variant=variant,
+            draft_sha256=draft_hash,
+            resource_caps=(
+                state.resource_ledger.caps
+                if state.resource_ledger is not None
+                else GraphResourceCaps()
+            ),
+            q_effective=q_effective,
+            local_weight=local_weight,
+            remote_weight=remote_weight,
+            candidates=[
+                RoutedCandidate(
+                    candidate_id=work.work_id,
+                    pool=pools[work.work_id],
+                    pool_rank=(
+                        local
+                        if pools[work.work_id] == "local"
+                        else (
+                            [*claim_linked, *topology]
+                            if pools[work.work_id] == "topology"
+                            else remote
+                        )
+                    ).index(work),
+                    final_rank=rank[work.work_id],
+                    semantic_relevance=relevance[work.work_id],
+                    selected_for_verification=rank[work.work_id] < limit,
+                    reason=(
+                        "claim_linked_citation_rank1_after_semantic_gate"
+                        if work in claim_linked[:1]
+                        else (
+                            "topology_admitted_after_candidate_gate"
+                            if pools[work.work_id] == "topology"
+                            else (
+                                "selected_by_equal_budget_interleave"
+                                if rank[work.work_id] < limit
+                                else "relation_classification_cap_reached"
+                            )
+                        )
+                    ),
+                )
+                for work in works
+            ],
+        )
+        state.retrieval_routing_plans[point.point_id] = plan
+        return ordered[:limit]
+
     def _citation(
         self,
         point: CanonicalReviewPoint,
-        state: ReviewStateV3,
+        state: ReviewState,
         paper_ir: PaperIR,
         store: EvidenceStore,
         prior_art: PriorArtService | None,
@@ -369,6 +504,9 @@ class EvidenceSupervisor:
             for mission in (guidance.missions if guidance is not None else [])
             if mission.origin == "topology"
         ]
+        if topology and all(mission.traversal == "none" for mission in topology):
+            point.validation_notes.append("topology_neighbor_expansion_not_requested")
+            return
         seeds = (
             self._topology_anchors.get(point.point_id, [])
             if topology
@@ -434,7 +572,7 @@ class EvidenceSupervisor:
     def _classify(
         self,
         point: CanonicalReviewPoint,
-        state: ReviewStateV3,
+        state: ReviewState,
         span: EvidenceSpan,
         claim: PaperClaim,
         works: list[RetrievedWork],
@@ -448,16 +586,9 @@ class EvidenceSupervisor:
         before_confidence = point.novelty_confidence
         labels: set[RelationLabel] = set()
         classified = self._classified_work_ids.setdefault(point.point_id, set())
-        ordered_works = [
-            work
-            for _, work in sorted(
-                enumerate(works),
-                key=lambda item: (
-                    not self._work_has_query_role(item[1], store, "graph_seed"),
-                    item[0],
-                ),
-            )
-        ]
+        # Preserve the safe routing order.  Graph candidates used to be forced
+        # ahead of stronger baseline candidates before relationship validation.
+        ordered_works = list(works)
         for work in ordered_works:
             classification_id = "|".join(
                 [work.work_id, *sorted(set(work.source_query_ids))]
@@ -672,41 +803,15 @@ class EvidenceSupervisor:
 
     @staticmethod
     def _allowed_query_roles(
-        guidance: GraphClaimGuidanceV1,
-        *,
-        prefer_profile: bool,
+        guidance: ClaimGuidance,
     ) -> list[str]:
-        del prefer_profile
-        local_roles = ["author_terminology", "object_problem"]
-        remote_roles = ["mechanism_outcome", "purpose_semantic"]
-        allowed = {*local_roles, *remote_roles}
-        score_roles = [
-            role
-            for mission in guidance.missions
-            if mission.origin in {"score", "rescue"}
-            for role in mission.query_roles
-            if role in allowed
+        roles = [role for mission in guidance.missions for role in mission.query_roles]
+        return list(dict.fromkeys(roles)) or [
+            "author_terminology",
+            "object_problem",
+            "mechanism_outcome",
+            "purpose_semantic",
         ]
-        if not score_roles:
-            score_roles = (
-                remote_roles + local_roles
-                if guidance.allocated_remote_query_slots
-                > guidance.allocated_local_query_slots
-                else local_roles + remote_roles
-            )
-        profile_roles = [
-            role
-            for mission in guidance.missions
-            if mission.origin == "profile"
-            for role in mission.query_roles
-            if role in allowed
-        ]
-        # Topology may change the content of an allocated query, but it must not
-        # silently change the Score/Profile query-family allocation.  Keeping
-        # this order invariant makes Full versus Score+Profile a true content-
-        # guidance comparison under the same logical resource geometry.
-        ordered = [score_roles[0], *profile_roles, *score_roles[1:]]
-        return list(dict.fromkeys(ordered))
 
     @staticmethod
     def _work_has_query_role(
@@ -716,17 +821,48 @@ class EvidenceSupervisor:
     ) -> bool:
         return any(
             (query_record := store.get(f"Q:{query_id}")) is not None
-            and (
-                query_record.payload.get("query_role") == role
-                or (
-                    role == "graph_seed"
-                    and str(query_record.payload.get("transformation", "")).startswith(
-                        "graph_claim_aligned_topology_search:"
-                    )
-                )
-            )
+            and query_record.payload.get("query_role") == role
             for query_id in work.source_query_ids
         )
+
+    @staticmethod
+    def _work_relevance(
+        work: RetrievedWork,
+        store: EvidenceStore,
+        rank: int,
+        candidate_count: int,
+    ) -> float:
+        """Read the strongest persisted retrieval score for audit display.
+
+        Rank is used only as a fail-closed fallback.  The old implementation
+        called reciprocal rank "semantic relevance", which hid whether a Graph
+        candidate had actually passed the claim-level reranker.
+        """
+
+        scores: list[float] = []
+        for evidence_id in store.ids():
+            if not str(evidence_id).startswith("H:"):
+                continue
+            record = store.get(str(evidence_id))
+            payload = record.payload if record is not None else {}
+            if str(payload.get("work_id") or "") != work.work_id:
+                continue
+            for field in (
+                "claim_alignment",
+                "rerank_score",
+                "recall_score",
+                "fused_score",
+            ):
+                value = payload.get(field)
+                try:
+                    if value is not None:
+                        scores.append(float(value))
+                        break
+                except (TypeError, ValueError):
+                    continue
+        if scores:
+            return min(1.0, max(0.0, max(scores)))
+        return max(0.0, 1.0 - rank / max(1, candidate_count))
 
     @staticmethod
     def _topology_seed_has_value(
@@ -740,12 +876,8 @@ class EvidenceSupervisor:
                 continue
             graph_sourced = any(
                 (query_record := store.get(f"Q:{query_id}")) is not None
-                and (
-                    query_record.payload.get("query_role") == "graph_seed"
-                    or str(
-                        query_record.payload.get("transformation", "")
-                    ).startswith("graph_claim_aligned_topology_search:")
-                )
+                and query_record.payload.get("query_role")
+                in {"graph_seed", "author_citation"}
                 for query_id in payload.get("source_query_ids") or []
             )
             if not graph_sourced:
@@ -773,14 +905,14 @@ class EvidenceSupervisor:
     def _topology_provider_fallback(
         self,
         point: CanonicalReviewPoint,
-        state: ReviewStateV3,
+        state: ReviewState,
         paper_ir: PaperIR,
         store: EvidenceStore,
         prior_art: PriorArtService,
         classifier: RelationClassifier,
         claim: PaperClaim,
         span: EvidenceSpan,
-        guidance: GraphClaimGuidanceV1 | None,
+        guidance: ClaimGuidance | None,
     ) -> None:
         kwargs: dict[str, Any] = {
             "family": "normal",
@@ -789,10 +921,7 @@ class EvidenceSupervisor:
         }
         parameters = inspect.signature(prior_art.retrieve).parameters
         if guidance is not None and "allowed_query_roles" in parameters:
-            kwargs["allowed_query_roles"] = self._allowed_query_roles(
-                guidance,
-                prefer_profile=True,
-            )
+            kwargs["allowed_query_roles"] = self._allowed_query_roles(guidance)
         if "max_provider_queries" in parameters:
             kwargs["max_provider_queries"] = 1
         if "resource_ledger" in parameters:
@@ -811,7 +940,7 @@ class EvidenceSupervisor:
         point.validation_notes.append("topology_low_yield_provider_fallback")
 
     @staticmethod
-    def _pending_topology_expansion(state: ReviewStateV3) -> bool:
+    def _pending_topology_expansion(state: ReviewState) -> bool:
         plan = state.graph_guidance_plan
         if plan is None:
             return False
@@ -949,101 +1078,9 @@ class EvidenceSupervisor:
         }
 
     @staticmethod
-    def _apply_cross_point_limiting_consensus(
-        state: ReviewStateV3,
-        store: EvidenceStore,
-    ) -> None:
-        if state.novelty_direction != NoveltyJudgment.POSITIVE:
-            return
-        points = list(state.canonical_points.values())
-        limits = [
-            point
-            for point in points
-            if point.retained
-            and (point.initial_section or point.section) == "novelty_limit"
-            and is_prior_art_direction_claim(point)
-        ]
-        for limit in limits:
-            primary_rows = EvidenceSupervisor._limiting_relation_rows(limit, store)
-            for other in points:
-                if other.point_id == limit.point_id or not other.retained:
-                    continue
-                other_rows = EvidenceSupervisor._limiting_relation_rows(other, store)
-                for primary_key, primary in primary_rows:
-                    for other_key, secondary in other_rows:
-                        if primary["prior_work_id"] == secondary["prior_work_id"]:
-                            continue
-                        overlap = EvidenceSupervisor._relation_dimension_tokens(
-                            primary
-                        ) & EvidenceSupervisor._relation_dimension_tokens(secondary)
-                        if len(overlap) < 3:
-                            continue
-                        before_text = limit.resolved_proposition or limit.proposition
-                        before_confidence = limit.novelty_confidence
-                        limit.novelty_resolution = "antecedent_found"
-                        limit.validation_status = (
-                            PointValidationStatus.EXTERNALLY_VALIDATED
-                        )
-                        limit.resolved_proposition = (
-                            "Independent paired comparisons across aligned "
-                            "contribution facets materially bound this novelty "
-                            f"claim while retaining its residual delta: {limit.proposition}"
-                        )
-                        limit.novelty_confidence = min(
-                            limit.novelty_confidence or 0.60,
-                            0.60,
-                        )
-                        guidance = [
-                            item
-                            for item in (
-                                _claim_guidance(state, limit.point_id),
-                                _claim_guidance(state, other.point_id),
-                            )
-                            if item is not None
-                        ]
-                        event = ReviewCorrectionEventV1(
-                            point_id=limit.point_id,
-                            before_text=before_text,
-                            after_text=limit.resolved_proposition,
-                            before_section=limit.section,
-                            after_section=limit.section,
-                            before_direction=NoveltyJudgment.POSITIVE,
-                            after_direction=NoveltyJudgment.MIXED,
-                            trigger_relation_ids=[
-                                primary_key.removeprefix("R:"),
-                                other_key.removeprefix("R:"),
-                            ],
-                            trigger_mission_ids=list(
-                                dict.fromkeys(
-                                    mission.mission_id
-                                    for item in guidance
-                                    for mission in item.missions
-                                )
-                            ),
-                            correction_type="partial_antecedent_refinement",
-                            confidence_change=(limit.novelty_confidence or 0.0)
-                            - (before_confidence or 0.0),
-                        )
-                        event_id = (
-                            "RC:"
-                            + hashlib.sha256(
-                                event.model_dump_json().encode("utf-8")
-                            ).hexdigest()[:18]
-                        )
-                        store.add_evidence(
-                            event_id,
-                            "review_correction_event",
-                            event,
-                        )
-                        if event_id not in state.correction_event_evidence_keys:
-                            state.correction_event_evidence_keys.append(event_id)
-                        state.novelty_direction = NoveltyJudgment.MIXED
-                        return
-
-    @staticmethod
     def _record_correction(
         point: CanonicalReviewPoint,
-        state: ReviewStateV3,
+        state: ReviewState,
         store: EvidenceStore,
         *,
         before_section: str,
@@ -1079,14 +1116,6 @@ class EvidenceSupervisor:
             correction_type = "partial_antecedent_refinement"
         after_confidence = point.novelty_confidence
         before_direction = getattr(state, "novelty_direction", None)
-        after_direction = EvidenceSupervisor._direction_after_correction(
-            state,
-            point,
-            before_section=before_section,
-            before_direction=before_direction,
-        )
-        if hasattr(state, "novelty_direction"):
-            state.novelty_direction = after_direction
         event = ReviewCorrectionEventV1(
             point_id=point.point_id,
             before_text=before_text,
@@ -1094,7 +1123,7 @@ class EvidenceSupervisor:
             before_section=before_section,
             after_section=point.section,
             before_direction=before_direction,
-            after_direction=after_direction,
+            after_direction=before_direction,
             trigger_relation_ids=verified_relations,
             trigger_mission_ids=(
                 [mission.mission_id for mission in guidance.missions]
@@ -1143,60 +1172,9 @@ class EvidenceSupervisor:
         return selected
 
     @staticmethod
-    def _direction_after_correction(
-        state: ReviewStateV3,
-        point: CanonicalReviewPoint,
-        *,
-        before_section: str,
-        before_direction: NoveltyJudgment | None,
-    ) -> NoveltyJudgment | None:
-        """Apply only direction changes justified by a verified point correction."""
-        if before_section == "novelty_support" and (point.section == "novelty_limit"):
-            remaining_support = any(
-                candidate.retained
-                and candidate.point_id != point.point_id
-                and candidate.section == "novelty_support"
-                for candidate in getattr(state, "canonical_points", {}).values()
-            )
-            return (
-                NoveltyJudgment.MIXED if remaining_support else NoveltyJudgment.NEGATIVE
-            )
-        if before_section == "novelty_limit" and point.section == "novelty_support":
-            remaining_limit = any(
-                candidate.retained
-                and candidate.point_id != point.point_id
-                and candidate.section == "novelty_limit"
-                for candidate in getattr(state, "canonical_points", {}).values()
-            )
-            return (
-                NoveltyJudgment.MIXED if remaining_limit else NoveltyJudgment.POSITIVE
-            )
-        if (
-            before_section == "novelty_limit"
-            and point.section == "novelty_limit"
-            and point.novelty_resolution == "antecedent_found"
-            and before_direction == NoveltyJudgment.POSITIVE
-        ):
-            return NoveltyJudgment.MIXED
-        if (
-            before_direction
-            in {
-                NoveltyJudgment.UNCERTAIN,
-                NoveltyJudgment.NOT_DISCUSSED,
-            }
-            and point.section == "novelty_support"
-        ):
-            has_limit = any(
-                candidate.retained and candidate.section == "novelty_limit"
-                for candidate in getattr(state, "canonical_points", {}).values()
-            )
-            return NoveltyJudgment.MIXED if has_limit else NoveltyJudgment.POSITIVE
-        return before_direction
-
-    @staticmethod
     def _stability(
         point: CanonicalReviewPoint,
-        state: ReviewStateV3,
+        state: ReviewState,
         store: EvidenceStore,
     ) -> None:
         # Graph-removal invariant holds because Graph never contributes relation labels.
@@ -1320,7 +1298,7 @@ class EvidenceSupervisor:
     @staticmethod
     def _record_retrieval_outcome(
         point: CanonicalReviewPoint,
-        state: ReviewStateV3,
+        state: ReviewState,
         prior_art: PriorArtService,
     ) -> None:
         if getattr(prior_art, "last_service_failed", False):
@@ -1371,7 +1349,7 @@ class EvidenceSupervisor:
     @staticmethod
     def _store_coverage(
         point: CanonicalReviewPoint,
-        state: ReviewStateV3,
+        state: ReviewState,
         claim: PaperClaim,
         prior_art: PriorArtService,
         store: EvidenceStore,
@@ -1402,7 +1380,7 @@ class EvidenceSupervisor:
             store.add_evidence(key, "retrieval_coverage", card)
         point.coverage_evidence_keys = [key]
 
-    def _budget(self, point_id: str, state: ReviewStateV3) -> RetrievalBudget:
+    def _budget(self, point_id: str, state: ReviewState) -> RetrievalBudget:
         if point_id not in self._budgets:
             guidance = (
                 None
@@ -1432,7 +1410,7 @@ class EvidenceSupervisor:
         return self._budgets[point_id]
 
     @staticmethod
-    def _finalize(state: ReviewStateV3) -> None:
+    def _finalize(state: ReviewState) -> None:
         for point in state.canonical_points.values():
             if point.validation_status == PointValidationStatus.UNRESOLVED:
                 point.validation_notes.append("finalized_unresolved")
@@ -1449,7 +1427,7 @@ class EvidenceSupervisor:
         state.finalized = True
 
     @staticmethod
-    def _exhaust(state: ReviewStateV3) -> None:
+    def _exhaust(state: ReviewState) -> None:
         for point in state.canonical_points.values():
             if point.validation_status not in {
                 PointValidationStatus.VALIDATED,
@@ -1477,7 +1455,7 @@ class EvidenceSupervisor:
                     point.retained = False
         EvidenceSupervisor._finalize(state)
 
-    def _update_process_features(self, state: ReviewStateV3) -> None:
+    def _update_process_features(self, state: ReviewState) -> None:
         external = [
             point
             for point in state.canonical_points.values()
@@ -1505,20 +1483,38 @@ class EvidenceSupervisor:
         state.process_features.failure_count = len(state.failures)
 
     @staticmethod
-    def _update_aspr_assessments(state: ReviewStateV3) -> None:
-        assessments = {}
+    def _update_aspr_assessments(state: ReviewState) -> None:
+        assessments: dict[
+            str,
+            Literal[
+                "NOT_CHALLENGED",
+                "CHALLENGED",
+                "REFINED",
+                "INCONCLUSIVE",
+                "NOT_APPLICABLE",
+            ],
+        ] = {}
         for point in state.canonical_points.values():
             if not point.section.startswith("novelty_"):
                 continue
             claim_id = point.novelty_claim_id or point.point_id
-            assessments[claim_id] = {
-                "antecedent_found": "CHALLENGED",
-                "incremental_or_parallel": "REFINED",
-                "bounded_no_antecedent": "NOT_CHALLENGED",
-                "inconclusive": "INCONCLUSIVE",
-                "search_failed": "INCONCLUSIVE",
-                "not_applicable": "NOT_APPLICABLE",
-            }[point.novelty_resolution]
+            assessments[claim_id] = cast(
+                Literal[
+                    "NOT_CHALLENGED",
+                    "CHALLENGED",
+                    "REFINED",
+                    "INCONCLUSIVE",
+                    "NOT_APPLICABLE",
+                ],
+                {
+                    "antecedent_found": "CHALLENGED",
+                    "incremental_or_parallel": "REFINED",
+                    "bounded_no_antecedent": "NOT_CHALLENGED",
+                    "inconclusive": "INCONCLUSIVE",
+                    "search_failed": "INCONCLUSIVE",
+                    "not_applicable": "NOT_APPLICABLE",
+                }[point.novelty_resolution],
+            )
         state.aspr_evidence_assessments = assessments
 
     @staticmethod
@@ -1546,7 +1542,7 @@ class EvidenceSupervisor:
         reason: str,
         before: int,
         after: int,
-        state: ReviewStateV3,
+        state: ReviewState,
         started: float,
         failure: str | None,
     ) -> None:

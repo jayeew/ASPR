@@ -6,8 +6,9 @@ import itertools
 import json
 import math
 from collections import Counter
+from collections.abc import Hashable, Mapping, Sequence
 from pathlib import Path
-from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -21,13 +22,12 @@ from .features_v6 import (
     field_pielou_evenness,
     field_variety,
     first_time_source_pair_share,
+    marginal_pair_z_scores,
     novelty_u,
     rao_stirling_integration,
-    marginal_pair_z_scores,
     uzzi_atypicality_p10,
     uzzi_conventionality_median,
 )
-
 
 FEATURE_VIEW_VERSION = "aspr-reference-features-v6-1"
 
@@ -41,16 +41,12 @@ def build_field_citation_events(work_view: pd.DataFrame) -> pd.DataFrame:
     metadata = work_view[["work_id", "field_id"]].copy()
     metadata["work_id"] = metadata["work_id"].map(normalize_openalex_id)
     metadata["field_id"] = metadata["field_id"].fillna("").astype(str)
-    field_lookup = metadata.drop_duplicates("work_id").set_index("work_id")[
-        "field_id"
-    ]
+    field_lookup = metadata.drop_duplicates("work_id").set_index("work_id")["field_id"]
     events = work_view[
         ["work_id", "publication_year", "field_id", "referenced_works"]
     ].copy()
     events["source_work_id"] = events["work_id"].map(normalize_openalex_id)
-    events["source_year"] = pd.to_numeric(
-        events["publication_year"], errors="coerce"
-    )
+    events["source_year"] = pd.to_numeric(events["publication_year"], errors="coerce")
     events["source_field_id"] = events["field_id"].fillna("").astype(str)
     events = events.explode("referenced_works")
     events["target_work_id"] = events["referenced_works"].map(normalize_openalex_id)
@@ -78,7 +74,7 @@ def annual_field_distances(
     focal_years: Sequence[int],
     *,
     window_years: int = 5,
-) -> Dict[int, Mapping[Tuple[Any, Any], float]]:
+) -> dict[int, Mapping[tuple[Any, Any], float]]:
     """Create frozen prior-window cosine distances for each focal year."""
     if window_years <= 0:
         raise ValueError("window_years must be positive")
@@ -107,8 +103,8 @@ def annual_field_distances(
             .rename("citation_count")
             .reset_index()
         )
-    outputs: Dict[int, Mapping[Tuple[Any, Any], float]] = {}
-    for focal_year in sorted(set(int(value) for value in focal_years)):
+    outputs: dict[int, Mapping[tuple[Any, Any], float]] = {}
+    for focal_year in sorted({int(value) for value in focal_years}):
         selected = aggregated[
             aggregated["source_year"].between(
                 focal_year - window_years, focal_year - 1, inclusive="both"
@@ -124,8 +120,8 @@ def annual_field_distances(
             aggfunc="sum",
             fill_value=0,
         ).astype(float)
-        profiles = {
-            str(field): matrix.loc[field].to_numpy(dtype=float)
+        profiles: dict[Hashable, Sequence[float]] = {
+            str(field): matrix.loc[field].to_numpy(dtype=float).tolist()
             for field in matrix.index
         }
         outputs[focal_year] = cosine_distance_profiles(profiles)
@@ -143,12 +139,8 @@ def aggregate_field_citation_events_from_edges(
     missing = sorted(required - set(reference_metadata))
     if missing:
         raise ValueError(f"reference metadata is missing columns: {missing}")
-    metadata = reference_metadata[
-        ["reference_id", "reference_year", "field_id"]
-    ].copy()
-    metadata["reference_id"] = metadata["reference_id"].map(
-        normalize_openalex_id
-    )
+    metadata = reference_metadata[["reference_id", "reference_year", "field_id"]].copy()
+    metadata["reference_id"] = metadata["reference_id"].map(normalize_openalex_id)
     metadata["reference_year"] = pd.to_numeric(
         metadata["reference_year"], errors="coerce"
     )
@@ -158,11 +150,9 @@ def aggregate_field_citation_events_from_edges(
         & metadata["reference_year"].notna()
         & metadata["field_id"].ne("")
     ].drop_duplicates("reference_id", keep="last")
-    year_lookup = metadata.set_index("reference_id")[
-        "reference_year"
-    ].to_dict()
+    year_lookup = metadata.set_index("reference_id")["reference_year"].to_dict()
     field_lookup = metadata.set_index("reference_id")["field_id"].to_dict()
-    counts: Counter[Tuple[int, str, str]] = Counter()
+    counts: Counter[tuple[int, str, str]] = Counter()
     path = Path(reference_edges_path)
     for chunk in pd.read_csv(
         path,
@@ -213,7 +203,7 @@ def _normalize_inputs(
     papers: pd.DataFrame,
     paper_references: pd.DataFrame,
     work_view: pd.DataFrame,
-) -> tuple[pd.DataFrame, Dict[str, Dict[str, List[Any]]]]:
+) -> tuple[pd.DataFrame, dict[str, dict[str, list[Any]]]]:
     required_papers = {"paper_id", "publication_year"}
     required_references = {"paper_id", "reference_id"}
     required_metadata = {
@@ -258,9 +248,7 @@ def _normalize_inputs(
         normalize_openalex_id
     )
     bibliography = bibliography.drop_duplicates().merge(
-        metadata[
-            ["reference_id", "reference_year", "source_id", "field_id"]
-        ],
+        metadata[["reference_id", "reference_year", "source_id", "field_id"]],
         on="reference_id",
         how="left",
         validate="many_to_one",
@@ -271,28 +259,25 @@ def _normalize_inputs(
         how="inner",
         validate="many_to_one",
     )
-    bibliography["strictly_prior_reference"] = (
-        bibliography["reference_year"].notna()
-        & bibliography["reference_year"].lt(bibliography["publication_year"])
-    )
+    bibliography["strictly_prior_reference"] = bibliography[
+        "reference_year"
+    ].notna() & bibliography["reference_year"].lt(bibliography["publication_year"])
 
-    grouped: Dict[str, Dict[str, List[Any]]] = {}
+    grouped: dict[str, dict[str, list[Any]]] = {}
     for paper_id, group in bibliography.groupby("paper_id", sort=False):
         prior = group[group["strictly_prior_reference"]]
         grouped[str(paper_id)] = {
             "declared_reference_ids": group["reference_id"].tolist(),
             "valid_reference_ids": prior["reference_id"].tolist(),
             "reference_years": prior["reference_year"].astype(int).tolist(),
-            "source_ids": [
-                value for value in prior["source_id"].astype(str) if value
-            ],
+            "source_ids": [value for value in prior["source_id"].astype(str) if value],
             "field_ids": [value for value in prior["field_id"].astype(str) if value],
         }
     return paper_frame, grouped
 
 
-def _paper_source_pairs(source_ids: Sequence[str]) -> set[Tuple[Any, Any]]:
-    unique_sources = sorted(set(value for value in source_ids if value))
+def _paper_source_pairs(source_ids: Sequence[str]) -> set[tuple[Any, Any]]:
+    unique_sources = sorted({value for value in source_ids if value})
     return {
         canonical_pair(left, right)
         for left, right in itertools.combinations(unique_sources, 2)
@@ -302,7 +287,7 @@ def _paper_source_pairs(source_ids: Sequence[str]) -> set[Tuple[Any, Any]]:
 def _update_historical_source_counts(
     source_ids: Sequence[str],
     source_counts: Counter[Any],
-    pair_counts: Counter[Tuple[Any, Any]],
+    pair_counts: Counter[tuple[Any, Any]],
 ) -> None:
     source_counts.update(set(source_ids))
     pair_counts.update(_paper_source_pairs(source_ids))
@@ -313,9 +298,9 @@ def build_v6_reference_feature_table(
     paper_references: pd.DataFrame,
     work_view: pd.DataFrame,
     *,
-    field_citation_events: Optional[pd.DataFrame] = None,
+    field_citation_events: pd.DataFrame | None = None,
     field_profile_window_years: int = 5,
-    output_path: Optional[Path] = None,
+    output_path: Path | None = None,
 ) -> pd.DataFrame:
     """Build annual T0 reference features from frozen local tables.
 
@@ -323,9 +308,7 @@ def build_v6_reference_feature_table(
     registry therefore retains the recombination metrics as adaptations.  No
     current-year paper is added until all papers in that year are scored.
     """
-    paper_frame, bibliographies = _normalize_inputs(
-        papers, paper_references, work_view
-    )
+    paper_frame, bibliographies = _normalize_inputs(papers, paper_references, work_view)
     focal_years = sorted(paper_frame["publication_year"].unique().tolist())
     if field_citation_events is None:
         field_citation_events = build_field_citation_events(work_view)
@@ -335,9 +318,9 @@ def build_v6_reference_feature_table(
         window_years=field_profile_window_years,
     )
     source_counts: Counter[Any] = Counter()
-    pair_counts: Counter[Tuple[Any, Any]] = Counter()
+    pair_counts: Counter[tuple[Any, Any]] = Counter()
     n_historical_papers = 0
-    rows: List[Dict[str, Any]] = []
+    rows: list[dict[str, Any]] = []
     for year, year_papers in paper_frame.groupby("publication_year", sort=True):
         year = int(year)
         distances = distance_by_year.get(year, {})
@@ -361,7 +344,7 @@ def build_v6_reference_feature_table(
             pair_z_scores = marginal_pair_z_scores(
                 sources, pair_counts, source_counts, n_historical_papers
             )
-            quality_flags: List[str] = []
+            quality_flags: list[str] = []
             if not sources:
                 quality_flags.append("no_mapped_reference_sources")
             if not fields:
@@ -392,9 +375,7 @@ def build_v6_reference_feature_table(
                         sources, pair_counts
                     ),
                     "first_time_source_pair_distance_mean": np.nan,
-                    "uzzi_atypicality_p10_t0": uzzi_atypicality_p10(
-                        pair_z_scores
-                    ),
+                    "uzzi_atypicality_p10_t0": uzzi_atypicality_p10(pair_z_scores),
                     "uzzi_conventionality_median_t0": (
                         uzzi_conventionality_median(pair_z_scores)
                     ),
@@ -430,9 +411,7 @@ def build_v6_reference_feature_table(
         for paper_id in year_papers["paper_id"].astype(str):
             sources = bibliographies.get(paper_id, {}).get("source_ids", [])
             if sources:
-                _update_historical_source_counts(
-                    sources, source_counts, pair_counts
-                )
+                _update_historical_source_counts(sources, source_counts, pair_counts)
         n_historical_papers += len(year_papers)
 
     output = pd.DataFrame(rows)

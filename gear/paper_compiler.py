@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import hashlib
 import re
+from collections.abc import Iterable, Sequence
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Literal
 
 from pypdf import PdfReader
 from pypdf.errors import PdfReadError
@@ -15,13 +16,13 @@ from .contracts import (
     ClaimLedger,
     ClaimStrength,
     ClaimType,
-    EvidenceSpan,
     EvidenceReadiness,
+    EvidenceSpan,
     MethodResultLedger,
     PageText,
     PaperClaim,
-    PaperQualityReport,
     PaperIR,
+    PaperQualityReport,
     ParseStatus,
     ReferenceEntry,
     ReviewRequest,
@@ -31,11 +32,12 @@ HEADING_PATTERN = re.compile(
     r"^(?:#{1,6}\s*)?(?:\d+(?:\.\d+)*\s+)?(?:abstract|introduction|background|related work|"
     r"methods?|materials? and methods?|experiments?|results?|discussion|"
     r"limitations?|conclusions?|references?|supplementary materials?)\s*$",
-    flags=re.I,
+    flags=re.IGNORECASE,
 )
-DOI_PATTERN = re.compile(r"10\.\d{4,9}/[-._;()/:A-Z0-9]+", flags=re.I)
+DOI_PATTERN = re.compile(r"10\.\d{4,9}/[-._;()/:A-Z0-9]+", flags=re.IGNORECASE)
+REFERENCE_NUMBER_PATTERN = re.compile(r"(?:^|\n)\s*(\d{1,4})[.)]\s+")
 SENTENCE_SPLIT = re.compile(r"(?<=[.!?。！？])\s+")
-PAGE_MARKER = re.compile(r"^<!--\s*GEAR_PAGE:\s*(\d+)\s*-->\s*$", re.M)
+PAGE_MARKER = re.compile(r"^<!--\s*GEAR_PAGE:\s*(\d+)\s*-->\s*$", re.MULTILINE)
 
 
 def sha256_file(path: Path) -> str:
@@ -57,7 +59,7 @@ def _normalize_page_text(text: str) -> str:
     return value.strip()
 
 
-def extract_pdf_pages(path: Path) -> List[PageText]:
+def extract_pdf_pages(path: Path) -> list[PageText]:
     """Extract one normalized text object per PDF page."""
     reader = PdfReader(str(Path(path)))
     return [
@@ -80,12 +82,12 @@ def read_markdown(path: Path) -> str:
     return value.replace("\r\n", "\n").replace("\r", "\n").strip()
 
 
-def markdown_pages(markdown: str) -> List[PageText]:
+def markdown_pages(markdown: str) -> list[PageText]:
     """Recover PDF page markers or expose native Markdown as one logical page."""
     matches = list(PAGE_MARKER.finditer(markdown))
     if not matches:
         return [PageText(page=1, text=markdown)] if markdown else []
-    pages: List[PageText] = []
+    pages: list[PageText] = []
     for index, marker in enumerate(matches):
         start = marker.end()
         end = matches[index + 1].start() if index + 1 < len(matches) else len(markdown)
@@ -100,7 +102,7 @@ def markdown_pages(markdown: str) -> List[PageText]:
 
 def _split_long_block(
     text: str, start: int, maximum: int = 1800
-) -> Iterable[Tuple[int, int, str]]:
+) -> Iterable[tuple[int, int, str]]:
     if len(text) <= maximum:
         yield start, start + len(text), text
         return
@@ -133,10 +135,10 @@ def _split_long_block(
         cursor = max(cut, end)
 
 
-def _blocks_with_offsets(text: str) -> List[Tuple[int, int, str]]:
+def _blocks_with_offsets(text: str) -> list[tuple[int, int, str]]:
     """Split headings before paragraphs while preserving exact page offsets."""
-    blocks: List[Tuple[int, int, str]] = []
-    heading_ranges: List[Tuple[int, int, str]] = []
+    blocks: list[tuple[int, int, str]] = []
+    heading_ranges: list[tuple[int, int, str]] = []
     cursor = 0
     for raw_line in text.splitlines(keepends=True):
         line_end = cursor + len(raw_line)
@@ -159,15 +161,15 @@ def _blocks_with_offsets(text: str) -> List[Tuple[int, int, str]]:
     return _paragraph_blocks(text, 0)
 
 
-def _paragraph_blocks(text: str, base_offset: int) -> List[Tuple[int, int, str]]:
-    blocks: List[Tuple[int, int, str]] = []
-    for match in re.finditer(r"\S(?:.*?\S)?(?=\n\s*\n|\Z)", text, flags=re.S):
+def _paragraph_blocks(text: str, base_offset: int) -> list[tuple[int, int, str]]:
+    blocks: list[tuple[int, int, str]] = []
+    for match in re.finditer(r"\S(?:.*?\S)?(?=\n\s*\n|\Z)", text, flags=re.DOTALL):
         raw = match.group(0)
         if not raw:
             continue
         blocks.extend(_split_long_block(raw, base_offset + match.start()))
     if len(blocks) <= 1 and "\n" in text:
-        line_blocks: List[Tuple[int, int, str]] = []
+        line_blocks: list[tuple[int, int, str]] = []
         cursor = 0
         for line in text.splitlines():
             position = text.find(line, cursor)
@@ -183,9 +185,9 @@ def _paragraph_blocks(text: str, base_offset: int) -> List[Tuple[int, int, str]]
     return blocks
 
 
-def segment_pages(pages: Sequence[PageText], source_id: str) -> List[EvidenceSpan]:
+def segment_pages(pages: Sequence[PageText], source_id: str) -> list[EvidenceSpan]:
     """Create deterministic page-local evidence spans and section paths."""
-    spans: List[EvidenceSpan] = []
+    spans: list[EvidenceSpan] = []
     current_section = "Document"
     block_index = 0
     for page in pages:
@@ -211,7 +213,7 @@ def segment_pages(pages: Sequence[PageText], source_id: str) -> List[EvidenceSpa
     return spans
 
 
-def _claim_type(sentence: str) -> Optional[ClaimType]:
+def _claim_type(sentence: str) -> ClaimType | None:
     lower = sentence.casefold()
     if re.search(r"\b(first|novel|new|unprecedented|we propose|we introduce)\b", lower):
         return ClaimType.NOVELTY
@@ -252,8 +254,8 @@ def _claim_strength(sentence: str) -> ClaimStrength:
     return ClaimStrength.MODERATE
 
 
-def _required_evidence(claim_type: ClaimType) -> List[str]:
-    mapping: Dict[ClaimType, List[str]] = {
+def _required_evidence(claim_type: ClaimType) -> list[str]:
+    mapping: dict[ClaimType, list[str]] = {
         ClaimType.NOVELTY: ["target_span", "prior_art_relation"],
         ClaimType.METHOD: ["target_span", "internal_method_evidence"],
         ClaimType.RESULT: ["target_span", "result_or_table_evidence"],
@@ -266,8 +268,8 @@ def _required_evidence(claim_type: ClaimType) -> List[str]:
 
 def extract_claims(
     spans: Sequence[EvidenceSpan], maximum: int = 12
-) -> List[PaperClaim]:
-    claims: List[PaperClaim] = []
+) -> list[PaperClaim]:
+    claims: list[PaperClaim] = []
     seen: set[str] = set()
     for span in spans:
         if any("reference" in item.casefold() for item in span.section_path):
@@ -313,34 +315,41 @@ def extract_claims(
     return claims
 
 
-LEDGER_PATTERNS: Dict[str, re.Pattern[str]] = {
-    "research_question": re.compile(r"\b(aim|question|objective|hypothes)\b", re.I),
+LEDGER_PATTERNS: dict[str, re.Pattern[str]] = {
+    "research_question": re.compile(
+        r"\b(aim|question|objective|hypothes)\b", re.IGNORECASE
+    ),
     "dataset_sample": re.compile(
-        r"\b(dataset|sample|participants?|cohort|corpus|subjects?)\b", re.I
+        r"\b(dataset|sample|participants?|cohort|corpus|subjects?)\b", re.IGNORECASE
     ),
     "design_comparator": re.compile(
-        r"\b(design|control group|comparator|randomi[sz]|intervention)\b", re.I
+        r"\b(design|control group|comparator|randomi[sz]|intervention)\b", re.IGNORECASE
     ),
     "model_algorithm": re.compile(
-        r"\b(model|algorithm|architecture|loss function|assay|protocol)\b", re.I
+        r"\b(model|algorithm|architecture|loss function|assay|protocol)\b",
+        re.IGNORECASE,
     ),
     "baselines_metrics_statistics": re.compile(
         r"\b(baseline|metric|accuracy|f1|auc|p[- ]value|confidence interval|statistical)\b",
-        re.I,
+        re.IGNORECASE,
     ),
     "ablation_robustness": re.compile(
-        r"\b(ablation|robust|sensitivity|perturb|subgroup)\b", re.I
+        r"\b(ablation|robust|sensitivity|perturb|subgroup)\b", re.IGNORECASE
     ),
     "main_results": re.compile(
-        r"\b(results?|outperform|improv|increase|decrease|significant)\b", re.I
+        r"\b(results?|outperform|improv|increase|decrease|significant)\b", re.IGNORECASE
     ),
-    "stated_limitations": re.compile(r"\b(limitations?|caveat|future work)\b", re.I),
-    "figures_tables": re.compile(r"\b(fig(?:ure)?\.?\s*\d+|table\s*\d+)\b", re.I),
+    "stated_limitations": re.compile(
+        r"\b(limitations?|caveat|future work)\b", re.IGNORECASE
+    ),
+    "figures_tables": re.compile(
+        r"\b(fig(?:ure)?\.?\s*\d+|table\s*\d+)\b", re.IGNORECASE
+    ),
 }
 
 
 def extract_method_result_ledger(spans: Sequence[EvidenceSpan]) -> MethodResultLedger:
-    values: Dict[str, List[str]] = {name: [] for name in LEDGER_PATTERNS}
+    values: dict[str, list[str]] = {name: [] for name in LEDGER_PATTERNS}
     for span in spans:
         searchable = f"{' '.join(span.section_path)} {span.text}"
         for name, pattern in LEDGER_PATTERNS.items():
@@ -349,28 +358,126 @@ def extract_method_result_ledger(spans: Sequence[EvidenceSpan]) -> MethodResultL
     return MethodResultLedger.model_validate(values)
 
 
-def extract_references(spans: Sequence[EvidenceSpan]) -> List[ReferenceEntry]:
-    references: List[ReferenceEntry] = []
+def extract_references(
+    spans: Sequence[EvidenceSpan], manuscript_doi: str | None = None
+) -> list[ReferenceEntry]:
+    """Split numbered bibliography spans into one traceable entry per citation.
+
+    PDF page chunks often contain 10--20 bibliography items.  Treating a whole
+    chunk as one reference makes citation seeds ambiguous and can accidentally
+    select the manuscript's own DOI.  Continuation text is carried across span
+    boundaries while each entry remains anchored to the span where it starts.
+    """
+
+    entries: list[tuple[int | None, str, str]] = []
+    current_number: int | None = None
+    current_source = ""
+    current_parts: list[str] = []
+
+    def flush() -> None:
+        nonlocal current_number, current_source, current_parts
+        text = " ".join(" ".join(current_parts).split()).strip()
+        if current_number is not None and current_source and len(text) >= 20:
+            entries.append((current_number, current_source, text))
+        current_number = None
+        current_source = ""
+        current_parts = []
+
     for span in spans:
-        in_references = any(
-            "reference" in item.casefold() for item in span.section_path
-        )
-        dois = DOI_PATTERN.findall(span.text)
-        if not in_references and not dois:
+        if not any("reference" in item.casefold() for item in span.section_path):
             continue
-        reference_identity = f"{span.span_id}|{span.text}"
-        reference_id = (
-            "REF-" + hashlib.sha256(reference_identity.encode("utf-8")).hexdigest()[:16]
-        )
+        matches = list(REFERENCE_NUMBER_PATTERN.finditer(span.text))
+        if not matches:
+            if current_number is not None:
+                current_parts.append(span.text)
+            else:
+                text = " ".join(span.text.split()).strip()
+                if len(text) >= 20:
+                    entries.append((None, span.span_id, text))
+            continue
+        prefix = span.text[: matches[0].start()].strip()
+        if prefix and current_number is not None:
+            current_parts.append(prefix)
+        for index, match in enumerate(matches):
+            flush()
+            current_number = int(match.group(1))
+            current_source = span.span_id
+            end = matches[index + 1].start() if index + 1 < len(matches) else None
+            current_parts = [span.text[match.end() : end].strip()]
+    flush()
+
+    references: list[ReferenceEntry] = []
+    normalized_manuscript_doi = _normalize_doi(manuscript_doi)
+    for citation_number, source_span_id, raw_text in entries:
+        dois = [
+            value
+            for raw_value in DOI_PATTERN.findall(raw_text)
+            if (value := raw_value.rstrip(".,;)"))
+            and _normalize_doi(value) != normalized_manuscript_doi
+        ]
+        identity = f"{source_span_id}|{citation_number or 'unnumbered'}|{raw_text}"
         references.append(
             ReferenceEntry(
-                reference_id=reference_id,
-                raw_text=span.text,
-                source_span_id=span.span_id,
-                doi=dois[0].rstrip(".,;)") if dois else None,
+                reference_id=(
+                    "REF-" + hashlib.sha256(identity.encode("utf-8")).hexdigest()[:16]
+                ),
+                raw_text=raw_text,
+                source_span_id=source_span_id,
+                citation_number=citation_number,
+                title=_reference_title(raw_text),
+                doi=dois[0] if dois else None,
+                publication_year=_reference_year(raw_text),
             )
         )
     return references
+
+
+def _reference_year(text: str) -> int | None:
+    years = [int(value) for value in re.findall(r"\b(?:19|20)\d{2}\b", text)]
+    return years[-1] if years else None
+
+
+REFERENCE_VENUE_PATTERN = re.compile(
+    r"\.\s+(?=(?:Nature|Science|Cell|Nat\.|Mol\.|J\.|Proc\.|Adv\.|Nano|ACS|"
+    r"Chem\.|Genes\s+Dev\.|EMBO\s+J\.|FEMS|PLoS|Phys\.|IEEE|Angew\.|"
+    r"Soft\s+Matter|Macromolecules|Small))",
+    re.IGNORECASE,
+)
+
+
+def _reference_title(text: str) -> str | None:
+    """Extract a conservative title for exact bibliography-anchor search.
+
+    A title is useful even when a PDF bibliography omits the DOI, which is the
+    common case in the Nature development papers.  Fail closed when the author
+    boundary or venue boundary cannot be identified; the raw citation remains
+    available for traceability.
+    """
+
+    compact = " ".join(text.split()).strip()
+    if not compact:
+        return None
+    author_end = compact.casefold().find(" et al. ")
+    if author_end >= 0:
+        start = author_end + len(" et al. ")
+    else:
+        initials = list(re.finditer(r"(?:[A-Z]\.(?:\s*|$)){1,3}", compact))
+        if not initials:
+            return None
+        start = initials[-1].end()
+    remainder = compact[start:].strip(" .")
+    venue = REFERENCE_VENUE_PATTERN.search(remainder)
+    if venue is None:
+        return None
+    title = remainder[: venue.start()].strip(" .")
+    return title if len(title) >= 8 else None
+
+
+def _normalize_doi(value: str | None) -> str:
+    text = str(value or "").strip().casefold()
+    for prefix in ("https://doi.org/", "http://doi.org/", "doi:"):
+        text = text.removeprefix(prefix)
+    return text.rstrip(".,;)")
 
 
 def build_claim_ledger(
@@ -420,7 +527,7 @@ def extract_ledgers(paper_ir: PaperIR) -> ClaimLedger:
 class PaperCompiler:
     """Build PaperIR from canonical Markdown without external manuscript upload."""
 
-    def __init__(self, config: Optional[GearConfig] = None) -> None:
+    def __init__(self, config: GearConfig | None = None) -> None:
         self.config = config or load_config()
 
     def compile(self, request: ReviewRequest) -> PaperIR:
@@ -430,8 +537,10 @@ class PaperCompiler:
         suffix = path.suffix.casefold()
         if suffix not in {".md", ".markdown", ".pdf"}:
             raise ValueError("paper must be Markdown (.md/.markdown) or PDF (.pdf)")
-        source_format = "pdf" if suffix == ".pdf" else "markdown"
-        parse_failure: Optional[str] = None
+        source_format: Literal["pdf", "markdown"] = (
+            "pdf" if suffix == ".pdf" else "markdown"
+        )
+        parse_failure: str | None = None
         try:
             markdown = (
                 pdf_to_markdown(path) if source_format == "pdf" else read_markdown(path)
@@ -453,7 +562,7 @@ class PaperCompiler:
         severe_garble = bool(combined_text) and (
             visible_ratio < 0.15 or replacement_ratio > 0.02
         )
-        flags: List[str] = []
+        flags: list[str] = []
         if parse_failure:
             flags.append(f"paper_parse_error:{parse_failure}")
         if not pages or total_characters == 0:
@@ -476,7 +585,7 @@ class PaperCompiler:
         paper_id = metadata.openalex_id or metadata.doi or paper_hash
         claims = [] if severe_garble else extract_claims(spans, self.config.max_claims)
         method_result = extract_method_result_ledger(spans)
-        references = extract_references(spans)
+        references = extract_references(spans, metadata.doi)
         sections = {item.section_path[0] for item in spans if item.section_path}
         document_ratio = (
             sum(item.section_path == ["Document"] for item in spans) / len(spans)
@@ -522,7 +631,7 @@ class PaperCompiler:
 
 def compile_paper(
     request: ReviewRequest,
-    config: Optional[GearConfig] = None,
+    config: GearConfig | None = None,
 ) -> PaperIR:
     return PaperCompiler(config).compile(request)
 

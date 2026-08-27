@@ -7,7 +7,7 @@ from gear.cli import _validate_command
 from gear.codex_critic import CodexCliCritic
 from gear.contracts import PaperMetadata, ReviewRequest, ReviewStatus
 from gear.graph_context import build_graph_review_context
-from gear.graph_prior_contracts import GraphResultV3
+from gear.graph_prior_contracts import GraphRuntimePacket, InfluenceForecast
 from gear.paper_compiler import PaperCompiler
 from gear.paper_extraction import PaperRubricBuilder
 from gear.prior_art import PriorArtService, RelationClassifier
@@ -21,8 +21,9 @@ from gear.review_contracts import (
     StructuredReview,
 )
 from gear.review_pipeline import ServiceRegistry, review_paper
-from gear.review_state import initialize_review_state_v3
+from gear.review_state import initialize_review_state
 from gear.review_verifier import ReviewVerifier
+from gear.reviewers import CodexAgentReviewer
 from gear.trace import EvidenceStore
 
 
@@ -46,6 +47,24 @@ def _draft(paper_ir):
             limiting_points=[],
         ),
         strengths=[point],
+    )
+
+
+def _graph(paper_id: str, cutoff: date = date(2010, 1, 2)) -> GraphRuntimePacket:
+    return GraphRuntimePacket(
+        paper_id=paper_id,
+        cutoff_date=cutoff,
+        forecast=InfluenceForecast(
+            status="available",
+            prospective_5y_diffusion_percentile=55.0,
+            uptake_probability=0.5,
+            conditional_diffusion=0.5,
+            expected_diffusion=0.25,
+            feature_coverage=1.0,
+            release_id="test",
+            model_sha256="sha256:test",
+            percentile_reference_sha256="sha256:test",
+        ),
     )
 
 
@@ -89,19 +108,19 @@ def test_pipeline_outputs_only_five_part_contract(
     )
     paper_ir = compiler.compile(request)
 
-    class CalibrationFake:
-        def build_packet(self, supplied, **kwargs):
-            return calibration_factory(supplied.paper_id, score=55.0)
+    class GraphFake:
+        def score(self, supplied, cutoff):
+            return _graph(supplied.paper_id, cutoff)
 
-    reviewer = CodexCliCritic(
+    reviewer = CodexAgentReviewer(
         gear_config,
         generator=lambda system, user: _draft(paper_ir).model_dump(mode="json"),
     )
     services = ServiceRegistry(
         evidence_store=EvidenceStore(output),
         paper_compiler=compiler,
-        calibration_service=CalibrationFake(),
-        reviewer=reviewer,
+        graph_scorer=GraphFake(),
+        agent_reviewer=reviewer,
         prior_art=PriorArtService(gear_config),
         relation_classifier=RelationClassifier(gear_config),
         verifier=ReviewVerifier(
@@ -131,14 +150,14 @@ def test_pipeline_outputs_only_five_part_contract(
     assert "recommend" not in bundle.review_markdown.casefold()
     assert "graph calibration" not in bundle.review_markdown.casefold()
     assert bundle.graph_result is not None
-    assert bundle.state_v3 is not None
+    assert bundle.state is not None
     assert (output / "graph_runtime_packet.json").is_file()
     assert not (output / "graph_prior.json").exists()
     assert not (output / "graph_prior_audit.json").exists()
     serialized_bundle = json.loads(
         (output / "review_bundle.json").read_text(encoding="utf-8")
     )
-    assert serialized_bundle["contract"] == "aspr_gear_review_bundle_v3"
+    assert serialized_bundle["contract"] == "gear_review_bundle"
     for legacy_field in ("calibration", "graph_context", "graph_prior", "state_v2"):
         assert legacy_field not in serialized_bundle
     assert services.evidence_store.validate_manifest() == []
@@ -152,11 +171,11 @@ def test_semantic_verifier_failure_forces_limited(
     request = ReviewRequest(paper_path=sample_md)
     paper_ir = compiler.compile(request)
 
-    class CalibrationFake:
-        def build_packet(self, supplied, **kwargs):
-            return calibration_factory(supplied.paper_id, score=55.0)
+    class GraphFake:
+        def score(self, supplied, cutoff):
+            return _graph(supplied.paper_id, cutoff)
 
-    reviewer = CodexCliCritic(
+    reviewer = CodexAgentReviewer(
         gear_config,
         generator=lambda system, user: _draft(paper_ir).model_dump(mode="json"),
     )
@@ -167,8 +186,8 @@ def test_semantic_verifier_failure_forces_limited(
     services = ServiceRegistry(
         evidence_store=EvidenceStore(output),
         paper_compiler=compiler,
-        calibration_service=CalibrationFake(),
-        reviewer=reviewer,
+        graph_scorer=GraphFake(),
+        agent_reviewer=reviewer,
         prior_art=PriorArtService(gear_config),
         relation_classifier=RelationClassifier(gear_config),
         verifier=ReviewVerifier(gear_config, semantic_checker=failed_semantic_checker),
@@ -191,9 +210,9 @@ def test_delete_only_semantic_repair_reaches_final_compiler(
     request = ReviewRequest(paper_path=sample_md)
     paper_ir = compiler.compile(request)
 
-    class CalibrationFake:
-        def build_packet(self, supplied, **kwargs):
-            return calibration_factory(supplied.paper_id, score=55.0)
+    class GraphFake:
+        def score(self, supplied, cutoff):
+            return _graph(supplied.paper_id, cutoff)
 
     def reject_visible_points(system, user):
         del system
@@ -214,8 +233,8 @@ def test_delete_only_semantic_repair_reaches_final_compiler(
     services = ServiceRegistry(
         evidence_store=EvidenceStore(output),
         paper_compiler=compiler,
-        calibration_service=CalibrationFake(),
-        reviewer=CodexCliCritic(
+        graph_scorer=GraphFake(),
+        agent_reviewer=CodexAgentReviewer(
             gear_config,
             generator=lambda system, user: _draft(paper_ir).model_dump(mode="json"),
         ),
@@ -230,21 +249,15 @@ def test_delete_only_semantic_repair_reaches_final_compiler(
 
     assert bundle.verification.passed is True
     assert bundle.structured_review.all_points() == []
-    assert bundle.state_v3 is not None
-    assert bundle.state_v3.phase.value == "compiled"
+    assert bundle.state is not None
+    assert bundle.state.phase.value == "compiled"
 
 
 def test_wrong_paper_relation_target_is_blocking(
     tmp_path, gear_config, paper_ir, paper_request
 ):
-    graph = GraphResultV3(
-        paper_id=paper_ir.paper_id,
-        score_0_100=50,
-        p_uptake=0.5,
-        conditional_diffusion=0.5,
-        feature_coverage=1.0,
-    )
-    state = initialize_review_state_v3(
+    graph = _graph(paper_ir.paper_id, paper_request.evidence_date)
+    state = initialize_review_state(
         paper_ir,
         PaperRubricBuilder().build(paper_ir),
         graph,
@@ -288,7 +301,7 @@ def test_graph_exception_is_limited_with_explicit_reason(
         def score(self, supplied, cutoff):
             raise RuntimeError("injected graph failure")
 
-    reviewer = CodexCliCritic(
+    reviewer = CodexAgentReviewer(
         gear_config,
         generator=lambda system, user: _draft(paper_ir).model_dump(mode="json"),
     )
@@ -296,7 +309,7 @@ def test_graph_exception_is_limited_with_explicit_reason(
         evidence_store=EvidenceStore(output),
         paper_compiler=compiler,
         graph_scorer=BrokenGraph(),
-        reviewer=reviewer,
+        agent_reviewer=reviewer,
         prior_art=PriorArtService(gear_config),
         relation_classifier=RelationClassifier(gear_config),
         verifier=ReviewVerifier(
@@ -335,19 +348,19 @@ def test_missing_codex_cli_is_explicit_limited(
 ):
     output = tmp_path / "limited-current"
 
-    class CalibrationFake:
-        def build_packet(self, supplied, **kwargs):
-            return calibration_factory(supplied.paper_id, score=55.0)
+    class GraphFake:
+        def score(self, supplied, cutoff):
+            return _graph(supplied.paper_id, cutoff)
 
     def unavailable(system, user):
         raise ValueError("Codex CLI unavailable")
 
-    reviewer = CodexCliCritic(gear_config, generator=unavailable)
+    reviewer = CodexAgentReviewer(gear_config, generator=unavailable)
     services = ServiceRegistry(
         evidence_store=EvidenceStore(output),
         paper_compiler=PaperCompiler(gear_config),
-        calibration_service=CalibrationFake(),
-        reviewer=reviewer,
+        graph_scorer=GraphFake(),
+        agent_reviewer=reviewer,
         prior_art=PriorArtService(gear_config),
         relation_classifier=RelationClassifier(gear_config),
         verifier=ReviewVerifier(

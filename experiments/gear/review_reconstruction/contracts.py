@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import List, Literal, Optional
+from typing import Literal
 
 from pydantic import Field, field_validator, model_validator
 
@@ -30,7 +30,7 @@ class ResolutionStatus(str, Enum):
 class ReviewSourceExcerpt(ReviewModel):
     source_key: str
     source_role: ReviewSourceRole
-    reviewer_id_hash: Optional[str] = None
+    reviewer_id_hash: str | None = None
     round_id: str
     char_start: int = Field(ge=0)
     char_end: int = Field(ge=0)
@@ -42,18 +42,19 @@ class ReconstructionPaperContext(ReviewModel):
     contract: Literal["reconstruction_paper_context"] = "reconstruction_paper_context"
     paper_id: str
     paper_sha256: str
-    claims: List[ContextClaim]
-    spans: List[ContextSpan]
+    claims: list[ContextClaim]
+    spans: list[ContextSpan]
 
 
 class ReferenceTrace(ReviewModel):
     trace_id: str
     paper_id: str
-    point_id: Optional[str] = None
-    reviewer_quote_keys: List[str] = Field(min_length=1)
-    author_response_keys: List[str] = Field(default_factory=list)
-    round_ids: List[str] = Field(min_length=1)
-    reviewer_id_hashes: List[str] = Field(min_length=1)
+    point_id: str | None = None
+    reviewer_quote_keys: list[str] = Field(min_length=1)
+    author_response_keys: list[str] = Field(default_factory=list)
+    round_ids: list[str] = Field(min_length=1)
+    reviewer_id_hashes: list[str] = Field(min_length=1)
+    final_paper_evidence_keys: list[str] = Field(min_length=1)
     resolution_status: ResolutionStatus
     rationale: str = ""
 
@@ -62,15 +63,16 @@ class ReferenceTrace(ReviewModel):
         "author_response_keys",
         "round_ids",
         "reviewer_id_hashes",
+        "final_paper_evidence_keys",
     )
     @classmethod
-    def unique_refs(cls, value: List[str]) -> List[str]:
+    def unique_refs(cls, value: list[str]) -> list[str]:
         if len(value) != len(set(value)):
             raise ValueError("ReferenceTrace reference lists must be unique")
         return value
 
     @model_validator(mode="after")
-    def resolution_target_rule(self) -> "ReferenceTrace":
+    def resolution_target_rule(self) -> ReferenceTrace:
         excluded = self.resolution_status in {
             ResolutionStatus.RESOLVED,
             ResolutionStatus.UNVERIFIABLE,
@@ -85,10 +87,10 @@ class ReferenceTrace(ReviewModel):
 class RevisionLedgerEntry(ReviewModel):
     ledger_id: str
     paper_id: str
-    reviewer_quote_keys: List[str] = Field(min_length=1)
-    author_response_keys: List[str] = Field(default_factory=list)
+    reviewer_quote_keys: list[str] = Field(min_length=1)
+    author_response_keys: list[str] = Field(default_factory=list)
     resolution_status: ResolutionStatus
-    final_paper_evidence_keys: List[str] = Field(default_factory=list)
+    final_paper_evidence_keys: list[str] = Field(default_factory=list)
     residual_summary: str = ""
 
 
@@ -105,13 +107,13 @@ class ReconstructionSessionPackage(ReviewModel):
     schema_sha256: str
     input_sha256: str
     paper_context: ReconstructionPaperContext
-    reviewer_spans: List[ReviewSourceExcerpt]
-    author_response_spans: List[ReviewSourceExcerpt]
+    reviewer_spans: list[ReviewSourceExcerpt]
+    author_response_spans: list[ReviewSourceExcerpt]
     speaker_role_audit: dict[str, object] = Field(default_factory=dict)
     instructions: str
 
     @model_validator(mode="after")
-    def identity_links(self) -> "ReconstructionSessionPackage":
+    def identity_links(self) -> ReconstructionSessionPackage:
         if self.paper_context.paper_id != self.paper_id:
             raise ValueError("session paper context identity mismatch")
         if self.paper_context.paper_sha256 != self.paper_sha256:
@@ -151,12 +153,12 @@ class ReconstructionSessionResponse(ReviewModel):
     schema_sha256: str
     input_sha256: str
     review: StructuredReview
-    reference_traces: List[ReferenceTrace]
-    revision_ledger: List[RevisionLedgerEntry] = Field(default_factory=list)
+    reference_traces: list[ReferenceTrace]
+    revision_ledger: list[RevisionLedgerEntry] = Field(default_factory=list)
     output_sha256: str
 
     @model_validator(mode="after")
-    def response_links(self) -> "ReconstructionSessionResponse":
+    def response_links(self) -> ReconstructionSessionResponse:
         if self.review.paper_id != self.paper_id:
             raise ValueError("response review paper_id mismatch")
         point_ids = {point.point_id for point in self.review.all_points()}

@@ -15,12 +15,11 @@ from .contracts import (
     ReviewStatus,
     StrictModel,
 )
-from .graph_prior import graph_runtime_packet
 from .graph_prior_contracts import (
-    GraphGuidancePlanV1,
-    GraphPriorResult,
-    GraphRuntimePacketV1,
-    ResourceLedgerV1,
+    GraphRuntimePacket,
+    ResourceLedger,
+    RetrievalGuidancePlan,
+    RetrievalRoutingPlan,
 )
 
 SCHEMA_VERSION: Literal["aspr_gear"] = "aspr_gear"
@@ -72,6 +71,14 @@ class NoveltyVerificationStatus(str, Enum):
     PARTIALLY_VERIFIED = "partially_verified"
     INSUFFICIENT_COVERAGE = "insufficient_coverage"
     NOT_ASSESSED = "not_assessed"
+
+
+class NoveltyEvidenceStatus(str, Enum):
+    NOT_ASSESSED = "not_assessed"
+    MANUSCRIPT_SUPPORTED = "manuscript_supported"
+    EVIDENCE_QUALIFIED = "evidence_qualified"
+    EVIDENCE_CHALLENGED = "evidence_challenged"
+    INCONCLUSIVE = "inconclusive"
 
 
 class CriticSource(str, Enum):
@@ -435,44 +442,8 @@ class FusionReport(ReviewModel):
     failures: list[str] = Field(default_factory=list)
 
 
-class ReviewStateV2(ReviewModel):
-    contract: Literal["aspr_evidence_state_v2"] = "aspr_evidence_state_v2"
-    state_id: str
-    phase: ReviewPhase
-    paper_id: str
-    paper_sha256: str
-    cutoff_date: date
-    rubric: PaperSpecificRubric
-    branch_reviews: dict[ReviewSource, BranchReview] = Field(default_factory=dict)
-    graph_prior_evidence_key: str
-    graph_prior: GraphPriorResult
-    canonical_points: dict[str, CanonicalReviewPoint] = Field(default_factory=dict)
-    retrieved_work_evidence_keys: list[str] = Field(default_factory=list)
-    relation_evidence_keys: list[str] = Field(default_factory=list)
-    unresolved_target_ids: list[str] = Field(default_factory=list)
-    action_budget: EvidenceBudget = Field(default_factory=EvidenceBudget)
-    process_features: ProcessFeatures = Field(default_factory=ProcessFeatures)
-    failures: list[FailureRecord] = Field(default_factory=list)
-    finalized: bool = False
-
-    @model_validator(mode="after")
-    def state_invariants(self) -> ReviewStateV2:
-        agent = self.branch_reviews.get(ReviewSource.AGENT)
-        if self.phase != ReviewPhase.INITIALIZED and agent is None:
-            raise ValueError("Agent Reviewer branch is required")
-        if any(key != point.point_id for key, point in self.canonical_points.items()):
-            raise ValueError("canonical point identity mismatch")
-        if self.finalized and self.phase not in {
-            ReviewPhase.EVIDENCE_FINALIZED,
-            ReviewPhase.VERIFIED,
-            ReviewPhase.COMPILED,
-        }:
-            raise ValueError("finalized state has an invalid phase")
-        return self
-
-
-class ReviewStateV3(ReviewModel):
-    contract: Literal["aspr_evidence_state_v3"] = "aspr_evidence_state_v3"
+class ReviewState(ReviewModel):
+    contract: Literal["gear_review_state"] = "gear_review_state"
     state_id: str
     phase: ReviewPhase
     paper_id: str
@@ -481,14 +452,18 @@ class ReviewStateV3(ReviewModel):
     rubric: PaperSpecificRubric
     branch_reviews: dict[ReviewSource, BranchReview] = Field(default_factory=dict)
     graph_result_evidence_key: str | None = None
-    graph_result: GraphRuntimePacketV1 | None = None
-    graph_guidance_plan: GraphGuidancePlanV1 | None = None
-    resource_ledger: ResourceLedgerV1 | None = None
+    graph_result: GraphRuntimePacket | None = None
+    graph_guidance_plan: RetrievalGuidancePlan | None = None
+    retrieval_routing_plans: dict[str, RetrievalRoutingPlan] = Field(
+        default_factory=dict
+    )
+    resource_ledger: ResourceLedger | None = None
     novelty_direction: NoveltyJudgment | None = None
     novelty_verification_status: NoveltyVerificationStatus = (
         NoveltyVerificationStatus.NOT_ASSESSED
     )
     novelty_direction_confidence: float | None = Field(default=None, ge=0.0, le=1.0)
+    novelty_evidence_status: NoveltyEvidenceStatus = NoveltyEvidenceStatus.NOT_ASSESSED
     aspr_evidence_assessments: dict[
         str,
         Literal[
@@ -512,10 +487,10 @@ class ReviewStateV3(ReviewModel):
     @field_validator("graph_result", mode="before")
     @classmethod
     def migrate_graph_result(cls, value: Any) -> Any:
-        return None if value is None else graph_runtime_packet(value)
+        return None if value is None else GraphRuntimePacket.model_validate(value)
 
     @model_validator(mode="after")
-    def state_invariants(self) -> ReviewStateV3:
+    def state_invariants(self) -> ReviewState:
         agent = self.branch_reviews.get(ReviewSource.AGENT)
         if self.phase != ReviewPhase.INITIALIZED and agent is None:
             raise ValueError("Agent Reviewer branch is required")
@@ -583,40 +558,6 @@ class ReviewContextPack(ReviewModel):
     graph: GraphReviewContext
 
 
-class ReviewPointState(ReviewModel):
-    point_id: str
-    status: PointValidationStatus = PointValidationStatus.PENDING
-    retained: bool = True
-    evidence_keys: list[str] = Field(default_factory=list)
-    relation_evidence_keys: list[str] = Field(default_factory=list)
-    validation_notes: list[str] = Field(default_factory=list)
-
-
-class ReviewState(ReviewModel):
-    contract: Literal["review_review_state"] = "review_review_state"
-    state_id: str
-    paper_id: str
-    paper_sha256: str
-    cutoff_date: date
-    draft_review: StructuredReview
-    graph_context: GraphReviewContext
-    point_states: dict[str, ReviewPointState]
-    retrieved_work_evidence_keys: list[str] = Field(default_factory=list)
-    relation_evidence_keys: list[str] = Field(default_factory=list)
-    graph_text_tension_point_ids: list[str] = Field(default_factory=list)
-    failure_ledger: list[FailureRecord] = Field(default_factory=list)
-    finalized: bool = False
-
-    @model_validator(mode="after")
-    def validate_point_links(self) -> ReviewState:
-        point_ids = {point.point_id for point in self.draft_review.all_points()}
-        if set(self.point_states) != point_ids:
-            raise ValueError("ReviewState point keys differ from draft review")
-        if any(key != value.point_id for key, value in self.point_states.items()):
-            raise ValueError("ReviewState point-state identity mismatch")
-        return self
-
-
 class CriticRunMetadata(ReviewModel):
     critic_source: CriticSource
     model_id: str
@@ -640,7 +581,7 @@ class VerificationReport(ReviewModel):
 
 
 class ReviewBundle(ReviewModel):
-    contract: Literal["aspr_gear_review_bundle_v3"] = "aspr_gear_review_bundle_v3"
+    contract: Literal["gear_review_bundle"] = "gear_review_bundle"
     status: ReviewStatus
     paper_ir: PaperIR
     critic: CriticRunMetadata
@@ -650,16 +591,16 @@ class ReviewBundle(ReviewModel):
     output_files: dict[str, str] = Field(default_factory=dict)
     agent_review: BranchReview | None = None
     qwen_review: BranchReview | None = None
-    graph_result: GraphRuntimePacketV1 | None = None
+    graph_result: GraphRuntimePacket | None = None
     fusion_report: FusionReport | None = None
-    state_v3: ReviewStateV3 | None = None
+    state: ReviewState | None = None
     process_diagnostic: dict[str, Any] | None = None
     grounding_report: dict[str, Any] | None = None
 
     @field_validator("graph_result", mode="before")
     @classmethod
     def migrate_graph_result(cls, value: Any) -> Any:
-        return None if value is None else graph_runtime_packet(value)
+        return None if value is None else GraphRuntimePacket.model_validate(value)
 
 
 def _validate_evidence_keys(value: list[str]) -> list[str]:
@@ -690,6 +631,7 @@ __all__ = [
     "FusionReport",
     "GraphReviewContext",
     "NoveltyAssessment",
+    "NoveltyEvidenceStatus",
     "NoveltyJudgment",
     "NoveltyVerificationStatus",
     "PaperSpecificRubric",
@@ -701,11 +643,8 @@ __all__ = [
     "ReviewContextPack",
     "ReviewPhase",
     "ReviewPoint",
-    "ReviewPointState",
     "ReviewSource",
     "ReviewState",
-    "ReviewStateV2",
-    "ReviewStateV3",
     "ReviewSummary",
     "StructuredReview",
     "VerificationIssue",

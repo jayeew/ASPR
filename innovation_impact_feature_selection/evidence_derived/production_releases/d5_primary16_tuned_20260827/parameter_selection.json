@@ -1,0 +1,15 @@
+{
+  "parameters": {
+    "inner_temporal_folds": 4,
+    "l2_regularization": 3.0,
+    "learning_rate": 0.05,
+    "max_depth": 5,
+    "max_iter": 250,
+    "max_leaf_nodes": 31,
+    "min_samples_leaf": 30,
+    "parameter_id": "medium_flexible",
+    "seed": 20260806
+  },
+  "selected_parameter_id": "medium_flexible",
+  "selection_rule": "modal parameter_id across D5 outer-fold inner selections; outer-test labels excluded"
+}

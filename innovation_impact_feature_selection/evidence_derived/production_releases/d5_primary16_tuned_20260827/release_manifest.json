@@ -1,0 +1,70 @@
+{
+  "artifacts": {
+    "d5_primary_oof_percentile_reference.npy": {
+      "sha256": "577191cd09b98ac037515157632e0d08dbe9b574c1250e55faba67c8b1321134",
+      "size_bytes": 2544088
+    },
+    "parameter_selection.json": {
+      "sha256": "b6ddc9d8670849640d84df9346506fbead8eb8ba6a1ccb9ead53fcd7ce6f1dd1",
+      "size_bytes": 423
+    },
+    "primary16_d5_model.joblib": {
+      "sha256": "792bb865d568e0de442ee18b4b34c1ac1e6e74dce2305b4b1db2185fe71be132",
+      "size_bytes": 12763899
+    },
+    "prospective_5y_diffusion_scores.parquet": {
+      "sha256": "002b7b3cbfddf12410abd041162ddbb321fffd5c97847d31b7b265366002c2e8",
+      "size_bytes": 8244838
+    },
+    "runtime_replay_100.parquet": {
+      "sha256": "41f11871ea798cbcfcb173c0b672a576b4f39c18de6504a3b3ab35d5782dee66",
+      "size_bytes": 4221
+    }
+  },
+  "contract": "evidence_derived_tuned_primary16_d5_production_v1",
+  "feature_count": 16,
+  "feature_names": [
+    "EF0017",
+    "EF0038",
+    "EF0052",
+    "EF0083",
+    "EF0186",
+    "EF0188",
+    "EF0197",
+    "EF0238",
+    "EF0240",
+    "EF0307",
+    "EF0309",
+    "EF0312",
+    "EF0314",
+    "EF0315",
+    "EF0318",
+    "EF0319"
+  ],
+  "horizon": 5,
+  "matrix_path": "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived/frozen_releases/relaxed_7_16_153_219_fixed_hgb_20260820/final_training_features_primary.parquet",
+  "matrix_sha256": "8da0fb900f5007bb0eb6cc6a34e138cfe9f6c414b154dc9107a3976c0d13d5c6",
+  "oof_reference_rows": 317995,
+  "parameter_selection": {
+    "parameters": {
+      "inner_temporal_folds": 4,
+      "l2_regularization": 3.0,
+      "learning_rate": 0.05,
+      "max_depth": 5,
+      "max_iter": 250,
+      "max_leaf_nodes": 31,
+      "min_samples_leaf": 30,
+      "parameter_id": "medium_flexible",
+      "seed": 20260806
+    },
+    "selected_parameter_id": "medium_flexible",
+    "selection_rule": "modal parameter_id across D5 outer-fold inner selections; outer-test labels excluded"
+  },
+  "score_is_novelty": false,
+  "score_is_probability": false,
+  "score_name": "prospective_5y_diffusion_percentile",
+  "scored_rows": 411490,
+  "source_tuned_release": "hgb_nested_tuned_7_16_153_219_20260820_b48936af",
+  "source_tuned_release_path": "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived/frozen_releases/hgb_nested_tuned_7_16_153_219_20260820_b48936af",
+  "training_rows": 333185
+}

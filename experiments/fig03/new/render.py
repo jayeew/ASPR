@@ -269,7 +269,7 @@ def draw_panel_b_header(axis: Axes) -> None:
     axis.text(
         0.045,
         0.12,
-        "Each cell: ten fold-local deciles with 95% year-block CI · D10 share / lift · ★ official",
+        "Each cell: ten fold-local deciles with 95% year-block CI · D10 share / lift · ★ selected D5 set",
         transform=axis.transAxes,
         fontsize=6.8,
         color=MUTED,
@@ -393,7 +393,7 @@ def draw_panel_b_board(
                 color=color,
                 show_y_axis=column == 0,
                 show_x_axis=row == 2,
-                official=horizon == 5 and model_id == "fulltext_16",
+                official=horizon == 5 and model_id == "primary",
             )
             if row == 0:
                 axis.set_title(
@@ -600,7 +600,7 @@ def draw_performance_board(
                         "pad": 0.3,
                     },
                 )
-            if horizon == 5 and model_id == "fulltext_16":
+            if horizon == 5 and model_id == "primary":
                 for spine in axis.spines.values():
                     spine.set_color(AMBER)
                     spine.set_linewidth(1.2)
@@ -617,7 +617,7 @@ def draw_performance_board(
                 axis.text(
                     0.985,
                     0.78,
-                    "Official ASPR model",
+                    "Selected D5 Primary16",
                     transform=axis.transAxes,
                     fontsize=6.5,
                     weight="bold",
@@ -710,7 +710,7 @@ def draw_ridgeline_terrain(
     domains = display_domains(config)
     selected = landscape[
         landscape["horizon"].eq(5)
-        & landscape["model_id"].eq("fulltext_16")
+        & landscape["model_id"].eq("primary")
         & landscape["status"].eq("reliable")
     ]
     z_min = float(config["ridgeline_z_min"])
@@ -1071,8 +1071,8 @@ def build_figure(
     panel_label(
         d_header,
         "d",
-        "Official-model 3D performance terrain",
-        "D5 × Full-text 16 · interpolation within observed years",
+        "D5 Primary16 3D performance terrain",
+        "D5 × Primary 16 · interpolation within observed years",
     )
     d_axis = cast(Axes3D, figure.add_subplot(bottom[1, 0], projection="3d"))
     draw_ridgeline_terrain(d_axis, landscape, config)
@@ -1231,7 +1231,7 @@ def nature_chart_contract(config: Mapping[str, Any]) -> Mapping[str, Any]:
             "a": "five-node formal ASPR construction with separate formulas and claim boundary",
             "b": "twelve separate D3/D5/D8 × four-set OOF decile curves with 95% CI",
             "c": "exact 3-by-4 temporal-domain heatmap board",
-            "d": "official D5 Full-text 16 continuous semi-transparent 3D performance terrain",
+            "d": "D5 Primary 16 continuous semi-transparent 3D performance terrain",
             "e": "three exact adjacent-set D5 gain heatmaps",
         },
         "data_policy": "render frozen panel tables only; no simulation, fitting, bootstrap, or numeric recomputation",
@@ -1240,7 +1240,7 @@ def nature_chart_contract(config: Mapping[str, Any]) -> Mapping[str, Any]:
         "minimum_font_size_pt": float(config["minimum_font_size_pt"]),
         "palette": "blue/teal/pale-yellow/orange/red absolute scale; blue-decrease/white/orange-increase gain scale",
         "performance_scale": "focused 0.68-0.82; under/over values shown with disclosed endpoint colors",
-        "domain_display_order": "descending mean reliable D5 Full-text 16 annual-window Spearman; display only",
+        "domain_display_order": "descending mean reliable D5 Primary 16 annual-window Spearman; display only",
         "ridgeline_color": "relative domain-mean performance on the same blue-to-red palette",
         "claim_boundary": "predictive screening, not causality or direct novelty judgment",
     }
@@ -1250,7 +1250,7 @@ def nature_panel_text(deciles: pd.DataFrame) -> Mapping[str, Any]:
     """Return the five-panel caption without changing any numeric evidence."""
     top_rows = deciles.loc[deciles["prediction_decile"].eq(10)]
     d5_top = top_rows.loc[
-        top_rows["horizon"].eq(5) & top_rows["model_id"].eq("fulltext_16")
+        top_rows["horizon"].eq(5) & top_rows["model_id"].eq("primary")
     ].iloc[0]
     return {
         "title": "Out-of-time validation of ASPR Score",
@@ -1258,11 +1258,11 @@ def nature_panel_text(deciles: pd.DataFrame) -> Mapping[str, Any]:
             "Fig. 3 | Out-of-time validation of ASPR Score. a, Publication-time indicators enter a calibrated "
             "two-part HGB; its raw expected-diffusion prediction is mapped through the mature-D5 empirical CDF "
             "to the 0–100 ASPR score. b, Twelve separate fold-local decile curves report enrichment for every "
-            "D3/D5/D8 × Strict 7/Full-text 16/Primary 154/Broad T0 221 combination, with year-block bootstrap "
-            "intervals and D10 share/lift callouts. The official D5 Full-text 16 cell reaches "
+            "D3/D5/D8 × Strict 7/Primary 16/Expanded 153/Broad T0 219 combination, with year-block bootstrap "
+            "intervals and D10 share/lift callouts. The D5 Primary 16 cell reaches "
             f"{100 * d5_top['observed_top_share']:.2f}% and {d5_top['enrichment_over_baseline']:.2f}× baseline. "
             "c, Exact three-year trailing heatmaps retain the frozen D3/D5/D8 × four-set × twelve-domain × year "
-            "results. d, A single semi-transparent surface visually interpolates the official D5 Full-text 16 mature-year "
+            "results. d, A single semi-transparent surface visually interpolates the D5 Primary 16 mature-year "
             "terrain only within each domain's observed endpoints; the three highest mean-performance domains are "
             "labelled, while exact values remain in c. e, Exact D5 adjacent-set "
             "gain maps show local "

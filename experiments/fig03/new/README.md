@@ -1,11 +1,10 @@
-# Fig.3 — ASPR Score frozen-data Nature renderer
+# Fig.3 — Evidence-derived tuned HGB performance landscape
 
 This directory implements the final uncapped-data Fig.3 using the HGB model
 family exclusively.
 
-数值输入通过 GEAR calibration release 注册表解析，不再依赖训练实验的深层
-`outputs/` 路径。当前配置使用 `prepublication_graph_v3:d5_fulltext16`；运行前可用
-`python3 -m gear show-calibration --verify` 验证本地 release。
+数值输入通过 evidence-derived 的 `current_release.json` 解析到自包含的不可变
+tuned release，不再读取 evidence v3 或旧 GEAR calibration 路径。
 
 ## Figure question
 
@@ -22,26 +21,26 @@ recompute any displayed statistic.
 
 ## Panels
 
-- **a — Score construction.** Full-text 16 inputs enter the calibrated two-part
-  HGB. `raw_prediction_score` is expected five-year realized diffusion;
-  `aspr_score` is its 0–100 empirical percentile against the mature D5 reference.
+- **a — Score construction.** Primary 16 inputs enter the calibrated two-part
+  HGB. The displayed score is the fold-valid D5 expected-diffusion prediction
+  mapped to its 0–100 OOF percentile; it is not a probability or novelty label.
 - **b — Multi-horizon, multi-set OOF enrichment.** A 3 × 4 small-multiple board
   draws twelve separate full decile curves for every D3/D5/D8 × Strict 7/
-  Full-text 16/Primary 154/Broad T0 221 combination. Every curve includes frozen
+  Primary 16/Expanded 153/Broad T0 219 combination. Every curve includes frozen
   95% year-block bootstrap intervals and an exact D10 share/lift callout.
 - **c — Performance landscape.** A 3-by-4 heatmap board shows three-year
-  trailing domain-level OOF Spearman across D3/D5/D8 and Strict 7, Full-text 16,
-  Primary 154, and Broad T0 221. The four heatmap columns use the full available
+  trailing domain-level OOF Spearman across D3/D5/D8 and Strict 7, Primary 16,
+  Expanded 153, and Broad T0 219. The four heatmap columns use the full available
   panel width; no separate overall-OOF summary matrix is displayed.
-- **d — Official-model terrain.** One continuous semi-transparent surface shows
-  the D5 Full-text 16 mature-year performance terrain. The surface is smoothed
+- **d — D5 Primary16 terrain.** One continuous semi-transparent surface shows
+  the D5 Primary 16 mature-year performance terrain. The surface is smoothed
   only between each domain's first and last reliable observed year: internal
   gaps may be linearly bridged for continuity, but endpoints are never
   extrapolated. Exact, uninterpolated values remain in Panel c. The three
-  domains with the highest mean reliable D5 Full-text 16 Spearman are labelled
+  domains with the highest mean reliable D5 Primary 16 Spearman are labelled
   outside the mountain area with arrows to their peaks.
 - **e — D5 gain landscape.** Adjacent nested-set differences show that the main
-  local gain occurs from Strict 7 to Full-text 16. Expanding further produces
+  local gain occurs from Strict 7 to Primary 16. Expanding further produces
   near-zero median gains and heterogeneous positive and negative cells.
 
 ## Frozen inputs
@@ -50,7 +49,7 @@ Numeric evidence comes only from the final uncapped-v2 HGB retraining output:
 
 - `oof_predictions.parquet`
 - `oof_metrics.csv`
-- `official_aspr_scores.parquet`
+- `paper_scores.parquet`
 
 The model configuration is read only to verify that every training cutoff is
 strictly earlier than its test interval. The source files contain only HGB

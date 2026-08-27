@@ -23,27 +23,26 @@ old v6.1 five-angle/eight-indicator system.
   formal dimension rule: a passing metric, two independent research teams, and
   H2 non-alias confirmation.
 - **d — Operating sets.** The strict core, full-text expansion, source-grounded
-  scalable set and broad T0 sensitivity ceiling are nested and frozen before
+  expanded set and broad T0 sensitivity ceiling are nested and frozen before
   outcome evaluation. Their implementation tiers are shown separately from
   model roles: direct source formulae, transparent local formula surrogates,
   structured construct proxies and title/taxonomy lexical proxies. In
-  particular, `source_154` is explicitly labelled as a source-grounded
-  expansion—not 154 formula replications.
+  particular, the 153-feature expansion is not 153 formula replications.
 
 ## Inputs and guardrails
 
 The adapter reads only frozen files under
-`innovation_impact_feature_selection/evidence_derived_v3/`, the frozen process
-record in `docs/`, and two metadata-only files that define the four operational
-sets. It does **not** read OOF metrics, predictions, fold data, targets, future
-outcomes or the old v6.1 candidate registry. The source-of-truth result is
+`innovation_impact_feature_selection/evidence_derived_v3/`, its registered
+recovery bundle, the frozen process record in `docs/`, and the tuned membership
+manifest. It does **not** read OOF metrics, predictions, fold data, targets or
+future outcomes. The source-of-truth result is
 checked against:
 
 - `K=42`, `Q=336`, `P=367`, `M=66`, `D=1`, `F=7`;
 - `3,615 → 3,170 → 1,102 → 367` terms/families;
 - `1,685` census mentions (plus 13 targeted formula-completion records) and
   `432` canonical indicator families;
-- nested set sizes `7 / 16 / 154 / 221` and dimensions `4 / 10 / 48 / 55`.
+- nested set sizes `7 / 16 / 153 / 219` and dimensions `4 / 10 / 48 / 55`.
 
 The Figure and its caption must retain three limitations: English-only evidence
 can create language/geographic bias; evidence-saturation retrieval is not an

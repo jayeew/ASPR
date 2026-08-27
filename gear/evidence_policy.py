@@ -9,7 +9,7 @@ from .review_contracts import (
     EvidenceAction,
     PointSeverity,
     PointValidationStatus,
-    ReviewStateV3,
+    ReviewState,
 )
 
 STRONG_CLAIM_RE = re.compile(
@@ -29,7 +29,7 @@ def is_high_risk(point: CanonicalReviewPoint) -> bool:
     )
 
 
-def _has_topology_mission(state: ReviewStateV3, point_id: str) -> bool:
+def _has_topology_mission(state: ReviewState, point_id: str) -> bool:
     plan = state.graph_guidance_plan
     if plan is None:
         return False
@@ -43,7 +43,7 @@ def _has_topology_mission(state: ReviewStateV3, point_id: str) -> bool:
     )
 
 
-def _has_counterfactual_mission(state: ReviewStateV3, point_id: str) -> bool:
+def _has_counterfactual_mission(state: ReviewState, point_id: str) -> bool:
     plan = state.graph_guidance_plan
     if plan is None:
         return True
@@ -57,7 +57,7 @@ def _has_counterfactual_mission(state: ReviewStateV3, point_id: str) -> bool:
 
 
 def highest_risk_unresolved_target(
-    state: ReviewStateV3,
+    state: ReviewState,
 ) -> CanonicalReviewPoint | None:
     candidates = [
         point
@@ -87,7 +87,7 @@ def highest_risk_unresolved_target(
 
 
 def next_evidence_action(
-    state: ReviewStateV3,
+    state: ReviewState,
 ) -> tuple[EvidenceAction, str | None, str]:
     candidates = [
         point

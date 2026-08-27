@@ -4,10 +4,11 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections.abc import Iterable, Mapping, Sequence
 from dataclasses import dataclass
 from itertools import combinations, pairwise
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Set, Tuple
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -33,7 +34,7 @@ class RuntimeReplayPaths:
     target_works: Path
 
     @classmethod
-    def from_active_dataset(cls, project_root: Path) -> "RuntimeReplayPaths":
+    def from_active_dataset(cls, project_root: Path) -> RuntimeReplayPaths:
         active = load_active_dataset(project_root)
         feature_root = Path(active["feature_dataset_dir"])
         return cls(
@@ -45,7 +46,7 @@ class RuntimeReplayPaths:
             target_works=Path(active["target_works"]),
         )
 
-    def values(self) -> Tuple[Path, ...]:
+    def values(self) -> tuple[Path, ...]:
         return (
             self.papers,
             self.target_metadata,
@@ -63,7 +64,7 @@ def _sha256_file(path: Path) -> str:
     return f"sha256:{digest.hexdigest()}"
 
 
-def _as_strings(value: object) -> Tuple[str, ...]:
+def _as_strings(value: object) -> tuple[str, ...]:
     if value is None or (isinstance(value, float) and np.isnan(value)):
         return ()
     if isinstance(value, str):
@@ -76,7 +77,7 @@ def _as_strings(value: object) -> Tuple[str, ...]:
     return tuple(str(item) for item in items if str(item))
 
 
-def _country_codes(count: object) -> Tuple[str, ...]:
+def _country_codes(count: object) -> tuple[str, ...]:
     if count is None or pd.isna(count):
         return ()
     numeric = float(str(count))
@@ -106,7 +107,7 @@ def _add_primary_work_to_coupling_context(
     work_id: str,
     publication_year: int,
     reference_ids: object,
-    reference_lookup: Mapping[str, Tuple[Optional[int], Optional[str]]],
+    reference_lookup: Mapping[str, tuple[int | None, str | None]],
 ) -> None:
     """Mirror the frozen v6 opportunity graph's strictly-prior postings."""
     for reference_id in set(_as_strings(reference_ids)):
@@ -120,11 +121,11 @@ def _add_primary_work_to_coupling_context(
         )
 
 
-def _reference_lookup(path: Path) -> Dict[str, Tuple[Optional[int], Optional[str]]]:
+def _reference_lookup(path: Path) -> dict[str, tuple[int | None, str | None]]:
     frame = pd.read_parquet(
         path, columns=["reference_id", "reference_year", "field_id"]
     ).drop_duplicates("reference_id", keep="last")
-    output: Dict[str, Tuple[Optional[int], Optional[str]]] = {}
+    output: dict[str, tuple[int | None, str | None]] = {}
     for row in frame.itertuples(index=False):
         year = int(row.reference_year) if pd.notna(row.reference_year) else None
         field = (
@@ -138,9 +139,9 @@ def _reference_lookup(path: Path) -> Dict[str, Tuple[Optional[int], Optional[str
 
 def _target_references(
     reference_ids: object,
-    lookup: Mapping[str, Tuple[Optional[int], Optional[str]]],
-) -> Tuple[ReferenceT0, ...]:
-    output: List[ReferenceT0] = []
+    lookup: Mapping[str, tuple[int | None, str | None]],
+) -> tuple[ReferenceT0, ...]:
+    output: list[ReferenceT0] = []
     for reference_id in _as_strings(reference_ids):
         year, field = lookup.get(reference_id, (None, None))
         output.append(ReferenceT0(reference_id, year, field))
@@ -149,7 +150,7 @@ def _target_references(
 
 def _load_targets(
     paths: RuntimeReplayPaths,
-    official_ids: Set[str],
+    official_ids: set[str],
 ) -> pd.DataFrame:
     papers = pd.read_parquet(
         paths.papers,
@@ -162,7 +163,7 @@ def _load_targets(
     )
     papers["paper_id"] = papers["paper_id"].astype(str)
     papers = papers[papers["paper_id"].isin(official_ids)].copy()
-    work_parts: List[pd.DataFrame] = []
+    work_parts: list[pd.DataFrame] = []
     for chunk in pd.read_csv(
         paths.target_works,
         usecols=["id", "title"],
@@ -206,10 +207,10 @@ def build_runtime_fulltext16_matrix(
     *,
     project_root: Path,
     official_matrix_path: Path,
-    paths: Optional[RuntimeReplayPaths] = None,
-    years: Optional[Sequence[int]] = None,
-    limit_per_year: Optional[int] = None,
-) -> Tuple[pd.DataFrame, ContextSnapshot, Dict[str, Any]]:
+    paths: RuntimeReplayPaths | None = None,
+    years: Sequence[int] | None = None,
+    limit_per_year: int | None = None,
+) -> tuple[pd.DataFrame, ContextSnapshot, dict[str, Any]]:
     """Recompute Full-text-16 without reading official feature values.
 
     The official matrix supplies only the exact cohort paper IDs.  Every feature
@@ -226,7 +227,7 @@ def build_runtime_fulltext16_matrix(
     )
     targets = _load_targets(source_paths, official_ids)
     focal_years = sorted(int(value) for value in targets["publication_year"].unique())
-    selected_years = set(int(value) for value in years) if years else set(focal_years)
+    selected_years = {int(value) for value in years} if years else set(focal_years)
     reference_lookup = _reference_lookup(source_paths.reference_metadata)
     online_context_year = max(focal_years) + 1
     distance_by_year = annual_field_distances(
@@ -234,7 +235,7 @@ def build_runtime_fulltext16_matrix(
         [*focal_years, online_context_year],
     )
     context = ContextSnapshot(source_max_year=min(focal_years) - 1)
-    output: List[Dict[str, object]] = []
+    output: list[dict[str, object]] = []
     rows_by_year = {
         int(year): frame
         for year, frame in targets.groupby("publication_year", sort=True)
@@ -315,8 +316,8 @@ def build_runtime_context_for_year(
     project_root: Path,
     official_matrix_path: Path,
     target_year: int,
-    paths: Optional[RuntimeReplayPaths] = None,
-) -> Tuple[ContextSnapshot, Dict[str, Any]]:
+    paths: RuntimeReplayPaths | None = None,
+) -> tuple[ContextSnapshot, dict[str, Any]]:
     """Replay frozen source views only up to the year before a target."""
     source_paths = paths or RuntimeReplayPaths.from_active_dataset(project_root)
     for path in source_paths.values():
@@ -349,7 +350,7 @@ def build_runtime_context_for_year(
                 reference_lookup,
             )
         _update_title_and_author_context(context, frame.itertuples(index=False))
-    context.source_max_year = int(target_year) - 1
+    context.source_max_year = int(eligible["publication_year"].astype(int).max())
     context.field_distances = dict(distances.get(int(target_year), {}))
     source_hashes = {
         str(path.resolve()): _sha256_file(path) for path in source_paths.values()
@@ -365,6 +366,6 @@ def build_runtime_context_for_year(
 
 __all__ = [
     "RuntimeReplayPaths",
-    "build_runtime_fulltext16_matrix",
     "build_runtime_context_for_year",
+    "build_runtime_fulltext16_matrix",
 ]

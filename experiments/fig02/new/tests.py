@@ -11,7 +11,7 @@ def _assert_fig2_contract(config_path: Path) -> None:
     """Check the outcome-free v3 evidence contract before rendering."""
     config, paths, _ = load_figure_context(config_path)
     bundle = build_new_bundle(2, config, paths)
-    assert bundle.status == "complete_evidence_derived_v3"
+    assert bundle.status == "complete_evidence_derived_tuned_recovery"
     forbidden = ("oof", "future", "known_group", "measurement_scene")
     assert not [
         table
@@ -75,9 +75,9 @@ def _assert_fig2_contract(config_path: Path) -> None:
     assert len(mapping) == 432
     assert int(mapping["dimension_id"].notna().sum()) == 428
     assert mapping["tier"].value_counts().to_dict() == {
-        "excluded": 211,
-        "source_only": 138,
-        "broad_t0_only": 67,
+        "excluded": 213,
+        "source_only": 137,
+        "broad_t0_only": 66,
         "fulltext_only": 9,
         "strict_core": 7,
     }
@@ -91,14 +91,14 @@ def _assert_fig2_contract(config_path: Path) -> None:
         "opportunity": 1,
     }
     sets = bundle.tables["fig2_feature_sets"].sort_values("set_order")
-    assert sets["feature_count"].astype(int).tolist() == [7, 16, 154, 221]
+    assert sets["feature_count"].astype(int).tolist() == [7, 16, 153, 219]
     assert sets["dimension_count"].astype(int).tolist() == [4, 10, 48, 55]
     source_tiers = bundle.tables["fig2_operationalization_tiers"]
     source_tiers = source_tiers.loc[source_tiers["set_id"].eq("source_154")]
-    assert source_tiers.sort_values("tier_order")["feature_count"].astype(int).tolist() == [12, 4, 79, 59]
+    assert source_tiers.sort_values("tier_order")["feature_count"].astype(int).tolist() == [12, 4, 78, 59]
     broad_tiers = bundle.tables["fig2_operationalization_tiers"]
     broad_tiers = broad_tiers.loc[broad_tiers["set_id"].eq("ultrarelaxed_221")]
-    assert broad_tiers.sort_values("tier_order")["feature_count"].astype(int).tolist() == [12, 4, 90, 115]
+    assert broad_tiers.sort_values("tier_order")["feature_count"].astype(int).tolist() == [12, 4, 88, 115]
     review = bundle.tables["fig2_review_coverage"].iloc[0]
     assert int(review["excluded_local_qwen_artifact_count"]) == 3
     assert int(review["human_attested_worksheet_count"]) == 7
@@ -106,9 +106,9 @@ def _assert_fig2_contract(config_path: Path) -> None:
     membership_sources = {
         Path(path).name
         for path in bundle.source_paths
-        if Path(path).name in {"feature_sets.json", "operationalization_audit.csv"}
+        if Path(path).name in {"run_manifest.json", "recovery_manifest_v3.json"}
     }
-    assert membership_sources == {"feature_sets.json", "operationalization_audit.csv"}
+    assert membership_sources == {"run_manifest.json", "recovery_manifest_v3.json"}
     assert bundle.chart_contract["future_data_used"] is False
     assert bundle.chart_contract["oof_data_used"] is False
     assert bundle.chart_contract["outcome_used_for_indicator_selection"] is False

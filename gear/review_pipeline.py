@@ -17,15 +17,13 @@ from .contracts import (
     ReviewRequest,
     ReviewStatus,
 )
+from .diffusion_forecast import DiffusionForecastService
 from .evidence_supervisor import EvidenceSupervisor, build_retrieval_claim
 from .graph_guidance import GraphGuidancePlanner, is_graph_guidance_target
-from .graph_prior import (
-    GraphScorer,
-    GraphService,
-    GraphUnavailableError,
-    graph_runtime_packet,
+from .graph_prior_contracts import (
+    GraphResourceCaps,
+    GraphRuntimePacket,
 )
-from .graph_prior_contracts import GraphResourceCapsV1, GraphRuntimePacketV1
 from .grounding import GroundingWorkflow
 from .paper_compiler import PaperCompiler
 from .paper_extraction import (
@@ -41,51 +39,35 @@ from .review_contracts import (
     CriticRunMetadata,
     CriticSource,
     EvidenceBudget,
-    GraphReviewContext,
     ReviewBundle,
     ReviewPhase,
-    ReviewSource,
     StructuredReview,
 )
-from .review_controller import ReviewController
 from .review_fusion import ReviewFusion
-from .review_state import initialize_review_state_v3
+from .review_state import initialize_review_state
 from .review_verifier import ReviewVerifier
 from .reviewers import ASPRQwenReviewer, CodexAgentReviewer
-from .reviewers.base import build_graph_blind_payload
 from .trace import EvidenceStore, sha256_file, sha256_value
 
 
-class StructuredReviewer(Protocol):
-    model_name: str
-    last_failures: list[str]
-
-    @property
-    def metadata(self) -> CriticRunMetadata: ...
-
-    def review(
-        self, paper_ir: Any, graph_context: GraphReviewContext
-    ) -> StructuredReview: ...
+class ForecastScorer(Protocol):
+    def score(self, paper_ir: Any, cutoff_date: Any) -> GraphRuntimePacket: ...
 
 
 @dataclass
 class ServiceRegistry:
     evidence_store: EvidenceStore
     paper_compiler: Any | None = None
-    calibration_service: Any | None = None
-    reviewer: StructuredReviewer | None = None
-    prior_art: PriorArtService | None = None
-    relation_classifier: RelationClassifier | None = None
-    controller: ReviewController | None = None
+    prior_art: Any | None = None
+    relation_classifier: Any | None = None
     compiler: ReviewCompiler | None = None
     verifier: ReviewVerifier | None = None
     agent_reviewer: Any | None = None
     qwen_reviewer: Any | None = None
-    graph_prior: GraphScorer | None = None
-    graph_scorer: GraphScorer | None = None
+    graph_scorer: ForecastScorer | None = None
     fusion: ReviewFusion | None = None
     supervisor: EvidenceSupervisor | None = None
-    paper_extractor: HybridPaperExtractor | None = None
+    paper_extractor: Any | None = None
 
 
 def review_paper(
@@ -125,12 +107,7 @@ def review_paper(
         if services and services.agent_reviewer is not None
         else None
     )
-    legacy_reviewer: StructuredReviewer | None = (
-        services.reviewer
-        if services and services.reviewer is not None and agent_reviewer is None
-        else None
-    )
-    if agent_reviewer is None and legacy_reviewer is None:
+    if agent_reviewer is None:
         agent_reviewer = CodexAgentReviewer(resolved_config)
     qwen_reviewer = (
         services.qwen_reviewer
@@ -169,14 +146,14 @@ def review_paper(
     _append_stage(store, "paper_review_compiler", request, paper_ir, started)
     rubric = PaperRubricBuilder().build(paper_ir)
     started = time.monotonic()
-    graph_result: GraphRuntimePacketV1 | None = None
+    graph_result: GraphRuntimePacket | None = None
     graph_failure: str | None = None
     try:
         candidate = graph_scorer.score(paper_ir, request.evidence_date)
-        graph_result = graph_runtime_packet(candidate)
+        graph_result = GraphRuntimePacket.model_validate(candidate)
         if graph_result.paper_id != paper_ir.paper_id:
             raise ValueError("Graph result paper_id mismatch")
-    except (GraphUnavailableError, OSError, RuntimeError, TypeError, ValueError) as exc:
+    except (OSError, RuntimeError, TypeError, ValueError) as exc:
         graph_result = None
         graph_failure = f"{type(exc).__name__}:{exc}"
     _append_stage(
@@ -193,7 +170,7 @@ def review_paper(
     grounding_report = (
         GroundingWorkflow().run(paper_ir, store) if full_artifacts else None
     )
-    state_v3 = initialize_review_state_v3(
+    state = initialize_review_state(
         paper_ir,
         rubric,
         graph_result,
@@ -207,38 +184,22 @@ def review_paper(
         ),
     )
     started = time.monotonic()
-    if legacy_reviewer is not None:
-        draft = legacy_reviewer.review(
-            paper_ir, _legacy_graph_context(paper_ir.paper_id, graph_result)
-        )
-        agent_branch = BranchReview.from_structured(
-            draft,
-            source=ReviewSource.AGENT,
-            model_id=legacy_reviewer.model_name,
-            prompt_sha256="sha256:legacy_v1_prompt",
-            input_sha256=sha256_value(build_graph_blind_payload(paper_ir, rubric)),
-            failures=list(legacy_reviewer.last_failures),
-        )
-        agent_payload = build_graph_blind_payload(paper_ir, rubric)
-        critic_metadata = legacy_reviewer.metadata
-    else:
-        if agent_reviewer is None:
-            raise RuntimeError("required Agent Reviewer was not configured")
-        agent_branch = agent_reviewer.review(paper_ir, rubric)
-        draft = _structured_from_branch(agent_branch)
-        agent_payload = dict(agent_reviewer.last_payload)
-        critic_metadata = CriticRunMetadata(
-            critic_source=(
-                CriticSource.UNAVAILABLE
-                if agent_branch.failures
-                else (
-                    CriticSource.CODEX_CLI
-                    if resolved_config.model_backend == "codex_cli"
-                    else CriticSource.OPENAI_COMPATIBLE_API
-                )
-            ),
-            model_id=agent_branch.model_id,
-        )
+    if agent_reviewer is None:
+        raise RuntimeError("required Agent Reviewer was not configured")
+    agent_branch = agent_reviewer.review(paper_ir, rubric)
+    agent_payload = dict(agent_reviewer.last_payload)
+    critic_metadata = CriticRunMetadata(
+        critic_source=(
+            CriticSource.UNAVAILABLE
+            if agent_branch.failures
+            else (
+                CriticSource.CODEX_CLI
+                if resolved_config.model_backend == "codex_cli"
+                else CriticSource.OPENAI_COMPATIBLE_API
+            )
+        ),
+        model_id=agent_branch.model_id,
+    )
     _append_stage(
         store,
         "agent_reviewer",
@@ -259,7 +220,7 @@ def review_paper(
         and resolved_config.aspr_qwen.required
         and qwen_branch is None
     ):
-        state_v3.failures.append(
+        state.failures.append(
             FailureRecord(stage="qwen_reviewer", reason="qwen_required_unavailable")
         )
     if qwen_branch is not None:
@@ -269,14 +230,14 @@ def review_paper(
             {"review": qwen_branch, "input_payload": qwen_reviewer.last_payload},
         )
     started = time.monotonic()
-    state_v3, fusion_report = fusion.fuse(state_v3, agent_branch, qwen_branch)
+    state, fusion_report = fusion.fuse(state, agent_branch, qwen_branch)
     store.add_evidence("F:FUSION", "review_fusion", fusion_report)
     _append_stage(store, "review_fusion", agent_branch, fusion_report, started)
-    if state_v3.graph_result is not None:
+    if state.graph_result is not None:
         guidance_config = resolved_config.graph_guidance
         search_frames = {}
         prepare_search_frame = getattr(prior_art, "prepare_search_frame", None)
-        for point in state_v3.canonical_points.values():
+        for point in state.canonical_points.values():
             if not (is_graph_guidance_target(point) and callable(prepare_search_frame)):
                 continue
             try:
@@ -291,7 +252,7 @@ def review_paper(
                     f"graph_claim_alignment_frame_degraded:{exc}"
                 )
         guidance_plan = GraphGuidancePlanner(
-            resource_caps=GraphResourceCapsV1(
+            resource_caps=GraphResourceCaps(
                 provider_searches=guidance_config.provider_searches,
                 direct_fetches=guidance_config.direct_fetches,
                 neighbor_expansions=guidance_config.neighbor_expansions,
@@ -300,41 +261,39 @@ def review_paper(
             ),
             policy_version=guidance_config.policy_version,
         ).plan(
-            state_v3,
+            state,
             search_frames=search_frames,
-            enable_profile=guidance_config.profile_enabled,
+            enable_score_routing=guidance_config.score_routing_enabled,
             enable_topology=guidance_config.topology_enabled,
         )
-        state_v3.graph_guidance_plan = guidance_plan
-        if state_v3.resource_ledger is not None:
-            state_v3.resource_ledger.caps = guidance_plan.resource_caps
+        state.graph_guidance_plan = guidance_plan
+        if state.resource_ledger is not None:
+            state.resource_ledger.caps = guidance_plan.resource_caps
         store.add_evidence("G:PLAN", "graph_guidance_plan", guidance_plan)
     if full_artifacts:
-        store.snapshot_state(state_v3)
+        store.snapshot_state(state)
     started = time.monotonic()
-    state_v3 = supervisor.resolve(
-        state_v3,
+    state = supervisor.resolve(
+        state,
         paper_ir,
         store,
         prior_art=prior_art,
         relation_classifier=relation_classifier,
     )
-    if state_v3.resource_ledger is not None:
-        store.add_evidence("G:LEDGER", "resource_ledger", state_v3.resource_ledger)
-    _append_stage(store, "evidence_supervisor", fusion_report, state_v3, started)
+    if state.resource_ledger is not None:
+        store.add_evidence("G:LEDGER", "resource_ledger", state.resource_ledger)
+    _append_stage(store, "evidence_supervisor", fusion_report, state, started)
     if full_artifacts:
-        store.snapshot_state(state_v3)
+        store.snapshot_state(state)
     started = time.monotonic()
-    structured = compiler.compile_v3(state_v3)
-    _append_stage(store, "review_compiler_v3", state_v3, structured, started)
+    structured = compiler.compile(state)
+    _append_stage(store, "review_compiler_v3", state, structured, started)
     started = time.monotonic()
-    verification = verifier.verify_state(structured, state_v3, paper_ir, store)
-    if not verification.passed and verifier.reject_failed_points(
-        state_v3, verification
-    ):
-        structured = compiler.compile_v3(state_v3)
+    verification = verifier.verify_state(structured, state, paper_ir, store)
+    if not verification.passed and verifier.reject_failed_points(state, verification):
+        structured = compiler.compile(state)
         deterministic_issues = verifier._deterministic_v2_issues(
-            structured, state_v3, paper_ir, store
+            structured, state, paper_ir, store
         )
         verification = verification.model_copy(
             update={
@@ -361,14 +320,14 @@ def review_paper(
         # A delete-only verifier repair recomputes the report without making a
         # second semantic model call.  Keep the state machine in sync with that
         # successful repaired report before invoking the final compiler.
-        state_v3.phase = ReviewPhase.VERIFIED
-        state_v3.process_features.semantic_verifier_passed = (
+        state.phase = ReviewPhase.VERIFIED
+        state.process_features.semantic_verifier_passed = (
             verification.semantic_verification_available
         )
-        structured = compiler.compile_verified(state_v3)
+        structured = compiler.compile_verified(state)
     markdown = render_markdown(structured)
-    diagnostic = diagnose_process(state_v3, paper_ir)
-    status = _bundle_status_v3(
+    diagnostic = diagnose_process(state, paper_ir)
+    status = _bundle_status(
         paper_ir,
         graph_result,
         agent_branch,
@@ -388,7 +347,7 @@ def review_paper(
         qwen_review=qwen_branch,
         graph_result=graph_result,
         fusion_report=fusion_report,
-        state_v3=state_v3,
+        state=state,
         process_diagnostic=diagnostic.model_dump(mode="json"),
         grounding_report=(
             grounding_report.model_dump(mode="json")
@@ -409,16 +368,13 @@ def review_paper(
 def _graph_scorer(
     config: GearConfig,
     services: ServiceRegistry | None,
-) -> GraphScorer:
+) -> ForecastScorer:
     if services and services.graph_scorer is not None:
         return services.graph_scorer
-    if services and services.graph_prior is not None:
-        return services.graph_prior
-    if services and services.calibration_service is not None:
-        return GraphService(
-            config, calibration_factory=lambda: services.calibration_service
-        )
-    return GraphService(config)
+    return DiffusionForecastService(
+        config.resolved_forecast_release_manifest(),
+        config.resolved_forecast_runtime_manifest(),
+    )
 
 
 def _structured_from_branch(branch: BranchReview) -> StructuredReview:
@@ -440,28 +396,9 @@ def _register_initial_evidence(
         store.add_evidence(f"P:{span.span_id}", "paper_span", span)
 
 
-def _legacy_graph_context(
-    paper_id: str, graph_result: GraphRuntimePacketV1 | None
-) -> GraphReviewContext:
-    """Compatibility-only projection for an injected legacy reviewer."""
-    return GraphReviewContext(
-        paper_id=paper_id,
-        p_uptake=graph_result.p_uptake if graph_result is not None else None,
-        conditional_diffusion=(
-            graph_result.conditional_diffusion if graph_result is not None else None
-        ),
-        d5_percentile=(graph_result.score_0_100 if graph_result is not None else None),
-        applicability_mode="v3_result" if graph_result is not None else "unavailable",
-        feature_coverage=(
-            graph_result.feature_coverage if graph_result is not None else 0.0
-        ),
-        limited=graph_result is None,
-    )
-
-
-def _bundle_status_v3(
+def _bundle_status(
     paper_ir: Any,
-    graph_result: GraphRuntimePacketV1 | None,
+    graph_result: GraphRuntimePacket | None,
     agent: BranchReview,
     qwen: BranchReview | None,
     config: GearConfig,
@@ -477,6 +414,7 @@ def _bundle_status_v3(
         paper_ir.parse_status != ParseStatus.READY
         or bool(agent.failures)
         or graph_result is None
+        or graph_result.forecast.status != "available"
         or qwen_required_missing
         or verification.limited
         or not verification.passed
@@ -537,9 +475,9 @@ def _persist_bundle(
         _write_model(paths["graph_runtime_packet"], bundle.graph_result)
     if bundle.fusion_report is not None and "fusion_report" in paths:
         _write_model(paths["fusion_report"], bundle.fusion_report)
-    if bundle.state_v3 is not None and "review_state" in paths:
-        _write_model(paths["review_state"], bundle.state_v3)
-        diagnostic = diagnose_process(bundle.state_v3, bundle.paper_ir)
+    if bundle.state is not None and "review_state" in paths:
+        _write_model(paths["review_state"], bundle.state)
+        diagnostic = diagnose_process(bundle.state, bundle.paper_ir)
         _write_model(paths["process_diagnostic"], diagnostic)
     if bundle.grounding_report is not None and "grounding_report" in paths:
         paths["grounding_report"].write_text(
@@ -568,8 +506,8 @@ def _persist_bundle(
             "deprecated_fig4_to_fig10_used": False,
             "request_sha256": sha256_value(request),
             "paper_sha256": bundle.paper_ir.paper_sha256,
-            "state_v3_sha256": (
-                sha256_value(bundle.state_v3) if bundle.state_v3 is not None else None
+            "state_sha256": (
+                sha256_value(bundle.state) if bundle.state is not None else None
             ),
             "agent_prompt_sha256": (
                 bundle.agent_review.prompt_sha256
@@ -638,4 +576,4 @@ def _append_stage(
     )
 
 
-__all__ = ["ServiceRegistry", "StructuredReviewer", "review_paper"]
+__all__ = ["ServiceRegistry", "review_paper"]

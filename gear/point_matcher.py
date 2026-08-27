@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from typing import Dict, List, Set, Tuple
+from typing import Literal
 
 from .review_contracts import BranchReview, FusionMatch, ReviewPoint
 
@@ -21,6 +21,7 @@ NEGATIVE_MARKERS = {
     "fail",
     "fails",
 }
+Relation = Literal["SAME_POINT", "PARTIAL", "CONTRADICTORY", "NO_MATCH"]
 
 
 @dataclass(frozen=True)
@@ -32,10 +33,10 @@ class _LocatedPoint:
 class PointMatcher:
     """Match branch points without using evaluation prompts or human references."""
 
-    def match(self, agent: BranchReview, qwen: BranchReview) -> List[FusionMatch]:
+    def match(self, agent: BranchReview, qwen: BranchReview) -> list[FusionMatch]:
         agent_points = _located_points(agent)
         qwen_points = _located_points(qwen)
-        candidates: List[Tuple[float, int, int, str]] = []
+        candidates: list[tuple[float, int, int, Relation]] = []
         for agent_index, left in enumerate(agent_points):
             for qwen_index, right in enumerate(qwen_points):
                 if left.point.aspect != right.point.aspect:
@@ -44,9 +45,9 @@ class PointMatcher:
                 relation = _relation(left.point, right.point, score)
                 if relation != "NO_MATCH":
                     candidates.append((score, agent_index, qwen_index, relation))
-        used_agent: Set[int] = set()
-        used_qwen: Set[int] = set()
-        matches: List[FusionMatch] = []
+        used_agent: set[int] = set()
+        used_qwen: set[int] = set()
+        matches: list[FusionMatch] = []
         for _, agent_index, qwen_index, relation in sorted(candidates, reverse=True):
             if agent_index in used_agent or qwen_index in used_qwen:
                 continue
@@ -72,11 +73,11 @@ class PointMatcher:
         return matches
 
 
-def branch_sections(review: BranchReview) -> Dict[str, str]:
+def branch_sections(review: BranchReview) -> dict[str, str]:
     return {item.point.point_id: item.section for item in _located_points(review)}
 
 
-def _located_points(review: BranchReview) -> List[_LocatedPoint]:
+def _located_points(review: BranchReview) -> list[_LocatedPoint]:
     return [
         *(
             _LocatedPoint("novelty_support", point)
@@ -96,7 +97,7 @@ def _located_points(review: BranchReview) -> List[_LocatedPoint]:
     ]
 
 
-def _tokens(text: str) -> Set[str]:
+def _tokens(text: str) -> set[str]:
     return {token.casefold() for token in TOKEN_RE.findall(text)}
 
 
@@ -111,7 +112,7 @@ def _similarity(left: ReviewPoint, right: ReviewPoint) -> float:
     return 0.65 * lexical + 0.25 * span_overlap + 0.10 * severity
 
 
-def _relation(left: ReviewPoint, right: ReviewPoint, score: float) -> str:
+def _relation(left: ReviewPoint, right: ReviewPoint, score: float) -> Relation:
     left_tokens = _tokens(left.text)
     right_tokens = _tokens(right.text)
     left_negative = bool(left_tokens & NEGATIVE_MARKERS)

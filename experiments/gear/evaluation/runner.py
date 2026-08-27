@@ -19,7 +19,8 @@ from experiments.gear.review_reconstruction.evaluation import (
 from gear.config import load_config
 from gear.contracts import PaperMetadata, ReviewRequest
 from gear.graph_guidance import GRAPH_GUIDANCE_POLICY_VERSION
-from gear.graph_prior_contracts import GraphRuntimePacketV1
+from gear.graph_prior import cutoff_safe_runtime_packet
+from gear.graph_prior_contracts import GraphRuntimePacket
 from gear.review_contracts import StructuredReview
 from gear.review_pipeline import ServiceRegistry, review_paper
 from gear.review_verifier import ReviewVerifier
@@ -38,12 +39,9 @@ from .efficiency import (
     run_integrity_metrics,
     supported_major_efficiency,
 )
-from .graph_ablation import (
-    assert_branch_isolation,
-    graph_variants,
-    shuffled_graph_components,
-)
+from .graph_ablation import assert_branch_isolation, graph_variants
 from .judges import (
+    judge_blind_review_preference,
     judge_point_support,
     judge_revision_issues,
     judge_semantic_matches,
@@ -125,12 +123,12 @@ def _aggregate_graph_deltas(
 
 
 class StaticGraphScorer:
-    def __init__(self, result: GraphRuntimePacketV1) -> None:
+    def __init__(self, result: GraphRuntimePacket) -> None:
         self.result = result
 
-    def score(self, paper_ir: Any, cutoff: Any) -> GraphRuntimePacketV1:
-        del cutoff
-        return self.result.model_copy(update={"paper_id": paper_ir.paper_id})
+    def score(self, paper_ir: Any, cutoff: Any) -> GraphRuntimePacket:
+        packet = self.result.model_copy(update={"paper_id": paper_ir.paper_id})
+        return cutoff_safe_runtime_packet(packet, cutoff)
 
 
 class EvaluationRunner:
@@ -291,14 +289,11 @@ class EvaluationRunner:
         self._write_jsonl("fault_results.jsonl", rows)
 
     def run_graph_ablations(self) -> None:
-        controls = shuffled_graph_components(
-            [case.graph_result for case in self.manifest.cases]
-        )
         rows: list[dict[str, Any]] = []
         isolation: dict[str, dict[str, dict[str, object]]] = defaultdict(dict)
         with ThreadPoolExecutor(max_workers=self.workers) as pool:
             results = pool.map(
-                lambda case: self._run_ablation_case(case, controls[case.paper_id]),
+                self._run_ablation_case,
                 self.manifest.cases,
             )
             for case_rows, payloads in results:
@@ -309,12 +304,11 @@ class EvaluationRunner:
         self._write_jsonl("graph_ablation_results.jsonl", rows)
 
     def _run_ablation_case(
-        self, case: Any, controls: dict[str, GraphRuntimePacketV1]
+        self, case: Any
     ) -> tuple[list[dict[str, Any]], dict[str, dict[str, object]]]:
-        variants = graph_variants(case.graph_result)
-        variants.extend(
-            type(variants[0])(name=name, result=result)
-            for name, result in controls.items()
+        variants = graph_variants(
+            case.graph_result,
+            placebo=case.placebo_graph_result,
         )
         rows: list[dict[str, Any]] = []
         payloads: dict[str, dict[str, object]] = {}
@@ -323,22 +317,27 @@ class EvaluationRunner:
         clean_bundle = load_review_bundle(clean_dir)
         for variant in variants:
             target = self.output_dir / "graph_ablations" / variant.name / case.case_id
-            if variant.name == "full" and _current_guidance_bundle(clean_bundle):
-                target, bundle = clean_dir, clean_bundle
-            else:
-                bundle = self._run_ablation_variant(
-                    case, variant.result, target, clean_bundle, clean_dir
-                )
-            branch, state = bundle.agent_review, bundle.state_v3
+            bundle = self._run_ablation_variant(
+                case,
+                variant.name,
+                variant.result,
+                target,
+                clean_bundle,
+                clean_dir,
+            )
+            branch, state = bundle.agent_review, bundle.state
             if branch is None or state is None:
-                raise ValueError("ablation run lacks Agent branch or ReviewStateV3")
+                raise ValueError("ablation run lacks Agent branch or ReviewState")
             ledgers[variant.name] = state.resource_ledger
             candidates = sorted(
                 (point.point_id, point.text) for point in branch.all_points()
             )
             payloads[variant.name] = {
+                "draft_sha256": sha256_value(branch),
+                "local_candidate_pool_sha256": _routing_pool_sha256(state, "local"),
+                "remote_candidate_pool_sha256": _routing_pool_sha256(state, "remote"),
+                "resource_caps_sha256": sha256_value(state.resource_ledger.caps),
                 "agent_input_sha256": branch.input_sha256,
-                "agent_branch_sha256": sha256_value(branch),
                 "candidate_set_sha256": sha256_value(candidates),
             }
             rows.append(
@@ -359,39 +358,44 @@ class EvaluationRunner:
         }
         if len(cap_payloads) != 1:
             raise ValueError("Graph ablation resource caps are not identical")
-        if {"full", "random_matched_topology"} <= ledgers.keys():
-            full = ledgers["full"]
-            random = ledgers["random_matched_topology"]
-            full_total = _logical_retrieval_total(full)
-            random_total = _logical_retrieval_total(random)
+        if {"score_topology", "placebo_graph"} <= ledgers.keys():
+            topology = ledgers["score_topology"]
+            wrong = ledgers["placebo_graph"]
+            topology_total = _logical_retrieval_total(topology)
+            wrong_total = _logical_retrieval_total(wrong)
             matched = bool(
-                full is not None and random is not None and full_total == random_total
+                topology is not None
+                and wrong is not None
+                and topology_total == wrong_total
             )
             for row in rows:
-                if row["variant"] == "random_matched_topology":
-                    row["full_random_resource_matched"] = matched
-                    row["full_direct_fetches"] = (
-                        full.logical_direct_fetches if full is not None else None
-                    )
-                    row["random_direct_fetches"] = (
-                        random.logical_direct_fetches if random is not None else None
-                    )
-                    row["full_neighbor_expansions"] = (
-                        full.logical_neighbor_expansions if full is not None else None
-                    )
-                    row["random_neighbor_expansions"] = (
-                        random.logical_neighbor_expansions
-                        if random is not None
+                if row["variant"] == "placebo_graph":
+                    row["topology_control_resource_matched"] = matched
+                    row["topology_direct_fetches"] = (
+                        topology.logical_direct_fetches
+                        if topology is not None
                         else None
                     )
-                    row["full_logical_retrieval_requests"] = full_total
-                    row["random_logical_retrieval_requests"] = random_total
+                    row["control_direct_fetches"] = (
+                        wrong.logical_direct_fetches if wrong is not None else None
+                    )
+                    row["topology_neighbor_expansions"] = (
+                        topology.logical_neighbor_expansions
+                        if topology is not None
+                        else None
+                    )
+                    row["control_neighbor_expansions"] = (
+                        wrong.logical_neighbor_expansions if wrong is not None else None
+                    )
+                    row["topology_logical_retrieval_requests"] = topology_total
+                    row["control_logical_retrieval_requests"] = wrong_total
         return rows, payloads
 
     def _run_ablation_variant(
         self,
         case: Any,
-        graph: GraphRuntimePacketV1,
+        variant_name: str,
+        graph: GraphRuntimePacket,
         target: Path,
         clean_bundle: Any,
         clean_dir: Path,
@@ -417,6 +421,17 @@ class EvaluationRunner:
             evaluation_date=case.cutoff_date,
         )
         config = load_config(self.runtime_config_path)
+        config = config.model_copy(
+            update={
+                "graph_guidance": config.graph_guidance.model_copy(
+                    update={
+                        "score_routing_enabled": variant_name != "neutral",
+                        "topology_enabled": variant_name
+                        in {"score_topology", "placebo_graph"},
+                    }
+                )
+            }
+        )
         services = ServiceRegistry(
             evidence_store=EvidenceStore(target),
             paper_compiler=FixedPaperCompiler(clean_bundle.paper_ir),
@@ -540,9 +555,11 @@ class EvaluationRunner:
         client = CachedEvaluatorClient(self.judge_config)
         rows: list[dict[str, Any]] = []
         failures: list[dict[str, Any]] = []
+        bundles: dict[str, Any] = {}
         for item in ablations:
             run_dir = Path(item["run_dir"])
             bundle = load_review_bundle(run_dir)
+            bundles[item["variant"]] = bundle
             context = build_context_pack(
                 bundle.paper_ir, human[case.paper_id], bundle.structured_review
             )
@@ -573,6 +590,41 @@ class EvaluationRunner:
                         "reason": f"judge_failed:{exc}",
                     }
                 )
+        if {"neutral", "topology"} <= bundles.keys():
+            topology = bundles["topology"]
+            neutral = bundles["neutral"]
+            context = build_context_pack(
+                topology.paper_ir,
+                human[case.paper_id],
+                topology.structured_review,
+            )
+            review_a, review_b = (
+                (topology.structured_review, neutral.structured_review)
+                if _topology_is_a(case.case_id)
+                else (neutral.structured_review, topology.structured_review)
+            )
+            try:
+                preference = judge_blind_review_preference(
+                    client,
+                    context,
+                    review_a,
+                    review_b,
+                )
+                rows.extend(
+                    _decision_rows(
+                        case,
+                        {"preference": preference},
+                        prefix="ablation/",
+                    )
+                )
+            except (EvaluationJudgeError, ValueError) as exc:
+                failures.append(
+                    {
+                        "case_id": case.case_id,
+                        "variant": "topology-neutral-preference",
+                        "reason": f"judge_failed:{exc}",
+                    }
+                )
         return rows, failures
 
     def score(self) -> None:
@@ -594,9 +646,9 @@ class EvaluationRunner:
                 **graph_action_metrics(clean[case.case_id]),
                 **run_integrity_metrics(clean[case.case_id], review, bundle.paper_ir),
             }
-            if bundle.state_v3 is not None:
-                used = bundle.state_v3.action_budget.actions_used
-                maximum = bundle.state_v3.action_budget.total_actions_max
+            if bundle.state is not None:
+                used = bundle.state.action_budget.actions_used
+                maximum = bundle.state.action_budget.total_actions_max
                 row.update(
                     {
                         "evidence_actions_used": used,
@@ -852,18 +904,15 @@ class EvaluationRunner:
             graph_metrics = json.loads(graph_path.read_text())
             text.extend(["", "## Graph ablation", ""])
             for comparison in (
-                "full-score_only",
-                "full-score_profile",
-                "score_only-neutral",
-                "score_profile-score_only",
-                "full-random_matched_topology",
-                "full-shuffled_score",
-                "full-shuffled_profile",
+                "topology-neutral",
+                "topology-wrong_paper_topology",
             ):
                 aggregate = graph_metrics.get("aggregate", {}).get(comparison, {})
                 text.append(f"- `{comparison}`:")
                 for key in (
                     "relation_count_delta",
+                    "claim_relevant_verified_relation_count_delta",
+                    "material_correction_count_delta",
                     "claim_relevant_verified_relation_yield_delta",
                     "relation_to_material_correction_rate_delta",
                     "independent_prior_count_delta",
@@ -879,8 +928,12 @@ class EvaluationRunner:
                             f"(n={aggregate[key].get('n')})"
                         )
             text.append(
-                "- `shuffled_graph_harm_rate`: "
-                f"{_render_metric(graph_metrics.get('shuffled_graph_harm_rate'))}"
+                "- `wrong_paper_topology_harm_rate`: "
+                f"{_render_metric(graph_metrics.get('wrong_paper_topology_harm_rate'))}"
+            )
+            text.append(
+                "- `blind_review_preference_score`: "
+                f"{_render_metric(graph_metrics.get('blind_review_preference_score'))}"
             )
         text.extend(["", "## Reliability", ""])
         for key, value in metrics.get("reliability", {}).items():
@@ -1030,6 +1083,8 @@ class EvaluationRunner:
         deltas = []
         keys = (
             "relation_count",
+            "claim_relevant_verified_relation_count",
+            "material_correction_count",
             "claim_relevant_verified_relation_yield",
             "relation_to_material_correction_rate",
             "logical_retrieval_requests",
@@ -1049,26 +1104,21 @@ class EvaluationRunner:
         )
         for case_id, variants in by_case.items():
             for left_name, right_name in (
-                ("score_only", "neutral"),
-                ("score_profile", "score_only"),
-                ("full", "score_only"),
-                ("full", "score_profile"),
-                ("full", "random_matched_topology"),
-                ("full", "shuffled_score"),
-                ("full", "shuffled_profile"),
+                ("topology", "neutral"),
+                ("topology", "wrong_paper_topology"),
             ):
                 if not {left_name, right_name} <= variants.keys():
                     continue
                 if (
-                    right_name == "random_matched_topology"
-                    and variants[right_name].get("full_random_resource_matched")
+                    right_name == "wrong_paper_topology"
+                    and variants[right_name].get("topology_control_resource_matched")
                     is not True
                 ):
                     not_measured.append(
                         {
                             "case_id": case_id,
                             "track": "graph_ablation",
-                            "metric": "full-random_matched_topology",
+                            "metric": "topology-wrong_paper_topology",
                             "reason": "total logical retrieval resources were not matched",
                         }
                     )
@@ -1092,28 +1142,11 @@ class EvaluationRunner:
                     else 0.0
                 )
                 deltas.append(delta)
-            if "shuffled_score" in variants:
-                shuffled_harm: dict[str, Any] = {
-                    "case_id": case_id,
-                    "comparison": "shuffled_score-full",
-                }
-                for key in (
-                    "analytical_quality",
-                    "major_support_precision",
-                    "novelty_reasoning_soft_f1",
-                    "unsupported_major_count",
-                ):
-                    shuffled_value = variants["shuffled_score"]["metrics"].get(key)
-                    full_value = variants["full"]["metrics"].get(key)
-                    shuffled_harm[f"{key}_delta"] = (
-                        float(shuffled_value) - float(full_value)
-                        if shuffled_value is not None and full_value is not None
-                        else None
-                    )
-                deltas.append(shuffled_harm)
         self._write_jsonl("graph_ablation_results.jsonl", rows)
         harm_rows = [
-            row for row in deltas if row["comparison"] == "shuffled_score-full"
+            row
+            for row in deltas
+            if row["comparison"] == "topology-wrong_paper_topology"
         ]
         harm_flags = [
             (row.get("unsupported_major_count_delta") or 0) > 0
@@ -1127,19 +1160,11 @@ class EvaluationRunner:
             )
             for row in harm_rows
         ]
-        high_tension_cases = {
-            row["case_id"]
-            for row in rows
-            if row["variant"] == "full" and row["score_band"] == "high"
-        }
-        high_deltas = [
-            row
-            for row in deltas
-            if row["comparison"] == "full-neutral"
-            and row["case_id"] in high_tension_cases
+        topology_deltas = [
+            row for row in deltas if row["comparison"] == "topology-neutral"
         ]
         usefulness = None
-        if high_deltas:
+        if topology_deltas:
             usefulness = all(
                 (
                     (row.get("relation_count_delta") or 0) > 0
@@ -1149,7 +1174,27 @@ class EvaluationRunner:
                 and (row.get("unsupported_major_count_delta") or 0) <= 0
                 and (row.get("post_cutoff_leakage_rate_delta") or 0) <= 0
                 and (row.get("graph_semantic_violation_delta") or 0) <= 0
-                for row in high_deltas
+                for row in topology_deltas
+            )
+        preference_rows: list[dict[str, Any]] = []
+        for case in self.manifest.cases:
+            preference = decisions.get(case.case_id, {}).get("ablation/preference")
+            if preference is None:
+                continue
+            topology_label = "A" if _topology_is_a(case.case_id) else "B"
+            score = (
+                0.5
+                if preference.preferred == "TIE"
+                else 1.0 if preference.preferred == topology_label else 0.0
+            )
+            preference_rows.append(
+                {
+                    "case_id": case.case_id,
+                    "topology_position": topology_label,
+                    "preferred": preference.preferred,
+                    "topology_score": score,
+                    "confidence": preference.confidence,
+                }
             )
         self._write_json(
             "graph_ablation_metrics.json",
@@ -1161,12 +1206,24 @@ class EvaluationRunner:
                     seed=self.manifest.seed,
                 ),
                 "latency_delta_cache_order_confounded": True,
-                "shuffled_graph_harm_rate": (
+                "wrong_paper_topology_harm_rate": (
                     sum(harm_flags) / len(harm_flags) if harm_flags else None
                 ),
+                "blind_review_preference_score": (
+                    sum(row["topology_score"] for row in preference_rows)
+                    if preference_rows
+                    else None
+                ),
+                "blind_review_preference_macro": (
+                    sum(row["topology_score"] for row in preference_rows)
+                    / len(preference_rows)
+                    if preference_rows
+                    else None
+                ),
+                "blind_review_preferences": preference_rows,
                 "graph_usefulness_criterion_met": usefulness,
                 "graph_guidance_acceptance_met": any(
-                    row["variant"] == "full"
+                    row["variant"] == "topology"
                     and (row["metrics"].get("graph_seed_fetch_rate") or 0) > 0
                     and (row["metrics"].get("graph_seed_verified_relation_yield") or 0)
                     > 0
@@ -1188,9 +1245,19 @@ class EvaluationRunner:
             for case in self.manifest.cases
             if case.case_id not in judged_cases
         )
+        preference_cases = {row["case_id"] for row in preference_rows}
+        not_measured.extend(
+            {
+                "paper_id": case.paper_id,
+                "metric": "blind_review_preference",
+                "reason": "pairwise preference judge not generated",
+            }
+            for case in self.manifest.cases
+            if case.case_id not in preference_cases
+        )
         self._write_json("not_measured.json", not_measured)
 
-    def _run_case(self, case: Any, graph: GraphRuntimePacketV1, target: Path) -> Any:
+    def _run_case(self, case: Any, graph: GraphRuntimePacket, target: Path) -> Any:
         if self.resume and (target / "review_bundle.json").is_file():
             bundle = load_review_bundle(target)
             if not _current_guidance_bundle(bundle):
@@ -1292,6 +1359,7 @@ class EvaluationRunner:
         from experiments.gear.review_reconstruction.evaluation import MatchJudgeResponse
 
         from .contracts import (
+            BlindReviewPreferenceV1,
             PointSupportResponseV1,
             RevisionIssueMatchResponseV1,
             RubricScoreResponseV1,
@@ -1303,6 +1371,7 @@ class EvaluationRunner:
             "matches": MatchJudgeResponse,
             "revision": RevisionIssueMatchResponseV1,
             "wrong_paper_support": PointSupportResponseV1,
+            "preference": BlindReviewPreferenceV1,
         }
         output: dict[str, dict[str, Any]] = defaultdict(dict)
         for row in _jsonl(self.output_dir / "judge_decisions.jsonl"):
@@ -1473,6 +1542,16 @@ def _evidence_payloads(run_dir: Path) -> dict[str, dict[str, Any]]:
     }
 
 
+def _routing_pool_sha256(state: Any, pool: str) -> str:
+    rows = sorted(
+        (claim_id, candidate.candidate_id, candidate.pool_rank)
+        for claim_id, plan in state.retrieval_routing_plans.items()
+        for candidate in plan.candidates
+        if candidate.pool == pool
+    )
+    return sha256_value(rows)
+
+
 def _decision_rows(
     case: Any, values: dict[str, Any], *, prefix: str = ""
 ) -> list[dict[str, Any]]:
@@ -1493,7 +1572,7 @@ def _render_metric(value: Any) -> str:
 
 
 def _current_guidance_bundle(bundle: Any) -> bool:
-    state = getattr(bundle, "state_v3", None)
+    state = getattr(bundle, "state", None)
     graph = getattr(bundle, "graph_result", None)
     return bool(
         state is not None
@@ -1502,6 +1581,10 @@ def _current_guidance_bundle(bundle: Any) -> bool:
         and graph is not None
         and graph.contract == "aspr_graph_runtime_packet_v1"
     )
+
+
+def _topology_is_a(case_id: str) -> bool:
+    return int(sha256_value(case_id).removeprefix("sha256:")[-1], 16) % 2 == 0
 
 
 __all__ = ["STAGES", "EvaluationRunner", "StaticGraphScorer"]

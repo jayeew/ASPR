@@ -28,7 +28,7 @@ def _source_records(config: Mapping[str, Any]) -> list[Mapping[str, Any]]:
     paths = [
         source_dir / "oof_predictions.parquet",
         source_dir / "oof_metrics.csv",
-        source_dir / "official_aspr_scores.parquet",
+        source_dir / "paper_scores.parquet",
         resolve_path(str(config["model_config"])),
     ]
     return [

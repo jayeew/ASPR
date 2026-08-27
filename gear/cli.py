@@ -13,16 +13,9 @@ from datetime import date, datetime
 from pathlib import Path
 from typing import Any
 
-from .calibration import CalibrationService
-from .calibration_assets import (
-    RELEASE_ALIAS,
-    load_calibration_release,
-    promote_calibration_release,
-    sha256_file,
-)
-from .config import PROJECT_ROOT, AssetPaths, load_config
+from .config import load_config
 from .contracts import PaperMetadata, ReviewRequest
-from .migrations import migrate_review_bundle_v2
+from .diffusion_forecast import validate_runtime_replay
 from .review_contracts import ReviewBundle, VerificationIssue
 from .review_pipeline import review_paper
 from .review_verifier import ReviewVerifier
@@ -87,15 +80,11 @@ def _validate_command(args: argparse.Namespace) -> int:
         )
         return 1
     store = EvidenceStore(run_dir)
-    bundle = (
-        migrate_review_bundle_v2(payload)
-        if payload.get("contract") == "aspr_gear_review_bundle"
-        else ReviewBundle.model_validate(payload)
-    )
+    bundle = ReviewBundle.model_validate(payload)
     verifier = ReviewVerifier()
-    if bundle.state_v3 is not None:
+    if bundle.state is not None:
         report = verifier.verify_state(
-            bundle.structured_review, bundle.state_v3, bundle.paper_ir, store
+            bundle.structured_review, bundle.state, bundle.paper_ir, store
         )
     else:
         raise ValueError("run bundle has no review state")
@@ -126,7 +115,10 @@ def _benchmark_command(args: argparse.Namespace) -> int:
     cases = payload.get("cases", []) if isinstance(payload, dict) else []
     args.output_dir.mkdir(parents=True, exist_ok=True)
     indexed = list(enumerate(cases))
-    worker = lambda item: _run_benchmark_case(item[0], item[1], args)
+
+    def worker(item: tuple[int, dict[str, Any]]) -> dict[str, Any]:
+        return _run_benchmark_case(item[0], item[1], args)
+
     if args.workers == 1:
         results = [worker(item) for item in indexed]
     else:
@@ -247,7 +239,7 @@ def _existing_case_result(output: Path) -> dict[str, Any] | None:
         status = str(payload["status"])
         reasons = [
             str(item.get("reason"))
-            for item in (payload.get("state_v3") or {}).get("failures", [])
+            for item in (payload.get("state") or {}).get("failures", [])
             if item.get("reason")
         ]
         reasons.extend(
@@ -264,86 +256,9 @@ def _existing_case_result(output: Path) -> dict[str, Any] | None:
 
 def _validate_assets_command(args: argparse.Namespace) -> int:
     config = load_config(args.config, validate_assets=True)
-    report = CalibrationService(config).validate_official_replay(
-        batch_size=args.batch_size
-    )
+    report = validate_runtime_replay(config.resolved_forecast_release_manifest())
     print(json.dumps(report, ensure_ascii=False, indent=2, sort_keys=True))
     return 0 if report["passed"] else 1
-
-
-def _promotion_sources(path: Path, config: Any) -> dict[str, Path]:
-    payload = json.loads(path.read_text(encoding="utf-8"))
-    if payload.get("contract") != "aspr_calibration_promotion_source_v1":
-        raise ValueError("unsupported calibration promotion source contract")
-    if payload.get("alias") != RELEASE_ALIAS:
-        raise ValueError("promotion source targets an unsupported calibration alias")
-    sources = {
-        name: config.resolve_path(value)
-        for name, value in (payload.get("assets") or {}).items()
-    }
-    for source in sources.values():
-        config.validate_asset_path(source)
-    return sources
-
-
-def _promote_calibration_command(args: argparse.Namespace) -> int:
-    config = load_config(args.config, validate_assets=True)
-    sources = _promotion_sources(args.source_config.resolve(), config)
-    core_paths = AssetPaths.model_validate(
-        {name: sources[name] for name in AssetPaths.model_fields}
-    )
-    replay = CalibrationService(
-        config, asset_paths=core_paths
-    ).validate_official_replay(batch_size=args.batch_size)
-    model_hash = sha256_file(core_paths.official_model_joblib).split(":", 1)[1][:8]
-    matrix_hash = sha256_file(core_paths.feature_matrix_16).split(":", 1)[1][:8]
-    release_id = args.release_id or (f"pgc-v3-d5-fulltext16-{model_hash}-{matrix_hash}")
-    release = promote_calibration_release(
-        release_id=release_id,
-        source_assets=sources,
-        replay=replay,
-        source_manifest_sha256=sha256_file(core_paths.official_run_manifest),
-        registry_path=config.resolve_path(config.calibration_registry),
-    )
-    print(
-        json.dumps(
-            {
-                "release_id": release.release_id,
-                "asset_root": str(release.asset_root),
-                "manifest": str(release.manifest_path),
-                "replay": replay,
-            },
-            ensure_ascii=False,
-            indent=2,
-        )
-    )
-    return 0
-
-
-def _show_calibration_command(args: argparse.Namespace) -> int:
-    config = load_config(args.config, validate_assets=bool(args.verify))
-    release = load_calibration_release(
-        args.release or config.calibration_release,
-        registry_path=config.resolve_path(config.calibration_registry),
-        verify=args.verify,
-    )
-    print(
-        json.dumps(
-            {
-                "release_id": release.release_id,
-                "asset_root": str(release.asset_root),
-                "manifest": str(release.manifest_path),
-                "verified": bool(args.verify),
-                "assets": {
-                    name: str(release.path(name))
-                    for name in sorted(release.manifest.assets)
-                },
-            },
-            ensure_ascii=False,
-            indent=2,
-        )
-    )
-    return 0
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -388,29 +303,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="Replay all frozen Fig.3 rows through the official model",
     )
     assets.add_argument("--config", type=Path)
-    assets.add_argument("--batch-size", type=int, default=50_000)
     assets.set_defaults(handler=_validate_assets_command)
-    promote = subparsers.add_parser(
-        "promote-calibration",
-        help="Validate and atomically publish a frozen calibration release",
-    )
-    promote.add_argument(
-        "--source-config",
-        type=Path,
-        default=PROJECT_ROOT / "configs" / "gear" / "calibration_promotion_source.json",
-    )
-    promote.add_argument("--release-id")
-    promote.add_argument("--batch-size", type=int, default=50_000)
-    promote.add_argument("--config", type=Path)
-    promote.set_defaults(handler=_promote_calibration_command)
-    show = subparsers.add_parser(
-        "show-calibration",
-        help="Resolve the active calibration release and list local assets",
-    )
-    show.add_argument("--release")
-    show.add_argument("--verify", action="store_true")
-    show.add_argument("--config", type=Path)
-    show.set_defaults(handler=_show_calibration_command)
     modules = subparsers.add_parser(
         "module", help="Publish, resolve, or compare decoupled module artifacts"
     )

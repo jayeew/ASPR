@@ -728,7 +728,17 @@ def build_fig2_evidence_map(
     paths: SuitePaths,
 ) -> FigureBundle:
     """Build the evidence-derived v3 Fig.2 without outcome data or OOF scores."""
-    input_paths = _v3_paths(paths)
+    try:
+        input_paths = _v3_paths(paths)
+    except ValueError as error:
+        if "missing frozen input(s)" not in str(error):
+            raise
+        from experiments.common.new.adapters.fig2_recovered import (
+            build_recovered_fig2,
+            recovered_fig2_paths,
+        )
+
+        return build_recovered_fig2(config, recovered_fig2_paths(paths))
     spec = _load_json(input_paths["spec"])
     audit = _load_json(input_paths["audit"])
     raw_terms = pd.read_csv(input_paths["raw_terms"])

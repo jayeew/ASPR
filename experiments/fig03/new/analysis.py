@@ -13,7 +13,9 @@ import numpy as np
 import pandas as pd
 from scipy.stats import spearmanr
 
-from gear.calibration_assets import load_calibration_release
+from innovation_impact_feature_selection.evidence_derived.release_registry import (
+    load_current_release,
+)
 
 HERE = Path(__file__).resolve().parent
 PROJECT_ROOT = HERE.parents[2]
@@ -67,8 +69,11 @@ def load_config(path: Path = CONFIG_PATH) -> dict[str, Any]:
 
 
 def calibration_source_dir(config: Mapping[str, Any]) -> Path:
-    """Resolve inputs through the frozen public calibration registry."""
-    return load_calibration_release(str(config["calibration_release"])).asset_root
+    """Resolve inputs through the preferred immutable tuned release."""
+    release = load_current_release()
+    if release["release_id"] != str(config["calibration_release"]):
+        raise ValueError("Fig.3 config does not name the current tuned release")
+    return Path(release["resolved_release_path"])
 
 
 def clean_generated_outputs(output_dir: Path) -> None:
@@ -148,26 +153,32 @@ def load_hgb_predictions(config: Mapping[str, Any]) -> pd.DataFrame:
 
 
 def build_score_summary(config: Mapping[str, Any], panel_dir: Path) -> pd.DataFrame:
-    """Audit the official two-field ASPR production score."""
+    """Audit the fold-valid D5 Primary16 prospective diffusion percentile."""
     source_dir = calibration_source_dir(config)
-    scores = pd.read_parquet(source_dir / "official_aspr_scores.parquet")
-    required = {"raw_prediction_score", "aspr_score", "paper_id"}
+    scores = pd.read_parquet(source_dir / "paper_scores.parquet")
+    scores = scores[
+        scores["horizon"].eq(int(config["primary_horizon"]))
+        & scores["model_id"].eq(str(config["primary_model_id"]))
+    ].copy()
+    required = {"expected_diffusion_score", "oof_percentile_score", "paper_id"}
     if not required.issubset(scores.columns):
-        raise ValueError("official ASPR score file lacks required score columns")
-    ordered = scores.sort_values("raw_prediction_score")
-    monotone = bool(ordered["aspr_score"].diff().fillna(0).ge(-1e-12).all())
+        raise ValueError("tuned paper-score file lacks required score columns")
+    ordered = scores.sort_values("expected_diffusion_score")
+    monotone = bool(
+        ordered["oof_percentile_score"].diff().fillna(0).ge(-1e-12).all()
+    )
     summary = pd.DataFrame(
         [
             {
                 "scored_papers": len(scores),
                 "paper_year_max": 2022,
                 "mature_d5_year_max": int(config["mature_year_max"]["5"]),
-                "official_model_family": str(scores["official_model_family"].iloc[0]),
-                "official_feature_set": str(scores["official_feature_set"].iloc[0]),
-                "raw_prediction_min": float(scores["raw_prediction_score"].min()),
-                "raw_prediction_max": float(scores["raw_prediction_score"].max()),
-                "aspr_score_min": float(scores["aspr_score"].min()),
-                "aspr_score_max": float(scores["aspr_score"].max()),
+                "official_model_family": str(scores["model_family"].iloc[0]),
+                "official_feature_set": str(scores["model_id"].iloc[0]),
+                "raw_prediction_min": float(scores["expected_diffusion_score"].min()),
+                "raw_prediction_max": float(scores["expected_diffusion_score"].max()),
+                "aspr_score_min": float(scores["oof_percentile_score"].min()),
+                "aspr_score_max": float(scores["oof_percentile_score"].max()),
                 "score_monotone": monotone,
             }
         ]
@@ -497,9 +508,9 @@ def build_gain_landscape(
     primary = landscape[landscape["horizon"].eq(int(config["primary_horizon"]))]
     lookup = primary.set_index(["domain12", "window_end", "model_id"])
     comparisons = [
-        ("fulltext_16", "strict_7", "Full-text 16 − Strict 7"),
-        ("source_154", "fulltext_16", "Primary 154 − Full-text 16"),
-        ("ultrarelaxed_221", "source_154", "Broad T0 221 − Primary 154"),
+        ("primary", "strict", "Primary 16 − Strict 7"),
+        ("expanded", "primary", "Expanded 153 − Primary 16"),
+        ("broad_t0", "expanded", "Broad T0 219 − Expanded 153"),
     ]
     rows: list[dict[str, Any]] = []
     limit = float(config["gain_color_limit"])
@@ -587,14 +598,14 @@ def chart_contract(config: Mapping[str, Any]) -> Mapping[str, Any]:
         "figure_id": 3,
         "figure_version": config["figure_version"],
         "analytical_question": "Can publication-time ASPR scores rank subsequent scientific diffusion across horizons, fields, and publication years?",
-        "takeaway": "ASPR provides strong out-of-time ranking and top-decile enrichment; Full-text 16 captures most local predictive gain while broader proxy sets show saturation.",
+        "takeaway": "The tuned HGB provides strong out-of-time ranking and top-decile enrichment; Primary 16 is the best D5 set while broader sets show saturation.",
         "surface": "standalone static research figure",
         "renderer": "matplotlib",
         "panels": {
             "a": "formal HGB score construction",
             "b": "twelve D3/D5/D8 × four-set fold-local OOF decile curves with year-block bootstrap",
             "c": "3-by-4 trailing three-year performance heatmap board",
-            "d": "continuous D5 Full-text 16 3D terrain within domain-observed mature-year endpoints",
+            "d": "continuous D5 Primary 16 3D terrain within domain-observed mature-year endpoints",
             "e": "three D5 adjacent feature-set gain heatmaps",
         },
         "data_sufficiency": {
@@ -614,7 +625,7 @@ def chart_contract(config: Mapping[str, Any]) -> Mapping[str, Any]:
 def panel_text(deciles: pd.DataFrame, gain_summary: pd.DataFrame) -> Mapping[str, Any]:
     """Return figure-ready explanatory text derived from panel data."""
     primary = deciles.loc[
-        deciles["horizon"].eq(5) & deciles["model_id"].eq("fulltext_16")
+        deciles["horizon"].eq(5) & deciles["model_id"].eq("primary")
     ]
     top = primary.loc[primary["prediction_decile"].eq(10)].iloc[0]
     low = primary.loc[primary["prediction_decile"].eq(1)].iloc[0]
@@ -626,24 +637,24 @@ def panel_text(deciles: pd.DataFrame, gain_summary: pd.DataFrame) -> Mapping[str
             f"lowest decile: {100 * low['observed_top_share']:.2f}%."
         ),
         "panel_d_interpretation": (
-            "Expanding Strict 7 to Full-text 16 produced a broadly positive local gain. "
-            "Further expansion to 154 or 221 indicators yielded near-zero median gains "
+            "Expanding Strict 7 to Primary 16 produced a broadly positive local gain. "
+            "Further expansion to 153 or 219 indicators yielded near-zero median gains "
             "and heterogeneous positive and negative changes."
         ),
         "caption": (
             "Fig. 3 | Temporal–disciplinary performance landscape and out-of-time validation of ASPR Score. "
             "a, Publication-time indicators are integrated by a calibrated two-part HGB model. The resulting "
-            "raw_prediction_score is converted to the 0–100 aspr_score using its empirical percentile in the "
-            "mature D5 training cohort. b, Twelve separate D3/D5/D8 by four-feature-set curves show the complete "
-            "fold-local decile gradients and D10 enrichment across all combinations; in the official D5 × "
-            f"Full-text 16 window, {100 * top['observed_top_share']:.1f}% of D10 papers reached the realized "
+            "fold-valid expected diffusion score is converted to a 0–100 OOF percentile within D5 Primary 16. "
+            "b, Twelve separate D3/D5/D8 by four-feature-set curves show the complete "
+            "fold-local decile gradients and D10 enrichment across all combinations; in the selected D5 × "
+            f"Primary 16 window, {100 * top['observed_top_share']:.1f}% of D10 papers reached the realized "
             f"top decile ({top['enrichment_over_baseline']:.2f}-fold enrichment). "
             "c, Three-year trailing "
             "performance landscapes show OOF rank correlations across three outcome horizons, four frozen "
             "feature sets, twelve scientific domains and continuous publication years. Neutral cells distinguish "
             "structural n < 30, undefined constant-rank correlations, and outcomes that have not yet matured. d, "
-            "Moving from Strict 7 to Full-text 16 produced broadly positive D5 gains, whereas expansion to 154 "
-            "or 221 indicators produced little median improvement and heterogeneous local changes. ASPR is a "
+            "Moving from Strict 7 to Primary 16 produced broadly positive D5 gains, whereas expansion to 153 "
+            "or 219 indicators produced little median improvement and heterogeneous local changes. The score is a "
             "publication-time screening signal for subsequent scientific uptake and diffusion, not a causal "
             "estimate or direct novelty judgment."
         ),

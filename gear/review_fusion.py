@@ -3,20 +3,25 @@
 from __future__ import annotations
 
 import hashlib
-from typing import Literal
+from typing import Literal, cast
 
 from .point_matcher import PointMatcher, branch_sections
 from .review_contracts import (
     BranchReview,
     CanonicalReviewPoint,
     FusionReport,
+    NoveltyEvidenceStatus,
     PointValidationStatus,
     ReviewAspect,
     ReviewPhase,
     ReviewPoint,
     ReviewSource,
-    ReviewStateV3,
+    ReviewState,
 )
+
+SectionName = Literal[
+    "novelty_support", "novelty_limit", "strengths", "weaknesses", "questions"
+]
 
 
 class ReviewFusion:
@@ -25,10 +30,10 @@ class ReviewFusion:
 
     def fuse(
         self,
-        state: ReviewStateV3,
+        state: ReviewState,
         agent: BranchReview,
         qwen: BranchReview | None = None,
-    ) -> tuple[ReviewStateV3, FusionReport]:
+    ) -> tuple[ReviewState, FusionReport]:
         if agent.source != ReviewSource.AGENT:
             raise ValueError("fusion requires Agent Reviewer as the primary branch")
         if agent.paper_id != state.paper_id:
@@ -56,6 +61,11 @@ class ReviewFusion:
                 "branch_reviews": branches,
                 "novelty_direction": agent.novelty.judgment,
                 "novelty_direction_confidence": agent.novelty.confidence,
+                "novelty_evidence_status": (
+                    NoveltyEvidenceStatus.MANUSCRIPT_SUPPORTED
+                    if agent.novelty.judgment.value != "not_discussed"
+                    else NoveltyEvidenceStatus.NOT_ASSESSED
+                ),
                 "canonical_points": canonical,
                 "unresolved_target_ids": list(canonical),
                 "process_features": state.process_features.model_copy(
@@ -77,7 +87,10 @@ class ReviewFusion:
         for point in agent.all_points():
             canonical_id = _canonical_id(point)
             output[canonical_id] = _canonical_point(
-                canonical_id, point, sections[point.point_id], ReviewSource.AGENT
+                canonical_id,
+                point,
+                cast(SectionName, sections[point.point_id]),
+                ReviewSource.AGENT,
             )
         return output
 
@@ -104,7 +117,7 @@ class ReviewFusion:
                 canonical[canonical_id] = _canonical_point(
                     canonical_id,
                     qwen_point,
-                    qwen_sections[qwen_point.point_id],
+                    cast(SectionName, qwen_sections[qwen_point.point_id]),
                     ReviewSource.ASPR_QWEN,
                 )
                 continue
@@ -134,9 +147,7 @@ def _canonical_id(point: ReviewPoint) -> str:
 def _canonical_point(
     canonical_id: str,
     point: ReviewPoint,
-    section: Literal[
-        "novelty_support", "novelty_limit", "strengths", "weaknesses", "questions"
-    ],
+    section: SectionName,
     source: ReviewSource,
 ) -> CanonicalReviewPoint:
     agent = source == ReviewSource.AGENT

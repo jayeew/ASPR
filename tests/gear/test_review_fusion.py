@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+from datetime import date
+
 from gear.evidence_supervisor import EvidenceSupervisor
-from gear.graph_prior_contracts import GraphResultV3
+from gear.graph_prior_contracts import GraphRuntimePacket, InfluenceForecast
 from gear.paper_extraction import PaperRubricBuilder
 from gear.review_compiler import ReviewCompiler
 from gear.review_contracts import (
@@ -15,16 +17,24 @@ from gear.review_contracts import (
     ReviewSummary,
 )
 from gear.review_fusion import ReviewFusion
-from gear.review_state import initialize_review_state_v3
+from gear.review_state import initialize_review_state
 
 
-def _graph(paper_id: str, score: float, coverage: float = 1.0) -> GraphResultV3:
-    return GraphResultV3(
+def _graph(paper_id: str, score: float, coverage: float = 1.0) -> GraphRuntimePacket:
+    return GraphRuntimePacket(
         paper_id=paper_id,
-        score_0_100=score,
-        p_uptake=0.8,
-        conditional_diffusion=0.6,
-        feature_coverage=coverage,
+        cutoff_date=date(2010, 1, 2),
+        forecast=InfluenceForecast(
+            status="available",
+            prospective_5y_diffusion_percentile=score,
+            uptake_probability=0.8,
+            conditional_diffusion=0.6,
+            expected_diffusion=0.48,
+            feature_coverage=coverage,
+            release_id="test",
+            model_sha256="sha256:test",
+            percentile_reference_sha256="sha256:test",
+        ),
     )
 
 
@@ -49,7 +59,7 @@ def _branch(paper_ir, source: ReviewSource) -> BranchReview:
 
 def test_graph_cannot_create_review_point(paper_ir, paper_request) -> None:
     graph = _graph(paper_ir.paper_id, 99.0)
-    state = initialize_review_state_v3(
+    state = initialize_review_state(
         paper_ir,
         PaperRubricBuilder().build(paper_ir),
         graph,
@@ -64,7 +74,7 @@ def test_fusion_forces_external_evidence_for_misplaced_novelty_point(
     paper_ir, paper_request
 ) -> None:
     graph = _graph(paper_ir.paper_id, 50.0)
-    state = initialize_review_state_v3(
+    state = initialize_review_state(
         paper_ir,
         PaperRubricBuilder().build(paper_ir),
         graph,
@@ -110,7 +120,7 @@ def test_fusion_is_graph_blind_and_has_no_calibration_side_effects(
             evidence_keys=[span_key],
         )
     ]
-    state = initialize_review_state_v3(
+    state = initialize_review_state(
         paper_ir,
         PaperRubricBuilder().build(paper_ir),
         _graph(paper_ir.paper_id, 95.0),
@@ -152,7 +162,7 @@ def test_legacy_coverage_does_not_modify_fused_points(paper_ir, paper_request) -
             )
         ],
     )
-    state = initialize_review_state_v3(
+    state = initialize_review_state(
         paper_ir,
         PaperRubricBuilder().build(paper_ir),
         _graph(paper_ir.paper_id, 95.0, coverage=0.5),
@@ -191,7 +201,7 @@ def test_evidence_exhaustion_does_not_collapse_novelty_direction(
             )
         ],
     )
-    state = initialize_review_state_v3(
+    state = initialize_review_state(
         paper_ir,
         PaperRubricBuilder().build(paper_ir),
         _graph(paper_ir.paper_id, 80.0),
@@ -200,7 +210,7 @@ def test_evidence_exhaustion_does_not_collapse_novelty_direction(
     fused, _ = ReviewFusion().fuse(state, branch)
 
     EvidenceSupervisor._exhaust(fused)
-    review = ReviewCompiler().compile_v3(fused)
+    review = ReviewCompiler().compile(fused)
 
     assert review.novelty.judgment == NoveltyJudgment.MIXED
     assert (

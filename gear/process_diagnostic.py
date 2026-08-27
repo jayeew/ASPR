@@ -7,7 +7,7 @@ from typing import Literal
 from pydantic import Field
 
 from .contracts import EvidenceReadiness, PaperIR, StrictModel
-from .review_contracts import ProcessFeatures, ReviewStateV3
+from .review_contracts import ProcessFeatures, ReviewState
 
 
 class ProcessDiagnostic(StrictModel):
@@ -21,7 +21,7 @@ class ProcessDiagnostic(StrictModel):
 
 
 def diagnose_process(
-    state: ReviewStateV3,
+    state: ReviewState,
     paper_ir: PaperIR | None = None,
 ) -> ProcessDiagnostic:
     features = state.process_features

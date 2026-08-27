@@ -208,7 +208,7 @@ class OpenScholar:
         if self._is_openalex(identifier):
             if direction == "citations":
                 suffix = identifier.rsplit("/", 1)[-1]
-                params: dict[str, Any] = {
+                params: dict[str, str | int] = {
                     "filter": f"cites:{suffix}",
                     "per_page": maximum,
                     "sort": "publication_date:asc",
@@ -233,9 +233,13 @@ class OpenScholar:
                 work for work in (self.fetch_work(item) for item in identifiers) if work
             ]
         edge = "citations" if direction == "citations" else "references"
+        neighbor_params: dict[str, str | int] = {
+            "fields": self._semantic_fields(),
+            "limit": maximum,
+        }
         response = requests.get(
             f"https://api.semanticscholar.org/graph/v1/paper/{identifier}/{edge}",
-            params={"fields": self._semantic_fields(), "limit": maximum},
+            params=neighbor_params,
             headers=self._semantic_headers(),
             timeout=60,
         )
@@ -316,7 +320,7 @@ class OpenScholar:
         terms = [str(query).strip()]
         separator = " + " if self.and_search else " | "
         formatted = separator.join(f'"{term}"' for term in terms if term)
-        params = {
+        params: dict[str, str | int] = {
             "query": formatted,
             "fields": self._semantic_fields(),
             "year": f"1800-{date_to.year}" if date_to else "1800-",
@@ -372,7 +376,11 @@ class OpenScholar:
     @staticmethod
     def _looks_like_doi(identifier: str) -> bool:
         return bool(
-            re.match(r"^(?:https?://doi\.org/|doi:)?10\.\d{4,9}/\S+$", identifier, re.I)
+            re.match(
+                r"^(?:https?://doi\.org/|doi:)?10\.\d{4,9}/\S+$",
+                identifier,
+                re.IGNORECASE,
+            )
         )
 
     @staticmethod

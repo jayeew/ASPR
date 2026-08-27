@@ -7,8 +7,11 @@ This package is intentionally outside the production runtime. Deterministic code
 - Exactly one reconstruction conversation per paper.
 - Reconstruction packages contain final-paper spans, reviewer reports, and author responses, but no graph fields, GEAR output, or legacy reconstruction.
 - Author responses may assign `resolved`, `partially_resolved`, `persists`, or `unverifiable`; they cannot create an opinion.
-- `resolved` and `unverifiable` traces have no target point and stay outside the SFT label.
+- The issue ledger is the authoritative label. `resolved` and `unverifiable`
+  traces have no target point and stay outside review-target exports.
 - Every retained point has reviewer-quote trace coverage and final-paper `P:S-*` evidence.
+- StructuredReview `positive/mixed/negative` is a compatibility export only. It
+  is not a Graph/HGB training target or a primary evaluation label.
 
 ## Commands
 

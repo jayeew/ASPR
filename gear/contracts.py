@@ -176,6 +176,7 @@ class ReferenceEntry(EvidenceModel):
     reference_id: str
     raw_text: str
     source_span_id: str
+    citation_number: Optional[int] = Field(default=None, ge=1)
     title: Optional[str] = None
     doi: Optional[str] = None
     publication_date: Optional[date] = None
@@ -486,6 +487,8 @@ class RetrievalHit(EvidenceModel):
     gate_label: Optional[Literal["comparable", "partial", "distant"]] = None
     matched_fields: List[str] = Field(default_factory=list)
     gate_reason: str = ""
+    claim_alignment: Optional[float] = Field(default=None, ge=0.0, le=1.0)
+    essential_claim_facets: List[str] = Field(default_factory=list)
     recall_score: Optional[float] = None
     rerank_score: Optional[float] = None
 

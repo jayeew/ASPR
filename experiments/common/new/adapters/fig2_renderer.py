@@ -1707,9 +1707,9 @@ def _draw_indicator_alluvial(ax: plt.Axes, bundle: FigureBundle) -> None:
                 tier_labels = {
                     "strict_core": ("Strict · 7 (cum. 7)", 0.682),
                     "fulltext_only": ("Full text · 9 (cum. 16)", 0.625),
-                    "source_only": ("Source · 138 (cum. 154)", 0.540),
-                    "broad_t0_only": ("Broad T0 · 67 (cum. 221)", 0.430),
-                    "excluded": ("Excluded · 211 (cum. 432)", 0.315),
+                    "source_only": ("Expanded · 137 (cum. 153)", 0.540),
+                    "broad_t0_only": ("Broad T0 · 66 (cum. 219)", 0.430),
+                    "excluded": ("Excluded · 213 (cum. 432)", 0.315),
                 }
                 label, label_y = tier_labels[str(row.node_id)]
             elif stage_name == "middle":
@@ -1894,7 +1894,7 @@ def _draw_feature_set_rows(ax: plt.Axes, bundle: FigureBundle) -> None:
     ax.text(
         0.028,
         0.775,
-        "7  ⊂  16  ⊂  154  ⊂  221",
+        "7  ⊂  16  ⊂  153  ⊂  219",
         transform=ax.transAxes,
         ha="left",
         va="center",
@@ -1914,8 +1914,8 @@ def _draw_feature_set_rows(ax: plt.Axes, bundle: FigureBundle) -> None:
     )
     labels = {
         "strict_7": "Strict core",
-        "fulltext_16": "Full-text set",
-        "source_154": "Primary scalable set",
+        "fulltext_16": "Primary set",
+        "source_154": "Expanded set",
         "ultrarelaxed_221": "Broad T0 set",
     }
     y_positions = [0.600, 0.458, 0.316, 0.174]
@@ -2240,7 +2240,7 @@ def _write_layout_audit(
         "panel_c": "Fixed hard-gate audit",
         "panel_d": "Nested outcome-blind sets",
         "round12": "R12: pragmatic stop",
-        "source154": "Primary scalable set",
+        "expanded153": "Expanded set",
     }
     rendered_text = "\n".join(
         text.get_text() for axis in axes.values() for text in axis.texts
@@ -2255,7 +2255,7 @@ def _write_layout_audit(
         "emphasis_contract": {
             "r12_orange_dashed": True,
             "hard_gate_audit_only": True,
-            "source154_blue_emphasis": True,
+            "expanded153_blue_emphasis": True,
             "broad_t0_dashed_outline": True,
             "operationalization_palette_separate_from_role_palette": True,
         },

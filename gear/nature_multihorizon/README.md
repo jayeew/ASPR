@@ -20,6 +20,9 @@ day information.
   structural validation subset.
 - Scores: an interpretable five-mechanism Simplex score and a separately
   selected GAM/HGB/Rank-Blend performance score.
+- Runtime meaning: the primary D5 HGB score is a prospective five-year
+  scholarly-diffusion percentile. It must not be interpreted as novelty,
+  reviewer sentiment, acceptance probability, or a positive/mixed label.
 - Cap handling: 1,000-citer truncation is explicit, horizon-specific, limited
   to at most 2% of each modeled cohort, and backed by a locked τ=5 uncapped OOF
   sensitivity gate.

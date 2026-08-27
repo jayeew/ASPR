@@ -1,0 +1,28 @@
+{
+  "contract": "gear_nature_graph_gate_v2",
+  "dataset_scope": "nature_only",
+  "status": "awaiting_traceable_human_reconstruction",
+  "forecast_release_manifest": "../../data/calibration/releases/gear-d5-primary16-current/release_manifest.json",
+  "required_issue_aspects": ["novelty_prior_art", "contribution"],
+  "required_issue_trace": [
+    "reviewer_quote",
+    "reviewer_id",
+    "round_id",
+    "final_paper_evidence"
+  ],
+  "variants": ["neutral", "score", "score_topology", "placebo_graph"],
+  "resource_caps": {
+    "logical_searches": 8,
+    "direct_fetches": 8,
+    "neighbor_expansions": 2,
+    "fulltext_candidates": 12,
+    "relation_classifications": 12
+  },
+  "quick_gate_size": 3,
+  "engineering_gate_size": 10,
+  "selection_seed": "stable-paper-hash",
+  "blind_hgb_score": true,
+  "blind_variant_name": true,
+  "allow_live_openalex_for_historical_case": false,
+  "allow_unverified_topology_as_evidence": false
+}

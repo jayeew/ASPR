@@ -2,11 +2,10 @@
 
 from __future__ import annotations
 
-from collections.abc import Iterable
-
 from .review_contracts import (
     CanonicalReviewPoint,
     NoveltyAssessment,
+    NoveltyEvidenceStatus,
     NoveltyJudgment,
     NoveltyVerificationStatus,
     PointValidationStatus,
@@ -15,62 +14,16 @@ from .review_contracts import (
     ReviewPoint,
     ReviewSource,
     ReviewState,
-    ReviewStateV3,
     ReviewSummary,
     StructuredReview,
     infer_novelty_judgment,
 )
 
 
-def calibration_evidence_key(calibration: object, part: str) -> str:
-    """Return the immutable evidence key for a calibration-packet component."""
-    contract = str(getattr(calibration, "contract", ""))
-    prefix = "G:SCP" if contract == "aspr_submission_calibration_packet_v1" else "G:CP"
-    return f"{prefix}:{part}"
-
-
 class ReviewCompiler:
     """Filter rejected points; never add graph or recommendation prose."""
 
     def compile(self, state: ReviewState) -> StructuredReview:
-        draft = state.draft_review
-        supporting = self._retained(draft.novelty.supporting_points, state)
-        limiting = self._retained(draft.novelty.limiting_points, state)
-        uncertain = self._retained(draft.novelty.uncertain_points, state)
-        return StructuredReview(
-            paper_id=draft.paper_id,
-            summary=draft.summary,
-            novelty=NoveltyAssessment(
-                judgment=draft.novelty.judgment,
-                verification_status=draft.novelty.verification_status,
-                confidence=draft.novelty.confidence,
-                supporting_points=supporting,
-                limiting_points=limiting,
-                uncertain_points=uncertain,
-            ),
-            strengths=self._retained(draft.strengths, state),
-            weaknesses=self._retained(draft.weaknesses, state),
-            questions=self._retained(draft.questions, state),
-        )
-
-    @staticmethod
-    def _retained(
-        points: Iterable[ReviewPoint], state: ReviewState
-    ) -> list[ReviewPoint]:
-        output: list[ReviewPoint] = []
-        for point in points:
-            point_state = state.point_states[point.point_id]
-            if not point_state.retained:
-                continue
-            evidence_keys = list(
-                dict.fromkeys(
-                    [*point_state.evidence_keys, *point_state.relation_evidence_keys]
-                )
-            )
-            output.append(point.model_copy(update={"evidence_keys": evidence_keys}))
-        return output
-
-    def compile_v3(self, state: ReviewStateV3) -> StructuredReview:
         if state.phase not in {
             ReviewPhase.EVIDENCE_FINALIZED,
             ReviewPhase.VERIFIED,
@@ -123,6 +76,7 @@ class ReviewCompiler:
         uncertain = compiled["novelty_uncertain"]
         direction = _preserved_novelty_direction(state, supporting, limiting, uncertain)
         verification_status = _novelty_verification_status(state)
+        state.novelty_evidence_status = _novelty_evidence_status(state)
         confidence = _novelty_direction_confidence(state, verification_status)
         state.novelty_direction = direction
         state.novelty_verification_status = verification_status
@@ -143,15 +97,15 @@ class ReviewCompiler:
             questions=compiled["questions"],
         )
 
-    def compile_verified(self, state: ReviewStateV3) -> StructuredReview:
+    def compile_verified(self, state: ReviewState) -> StructuredReview:
         if state.phase != ReviewPhase.VERIFIED:
             raise ValueError("final compiler reads VERIFIED state only")
-        review = self.compile_v3(state)
+        review = self.compile(state)
         state.phase = ReviewPhase.COMPILED
         return review
 
 
-def _rebuild_summary(state: ReviewStateV3, points: list) -> ReviewSummary:
+def _rebuild_summary(state: ReviewState, points: list) -> ReviewSummary:
     contribution = next(
         (
             point
@@ -180,7 +134,7 @@ def _rebuild_summary(state: ReviewStateV3, points: list) -> ReviewSummary:
 
 
 def _preserved_novelty_direction(
-    state: ReviewStateV3,
+    state: ReviewState,
     supporting: list[ReviewPoint],
     limiting: list[ReviewPoint],
     uncertain: list[ReviewPoint],
@@ -195,7 +149,7 @@ def _preserved_novelty_direction(
 
 
 def _novelty_verification_status(
-    state: ReviewStateV3,
+    state: ReviewState,
 ) -> NoveltyVerificationStatus:
     novelty_points = [
         point
@@ -231,8 +185,34 @@ def _novelty_verification_status(
     return NoveltyVerificationStatus.INSUFFICIENT_COVERAGE
 
 
+def _novelty_evidence_status(state: ReviewState) -> NoveltyEvidenceStatus:
+    points = [
+        point
+        for point in state.canonical_points.values()
+        if point.retained and _is_novelty_point(state, point)
+    ]
+    if not points:
+        return NoveltyEvidenceStatus.NOT_ASSESSED
+    verified = [
+        point
+        for point in points
+        if point.validation_status
+        in {PointValidationStatus.VALIDATED, PointValidationStatus.EXTERNALLY_VALIDATED}
+    ]
+    if any(
+        point.section == "novelty_limit" and point.relation_evidence_keys
+        for point in verified
+    ):
+        return NoveltyEvidenceStatus.EVIDENCE_CHALLENGED
+    if verified:
+        return NoveltyEvidenceStatus.EVIDENCE_QUALIFIED
+    if any(point.requires_external_evidence for point in points):
+        return NoveltyEvidenceStatus.INCONCLUSIVE
+    return NoveltyEvidenceStatus.MANUSCRIPT_SUPPORTED
+
+
 def _novelty_direction_confidence(
-    state: ReviewStateV3,
+    state: ReviewState,
     status: NoveltyVerificationStatus,
 ) -> float | None:
     direction = state.novelty_direction
@@ -255,7 +235,7 @@ def _novelty_direction_confidence(
     return ceiling if base is None else min(base, ceiling)
 
 
-def _is_novelty_point(state: ReviewStateV3, point: CanonicalReviewPoint) -> bool:
+def _is_novelty_point(state: ReviewState, point: CanonicalReviewPoint) -> bool:
     section = point.initial_section or point.section
     if section.startswith("novelty_"):
         return True
@@ -319,4 +299,4 @@ def _render_point_list(points: list[ReviewPoint]) -> list[str]:
     return lines
 
 
-__all__ = ["ReviewCompiler", "calibration_evidence_key", "render_markdown"]
+__all__ = ["ReviewCompiler", "render_markdown"]

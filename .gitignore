@@ -30,3 +30,7 @@ kg_validator/output/
 data/papers.json
 data/total_related_papers.json
 *.parquet
+
+# Local packaging artifact and its generator script.
+ASPR_code_dev10_runs.zip
+tmp/make_zip.py

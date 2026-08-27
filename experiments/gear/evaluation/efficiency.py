@@ -113,12 +113,7 @@ def graph_action_metrics(run_dir: Path) -> dict[str, Any]:
     ]
     graph_queries = [row for row in queries if _is_graph_guided_query(row)]
     seed_queries = [
-        row
-        for row in graph_queries
-        if row.get("query_role") == "graph_seed"
-        or str(row.get("transformation", "")).startswith(
-            "graph_claim_aligned_topology_search:"
-        )
+        row for row in graph_queries if row.get("query_role") == "graph_seed"
     ]
     hits = [
         row.payload
@@ -166,6 +161,16 @@ def graph_action_metrics(run_dir: Path) -> dict[str, Any]:
         if row.get("relation_id")
     }
     material_claim_relevant_ids = corrected_relation_ids & claim_relevant_relation_ids
+    material_corrections = [
+        correction
+        for correction in corrections
+        if correction.get("correction_type") != "prior_work_added_only"
+        and material_claim_relevant_ids
+        & {
+            str(relation_id)
+            for relation_id in correction.get("trigger_relation_ids") or []
+        }
+    ]
     eligible_seed_query_ids = {
         str(row.get("query_id"))
         for row in seed_hits
@@ -185,6 +190,8 @@ def graph_action_metrics(run_dir: Path) -> dict[str, Any]:
             len(comparable_seed_query_ids) / len(seed_queries) if seed_queries else None
         ),
         "graph_seed_verified_relation_yield": len(graph_relations),
+        "claim_relevant_verified_relation_count": len(claim_relevant_relations),
+        "material_correction_count": len(material_corrections),
         "graph_query_unique_prior_yield": len(
             {
                 str(row.get("prior_work_id"))
@@ -319,11 +326,7 @@ def _verified_relation_payloads(store: EvidenceStore) -> list[dict[str, Any]]:
 
 def _is_graph_guided_query(payload: dict[str, Any]) -> bool:
     return bool(
-        payload.get("query_role")
-        in {"graph_seed", "graph_focus", "citation_neighbor"}
-        or str(payload.get("transformation", "")).startswith(
-            "graph_claim_aligned_topology_search:"
-        )
+        payload.get("query_role") in {"graph_seed", "graph_focus", "citation_neighbor"}
     )
 
 

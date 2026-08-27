@@ -1,10 +1,19 @@
-.PHONY: gear-review gear-test gear-validate gear-lint gear-submission-train gear-calibration-show gear-calibration-promote gear-reconstruction-help gear-reconstruction-test gear-module-help artifact-help dataset-help figures-help
+.PHONY: gear-review gear-test gear-validate gear-lint gear-reconstruction-help gear-reconstruction-test gear-module-help artifact-help dataset-help figures-help
 
 PYTHON ?= python3
 GEAR_PAPER ?=
 GEAR_METADATA ?=
 GEAR_OUTPUT_DIR ?=
-GEAR_SUBMISSION_OUTPUT ?= outputs/gear/submission_calibration
+GEAR_RUNTIME_LINT = \
+	gear/__init__.py gear/cli.py gear/config.py gear/diffusion_forecast.py \
+	gear/evidence_policy.py gear/evidence_supervisor.py gear/graph_guidance.py \
+	gear/graph_prior.py gear/graph_prior_contracts.py gear/prior_art.py \
+	gear/process_diagnostic.py gear/review_compiler.py gear/review_contracts.py \
+	gear/review_fusion.py gear/review_pipeline.py gear/review_state.py \
+	gear/review_verifier.py experiments/gear/evaluation \
+	experiments/gear/review_reconstruction/contracts.py \
+	experiments/gear/review_reconstruction/sessions.py \
+	scripts/build_gear_diffusion_release.py tests/gear
 
 gear-review:
 	@test -n "$(GEAR_PAPER)" || (echo "GEAR_PAPER is required" >&2; exit 2)
@@ -19,20 +28,21 @@ gear-test:
 gear-validate:
 	$(PYTHON) -m gear validate-assets
 
-gear-calibration-show:
-	$(PYTHON) -m gear show-calibration --verify
-
-gear-calibration-promote:
-	$(PYTHON) -m gear promote-calibration
-
 gear-lint:
-	$(PYTHON) -m black --check gear scripts/run_gear_reconstruction_sessions.py scripts/run_gear_revision_audit.py experiments/gear tests/gear
-	$(PYTHON) -m ruff check --select E4,E7,E9,F,I gear scripts/run_gear_reconstruction_sessions.py scripts/run_gear_revision_audit.py experiments/gear tests/gear
-	$(PYTHON) -m mypy --ignore-missing-imports --follow-imports=skip gear scripts/run_gear_reconstruction_sessions.py scripts/run_gear_revision_audit.py experiments/gear
-
-gear-submission-train:
-	$(PYTHON) experiments/gear/train_submission_calibration.py \
-		--output-dir "$(GEAR_SUBMISSION_OUTPUT)"
+	$(PYTHON) -m black --check $(GEAR_RUNTIME_LINT)
+	$(PYTHON) -m ruff check --select E4,E7,E9,F,I $(GEAR_RUNTIME_LINT)
+	$(PYTHON) -m mypy --ignore-missing-imports --follow-imports=skip \
+		gear/__init__.py gear/cli.py gear/config.py gear/diffusion_forecast.py \
+		gear/graph_prior_contracts.py gear/graph_prior.py gear/graph_guidance.py \
+		gear/review_contracts.py gear/review_state.py gear/review_fusion.py \
+		gear/review_compiler.py gear/evidence_supervisor.py gear/review_pipeline.py \
+		gear/review_verifier.py experiments/gear/evaluation/contracts.py \
+		experiments/gear/evaluation/graph_ablation.py \
+		experiments/gear/evaluation/human_audit.py \
+		experiments/gear/evaluation/runner.py \
+		experiments/gear/review_reconstruction/contracts.py \
+		experiments/gear/review_reconstruction/sessions.py \
+		scripts/build_gear_diffusion_release.py
 
 gear-reconstruction-help:
 	$(PYTHON) -m experiments.gear.review_reconstruction --help
@@ -42,7 +52,7 @@ gear-reconstruction-test:
 		tests/gear/test_review_contracts.py \
 		tests/gear/test_runtime.py \
 		tests/gear/test_reconstruction.py \
-		tests/gear/test_evaluation.py
+		tests/gear/test_human_audit.py
 
 gear-module-help:
 	$(PYTHON) -m gear.module_cli --help
