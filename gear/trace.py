@@ -4,8 +4,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections.abc import Iterable, Mapping
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Mapping, Optional
+from typing import Any
 
 from pydantic import BaseModel
 
@@ -57,13 +58,16 @@ class EvidenceStore:
         self.evidence_path = self.output_dir / "evidence_trace.jsonl"
         self.action_path = self.output_dir / "action_trace.jsonl"
         self.state_path = self.output_dir / "state_trace.jsonl"
-        self._evidence: Dict[str, EvidenceRecord] = {}
+        self._evidence: dict[str, EvidenceRecord] = {}
         self._load_existing()
 
     def _load_existing(self) -> None:
         if not self.evidence_path.is_file():
             return
-        for line in self.evidence_path.read_text(encoding="utf-8").splitlines():
+        # JSONL records are delimited by LF. ``str.splitlines`` also treats
+        # Unicode C1 controls (for example U+0085 from imperfect PDF text
+        # extraction) as separators and can corrupt an otherwise valid record.
+        for line in self.evidence_path.read_text(encoding="utf-8").split("\n"):
             if not line.strip():
                 continue
             record = EvidenceRecord.model_validate_json(line)
@@ -113,7 +117,7 @@ class EvidenceStore:
         return snapshot
 
     @staticmethod
-    def _compact_state(state: Any) -> Dict[str, Any]:
+    def _compact_state(state: Any) -> dict[str, Any]:
         normalized = canonical_payload(state)
         if not isinstance(normalized, dict):
             raise TypeError("state snapshots require a mapping payload")
@@ -122,7 +126,7 @@ class EvidenceStore:
     def has(self, evidence_id: str) -> bool:
         return evidence_id in self._evidence
 
-    def get(self, evidence_id: str) -> Optional[EvidenceRecord]:
+    def get(self, evidence_id: str) -> EvidenceRecord | None:
         return self._evidence.get(evidence_id)
 
     def ids(self) -> Iterable[str]:
@@ -154,7 +158,7 @@ class EvidenceStore:
         )
         return path
 
-    def validate_manifest(self) -> List[str]:
+    def validate_manifest(self) -> list[str]:
         """Validate the manifest, trace files, and persisted review artifacts."""
         path = self.output_dir / "run_manifest.json"
         if not path.is_file():
@@ -164,7 +168,7 @@ class EvidenceStore:
         except (OSError, json.JSONDecodeError) as exc:
             return [f"run_manifest_invalid:{type(exc).__name__}"]
         claimed_manifest_hash = str(payload.pop("manifest_sha256", ""))
-        failures: List[str] = []
+        failures: list[str] = []
         if claimed_manifest_hash != sha256_value(payload):
             failures.append("run_manifest_hash_mismatch")
         for name, expected in (payload.get("trace_files") or {}).items():

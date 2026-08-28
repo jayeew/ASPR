@@ -4,20 +4,30 @@ from __future__ import annotations
 
 import argparse
 import concurrent.futures
+import faulthandler
+import fcntl
 import hashlib
 import json
 import subprocess
 import sys
 import time
+from collections.abc import Iterator
+from contextlib import contextmanager
 from datetime import date, datetime
 from pathlib import Path
 from typing import Any
 
 from .config import load_config
 from .contracts import PaperMetadata, ReviewRequest
-from .diffusion_forecast import validate_runtime_replay
+from .diffusion_forecast import (
+    validate_runtime_replay,
+    validate_structural_head_replay,
+)
+from .env import subprocess_environment
+from .graph_action_policy import GRAPH_ACTIONS, RandomizedGraphActionSelector
+from .paper_extraction import configured_paper_extractor
 from .review_contracts import ReviewBundle, VerificationIssue
-from .review_pipeline import review_paper
+from .review_pipeline import ServiceRegistry, review_paper
 from .review_verifier import ReviewVerifier
 from .trace import EvidenceStore
 
@@ -35,6 +45,31 @@ def _positive_int(value: str) -> int:
     return parsed
 
 
+@contextmanager
+def _hang_diagnostic(output_dir: Path | None) -> Iterator[None]:
+    """Persist Python stacks for unexpectedly long review workers."""
+    if output_dir is None:
+        yield
+        return
+    path = output_dir.resolve() / "hang_diagnostic.log"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    completed = False
+    with path.open("w", encoding="utf-8") as handle:
+        faulthandler.dump_traceback_later(900, repeat=True, file=handle)
+        try:
+            yield
+            completed = True
+        finally:
+            faulthandler.cancel_dump_traceback_later()
+    if path.stat().st_size == 0:
+        path.unlink(missing_ok=True)
+    elif completed:
+        with path.open("a", encoding="utf-8") as handle:
+            handle.write(
+                "\nGEAR_DIAGNOSTIC_RESOLUTION: review command completed normally.\n"
+            )
+
+
 def _review_command(args: argparse.Namespace) -> int:
     config = load_config(args.config)
     request = ReviewRequest(
@@ -46,12 +81,25 @@ def _review_command(args: argparse.Namespace) -> int:
             else datetime.now().astimezone().date()
         ),
     )
-    bundle = review_paper(
-        request,
-        output_dir=args.output_dir,
-        config=config,
-        full_artifacts=not args.compact_artifacts,
-    )
+    services = None
+    if args.forced_graph_action is not None:
+        if args.output_dir is None:
+            raise ValueError("forced Graph actions require --output-dir")
+        services = ServiceRegistry(
+            evidence_store=EvidenceStore(args.output_dir.resolve()),
+            graph_action_selector=RandomizedGraphActionSelector(
+                args.forced_graph_action, args.action_propensity
+            ),
+            paper_extractor=configured_paper_extractor(config),
+        )
+    with _hang_diagnostic(args.output_dir):
+        bundle = review_paper(
+            request,
+            output_dir=args.output_dir,
+            config=config,
+            services=services,
+            full_artifacts=not args.compact_artifacts,
+        )
     print(
         json.dumps(
             {"status": bundle.status.value, **bundle.output_files},
@@ -114,6 +162,8 @@ def _benchmark_command(args: argparse.Namespace) -> int:
     payload = json.loads(args.manifest.read_text(encoding="utf-8"))
     cases = payload.get("cases", []) if isinstance(payload, dict) else []
     args.output_dir.mkdir(parents=True, exist_ok=True)
+    report_dir = (args.batch_report_dir or args.output_dir).resolve()
+    report_dir.mkdir(parents=True, exist_ok=True)
     indexed = list(enumerate(cases))
 
     def worker(item: tuple[int, dict[str, Any]]) -> dict[str, Any]:
@@ -127,7 +177,7 @@ def _benchmark_command(args: argparse.Namespace) -> int:
     results.sort(key=lambda row: row["index"])
     for row in results:
         row.pop("index", None)
-    (args.output_dir / "batch_results.jsonl").write_text(
+    (report_dir / "batch_results.jsonl").write_text(
         "".join(json.dumps(row, ensure_ascii=False) + "\n" for row in results),
         encoding="utf-8",
     )
@@ -135,7 +185,7 @@ def _benchmark_command(args: argparse.Namespace) -> int:
     for row in results:
         counts[row["status"]] = counts.get(row["status"], 0) + 1
     summary = {"case_count": len(results), "status_counts": counts, "results": results}
-    (args.output_dir / "batch_summary.json").write_text(
+    (report_dir / "batch_summary.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     failed = any(row["status"] == "failed" for row in results)
@@ -154,6 +204,18 @@ def _run_benchmark_case(
         "paper_id": str(case.get("paper_id") or ""),
         "output_dir": str(output),
     }
+    with _case_lock(args.output_dir, case_id):
+        return _run_locked_benchmark_case(started, case, args, output, base)
+
+
+def _run_locked_benchmark_case(
+    started: float,
+    case: dict[str, Any],
+    args: argparse.Namespace,
+    output: Path,
+    base: dict[str, Any],
+) -> dict[str, Any]:
+    """Run one case while its cross-process lock is held."""
     existing = _existing_case_result(output)
     if (
         args.resume
@@ -161,6 +223,7 @@ def _run_benchmark_case(
         and not (args.retry_failed and existing["status"] == "failed")
     ):
         return {**base, **existing, "elapsed_seconds": 0.0, "resumed": True}
+    archived_attempt = _archive_prior_attempt(output)
     try:
         paper = Path(str(case["paper_path"])).resolve()
         if not paper.is_file():
@@ -187,6 +250,15 @@ def _run_benchmark_case(
             command.extend(["--cutoff", str(case["cutoff"])])
         if args.config:
             command.extend(["--config", str(args.config.resolve())])
+        if case.get("assigned_action"):
+            command.extend(
+                [
+                    "--forced-graph-action",
+                    str(case["assigned_action"]),
+                    "--action-propensity",
+                    str(case["propensity"]),
+                ]
+            )
         if not args.full_artifacts:
             command.append("--compact-artifacts")
         completed = subprocess.run(
@@ -194,6 +266,7 @@ def _run_benchmark_case(
             capture_output=True,
             text=True,
             check=False,
+            env=subprocess_environment(),
             timeout=args.case_timeout_seconds,
         )
         (output / "subprocess_stdout.log").write_text(
@@ -210,6 +283,7 @@ def _run_benchmark_case(
         return {
             **base,
             **existing,
+            "archived_attempt": str(archived_attempt) if archived_attempt else None,
             "elapsed_seconds": time.monotonic() - started,
             "resumed": False,
         }
@@ -225,9 +299,35 @@ def _run_benchmark_case(
             **base,
             "status": "failed",
             "reason_codes": [f"{type(exc).__name__}:{exc}"],
+            "archived_attempt": str(archived_attempt) if archived_attempt else None,
             "elapsed_seconds": time.monotonic() - started,
             "resumed": False,
         }
+
+
+def _archive_prior_attempt(output: Path) -> Path | None:
+    """Preserve a prior attempt before retrying into a fresh EvidenceStore."""
+    if not output.is_dir() or not any(output.iterdir()):
+        return None
+    archive_root = output.parent / ".attempt_archive" / output.name
+    archive_root.mkdir(parents=True, exist_ok=True)
+    archived = archive_root / f"attempt_{time.time_ns()}"
+    output.replace(archived)
+    return archived
+
+
+@contextmanager
+def _case_lock(output_dir: Path, case_id: str) -> Iterator[None]:
+    """Serialize writers for a case across benchmark processes on this host."""
+    lock_dir = output_dir.resolve() / ".case_locks"
+    lock_dir.mkdir(parents=True, exist_ok=True)
+    lock_name = hashlib.sha256(case_id.encode("utf-8")).hexdigest() + ".lock"
+    with (lock_dir / lock_name).open("a", encoding="utf-8") as handle:
+        fcntl.flock(handle.fileno(), fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(handle.fileno(), fcntl.LOCK_UN)
 
 
 def _existing_case_result(output: Path) -> dict[str, Any] | None:
@@ -257,6 +357,35 @@ def _existing_case_result(output: Path) -> dict[str, Any] | None:
 def _validate_assets_command(args: argparse.Namespace) -> int:
     config = load_config(args.config, validate_assets=True)
     report = validate_runtime_replay(config.resolved_forecast_release_manifest())
+    structural_manifest = config.resolved_structural_head_manifest()
+    if structural_manifest is None:
+        report["structural_head_release"] = "not_configured"
+    else:
+        report["structural_head_replay"] = validate_structural_head_replay(
+            structural_manifest,
+            config.resolved_forecast_release_manifest(),
+            config.resolved_forecast_runtime_manifest(),
+        )
+    report["claim_attribution_mode"] = config.claim_attribution.mode
+    attribution_manifest = config.resolved_claim_attribution_manifest()
+    if attribution_manifest is None:
+        report["claim_attribution_release"] = "deterministic_t0_baseline_no_asset"
+    else:
+        from .claim_attribution import validate_claim_attribution_replay
+
+        report["claim_attribution_replay"] = validate_claim_attribution_replay(
+            attribution_manifest
+        )
+    action_policy_manifest = config.resolved_graph_action_policy_manifest()
+    report["graph_action_policy_enabled"] = config.graph_guidance.action_policy_enabled
+    if action_policy_manifest is None:
+        report["graph_action_policy_release"] = "not_configured"
+    else:
+        from .graph_action_policy import validate_graph_action_policy_replay
+
+        report["graph_action_policy_replay"] = validate_graph_action_policy_replay(
+            action_policy_manifest
+        )
     anatomy_manifest = config.resolved_forecast_anatomy_manifest()
     if anatomy_manifest is not None:
         anatomy = json.loads(anatomy_manifest.read_text(encoding="utf-8"))
@@ -285,6 +414,8 @@ def build_parser() -> argparse.ArgumentParser:
     )
     review.add_argument("--output-dir", type=Path)
     review.add_argument("--config", type=Path)
+    review.add_argument("--forced-graph-action", choices=("baseline", *GRAPH_ACTIONS))
+    review.add_argument("--action-propensity", type=float, default=1.0)
     review.add_argument(
         "--compact-artifacts", action="store_true", help=argparse.SUPPRESS
     )
@@ -295,6 +426,11 @@ def build_parser() -> argparse.ArgumentParser:
     benchmark = subparsers.add_parser("benchmark", help="Run a JSON benchmark manifest")
     benchmark.add_argument("--manifest", type=Path, required=True)
     benchmark.add_argument("--output-dir", type=Path, required=True)
+    benchmark.add_argument(
+        "--batch-report-dir",
+        type=Path,
+        help="Write this invocation's summary outside the shared case output directory.",
+    )
     benchmark.add_argument("--config", type=Path)
     benchmark.add_argument("--workers", type=_positive_int, default=1)
     benchmark.add_argument("--resume", action="store_true")

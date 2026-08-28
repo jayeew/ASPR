@@ -11,7 +11,11 @@ from .contracts import StrictModel
 
 
 class InfluenceForecast(StrictModel):
-    """A future-diffusion forecast; never evidence for a review judgment."""
+    """A future-diffusion forecast, not evidence of novelty or prior art.
+
+    The forecast may enter the registered structural-innovation fusion, but it
+    can never establish manuscript validity or negate an antecedent.
+    """
 
     status: Literal["available", "limited", "unavailable"]
     prospective_5y_diffusion_percentile: float | None = Field(
@@ -20,6 +24,27 @@ class InfluenceForecast(StrictModel):
     uptake_probability: float | None = Field(default=None, ge=0.0, le=1.0)
     conditional_diffusion: float | None = Field(default=None, ge=0.0, le=1.0)
     expected_diffusion: float | None = Field(default=None, ge=0.0, le=1.0)
+    excess_diffusion: float | None = Field(default=None, ge=0.0, le=1.0)
+    field_year_base: float | None = Field(default=None, ge=0.0, le=1.0)
+    perturbation_potential: float | None = Field(default=None, ge=0.0, le=1.0)
+    perturbation_components: dict[str, float] = Field(default_factory=dict)
+    prediction_interval_width: float | None = Field(default=None, ge=0.0, le=1.0)
+    ood_reliability: float = Field(default=1.0, ge=0.0, le=1.0)
+    calibration_reliability: float = Field(default=1.0, ge=0.0, le=1.0)
+    structural_heads_status: Literal["available", "limited", "unavailable"] = (
+        "unavailable"
+    )
+    structural_head_release_id: str | None = None
+    structural_head_model_sha256: str | None = None
+    structural_head_training_reference_sha256: str | None = None
+    structural_head_prediction_protocol: (
+        Literal[
+            "strict_oof",
+            "frozen_t0_runtime",
+            "frozen_t0_out_of_training",
+        ]
+        | None
+    ) = None
     feature_coverage: float = Field(default=0.0, ge=0.0, le=1.0)
     release_id: str | None = None
     model_sha256: str | None = None
@@ -41,6 +66,34 @@ class InfluenceForecast(StrictModel):
         )
         if self.status == "available" and any(value is None for value in required):
             raise ValueError("available forecast lacks values or release provenance")
+        structural_required = (
+            self.excess_diffusion,
+            self.field_year_base,
+            self.perturbation_potential,
+            self.structural_head_release_id,
+            self.structural_head_model_sha256,
+            self.structural_head_training_reference_sha256,
+            self.structural_head_prediction_protocol,
+        )
+        if self.structural_heads_status == "available" and any(
+            value is None for value in structural_required
+        ):
+            raise ValueError("available structural heads lack values or provenance")
+        if self.structural_heads_status != "available" and (
+            any(
+                value is not None
+                for value in (
+                    self.excess_diffusion,
+                    self.perturbation_potential,
+                    self.structural_head_release_id,
+                    self.structural_head_model_sha256,
+                    self.structural_head_training_reference_sha256,
+                    self.structural_head_prediction_protocol,
+                )
+            )
+            or self.perturbation_components
+        ):
+            raise ValueError("unavailable structural heads cannot expose predictions")
         return self
 
 
@@ -254,13 +307,26 @@ class RetrievalRoutingPlan(StrictModel):
 class RetrievalMission(StrictModel):
     mission_id: str
     mission_type: Literal[
+        "antecedent_falsification",
+        "cross_field_pathway",
+        "opportunity_attribution_audit",
+        "topology_expansion",
+        "abstain",
+        # Read compatibility for already persisted v1 plans.
         "local_nearest_antecedent",
         "remote_mechanism_analogue",
         "topology_seed",
     ]
-    origin: Literal["score", "topology", "calibration"]
+    origin: Literal["score", "topology", "calibration", "policy"]
     target_claim_id: str
-    orientation: Literal["neutral"]
+    orientation: Literal[
+        "neutral",
+        "falsify_antecedent",
+        "verify_pathway",
+        "audit_opportunity",
+        "expand_topology",
+        "abstain",
+    ]
     query_roles: list[str] = Field(default_factory=list)
     seed_work_ids: list[str] = Field(default_factory=list)
     traversal: Literal["none", "references", "citations"] = "none"
@@ -307,18 +373,222 @@ class ResourceLedger(StrictModel):
     cache_hits: int = Field(default=0, ge=0)
 
 
+class GraphSignalBundle(StrictModel):
+    """Frozen multi-head Graph signal admitted to structural fusion only."""
+
+    contract: Literal["gear_graph_signal_bundle_v1"] = "gear_graph_signal_bundle_v1"
+    paper_id: str
+    expected_diffusion: float = Field(ge=0.0, le=1.0)
+    uptake_probability: float = Field(default=0.0, ge=0.0, le=1.0)
+    conditional_diffusion: float = Field(default=0.0, ge=0.0, le=1.0)
+    excess_diffusion: float | None = Field(default=None, ge=0.0, le=1.0)
+    field_year_base: float = Field(ge=0.0, le=1.0)
+    reliability: float = Field(ge=0.0, le=1.0)
+    shrunk_diffusion: float = Field(ge=0.0, le=1.0)
+    perturbation_potential: float | None = Field(default=None, ge=0.0, le=1.0)
+    perturbation_components: dict[str, float] = Field(default_factory=dict)
+    percentile_display: float | None = Field(default=None, ge=0.0, le=100.0)
+    structural_contribution_share: float | None = Field(default=None, ge=0.0, le=1.0)
+    opportunity_context_share: float | None = Field(default=None, ge=0.0, le=1.0)
+    structural_heads_status: Literal["available", "limited", "unavailable"] = (
+        "unavailable"
+    )
+    limited: bool = False
+    diagnostics: list[str] = Field(default_factory=list)
+
+
+class ClaimInventoryEntry(StrictModel):
+    """Graph-blind contribution claim frozen before reviewer execution."""
+
+    claim_id: str
+    claim_type: str
+    text: str
+    manuscript_evidence_keys: list[str] = Field(min_length=1)
+    centrality: float = Field(ge=0.0, le=1.0)
+
+
+class ClaimGraphPrior(StrictModel):
+    contract: Literal["gear_claim_graph_prior_v2"] = "gear_claim_graph_prior_v2"
+    claim_id: str
+    attribution_weight: float = Field(ge=0.0, le=1.0)
+    diffusion_prior: float = Field(ge=0.0, le=1.0)
+    perturbation_prior: float | None = Field(default=None, ge=0.0, le=1.0)
+    dominant_forecast_role: Literal[
+        "substantive_innovation", "t0_potential", "opportunity", "context", "unknown"
+    ] = "unknown"
+    pathway_hypothesis: Literal[
+        "local_method_adoption",
+        "cross_field_bridge",
+        "reusable_resource",
+        "platform_scaling",
+        "mechanism_transfer",
+        "unspecified",
+    ] = "unspecified"
+    confidence: float = Field(ge=0.0, le=1.0)
+    attribution_method: Literal["deterministic_t0", "learned_t0"] = "deterministic_t0"
+    attribution_status: Literal["available", "limited"] = "available"
+    attribution_release_id: str | None = None
+    diagnostics: list[str] = Field(default_factory=list)
+
+
+class ClaimAttributionAudit(StrictModel):
+    """Decision record proving which claim-attribution contract ran."""
+
+    contract: Literal["gear_claim_attribution_audit_v1"] = (
+        "gear_claim_attribution_audit_v1"
+    )
+    requested_mode: Literal["deterministic_t0", "learned_t0"]
+    applied_mode: Literal["deterministic_t0", "learned_t0", "unavailable"]
+    status: Literal["available", "limited"]
+    feature_schema_version: str
+    feature_names: list[str]
+    release_id: str | None = None
+    manifest_sha256: str | None = None
+    future_contexts_used_at_inference: Literal[False] = False
+    diagnostics: list[str] = Field(default_factory=list)
+
+
+class ImpactPathwayCard(StrictModel):
+    pathway_id: str
+    claim_id: str
+    pathway_type: Literal[
+        "local_method_adoption",
+        "cross_field_bridge",
+        "reusable_resource",
+        "platform_scaling",
+        "mechanism_transfer",
+        "unspecified",
+    ]
+    source_community: str | None = None
+    target_community: str | None = None
+    manuscript_evidence_ids: list[str] = Field(default_factory=list)
+    prior_work_evidence_ids: list[str] = Field(default_factory=list)
+    pathway_plausibility: float = Field(ge=0.0, le=1.0)
+    attribution_confidence: float = Field(ge=0.0, le=1.0)
+    verified: bool = False
+
+
+class StructuralInnovationCard(StrictModel):
+    """Frozen claim-level result of the monotone evidence-gated contract."""
+
+    contract: Literal["gear_structural_innovation_card_v1"] = (
+        "gear_structural_innovation_card_v1"
+    )
+    claim_id: str
+    manuscript_validity: float = Field(ge=0.0, le=1.0)
+    antecedent_risk: float = Field(ge=0.0, le=1.0)
+    residual_novelty: float = Field(ge=0.0, le=1.0)
+    evidence_coverage: float = Field(ge=0.0, le=1.0)
+    mechanism_validity: float = Field(ge=0.0, le=1.0)
+    evidence_gate: float = Field(ge=0.0, le=1.0)
+    diffusion_potential: float = Field(ge=0.0, le=1.0)
+    perturbation_potential: float | None = Field(default=None, ge=0.0, le=1.0)
+    structural_innovation_score: float = Field(ge=0.0, le=1.0)
+    uncertainty: float = Field(ge=0.0, le=1.0)
+    profile_class: Literal[
+        "transformative_broad",
+        "niche_or_delayed_foundational",
+        "scalable_incremental",
+        "limited_structural_innovation",
+        "insufficient_evidence",
+    ]
+    evidence_keys: list[str] = Field(default_factory=list)
+
+
+class GraphActionDecision(StrictModel):
+    action: Literal[
+        "baseline",
+        "antecedent_falsification",
+        "remote_mechanism_analogue",
+        "cross_field_pathway",
+        "topology_expansion",
+        "opportunity_attribution_audit",
+        "abstain",
+    ]
+    predicted_uplift: float
+    uplift_lcb: float
+    propensity: float | None = Field(default=None, gt=0.0, le=1.0)
+    selected: bool
+    reason: str
+    policy_status: Literal["available", "limited", "experimental", "unconfigured"] = (
+        "unconfigured"
+    )
+    policy_release_id: str | None = None
+    policy_manifest_sha256: str | None = None
+
+
+class TargetHeadProvenance(StrictModel):
+    """Fold-local lineage for one future-graph target head."""
+
+    head: Literal["uptake", "diffusion", "excess_diffusion", "perturbation"]
+    outer_fold_id: str
+    horizon_years: int = Field(ge=1)
+    fit_scope: Literal["outer_training_fold_only"] = "outer_training_fold_only"
+    training_rows: int = Field(ge=1)
+    target_columns: list[str] = Field(min_length=1)
+    training_reference_sha256: str
+
+
+class StructuralHeadPrediction(StrictModel):
+    """Preserved U/D/P/R outputs; never collapsed before runtime fusion."""
+
+    paper_id: str
+    uptake_probability: float = Field(ge=0.0, le=1.0)
+    excess_diffusion: float = Field(ge=0.0, le=1.0)
+    perturbation_potential: float = Field(ge=0.0, le=1.0)
+    reliability: float = Field(ge=0.0, le=1.0)
+    aspr_joint: float = Field(ge=0.0, le=1.0)
+    model_release_id: str
+    target_provenance_keys: list[str] = Field(min_length=1)
+
+
+class GraphActionLog(StrictModel):
+    """One matched-budget randomized or policy action observation."""
+
+    context_id: str
+    paper_id: str
+    claim_id: str
+    assigned_action: Literal[
+        "baseline",
+        "antecedent_falsification",
+        "remote_mechanism_analogue",
+        "cross_field_pathway",
+        "topology_expansion",
+        "opportunity_attribution_audit",
+    ]
+    propensity: float = Field(gt=0.0, le=1.0)
+    matched_budget: int = Field(ge=0)
+    useful_relation_yield: float = Field(ge=0.0)
+    correction_quality: float = Field(ge=0.0, le=1.0)
+    claim_recall_gain: float = Field(ge=-1.0, le=1.0)
+    wrong_correction: bool
+    unsupported_claim: bool
+    realized_cost: float = Field(ge=0.0)
+    outcome_utility: float
+    outer_fold_id: str | None = None
+
+
 __all__ = [
     "AnalogSeed",
     "CalibrationTension",
+    "ClaimGraphPrior",
     "ClaimGuidance",
+    "ClaimInventoryEntry",
     "ForecastAnatomy",
+    "GraphActionDecision",
+    "GraphActionLog",
     "GraphResourceCaps",
     "GraphRuntimePacket",
+    "GraphSignalBundle",
+    "ImpactPathwayCard",
     "InfluenceForecast",
     "ResourceLedger",
     "RetrievalGuidancePlan",
     "RetrievalMission",
     "RetrievalRoutingPlan",
     "RoutedCandidate",
+    "StructuralHeadPrediction",
+    "StructuralInnovationCard",
+    "TargetHeadProvenance",
     "TopologySeed",
 ]

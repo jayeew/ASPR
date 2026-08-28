@@ -50,8 +50,11 @@ change direction only through an explicit verified correction event.
 """
 
 FORBIDDEN_DECISION_TEXT = re.compile(
-    r"\b(?:accept(?:ed|ance)?|reject(?:ed)?|major revision|minor revision|"
-    r"recommendation|rating|score\s*[=:])\b",
+    r"\b(?:(?:paper|manuscript|submission|article)\s+(?:should\s+be\s+|is\s+|"
+    r"was\s+)?(?:accept(?:ed)?|reject(?:ed)?)|(?:accept|reject)\s+(?:this|the)\s+"
+    r"(?:paper|manuscript|submission|article)|major revision|minor revision|"
+    r"(?:editorial|reviewer|publication)\s+recommendation|(?:overall\s+)?rating\s*[=:]|"
+    r"review\s+score\s*[=:])\b",
     re.IGNORECASE,
 )
 

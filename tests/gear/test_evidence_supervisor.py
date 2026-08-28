@@ -1,13 +1,15 @@
 from __future__ import annotations
 
+from datetime import date
 from types import SimpleNamespace
 
-from gear.contracts import RetrievedWork
+from gear.contracts import PaperClaim, RetrievalBudget, RetrievedWork
 from gear.evidence_supervisor import EvidenceSupervisor, build_retrieval_claim
 from gear.graph_prior_contracts import (
     ClaimGuidance,
     GraphRuntimePacket,
     InfluenceForecast,
+    ResourceLedger,
     RetrievalMission,
 )
 from gear.paper_extraction import PaperRubricBuilder
@@ -26,6 +28,81 @@ from gear.review_fusion import ReviewFusion
 from gear.review_state import initialize_review_state
 from gear.trace import EvidenceStore
 from tests.gear.fakes import EmptyPriorArt, UnusedRelationClassifier
+
+
+def test_policy_topology_fallback_executes_one_deterministic_neighbor(
+    tmp_path, gear_config
+) -> None:
+    supervisor = EvidenceSupervisor(gear_config)
+    supervisor._budget = lambda point_id, state: RetrievalBudget(  # type: ignore[method-assign]
+        citation_expansion_max=1, fulltext_max=2
+    )
+    supervisor._store_retrieval_audit = lambda *args: None  # type: ignore[method-assign]
+    supervisor._record_retrieval_outcome = lambda *args: None  # type: ignore[method-assign]
+    ledger = ResourceLedger(paper_id="P")
+    state = SimpleNamespace(
+        cutoff_date=date(2020, 1, 1), resource_ledger=ledger, failures=[]
+    )
+    point = SimpleNamespace(point_id="CP-1", validation_notes=[])
+    claim = PaperClaim(
+        claim_id="C-1", claim_type="novelty_claim", span_id="S-1", text="claim"
+    )
+    guidance = ClaimGuidance(
+        review_point_id="CP-1",
+        claim_id="C-1",
+        claim_relevance=1.0,
+        allocated_local_query_slots=0,
+        allocated_remote_query_slots=1,
+        missions=[
+            RetrievalMission(
+                mission_id="GM-1",
+                mission_type="topology_expansion",
+                origin="policy",
+                target_claim_id="C-1",
+                orientation="expand_topology",
+                traversal="references",
+                stop_rule="matched_budget",
+            )
+        ],
+    )
+    seeds = [
+        RetrievedWork(
+            work_id=work_id,
+            target_claim_id="C-1",
+            title=work_id,
+            retrieval_query_id="Q-1",
+            source_query_ids=["Q-1"],
+            retrieval_source="test",
+        )
+        for work_id in ("W2", "W1")
+    ]
+
+    class Prior:
+        selected_seed = ""
+
+        def expand_neighbors(self, seed, *args, resource_ledger=None, **kwargs):
+            self.selected_seed = seed.work_id
+            resource_ledger.logical_neighbor_expansions += 1
+            resource_ledger.network_neighbor_attempts += 1
+            return [seeds[0]]
+
+    prior = Prior()
+    expanded = supervisor._expand_topology_fallback(
+        point,
+        state,
+        SimpleNamespace(references=[]),
+        prior,
+        claim,
+        seeds,
+        guidance,
+        None,
+    )
+
+    assert expanded
+    assert prior.selected_seed == "W1"
+    assert ledger.logical_neighbor_expansions == 1
+    assert ledger.network_neighbor_attempts == 1
+    assert not state.failures
 
 
 def test_low_coverage_graph_seed_uses_claim_fallback(tmp_path) -> None:
@@ -204,7 +281,7 @@ def test_semantically_admitted_author_citation_is_verified_first(
 
     routed = EvidenceSupervisor(gear_config)._route_works(point, state, works, store)
 
-    assert [work.work_id for work in routed][0] == "W-citation"
+    assert next(work.work_id for work in routed) == "W-citation"
     plan = state.retrieval_routing_plans[point.point_id]
     citation = next(row for row in plan.candidates if row.candidate_id == "W-citation")
     assert citation.final_rank == 0

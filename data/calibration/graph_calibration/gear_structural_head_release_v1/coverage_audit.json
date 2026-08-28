@@ -1,0 +1,35 @@
+{
+  "contract": "gear_structural_head_coverage_audit_v1",
+  "passed": true,
+  "runtime_10": {
+    "available_papers": 10,
+    "expected_papers": 10,
+    "passed": true,
+    "protocols": [
+      "frozen_t0_runtime"
+    ]
+  },
+  "stage_b_241": {
+    "available_papers": 241,
+    "expected_papers": 241,
+    "manifest": "outputs/gear/stage_b_targeted_expansion_20260828/complete_graph_benchmark_manifest.json",
+    "manifest_sha256": "sha256:23683620339be6952492f120c112f8c0449475bf424f3fcb5fb768f04ea113e9",
+    "passed": true,
+    "protocol_counts": {
+      "strict_oof": 241
+    },
+    "protocols_correct_by_training_identity": true
+  },
+  "stage_c_150": {
+    "available_papers": 150,
+    "expected_papers": 150,
+    "manifest": "outputs/gear/stage_c_randomized_actions_20260828/randomized_manifest_150.json",
+    "manifest_sha256": "sha256:555f7277c98dbbfeba277f9e3e4f4b5cf6480f4ea65ac3a7abefd4766cb9ba0c",
+    "passed": true,
+    "protocol_counts": {
+      "frozen_t0_out_of_training": 115,
+      "strict_oof": 35
+    },
+    "protocols_correct_by_training_identity": true
+  }
+}

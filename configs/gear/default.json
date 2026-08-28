@@ -7,7 +7,13 @@
   "forecast_release_manifest": "data/calibration/releases/gear-d5-primary16-current/release_manifest.json",
   "forecast_runtime_manifest": "data/calibration/runtime_features/gear-d5-primary16-dev10-v1/runtime_manifest.json",
   "forecast_anatomy_manifest": "data/calibration/graph_calibration/primary16_forecast_anatomy_v1/manifest.json",
+  "structural_head_manifest": "data/calibration/graph_calibration/gear_structural_head_release_v1/manifest.json",
+  "graph_action_policy_manifest": null,
   "graph_results_path": null,
+  "claim_attribution": {
+    "mode": "learned_t0",
+    "learned_manifest": "data/calibration/graph_calibration/gear_claim_attribution_release_v1/release.json"
+  },
   "allowed_asset_roots": [
     "data/calibration/releases",
     "data/calibration/runtime_features",
@@ -57,6 +63,7 @@
   },
   "graph_guidance": {
     "policy_version": "primary16_forecast_calibration_v1",
+    "action_policy_enabled": false,
     "shadow": false,
     "score_routing_enabled": false,
     "topology_enabled": true,

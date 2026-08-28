@@ -7,6 +7,7 @@ from gear.graph_guidance import (
     _assign_seeds,
     _citation_topology_mission,
     routing_weights,
+    score_controller,
     weighted_interleave,
 )
 from gear.graph_prior_contracts import (
@@ -56,6 +57,17 @@ def test_weighted_interleave_changes_order_not_pool_or_budget() -> None:
     assert neutral != scored
     assert [row for row in scored if row.startswith("l")] == local
     assert [row for row in scored if row.startswith("r")] == remote
+
+
+def test_score_controller_changes_geometry() -> None:
+    low = GraphRuntimePacket(
+        paper_id="paper", cutoff_date=date(2020, 1, 1), forecast=forecast(0.0)
+    )
+    high = low.model_copy(update={"forecast": forecast(100.0)})
+
+    assert score_controller(low, 8, enabled=True)[:2] == (6, 2)
+    assert score_controller(high, 8, enabled=True)[:2] == (2, 6)
+    assert score_controller(low, 8, enabled=False)[:2] == (4, 4)
 
 
 def test_claim_citation_is_an_explicit_topology_mission() -> None:

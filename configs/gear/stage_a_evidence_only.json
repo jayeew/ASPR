@@ -1,0 +1,25 @@
+{
+  "config_version": "aspr_gear_stage_a_evidence_only_v1",
+  "model_backend": "codex_cli",
+  "graph_forecast_enabled": false,
+  "codex_cli": {
+    "executable": "codex",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "medium",
+    "timeout_seconds": 1800,
+    "sandbox": "read-only"
+  },
+  "graph_guidance": {
+    "action_policy_enabled": false,
+    "shadow": false,
+    "score_routing_enabled": false,
+    "topology_enabled": false,
+    "calibration_enabled": false,
+    "calibration_variant": "neutral"
+  },
+  "allow_external_retrieval": true,
+  "aspr_qwen": {
+    "enabled": false,
+    "required": false
+  }
+}

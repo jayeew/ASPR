@@ -17,11 +17,13 @@ from .contracts import (
     ReviewRequest,
     ReviewStatus,
 )
-from .diffusion_forecast import DiffusionForecastService
+from .diffusion_forecast import DiffusionForecastService, unavailable_packet
 from .evidence_supervisor import EvidenceSupervisor, build_retrieval_claim
+from .graph_action_policy import FrozenGraphActionSelector
 from .graph_calibration import load_forecast_analog_index
 from .graph_guidance import GraphGuidancePlanner, is_graph_guidance_target
 from .graph_prior_contracts import (
+    GraphActionDecision,
     GraphResourceCaps,
     GraphRuntimePacket,
 )
@@ -43,17 +45,47 @@ from .review_contracts import (
     InfluenceContextCard,
     ReviewBundle,
     ReviewPhase,
+    ReviewState,
     StructuredReview,
 )
 from .review_fusion import ReviewFusion
 from .review_state import initialize_review_state
 from .review_verifier import ReviewVerifier
 from .reviewers import ASPRQwenReviewer, CodexAgentReviewer
+from .structural_innovation import (
+    attribute_graph_signal_with_audit,
+    build_claim_inventory,
+    build_graph_signal_bundle,
+    build_impact_pathways,
+    fuse_structural_innovation,
+)
 from .trace import EvidenceStore, sha256_file, sha256_value
+
+
+def runtime_code_fingerprint() -> tuple[str, int]:
+    """Hash the Python runtime snapshot loaded by a review worker."""
+    root = Path(__file__).resolve().parent
+    digest = hashlib.sha256()
+    paths = sorted(
+        root.rglob("*.py"), key=lambda path: path.relative_to(root).as_posix()
+    )
+    for path in paths:
+        digest.update(path.relative_to(root).as_posix().encode("utf-8"))
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return "sha256:" + digest.hexdigest(), len(paths)
+
+
+_RUNTIME_CODE_SHA256, _RUNTIME_SOURCE_FILE_COUNT = runtime_code_fingerprint()
 
 
 class ForecastScorer(Protocol):
     def score(self, paper_ir: Any, cutoff_date: Any) -> GraphRuntimePacket: ...
+
+
+class GraphActionSelector(Protocol):
+    def decide(self, state: ReviewState) -> GraphActionDecision: ...
 
 
 @dataclass
@@ -70,6 +102,7 @@ class ServiceRegistry:
     fusion: ReviewFusion | None = None
     supervisor: EvidenceSupervisor | None = None
     paper_extractor: Any | None = None
+    graph_action_selector: GraphActionSelector | None = None
 
 
 def review_paper(
@@ -185,6 +218,50 @@ def review_paper(
             total_actions_max=resolved_config.retrieval.total_actions_max,
         ),
     )
+    # Freeze the graph-blind contribution inventory before either reviewer runs.
+    state.claim_inventory = build_claim_inventory(paper_ir)
+    for item in state.claim_inventory:
+        store.add_evidence(f"CI:{item.claim_id}", "claim_inventory_entry", item)
+    if graph_result is not None:
+        state.graph_signal_bundle = build_graph_signal_bundle(graph_result)
+        learned_manifest = resolved_config.resolved_claim_attribution_manifest()
+        state.claim_graph_priors, state.claim_attribution_audit = (
+            attribute_graph_signal_with_audit(
+                state.claim_inventory,
+                state.graph_signal_bundle,
+                graph_result,
+                mode=resolved_config.claim_attribution.mode,
+                learned_manifest=learned_manifest,
+            )
+        )
+        if state.claim_attribution_audit.status == "limited":
+            state.graph_signal_bundle = state.graph_signal_bundle.model_copy(
+                update={
+                    "limited": True,
+                    "diagnostics": list(
+                        dict.fromkeys(
+                            [
+                                *state.graph_signal_bundle.diagnostics,
+                                *state.claim_attribution_audit.diagnostics,
+                            ]
+                        )
+                    ),
+                }
+            )
+            state.failures.append(
+                FailureRecord(
+                    stage="claim_attribution",
+                    reason="claim_attribution_unavailable",
+                )
+            )
+        store.add_evidence("G:SIGNAL", "graph_signal_bundle", state.graph_signal_bundle)
+        store.add_evidence(
+            "G:CLAIM_ATTRIBUTION",
+            "claim_attribution_audit",
+            state.claim_attribution_audit,
+        )
+        for prior in state.claim_graph_priors:
+            store.add_evidence(f"GP:{prior.claim_id}", "claim_graph_prior", prior)
     influence_context = _influence_context_card(graph_result)
     if influence_context is not None:
         state.influence_context_evidence_key = "G:INFLUENCE"
@@ -241,6 +318,35 @@ def review_paper(
     _append_stage(store, "review_fusion", agent_branch, fusion_report, started)
     if state.graph_result is not None:
         guidance_config = resolved_config.graph_guidance
+        if guidance_config.action_policy_enabled:
+            selector = services.graph_action_selector if services is not None else None
+            if selector is None:
+                selector = FrozenGraphActionSelector(
+                    resolved_config.resolved_graph_action_policy_manifest()
+                )
+            try:
+                state.graph_action_decision = GraphActionDecision.model_validate(
+                    selector.decide(state)
+                )
+            except (OSError, TypeError, ValueError) as exc:
+                state.graph_action_decision = GraphActionDecision(
+                    action="abstain",
+                    predicted_uplift=0.0,
+                    uplift_lcb=0.0,
+                    selected=False,
+                    reason=f"action_selector_failed:{type(exc).__name__}",
+                    policy_status="limited",
+                )
+            if state.graph_action_decision.policy_status == "limited":
+                state.failures.append(
+                    FailureRecord(
+                        stage="graph_action_policy",
+                        reason="graph_action_policy_unavailable",
+                    )
+                )
+            store.add_evidence(
+                "G:ACTION", "graph_action_decision", state.graph_action_decision
+            )
         analog_index = None
         if guidance_config.calibration_enabled:
             try:
@@ -311,6 +417,20 @@ def review_paper(
         prior_art=prior_art,
         relation_classifier=relation_classifier,
     )
+    if state.graph_signal_bundle is not None:
+        state.impact_pathway_cards = build_impact_pathways(state, store)
+        for pathway_card in state.impact_pathway_cards:
+            store.add_evidence(
+                pathway_card.pathway_id, "impact_pathway_card", pathway_card
+            )
+        state = fuse_structural_innovation(state, store)
+        state.process_features.structural_fusion_completed = True
+        for structural_card in state.structural_innovation_cards:
+            store.add_evidence(
+                f"SI:{structural_card.claim_id}",
+                "structural_innovation_card",
+                structural_card,
+            )
     if state.resource_ledger is not None:
         store.add_evidence("G:LEDGER", "resource_ledger", state.resource_ledger)
     _append_stage(store, "evidence_supervisor", fusion_report, state, started)
@@ -403,11 +523,21 @@ def _graph_scorer(
 ) -> ForecastScorer:
     if services and services.graph_scorer is not None:
         return services.graph_scorer
+    if not config.graph_forecast_enabled:
+        return _DisabledForecastScorer()
     return DiffusionForecastService(
         config.resolved_forecast_release_manifest(),
         config.resolved_forecast_runtime_manifest(),
         config.resolved_forecast_anatomy_manifest(),
+        config.resolved_structural_head_manifest(),
     )
+
+
+class _DisabledForecastScorer:
+    def score(self, paper_ir: Any, cutoff_date: Any) -> GraphRuntimePacket:
+        return unavailable_packet(
+            paper_ir.paper_id, cutoff_date, "graph_disabled_by_experiment_config"
+        )
 
 
 def _influence_context_card(
@@ -574,6 +704,9 @@ def _persist_bundle(
             "contract": "aspr_gear_run_manifest_v3",
             "schema_version": "aspr_gear",
             "config_version": config.config_version,
+            "runtime_code_sha256": _RUNTIME_CODE_SHA256,
+            "runtime_source_file_count": _RUNTIME_SOURCE_FILE_COUNT,
+            "runtime_config_sha256": sha256_value(config),
             "evidence_policy": config.evidence_policy,
             "deprecated_fig4_to_fig10_used": False,
             "request_sha256": sha256_value(request),
@@ -648,4 +781,4 @@ def _append_stage(
     )
 
 
-__all__ = ["ServiceRegistry", "review_paper"]
+__all__ = ["ServiceRegistry", "review_paper", "runtime_code_fingerprint"]

@@ -1,0 +1,60 @@
+{
+  "categorical_feature_names": [
+    "EF0197"
+  ],
+  "contract": "gear_structural_head_feature_registry_v1",
+  "excess_target_fit_scope": "outer_training_fold_only",
+  "feature_names": [
+    "EF0017",
+    "EF0038",
+    "EF0052",
+    "EF0083",
+    "EF0186",
+    "EF0188",
+    "EF0197",
+    "EF0238",
+    "EF0240",
+    "EF0307",
+    "EF0309",
+    "EF0312",
+    "EF0314",
+    "EF0315",
+    "EF0318",
+    "EF0319"
+  ],
+  "feature_time_basis": "T0_only",
+  "field_year_base_fit_scope": "outer_training_fold_only",
+  "historical_prediction_protocol": "strict_paper_independent_oof",
+  "inference_columns": [
+    "EF0017",
+    "EF0038",
+    "EF0052",
+    "EF0083",
+    "EF0186",
+    "EF0188",
+    "EF0197",
+    "EF0238",
+    "EF0240",
+    "EF0307",
+    "EF0309",
+    "EF0312",
+    "EF0314",
+    "EF0315",
+    "EF0318",
+    "EF0319",
+    "domain12",
+    "publication_year"
+  ],
+  "label_only_columns_excluded_from_models": true,
+  "label_only_future_columns": [
+    "realized_diffusion_target",
+    "future_citer_count",
+    "boundary_expansion",
+    "community_mixing_change",
+    "dependency_displacement",
+    "path_shortening"
+  ],
+  "parent_feature_registry_sha256": "sha256:63b66dd9f8ef050c70f9066030856fc06352fc21f9a73078f805e14a91ca566c",
+  "perturbation_target_fit_scope": "outer_training_fold_only",
+  "uses_future_features": false
+}

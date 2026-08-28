@@ -1,0 +1,42 @@
+{
+  "contract": "gear_claim_attribution_linear_head_v1",
+  "feature_names": [
+    "claim_centrality",
+    "claim_type__novelty_claim",
+    "claim_type__method_claim",
+    "claim_type__result_claim",
+    "claim_type__scope_claim",
+    "claim_type__causal_claim",
+    "claim_type__significance_claim",
+    "anatomy_role__substantive_innovation",
+    "anatomy_role__t0_potential",
+    "anatomy_role__opportunity",
+    "anatomy_role__context",
+    "pathway__local_method_adoption",
+    "pathway__cross_field_bridge",
+    "pathway__reusable_resource",
+    "pathway__platform_scaling",
+    "pathway__mechanism_transfer",
+    "pathway__unspecified"
+  ],
+  "coefficients": [
+    0.028378344412007383,
+    0.09544063539881416,
+    0.008195289128342172,
+    -0.052846960359109275,
+    -0.05397468361904651,
+    0.0031857194510001726,
+    0.0,
+    0.004623402841956005,
+    0.003739611165407217,
+    -0.002929375077506797,
+    -0.005433638929856377,
+    0.024136973429591882,
+    -0.011787581037506399,
+    -0.03842332627529402,
+    0.03326552439445055,
+    0.0031857194510001574,
+    -0.010377309962241196
+  ],
+  "intercept": 0.15538225439143555
+}

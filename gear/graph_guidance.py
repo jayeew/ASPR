@@ -13,6 +13,7 @@ from .graph_prior_contracts import (
     AnalogSeed,
     CalibrationTension,
     ClaimGuidance,
+    GraphActionDecision,
     GraphResourceCaps,
     GraphRuntimePacket,
     InfluenceForecast,
@@ -58,12 +59,22 @@ ABSOLUTE_PRIORITY_RE = re.compile(
     re.IGNORECASE,
 )
 MissionType = Literal[
-    "local_nearest_antecedent",
+    "antecedent_falsification",
     "remote_mechanism_analogue",
-    "topology_seed",
+    "cross_field_pathway",
+    "opportunity_attribution_audit",
+    "topology_expansion",
+    "abstain",
 ]
-MissionOrigin = Literal["score", "topology", "calibration"]
-MissionOrientation = Literal["neutral"]
+MissionOrigin = Literal["score", "topology", "calibration", "policy"]
+MissionOrientation = Literal[
+    "neutral",
+    "falsify_antecedent",
+    "verify_pathway",
+    "audit_opportunity",
+    "expand_topology",
+    "abstain",
+]
 Traversal = Literal["none", "references", "citations"]
 CandidateT = TypeVar("CandidateT")
 
@@ -139,10 +150,20 @@ def score_controller(
     *,
     enabled: bool = False,
 ) -> tuple[int, int, float]:
-    """Return matched local/remote geometry; forecast routing is opt-in only."""
-    _, _, q_effective = routing_weights(packet.forecast, use_score=enabled)
-    local = query_slots // 2
-    return local, query_slots - local, q_effective
+    """Allocate a fixed budget while making enabled score routing causal."""
+    if query_slots < 0:
+        raise ValueError("query_slots must be non-negative")
+    local_weight, remote_weight, q_effective = routing_weights(
+        packet.forecast, use_score=enabled
+    )
+    if query_slots == 0:
+        return 0, 0, q_effective
+    if query_slots == 1:
+        remote = int(remote_weight >= local_weight)
+    else:
+        remote = round(query_slots * remote_weight)
+        remote = min(query_slots - 1, max(1, remote))
+    return query_slots - remote, remote, q_effective
 
 
 def is_graph_guidance_target(point: CanonicalReviewPoint) -> bool:
@@ -193,6 +214,7 @@ class GraphGuidancePlanner:
         packet = state.graph_result
         if packet is None:
             raise ValueError("Graph guidance requires a runtime packet")
+        action_decision = state.graph_action_decision
         points = sorted(
             (
                 point
@@ -276,6 +298,7 @@ class GraphGuidancePlanner:
                 seed_usage,
                 analog_seeds=analog_seeds,
                 tension=tension,
+                action_decision=action_decision,
             )
             if any(mission.origin == "topology" for mission in claim_guidance.missions):
                 topology_claims_used += 1
@@ -294,6 +317,9 @@ class GraphGuidancePlanner:
                 "executable_query_slots": executable_slots,
                 "local_slots": local,
                 "remote_slots": remote,
+                "selected_graph_action": (
+                    action_decision.action if action_decision is not None else "legacy"
+                ),
             },
             resource_caps=self.resource_caps,
             claim_guidance=guidance,
@@ -313,8 +339,18 @@ class GraphGuidancePlanner:
         *,
         analog_seeds: Sequence[AnalogSeed],
         tension: CalibrationTension | None,
+        action_decision: GraphActionDecision | None,
     ) -> ClaimGuidance:
         claim_id = point.novelty_claim_id or point.point_id
+        if action_decision is not None:
+            return _policy_guidance(
+                point,
+                claim_id,
+                action_decision,
+                local_slots=local_slots,
+                remote_slots=remote_slots,
+                q_effective=q_effective,
+            )
         missions = _score_missions(
             claim_id,
             local_slots,
@@ -361,6 +397,101 @@ class GraphGuidancePlanner:
         )
 
 
+def _policy_guidance(
+    point: CanonicalReviewPoint,
+    claim_id: str,
+    decision: GraphActionDecision,
+    *,
+    local_slots: int,
+    remote_slots: int,
+    q_effective: float,
+) -> ClaimGuidance:
+    if decision.action == "baseline":
+        return ClaimGuidance(
+            review_point_id=point.point_id,
+            claim_id=claim_id,
+            claim_relevance=1.0,
+            allocated_local_query_slots=local_slots,
+            allocated_remote_query_slots=remote_slots,
+            missions=_score_missions(
+                claim_id,
+                local_slots,
+                remote_slots,
+                q_effective=q_effective,
+                section=point.section,
+            ),
+        )
+    if not decision.selected or decision.action == "abstain":
+        mission = _mission(
+            claim_id,
+            "abstain",
+            "policy",
+            "abstain",
+            [],
+            "none",
+            decision.reason,
+        )
+        return ClaimGuidance(
+            review_point_id=point.point_id,
+            claim_id=claim_id,
+            claim_relevance=0.0,
+            allocated_local_query_slots=0,
+            allocated_remote_query_slots=0,
+            missions=[mission],
+        )
+    mapping: dict[str, tuple[MissionType, MissionOrientation, list[str], Traversal]] = {
+        "antecedent_falsification": (
+            "antecedent_falsification",
+            "falsify_antecedent",
+            ["author_terminology", "object_problem"],
+            "none",
+        ),
+        "remote_mechanism_analogue": (
+            "remote_mechanism_analogue",
+            "verify_pathway",
+            ["mechanism_outcome", "purpose_semantic"],
+            "none",
+        ),
+        "cross_field_pathway": (
+            "cross_field_pathway",
+            "verify_pathway",
+            ["mechanism_outcome", "purpose_semantic"],
+            "citations",
+        ),
+        "topology_expansion": (
+            "topology_expansion",
+            "expand_topology",
+            ["author_terminology", "object_problem"],
+            "references",
+        ),
+        "opportunity_attribution_audit": (
+            "opportunity_attribution_audit",
+            "audit_opportunity",
+            ["object_problem", "purpose_semantic"],
+            "none",
+        ),
+    }
+    mission_type, orientation, roles, traversal = mapping[decision.action]
+    mission = _mission(
+        claim_id,
+        mission_type,
+        "policy",
+        orientation,
+        roles,
+        traversal,
+        "matched_budget_exhausted_or_verified_relation",
+    )
+    local = int(decision.action == "antecedent_falsification")
+    return ClaimGuidance(
+        review_point_id=point.point_id,
+        claim_id=claim_id,
+        claim_relevance=1.0,
+        allocated_local_query_slots=local,
+        allocated_remote_query_slots=1 - local,
+        missions=[mission],
+    )
+
+
 def _score_missions(
     claim_id: str,
     local: int,
@@ -374,9 +505,9 @@ def _score_missions(
     if local:
         local_mission = _mission(
             claim_id,
-            "local_nearest_antecedent",
+            "antecedent_falsification",
             "score",
-            "neutral",
+            "falsify_antecedent",
             ["author_terminology", "object_problem"],
             "none",
             "local_slots_exhausted_or_direct_antecedent",
@@ -386,7 +517,7 @@ def _score_missions(
             claim_id,
             "remote_mechanism_analogue",
             "score",
-            "neutral",
+            "verify_pathway",
             ["mechanism_outcome", "purpose_semantic"],
             "none",
             "remote_slots_exhausted_or_comparable_relation",
@@ -459,12 +590,11 @@ def _topology_missions(
     # verified-relation yield from an additional one-hop traversal, so the
     # default policy spends that matched slot on claim-level search breadth.
     traversal: Traversal = "none"
-    orientation: MissionOrientation = "neutral"
     mission = _mission(
         claim_id,
-        "topology_seed",
+        "topology_expansion",
         "topology",
-        orientation,
+        "expand_topology",
         ["graph_seed"],
         traversal,
         "two_seeds_or_one_verified_relation",
@@ -479,9 +609,9 @@ def _citation_topology_mission(claim_id: str) -> RetrievalMission:
 
     return _mission(
         claim_id,
-        "topology_seed",
+        "topology_expansion",
         "topology",
-        "neutral",
+        "expand_topology",
         ["author_citation"],
         "none",
         "one_semantically_admitted_claim_citation_or_citation_pool_exhausted",
@@ -494,9 +624,9 @@ def _analog_missions(
     return [
         _mission(
             claim_id,
-            "topology_seed",
+            "topology_expansion",
             "calibration",
-            "neutral",
+            "expand_topology",
             ["graph_seed"],
             "references",
             "one_cutoff_safe_hgb_analog_or_analog_pool_exhausted",
@@ -514,12 +644,16 @@ def _tension_mission(claim_id: str, tension: CalibrationTension) -> RetrievalMis
     return _mission(
         claim_id,
         (
-            "local_nearest_antecedent"
+            "antecedent_falsification"
             if role == "object_problem"
             else "remote_mechanism_analogue"
         ),
         "calibration",
-        "neutral",
+        (
+            "audit_opportunity"
+            if tension.kind == "opportunity_dominant"
+            else "verify_pathway"
+        ),
         [role],
         "none",
         "calibration_tension_checked",

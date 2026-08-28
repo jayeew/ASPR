@@ -7,6 +7,7 @@ import inspect
 import re
 import time
 from collections.abc import Mapping
+from datetime import date
 from typing import Any, Literal, cast
 
 from .config import GearConfig, load_config
@@ -39,6 +40,7 @@ from .prior_art import PriorArtService, RelationClassifier
 from .review_contracts import (
     CanonicalReviewPoint,
     EvidenceAction,
+    NoveltyJudgment,
     PointSeverity,
     PointValidationStatus,
     ReviewAspect,
@@ -365,7 +367,11 @@ class EvidenceSupervisor:
         guidance = _claim_guidance(state, point.point_id)
         topology_active = bool(
             guidance
-            and any(mission.origin == "topology" for mission in guidance.missions)
+            and any(
+                mission.origin == "topology"
+                or mission.mission_type == "topology_expansion"
+                for mission in guidance.missions
+            )
         )
         analog_ids = {
             seed.work_id
@@ -528,6 +534,7 @@ class EvidenceSupervisor:
             mission
             for mission in (guidance.missions if guidance is not None else [])
             if mission.origin == "topology"
+            or mission.mission_type == "topology_expansion"
         ]
         calibration = [
             mission
@@ -540,16 +547,21 @@ class EvidenceSupervisor:
         ):
             point.validation_notes.append("topology_neighbor_expansion_not_requested")
             return
-        seeds = (
-            self._topology_anchors.get(point.point_id, [])
-            if seed_missions
-            else self._works.get(point.point_id, [])
-        )
+        anchors = self._topology_anchors.get(point.point_id, [])
+        seeds = anchors or self._works.get(point.point_id, [])
         if prior_art is None or classifier is None:
             point.validation_notes.append("citation_expansion_service_unavailable")
             return
         claim, span = build_retrieval_claim(point, paper_ir)
-        if topology and (not seeds or not self._topology_seed_has_value(point, store)):
+        policy_topology = any(mission.origin == "policy" for mission in topology)
+        if topology and (
+            not seeds
+            or not self._topology_seed_has_value(
+                point,
+                store,
+                require_graph_source=not policy_topology,
+            )
+        ):
             self._topology_provider_fallback(
                 point,
                 state,
@@ -901,6 +913,8 @@ class EvidenceSupervisor:
     def _topology_seed_has_value(
         point: CanonicalReviewPoint,
         store: EvidenceStore,
+        *,
+        require_graph_source: bool = True,
     ) -> bool:
         for key in point.relation_evidence_keys:
             record = store.get(key)
@@ -913,7 +927,7 @@ class EvidenceSupervisor:
                 in {"graph_seed", "author_citation"}
                 for query_id in payload.get("source_query_ids") or []
             )
-            if not graph_sourced:
+            if require_graph_source and not graph_sourced:
                 continue
             try:
                 label = RelationLabel(str(payload.get("relation_label")))
@@ -968,9 +982,142 @@ class EvidenceSupervisor:
         self._store_retrieval_audit(claim, prior_art, store)
         self._record_retrieval_outcome(point, state, prior_art)
         self._works.setdefault(point.point_id, []).extend(works)
-        self._classify(point, state, span, claim, works, store, classifier)
+        neighbor_works = self._expand_topology_fallback(
+            point,
+            state,
+            paper_ir,
+            prior_art,
+            claim,
+            self._works[point.point_id],
+            guidance,
+            store,
+        )
+        self._works[point.point_id].extend(neighbor_works)
+        self._classify(
+            point,
+            state,
+            span,
+            claim,
+            [*works, *neighbor_works],
+            store,
+            classifier,
+            reserve_topology=False,
+        )
         self._store_coverage(point, state, claim, prior_art, store)
         point.validation_notes.append("topology_low_yield_provider_fallback")
+
+    def _expand_topology_fallback(
+        self,
+        point: CanonicalReviewPoint,
+        state: ReviewState,
+        paper_ir: PaperIR,
+        prior_art: PriorArtService,
+        claim: PaperClaim,
+        works: list[RetrievedWork],
+        guidance: ClaimGuidance | None,
+        store: EvidenceStore,
+    ) -> list[RetrievedWork]:
+        ledger = state.resource_ledger
+        if ledger is not None and (
+            ledger.logical_neighbor_expansions >= ledger.caps.neighbor_expansions
+        ):
+            point.validation_notes.append("topology_neighbor_cap_already_consumed")
+            return []
+        seed = self._deterministic_topology_seed(
+            works, paper_ir, claim, state.cutoff_date
+        )
+        if seed is None:
+            point.validation_notes.append("topology_t0_seed_unavailable")
+            state.failures.append(
+                FailureRecord(
+                    stage="topology_expansion",
+                    reason="topology_t0_seed_unavailable",
+                )
+            )
+            return []
+        direction = self._topology_direction(guidance)
+        expanded = prior_art.expand_neighbors(
+            seed,
+            claim,
+            state.cutoff_date,
+            self._budget(point.point_id, state),
+            direction=direction,
+            resource_ledger=ledger,
+        )
+        self._store_retrieval_audit(claim, prior_art, store)
+        self._record_retrieval_outcome(point, state, prior_art)
+        point.validation_notes.append(f"topology_t0_seed:{seed.work_id}")
+        if not expanded:
+            point.validation_notes.append("topology_neighbor_expansion_empty")
+            state.failures.append(
+                FailureRecord(
+                    stage="topology_expansion",
+                    reason="topology_neighbor_expansion_empty",
+                )
+            )
+        return expanded
+
+    @staticmethod
+    def _deterministic_topology_seed(
+        works: list[RetrievedWork],
+        paper_ir: PaperIR,
+        claim: PaperClaim,
+        cutoff: date,
+    ) -> RetrievedWork | None:
+        if works:
+            return min(works, key=lambda work: work.work_id)
+        references = sorted(
+            (
+                reference
+                for reference in paper_ir.references
+                if reference.doi
+                and (
+                    reference.publication_date is not None
+                    and reference.publication_date < cutoff
+                    or reference.publication_date is None
+                    and reference.publication_year is not None
+                    and reference.publication_year < cutoff.year
+                )
+            ),
+            key=lambda reference: (str(reference.doi), reference.reference_id),
+        )
+        if not references:
+            return None
+        reference = references[0]
+        query_id = (
+            "QRY-T0-REF-"
+            + hashlib.sha256(
+                f"{claim.claim_id}|{reference.reference_id}|{reference.doi}".encode()
+            ).hexdigest()[:18]
+        )
+        return RetrievedWork(
+            work_id=str(reference.doi),
+            target_claim_id=claim.claim_id,
+            title=str(reference.title or reference.raw_text),
+            publication_date=reference.publication_date,
+            publication_year=reference.publication_year,
+            doi=reference.doi,
+            retrieval_query_id=query_id,
+            source_query_ids=[query_id],
+            retrieval_source="manuscript_reference_t0_topology_seed",
+        )
+
+    @staticmethod
+    def _topology_direction(
+        guidance: ClaimGuidance | None,
+    ) -> Literal["references", "citations"]:
+        if guidance is not None:
+            for mission in guidance.missions:
+                if (
+                    mission.mission_type == "topology_expansion"
+                    and mission.traversal
+                    in {
+                        "references",
+                        "citations",
+                    }
+                ):
+                    return cast(Literal["references", "citations"], mission.traversal)
+        return "references"
 
     @staticmethod
     def _pending_topology_expansion(state: ReviewState) -> bool:
@@ -980,7 +1127,10 @@ class EvidenceSupervisor:
         point_map = state.canonical_points
         return any(
             any(
-                mission.origin == "topology" and mission.traversal != "none"
+                mission.origin == "topology"
+                and mission.traversal != "none"
+                or mission.mission_type == "topology_expansion"
+                and mission.traversal != "none"
                 for mission in guidance.missions
             )
             and guidance.review_point_id in point_map
@@ -1149,6 +1299,12 @@ class EvidenceSupervisor:
             correction_type = "partial_antecedent_refinement"
         after_confidence = point.novelty_confidence
         before_direction = getattr(state, "novelty_direction", None)
+        after_direction = EvidenceSupervisor._evidence_corrected_direction(
+            before_direction,
+            before_section=before_section,
+            after_section=point.section,
+        )
+        state.novelty_direction = after_direction
         event = ReviewCorrectionEventV1(
             point_id=point.point_id,
             before_text=before_text,
@@ -1156,7 +1312,9 @@ class EvidenceSupervisor:
             before_section=before_section,
             after_section=point.section,
             before_direction=before_direction,
-            after_direction=before_direction,
+            after_direction=after_direction,
+            graph_triggered_retrieval=guidance is not None,
+            entered_structural_fusion=state.graph_signal_bundle is not None,
             trigger_relation_ids=verified_relations,
             trigger_mission_ids=(
                 [mission.mission_id for mission in guidance.missions]
@@ -1174,6 +1332,30 @@ class EvidenceSupervisor:
         correction_keys = getattr(state, "correction_event_evidence_keys", None)
         if correction_keys is not None and event_id not in correction_keys:
             correction_keys.append(event_id)
+
+    @staticmethod
+    def _evidence_corrected_direction(
+        before: NoveltyJudgment | None,
+        *,
+        before_section: str,
+        after_section: str,
+    ) -> NoveltyJudgment | None:
+        """Let verified relations alter novelty without attributing it to Graph."""
+        if before is None or before_section == after_section:
+            return before
+        if before_section == "novelty_support" and after_section == "novelty_limit":
+            return (
+                NoveltyJudgment.NEGATIVE
+                if before == NoveltyJudgment.NOT_DISCUSSED
+                else NoveltyJudgment.MIXED
+            )
+        if before_section == "novelty_limit" and after_section == "novelty_support":
+            return (
+                NoveltyJudgment.POSITIVE
+                if before == NoveltyJudgment.NOT_DISCUSSED
+                else NoveltyJudgment.MIXED
+            )
+        return before
 
     @staticmethod
     def _correction_relation_ids(

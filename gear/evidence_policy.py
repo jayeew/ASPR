@@ -36,7 +36,11 @@ def _has_topology_mission(state: ReviewState, point_id: str) -> bool:
     return any(
         guidance.review_point_id == point_id
         and any(
-            mission.origin == "topology" and mission.traversal != "none"
+            (
+                mission.origin == "topology"
+                or mission.mission_type == "topology_expansion"
+            )
+            and mission.traversal != "none"
             for mission in guidance.missions
         )
         for guidance in plan.claim_guidance

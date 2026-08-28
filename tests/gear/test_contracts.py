@@ -66,3 +66,18 @@ def test_evidence_store_rejects_tampered_serialized_payload(tmp_path):
 
     with pytest.raises(ValueError, match="stored evidence hash mismatch"):
         EvidenceStore(tmp_path)
+
+
+def test_evidence_store_preserves_c1_control_characters(tmp_path):
+    store = EvidenceStore(tmp_path)
+    store.add_evidence(
+        "P:c1-control",
+        "paper_span",
+        {"text": "PDF extraction before\u0085after"},
+    )
+
+    reloaded = EvidenceStore(tmp_path)
+
+    record = reloaded.get("P:c1-control")
+    assert record is not None
+    assert record.payload["text"] == "PDF extraction before\u0085after"

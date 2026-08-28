@@ -8,6 +8,7 @@ environment variable and are never persisted in review artifacts or logs.
 from __future__ import annotations
 
 import json
+import time
 from collections.abc import Callable, Mapping
 from typing import Any
 from urllib.error import HTTPError, URLError
@@ -70,7 +71,7 @@ class OpenAICompatibleJsonClient:
             method="POST",
         )
         try:
-            raw = self.requester(request, self.endpoint.timeout_seconds)
+            raw = self._request_with_transient_retry(request)
             response = json.loads(raw.decode("utf-8"))
             content = response["choices"][0]["message"]["content"]
             return _json_object(content)
@@ -87,6 +88,22 @@ class OpenAICompatibleJsonClient:
                 f"OpenAI-compatible API request failed for {self.endpoint.model}: {exc}"
             ) from exc
 
+    def _request_with_transient_retry(self, request: Request) -> bytes:
+        last_error: HTTPError | URLError | TimeoutError | None = None
+        for attempt in range(3):
+            try:
+                return self.requester(request, self.endpoint.timeout_seconds)
+            except HTTPError as exc:
+                if exc.code not in {408, 429, 500, 502, 503, 504}:
+                    raise
+                last_error = exc
+            except (URLError, TimeoutError) as exc:
+                last_error = exc
+            if attempt < 2:
+                time.sleep(float(attempt + 1))
+        assert last_error is not None
+        raise last_error
+
 
 def _request_bytes(request: Request, timeout_seconds: int) -> bytes:
     with urlopen(request, timeout=timeout_seconds) as response:
@@ -99,7 +116,7 @@ def _system_prompt(
 ) -> str:
     prompt = (
         "You are running as a stateless GEAR model worker. Follow the system "
-        "instructions exactly. Return only one JSON object; do not add markdown or commentary.\n\n"
+        "instructions exactly. Return only one json object; do not add markdown or commentary.\n\n"
         f"SYSTEM INSTRUCTIONS:\n{system}"
     )
     if response_schema is not None:

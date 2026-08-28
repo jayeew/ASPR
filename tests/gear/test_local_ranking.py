@@ -4,6 +4,7 @@ import hashlib
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 from gear.contracts import EvidenceLevel, RetrievedSpan, RetrievedWork
 from gear.local_ranking import LocalScientificRanker
@@ -76,3 +77,21 @@ def test_local_ranker_is_lazy_and_dual_view_union_is_ranked():
     )
     assert {work.work_id for work in ranked} == {"W-a", "W-b"}
     assert set(scores) == {"W-a", "W-b"}
+
+
+def test_gpu_lease_limits_model_bearing_processes(monkeypatch, tmp_path: Path):
+    monkeypatch.setenv("GEAR_GPU_MAX_PROCESSES", "1")
+    monkeypatch.setenv("GEAR_GPU_LEASE_DIR", str(tmp_path))
+    monkeypatch.setenv("GEAR_GPU_LEASE_TIMEOUT_SECONDS", "0")
+    first = LocalScientificRanker(Path("recall"), Path("reranker"))
+    second = LocalScientificRanker(Path("recall"), Path("reranker"))
+
+    first._acquire_gpu_lease()
+    with pytest.raises(TimeoutError, match="GPU lease unavailable"):
+        second._acquire_gpu_lease()
+
+    first._gpu_lease.close()
+    first._gpu_lease = None
+    second._acquire_gpu_lease()
+    assert second._gpu_lease is not None
+    second._gpu_lease.close()

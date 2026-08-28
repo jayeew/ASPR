@@ -94,7 +94,7 @@ def test_codex_cli_returns_entire_review(gear_config, paper_ir, calibration_fact
     assert critic.metadata.critic_source.value == "codex_cli"
 
 
-def test_pipeline_outputs_only_five_part_contract(
+def test_pipeline_outputs_review_and_structural_profile_contract(
     tmp_path, gear_config, sample_md, calibration_factory
 ):
     output = tmp_path / "current"
@@ -146,11 +146,15 @@ def test_pipeline_outputs_only_five_part_contract(
         "strengths",
         "weaknesses",
         "questions",
+        "structural_innovation",
     }
+    assert payload["structural_innovation"] is not None
     assert "recommend" not in bundle.review_markdown.casefold()
     assert "graph calibration" not in bundle.review_markdown.casefold()
     assert bundle.graph_result is not None
     assert bundle.state is not None
+    assert bundle.state.claim_attribution_audit is not None
+    assert bundle.state.claim_attribution_audit.applied_mode == "deterministic_t0"
     assert (output / "graph_runtime_packet.json").is_file()
     assert not (output / "graph_prior.json").exists()
     assert not (output / "graph_prior_audit.json").exists()
@@ -161,6 +165,66 @@ def test_pipeline_outputs_only_five_part_contract(
     for legacy_field in ("calibration", "graph_context", "graph_prior", "state_v2"):
         assert legacy_field not in serialized_bundle
     assert services.evidence_store.validate_manifest() == []
+
+
+def test_pipeline_fails_closed_when_required_runtime_heads_are_unavailable(
+    tmp_path, gear_config, sample_md
+):
+    output = tmp_path / "learned-attribution-unavailable"
+    compiler = PaperCompiler(gear_config)
+    request = ReviewRequest(paper_path=sample_md)
+    paper_ir = compiler.compile(request)
+    config = gear_config.model_copy(
+        update={
+            "claim_attribution": gear_config.claim_attribution.model_copy(
+                update={"mode": "learned_t0", "learned_manifest": None}
+            ),
+            "graph_guidance": gear_config.graph_guidance.model_copy(
+                update={"action_policy_enabled": True}
+            ),
+        }
+    )
+
+    class GraphFake:
+        def score(self, supplied, cutoff):
+            return _graph(supplied.paper_id, cutoff)
+
+    reviewer = CodexAgentReviewer(
+        config,
+        generator=lambda system, user: _draft(paper_ir).model_dump(mode="json"),
+    )
+    services = ServiceRegistry(
+        evidence_store=EvidenceStore(output),
+        paper_compiler=compiler,
+        graph_scorer=GraphFake(),
+        agent_reviewer=reviewer,
+        prior_art=PriorArtService(config),
+        relation_classifier=RelationClassifier(config),
+        verifier=ReviewVerifier(
+            config,
+            semantic_checker=lambda system, user: {
+                "unsupported_point_ids": [],
+                "summary_supported": True,
+            },
+        ),
+    )
+
+    bundle = review_paper(request, output_dir=output, config=config, services=services)
+
+    assert bundle.status == ReviewStatus.LIMITED
+    assert bundle.state is not None
+    assert bundle.state.claim_graph_priors == []
+    assert bundle.state.claim_attribution_audit is not None
+    assert bundle.state.claim_attribution_audit.status == "limited"
+    assert bundle.state.graph_action_decision is not None
+    assert bundle.state.graph_action_decision.action == "abstain"
+    assert bundle.state.graph_action_decision.policy_status == "limited"
+    assert "claim_attribution_unavailable" in (bundle.process_diagnostic or {}).get(
+        "blocking_reasons", []
+    )
+    assert "graph_action_policy_unavailable" in (bundle.process_diagnostic or {}).get(
+        "blocking_reasons", []
+    )
 
 
 def test_semantic_verifier_failure_forces_limited(

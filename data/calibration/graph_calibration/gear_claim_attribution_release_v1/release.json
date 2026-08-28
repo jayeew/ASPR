@@ -1,0 +1,42 @@
+{
+  "contract": "gear_claim_attribution_release_v1",
+  "release_id": "claim-attribution-t0-20260828",
+  "status": "promoted",
+  "feature_schema_version": "gear_claim_attribution_t0_features_v1",
+  "feature_names": [
+    "claim_centrality",
+    "claim_type__novelty_claim",
+    "claim_type__method_claim",
+    "claim_type__result_claim",
+    "claim_type__scope_claim",
+    "claim_type__causal_claim",
+    "claim_type__significance_claim",
+    "anatomy_role__substantive_innovation",
+    "anatomy_role__t0_potential",
+    "anatomy_role__opportunity",
+    "anatomy_role__context",
+    "pathway__local_method_adoption",
+    "pathway__cross_field_bridge",
+    "pathway__reusable_resource",
+    "pathway__platform_scaling",
+    "pathway__mechanism_transfer",
+    "pathway__unspecified"
+  ],
+  "model_path": "claim_attribution_linear_head.json",
+  "model_sha256": "sha256:724186d6bd8822054bdb7272906319bd32eaaa976543ea21ba2927786be4dc6c",
+  "replay_path": "claim_attribution_replay.json",
+  "replay_sha256": "sha256:a8d29ef5aba00460b0a731d2919d414bd70a535ca486c3dc12f262e226280fd0",
+  "gate1_report_paths": [
+    "gate1_temporal.json",
+    "gate1_domain.json"
+  ],
+  "gate1_report_sha256": [
+    "sha256:a6c32f542bcebf438b52cd72e1911d73d1af9f3893a7955708723103ac317e95",
+    "sha256:965b5de652bee5adcc85a6adb7bd926d2d9e5a2bf1f94252994bc07f1059543a"
+  ],
+  "training_target": "future_claim_adoption_share_given_any_adoption",
+  "training_features_t0_only": true,
+  "development_only": true,
+  "sealed_holdout_labels_used": false,
+  "future_contexts_used_at_inference": false
+}

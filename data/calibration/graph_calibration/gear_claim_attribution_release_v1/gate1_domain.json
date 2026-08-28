@@ -1,0 +1,62 @@
+{
+  "claim_allowed": true,
+  "claim_attribution_runtime_candidate": {
+    "development_only": true,
+    "development_papers": 144,
+    "evaluation_axis": "domain",
+    "evaluation_protocol": "leave_one_domain12_out",
+    "feature_names": [
+      "claim_centrality",
+      "claim_type__novelty_claim",
+      "claim_type__method_claim",
+      "claim_type__result_claim",
+      "claim_type__scope_claim",
+      "claim_type__causal_claim",
+      "claim_type__significance_claim",
+      "anatomy_role__substantive_innovation",
+      "anatomy_role__t0_potential",
+      "anatomy_role__opportunity",
+      "anatomy_role__context",
+      "pathway__local_method_adoption",
+      "pathway__cross_field_bridge",
+      "pathway__reusable_resource",
+      "pathway__platform_scaling",
+      "pathway__mechanism_transfer",
+      "pathway__unspecified"
+    ],
+    "feature_schema_version": "gear_claim_attribution_t0_features_v1",
+    "fold_local_target_fit": true,
+    "future_contexts_used_at_inference": false,
+    "future_features_used": false,
+    "gate_estimand": "paired_within_paper_permutation_advantage",
+    "holdout_labels_used_for_model_selection": false,
+    "informative_development_papers": 53,
+    "model_sha256": "sha256:724186d6bd8822054bdb7272906319bd32eaaa976543ea21ba2927786be4dc6c",
+    "ridge_alpha": 10.0,
+    "sealed_holdout_labels_used": false,
+    "source_sha256": [
+      "sha256:cda9ce4e12e60e4edc56a15c2121e81a8d2f100a1daa2b4552823c9623c7240e",
+      "sha256:8018691e13fc95465f23dbc664e046065c1d27a5f5da4f918549e081543edef7"
+    ],
+    "target_definition": "within_paper_share_given_any_observed_adoption",
+    "training_split": "development"
+  },
+  "contract": "gear_claim_attribution_gate1_report_v1",
+  "metrics": {
+    "advantage_over_permutation": 0.2663475827151396,
+    "bootstrap_replicates": 2000,
+    "paired_advantage_bootstrap_ci95": [
+      0.08840501534787498,
+      0.4436165662557883
+    ],
+    "paper_cluster_bootstrap_ci95": [
+      0.07462057867246426,
+      0.30480499807205563
+    ],
+    "papers": 53,
+    "rows": 317,
+    "spearman_rho": 0.1963245394197089,
+    "within_paper_permutation_rho": -0.0700230432954307
+  },
+  "status": "passed"
+}

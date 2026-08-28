@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import json
-from typing import Any, Callable, Dict, List, Mapping, Optional
+from collections.abc import Callable, Mapping
+from typing import Any
 
 from pydantic import ValidationError
 
@@ -31,10 +32,10 @@ class HybridPaperExtractor:
     def __init__(
         self,
         *,
-        generator: Optional[Callable[[Dict[str, Any]], Mapping[str, Any]]] = None,
+        generator: Callable[[dict[str, Any]], Mapping[str, Any]] | None = None,
     ) -> None:
         self.generator = generator
-        self.last_failures: List[str] = []
+        self.last_failures: list[str] = []
 
     def enrich(self, paper_ir: PaperIR) -> PaperIR:
         self.last_failures = []
@@ -92,7 +93,7 @@ class HybridPaperExtractor:
         )
 
     @staticmethod
-    def _validate_claim_spans(claims: List[PaperClaim], paper_ir: PaperIR) -> None:
+    def _validate_claim_spans(claims: list[PaperClaim], paper_ir: PaperIR) -> None:
         """Validate references, not wording identity.
 
         Semantic extraction is allowed to condense or paraphrase a supplied span.
@@ -142,11 +143,11 @@ def configured_paper_extractor(config: GearConfig) -> HybridPaperExtractor:
     """Build a model-backed extractor without creating a client at import time."""
     client: Any = None
 
-    def generate(payload: Dict[str, Any]) -> Mapping[str, Any]:
+    def generate(payload: dict[str, Any]) -> Mapping[str, Any]:
         nonlocal client
         if client is None:
             client = build_json_model_client(config)
-        return client.generate_json(
+        result = client.generate_json(
             system=(
                 "Extract only atomic manuscript claims grounded in supplied spans. "
                 "Concise paraphrases are allowed. Preserve the supporting span_id; "
@@ -155,6 +156,10 @@ def configured_paper_extractor(config: GearConfig) -> HybridPaperExtractor:
             user=json.dumps(payload, ensure_ascii=False),
             response_schema=ClaimExtractionResponse.model_json_schema(),
         )
+        claims = result.get("claims")
+        if isinstance(claims, list):
+            return {**result, "claims": claims[: config.max_claims]}
+        return result
 
     return HybridPaperExtractor(generator=generate)
 

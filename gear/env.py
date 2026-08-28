@@ -117,6 +117,18 @@ def getenv_runtime(name: str, default: str = "") -> str:
     return value
 
 
+def subprocess_environment() -> dict[str, str]:
+    """Return an environment that does not promote dotenv values to overrides."""
+    ensure_env_loaded()
+    output = dict(os.environ)
+    dotenv_keys: set[str] = set()
+    for path in DEFAULT_ENV_FILES:
+        dotenv_keys.update(parse_env_file(path))
+    for name in dotenv_keys - set(SYSTEM_ENV):
+        output.pop(name, None)
+    return output
+
+
 def getenv_int(name: str, default: int) -> int:
     value = getenv(name, "")
     if value == "":

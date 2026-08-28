@@ -55,6 +55,12 @@ def test_graph_blind_check_rejects_fields_but_allows_scientific_prose() -> None:
 
 def test_scientific_rejection_is_not_editorial_decision_language() -> None:
     assert FORBIDDEN_DECISION_TEXT.search("99% salt rejection") is None
+    assert (
+        FORBIDDEN_DECISION_TEXT.search(
+            "proposed modifications were accepted or rejected"
+        )
+        is None
+    )
     assert FORBIDDEN_DECISION_TEXT.search("the paper should be rejected") is not None
 
 

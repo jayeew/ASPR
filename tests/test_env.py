@@ -5,26 +5,31 @@ import sys
 import tempfile
 from pathlib import Path
 
+import pytest
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from gear.env import getenv, getenv_int, getenv_list, load_env
+import gear.env as gear_env
+from gear.env import (
+    getenv,
+    getenv_int,
+    getenv_list,
+    load_env,
+    subprocess_environment,
+)
 
 
 def test_load_env_file() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         env_path = Path(tmp) / ".env"
         env_path.write_text(
-            "\n".join(
-                [
-                    "ASPR_TEST_TOKEN=abc123",
-                    "ASPR_TEST_PORT=12345",
-                    "ASPR_TEST_KEYS=key1, key2 key3",
-                    "ASPR_TEST_QUOTED='value # not comment'",
-                    "ASPR_TEST_COMMENT=value # comment",
-                ]
-            ),
+            "ASPR_TEST_TOKEN=abc123\n"
+            "ASPR_TEST_PORT=12345\n"
+            "ASPR_TEST_KEYS=key1, key2 key3\n"
+            "ASPR_TEST_QUOTED='value # not comment'\n"
+            "ASPR_TEST_COMMENT=value # comment",
             encoding="utf-8",
         )
 
@@ -61,6 +66,23 @@ def test_later_env_file_overrides_earlier_file() -> None:
             assert getenv("ASPR_TEST_LAYER") == "local"
         finally:
             os.environ.pop("ASPR_TEST_LAYER", None)
+
+
+def test_subprocess_environment_does_not_promote_dotenv_values(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    env_path = tmp_path / ".env"
+    env_path.write_text("DOTENV_ONLY_VALUE=not-an-override\n", encoding="utf-8")
+    monkeypatch.setattr(gear_env, "DEFAULT_ENV_FILES", (env_path,))
+    monkeypatch.setattr(gear_env, "SYSTEM_ENV", {"SYSTEM_ONLY_VALUE": "kept"})
+    monkeypatch.setattr(gear_env, "_LOADED", False)
+    monkeypatch.delenv("DOTENV_ONLY_VALUE", raising=False)
+    monkeypatch.setenv("SYSTEM_ONLY_VALUE", "kept")
+
+    child = subprocess_environment()
+
+    assert "DOTENV_ONLY_VALUE" not in child
+    assert child["SYSTEM_ONLY_VALUE"] == "kept"
 
 
 if __name__ == "__main__":

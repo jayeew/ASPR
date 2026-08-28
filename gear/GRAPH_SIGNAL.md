@@ -1,20 +1,80 @@
 # Graph signal boundary
 
-GEAR deliberately separates forecast, retrieval, evidence, and review judgment.
+GEAR separates novelty evidence from prospective structural impact while
+combining them through one registered deterministic contract.
 
 1. `nature_multihorizon` predicts five-year scholarly diffusion. The public
    value is `prospective_5y_diffusion_percentile`; it is neither novelty nor an
    acceptance probability.
-2. The percentile is a diagnostic forecast. Experimental routing may reorder
-   only a fixed local/remote pool; it cannot change the graph-blind draft.
+2. The percentile is display/ranking metadata and is never treated as a
+   probability. Calibrated expected diffusion is reliability-shrunk toward the
+   field-year base and may enter only the evidence-gated structural score.
 3. Point-in-time Graph topology is a bounded candidate probe. It cannot delete
    claim-level provider queries. The first entrance is an exact manuscript
    citation attached to the claim span. It must have substantive prior-work
    text and pass the candidate comparability gate before replacing the last
    candidate and entering verification at rank one. Generic Graph seeds remain
    lower priority. A topology seed is never review evidence.
-4. A review point may change only after full-text retrieval, claim-level
+4. A novelty review point may change only after full-text retrieval, claim-level
    relation classification, semantic verification, and evidence storage.
+5. The Graph scalar can never establish novelty, manuscript validity, or erase
+   a direct antecedent. Holding those evidence variables fixed, its marginal
+   effect on the separate structural-innovation score is monotone non-negative.
+
+The preserved runtime heads are U (uptake), D (diffusion or fold-local excess
+diffusion), P (structural perturbation), A (claim attribution/pathway), and R
+(reliability). When a registered excess-diffusion head is present it replaces
+total diffusion inside the shrinkage step; otherwise frozen D is used and the
+result remains limited. Each fold-local target head carries its training-scope
+hash and provenance.
+
+Production admits D-excess/P only through `gear_structural_head_release_v1`.
+The sidecar is hash-bound to the canonical Primary16 release and registry. Its
+manifest must declare T0-only inputs and outer-training-fold-only target fits;
+historical rows must be strict OOF predictions with a fold identifier, while
+recent rows must be exact-cutoff predictions from the frozen model. A missing,
+corrupt, ambiguous, post-cutoff, or protocol-mismatched sidecar never receives
+a numeric substitute: D-excess/P are omitted, frozen HGB-D remains available,
+and the Graph signal is explicitly limited.
+
+Claim attribution has two intentionally separate runtime identities. The
+default `deterministic_t0` phase-one baseline uses only the frozen claim type,
+manuscript centrality, forecast-anatomy roles, and a manuscript-derived pathway
+hypothesis. It is never reported as learned. The optional `learned_t0` head is
+admitted only through `gear_claim_attribution_release_v1`: a non-executable
+linear JSON model, exact T0 feature schema, runtime replay, and distinct
+temporal/domain Gate-1 reports must all be hash-bound. Those reports must bind
+their result to the candidate model hash and declare that future citing
+contexts are labels used during development, never inference features. Missing
+or corrupt learned assets produce an empty, explicitly limited attribution;
+runtime does not silently substitute the deterministic baseline. The current
+Gate-1 OOF estimates are evaluation evidence only and are not a frozen
+production model.
+
+Selective retrieval is gated separately. A promoted selector may choose A1–A5
+only after its uplift lower confidence bound and wrong-correction,
+unsupported-claim, and cost guardrails pass. If action policy execution is
+enabled without a promoted selector, runtime records `abstain`; it does not
+fall back to an unvalidated score-to-action mapping.
+
+Production action selection requires `gear_graph_action_policy_release_v1`.
+The release binds the complete balanced 150-row randomized log, its exact
+90-row development subset, paired 60-row Graph/no-Graph policy holdouts, the
+portable A0–A5 Q heads and conservative decision rules, a runtime replay, and
+the final dual-holdout Gate-2 report by SHA-256. Gate 2 must pass every check
+and all three guardrails, and must identify the exact candidate model, T0
+feature schema, and data hashes. The self-contained immutable release also
+binds the formal frozen-replay manifest, rescue-source audit, and Stage A/B/C
+runtime code/config cohort audits. The runtime features are claim count, mean
+manuscript centrality, publication year, shrunk diffusion, reliability, the
+two forecast-anatomy shares, HGB-P perturbation potential, and forecast
+prediction uncertainty (explicit interval width when available, otherwise
+`1 - reliability`). P is required and is never replaced with D. Future
+outcomes are never inference inputs. The post-retrieval GEAR evidence gap is
+explicitly excluded from this phase-one pre-retrieval decision because no
+stable T0 field exists; the release manifest records that rationale. Missing,
+corrupt, partial, unpaired, or non-replayable assets force `abstain` and a
+limited run; the randomized selector remains explicitly experimental.
 
 The frozen routing formula is:
 
@@ -25,13 +85,32 @@ remote_weight = 0.25 + 0.5 * q_effective
 local_weight = 1 - remote_weight
 ```
 
-The formula is active only when feature coverage is at least 0.8 and
-`abs(q_effective - 0.5) >= 0.1`; otherwise routing is exactly neutral. This
-prevents weak, central, or partial-feature forecasts from creating arbitrary
-candidate permutations. Unavailable forecast also uses `q_effective = 0.5`
-and emits an explicit limited Graph packet. Historical cases never call live
-OpenAlex. A year-only candidate is eligible only when
+When the score-routing experiment is enabled, the fixed query budget is
+allocated according to these weights (for eight slots, 0 and 100 map to 6/2
+and 2/6 local/remote). The production action policy may instead abstain unless
+an action's uplift lower confidence bound is positive and its guardrails pass.
+Unavailable forecast uses `q_effective = 0.5` and emits an explicit limited
+Graph packet. Historical cases never call live OpenAlex. A year-only candidate is eligible only when
 `source_year < cutoff_year`.
+
+## Structural innovation fusion
+
+The graph-blind claim inventory is frozen from manuscript spans before reviewer
+execution. For each claim, RelationCards and RetrievalCoverageCards determine:
+
+```text
+N = manuscript_validity * evidence_coverage
+    * (1 - antecedent_risk) * residual_novelty
+
+I = N^alpha * [epsilon + (1-epsilon)D]^beta
+    * [epsilon + (1-epsilon)P]^eta * mechanism_validity^gamma
+```
+
+All exponents are non-negative and `beta > 0`. The perturbation factor is
+omitted while HGB-P is unavailable. Complete direct-antecedent coverage forces
+`N=0`, so diffusion cannot compensate. Paper aggregation uses centrality from
+the frozen claim inventory and a top-three noisy-OR; Graph never sets claim
+centrality. The text compiler only renders frozen numeric fields.
 
 ## Safe topology admission
 
@@ -80,11 +159,12 @@ reference. The model is never refitted for a recent paper. The former v6.1
 coverage are recorded separately; incomplete historical coverage is shrunk
 toward neutral before routing.
 
-Claim-linked topology is now enabled by default. Score-only routing remains
-disabled: it was non-inferior in 10/10 papers but its median `Delta NDCG@10` was
-zero. HGB remains an independent five-year diffusion forecast. Any future score
-routing model must be trained against candidate-level relation yield or material
-review change, not future citation diffusion.
+Claim-linked topology remains available under matched caps. Scalar routing is a
+correctness-tested experimental arm, not the scientific integration mechanism.
+The production retrieval policy must be trained against candidate-level
+relation yield or material review change, record propensities, and abstain when
+its uplift lower bound is non-positive. HGB remains an independent five-year
+diffusion forecast and enters the final system through structural fusion.
 
 Paper references are now parsed as individual numbered bibliography entries.
 The search frame first exposes references cited in the exact target span (for

@@ -75,3 +75,28 @@ def test_semantic_claim_may_paraphrase_its_evidence_span(
 
     assert enriched.quality_report.semantic_extraction_ready is True
     assert enriched.claims[0].text == "A concise paraphrase of the manuscript claim."
+
+
+def test_configured_extractor_enforces_max_claims(
+    monkeypatch, gear_config, paper_ir
+) -> None:
+    span = paper_ir.spans[0]
+    client = _RecordingClient(span.span_id, span.text)
+    original = client.generate_json
+
+    def repeated(**kwargs: Any) -> dict[str, Any]:
+        payload = original(**kwargs)
+        payload["claims"] = [
+            {**payload["claims"][0], "claim_id": f"C-{index}"} for index in range(3)
+        ]
+        return payload
+
+    monkeypatch.setattr(client, "generate_json", repeated)
+    monkeypatch.setattr(
+        "gear.paper_extraction.build_json_model_client", lambda config: client
+    )
+    bounded = gear_config.model_copy(update={"max_claims": 2})
+
+    enriched = configured_paper_extractor(bounded).enrich(paper_ir)
+
+    assert len(enriched.claims) == 2

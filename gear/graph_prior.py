@@ -28,6 +28,8 @@ class GraphService:
         self._service = DiffusionForecastService(
             resolved.resolved_forecast_release_manifest(),
             resolved.resolved_forecast_runtime_manifest(),
+            resolved.resolved_forecast_anatomy_manifest(),
+            resolved.resolved_structural_head_manifest(),
         )
 
     def score(self, paper_ir: PaperIR, cutoff_date: date) -> GraphRuntimePacket:

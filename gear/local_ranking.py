@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import fcntl
+import os
+import time
 from collections.abc import Sequence
 from pathlib import Path
 from typing import Any
@@ -17,6 +20,7 @@ class LocalScientificRanker:
         self.reranker_path = Path(reranker_path)
         self._recall: Any = None
         self._reranker: Any = None
+        self._gpu_lease: Any = None
 
     def rank(
         self,
@@ -99,6 +103,7 @@ class LocalScientificRanker:
             if not torch.cuda.is_available():
                 raise RuntimeError("CUDA is required for the local scientific ranker")
 
+            self._acquire_gpu_lease()
             self._recall = BGEM3FlagModel(
                 str(self.recall_path), use_fp16=True, devices=["cuda:0"]
             )
@@ -120,6 +125,38 @@ class LocalScientificRanker:
                 model_kwargs={"torch_dtype": "float16"},
             )
         return self._reranker
+
+    def _acquire_gpu_lease(self) -> None:
+        """Limit model-bearing review processes on a shared CUDA device."""
+        if self._gpu_lease is not None:
+            return
+        slot_count = int(os.environ.get("GEAR_GPU_MAX_PROCESSES", "0"))
+        if slot_count <= 0:
+            return
+        timeout = float(os.environ.get("GEAR_GPU_LEASE_TIMEOUT_SECONDS", "3600"))
+        lease_dir = Path(
+            os.environ.get("GEAR_GPU_LEASE_DIR", "/tmp/aspr_gear_gpu_leases")
+        )
+        lease_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
+        deadline = time.monotonic() + timeout
+        while True:
+            for slot in range(slot_count):
+                handle = (lease_dir / f"cuda0_slot_{slot}.lock").open(
+                    "a+", encoding="utf-8"
+                )
+                try:
+                    fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+                except BlockingIOError:
+                    handle.close()
+                    continue
+                self._gpu_lease = handle
+                return
+            if time.monotonic() >= deadline:
+                raise TimeoutError(
+                    f"GPU lease unavailable after {timeout:.1f}s "
+                    f"({slot_count} slots)"
+                )
+            time.sleep(0.25)
 
     @staticmethod
     def _document(work: RetrievedWork) -> str:

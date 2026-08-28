@@ -80,6 +80,7 @@ class RetrievalLimits(StrictModel):
 
 class GraphGuidanceConfig(StrictModel):
     policy_version: str = "primary16_forecast_calibration_v1"
+    action_policy_enabled: bool = False
     shadow: bool = False
     score_routing_enabled: bool = False
     topology_enabled: bool = True
@@ -99,6 +100,13 @@ class GraphGuidanceConfig(StrictModel):
     relation_classifications: int = Field(default=12, ge=0)
 
 
+class ClaimAttributionConfig(StrictModel):
+    """Choose the declared T0 baseline or a promoted learned head."""
+
+    mode: Literal["deterministic_t0", "learned_t0"] = "deterministic_t0"
+    learned_manifest: Path | None = None
+
+
 class GearConfig(StrictModel):
     config_version: str
     evidence_policy: str
@@ -107,6 +115,9 @@ class GearConfig(StrictModel):
     forecast_release_manifest: Path
     forecast_runtime_manifest: Path | None = None
     forecast_anatomy_manifest: Path | None = None
+    structural_head_manifest: Path | None = None
+    graph_action_policy_manifest: Path | None = None
+    graph_forecast_enabled: bool = True
     graph_results_path: Path | None = None
     allowed_asset_roots: list[Path]
     denied_path_fragments: list[str]
@@ -116,6 +127,9 @@ class GearConfig(StrictModel):
     aspr_qwen: ASPRQwenConfig = Field(default_factory=ASPRQwenConfig)
     retrieval: RetrievalLimits = Field(default_factory=RetrievalLimits)
     graph_guidance: GraphGuidanceConfig = Field(default_factory=GraphGuidanceConfig)
+    claim_attribution: ClaimAttributionConfig = Field(
+        default_factory=ClaimAttributionConfig
+    )
     allow_external_retrieval: bool = True
     cache_dir: Path
     output_root: Path
@@ -164,6 +178,27 @@ class GearConfig(StrictModel):
             return None
         return self.validate_asset_path(
             self.resolve_path(self.forecast_anatomy_manifest)
+        )
+
+    def resolved_structural_head_manifest(self) -> Path | None:
+        if self.structural_head_manifest is None:
+            return None
+        return self.validate_asset_path(
+            self.resolve_path(self.structural_head_manifest)
+        )
+
+    def resolved_claim_attribution_manifest(self) -> Path | None:
+        if self.claim_attribution.learned_manifest is None:
+            return None
+        return self.validate_asset_path(
+            self.resolve_path(self.claim_attribution.learned_manifest)
+        )
+
+    def resolved_graph_action_policy_manifest(self) -> Path | None:
+        if self.graph_action_policy_manifest is None:
+            return None
+        return self.validate_asset_path(
+            self.resolve_path(self.graph_action_policy_manifest)
         )
 
     def validate_asset_path(self, value: Path) -> Path:
@@ -263,6 +298,10 @@ def load_config(
         ("output_root", "ASPR_GEAR_OUTPUT_ROOT"),
         ("forecast_release_manifest", "ASPR_GEAR_FORECAST_RELEASE_MANIFEST"),
         ("forecast_runtime_manifest", "ASPR_GEAR_FORECAST_RUNTIME_MANIFEST"),
+        (
+            "graph_action_policy_manifest",
+            "ASPR_GEAR_GRAPH_ACTION_POLICY_MANIFEST",
+        ),
     ):
         value = getenv_runtime(environment_name)
         if value:
@@ -270,6 +309,14 @@ def load_config(
     graph_results_path = getenv_runtime("ASPR_GEAR_GRAPH_RESULTS_PATH")
     if graph_results_path:
         payload["graph_results_path"] = graph_results_path
+    attribution_mode = getenv_runtime("ASPR_GEAR_CLAIM_ATTRIBUTION_MODE")
+    if attribution_mode:
+        payload.setdefault("claim_attribution", {})["mode"] = attribution_mode
+    attribution_manifest = getenv_runtime("ASPR_GEAR_CLAIM_ATTRIBUTION_MANIFEST")
+    if attribution_manifest:
+        payload.setdefault("claim_attribution", {})[
+            "learned_manifest"
+        ] = attribution_manifest
     qwen_env = {
         "model": "ASPR_QWEN_MODEL",
         "base_url": "ASPR_QWEN_BASE_URL",
@@ -321,22 +368,48 @@ def load_config(
     if config.deprecated_fig4_to_fig10_used:
         raise ValueError("deprecated Fig.4-Fig.10 evidence cannot be enabled")
     if validate_assets:
-        from .diffusion_forecast import ForecastRelease, RuntimeFeatureRelease
+        from .diffusion_forecast import (
+            ForecastRelease,
+            RuntimeFeatureRelease,
+            StructuralHeadRelease,
+        )
         from .graph_calibration import load_forecast_analog_index
 
         release = ForecastRelease(config.resolved_forecast_release_manifest())
         release.verify()
         runtime_manifest = config.resolved_forecast_runtime_manifest()
+        runtime_release = None
         if runtime_manifest is not None:
-            RuntimeFeatureRelease(runtime_manifest).verify(release)
+            runtime_release = RuntimeFeatureRelease(runtime_manifest)
+            runtime_release.verify(release)
         anatomy_manifest = config.resolved_forecast_anatomy_manifest()
         if anatomy_manifest is not None:
             load_forecast_analog_index(anatomy_manifest)
+        structural_manifest = config.resolved_structural_head_manifest()
+        if structural_manifest is not None:
+            StructuralHeadRelease(structural_manifest).verify(release, runtime_release)
+        resolved_attribution_manifest = config.resolved_claim_attribution_manifest()
+        if config.claim_attribution.mode == "learned_t0":
+            if resolved_attribution_manifest is None:
+                raise ValueError(
+                    "learned claim attribution requires a promoted manifest"
+                )
+            from .claim_attribution import load_claim_attribution_release
+
+            load_claim_attribution_release(resolved_attribution_manifest)
+        action_policy_manifest = config.resolved_graph_action_policy_manifest()
+        if action_policy_manifest is not None:
+            from .graph_action_policy import load_graph_action_policy_release
+
+            load_graph_action_policy_release(action_policy_manifest)
+        elif config.graph_guidance.action_policy_enabled:
+            raise ValueError("enabled Graph action policy requires a promoted manifest")
     return config
 
 
 __all__ = [
     "ASPRQwenConfig",
+    "ClaimAttributionConfig",
     "CodexCliEndpoint",
     "GearConfig",
     "OpenAICompatibleEndpoint",

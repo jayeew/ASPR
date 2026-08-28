@@ -29,6 +29,7 @@
   },
   "graph_guidance": {
     "policy_version": "primary16_forecast_calibration_v1",
+    "action_policy_enabled": false,
     "shadow": false,
     "score_routing_enabled": false,
     "topology_enabled": true,

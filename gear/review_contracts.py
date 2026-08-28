@@ -16,10 +16,17 @@ from .contracts import (
     StrictModel,
 )
 from .graph_prior_contracts import (
+    ClaimAttributionAudit,
+    ClaimGraphPrior,
+    ClaimInventoryEntry,
+    GraphActionDecision,
     GraphRuntimePacket,
+    GraphSignalBundle,
+    ImpactPathwayCard,
     ResourceLedger,
     RetrievalGuidancePlan,
     RetrievalRoutingPlan,
+    StructuralInnovationCard,
 )
 
 SCHEMA_VERSION: Literal["aspr_gear"] = "aspr_gear"
@@ -198,6 +205,24 @@ class NoveltyAssessment(ReviewModel):
         return self
 
 
+class StructuralInnovationSummary(ReviewModel):
+    """Deterministic multi-axis projection; generators may not populate it."""
+
+    novelty_evidence_score: float = Field(ge=0.0, le=1.0)
+    antecedent_risk: float = Field(ge=0.0, le=1.0)
+    residual_novelty: float = Field(ge=0.0, le=1.0)
+    manuscript_validity: float = Field(ge=0.0, le=1.0)
+    diffusion_potential: float = Field(ge=0.0, le=1.0)
+    perturbation_potential: float | None = Field(default=None, ge=0.0, le=1.0)
+    structural_contribution_share: float | None = Field(default=None, ge=0.0, le=1.0)
+    opportunity_context_share: float | None = Field(default=None, ge=0.0, le=1.0)
+    graph_reliability: float = Field(ge=0.0, le=1.0)
+    structural_innovation_score: float = Field(ge=0.0, le=1.0)
+    profile_class: str
+    uncertainty: float = Field(ge=0.0, le=1.0)
+    evidence_keys: list[str] = Field(default_factory=list)
+
+
 def infer_novelty_judgment(
     supporting_points: list[ReviewPoint],
     limiting_points: list[ReviewPoint],
@@ -228,6 +253,7 @@ class StructuredReview(ReviewModel):
     strengths: list[ReviewPoint] = Field(default_factory=list)
     weaknesses: list[ReviewPoint] = Field(default_factory=list)
     questions: list[ReviewPoint] = Field(default_factory=list)
+    structural_innovation: StructuralInnovationSummary | None = None
 
     def all_points(self) -> list[ReviewPoint]:
         return [
@@ -379,6 +405,9 @@ class ReviewCorrectionEventV1(ReviewModel):
     after_section: str
     before_direction: NoveltyJudgment | None = None
     after_direction: NoveltyJudgment | None = None
+    graph_triggered_retrieval: bool = False
+    entered_structural_fusion: bool = False
+    novelty_direction_changed_by_graph: Literal[False] = False
     trigger_relation_ids: list[str]
     trigger_mission_ids: list[str] = Field(default_factory=list)
     correction_type: Literal[
@@ -419,6 +448,7 @@ class ProcessFeatures(ReviewModel):
     counterfactual_changed_judgment: bool = False
     stability_passed: bool = False
     graph_text_tension: bool = False
+    structural_fusion_completed: bool = False
     semantic_verifier_passed: bool = False
     failure_count: int = Field(default=0, ge=0)
 
@@ -454,6 +484,28 @@ class ReviewState(ReviewModel):
     graph_result_evidence_key: str | None = None
     influence_context_evidence_key: str | None = None
     graph_result: GraphRuntimePacket | None = None
+    claim_inventory: list[ClaimInventoryEntry] = Field(default_factory=list)
+    graph_signal_bundle: GraphSignalBundle | None = None
+    graph_action_decision: GraphActionDecision | None = None
+    claim_graph_priors: list[ClaimGraphPrior] = Field(default_factory=list)
+    claim_attribution_audit: ClaimAttributionAudit | None = None
+    impact_pathway_cards: list[ImpactPathwayCard] = Field(default_factory=list)
+    structural_innovation_cards: list[StructuralInnovationCard] = Field(
+        default_factory=list
+    )
+    paper_structural_innovation_score: float | None = Field(
+        default=None, ge=0.0, le=1.0
+    )
+    structural_innovation_profile: (
+        Literal[
+            "transformative_broad",
+            "niche_or_delayed_foundational",
+            "scalable_incremental",
+            "limited_structural_innovation",
+            "insufficient_evidence",
+        ]
+        | None
+    ) = None
     graph_guidance_plan: RetrievalGuidancePlan | None = None
     retrieval_routing_plans: dict[str, RetrievalRoutingPlan] = Field(
         default_factory=dict

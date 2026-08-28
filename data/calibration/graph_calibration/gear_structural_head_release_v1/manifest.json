@@ -1,0 +1,90 @@
+{
+  "assets": {
+    "coverage_audit": {
+      "file": "coverage_audit.json",
+      "sha256": "sha256:d5b8912684107e199c52689c77590cd8669e6da41319d421889ce9b542f15e53",
+      "size_bytes": 1081
+    },
+    "domain_oof_audit": {
+      "file": "domain_oof_audit.parquet",
+      "sha256": "sha256:34bb6b72830a693cebf8d969dc3eed0d718bbbebf50168e6eb9260418a0ab805",
+      "size_bytes": 42873
+    },
+    "feature_registry": {
+      "file": "feature_registry.json",
+      "sha256": "sha256:ba88b053525b35b540ef6db52794d648cde5500419c29f7af9d0aee6e2dd3d8f",
+      "size_bytes": 1338
+    },
+    "model": {
+      "file": "model.joblib",
+      "sha256": "sha256:1d89f4d096e6b82c52d57d1e2ccfd8921adaaed36f8dff12a778e5a06a75bb7d",
+      "size_bytes": 569299
+    },
+    "prediction_table": {
+      "file": "prediction_table.parquet",
+      "sha256": "sha256:a986f5e7d00ba120a9ecb3269e41d14444d8c7c57eeee862b3d56513f77834a7",
+      "size_bytes": 18026010
+    },
+    "runtime_replay": {
+      "file": "runtime_replay.parquet",
+      "sha256": "sha256:642f4856672d53f88f599fde9afcdcd9af69cb330f7f994df9bcc139480dfbd2",
+      "size_bytes": 22513
+    },
+    "temporal_oof_audit": {
+      "file": "temporal_oof_audit.parquet",
+      "sha256": "sha256:02b74c31071b36188edb11ccb41aa7c9c57056534b889684c705d2c64e2b37ae",
+      "size_bytes": 39244
+    },
+    "training_reference": {
+      "file": "training_reference.parquet",
+      "sha256": "sha256:8af8a411e6006add211948f51702175d1eee956ddd4ae2a9e9dda6fbdef2f1db",
+      "size_bytes": 58871
+    },
+    "validation_report": {
+      "file": "validation_report.json",
+      "sha256": "sha256:be5287c9272e8c3ee801873de5c5dcd6e0c32c541b05b21afa780d2b85616ec3",
+      "size_bytes": 23868
+    }
+  },
+  "contract": "gear_structural_head_release_v1",
+  "created_at_utc": "2026-08-28T05:44:19.864148+00:00",
+  "excess_target_fit_scope": "outer_training_fold_only",
+  "feature_names": [
+    "EF0017",
+    "EF0038",
+    "EF0052",
+    "EF0083",
+    "EF0186",
+    "EF0188",
+    "EF0197",
+    "EF0238",
+    "EF0240",
+    "EF0307",
+    "EF0309",
+    "EF0312",
+    "EF0314",
+    "EF0315",
+    "EF0318",
+    "EF0319"
+  ],
+  "feature_protocol_version": "evidence-derived-primary16-d5-tuned-1",
+  "feature_time_basis": "T0_only",
+  "historical_prediction_policy": "strict_oof_only",
+  "horizon_years": 5,
+  "parent_feature_registry_sha256": "sha256:63b66dd9f8ef050c70f9066030856fc06352fc21f9a73078f805e14a91ca566c",
+  "parent_forecast_release_id": "gear-d5-primary16-948a4f87086c",
+  "parent_oof_inference_row_count": 317754,
+  "parent_oof_predictions_sha256": "sha256:508f983aae100b283e382d17fd40773eceb9bed34ac8409b745f25c46418353c",
+  "parent_training_snapshot_sha256": "sha256:bcc85063fd2984d1b9f7fc35fbd823891fd8c351c84480e5f940050731839052",
+  "perturbation_target_fit_scope": "outer_training_fold_only",
+  "release_id": "gear-structural-head-primary16-c9384ecc11f2",
+  "runtime_anatomy_table_sha256": "sha256:b1b6e8f370dde649da21592afd6247a35bfe946fc468b8d6fe890128c1f1e80e",
+  "runtime_feature_release_id": "gear-d5-primary16-948a4f87086c",
+  "runtime_feature_table_sha256": "sha256:251b8760e0a6a0fb0e4a15912fa40b7dfc6b211a3b3c1cfdf4e2d0832775e715",
+  "runtime_prediction_policy": "frozen_model_t0_only",
+  "runtime_prediction_row_count": 10,
+  "runtime_score_table_sha256": "sha256:8ba394b85ba4156849083a2d961b0cb20d37773e8555e15834aed0273d3ffdbb",
+  "status": "promoted",
+  "training_row_count": 241,
+  "uses_future_features": false
+}

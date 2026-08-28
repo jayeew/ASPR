@@ -15,6 +15,7 @@ from .review_contracts import (
     ReviewSource,
     ReviewState,
     ReviewSummary,
+    StructuralInnovationSummary,
     StructuredReview,
     infer_novelty_judgment,
 )
@@ -95,6 +96,7 @@ class ReviewCompiler:
             strengths=compiled["strengths"],
             weaknesses=compiled["weaknesses"],
             questions=compiled["questions"],
+            structural_innovation=_structural_summary(state),
         )
 
     def compile_verified(self, state: ReviewState) -> StructuredReview:
@@ -271,6 +273,36 @@ def render_markdown(review: StructuredReview) -> str:
     lines.extend(_render_points("Supporting points", review.novelty.supporting_points))
     lines.extend(_render_points("Limiting points", review.novelty.limiting_points))
     lines.extend(_render_points("Uncertain points", review.novelty.uncertain_points))
+    if review.structural_innovation is not None:
+        structural = review.structural_innovation
+        lines.extend(
+            [
+                "## Evidence-gated structural innovation",
+                "",
+                f"Profile: `{structural.profile_class}`",
+                "",
+                f"Structural score: `{structural.structural_innovation_score:.3f}`",
+                "",
+                (
+                    f"Evidence gate: `{structural.novelty_evidence_score:.3f}`; "
+                    f"diffusion potential: `{structural.diffusion_potential:.3f}`; "
+                    f"uncertainty: `{structural.uncertainty:.3f}`."
+                ),
+                "",
+                (
+                    "Graph anatomy — structural share: "
+                    f"`{structural.structural_contribution_share:.3f}`; "
+                    "opportunity/context share: "
+                    f"`{structural.opportunity_context_share:.3f}`."
+                    if structural.structural_contribution_share is not None
+                    and structural.opportunity_context_share is not None
+                    else "Graph anatomy unavailable; interpretation is limited."
+                ),
+                "",
+                " ".join(f"[{key}]" for key in structural.evidence_keys),
+                "",
+            ]
+        )
     lines.extend(["## Strengths", ""])
     lines.extend(_render_point_list(review.strengths))
     lines.extend(["## Weaknesses", ""])
@@ -278,6 +310,42 @@ def render_markdown(review: StructuredReview) -> str:
     lines.extend(["## Questions", ""])
     lines.extend(_render_point_list(review.questions))
     return "\n".join(lines).rstrip() + "\n"
+
+
+def _structural_summary(state: ReviewState) -> StructuralInnovationSummary | None:
+    cards = state.structural_innovation_cards
+    bundle = state.graph_signal_bundle
+    if not cards or bundle is None or state.paper_structural_innovation_score is None:
+        return None
+    representative = max(cards, key=lambda card: card.structural_innovation_score)
+    evidence_keys = list(
+        dict.fromkeys(
+            [
+                *(
+                    [state.graph_result_evidence_key]
+                    if state.graph_result_evidence_key
+                    else []
+                ),
+                *(key for card in cards for key in card.evidence_keys),
+            ]
+        )
+    )
+    return StructuralInnovationSummary(
+        novelty_evidence_score=max(card.evidence_gate for card in cards),
+        antecedent_risk=max(card.antecedent_risk for card in cards),
+        residual_novelty=max(card.residual_novelty for card in cards),
+        manuscript_validity=max(card.manuscript_validity for card in cards),
+        diffusion_potential=bundle.shrunk_diffusion,
+        perturbation_potential=bundle.perturbation_potential,
+        structural_contribution_share=bundle.structural_contribution_share,
+        opportunity_context_share=bundle.opportunity_context_share,
+        graph_reliability=bundle.reliability,
+        structural_innovation_score=state.paper_structural_innovation_score,
+        profile_class=state.structural_innovation_profile
+        or representative.profile_class,
+        uncertainty=max(card.uncertainty for card in cards),
+        evidence_keys=evidence_keys,
+    )
 
 
 def _render_points(title: str, points: list[ReviewPoint]) -> list[str]:

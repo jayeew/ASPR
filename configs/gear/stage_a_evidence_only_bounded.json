@@ -1,0 +1,50 @@
+{
+  "config_version": "aspr_gear_stage_a_evidence_only_bounded_v1",
+  "model_backend": "codex_cli",
+  "graph_forecast_enabled": false,
+  "codex_cli": {
+    "executable": "codex",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "medium",
+    "timeout_seconds": 1800,
+    "sandbox": "read-only"
+  },
+  "graph_guidance": {
+    "action_policy_enabled": false,
+    "shadow": false,
+    "score_routing_enabled": false,
+    "topology_enabled": false,
+    "calibration_enabled": false,
+    "calibration_variant": "neutral",
+    "provider_searches": 4,
+    "direct_fetches": 4,
+    "neighbor_expansions": 1,
+    "fulltext_candidates": 6,
+    "relation_classifications": 8
+  },
+  "retrieval": {
+    "normal_max": 2,
+    "contrastive_max": 1,
+    "citation_expansion_max": 1,
+    "fulltext_max": 6,
+    "provider_limit": 30,
+    "relation_cards_max": 8,
+    "total_actions_max": 20,
+    "lexical_candidate_limit": 12,
+    "semantic_candidate_limit": 18,
+    "candidate_union_limit": 60,
+    "embedding_candidate_limit": 50,
+    "rerank_candidate_limit": 12,
+    "dual_rerank_top_k": 8,
+    "retained_candidates_per_claim": 5,
+    "per_family_retained_max": 2,
+    "minimum_comparable_candidates": 5,
+    "minimum_unique_candidates": 10
+  },
+  "allow_external_retrieval": true,
+  "aspr_qwen": {
+    "enabled": false,
+    "required": false
+  },
+  "max_claims": 6
+}

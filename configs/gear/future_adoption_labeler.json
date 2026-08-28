@@ -1,0 +1,16 @@
+{
+  "config_version": "aspr_gear_future_adoption_labeler_v1",
+  "model_backend": "codex_cli",
+  "codex_cli": {
+    "executable": "codex",
+    "model": "gpt-5.6-terra",
+    "reasoning_effort": "medium",
+    "timeout_seconds": 1800,
+    "sandbox": "read-only"
+  },
+  "allow_external_retrieval": false,
+  "aspr_qwen": {
+    "enabled": false,
+    "required": false
+  }
+}

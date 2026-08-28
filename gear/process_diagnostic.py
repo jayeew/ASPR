@@ -37,6 +37,8 @@ def diagnose_process(
         "agent_reviewer_unavailable": "agent_reviewer_unavailable",
         "retrieval_unavailable": "retrieval_unavailable",
         "qwen_required_unavailable": "qwen_required_unavailable",
+        "claim_attribution_unavailable": "claim_attribution_unavailable",
+        "graph_action_policy_unavailable": "graph_action_policy_unavailable",
         "evidence_integrity_failed": "evidence_integrity_failed",
     }
     reasons.extend(

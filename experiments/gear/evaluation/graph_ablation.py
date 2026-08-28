@@ -56,4 +56,20 @@ def assert_branch_isolation(
             raise ValueError(f"score changed the candidate pool for {field}")
 
 
-__all__ = ["assert_branch_isolation", "graph_variants"]
+def assert_score_shuffle_changes_signal(
+    original: Mapping[str, float], shuffled: Mapping[str, float]
+) -> None:
+    """Reject placebo arms that retained the original paper-score mapping."""
+    if set(original) != set(shuffled) or len(original) < 2:
+        raise ValueError("score shuffle requires the same multi-paper cohort")
+    if sorted(original.values()) != sorted(shuffled.values()):
+        raise ValueError("score shuffle must preserve the score multiset")
+    if all(original[key] == shuffled[key] for key in original):
+        raise ValueError("score shuffle did not change any paper's signal")
+
+
+__all__ = [
+    "assert_branch_isolation",
+    "assert_score_shuffle_changes_signal",
+    "graph_variants",
+]
