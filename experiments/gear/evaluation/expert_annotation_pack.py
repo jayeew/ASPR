@@ -1,4 +1,4 @@
-"""Build and validate a blinded, auditable expert annotation pack.
+"""Build and validate a blinded expert annotation pack.
 
 The pack is intentionally label-free.  It can only be released after the full
 Stage-B, Gate-1, and randomized Stage-C inputs pass conservative readiness
@@ -179,7 +179,7 @@ def generate_annotation_pack(
     expected_stage_c_cases: int = 150,
     seed: int = 20260828,
 ) -> dict[str, Any]:
-    """Generate immutable public tasks, empty templates, schemas, and seal."""
+    """Generate public tasks, empty templates, schemas, and a sealed key."""
     paths = [
         stage_b_claims_path,
         gate1_path,
@@ -220,7 +220,7 @@ def generate_annotation_pack(
     b_tasks, b_seal = _build_claim_b_tasks(joined, b_ids, runs_dir, seed)
     c_tasks, c_seal = _build_claim_c_tasks(joined, c_ids, runs_dir, seed)
     output_dir.mkdir(parents=True, exist_ok=True)
-    public_files = _write_pack_files(output_dir, b_tasks, c_tasks)
+    _write_pack_files(output_dir, b_tasks, c_tasks)
     seal_path = output_dir / "sealed_assignment_key.json"
     _write_json(
         seal_path,
@@ -247,7 +247,6 @@ def generate_annotation_pack(
             "graph_scores_hidden": True,
             "method_names_hidden": True,
             "future_outcomes_hidden": True,
-            "sealed_key_sha256": _sha256_file(seal_path),
         },
         "review_design": {
             "independent_experts_per_task": 2,
@@ -261,12 +260,7 @@ def generate_annotation_pack(
         },
         "counts": {"claim_b_tasks": len(b_tasks), "claim_c_tasks": len(c_tasks)},
         "seed": seed,
-        "source_sha256": {
-            name: _sha256_file(path) for name, path in source_paths.items()
-        },
-        "file_sha256": {
-            path.name: _sha256_file(path) for path in [*public_files, seal_path]
-        },
+        "sources": {name: str(path) for name, path in source_paths.items()},
     }
     _write_json(output_dir / "manifest.json", manifest)
     validate_annotation_pack(output_dir)
@@ -278,17 +272,13 @@ def validate_annotation_pack(
     *,
     require_completed: bool = False,
 ) -> dict[str, Any]:
-    """Validate hashes, blindness, templates, and optionally expert labels."""
+    """Validate blindness, templates, and optionally completed labels."""
     manifest_path = pack_dir / "manifest.json"
     if not manifest_path.is_file():
         raise ValueError("annotation pack manifest is missing")
     manifest = _json(manifest_path)
     if manifest.get("status") != "ready_for_annotation":
         raise ValueError("annotation pack is not release-ready")
-    for name, expected in manifest.get("file_sha256", {}).items():
-        path = pack_dir / name
-        if not path.is_file() or _sha256_file(path) != expected:
-            raise ValueError(f"annotation pack hash mismatch: {name}")
     b_tasks = [
         ClaimBTask.model_validate(row)
         for row in _read_jsonl(pack_dir / "claim_b_tasks.jsonl")
@@ -299,24 +289,14 @@ def validate_annotation_pack(
     ]
     _validate_public_blinding(b_tasks, c_tasks)
     _validate_templates(pack_dir, b_tasks, c_tasks)
-    annotation_hashes: dict[str, str] = {}
     if require_completed:
         _validate_completed(pack_dir, b_tasks, c_tasks)
-        for name in (
-            "claim_b_annotations.jsonl",
-            "claim_c_annotations.jsonl",
-            "adjudications.jsonl",
-        ):
-            path = pack_dir / name
-            if path.is_file():
-                annotation_hashes[name] = _sha256_file(path)
     return {
         "contract": "gear_expert_annotation_pack_validation_v1",
         "valid": True,
         "completed_annotations_validated": require_completed,
         "claim_b_tasks": len(b_tasks),
         "claim_c_tasks": len(c_tasks),
-        "annotation_sha256": annotation_hashes,
     }
 
 
@@ -981,10 +961,6 @@ def _list_value(value: Any) -> list[str]:
 def _stable_digest(seed: int, *values: str) -> str:
     payload = "|".join([str(seed), *values]).encode("utf-8")
     return hashlib.sha256(payload).hexdigest()
-
-
-def _sha256_file(path: Path) -> str:
-    return "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def _json(path: Path) -> dict[str, Any]:

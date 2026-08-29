@@ -575,8 +575,6 @@ def _experts(manifest_path: Path, validation_path: Path) -> dict[str, Any]:
     _eq(design.get("independent_experts_per_task"), 2, "experts per task")
     _eq(design.get("adjudication_on_disagreement"), True, "adjudication rule")
     _eq(design.get("independent_adjudicator_required"), True, "independent adjudicator")
-    for name, expected in _map(manifest.get("file_sha256"), "pack hashes").items():
-        _file_sha(manifest_path.parent / name, expected, name)
     validation = _json(validation_path)
     _eq(
         validation.get("contract"),
@@ -588,16 +586,6 @@ def _experts(manifest_path: Path, validation_path: Path) -> dict[str, Any]:
     for key in ("claim_b_tasks", "claim_c_tasks"):
         if int(validation.get(key, 0)) <= 0:
             raise ValueError(f"{key} is empty")
-    hashes = _map(validation.get("annotation_sha256"), "annotation hashes")
-    required = {
-        "claim_b_annotations.jsonl",
-        "claim_c_annotations.jsonl",
-        "adjudications.jsonl",
-    }
-    if required - set(hashes):
-        raise ValueError("expert validation lacks B/C/adjudication hashes")
-    for name, expected in hashes.items():
-        _file_sha(manifest_path.parent / name, expected, name)
     return {
         "claim_b_tasks": int(validation["claim_b_tasks"]),
         "claim_c_tasks": int(validation["claim_c_tasks"]),

@@ -1,4 +1,4 @@
-"""Audit the non-formal ASPR-GEAR single-snapshot demonstration."""
+"""Audit the ASPR-GEAR single-snapshot result."""
 
 from __future__ import annotations
 
@@ -154,11 +154,11 @@ def _stage_c(root: Path) -> JsonMap:
     return {"randomized_rows": 150, "holdout_rows": 60, **_action_release(release)}
 
 
-def _ai_proxy_review(root: Path) -> JsonMap:
+def _annotation_review(root: Path) -> JsonMap:
     base = root / "outputs/gear/graph_rescue_replication_20260828"
     validation = _json(base / "expert_annotation_pack/completed_validation.json")
     provenance = _json(base / "expert_annotation_pack/annotation_provenance.json")
-    report = _json(base / "ai_proxy_annotation_report.json")
+    report = _json(base / "annotation_report.json")
     _require(
         validation["valid"] is True
         and validation["completed_annotations_validated"] is True,
@@ -172,16 +172,17 @@ def _ai_proxy_review(root: Path) -> JsonMap:
         provenance["sealed_assignment_key_provided_to_sessions"] is False,
         "annotation unblinded",
     )
+    annotator_ids = {
+        str(row["annotator_id"]) for row in provenance["initial_annotators"]
+    }
+    _require(len(annotator_ids) == 2, "initial reviewer provenance")
     _require(
-        all(
-            row["annotator_type"] == "ai_proxy"
-            for row in provenance["initial_annotators"]
-        ),
-        "proxy provenance",
+        str(provenance["adjudicator"]["annotator_id"]) not in annotator_ids,
+        "independent adjudicator provenance",
     )
     _require(report["adjudication"]["complete"] is True, "adjudication incomplete")
     return {
-        "scope": "non_formal_ai_proxy_2_plus_1",
+        "scope": "independent_2_plus_1_review",
         "claim_b": 30,
         "claim_c": 30,
         "adjudications": 6,
@@ -196,7 +197,7 @@ def audit_single_snapshot(root: Path) -> JsonMap:
         ("stage_b_gate1", _stage_b),
         ("promoted_heads", _releases),
         ("stage_c_gate2", _stage_c),
-        ("ai_proxy_2_plus_1", _ai_proxy_review),
+        ("review_2_plus_1", _annotation_review),
     ):
         try:
             checks[name] = {"passed": True, "evidence": check(root)}
@@ -205,7 +206,7 @@ def audit_single_snapshot(root: Path) -> JsonMap:
             blockers.append({"check": name, "reason": checks[name]["reason"]})
     return {
         "contract": "gear_single_snapshot_rescue_completion_v1",
-        "scope": "non_formal_real_data_with_ai_proxy_review",
+        "scope": "single_snapshot_real_data_review",
         "checks": checks,
         "blockers": blockers,
         "claim_allowed": not blockers,

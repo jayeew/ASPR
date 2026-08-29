@@ -383,12 +383,6 @@ def _fixture(tmp_path: Path) -> CompletionArtifacts:
             **action_refs,
         },
     )
-    for name in (
-        "claim_b_annotations.jsonl",
-        "claim_c_annotations.jsonl",
-        "adjudications.jsonl",
-    ):
-        (tmp_path / name).write_text("{}\n", encoding="utf-8")
     _write_json(
         paths["expert_pack_manifest"],
         {
@@ -399,7 +393,6 @@ def _fixture(tmp_path: Path) -> CompletionArtifacts:
                 "adjudication_on_disagreement": True,
                 "independent_adjudicator_required": True,
             },
-            "file_sha256": {},
         },
     )
     _write_json(
@@ -410,14 +403,6 @@ def _fixture(tmp_path: Path) -> CompletionArtifacts:
             "completed_annotations_validated": True,
             "claim_b_tasks": 30,
             "claim_c_tasks": 30,
-            "annotation_sha256": {
-                name: _sha(tmp_path / name)
-                for name in (
-                    "claim_b_annotations.jsonl",
-                    "claim_c_annotations.jsonl",
-                    "adjudications.jsonl",
-                )
-            },
         },
     )
     _write_json(

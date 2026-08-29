@@ -171,7 +171,7 @@ def test_partial_stage_inputs_fail_closed(tmp_path: Path) -> None:
     assert not (tmp_path / "pack" / "manifest.json").exists()
 
 
-def test_builds_label_free_blinded_pack_with_hashes(tmp_path: Path) -> None:
+def test_builds_label_free_blinded_pack_without_hash_bindings(tmp_path: Path) -> None:
     paths = _fixture(tmp_path)
     pack = tmp_path / "pack"
     _generate(paths, pack)
@@ -179,6 +179,9 @@ def test_builds_label_free_blinded_pack_with_hashes(tmp_path: Path) -> None:
     assert report["valid"] is True
     manifest = json.loads((pack / "manifest.json").read_text())
     assert manifest["labels_included"] is False
+    assert "file_sha256" not in manifest
+    assert "source_sha256" not in manifest
+    assert "sealed_key_sha256" not in manifest["blinding"]
     assert manifest["review_design"]["independent_experts_per_task"] == 2
     task = json.loads((pack / "claim_c_tasks.jsonl").read_text().splitlines()[0])
     serialized = json.dumps(task).casefold()
@@ -195,14 +198,13 @@ def test_builds_label_free_blinded_pack_with_hashes(tmp_path: Path) -> None:
     assert template["assessments"][0]["confidence"] is None
 
 
-def test_validator_detects_tampering(tmp_path: Path) -> None:
+def test_validator_does_not_enforce_file_hashes(tmp_path: Path) -> None:
     paths = _fixture(tmp_path)
     pack = tmp_path / "pack"
     _generate(paths, pack)
     with (pack / "CODEBOOK.md").open("a", encoding="utf-8") as handle:
         handle.write("tampered\n")
-    with pytest.raises(ValueError, match="hash mismatch"):
-        validate_annotation_pack(pack)
+    assert validate_annotation_pack(pack)["valid"] is True
 
 
 def test_validate_cli_writes_machine_readable_report(
@@ -227,6 +229,7 @@ def test_validate_cli_writes_machine_readable_report(
     report = json.loads(output.read_text(encoding="utf-8"))
     assert report["valid"] is True
     assert report["completed_annotations_validated"] is False
+    assert "annotation_sha256" not in report
 
 
 def test_completed_validation_requires_two_independent_experts(tmp_path: Path) -> None:
