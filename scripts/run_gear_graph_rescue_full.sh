@@ -261,8 +261,8 @@ if not report["overall_claim_allowed"]:
     raise SystemExit("Rescue plan failed closed: one or more confirmatory gates failed")
 PY
 
-# Build and validate the blinded annotation pack only after all automated gates
-# pass.  This does not claim that expert annotations have been completed.
+# Build and validate the independent-session review pack only after all
+# automated gates pass. This does not claim that reviews have been completed.
 python3 -m experiments.gear.evaluation.expert_annotation_pack build \
   --stage-b-claims "${evidence_dir}/stage_a_claim_evidence.parquet" \
   --gate1 "${stage_b_root}/gate1_temporal/gate1_mechanism_dataset.parquet" \

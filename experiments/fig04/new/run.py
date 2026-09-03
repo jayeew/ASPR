@@ -1,9 +1,6 @@
-"""Run Fig.4."""
+"""Render the reference-layout Fig. 4new."""
 
-from pathlib import Path
-
-from experiments.common.new.adapters.runtime import run_figure_cli
-
+from experiments.fig04.new.draw_reference import main
 
 if __name__ == "__main__":
-    run_figure_cli(4, Path(__file__).with_name("config.json"))
+    raise SystemExit(main())

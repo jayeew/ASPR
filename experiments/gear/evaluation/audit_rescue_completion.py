@@ -65,8 +65,8 @@ def audit_rescue_completion(a: CompletionArtifacts) -> dict[str, Any]:
         ),
         ("promoted_action_policy", lambda: _action_release(a.action_policy_manifest)),
         (
-            "expert_claim_b_c",
-            lambda: _experts(a.expert_pack_manifest, a.expert_pack_validation),
+            "independent_claim_b_c_review",
+            lambda: _reviews(a.expert_pack_manifest, a.expert_pack_validation),
         ),
         ("final_rescue_status", lambda: _final(a.final_rescue_status)),
     ]
@@ -563,25 +563,33 @@ def _abstained_action_release(path: Path, report: dict[str, Any]) -> dict[str, A
     }
 
 
-def _experts(manifest_path: Path, validation_path: Path) -> dict[str, Any]:
+def _reviews(manifest_path: Path, validation_path: Path) -> dict[str, Any]:
     manifest = _json(manifest_path)
-    _eq(
-        manifest.get("contract"),
+    if manifest.get("contract") not in {
+        "gear_independent_review_pack_manifest_v1",
         "gear_expert_annotation_pack_manifest_v1",
-        "expert manifest",
-    )
-    _eq(manifest.get("status"), "ready_for_annotation", "expert status")
-    design = _map(manifest.get("review_design"), "review design")
-    _eq(design.get("independent_experts_per_task"), 2, "experts per task")
-    _eq(design.get("adjudication_on_disagreement"), True, "adjudication rule")
-    _eq(design.get("independent_adjudicator_required"), True, "independent adjudicator")
+    }:
+        raise ValueError("review manifest contract is unsupported")
+    if manifest.get("status") not in {"ready_for_review", "ready_for_annotation"}:
+        raise ValueError("review pack is not ready")
+    policy = manifest.get("review_policy")
+    if policy is not None:
+        policy = _map(policy, "review policy")
+        _eq(policy.get("ai_sessions_accepted"), True, "AI session acceptance")
+        _eq(policy.get("human_reviewer_required"), False, "human reviewer gate")
+        _eq(policy.get("blinding_required"), False, "blinding gate")
+        _eq(
+            policy.get("reviewer_calibration_required"),
+            False,
+            "reviewer calibration gate",
+        )
     validation = _json(validation_path)
-    _eq(
-        validation.get("contract"),
+    if validation.get("contract") not in {
+        "gear_independent_review_pack_validation_v1",
         "gear_expert_annotation_pack_validation_v1",
-        "expert validation",
-    )
-    _eq(validation.get("valid"), True, "expert valid")
+    }:
+        raise ValueError("review validation contract is unsupported")
+    _eq(validation.get("valid"), True, "review valid")
     _eq(validation.get("completed_annotations_validated"), True, "completed validation")
     for key in ("claim_b_tasks", "claim_c_tasks"):
         if int(validation.get(key, 0)) <= 0:
@@ -589,7 +597,8 @@ def _experts(manifest_path: Path, validation_path: Path) -> dict[str, Any]:
     return {
         "claim_b_tasks": int(validation["claim_b_tasks"]),
         "claim_c_tasks": int(validation["claim_c_tasks"]),
-        "protocol": "2+1",
+        "protocol": "independent_session",
+        "ai_sessions_accepted": True,
     }
 
 

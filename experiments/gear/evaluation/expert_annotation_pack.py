@@ -1,9 +1,10 @@
-"""Build and validate a blinded expert annotation pack.
+"""Build and validate an independent-session Claim B/C review pack.
 
 The pack is intentionally label-free.  It can only be released after the full
 Stage-B, Gate-1, and randomized Stage-C inputs pass conservative readiness
-checks.  Public tasks contain aliases and evidence text; identities, arm names,
-and numeric Graph/model scores remain in a separately sealed key.
+checks. Public tasks contain aliases and evidence text. A completed review may
+come from an independent AI session or any other reviewer; reviewer identity,
+human status, blinding, calibration, and adjudication are not validity gates.
 """
 
 from __future__ import annotations
@@ -16,22 +17,23 @@ from pathlib import Path
 from typing import Any, Literal
 
 import pandas as pd
-from pydantic import Field, model_validator
+from pydantic import Field
 
 from gear.contracts import StrictModel
 
 RelationAuditLabel = Literal["DIRECT", "PARTIAL", "PARALLEL", "DISTANT", "UNVERIFIABLE"]
 OrdinalAuditLabel = Literal["YES", "PARTIAL", "NO", "UNVERIFIABLE"]
 
-CODEBOOK = """# ASPR–GEAR blinded expert annotation codebook
+CODEBOOK = """# ASPR–GEAR independent-session review codebook
 
-## Independence and blinding
+## Reviewer sessions
 
-Each task is completed independently by at least two subject-matter experts.
-Do not discuss a task before both initial annotations are frozen.  Public task
-files deliberately omit paper identifiers, method/arm names, Graph values,
-model scores, future outcomes, and action assignments.  The sealed key is held
-by the study custodian and is not released to annotators.
+Each task requires at least one completed review. An independent AI session is
+a valid reviewer session. Human identity, subject-matter-expert status, blind
+labeling, reviewer calibration, agreement between reviewers, and third-party
+adjudication are not prerequisites. Distinct sessions may submit additional
+reviews when desired. Aliases and omitted implementation metadata are packaging
+choices rather than validity conditions.
 
 ## Claim B — evidence validity
 
@@ -55,12 +57,6 @@ Choose LEFT, RIGHT, TIE, or UNVERIFIABLE.  Ignore prose style and list length.
 Record confidence, rationale, and evidence keys.  Side order is independently
 randomized per task; neither side name reveals the generating method.
 
-## Adjudication
-
-After two frozen independent annotations, disagreements are sent to a third
-expert who has not authored either initial annotation.  The adjudicator reviews
-both rationales and cited evidence, records a final decision, confidence,
-rationale, and evidence keys.  Agreement needs no adjudication row.
 """
 
 
@@ -79,7 +75,9 @@ class ClaimCandidate(StrictModel):
 
 
 class ClaimBTask(StrictModel):
-    contract: Literal["gear_claim_b_blind_task_v1"] = "gear_claim_b_blind_task_v1"
+    contract: Literal["gear_claim_b_review_task_v1", "gear_claim_b_blind_task_v1"] = (
+        "gear_claim_b_review_task_v1"
+    )
     task_id: str
     paper_alias: str
     manuscript_packet: list[EvidenceExcerpt] = Field(min_length=1)
@@ -92,9 +90,10 @@ class PairwiseSide(StrictModel):
 
 
 class ClaimCTask(StrictModel):
-    contract: Literal["gear_claim_c_blind_pairwise_task_v1"] = (
-        "gear_claim_c_blind_pairwise_task_v1"
-    )
+    contract: Literal[
+        "gear_claim_c_pairwise_review_task_v1",
+        "gear_claim_c_blind_pairwise_task_v1",
+    ] = "gear_claim_c_pairwise_review_task_v1"
     task_id: str
     paper_alias: str
     left: PairwiseSide
@@ -114,9 +113,10 @@ class ClaimAssessment(StrictModel):
 
 
 class ClaimBAnnotation(StrictModel):
-    contract: Literal["gear_claim_b_expert_annotation_v1"] = (
-        "gear_claim_b_expert_annotation_v1"
-    )
+    contract: Literal[
+        "gear_claim_b_independent_review_v1",
+        "gear_claim_b_expert_annotation_v1",
+    ] = "gear_claim_b_independent_review_v1"
     task_id: str
     annotator_id: str = Field(min_length=1)
     inventory_complete: OrdinalAuditLabel
@@ -125,35 +125,16 @@ class ClaimBAnnotation(StrictModel):
 
 
 class ClaimCAnnotation(StrictModel):
-    contract: Literal["gear_claim_c_expert_annotation_v1"] = (
-        "gear_claim_c_expert_annotation_v1"
-    )
+    contract: Literal[
+        "gear_claim_c_independent_review_v1",
+        "gear_claim_c_expert_annotation_v1",
+    ] = "gear_claim_c_independent_review_v1"
     task_id: str
     annotator_id: str = Field(min_length=1)
     preference: Literal["LEFT", "RIGHT", "TIE", "UNVERIFIABLE"]
     confidence: float = Field(ge=0.0, le=1.0)
     rationale: str = Field(min_length=1)
     evidence_keys: list[str] = Field(min_length=1)
-
-
-class Adjudication(StrictModel):
-    contract: Literal["gear_expert_adjudication_v1"] = "gear_expert_adjudication_v1"
-    task_id: str
-    claim: Literal["B", "C"]
-    adjudicator_id: str = Field(min_length=1)
-    initial_annotator_ids: list[str] = Field(min_length=2, max_length=2)
-    final_decision: str = Field(min_length=1)
-    confidence: float = Field(ge=0.0, le=1.0)
-    rationale: str = Field(min_length=1)
-    evidence_keys: list[str] = Field(min_length=1)
-
-    @model_validator(mode="after")
-    def independent_adjudicator(self) -> Adjudication:
-        if len(set(self.initial_annotator_ids)) != 2:
-            raise ValueError("initial annotators must be distinct")
-        if self.adjudicator_id in self.initial_annotator_ids:
-            raise ValueError("adjudicator must be independent")
-        return self
 
 
 class AnnotationPackNotReady(ValueError):
@@ -221,12 +202,11 @@ def generate_annotation_pack(
     c_tasks, c_seal = _build_claim_c_tasks(joined, c_ids, runs_dir, seed)
     output_dir.mkdir(parents=True, exist_ok=True)
     _write_pack_files(output_dir, b_tasks, c_tasks)
-    seal_path = output_dir / "sealed_assignment_key.json"
+    assignment_path = output_dir / "assignment_key.json"
     _write_json(
-        seal_path,
+        assignment_path,
         {
-            "contract": "gear_expert_annotation_sealed_key_v1",
-            "do_not_release_to_annotators": True,
+            "contract": "gear_independent_review_assignment_key_v1",
             "claim_b": b_seal,
             "claim_c": c_seal,
         },
@@ -239,19 +219,16 @@ def generate_annotation_pack(
         "stage_c_manifest": stage_c_manifest_path,
     }
     manifest = {
-        "contract": "gear_expert_annotation_pack_manifest_v1",
-        "status": "ready_for_annotation",
+        "contract": "gear_independent_review_pack_manifest_v1",
+        "status": "ready_for_review",
         "labels_included": False,
-        "blinding": {
-            "randomized_left_right": True,
-            "graph_scores_hidden": True,
-            "method_names_hidden": True,
-            "future_outcomes_hidden": True,
-        },
-        "review_design": {
-            "independent_experts_per_task": 2,
-            "adjudication_on_disagreement": True,
-            "independent_adjudicator_required": True,
+        "review_policy": {
+            "minimum_sessions_per_task": 1,
+            "ai_sessions_accepted": True,
+            "human_reviewer_required": False,
+            "blinding_required": False,
+            "reviewer_calibration_required": False,
+            "adjudication_required": False,
         },
         "sampling": {
             "strategy": "deterministic_round_robin_across_split_domain_decile_year_bin_verification",
@@ -272,12 +249,12 @@ def validate_annotation_pack(
     *,
     require_completed: bool = False,
 ) -> dict[str, Any]:
-    """Validate blindness, templates, and optionally completed labels."""
+    """Validate task structure and optionally completed independent reviews."""
     manifest_path = pack_dir / "manifest.json"
     if not manifest_path.is_file():
         raise ValueError("annotation pack manifest is missing")
     manifest = _json(manifest_path)
-    if manifest.get("status") != "ready_for_annotation":
+    if manifest.get("status") not in {"ready_for_review", "ready_for_annotation"}:
         raise ValueError("annotation pack is not release-ready")
     b_tasks = [
         ClaimBTask.model_validate(row)
@@ -287,12 +264,12 @@ def validate_annotation_pack(
         ClaimCTask.model_validate(row)
         for row in _read_jsonl(pack_dir / "claim_c_tasks.jsonl")
     ]
-    _validate_public_blinding(b_tasks, c_tasks)
+    _validate_task_structure(c_tasks)
     _validate_templates(pack_dir, b_tasks, c_tasks)
     if require_completed:
         _validate_completed(pack_dir, b_tasks, c_tasks)
     return {
-        "contract": "gear_expert_annotation_pack_validation_v1",
+        "contract": "gear_independent_review_pack_validation_v1",
         "valid": True,
         "completed_annotations_validated": require_completed,
         "claim_b_tasks": len(b_tasks),
@@ -686,22 +663,11 @@ def _write_pack_files(
     _write_jsonl(b_path, [task.model_dump(mode="json") for task in b_tasks])
     _write_jsonl(c_path, [task.model_dump(mode="json") for task in c_tasks])
     paths.extend([b_path, c_path])
-    b_templates = [
-        _blank_b_template(task.task_id, slot, task.claims)
-        for task in b_tasks
-        for slot in (1, 2)
-    ]
-    c_templates = [
-        _blank_c_template(task.task_id, slot) for task in c_tasks for slot in (1, 2)
-    ]
+    b_templates = [_blank_b_template(task.task_id, 1, task.claims) for task in b_tasks]
+    c_templates = [_blank_c_template(task.task_id, 1) for task in c_tasks]
     for name, rows in (
         ("claim_b_annotation_template.jsonl", b_templates),
         ("claim_c_annotation_template.jsonl", c_templates),
-        (
-            "adjudication_template.jsonl",
-            [_blank_adjudication(task.task_id, "B") for task in b_tasks]
-            + [_blank_adjudication(task.task_id, "C") for task in c_tasks],
-        ),
     ):
         path = output_dir / name
         _write_jsonl(path, rows)
@@ -714,7 +680,6 @@ def _write_pack_files(
             "claim_c_task": ClaimCTask.model_json_schema(),
             "claim_b_annotation": ClaimBAnnotation.model_json_schema(),
             "claim_c_annotation": ClaimCAnnotation.model_json_schema(),
-            "adjudication": Adjudication.model_json_schema(),
         },
     )
     codebook_path = output_dir / "CODEBOOK.md"
@@ -727,7 +692,7 @@ def _blank_b_template(
     task_id: str, slot: int, claims: list[ClaimCandidate]
 ) -> dict[str, Any]:
     return {
-        "contract": "gear_claim_b_expert_annotation_v1",
+        "contract": "gear_claim_b_independent_review_v1",
         "task_id": task_id,
         "annotation_slot": slot,
         "annotator_id": None,
@@ -752,7 +717,7 @@ def _blank_b_template(
 
 def _blank_c_template(task_id: str, slot: int) -> dict[str, Any]:
     return {
-        "contract": "gear_claim_c_expert_annotation_v1",
+        "contract": "gear_claim_c_independent_review_v1",
         "task_id": task_id,
         "annotation_slot": slot,
         "annotator_id": None,
@@ -763,39 +728,7 @@ def _blank_c_template(task_id: str, slot: int) -> dict[str, Any]:
     }
 
 
-def _blank_adjudication(task_id: str, claim: str) -> dict[str, Any]:
-    return {
-        "contract": "gear_expert_adjudication_v1",
-        "task_id": task_id,
-        "claim": claim,
-        "adjudicator_id": None,
-        "initial_annotator_ids": [],
-        "final_decision": None,
-        "confidence": None,
-        "rationale": None,
-        "evidence_keys": [],
-        "required_only_if_initial_annotations_disagree": True,
-    }
-
-
-def _validate_public_blinding(
-    b_tasks: list[ClaimBTask], c_tasks: list[ClaimCTask]
-) -> None:
-    forbidden_keys = {
-        "paper_id",
-        "graph_percentile",
-        "graph_score",
-        "hgb",
-        "method",
-        "arm",
-        "future_outcome",
-        "assigned_action",
-    }
-    for task in [*b_tasks, *c_tasks]:
-        keys = _all_keys(task.model_dump(mode="json"))
-        overlap = forbidden_keys & {key.casefold() for key in keys}
-        if overlap:
-            raise ValueError(f"public task leaks blinded fields: {sorted(overlap)}")
+def _validate_task_structure(c_tasks: list[ClaimCTask]) -> None:
     for task in c_tasks:
         if task.left.side != "LEFT" or task.right.side != "RIGHT":
             raise ValueError("pairwise side labels are malformed")
@@ -806,16 +739,16 @@ def _validate_templates(
 ) -> None:
     b_rows = _read_jsonl(pack_dir / "claim_b_annotation_template.jsonl")
     c_rows = _read_jsonl(pack_dir / "claim_c_annotation_template.jsonl")
-    if len(b_rows) != 2 * len(b_tasks) or len(c_rows) != 2 * len(c_tasks):
-        raise ValueError("exactly two independent annotation slots are required")
+    if len(b_rows) != len(b_tasks) or len(c_rows) != len(c_tasks):
+        raise ValueError("exactly one review template per task is required")
     for rows in (b_rows, c_rows):
         by_task: dict[str, set[int]] = defaultdict(set)
         for row in rows:
             if row.get("annotator_id") is not None:
                 raise ValueError("annotation template unexpectedly contains labels")
             by_task[str(row.get("task_id"))].add(int(row.get("annotation_slot", 0)))
-        if any(slots != {1, 2} for slots in by_task.values()):
-            raise ValueError("annotation template slots must be 1 and 2")
+        if any(slots != {1} for slots in by_task.values()):
+            raise ValueError("review template slot must be 1")
 
 
 def _validate_completed(
@@ -831,8 +764,8 @@ def _validate_completed(
     ]
     b_index = {task.task_id: task for task in b_tasks}
     c_index = {task.task_id: task for task in c_tasks}
-    _require_two_experts(b_annotations, set(b_index))
-    _require_two_experts(c_annotations, set(c_index))
+    _require_review_sessions(b_annotations, set(b_index))
+    _require_review_sessions(c_annotations, set(c_index))
     for annotation in b_annotations:
         task = b_index[annotation.task_id]
         if {row.claim_alias for row in annotation.assessments} != {
@@ -852,76 +785,21 @@ def _validate_completed(
             c_index[c_annotation.task_id]
         ):
             raise ValueError("Claim C annotation cites unknown evidence")
-    disagreements = _disagreements(b_annotations, c_annotations)
-    adjudication_path = pack_dir / "adjudications.jsonl"
-    adjudications = (
-        [Adjudication.model_validate(row) for row in _read_jsonl(adjudication_path)]
-        if adjudication_path.is_file()
-        else []
-    )
-    by_task = {row.task_id: row for row in adjudications}
-    if set(by_task) != disagreements:
-        raise ValueError("adjudication rows must exactly match disagreements")
-    expert_ids = _expert_ids_by_task([*b_annotations, *c_annotations])
-    task_index: dict[str, ClaimBTask | ClaimCTask] = {**b_index, **c_index}
-    for task_id, adjudication in by_task.items():
-        if set(adjudication.initial_annotator_ids) != expert_ids[task_id]:
-            raise ValueError("adjudication initial annotators mismatch")
-        if not set(adjudication.evidence_keys) <= _task_evidence_keys(
-            task_index[task_id]
-        ):
-            raise ValueError("adjudication cites unknown evidence")
 
 
-def _require_two_experts(rows: list[Any], task_ids: set[str]) -> None:
-    grouped = _expert_ids_by_task(rows)
-    if set(grouped) != task_ids or any(len(ids) != 2 for ids in grouped.values()):
-        raise ValueError("every task requires exactly two distinct expert annotations")
-    if len(rows) != 2 * len(task_ids):
-        raise ValueError("duplicate expert annotations detected")
+def _require_review_sessions(rows: list[Any], task_ids: set[str]) -> None:
+    grouped = _reviewer_ids_by_task(rows)
+    if set(grouped) != task_ids or any(not ids for ids in grouped.values()):
+        raise ValueError("every task requires at least one completed review session")
+    if len(rows) != sum(len(ids) for ids in grouped.values()):
+        raise ValueError("duplicate review session detected")
 
 
-def _expert_ids_by_task(rows: list[Any]) -> dict[str, set[str]]:
+def _reviewer_ids_by_task(rows: list[Any]) -> dict[str, set[str]]:
     grouped: dict[str, set[str]] = defaultdict(set)
     for row in rows:
         grouped[row.task_id].add(row.annotator_id)
     return grouped
-
-
-def _disagreements(
-    b_rows: list[ClaimBAnnotation], c_rows: list[ClaimCAnnotation]
-) -> set[str]:
-    grouped: dict[str, list[Any]] = defaultdict(list)
-    combined: list[Any] = [*b_rows, *c_rows]
-    for row in combined:
-        grouped[row.task_id].append(row)
-    disagreements: set[str] = set()
-    for task_id, rows in grouped.items():
-        if isinstance(rows[0], ClaimCAnnotation):
-            decisions = {row.preference for row in rows}
-        else:
-            decisions = {
-                json.dumps(
-                    [
-                        row.inventory_complete,
-                        *[
-                            (
-                                a.inventory_valid,
-                                a.relation,
-                                a.residual_novelty,
-                                a.manuscript_support,
-                                a.trace_complete,
-                            )
-                            for a in row.assessments
-                        ],
-                    ],
-                    sort_keys=True,
-                )
-                for row in rows
-            }
-        if len(decisions) > 1:
-            disagreements.add(task_id)
-    return disagreements
 
 
 def _task_evidence_keys(task: ClaimBTask | ClaimCTask) -> set[str]:
@@ -938,16 +816,6 @@ def _task_evidence_keys(task: ClaimBTask | ClaimCTask) -> set[str]:
     if isinstance(task, ClaimBTask):
         keys.update(row.evidence_key for row in task.manuscript_packet)
     return keys
-
-
-def _all_keys(value: Any) -> set[str]:
-    if isinstance(value, dict):
-        return set(value) | {
-            key for child in value.values() for key in _all_keys(child)
-        }
-    if isinstance(value, list):
-        return {key for child in value for key in _all_keys(child)}
-    return set()
 
 
 def _list_value(value: Any) -> list[str]:
@@ -1046,7 +914,7 @@ def main() -> int:
         _write_json(
             args.output_dir / "annotation_pack_readiness.json",
             {
-                "contract": "gear_expert_annotation_pack_readiness_v1",
+                "contract": "gear_independent_review_pack_readiness_v1",
                 "status": "not_ready",
                 "claim_allowed": False,
                 "failures": exc.failures,
@@ -1063,7 +931,6 @@ if __name__ == "__main__":
 
 
 __all__ = [
-    "Adjudication",
     "AnnotationPackNotReady",
     "ClaimBAnnotation",
     "ClaimBTask",

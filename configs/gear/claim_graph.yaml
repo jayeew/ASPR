@@ -1,0 +1,33 @@
+paths:
+  nature_manifest: /mnt/d/aspr_nature_markdown/manifest.jsonl
+  output_root: data/claim_graph
+  embedding_model: /home/jayee/models/bge-m3
+
+paper_graph:
+  backward_hops: 2
+  workers: 0
+
+claim_extraction:
+  min_claims: 1
+  max_claims: 3
+  allowed_types:
+    - METHOD
+    - FINDING
+    - MECHANISM
+    - RESOURCE
+    - THEORY
+
+embedding:
+  normalize: true
+  batch_size: 64
+
+claim_graph:
+  semantic_top_k: 10
+  community_knn_k: 10
+  paper_path_candidate_papers_max: 50
+  paper_path_top_k: 10
+  forbid_same_paper_edges: true
+  require_strictly_earlier_date: true
+
+runtime:
+  persist_inserted_claims: false

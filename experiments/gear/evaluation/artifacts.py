@@ -21,7 +21,7 @@ def load_manifest(path: Path) -> EvaluationManifestV1:
     manifest = EvaluationManifestV1.model_validate_json(path.read_text())
     base = path.parent.resolve()
     payload = manifest.model_dump(mode="python")
-    payload["human_release_dir"] = _resolve(base, manifest.human_release_dir)
+    payload["reference_release_dir"] = _resolve(base, manifest.reference_release_dir)
     for item, case in zip(payload["cases"], manifest.cases, strict=True):
         for field in (
             "manuscript_path",
@@ -35,18 +35,18 @@ def load_manifest(path: Path) -> EvaluationManifestV1:
     return EvaluationManifestV1.model_validate(payload)
 
 
-def load_human_release(
+def load_reference_release(
     release_dir: Path,
 ) -> tuple[dict[str, StructuredReview], dict[str, list[RevisionIssueLabel]]]:
     release_path = release_dir / "release_manifest.json"
     release = json.loads(release_path.read_text())
-    review_path = release_dir / "human_structured_reviews.jsonl"
-    _validate_declared_hash(review_path, release, "human_structured_reviews_sha256")
+    review_path, review_hash_field = _reference_review_path(release_dir, release)
+    _validate_declared_hash(review_path, release, review_hash_field)
     reviews = {row.paper_id: row for row in _read_jsonl(review_path, StructuredReview)}
     if release.get("record_count") is not None and int(release["record_count"]) != len(
         reviews
     ):
-        raise ValueError("human release review count mismatch")
+        raise ValueError("reference release review count mismatch")
     source_path = release_dir / "source_manifest.json"
     if source_path.is_file() and release.get("source_manifest_sha256") is not None:
         source_payload = json.loads(source_path.read_text())
@@ -54,7 +54,7 @@ def load_human_release(
             sha256_value(source_payload),
             sha256_file(source_path),
         }:
-            raise ValueError("human release source manifest hash mismatch")
+            raise ValueError("reference release source manifest hash mismatch")
     labels: dict[str, list[RevisionIssueLabel]] = {}
     sidecar = release_dir / "revision_issue_labels.jsonl"
     if sidecar.exists():
@@ -66,8 +66,15 @@ def load_human_release(
             release.get("revision_issue_label_count") is not None
             and int(release["revision_issue_label_count"]) != label_count
         ):
-            raise ValueError("human release revision label count mismatch")
+            raise ValueError("reference release revision label count mismatch")
     return reviews, labels
+
+
+def load_human_release(
+    release_dir: Path,
+) -> tuple[dict[str, StructuredReview], dict[str, list[RevisionIssueLabel]]]:
+    """Compatibility alias for older callers and release layouts."""
+    return load_reference_release(release_dir)
 
 
 def load_review_bundle(run_dir: Path) -> ReviewBundle:
@@ -77,12 +84,12 @@ def load_review_bundle(run_dir: Path) -> ReviewBundle:
 
 def build_context_pack(
     paper_ir: PaperIR,
-    human: StructuredReview,
+    reference_review: StructuredReview,
     gear: StructuredReview,
 ) -> EvaluationContextPack:
     referenced = {
         key
-        for review in (human, gear)
+        for review in (reference_review, gear)
         for key in [
             *review.summary.evidence_keys,
             *(key for point in review.all_points() for key in point.evidence_keys),
@@ -128,7 +135,19 @@ def _read_jsonl(path: Path, model: type[Any]) -> list[Any]:
 def _validate_declared_hash(path: Path, release: dict[str, Any], field: str) -> None:
     declared = release.get(field)
     if declared is not None and declared != sha256_file(path):
-        raise ValueError(f"human release hash mismatch: {path.name}")
+        raise ValueError(f"reference release hash mismatch: {path.name}")
+
+
+def _reference_review_path(
+    release_dir: Path, release: dict[str, Any]
+) -> tuple[Path, str]:
+    neutral = release_dir / "reference_structured_reviews.jsonl"
+    if neutral.is_file():
+        return neutral, "reference_structured_reviews_sha256"
+    return (
+        release_dir / "human_structured_reviews.jsonl",
+        "human_structured_reviews_sha256",
+    )
 
 
 def _resolve(base: Path, value: Path) -> Path:
@@ -139,5 +158,6 @@ __all__ = [
     "build_context_pack",
     "load_human_release",
     "load_manifest",
+    "load_reference_release",
     "load_review_bundle",
 ]

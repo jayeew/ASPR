@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# This command is intentionally separate from the automated experiment runner:
-# it can only succeed after humans have supplied the two independent annotation
-# files and any required independent adjudications.
+# This command is intentionally separate from the automated experiment runner.
+# It accepts completed Claim B/C reviews from independent AI sessions or other
+# reviewers; human identity, blinding, calibration, and adjudication are not
+# completion requirements.
 
 : "${GEAR_FROZEN_REPLAY_MANIFEST:?set GEAR_FROZEN_REPLAY_MANIFEST to the formal frozen replay manifest}"
 

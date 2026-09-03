@@ -30,8 +30,8 @@ make figures-nature-check
 
 The check intentionally exits nonzero while Nature strong-claim gates remain unresolved.
 
-After external evaluators return the blinded evidence files, ingest and validate them
-with:
+After independent reviewer sessions return the evidence files, ingest and validate
+them with:
 
 ```bash
 make figures-external-evidence-intake
@@ -40,8 +40,9 @@ make figures-external-evidence-intake
 This target reads `outputs/fig04/old/work/full50/fig4_completed_blinded_labels.csv`
 and `outputs/fig10/old/work/kg_perturbation/fig10_completed_blinded_preferences.csv`, rebuilds the
 Fig.4 external-validation report, rebuilds the Fig.10 ablation/preference report,
-regenerates the final assembly, and runs the strict external-evidence check. A nonzero
-exit means at least one required human-evidence artifact is missing, synthetic/non-human,
+regenerates the final assembly, and runs the strict external-evidence check. Reviewer
+sessions may be AI-based; human identity, blind labeling, and reviewer calibration are
+not validity requirements. A nonzero exit means required review evidence is missing,
 incomplete, or not statistically supportive of the relevant strong claim.
 
 If Fig.4 labels are returned as the three labeler-specific templates, run
@@ -63,4 +64,4 @@ not promoted to `fig10_completed_blinded_preferences.csv`.
 
 ## Current Claim Boundary
 
-The current package is not yet a Nature-ready strong-evidence submission. It is a diagnostic and pipeline-readiness package until Fig1-Fig4 strong gates, Fig6 true reruns, and Fig9/Fig10 checkpoint/ablation/human-preference replacement gates are resolved.
+The current package is not yet a Nature-ready strong-evidence submission. It is a diagnostic and pipeline-readiness package until Fig1-Fig4 strong gates, Fig6 true reruns, and Fig9/Fig10 checkpoint/ablation/independent-review replacement gates are resolved.

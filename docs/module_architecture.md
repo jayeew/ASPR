@@ -16,10 +16,9 @@ datasets -> indicator_definition -> aspr_scoring
                         review_evaluation
 ```
 
-The reconstruction and Agent branches remain information-isolated:
-reconstruction may read the full reviewer/author revision history, while the
-Agent may read only the submitted paper and its declared data/calibration
-releases. This prevents benchmark leakage.
+The reconstruction and Agent branches may remain information-isolated when a
+study chooses that design, but blindness is not a validity requirement. A
+reference review may come from an independent AI session or another reviewer.
 
 ## Stable contracts
 
@@ -27,14 +26,15 @@ releases. This prevents benchmark leakage.
 |---|---|---|
 | `indicator_definition` | `feature_registry.json` | frozen indicator definitions |
 | `aspr_scoring` | `paper_scores.parquet` | paper-level ASPR scores |
-| `review_reconstruction` | `human_structured_reviews.jsonl` | revision-aware human labels |
+| `review_reconstruction` | `reference_structured_reviews.jsonl` | independent-session reference reviews |
 | `gear_agent` | `agent_structured_reviews.jsonl` | Agent outputs |
-| `review_evaluation` | `corpus_metrics.json` | Agent-human agreement metrics |
+| `review_evaluation` | `corpus_metrics.json` | GEAR-reference comparison metrics |
 
 Both review JSONL files contain exactly one
 `gear.review_contracts.StructuredReview` per paper and use `paper_id` as the join
-key. Publication validates this contract, rejects empty releases and duplicate
-paper IDs, so comparison needs no schema conversion.
+key. AI-generated independent-session reviews are valid inputs. Publication
+validates structure, rejects empty releases and duplicate paper IDs, and imposes
+no human-identity, blind-label, reviewer-calibration, or agreement gate.
 
 ## Canonical storage
 

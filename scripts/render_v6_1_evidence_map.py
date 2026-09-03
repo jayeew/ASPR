@@ -27,7 +27,7 @@ from gear.nature_multihorizon.source_audit_v6 import sha256_file
 DEFAULT_CONFIG = (
     PROJECT_ROOT / "configs" / "nature_multihorizon" / "v6_1_simple.json"
 )
-DEFAULT_OUTPUT = PROJECT_ROOT / "docs" / "aspr_v6_1_indicator_evidence_map.md"
+DEFAULT_OUTPUT = PROJECT_ROOT / "outputs" / "aspr_v6_1_indicator_evidence_map.md"
 
 
 def _resolve(value: str) -> Path:

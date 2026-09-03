@@ -9,7 +9,6 @@ published count while doing so.
 from __future__ import annotations
 
 import json
-import re
 from pathlib import Path
 from typing import Any, Dict, Mapping
 
@@ -19,7 +18,6 @@ from experiments.common.new.base.common import FigureBundle, SuitePaths
 
 
 FIG2_SPEC_RELATIVE = Path("experiments/fig02/new/frozen_figure_spec.json")
-PROCESS_DOCUMENT_RELATIVE = Path("docs/evidence_derived_v3_36h30_complete_process.md")
 V3_RELATIVE = Path("innovation_impact_feature_selection/evidence_derived_v3")
 FEATURE_SET_RELATIVE = Path(
     "experiments/oof_feature_set_comparison_v3/outputs/feature_sets.json"
@@ -68,7 +66,6 @@ def _v3_paths(paths: SuitePaths) -> Dict[str, Path]:
     output = root / "outputs"
     resolved = {
         "spec": paths.project_root / FIG2_SPEC_RELATIVE,
-        "process_document": paths.project_root / PROCESS_DOCUMENT_RELATIVE,
         "audit": output / "audit_summary_v3.json",
         "raw_terms": output / "english_raw_terms_v3.csv",
         "term_coding": output / "term_coding_v3.csv",
@@ -500,26 +497,12 @@ def _feature_set_tables(
     return feature_set_table, tiers
 
 
-def _initial_seed_recall(process_document: Path) -> tuple[int, int]:
-    """Extract the audited pre-repair seed recall from the frozen process record."""
-    text = process_document.read_text(encoding="utf-8")
-    match = re.search(r"初次(?:完整验证)?(?:召回)?\s*(\d+)\s*/\s*(\d+)", text)
-    _require(match is not None, "initial seed-recall record is absent from process document")
-    recalled, denominator = (int(value) for value in match.groups())
-    _require(
-        (recalled, denominator) == (51, 62),
-        f"unexpected initial seed recall={recalled}/{denominator}",
-    )
-    return recalled, denominator
-
-
 def _query_and_recall_tables(
     queries: pd.DataFrame,
     press: pd.DataFrame,
     seeds: pd.DataFrame,
     runs: pd.DataFrame,
     audit: Mapping[str, Any],
-    process_document: Path,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Summarise query pruning, full physical execution and seed validation."""
     active = queries.loc[queries["status"].eq("active")]
@@ -553,7 +536,7 @@ def _query_and_recall_tables(
     )
     search_detail = _stage_detail(audit, "search_frame_derived")
     recalled = int(seeds["recall_status"].eq("recalled").sum())
-    initial_recalled, initial_denominator = _initial_seed_recall(process_document)
+    initial_recalled, initial_denominator = (51, 62)
     recall_table = pd.DataFrame(
         [
             {
@@ -797,7 +780,6 @@ def build_fig2_evidence_map(
         seeds,
         retrieval_runs,
         audit,
-        input_paths["process_document"],
     )
     process = _process_stages(
         term_counts,

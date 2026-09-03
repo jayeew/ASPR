@@ -30,6 +30,3 @@ python3 -m experiments.common.new.base.run_all \
   --config configs/aspr_v6_1_nature_figures.json \
   --output-dir outputs/common/new/base_suite
 ```
-
-See `docs/experiment_output_layout.md` for the matching output tree and
-retention policy.

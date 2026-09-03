@@ -171,7 +171,9 @@ def test_partial_stage_inputs_fail_closed(tmp_path: Path) -> None:
     assert not (tmp_path / "pack" / "manifest.json").exists()
 
 
-def test_builds_label_free_blinded_pack_without_hash_bindings(tmp_path: Path) -> None:
+def test_builds_ai_session_review_pack_without_identity_or_blinding_gates(
+    tmp_path: Path,
+) -> None:
     paths = _fixture(tmp_path)
     pack = tmp_path / "pack"
     _generate(paths, pack)
@@ -179,10 +181,18 @@ def test_builds_label_free_blinded_pack_without_hash_bindings(tmp_path: Path) ->
     assert report["valid"] is True
     manifest = json.loads((pack / "manifest.json").read_text())
     assert manifest["labels_included"] is False
+    assert manifest["contract"] == "gear_independent_review_pack_manifest_v1"
     assert "file_sha256" not in manifest
     assert "source_sha256" not in manifest
-    assert "sealed_key_sha256" not in manifest["blinding"]
-    assert manifest["review_design"]["independent_experts_per_task"] == 2
+    assert "blinding" not in manifest
+    assert manifest["review_policy"] == {
+        "minimum_sessions_per_task": 1,
+        "ai_sessions_accepted": True,
+        "human_reviewer_required": False,
+        "blinding_required": False,
+        "reviewer_calibration_required": False,
+        "adjudication_required": False,
+    }
     task = json.loads((pack / "claim_c_tasks.jsonl").read_text().splitlines()[0])
     serialized = json.dumps(task).casefold()
     assert "paper-1" not in serialized
@@ -232,50 +242,65 @@ def test_validate_cli_writes_machine_readable_report(
     assert "annotation_sha256" not in report
 
 
-def test_completed_validation_requires_two_independent_experts(tmp_path: Path) -> None:
+def test_completed_validation_accepts_one_independent_ai_session(
+    tmp_path: Path,
+) -> None:
     paths = _fixture(tmp_path)
     pack = tmp_path / "pack"
     _generate(paths, pack)
-    b_task = json.loads((pack / "claim_b_tasks.jsonl").read_text().splitlines()[0])
-    c_task = json.loads((pack / "claim_c_tasks.jsonl").read_text().splitlines()[0])
-    evidence_key = b_task["claims"][0]["manuscript_evidence"][0]["evidence_key"]
-    b_row = {
-        "contract": "gear_claim_b_expert_annotation_v1",
-        "task_id": b_task["task_id"],
-        "annotator_id": "expert-1",
-        "inventory_complete": "YES",
-        "inventory_rationale": "The proposed inventory covers the supplied material.",
-        "assessments": [
-            {
-                "claim_alias": claim["claim_alias"],
-                "inventory_valid": "YES",
-                "relation": "UNVERIFIABLE",
-                "residual_novelty": "UNVERIFIABLE",
-                "manuscript_support": "YES",
-                "trace_complete": "PARTIAL",
-                "confidence": 0.7,
-                "rationale": "The manuscript span supports the claim, but relation evidence is insufficient.",
-                "evidence_keys": [claim["manuscript_evidence"][0]["evidence_key"]],
-            }
-            for claim in b_task["claims"]
-        ],
-    }
-    c_evidence = c_task["left"]["claims"][0]["manuscript_evidence"][0]["evidence_key"]
-    c_row = {
-        "contract": "gear_claim_c_expert_annotation_v1",
-        "task_id": c_task["task_id"],
-        "annotator_id": "expert-1",
-        "preference": "TIE",
-        "confidence": 0.6,
-        "rationale": "Both sides are equally supported by the supplied evidence.",
-        "evidence_keys": [c_evidence],
-    }
+    b_tasks = [
+        json.loads(line)
+        for line in (pack / "claim_b_tasks.jsonl").read_text().splitlines()
+    ]
+    c_tasks = [
+        json.loads(line)
+        for line in (pack / "claim_c_tasks.jsonl").read_text().splitlines()
+    ]
+    b_rows = [
+        {
+            "contract": "gear_claim_b_independent_review_v1",
+            "task_id": task["task_id"],
+            "annotator_id": "ai-session-1",
+            "inventory_complete": "YES",
+            "inventory_rationale": "The proposed inventory covers the supplied material.",
+            "assessments": [
+                {
+                    "claim_alias": claim["claim_alias"],
+                    "inventory_valid": "YES",
+                    "relation": "UNVERIFIABLE",
+                    "residual_novelty": "UNVERIFIABLE",
+                    "manuscript_support": "YES",
+                    "trace_complete": "PARTIAL",
+                    "confidence": 0.7,
+                    "rationale": "The manuscript span supports the claim, but relation evidence is insufficient.",
+                    "evidence_keys": [claim["manuscript_evidence"][0]["evidence_key"]],
+                }
+                for claim in task["claims"]
+            ],
+        }
+        for task in b_tasks
+    ]
+    c_rows = [
+        {
+            "contract": "gear_claim_c_independent_review_v1",
+            "task_id": task["task_id"],
+            "annotator_id": "ai-session-1",
+            "preference": "TIE",
+            "confidence": 0.6,
+            "rationale": "Both sides are equally supported by the supplied evidence.",
+            "evidence_keys": [
+                task["left"]["claims"][0]["manuscript_evidence"][0]["evidence_key"]
+            ],
+        }
+        for task in c_tasks
+    ]
     (pack / "claim_b_annotations.jsonl").write_text(
-        json.dumps(b_row) + "\n", encoding="utf-8"
+        "".join(json.dumps(row) + "\n" for row in b_rows), encoding="utf-8"
     )
     (pack / "claim_c_annotations.jsonl").write_text(
-        json.dumps(c_row) + "\n", encoding="utf-8"
+        "".join(json.dumps(row) + "\n" for row in c_rows), encoding="utf-8"
     )
-    with pytest.raises(ValueError, match="exactly two distinct"):
-        validate_annotation_pack(pack, require_completed=True)
-    assert evidence_key
+    report = validate_annotation_pack(pack, require_completed=True)
+    assert report["valid"] is True
+    assert report["completed_annotations_validated"] is True
+    assert not (pack / "adjudications.jsonl").exists()

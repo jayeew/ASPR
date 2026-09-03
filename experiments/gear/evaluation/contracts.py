@@ -6,7 +6,7 @@ from datetime import date
 from pathlib import Path
 from typing import Literal
 
-from pydantic import Field, field_validator, model_validator
+from pydantic import AliasChoices, Field, field_validator, model_validator
 
 from gear.config import CodexCliEndpoint, OpenAICompatibleEndpoint
 from gear.contracts import ReviewStatus, StrictModel
@@ -63,7 +63,9 @@ class EvaluationManifestV1(StrictModel):
     contract: Literal["gear_evaluation_manifest_v1"] = "gear_evaluation_manifest_v1"
     dataset_id: str = Field(min_length=1)
     development_non_confirmatory: bool = True
-    human_release_dir: Path
+    reference_release_dir: Path = Field(
+        validation_alias=AliasChoices("reference_release_dir", "human_release_dir")
+    )
     cases: list[EvaluationCase] = Field(min_length=1)
     tracks: list[EvaluationTrack] = Field(min_length=1)
     bootstrap_samples: int = Field(default=5000, ge=1)

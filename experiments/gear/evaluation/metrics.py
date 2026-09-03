@@ -108,7 +108,7 @@ def semantic_match_metrics(
         "soft_precision": soft_p,
         "soft_recall": soft_r,
         "soft_f1": soft_f,
-        "human_concern_coverage": soft_r,
+        "reference_concern_coverage": soft_r,
         "weighted_alignment_precision": weighted_p,
         "weighted_alignment_recall": weighted_r,
         "weighted_alignment_f1": weighted_f,
@@ -151,12 +151,12 @@ def concern_coverage_metrics(
         weighted, len(candidates), len(references)
     )
     return {
-        "human_concern_coverage": _ratio(len(matched_references), len(references)),
+        "reference_concern_coverage": _ratio(len(matched_references), len(references)),
         "weighted_alignment_precision": weighted_p,
         "weighted_alignment_recall": weighted_r,
         "weighted_alignment_f1": weighted_f,
         "issue_family_coverage": _ratio(len(matched_families), len(families)),
-        "major_human_concern_coverage": _ratio(
+        "major_reference_concern_coverage": _ratio(
             len(major_ids & matched_references), len(major_ids)
         ),
     }

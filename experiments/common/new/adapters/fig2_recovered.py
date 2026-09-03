@@ -37,7 +37,6 @@ def recovered_fig2_paths(paths: SuitePaths) -> dict[str, Path]:
     recovered = paths.project_root / RECOVERED_V3_RELATIVE
     resolved = {
         "spec": paths.project_root / "experiments/fig02/new/frozen_figure_spec.json",
-        "process_document": paths.project_root / "docs/evidence_derived_v3_36h30_complete_process.md",
         "indicator_library": recovered / "complete_indicator_library_v3.csv",
         "dimensions": recovered / "candidate_dimensions_v3.csv",
         "gates": recovered / "feature_gate_decisions_v3.csv",
@@ -449,6 +448,5 @@ def build_recovered_fig2(
         source_paths=list(input_paths.values()),
         notes=[spec["claim_boundary"], *disclosure["text"].tolist()],
     )
-
 
 

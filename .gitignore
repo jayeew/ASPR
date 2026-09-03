@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.pytest_tmp/
 
 *.txt
 !requirements-figures.txt
@@ -24,6 +25,11 @@ innovation_impact_feature_selection/evidence_derived/frozen_releases/**/*.parque
 outputs/gear/runs/
 data/gear_peer_review_benchmark_v1/
 outputs/gear/review_alignment/
+# Claim-graph indexes, local model weights, and DOI-audit databases are
+# reproducible local artifacts; source code and configuration stay tracked.
+data/claim_graph/
+data/doi_coverage_audit/
+data/models/
 
 # Large local data files (multi-MB JSON / parquet) are regenerable, not source.
 kg_validator/output/

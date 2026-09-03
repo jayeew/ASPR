@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 
 from artifact_store import ArtifactReference, ArtifactStore
+from experiments.gear.evaluation.artifacts import load_reference_release
 from gear.module_cli import main
 
 
@@ -81,3 +82,19 @@ def test_agent_export_is_exact_structured_review(paper_ir, tmp_path):
     assert (
         len((output / "agent_structured_reviews.jsonl").read_text().splitlines()) == 1
     )
+
+
+def test_reference_loader_accepts_ai_session_release(paper_ir, tmp_path):
+    evidence = f"P:{paper_ir.spans[0].span_id}"
+    (tmp_path / "reference_structured_reviews.jsonl").write_text(
+        json.dumps(_review_payload(paper_ir.paper_id, evidence)) + "\n",
+        encoding="utf-8",
+    )
+    (tmp_path / "release_manifest.json").write_text(
+        json.dumps({"record_count": 1}), encoding="utf-8"
+    )
+
+    reviews, revision_labels = load_reference_release(tmp_path)
+
+    assert set(reviews) == {paper_ir.paper_id}
+    assert revision_labels == {}

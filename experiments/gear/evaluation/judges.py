@@ -63,13 +63,13 @@ def fixed_rubric(paper_id: str) -> RubricSetV1:
 def score_review_quality(
     client: CachedEvaluatorClient,
     context: EvaluationContextPack,
-    human_review: StructuredReview,
+    reference_review: StructuredReview,
     gear_review: StructuredReview,
 ) -> RubricScoreResponseV1:
     rubric = fixed_rubric(context.paper_id)
     user = json.dumps(
         {
-            "task": "Score the GEAR review against the manuscript-specific rubric derived from the manuscript and human review.",
+            "task": "Score the GEAR review against the manuscript-specific rubric derived from the manuscript and independent reference review.",
             "rules": {
                 "positive_dimensions": "0, 1, or 2",
                 "risk_dimension": "0, -1, or -2",
@@ -77,7 +77,9 @@ def score_review_quality(
                 "required_titles": list(RUBRIC_TITLES),
             },
             "context": context.model_dump(mode="json"),
-            "human_review_for_rubric_only": human_review.model_dump(mode="json"),
+            "reference_review_for_rubric_only": reference_review.model_dump(
+                mode="json"
+            ),
             "gear_review_to_score": gear_review.model_dump(mode="json"),
             "rubric": rubric.model_dump(mode="json"),
         },

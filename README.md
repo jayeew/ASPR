@@ -95,23 +95,18 @@ experiments, and consistency evaluation are separate modules. They exchange only
 immutable, hash-verified releases through `artifact_store/`; see
 [module architecture](docs/module_architecture.md).
 
-## Review reconstruction and Agent comparison
+## Review reconstruction and independent-session comparison
 
-Human reconstruction synthesizes all reviewer rounds and author replies into the
-same `StructuredReview` contract emitted by the Agent. Resolved concerns are not
-retained as final weaknesses. Both sides are published as immutable artifacts
-and joined directly by `paper_id`; see
-[module architecture](docs/module_architecture.md) for runnable reconstruction,
-Agent export, publication, and comparison commands.
+Reference reconstruction maps supplied reviewer rounds and replies into the same
+`StructuredReview` contract emitted by GEAR. A reference release may be produced
+by an independent AI session or another reviewer; no human identity, blind-label,
+reviewer-calibration, or human-agreement prerequisite is imposed. Resolved
+concerns are not retained as final weaknesses. Releases are joined by `paper_id`;
+see [module architecture](docs/module_architecture.md) for runnable commands.
 
-The legacy dev100 consistency workflow uses blinded one-to-one atomic-point matching and
-reports precision, recall, F1, novelty agreement, evidence validity, and
-paper-level bootstrap intervals. It is explicitly a revision-aware development
-audit, not submission-time AI–Human alignment. The new
-`experiments/gear/human_alignment/` framework keeps availability, conditional
-quality, end-to-end utility, human–human agreement, and 5,000-iteration
-paper-cluster bootstrap reporting separate; empty/empty reviews are never scored
-as true matches.
+Legacy human-alignment modules remain available only as optional historical
+diagnostics. They are not validity gates for current independent-session review
+or Claim B/C completion. Empty/empty reviews are never scored as true matches.
 
 ## Checks
 

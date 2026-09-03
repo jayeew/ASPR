@@ -7,7 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 
 
-def test_full_runner_builds_only_ready_expert_pack_after_gate() -> None:
+def test_full_runner_builds_only_ready_review_pack_after_gate() -> None:
     script = (ROOT / "scripts/run_gear_graph_rescue_full.sh").read_text(
         encoding="utf-8"
     )
@@ -20,7 +20,7 @@ def test_full_runner_builds_only_ready_expert_pack_after_gate() -> None:
     assert "expert_annotation_pack_ready_validation.json" in ready_command
 
 
-def test_finalize_requires_completed_experts_before_completion_audit() -> None:
+def test_finalize_requires_completed_reviews_before_completion_audit() -> None:
     script = (ROOT / "scripts/finalize_gear_graph_rescue.sh").read_text(
         encoding="utf-8"
     )
@@ -29,6 +29,8 @@ def test_finalize_requires_completed_experts_before_completion_audit() -> None:
     assert completed < audit
     assert "expert_annotation_pack_completed_validation.json" in script
     assert '--expert-pack-validation "${completed_validation}"' in script
+    assert "humans have supplied" not in script
+    assert "AI sessions" in script
 
 
 def test_finalize_shell_is_syntactically_valid() -> None:

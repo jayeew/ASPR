@@ -28,8 +28,8 @@ from gear.trace import EvidenceStore, canonical_json, sha256_file, sha256_value
 
 from .artifacts import (
     build_context_pack,
-    load_human_release,
     load_manifest,
+    load_reference_release,
     load_review_bundle,
 )
 from .client import CachedEvaluatorClient, EvaluationJudgeError, load_evaluator_config
@@ -165,13 +165,13 @@ class EvaluationRunner:
         self._write_run_manifest()
 
     def preflight(self) -> None:
-        reviews, _ = load_human_release(self.manifest.human_release_dir)
+        reviews, _ = load_reference_release(self.manifest.reference_release_dir)
         for case in self.manifest.cases:
             for path in (case.manuscript_path, case.metadata_path):
                 if not path.is_file():
                     raise FileNotFoundError(path)
             if case.paper_id not in reviews:
-                raise ValueError(f"human review missing for {case.paper_id}")
+                raise ValueError(f"reference review missing for {case.paper_id}")
             if case.clean_run_dir is not None:
                 bundle = load_review_bundle(case.clean_run_dir)
                 failures = EvidenceStore(case.clean_run_dir).validate_manifest()
@@ -449,7 +449,7 @@ class EvaluationRunner:
         )
 
     def prepare_judges(self) -> None:
-        human, _ = load_human_release(self.manifest.human_release_dir)
+        human, _ = load_reference_release(self.manifest.reference_release_dir)
         clean = self._clean_run_map()
         targets = self.output_dir / "judge_inputs"
         targets.mkdir(parents=True, exist_ok=True)
@@ -471,7 +471,9 @@ class EvaluationRunner:
             )
 
     def run_judges(self) -> None:
-        human, revision_labels = load_human_release(self.manifest.human_release_dir)
+        human, revision_labels = load_reference_release(
+            self.manifest.reference_release_dir
+        )
         clean = self._clean_run_map()
         rows: list[dict[str, Any]] = []
         failures: list[dict[str, Any]] = []
@@ -628,7 +630,7 @@ class EvaluationRunner:
         return rows, failures
 
     def score(self) -> None:
-        human, labels = load_human_release(self.manifest.human_release_dir)
+        human, labels = load_reference_release(self.manifest.reference_release_dir)
         clean = self._clean_run_map()
         decisions = self._judge_map()
         samples = []
@@ -775,7 +777,7 @@ class EvaluationRunner:
                     {
                         "paper_id": case.paper_id,
                         "metric": "revision",
-                        "reason": "human release has no revision sidecar",
+                        "reason": "reference release has no revision sidecar",
                     }
                 )
             if case.prior_art_gold_path is None:
@@ -848,14 +850,14 @@ class EvaluationRunner:
         text = [
             "# GEAR Evaluation Results",
             "",
-            "> Development-only, non-confirmatory Nature pilot. These results do not support generalization, capability, acceptance-rate, or human-level claims.",
+            "> Development-only, non-confirmatory Nature pilot. These results do not support generalization, capability, acceptance-rate, or reviewer-level claims.",
             "",
             "## Primary KPIs",
             "",
         ]
         for key in (
             "completed_coverage",
-            "human_concern_coverage",
+            "reference_concern_coverage",
             "weighted_alignment_f1",
             "analytical_quality",
             "major_support_precision",
@@ -869,7 +871,7 @@ class EvaluationRunner:
         text.extend(["", "## Drivers", ""])
         for key in (
             "issue_family_coverage",
-            "major_human_concern_coverage",
+            "major_reference_concern_coverage",
             "persistent_concern_recall",
             "independent_prior_count",
             "relation_count",
@@ -947,7 +949,7 @@ class EvaluationRunner:
         columns = (
             ("case_id", "Case"),
             ("status", "Status"),
-            ("human_concern_coverage", "Concern cov."),
+            ("reference_concern_coverage", "Concern cov."),
             ("weighted_alignment_f1", "Weighted F1"),
             ("analytical_quality", "Analytical"),
             ("major_support_precision", "Major support"),
@@ -985,7 +987,7 @@ class EvaluationRunner:
         if not path.is_file():
             return
         rows = _jsonl(path)
-        human, _ = load_human_release(self.manifest.human_release_dir)
+        human, _ = load_reference_release(self.manifest.reference_release_dir)
         decisions = self._judge_map()
         for row in rows:
             run_dir = Path(row["run_dir"])
@@ -998,10 +1000,10 @@ class EvaluationRunner:
                 "unsupported_major_count": bundle.verification.unsupported_major_count,
                 "graph_semantic_violation": bundle.verification.graph_semantic_violation_count,
             }
-            human_direction = human[row["paper_id"]].novelty.judgment
+            reference_direction = human[row["paper_id"]].novelty.judgment
             final_direction = review.novelty.judgment
             direction_metrics = novelty_direction_metrics(
-                [human_direction], [final_direction]
+                [reference_direction], [final_direction]
             )
             row["metrics"].update(
                 {
@@ -1013,7 +1015,7 @@ class EvaluationRunner:
                     ],
                 }
             )
-            row["human_novelty_direction"] = human_direction.value
+            row["reference_novelty_direction"] = reference_direction.value
             row["initial_novelty_direction"] = (
                 bundle.agent_review.novelty.judgment.value
                 if bundle.agent_review is not None

@@ -386,19 +386,22 @@ def _fixture(tmp_path: Path) -> CompletionArtifacts:
     _write_json(
         paths["expert_pack_manifest"],
         {
-            "contract": "gear_expert_annotation_pack_manifest_v1",
-            "status": "ready_for_annotation",
-            "review_design": {
-                "independent_experts_per_task": 2,
-                "adjudication_on_disagreement": True,
-                "independent_adjudicator_required": True,
+            "contract": "gear_independent_review_pack_manifest_v1",
+            "status": "ready_for_review",
+            "review_policy": {
+                "minimum_sessions_per_task": 1,
+                "ai_sessions_accepted": True,
+                "human_reviewer_required": False,
+                "blinding_required": False,
+                "reviewer_calibration_required": False,
+                "adjudication_required": False,
             },
         },
     )
     _write_json(
         paths["expert_pack_validation"],
         {
-            "contract": "gear_expert_annotation_pack_validation_v1",
+            "contract": "gear_independent_review_pack_validation_v1",
             "valid": True,
             "completed_annotations_validated": True,
             "claim_b_tasks": 30,
@@ -444,9 +447,7 @@ def test_completion_audit_accepts_registered_fail_closed_abstention(
     tmp_path: Path,
 ) -> None:
     artifacts = _fixture(tmp_path)
-    manifest = json.loads(
-        artifacts.action_policy_manifest.read_text(encoding="utf-8")
-    )
+    manifest = json.loads(artifacts.action_policy_manifest.read_text(encoding="utf-8"))
     manifest.update(
         {
             "status": "abstained",
@@ -467,15 +468,11 @@ def test_completion_audit_accepts_registered_fail_closed_abstention(
         manifest.pop(f"{stem}_path")
         manifest.pop(f"{stem}_sha256")
     graph = json.loads(artifacts.policy_graph_report.read_text(encoding="utf-8"))
-    no_graph = json.loads(
-        artifacts.policy_no_graph_report.read_text(encoding="utf-8")
-    )
+    no_graph = json.loads(artifacts.policy_no_graph_report.read_text(encoding="utf-8"))
     for policy in (graph, no_graph):
         policy["selective_abstain"] = True
         policy["target_action_counts"] = {"baseline": 60}
-    graph["rules"] = {
-        "topology_expansion": {"development_average_uplift_lcb": -0.01}
-    }
+    graph["rules"] = {"topology_expansion": {"development_average_uplift_lcb": -0.01}}
     _write_json(artifacts.policy_graph_report, graph)
     _write_json(artifacts.policy_no_graph_report, no_graph)
     gate2 = json.loads(artifacts.gate2_report.read_text(encoding="utf-8"))
@@ -531,11 +528,13 @@ def test_completion_audit_detects_hash_and_pairing_mismatch(tmp_path: Path) -> N
     assert result["checks"]["promoted_structural_head"]["passed"] is False
 
 
-def test_completion_audit_requires_exact_expert_two_plus_one(tmp_path: Path) -> None:
+def test_completion_audit_accepts_ai_session_without_human_blind_or_calibration_gate(
+    tmp_path: Path,
+) -> None:
     artifacts = _fixture(tmp_path)
-    report = json.loads(artifacts.expert_pack_manifest.read_text(encoding="utf-8"))
-    report["review_design"]["independent_adjudicator_required"] = False
-    _write_json(artifacts.expert_pack_manifest, report)
     result = audit_rescue_completion(artifacts)
-    assert result["claim_allowed"] is False
-    assert result["checks"]["expert_claim_b_c"]["passed"] is False
+    check = result["checks"]["independent_claim_b_c_review"]
+    assert result["claim_allowed"] is True
+    assert check["passed"] is True
+    assert check["evidence"]["protocol"] == "independent_session"
+    assert check["evidence"]["ai_sessions_accepted"] is True

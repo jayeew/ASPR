@@ -2,7 +2,6 @@
 
 > 对应图：[`Fig2_evidence_architecture.svg`](../../outputs/fig02/new/Fig2_evidence_architecture.svg)  
 > 图的冻结规格：[`frozen_figure_spec.json`](../../experiments/fig02/new/frozen_figure_spec.json)  
-> 证据流程总记录：[`evidence_derived_v3_36h30_complete_process.md`](../evidence_derived_v3_36h30_complete_process.md)
 
 ## 1. 这张图在整篇研究中要解决什么问题
 
@@ -543,7 +542,6 @@ Panel D 把规则交集冻结为后续实验集合
 | 图形渲染逻辑 | [`experiments/common/new/adapters/fig2_renderer.py`](../../experiments/common/new/adapters/fig2_renderer.py) |
 | 证据数据适配与不变量检查 | [`experiments/common/new/adapters/fig2_evidence.py`](../../experiments/common/new/adapters/fig2_evidence.py) |
 | 图专用合同测试 | [`experiments/fig02/new/tests.py`](../../experiments/fig02/new/tests.py) |
-| 全流程审计说明 | [`docs/evidence_derived_v3_36h30_complete_process.md`](../evidence_derived_v3_36h30_complete_process.md) |
 | 完整指标库 | [`innovation_impact_feature_selection/evidence_derived_v3/outputs/complete_indicator_library_v3.csv`](../../innovation_impact_feature_selection/evidence_derived_v3/outputs/complete_indicator_library_v3.csv) |
 | 候选维度库 | [`innovation_impact_feature_selection/evidence_derived_v3/outputs/candidate_dimensions_v3.csv`](../../innovation_impact_feature_selection/evidence_derived_v3/outputs/candidate_dimensions_v3.csv) |
 | 逐指标硬门槛结果 | [`innovation_impact_feature_selection/evidence_derived_v3/outputs/feature_gate_decisions_v3.csv`](../../innovation_impact_feature_selection/evidence_derived_v3/outputs/feature_gate_decisions_v3.csv) |

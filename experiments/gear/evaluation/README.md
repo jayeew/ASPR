@@ -33,7 +33,7 @@ routing now changes local/remote slot geometry under the same total budget; it
 is a correctness-tested experimental arm, not the primary integration claim.
 
 The primary Graph KPIs are claim-relevant verified relation yield, material
-correction yield, equal logical resources, and blind review preference.
+correction yield, equal logical resources, and independent review preference.
 Accepted-paper novelty polarity is only a compatibility diagnostic. Driver and
 guardrail families remain separate. Null means not measured; judge failures are
 excluded rather than replaced with zero.
@@ -157,17 +157,19 @@ does not match its frozen assignment or whose semantic/relation evidence is
 unavailable; exclusions remain in a separate audit artifact.
 
 After all automated gates pass, `scripts/run_gear_graph_rescue_full.sh` builds a
-label-free, blinded expert Claim-B/Claim-C pack and writes only a readiness
-validation. It never treats an unannotated pack as completed evidence. Once two
-independent expert annotations per task and independent adjudications for every
-disagreement have been supplied, run:
+label-free Claim-B/Claim-C review pack and writes only a readiness validation.
+It never treats an unreviewed pack as completed evidence. Each task needs at
+least one evidence-backed review; a separate AI session is a valid reviewer.
+Human identity, blind labeling, reviewer calibration, multi-reviewer agreement,
+and third-party adjudication are not required. Once the reviews are supplied,
+run:
 
 ```bash
 GEAR_FROZEN_REPLAY_MANIFEST=/absolute/path/frozen_replay_manifest.json \
   bash scripts/finalize_gear_graph_rescue.sh
 ```
 
-The finalize command first runs the expert validator with
+The finalize command first validates completed independent-session reviews with
 `--require-completed`, then invokes the strict rescue completion audit. Missing,
-partial, hash-drifted, or protocol-invalid annotations stop the command before
-an overall claim can be allowed.
+partial, or structurally invalid reviews stop the command before an overall
+claim can be allowed.
