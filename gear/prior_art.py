@@ -1976,7 +1976,7 @@ class PriorArtService:
     def _cache_path(self, payload: Mapping[str, Any]) -> Path:
         identity = json.dumps(
             {
-                "config_version": self.config.config_version,
+                "runtime": "claim_graph_gear",
                 "ranking_algorithm": (
                     self.config.retrieval.ranking_algorithm_fingerprint
                 ),

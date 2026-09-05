@@ -1,729 +1,246 @@
-"""Strict ASPR-GEAR contracts shared by labels, critics, and runtime."""
+"""Strict disk contracts for the current Graph + GEAR innovation system."""
 
 from __future__ import annotations
 
-import re
 from datetime import date
 from enum import Enum
-from typing import Any, Literal
+from pathlib import Path
+from typing import Any
 
-from pydantic import ConfigDict, Field, field_validator, model_validator
+from pydantic import Field, model_validator
 
-from .contracts import (
-    FailureRecord,
-    PaperIR,
-    ReviewStatus,
-    StrictModel,
-)
-from .graph_prior_contracts import (
-    ClaimAttributionAudit,
-    ClaimGraphPrior,
-    ClaimInventoryEntry,
-    GraphActionDecision,
-    GraphRuntimePacket,
-    GraphSignalBundle,
-    ImpactPathwayCard,
-    ResourceLedger,
-    RetrievalGuidancePlan,
-    RetrievalRoutingPlan,
-    StructuralInnovationCard,
-)
-
-SCHEMA_VERSION: Literal["aspr_gear"] = "aspr_gear"
-_WORD_RE = re.compile(r"[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)*|[\u3400-\u9fff]")
+from gear.claim_graph.contracts import InnovationClaimType
+from gear.contracts import StrictModel
 
 
-def word_count(text: str) -> int:
-    """Count Latin tokens and CJK characters conservatively for output limits."""
-    return len(_WORD_RE.findall(str(text or "")))
+class BranchStatus(str, Enum):
+    COMPLETE = "complete"
+    LIMITED = "limited"
+    FAILED = "failed"
 
 
-class ReviewModel(StrictModel):
-    """Base model for the only supported review payloads."""
-
-    model_config = ConfigDict(extra="forbid", validate_assignment=True)
-    schema_version: Literal["aspr_gear"] = SCHEMA_VERSION
-    schema_revision: Literal["evidence_state_delta_v2"] = "evidence_state_delta_v2"
+class InternalSupportStatus(str, Enum):
+    SUPPORTED = "supported"
+    PARTIALLY_SUPPORTED = "partially_supported"
+    UNSUPPORTED = "internally_unsupported"
 
 
-class ReviewAspect(str, Enum):
-    CONTRIBUTION = "contribution"
-    NOVELTY_PRIOR_ART = "novelty_prior_art"
-    METHOD = "method"
-    EXPERIMENT_EVIDENCE = "experiment_evidence"
-    RESULTS_CONCLUSION = "results_conclusion"
-    PRESENTATION_REPRODUCIBILITY = "presentation_reproducibility"
-    OTHER = "other"
-
-
-class PointSeverity(str, Enum):
-    NONE = "none"
-    MINOR = "minor"
-    MAJOR = "major"
-    CRITICAL = "critical"
-
-
-class NoveltyJudgment(str, Enum):
-    POSITIVE = "positive"
-    MIXED = "mixed"
-    NEGATIVE = "negative"
-    UNCERTAIN = "uncertain"
-    NOT_DISCUSSED = "not_discussed"
-
-
-class NoveltyVerificationStatus(str, Enum):
-    """Evidence status for a novelty direction, kept separate from direction."""
-
-    VERIFIED = "verified"
-    PARTIALLY_VERIFIED = "partially_verified"
-    INSUFFICIENT_COVERAGE = "insufficient_coverage"
-    NOT_ASSESSED = "not_assessed"
-
-
-class NoveltyEvidenceStatus(str, Enum):
-    NOT_ASSESSED = "not_assessed"
-    MANUSCRIPT_SUPPORTED = "manuscript_supported"
-    EVIDENCE_QUALIFIED = "evidence_qualified"
-    EVIDENCE_CHALLENGED = "evidence_challenged"
+class GearEvidenceStatus(str, Enum):
+    INTERNALLY_UNSUPPORTED = "internally_unsupported"
+    ANTECEDENT_FOUND = "antecedent_found"
+    RESIDUAL_EXTENSION = "residual_extension"
+    BOUNDED_NO_ANTECEDENT = "bounded_no_antecedent"
     INCONCLUSIVE = "inconclusive"
 
 
-class CriticSource(str, Enum):
-    CODEX_CLI = "codex_cli"
-    OPENAI_COMPATIBLE_API = "openai_compatible_api"
-    UNAVAILABLE = "unavailable"
-
-
-class PointValidationStatus(str, Enum):
-    PENDING = "pending"
-    VALIDATED = "validated"
-    EXTERNALLY_VALIDATED = "externally_validated"
+class ReviewerStance(str, Enum):
+    RECOGNIZED = "recognized"
+    INCREMENTAL_OR_LIMITED = "incremental_or_limited"
+    CHALLENGED = "challenged"
     UNRESOLVED = "unresolved"
-    REJECTED = "rejected"
 
 
-class ReviewSource(str, Enum):
-    AGENT = "agent_reviewer"
-    ASPR_QWEN = "aspr_qwen"
-
-
-class ReviewPhase(str, Enum):
-    INITIALIZED = "initialized"
-    SOURCES_READY = "sources_ready"
-    FUSED = "fused"
-    EVIDENCE_GATHERING = "evidence_gathering"
-    EVIDENCE_FINALIZED = "evidence_finalized"
-    VERIFIED = "verified"
-    COMPILED = "compiled"
-
-
-class EvidenceAction(str, Enum):
-    SEARCH_PRIOR_ART = "search_prior_art"
-    COUNTERFACTUAL_SEARCH = "counterfactual_search"
-    CITATION_EXPAND = "citation_expand"
-    VERIFY_POINT = "verify_point"
-    STABILITY_TEST = "stability_test"
-    FINALIZE = "finalize"
-
-
-class ReviewSummary(ReviewModel):
-    text: str = Field(min_length=1)
-    evidence_keys: list[str] = Field(min_length=1)
-
-    @field_validator("text")
-    @classmethod
-    def summary_limit(cls, value: str) -> str:
-        if word_count(value) > 150:
-            raise ValueError("summary must not exceed 150 words")
-        return value.strip()
-
-    @field_validator("evidence_keys")
-    @classmethod
-    def summary_evidence(cls, value: list[str]) -> list[str]:
-        return _validate_evidence_keys(value)
-
-
-class ReviewPoint(ReviewModel):
-    point_id: str = Field(min_length=1)
-    aspect: ReviewAspect
-    text: str = Field(min_length=1)
-    severity: PointSeverity = PointSeverity.NONE
-    suggested_action: str = ""
-    why_it_matters: str = ""
-    confidence: float | None = Field(default=None, ge=0.0, le=1.0)
-    evidence_keys: list[str] = Field(default_factory=list)
-    external_verification_required: bool = False
-
-    @field_validator("text")
-    @classmethod
-    def point_limit(cls, value: str) -> str:
-        if word_count(value) > 120:
-            raise ValueError("review point must not exceed 120 words")
-        return value.strip()
-
-    @field_validator("evidence_keys")
-    @classmethod
-    def point_evidence(cls, value: list[str]) -> list[str]:
-        return _validate_evidence_keys(value)
-
-    @model_validator(mode="after")
-    def major_requires_evidence(self) -> ReviewPoint:
-        if (
-            self.severity in {PointSeverity.MAJOR, PointSeverity.CRITICAL}
-            and not self.evidence_keys
-        ):
-            raise ValueError("major and critical review points require evidence_keys")
-        return self
-
-
-class NoveltyAssessment(ReviewModel):
-    judgment: NoveltyJudgment
-    verification_status: NoveltyVerificationStatus = (
-        NoveltyVerificationStatus.NOT_ASSESSED
-    )
-    confidence: float | None = Field(default=None, ge=0.0, le=1.0)
-    supporting_points: list[ReviewPoint] = Field(default_factory=list, max_length=3)
-    limiting_points: list[ReviewPoint] = Field(default_factory=list, max_length=3)
-    uncertain_points: list[ReviewPoint] = Field(default_factory=list, max_length=3)
-
-    @model_validator(mode="after")
-    def validate_novelty_points(self) -> NoveltyAssessment:
-        # Direction is an assessment, while the point lists are the evidence that
-        # survived verification.  They deliberately need not imply the same enum:
-        # incomplete retrieval may soften or remove a point without erasing the
-        # graph-blind reviewer's original direction.
-        for point in [
-            *self.supporting_points,
-            *self.limiting_points,
-            *self.uncertain_points,
-        ]:
-            if point.aspect not in {
-                ReviewAspect.CONTRIBUTION,
-                ReviewAspect.NOVELTY_PRIOR_ART,
-            }:
-                raise ValueError("novelty points require a novelty/contribution aspect")
-        return self
-
-
-class StructuralInnovationSummary(ReviewModel):
-    """Deterministic multi-axis projection; generators may not populate it."""
-
-    novelty_evidence_score: float = Field(ge=0.0, le=1.0)
-    antecedent_risk: float = Field(ge=0.0, le=1.0)
-    residual_novelty: float = Field(ge=0.0, le=1.0)
-    manuscript_validity: float = Field(ge=0.0, le=1.0)
-    diffusion_potential: float = Field(ge=0.0, le=1.0)
-    perturbation_potential: float | None = Field(default=None, ge=0.0, le=1.0)
-    structural_contribution_share: float | None = Field(default=None, ge=0.0, le=1.0)
-    opportunity_context_share: float | None = Field(default=None, ge=0.0, le=1.0)
-    graph_reliability: float = Field(ge=0.0, le=1.0)
-    structural_innovation_score: float = Field(ge=0.0, le=1.0)
-    profile_class: str
-    uncertainty: float = Field(ge=0.0, le=1.0)
-    evidence_keys: list[str] = Field(default_factory=list)
-
-
-def infer_novelty_judgment(
-    supporting_points: list[ReviewPoint],
-    limiting_points: list[ReviewPoint],
-    uncertain_points: list[ReviewPoint] | None = None,
-) -> NoveltyJudgment:
-    uncertain_points = uncertain_points or []
-    if supporting_points and limiting_points:
-        return NoveltyJudgment.MIXED
-    if supporting_points and uncertain_points:
-        return NoveltyJudgment.MIXED
-    if limiting_points and uncertain_points:
-        return NoveltyJudgment.MIXED
-    if supporting_points:
-        return NoveltyJudgment.POSITIVE
-    if limiting_points:
-        return NoveltyJudgment.NEGATIVE
-    if uncertain_points:
-        return NoveltyJudgment.UNCERTAIN
-    return NoveltyJudgment.NOT_DISCUSSED
-
-
-class StructuredReview(ReviewModel):
-    """The single label/draft/final-review contract for GEAR."""
-
-    paper_id: str = Field(min_length=1)
-    summary: ReviewSummary
-    novelty: NoveltyAssessment
-    strengths: list[ReviewPoint] = Field(default_factory=list)
-    weaknesses: list[ReviewPoint] = Field(default_factory=list)
-    questions: list[ReviewPoint] = Field(default_factory=list)
-    structural_innovation: StructuralInnovationSummary | None = None
-
-    def all_points(self) -> list[ReviewPoint]:
-        return [
-            *self.novelty.supporting_points,
-            *self.novelty.limiting_points,
-            *self.novelty.uncertain_points,
-            *self.strengths,
-            *self.weaknesses,
-            *self.questions,
-        ]
-
-    @model_validator(mode="after")
-    def review_limits(self) -> StructuredReview:
-        points = self.all_points()
-        if len(points) > 24:
-            raise ValueError("StructuredReview permits at most 24 atomic points")
-        point_ids = [point.point_id for point in points]
-        if len(point_ids) != len(set(point_ids)):
-            raise ValueError("review point IDs must be unique within a paper")
-        return self
-
-
-class PaperSpecificRubric(ReviewModel):
-    """Deterministic, generation-time rubric built only from PaperIR."""
-
+class InnovationPaperInput(StrictModel):
     paper_id: str
-    paper_type: str = "scientific_manuscript"
-    novelty_checks: list[str] = Field(default_factory=list)
-    methodology_checks: list[str] = Field(default_factory=list)
-    experiment_checks: list[str] = Field(default_factory=list)
-    reproducibility_checks: list[str] = Field(default_factory=list)
-
-
-class BranchReview(ReviewModel):
-    """Common graph-blind output contract for Agent and ASPR-Qwen."""
-
-    contract: Literal["aspr_branch_review_v2"] = "aspr_branch_review_v2"
-    paper_id: str
-    source: ReviewSource
-    model_id: str
-    prompt_sha256: str
-    input_sha256: str
-    graph_blind: Literal[True] = True
-    summary: ReviewSummary
-    novelty: NoveltyAssessment
-    strengths: list[ReviewPoint] = Field(default_factory=list)
-    weaknesses: list[ReviewPoint] = Field(default_factory=list)
-    questions: list[ReviewPoint] = Field(default_factory=list)
-    failures: list[str] = Field(default_factory=list)
-
-    def all_points(self) -> list[ReviewPoint]:
-        return [
-            *self.novelty.supporting_points,
-            *self.novelty.limiting_points,
-            *self.novelty.uncertain_points,
-            *self.strengths,
-            *self.weaknesses,
-            *self.questions,
-        ]
-
-    @classmethod
-    def from_structured(
-        cls,
-        review: StructuredReview,
-        *,
-        source: ReviewSource,
-        model_id: str,
-        prompt_sha256: str,
-        input_sha256: str,
-        failures: list[str] | None = None,
-    ) -> BranchReview:
-        return cls(
-            paper_id=review.paper_id,
-            source=source,
-            model_id=model_id,
-            prompt_sha256=prompt_sha256,
-            input_sha256=input_sha256,
-            summary=review.summary,
-            novelty=review.novelty,
-            strengths=review.strengths,
-            weaknesses=review.weaknesses,
-            questions=review.questions,
-            failures=list(failures or []),
-        )
-
-
-class CanonicalReviewPoint(ReviewModel):
-    point_id: str
-    section: Literal[
-        "novelty_support", "novelty_limit", "strengths", "weaknesses", "questions"
-    ]
-    initial_section: (
-        Literal[
-            "novelty_support", "novelty_limit", "strengths", "weaknesses", "questions"
-        ]
-        | None
-    ) = None
-    aspect: ReviewAspect
-    severity: PointSeverity
-    proposition: str
-    resolved_proposition: str | None = None
-    suggested_action: str | None = None
-    source_point_ids: dict[ReviewSource, list[str]] = Field(default_factory=dict)
-    paper_evidence_keys: list[str] = Field(default_factory=list)
-    relation_evidence_keys: list[str] = Field(default_factory=list)
-    coverage_evidence_keys: list[str] = Field(default_factory=list)
-    novelty_resolution: Literal[
-        "not_applicable",
-        "antecedent_found",
-        "incremental_or_parallel",
-        "bounded_no_antecedent",
-        "inconclusive",
-        "search_failed",
-    ] = "not_applicable"
-    contribution_id: str | None = None
-    residual_delta: list[str] = Field(default_factory=list)
-    shared_base: list[str] = Field(default_factory=list)
-    novelty_confidence: float | None = Field(default=None, ge=0.0, le=1.0)
-    agent_support: bool
-    qwen_support: bool | None = None
-    qwen_conflict: bool = False
-    graph_tension: bool = False
-    graph_tension_score: float = Field(default=0.0, ge=0.0, le=1.0)
-    graph_focus_weight: float = Field(default=0.0, ge=0.0, le=1.0)
-    graph_extra_counterfactual_actions: int = Field(default=0, ge=0, le=2)
-    novelty_claim_id: str | None = None
-    requires_external_evidence: bool = False
-    validation_status: PointValidationStatus = PointValidationStatus.PENDING
-    stability_status: Literal["not_required", "pending", "stable", "unstable"] = (
-        "not_required"
-    )
-    validation_notes: list[str] = Field(default_factory=list)
-    normal_search_done: bool = False
-    counterfactual_search_done: bool = False
-    counterfactual_search_count: int = Field(default=0, ge=0)
-    citation_expanded: bool = False
-    semantic_verified: bool = False
-    retained: bool = True
-
-
-class ReviewCorrectionEventV1(ReviewModel):
-    contract: Literal["aspr_review_correction_event_v1"] = (
-        "aspr_review_correction_event_v1"
-    )
-    point_id: str
-    before_text: str
-    after_text: str
-    before_section: str
-    after_section: str
-    before_direction: NoveltyJudgment | None = None
-    after_direction: NoveltyJudgment | None = None
-    graph_triggered_retrieval: bool = False
-    entered_structural_fusion: bool = False
-    novelty_direction_changed_by_graph: Literal[False] = False
-    trigger_relation_ids: list[str]
-    trigger_mission_ids: list[str] = Field(default_factory=list)
-    correction_type: Literal[
-        "direct_antecedent_challenge",
-        "partial_antecedent_refinement",
-        "residual_novelty_refinement",
-        "attribution_scope_refinement",
-        "confidence_downgrade",
-        "confidence_upgrade",
-        "prior_work_added_only",
-    ]
-    confidence_change: float = Field(ge=-1.0, le=1.0)
-
-
-class EvidenceBudget(ReviewModel):
-    normal_per_claim_max: int = Field(default=4, ge=0)
-    counterfactual_per_claim_max: int = Field(default=1, ge=0)
-    citation_per_claim_max: int = Field(default=1, ge=0)
-    relation_cards_max: int = Field(default=24, ge=1)
-    total_actions_max: int = Field(default=48, ge=1)
-    actions_used: int = Field(default=0, ge=0)
-
-    @model_validator(mode="after")
-    def bounded_actions(self) -> EvidenceBudget:
-        if self.actions_used > self.total_actions_max:
-            raise ValueError("evidence action budget exceeded")
-        return self
-
-
-class ProcessFeatures(ReviewModel):
-    agent_review_available: bool = False
-    qwen_review_available: bool = False
-    graph_score_available: bool = False
-    retrieval_coverage: float = Field(default=0.0, ge=0.0, le=1.0)
-    independent_prior_count: int = Field(default=0, ge=0)
-    relation_conflict: bool = False
-    counterfactual_completed: bool = False
-    counterfactual_changed_judgment: bool = False
-    stability_passed: bool = False
-    graph_text_tension: bool = False
-    structural_fusion_completed: bool = False
-    semantic_verifier_passed: bool = False
-    failure_count: int = Field(default=0, ge=0)
-
-
-class FusionMatch(ReviewModel):
-    agent_point_id: str | None = None
-    qwen_point_id: str | None = None
-    relation: Literal["SAME_POINT", "PARTIAL", "CONTRADICTORY", "NO_MATCH"]
-
-
-class FusionReport(ReviewModel):
-    contract: Literal["aspr_fusion_report_v3"] = "aspr_fusion_report_v3"
-    paper_id: str
-    matches: list[FusionMatch] = Field(default_factory=list)
-    canonical_point_ids: list[str] = Field(default_factory=list)
-    graph_tension_scores: dict[str, float] = Field(default_factory=dict)
-    graph_focus_weights: dict[str, float] = Field(default_factory=dict)
-    graph_triggered_actions: dict[str, list[str]] = Field(default_factory=dict)
-    graph_guided_point_ids: list[str] = Field(default_factory=list)
-    graph_query_replacements: dict[str, str] = Field(default_factory=dict)
-    failures: list[str] = Field(default_factory=list)
-
-
-class ReviewState(ReviewModel):
-    contract: Literal["gear_review_state"] = "gear_review_state"
-    state_id: str
-    phase: ReviewPhase
-    paper_id: str
-    paper_sha256: str
+    paper_path: Path
+    title: str
+    doi: str | None = None
+    venue: str | None = None
+    publication_date: date
     cutoff_date: date
-    rubric: PaperSpecificRubric
-    branch_reviews: dict[ReviewSource, BranchReview] = Field(default_factory=dict)
-    graph_result_evidence_key: str | None = None
-    influence_context_evidence_key: str | None = None
-    graph_result: GraphRuntimePacket | None = None
-    claim_inventory: list[ClaimInventoryEntry] = Field(default_factory=list)
-    graph_signal_bundle: GraphSignalBundle | None = None
-    graph_action_decision: GraphActionDecision | None = None
-    claim_graph_priors: list[ClaimGraphPrior] = Field(default_factory=list)
-    claim_attribution_audit: ClaimAttributionAudit | None = None
-    impact_pathway_cards: list[ImpactPathwayCard] = Field(default_factory=list)
-    structural_innovation_cards: list[StructuralInnovationCard] = Field(
-        default_factory=list
-    )
-    paper_structural_innovation_score: float | None = Field(
-        default=None, ge=0.0, le=1.0
-    )
-    structural_innovation_profile: (
-        Literal[
-            "transformative_broad",
-            "niche_or_delayed_foundational",
-            "scalable_incremental",
-            "limited_structural_innovation",
-            "insufficient_evidence",
-        ]
-        | None
-    ) = None
-    graph_guidance_plan: RetrievalGuidancePlan | None = None
-    retrieval_routing_plans: dict[str, RetrievalRoutingPlan] = Field(
-        default_factory=dict
-    )
-    resource_ledger: ResourceLedger | None = None
-    novelty_direction: NoveltyJudgment | None = None
-    novelty_verification_status: NoveltyVerificationStatus = (
-        NoveltyVerificationStatus.NOT_ASSESSED
-    )
-    novelty_direction_confidence: float | None = Field(default=None, ge=0.0, le=1.0)
-    novelty_evidence_status: NoveltyEvidenceStatus = NoveltyEvidenceStatus.NOT_ASSESSED
-    aspr_evidence_assessments: dict[
-        str,
-        Literal[
-            "NOT_CHALLENGED",
-            "CHALLENGED",
-            "REFINED",
-            "INCONCLUSIVE",
-            "NOT_APPLICABLE",
-        ],
-    ] = Field(default_factory=dict)
-    canonical_points: dict[str, CanonicalReviewPoint] = Field(default_factory=dict)
-    retrieved_work_evidence_keys: list[str] = Field(default_factory=list)
-    relation_evidence_keys: list[str] = Field(default_factory=list)
-    correction_event_evidence_keys: list[str] = Field(default_factory=list)
-    unresolved_target_ids: list[str] = Field(default_factory=list)
-    action_budget: EvidenceBudget = Field(default_factory=EvidenceBudget)
-    process_features: ProcessFeatures = Field(default_factory=ProcessFeatures)
-    failures: list[FailureRecord] = Field(default_factory=list)
-    finalized: bool = False
+    abstract_text: str
+    abstract_source: str
+    openalex_work_id: str | None = None
+    reference_work_ids: list[str] = Field(default_factory=list)
 
-    @field_validator("graph_result", mode="before")
-    @classmethod
-    def migrate_graph_result(cls, value: Any) -> Any:
-        return None if value is None else GraphRuntimePacket.model_validate(value)
+
+class NumberedSentence(StrictModel):
+    sentence_id: str
+    text: str
+
+
+class GraphClaim(StrictModel):
+    claim_id: str
+    paper_id: str
+    claim_type: InnovationClaimType
+    claim_text: str
+    source_sentence_ids: list[str]
+    source_sentence_texts: list[str]
+
+
+class GraphNeighbor(StrictModel):
+    claim_id: str
+    parent_paper_id: str
+    parent_openalex_work_id: str | None = None
+    claim_type: InnovationClaimType
+    claim_text: str
+    publication_date: date
+    cosine_similarity: float
+    semantic_rank: int
+    community_id: int | None = None
+    direct_citation: bool = False
+    two_hop_path_count: int = 0
+    shared_reference_count: int = 0
+    shared_reference_salton: float = 0.0
+
+
+class MetricFact(StrictModel):
+    name: str
+    value: float | int | None
+    global_percentile: float | None = None
+    claim_type_percentile: float | None = None
+    direction: str | None = None
+
+
+class GraphFactCard(StrictModel):
+    claim: GraphClaim
+    neighbors: list[GraphNeighbor]
+    metrics: list[MetricFact]
+    community_ids: list[int] = Field(default_factory=list)
+    notes: list[str] = Field(default_factory=list)
+
+
+class GraphBranchResult(StrictModel):
+    paper_id: str
+    status: BranchStatus
+    claims: list[GraphClaim] = Field(default_factory=list)
+    fact_cards: list[GraphFactCard] = Field(default_factory=list)
+    limitations: list[str] = Field(default_factory=list)
+    output_files: dict[str, str] = Field(default_factory=dict)
+
+
+class ClaimCandidate(StrictModel):
+    candidate_id: str
+    claim_type: InnovationClaimType
+    author_claim_text: str
+    source_span_ids: list[str]
+
+
+class GearClaim(StrictModel):
+    claim_id: str
+    claim_type: InnovationClaimType
+    author_claim_text: str
+    normalized_claim_text: str
+    source_span_ids: list[str]
+    support_span_ids: list[str]
+    internal_support: InternalSupportStatus
+    narrowing_reason: str
+
+
+class SupervisorAction(StrictModel):
+    step: int
+    action: str
+    reason: str
+    input_ids: list[str] = Field(default_factory=list)
+    output_ids: list[str] = Field(default_factory=list)
+
+
+class GearClaimCard(StrictModel):
+    claim: GearClaim
+    status: GearEvidenceStatus
+    summary: str
+    strongest_relation: str | None = None
+    antecedent_work_ids: list[str] = Field(default_factory=list)
+    residual_contribution: str | None = None
+    evidence_keys: list[str] = Field(default_factory=list)
+    assessed_work_ids: list[str] = Field(default_factory=list)
+    actions: list[SupervisorAction] = Field(default_factory=list)
+    limitations: list[str] = Field(default_factory=list)
+
+
+class GearBranchResult(StrictModel):
+    paper_id: str
+    status: BranchStatus
+    claims: list[GearClaim] = Field(default_factory=list)
+    claim_cards: list[GearClaimCard] = Field(default_factory=list)
+    limitations: list[str] = Field(default_factory=list)
+    output_files: dict[str, str] = Field(default_factory=dict)
+
+
+class AlignmentLink(StrictModel):
+    graph_claim_id: str
+    gear_claim_id: str
+    relation: str
+    confidence: float = Field(ge=0.0, le=1.0)
+    rationale: str
+
+
+class JointInnovationClaimCard(StrictModel):
+    joint_claim_id: str
+    graph_claim_ids: list[str]
+    gear_claim_ids: list[str]
+    statement: str
+    evidence_status: GearEvidenceStatus | None = None
+    graph_facts: list[MetricFact] = Field(default_factory=list)
+    graph_neighbor_ids: list[str] = Field(default_factory=list)
+    evidence_keys: list[str] = Field(default_factory=list)
+    interpretation: str
+    limitations: list[str] = Field(default_factory=list)
+
+
+class FusionResult(StrictModel):
+    paper_id: str
+    mode: str
+    status: BranchStatus
+    alignments: list[AlignmentLink] = Field(default_factory=list)
+    joint_claim_cards: list[JointInnovationClaimCard] = Field(default_factory=list)
+    recovered_claim_ids: list[str] = Field(default_factory=list)
+    graph_triggered_rechecks: list[dict[str, Any]] = Field(default_factory=list)
+    limitations: list[str] = Field(default_factory=list)
+    report_path: str | None = None
+
+
+class ReviewerClaim(StrictModel):
+    reviewer_claim_id: str
+    paper_id: str
+    reviewer_id: str
+    round_number: int
+    target_claim_text: str
+    stance: ReviewerStance
+    source_block_id: str
+    source_quote: str
+
+
+class ReviewerView(StrictModel):
+    paper_id: str
+    reviewer_id: str
+    claims: list[ReviewerClaim]
+
+
+class DiscussionResolvedReference(StrictModel):
+    paper_id: str
+    claims: list[ReviewerClaim]
+    resolution_notes: dict[str, str] = Field(default_factory=dict)
+
+
+class EvaluationCase(StrictModel):
+    paper_id: str
+    system_name: str
+    predicted_claim_id: str
+    reference_claim_id: str | None = None
+    semantic_similarity: float | None = None
+    judge_match: bool | None = None
+    predicted_stance: ReviewerStance | None = None
+    reference_stance: ReviewerStance | None = None
+
+
+class EvaluationSummary(StrictModel):
+    system_name: str
+    paper_count: int
+    predicted_claim_count: int
+    reference_claim_count: int
+    claim_precision: float | None = None
+    claim_recall: float | None = None
+    claim_f1: float | None = None
+    stance_macro_f1: float | None = None
+    details_path: str
+
+
+class ClaimList(StrictModel):
+    claims: list[dict[str, Any]]
 
     @model_validator(mode="after")
-    def state_invariants(self) -> ReviewState:
-        agent = self.branch_reviews.get(ReviewSource.AGENT)
-        if self.phase != ReviewPhase.INITIALIZED and agent is None:
-            raise ValueError("Agent Reviewer branch is required")
-        if (
-            self.graph_result is not None
-            and self.graph_result.paper_id != self.paper_id
-        ):
-            raise ValueError("Graph result paper_id mismatch")
-        if any(key != point.point_id for key, point in self.canonical_points.items()):
-            raise ValueError("canonical point identity mismatch")
-        if self.finalized and self.phase not in {
-            ReviewPhase.EVIDENCE_FINALIZED,
-            ReviewPhase.VERIFIED,
-            ReviewPhase.COMPILED,
-        }:
-            raise ValueError("finalized state has an invalid phase")
+    def nonempty_claims(self) -> "ClaimList":
+        if not self.claims:
+            raise ValueError("模型没有返回任何 Claim")
         return self
-
-
-class GraphReviewContext(ReviewModel):
-    """Safe Fig.1-Fig.3 projection; opportunity/control never enter this model."""
-
-    contract: Literal["graph_review_context"] = "graph_review_context"
-    paper_id: str
-    substantive_innovation: dict[str, float | int | str | bool | None] = Field(
-        default_factory=dict
-    )
-    t0_potential: dict[str, float | int | str | bool | None] = Field(
-        default_factory=dict
-    )
-    p_uptake: float | None = Field(default=None, ge=0.0, le=1.0)
-    conditional_diffusion: float | None = Field(default=None, ge=0.0, le=1.0)
-    d5_percentile: float | None = Field(default=None, ge=0.0, le=100.0)
-    applicability_mode: str
-    feature_coverage: float = Field(ge=0.0, le=1.0)
-    overall_oof_spearman: float | None = None
-    fold_oof_spearman: float | None = None
-    domain_oof_spearman: float | None = None
-    drift_flags: list[str] = Field(default_factory=list)
-    limited: bool = False
-
-
-class InfluenceContextCard(ReviewModel):
-    """Non-evidentiary HGB explanation displayed beside review evidence."""
-
-    contract: Literal["gear_influence_context_card_v1"] = (
-        "gear_influence_context_card_v1"
-    )
-    paper_id: str
-    forecast_percentile: float | None = Field(default=None, ge=0.0, le=100.0)
-    uptake_percentile: float | None = Field(default=None, ge=0.0, le=100.0)
-    conditional_diffusion_percentile: float | None = Field(
-        default=None, ge=0.0, le=100.0
-    )
-    anatomy_roles: dict[str, dict[str, float]] = Field(default_factory=dict)
-    role_coverage: dict[str, float] = Field(default_factory=dict)
-    tensions: list[str] = Field(default_factory=list)
-    applicability: str
-    limited: bool = False
-    non_evidentiary: Literal[True] = True
-
-
-class ContextSpan(ReviewModel):
-    evidence_key: str
-    span_id: str
-    page: int = Field(ge=1)
-    section_path: list[str] = Field(default_factory=list)
-    text: str
-    text_sha256: str
-
-
-class ContextClaim(ReviewModel):
-    claim_id: str
-    claim_type: str
-    evidence_key: str
-    text: str
-
-
-class ReviewContextPack(ReviewModel):
-    contract: Literal["review_context_pack"] = "review_context_pack"
-    paper_id: str
-    paper_sha256: str
-    claims: list[ContextClaim]
-    spans: list[ContextSpan]
-    graph: GraphReviewContext
-
-
-class CriticRunMetadata(ReviewModel):
-    critic_source: CriticSource
-    model_id: str
-
-
-class VerificationIssue(ReviewModel):
-    issue_id: str
-    code: str
-    message: str
-    point_id: str | None = None
-    repairable: bool = False
-
-
-class VerificationReport(ReviewModel):
-    passed: bool
-    limited: bool = False
-    issues: list[VerificationIssue] = Field(default_factory=list)
-    semantic_verification_available: bool = False
-    graph_semantic_violation_count: int = Field(default=0, ge=0)
-    unsupported_major_count: int = Field(default=0, ge=0)
-
-
-class ReviewBundle(ReviewModel):
-    contract: Literal["gear_review_bundle"] = "gear_review_bundle"
-    status: ReviewStatus
-    paper_ir: PaperIR
-    critic: CriticRunMetadata
-    structured_review: StructuredReview
-    review_markdown: str
-    verification: VerificationReport
-    output_files: dict[str, str] = Field(default_factory=dict)
-    agent_review: BranchReview | None = None
-    qwen_review: BranchReview | None = None
-    graph_result: GraphRuntimePacket | None = None
-    influence_context: InfluenceContextCard | None = None
-    fusion_report: FusionReport | None = None
-    state: ReviewState | None = None
-    process_diagnostic: dict[str, Any] | None = None
-    grounding_report: dict[str, Any] | None = None
-
-    @field_validator("graph_result", mode="before")
-    @classmethod
-    def migrate_graph_result(cls, value: Any) -> Any:
-        return None if value is None else GraphRuntimePacket.model_validate(value)
-
-
-def _validate_evidence_keys(value: list[str]) -> list[str]:
-    unique_keys = list(dict.fromkeys(value))
-    for key in unique_keys:
-        if not re.fullmatch(
-            r"(?:P:S-[A-Za-z0-9_-]+|R:[A-Za-z0-9:_-]+|COV:[A-Za-z0-9:_-]+)",
-            key,
-        ):
-            raise ValueError(
-                "review evidence keys must reference paper spans, relations, "
-                "or search coverage"
-            )
-    return unique_keys
-
-
-__all__ = [
-    "SCHEMA_VERSION",
-    "BranchReview",
-    "CanonicalReviewPoint",
-    "ContextClaim",
-    "ContextSpan",
-    "CriticRunMetadata",
-    "CriticSource",
-    "EvidenceAction",
-    "EvidenceBudget",
-    "FusionMatch",
-    "FusionReport",
-    "GraphReviewContext",
-    "InfluenceContextCard",
-    "NoveltyAssessment",
-    "NoveltyEvidenceStatus",
-    "NoveltyJudgment",
-    "NoveltyVerificationStatus",
-    "PaperSpecificRubric",
-    "PointSeverity",
-    "PointValidationStatus",
-    "ProcessFeatures",
-    "ReviewAspect",
-    "ReviewBundle",
-    "ReviewContextPack",
-    "ReviewPhase",
-    "ReviewPoint",
-    "ReviewSource",
-    "ReviewState",
-    "ReviewSummary",
-    "StructuredReview",
-    "VerificationIssue",
-    "VerificationReport",
-    "infer_novelty_judgment",
-    "word_count",
-]

@@ -3559,12 +3559,16 @@ python3 scripts/claim_graph/07_build_claim_communities.py \
 ### Phase 8：历史组合与插入基线
 
 ```bash
-python3 scripts/claim_graph/08_build_claim_statistics.py \
+python3 scripts/claim_graph/08_build_claim_graph_statistics.py \
   --claims data/claim_graph/claim_nodes.parquet \
   --edges data/claim_graph/claim_edges.parquet \
   --communities data/claim_graph/claim_communities.parquet \
-  --community-profiles data/claim_graph/community_profiles.parquet \
-  --output-root data/claim_graph
+  --embeddings data/claim_graph/claim_embedding_matrix.npy \
+  --embedding-index data/claim_graph/claim_embedding_index.parquet \
+  --graph-index data/claim_graph/claim_graph_index.sqlite \
+  --output-root data/claim_graph \
+  --workers 0 \
+  --verbose
 ```
 
 完成条件：

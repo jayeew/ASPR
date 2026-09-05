@@ -1,7 +1,7 @@
 paths:
   nature_manifest: /mnt/d/aspr_nature_markdown/manifest.jsonl
   output_root: data/claim_graph
-  embedding_model: /home/jayee/models/bge-m3
+  embedding_model: /home/jayee/workspace/ASPR/data/models/Qwen3-Embedding-4B
 
 paper_graph:
   backward_hops: 2
@@ -9,7 +9,7 @@ paper_graph:
 
 claim_extraction:
   min_claims: 1
-  max_claims: 3
+  max_claims: 5
   allowed_types:
     - METHOD
     - FINDING

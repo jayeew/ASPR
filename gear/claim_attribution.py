@@ -1,552 +1,439 @@
-"""Point-in-time-safe claim attribution with frozen learned-head promotion."""
+"""Abstract Claim extraction and transient insertion into the Claim Graph."""
 
 from __future__ import annotations
 
-import hashlib
 import json
 import math
-from collections.abc import Sequence
+import re
+import sqlite3
+from collections import Counter
+from datetime import date
 from pathlib import Path
-from typing import Any, Literal, cast
 
-from pydantic import Field, model_validator
+import numpy as np
 
-from .contracts import ClaimType, StrictModel
-from .graph_prior_contracts import (
-    ClaimAttributionAudit,
-    ClaimGraphPrior,
-    ClaimInventoryEntry,
-    GraphRuntimePacket,
-    GraphSignalBundle,
+from gear.claim_graph.contracts import InnovationClaimType
+from gear.config import GearConfig
+
+from .review_contracts import (
+    BranchStatus,
+    GraphBranchResult,
+    GraphClaim,
+    GraphFactCard,
+    GraphNeighbor,
+    InnovationPaperInput,
+    MetricFact,
+    NumberedSentence,
 )
-
-FEATURE_SCHEMA_VERSION: Literal["gear_claim_attribution_t0_features_v1"] = (
-    "gear_claim_attribution_t0_features_v1"
-)
-ForecastRole = Literal[
-    "substantive_innovation", "t0_potential", "opportunity", "context", "unknown"
-]
-PathwayType = Literal[
-    "local_method_adoption",
-    "cross_field_bridge",
-    "reusable_resource",
-    "platform_scaling",
-    "mechanism_transfer",
-    "unspecified",
-]
-CLAIM_TYPES = tuple(item.value for item in ClaimType)
-FORECAST_ROLES = (
-    "substantive_innovation",
-    "t0_potential",
-    "opportunity",
-    "context",
-)
-PATHWAYS = (
-    "local_method_adoption",
-    "cross_field_bridge",
-    "reusable_resource",
-    "platform_scaling",
-    "mechanism_transfer",
-    "unspecified",
-)
-T0_FEATURE_NAMES = (
-    "claim_centrality",
-    *(f"claim_type__{value}" for value in CLAIM_TYPES),
-    *(f"anatomy_role__{value}" for value in FORECAST_ROLES),
-    *(f"pathway__{value}" for value in PATHWAYS),
-)
+from gear.artifacts import write_jsonl, write_model
+from gear.model_client import LazyRoleClient
 
 
-class ClaimAttributionLinearHead(StrictModel):
-    """Portable numeric model; loading never executes serialized Python code."""
+SENTENCE_SPLIT = re.compile(r"(?<=[.!?。！？])\s+")
+GRAPH_CLAIM_SYSTEM = """Extract 1-5 atomic contribution Claims from the numbered abstract.
+Each Claim must describe one method, finding, mechanism, resource, or theory contribution explicitly
+supported by the supplied sentences. Exclude background, motivation, generic importance and future
+work. Bind every Claim to exact sentence IDs; do not use outside knowledge. Return JSON only."""
 
-    contract: Literal["gear_claim_attribution_linear_head_v1"] = (
-        "gear_claim_attribution_linear_head_v1"
-    )
-    feature_names: list[str]
-    coefficients: list[float]
-    intercept: float = 0.0
 
-    @model_validator(mode="after")
-    def exact_feature_schema(self) -> ClaimAttributionLinearHead:
-        if tuple(self.feature_names) != T0_FEATURE_NAMES:
-            raise ValueError(
-                "claim-attribution head feature schema is not frozen T0 v1"
+def number_abstract(abstract: str, paper_id: str) -> list[NumberedSentence]:
+    parts = [part.strip() for part in SENTENCE_SPLIT.split(abstract) if part.strip()]
+    return [NumberedSentence(sentence_id=f"{paper_id}::S{i:02d}", text=text) for i, text in enumerate(parts, 1)]
+
+
+class AbstractClaimExtractor:
+    def __init__(self, config: GearConfig) -> None:
+        self.client = LazyRoleClient(config, "graph_claim")
+
+    def extract(self, item: InnovationPaperInput) -> list[GraphClaim]:
+        sentences = number_abstract(item.abstract_text, item.paper_id)
+        raw = self.client.generate_json(
+            system=GRAPH_CLAIM_SYSTEM,
+            user=json.dumps({"paper_id": item.paper_id, "title": item.title, "sentences": [x.model_dump() for x in sentences]}, ensure_ascii=False),
+            response_schema={
+                "type": "object",
+                "properties": {"claims": {"type": "array", "minItems": 1, "maxItems": 5, "items": {
+                    "type": "object", "properties": {
+                        "claim_type": {"type": "string", "enum": [x.value for x in InnovationClaimType]},
+                        "claim_text": {"type": "string"},
+                        "source_sentence_ids": {"type": "array", "items": {"type": "string"}},
+                    }, "required": ["claim_type", "claim_text", "source_sentence_ids"], "additionalProperties": False,
+                }}},
+                "required": ["claims"], "additionalProperties": False,
+            },
+        )
+        sentence_map = {row.sentence_id: row.text for row in sentences}
+        output: list[GraphClaim] = []
+        for index, value in enumerate(raw.get("claims", [])[:5], 1):
+            ids = [str(x) for x in value.get("source_sentence_ids", []) if str(x) in sentence_map]
+            text = str(value.get("claim_text", "")).strip()
+            if not ids or not text:
+                continue
+            output.append(GraphClaim(
+                claim_id=f"{item.paper_id}::GRAPH::{index:02d}", paper_id=item.paper_id,
+                claim_type=InnovationClaimType(str(value.get("claim_type", "FINDING")).upper()),
+                claim_text=text, source_sentence_ids=ids,
+                source_sentence_texts=[sentence_map[x] for x in ids],
+            ))
+        if not output:
+            raise ValueError("摘要没有产生可绑定的 Graph Claim")
+        return output
+
+
+class ClaimGraphRuntime:
+    """Read static assets and compute a target insertion without mutating them."""
+
+    def __init__(self, root: Path, embedding_model: Path, top_k: int = 10) -> None:
+        self.root = root
+        self.embedding_model = embedding_model
+        self.top_k = top_k
+        self._model: object | None = None
+        self._faiss: object | None = None
+        self._faiss_unavailable = False
+        self._embedding_matrix: np.ndarray | None = None
+        self._claim_db: sqlite3.Connection | None = None
+        self._paper_db: sqlite3.Connection | None = None
+        self._stats_db: sqlite3.Connection | None = None
+        self._claim_texts: dict[str, str] | None = None
+        self._paper_id_map: dict[str, str] | None = None
+        self._centroids: np.ndarray | None = None
+        self._community_rows: dict[int, int] | None = None
+
+    def close(self) -> None:
+        for connection in (self._claim_db, self._paper_db, self._stats_db):
+            if connection is not None:
+                connection.close()
+
+    def insert(self, claim: GraphClaim, item: InnovationPaperInput) -> GraphFactCard:
+        vector = self._encode(claim.claim_text)
+        neighbors = self._neighbors(vector, item)
+        metrics = self._metrics(neighbors, claim.claim_type)
+        return GraphFactCard(
+            claim=claim, neighbors=neighbors, metrics=metrics,
+            community_ids=sorted({x.community_id for x in neighbors if x.community_id is not None}),
+            notes=["临时插入未改写历史 Claim Graph。", "Graph 指标是结构事实，不直接构成创新性结论。"],
+        )
+
+    def _encode(self, text: str) -> np.ndarray:
+        if self._model is None:
+            from sentence_transformers import SentenceTransformer
+            self._model = SentenceTransformer(str(self.embedding_model), trust_remote_code=True)
+        array = self._model.encode([text], normalize_embeddings=True, convert_to_numpy=True)
+        return np.asarray(array[0], dtype=np.float32)
+
+    def _connections(self) -> None:
+        if self._claim_db is None:
+            self._claim_db = sqlite3.connect(self.root / "claim_graph_index.sqlite")
+            self._claim_db.row_factory = sqlite3.Row
+        if self._paper_db is None:
+            self._paper_db = sqlite3.connect(self.root / "paper_graph_index.sqlite")
+        stats = self.root / "claim_graph_runtime_statistics.sqlite"
+        if self._stats_db is None and stats.exists():
+            self._stats_db = sqlite3.connect(stats)
+
+    def _index(self) -> object:
+        if self._faiss is None and not self._faiss_unavailable:
+            try:
+                import faiss
+            except ImportError:
+                self._faiss_unavailable = True
+            else:
+                self._faiss = faiss.read_index(str(self.root / "claim_semantic_index.faiss"))
+        return self._faiss
+
+    def _semantic_search(self, vector: np.ndarray, requested: int) -> tuple[np.ndarray, np.ndarray]:
+        index = self._index()
+        if index is not None:
+            distances, rows = index.search(vector.reshape(1, -1), requested)
+            return distances[0], rows[0]
+        if self._embedding_matrix is None:
+            self._embedding_matrix = np.load(
+                self.root / "claim_embedding_matrix.npy", mmap_mode="r"
             )
-        if len(self.coefficients) != len(self.feature_names):
-            raise ValueError("claim-attribution coefficient count mismatch")
-        if not all(
-            math.isfinite(value) for value in [self.intercept, *self.coefficients]
-        ):
-            raise ValueError("claim-attribution model contains non-finite coefficients")
-        return self
+        scores = np.empty(len(self._embedding_matrix), dtype=np.float32)
+        for start in range(0, len(self._embedding_matrix), 4096):
+            end = min(start + 4096, len(self._embedding_matrix))
+            scores[start:end] = np.asarray(self._embedding_matrix[start:end]) @ vector
+        requested = min(requested, len(scores))
+        selected = np.argpartition(scores, len(scores) - requested)[-requested:]
+        selected = selected[np.argsort(scores[selected])[::-1]]
+        return scores[selected], selected.astype(np.int64)
 
-    def predict(self, rows: Sequence[Sequence[float]]) -> list[float]:
-        return [
-            max(
-                0.0,
-                self.intercept
-                + sum(
-                    coefficient * float(value)
-                    for coefficient, value in zip(self.coefficients, row, strict=True)
-                ),
+    def _index_size(self) -> int:
+        index = self._index()
+        if index is not None:
+            return int(index.ntotal)
+        if self._embedding_matrix is None:
+            self._embedding_matrix = np.load(
+                self.root / "claim_embedding_matrix.npy", mmap_mode="r"
             )
-            for row in rows
-        ]
+        return len(self._embedding_matrix)
+
+    def _neighbors(self, vector: np.ndarray, item: InnovationPaperInput) -> list[GraphNeighbor]:
+        self._connections()
+        index_size = self._index_size()
+        requested = min(500, index_size)
+        distances, rows = self._semantic_search(vector, requested)
+        while requested < index_size and self._eligible_count(rows, item) < self.top_k:
+            requested = min(requested * 2, index_size)
+            distances, rows = self._semantic_search(vector, requested)
+        output: list[GraphNeighbor] = []
+        rank = 0
+        for cosine, row_id in zip(distances, rows):
+            row = self._claim_db.execute("SELECT * FROM claim_nodes WHERE claim_row = ?", (int(row_id),)).fetchone()
+            if row is None or str(row["parent_paper_id"]) == item.paper_id:
+                continue
+            published = date.fromisoformat(str(row["publication_date"])[:10])
+            if published >= item.cutoff_date:
+                continue
+            claim_row = self._claim_text(str(row["claim_id"]))
+            rank += 1
+            parent_paper_id = str(row["parent_paper_id"])
+            parent_openalex_id = self._parent_openalex_id(parent_paper_id)
+            path = self._paper_path(item.reference_work_ids, parent_openalex_id)
+            output.append(GraphNeighbor(
+                claim_id=str(row["claim_id"]), parent_paper_id=parent_paper_id,
+                parent_openalex_work_id=parent_openalex_id,
+                claim_type=InnovationClaimType(str(row["claim_type"])),
+                claim_text=claim_row, publication_date=published,
+                cosine_similarity=float(cosine), semantic_rank=rank,
+                community_id=row["community_id"], **path,
+            ))
+            if rank >= self.top_k:
+                break
+        return output
+
+    def _eligible_count(self, rows: np.ndarray, item: InnovationPaperInput) -> int:
+        count = 0
+        for row_id in rows:
+            row = self._claim_db.execute("SELECT parent_paper_id,publication_date FROM claim_nodes WHERE claim_row = ?", (int(row_id),)).fetchone()
+            if row is None or str(row[0]) == item.paper_id:
+                continue
+            if date.fromisoformat(str(row[1])[:10]) < item.cutoff_date:
+                count += 1
+                if count >= self.top_k:
+                    return count
+        return count
+
+    def _claim_text(self, claim_id: str) -> str:
+        if self._claim_texts is None:
+            import pandas as pd
+            frame = pd.read_parquet(self.root / "claim_nodes.parquet", columns=["claim_id", "claim_text"])
+            self._claim_texts = dict(zip(frame["claim_id"].astype(str), frame["claim_text"].astype(str)))
+        return self._claim_texts.get(claim_id, "")
+
+    def _parent_openalex_id(self, article_id: str) -> str:
+        if self._paper_id_map is None:
+            import pandas as pd
+            frame = pd.read_parquet(
+                self.root / "canonical_target_works.parquet",
+                columns=["nature_article_id", "work_id"],
+            ).dropna(subset=["nature_article_id", "work_id"])
+            self._paper_id_map = dict(zip(
+                frame["nature_article_id"].astype(str),
+                frame["work_id"].astype(str),
+            ))
+        return self._paper_id_map.get(article_id, article_id)
+
+    def _paper_path(self, target_refs: list[str], neighbor_paper: str) -> dict[str, object]:
+        refs = {self._bare_openalex_id(value) for value in target_refs}
+        neighbor_id = self._bare_openalex_id(neighbor_paper)
+        direct = neighbor_id in refs
+        neighbor_refs = {str(x[0]) for x in self._paper_db.execute("SELECT cited_work_id FROM paper_edges WHERE citing_work_id = ?", (neighbor_id,))}
+        shared = refs & neighbor_refs
+        salton = len(shared) / math.sqrt(max(len(refs) * len(neighbor_refs), 1))
+        two_hop = 0
+        for start in range(0, len(target_refs), 800):
+            chunk = target_refs[start:start + 800]
+            if not chunk:
+                continue
+            placeholders = ",".join("?" for _ in chunk)
+            query = f"SELECT COUNT(*) FROM paper_edges WHERE citing_work_id IN ({placeholders}) AND cited_work_id = ?"
+            two_hop += int(self._paper_db.execute(query, (*chunk, neighbor_id)).fetchone()[0])
+        return {"direct_citation": direct, "two_hop_path_count": two_hop,
+                "shared_reference_count": len(shared), "shared_reference_salton": salton}
+
+    @staticmethod
+    def _bare_openalex_id(value: str) -> str:
+        return str(value).rstrip("/").rsplit("/", 1)[-1].upper()
+
+    def _metrics(self, neighbors: list[GraphNeighbor], claim_type: InnovationClaimType) -> list[MetricFact]:
+        similarities = [x.cosine_similarity for x in neighbors]
+        communities = [x.community_id for x in neighbors if x.community_id is not None]
+        weights: dict[int, float] = {}
+        for neighbor in neighbors:
+            if neighbor.community_id is not None:
+                weights[neighbor.community_id] = weights.get(neighbor.community_id, 0.0) + max(neighbor.cosine_similarity, 0.0)
+        weight_total = sum(weights.values())
+        probabilities = {key: value / weight_total for key, value in weights.items()} if weight_total else {}
+        component_sizes = self._neighbor_component_sizes(neighbors)
+        possible_pairs = len(neighbors) * (len(neighbors) - 1) // 2
+        disconnected_pairs = possible_pairs - sum(size * (size - 1) // 2 for size in component_sizes)
+        values: dict[str, float | int] = {
+            "nearest_prior_similarity": max(similarities, default=0.0),
+            "mean_top5_similarity": float(np.mean(similarities[:5])) if similarities else 0.0,
+            "effective_community_count": 1.0 / sum(value * value for value in probabilities.values()) if probabilities else 0.0,
+            "community_rao_stirling": self._rao(probabilities),
+            "first_observed_recent_nature_pair_share": self._new_pair_share(list(probabilities)),
+            "community_pair_mean_surprisal": self._pair_surprisal(list(probabilities)),
+            "neighbor_induced_density": self._neighbor_density(neighbors),
+            "component_merge_count": max(len(component_sizes) - 1, 0),
+            "newly_connected_neighbor_pair_count": disconnected_pairs,
+            "cross_boundary_weight_share": self._cross_boundary_share(neighbors),
+            "direct_citation_neighbor_count": sum(x.direct_citation for x in neighbors),
+            "two_hop_neighbor_count": sum(x.two_hop_path_count > 0 for x in neighbors),
+            "co_citation_neighbor_count": sum(x.shared_reference_count > 0 for x in neighbors),
+            "cross_type_neighbor_count": sum(x.claim_type != claim_type for x in neighbors),
+        }
+        return [self._metric_fact(name, value, claim_type) for name, value in values.items()]
+
+    def _rao(self, probabilities: dict[int, float]) -> float:
+        if len(probabilities) < 2:
+            return 0.0
+        if self._centroids is None:
+            import pandas as pd
+            self._centroids = np.load(self.root / "community_centroid_matrix.npy", mmap_mode="r")
+            frame = pd.read_parquet(self.root / "community_centroid_index.parquet")
+            self._community_rows = dict(zip(frame["community_id"].astype(int), frame["centroid_row"].astype(int)))
+        result = 0.0
+        ordered = sorted(probabilities)
+        for index, left in enumerate(ordered):
+            for right in ordered[index + 1:]:
+                if left not in self._community_rows or right not in self._community_rows:
+                    continue
+                similarity = float(np.dot(self._centroids[self._community_rows[left]], self._centroids[self._community_rows[right]]))
+                result += 2.0 * probabilities[left] * probabilities[right] * float(np.clip(1.0 - similarity, 0.0, 1.0))
+        return result
+
+    def _new_pair_share(self, communities: list[int]) -> float:
+        pairs = [(a, b) for i, a in enumerate(sorted(set(communities))) for b in sorted(set(communities))[i + 1:]]
+        if not pairs or self._stats_db is None:
+            return 0.0
+        unseen = sum(self._stats_db.execute("SELECT 1 FROM community_pair_history WHERE community_a = ? AND community_b = ?", pair).fetchone() is None for pair in pairs)
+        return unseen / len(pairs)
+
+    def _pair_surprisal(self, communities: list[int]) -> float:
+        pairs = [(a, b) for i, a in enumerate(sorted(set(communities))) for b in sorted(set(communities))[i + 1:]]
+        if not pairs or self._stats_db is None:
+            return 0.0
+        counts = []
+        for pair in pairs:
+            row = self._stats_db.execute("SELECT pair_connector_count,community_a_claim_count,community_b_claim_count,historical_claim_count FROM community_pair_history WHERE community_a = ? AND community_b = ?", pair).fetchone()
+            if row and int(row[1]) and int(row[2]) and int(row[3]):
+                commonness = (int(row[0]) + 0.5) * int(row[3]) / (int(row[1]) * int(row[2]))
+                counts.append(-math.log(commonness))
+        return float(np.mean(counts)) if counts else 0.0
+
+    def _neighbor_edges(self, neighbors: list[GraphNeighbor]) -> set[tuple[int, int]]:
+        rows = []
+        for item in neighbors:
+            row = self._claim_db.execute("SELECT claim_row FROM claim_nodes WHERE claim_id = ?", (item.claim_id,)).fetchone()
+            if row:
+                rows.append(int(row[0]))
+        if len(rows) < 2:
+            return set()
+        placeholders = ",".join("?" for _ in rows)
+        query = f"SELECT source_row,target_row FROM semantic_backbone_adjacency WHERE source_row IN ({placeholders}) AND target_row IN ({placeholders})"
+        return {tuple(sorted((int(a), int(b)))) for a, b in self._claim_db.execute(query, (*rows, *rows)) if a != b}
+
+    def _neighbor_density(self, neighbors: list[GraphNeighbor]) -> float:
+        n = len(neighbors)
+        return len(self._neighbor_edges(neighbors)) / (n * (n - 1) / 2) if n > 1 else 0.0
+
+    def _neighbor_component_sizes(self, neighbors: list[GraphNeighbor]) -> list[int]:
+        rows = []
+        for item in neighbors:
+            row = self._claim_db.execute("SELECT claim_row FROM claim_nodes WHERE claim_id = ?", (item.claim_id,)).fetchone()
+            if row:
+                rows.append(int(row[0]))
+        parent = {row: row for row in rows}
+        def find(node: int) -> int:
+            while parent[node] != node:
+                parent[node] = parent[parent[node]]
+                node = parent[node]
+            return node
+        for left, right in self._neighbor_edges(neighbors):
+            a, b = find(left), find(right)
+            if a != b:
+                parent[b] = a
+        counts = Counter(find(row) for row in rows)
+        return list(counts.values())
+
+    @staticmethod
+    def _cross_boundary_share(neighbors: list[GraphNeighbor]) -> float:
+        total = sum(max(x.cosine_similarity, 0.0) for x in neighbors)
+        if total == 0:
+            return 0.0
+        dominant = Counter(x.community_id for x in neighbors).most_common(1)[0][0]
+        return sum(max(x.cosine_similarity, 0.0) for x in neighbors if x.community_id != dominant) / total
+
+    def _metric_fact(self, name: str, value: float | int, claim_type: InnovationClaimType) -> MetricFact:
+        percentile = None
+        type_percentile = None
+        direction = None
+        if self._stats_db is not None:
+            row = self._stats_db.execute("SELECT raw_percentile, metric_direction FROM metric_percentiles WHERE reference_scope = 'ALL' AND claim_type = '' AND metric_name = ? ORDER BY ABS(metric_value - ?) LIMIT 1", (name, float(value))).fetchone()
+            if row:
+                percentile, direction = float(row[0]), str(row[1])
+            typed = self._stats_db.execute("SELECT raw_percentile FROM metric_percentiles WHERE reference_scope = 'CLAIM_TYPE' AND claim_type = ? AND metric_name = ? ORDER BY ABS(metric_value - ?) LIMIT 1", (claim_type.value, name, float(value))).fetchone()
+            if typed:
+                type_percentile = float(typed[0])
+        return MetricFact(name=name, value=value, global_percentile=percentile, claim_type_percentile=type_percentile, direction=direction)
 
 
-class ClaimAttributionRelease(StrictModel):
-    """Hash-bound promotion sidecar for a development-only learned head."""
-
-    contract: Literal["gear_claim_attribution_release_v1"] = (
-        "gear_claim_attribution_release_v1"
-    )
-    release_id: str
-    status: Literal["promoted"]
-    feature_schema_version: Literal["gear_claim_attribution_t0_features_v1"]
-    feature_names: list[str]
-    model_path: str
-    model_sha256: str
-    replay_path: str
-    replay_sha256: str
-    gate1_report_paths: list[str] = Field(min_length=2)
-    gate1_report_sha256: list[str] = Field(min_length=2)
-    training_target: Literal["future_claim_adoption_share_given_any_adoption"]
-    training_features_t0_only: Literal[True]
-    development_only: Literal[True]
-    sealed_holdout_labels_used: Literal[False]
-    future_contexts_used_at_inference: Literal[False]
-
-    @model_validator(mode="after")
-    def frozen_schema_and_references(self) -> ClaimAttributionRelease:
-        if tuple(self.feature_names) != T0_FEATURE_NAMES:
-            raise ValueError("release does not use the frozen T0 feature schema")
-        if len(self.gate1_report_paths) != len(self.gate1_report_sha256):
-            raise ValueError("Gate-1 report paths and hashes differ in length")
-        if len(set(self.gate1_report_paths)) != len(self.gate1_report_paths):
-            raise ValueError("Gate-1 promotion reports must be distinct")
-        return self
-
-
-def pathway_hypothesis(item: ClaimInventoryEntry) -> PathwayType:
-    """Derive the predeclared pathway only from manuscript-time claim fields."""
-    text = item.text.casefold()
-    if any(token in text for token in ("dataset", "resource", "benchmark", "database")):
-        return "reusable_resource"
-    if any(token in text for token in ("platform", "framework", "pipeline", "system")):
-        return "platform_scaling"
-    if any(
-        token in text for token in ("across", "transfer", "generaliz", "cross-field")
-    ):
-        return "cross_field_bridge"
-    if item.claim_type in {ClaimType.METHOD.value, ClaimType.NOVELTY.value}:
-        return "local_method_adoption"
-    if item.claim_type == ClaimType.CAUSAL.value:
-        return "mechanism_transfer"
-    return "unspecified"
-
-
-def t0_feature_row(
-    item: ClaimInventoryEntry, packet: GraphRuntimePacket
-) -> tuple[list[float], PathwayType]:
-    """Materialize only claim/manuscript and point-in-time forecast anatomy."""
-    pathway = pathway_hypothesis(item)
-    anatomy = _normalized_anatomy(packet)
-    row = [float(item.centrality)]
-    row.extend(float(item.claim_type == value) for value in CLAIM_TYPES)
-    row.extend(anatomy[value] for value in FORECAST_ROLES)
-    row.extend(float(pathway == value) for value in PATHWAYS)
-    return row, pathway
-
-
-def deterministic_t0_attribution(
-    inventory: Sequence[ClaimInventoryEntry],
-    bundle: GraphSignalBundle,
-    packet: GraphRuntimePacket,
-) -> tuple[list[ClaimGraphPrior], ClaimAttributionAudit]:
-    """Run the declared phase-one baseline; this is not a learned model."""
-    rows = [t0_feature_row(item, packet) for item in inventory]
-    scores = [
-        _deterministic_score(item, row, pathway)
-        for item, (row, pathway) in zip(inventory, rows, strict=True)
-    ]
-    diagnostics = (
-        [] if packet.forecast_anatomy is not None else ["forecast_anatomy_unavailable"]
-    )
-    priors = _build_priors(
-        inventory,
-        bundle,
-        packet,
-        scores,
-        [pathway for _, pathway in rows],
-        method="deterministic_t0",
-        release_id=None,
-        diagnostics=diagnostics,
-    )
-    return priors, ClaimAttributionAudit(
-        requested_mode="deterministic_t0",
-        applied_mode="deterministic_t0",
-        status="available",
-        feature_schema_version=FEATURE_SCHEMA_VERSION,
-        feature_names=list(T0_FEATURE_NAMES),
-        diagnostics=diagnostics,
-    )
-
-
-def learned_t0_attribution(
-    inventory: Sequence[ClaimInventoryEntry],
-    bundle: GraphSignalBundle,
-    packet: GraphRuntimePacket,
-    manifest_path: Path | None,
-) -> tuple[list[ClaimGraphPrior], ClaimAttributionAudit]:
-    """Run a verified learned head or return an explicit limited result."""
+def run_graph_branch(item: InnovationPaperInput, output_dir: Path, config: GearConfig,
+                     graph_root: Path, embedding_model: Path) -> GraphBranchResult:
+    runtime = ClaimGraphRuntime(graph_root, embedding_model)
+    extractor = AbstractClaimExtractor(config)
     try:
-        if manifest_path is None:
-            raise ValueError("learned_manifest_unconfigured")
-        release, model = load_claim_attribution_release(manifest_path)
-        rows = [t0_feature_row(item, packet) for item in inventory]
-        scores = model.predict([row for row, _ in rows])
-        priors = _build_priors(
-            inventory,
-            bundle,
-            packet,
-            scores,
-            [pathway for _, pathway in rows],
-            method="learned_t0",
-            release_id=release.release_id,
-            diagnostics=[],
+        return run_graph_branch_shared_runtime(
+            item, output_dir, runtime=runtime, extractor=extractor
         )
-        return priors, ClaimAttributionAudit(
-            requested_mode="learned_t0",
-            applied_mode="learned_t0",
-            status="available",
-            feature_schema_version=FEATURE_SCHEMA_VERSION,
-            feature_names=list(T0_FEATURE_NAMES),
-            release_id=release.release_id,
-            manifest_sha256=_sha256(manifest_path),
-        )
-    except (OSError, ValueError, TypeError, json.JSONDecodeError) as exc:
-        reason = f"learned_head_unavailable:{type(exc).__name__}:{exc}"
-        return [], ClaimAttributionAudit(
-            requested_mode="learned_t0",
-            applied_mode="unavailable",
-            status="limited",
-            feature_schema_version=FEATURE_SCHEMA_VERSION,
-            feature_names=list(T0_FEATURE_NAMES),
-            diagnostics=[reason],
-        )
+    finally:
+        runtime.close()
 
 
-def load_claim_attribution_release(
-    manifest_path: Path,
-) -> tuple[ClaimAttributionRelease, ClaimAttributionLinearHead]:
-    """Verify every promoted artifact before parsing the non-executable model."""
-    path = Path(manifest_path).resolve()
-    release = ClaimAttributionRelease.model_validate_json(
-        path.read_text(encoding="utf-8")
-    )
-    model_path = _bound_path(path, release.model_path)
-    replay_path = _bound_path(path, release.replay_path)
-    _require_hash(model_path, release.model_sha256)
-    _require_hash(replay_path, release.replay_sha256)
-    axes = set()
-    for report_name, expected_hash in zip(
-        release.gate1_report_paths, release.gate1_report_sha256, strict=True
-    ):
-        report_path = _bound_path(path, report_name)
-        _require_hash(report_path, expected_hash)
-        axes.add(_verify_gate1_report(report_path, release.model_sha256))
-    if not {"temporal", "domain"}.issubset(axes):
-        raise ValueError("promotion lacks distinct temporal and domain Gate-1 passes")
-    model = ClaimAttributionLinearHead.model_validate_json(
-        model_path.read_text(encoding="utf-8")
-    )
-    validate_claim_attribution_replay(path, release=release, model=model)
-    return release, model
-
-
-def validate_claim_attribution_replay(
-    manifest_path: Path,
+def run_graph_branch_shared_runtime(
+    item: InnovationPaperInput,
+    output_dir: Path,
     *,
-    release: ClaimAttributionRelease | None = None,
-    model: ClaimAttributionLinearHead | None = None,
-) -> dict[str, Any]:
-    """Require exact replay of frozen T0 rows and normalized paper weights."""
-    path = Path(manifest_path).resolve()
-    if release is None or model is None:
-        payload = ClaimAttributionRelease.model_validate_json(
-            path.read_text(encoding="utf-8")
-        )
-        model_path = _bound_path(path, payload.model_path)
-        _require_hash(model_path, payload.model_sha256)
-        release, model = payload, ClaimAttributionLinearHead.model_validate_json(
-            model_path.read_text(encoding="utf-8")
-        )
-    replay_path = _bound_path(path, release.replay_path)
-    _require_hash(replay_path, release.replay_sha256)
-    payload = json.loads(replay_path.read_text(encoding="utf-8"))
-    rows = payload.get("rows")
-    if not isinstance(rows, list) or not rows:
-        raise ValueError("claim-attribution replay is empty")
-    features = [row.get("features") for row in rows]
-    if any(
-        not isinstance(row, list) or len(row) != len(T0_FEATURE_NAMES)
-        for row in features
-    ):
-        raise ValueError("claim-attribution replay feature shape mismatch")
-    if any(
-        not all(
-            isinstance(value, (int, float)) and math.isfinite(value) for value in row
-        )
-        for row in features
-    ):
-        raise ValueError("claim-attribution replay contains non-finite features")
-    raw = model.predict(features)
-    expected_raw = [float(row["expected_raw_score"]) for row in rows]
-    max_raw_error = max(
-        abs(left - right) for left, right in zip(raw, expected_raw, strict=True)
-    )
-    weights = _normalize_by_paper([str(row["paper_id"]) for row in rows], raw)
-    expected_weights = [float(row["expected_attribution_weight"]) for row in rows]
-    max_weight_error = max(
-        abs(left - right) for left, right in zip(weights, expected_weights, strict=True)
-    )
-    if max(max_raw_error, max_weight_error) > 1e-12:
-        raise ValueError("claim-attribution runtime replay mismatch")
-    return {
-        "contract": "gear_claim_attribution_replay_validation_v1",
-        "passed": True,
-        "release_id": release.release_id,
-        "rows": len(rows),
-        "max_raw_error": max_raw_error,
-        "max_weight_error": max_weight_error,
-    }
-
-
-def promote_claim_attribution_release(
-    *,
-    model_path: Path,
-    replay_path: Path,
-    gate1_report_paths: Sequence[Path],
-    output_path: Path,
-    release_id: str,
-) -> ClaimAttributionRelease:
-    """Promote only a replayable model evaluated by two hash-bound Gate-1 runs."""
-    model = ClaimAttributionLinearHead.model_validate_json(
-        model_path.read_text(encoding="utf-8")
-    )
-    model_hash = _sha256(model_path)
-    if len(gate1_report_paths) < 2:
-        raise ValueError("promotion requires temporal and domain Gate-1 reports")
-    axes = {
-        _verify_gate1_report(report_path, model_hash)
-        for report_path in gate1_report_paths
-    }
-    if not {"temporal", "domain"}.issubset(axes):
-        raise ValueError("promotion lacks distinct temporal and domain Gate-1 passes")
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    release = ClaimAttributionRelease(
-        release_id=release_id,
-        status="promoted",
-        feature_schema_version=FEATURE_SCHEMA_VERSION,
-        feature_names=list(T0_FEATURE_NAMES),
-        model_path=_relative_reference(output_path, model_path),
-        model_sha256=model_hash,
-        replay_path=_relative_reference(output_path, replay_path),
-        replay_sha256=_sha256(replay_path),
-        gate1_report_paths=[
-            _relative_reference(output_path, value) for value in gate1_report_paths
-        ],
-        gate1_report_sha256=[_sha256(value) for value in gate1_report_paths],
-        training_target="future_claim_adoption_share_given_any_adoption",
-        training_features_t0_only=True,
-        development_only=True,
-        sealed_holdout_labels_used=False,
-        future_contexts_used_at_inference=False,
-    )
-    validate_claim_attribution_replay(output_path, release=release, model=model)
-    output_path.write_text(release.model_dump_json(indent=2) + "\n", encoding="utf-8")
-    load_claim_attribution_release(output_path)
-    return release
-
-
-def _deterministic_score(
-    item: ClaimInventoryEntry, row: Sequence[float], pathway: str
-) -> float:
-    type_signal = {
-        ClaimType.NOVELTY.value: 1.0,
-        ClaimType.METHOD.value: 0.95,
-        ClaimType.CAUSAL.value: 0.9,
-        ClaimType.RESULT.value: 0.8,
-        ClaimType.SIGNIFICANCE.value: 0.75,
-        ClaimType.SCOPE.value: 0.55,
-    }.get(item.claim_type, 0.5)
-    anatomy_offset = 1 + len(CLAIM_TYPES)
-    anatomy = dict(
-        zip(
-            FORECAST_ROLES,
-            row[anatomy_offset : anatomy_offset + len(FORECAST_ROLES)],
-            strict=True,
-        )
-    )
-    structural = anatomy["substantive_innovation"] + anatomy["t0_potential"]
-    pathway_signal = 0.5 if pathway == "unspecified" else 1.0
-    return max(
-        1e-9,
-        0.55 * item.centrality
-        + 0.2 * type_signal
-        + 0.15 * structural
-        + 0.1 * pathway_signal,
-    )
-
-
-def _build_priors(
-    inventory: Sequence[ClaimInventoryEntry],
-    bundle: GraphSignalBundle,
-    packet: GraphRuntimePacket,
-    scores: Sequence[float],
-    pathways: Sequence[PathwayType],
-    *,
-    method: Literal["deterministic_t0", "learned_t0"],
-    release_id: str | None,
-    diagnostics: list[str],
-) -> list[ClaimGraphPrior]:
-    weights = _normalize_by_paper([bundle.paper_id] * len(scores), scores)
-    dominant = _dominant_role(packet)
-    return [
-        ClaimGraphPrior(
-            claim_id=item.claim_id,
-            attribution_weight=weight,
-            diffusion_prior=bundle.shrunk_diffusion * weight,
-            perturbation_prior=(
-                None
-                if bundle.perturbation_potential is None
-                else bundle.perturbation_potential * weight
-            ),
-            dominant_forecast_role=dominant,
-            pathway_hypothesis=pathway,
-            confidence=bundle.reliability * (0.5 + 0.5 * item.centrality),
-            attribution_method=method,
-            attribution_release_id=release_id,
-            diagnostics=diagnostics,
-        )
-        for item, weight, pathway in zip(inventory, weights, pathways, strict=True)
-    ]
-
-
-def _normalized_anatomy(packet: GraphRuntimePacket) -> dict[str, float]:
-    anatomy = packet.forecast_anatomy
-    if anatomy is None:
-        return dict.fromkeys(FORECAST_ROLES, 0.0)
-    totals = {
-        role: abs(float(anatomy.uptake_role_contributions.get(role, 0.0)))
-        + abs(float(anatomy.conditional_role_contributions.get(role, 0.0)))
-        for role in FORECAST_ROLES
-    }
-    denominator = sum(totals.values())
-    return (
-        {key: value / denominator for key, value in totals.items()}
-        if denominator > 0.0
-        else dict.fromkeys(FORECAST_ROLES, 0.0)
-    )
-
-
-def _dominant_role(packet: GraphRuntimePacket) -> ForecastRole:
-    shares = _normalized_anatomy(packet)
-    if not any(shares.values()):
-        return "unknown"
-    return cast(ForecastRole, max(shares, key=lambda role: shares[role]))
-
-
-def _normalize_by_paper(
-    paper_ids: Sequence[str], scores: Sequence[float]
-) -> list[float]:
-    totals: dict[str, float] = {}
-    counts: dict[str, int] = {}
-    for paper_id, score in zip(paper_ids, scores, strict=True):
-        totals[paper_id] = totals.get(paper_id, 0.0) + max(0.0, float(score))
-        counts[paper_id] = counts.get(paper_id, 0) + 1
-    return [
-        (
-            max(0.0, float(score)) / totals[paper_id]
-            if totals[paper_id] > 0.0
-            else 1.0 / counts[paper_id]
-        )
-        for paper_id, score in zip(paper_ids, scores, strict=True)
-    ]
-
-
-def _verify_gate1_report(path: Path, model_sha256: str) -> str:
-    payload = json.loads(path.read_text(encoding="utf-8"))
-    if payload.get("status") != "passed" or payload.get("claim_allowed") is not True:
-        raise ValueError(f"Gate-1 report did not pass: {path}")
-    binding = payload.get("claim_attribution_runtime_candidate") or {}
-    if binding.get("model_sha256") != model_sha256:
-        raise ValueError(f"Gate-1 report is not bound to candidate model: {path}")
-    if binding.get("feature_schema_version") != FEATURE_SCHEMA_VERSION:
-        raise ValueError(f"Gate-1 report has the wrong T0 feature schema: {path}")
-    if binding.get("future_contexts_used_at_inference") is not False:
-        raise ValueError(f"Gate-1 report permits future context at inference: {path}")
-    if binding.get("development_only") is not True:
-        raise ValueError(f"Gate-1 report is not development-only: {path}")
-    if binding.get("training_split") != "development":
-        raise ValueError(f"Gate-1 report has an invalid training split: {path}")
-    if binding.get("sealed_holdout_labels_used") is not False:
-        raise ValueError(f"Gate-1 report used sealed holdout labels: {path}")
-    if binding.get("holdout_labels_used_for_model_selection") is not False:
-        raise ValueError(
-            f"Gate-1 report used holdout labels for model selection: {path}"
-        )
-    if binding.get("fold_local_target_fit") is not True:
-        raise ValueError(f"Gate-1 report lacks fold-local target fitting: {path}")
-    if binding.get("future_features_used") is not False:
-        raise ValueError(f"Gate-1 report used future features: {path}")
-    axis = str(binding.get("evaluation_axis", ""))
-    if axis not in {"temporal", "domain"}:
-        raise ValueError(f"Gate-1 report lacks a valid evaluation axis: {path}")
-    return axis
-
-
-def _bound_path(manifest_path: Path, reference: str) -> Path:
-    candidate = (manifest_path.parent / reference).resolve()
-    if not candidate.is_relative_to(manifest_path.parent.resolve()):
-        raise ValueError(
-            "claim-attribution release reference escapes release directory"
-        )
-    return candidate
-
-
-def _relative_reference(output_path: Path, target: Path) -> str:
+    runtime: ClaimGraphRuntime,
+    extractor: AbstractClaimExtractor,
+) -> GraphBranchResult:
+    """Run one virtual insertion while reusing model, FAISS and SQLite handles."""
+    branch_dir = output_dir / "graph"
+    write_model(output_dir / "innovation_input.json", item)
     try:
-        return target.resolve().relative_to(output_path.parent.resolve()).as_posix()
-    except ValueError as exc:
-        raise ValueError(
-            "promotion inputs must be inside the release directory"
-        ) from exc
+        claims = extractor.extract(item)
+        cards = [runtime.insert(claim, item) for claim in claims]
+        write_jsonl(branch_dir / "graph_claims.jsonl", claims)
+        write_jsonl(branch_dir / "graph_fact_cards.jsonl", cards)
+        _write_insertion_edges(branch_dir / "graph_insertion_edges.parquet", cards)
+        result = GraphBranchResult(paper_id=item.paper_id, status=BranchStatus.COMPLETE, claims=claims, fact_cards=cards)
+    except (ImportError, OSError, RuntimeError, ValueError, sqlite3.Error) as exc:
+        result = GraphBranchResult(paper_id=item.paper_id, status=BranchStatus.LIMITED, limitations=[str(exc)])
+    result.output_files = {"claims": str(branch_dir / "graph_claims.jsonl"), "fact_cards": str(branch_dir / "graph_fact_cards.jsonl"), "insertion_edges": str(branch_dir / "graph_insertion_edges.parquet")}
+    write_model(branch_dir / "graph_branch_result.json", result)
+    return result
 
 
-def _sha256(path: Path) -> str:
-    return "sha256:" + hashlib.sha256(path.read_bytes()).hexdigest()
-
-
-def _require_hash(path: Path, expected: str) -> None:
-    if _sha256(path) != expected:
-        raise ValueError(f"claim-attribution artifact hash mismatch: {path}")
-
-
-__all__ = [
-    "CLAIM_TYPES",
-    "FEATURE_SCHEMA_VERSION",
-    "FORECAST_ROLES",
-    "PATHWAYS",
-    "T0_FEATURE_NAMES",
-    "ClaimAttributionLinearHead",
-    "ClaimAttributionRelease",
-    "deterministic_t0_attribution",
-    "learned_t0_attribution",
-    "load_claim_attribution_release",
-    "pathway_hypothesis",
-    "promote_claim_attribution_release",
-    "t0_feature_row",
-    "validate_claim_attribution_replay",
-]
+def _write_insertion_edges(path: Path, cards: list[GraphFactCard]) -> None:
+    import pandas as pd
+    rows = []
+    for card in cards:
+        for neighbor in card.neighbors:
+            rows.append({
+                "target_claim_id": card.claim.claim_id,
+                "historical_claim_id": neighbor.claim_id,
+                "cosine_similarity": neighbor.cosine_similarity,
+                "semantic_rank": neighbor.semantic_rank,
+                "edge_type": "semantic_and_paper_path" if (
+                    neighbor.direct_citation or neighbor.two_hop_path_count or neighbor.shared_reference_count
+                ) else "semantic_only",
+                "direct_citation": neighbor.direct_citation,
+                "two_hop_path_count": neighbor.two_hop_path_count,
+                "shared_reference_count": neighbor.shared_reference_count,
+                "shared_reference_salton": neighbor.shared_reference_salton,
+            })
+    path.parent.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(rows).to_parquet(path, index=False)

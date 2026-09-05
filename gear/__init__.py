@@ -1,33 +1,30 @@
-"""ASPR-GEAR: evidence-traceable, five-part paper review."""
+"""ASPR-GEAR: Claim Graph plus evidence-traceable innovation evaluation."""
 
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING
 
-from .contracts import ReviewRequest
-from .review_contracts import ReviewBundle
-
-if TYPE_CHECKING:
-    from .config import GearConfig
-    from .review_pipeline import ServiceRegistry
+from .config import GearConfig
+from .review_contracts import InnovationPaperInput
 
 
 def review_paper(
-    request: ReviewRequest,
+    input_contract: Path | InnovationPaperInput,
     *,
-    output_dir: Path | None = None,
+    output_dir: Path,
     config: GearConfig | None = None,
-    services: ServiceRegistry | None = None,
-) -> ReviewBundle:
-    """Lazily import the current pipeline to keep package import side-effect free."""
-    from .review_pipeline import review_paper
+    stage: str = "all",
+    fusion_mode: str = "passive",
+) -> dict[str, str]:
+    """Lazily invoke the current innovation-only runtime."""
+    from .review_pipeline import review_paper as run
 
-    return review_paper(
-        request,
+    return run(
+        input_contract,
         output_dir=output_dir,
         config=config,
-        services=services,
+        stage=stage,
+        fusion_mode=fusion_mode,
     )
 
 

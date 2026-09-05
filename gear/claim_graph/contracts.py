@@ -48,7 +48,7 @@ class InnovationClaim(ClaimGraphModel):
 
 class InnovationClaimInventory(ClaimGraphModel):
     parent_paper_id: str = Field(min_length=1)
-    claims: list[InnovationClaim] = Field(min_length=1, max_length=3)
+    claims: list[InnovationClaim] = Field(min_length=1, max_length=5)
 
     @model_validator(mode="after")
     def validate_parent_papers(self) -> InnovationClaimInventory:
@@ -69,7 +69,7 @@ class ClaimCandidateEdge(ClaimGraphModel):
     later_publication_date: date
     cosine_similarity: float | None = None
     semantic_rank: int | None = Field(default=None, ge=1)
-    from_semantic: bool = False
+    from_semantic: bool = True
     from_paper_path: bool = False
 
     @model_validator(mode="after")
@@ -79,8 +79,10 @@ class ClaimCandidateEdge(ClaimGraphModel):
             raise ValueError("同一父论文的 Claim 不允许连边")
         if self.earlier_publication_date >= self.later_publication_date:
             raise ValueError("Claim 边必须严格从较早日期指向较晚日期")
-        if not self.from_semantic and not self.from_paper_path:
-            raise ValueError("Claim 边至少需要一个候选来源")
+        if not self.from_semantic:
+            raise ValueError("Claim 边必须由语义近邻生成，不允许 paper_path_only 边")
+        if self.cosine_similarity is None or self.semantic_rank is None:
+            raise ValueError("语义 Claim 边必须包含 cosine_similarity 和 semantic_rank")
         return self
 
     @property
@@ -92,8 +94,17 @@ class ClaimCandidateEdge(ClaimGraphModel):
 class ClaimCommunity(ClaimGraphModel):
     claim_id: str = Field(min_length=1)
     claim_type: InnovationClaimType
-    community_id: str = Field(min_length=1)
-    community_size: int = Field(ge=1)
+    community_id: int | None = None
+    community_size: int = Field(ge=0)
+
+    @model_validator(mode="after")
+    def validate_isolate_community(self) -> ClaimCommunity:
+        """Represent isolates with a null community and a zero community size."""
+        if self.community_id is None and self.community_size != 0:
+            raise ValueError("孤立 Claim 的 community_id 必须为空且 community_size 必须为 0")
+        if self.community_id is not None and self.community_size < 1:
+            raise ValueError("非孤立 Claim 的 community_size 必须至少为 1")
+        return self
 
 
 class ClaimInsertionProfile(ClaimGraphModel):

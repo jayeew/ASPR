@@ -1,0 +1,31 @@
+{
+  "schema_version": "nature_2026_paired_testset_v1",
+  "year": 2026,
+  "pair_count": 200,
+  "journal_count": 6,
+  "journal_counts": {
+    "Nature Communications": 150,
+    "Communications Biology": 10,
+    "Communications Chemistry": 10,
+    "Communications Physics": 10,
+    "Communications Materials": 10,
+    "Communications Earth & Environment": 10
+  },
+  "journal_quotas": {
+    "41467": 150,
+    "42003": 10,
+    "42004": 10,
+    "42005": 10,
+    "43246": 10,
+    "43247": 10
+  },
+  "validation": {
+    "paper": "PDF signature, parseable pages, >=5000 text chars, article ID match",
+    "peer_review": "publisher transparent-review link, parseable PDF, >=1000 text chars, review markers",
+    "pair_policy": "both members must pass; otherwise the candidate is rejected"
+  },
+  "raw_pdf_root": "/mnt/d/dataset/nature_2026_testset",
+  "markdown_root": "/home/jayee/workspace/ASPR/data/nature_2026_testset",
+  "manifest_sha256": "80329fda5839f6f2e89dd85ebfd071fb7f1b1cf9ea6f63775730e3ed75bfc298",
+  "completed_at": "2026-09-04T02:47:56.157186+00:00"
+}

@@ -1,14 +1,5 @@
-"""Independent, graph-blind scientific review branches."""
+"""Innovation-evaluation baselines."""
 
-from .agent import CodexAgentReviewer, OpenAICompatibleAgentReviewer
-from .base import AgentReviewer, assert_graph_blind_payload, build_graph_blind_payload
-from .qwen import ASPRQwenReviewer
+from .agent import run_direct_baseline
 
-__all__ = [
-    "ASPRQwenReviewer",
-    "AgentReviewer",
-    "CodexAgentReviewer",
-    "OpenAICompatibleAgentReviewer",
-    "assert_graph_blind_payload",
-    "build_graph_blind_payload",
-]
+__all__ = ["run_direct_baseline"]
