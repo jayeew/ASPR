@@ -4,15 +4,15 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from gear.artifacts import write_jsonl, write_model
 from gear.config import GearConfig
 from gear.contracts import PaperMetadata, ReviewRequest
 from gear.paper_compiler import PaperCompiler
 from gear.trace import EvidenceStore
 
-from .review_contracts import BranchStatus, GearBranchResult, InnovationPaperInput
 from .evidence_supervisor import EvidenceSupervisor
 from .grounding import FullTextClaimMiner
-from gear.artifacts import write_jsonl, write_model
+from .review_contracts import BranchStatus, GearBranchResult, InnovationPaperInput
 
 
 def run_gear_branch(
@@ -26,14 +26,20 @@ def run_gear_branch(
     branch_dir = output_dir / "gear"
     branch_dir.mkdir(parents=True, exist_ok=True)
     for name in ("evidence_trace.jsonl", "action_trace.jsonl", "state_trace.jsonl"):
-        (branch_dir / name).unlink(missing_ok=True)
+        if (branch_dir / name).exists():
+            raise FileExistsError(
+                f"Existing evidence must be preserved: {branch_dir}; use a new run directory"
+            )
     write_model(output_dir / "innovation_input.json", item)
     try:
         request = ReviewRequest(
             paper_path=item.paper_path,
             metadata=PaperMetadata(
-                title=item.title, doi=item.doi, openalex_id=item.openalex_work_id,
-                publication_date=item.publication_date, venue=item.venue,
+                title=item.title,
+                doi=item.doi,
+                openalex_id=item.openalex_work_id,
+                publication_date=item.publication_date,
+                venue=item.venue,
             ),
             evaluation_date=item.cutoff_date,
         )
@@ -44,17 +50,27 @@ def run_gear_branch(
         supervisor = EvidenceSupervisor(config, store)
         cards = [
             supervisor.evaluate(
-                claim, paper, item.cutoff_date,
+                claim,
+                paper,
+                item.cutoff_date,
                 seed_work_ids=(graph_seed_work_ids or {}).get(claim.claim_id, []),
             )
             for claim in claims
         ]
         write_jsonl(branch_dir / "gear_claims.jsonl", claims)
         write_jsonl(branch_dir / "gear_claim_cards.jsonl", cards)
-        status = BranchStatus.LIMITED if any(card.limitations for card in cards) else BranchStatus.COMPLETE
-        result = GearBranchResult(paper_id=item.paper_id, status=status, claims=claims, claim_cards=cards)
+        status = (
+            BranchStatus.LIMITED
+            if any(card.limitations for card in cards)
+            else BranchStatus.COMPLETE
+        )
+        result = GearBranchResult(
+            paper_id=item.paper_id, status=status, claims=claims, claim_cards=cards
+        )
     except (ImportError, OSError, RuntimeError, TypeError, ValueError, KeyError) as exc:
-        result = GearBranchResult(paper_id=item.paper_id, status=BranchStatus.LIMITED, limitations=[str(exc)])
+        result = GearBranchResult(
+            paper_id=item.paper_id, status=BranchStatus.LIMITED, limitations=[str(exc)]
+        )
     result.output_files = {
         "claims": str(branch_dir / "gear_claims.jsonl"),
         "claim_cards": str(branch_dir / "gear_claim_cards.jsonl"),

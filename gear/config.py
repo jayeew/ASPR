@@ -73,9 +73,16 @@ class GearConfig(StrictModel):
     minimum_pdf_characters: int = 1500
     minimum_nonempty_page_ratio: float = 0.5
     max_claims: int = 12
+    model_cache_enabled: bool = True
+    relation_stability_check_enabled: bool = True
+    resume_fingerprint_checks_enabled: bool = True
+    role_model_override: str | None = None
+    role_effort_overrides: dict[str, str] = Field(default_factory=dict)
+    graph_top_k: int = Field(default=10, ge=1, le=100)
+    graph_min_similarity: float = Field(default=0.5, ge=-1.0, le=1.0)
 
     @model_validator(mode="after")
-    def endpoint_available(self) -> "GearConfig":
+    def endpoint_available(self) -> GearConfig:
         if self.model_backend == "openai_compatible" and self.openai_compatible is None:
             raise ValueError("openai_compatible endpoint is required")
         return self
@@ -124,7 +131,8 @@ def load_config(
     api_url = getenv_runtime("ASPR_GEAR_API_BASE_URL")
     api_model = getenv_runtime("ASPR_GEAR_API_MODEL")
     if api_url or api_model:
-        endpoint = payload.setdefault("openai_compatible", {})
+        endpoint = payload.get("openai_compatible") or {}
+        payload["openai_compatible"] = endpoint
         if api_url:
             endpoint["base_url"] = api_url
         if api_model:
@@ -136,6 +144,13 @@ def load_config(
         value = getenv(variable)
         if value:
             payload.setdefault("retrieval", {})[field] = value
+    historical_pdf = getenv("GEAR_HISTORICAL_PDF_ENABLED").strip().casefold()
+    if historical_pdf:
+        if historical_pdf not in {"1", "true", "yes", "on", "0", "false", "no", "off"}:
+            raise ValueError("GEAR_HISTORICAL_PDF_ENABLED must be true or false")
+        payload.setdefault("retrieval", {})["openalex_pdf_enabled"] = (
+            historical_pdf in {"1", "true", "yes", "on"}
+        )
     return GearConfig.model_validate(payload)
 
 

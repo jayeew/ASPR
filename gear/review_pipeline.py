@@ -8,13 +8,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from .artifacts import read_model
+from .claim_attribution import run_graph_branch
 from .config import GearConfig, load_config
+from .review_compiler import run_gear_branch
 from .review_contracts import InnovationPaperInput
 from .review_fusion import BranchFusion
-from .review_compiler import run_gear_branch
-from .claim_attribution import run_graph_branch
-from .artifacts import read_model
-
 
 DEFAULT_GRAPH_ROOT = Path("data/claim_graph")
 DEFAULT_EMBEDDING_MODEL = Path("data/models/Qwen3-Embedding-4B")
@@ -26,9 +25,10 @@ def review_paper(
     output_dir: Path,
     config: GearConfig | None = None,
     stage: str = "all",
-    fusion_mode: str = "passive",
+    fusion_mode: str = "knowledge",
     graph_root: Path = DEFAULT_GRAPH_ROOT,
     embedding_model: Path = DEFAULT_EMBEDDING_MODEL,
+    target_claims: list[str] | None = None,
 ) -> dict[str, str]:
     """Run all stages or one independently addressable stage."""
     resolved = config or load_config()
@@ -37,6 +37,20 @@ def review_paper(
         if isinstance(input_contract, InnovationPaperInput)
         else read_model(input_contract, InnovationPaperInput)
     )
+    if fusion_mode == "knowledge":
+        from .innovation.pipeline import run
+        from .innovation.usage import usage_log
+
+        with usage_log(output_dir / "model_usage.jsonl"):
+            return run(
+                item,
+                output_dir,
+                resolved,
+                stage,
+                graph_root,
+                embedding_model,
+                target_claims,
+            )
     outputs: dict[str, str] = {}
     if stage in {"all", "graph"}:
         run_graph_branch(item, output_dir, resolved, graph_root, embedding_model)

@@ -14,7 +14,8 @@ def review_paper(
     output_dir: Path,
     config: GearConfig | None = None,
     stage: str = "all",
-    fusion_mode: str = "passive",
+    fusion_mode: str = "knowledge",
+    target_claims: list[str] | None = None,
 ) -> dict[str, str]:
     """Lazily invoke the current innovation-only runtime."""
     from .review_pipeline import review_paper as run
@@ -25,6 +26,7 @@ def review_paper(
         config=config,
         stage=stage,
         fusion_mode=fusion_mode,
+        target_claims=target_claims,
     )
 
 

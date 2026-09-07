@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import date
 from io import BytesIO
 
+import requests
 from reportlab.pdfgen import canvas
 
 from gear.scholar import OpenScholar
@@ -34,6 +35,25 @@ class Response:
 
     def close(self):
         self.closed = True
+
+
+def test_transport_error_is_retried_twice(monkeypatch):
+    calls = 0
+    delays = []
+
+    def fake_get(*args, **kwargs):
+        nonlocal calls
+        calls += 1
+        if calls < 3:
+            raise requests.exceptions.SSLError("temporary EOF")
+        return Response({"results": []})
+
+    monkeypatch.setattr("gear.scholar.requests.get", fake_get)
+    monkeypatch.setattr("gear.scholar.time.sleep", delays.append)
+
+    assert OpenScholar(Args()).search_query("query") == []
+    assert calls == 3
+    assert delays == [1, 2]
 
 
 def test_openalex_is_default_and_enforces_date_filter_at_api_and_local(monkeypatch):

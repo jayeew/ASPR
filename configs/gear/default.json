@@ -44,5 +44,12 @@
   "output_root": "outputs/gear/runs",
   "minimum_pdf_characters": 1500,
   "minimum_nonempty_page_ratio": 0.5,
-  "max_claims": 12
+  "max_claims": 12,
+  "graph_top_k": 10,
+  "graph_min_similarity": 0.5,
+  "model_cache_enabled": true,
+  "relation_stability_check_enabled": true,
+  "resume_fingerprint_checks_enabled": true,
+  "role_model_override": null,
+  "role_effort_overrides": {}
 }

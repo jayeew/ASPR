@@ -3,13 +3,124 @@
 from __future__ import annotations
 
 import re
+import threading
+import time
 from datetime import date
 from io import BytesIO
 from typing import Any
 
 import requests
 
-from .env import getenv, getenv_int
+from .cli_limiter import network_request_lease
+from .env import getenv, getenv_bool, getenv_int
+
+_OPENALEX_KEY_LOCK = threading.Lock()
+_OPENALEX_KEY_INDEX = 0
+_OPENALEX_KEY_COOLDOWNS: dict[str, float] = {}
+
+
+def _next_openalex_key(current: str = "") -> str:
+    global _OPENALEX_KEY_INDEX
+    values = [
+        item
+        for item in re.split(
+            r"[,;\s]+",
+            " ".join(
+                [current, getenv("OPENALEX_API_KEY"), getenv("OPENALEX_API_KEYS")]
+            ),
+        )
+        if item
+    ]
+    keys = list(dict.fromkeys(values))
+    if not keys:
+        return ""
+    with _OPENALEX_KEY_LOCK:
+        now = time.monotonic()
+        available = [
+            key for key in keys if _OPENALEX_KEY_COOLDOWNS.get(key, 0.0) <= now
+        ]
+        if not available:
+            return ""
+        key = available[_OPENALEX_KEY_INDEX % len(available)]
+        _OPENALEX_KEY_INDEX += 1
+    return key
+
+
+def _suspend_openalex_key(key: str, retry_after: str) -> None:
+    if not key:
+        return
+    try:
+        seconds = float(retry_after)
+    except ValueError:
+        seconds = 60.0
+    seconds = max(1.0, min(seconds, 86_400.0))
+    with _OPENALEX_KEY_LOCK:
+        _OPENALEX_KEY_COOLDOWNS[key] = time.monotonic() + seconds
+
+
+def _safe_request_error(error: requests.RequestException) -> str:
+    return re.sub(
+        r"(?i)(api_key=)[^&\s'\")]+",
+        r"\1<redacted>",
+        str(error),
+    )
+
+
+def _limited_get(*args: Any, **kwargs: Any) -> requests.Response:
+    if getenv_bool("GEAR_SCHOLAR_BYPASS_PROXY", False):
+        kwargs.setdefault("proxies", {"http": "", "https": ""})
+    retries = max(0, min(getenv_int("GEAR_NETWORK_RETRIES", 2), 5))
+    for attempt in range(retries + 1):
+        try:
+            url = str(args[0]) if args else str(kwargs.get("url", ""))
+            params = kwargs.get("params")
+            if "openalex.org" in url.casefold() and isinstance(params, dict):
+                request_params = dict(params)
+                key = _next_openalex_key(str(request_params.get("api_key", "")))
+                if key:
+                    request_params["api_key"] = key
+                else:
+                    request_params.pop("api_key", None)
+                kwargs["params"] = request_params
+            with network_request_lease():
+                response = requests.get(*args, **kwargs)
+            if response.status_code != 429:
+                return response
+            if attempt == retries:
+                return response
+            from .innovation.usage import log_progress
+
+            retry_after = response.headers.get("Retry-After", "")
+            used_key = str(kwargs.get("params", {}).get("api_key", ""))
+            _suspend_openalex_key(used_key, retry_after)
+            response.close()
+            if used_key:
+                delay = 0.25
+            else:
+                delay = min(float(2 ** (attempt + 1)), 30.0)
+            log_progress(
+                "[网络响应重试] attempt=%d/%d，status=%d，等待=%.1f秒",
+                attempt + 1,
+                retries,
+                response.status_code,
+                delay,
+            )
+            time.sleep(delay)
+        except requests.RequestException as exc:
+            if attempt == retries:
+                raise requests.RequestException(_safe_request_error(exc)) from exc
+            from .innovation.usage import log_progress
+
+            delay = 2**attempt
+            log_progress(
+                "[网络请求重试] attempt=%d/%d，等待=%d秒，error=%s",
+                attempt + 1,
+                retries,
+                delay,
+                _safe_request_error(exc),
+            )
+            time.sleep(delay)
+    raise RuntimeError("unreachable")
 
 
 class OpenScholar:
@@ -62,7 +173,7 @@ class OpenScholar:
         if not self._is_openalex(identifier):
             return ""
         suffix = identifier.rsplit("/", 1)[-1]
-        response = requests.get(
+        response = _limited_get(
             f"{self.openalex_content_url}/{suffix}.pdf",
             params=self._openalex_key_params(),
             headers={"Accept": "application/pdf"},
@@ -176,7 +287,7 @@ class OpenScholar:
                 if self._is_openalex(identifier)
                 else f"https://doi.org/{self._strip_doi(identifier)}"
             )
-            response = requests.get(
+            response = _limited_get(
                 f"{self.openalex_url}/{suffix}",
                 params=self._openalex_key_params(),
                 headers={"Accept-Encoding": "gzip, deflate"},
@@ -185,7 +296,7 @@ class OpenScholar:
             if response.status_code != 200:
                 return {}
             return self._format_openalex(response.json())
-        response = requests.get(
+        response = _limited_get(
             f"https://api.semanticscholar.org/graph/v1/paper/{identifier}",
             params={"fields": self._semantic_fields(include_references=True)},
             headers=self._semantic_headers(),
@@ -214,7 +325,7 @@ class OpenScholar:
                     "sort": "publication_date:asc",
                     **self._openalex_key_params(),
                 }
-                response = requests.get(
+                response = _limited_get(
                     self.openalex_url,
                     params=params,
                     headers={"Accept-Encoding": "gzip, deflate"},
@@ -237,7 +348,7 @@ class OpenScholar:
             "fields": self._semantic_fields(),
             "limit": maximum,
         }
-        response = requests.get(
+        response = _limited_get(
             f"https://api.semanticscholar.org/graph/v1/paper/{identifier}/{edge}",
             params=neighbor_params,
             headers=self._semantic_headers(),
@@ -280,7 +391,7 @@ class OpenScholar:
         }
         if not semantic:
             params["sort"] = "relevance_score:desc"
-        response = requests.get(
+        response = _limited_get(
             self.openalex_url,
             params=params,
             headers={"Accept": "application/json", "Accept-Encoding": "gzip, deflate"},
@@ -333,7 +444,7 @@ class OpenScholar:
         attempts.append({})
         last_status = 0
         for headers in attempts:
-            response = requests.get(
+            response = _limited_get(
                 self.s2_url, params=params, headers=headers, timeout=60
             )
             last_status = response.status_code

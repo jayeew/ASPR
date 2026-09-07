@@ -1,67 +1,63 @@
-# Code Availability Draft
+# Code availability and reproducibility
 
-The ASPR figure-generation and Nature-readiness audit code is available in this repository. Custom code used to generate the current Fig.1-Fig.10 evidence package is organized under `experiments/`, with reusable ASPR modules under `aspr/`.
+The current innovation runtime is `gear`, with the default analysis in
+`gear/innovation/` and native Claim Graph contracts in `gear/claim_graph/`.
+The staged study lives in `experiments/innovation_200/`; there is no current
+`aspr/` public runtime. Historical figure and scoring code remains in place for
+its original research questions.
 
-## Reproducing The Current Figure Package
+## Setup and entry points
 
-Install the Python dependencies:
+Install repository Python dependencies in the project's working environment:
 
 ```bash
 python3 -m pip install -r requirements.txt
+python3 -m gear --help
+python3 -m gear review --help
 ```
 
-Rebuild the current diagnostic figure package:
+Dependencies alone do not supply local graph files, embedding/reranker weights,
+manuscripts or a configured model backend. Consult the [root README](../README.md)
+for input preparation, model settings and evidence boundaries.
 
 ```bash
-make figures-current
+python3 -m gear review --input-contract /absolute/path/input.json --output-dir /absolute/path/new-run
+python3 -m gear validate-assets
+python3 -m gear validate-run /absolute/path/new-run
+make gear-test
+make gear-lint
+python3 -m pytest -q tests/innovation_200 tests/gear/test_historical_pdf_config.py
 ```
 
-Run the Nature-readiness checks without rerunning the full figure pipeline:
+The standard run validator checks claim-level artifacts, not complete study
+reports or scientific correctness. `make gear-validate` invokes native graph
+asset checks. Retained old Make targets may depend on removed reviewer contracts;
+they are not the acceptance suite for the new system.
 
-```bash
-make figures-nature-check
-```
+## Reproduction records
 
-`figures-nature-check` writes:
+A reproducible analysis should identify its actual source papers/cutoff, graph
+assets and insertion policy, code revision, model/role settings, retrieval policy,
+claim identities, raw evidence, stage outputs, missingness and evaluation method.
+Provider token fields may be unavailable and must not be invented.
 
-- `outputs/common/old/final_assembly_work/fig1_fig10_claim_ledger.csv`
-- `outputs/common/old/final_assembly_work/fig1_fig10_nature_check_summary.csv`
-- `outputs/common/old/final_assembly_work/fig1_fig10_nature_check_report.json`
+Current stages exchange ordinary files; mandatory immutable-release publication
+is not the default runtime protocol. The staged study disables resume fingerprint
+checks and model-response caching while reusing completed artifact files. Do not
+call an in-progress/mixed-condition run frozen or hash-verified by assumption.
+See [architecture](module_architecture.md) and
+[study commands](../experiments/innovation_200/README.md).
 
-The check intentionally exits nonzero while Nature strong-claim gates remain unresolved.
+The study name originates from a 200-paper sample. Its 1,000-paper extension
+prepares claims and references only; an extended roster is not a completed
+full-system comparison. The new Fig.1–Fig.10 plan remains under discussion.
 
-After independent reviewer sessions return the evidence files, ingest and validate
-them with:
+## Historical code
 
-```bash
-make figures-external-evidence-intake
-```
+[The experiment index](../experiments/README.md) identifies retained figure
+workflows, sources and limitations. Historical renders do not prove that every
+old runner remains compatible with current contracts. Obsolete commands such as
+`make figures-current` and `make figures-nature-check` are not current documented
+entry points. No old figure output is republished here as a new result.
 
-This target reads `outputs/fig04/old/work/full50/fig4_completed_blinded_labels.csv`
-and `outputs/fig10/old/work/kg_perturbation/fig10_completed_blinded_preferences.csv`, rebuilds the
-Fig.4 external-validation report, rebuilds the Fig.10 ablation/preference report,
-regenerates the final assembly, and runs the strict external-evidence check. Reviewer
-sessions may be AI-based; human identity, blind labeling, and reviewer calibration are
-not validity requirements. A nonzero exit means required review evidence is missing,
-incomplete, or not statistically supportive of the relevant strong claim.
-
-If Fig.4 labels are returned as the three labeler-specific templates, run
-`make fig4-merge-blinded-labels` first. The intake target also runs this merge step
-and writes `fig4_blinded_label_return_merge_audit.csv`; blank or incomplete labeler
-templates are not promoted to `fig4_completed_blinded_labels.csv`.
-
-If Fig.10 preferences are returned as the three evaluator-specific templates, run
-`make fig10-merge-blinded-preferences` first. The intake target also runs this merge
-step and writes `fig10_blinded_preference_return_merge_audit.csv`; blank templates are
-not promoted to `fig10_completed_blinded_preferences.csv`.
-
-## Main Reproducibility Artifacts
-
-- Figure quality reports: `outputs/**/figure_quality_report.json` and figure-specific quality JSON files.
-- Run manifests: `outputs/**/run_manifest.json`.
-- Source tables: figure-specific CSV/JSON/JSONL files under `outputs/`.
-- Claim ledger and readiness summary: generated by `experiments.nature_ready_checks`.
-
-## Current Claim Boundary
-
-The current package is not yet a Nature-ready strong-evidence submission. It is a diagnostic and pipeline-readiness package until Fig1-Fig4 strong gates, Fig6 true reruns, and Fig9/Fig10 checkpoint/ablation/independent-review replacement gates are resolved.
+Data/text redistribution follows [source and sharing boundaries](data_sources.md).

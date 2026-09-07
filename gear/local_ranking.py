@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import fcntl
 import os
+import threading
 import time
 from collections.abc import Sequence
 from pathlib import Path
@@ -21,6 +22,27 @@ class LocalScientificRanker:
         self._recall: Any = None
         self._reranker: Any = None
         self._gpu_lease: Any = None
+        self._lock = threading.RLock()
+
+    def close(self) -> None:
+        """Release resident models before making this GPU slot available."""
+        with self._lock:
+            self._close()
+
+    def _close(self) -> None:
+        if self._recall is not None or self._reranker is not None:
+            import gc
+
+            import torch
+
+            self._recall = None
+            self._reranker = None
+            gc.collect()
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+        if self._gpu_lease is not None:
+            self._gpu_lease.close()
+            self._gpu_lease = None
 
     def rank(
         self,
@@ -32,8 +54,35 @@ class LocalScientificRanker:
         rerank_top_k: int,
         output_limit: int,
     ) -> tuple[list[RetrievedWork], dict[str, tuple[float, float]]]:
+        with self._lock:
+            return self._rank(
+                works,
+                whole_paper_view=whole_paper_view,
+                purpose_view=purpose_view,
+                recall_limit=recall_limit,
+                rerank_top_k=rerank_top_k,
+                output_limit=output_limit,
+            )
+
+    def _rank(
+        self,
+        works: Sequence[RetrievedWork],
+        *,
+        whole_paper_view: str,
+        purpose_view: str,
+        recall_limit: int,
+        rerank_top_k: int,
+        output_limit: int,
+    ) -> tuple[list[RetrievedWork], dict[str, tuple[float, float]]]:
         if not works:
             return [], {}
+        from .innovation.usage import log_progress
+
+        log_progress(
+            "[本地排序开始] 候选=%d，模型复用=%s",
+            len(works),
+            self._recall is not None and self._reranker is not None,
+        )
         documents = [self._document(work) for work in works]
         recall = self._load_recall()
         document_vectors = recall.encode(documents, return_dense=True)["dense_vecs"]
@@ -91,7 +140,9 @@ class LocalScientificRanker:
             )
             for index in ordered_ids
         }
-        return [works[index] for index in ordered_ids], result_scores
+        result = [works[index] for index in ordered_ids]
+        log_progress("[本地排序完成] 保留=%d", len(result))
+        return result, result_scores
 
     def _load_recall(self) -> Any:
         if self._recall is None:
@@ -104,6 +155,9 @@ class LocalScientificRanker:
                 raise RuntimeError("CUDA is required for the local scientific ranker")
 
             self._acquire_gpu_lease()
+            from .innovation.usage import log_progress
+
+            log_progress("[本地模型加载] recall=%s", self.recall_path)
             self._recall = BGEM3FlagModel(
                 str(self.recall_path), use_fp16=True, devices=["cuda:0"]
             )
@@ -119,6 +173,9 @@ class LocalScientificRanker:
                 raise FileNotFoundError(self.reranker_path)
             from sentence_transformers import CrossEncoder
 
+            from .innovation.usage import log_progress
+
+            log_progress("[本地模型加载] reranker=%s", self.reranker_path)
             self._reranker = CrossEncoder(
                 str(self.reranker_path),
                 device="cuda:0",
@@ -153,8 +210,7 @@ class LocalScientificRanker:
                 return
             if time.monotonic() >= deadline:
                 raise TimeoutError(
-                    f"GPU lease unavailable after {timeout:.1f}s "
-                    f"({slot_count} slots)"
+                    f"GPU lease unavailable after {timeout:.1f}s ({slot_count} slots)"
                 )
             time.sleep(0.25)
 

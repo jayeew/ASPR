@@ -1,6 +1,6 @@
 # Nature 2026 paired peer-review test set
 
-This local test set contains 200 validated paper/peer-review pairs formally
+This local test set contains 1,000 validated paper/peer-review pairs formally
 published in 2026. Every accepted article also has a `-026-` Nature DOI segment,
 matching the year convention used by the existing 2023--2025 local corpus.
 
@@ -8,19 +8,19 @@ matching the year convention used by the existing 2023--2025 local corpus.
 
 | Journal | Journal ID | Pairs |
 | --- | ---: | ---: |
-| Nature Communications | 41467 | 150 |
-| Communications Biology | 42003 | 10 |
-| Communications Chemistry | 42004 | 10 |
-| Communications Physics | 42005 | 10 |
-| Communications Materials | 43246 | 10 |
-| Communications Earth & Environment | 43247 | 10 |
+| Nature Communications | 41467 | 750 |
+| Communications Biology | 42003 | 50 |
+| Communications Chemistry | 42004 | 50 |
+| Communications Physics | 42005 | 50 |
+| Communications Materials | 43246 | 50 |
+| Communications Earth & Environment | 43247 | 50 |
 
-The included publication dates range from 2026-01-10 through 2026-02-13.
+The included publication dates range from 2026-01-10 through 2026-05-08.
 
 ## Layout
 
-- `paper/`: 200 article Markdown files.
-- `peer_review/`: 200 peer-review Markdown files.
+- `paper/`: 1,000 article Markdown files.
+- `peer_review/`: 1,000 peer-review Markdown files.
 - `manifest.jsonl`: one source- and hash-traceable record per accepted pair.
 - `rejected.jsonl`: candidate failures, retained for auditability.
 - `summary.json`: counts, paths, validation policy, and manifest hash.
@@ -40,9 +40,9 @@ file label and reviewer/report structure. Failed candidates are replaced.
 
 ```bash
 python3 scripts/build_nature_2026_testset.py \
-  --target 200 \
-  --workers 2 \
-  --candidates-per-journal 300
+  --target 1000 \
+  --workers 6 \
+  --candidates-per-journal 1000
 ```
 
 The command resumes from `manifest.jsonl`. Add `--fresh` only when intentionally

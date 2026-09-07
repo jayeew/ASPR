@@ -9,14 +9,13 @@ from typing import Iterable
 from gear.claim_graph.contracts import InnovationClaimType
 from gear.config import GearConfig
 from gear.contracts import EvidenceSpan, PaperIR
+from gear.model_client import LazyRoleClient
 
 from .review_contracts import (
     ClaimCandidate,
     GearClaim,
     InternalSupportStatus,
 )
-from gear.model_client import LazyRoleClient
-
 
 MINER_SYSTEM = """You extract candidate scientific contributions from one manuscript chunk.
 Use only supplied spans. Extract what the authors present as a method, finding, mechanism,
@@ -85,58 +84,123 @@ class FullTextClaimMiner:
 
     def extract(self, paper: PaperIR) -> list[GearClaim]:
         candidates = self._mine(paper)
+        self.last_candidates = candidates
         consolidated = self._consolidate(paper, candidates)
-        return [self._verify(paper, index, raw) for index, raw in enumerate(consolidated, 1)]
+        self.last_consolidated = consolidated
+        return [
+            self._verify(paper, index, raw) for index, raw in enumerate(consolidated, 1)
+        ]
 
     def _mine(self, paper: PaperIR) -> list[ClaimCandidate]:
         output: list[ClaimCandidate] = []
         for chunk_index, spans in enumerate(_chunks(paper), 1):
             raw = self.miner.generate_json(
                 system=MINER_SYSTEM,
-                user=json.dumps({"paper_id": paper.paper_id, "spans": _span_payload(spans)}, ensure_ascii=False),
+                user=json.dumps(
+                    {"paper_id": paper.paper_id, "spans": _span_payload(spans)},
+                    ensure_ascii=False,
+                ),
                 response_schema={
                     "type": "object",
-                    "properties": {"candidates": {"type": "array", "items": {
-                        "type": "object", "properties": {
-                            "claim_type": {"type": "string", "enum": [x.value for x in InnovationClaimType]},
-                            "author_claim_text": {"type": "string"},
-                            "source_span_ids": {"type": "array", "items": {"type": "string"}},
-                        }, "required": ["claim_type", "author_claim_text", "source_span_ids"], "additionalProperties": False,
-                    }}},
+                    "properties": {
+                        "candidates": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "claim_type": {
+                                        "type": "string",
+                                        "enum": [x.value for x in InnovationClaimType],
+                                    },
+                                    "author_claim_text": {"type": "string"},
+                                    "source_span_ids": {
+                                        "type": "array",
+                                        "items": {"type": "string"},
+                                    },
+                                },
+                                "required": [
+                                    "claim_type",
+                                    "author_claim_text",
+                                    "source_span_ids",
+                                ],
+                                "additionalProperties": False,
+                            },
+                        }
+                    },
                     "required": ["candidates"],
                     "additionalProperties": False,
                 },
             )
             known = {span.span_id for span in spans}
             for item_index, item in enumerate(raw.get("candidates", []), 1):
-                ids = [str(value) for value in item.get("source_span_ids", []) if str(value) in known]
+                ids = [
+                    str(value)
+                    for value in item.get("source_span_ids", [])
+                    if str(value) in known
+                ]
                 text = str(item.get("author_claim_text", "")).strip()
                 if not text or not ids:
                     continue
-                output.append(ClaimCandidate(
-                    candidate_id=f"CAND-{chunk_index:03d}-{item_index:03d}",
-                    claim_type=InnovationClaimType(str(item.get("claim_type", "FINDING")).upper()),
-                    author_claim_text=text,
-                    source_span_ids=ids,
-                ))
+                output.append(
+                    ClaimCandidate(
+                        candidate_id=f"CAND-{chunk_index:03d}-{item_index:03d}",
+                        claim_type=InnovationClaimType(
+                            str(item.get("claim_type", "FINDING")).upper()
+                        ),
+                        author_claim_text=text,
+                        source_span_ids=ids,
+                    )
+                )
         if not output:
             raise ValueError("全文中没有抽取到可绑定的贡献候选")
         return output
 
-    def _consolidate(self, paper: PaperIR, candidates: list[ClaimCandidate]) -> list[dict[str, object]]:
+    def _consolidate(
+        self, paper: PaperIR, candidates: list[ClaimCandidate]
+    ) -> list[dict[str, object]]:
         raw = self.consolidator.generate_json(
             system=CONSOLIDATOR_SYSTEM,
-            user=json.dumps({"paper_id": paper.paper_id, "candidates": [x.model_dump(mode="json") for x in candidates]}, ensure_ascii=False),
+            user=json.dumps(
+                {
+                    "paper_id": paper.paper_id,
+                    "candidates": [x.model_dump(mode="json") for x in candidates],
+                },
+                ensure_ascii=False,
+            ),
             response_schema={
                 "type": "object",
-                "properties": {"claims": {"type": "array", "minItems": 1, "maxItems": 8, "items": {
-                    "type": "object", "properties": {
-                        "claim_type": {"type": "string", "enum": [x.value for x in InnovationClaimType]},
-                        "author_claim_text": {"type": "string"},
-                        "source_span_ids": {"type": "array", "items": {"type": "string"}},
-                        "candidate_ids": {"type": "array", "items": {"type": "string"}},
-                    }, "required": ["claim_type", "author_claim_text", "source_span_ids", "candidate_ids"], "additionalProperties": False,
-                }}},
+                "properties": {
+                    "claims": {
+                        "type": "array",
+                        "minItems": 1,
+                        "maxItems": 8,
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "claim_type": {
+                                    "type": "string",
+                                    "enum": [x.value for x in InnovationClaimType],
+                                },
+                                "author_claim_text": {"type": "string"},
+                                "source_span_ids": {
+                                    "type": "array",
+                                    "items": {"type": "string"},
+                                },
+                                "candidate_ids": {
+                                    "type": "array",
+                                    "items": {"type": "string"},
+                                },
+                            },
+                            "required": [
+                                "claim_type",
+                                "author_claim_text",
+                                "source_span_ids",
+                                "candidate_ids",
+                            ],
+                            "additionalProperties": False,
+                        },
+                    }
+                },
                 "required": ["claims"],
                 "additionalProperties": False,
             },
@@ -148,33 +212,55 @@ class FullTextClaimMiner:
 
     def _verify(self, paper: PaperIR, index: int, raw: dict[str, object]) -> GearClaim:
         span_map = paper.span_map()
-        source_ids = [str(value) for value in raw.get("source_span_ids", []) if str(value) in span_map]
+        source_ids = [
+            str(value)
+            for value in raw.get("source_span_ids", [])
+            if str(value) in span_map
+        ]
         if not source_ids:
             raise ValueError(f"第 {index} 条全文 Claim 没有有效原文绑定")
         author_text = str(raw.get("author_claim_text", "")).strip()
         response = self.verifier.generate_json(
             system=VERIFIER_SYSTEM,
-            user=json.dumps({"author_claim_text": author_text, "spans": _span_payload(span_map[x] for x in source_ids)}, ensure_ascii=False),
+            user=json.dumps(
+                {
+                    "author_claim_text": author_text,
+                    "spans": _span_payload(span_map[x] for x in source_ids),
+                },
+                ensure_ascii=False,
+            ),
             response_schema={
                 "type": "object",
                 "properties": {
-                    "internal_support": {"type": "string", "enum": [x.value for x in InternalSupportStatus]},
+                    "internal_support": {
+                        "type": "string",
+                        "enum": [x.value for x in InternalSupportStatus],
+                    },
                     "normalized_claim_text": {"type": "string"},
                     "support_span_ids": {"type": "array", "items": {"type": "string"}},
                     "narrowing_reason": {"type": "string"},
                 },
-                "required": ["internal_support", "normalized_claim_text", "support_span_ids", "narrowing_reason"],
+                "required": [
+                    "internal_support",
+                    "normalized_claim_text",
+                    "support_span_ids",
+                    "narrowing_reason",
+                ],
                 "additionalProperties": False,
             },
         )
-        support_ids = [str(x) for x in response["support_span_ids"] if str(x) in span_map]
+        support_ids = [
+            str(x) for x in response["support_span_ids"] if str(x) in span_map
+        ]
         status = InternalSupportStatus(str(response["internal_support"]))
         if status is not InternalSupportStatus.UNSUPPORTED and not support_ids:
             status = InternalSupportStatus.UNSUPPORTED
         normalized = str(response["normalized_claim_text"]).strip() or author_text
         return GearClaim(
             claim_id=f"{paper.paper_id}::GEAR::{index:02d}",
-            claim_type=InnovationClaimType(str(raw.get("claim_type", "FINDING")).upper()),
+            claim_type=InnovationClaimType(
+                str(raw.get("claim_type", "FINDING")).upper()
+            ),
             author_claim_text=author_text,
             normalized_claim_text=normalized,
             source_span_ids=source_ids,

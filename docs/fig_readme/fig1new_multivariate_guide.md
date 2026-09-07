@@ -1,5 +1,11 @@
 # Fig.1new：landmark 论文前后知识图谱与特征空间位移解读指南
 
+> **文档状态（2026-09-07）：历史设计／历史实验记录。** 下文的“当前”、
+> “最终”、运行命令、样本数量和验收条件均属于该文档原版本，不代表当前默认系统。
+> 最新运行口径为共享全文 claims、独立 GEAR / 原生 Claim Graph 分析及联合创新解释，
+> 见[当前架构](../module_architecture.md)。保留本页用于方法和结果溯源；旧结果不能直接证明新版系统有效，
+> 旧接口或本地资产也不保证仍可运行。新 Fig.1–Fig.10 规划尚未冻结。
+
 > 适用对象：`outputs/fig01/new/figure_full_multivariate_shift.*`，版本
 > `fig1-multivariate-shift-v8.3`。本文件解释最终保留的 Fig.1new；它不是
 > 指标筛选流程本身的替代文档，也不描述已删除的 annual-line、strict7 或

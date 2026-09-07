@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import date
 from enum import Enum
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import Field, model_validator
 
@@ -41,6 +41,7 @@ class ReviewerStance(str, Enum):
 
 
 class InnovationPaperInput(StrictModel):
+    authors: list[str] = Field(default_factory=list)
     paper_id: str
     paper_path: Path
     title: str
@@ -82,6 +83,8 @@ class GraphNeighbor(StrictModel):
     two_hop_path_count: int = 0
     shared_reference_count: int = 0
     shared_reference_salton: float = 0.0
+    parent_id_cache_hit: bool = False
+    edge_type: Literal["semantic_only", "semantic_and_paper_path"] = "semantic_only"
 
 
 class MetricFact(StrictModel):
@@ -93,6 +96,8 @@ class MetricFact(StrictModel):
 
 
 class GraphFactCard(StrictModel):
+    insertion_policy: str = "legacy_top_k"
+    neighbor_edges: list[list[str]] = Field(default_factory=list)
     claim: GraphClaim
     neighbors: list[GraphNeighbor]
     metrics: list[MetricFact]
@@ -240,7 +245,7 @@ class ClaimList(StrictModel):
     claims: list[dict[str, Any]]
 
     @model_validator(mode="after")
-    def nonempty_claims(self) -> "ClaimList":
+    def nonempty_claims(self) -> ClaimList:
         if not self.claims:
             raise ValueError("模型没有返回任何 Claim")
         return self

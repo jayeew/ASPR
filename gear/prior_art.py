@@ -47,6 +47,15 @@ fraction of the target claim's essential scientific facets explicitly present in
 the prior span. DIRECT_ANTECEDENT requires coverage at least 0.9; otherwise use
 PARTIAL_ANTECEDENT. Cite both supplied span IDs."""
 
+BATCH_RELATION_CLASSIFICATION_PROMPT = """Compare one target-paper claim with each
+supplied prior work independently. Return exactly one relation object for every
+work_id, preserving the supplied work order. Allowed relations are
+DIRECT_ANTECEDENT, PARTIAL_ANTECEDENT, EXTENSION, PARALLEL, SUPPORT, CONFLICT,
+BUILDING_BLOCK, DISTANT, and UNRESOLVED. Similarity alone is not antecedence. For each work return
+common_dimensions, difference_dimensions, essential_facet_coverage from 0 to 1,
+and a paired-evidence rationale. DIRECT_ANTECEDENT requires coverage at least 0.9;
+otherwise use PARTIAL_ANTECEDENT. Judge each item only from its supplied span."""
+
 DIRECT_ANTECEDENT_VERIFICATION_PROMPT = """Independently try to falsify a proposed
 direct antecedent using only the supplied paired spans. Confirm only when the prior
 span explicitly covers every essential target facet and any remaining difference is
@@ -273,11 +282,23 @@ class QueryPlanner:
         )
         frame = ScientificSearchFrame.model_validate(payload)
         allowed_spans = set(span_map)
-        if not set(frame.source_span_ids).issubset(allowed_spans):
-            raise ValueError("search frame cites unknown manuscript spans")
+        source_span_ids = [
+            span_id for span_id in frame.source_span_ids if span_id in allowed_spans
+        ]
+        if not source_span_ids:
+            source_span_ids = [target_span.span_id]
         allowed_references = {item.reference_id for item in paper_ir.references}
-        if not set(frame.citation_seed_ids).issubset(allowed_references):
-            raise ValueError("search frame cites unknown references")
+        citation_seed_ids = [
+            reference_id
+            for reference_id in frame.citation_seed_ids
+            if reference_id in allowed_references
+        ]
+        frame = frame.model_copy(
+            update={
+                "source_span_ids": list(dict.fromkeys(source_span_ids)),
+                "citation_seed_ids": list(dict.fromkeys(citation_seed_ids)),
+            }
+        )
         # Bracketed references attached to the exact verification span are
         # deterministic citation-graph edges.  Do not leave their inclusion to
         # a generative planner: they are the strongest cutoff-safe entrances to
@@ -631,6 +652,8 @@ class PriorArtService:
         max_provider_queries: int | None = None,
         resource_ledger: ResourceLedger | None = None,
     ) -> list[RetrievedWork]:
+        from .innovation.usage import log_progress
+
         self.last_failures = []
         self.last_queries = []
         self.last_query_specs = []
@@ -644,6 +667,7 @@ class PriorArtService:
         self.last_graph_seed_works = []
         cache_hits: list[bool] = []
         direct_graph_seed_ids = list(dict.fromkeys(graph_seed_work_ids))
+        log_progress("[检索规划开始] family=%s", family)
         if not self.config.allow_external_retrieval:
             self.last_failures.append("external_retrieval_disabled")
             self.last_service_failed = True
@@ -775,6 +799,7 @@ class PriorArtService:
                 self.last_failures.append(reason)
                 self.last_service_failed = True
                 return []
+        log_progress("[检索规划完成] family=%s，查询=%d", family, len(queries))
         self.last_query_specs = list(queries)
         remaining_slots = budget.fulltext_max - budget.fulltext_kept
         if remaining_slots <= 0:
@@ -814,6 +839,11 @@ class PriorArtService:
         )
         for query in queries:
             self.last_queries.append(f"{query.query_id}:{query.query}")
+            log_progress(
+                "[检索请求开始] role=%s，mode=%s",
+                query.query_role,
+                query.search_mode,
+            )
             if resource_ledger is not None:
                 resource_ledger.logical_provider_searches += 1
                 resource_ledger.network_provider_attempts += 1
@@ -830,7 +860,14 @@ class PriorArtService:
                     resource_ledger.network_provider_attempts -= 1
             except (OSError, RuntimeError, TypeError, ValueError) as exc:
                 self.last_failures.append(f"{query.query_id}:{exc}")
+                log_progress("[检索请求失败] role=%s，error=%s", query.query_role, exc)
                 continue
+            log_progress(
+                "[检索请求完成] role=%s，返回=%d，缓存=%s",
+                query.query_role,
+                len(rows),
+                cache_hit,
+            )
             coverage["roles"].add(query.query_role)
             coverage["query_ids"].add(query.query_id)
             coverage["retrieved"] += len(rows)
@@ -917,6 +954,7 @@ class PriorArtService:
             key=lambda item: (fused_scores[item.work_id], item.title),
             reverse=True,
         )[: self.config.retrieval.candidate_union_limit]
+        log_progress("[候选排序开始] 去重候选=%d", len(candidate_union))
         try:
             ranked, ranking_scores = self._global_rank(frame, paper_ir, candidate_union)
             coverage["whole_ranked"], coverage["purpose_ranked"] = (
@@ -925,6 +963,11 @@ class PriorArtService:
             coverage["ranker"] = self.last_ranker
             coverage["degraded"] = bool(self.last_advisories)
             coverage["advisories"].extend(self.last_advisories)
+            log_progress(
+                "[候选排序完成] 排序器=%s，保留=%d",
+                self.last_ranker,
+                len(ranked),
+            )
         except (
             ModelClientUnavailableError,
             OSError,
@@ -937,6 +980,7 @@ class PriorArtService:
             coverage["service_failed"] = True
             return []
         comparison_pool = ranked[: self.config.retrieval.rerank_candidate_limit]
+        log_progress("[候选可比性判断开始] 文献=%d", len(comparison_pool))
         try:
             decisions = self._rerank(
                 frame,
@@ -959,6 +1003,7 @@ class PriorArtService:
                 }
                 for work in comparison_pool
             }
+        log_progress("[候选可比性判断完成] 文献=%d", len(decisions))
         selected = self._select_candidates(
             candidate_union,
             comparison_pool,
@@ -982,6 +1027,7 @@ class PriorArtService:
         coverage["compared_ids"].update(work.work_id for work in selected)
         budget.fulltext_kept += len(selected)
         self.last_cache_hit = bool(cache_hits) and all(cache_hits)
+        log_progress("[候选选择完成] 最终历史文献=%d", len(selected))
         return selected
 
     def prepare_search_frame(
@@ -2162,6 +2208,8 @@ class PriorArtService:
 
     @staticmethod
     def _fetch_doi_abstract(doi: str) -> tuple[str, str]:
+        from .cli_limiter import network_request_lease
+
         query = urllib.parse.urlencode(
             {"query": f"DOI:{doi}", "resultType": "core", "format": "json"}
         )
@@ -2181,7 +2229,10 @@ class PriorArtService:
                     url,
                     headers={"User-Agent": "ASPR-GEAR/1.0 research@example.org"},
                 )
-                with urllib.request.urlopen(request, timeout=20) as response:
+                with (
+                    network_request_lease(),
+                    urllib.request.urlopen(request, timeout=20) as response,
+                ):
                     payload = json.load(response)
                 raw = (
                     (payload.get("resultList", {}).get("result") or [{}])[0].get(
@@ -2281,6 +2332,18 @@ class PriorArtService:
             retrieval_source=str(row.get("retrieval_source") or "unknown"),
         )
 
+    def upgrade_fulltext(self, work: RetrievedWork, target_text: str) -> RetrievedWork:
+        """Acquire full text for a selected consequential candidate within PDF budget."""
+        if any(span.source is EvidenceLevel.FULLTEXT for span in work.spans):
+            return work
+        text = self._openalex_pdf_text(work.work_id)
+        if not text:
+            return work
+        spans = self.passage_extractor.extract(
+            text, query=target_text, source=EvidenceLevel.FULLTEXT
+        )
+        return work.model_copy(update={"spans": spans}) if spans else work
+
     def _openalex_pdf_text(self, work_id: str) -> str:
         limits = self.config.retrieval
         if not limits.openalex_pdf_enabled or "openalex.org/" not in work_id.casefold():
@@ -2338,6 +2401,8 @@ class RelationClassifier:
         *,
         target_claim_id: str,
         cutoff: date,
+        target_claim_text: str | None = None,
+        replicate: str = "",
     ) -> RelationCard:
         self.last_failure = None
         prior_span = self._best_prior_span(claim_span, prior)
@@ -2371,7 +2436,9 @@ class RelationClassifier:
             )
         user = json.dumps(
             {
+                **({"replicate": replicate} if replicate else {}),
                 "target_claim_id": target_claim_id,
+                "target_claim_text": target_claim_text or claim_span.text,
                 "target_span": claim_span.model_dump(mode="json"),
                 "prior_work": prior.model_dump(mode="json"),
                 "output": {
@@ -2422,12 +2489,7 @@ class RelationClassifier:
                 ).strip()
         except (ModelClientUnavailableError, ValueError, TypeError) as exc:
             self.last_failure = str(exc)
-            target_tokens = set(_tokens(claim_span.text))
-            prior_tokens = set(_tokens(prior_span.text))
-            overlap = len(target_tokens & prior_tokens) / max(
-                len(target_tokens | prior_tokens), 1
-            )
-            label = RelationLabel.DISTANT if overlap < 0.1 else RelationLabel.UNRESOLVED
+            label = RelationLabel.UNRESOLVED
             dimensions = ["lexical_scope"]
             common_dimensions = []
             facet_coverage = 0.0
@@ -2455,6 +2517,235 @@ class RelationClassifier:
             essential_facet_coverage=facet_coverage,
             independent_verification_passed=independently_verified,
         )
+
+    def classify_many(
+        self,
+        claim_span: EvidenceSpan,
+        priors: Sequence[RetrievedWork],
+        *,
+        target_claim_id: str,
+        cutoff: date,
+        target_claim_text: str | None = None,
+    ) -> list[RelationCard]:
+        """Classify eligible prior works in one call and preserve input order."""
+
+        self.last_failure = None
+        cards: dict[str, RelationCard] = {}
+        eligible: list[tuple[RetrievedWork, RetrievedSpan, bool, bool]] = []
+        for prior in priors:
+            prior_span = self._best_prior_span(claim_span, prior)
+            temporal_valid, temporal_unresolved = self._temporal_status(prior, cutoff)
+            if prior_span is None:
+                cards[prior.work_id] = self._card(
+                    claim_span,
+                    prior,
+                    target_claim_id,
+                    RelationLabel.UNRESOLVED,
+                    EvidenceLevel.METADATA_ONLY,
+                    temporal_valid,
+                    temporal_unresolved,
+                    "Prior work has no verifiable abstract or full-text span.",
+                )
+            elif not temporal_valid:
+                label = (
+                    RelationLabel.PARALLEL
+                    if temporal_unresolved
+                    else RelationLabel.UNRESOLVED
+                )
+                cards[prior.work_id] = self._card(
+                    claim_span,
+                    prior,
+                    target_claim_id,
+                    label,
+                    prior_span.source,
+                    temporal_valid,
+                    temporal_unresolved,
+                    "Temporal precedence is not established.",
+                    prior_span=prior_span,
+                )
+            else:
+                eligible.append(
+                    (prior, prior_span, temporal_valid, temporal_unresolved)
+                )
+        if eligible:
+            cards.update(
+                self._classify_eligible_batch(
+                    claim_span,
+                    eligible,
+                    target_claim_id=target_claim_id,
+                    target_claim_text=target_claim_text,
+                )
+            )
+        return [cards[prior.work_id] for prior in priors]
+
+    def _classify_eligible_batch(
+        self,
+        claim_span: EvidenceSpan,
+        eligible: Sequence[tuple[RetrievedWork, RetrievedSpan, bool, bool]],
+        *,
+        target_claim_id: str,
+        target_claim_text: str | None,
+    ) -> dict[str, RelationCard]:
+        work_ids = [prior.work_id for prior, _, _, _ in eligible]
+        user = json.dumps(
+            {
+                "target_claim_id": target_claim_id,
+                "target_claim_text": target_claim_text or claim_span.text,
+                "target_span": claim_span.model_dump(mode="json"),
+                "prior_works": [
+                    {
+                        "work_id": prior.work_id,
+                        "prior_work": prior.model_dump(mode="json"),
+                        "selected_prior_span": prior_span.model_dump(mode="json"),
+                    }
+                    for prior, prior_span, _, _ in eligible
+                ],
+            },
+            ensure_ascii=False,
+        )
+        try:
+            payload = (
+                self.generator(BATCH_RELATION_CLASSIFICATION_PROMPT, user)
+                if self.generator is not None
+                else self._client().generate_json(
+                    system=BATCH_RELATION_CLASSIFICATION_PROMPT,
+                    user=user,
+                    response_schema=self._batch_schema(work_ids),
+                )
+            )
+            rows = payload.get("relations")
+            if not isinstance(rows, list):
+                raise TypeError("batch relation response lacks relations")
+            if not all(isinstance(row, Mapping) for row in rows):
+                raise TypeError("batch relation response contains a non-object item")
+            by_id = {str(row.get("work_id")): row for row in rows}
+            if len(by_id) != len(rows) or set(by_id) != set(work_ids):
+                raise ValueError("batch response has missing or duplicate work_ids")
+            return {
+                prior.work_id: self._batch_card(
+                    claim_span,
+                    prior,
+                    prior_span,
+                    by_id[prior.work_id],
+                    target_claim_id,
+                    temporal_valid,
+                    temporal_unresolved,
+                )
+                for prior, prior_span, temporal_valid, temporal_unresolved in eligible
+            }
+        except (ModelClientUnavailableError, ValueError, TypeError) as exc:
+            self.last_failure = str(exc)
+            return {
+                prior.work_id: self._card(
+                    claim_span,
+                    prior,
+                    target_claim_id,
+                    RelationLabel.UNRESOLVED,
+                    prior_span.source,
+                    temporal_valid,
+                    temporal_unresolved,
+                    "Batch relation model unavailable; lexical overlap is not treated as antecedence.",
+                    ["lexical_scope"],
+                    prior_span=prior_span,
+                )
+                for prior, prior_span, temporal_valid, temporal_unresolved in eligible
+            }
+
+    def _batch_card(
+        self,
+        claim_span: EvidenceSpan,
+        prior: RetrievedWork,
+        prior_span: RetrievedSpan,
+        payload: Mapping[str, Any],
+        target_claim_id: str,
+        temporal_valid: bool,
+        temporal_unresolved: bool,
+    ) -> RelationCard:
+        label = RelationLabel(str(payload.get("relation_label")))
+        dimensions = [str(item) for item in payload.get("difference_dimensions") or []]
+        common = [str(item) for item in payload.get("common_dimensions") or []]
+        coverage = min(
+            1.0,
+            max(0.0, float(payload.get("essential_facet_coverage", 0.0))),
+        )
+        rationale = str(payload.get("rationale") or "")
+        if label != RelationLabel.UNRESOLVED and not dimensions:
+            label = RelationLabel.UNRESOLVED
+            dimensions = ["classifier_output_incomplete"]
+            rationale = "The batch classifier omitted required difference dimensions."
+        elif label == RelationLabel.DIRECT_ANTECEDENT and coverage < 0.9:
+            label = RelationLabel.PARTIAL_ANTECEDENT
+            rationale = (
+                "The paired evidence does not cover enough essential facets for "
+                f"direct antecedence. {rationale}"
+            ).strip()
+        verified = label == RelationLabel.DIRECT_ANTECEDENT and (
+            self._verify_direct_antecedent(claim_span, prior_span)
+        )
+        return self._card(
+            claim_span,
+            prior,
+            target_claim_id,
+            label,
+            prior_span.source,
+            temporal_valid,
+            temporal_unresolved,
+            rationale,
+            dimensions,
+            prior_span=prior_span,
+            common_dimensions=common,
+            essential_facet_coverage=coverage,
+            independent_verification_passed=verified,
+        )
+
+    @staticmethod
+    def _batch_schema(work_ids: Sequence[str]) -> dict[str, Any]:
+        relation = {
+            "type": "object",
+            "additionalProperties": False,
+            "properties": {
+                "work_id": {"type": "string", "enum": list(work_ids)},
+                "relation_label": {
+                    "type": "string",
+                    "enum": [label.value for label in RelationLabel],
+                },
+                "common_dimensions": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                },
+                "difference_dimensions": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                },
+                "essential_facet_coverage": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1,
+                },
+                "rationale": {"type": "string"},
+            },
+            "required": [
+                "work_id",
+                "relation_label",
+                "common_dimensions",
+                "difference_dimensions",
+                "essential_facet_coverage",
+                "rationale",
+            ],
+        }
+        return {
+            "type": "object",
+            "additionalProperties": False,
+            "properties": {
+                "relations": {
+                    "type": "array",
+                    "items": relation,
+                    "minItems": len(work_ids),
+                    "maxItems": len(work_ids),
+                }
+            },
+            "required": ["relations"],
+        }
 
     def _verify_direct_antecedent(
         self, claim_span: EvidenceSpan, prior_span: RetrievedSpan

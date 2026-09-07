@@ -108,7 +108,7 @@ def sha256_file(path: Path) -> str:
 def atomic_text(path: Path, value: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_suffix(path.suffix + ".part")
-    temporary.write_text(value, encoding="utf-8")
+    temporary.write_text(value, encoding="utf-8", errors="replace")
     temporary.replace(path)
 
 
@@ -201,18 +201,28 @@ def parse_candidate(item: Mapping[str, Any], journal: Journal) -> Candidate | No
 
 
 def discover_candidates(journal: Journal, maximum: int) -> list[Candidate]:
-    response = request(
-        f"{CROSSREF_ROOT}/{journal.issn}/works",
-        params={
-            "filter": "from-pub-date:2026-01-01,until-pub-date:" + today_iso(),
-            "rows": min(maximum, 1000),
-            "sort": "published",
-            "order": "asc",
-            "select": "DOI,title,published-online,published-print,published,created",
-        },
-        timeout=90,
-    )
-    items = response.json().get("message", {}).get("items", [])
+    items: list[Mapping[str, Any]] = []
+    cursor = "*"
+    while len(items) < maximum:
+        response = request(
+            f"{CROSSREF_ROOT}/{journal.issn}/works",
+            params={
+                "filter": "from-pub-date:2026-01-01,until-pub-date:" + today_iso(),
+                "rows": min(1000, maximum - len(items)),
+                "cursor": cursor,
+                "select": "DOI,title,published-online,published-print,published,created",
+            },
+            timeout=90,
+        )
+        message = response.json().get("message", {})
+        page = message.get("items", [])
+        if not page:
+            break
+        items.extend(page)
+        next_cursor = str(message.get("next-cursor") or "")
+        if not next_cursor or next_cursor == cursor:
+            break
+        cursor = next_cursor
     candidates = [
         candidate for item in items if (candidate := parse_candidate(item, journal))
     ]
@@ -522,9 +532,7 @@ def process_journal(
     )
     cursor = 0
     while remaining > 0 and cursor < len(queue):
-        batch = queue[
-            cursor : cursor + min(max(workers * 2, remaining), remaining + workers)
-        ]
+        batch = queue[cursor : cursor + min(workers * 2, remaining + workers)]
         cursor += len(batch)
         with ThreadPoolExecutor(max_workers=workers) as executor:
             futures: dict[Future[dict[str, Any]], Candidate] = {
@@ -641,9 +649,7 @@ def build(args: argparse.Namespace) -> None:
     rejected_ids = {str(row["article_id"]) for row in read_jsonl(rejected_path)}
     quotas = normalized_quotas(args.target)
     for journal in JOURNALS:
-        maximum = min(
-            1000, max(args.candidates_per_journal, quotas[journal.journal_id] * 5)
-        )
+        maximum = max(args.candidates_per_journal, quotas[journal.journal_id] * 5)
         candidates = discover_candidates(journal, maximum)
         process_journal(
             journal,

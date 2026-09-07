@@ -1,27 +1,63 @@
-# Data Sources And Sharing Boundaries
+# Data sources and interpretation boundaries
 
-This project uses public scholarly metadata, locally cached derived tables, and local manuscript/peer-review text caches to build the Fig.1-Fig.10 evidence package.
+The current system analyzes target-paper full text with GEAR prior-art evidence
+and a native historical Claim Graph. Historical diffusion-scoring datasets are
+retained separately; they are not default innovation-runtime inputs.
 
-## Public Metadata Sources
+## Current sources
 
-- **OpenAlex**: works, source/venue metadata, concepts/topics, citation and reference metadata where available.
-- **Semantic Scholar**: prior-art search and citation metadata when API access is configured.
-- **Crossref**: DOI and publication metadata checks when available.
-- **Local derived corpus tables**: `data/knowledge_corpus/...` views such as works, citations, topics, topic edges, domains, and figure-specific views.
+| Source | Role | Boundary |
+| --- | --- | --- |
+| Local 2023–2025 Nature abstracts | Historical claim extraction and native Claim Graph | A bounded venue/time corpus, not all literature |
+| OpenAlex work metadata and references | Parent paper graph, identity and retrieval | Metadata/citation paths do not prove claim-level derivation |
+| Target-paper Markdown or PDF | Shared contribution extraction and internal support | Author claims and manuscript-supported scope must be distinguished |
+| Retrieved historical abstracts/full text | GEAR prior-art comparison | Preserve source type, date, identity and actual passages |
+| Published transparent peer-review files | Source-bound contribution references | Incomplete, reviewer/round dependent; not exhaustive novelty ground truth |
 
-## Restricted Or Third-party Content
+Native graph artifacts live under `data/claim_graph`; offline construction code
+is under `scripts/claim_graph`. `canonical_target_works.parquet` records the
+actual historical parent-paper population; do not substitute counts from old
+design documents. Runtime uses temporary cutoff-filtered insertion and does not
+rewrite historical graph assets.
 
-- Local Nature manuscript markdown, peer-review markdown, and PDFs under paths such as `/mnt/d/aspr_nature_markdown` and `/mnt/d/dataset/...` are used for local analysis and review.
-- These files may contain third-party copyrighted full text, peer-review files, or publisher PDFs. The project must not redistribute copyrighted full text, publisher PDFs, or peer-review PDFs unless an explicit license permits redistribution.
-- Publication packages should share only derived metadata, feature tables, quality reports, source tables, figure manifests, and reproducibility scripts.
+The [2026 paired corpus](../data/nature_2026_testset/README.md) contains 1,000
+paper/review pairs with its own manifest and source validation. This corpus,
+the study's active `papers.jsonl`, completed stage outputs and valid evaluation
+denominators are different populations. A script or directory named
+`innovation_200` can operate on the extended roster.
 
-## Recommended Public Release Package
+## Retrieval and time
 
-- Frozen figure source tables and derived metadata needed to reproduce the reported metrics.
-- Quality gate reports, run manifests, claim ledger, and Nature-readiness summaries.
-- Scripts, configuration, environment files, and tests.
-- A data availability statement that explains which original sources are public, which local text/PDF sources are restricted, and how reviewers can request access-compatible reproductions.
+Historical literature PDF downloading defaults off and is controlled by
+`GEAR_HISTORICAL_PDF_ENABLED`. Abstract evidence remains usable within its scope;
+reference-only metadata cannot establish an external scientific result. Target
+full text is unaffected by this switch. Previously retrieved full text survives
+resume after policy changes, which must be reported as mixed conditions.
 
-## Current Nature-ready Gap
+Preserve publication/cutoff identity and distinguish target versions from
+independent prior art. Semantic neighbors, parent citation paths and local
+community structure are candidate/context evidence, not a global firstness or
+causal claim. Current neighbor thresholds differ from older calibrations, so
+old graph percentiles must not be applied to new raw values.
 
-The current main graph-perturbation claim is gated separately from ASPR application claims. Fig.6 now includes construction-matched full-rerun robustness artifacts, and Fig.9 has a checkpoint-generated single-case ASPR-Qwen output with saved metadata. Remaining strict external-evidence gaps are Fig.4 blinded low/middle/high novelty-significance labels and Fig.10 blinded human preference ratings. Fig.10 true module reruns are present, but the ASPR performance claim remains Extended Data until the human-preference gate passes.
+## References and sharing
+
+Reviewer extraction preserves quotes, reviewer/round, contribution identity and
+reasons. Tier A contains explicit innovation judgments; B supports identification.
+AI extraction, report matching and preference calls must be labeled as such.
+Missing reviewer coverage does not make a system contribution false. Published
+paper analysis against earlier review rounds is not automatically submission-time
+validation.
+
+Local manuscripts, review files and PDFs remain subject to their source licenses.
+Do not redistribute third-party full text without permission or a license that
+allows it. Share code, compatible configuration, derived tables, source locators,
+method descriptions and provenance as permitted; avoid publishing secrets or
+restricted cached text. A citation appendix is not itself a redistribution license.
+
+## Historical results
+
+Fig.1–Fig.10 outputs retain their original model, data and protocol scope. Old
+HGB prediction, ASPR-Qwen case, Graph-guidance and review-agreement results do
+not establish current-system performance. New figure planning is in discussion;
+scientific completion must be assessed from the actual new study outputs.

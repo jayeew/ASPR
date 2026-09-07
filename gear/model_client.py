@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import os
+import time
+from collections.abc import Mapping
 from dataclasses import dataclass
-from typing import Any, Mapping, Protocol
+from typing import Any, Protocol
 
 from .config import GearConfig
 
@@ -34,7 +37,11 @@ def build_json_model_client(config: GearConfig) -> JsonModelClient:
 
         return CodexCliJsonClient(
             config.codex_cli,
-            cache_dir=config.resolve_path(config.cache_dir) / "model_responses",
+            cache_dir=(
+                config.resolve_path(config.cache_dir) / "model_responses"
+                if config.model_cache_enabled
+                else None
+            ),
         )
     if config.openai_compatible is None:
         raise ModelClientUnavailableError(
@@ -47,13 +54,17 @@ def build_json_model_client(config: GearConfig) -> JsonModelClient:
 
 __all__ = [
     "JsonModelClient",
+    "LazyRoleClient",
     "ModelClientUnavailableError",
     "build_json_model_client",
-    "LazyRoleClient",
 ]
 
 
 ROLE_MODELS = {
+    "field_classifier": ("gpt-5.6-luna", "low"),
+    "graph_analysis": ("gpt-5.6-luna", "high"),
+    "reference_extract": ("gpt-5.6-luna", "low"),
+    "reference_check": ("gpt-5.6-luna", "low"),
     "graph_claim": ("gpt-5.6-luna", "medium"),
     "claim_miner": ("gpt-5.6-luna", "medium"),
     "supervisor_planner": ("gpt-5.6-luna", "medium"),
@@ -61,7 +72,17 @@ ROLE_MODELS = {
     "internal_verifier": ("gpt-5.6-terra", "high"),
     "relation_fusion": ("gpt-5.6-terra", "high"),
     "evaluation_judge": ("gpt-5.6-sol", "high"),
+    "report_writer": ("gpt-5.6-luna", "high"),
+    "pairwise_judge": ("gpt-5.6-luna", "high"),
 }
+
+
+def resolve_role_model(config: GearConfig, role: str) -> tuple[str, str]:
+    model, effort = ROLE_MODELS[role]
+    return (
+        config.role_model_override or model,
+        config.role_effort_overrides.get(role, effort),
+    )
 
 
 @dataclass
@@ -74,7 +95,7 @@ class LazyRoleClient:
 
     def _get(self) -> JsonModelClient:
         if self._client is None:
-            model, effort = ROLE_MODELS[self.role]
+            model, effort = resolve_role_model(self.config, self.role)
             endpoint = self.config.codex_cli.model_copy(
                 update={"model": model, "reasoning_effort": effort}
             )
@@ -90,8 +111,20 @@ class LazyRoleClient:
         user: str,
         response_schema: Mapping[str, Any] | None = None,
     ) -> dict[str, Any]:
-        return self._get().generate_json(
-            system=system,
-            user=user,
-            response_schema=response_schema,
-        )
+        from .innovation.usage import progress_scope
+
+        with progress_scope(f"role={self.role}"):
+            retries = max(0, int(os.environ.get("GEAR_MODEL_RETRIES", "0")))
+            for attempt in range(retries + 1):
+                try:
+                    return self._get().generate_json(
+                        system=system,
+                        user=user,
+                        response_schema=response_schema,
+                    )
+                except (OSError, RuntimeError, ValueError) as exc:
+                    blocked = "limited access to this content" in str(exc).casefold()
+                    if blocked or attempt == retries:
+                        raise
+                    time.sleep(attempt + 1)
+        raise RuntimeError("unreachable")

@@ -599,6 +599,13 @@ def test_metadata_only_candidates_are_ignored_without_pdf_fallback(
     gear_config, paper_ir
 ):
     config = gear_config.model_copy(update={"allow_external_retrieval": True})
+    config = config.model_copy(
+        update={
+            "retrieval": config.retrieval.model_copy(
+                update={"openalex_pdf_enabled": False}
+            )
+        }
+    )
     client = MetadataOnlySearchFake()
     service = service_with_model(config, client)
     claim = paper_ir.claims[0]
@@ -727,6 +734,69 @@ def test_missing_prior_text_is_unresolved(gear_config, paper_ir):
     )
     assert card.relation_label == RelationLabel.UNRESOLVED
     assert card.evidence_level == EvidenceLevel.METADATA_ONLY
+
+
+def test_relation_batch_uses_one_call_and_returns_one_card_per_work(
+    gear_config, paper_ir
+):
+    claim = paper_ir.claims[0]
+    target = paper_ir.span_map()[claim.span_id]
+    calls: list[dict] = []
+    priors = []
+    for index in range(5):
+        text = f"Earlier evidence passage {index} about bounded review controllers."
+        priors.append(
+            RetrievedWork(
+                work_id=f"W-batch-{index}",
+                target_claim_id=claim.claim_id,
+                title=f"Earlier work {index}",
+                publication_date=date(2000, 1, index + 1),
+                spans=[
+                    RetrievedSpan(
+                        span_id=f"RS-batch-{index}",
+                        text=text,
+                        text_sha256="sha256:"
+                        + hashlib.sha256(text.encode("utf-8")).hexdigest(),
+                        source=EvidenceLevel.ABSTRACT,
+                    )
+                ],
+                retrieval_query_id=f"QRY-batch-{index}",
+                retrieval_source="fake",
+            )
+        )
+
+    def generate(system, user):
+        request = json.loads(user)
+        calls.append(request)
+        return {
+            "relations": [
+                {
+                    "work_id": item["work_id"],
+                    "relation_label": "DISTANT",
+                    "common_dimensions": ["task"],
+                    "difference_dimensions": [f"mechanism-{index}"],
+                    "essential_facet_coverage": 0.2,
+                    "rationale": f"Independent relation {index}",
+                }
+                for index, item in enumerate(request["prior_works"])
+            ]
+        }
+
+    cards = RelationClassifier(gear_config, generator=generate).classify_many(
+        target,
+        priors,
+        target_claim_id=claim.claim_id,
+        cutoff=date(2010, 1, 1),
+    )
+
+    assert len(calls) == 1
+    assert [item["work_id"] for item in calls[0]["prior_works"]] == [
+        prior.work_id for prior in priors
+    ]
+    assert [card.prior_work_id for card in cards] == [prior.work_id for prior in priors]
+    assert [card.difference_dimensions for card in cards] == [
+        [f"mechanism-{index}"] for index in range(5)
+    ]
 
 
 def test_relation_without_difference_dimensions_fails_closed(gear_config, paper_ir):
@@ -877,3 +947,4 @@ def test_scientific_search_frame_normalizes_list_delta() -> None:
         source_span_ids=["S-1"],
     )
     assert frame.claimed_delta == "first mechanism; second result"
+

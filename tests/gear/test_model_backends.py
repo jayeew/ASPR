@@ -103,6 +103,9 @@ def test_environment_can_select_openai_compatible_mode(
     monkeypatch.setenv("ASPR_GEAR_MODEL_BACKEND", "openai_compatible")
     monkeypatch.setenv("ASPR_GEAR_API_BASE_URL", "https://api.example.test/v1")
     monkeypatch.setenv("ASPR_GEAR_API_MODEL", "provider-model")
+    from gear import env
+
+    monkeypatch.setitem(env.SYSTEM_ENV, "ASPR_GEAR_MODEL_BACKEND", "openai_compatible")
     config = load_config()
     assert config.model_backend == "openai_compatible"
     assert config.openai_compatible is not None

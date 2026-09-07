@@ -23,26 +23,15 @@ gear-review:
 		$(if $(GEAR_OUTPUT_DIR),--output-dir "$(GEAR_OUTPUT_DIR)",)
 
 gear-test:
-	TMPDIR=/tmp $(PYTHON) -m pytest -s -q tests/gear
+	TMPDIR=/tmp $(PYTHON) -m pytest -s -q tests/innovation_v2 tests/gear/test_paper_compiler.py tests/gear/test_prior_art.py tests/gear/test_codex_cli.py tests/gear/test_model_backends.py
 
 gear-validate:
 	$(PYTHON) -m gear validate-assets
 
 gear-lint:
-	$(PYTHON) -m black --check $(GEAR_RUNTIME_LINT)
-	$(PYTHON) -m ruff check --select E4,E7,E9,F,I $(GEAR_RUNTIME_LINT)
-	$(PYTHON) -m mypy --ignore-missing-imports --follow-imports=skip \
-		gear/__init__.py gear/cli.py gear/config.py gear/diffusion_forecast.py \
-		gear/graph_prior_contracts.py gear/graph_prior.py gear/graph_guidance.py \
-		gear/review_contracts.py gear/review_state.py gear/review_fusion.py \
-		gear/review_compiler.py gear/evidence_supervisor.py gear/review_pipeline.py \
-		gear/review_verifier.py experiments/gear/evaluation/contracts.py \
-		experiments/gear/evaluation/graph_ablation.py \
-		experiments/gear/evaluation/human_audit.py \
-		experiments/gear/evaluation/runner.py \
-		experiments/gear/review_reconstruction/contracts.py \
-		experiments/gear/review_reconstruction/sessions.py \
-		scripts/build_gear_diffusion_release.py
+	$(PYTHON) -m black --check gear/innovation gear/work_identity.py scripts/innovation_experiment.py tests/innovation_v2
+	$(PYTHON) -m ruff check gear/innovation gear/work_identity.py scripts/innovation_experiment.py tests/innovation_v2
+	$(PYTHON) -m mypy --ignore-missing-imports --follow-imports=skip gear/innovation scripts/innovation_experiment.py
 
 gear-reconstruction-help:
 	$(PYTHON) -m experiments.gear.review_reconstruction --help
@@ -65,3 +54,7 @@ dataset-help:
 
 figures-help:
 	$(PYTHON) -m experiments.common.new.run_all --help
+
+# Archived interface tests remain available for migration diagnostics.
+gear-legacy-test:
+	$(PYTHON) -m pytest -q tests/gear

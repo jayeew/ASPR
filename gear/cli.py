@@ -53,6 +53,11 @@ def _review(args: argparse.Namespace) -> int:
         fusion_mode=args.fusion_mode,
         graph_root=args.claim_graph_root,
         embedding_model=args.claim_embedding_model,
+        target_claims=(
+            json.loads(args.targets.read_text(encoding="utf-8"))
+            if args.targets
+            else None
+        ),
     )
     print(json.dumps(outputs, ensure_ascii=False, indent=2))
     return 0
@@ -66,14 +71,30 @@ def _prepare(args: argparse.Namespace) -> int:
 
 
 def _show_run(args: argparse.Namespace) -> int:
+    if (args.run_dir / "shared" / "claims.json").exists():
+        from .innovation.validation import validate_run
+
+        report = validate_run(args.run_dir)
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return 0 if report["valid"] else 1
     paths = (
         args.run_dir / "graph" / "graph_branch_result.json",
         args.run_dir / "gear" / "gear_branch_result.json",
         args.run_dir / "fusion" / "fusion_result.json",
     )
-    payload = [json.loads(path.read_text(encoding="utf-8")) for path in paths if path.exists()]
+    payload = [
+        json.loads(path.read_text(encoding="utf-8")) for path in paths if path.exists()
+    ]
     print(json.dumps(payload, ensure_ascii=False, indent=2))
     return 0
+
+
+def _validate_assets(args: argparse.Namespace) -> int:
+    from .innovation.validation import validate_assets
+
+    result = validate_assets(args.claim_graph_root)
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    return 0 if result["valid"] else 1
 
 
 def _paper_arguments(parser: argparse.ArgumentParser) -> None:
@@ -92,6 +113,11 @@ def _paper_arguments(parser: argparse.ArgumentParser) -> None:
 def build_parser() -> argparse.ArgumentParser:
     root = argparse.ArgumentParser(description="Claim Graph + GEAR 创新性评价")
     commands = root.add_subparsers(dest="command", required=True)
+    assets = commands.add_parser("validate-assets", help="校验当前 claim graph 资产")
+    assets.add_argument(
+        "--claim-graph-root", type=Path, default=Path("data/claim_graph")
+    )
+    assets.set_defaults(handler=_validate_assets)
     prepare = commands.add_parser("prepare-input", help="准备统一测试论文输入")
     _paper_arguments(prepare)
     prepare.add_argument("--output", type=Path, required=True)
@@ -99,13 +125,28 @@ def build_parser() -> argparse.ArgumentParser:
     review = commands.add_parser("review", help="运行 Graph、GEAR 或融合分支")
     _paper_arguments(review)
     review.add_argument("--output-dir", type=Path, required=True)
-    review.add_argument("--stage", choices=("all", "graph", "gear", "fusion"), default="all")
-    review.add_argument("--fusion-mode", choices=("passive", "active"), default="passive")
-    review.add_argument("--claim-graph-root", type=Path, default=Path("data/claim_graph"))
-    review.add_argument("--claim-embedding-model", type=Path, default=Path("data/models/Qwen3-Embedding-4B"))
+    review.add_argument(
+        "--stage", choices=("all", "shared", "graph", "gear", "fusion"), default="all"
+    )
+    review.add_argument(
+        "--fusion-mode", choices=("knowledge", "passive", "active"), default="knowledge"
+    )
+    review.add_argument(
+        "--claim-graph-root", type=Path, default=Path("data/claim_graph")
+    )
+    review.add_argument(
+        "--claim-embedding-model",
+        type=Path,
+        default=Path("data/models/Qwen3-Embedding-4B"),
+    )
     review.add_argument("--config", type=Path)
+    review.add_argument(
+        "--targets", type=Path, help="指定贡献测评：只含中性贡献描述的 JSON 字符串列表"
+    )
     review.set_defaults(handler=_review)
-    show = commands.add_parser("validate-run", help="显示各分支落盘结果，不执行一致性校验")
+    show = commands.add_parser(
+        "validate-run", help="校验 v2 claim、结果和证据一致性；旧结果仅显示"
+    )
     show.add_argument("run_dir", type=Path)
     show.set_defaults(handler=_show_run)
     return root

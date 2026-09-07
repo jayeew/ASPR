@@ -1,5 +1,11 @@
 # Fig. 4new — layered validation result figure
 
+> **文档状态（2026-09-07）：历史设计／历史实验记录。** 下文的“当前”、
+> “最终”、运行命令、样本数量和验收条件均属于该文档原版本，不代表当前默认系统。
+> 最新运行口径为共享全文 claims、独立 GEAR / 原生 Claim Graph 分析及联合创新解释，
+> 见[当前架构](../../../docs/module_architecture.md)。保留本页用于方法和结果溯源；旧结果不能直接证明新版系统有效，
+> 旧接口或本地资产也不保证仍可运行。新 Fig.1–Fig.10 规划尚未冻结。
+
 This directory prepares the source-backed data needed to evaluate GEAR+Graph
 and renders the current six-panel Fig. 4new. It does not add a new runtime,
 Pydantic contract, schema requirement, or public API.

@@ -1,117 +1,126 @@
-# ASPR-GEAR
+# ASPR-GEAR — Claim Graph + GEAR innovation analysis
 
-ASPR-GEAR implements the ASPR Evidence-State Reviewer (ASPR-ESR): an
-evidence-traceable five-part peer reviewer with independent Agent, optional
-ASPR-Qwen, and required Graph-prior branches. The visible review contains a
-contribution summary, novelty, strengths, weaknesses, and questions; it never
-contains an editorial decision.
+ASPR-GEAR analyzes a paper's concrete contributions, manuscript support,
+historical basis and knowledge relationships. The current research focus is the
+innovation-analysis system. Historical indicator and diffusion-scoring research
+remains available where relevant; it does not automatically validate this system.
 
 ```text
-ReviewRequest → PaperIR + paper-specific rubric
-→ Agent Reviewer ∥ optional ASPR-Qwen ∥ Graph Prior
-→ Review Fusion → bounded Evidence Supervisor
-→ stability + verification → deterministic review compilation
+Paper full text → PaperIR → shared grounded contribution claims
+                              ├─ GEAR: prior art, support, residual increment
+                              └─ Claim Graph: historical neighbors and structure
+                                   └─ joint Graph analysis across paper claims
+GEAR + per-claim Graph analysis → claim-level fusion
+Study report writer → whole-paper report using selected branch/joint evidence
 ```
 
-The runtime is in `gear/`. Its review contract is in
-`gear/review_contracts.py`; `gear/review_pipeline.py` is the sole execution
-path. Paper and prior-art evidence are append-only in `EvidenceStore`. Agent and
-Qwen inputs are Graph-blind. The Graph branch exposes one 0–100 ASPR Score only
-to Fusion/Supervisor; it cannot create a review point, establish claim novelty,
-or override a direct antecedent.
+The runtime is `gear`; `gear/review_pipeline.py` dispatches default `knowledge`
+mode to `gear/innovation/pipeline.py`. Branches share contribution identities
+but analyze evidence independently. The single-paper `all` command runs GEAR
+then Graph before fusion; the study supports separate streaming processes.
+`passive` and `active` are explicitly selected compatibility modes.
 
-## Model backend
+The output is innovation analysis, not an editorial decision or the old
+five-section `StructuredReview`. No numeric novelty score is generated.
+Graph structure alone cannot establish firstness, scientific validity or claim
+derivation. GEAR distinguishes antecedents from related work and explains
+residual increment. Insufficient evidence remains explicit.
 
-`codex_cli` is the default primary Agent backend: every model request uses a fresh, ephemeral,
-read-only Codex CLI session with `gpt-5.6-terra` and `high` reasoning effort.
-Alternatively, set `model_backend` to `openai_compatible` in a config file.
-The adapter is stateless and supports providers exposing `/chat/completions`,
-including DeepSeek. A ready-to-copy non-secret example is
-[`configs/gear/deepseek.example.json`](configs/gear/deepseek.example.json).
-Keep the provider key only in the environment variable named by `api_key_env`
-(for the example, `DEEPSEEK_API_KEY`); never add it to a JSON config or commit it.
-The same `--config` selection is used by `python -m gear review`, the one-pass
-reconstruction runner, and the consistency-match judge; a run manifest records
-the selected backend and model ID.
+## Run one paper
 
-```bash
-# Current isolated Codex CLI mode (default)
-python3 -m gear review --paper /absolute/path/paper.md
-
-# DeepSeek or another OpenAI-compatible provider
-export DEEPSEEK_API_KEY='...'
-python3 -m gear review \
-  --config configs/gear/deepseek.example.json \
-  --paper /absolute/path/paper.md
-```
-
-## Review one paper
+Run from the repository root with an `InnovationPaperInput` JSON:
 
 ```bash
 python3 -m gear review \
-  --paper /absolute/path/paper.md \
-  --cutoff 2025-01-31 \
-  --metadata /absolute/path/metadata.json \
+  --input-contract /absolute/path/input.json \
   --output-dir outputs/gear/runs/example
 ```
 
-The input may be Markdown or PDF. A run emits `paper_ir.json`,
-`agent_review.json`, optional `qwen_review.json`, `graph_prior.json`, the
-internal-only `graph_prior_audit.json`, `fusion_report.json`,
-`review_state.json`, `process_diagnostic.json`, review JSON/Markdown, validation
-report, immutable traces, and a hash-verified manifest. If the required Agent or
-Graph score is unavailable, the system fails closed to `LIMITED` rather than
-interpreting missing Graph data as a low score. Revalidate a run with:
+Prepare that input from Markdown or PDF with the required metadata:
 
 ```bash
-python3 -m gear validate-run outputs/gear/runs/example
+python3 -m gear prepare-input \
+  --paper /absolute/path/paper.md \
+  --paper-id example-paper \
+  --title "Example paper title" \
+  --doi "10.example/paper" \
+  --publication-date 2026-01-10 \
+  --cutoff 2026-01-10 \
+  --output /absolute/path/input.json
 ```
 
-## Calibration assets
+Replace example identifiers and dates with actual metadata. `--abstract-file`
+can supply an abstract. The input contract requires `paper_id`, `paper_path`,
+`title`, `publication_date`, `cutoff_date`, `abstract_text`, and `abstract_source`;
+optional fields include DOI, venue, authors, OpenAlex ID and reference work IDs.
+See [`InnovationPaperInput`](gear/review_contracts.py).
 
-GEAR uses only the current Fig.1–Fig.3 calibration assets. Validate their frozen
-release with:
+Use `--stage shared|gear|graph|fusion|all` to address a stage. Shared claims are
+prepared/reused first; fusion needs saved GEAR and Graph results. `--targets`
+accepts a JSON list of neutral contribution descriptions for specified-target
+tasks, without reviewer judgments or reasons. Use a separate run directory when
+changing inputs or experimental conditions.
+
+## Outputs and checks
+
+A standard knowledge-mode run writes:
+
+- `innovation_input.json`, `shared/paper_ir.json`, `shared/claims.json`;
+- `gear/NN/` evidence, `gear_card.json` and `assessment.json`;
+- `graph/NN/` graph facts and assessments, plus `graph/joint/` joint results;
+- branch `analysis.json` files and `fusion/innovation_report.md`;
+- append-only evidence traces and `model_usage.jsonl`.
 
 ```bash
 python3 -m gear validate-assets
-python3 -m gear show-calibration --verify
-```
-
-Ordinary configuration loading and non-Graph unit tests do not load these large
-assets. Strict asset resolution occurs only in the Graph service and the two
-explicit validation commands.
-
-## Optional ASPR-Qwen branch
-
-ASPR-Qwen uses a separate OpenAI-compatible endpoint and never receives the
-Agent result or Graph payload. It is disabled by default. Configure it under
-`aspr_qwen` (`enabled`, `model`, `base_url`, `api_key_env`, `required`). Missing
-Qwen does not limit a run unless `required=true`.
-
-## Modules and shared results
-
-Dataset construction, review reconstruction, GEAR agent reviews, Figure 1–10
-experiments, and consistency evaluation are separate modules. They exchange only
-immutable, hash-verified releases through `artifact_store/`; see
-[module architecture](docs/module_architecture.md).
-
-## Review reconstruction and independent-session comparison
-
-Reference reconstruction maps supplied reviewer rounds and replies into the same
-`StructuredReview` contract emitted by GEAR. A reference release may be produced
-by an independent AI session or another reviewer; no human identity, blind-label,
-reviewer-calibration, or human-agreement prerequisite is imposed. Resolved
-concerns are not retained as final weaknesses. Releases are joined by `paper_id`;
-see [module architecture](docs/module_architecture.md) for runnable commands.
-
-Legacy human-alignment modules remain available only as optional historical
-diagnostics. They are not validity gates for current independent-session review
-or Claim B/C completion. Empty/empty reviews are never scored as true matches.
-
-## Checks
-
-```bash
+python3 -m gear validate-run outputs/gear/runs/example
 make gear-test
-make gear-reconstruction-test
-make gear-validate
+make gear-lint
+python3 -m pytest -q tests/innovation_200 tests/gear/test_historical_pdf_config.py
 ```
+
+`validate-assets` checks native Claim Graph assets, not historical HGB releases.
+`validate-run` checks standard v2 claim identity, coverage and evidence keys; it
+is not a whole-study or scientific-correctness validator. Study fingerprint
+settings differ; see [architecture and validation limits](docs/module_architecture.md).
+
+## Models, retrieval and graph assets
+
+The default backend is `codex_cli`, using fresh read-only CLI sessions. Current
+role-specific models and reasoning settings are in
+[`gear/model_client.py`](gear/model_client.py); the base `codex_cli.model` does
+not determine every role. An `openai_compatible` backend is supported with
+`--config`; see [`DeepSeek example`](configs/gear/deepseek.example.json). Keep
+API keys only in the configured environment variable.
+
+Native historical graph assets live under `data/claim_graph`; builders are in
+`scripts/claim_graph`. Qwen3-Embedding-4B supplies graph embeddings and local
+recall, with OpenScholar reranking for GEAR retrieval. These are not the retired
+ASPR-Qwen review branch. Runtime insertion leaves the historical graph unchanged
+and defaults to at most ten eligible neighbors with cosine strictly above 0.5.
+Current thresholded structural values do not use percentiles calibrated under
+the older neighbor-selection policy.
+
+Historical literature PDF downloading defaults off. Set
+`GEAR_HISTORICAL_PDF_ENABLED=true` for budgeted PDF retrieval and restart workers
+after changing it. Target-paper full text is unaffected. Distinguish abstract
+and full-text evidence. Resuming after a policy change preserves old results
+and creates mixed conditions; use a separate directory for uniform comparisons.
+
+## Current experiments and documentation
+
+- [Staged innovation study](experiments/innovation_200/README.md): initially 200
+  papers, with a 1,000-paper claims/reference extension. `papers.jsonl` is the
+  active roster; extension alone does not complete eight-system evaluation.
+- [Module architecture](docs/module_architecture.md): boundaries, artifacts,
+  branch independence and recovery.
+- [Implementation and evaluation scope](docs/innovation_v2_implementation.md).
+- [Single and joint Graph analysis](docs/graph_joint_analysis.md).
+- [Experiment index](experiments/README.md): current studies versus historical
+  Fig.1–Fig.10. New figure allocation is still under discussion.
+- [Data sources](docs/data_sources.md) and [code availability](docs/code_availability.md).
+
+Documents marked historical preserve earlier designs/results, not current CLI
+instructions, runtime requirements or current-system superiority evidence.
+The old HGB-to-claim pathway, five-part review contracts and mandatory
+immutable-release exchange do not describe the default innovation workflow.
