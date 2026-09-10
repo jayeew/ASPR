@@ -2,17 +2,27 @@
 
 from __future__ import annotations
 
+import hashlib
+import json
+import math
+import os
 import re
 import threading
 import time
+from collections.abc import Mapping
+from contextlib import ExitStack
 from datetime import date
+from email.utils import parsedate_to_datetime
 from io import BytesIO
+from pathlib import Path
 from typing import Any
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import requests
 
 from .cli_limiter import network_request_lease
 from .env import getenv, getenv_bool, getenv_int
+from .innovation.locking import stage_lock
 
 _OPENALEX_KEY_LOCK = threading.Lock()
 _OPENALEX_KEY_INDEX = 0
@@ -26,7 +36,7 @@ def _next_openalex_key(current: str = "") -> str:
         for item in re.split(
             r"[,;\s]+",
             " ".join(
-                [current, getenv("OPENALEX_API_KEY"), getenv("OPENALEX_API_KEYS")]
+                [getenv("OPENALEX_API_KEYS"), getenv("OPENALEX_API_KEY"), current]
             ),
         )
         if item
@@ -34,28 +44,76 @@ def _next_openalex_key(current: str = "") -> str:
     keys = list(dict.fromkeys(values))
     if not keys:
         return ""
-    with _OPENALEX_KEY_LOCK:
-        now = time.monotonic()
-        available = [
-            key for key in keys if _OPENALEX_KEY_COOLDOWNS.get(key, 0.0) <= now
-        ]
-        if not available:
-            return ""
-        key = available[_OPENALEX_KEY_INDEX % len(available)]
-        _OPENALEX_KEY_INDEX += 1
-    return key
+    while True:
+        with _OPENALEX_KEY_LOCK:
+            now = time.monotonic()
+            for offset in range(len(keys)):
+                index = (_OPENALEX_KEY_INDEX + offset) % len(keys)
+                key = keys[index]
+                if _OPENALEX_KEY_COOLDOWNS.get(key, 0.0) <= now:
+                    _OPENALEX_KEY_INDEX = index + 1
+                    return key
+            delay = min(_OPENALEX_KEY_COOLDOWNS[key] - now for key in keys)
+        from .innovation.usage import log_progress
+
+        log_progress("[OpenAlex冷却] 所有Key暂不可用，等待=%.1f秒", min(delay, 60.0))
+        time.sleep(min(max(delay, 0.01), 60.0))
 
 
-def _suspend_openalex_key(key: str, retry_after: str) -> None:
+def _retry_after_seconds(value: str, *, epoch_allowed: bool = False) -> float:
+    try:
+        seconds = float(value)
+        if epoch_allowed and seconds > 1_000_000_000:
+            seconds -= time.time()
+    except ValueError:
+        try:
+            seconds = parsedate_to_datetime(value).timestamp() - time.time()
+        except (ValueError, TypeError, OverflowError):
+            return 0.0
+    return max(0.0, seconds) if math.isfinite(seconds) else 0.0
+
+
+def _budget_exhausted(headers: Mapping[str, str], body: str) -> bool:
+    for name in ("X-RateLimit-Remaining-USD", "X-RateLimit-Remaining"):
+        try:
+            if name in headers and float(headers[name]) <= 0:
+                return True
+        except ValueError:
+            continue
+    text = body.casefold()
+    return any(
+        marker in text
+        for marker in (
+            "insufficient budget",
+            "budget exhausted",
+            "daily budget",
+            "daily limit",
+            "credits exhausted",
+            "insufficient credits",
+        )
+    )
+
+
+def _suspend_openalex_key(
+    key: str, retry_after: str, response: requests.Response | None = None
+) -> None:
     if not key:
         return
-    try:
-        seconds = float(retry_after)
-    except ValueError:
-        seconds = 60.0
-    seconds = max(1.0, min(seconds, 86_400.0))
+    seconds = _retry_after_seconds(retry_after)
+    if response is not None and _budget_exhausted(
+        response.headers, response.text[:4096]
+    ):
+        seconds = max(
+            seconds,
+            _retry_after_seconds(
+                response.headers.get("X-RateLimit-Reset", ""), epoch_allowed=True
+            ),
+        )
+    seconds = max(1.0, seconds or 60.0)
     with _OPENALEX_KEY_LOCK:
-        _OPENALEX_KEY_COOLDOWNS[key] = time.monotonic() + seconds
+        _OPENALEX_KEY_COOLDOWNS[key] = max(
+            _OPENALEX_KEY_COOLDOWNS.get(key, 0.0), time.monotonic() + seconds
+        )
 
 
 def _safe_request_error(error: requests.RequestException) -> str:
@@ -66,15 +124,144 @@ def _safe_request_error(error: requests.RequestException) -> str:
     )
 
 
+def _is_openalex_url(url: str) -> bool:
+    return urlsplit(url).hostname in {"api.openalex.org", "content.openalex.org"}
+
+
+def _openalex_cache_key(url: str, kwargs: dict[str, Any]) -> str:
+    parts = urlsplit(url)
+    if (
+        parts.hostname != "api.openalex.org"
+        or not (parts.path == "/works" or parts.path.startswith("/works/"))
+        or kwargs.get("stream")
+        or "pdf" in str(kwargs.get("headers", {}).get("Accept", "")).casefold()
+    ):
+        return ""
+    prepared = requests.Request("GET", url, params=kwargs.get("params")).prepare()
+    parts = urlsplit(str(prepared.url))
+    query = sorted(
+        (key, value)
+        for key, value in parse_qsl(parts.query, keep_blank_values=True)
+        if key.casefold() != "api_key"
+    )
+    return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(query), ""))
+
+
+def _read_openalex_cache(path: Path, url: str, ttl: int) -> requests.Response | None:
+    try:
+        max_bytes = getenv_int("GEAR_OPENALEX_CACHE_ENTRY_MAX_BYTES", 4 * 1024**2)
+        if path.stat().st_size > max_bytes:
+            return None
+        entry = json.loads(path.read_text(encoding="utf-8"))
+        age = time.time() - float(entry["saved_at"])
+        if age < 0 or age > ttl:
+            return None
+        content = json.dumps(entry["payload"], ensure_ascii=False).encode("utf-8")
+    except (OSError, ValueError, TypeError, KeyError):
+        return None
+    response = requests.Response()
+    response.status_code = 200
+    response.url = url
+    response.encoding = "utf-8"
+    response._content = content
+    response.headers.update({"Content-Type": "application/json", "X-GEAR-Cache": "HIT"})
+    return response
+
+
+def _prune_openalex_cache(root: Path, incoming_size: int, ttl: int) -> None:
+    max_entries = max(1, getenv_int("GEAR_OPENALEX_CACHE_MAX_ENTRIES", 10_000))
+    max_bytes = max(1, getenv_int("GEAR_OPENALEX_CACHE_MAX_BYTES", 256 * 1024**2))
+    now = time.time()
+    entries: list[tuple[float, int, Path]] = []
+    for path in root.glob("*.json"):
+        try:
+            stat = path.stat()
+            if now - stat.st_mtime > ttl:
+                path.unlink(missing_ok=True)
+            else:
+                entries.append((stat.st_mtime, stat.st_size, path))
+        except OSError:
+            continue
+    entries.sort()
+    total = sum(size for _, size, _ in entries) + incoming_size
+    count = len(entries) + 1
+    for _, size, path in entries:
+        if count <= max_entries and total <= max_bytes:
+            break
+        path.unlink(missing_ok=True)
+        count -= 1
+        total -= size
+
+
+def _write_openalex_cache(path: Path, response: requests.Response, ttl: int) -> None:
+    if response.status_code != 200:
+        return
+    max_bytes = min(
+        getenv_int("GEAR_OPENALEX_CACHE_ENTRY_MAX_BYTES", 4 * 1024**2),
+        getenv_int("GEAR_OPENALEX_CACHE_MAX_BYTES", 256 * 1024**2),
+    )
+    if len(response.content) > max_bytes:
+        return
+    temporary = path.with_suffix(f".{os.getpid()}.{threading.get_ident()}.tmp")
+    try:
+        payload = response.json()
+        if not isinstance(payload, dict) or not (
+            isinstance(payload.get("results"), list)
+            or isinstance(payload.get("id"), str)
+        ):
+            return
+        entry = json.dumps(
+            {"saved_at": time.time(), "payload": payload}, ensure_ascii=False
+        ).encode("utf-8")
+        if len(entry) > max_bytes:
+            return
+        with stage_lock(path.parent / "capacity.lock"):
+            _prune_openalex_cache(path.parent, len(entry), ttl)
+            temporary.write_bytes(entry)
+            temporary.replace(path)
+    except (OSError, ValueError, TypeError):
+        try:
+            temporary.unlink(missing_ok=True)
+        except OSError:
+            pass
+
+
 def _limited_get(*args: Any, **kwargs: Any) -> requests.Response:
+    url = str(args[0]) if args else str(kwargs.get("url", ""))
+    cache_key = _openalex_cache_key(url, kwargs)
+    ttl = getenv_int("GEAR_OPENALEX_CACHE_TTL_SECONDS", 7 * 86400)
+    if not cache_key or ttl <= 0:
+        return _network_get(*args, **kwargs)
+    default_root = Path(__file__).resolve().parents[1] / "data/cache/openalex_requests"
+    root = Path(getenv("GEAR_OPENALEX_CACHE_DIR", str(default_root))).expanduser()
+    digest = hashlib.sha256(cache_key.encode("utf-8")).hexdigest()
+    path = root / f"{digest}.json"
+    # A fixed set of lock files bounds inode use while serializing identical requests.
+    with ExitStack() as stack:
+        try:
+            stack.enter_context(stage_lock(root / f"request_{digest[:2]}.lock"))
+        except OSError:
+            return _network_get(*args, **kwargs)
+        cached = _read_openalex_cache(path, cache_key, ttl)
+        if cached is not None:
+            from .innovation.usage import log_progress
+
+            log_progress("[OpenAlex缓存命中] 复用成功检索响应")
+            return cached
+        response = _network_get(*args, **kwargs)
+        _write_openalex_cache(path, response, ttl)
+        return response
+
+
+def _network_get(*args: Any, **kwargs: Any) -> requests.Response:
     if getenv_bool("GEAR_SCHOLAR_BYPASS_PROXY", False):
         kwargs.setdefault("proxies", {"http": "", "https": ""})
     retries = max(0, min(getenv_int("GEAR_NETWORK_RETRIES", 2), 5))
     for attempt in range(retries + 1):
         try:
             url = str(args[0]) if args else str(kwargs.get("url", ""))
-            params = kwargs.get("params")
-            if "openalex.org" in url.casefold() and isinstance(params, dict):
+            params = kwargs.get("params") or {}
+            if _is_openalex_url(url) and isinstance(params, dict):
                 request_params = dict(params)
                 key = _next_openalex_key(str(request_params.get("api_key", "")))
                 if key:
@@ -86,18 +273,22 @@ def _limited_get(*args: Any, **kwargs: Any) -> requests.Response:
                 response = requests.get(*args, **kwargs)
             if response.status_code != 429:
                 return response
-            if attempt == retries:
-                return response
             from .innovation.usage import log_progress
 
             retry_after = response.headers.get("Retry-After", "")
             used_key = str(kwargs.get("params", {}).get("api_key", ""))
-            _suspend_openalex_key(used_key, retry_after)
+            if _is_openalex_url(url):
+                _suspend_openalex_key(used_key, retry_after, response)
+            if attempt == retries:
+                return response
             response.close()
             if used_key:
                 delay = 0.25
             else:
-                delay = min(float(2 ** (attempt + 1)), 30.0)
+                delay = max(
+                    min(float(2 ** (attempt + 1)), 30.0),
+                    _retry_after_seconds(retry_after),
+                )
             log_progress(
                 "[网络响应重试] attempt=%d/%d，status=%d，等待=%.1f秒",
                 attempt + 1,
@@ -403,6 +594,7 @@ class OpenScholar:
                 "query": query,
                 "search_mode": "semantic" if semantic else "text",
                 "status_code": response.status_code,
+                "cache_hit": response.headers.get("X-GEAR-Cache") == "HIT",
             }
         )
         if response.status_code != 200:
@@ -556,6 +748,7 @@ class OpenScholar:
             "abstract": abstract,
             "isOpenAccess": bool(open_access.get("is_oa")),
             "url": location.get("pdf_url") or location.get("landing_page_url") or "",
+            "open_access_locations": cls._openalex_locations(work),
             "externalIds": {
                 "DOI": doi,
                 "OpenAlex": ids.get("openalex") or work.get("id") or "",
@@ -577,6 +770,27 @@ class OpenScholar:
             "relevance_score": work.get("relevance_score"),
             "retrieval_source": "openalex",
         }
+
+    @staticmethod
+    def _openalex_locations(work: dict[str, Any]) -> list[dict[str, Any]]:
+        raw_locations = work.get("locations")
+        candidates = [work.get("best_oa_location")]
+        if isinstance(raw_locations, list):
+            candidates.extend(raw_locations)
+        candidates.append(work.get("primary_location"))
+        locations: list[dict[str, Any]] = []
+        for raw in candidates:
+            if not isinstance(raw, dict):
+                continue
+            location: dict[str, Any] = {"is_oa": raw.get("is_oa") is True}
+            for field in ("pdf_url", "landing_page_url", "version", "license"):
+                value = raw.get(field)
+                location[field] = value.strip() if isinstance(value, str) else ""
+            if (
+                location["pdf_url"] or location["landing_page_url"]
+            ) and location not in locations:
+                locations.append(location)
+        return locations
 
     @staticmethod
     def _reconstruct_abstract(index: Any) -> str:

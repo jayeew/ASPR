@@ -84,22 +84,16 @@ def test_batched_relations_preserve_ordered_evidence(
             retrieval_query_id="q",
             retrieval_source="test",
         )
-        for i in range(7)
+        for i in range(12)
     ]
     store = EvidenceStore(tmp_path)
     supervisor = EvidenceSupervisor(GearConfig(), store)
     relations = {}
     actions = []
     supervisor._classify(span, claim, works, date(2026, 1, 1), relations, actions)
-    assert batches == [["w0", "w1", "w2", "w3", "w4"]]
-    assert list(relations) == ["w0", "w1", "w2", "w3", "w4"]
-    assert actions[0].output_ids == [
-        "RELATION:c:w0",
-        "RELATION:c:w1",
-        "RELATION:c:w2",
-        "RELATION:c:w3",
-        "RELATION:c:w4",
-    ]
+    assert batches == [[f"w{i}" for i in range(10)]]
+    assert list(relations) == [f"w{i}" for i in range(10)]
+    assert actions[0].output_ids == [f"RELATION:c:w{i}" for i in range(10)]
 
 
 def test_repeated_identity_exclusion_preserves_changed_provenance(

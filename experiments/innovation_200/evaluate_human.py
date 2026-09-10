@@ -13,6 +13,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
+from experiments.innovation_200.blinding import (
+    EVALUATION_VERSION,
+    BlindHumanEvaluation,
+    blind_reports,
+    evaluation_root,
+    payload_hash,
+)
 from experiments.innovation_200.common import (
     configure_limits,
     experiment_config,
@@ -60,7 +67,7 @@ def score(
         if ref.reasons:
             reasons[match.reason_coverage] += 1
             reason_total += 1
-        contradictions += int(match.contradiction)
+        contradictions += int(match.contradiction and match.scope == "same")
         if ref.tier == "A":
             a_total += 1
             found = match.scope != "none"
@@ -86,6 +93,7 @@ def score(
         "reason_missing": reasons["missing"],
         "reason_reference_count": reason_total,
         "contradiction_rate": contradictions / total if total else None,
+        "contradiction_definition": "opposite judgment with scope=same",
         "stance_by_dimension": {
             key: dict(value) for key, value in stance_by_dimension.items()
         },
@@ -164,12 +172,13 @@ def evaluate(
     logger: logging.Logger | None = None,
 ) -> dict[str, object]:
     paper_id = str(raw["paper_id"])
+    output_root = evaluation_root(study)
     systems = (str(raw["system"]),) if "system" in raw else SYSTEMS
     if any(system not in SYSTEMS for system in systems):
         raise ValueError("Unknown report system")
     if (
         all(
-            (study / "human_evaluation" / system / f"{paper_id}.json").exists()
+            (output_root / "human" / system / f"{paper_id}.json").exists()
             for system in systems
         )
         and not overwrite
@@ -195,7 +204,7 @@ def evaluate(
     refs = HumanReferenceSet.model_validate_json(refs_path.read_text(encoding="utf-8"))
     with stage_lock(study / ".locks" / f"reviewer_consistency_{paper_id}"):
         write_json(
-            study / "reviewer_consistency" / f"{paper_id}.json",
+            output_root / "reviewer_consistency" / f"{paper_id}.json",
             reviewer_consistency(refs),
         )
     main_refs = refs.model_copy(
@@ -203,7 +212,7 @@ def evaluate(
     )
     completed = 0
     for system in systems:
-        target = study / "human_evaluation" / system / f"{paper_id}.json"
+        target = output_root / "human" / system / f"{paper_id}.json"
         if target.exists() and not overwrite:
             continue
         report_path = study / "reports" / system / f"{paper_id}.json"
@@ -216,6 +225,7 @@ def evaluate(
                 {
                     "paper_id": paper_id,
                     "system": system,
+                    "evaluation_version": EVALUATION_VERSION,
                     "evaluation": None,
                     "metrics": score(
                         HumanEvaluation(paper_id=paper_id, system=system, matches=[]),
@@ -225,29 +235,47 @@ def evaluate(
             )
             completed += 1
             continue
-        schema = HumanEvaluation.model_json_schema()
-        schema["properties"]["paper_id"]["enum"] = [paper_id]
-        schema["properties"]["system"]["enum"] = [system]
+        schema = BlindHumanEvaluation.model_json_schema()
         schema["properties"]["matches"]["minItems"] = len(main_refs.references)
         schema["properties"]["matches"]["maxItems"] = len(main_refs.references)
         schema["$defs"]["HumanMatch"]["properties"]["reference_id"]["enum"] = [
             ref.reference_id for ref in main_refs.references
         ]
+        reports, mapping = blind_reports({"report": report})
+        judge_payload = {
+            "report": reports["report"],
+            "human_references": {
+                "references": [
+                    ref.model_dump(mode="json", exclude={"paper_id"})
+                    for ref in main_refs.references
+                ],
+                "limitations": main_refs.limitations,
+            },
+        }
+        mapping["human_references_sha256"] = payload_hash(
+            main_refs.model_dump(mode="json")
+        )
+        write_json(target.with_suffix(".mapping.json"), mapping)
+        write_json(
+            target.with_suffix(".request.json"),
+            {
+                "prompt": PROMPT,
+                "payload": judge_payload,
+                "response_schema": schema,
+            },
+        )
         wait_for_memory(logger)
         raw_result = LazyRoleClient(
             experiment_config(), "evaluation_judge"
         ).generate_json(
             system=PROMPT,
-            user=json.dumps(
-                {
-                    "report": report.model_dump(mode="json"),
-                    "human_references": main_refs.model_dump(mode="json"),
-                },
-                ensure_ascii=False,
-            ),
+            user=json.dumps(judge_payload, ensure_ascii=False),
             response_schema=schema,
         )
-        result = HumanEvaluation.model_validate(raw_result)
+        blind_result = BlindHumanEvaluation.model_validate(raw_result)
+        result = HumanEvaluation(
+            paper_id=paper_id, system=system, matches=blind_result.matches
+        )
         if {match.reference_id for match in result.matches} != {
             ref.reference_id for ref in main_refs.references
         } or len(result.matches) != len(main_refs.references):
@@ -259,6 +287,7 @@ def evaluate(
             {
                 "paper_id": paper_id,
                 "system": system,
+                "evaluation_version": EVALUATION_VERSION,
                 "evaluation": result.model_dump(mode="json"),
                 "metrics": score(result, main_refs),
             },
@@ -281,7 +310,9 @@ def main() -> None:
     parser.add_argument("--wait-for-inputs", action="store_true")
     parser.add_argument("--verbose", action="store_true")
     args = parser.parse_args()
-    logger = setup_stage_logging(args.study, "evaluate_human", args.verbose)
+    logger = setup_stage_logging(
+        evaluation_root(args.study), "evaluate_human", args.verbose
+    )
     logger.info(
         "[配置] study=%s，workers=%d，cli_limit=%d，wait=%s，overwrite=%s",
         args.study,
@@ -301,8 +332,8 @@ def main() -> None:
             row, args.study, args.overwrite, args.wait_for_inputs, logger
         ),
         workers=args.workers,
-        status_path=args.study / "status/evaluate_human.json",
-        usage_dir=args.study / "status/usage/evaluate_human",
+        status_path=evaluation_root(args.study) / "status/evaluate_human.json",
+        usage_dir=evaluation_root(args.study) / "status/usage/evaluate_human",
         logger=logger,
     )
 

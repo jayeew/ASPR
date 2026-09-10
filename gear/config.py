@@ -18,7 +18,7 @@ DEFAULT_CONFIG = PROJECT_ROOT / "configs" / "gear" / "default.json"
 class CodexCliEndpoint(StrictModel):
     executable: str = "codex"
     model: str = "gpt-5.6-terra"
-    reasoning_effort: Literal["low", "medium", "high", "xhigh"] = "high"
+    reasoning_effort: Literal["low", "medium", "high", "xhigh", "max"] = "high"
     timeout_seconds: int = 1800
     sandbox: Literal["read-only"] = "read-only"
 
@@ -56,6 +56,8 @@ class RetrievalLimits(StrictModel):
     reranker_model_path: Path = Path("/home/jayee/models/OpenScholar_Reranker")
     ranking_algorithm_fingerprint: str = "qwen3_openscholar_claim_prior_v1"
     openalex_pdf_enabled: bool = False
+    external_fulltext_enabled: bool = False
+    external_fulltext_max_works: int = Field(default=2, ge=0, le=5)
     openalex_pdf_max_downloads: int = Field(default=3, ge=0, le=12)
     openalex_pdf_max_bytes: int = Field(default=25_000_000, ge=1_000_000)
     openalex_pdf_max_pages: int = Field(default=100, ge=1)
@@ -150,6 +152,21 @@ def load_config(
             raise ValueError("GEAR_HISTORICAL_PDF_ENABLED must be true or false")
         payload.setdefault("retrieval", {})["openalex_pdf_enabled"] = (
             historical_pdf in {"1", "true", "yes", "on"}
+        )
+    external = getenv("GEAR_EXTERNAL_FULLTEXT_ENABLED").strip().casefold()
+    if external:
+        if external not in {"1", "true", "yes", "on", "0", "false", "no", "off"}:
+            raise ValueError("GEAR_EXTERNAL_FULLTEXT_ENABLED must be true or false")
+        payload.setdefault("retrieval", {})["external_fulltext_enabled"] = external in {
+            "1",
+            "true",
+            "yes",
+            "on",
+        }
+    external_max = getenv("GEAR_EXTERNAL_FULLTEXT_MAX_WORKS").strip()
+    if external_max:
+        payload.setdefault("retrieval", {})["external_fulltext_max_works"] = int(
+            external_max
         )
     return GearConfig.model_validate(payload)
 

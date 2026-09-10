@@ -10,6 +10,8 @@ import urllib.parse
 import urllib.request
 from collections import defaultdict
 from collections.abc import Callable, Mapping, Sequence
+from concurrent.futures import ThreadPoolExecutor
+from contextvars import copy_context
 from datetime import date
 from pathlib import Path
 from typing import Any, Literal, Protocol, cast
@@ -18,6 +20,8 @@ from .config import GearConfig, load_config
 from .contracts import (
     EvidenceLevel,
     EvidenceSpan,
+    FulltextProvenance,
+    OpenAccessLocation,
     PaperClaim,
     PaperIR,
     QuerySpec,
@@ -30,6 +34,7 @@ from .contracts import (
     RetrievedWork,
     ScientificSearchFrame,
 )
+from .env import getenv_int
 from .graph_prior_contracts import ResourceLedger
 from .local_ranking import LocalScientificRanker
 from .model_client import (
@@ -394,7 +399,15 @@ class QueryPlanner:
         query = self._semantic_query(frame, contrastive=True)
         normal = self._semantic_query(frame, contrastive=False)
         if query.casefold() == normal.casefold():
-            raise ValueError("contrastive query did not change the search intent")
+            # Broaden to the object/problem and legacy terminology, omitting
+            # the proposed mechanism. Do not merely append a cosmetic suffix.
+            terms = self._without_brand(
+                [*frame.target_object, *frame.task_problem, *frame.legacy_terms],
+                frame.brand_terms,
+            )
+            query = ". ".join(dict.fromkeys(terms))[:420].strip()
+            if len(query) < 40 or query.casefold() == normal.casefold():
+                raise ValueError("contrastive query did not change the search intent")
         return self._spec(
             claim,
             frame,
@@ -620,6 +633,7 @@ class PriorArtService:
         self.last_graph_seed_works: list[RetrievedWork] = []
         self._pdf_downloads_used = 0
         self._pdf_text_cache: dict[str, str] = {}
+        self.fulltext_attempts: dict[str, dict[str, Any]] = {}
         self._frames: dict[str, ScientificSearchFrame] = {}
         self._coverage_state: dict[str, dict[str, Any]] = {}
 
@@ -1014,6 +1028,11 @@ class PriorArtService:
             maximum=min(
                 remaining_slots,
                 self.config.retrieval.retained_candidates_per_claim,
+                (
+                    max(1, budget.fulltext_max // 2)
+                    if family == "normal" and budget.contrastive_max > 0
+                    else remaining_slots
+                ),
             ),
         )
         if resource_ledger is not None:
@@ -1068,7 +1087,10 @@ class PriorArtService:
         )
         enough_roles = len(normal_roles & roles) >= 3
         contrastive_done = not require_contrastive or "legacy_contrastive" in roles
-        eligible_count = len(values.get("eligible_ids", set()))
+        eligible_count = max(
+            len(values.get("eligible_ids", set())),
+            int(values.get("prior_eligible_count", 0)),
+        )
         compared = sorted(values.get("compared_ids", set()))
         candidate_coverage = (
             eligible_count >= self.config.retrieval.minimum_unique_candidates
@@ -1641,9 +1663,29 @@ class PriorArtService:
     ) -> dict[str, dict[str, Any]]:
         if not works:
             return {}
+        batches = [works[start : start + 8] for start in range(0, len(works), 8)]
+        workers = max(1, min(4, getenv_int("GEAR_CANDIDATE_GATE_WORKERS", 2)))
+        if len(batches) > 1 and workers > 1:
+            # Initialize the lazy client once before submitting independent calls.
+            if self.rerank_generator is None:
+                self.query_planner._client()
+            with ThreadPoolExecutor(max_workers=workers) as executor:
+                jobs = [
+                    executor.submit(
+                        copy_context().run,
+                        self._rerank_batch,
+                        frame,
+                        batch,
+                        claim=claim,
+                        target_span=target_span,
+                    )
+                    for batch in batches
+                ]
+                return {
+                    key: value for job in jobs for key, value in job.result().items()
+                }
         decisions: dict[str, dict[str, Any]] = {}
-        for start in range(0, len(works), 8):
-            batch = works[start : start + 8]
+        for batch in batches:
             decisions.update(
                 self._rerank_batch(
                     frame,
@@ -1706,6 +1748,12 @@ class PriorArtService:
             ensure_ascii=False,
         )
         last_error: TypeError | ValueError | None = None
+        schema = self._candidate_gate_schema()
+        decision_schema = schema["properties"]["decisions"]
+        decision_schema["minItems"] = decision_schema["maxItems"] = len(works)
+        decision_schema["items"]["properties"]["work_id"]["enum"] = [
+            work.work_id for work in works
+        ]
         for attempt in range(2):
             prompt = CANDIDATE_GATE_PROMPT
             if attempt:
@@ -1719,7 +1767,7 @@ class PriorArtService:
                 else self.query_planner._client().generate_json(
                     system=prompt,
                     user=user,
-                    response_schema=self._candidate_gate_schema(),
+                    response_schema=schema,
                 )
             )
             try:
@@ -2272,7 +2320,12 @@ class PriorArtService:
         abstract = str(row.get("abstract") or "").strip()
         full_text = str(row.get("full_text") or row.get("fulltext") or "").strip()
         citation_context = str(row.get("citation_context") or "").strip()
-        if not abstract and not full_text and not citation_context:
+        if (
+            not abstract
+            and not full_text
+            and not citation_context
+            and not self.config.retrieval.external_fulltext_enabled
+        ):
             full_text = self._openalex_pdf_text(work_id)
         authors_raw = row.get("authors") or []
         if isinstance(authors_raw, str):
@@ -2323,6 +2376,10 @@ class PriorArtService:
             publication_date=publication_date,
             publication_year=publication_year,
             doi=doi,
+            open_access_locations=[
+                OpenAccessLocation.model_validate(location)
+                for location in row.get("open_access_locations") or []
+            ],
             cited_work_ids=[str(item) for item in row.get("referenced_works") or []],
             topics=[str(item) for item in row.get("topics") or [] if str(item)],
             keywords=[str(item) for item in row.get("keywords") or [] if str(item)],
@@ -2336,6 +2393,8 @@ class PriorArtService:
         """Acquire full text for a selected consequential candidate within PDF budget."""
         if any(span.source is EvidenceLevel.FULLTEXT for span in work.spans):
             return work
+        if self.config.retrieval.external_fulltext_enabled:
+            return self._external_fulltext(work, target_text)
         text = self._openalex_pdf_text(work.work_id)
         if not text:
             return work
@@ -2343,6 +2402,53 @@ class PriorArtService:
             text, query=target_text, source=EvidenceLevel.FULLTEXT
         )
         return work.model_copy(update={"spans": spans}) if spans else work
+
+    def _external_fulltext(
+        self, work: RetrievedWork, target_text: str
+    ) -> RetrievedWork:
+        from .fulltext import fetch_external_fulltext
+
+        limits = self.config.retrieval
+        locations = [location.model_dump() for location in work.open_access_locations]
+        # Older search caches may lack OA locations; the DOI fallback stays
+        # inside the external fetch deadline and never waits for OpenAlex quota.
+        result = fetch_external_fulltext(
+            work.work_id,
+            work.doi or "",
+            work.title,
+            locations,
+            max_bytes=limits.openalex_pdf_max_bytes,
+            max_pages=limits.openalex_pdf_max_pages,
+            max_characters=limits.openalex_pdf_max_characters,
+        )
+        result["extraction_limits"] = {
+            "max_bytes": limits.openalex_pdf_max_bytes,
+            "max_pages": limits.openalex_pdf_max_pages,
+            "max_characters": limits.openalex_pdf_max_characters,
+        }
+        self.fulltext_attempts[work.work_id] = result
+        text = str(result.get("text") or "")
+        if (
+            result.get("status") != "success"
+            or not result.get("identity_verified")
+            or not text
+        ):
+            return work
+        spans = self.passage_extractor.extract(
+            text, query=target_text, source=EvidenceLevel.FULLTEXT
+        )
+        if not spans:
+            return work
+        provenance = FulltextProvenance(
+            source_url=result["source_url"],
+            provider=result["provider"],
+            format=result["format"],
+            identity_verified=True,
+            text_sha256="sha256:" + hashlib.sha256(text.encode()).hexdigest(),
+        )
+        return work.model_copy(
+            update={"spans": spans, "fulltext_provenance": provenance}
+        )
 
     def _openalex_pdf_text(self, work_id: str) -> str:
         limits = self.config.retrieval

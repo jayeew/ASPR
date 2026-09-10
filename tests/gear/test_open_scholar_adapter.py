@@ -3,10 +3,16 @@ from __future__ import annotations
 from datetime import date
 from io import BytesIO
 
+import pytest
 import requests
 from reportlab.pdfgen import canvas
 
 from gear.scholar import OpenScholar
+
+
+@pytest.fixture(autouse=True)
+def disable_persistent_cache(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("GEAR_OPENALEX_CACHE_TTL_SECONDS", "0")
 
 
 class Args:

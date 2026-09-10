@@ -5,7 +5,10 @@ from __future__ import annotations
 import hashlib
 import json
 from collections.abc import Iterable
+from concurrent.futures import ThreadPoolExecutor
+from contextvars import copy_context
 from datetime import date
+from pathlib import Path
 
 from gear.config import GearConfig
 from gear.contracts import (
@@ -38,7 +41,7 @@ def _digest(text: str) -> str:
     return "sha256:" + hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
-MAX_CANDIDATE_WORKS_PER_CLAIM = 5
+MAX_CANDIDATE_WORKS_PER_CLAIM = 10
 
 
 def _claim_type(_: GearClaim) -> ClaimType:
@@ -60,6 +63,8 @@ class EvidenceSupervisor:
         self.prior_art = PriorArtService(config, local_ranker=local_ranker)
         self.classifier = RelationClassifier(config)
         self.planner = LazyRoleClient(config, "supervisor_planner")
+        self.execution_errors: list[str] = []
+        self._fulltext_requested: set[str] = set()
 
     def _record_identity(
         self, claim: GearClaim, work: RetrievedWork, reason: str
@@ -80,6 +85,7 @@ class EvidenceSupervisor:
         cutoff: date,
         *,
         seed_work_ids: list[str] | None = None,
+        recovery_source: Path | None = None,
     ) -> GearClaimCard:
         from gear.innovation.usage import log_progress
 
@@ -109,6 +115,15 @@ class EvidenceSupervisor:
         relations: dict[str, RelationCard] = {}
         actions: list[SupervisorAction] = []
         normal_done = contrastive_done = expanded_done = stability_done = False
+        if recovery_source is not None:
+            from gear.innovation.gear_resume import restore_evidence
+
+            normal_done, contrastive_done = restore_evidence(
+                self, recovery_source, claim, cutoff, works, relations, budget
+            )
+            log_progress(
+                "[补检索证据复用] 文献=%d，关系=%d", len(works), len(relations)
+            )
         for _ in range(12):
             unclassified = [
                 work for key, work in works.items() if key not in relations
@@ -167,6 +182,7 @@ class EvidenceSupervisor:
                 found = self.prior_art.expand_neighbors(
                     seed, paper_claim, cutoff, budget
                 )
+                self._record_retrieval_errors()
                 for work in found:
                     if (
                         work.work_id not in works
@@ -292,6 +308,7 @@ class EvidenceSupervisor:
                 graph_seed_work_ids=seeds,
                 graph_neighbor_slots=len(seeds),
             )
+        self._record_retrieval_errors()
         log_progress(
             "[检索完成] family=%s，候选=%d，查询=%d，失败=%d",
             family,
@@ -311,9 +328,9 @@ class EvidenceSupervisor:
                 self._record_identity(claim, work, identity)
                 continue
             is_new = work.work_id not in works
-            works[work.work_id] = work
             if not is_new:
                 continue
+            works[work.work_id] = work
             self.store.add_evidence(
                 f"WORK:{claim.claim_id}:{work.work_id}",
                 "retrieved_work",
@@ -327,6 +344,20 @@ class EvidenceSupervisor:
                 input_ids=seeds,
                 output_ids=[x.work_id for x in found],
             )
+        )
+
+    def _record_retrieval_errors(self) -> None:
+        self.execution_errors.extend(self.prior_art.last_failures)
+        failure_prefixes = (
+            "query_planner_degraded:",
+            "comparability_audit_degraded:",
+            "local_ranker_degraded:",
+            "global_ranker_degraded:",
+        )
+        self.execution_errors.extend(
+            note
+            for note in self.prior_art.last_advisories
+            if note.startswith(failure_prefixes)
         )
 
     def _classify(
@@ -344,31 +375,7 @@ class EvidenceSupervisor:
 
         from gear.innovation.usage import log_progress, progress_scope
 
-        prepared: list[RetrievedWork] = []
-        if not self.config.retrieval.openalex_pdf_enabled:
-            log_progress("[历史全文下载关闭] 使用已有证据，不新增PDF请求；文献=%d", len(pending))
-        for work in pending:
-            if not self.config.retrieval.openalex_pdf_enabled:
-                prepared.append(work)
-                continue
-            log_progress("[历史全文补强开始] work_id=%s", work.work_id)
-            upgraded = self.prior_art.upgrade_fulltext(
-                work, claim.normalized_claim_text
-            )
-            if upgraded is not work:
-                self.store.add_evidence(
-                    f"FULLTEXT:{claim.claim_id}:{work.work_id}",
-                    "retrieved_work_fulltext",
-                    upgraded.model_dump(mode="json"),
-                )
-                self._works[work.work_id] = upgraded
-            log_progress(
-                "[历史全文补强完成] work_id=%s，升级=%s",
-                work.work_id,
-                upgraded is not work,
-            )
-            prepared.append(upgraded)
-        pending = prepared
+        pending = self._prepare_fulltext(claim, pending)
         log_progress("[关系批量判断开始] 文献=%d", len(pending))
         with progress_scope("operation=relation_batch"):
             cards = self.classifier.classify_many(
@@ -379,6 +386,10 @@ class EvidenceSupervisor:
                 target_claim_text=claim.normalized_claim_text,
             )
         log_progress("[关系批量判断完成] 文献=%d", len(cards))
+        if getattr(self.classifier, "last_failure", None):
+            self.execution_errors.append(
+                f"relation_model:{self.classifier.last_failure}"
+            )
         for work, card in zip(pending, cards):
             relations[work.work_id] = card
             key = f"RELATION:{claim.claim_id}:{work.work_id}"
@@ -393,6 +404,70 @@ class EvidenceSupervisor:
                     output_ids=new_ids,
                 )
             )
+
+    def _prepare_fulltext(
+        self, claim: GearClaim, pending: list[RetrievedWork]
+    ) -> list[RetrievedWork]:
+        from gear.innovation.usage import log_progress
+
+        limits = self.config.retrieval
+        if not (limits.external_fulltext_enabled or limits.openalex_pdf_enabled):
+            log_progress("[历史全文下载关闭] 使用已有摘要；文献=%d", len(pending))
+            return pending
+        maximum = (
+            limits.external_fulltext_max_works
+            if limits.external_fulltext_enabled
+            else limits.openalex_pdf_max_downloads
+        )
+        selected = [
+            work for work in pending if work.work_id not in self._fulltext_requested
+        ][: max(0, maximum - len(self._fulltext_requested))]
+        self._fulltext_requested.update(work.work_id for work in selected)
+        upgraded_by_id: dict[str, RetrievedWork] = {}
+        log_progress(
+            "[历史全文队列] 本批=%d，Claim预算=%d，外部来源=%s",
+            len(selected),
+            maximum,
+            limits.external_fulltext_enabled,
+        )
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            jobs = [
+                (
+                    work,
+                    executor.submit(
+                        copy_context().run,
+                        self.prior_art.upgrade_fulltext,
+                        work,
+                        claim.normalized_claim_text,
+                    ),
+                )
+                for work in selected
+            ]
+            for work, future in jobs:
+                upgraded = future.result()
+                attempt = self.prior_art.fulltext_attempts.get(work.work_id)
+                if attempt:
+                    self.store.add_evidence(
+                        f"FULLTEXT_FETCH:{claim.claim_id}:{work.work_id}",
+                        "fulltext_acquisition",
+                        attempt,
+                    )
+                    log_progress(
+                        "[外部全文结果] work_id=%s，status=%s，provider=%s，cache=%s",
+                        work.work_id,
+                        attempt.get("status"),
+                        attempt.get("provider"),
+                        attempt.get("cache_hit"),
+                    )
+                if upgraded is not work:
+                    self.store.add_evidence(
+                        f"FULLTEXT:{claim.claim_id}:{work.work_id}",
+                        "retrieved_work_fulltext",
+                        upgraded.model_dump(mode="json"),
+                    )
+                    self._works[work.work_id] = upgraded
+                upgraded_by_id[work.work_id] = upgraded
+        return [upgraded_by_id.get(work.work_id, work) for work in pending]
 
     @staticmethod
     def _antecedents(relations: object) -> list[RelationCard]:
@@ -492,6 +567,7 @@ class EvidenceSupervisor:
             )
             return str(raw["action"]), str(raw["reason"])
         except (RuntimeError, TypeError, ValueError, KeyError) as exc:
+            self.execution_errors.append(f"planner:{exc}")
             return (
                 legal[0],
                 f"Planner unavailable; deterministic legal action selected: {exc}",

@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import argparse
 import gzip
-import hashlib
 import json
 import logging
 import multiprocessing
@@ -14,11 +13,13 @@ import re
 import shutil
 import sqlite3
 import sys
+import tempfile
 import time
+from collections.abc import Iterable, Sequence
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Iterable, Sequence
+from typing import Any
 from urllib.parse import unquote
 
 import pyarrow as pa
@@ -29,7 +30,7 @@ DEFAULT_SNAPSHOT = Path("/mnt/d/FabCitationData/openalex-snapshot")
 DEFAULT_ID_INDEX = Path("/home/jayee/workspace/FabCitation/openalex_snapshot_reference_check_results/analysis_state.db")
 DEFAULT_TARGETS = PROJECT_ROOT / "data" / "claim_graph" / "nature_targets.parquet"
 DEFAULT_OUTPUT_ROOT = PROJECT_ROOT / "data" / "claim_graph"
-DOI_PATTERN = re.compile(r"10\.\d{4,9}/[-._;()/:A-Z0-9]+", re.I)
+DOI_PATTERN = re.compile(r"10\.\d{4,9}/[-._;()/:A-Z0-9]+", re.IGNORECASE)
 
 NODE_SCHEMA = pa.schema([
     pa.field("work_id", pa.string(), False), pa.field("doi", pa.string()),
@@ -105,6 +106,7 @@ def scan_shard(task: tuple[int, str]) -> dict[str, Any]:
     shard = Path(shard_text)
     nodes: list[dict[str, Any]] = []
     edges: list[dict[str, Any]] = []
+    anomalies: list[dict[str, Any]] = []
     seen = 0
     with gzip.open(shard, "rt", encoding="utf-8", errors="replace") as handle:
         for line in handle:
@@ -128,8 +130,19 @@ def scan_shard(task: tuple[int, str]) -> dict[str, Any]:
             nodes.append(project_node(record, hop, article_id))
             if _WORKER_PHASE == "pass3":
                 continue
-            references = {short_work_id(value) for value in record.get("referenced_works") or []}
-            references.discard("")
+            references: set[str] = set()
+            for reference in record.get("referenced_works") or []:
+                reference_id = short_work_id(reference)
+                reason = ("invalid_work_id" if not reference_id else
+                          "same_work_citation" if reference_id == work_id else
+                          "duplicate_reference" if reference_id in references else None)
+                if reason:
+                    anomalies.append({"reason": reason, "source_shard": str(shard),
+                                      "source_line": seen, "citing_work_id": work_id,
+                                      "raw_citing_id": record.get("id"),
+                                      "raw_cited_id": reference, "cited_work_id": reference_id})
+                else:
+                    references.add(reference_id)
             for reference_id in references:
                 if _WORKER_PHASE == "pass1":
                     cited_hop = 0 if reference_id in _TARGET_IDS else 1
@@ -142,6 +155,8 @@ def scan_shard(task: tuple[int, str]) -> dict[str, Any]:
             handle.write(json.dumps({"kind": "node", "row": row}, ensure_ascii=False) + "\n")
         for row in edges:
             handle.write(json.dumps({"kind": "edge", "row": row}, ensure_ascii=False) + "\n")
+        for row in anomalies:
+            handle.write(json.dumps({"kind": "anomaly", "row": row}, ensure_ascii=False) + "\n")
     return {"index": index, "shard": shard.name, "seen": seen, "nodes": len(nodes), "edges": len(edges)}
 
 
@@ -256,23 +271,45 @@ def normalized_node_rows(output_root: Path, p_ids: set[str], r1_ids: set[str], r
 
 
 def normalized_edge_rows(output_root: Path, p_ids: set[str], r1_ids: set[str], r2_ids: set[str]) -> Iterable[dict[str, Any]]:
-    """Normalize hop labels after Pass 1 knows all target Work IDs."""
+    """Quarantine invalid/duplicate citations, including pre-fix resumed chunks."""
     valid_ids = p_ids | r1_ids | r2_ids
-    for phase in ("pass1", "pass2"):
-        for row in iter_chunk_rows(output_root / "chunks" / "paper_graph" / phase, "edge"):
-            citing_id, cited_id = row["citing_work_id"], row["cited_work_id"]
-            if phase == "pass1" and citing_id not in p_ids:
-                continue
-            if phase == "pass2" and citing_id not in r1_ids:
-                continue
-            if citing_id not in valid_ids or cited_id not in valid_ids:
-                continue
-            yield {
-                "citing_work_id": citing_id,
-                "cited_work_id": cited_id,
-                "citing_hop_min": 0 if citing_id in p_ids else 1,
-                "cited_hop_min": 0 if cited_id in p_ids else (1 if cited_id in r1_ids else 2),
-            }
+    audit_path = output_root / "paper_edge_anomalies.jsonl"
+    with tempfile.TemporaryDirectory(prefix="aspr-edge-dedup-") as temporary:
+        database = sqlite3.connect(str(Path(temporary) / "seen.sqlite"))
+        database.execute("CREATE TABLE seen (a TEXT, b TEXT, PRIMARY KEY(a,b)) WITHOUT ROWID")
+        try:
+            with audit_path.open("w", encoding="utf-8") as audit:
+                for phase in ("pass1", "pass2"):
+                    chunk_dir = output_root / "chunks" / "paper_graph" / phase
+                    for path in sorted(chunk_dir.glob("*.jsonl")):
+                        with path.open(encoding="utf-8") as handle:
+                            for line_number, line in enumerate(handle, 1):
+                                payload = json.loads(line)
+                                if payload["kind"] == "anomaly":
+                                    audit.write(json.dumps(payload["row"], ensure_ascii=False) + "\n")
+                                if payload["kind"] != "edge":
+                                    continue
+                                row = payload["row"]
+                                a, b = row["citing_work_id"], row["cited_work_id"]
+                                reason = ("invalid_work_id" if not short_work_id(a) or not short_work_id(b) else
+                                          "same_work_citation" if a == b else
+                                          "missing_endpoint" if a not in valid_ids or b not in valid_ids else None)
+                                if not reason and ((phase == "pass1" and a not in p_ids) or
+                                                   (phase == "pass2" and a not in r1_ids)):
+                                    continue
+                                if not reason:
+                                    inserted = database.execute("INSERT OR IGNORE INTO seen VALUES (?, ?)", (a, b))
+                                    if inserted.rowcount == 0:
+                                        reason = "duplicate_citation"
+                                if reason:
+                                    audit.write(json.dumps({"reason": reason, "source_chunk": str(path),
+                                                            "source_line": line_number, **row}) + "\n")
+                                    continue
+                                yield {"citing_work_id": a, "cited_work_id": b,
+                                       "citing_hop_min": 0 if a in p_ids else 1,
+                                       "cited_hop_min": 0 if b in p_ids else (1 if b in r1_ids else 2)}
+        finally:
+            database.close()
 
 
 def build_graph(args: argparse.Namespace) -> None:

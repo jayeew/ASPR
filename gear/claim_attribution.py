@@ -151,7 +151,7 @@ class ClaimGraphRuntime:
 
     @property
     def insertion_policy(self) -> str:
-        return f"threshold_parent_path_v1:k={self.top_k}:cosine>{self.min_similarity}"
+        return f"threshold_parent_path_v2:k={self.top_k}:cosine>{self.min_similarity}"
 
     def close(self) -> None:
         if self._model is not None:
@@ -440,7 +440,8 @@ class ClaimGraphRuntime:
         neighbor_refs = {
             str(x[0])
             for x in self._paper_db.execute(
-                "SELECT cited_work_id FROM paper_edges WHERE citing_work_id = ?",
+                "SELECT DISTINCT cited_work_id FROM paper_edges WHERE citing_work_id = ? "
+                "AND citing_work_id != cited_work_id",
                 (neighbor_id,),
             )
         }
@@ -453,7 +454,9 @@ class ClaimGraphRuntime:
             if not chunk:
                 continue
             placeholders = ",".join("?" for _ in chunk)
-            query = f"SELECT COUNT(*) FROM paper_edges WHERE citing_work_id IN ({placeholders}) AND cited_work_id = ?"
+            query = (f"SELECT COUNT(DISTINCT citing_work_id) FROM paper_edges "
+                     f"WHERE citing_work_id IN ({placeholders}) AND cited_work_id = ? "
+                     "AND citing_work_id != cited_work_id")
             two_hop += int(
                 self._paper_db.execute(query, (*chunk, neighbor_id)).fetchone()[0]
             )

@@ -540,7 +540,7 @@ def test_neighbor_query_id_includes_traversal_direction(gear_config, paper_ir) -
     assert references_id != citations_id
 
 
-def test_redundant_contrastive_query_is_coverage_gap_not_service_failure(
+def test_redundant_contrastive_query_broadens_to_problem_without_mechanism(
     gear_config, paper_ir
 ):
     config = gear_config.model_copy(update={"allow_external_retrieval": True})
@@ -578,21 +578,22 @@ def test_redundant_contrastive_query_is_coverage_gap_not_service_failure(
         resource_ledger=ledger,
     )
 
-    assert works == []
+    assert works
     assert service.last_service_failed is False
     assert service.last_failures == []
-    assert service.last_advisories == [
-        "contrastive_query_coverage_gap:contrastive query did not change the search intent"
-    ]
+    assert not service.last_advisories
     assert ledger.logical_provider_searches == 1
-    assert ledger.network_provider_attempts == 0
+    assert ledger.network_provider_attempts == 1
+    frame = service.last_frame
+    query = service.last_query_specs[0].query
+    assert query != service.query_planner._semantic_query(frame, contrastive=False)
     coverage = service.coverage_card(
         claim.claim_id,
         date(2010, 1, 1),
         require_contrastive=True,
         direct_or_partial_found=False,
     )
-    assert coverage.coverage_sufficient is False
+    assert "legacy_contrastive" in coverage.completed_query_roles
 
 
 def test_metadata_only_candidates_are_ignored_without_pdf_fallback(
@@ -622,7 +623,11 @@ def test_metadata_only_candidates_are_ignored_without_pdf_fallback(
 
 def test_enabled_pdf_fallback_recovers_fulltext_span(gear_config, paper_ir):
     retrieval = gear_config.retrieval.model_copy(
-        update={"openalex_pdf_enabled": True, "openalex_pdf_max_downloads": 1}
+        update={
+            "openalex_pdf_enabled": True,
+            "external_fulltext_enabled": False,
+            "openalex_pdf_max_downloads": 1,
+        }
     )
     config = gear_config.model_copy(
         update={"allow_external_retrieval": True, "retrieval": retrieval}
@@ -948,3 +953,31 @@ def test_scientific_search_frame_normalizes_list_delta() -> None:
     )
     assert frame.claimed_delta == "first mechanism; second result"
 
+
+def test_normal_search_reserves_capacity_for_contrastive(gear_config, paper_ir):
+    config = gear_config.model_copy(update={"allow_external_retrieval": True})
+    service = service_with_model(config, SearchFake())
+    claim = paper_ir.claims[0]
+    span = paper_ir.span_map()[claim.span_id]
+    budget = RetrievalBudget(fulltext_max=10, contrastive_max=1)
+    normal = service.retrieve(
+        claim, date(2010, 1, 1), budget, target_span=span, paper_ir=paper_ir
+    )
+    assert len(normal) <= 5
+    assert budget.fulltext_kept < budget.fulltext_max
+    service.retrieve(
+        claim,
+        date(2010, 1, 1),
+        budget,
+        family="contrastive",
+        target_span=span,
+        paper_ir=paper_ir,
+    )
+    coverage = service.coverage_card(
+        claim.claim_id,
+        date(2010, 1, 1),
+        require_contrastive=True,
+        direct_or_partial_found=False,
+    )
+    assert "legacy_contrastive" in coverage.completed_query_roles
+    assert budget.fulltext_kept <= 10

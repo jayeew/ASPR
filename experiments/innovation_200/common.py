@@ -15,6 +15,7 @@ from typing import TypeVar
 from pydantic import BaseModel
 
 from gear.config import GearConfig, load_config
+from gear.env import getenv_runtime
 
 T = TypeVar("T")
 
@@ -79,34 +80,39 @@ def write_jsonl(path: Path, rows: list[dict]) -> None:
 
 
 def experiment_config() -> GearConfig:
-    """Luna routing is role-based; experiment disables response cache and repeats."""
+    """Default to Luna roles; child runners may explicitly override model/effort."""
+    model = getenv_runtime("GEAR_STUDY_MODEL") or "gpt-5.6-luna"
+    effort = getenv_runtime("GEAR_STUDY_REASONING_EFFORT")
+    role_efforts = {
+        "field_classifier": "low",
+        "reference_extract": "low",
+        "reference_check": "low",
+        "graph_claim": "low",
+        "claim_miner": "low",
+        "supervisor_planner": "low",
+        "claim_consolidator": "low",
+        "internal_verifier": "high",
+        "relation_fusion": "high",
+        "graph_analysis": "high",
+        "evaluation_judge": "high",
+        "report_writer": "high",
+        "pairwise_judge": "high",
+    }
     return load_config(
         overrides={
             "model_cache_enabled": False,
             "relation_stability_check_enabled": False,
             "resume_fingerprint_checks_enabled": False,
-            "role_model_override": "gpt-5.6-luna",
+            "role_model_override": model,
             "role_effort_overrides": {
-                "field_classifier": "low",
-                "reference_extract": "low",
-                "reference_check": "low",
-                "graph_claim": "low",
-                "claim_miner": "low",
-                "supervisor_planner": "low",
-                "claim_consolidator": "low",
-                "internal_verifier": "high",
-                "relation_fusion": "high",
-                "graph_analysis": "high",
-                "evaluation_judge": "high",
-                "report_writer": "high",
-                "pairwise_judge": "high",
+                role: effort or default for role, default in role_efforts.items()
             },
             "max_claims": 8,
-            "codex_cli": {"model": "gpt-5.6-luna", "reasoning_effort": "high"},
+            "codex_cli": {"model": model, "reasoning_effort": effort or "high"},
             "retrieval": {
                 "query_reasoning_effort": "low",
-                "fulltext_max": 5,
-                "relation_cards_max": 5,
+                "fulltext_max": 10,
+                "relation_cards_max": 10,
                 "retained_candidates_per_claim": 5,
                 "minimum_comparable_candidates": 5,
             },

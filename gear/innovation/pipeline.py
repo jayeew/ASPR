@@ -76,12 +76,18 @@ def _gear_assess(
 
     with progress_scope(f"claim={claim.claim_id}"):
         log_progress("[Claim处理开始]")
+        recovery_path = claim_dir / "recovery_source.json"
+        recovery = (
+            json.loads(recovery_path.read_text()) if recovery_path.exists() else {}
+        )
         if (claim_dir / "evidence_trace.jsonl").exists() and not (
             claim_dir / "gear_card.json"
         ).exists():
             archive = root / "gear_attempts" / claim_dir.name / uuid4().hex
             archive.parent.mkdir(parents=True, exist_ok=True)
             claim_dir.rename(archive)
+            if recovery:
+                write_json(recovery_path, recovery)
         sources = _manuscript(paper, claim_dir)
         store = EvidenceStore(claim_dir)
         card_path = claim_dir / "gear_card.json"
@@ -93,7 +99,14 @@ def _gear_assess(
         else:
             write_json(
                 claim_dir / "retrieval_policy.json",
-                {"historical_pdf_enabled": config.retrieval.openalex_pdf_enabled},
+                {
+                    "historical_pdf_enabled": config.retrieval.openalex_pdf_enabled,
+                    "external_fulltext_enabled": config.retrieval.external_fulltext_enabled,
+                    "external_fulltext_max_works": config.retrieval.external_fulltext_max_works,
+                    "coverage_protocol": "normal_contrastive_reserved_v2",
+                    "candidate_budget": config.retrieval.fulltext_max,
+                    "recovery_source": recovery.get("source"),
+                },
             )
             supervisor = EvidenceSupervisor(
                 config,
@@ -113,8 +126,23 @@ def _gear_assess(
                 frame = read_model(frame_path, ScientificSearchFrame)
                 supervisor.prior_art._frames[claim.claim_id] = frame
                 log_progress("[检索准备复用] %s", frame_path)
-            card = supervisor.evaluate(claim, paper, item.cutoff_date)
+            if recovery:
+                card = supervisor.evaluate(
+                    claim,
+                    paper,
+                    item.cutoff_date,
+                    recovery_source=Path(recovery["source"]),
+                )
+            else:
+                card = supervisor.evaluate(claim, paper, item.cutoff_date)
             write_model(card_path, card)
+            write_json(
+                claim_dir / "execution.json",
+                {
+                    "status": "evidence_complete",
+                    "errors": list(dict.fromkeys(supervisor.execution_errors)),
+                },
+            )
         store.add_evidence(f"GEAR:{claim.claim_id}", "gear_claim_card", card)
         sources = evidence_payloads(claim_dir)
         log_progress("[Claim总结开始]")
@@ -126,6 +154,11 @@ def _gear_assess(
             "gear",
             claim_dir / "assessment.json",
         )
+        execution_path = claim_dir / "execution.json"
+        if execution_path.exists():
+            execution = json.loads(execution_path.read_text(encoding="utf-8"))
+            execution["status"] = "failed" if execution.get("errors") else "complete"
+            write_json(execution_path, execution)
         log_progress("[Claim处理完成] status=%s", assessment.overall_stance.value)
         return assessment
 
@@ -140,6 +173,8 @@ def run_branch(
     graph_root: Path,
     embedding_model: Path,
     prepared_search_root: Path | None = None,
+    *,
+    shared_local_ranker: LocalScientificRanker | None = None,
 ) -> AnalysisResult:
     with stage_lock(root / ".locks" / mode):
         return _run_branch(
@@ -152,6 +187,7 @@ def run_branch(
             graph_root,
             embedding_model,
             prepared_search_root,
+            shared_local_ranker,
         )
 
 
@@ -165,6 +201,7 @@ def _run_branch(
     graph_root: Path,
     embedding_model: Path,
     prepared_search_root: Path | None = None,
+    shared_local_ranker: LocalScientificRanker | None = None,
 ) -> AnalysisResult:
     branch = root / mode
     result_path = branch / "analysis.json"
@@ -173,7 +210,7 @@ def _run_branch(
     )
     if mode == "graph":
         policy = {
-            "version": "threshold_parent_path_v1",
+            "version": "threshold_parent_path_v2",
             "top_k": config.graph_top_k,
             "min_similarity": config.graph_min_similarity,
         }
@@ -216,7 +253,8 @@ def _run_branch(
         else 8
     )
     local_ranker = (
-        LocalScientificRanker(
+        shared_local_ranker
+        or LocalScientificRanker(
             config.retrieval.recall_model_path,
             config.retrieval.reranker_model_path,
         )
@@ -311,7 +349,7 @@ def _run_branch(
         result.assessments.sort(key=lambda row: order[row.claim_id])
     finally:
         executor.shutdown(wait=True)
-        if local_ranker is not None:
+        if local_ranker is not None and local_ranker is not shared_local_ranker:
             local_ranker.close()
         if runtime:
             runtime.close()

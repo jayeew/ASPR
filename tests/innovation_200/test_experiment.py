@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pytest
 
+from experiments.innovation_200.ablation_protocol import SUPPORTED_REPORT_SYSTEMS
 from experiments.innovation_200.common import (
     experiment_config,
     run_stage,
@@ -67,8 +68,8 @@ def test_all_experiment_roles_use_luna_with_planned_effort() -> None:
     assert not config.model_cache_enabled
     assert not config.relation_stability_check_enabled
     assert not config.resume_fingerprint_checks_enabled
-    assert config.retrieval.fulltext_max == 5
-    assert config.retrieval.relation_cards_max == 5
+    assert config.retrieval.fulltext_max == 10
+    assert config.retrieval.relation_cards_max == 10
     assert config.retrieval.retained_candidates_per_claim == 5
 
 
@@ -162,7 +163,7 @@ def test_all_seven_structured_report_conditions_have_separate_inputs(
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(json.dumps(payload), encoding="utf-8")
     contexts = {
-        system: build_system_context(system, tmp_path, claims)
+        system: build_system_context(system, tmp_path, claims, inspect_legacy_variant=True)
         for system in SYSTEMS
         if system != "direct_llm"
     }
@@ -334,6 +335,36 @@ def test_mock_report_stage_handoff_and_resume(
             "spans": [],
         },
     )
+    fulltext_key = "FULLTEXT:p::CLAIM::01:old"
+    EvidenceStore(root / "gear/01").add_evidence(
+        fulltext_key,
+        "retrieved_work_fulltext",
+        {
+            "work_id": "old",
+            "title": "Historical work",
+            "publication_year": 2020,
+            "doi": "10.1/old",
+            "url": "https://doi.org/10.1/old",
+            "spans": [
+                {
+                    "span_id": "full-p1",
+                    "text": "Historical fulltext methods passage.",
+                    "source": "fulltext_evidence",
+                }
+            ],
+            "fulltext_provenance": {
+                "source_url": "https://repository.example/paper.pdf"
+            },
+        },
+    )
+    EvidenceStore(root / "gear/01").add_evidence(
+        "FULLTEXT_FETCH:p::CLAIM::01:old",
+        "fulltext_acquisition",
+        {
+            "status": "success",
+            "text": "Raw whole document must not become a report passage.",
+        },
+    )
     card = GraphFactCard(
         insertion_policy="top10_strict_gt_0.5_parent_path_v1",
         claim=GraphClaim(
@@ -361,6 +392,8 @@ def test_mock_report_stage_handoff_and_resume(
         f"GRAPH:{claim.claim_id}", "graph_fact", card
     )
 
+    seen_catalogs: list[list[dict]] = []
+
     def fake_generate(
         _self: object,
         *,
@@ -370,6 +403,7 @@ def test_mock_report_stage_handoff_and_resume(
     ) -> dict:
         del system, response_schema
         cited = []
+        catalog = []
         if user.startswith("{"):
             catalog = json.loads(user).get("source_catalog", [])
             external = [
@@ -377,20 +411,66 @@ def test_mock_report_stage_handoff_and_resume(
                 for source in catalog
                 if source["source_type"] != "manuscript"
             ]
-            cited = external[:1]
+            fulltext = [
+                source_id for source_id in external if source_id.startswith("FULLTEXT:")
+            ]
+            cited = (fulltext or external)[:1]
+        seen_catalogs.append(catalog)
         return {"body": "合成分析。" * 400, "cited_source_ids": cited}
 
     monkeypatch.setattr(
         "experiments.innovation_200.reporting.LazyRoleClient.generate_json",
         fake_generate,
     )
-    assert generate({"paper_id": "p"}, tmp_path, False)["generated"] == 8
+    assert generate({"paper_id": "p"}, tmp_path, False)["generated"] == len(SUPPORTED_REPORT_SYSTEMS)
     assert generate({"paper_id": "p"}, tmp_path, False)["generated"] == 0
-    assert len(list((tmp_path / "reports").glob("*/*.json"))) == 8
+    assert len(list((tmp_path / "reports").glob("*/*.json"))) == len(SUPPORTED_REPORT_SYSTEMS)
     direct = json.loads((tmp_path / "reports/direct_llm/p.json").read_text())
     fusion = json.loads((tmp_path / "reports/fusion/p.json").read_text())
     assert direct["references"] == []
-    assert fusion["references"][0]["passage"] in {
-        "Historical abstract passage.",
-        "Historical graph claim.",
-    }
+    assert fusion["references"][0]["passage"] == "Historical fulltext methods passage."
+    assert fusion["references"][0]["source_type"] == "fulltext"
+    assert fusion["references"][0]["url"] == "https://repository.example/paper.pdf"
+    catalogs = dict(zip(SUPPORTED_REPORT_SYSTEMS, seen_catalogs))
+    assert catalogs["direct_llm"] == []
+    for system, catalog in catalogs.items():
+        ids = [source["source_id"] for source in catalog]
+        assert not any(key.startswith("FULLTEXT_FETCH:") for key in ids)
+        if system in ("graph", "direct_llm"):
+            assert not any(key.startswith(("FULLTEXT:", "WORK:")) for key in ids)
+        else:
+            assert f"{fulltext_key}:P01" in ids
+            assert any(source["source_type"] == "abstract" for source in catalog)
+
+
+def test_fulltext_source_uses_acquisition_url_without_relabeling_abstract() -> None:
+    from experiments.innovation_200.reporting import _source_from_work
+
+    sources = _source_from_work(
+        "FULLTEXT:old",
+        {
+            "title": "Historical work",
+            "url": "https://doi.org/10.1/old",
+            "fulltext_provenance": {
+                "source_url": "https://repository.example/paper.xml"
+            },
+            "spans": [
+                {
+                    "span_id": "a",
+                    "text": "Abstract evidence",
+                    "source": "abstract_evidence",
+                },
+                {
+                    "span_id": "f",
+                    "text": "Methods evidence",
+                    "source": "fulltext_evidence",
+                },
+            ],
+        },
+        [],
+    )
+    assert [source.source_type for source in sources] == ["abstract", "fulltext"]
+    assert [source.url for source in sources] == [
+        "https://doi.org/10.1/old",
+        "https://repository.example/paper.xml",
+    ]

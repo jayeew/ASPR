@@ -1,0 +1,200 @@
+[
+  {
+    "figure": 1,
+    "panel": "a",
+    "question": "双层历史结构是什么？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 1,
+    "panel": "b",
+    "question": "插入前后发生何种局部变化？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 1,
+    "panel": "c",
+    "question": "真实结构量如何分布？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 2,
+    "panel": "a",
+    "question": "两个分支与joint如何独立衔接？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 2,
+    "panel": "b",
+    "question": "判断如何追到终端来源？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 2,
+    "panel": "c",
+    "question": "实际输出有哪些层次？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 3,
+    "panel": "a",
+    "question": "结构描述之间有何关系？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 3,
+    "panel": "b",
+    "question": "变化是否由局部拓扑机械决定？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 3,
+    "panel": "c",
+    "question": "解释是否经独立原文核验？",
+    "evidence_status": "missing_core_evidence"
+  },
+  {
+    "figure": 4,
+    "panel": "a",
+    "question": "两方法的配对总体效果如何？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 4,
+    "panel": "b",
+    "question": "论文层面差值如何分布？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 4,
+    "panel": "c",
+    "question": "同一参考ID的覆盖状态如何变化？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 5,
+    "panel": "a",
+    "question": "融合改变了什么判断？",
+    "evidence_status": "missing_core_evidence"
+  },
+  {
+    "figure": 5,
+    "panel": "b",
+    "question": "哪些角色出现收益或伤害？",
+    "evidence_status": "missing_core_evidence"
+  },
+  {
+    "figure": 5,
+    "panel": "c",
+    "question": "真实纠正或损害如何溯源？",
+    "evidence_status": "missing_core_evidence"
+  },
+  {
+    "figure": 6,
+    "panel": "a",
+    "question": "受控输入与生成路径是否一致？",
+    "evidence_status": "missing_core_evidence"
+  },
+  {
+    "figure": 6,
+    "panel": "b",
+    "question": "去除组件的配对效应是什么？",
+    "evidence_status": "missing_core_evidence"
+  },
+  {
+    "figure": 6,
+    "panel": "c",
+    "question": "joint超出同文本综合的增量是什么？",
+    "evidence_status": "missing_core_evidence"
+  },
+  {
+    "figure": 7,
+    "panel": "a",
+    "question": "可用性条件与真实效果怎样关联？",
+    "evidence_status": "missing_core_evidence"
+  },
+  {
+    "figure": 7,
+    "panel": "b",
+    "question": "扰动后的结论是否稳健？",
+    "evidence_status": "missing_core_evidence"
+  },
+  {
+    "figure": 7,
+    "panel": "c",
+    "question": "不确定性是否恰当？",
+    "evidence_status": "missing_core_evidence"
+  },
+  {
+    "figure": 8,
+    "panel": "a",
+    "question": "历史与未来如何隔离？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 8,
+    "panel": "b",
+    "question": "去重的方向空间如何组织？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 8,
+    "panel": "c",
+    "question": "预测短语如何排序？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 8,
+    "panel": "d",
+    "question": "增长与热度基线表现如何？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 9,
+    "panel": "a",
+    "question": "期刊样本与来源怎样构成？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 9,
+    "panel": "b",
+    "question": "论文归一后贡献角色怎样分布？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 9,
+    "panel": "c",
+    "question": "结构画像及不确定性怎样变化？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 10,
+    "panel": "a",
+    "question": "C05原文与抽取的范围差别是什么？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 10,
+    "panel": "b",
+    "question": "GEAR支持哪些历史比较？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 10,
+    "panel": "c",
+    "question": "各claim邻域怎样连接？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 10,
+    "panel": "d",
+    "question": "union图的局部变化是什么？",
+    "evidence_status": "saved_snapshot_descriptive"
+  },
+  {
+    "figure": 10,
+    "panel": "e",
+    "question": "Graph报告如何对应主审稿参考？",
+    "evidence_status": "saved_snapshot_descriptive"
+  }
+]

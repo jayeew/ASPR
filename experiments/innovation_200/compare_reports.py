@@ -13,6 +13,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
+from experiments.innovation_200.blinding import (
+    EVALUATION_VERSION,
+    blind_reports,
+    evaluation_root,
+)
 from experiments.innovation_200.common import (
     configure_limits,
     experiment_config,
@@ -81,7 +86,9 @@ def compare(
 ) -> dict[str, object]:
     paper_id = str(task["paper_id"])
     baseline = str(task["baseline_system"])
-    target = study / "pairwise" / f"{paper_id}__fusion_vs_{baseline}.json"
+    target = (
+        evaluation_root(study) / "pairwise" / f"{paper_id}__fusion_vs_{baseline}.json"
+    )
     if target.exists() and not overwrite:
         return {"skipped": True, "output": str(target)}
     if wait_for_upstream:
@@ -104,16 +111,20 @@ def compare(
     report_a, report_b = (fusion, other) if position == "A" else (other, fusion)
     manuscript = Path(study / "papers" / paper_id / "shared/paper_ir.json")
     paper_payload = json.loads(manuscript.read_text(encoding="utf-8"))
+    reports, mapping = blind_reports({"report_A": report_a, "report_B": report_b})
+    judge_payload = {"manuscript": paper_payload.get("markdown", ""), **reports}
+    write_json(target.with_suffix(".mapping.json"), mapping)
+    write_json(
+        target.with_suffix(".request.json"),
+        {
+            "prompt": PROMPT,
+            "payload": judge_payload,
+            "response_schema": BlindDecision.model_json_schema(),
+        },
+    )
     raw = LazyRoleClient(experiment_config(), "pairwise_judge").generate_json(
         system=PROMPT,
-        user=json.dumps(
-            {
-                "manuscript": paper_payload.get("markdown", ""),
-                "report_A": report_a.model_dump(mode="json"),
-                "report_B": report_b.model_dump(mode="json"),
-            },
-            ensure_ascii=False,
-        ),
+        user=json.dumps(judge_payload, ensure_ascii=False),
         response_schema=BlindDecision.model_json_schema(),
     )
     decision = BlindDecision.model_validate(raw)
@@ -124,6 +135,7 @@ def compare(
         **decision.model_dump(),
     )
     payload = result.model_dump(mode="json")
+    payload["evaluation_version"] = EVALUATION_VERSION
     payload["winners"] = {
         field: _winner(str(getattr(result, field)), position, baseline)
         for field in (
@@ -148,7 +160,9 @@ def main() -> None:
     parser.add_argument("--wait-for-inputs", action="store_true")
     parser.add_argument("--verbose", action="store_true")
     args = parser.parse_args()
-    logger = setup_stage_logging(args.study, "compare_reports", args.verbose)
+    logger = setup_stage_logging(
+        evaluation_root(args.study), "compare_reports", args.verbose
+    )
     configure_limits(args.cli_limit)
     tasks = comparison_tasks(read_jsonl(args.study / "papers.jsonl"))
     logger.info(
@@ -166,8 +180,8 @@ def main() -> None:
             row, args.study, args.overwrite, args.wait_for_inputs, logger
         ),
         workers=args.workers,
-        status_path=args.study / "status/compare_reports.json",
-        usage_dir=args.study / "status/usage/compare_reports",
+        status_path=evaluation_root(args.study) / "status/compare_reports.json",
+        usage_dir=evaluation_root(args.study) / "status/usage/compare_reports",
         logger=logger,
     )
 

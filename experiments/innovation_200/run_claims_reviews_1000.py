@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Extend the active study to 1,000 papers and run claims/reviews concurrently."""
+"""Extend to 1,000 papers and resume claims/reviews with gpt-5.6-luna / low / fast."""
 
 from __future__ import annotations
 
@@ -26,6 +26,9 @@ from gear.innovation.contracts import ClaimSet
 
 DEFAULT_STUDY = ROOT / "outputs" / "innovation_200_20260907"
 DEFAULT_MANIFEST = ROOT / "data" / "nature_2026_testset" / "manifest.jsonl"
+RUN_MODEL = "gpt-5.6-luna"
+RUN_REASONING_EFFORT = "low"
+RUN_SERVICE_TIER = "fast"
 
 
 def logger_for(study: Path) -> logging.Logger:
@@ -173,6 +176,22 @@ def stage_command(name: str, study: Path, workers: int, cli_limit: int) -> list[
     ]
 
 
+def stage_environment() -> dict[str, str]:
+    """Pin both endpoint and role routing for these two child stages only."""
+    env = subprocess_environment()
+    env.update(
+        PYTHONUNBUFFERED="1",
+        ASPR_GEAR_MODEL_BACKEND="codex_cli",
+        ASPR_GEAR_CODEX_MODEL=RUN_MODEL,
+        ASPR_GEAR_CODEX_REASONING_EFFORT=RUN_REASONING_EFFORT,
+        GEAR_STUDY_MODEL=RUN_MODEL,
+        GEAR_STUDY_REASONING_EFFORT=RUN_REASONING_EFFORT,
+        GEAR_CODEX_SERVICE_TIER=RUN_SERVICE_TIER,
+        GEAR_MODEL_RETRIES="2",
+    )
+    return env
+
+
 def run_round(study: Path, workers: int, cli_limit: int, env: dict[str, str]) -> None:
     commands = {
         "claims": stage_command("extract_claims.py", study, workers, cli_limit),
@@ -231,15 +250,16 @@ def main() -> None:
             args.workers,
             args.cli_limit,
         )
+        logger.info(
+            "[模型] 新请求：model=%s reasoning_effort=%s service_tier=%s；"
+            "已完成文件保留",
+            RUN_MODEL,
+            RUN_REASONING_EFFORT,
+            RUN_SERVICE_TIER,
+        )
         if args.dry_run:
             return
-        env = subprocess_environment()
-        env.update(
-            PYTHONUNBUFFERED="1",
-            ASPR_GEAR_MODEL_BACKEND="codex_cli",
-            GEAR_CODEX_SERVICE_TIER="fast",
-            GEAR_MODEL_RETRIES="2",
-        )
+        env = stage_environment()
         for round_number in range(1, args.max_rounds + 1):
             if claims == reviews == 1_000:
                 break
@@ -258,7 +278,7 @@ def main() -> None:
             raise RuntimeError(
                 f"incomplete after retries: claims={claims}, reviews={reviews}"
             )
-        logger.info("[完成] 1000/1000 claims；1000/1000 reviews；service_tier=fast")
+        logger.info("[完成] 1000/1000 claims；1000/1000 reviews")
     finally:
         fcntl.flock(lock.fileno(), fcntl.LOCK_UN)
         lock.close()

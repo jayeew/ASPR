@@ -269,7 +269,7 @@ def analyze_prepared_joint(config: GearConfig, root: Path, shared: ClaimSet) -> 
         ]
         if fact.get("input_claims") != expected_claims:
             raise ValueError("Prepared joint claim inputs changed")
-        policy = f"threshold_parent_path_v1:k={config.graph_top_k}:cosine>{config.graph_min_similarity}"
+        policy = f"threshold_parent_path_v2:k={config.graph_top_k}:cosine>{config.graph_min_similarity}"
         for claim in shared.claims:
             card = GraphFactCard.model_validate(sources[f"GRAPH:{claim.claim_id}"])
             if (

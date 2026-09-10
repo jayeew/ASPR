@@ -4,7 +4,9 @@
 from __future__ import annotations
 
 import argparse
+import json
 import logging
+import re
 import sqlite3
 import sys
 import time
@@ -64,6 +66,11 @@ def connect(path: Path) -> sqlite3.Connection:
         "source_name TEXT PRIMARY KEY, completed_batch INTEGER NOT NULL, "
         "completed_rows INTEGER NOT NULL, finished INTEGER NOT NULL DEFAULT 0)"
     )
+    connection.execute(
+        "CREATE TABLE IF NOT EXISTS paper_edge_anomalies ("
+        "source_path TEXT, batch_index INTEGER, row_index INTEGER, reason TEXT NOT NULL, "
+        "raw_edge TEXT NOT NULL, PRIMARY KEY(source_path, batch_index, row_index))"
+    )
     connection.commit()
     return connection
 
@@ -120,11 +127,18 @@ def import_nodes(connection: sqlite3.Connection, path: Path, batch_size: int, re
             save_state(connection, source, batch_index, completed_rows, False)
         logger.info("[节点] batch=%d，累计=%d，速度=%.0f 行/秒", batch_index + 1, completed_rows, completed_rows / max(time.monotonic() - started, 0.001))
     with connection:
-        save_state(connection, source, last_batch if last_batch >= 0 else 0, completed_rows, True)
+        save_state(connection, source, max(last_batch, 0), completed_rows, True)
 
 
 def import_edges(connection: sqlite3.Connection, path: Path, batch_size: int, resume: bool, logger: logging.Logger) -> None:
     source = "paper_edges"
+    invalid_existing = connection.execute(
+        "SELECT COUNT(*) FROM paper_edges e WHERE e.citing_work_id=e.cited_work_id "
+        "OR NOT EXISTS (SELECT 1 FROM paper_nodes n WHERE n.work_id=e.citing_work_id) "
+        "OR NOT EXISTS (SELECT 1 FROM paper_nodes n WHERE n.work_id=e.cited_work_id)"
+    ).fetchone()[0]
+    if invalid_existing:
+        raise ValueError("Existing index contains invalid citations; rebuild into a separate output path to preserve the original")
     last_batch, completed_rows, finished = state(connection, source)
     if finished:
         logger.info("[边] 已完成，跳过")
@@ -136,14 +150,28 @@ def import_edges(connection: sqlite3.Connection, path: Path, batch_size: int, re
     for batch_index, batch in enumerate(parquet.iter_batches(columns=["citing_work_id", "cited_work_id"], batch_size=batch_size)):
         if batch_index <= last_batch:
             continue
-        values = [(str(row["citing_work_id"]), str(row["cited_work_id"])) for row in batch.to_pylist()]
+        rows = batch.to_pylist()
         with connection:
-            connection.executemany("INSERT OR IGNORE INTO paper_edges VALUES (?, ?)", values)
-            completed_rows += len(values)
+            for row_index, row in enumerate(rows):
+                a, b = str(row["citing_work_id"]), str(row["cited_work_id"])
+                reason = ("invalid_work_id" if not re.fullmatch(r"W\d+", a) or not re.fullmatch(r"W\d+", b) else
+                          "same_work_citation" if a == b else None)
+                if not reason:
+                    count = connection.execute("SELECT COUNT(*) FROM paper_nodes WHERE work_id IN (?, ?)", (a, b)).fetchone()[0]
+                    if count != 2:
+                        reason = "missing_endpoint"
+                if not reason:
+                    cursor = connection.execute("INSERT OR IGNORE INTO paper_edges VALUES (?, ?)", (a, b))
+                    if cursor.rowcount == 0:
+                        reason = "duplicate_citation"
+                if reason:
+                    connection.execute("INSERT OR REPLACE INTO paper_edge_anomalies VALUES (?, ?, ?, ?, ?)",
+                                       (str(path.resolve()), batch_index, row_index, reason, json.dumps(row)))
+            completed_rows += len(rows)
             save_state(connection, source, batch_index, completed_rows, False)
         logger.info("[边] batch=%d，累计=%d，速度=%.0f 行/秒", batch_index + 1, completed_rows, completed_rows / max(time.monotonic() - started, 0.001))
     with connection:
-        save_state(connection, source, last_batch if last_batch >= 0 else 0, completed_rows, True)
+        save_state(connection, source, max(last_batch, 0), completed_rows, True)
 
 
 def build_indexes(connection: sqlite3.Connection, logger: logging.Logger) -> None:

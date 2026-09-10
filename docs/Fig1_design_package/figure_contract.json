@@ -1,0 +1,94 @@
+{
+  "figure": "Fig.1",
+  "purpose": "two-layer ontology, local insertion profiles, aggregate graph structure",
+  "panels": [
+    {
+      "panel": "a",
+      "kind": "two_layer_network",
+      "scope": "historical sampled atlas plus independent target overlays",
+      "primary_layer": "claim_backbone",
+      "paper_edge_type": "actual citations",
+      "claim_above_paper": true
+    },
+    {
+      "panel": "b",
+      "kind": "2x2_before_after_case_gallery",
+      "cases": [
+        "semantic_anchoring",
+        "community_mixing",
+        "role_composition",
+        "local_connectivity"
+      ],
+      "case_status": "not_selected_raw_records_not_in_upload"
+    },
+    {
+      "panel": "c",
+      "kind": "population_relations_and_role_bars",
+      "scope": "historical_corpus",
+      "available_from_aggregate": true
+    },
+    {
+      "panel": "d",
+      "kind": "community_size_profile_composition_mixing",
+      "scope": "historical_claim_graph",
+      "size_distribution_available": true,
+      "individual_community_composition_available": false,
+      "community_mixing_matrix_available": false
+    },
+    {
+      "panel": "e",
+      "kind": "role_pair_matrix_and_paper_path_motifs",
+      "role_pair_matrix_available": true,
+      "real_path_witnesses_available": false
+    }
+  ],
+  "metric_semantics": {
+    "before_after": [
+      "components_before",
+      "components_after",
+      "component_merge_count",
+      "newly_connected_neighbor_pair_count",
+      "connected_pair_share"
+    ],
+    "profile_not_delta": [
+      "nearest_prior_similarity",
+      "mean_top5_similarity",
+      "effective_community_count",
+      "community_rao_stirling",
+      "cross_type_neighbor_count",
+      "first_observed_recent_nature_pair_share",
+      "community_pair_mean_surprisal"
+    ],
+    "historical_subgraph_context": [
+      "neighbor_induced_density",
+      "historical_edge_count"
+    ],
+    "annotations_not_scientific_relations": [
+      "direct_citation_neighbor_count",
+      "two_hop_neighbor_count",
+      "co_citation_neighbor_count"
+    ]
+  },
+  "invariants": [
+    "no generated scientific nodes or edges",
+    "historical positions identical before after",
+    "all displayed metrics match counted subgraph",
+    "distinct parent papers across examples",
+    "do not infer citation from semantic edge",
+    "do not sum overlapping edge families",
+    "retain NA and community-unassigned states",
+    "same metric and temporal policies for case comparisons",
+    "no future-impact or scientific-correctness claim from insertion alone"
+  ],
+  "future_figures": {
+    "2": "end_to_end_architecture",
+    "3": "construct_and_mechanical_validity",
+    "4": "paired_evaluation",
+    "5": "fusion_value_and_harm",
+    "6": "controlled_ablation",
+    "7": "robustness_failure_boundaries",
+    "8": "forecast_and_direction_space",
+    "9": "journal_profiles",
+    "10": "whole_paper_end_to_end_case"
+  }
+}

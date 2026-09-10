@@ -507,6 +507,22 @@ class RetrievedSpan(EvidenceModel):
         return self
 
 
+class OpenAccessLocation(StrictModel):
+    is_oa: bool = False
+    pdf_url: str | None = None
+    landing_page_url: str | None = None
+    version: str | None = None
+    license: str | None = None
+
+
+class FulltextProvenance(StrictModel):
+    source_url: str
+    provider: str
+    format: str
+    identity_verified: bool
+    text_sha256: str
+
+
 class RetrievedWork(EvidenceModel):
     work_id: str
     target_claim_id: str
@@ -517,6 +533,8 @@ class RetrievedWork(EvidenceModel):
     publication_date: Optional[date] = None
     publication_year: Optional[int] = None
     doi: Optional[str] = None
+    open_access_locations: list[OpenAccessLocation] = Field(default_factory=list)
+    fulltext_provenance: FulltextProvenance | None = None
     cited_work_ids: List[str] = Field(default_factory=list)
     topics: List[str] = Field(default_factory=list)
     keywords: List[str] = Field(default_factory=list)

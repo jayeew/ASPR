@@ -36,7 +36,7 @@ def pending_claims(
     paper = cast(PaperIR, read_model(root / "shared/paper_ir.json", PaperIR))
     shared = cast(ClaimSet, read_model(root / "shared/claims.json", ClaimSet))
     policy = {
-        "version": "threshold_parent_path_v1",
+        "version": "threshold_parent_path_v2",
         "top_k": config.graph_top_k,
         "min_similarity": config.graph_min_similarity,
     }
@@ -181,7 +181,7 @@ def prepared_sources(
 ) -> tuple[dict[str, object], GraphFactCard]:
     sources = evidence_payloads(directory)
     card = GraphFactCard.model_validate(sources[f"GRAPH:{claim.claim_id}"])
-    expected = f"threshold_parent_path_v1:k={config.graph_top_k}:cosine>{config.graph_min_similarity}"
+    expected = f"threshold_parent_path_v2:k={config.graph_top_k}:cosine>{config.graph_min_similarity}"
     if (
         card.insertion_policy != expected
         or card.claim.claim_id != claim.claim_id

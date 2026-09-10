@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate all eight whole-paper report conditions independently."""
+"""Generate supported whole-paper conditions; block confounded ablations."""
 
 from __future__ import annotations
 
@@ -11,6 +11,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT))
 
+from experiments.innovation_200.ablation_protocol import (
+    SUPPORTED_REPORT_SYSTEMS,
+    require_supported_generation,
+)
 from experiments.innovation_200.common import (
     configure_limits,
     read_jsonl,
@@ -32,7 +36,9 @@ def generate(
     logger: logging.Logger | None = None,
 ) -> dict[str, object]:
     paper_id = str(raw["paper_id"])
-    systems = (str(raw["system"]),) if "system" in raw else SYSTEMS
+    systems = (str(raw["system"]),) if "system" in raw else SUPPORTED_REPORT_SYSTEMS
+    for system in systems:
+        require_supported_generation(system)
     generated = 0
     for system in systems:
         if system not in SYSTEMS:
@@ -71,7 +77,9 @@ def main() -> None:
     parser.add_argument("--study", type=Path, required=True)
     parser.add_argument("--workers", type=int, default=16)
     parser.add_argument("--cli-limit", type=int, default=16)
-    parser.add_argument("--systems", nargs="+", choices=SYSTEMS, default=list(SYSTEMS))
+    parser.add_argument(
+        "--systems", nargs="+", choices=SYSTEMS, default=list(SUPPORTED_REPORT_SYSTEMS)
+    )
     parser.add_argument("--overwrite", action="store_true")
     parser.add_argument("--wait-for-inputs", action="store_true")
     parser.add_argument("--verbose", action="store_true")

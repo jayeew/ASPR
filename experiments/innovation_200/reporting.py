@@ -7,6 +7,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+from experiments.innovation_200.ablation_protocol import require_supported_generation
 from experiments.innovation_200.common import experiment_config, read_json
 from experiments.innovation_200.contracts import ReportBundle, ReportDraft, ReportSource
 from gear.artifacts import read_model
@@ -15,6 +16,8 @@ from gear.innovation.contracts import ClaimSet
 from gear.model_client import LazyRoleClient
 from gear.review_contracts import GraphFactCard
 from gear.trace import EvidenceStore
+
+GEAR_SOURCE_PREFIXES = ("W:", "WORK:", "FULLTEXT:")
 
 DIRECT_PROMPT = """请仅根据以下论文，写一份约1200—2000字的中文创新性分析，说明主要贡献、与已有工作的关系及局限。涉及其他文献时写明名称，只有输入包含其原文时才引用片段，不补造文献或引文。"""
 
@@ -65,17 +68,26 @@ def _source_from_work(
         "doi": payload.get("doi"),
         "url": payload.get("url"),
     }
+    provenance = payload.get("fulltext_provenance")
+    fulltext_url = (
+        provenance.get("source_url") if isinstance(provenance, dict) else None
+    )
     output: list[ReportSource] = []
     for index, span in enumerate(payload.get("spans") or [], 1):
         source = str(span.get("source") or "")
         source_type = "fulltext" if "fulltext" in source else "abstract"
+        metadata = (
+            {**common, "url": fulltext_url}
+            if source_type == "fulltext" and fulltext_url
+            else common
+        )
         output.append(
             ReportSource(
                 source_id=f"{key}:P{index:02d}",
                 passage_id=str(span.get("span_id") or f"P{index:02d}"),
                 source_type=source_type,
                 passage=str(span.get("text") or ""),
-                **common,
+                **metadata,
             )
         )
     if not output and payload.get("abstract"):
@@ -148,7 +160,7 @@ def collect_sources(
         for key, payload in (
             _load_evidence(root / "gear" / suffix) if include_gear else {}
         ).items():
-            if key.startswith(("W:", "WORK:")) and isinstance(payload, dict):
+            if key.startswith(GEAR_SOURCE_PREFIXES) and isinstance(payload, dict):
                 for source in _source_from_work(key, payload, reference_entries):
                     source_map[source.source_id] = source
         for payload in (
@@ -275,7 +287,11 @@ def _load_analysis(path: Path) -> dict[str, Any] | None:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def build_system_context(system: str, root: Path, claims: ClaimSet) -> dict[str, Any]:
+def build_system_context(
+    system: str, root: Path, claims: ClaimSet, *, inspect_legacy_variant: bool = False,
+) -> dict[str, Any]:
+    if not inspect_legacy_variant:
+        require_supported_generation(system)
     gear = _load_analysis(root / "gear/analysis.json") if system != "graph" else None
     graph = _load_analysis(root / "graph/analysis.json")
     joint = _load_analysis(root / "graph/joint/analysis.json")
@@ -325,6 +341,7 @@ def build_system_context(system: str, root: Path, claims: ClaimSet) -> dict[str,
 
 
 def generate_report(paper_id: str, system: str, root: Path) -> ReportBundle:
+    require_supported_generation(system)
     paper = read_model(root / "shared/paper_ir.json", PaperIR)
     claims = read_model(root / "shared/claims.json", ClaimSet)
     sources = (
@@ -352,7 +369,7 @@ def generate_report(paper_id: str, system: str, root: Path) -> ReportBundle:
             allowed = [
                 source
                 for source in sources
-                if not source.source_id.startswith(("W:", "WORK:"))
+                if not source.source_id.startswith(GEAR_SOURCE_PREFIXES)
             ]
         else:
             allowed = sources
