@@ -60,6 +60,7 @@ class EvidenceSupervisor:
     ) -> None:
         self.config = config
         self.store = store
+        self._identity_exclusions: list[str] = []
         self.prior_art = PriorArtService(config, local_ranker=local_ranker)
         self.classifier = RelationClassifier(config)
         self.planner = LazyRoleClient(config, "supervisor_planner")
@@ -124,6 +125,15 @@ class EvidenceSupervisor:
             log_progress(
                 "[补检索证据复用] 文献=%d，关系=%d", len(works), len(relations)
             )
+        supplemental = self.prior_art.supplemental_queries.get(claim.claim_id)
+        if supplemental:
+            if recovery_source is None or len(supplemental) > budget.normal_max:
+                raise ValueError(
+                    "Supplement requires saved evidence and bounded queries"
+                )
+            normal_done = False
+            budget.normal_used = 0
+            log_progress("[定向补检索] 新查询=%d", len(supplemental))
         for _ in range(12):
             unclassified = [
                 work for key, work in works.items() if key not in relations
@@ -227,6 +237,11 @@ class EvidenceSupervisor:
                 break
             if actions:
                 actions[-1].reason = reason
+        # Retrieval selection is not a completed comparison. Count only the
+        # relation cards that survived target-version exclusion and verification.
+        state = self.prior_art._coverage_state[claim.claim_id]
+        state["compared_ids"] = set(relations)
+        state["eligible_ids"].difference_update(self._identity_exclusions)
         coverage = self.prior_art.coverage_card(
             claim.claim_id,
             cutoff,
@@ -249,7 +264,7 @@ class EvidenceSupervisor:
             claim,
             list(relations.values()),
             coverage_key,
-            coverage.coverage_sufficient and not self._identity_exclusions,
+            coverage.coverage_sufficient,
             works,
             actions,
         )
@@ -309,6 +324,13 @@ class EvidenceSupervisor:
                 graph_neighbor_slots=len(seeds),
             )
         self._record_retrieval_errors()
+        if claim.claim_id in self.prior_art.supplemental_queries:
+            for query in self.prior_art.last_query_specs:
+                self.store.add_evidence(
+                    f"QUERY:{query.query_id}", "retrieval_query", query
+                )
+            for hit in self.prior_art.last_hits:
+                self.store.add_evidence(f"HIT:{hit.hit_id}", "retrieval_hit", hit)
         log_progress(
             "[检索完成] family=%s，候选=%d，查询=%d，失败=%d",
             family,

@@ -7,8 +7,7 @@ import pytest
 
 from experiments.innovation_200 import compare_reports, evaluate_human
 from experiments.innovation_200.ablation_protocol import (
-    MIXED_PATH_VARIANTS,
-    UncontrolledAblationError,
+    MASKED_GRAPH_VARIANTS,
     ablation_plan,
 )
 from experiments.innovation_200.blinding import blind_reports, evaluation_root
@@ -19,7 +18,7 @@ from experiments.innovation_200.contracts import (
     ReportBundle,
     ReportSource,
 )
-from experiments.innovation_200.reporting import build_system_context, generate_report
+from experiments.innovation_200.reporting import build_system_context
 from gear.innovation.contracts import ClaimSet
 
 
@@ -176,14 +175,23 @@ def test_pairwise_judge_receives_neutral_reports_and_keeps_external_mapping(
     assert not (tmp_path / "pairwise").exists()
 
 
-@pytest.mark.parametrize("system", sorted(MIXED_PATH_VARIANTS))
-def test_confounded_ablation_is_blocked_before_reading_or_model_calls(
-    tmp_path: Path, system: str
+@pytest.mark.parametrize("system", sorted(MASKED_GRAPH_VARIANTS))
+def test_ablation_uses_masked_interpretations(
+    tmp_path: Path,
+    system: str,
+    monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    from experiments.innovation_200 import reporting
+
     claims = ClaimSet(paper_id="paper", input_fingerprint="x", claims=[])
-    with pytest.raises(UncontrolledAblationError, match="mixes interpreted"):
-        build_system_context(system, tmp_path, claims)
-    with pytest.raises(UncontrolledAblationError):
-        generate_report("paper", system, tmp_path)
-    assert ablation_plan(system)["generation_blocked"]
-    assert not ablation_plan(system)["causal_effect_ready"]
+    calls = []
+
+    def interpreted(root, shared, condition):
+        calls.append((root, shared, condition))
+        return {"graph": "masked interpretation", "joint_graph": "masked joint"}
+
+    monkeypatch.setattr(reporting, "interpreted_context", interpreted)
+    result = build_system_context(system, tmp_path, claims)
+    assert calls == [(tmp_path, claims, system)]
+    assert result["graph"] == "masked interpretation"
+    assert not ablation_plan(system)["generation_blocked"]

@@ -48,7 +48,7 @@ def inputs(
         abstract_source="test",
     )
     card = GraphFactCard(
-        insertion_policy="threshold_parent_path_v2:k=10:cosine>0.5",
+        insertion_policy="threshold_parent_path:k=10:cosine>0.5",
         claim=GraphClaim(
             claim_id=claim.claim_id,
             paper_id=paper_id,

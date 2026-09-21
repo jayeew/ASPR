@@ -11,6 +11,7 @@ from collections.abc import Callable
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import TypeVar
+from uuid import uuid4
 
 from pydantic import BaseModel
 
@@ -55,10 +56,13 @@ def write_json(path: Path, value: object) -> None:
         payload = value.model_dump(mode="json")
     else:
         payload = value
-    path.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2, default=str) + "\n",
-        encoding="utf-8",
-    )
+    encoded = json.dumps(payload, ensure_ascii=False, indent=2, default=str) + "\n"
+    temporary = path.with_name(f".{path.name}.{uuid4().hex}.tmp")
+    try:
+        temporary.write_text(encoded, encoding="utf-8")
+        temporary.replace(path)
+    finally:
+        temporary.unlink(missing_ok=True)
 
 
 def read_jsonl(path: Path) -> list[dict]:
@@ -146,6 +150,16 @@ def run_stage(
 ) -> list[dict]:
     """Run independent paper tasks; worker itself decides whether output already exists."""
     records: list[dict] = []
+    write_json(
+        status_path,
+        [
+            {
+                "paper_id": str(row.get("task_id") or row["paper_id"]),
+                "status": "pending",
+            }
+            for row in rows
+        ],
+    )
     stage_started = time.monotonic()
     if logger:
         logger.info(
@@ -270,13 +284,23 @@ def wait_for_inputs(
                 "；".join(missing),
             )
             last_report = waited
+        # Report producers are keyed by paper__system, not just paper ID.
+        missing_paths = [path for path in paths if not path.exists()]
+        dependency_ids = {
+            (
+                f"{path.stem}__{path.parent.name}"
+                if path.parent.parent.name == "reports"
+                else paper_id.split("__", 1)[0]
+            )
+            for path in missing_paths
+        }
         for status_path in producer_statuses:
             try:
                 records = read_json(status_path) if status_path.exists() else []
             except (OSError, json.JSONDecodeError):
                 records = []
             if isinstance(records, list) and any(
-                str(record.get("paper_id")) == paper_id
+                str(record.get("paper_id")) in dependency_ids
                 and record.get("status") == "failed"
                 for record in records
                 if isinstance(record, dict)

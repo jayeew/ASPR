@@ -79,3 +79,32 @@ def test_intervention_preserves_text_and_does_not_modify_original():
     assert result["neighbors"][0]["claim_text"] == "old fact"
     assert result["neighbors"][0]["community_id"] == 0
     assert fact["neighbors"][0]["community_id"] == 8
+
+
+def test_claim_text_is_constrained_and_mismatch_still_rejected(monkeypatch):
+    def call(self, **kwargs):
+        assert kwargs["response_schema"]["properties"]["claim_text"]["enum"] == [
+            "Claim"
+        ]
+        raw = payload(["real"])
+        raw["claim_text"] = "Changed claim"
+        return raw
+
+    monkeypatch.setattr(LazyRoleClient, "generate_json", call)
+    with pytest.raises(ValueError, match="identity/text"):
+        assess(GearConfig(), "c", "Claim", {"real": {}}, "gear")
+
+
+def test_quoted_claim_text_is_bound_without_schema_literal(monkeypatch) -> None:
+    text = 'A "quoted" claim'
+
+    def call(self, **kwargs):
+        schema = kwargs['response_schema']
+        assert 'claim_text' not in schema['properties']
+        assert 'claim_text' not in schema['required']
+        raw = payload(['real'])
+        del raw['claim_text']
+        return raw
+
+    monkeypatch.setattr(LazyRoleClient, 'generate_json', call)
+    assert assess(GearConfig(), 'c', text, {'real': {}}, 'graph').claim_text == text

@@ -1,4 +1,4 @@
-"""Read-only scientific inputs and versioned figure derivatives; no model calls."""
+"""Read-only scientific inputs and replaceable figure outputs; no model calls."""
 
 from __future__ import annotations
 
@@ -215,10 +215,46 @@ def paths(
     }
 
 
+def study_observations() -> list[dict[str, Any]]:
+    papers = [
+        json.loads(line)
+        for line in (STUDY / "papers.jsonl").read_text().splitlines()
+        if line.strip()
+    ]
+    observations = []
+    for paper in papers:
+        folder = STUDY / "papers" / paper["paper_id"]
+        for claim in read(folder / "shared/claims.json")["claims"]:
+            cid = claim["claim_id"]
+            trace = folder / "graph" / cid.rsplit("::", 1)[-1] / "evidence_trace.jsonl"
+            records = [json.loads(line) for line in trace.read_text().splitlines()]
+            evidence = next(
+                row for row in reversed(records)
+                if row.get("kind") == "graph_fact"
+                and row["payload"]["claim"]["claim_id"] == cid
+            )
+            fact = evidence["payload"]
+            neighbors = fact["neighbors"]
+            observations.append({
+                "paper_id": paper["paper_id"],
+                "claim_id": cid,
+                "claim_type": fact["claim"]["claim_type"],
+                "source_path": str(trace),
+                "evidence_key": evidence["evidence_id"],
+                "neighbor_count": len(neighbors),
+                "community_assignment_coverage": (
+                    sum(n["community_id"] is not None for n in neighbors) / len(neighbors)
+                    if neighbors else None
+                ),
+                **{metric["name"]: metric["value"] for metric in fact["metrics"]},
+            })
+    return observations
+
+
 def load_cases(
     graph: nx.Graph, nodes: dict[str, Any], db: sqlite3.Connection
 ) -> tuple[list[dict[str, Any]], list[Any]]:
-    observations = read(ROOT / "outputs/FROM_WEB/data/fig01_claim_observations.json")
+    observations = study_observations()
     by_id = {r["claim_id"]: r for r in observations}
     cases = []
     for label, (cid, reason) in SELECTIONS.items():

@@ -1,0 +1,39 @@
+{
+  "claim_boundary": "This figure documents the provenance, coding order, fixed gates and operationalisation range of the measurement system. It does not establish causal mechanisms, universal literature coverage or predictive superiority.",
+  "feature_set_source_policy": "Recovered evidence-v3 definitions plus registered tuned membership; no prediction, outcome, fold or metric table is read.",
+  "figure_id": 2,
+  "future_data_used": false,
+  "numeric_rendering": "python_only",
+  "oof_data_used": false,
+  "outcome_used_for_indicator_selection": false,
+  "panels": {
+    "a": {
+      "mark": "evidence pipeline and review ledger"
+    },
+    "b": {
+      "mark": "quantity-conserving classification alluvial"
+    },
+    "c": {
+      "mark": "overlapping 14-gate audit"
+    },
+    "d": {
+      "mark": "nested frozen feature sets"
+    }
+  },
+  "render_config": {
+    "canvas_px": [
+      7200,
+      12000
+    ],
+    "min_font_pt": 5.0,
+    "qa_preview_width": 1800
+  },
+  "required_plot_packages": {
+    "Pillow": "12.2.0",
+    "colorspacious": "1.1.2",
+    "matplotlib": "3.11.0",
+    "pandas": "3.0.3"
+  },
+  "schema_version": "fig2-evidence-derived-tuned-repair-1",
+  "scientific_question": "How did English-language evidence, term coding and frozen T0 gates determine the candidate dimensions and scalable feature sets?"
+}

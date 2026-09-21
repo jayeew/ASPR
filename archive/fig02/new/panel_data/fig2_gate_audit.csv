@@ -1,0 +1,15 @@
+gate_order,gate_id,group,label,short_label,pass_count,fail_count,denominator
+1,G02_ARTICLE_LEVEL,Scope and time boundary,"Paper-level rather than person, institution or aggregate-level",Paper level,432,0,432
+2,G01_IN_SCOPE_ROLE,Scope and time boundary,Innovation / T0-potential / opportunity / permitted-control scope,Allowed role scope,432,0,432
+3,G05_PUBLICATION_TIME,Scope and time boundary,Computable no later than publication (T0),Publication-time computable,221,211,432
+4,G06_NO_FUTURE_INFORMATION,Scope and time boundary,"No future citations, diffusion, disruption or attention",No future information,432,0,432
+5,G08_BIAS_GUARDRAIL,Bias and outcome isolation,Does not violate protected-attribute or bias guardrails,Bias / protected-attribute rules,432,0,432
+6,G09_NO_FATAL_VALIDITY_CONCERN,Bias and outcome isolation,No fatal construct-validity concern,No fatal construct-validity problem,432,0,432
+7,G10_OUTCOME_BLIND_SELECTION,Bias and outcome isolation,Selected without model outcome or prediction-performance feedback,Not chosen using prediction results,432,0,432
+8,G03_PRIMARY_OR_FOUNDATIONAL_EVIDENCE,Source and formula evidence,Peer-reviewed original application or foundational mathematical source,Primary / foundational evidence,167,265,432
+9,G13_ENGLISH_FULLTEXT_FORMULA_EVIDENCE,Source and formula evidence,English key full text and formula evidence verified,English full-text / formula evidence,16,416,432
+10,G04_REPRODUCIBLE_DEFINITION,Implementation and quality,"Formula, parameters, direction and missingness reproducible",Reproducible definition,7,425,432
+11,G07_LOCAL_DATA_READY,Implementation and quality,Current T0 data available or stably derivable from audited inputs,Local data ready,12,420,432
+12,G11_QUALITY_AUDIT,Implementation and quality,Passes implementation data-quality checks,Quality audit,12,420,432
+13,G12_NONCONSTANT,Implementation and quality,Nonconstant in the effective analytic sample,Nonconstant,12,420,432
+14,G14_SECOND_HUMAN_APPROVAL,Independent review,Independent H2 approval after role-separated review,Independent H2 approval,16,416,432

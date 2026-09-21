@@ -623,6 +623,7 @@ class PriorArtService:
         self.last_failures: list[str] = []
         self.last_queries: list[str] = []
         self.last_query_specs: list[QuerySpec] = []
+        self.supplemental_queries: dict[str, list[QuerySpec]] = {}
         self.last_hits: list[RetrievalHit] = []
         self.last_frame: ScientificSearchFrame | None = None
         self.last_cache_hit = False
@@ -714,7 +715,9 @@ class PriorArtService:
                 remaining = budget.normal_max - budget.normal_used
                 if remaining <= 0:
                     return []
-                queries = self.query_planner.plan(claim, frame)
+                queries = self.supplemental_queries.get(
+                    claim.claim_id
+                ) or self.query_planner.plan(claim, frame)
                 if allowed_query_roles:
                     order = {
                         role: index for index, role in enumerate(allowed_query_roles)
@@ -772,7 +775,9 @@ class PriorArtService:
                     budget.contrastive_used += 1
                 else:
                     remaining = budget.normal_max - budget.normal_used
-                    queries = self.query_planner.plan(claim, frame)
+                    queries = self.supplemental_queries.get(
+                        claim.claim_id
+                    ) or self.query_planner.plan(claim, frame)
                     if allowed_query_roles:
                         order = {
                             role: index
@@ -963,6 +968,14 @@ class PriorArtService:
                     resource_ledger,
                 )
         coverage["eligible_ids"].update(works)
+        if claim.claim_id in self.supplemental_queries:
+            # Restored evidence already has comparisons; spend the supplemental
+            # ranking/verification budget only on newly retrieved work IDs.
+            works = {
+                key: work
+                for key, work in works.items()
+                if key not in coverage["compared_ids"]
+            }
         candidate_union = sorted(
             works.values(),
             key=lambda item: (fused_scores[item.work_id], item.title),

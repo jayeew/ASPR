@@ -1,0 +1,9 @@
+stage,ai_count,h1_count,h2_count,note,ai_display,h1_display,h2_display,human_attested_worksheet_count,attestation_hashes_match,independent_ai_run_count,independent_ai_item_count,excluded_local_qwen_artifact_count
+Literature screening,9515,9515,9300,all H2-required records adjudicated,"9,515","9,515","9,300
+mandated review",7,True,119,50314,3
+Term coding,3615,3615,3589,"H2 disposition required for 3,589 terms","3,615","3,615","3,589
+mandated review",7,True,119,50314,3
+Indicator census,1685,1685,1685,363 English sources,"1,685","1,685","1,685
+mandated review",7,True,119,50314,3
+Dimension coding,432,432,432,H2 adjudication defines final mapping,432,432,"432
+mandated review",7,True,119,50314,3

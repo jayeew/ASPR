@@ -1,0 +1,21 @@
+{
+  "claim_boundary": "predictive screening, not causality or direct novelty judgment",
+  "data_policy": "render frozen panel tables only; no simulation, fitting, bootstrap, or numeric recomputation",
+  "domain_display_order": "descending mean reliable D5 Primary 16 annual-window Spearman; display only",
+  "figure_id": 3,
+  "figure_version": "fig3-evidence-derived-tuned-7-16-153-219-v1",
+  "interpolation": "Panel c and e use exact cells only; Panel d linearly bridges internal missing years within each domain's observed endpoints, then applies a visual surface spline across the shared mature-year range; it never extrapolates beyond observed endpoints",
+  "minimum_font_size_pt": 6.5,
+  "model_family": "hgb",
+  "palette": "blue/teal/pale-yellow/orange/red absolute scale; blue-decrease/white/orange-increase gain scale",
+  "panels": {
+    "a": "five-node formal ASPR construction with separate formulas and claim boundary",
+    "b": "twelve separate D3/D5/D8 × four-set OOF decile curves with 95% CI",
+    "c": "exact 3-by-4 temporal-domain heatmap board",
+    "d": "D5 Primary 16 continuous semi-transparent 3D performance terrain",
+    "e": "three exact adjacent-set D5 gain heatmaps"
+  },
+  "performance_scale": "focused 0.68-0.82; under/over values shown with disclosed endpoint colors",
+  "ridgeline_color": "relative domain-mean performance on the same blue-to-red palette",
+  "surface": "220 × 220 mm editable expanded research figure"
+}

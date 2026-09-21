@@ -1,0 +1,17 @@
+set_order,set_id,tier_order,tier,tier_label,feature_count,share
+1,strict_7,1,source_formula_existing,Source formula,7,1
+1,strict_7,2,source_formula_local_surrogate,Local formula surrogate,0,0
+1,strict_7,3,structured_construct_proxy,Structured construct proxy,0,0
+1,strict_7,4,title_taxonomy_lexical_proxy,Title/taxonomy lexical proxy,0,0
+2,fulltext_16,1,source_formula_existing,Source formula,12,0.75
+2,fulltext_16,2,source_formula_local_surrogate,Local formula surrogate,4,0.25
+2,fulltext_16,3,structured_construct_proxy,Structured construct proxy,0,0
+2,fulltext_16,4,title_taxonomy_lexical_proxy,Title/taxonomy lexical proxy,0,0
+3,source_154,1,source_formula_existing,Source formula,12,0.078431372549
+3,source_154,2,source_formula_local_surrogate,Local formula surrogate,4,0.0261437908497
+3,source_154,3,structured_construct_proxy,Structured construct proxy,78,0.509803921569
+3,source_154,4,title_taxonomy_lexical_proxy,Title/taxonomy lexical proxy,59,0.385620915033
+4,ultrarelaxed_221,1,source_formula_existing,Source formula,12,0.0547945205479
+4,ultrarelaxed_221,2,source_formula_local_surrogate,Local formula surrogate,4,0.0182648401826
+4,ultrarelaxed_221,3,structured_construct_proxy,Structured construct proxy,88,0.401826484018
+4,ultrarelaxed_221,4,title_taxonomy_lexical_proxy,Title/taxonomy lexical proxy,115,0.525114155251

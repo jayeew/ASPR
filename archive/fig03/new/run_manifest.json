@@ -1,0 +1,64 @@
+{
+  "audit_passed": true,
+  "baseline_svg_sha256": "02646f85c5190fbf9d8cde51c9ae0a364eb89808863fa2a6242410f8a7bd25d1",
+  "calibration_release": "hgb_nested_tuned_7_16_153_219_20260820_b48936af",
+  "figure_config": {
+    "path": "/home/jayee/workspace/ASPR/experiments/fig03/new/config.json",
+    "sha256": "sha256:08c18685d9e4908a6606f1a425e20cd53d1370ec9cc1baca93722b7da4ec8f70"
+  },
+  "figure_id": 3,
+  "figure_version": "fig3-evidence-derived-tuned-7-16-153-219-v1",
+  "model_family": "hgb",
+  "notes": [
+    "All rendered predictive results use only the formal HGB model family.",
+    "Performance is predictive association with later uptake and diffusion, not a causal or direct novelty claim."
+  ],
+  "numeric_data_recomputed": true,
+  "old_fig3_inputs_used": false,
+  "panel_data_manifest": "/home/jayee/workspace/ASPR/outputs/fig03/new/panel_data_manifest.json",
+  "panel_tables": [
+    "/home/jayee/workspace/ASPR/outputs/fig03/new/panel_data/d5_gain_landscape.csv",
+    "/home/jayee/workspace/ASPR/outputs/fig03/new/panel_data/d5_gain_summary.csv",
+    "/home/jayee/workspace/ASPR/outputs/fig03/new/panel_data/decile_enrichment.csv",
+    "/home/jayee/workspace/ASPR/outputs/fig03/new/panel_data/domain_display_order.csv",
+    "/home/jayee/workspace/ASPR/outputs/fig03/new/panel_data/performance_landscape.csv",
+    "/home/jayee/workspace/ASPR/outputs/fig03/new/panel_data/score_summary.csv"
+  ],
+  "rendered": [
+    "/home/jayee/workspace/ASPR/outputs/fig03/new/figure_full.png",
+    "/home/jayee/workspace/ASPR/outputs/fig03/new/figure_full.svg",
+    "/home/jayee/workspace/ASPR/outputs/fig03/new/figure_full.pdf"
+  ],
+  "reproduction": "python3 -m experiments.fig03.new.run --stage all  # recompute panel tables, freeze hashes, render, audit",
+  "software": {
+    "created_at_utc": "2026-08-27T06:52:20.687803+00:00",
+    "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]"
+  },
+  "source_policy": "uncapped_v2_source-year_complete_local_frozen",
+  "sources": [
+    {
+      "path": "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived/frozen_releases/hgb_nested_tuned_7_16_153_219_20260820_b48936af/oof_predictions.parquet",
+      "sha256": "sha256:d37ef24b4c06243556ca82fb718406c5518c877dd51f66137d0093fb47e03c7a",
+      "size_bytes": 124635598
+    },
+    {
+      "path": "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived/frozen_releases/hgb_nested_tuned_7_16_153_219_20260820_b48936af/oof_metrics.csv",
+      "sha256": "sha256:4ba3c6bcb90bc9888d10a347915b1ef11ec3f81f029ed858a4317a26c694ebfe",
+      "size_bytes": 527
+    },
+    {
+      "path": "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived/frozen_releases/hgb_nested_tuned_7_16_153_219_20260820_b48936af/paper_scores.parquet",
+      "sha256": "sha256:9ab597e07e61d32ad0bd14a697a95c46410f4f95ef01c9dc5d3c73fcbe2df1df",
+      "size_bytes": 103088364
+    },
+    {
+      "path": "/home/jayee/workspace/ASPR/configs/nature_multihorizon/hgb_uncapped_v2.json",
+      "sha256": "sha256:ae3a676df4f9417b76768a9f802803a10ae4e138ccffc4d34c2a201d449b4361",
+      "size_bytes": 2542
+    }
+  ],
+  "stage": "all",
+  "status": "complete_aspr_performance_landscape",
+  "title": "Temporal–disciplinary performance landscape and out-of-time validation of ASPR Score"
+}

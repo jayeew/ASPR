@@ -241,3 +241,22 @@ def test_openalex_content_pdf_is_downloaded_and_extracted(monkeypatch):
     assert calls[0][0].endswith("/W1.pdf")
     assert calls[0][1] is True
     assert response.closed is True
+
+
+@pytest.mark.parametrize("mode", ["text", "semantic"])
+def test_scientific_punctuation_is_not_sent_as_wildcards(monkeypatch, mode):
+    calls = []
+
+    def fake_get(url, *, params=None, headers=None, timeout=None):
+        calls.append(params)
+        return Response({"results": []})
+
+    monkeypatch.setattr("gear.scholar.requests.get", fake_get)
+    scholar = OpenScholar(Args())
+    scholar.search_query("Which catalyst? CHxO* and *O on TiO2", search_mode=mode)
+    name = "search.semantic" if mode == "semantic" else "search"
+    assert calls[0][name] == "Which catalyst CHxO and O on TiO2"
+    assert (
+        scholar.last_query_audits[-1]["query"] == "Which catalyst? CHxO* and *O on TiO2"
+    )
+    assert scholar.last_query_audits[-1]["submitted_query"] == calls[0][name]

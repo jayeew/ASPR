@@ -1,0 +1,33 @@
+{
+  "non_color_encodings": [
+    "direct labels and counts",
+    "fixed left-to-right process order",
+    "hatching for title/taxonomy lexical proxies",
+    "strict, scalable and sensitivity borders"
+  ],
+  "packages": {
+    "Pillow": "12.2.0",
+    "colorspacious": "1.1.2",
+    "matplotlib": "3.11.0",
+    "pandas": "3.0.3"
+  },
+  "preview_183mm_at_render_dpi_px": [
+    4323,
+    7205
+  ],
+  "preview_size_px": [
+    1800,
+    3000
+  ],
+  "render_dpi": 600,
+  "requested_physical_width_mm": 183.0,
+  "role_palette_min_rgb_distance": {
+    "deuteranopia": 0.0,
+    "protanopia": 0.0
+  },
+  "source_png": "/home/jayee/workspace/ASPR/outputs/fig02/new/figure_full.png",
+  "source_size_px": [
+    7200,
+    12000
+  ]
+}

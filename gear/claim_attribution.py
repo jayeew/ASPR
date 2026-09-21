@@ -151,7 +151,7 @@ class ClaimGraphRuntime:
 
     @property
     def insertion_policy(self) -> str:
-        return f"threshold_parent_path_v2:k={self.top_k}:cosine>{self.min_similarity}"
+        return f"threshold_parent_path:k={self.top_k}:cosine>{self.min_similarity}"
 
     def close(self) -> None:
         if self._model is not None:

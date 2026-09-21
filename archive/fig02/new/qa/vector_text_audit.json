@@ -1,0 +1,19 @@
+{
+  "passes": true,
+  "pdf_extractable_text_characters": 2392,
+  "pdf_pages": 1,
+  "pdf_path": "/home/jayee/workspace/ASPR/outputs/fig02/new/Fig2_evidence_architecture.pdf",
+  "svg_path": "/home/jayee/workspace/ASPR/outputs/fig02/new/Fig2_evidence_architecture.svg",
+  "svg_raster_image_elements": 0,
+  "svg_text_elements": 173,
+  "typography": {
+    "estimated_median_font_pt_at_183mm": 5.5,
+    "estimated_minimum_font_pt_at_183mm": 5.0,
+    "median_svg_font_px": 12.214,
+    "minimum_svg_font_px": 11.104,
+    "source_svg_width_pt": 864.0,
+    "target_print_width_mm": 183.0,
+    "text_below_5pt_at_183mm": 0,
+    "typography_passes": true
+  }
+}

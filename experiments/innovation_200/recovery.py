@@ -15,6 +15,7 @@ from uuid import uuid4
 
 from experiments.innovation_200.common import write_json
 from experiments.innovation_200.contracts import SYSTEMS
+from gear.contracts import QuerySpec
 from gear.innovation.contracts import AnalysisResult, Assessment, ClaimSet
 from gear.innovation.locking import stage_lock
 from gear.review_contracts import BranchStatus, GearClaim, GearClaimCard
@@ -503,3 +504,98 @@ def _repair_coverage_paper(
 def repair_coverage(study: Path, paper_ids: list[str]) -> dict[str, Any]:
     """Archive affected attempts and seed healthy evidence for contrastive repair."""
     return _recover(study, paper_ids, failed_only=False, coverage_only=True)
+
+
+def supplement_claims(study: Path, plan: list[dict[str, Any]]) -> dict[str, Any]:
+    """Archive only explicitly selected claims, retaining evidence for new queries.
+
+    Caller holds study_gear_lock. Validate the entire plan before moving files.
+    Replaying the same plan resumes its existing attempt, never cleans it again.
+    """
+    from experiments.innovation_200.common import experiment_config
+
+    maximum = experiment_config().retrieval.normal_max
+    seen: set[str] = set()
+    selected: list[tuple[str, Path, dict[str, Any]]] = []
+    for row in plan:
+        claim_id = str(row["claim_id"])
+        parts = claim_id.split("::CLAIM::")
+        if len(parts) != 2 or any(Path(p).name != p or p in (".", "..") for p in parts):
+            raise ValueError("Invalid supplemental claim ID")
+        if claim_id in seen:
+            raise ValueError("Duplicate supplemental claim ID")
+        seen.add(claim_id)
+        paper_id, suffix = parts
+        root = study / "papers" / paper_id
+        claims = ClaimSet.model_validate_json((root / "shared/claims.json").read_text())
+        claim = next((c for c in claims.claims if c.claim_id == claim_id), None)
+        if claim is None:
+            raise ValueError(f"Unknown supplemental claim: {claim_id}")
+        queries = [QuerySpec.model_validate(q) for q in row["queries"]]
+        if not 1 <= len(queries) <= maximum or any(
+            q.claim_id != claim_id
+            or q.search_mode not in ("text", "semantic")
+            or not q.query.strip()
+            for q in queries
+        ):
+            raise ValueError(f"Invalid supplemental queries: {claim_id}")
+        payload = [q.model_dump(mode="json") for q in queries]
+        directory = root / "gear" / suffix
+        marker = directory / "recovery_source.json"
+        if marker.exists():
+            previous = json.loads(marker.read_text())
+            if previous.get("supplemental_queries") == payload:
+                continue
+            if (
+                not (directory / "gear_card.json").is_file()
+                or not (directory / "assessment.json").is_file()
+            ):
+                raise ValueError(
+                    f"Claim already has an unfinished recovery attempt: {claim_id}"
+                )
+        issue = _recorded_execution_problem(directory) or _healthy_card_problem(
+            directory, claim
+        )
+        issue = issue or _assessment_problem(directory, claim)
+        coverage = EvidenceStore(directory).get(f"COVERAGE:{claim_id}")
+        if issue or coverage is None or coverage.payload["coverage_sufficient"]:
+            raise ValueError(f"Not a healthy coverage-gap claim: {claim_id}: {issue}")
+        selected.append(
+            (
+                paper_id,
+                directory,
+                {"claim_id": claim_id, "supplemental_queries": payload},
+            )
+        )
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S_%f")
+    archive = study / "status/gear_recovery" / f"{stamp}_{uuid4().hex[:8]}"
+    manifest: dict[str, Any] = {
+        "mode": "targeted_supplement",
+        "archive": str(archive),
+        "moved": [],
+        "claims": [],
+        "invalidated_status_files": [],
+        "status": "running",
+    }
+    write_json(archive / "manifest.json", manifest)
+    for paper_id, directory, marker in selected:
+        with stage_lock(study / "papers" / paper_id / ".locks/gear"):
+            source = archive / "artifacts" / directory.relative_to(study)
+            _move(directory, study, archive, manifest)
+            write_json(
+                directory / "recovery_source.json",
+                {
+                    **marker,
+                    "source": str(source.resolve()),
+                    "mode": "supplement_evidence",
+                    "reason": "targeted_candidate_shortfall",
+                },
+            )
+            manifest["claims"].append(marker["claim_id"])
+            _move(directory.parent / "analysis.json", study, archive, manifest)
+            for path in _dependent_paths(study, paper_id):
+                _move(path, study, archive, manifest)
+    _invalidate_status(study, archive, {p for p, _, _ in selected}, manifest)
+    manifest["status"] = "complete"
+    write_json(archive / "manifest.json", manifest)
+    return manifest

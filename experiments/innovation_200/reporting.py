@@ -3,12 +3,17 @@
 from __future__ import annotations
 
 import json
+import re
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-from experiments.innovation_200.ablation_protocol import require_supported_generation
-from experiments.innovation_200.common import experiment_config, read_json
+from experiments.innovation_200.ablation_protocol import (
+    MASKED_GRAPH_VARIANTS,
+    require_supported_generation,
+)
+from experiments.innovation_200.ablation_interpretation import interpreted_context
+from experiments.innovation_200.common import experiment_config, read_json, write_json
 from experiments.innovation_200.contracts import ReportBundle, ReportDraft, ReportSource
 from gear.artifacts import read_model
 from gear.contracts import PaperIR
@@ -288,10 +293,16 @@ def _load_analysis(path: Path) -> dict[str, Any] | None:
 
 
 def build_system_context(
-    system: str, root: Path, claims: ClaimSet, *, inspect_legacy_variant: bool = False,
+    system: str,
+    root: Path,
+    claims: ClaimSet,
+    *,
+    inspect_legacy_variant: bool = False,
 ) -> dict[str, Any]:
     if not inspect_legacy_variant:
         require_supported_generation(system)
+    if system in MASKED_GRAPH_VARIANTS and not inspect_legacy_variant:
+        return interpreted_context(root, claims, system)
     gear = _load_analysis(root / "gear/analysis.json") if system != "graph" else None
     graph = _load_analysis(root / "graph/analysis.json")
     joint = _load_analysis(root / "graph/joint/analysis.json")
@@ -355,6 +366,7 @@ def generate_report(paper_id: str, system: str, root: Path) -> ReportBundle:
             include_graph=system != "gear",
         )
     )
+    aliases = {}
     if system == "direct_llm":
         prompt = DIRECT_PROMPT
         user = paper.markdown
@@ -373,33 +385,97 @@ def generate_report(paper_id: str, system: str, root: Path) -> ReportBundle:
             ]
         else:
             allowed = sources
+        aliases = {
+            f"CITE{i:04d}": source.source_id for i, source in enumerate(allowed, 1)
+        }
+        inverse = {value: key for key, value in aliases.items()}
+        prompt += "\n正文引用必须写成 [CITE0001] 形式，只能使用目录中的短source_id；不得复制或拼接原生证据ID。"
         user = json.dumps(
             {
                 "paper": {"title": paper.metadata.title, "manuscript": paper.markdown},
                 "analysis": build_system_context(system, root, claims),
                 "source_catalog": [
-                    source.model_dump(mode="json") for source in allowed
+                    {
+                        **source.model_dump(mode="json"),
+                        "source_id": inverse[source.source_id],
+                        "passage_id": inverse[source.source_id],
+                    }
+                    for source in allowed
                 ],
             },
             ensure_ascii=False,
         )
     schema = ReportDraft.model_json_schema()
     if allowed:
-        schema["properties"]["cited_source_ids"]["items"]["enum"] = [
-            source.source_id for source in allowed
-        ]
+        schema["properties"]["cited_source_ids"]["items"]["enum"] = [*aliases]
     else:
         schema["properties"]["cited_source_ids"]["maxItems"] = 0
-    raw = LazyRoleClient(experiment_config(), "report_writer").generate_json(
-        system=prompt, user=user, response_schema=schema
+    client = LazyRoleClient(experiment_config(), "report_writer")
+    request = user
+    for attempt in range(3):
+        raw = client.generate_json(system=prompt, user=request, response_schema=schema)
+        write_json(root / "report_inputs" / system / "writer_draft.json", raw)
+        try:
+            draft = ReportDraft.model_validate(raw)
+            return bind_report_citations(
+                paper_id, system, draft, allowed, aliases=aliases
+            )
+        except ValueError as exc:
+            if attempt == 2:
+                raise
+            request = (
+                user
+                + "\n修正上一稿的引用/格式错误："
+                + str(exc)
+                + (
+                    "\n保持有证据支持的分析，所有引用只能来自目录；无法找到支持的句子应删除或缩小范围。"
+                    "不得猜测引用编号。上一稿：" + json.dumps(raw, ensure_ascii=False)
+                )
+            )
+    raise RuntimeError("Report generation exhausted")
+
+
+def restore_citation_ids(
+    draft: ReportDraft, aliases: dict[str, str]
+) -> tuple[str, list[str]]:
+    """Expand only exact known aliases; never approximate a source identity."""
+    pattern = r"\[[ \t]*(CITE[^\]\n]*?)\s*\]"
+    keys = [key.strip() for key in re.findall(pattern, draft.body)]
+    unknown = (
+        set(keys + [k for k in draft.cited_source_ids if k.startswith("CITE")])
+        - aliases.keys()
     )
-    draft = ReportDraft.model_validate(raw)
+    if unknown:
+        raise ValueError(f"Unknown short citation IDs: {sorted(unknown)}")
+    body = re.sub(pattern, lambda match: f"[{aliases[match.group(1).strip()]}]", draft.body)
+    return body, [aliases.get(k, k) for k in draft.cited_source_ids]
+
+
+def bind_report_citations(
+    paper_id: str,
+    system: str,
+    draft: ReportDraft,
+    allowed: list[ReportSource],
+    *,
+    aliases: dict[str, str] | None = None,
+) -> ReportBundle:
+    """Bind both inline citations and the declared list to the supplied catalog."""
     known = {source.source_id: source for source in allowed}
-    if any(source_id not in known for source_id in draft.cited_source_ids):
+    body, declared = restore_citation_ids(draft, aliases or {})
+    cited = re.findall(r"\[((?:M|G|W|WORK|FULLTEXT):[^\]\n]+)\]", body)
+    for key in cited:
+        normalized = key.replace("M:S:", "M:S-", 1)
+        if key not in known and normalized in known:
+            body = body.replace(f"[{key}]", f"[{normalized}]")
+    cited = re.findall(r"\[((?:M|G|W|WORK|FULLTEXT):[^\]\n]+)\]", body)
+    missing = sorted(set(cited) - set(known))
+    if missing:
+        raise ValueError(f"Report body has unbound citations: {missing}")
+    if any(source_id not in known for source_id in declared):
         raise ValueError("Report cited a source outside its information condition")
-    selected = [known[source_id] for source_id in dict.fromkeys(draft.cited_source_ids)]
+    selected = [known[source_id] for source_id in dict.fromkeys([*declared, *cited])]
     return ReportBundle(
-        paper_id=paper_id, system=system, body=draft.body, references=selected
+        paper_id=paper_id, system=system, body=body, references=selected
     )
 
 

@@ -103,7 +103,7 @@ GEAR_HISTORICAL_PDF_ENABLED=false
 
 本地排序模型跨论文共享；候选判断按每批 8 篇分组，默认并发 2 批（`GEAR_CANDIDATE_GATE_WORKERS`），仍受全局 CLI 上限控制。网络等待、模型调用和本地排序可跨 Claim/论文交错推进。修改配置后需重启进程；环境变量优先于 `.env`，`.env.local` 优先于 `.env`。
 
-切换模式后可以在原目录不带 `--overwrite` 续跑，已完成论文、claim assessment 和 GEAR card 会复用。没有形成 card 的中断 claim 会归档原始证据后重试。新生成 card 的 claim 目录记录 `retrieval_policy.json`。已有全文证据和已生成结果不会删除或降级，因此续跑属于保留历史结果的混合模式；若要得到全体统一“仅摘要”的对照实验，应在独立输出目录重新运行 GEAR 及依赖它的报告/测评，Graph、共享 claims、人工参考与 direct_llm/graph 报告无需因此重新生成。
+切换模式后可以在原目录不带 `--overwrite` 续跑，已完成论文、claim assessment 和 GEAR card 会复用。没有形成 card 的中断 claim 会归档原始证据后重试。新生成 card 的 claim 目录记录 `retrieval_policy.json`。已有全文证据与新取得证据进入同一正式结果，续跑完成后统一使用 `normal_contrastive_reserved` 协议，不按补跑批次划分版本或统计组。摘要/全文来源仍按实际证据记录。若另做“仅摘要”对照实验，应使用独立输出目录，避免改变当前正式结果。
 
 终端续跑仍由 `experiments/innovation_200/run_gear.py` 执行；可用一键入口：
 
@@ -140,7 +140,7 @@ CODEX_HOME=/mnt/c/Users/jayee/.codex bash scripts/run_gear_resumable.sh \
   --paper-id s42003-026-09574-2 --workers 1
 ```
 
-`--paper-id` 可重复，所选论文必须存在于 `papers.jsonl`。选样运行使用独立的 `status/run_gear_selected_<时间>.json` 和日志，避免覆盖全量状态。启动及清理共用 study 写锁，重复启动会立即报错。检索或模型发生实际失败时退出码非零，科学局限本身不作为进程执行失败。重跑后仍可能科学上受限；不要为清除 `limited` 标签反复清理。保留旧结果并使用新全文流程属于有意的混合模式恢复。
+`--paper-id` 可重复，所选论文必须存在于 `papers.jsonl`。选样运行使用独立的 `status/run_gear_selected_<时间>.json` 和日志，避免覆盖全量状态。启动及清理共用 study 写锁，重复启动会立即报错。检索或模型发生实际失败时退出码非零，科学局限本身不作为进程执行失败。重跑后仍可能科学上受限；不要为清除 `limited` 标签反复清理。恢复完成后继续作为同一正式数据集使用，不生成补跑专属协议标签。
 
 ## 报告、测评与消融的解释边界
 
@@ -209,3 +209,72 @@ Codex 调用；检索并发仍为 2。新论文启动前要求至少 8 GiB 可�
 所有论文仍共享同一个带锁的 GPU 排序器。已有进程需要正常退出后重启
 才能采用新配置；完成结果自动复用，勿使用清理或覆盖参数。可通过
 `GEAR_PAPER_WORKERS=2 GEAR_CLI_LIMIT=8` 临时恢复较低并发。
+
+2026-09-10：OpenAlex 搜索请求在提交前移除科学文本中的 `?`、`*`，避免标题问号、
+化学吸附物种标记和对照名称被解释为默认搜索不支持的通配符；查询审计同时保留
+原文与 `submitted_query`。这是检索语法规范化，不更改 Claim 或文献原文。
+GEAR 最终评估的结构化输出同时约束 `claim_id` 与 `claim_text`，仍校验精确匹配。
+服务安全检查拒绝的结果应显式保留为未完成，不应通过改写提示或换模型绕过。
+
+Targeted candidate-shortfall repair can use `run_gear.py --supplement-plan PLAN.json`
+(or pass that option to `scripts/run_gear_resumable.sh`). The JSON list explicitly
+names each `claim_id` and its bounded `queries` (`QuerySpec` records). The runner
+validates the whole allowlist, archives only those healthy coverage-gap claim
+attempts and affected summaries, and restores their raw evidence and relations.
+It runs new queries against the original cutoff, ranks new candidate IDs, and
+reuses every unselected assessment. Repeating the same plan resumes without
+cleaning again. Query/hit evidence and recovery markers preserve the changed
+retrieval condition; this is a mixed-condition supplement, not a uniform rerun.
+Coverage thresholds and scientific limitations are unchanged. Related literature
+must still pass the existing candidate and relation checks; supplementation does
+not guarantee sufficient coverage. The 2026-09-10 plan is saved in the study's
+`status/gear_supplement_32_plan.json` (32 claims from the pinned 200-paper roster).
+
+Local retrieval models are shared and GPU ranking remains serialized. Local
+encode/rerank batches default to 8 (`GEAR_LOCAL_RANK_BATCH_SIZE`, clamped to 1–32)
+to bound activation memory when broadened searches return larger candidate pools.
+
+## 当前后处理入口与正式数据
+
+GEAR 的 `retrieval_policy.json` 统一使用无版本名 `normal_contrastive_reserved`。
+正常运行与补充检索都按同一规则记录候选预算、摘要和全文来源，补充结果直接并入
+正式分析。协议文件不包含补救来源路径，统计和报告不按补跑批次分组。
+这不改变原始请求和取得证据的事实，也不把未取得全文的证据标成全文。
+
+`generate_reports.py` 支持全部八组。`fusion_no_metrics`、
+`fusion_no_citation_paths`、`fusion_text_only` 先从同一份 Graph 原始事实中
+屏蔽对应信息，再用正常的 Graph 单 Claim 和联合分析模型、提示词生成解释，最后
+使用相同的论文正文、历史文本目录和 GEAR 分析生成报告。中间结果存于
+`papers/<paper_id>/report_inputs/<system>/`，按步骤续跑；输入变化时覆盖对应结果。
+不会读取完整条件的 Graph 解释来生成这些屏蔽条件。没有合格邻居的 Claim 仍保留
+缺项，不通过消融生成虚构判断。模型调用数量、文本长度等预算差异应按实际记录解释。
+
+新评估和成对比较统一由 `blinding.evaluation_root()` 定位。
+汇总、完整性表、审稿人分歧表及评估用量读取同一个评估目录：若已有新评估结果，
+读取 `evaluations/identity_blind_v2/`；否则读取现有 `human_evaluation/` 等目录。
+一个汇总不跨两套评估条件拼接记录。新评估尚未覆盖的论文作为缺项呈现，
+请求文件和身份映射文件不计入结果数量。`summary.json` 记录实际采用的评估目录。
+
+```bash
+python3 experiments/innovation_200/generate_reports.py --study outputs/innovation_200_20260907 --workers 8 --cli-limit 16
+python3 experiments/innovation_200/evaluate_human.py --study outputs/innovation_200_20260907 --workers 8 --cli-limit 16
+python3 experiments/innovation_200/compare_reports.py --study outputs/innovation_200_20260907 --workers 8 --cli-limit 16
+python3 experiments/innovation_200/summarize_results.py --study outputs/innovation_200_20260907
+```
+
+### GEAR / Graph 完成后的运行安排
+
+已有分支完成时不必再启动 `run_gear.py` 或 `run_graph.py`，也无需
+`--wait-for-inputs`。推荐报告阶段使用 `--workers 16 --cli-limit 24`；
+报告全部成功后，人工评估（12 workers）与成对比较（8 workers）可并行，
+共同使用 `--cli-limit 24`。设置 `GEAR_POSTPROCESS_MIN_AVAILABLE_GIB=8`；
+此门槛会暂停新增调用，并非操作系统硬内存上限。后处理不加载本地嵌入模型。
+
+三个后处理入口在任何任务失败时返回非零状态，成功文件继续复用；同一入口不要
+重复启动。报告先完成可以避免随机排列的比较任务占用线程等待未生成的报告。
+JSON 结果采用临时文件原子替换，上游报告失败按 `paper_id__system` 正确传播。
+使用流式等待参数时，请先启动上游；每次阶段启动会清除该状态文件中的旧失败状态。
+最后只在评估和比较均成功退出后运行 `summarize_results.py`。
+
+当前匿名评估使用自己的结果目录，旧口径评估不作为新口径的缓存；报告仍正常复用。
+所有 nohup 重定向须与对应命令保持连续，行末反斜杠后不能插入空行。

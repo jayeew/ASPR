@@ -36,6 +36,13 @@ def assess(
     )
     schema = Assessment.model_json_schema()
     schema["properties"]["claim_id"]["enum"] = [claim_id]
+    schema["properties"]["claim_text"]["enum"] = [text]
+    # The structured-output backend rejects quoted prose in enum literals.
+    # This is input metadata, so bind it locally rather than ask for an echo.
+    bind_text = '"' in text
+    if bind_text:
+        del schema["properties"]["claim_text"]
+        schema["required"].remove("claim_text")
     schema["properties"]["findings"]["minItems"] = 1
     schema["$defs"]["Finding"]["properties"]["evidence_keys"]["minItems"] = 1
     schema["$defs"]["Finding"]["properties"]["evidence_keys"]["items"]["enum"] = sorted(
@@ -57,6 +64,8 @@ def assess(
         ),
         response_schema=schema,
     )
+    if bind_text and "claim_text" not in raw:
+        raw = dict(raw, claim_text=text)
     result = Assessment.model_validate(raw)
     if result.claim_id != claim_id or result.claim_text != text:
         raise ValueError("Analysis changed shared claim identity/text")
@@ -81,4 +90,7 @@ def evidence_payloads(root: Path) -> dict[str, object]:
             else row.payload
         )
         for key, row in store._evidence.items()
+        # Query/hit audits explain retrieval decisions, not scientific findings.
+        # Keep them in the raw store without sending every discarded hit to the LLM.
+        if row.kind not in {"retrieval_query", "retrieval_hit"}
     }

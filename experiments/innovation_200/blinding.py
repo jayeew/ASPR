@@ -27,6 +27,23 @@ def evaluation_root(study: Path) -> Path:
     return study / "evaluations" / EVALUATION_VERSION
 
 
+def summary_evaluation_root(study: Path) -> Path:
+    """Choose one evaluation condition for the whole summary, never mix rows."""
+    current = evaluation_root(study)
+    paths = [
+        *(current / "human").glob("*/*.json"),
+        *(current / "pairwise").glob("*.json"),
+    ]
+    if any(not p.name.endswith((".mapping.json", ".request.json")) for p in paths):
+        return current
+    return study
+
+
+def summary_human_root(study: Path) -> Path:
+    root = summary_evaluation_root(study)
+    return root / ("human_evaluation" if root == study else "human")
+
+
 def payload_hash(payload: Any) -> str:
     encoded = json.dumps(payload, sort_keys=True, ensure_ascii=False).encode("utf-8")
     return hashlib.sha256(encoded).hexdigest()

@@ -152,3 +152,30 @@ def test_joint_rejects_invented_claims(monkeypatch):
     monkeypatch.setattr("gear.innovation.joint_graph.LazyRoleClient", Client)
     with pytest.raises(ValueError, match="invented"):
         analyze_joint(GearConfig(), "p", {"source": {}}, {"real"})
+
+
+def test_joint_retries_invalid_keys_and_constrains_target_ids(monkeypatch) -> None:
+    requests = []
+
+    class Client:
+        def __init__(self, *args):
+            pass
+
+        def generate_json(self, **kwargs):
+            requests.append(kwargs)
+            fields = kwargs['response_schema']['$defs']['JointFinding']['properties']
+            assert fields['claim_ids']['items']['enum'] == ['target']
+            assert fields['evidence_keys']['items']['enum'] == ['source']
+            return {
+                'paper_id': 'p', 'knowledge_summary': 'summary', 'limitations': [],
+                'findings': [{'question': 'q', 'claim_ids': ['target'],
+                              'observation': 'o', 'interpretation': 'i',
+                              'evidence_keys': ['unknown' if len(requests) == 1 else 'source'],
+                              'limitations': []}],
+            }
+
+    monkeypatch.setattr('gear.innovation.joint_graph.LazyRoleClient', Client)
+    result = analyze_joint(GearConfig(), 'p', {'source': {}}, {'target'})
+    assert len(requests) == 2
+    assert 'unknown' in requests[1]['user']
+    assert result.findings[0].evidence_keys == ['source']

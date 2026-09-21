@@ -33,6 +33,7 @@ from experiments.innovation_200.contracts import (
     Preference,
     ReportBundle,
 )
+from experiments.innovation_200.resource_guard import wait_for_memory
 from gear.contracts import StrictModel
 from gear.model_client import LazyRoleClient
 
@@ -101,6 +102,7 @@ def compare(
             producer_statuses=[study / "status/generate_reports.json"],
             logger=logger,
         )
+    wait_for_memory(logger)
     fusion = ReportBundle.model_validate_json(
         (study / "reports/fusion" / f"{paper_id}.json").read_text(encoding="utf-8")
     )
@@ -174,7 +176,7 @@ def main() -> None:
         args.overwrite,
         len(tasks),
     )
-    run_stage(
+    records = run_stage(
         tasks,
         lambda row: compare(
             row, args.study, args.overwrite, args.wait_for_inputs, logger
@@ -184,6 +186,9 @@ def main() -> None:
         usage_dir=evaluation_root(args.study) / "status/usage/compare_reports",
         logger=logger,
     )
+
+    if any(row["status"] == "failed" for row in records):
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":

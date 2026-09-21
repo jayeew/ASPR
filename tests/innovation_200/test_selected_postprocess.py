@@ -75,3 +75,32 @@ def test_memory_guard_waits_until_reserve_is_available(
     )
     resource_guard.wait_for_memory()
     assert sleeps == [2]
+
+
+def test_report_capacity_retry_preserves_other_errors(monkeypatch, tmp_path) -> None:
+    from experiments.innovation_200 import generate_reports
+    from gear.codex_cli import CodexCLIUnavailableError
+    import pytest
+
+    calls = []
+    delays = []
+    sentinel = object()
+
+    def generate(*args):
+        calls.append(args)
+        if len(calls) == 1:
+            raise CodexCLIUnavailableError('ERROR: Selected model is at capacity.')
+        return sentinel
+
+    monkeypatch.setattr(generate_reports, 'generate_report', generate)
+    monkeypatch.setattr(generate_reports.time, 'sleep', delays.append)
+    assert generate_reports.generate_with_capacity_retry('p', 'gear', tmp_path, None) is sentinel
+    assert len(calls) == 2 and delays == [15]
+
+    def blocked(*args):
+        raise CodexCLIUnavailableError('ERROR: This content was flagged for possible biological risk.')
+
+    monkeypatch.setattr(generate_reports, 'generate_report', blocked)
+    with pytest.raises(CodexCLIUnavailableError, match='biological'):
+        generate_reports.generate_with_capacity_retry('p', 'gear', tmp_path, None)
+    assert delays == [15]

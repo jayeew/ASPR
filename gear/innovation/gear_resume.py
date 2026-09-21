@@ -72,7 +72,7 @@ def restore_evidence(
         "metadata": cov["metadata_only_count"],
         # Unknown discarded candidate IDs cannot be reconstructed from counts.
         "eligible_ids": set(works),
-        "compared_ids": set(cov["compared_work_ids"]),
+        "compared_ids": set(relations),
         "whole_ranked": cov["whole_paper_ranking_completed"],
         "purpose_ranked": cov["purpose_ranking_completed"],
         "ranker": cov["ranker"],
@@ -85,7 +85,11 @@ def restore_evidence(
             if not x.startswith("contrastive_query_coverage_gap:")
         ]
         + ["resumed_unique_eligible_count_is_lower_bound"],
-        "prior_eligible_count": cov["unique_eligible_count"],
+        "prior_eligible_count": max(
+            0,
+            cov["unique_eligible_count"]
+            - len(set(supervisor._identity_exclusions) & set(cov["compared_work_ids"])),
+        ),
     }
     supervisor.prior_art._coverage_state[claim.claim_id] = state
     budget.fulltext_kept = len(works)

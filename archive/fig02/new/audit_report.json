@@ -1,0 +1,504 @@
+{
+  "checks": [
+    {
+      "check": "supported_figure",
+      "detail": "figure_id=2",
+      "passed": true
+    },
+    {
+      "check": "chart_contract_tables_exist",
+      "detail": "missing=[]",
+      "passed": true
+    },
+    {
+      "check": "outcome_free_fig2_data_path",
+      "detail": "forbidden_tables=[]",
+      "passed": true
+    },
+    {
+      "check": "feature_set_membership_reads_metadata_not_outcome_results",
+      "detail": [
+        "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived_v3/outputs_recovered_20260819/recovery_manifest_v3.json",
+        "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived/frozen_releases/hgb_nested_tuned_7_16_153_219_20260820_b48936af/run_manifest.json"
+      ],
+      "passed": true
+    },
+    {
+      "check": "evidence_pipeline_counts_exact",
+      "detail": "{'Raw English terms': 3615, 'H2 retained': 3170, 'Canonical terms': 1102, 'Term families': 367, 'Search domains': 42, 'Candidate logical queries': 381, 'Frozen search frame': 336, 'Seed + PRESS validation': 62, 'Formal query records': 30332, 'Final title/abstract dispositions': 9515, 'Indicator mentions': 1685, 'Canonical indicator families': 432, 'Mapped families': 428, 'Candidate dimensions': 66}",
+      "passed": true
+    },
+    {
+      "check": "screening_disposition_conservation",
+      "detail": {
+        "count": 9515,
+        "detail": "363 included English sources · 9152 excluded",
+        "excluded_count": 9152,
+        "included_count": 363
+      },
+      "passed": true
+    },
+    {
+      "check": "twelve_rounds_and_transparent_round12_stop",
+      "detail": {
+        "decision": "freeze",
+        "iteration": 12,
+        "new_canonical_indicator_families": 9,
+        "new_nonredundant_english_terms": 10,
+        "stop_basis": "retrospective_owner_pragmatic_stop"
+      },
+      "passed": true
+    },
+    {
+      "check": "ai_h1_h2_review_coverage",
+      "detail": [
+        {
+          "ai_count": 9515,
+          "h1_count": 9515,
+          "h2_count": 9300,
+          "stage": "Literature screening"
+        },
+        {
+          "ai_count": 3615,
+          "h1_count": 3615,
+          "h2_count": 3589,
+          "stage": "Term coding"
+        },
+        {
+          "ai_count": 1685,
+          "h1_count": 1685,
+          "h2_count": 1685,
+          "stage": "Indicator census"
+        },
+        {
+          "ai_count": 432,
+          "h1_count": 432,
+          "h2_count": 432,
+          "stage": "Dimension coding"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "check": "search_frame_press_and_seed_recall",
+      "detail": {
+        "query": {
+          "active_logical_queries": 336,
+          "archived_queries": 45,
+          "candidate_logical_queries": 381,
+          "physical_openalex_requests": 367,
+          "press_unresolved_active": 0,
+          "press_unsupported_archived": 9,
+          "redundant_archived": 23,
+          "zero_hit_archived": 13
+        },
+        "recall": {
+          "development_seed_count": 53,
+          "hidden_seed_count": 9,
+          "indexable_seed_count": 62,
+          "initial_recalled_seed_count": 51,
+          "initial_seed_denominator": 62,
+          "press_unresolved": 0,
+          "recalled_seed_count": 62,
+          "source_grounded_repairs": 10
+        }
+      },
+      "passed": true
+    },
+    {
+      "check": "indicator_to_dimension_to_tier_conservation",
+      "detail": {
+        "families": 432,
+        "mapped": 428,
+        "tiers": {
+          "broad_t0_only": 66,
+          "excluded": 213,
+          "fulltext_only": 9,
+          "source_only": 137,
+          "strict_core": 7
+        }
+      },
+      "passed": true
+    },
+    {
+      "check": "strict_seven_metrics_four_operational_dimensions",
+      "detail": [
+        {
+          "dimension_id": "CD031",
+          "final_role": "predictive",
+          "independent_team_count": 9,
+          "indicator_count": 2
+        },
+        {
+          "dimension_id": "CD014",
+          "final_role": "opportunity",
+          "independent_team_count": 24,
+          "indicator_count": 2
+        },
+        {
+          "dimension_id": "CD010",
+          "final_role": "control",
+          "independent_team_count": 12,
+          "indicator_count": 1
+        },
+        {
+          "dimension_id": "CD041",
+          "final_role": "control",
+          "independent_team_count": 14,
+          "indicator_count": 2
+        }
+      ],
+      "passed": true
+    },
+    {
+      "check": "fourteen_hard_gate_marginal_counts_exact",
+      "detail": [
+        {
+          "gate_id": "G02_ARTICLE_LEVEL",
+          "pass_count": 432
+        },
+        {
+          "gate_id": "G01_IN_SCOPE_ROLE",
+          "pass_count": 432
+        },
+        {
+          "gate_id": "G05_PUBLICATION_TIME",
+          "pass_count": 221
+        },
+        {
+          "gate_id": "G06_NO_FUTURE_INFORMATION",
+          "pass_count": 432
+        },
+        {
+          "gate_id": "G08_BIAS_GUARDRAIL",
+          "pass_count": 432
+        },
+        {
+          "gate_id": "G09_NO_FATAL_VALIDITY_CONCERN",
+          "pass_count": 432
+        },
+        {
+          "gate_id": "G10_OUTCOME_BLIND_SELECTION",
+          "pass_count": 432
+        },
+        {
+          "gate_id": "G03_PRIMARY_OR_FOUNDATIONAL_EVIDENCE",
+          "pass_count": 167
+        },
+        {
+          "gate_id": "G13_ENGLISH_FULLTEXT_FORMULA_EVIDENCE",
+          "pass_count": 16
+        },
+        {
+          "gate_id": "G04_REPRODUCIBLE_DEFINITION",
+          "pass_count": 7
+        },
+        {
+          "gate_id": "G07_LOCAL_DATA_READY",
+          "pass_count": 12
+        },
+        {
+          "gate_id": "G11_QUALITY_AUDIT",
+          "pass_count": 12
+        },
+        {
+          "gate_id": "G12_NONCONSTANT",
+          "pass_count": 12
+        },
+        {
+          "gate_id": "G14_SECOND_HUMAN_APPROVAL",
+          "pass_count": 16
+        }
+      ],
+      "passed": true
+    },
+    {
+      "check": "four_nested_feature_sets_exact",
+      "detail": [
+        {
+          "dimension_count": 4,
+          "feature_count": 7,
+          "incremental_count": 7,
+          "set_id": "strict_7"
+        },
+        {
+          "dimension_count": 10,
+          "feature_count": 16,
+          "incremental_count": 9,
+          "set_id": "fulltext_16"
+        },
+        {
+          "dimension_count": 48,
+          "feature_count": 153,
+          "incremental_count": 137,
+          "set_id": "source_154"
+        },
+        {
+          "dimension_count": 55,
+          "feature_count": 219,
+          "incremental_count": 66,
+          "set_id": "ultrarelaxed_221"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "check": "source153_operationalisation_range_exact",
+      "detail": [
+        {
+          "feature_count": 12,
+          "tier": "source_formula_existing"
+        },
+        {
+          "feature_count": 4,
+          "tier": "source_formula_local_surrogate"
+        },
+        {
+          "feature_count": 78,
+          "tier": "structured_construct_proxy"
+        },
+        {
+          "feature_count": 59,
+          "tier": "title_taxonomy_lexical_proxy"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "check": "broad219_operationalisation_range_exact",
+      "detail": [
+        {
+          "feature_count": 12,
+          "tier": "source_formula_existing"
+        },
+        {
+          "feature_count": 4,
+          "tier": "source_formula_local_surrogate"
+        },
+        {
+          "feature_count": 88,
+          "tier": "structured_construct_proxy"
+        },
+        {
+          "feature_count": 115,
+          "tier": "title_taxonomy_lexical_proxy"
+        }
+      ],
+      "passed": true
+    },
+    {
+      "check": "exclusive_tiers_sum_to_indicator_universe",
+      "detail": {
+        "broad_t0_only": 66,
+        "excluded": 213,
+        "fulltext_only": 9,
+        "source_only": 137,
+        "strict_core": 7
+      },
+      "passed": true
+    },
+    {
+      "check": "fixed_figure_dependencies",
+      "detail": {
+        "expected": {
+          "Pillow": "12.2.0",
+          "colorspacious": "1.1.2",
+          "matplotlib": "3.11.0",
+          "pandas": "3.0.3"
+        },
+        "observed": {
+          "Pillow": "12.2.0",
+          "colorspacious": "1.1.2",
+          "matplotlib": "3.11.0",
+          "pandas": "3.0.3"
+        }
+      },
+      "passed": true
+    },
+    {
+      "check": "master_canvas_exact",
+      "detail": "expected=(7200, 12000); observed=(7200, 12000)",
+      "passed": true
+    },
+    {
+      "check": "accessibility_previews_complete",
+      "detail": [
+        "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/figure_full_lowres_preview.png",
+        "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/figure_full_grayscale.png",
+        "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/figure_full_deuteranopia.png",
+        "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/figure_full_protanopia.png",
+        "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/figure_183mm_preview.png",
+        "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/visual_accessibility.json",
+        "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/layout_audit.json",
+        "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/vector_text_audit.json"
+      ],
+      "passed": true
+    },
+    {
+      "check": "layout_and_required_emphasis_audit",
+      "detail": {
+        "emphasis_contract": {
+          "broad_t0_dashed_outline": true,
+          "expanded153_blue_emphasis": true,
+          "hard_gate_audit_only": true,
+          "operationalization_palette_separate_from_role_palette": true,
+          "r12_orange_dashed": true
+        },
+        "obvious_text_collision_count": 0,
+        "outside_panel_text_count": 0,
+        "panel_checks": {
+          "a": {
+            "obvious_text_collision_count": 0,
+            "obvious_text_collisions": [],
+            "outside_panel_text": [],
+            "outside_panel_text_count": 0,
+            "visible_text_count": 69
+          },
+          "b": {
+            "obvious_text_collision_count": 0,
+            "obvious_text_collisions": [],
+            "outside_panel_text": [],
+            "outside_panel_text_count": 0,
+            "visible_text_count": 19
+          },
+          "c": {
+            "obvious_text_collision_count": 0,
+            "obvious_text_collisions": [],
+            "outside_panel_text": [],
+            "outside_panel_text_count": 0,
+            "visible_text_count": 32
+          },
+          "d": {
+            "obvious_text_collision_count": 0,
+            "obvious_text_collisions": [],
+            "outside_panel_text": [],
+            "outside_panel_text_count": 0,
+            "visible_text_count": 16
+          }
+        },
+        "passes": true,
+        "required_text_present": {
+          "expanded153": true,
+          "global_title": true,
+          "panel_a": true,
+          "panel_b": true,
+          "panel_c": true,
+          "panel_d": true,
+          "round12": true
+        }
+      },
+      "passed": true
+    },
+    {
+      "check": "vector_text_not_rasterized_master",
+      "detail": {
+        "passes": true,
+        "pdf_extractable_text_characters": 2392,
+        "pdf_pages": 1,
+        "pdf_path": "/home/jayee/workspace/ASPR/outputs/fig02/new/Fig2_evidence_architecture.pdf",
+        "svg_path": "/home/jayee/workspace/ASPR/outputs/fig02/new/Fig2_evidence_architecture.svg",
+        "svg_raster_image_elements": 0,
+        "svg_text_elements": 173,
+        "typography": {
+          "estimated_median_font_pt_at_183mm": 5.5,
+          "estimated_minimum_font_pt_at_183mm": 5.0,
+          "median_svg_font_px": 12.214,
+          "minimum_svg_font_px": 11.104,
+          "source_svg_width_pt": 864.0,
+          "target_print_width_mm": 183.0,
+          "text_below_5pt_at_183mm": 0,
+          "typography_passes": true
+        }
+      },
+      "passed": true
+    },
+    {
+      "check": "actual_size_preview_dimensions",
+      "detail": {
+        "non_color_encodings": [
+          "direct labels and counts",
+          "fixed left-to-right process order",
+          "hatching for title/taxonomy lexical proxies",
+          "strict, scalable and sensitivity borders"
+        ],
+        "packages": {
+          "Pillow": "12.2.0",
+          "colorspacious": "1.1.2",
+          "matplotlib": "3.11.0",
+          "pandas": "3.0.3"
+        },
+        "preview_183mm_at_render_dpi_px": [
+          4323,
+          7205
+        ],
+        "preview_size_px": [
+          1800,
+          3000
+        ],
+        "render_dpi": 600,
+        "requested_physical_width_mm": 183.0,
+        "role_palette_min_rgb_distance": {
+          "deuteranopia": 0.0,
+          "protanopia": 0.0
+        },
+        "source_png": "/home/jayee/workspace/ASPR/outputs/fig02/new/figure_full.png",
+        "source_size_px": [
+          7200,
+          12000
+        ]
+      },
+      "passed": true
+    },
+    {
+      "check": "figure_full_png",
+      "detail": "/home/jayee/workspace/ASPR/outputs/fig02/new/figure_full.png",
+      "passed": true
+    },
+    {
+      "check": "architecture_png",
+      "detail": "/home/jayee/workspace/ASPR/outputs/fig02/new/Fig2_evidence_architecture.png",
+      "passed": true
+    },
+    {
+      "check": "figure_full_svg",
+      "detail": "/home/jayee/workspace/ASPR/outputs/fig02/new/figure_full.svg",
+      "passed": true
+    },
+    {
+      "check": "architecture_svg",
+      "detail": "/home/jayee/workspace/ASPR/outputs/fig02/new/Fig2_evidence_architecture.svg",
+      "passed": true
+    },
+    {
+      "check": "figure_full_pdf",
+      "detail": "/home/jayee/workspace/ASPR/outputs/fig02/new/figure_full.pdf",
+      "passed": true
+    },
+    {
+      "check": "architecture_pdf",
+      "detail": "/home/jayee/workspace/ASPR/outputs/fig02/new/Fig2_evidence_architecture.pdf",
+      "passed": true
+    },
+    {
+      "check": "standalone_panel_exports",
+      "detail": [
+        "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_a.png",
+        "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_a.svg",
+        "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_a.pdf",
+        "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_b.png",
+        "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_b.svg",
+        "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_b.pdf",
+        "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_c.png",
+        "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_c.svg",
+        "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_c.pdf",
+        "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_d.png",
+        "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_d.svg",
+        "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_d.pdf"
+      ],
+      "passed": true
+    }
+  ],
+  "figure_id": 2,
+  "passed": true,
+  "status": "complete_evidence_derived_tuned_recovery"
+}

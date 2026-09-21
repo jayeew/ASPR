@@ -21,6 +21,10 @@ from experiments.innovation_200.common import (
     write_json,
 )
 from experiments.innovation_200.contracts import SYSTEMS
+from experiments.innovation_200.blinding import (
+    summary_evaluation_root,
+    summary_human_root,
+)
 
 
 def _json(path: Path) -> dict[str, Any]:
@@ -41,7 +45,7 @@ def human_rows(study: Path, papers: list[dict]) -> list[dict[str, Any]]:
     for paper in papers:
         paper_id = str(paper["paper_id"])
         for system in SYSTEMS:
-            path = study / "human_evaluation" / system / f"{paper_id}.json"
+            path = summary_human_root(study) / system / f"{paper_id}.json"
             if not path.exists():
                 continue
             payload = _json(path)
@@ -138,7 +142,9 @@ def consistency_summary(
     study: Path, rows: list[dict[str, Any]]
 ) -> list[dict[str, Any]]:
     labels: dict[str, str] = {}
-    for path in (study / "reviewer_consistency").glob("*.json"):
+    for path in (summary_evaluation_root(study) / "reviewer_consistency").glob(
+        "*.json"
+    ):
         payload = _json(path)
         relations = {row["relation"] for row in payload["comparisons"]}
         if relations & {"opposite", "intensity_only", "uncertain"}:
@@ -175,7 +181,11 @@ def consistency_summary(
 
 
 def pairwise_rows(study: Path) -> list[dict[str, Any]]:
-    return [_json(path) for path in sorted((study / "pairwise").glob("*.json"))]
+    return [
+        _json(path)
+        for path in sorted((summary_evaluation_root(study) / "pairwise").glob("*.json"))
+        if not path.name.endswith((".mapping.json", ".request.json"))
+    ]
 
 
 def pairwise_summary(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -190,10 +200,11 @@ def pairwise_summary(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
                 "fusion_wins": counts["fusion"],
                 "baseline_wins": counts[baseline],
                 "ties": counts["tie"],
-                "fusion_win_rate_excluding_ties": counts["fusion"]
-                / (counts["fusion"] + counts[baseline])
-                if counts["fusion"] + counts[baseline]
-                else None,
+                "fusion_win_rate_excluding_ties": (
+                    counts["fusion"] / (counts["fusion"] + counts[baseline])
+                    if counts["fusion"] + counts[baseline]
+                    else None
+                ),
             }
         )
     return output
@@ -201,7 +212,16 @@ def pairwise_summary(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 def usage_summary(study: Path) -> dict[str, Any]:
     records = []
-    for path in (study / "status/usage").glob("**/*.jsonl"):
+    current = summary_evaluation_root(study)
+    paths = list((study / "status/usage").glob("**/*.jsonl"))
+    if current != study:
+        paths = [
+            p
+            for p in paths
+            if p.parent.name not in {"evaluate_human", "compare_reports"}
+        ]
+        paths.extend((current / "status/usage").glob("**/*.jsonl"))
+    for path in paths:
         stage = path.parent.name
         for row in read_jsonl(path):
             records.append({"stage": stage, **row})
@@ -223,7 +243,13 @@ def usage_summary(study: Path) -> dict[str, Any]:
 
 def stage_summary(study: Path) -> list[dict[str, Any]]:
     output: list[dict[str, Any]] = []
-    for path in sorted((study / "status").glob("*.json")):
+    paths = {p.name: p for p in (study / "status").glob("*.json")}
+    current = summary_evaluation_root(study)
+    if current != study:
+        for name in ("evaluate_human.json", "compare_reports.json"):
+            paths.pop(name, None)
+        paths.update({p.name: p for p in (current / "status").glob("*.json")})
+    for path in sorted(paths.values()):
         payload = _json(path)
         if not isinstance(payload, list):
             continue
@@ -250,7 +276,13 @@ def output_completeness(study: Path, papers: list[dict]) -> list[dict[str, Any]]
             "field_name": paper["field_name"],
             "human_reference": (study / "human_refs" / f"{paper_id}.json").exists(),
             "pairwise_complete": len(
-                list((study / "pairwise").glob(f"{paper_id}__*.json"))
+                [
+                    p
+                    for p in (summary_evaluation_root(study) / "pairwise").glob(
+                        f"{paper_id}__*.json"
+                    )
+                    if not p.name.endswith((".mapping.json", ".request.json"))
+                ]
             ),
         }
         for system in SYSTEMS:
@@ -258,7 +290,7 @@ def output_completeness(study: Path, papers: list[dict]) -> list[dict[str, Any]]
                 study / "reports" / system / f"{paper_id}.json"
             ).exists()
             row[f"human_eval_{system}"] = (
-                study / "human_evaluation" / system / f"{paper_id}.json"
+                summary_human_root(study) / system / f"{paper_id}.json"
             ).exists()
         rows.append(row)
     return rows
@@ -281,6 +313,8 @@ def write_report(
         "# 200篇全文创新分析实验汇总",
         "",
         f"抽样论文：{len(papers)}篇；最终报告：{report_count}/{len(papers) * len(SYSTEMS)}；匿名比较：{len(pairs)}/{len(papers) * 7}。",
+        "",
+        f"评估数据来源：`{summary_evaluation_root(study).relative_to(study)}`；只汇总该评估目录，不以旧评估填补缺项。",
         "",
         "## 人工具体贡献对比（论文等权）",
         "",
@@ -330,6 +364,7 @@ def write_report(
         study / "summary.json",
         {
             "papers": len(papers),
+            "evaluation_source": str(summary_evaluation_root(study).relative_to(study)),
             "human": human_summary,
             "pairwise": pair_summary,
             "stages": stages,

@@ -4,8 +4,10 @@ import hashlib
 import json
 from datetime import date
 
+from gear.config import GearConfig
 from gear.contracts import (
     EvidenceLevel,
+    PaperIR,
     RelationLabel,
     RetrievalBudget,
     RetrievedSpan,
@@ -981,3 +983,41 @@ def test_normal_search_reserves_capacity_for_contrastive(gear_config, paper_ir):
     )
     assert "legacy_contrastive" in coverage.completed_query_roles
     assert budget.fulltext_kept <= 10
+
+
+def test_supplement_queries_preserve_coverage_and_skip_old_candidates(
+    gear_config: GearConfig, paper_ir: PaperIR
+) -> None:
+    from gear.contracts import QuerySpec
+
+    config = gear_config.model_copy(update={"allow_external_retrieval": True})
+    service = service_with_model(config, SearchFake())
+    claim = paper_ir.claims[0]
+    old = service.retrieve(
+        claim,
+        date(2010, 1, 1),
+        RetrievalBudget(fulltext_max=10),
+        target_span=paper_ir.span_map()[claim.span_id],
+        paper_ir=paper_ir,
+    )
+    old_ids = {w.work_id for w in old}
+    assert old_ids
+    service.supplemental_queries[claim.claim_id] = [
+        QuerySpec(
+            query_id="supplement",
+            claim_id=claim.claim_id,
+            family="lexical",
+            query="broader evidence terminology",
+        )
+    ]
+    new = service.retrieve(
+        claim,
+        date(2010, 1, 1),
+        RetrievalBudget(fulltext_max=10, fulltext_kept=len(old)),
+        target_span=paper_ir.span_map()[claim.span_id],
+        paper_ir=paper_ir,
+    )
+    assert [q.query_id for q in service.last_query_specs] == ["supplement"]
+    assert new and not old_ids.intersection(w.work_id for w in new)
+    assert all(w.work_id != "future" for w in new)
+    assert old_ids <= service._coverage_state[claim.claim_id]["compared_ids"]

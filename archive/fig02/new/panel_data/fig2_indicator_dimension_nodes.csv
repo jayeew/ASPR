@@ -1,0 +1,16 @@
+node_stage,node_id,node_order,label,feature_count,dimension_count,cumulative_count
+source_role,direct_innovation,0,Direct innovation,31,,
+source_role,t0_substantive,1,T0 substantive potential,259,,
+source_role,t0_opportunity,2,T0 opportunity,106,,
+source_role,context_control,3,Context control,36,,
+dimension_role,substantive_innovation,0,Innovation content,14,4,
+dimension_role,t0_potential,1,T0 impact potential,207,31,
+dimension_role,opportunity,2,Opportunity context,91,15,
+dimension_role,context_control,3,Background controls,65,10,
+dimension_role,sensitivity,4,Sensitivity-only,51,6,
+dimension_role,unassigned,5,Unassigned / pre-dimension rejection,4,0,
+exclusive_tier,strict_core,0,Strict core,7,,7
+exclusive_tier,fulltext_only,1,Full-text extension only,9,,16
+exclusive_tier,source_only,2,Source-grounded extension only,137,,153
+exclusive_tier,broad_t0_only,3,Broad T0 extension only,66,,219
+exclusive_tier,excluded,4,Excluded,213,,432

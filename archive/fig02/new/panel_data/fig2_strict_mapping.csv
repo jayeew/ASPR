@@ -1,0 +1,5 @@
+display_order,dimension_id,dimension_label,final_role,construct_role,indicator_count,indicator_labels,independent_team_count
+1,CD031,Knowledge diversity and integration potential,predictive,t0_potential,2,Reference balance | Reference variety,9
+2,CD014,Collaboration breadth and type,opportunity,opportunity,2,International collaboration | Country count,24
+3,CD010,Author team composition context,control,context_control,1,Author count,12
+4,CD041,Publication and venue context,control,context_control,2,Journal identity | Publication year,14

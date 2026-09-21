@@ -980,6 +980,11 @@ def relations(f: Figure) -> None:
 
 
 def render(out: Path, only: str | None = None) -> Figure:
+    for extension in ["svg", "pdf", "png"]:
+        (out / "components" / f"figure_caption_note.{extension}").unlink(
+            missing_ok=True
+        )
+    (out / "components/layers/figure_caption_note.svg").unlink(missing_ok=True)
     # Retire the four annotations from both assembly layers and standalone exports.
     for label in "ABCD":
         for extension in ["svg", "pdf", "png"]:
@@ -1004,28 +1009,12 @@ def render(out: Path, only: str | None = None) -> Figure:
         "#080808",
         True,
     )
-    footer = f.component(
-        "figure_caption_note",
-        1036,
-        43,
-        "Figure scope note",
-        "descriptive insertion, bounded historical graph",
-    )
-    footer.paragraph(
-        0,
-        13,
-        "Historical atlas: 2023–2025 abstract-derived claims. Four full-text target claims are shown as independent insertions; network layouts are display coordinates. Semantic association and local connectivity do not establish scientific correctness or novelty.",
-        1036,
-        11.5,
-        14,
-    )
     figure = Scene(1055, 1491, "fig1")
     figure.rect(0, 0, 1055, 1491, "white")
     f.place(figure, title, 12, 0)
     for key in ["a", "b", "c", "d", "e"]:
         x, y, _, _ = PANEL_BOXES[key]
         figure.use(f.panels[key], x, y)
-    f.place(figure, footer, 12, 1434)
     for ident, scene in f.components.items():
         if only and not (ident == only or ident.startswith(only + "_")):
             continue

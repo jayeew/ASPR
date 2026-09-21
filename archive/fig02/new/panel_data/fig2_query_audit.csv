@@ -1,0 +1,2 @@
+candidate_logical_queries,active_logical_queries,physical_openalex_requests,archived_queries,zero_hit_archived,press_unsupported_archived,redundant_archived,press_unresolved_active
+381,336,367,45,13,9,23,0

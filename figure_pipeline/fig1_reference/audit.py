@@ -284,20 +284,9 @@ def cases_and_display(audit: Audit, snapshot: dict[str, Any], out: Path) -> None
             ),
             True,
         )
-    previous = ROOT / "outputs/fig1_reference_versions/v2/data/snapshot.json"
-    if previous.exists():
-        old = read(previous)["atlas"]["paper_layer"]
-        audit.check(
-            "a.original_connector_paths_unchanged",
-            layer["connecting_paths"],
-            old["connecting_paths"],
-        )
-        audit.check(
-            "a.reduced_papers_are_subset_of_v2",
-            {p["work_id"] for p in layer["nodes"]}
-            <= {p["work_id"] for p in old["nodes"]},
-            True,
-        )
+    graph.add_nodes_from(p["work_id"] for p in layer["nodes"])
+    audit.check("a.paper_display_connected", nx.is_weakly_connected(graph), True)
+    audit.check("a.paper_display_isolated_nodes", len(list(nx.isolates(graph))), 0)
     audit.check("a.paper_display_budget", len(layer["nodes"]), 90)
     svg = (out / "final/Fig1.svg").read_text()
     audit.check(

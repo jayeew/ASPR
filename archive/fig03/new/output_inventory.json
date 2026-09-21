@@ -1,0 +1,109 @@
+{
+  "artifacts": {
+    "deuteranopia": {
+      "path": "/home/jayee/workspace/ASPR/outputs/fig03/new/figure_full_deuteranopia.png",
+      "sha256": "sha256:9db1aca67fb365207a7fb1d6f846db3005665666e84a24ec14aeca7e1e1048de",
+      "size_bytes": 1559341
+    },
+    "grayscale": {
+      "path": "/home/jayee/workspace/ASPR/outputs/fig03/new/figure_full_grayscale.png",
+      "sha256": "sha256:2b1c8769cd1951c6c6baadeb6b56d802581cee17620a4afe1f95460282bb59a9",
+      "size_bytes": 1396988
+    },
+    "minimum_font_size_pt": 6.5,
+    "pdf": {
+      "path": "/home/jayee/workspace/ASPR/outputs/fig03/new/figure_full.pdf",
+      "sha256": "sha256:c4005b5ba268582783c170bb38171fc1f1e3035be67dd238ce7c720b07ca9098",
+      "size_bytes": 626081
+    },
+    "physical_size_mm": [
+      220.0,
+      220.0
+    ],
+    "png": {
+      "path": "/home/jayee/workspace/ASPR/outputs/fig03/new/figure_full.png",
+      "pixel_dimensions": [
+        5196,
+        5196
+      ],
+      "sha256": "sha256:343d3cc377cd10d7d60876820a1c564b59aa50c305c34e90a8dbad90138a9576",
+      "size_bytes": 1729530
+    },
+    "svg": {
+      "path": "/home/jayee/workspace/ASPR/outputs/fig03/new/figure_full.svg",
+      "sha256": "sha256:33c29a53537fe77048446a0e3780ffd6f625ed71e7eec5bcc3e5e4291f6cac3e",
+      "size_bytes": 3524420
+    },
+    "unexpected_text_overlap_count": 0,
+    "unexpected_text_overlaps": []
+  },
+  "figure_version": "fig3-evidence-derived-tuned-7-16-153-219-v1",
+  "panel_data_manifest": {
+    "artifact_kind": "fig3_recomputed_panel_data",
+    "numeric_data_recomputed": true,
+    "tables": {
+      "d5_gain_landscape.csv": {
+        "path": "/home/jayee/workspace/ASPR/outputs/fig03/new/panel_data/d5_gain_landscape.csv",
+        "sha256": "sha256:18075560b88e637a1e82e696776044ca010082c94c4cb3368025e1ac5b7281aa",
+        "size_bytes": 192796
+      },
+      "d5_gain_summary.csv": {
+        "path": "/home/jayee/workspace/ASPR/outputs/fig03/new/panel_data/d5_gain_summary.csv",
+        "sha256": "sha256:bf0ab5a76d58818648cc90aee4856f5310a6995519ce8fa3ff184ce0cf0b03de",
+        "size_bytes": 669
+      },
+      "decile_enrichment.csv": {
+        "path": "/home/jayee/workspace/ASPR/outputs/fig03/new/panel_data/decile_enrichment.csv",
+        "sha256": "sha256:86eff5f64d968eeafe3fcb85d48eff6ed1b98a82b1eda0b82dbfa872cd57b7d3",
+        "size_bytes": 19108
+      },
+      "domain_display_order.csv": {
+        "path": "/home/jayee/workspace/ASPR/outputs/fig03/new/panel_data/domain_display_order.csv",
+        "sha256": "sha256:224064a365c813f9ba08e6971aeec5d463df59f65997d7e8332d94589c22f845",
+        "size_bytes": 781
+      },
+      "performance_landscape.csv": {
+        "path": "/home/jayee/workspace/ASPR/outputs/fig03/new/panel_data/performance_landscape.csv",
+        "sha256": "sha256:7d676008623edac78767a0ae46fbdd603190c52026300f93c2a04b68b23e914d",
+        "size_bytes": 644562
+      },
+      "score_summary.csv": {
+        "path": "/home/jayee/workspace/ASPR/outputs/fig03/new/panel_data/score_summary.csv",
+        "sha256": "sha256:ab0e2d77aff88821215aa3960a2e0f634954a058281a04691c366e4f03620ccd",
+        "size_bytes": 277
+      }
+    }
+  },
+  "panel_tables": {
+    "d5_gain_landscape.csv": {
+      "path": "/home/jayee/workspace/ASPR/outputs/fig03/new/panel_data/d5_gain_landscape.csv",
+      "sha256": "sha256:18075560b88e637a1e82e696776044ca010082c94c4cb3368025e1ac5b7281aa",
+      "size_bytes": 192796
+    },
+    "d5_gain_summary.csv": {
+      "path": "/home/jayee/workspace/ASPR/outputs/fig03/new/panel_data/d5_gain_summary.csv",
+      "sha256": "sha256:bf0ab5a76d58818648cc90aee4856f5310a6995519ce8fa3ff184ce0cf0b03de",
+      "size_bytes": 669
+    },
+    "decile_enrichment.csv": {
+      "path": "/home/jayee/workspace/ASPR/outputs/fig03/new/panel_data/decile_enrichment.csv",
+      "sha256": "sha256:86eff5f64d968eeafe3fcb85d48eff6ed1b98a82b1eda0b82dbfa872cd57b7d3",
+      "size_bytes": 19108
+    },
+    "domain_display_order.csv": {
+      "path": "/home/jayee/workspace/ASPR/outputs/fig03/new/panel_data/domain_display_order.csv",
+      "sha256": "sha256:224064a365c813f9ba08e6971aeec5d463df59f65997d7e8332d94589c22f845",
+      "size_bytes": 781
+    },
+    "performance_landscape.csv": {
+      "path": "/home/jayee/workspace/ASPR/outputs/fig03/new/panel_data/performance_landscape.csv",
+      "sha256": "sha256:7d676008623edac78767a0ae46fbdd603190c52026300f93c2a04b68b23e914d",
+      "size_bytes": 644562
+    },
+    "score_summary.csv": {
+      "path": "/home/jayee/workspace/ASPR/outputs/fig03/new/panel_data/score_summary.csv",
+      "sha256": "sha256:ab0e2d77aff88821215aa3960a2e0f634954a058281a04691c366e4f03620ccd",
+      "size_bytes": 277
+    }
+  }
+}

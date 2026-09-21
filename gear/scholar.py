@@ -563,6 +563,12 @@ class OpenScholar:
         search_mode: str,
     ) -> list[dict[str, Any]]:
         semantic = str(search_mode).strip().casefold() == "semantic"
+        # Scientific titles use '?' as punctuation and '*' for surface species
+        # or controls. OpenAlex treats both as wildcard operators and rejects
+        # them in stemmed search; they are not intentional wildcard queries here.
+        submitted_query = " ".join(re.sub(r"[?*]", " ", str(query)).split())[:2000]
+        if not submitted_query:
+            raise ValueError("OpenAlex query has no searchable text")
         filters = ["has_abstract:true", "is_retracted:false"]
         if semantic:
             if date_to is not None:
@@ -572,7 +578,7 @@ class OpenScholar:
             if date_to is not None:
                 filters.append(f"to_publication_date:{date_to.isoformat()}")
         params: dict[str, Any] = {
-            "search.semantic" if semantic else "search": str(query).strip()[:2000],
+            "search.semantic" if semantic else "search": submitted_query,
             "filter": ",".join(filters),
             "per_page": min(
                 50 if semantic else 100,
@@ -592,6 +598,7 @@ class OpenScholar:
             {
                 "source": "openalex",
                 "query": query,
+                "submitted_query": submitted_query,
                 "search_mode": "semantic" if semantic else "text",
                 "status_code": response.status_code,
                 "cache_hit": response.headers.get("X-GEAR-Cache") == "HIT",

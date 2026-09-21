@@ -1,0 +1,51 @@
+{
+  "emphasis_contract": {
+    "broad_t0_dashed_outline": true,
+    "expanded153_blue_emphasis": true,
+    "hard_gate_audit_only": true,
+    "operationalization_palette_separate_from_role_palette": true,
+    "r12_orange_dashed": true
+  },
+  "obvious_text_collision_count": 0,
+  "outside_panel_text_count": 0,
+  "panel_checks": {
+    "a": {
+      "obvious_text_collision_count": 0,
+      "obvious_text_collisions": [],
+      "outside_panel_text": [],
+      "outside_panel_text_count": 0,
+      "visible_text_count": 69
+    },
+    "b": {
+      "obvious_text_collision_count": 0,
+      "obvious_text_collisions": [],
+      "outside_panel_text": [],
+      "outside_panel_text_count": 0,
+      "visible_text_count": 19
+    },
+    "c": {
+      "obvious_text_collision_count": 0,
+      "obvious_text_collisions": [],
+      "outside_panel_text": [],
+      "outside_panel_text_count": 0,
+      "visible_text_count": 32
+    },
+    "d": {
+      "obvious_text_collision_count": 0,
+      "obvious_text_collisions": [],
+      "outside_panel_text": [],
+      "outside_panel_text_count": 0,
+      "visible_text_count": 16
+    }
+  },
+  "passes": true,
+  "required_text_present": {
+    "expanded153": true,
+    "global_title": true,
+    "panel_a": true,
+    "panel_b": true,
+    "panel_c": true,
+    "panel_d": true,
+    "round12": true
+  }
+}

@@ -412,7 +412,7 @@ def test_mock_report_stage_handoff_and_resume(
                 if source["source_type"] != "manuscript"
             ]
             fulltext = [
-                source_id for source_id in external if source_id.startswith("FULLTEXT:")
+                source["source_id"] for source in catalog if source["source_type"] == "fulltext"
             ]
             cited = (fulltext or external)[:1]
         seen_catalogs.append(catalog)
@@ -421,6 +421,11 @@ def test_mock_report_stage_handoff_and_resume(
     monkeypatch.setattr(
         "experiments.innovation_200.reporting.LazyRoleClient.generate_json",
         fake_generate,
+    )
+    # Masked interpretation and interrupted resume are exercised separately.
+    monkeypatch.setattr(
+        "experiments.innovation_200.reporting.interpreted_context",
+        lambda root, claims, system: {"graph": {"assessments": []}, "joint_graph": {}},
     )
     assert generate({"paper_id": "p"}, tmp_path, False)["generated"] == len(SUPPORTED_REPORT_SYSTEMS)
     assert generate({"paper_id": "p"}, tmp_path, False)["generated"] == 0
@@ -439,7 +444,7 @@ def test_mock_report_stage_handoff_and_resume(
         if system in ("graph", "direct_llm"):
             assert not any(key.startswith(("FULLTEXT:", "WORK:")) for key in ids)
         else:
-            assert f"{fulltext_key}:P01" in ids
+            assert any(source["source_type"] == "fulltext" for source in catalog)
             assert any(source["source_type"] == "abstract" for source in catalog)
 
 
@@ -474,3 +479,77 @@ def test_fulltext_source_uses_acquisition_url_without_relabeling_abstract() -> N
         "https://doi.org/10.1/old",
         "https://repository.example/paper.xml",
     ]
+
+
+def test_report_binds_inline_sources_missing_from_declared_list() -> None:
+    from experiments.innovation_200.contracts import ReportDraft, ReportSource
+    from experiments.innovation_200.reporting import bind_report_citations
+
+    source = ReportSource(
+        source_id="M:S-abc", passage_id="S-abc", source_type="manuscript",
+        passage="Recorded manuscript evidence.",
+    )
+    draft = ReportDraft(body="正文" * 600 + "[M:S:abc]", cited_source_ids=[])
+    report = bind_report_citations("paper", "graph", draft, [source])
+    assert report.body.endswith("[M:S-abc]")
+    assert report.references == [source]
+
+
+def test_report_rejects_placeholder_even_when_declared_sources_are_valid() -> None:
+    from experiments.innovation_200.contracts import ReportDraft, ReportSource
+    from experiments.innovation_200.reporting import bind_report_citations
+
+    source = ReportSource(
+        source_id="M:S-abc", passage_id="S-abc", source_type="manuscript",
+        passage="Recorded manuscript evidence.",
+    )
+    draft = ReportDraft(body="正文" * 600 + "[M:S:??]", cited_source_ids=[source.source_id])
+    with pytest.raises(ValueError, match="body has unbound"):
+        bind_report_citations("paper", "graph", draft, [source])
+
+
+def test_writer_short_citations_restore_exact_ids() -> None:
+    from experiments.innovation_200.reporting import restore_citation_ids
+    from experiments.innovation_200.contracts import ReportDraft
+    source = "WORK:paper::CLAIM::01:https://openalex.org/W123:P01"
+    draft = ReportDraft(body="正文" * 600 + "[CITE0001]", cited_source_ids=["CITE0001"])
+    restored = restore_citation_ids(draft, {"CITE0001": source})
+    assert restored[0].endswith(f"[{source}]")
+    assert restored[1] == [source]
+    spaced = ReportDraft(body="正文" * 600 + "[ CITE0001 ]", cited_source_ids=[])
+    assert restore_citation_ids(spaced, {"CITE0001": source})[0].endswith(f"[{source}]")
+    with pytest.raises(ValueError, match="Unknown short"):
+        restore_citation_ids(spaced, {"CITE0002": source})
+    with pytest.raises(ValueError, match="Unknown short"):
+        restore_citation_ids(draft, {"CITE0002": source})
+
+
+def test_report_writer_repairs_unknown_alias_without_guessing(tmp_path, monkeypatch) -> None:
+    from types import SimpleNamespace
+    from experiments.innovation_200 import reporting
+    from experiments.innovation_200.contracts import ReportSource
+    source = ReportSource(source_id="M:S-real", passage_id="S-real", source_type="manuscript", title="Title", passage="Evidence")
+    paper = SimpleNamespace(metadata=SimpleNamespace(title="Title"), markdown="Manuscript")
+    monkeypatch.setattr(reporting, "read_model", lambda path, model: paper if path.name == "paper_ir.json" else None)
+    monkeypatch.setattr(reporting, "collect_sources", lambda *args, **kwargs: [source])
+    monkeypatch.setattr(reporting, "build_system_context", lambda *args: {})
+    requests = []
+    def fake(self, *, system, user, response_schema):
+        requests.append(user)
+        assert response_schema['properties']['cited_source_ids']['items']['enum'] == ['CITE0001']
+        key = 'CITE9999' if len(requests) == 1 else 'CITE0001'
+        return {'body': '正文' * 600 + f'[{key}]', 'cited_source_ids': [key]}
+    monkeypatch.setattr(reporting.LazyRoleClient, "generate_json", fake)
+    result = reporting.generate_report('p', 'gear', tmp_path)
+    assert len(requests) == 2 and 'Unknown short citation' in requests[1]
+    assert result.body.endswith('[M:S-real]')
+    assert result.references == [source]
+
+
+def test_expanded_citation_ids_do_not_use_prose_length_budget() -> None:
+    from experiments.innovation_200.contracts import ReportBundle
+    text = "正文" * 1200 + ("[WORK:paper::CLAIM::01:https://openalex.org/W123:P01]" * 60)
+    assert len(text) > 4000
+    assert ReportBundle(paper_id="p", system="gear", body=text).body == text
+    with pytest.raises(ValueError):
+        ReportBundle(paper_id="p", system="gear", body="文" * 4001)

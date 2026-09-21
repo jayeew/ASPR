@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
+import re
 from typing import Literal
 
-from pydantic import Field
+from pydantic import Field, field_validator
 
 from gear.contracts import StrictModel
 from gear.review_contracts import ReviewerStance
@@ -94,8 +95,17 @@ class ReportDraft(StrictModel):
 class ReportBundle(StrictModel):
     paper_id: str
     system: SystemName
-    body: str = Field(min_length=1000, max_length=4000)
+    body: str = Field(min_length=1000, max_length=100000)
     references: list[ReportSource] = Field(default_factory=list)
+
+    @field_validator("body")
+    @classmethod
+    def prose_length(cls, value: str) -> str:
+        # Native source IDs can be much longer than the writer's short aliases.
+        prose = re.sub(r"\[((?:M|G|W|WORK|FULLTEXT):[^\]\n]+)\]", "", value)
+        if len(prose) > 4000:
+            raise ValueError("Report prose exceeds 4000 characters excluding citations")
+        return value
 
 
 class HumanMatch(StrictModel):

@@ -23,6 +23,9 @@ class LocalScientificRanker:
         self._reranker: Any = None
         self._gpu_lease: Any = None
         self._lock = threading.RLock()
+        self.batch_size = max(
+            1, min(32, int(os.environ.get("GEAR_LOCAL_RANK_BATCH_SIZE", "8")))
+        )
 
     def close(self) -> None:
         """Release resident models before making this GPU slot available."""
@@ -85,11 +88,15 @@ class LocalScientificRanker:
         )
         documents = [self._document(work) for work in works]
         recall = self._load_recall()
-        document_vectors = recall.encode(documents, return_dense=True)["dense_vecs"]
+        document_vectors = recall.encode(
+            documents, return_dense=True, batch_size=self.batch_size
+        )["dense_vecs"]
         scores_by_view: list[list[float]] = []
         recalled_ids: set[int] = set()
         for view in (whole_paper_view, purpose_view):
-            query_vector = recall.encode([view], return_dense=True)["dense_vecs"][0]
+            query_vector = recall.encode([view], return_dense=True, batch_size=1)[
+                "dense_vecs"
+            ][0]
             scores = [float(vector @ query_vector) for vector in document_vectors]
             scores_by_view.append(scores)
             recalled_ids.update(
@@ -104,9 +111,11 @@ class LocalScientificRanker:
         for view in (whole_paper_view, purpose_view):
             pairs = [[view, documents[index]] for index in candidate_ids]
             raw = (
-                reranker.compute_score(pairs, normalize=True)
+                reranker.compute_score(
+                    pairs, normalize=True, batch_size=self.batch_size
+                )
                 if hasattr(reranker, "compute_score")
-                else reranker.predict(pairs)
+                else reranker.predict(pairs, batch_size=self.batch_size)
             )
             values = (
                 [float(raw)]

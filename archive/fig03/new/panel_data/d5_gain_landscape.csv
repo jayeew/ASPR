@@ -1,0 +1,1261 @@
+comparison_label,candidate_model_id,baseline_model_id,domain12,domain_label,window_start,window_end,n,delta_spearman,display_delta,out_of_scale,status
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,1986,1988,1768,0.0005770455510387684,0.0005770455510387684,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,1987,1989,1812,-0.016485407357084036,-0.016485407357084036,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,1988,1990,1742,-0.011022325315507064,-0.011022325315507064,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,1989,1991,1700,-0.011002275261647654,-0.011002275261647654,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,1990,1992,1833,0.002095747217013666,0.002095747217013666,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,1991,1993,1922,0.006955948686395597,0.006955948686395597,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,1992,1994,2082,0.007288777238669164,0.007288777238669164,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,1993,1995,2370,0.007847268505493665,0.007847268505493665,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,1994,1996,2677,0.012744614603031779,0.012744614603031779,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,1995,1997,2959,0.015511148114795814,0.015511148114795814,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,1996,1998,3080,0.019387235158804805,0.019387235158804805,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,1997,1999,3483,0.006868857617497004,0.006868857617497004,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,1998,2000,3700,-0.0012063728951368091,-0.0012063728951368091,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,1999,2001,3704,-0.003173177935911764,-0.003173177935911764,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,2000,2002,3384,-0.003298174057062231,-0.003298174057062231,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,2001,2003,3218,-0.004725842418357162,-0.004725842418357162,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,2002,2004,3267,-0.009180578918635995,-0.009180578918635995,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,2003,2005,3362,-0.003607741919456342,-0.003607741919456342,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,2004,2006,3623,0.0019101446380084264,0.0019101446380084264,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,2005,2007,3604,-0.002201995864590023,-0.002201995864590023,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,2006,2008,3700,0.002400743514933912,0.002400743514933912,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,2007,2009,3666,0.0020492429938865353,0.0020492429938865353,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,2008,2010,3844,0.002079356395954246,0.002079356395954246,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,2009,2011,4069,0.0055084091107021615,0.0055084091107021615,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,2010,2012,4488,0.009203423844002523,0.009203423844002523,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,2011,2013,5007,0.009023479404745127,0.009023479404745127,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,2012,2014,5705,0.007299639365050514,0.007299639365050514,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,2013,2015,7639,0.009002900450489015,0.009002900450489015,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,2014,2016,11929,0.009903778904970184,0.009903778904970184,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,2015,2017,17924,0.013357481637368718,0.013357481637368718,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,2016,2018,21123,0.011342826406100959,0.011342826406100959,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,2017,2019,22999,0.013064004313922517,0.013064004313922517,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,2018,2020,24458,0.014037858811831838,0.014037858811831838,False,reliable
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,2019,2021,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,clinical_health,Clinical health,2020,2022,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,1986,1988,172,0.020707519287773923,0.020707519287773923,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,1987,1989,191,0.01165088832960215,0.01165088832960215,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,1988,1990,192,-0.0032524236499953396,-0.0032524236499953396,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,1989,1991,228,-0.007199845829913287,-0.007199845829913287,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,1990,1992,242,-0.007300473963402054,-0.007300473963402054,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,1991,1993,252,-0.015329365904218628,-0.015329365904218628,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,1992,1994,239,-0.01731187668319234,-0.01731187668319234,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,1993,1995,205,-0.0055989002744647465,-0.0055989002744647465,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,1994,1996,190,0.008063616418421904,0.008063616418421904,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,1995,1997,161,0.005777694407678946,0.005777694407678946,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,1996,1998,169,-0.0020456247831351915,-0.0020456247831351915,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,1997,1999,179,-0.006801937183010587,-0.006801937183010587,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,1998,2000,202,-0.009803225666880744,-0.009803225666880744,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,1999,2001,216,0.007510360176640307,0.007510360176640307,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,2000,2002,220,0.009905567019189432,0.009905567019189432,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,2001,2003,213,0.01924126154136907,0.01924126154136907,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,2002,2004,187,0.022927410107990043,0.022927410107990043,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,2003,2005,170,0.020669527609382787,0.020669527609382787,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,2004,2006,174,0.004573494666348155,0.004573494666348155,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,2005,2007,227,0.008831825023120743,0.008831825023120743,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,2006,2008,323,0.0028445041972293694,0.0028445041972293694,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,2007,2009,459,0.007474274000985215,0.007474274000985215,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,2008,2010,619,0.00844855218249474,0.00844855218249474,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,2009,2011,624,0.012459864853020308,0.012459864853020308,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,2010,2012,625,0.009606500463595902,0.009606500463595902,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,2011,2013,630,0.017726942793181433,0.017726942793181433,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,2012,2014,800,0.017351268133209197,0.017351268133209197,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,2013,2015,1011,0.018774800295168537,0.018774800295168537,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,2014,2016,1331,0.01803634071641058,0.01803634071641058,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,2015,2017,1689,0.011765705763786438,0.011765705763786438,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,2016,2018,1920,0.010065673510146422,0.010065673510146422,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,2017,2019,2068,0.011132389087975869,0.011132389087975869,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,2018,2020,2133,0.02162694422350442,0.02162694422350442,False,reliable
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,2019,2021,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,chemistry,Chemistry,2020,2022,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,1986,1988,78,-0.040266914767758566,-0.040266914767758566,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,1987,1989,93,0.07798474906155328,0.07798474906155328,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,1988,1990,86,0.18050494146765114,0.08,True,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,1989,1991,87,0.2069219204646508,0.08,True,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,1990,1992,89,0.09097901681410914,0.08,True,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,1991,1993,101,0.003594402747386649,0.003594402747386649,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,1992,1994,100,0.004082106507425354,0.004082106507425354,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,1993,1995,92,-0.040217212911129785,-0.040217212911129785,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,1994,1996,73,0.01959150090626882,0.01959150090626882,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,1995,1997,75,-0.04161706343620042,-0.04161706343620042,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,1996,1998,72,-0.002142575550561965,-0.002142575550561965,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,1997,1999,103,-0.09551818712859411,-0.08,True,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,1998,2000,97,-0.09887539294935843,-0.08,True,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,1999,2001,108,-0.04090688131254033,-0.04090688131254033,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,2000,2002,79,0.030534388662353917,0.030534388662353917,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,2001,2003,94,0.022581012424059077,0.022581012424059077,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,2002,2004,79,0.023840314022404163,0.023840314022404163,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,2003,2005,80,0.05010082711664379,0.05010082711664379,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,2004,2006,74,0.027507270652694038,0.027507270652694038,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,2005,2007,96,0.0003612192871131903,0.0003612192871131903,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,2006,2008,117,-0.01699772532439564,-0.01699772532439564,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,2007,2009,128,-0.016396087731655518,-0.016396087731655518,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,2008,2010,117,-0.005549286984707746,-0.005549286984707746,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,2009,2011,130,0.01926632566186326,0.01926632566186326,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,2010,2012,149,0.021895797983244203,0.021895797983244203,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,2011,2013,192,0.023155899089232435,0.023155899089232435,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,2012,2014,215,0.024165997356985214,0.024165997356985214,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,2013,2015,244,-0.0032930831243153103,-0.0032930831243153103,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,2014,2016,279,-0.005538985289624598,-0.005538985289624598,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,2015,2017,331,-0.013729133131721527,-0.013729133131721527,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,2016,2018,394,-0.00905352479327659,-0.00905352479327659,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,2017,2019,430,-0.018889523188303725,-0.018889523188303725,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,2018,2020,595,-0.03095587514931608,-0.03095587514931608,False,reliable
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,2019,2021,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,mathematics_statistics,Mathematics & statistics,2020,2022,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,1986,1988,192,0.014627016219554312,0.014627016219554312,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,1987,1989,192,0.018958308647372912,0.018958308647372912,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,1988,1990,200,0.0046827031316128975,0.0046827031316128975,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,1989,1991,183,0.0143668666479152,0.0143668666479152,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,1990,1992,187,-0.004064375225804717,-0.004064375225804717,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,1991,1993,178,0.020405637079909722,0.020405637079909722,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,1992,1994,187,0.03950798168640646,0.03950798168640646,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,1993,1995,169,0.06110068778461819,0.06110068778461819,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,1994,1996,157,0.06567971947795515,0.06567971947795515,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,1995,1997,147,0.04078971126196518,0.04078971126196518,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,1996,1998,167,0.050850753085928346,0.050850753085928346,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,1997,1999,205,0.02249191239198145,0.02249191239198145,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,1998,2000,234,0.003540250157606284,0.003540250157606284,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,1999,2001,252,-0.010873193787589552,-0.010873193787589552,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,2000,2002,241,-0.00863467076782043,-0.00863467076782043,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,2001,2003,248,-0.010120742446029674,-0.010120742446029674,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,2002,2004,254,0.0008323794306688281,0.0008323794306688281,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,2003,2005,278,0.014435704343309319,0.014435704343309319,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,2004,2006,299,0.009101797069542283,0.009101797069542283,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,2005,2007,332,-0.006239245383000913,-0.006239245383000913,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,2006,2008,362,0.003276106075435492,0.003276106075435492,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,2007,2009,362,0.011725580812936731,0.011725580812936731,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,2008,2010,374,0.011782512064530293,0.011782512064530293,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,2009,2011,391,0.016283951296921728,0.016283951296921728,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,2010,2012,473,0.009006340013560155,0.009006340013560155,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,2011,2013,548,0.005930532640313957,0.005930532640313957,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,2012,2014,643,-0.0013142171548176096,-0.0013142171548176096,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,2013,2015,790,0.002817393909446464,0.002817393909446464,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,2014,2016,1059,-0.005060493524679299,-0.005060493524679299,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,2015,2017,1345,-0.014394193921058562,-0.014394193921058562,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,2016,2018,1512,-0.017122963206017916,-0.017122963206017916,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,2017,2019,1665,-0.007394774781293689,-0.007394774781293689,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,2018,2020,1821,0.007911494115632411,0.007911494115632411,False,reliable
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,2019,2021,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,computer_science_ai,Computer science & AI,2020,2022,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,1986,1988,489,-0.002176755601374203,-0.002176755601374203,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,1987,1989,468,-0.025849529374104008,-0.025849529374104008,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,1988,1990,464,-0.014518109142869329,-0.014518109142869329,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,1989,1991,462,0.0015225944257437618,0.0015225944257437618,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,1990,1992,434,0.0044850848487894,0.0044850848487894,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,1991,1993,402,0.0007161635405878997,0.0007161635405878997,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,1992,1994,382,-0.0007494271805985608,-0.0007494271805985608,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,1993,1995,382,0.0057042619725788946,0.0057042619725788946,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,1994,1996,361,0.015533168877752135,0.015533168877752135,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,1995,1997,356,0.001679920093348386,0.001679920093348386,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,1996,1998,372,0.0018192236696730202,0.0018192236696730202,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,1997,1999,453,-0.01445939804348395,-0.01445939804348395,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,1998,2000,536,-0.02016797471269549,-0.02016797471269549,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,1999,2001,607,-0.018057048907522022,-0.018057048907522022,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,2000,2002,594,-0.012461081971225196,-0.012461081971225196,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,2001,2003,651,-0.013700076105849113,-0.013700076105849113,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,2002,2004,677,-0.005708167895242422,-0.005708167895242422,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,2003,2005,729,0.0027707797295770664,0.0027707797295770664,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,2004,2006,762,0.005895370379984222,0.005895370379984222,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,2005,2007,913,0.015172817992221588,0.015172817992221588,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,2006,2008,1079,0.025229103914552353,0.025229103914552353,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,2007,2009,1201,0.024548913458183885,0.024548913458183885,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,2008,2010,1189,0.020313629831469115,0.020313629831469115,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,2009,2011,1213,0.013497042209620669,0.013497042209620669,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,2010,2012,1357,0.012951007450478391,0.012951007450478391,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,2011,2013,1962,0.013795164267925708,0.013795164267925708,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,2012,2014,2856,0.01387717269589428,0.01387717269589428,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,2013,2015,4317,0.009339709683754194,0.009339709683754194,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,2014,2016,6317,0.011641704568460254,0.011641704568460254,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,2015,2017,8169,0.008394444134257384,0.008394444134257384,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,2016,2018,8952,0.011264978991438523,0.011264978991438523,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,2017,2019,9117,0.012908240340194332,0.012908240340194332,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,2018,2020,9156,0.025004426121448264,0.025004426121448264,False,reliable
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,2019,2021,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,engineering_energy,Engineering & energy,2020,2022,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",1986,1988,1399,0.02109493777053606,0.02109493777053606,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",1987,1989,1357,0.030157617218490862,0.030157617218490862,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",1988,1990,1412,0.02878167486593608,0.02878167486593608,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",1989,1991,1327,0.021637736437953525,0.021637736437953525,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",1990,1992,1324,0.0135957456525293,0.0135957456525293,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",1991,1993,1228,0.01438523901101374,0.01438523901101374,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",1992,1994,1158,0.007989581119752787,0.007989581119752787,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",1993,1995,1049,0.01242072998955357,0.01242072998955357,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",1994,1996,1016,0.021709879674698174,0.021709879674698174,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",1995,1997,1061,0.018647117422487036,0.018647117422487036,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",1996,1998,1163,0.011363180404352913,0.011363180404352913,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",1997,1999,1226,-0.01179811139414233,-0.01179811139414233,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",1998,2000,1291,-0.014072025792704279,-0.014072025792704279,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",1999,2001,1259,-0.008662224231490767,-0.008662224231490767,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",2000,2002,1257,0.00880911387712835,0.00880911387712835,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",2001,2003,1268,0.010401121924675905,0.010401121924675905,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",2002,2004,1314,0.00893527828119467,0.00893527828119467,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",2003,2005,1418,0.014455126306800237,0.014455126306800237,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",2004,2006,1406,0.017458156145312542,0.017458156145312542,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",2005,2007,1475,0.012093559945406174,0.012093559945406174,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",2006,2008,1758,0.016092877948957862,0.016092877948957862,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",2007,2009,2136,0.016043244396199974,0.016043244396199974,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",2008,2010,2440,0.009736131671651327,0.009736131671651327,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",2009,2011,2618,0.005331937105847673,0.005331937105847673,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",2010,2012,2947,0.005275680768727642,0.005275680768727642,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",2011,2013,3376,0.012747179675018483,0.012747179675018483,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",2012,2014,3921,0.0159701156312958,0.0159701156312958,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",2013,2015,4770,0.01564341248106782,0.01564341248106782,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",2014,2016,6258,0.01545254419733566,0.01545254419733566,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",2015,2017,8329,0.013137287528174113,0.013137287528174113,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",2016,2018,9463,0.01817179333115948,0.01817179333115948,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",2017,2019,10255,0.018658350857979733,0.018658350857979733,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",2018,2020,10382,0.028663797335424013,0.028663797335424013,False,reliable
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",2019,2021,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,earth_climate_environment,"Earth, climate & environment",2020,2022,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,1986,1988,887,0.012572388612922203,0.012572388612922203,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,1987,1989,777,0.013363437120450405,0.013363437120450405,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,1988,1990,701,0.02144144350325483,0.02144144350325483,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,1989,1991,639,0.014783759595634938,0.014783759595634938,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,1990,1992,604,0.0032361748659133216,0.0032361748659133216,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,1991,1993,561,0.0007695220775021383,0.0007695220775021383,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,1992,1994,545,0.020123009343908316,0.020123009343908316,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,1993,1995,494,0.0180308276982436,0.0180308276982436,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,1994,1996,489,0.032277522247356916,0.032277522247356916,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,1995,1997,482,0.006284538112749205,0.006284538112749205,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,1996,1998,531,-0.009521787794688708,-0.009521787794688708,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,1997,1999,526,-0.035329497010818,-0.035329497010818,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,1998,2000,525,-0.038342693945020545,-0.038342693945020545,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,1999,2001,508,-0.01360855982837239,-0.01360855982837239,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,2000,2002,526,0.001873267890939112,0.001873267890939112,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,2001,2003,555,-0.0008852497700688744,-0.0008852497700688744,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,2002,2004,559,-0.011241049272034065,-0.011241049272034065,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,2003,2005,670,-0.003290628853066191,-0.003290628853066191,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,2004,2006,716,0.0019321554535159935,0.0019321554535159935,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,2005,2007,753,-0.005741943157936302,-0.005741943157936302,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,2006,2008,755,-0.0027027644114300253,-0.0027027644114300253,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,2007,2009,790,-0.0002543061640297717,-0.0002543061640297717,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,2008,2010,823,0.005078387229488501,0.005078387229488501,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,2009,2011,780,0.00322059519731821,0.00322059519731821,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,2010,2012,778,-0.006932261289573249,-0.006932261289573249,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,2011,2013,825,-0.005037157612522103,-0.005037157612522103,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,2012,2014,889,-0.010496869998892544,-0.010496869998892544,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,2013,2015,974,-0.004569322596515324,-0.004569322596515324,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,2014,2016,1013,-0.005489489220617094,-0.005489489220617094,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,2015,2017,1264,-0.008646568268973809,-0.008646568268973809,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,2016,2018,1476,0.004700763239164907,0.004700763239164907,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,2017,2019,1705,0.017078075534618042,0.017078075534618042,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,2018,2020,1679,0.037118067333250626,0.037118067333250626,False,reliable
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,2019,2021,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,astronomy_space,Astronomy & space,2020,2022,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,1986,1988,2284,0.024831303355097867,0.024831303355097867,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,1987,1989,2381,0.026771297120512627,0.026771297120512627,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,1988,1990,2428,0.03806802109556173,0.03806802109556173,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,1989,1991,2402,0.035850701127266515,0.035850701127266515,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,1990,1992,2487,0.03711913879705908,0.03711913879705908,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,1991,1993,2606,0.038582176605354235,0.038582176605354235,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,1992,1994,2629,0.042140532537825015,0.042140532537825015,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,1993,1995,2661,0.03789791784448615,0.03789791784448615,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,1994,1996,2737,0.035510406917555026,0.035510406917555026,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,1995,1997,2966,0.022051429892098073,0.022051429892098073,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,1996,1998,3077,0.01843938676494461,0.01843938676494461,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,1997,1999,3771,0.007767851129303005,0.007767851129303005,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,1998,2000,4425,0.008023445903952875,0.008023445903952875,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,1999,2001,5142,0.008202963739849523,0.008202963739849523,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,2000,2002,5030,0.012832892300355336,0.012832892300355336,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,2001,2003,4858,0.014442532167557975,0.014442532167557975,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,2002,2004,4510,0.01277758091813952,0.01277758091813952,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,2003,2005,4464,0.018175045857672822,0.018175045857672822,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,2004,2006,4566,0.020148351911356444,0.020148351911356444,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,2005,2007,4712,0.025355595800669928,0.025355595800669928,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,2006,2008,4912,0.025754856296270834,0.025754856296270834,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,2007,2009,5116,0.024929132868229953,0.024929132868229953,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,2008,2010,5371,0.02263846830303795,0.02263846830303795,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,2009,2011,5608,0.023863431760764442,0.023863431760764442,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,2010,2012,6146,0.02517959394979641,0.02517959394979641,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,2011,2013,7144,0.02416598329709141,0.02416598329709141,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,2012,2014,8807,0.020039191915272037,0.020039191915272037,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,2013,2015,12527,0.015483589554314947,0.015483589554314947,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,2014,2016,19362,0.014751619382611048,0.014751619382611048,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,2015,2017,26707,0.01234149879954105,0.01234149879954105,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,2016,2018,29481,0.011264716856133283,0.011264716856133283,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,2017,2019,29617,0.01224896085977778,0.01224896085977778,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,2018,2020,28281,0.023887876448509426,0.023887876448509426,False,reliable
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,2019,2021,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,life_molecular,Life & molecular sciences,2020,2022,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,physics,Physics,1986,1988,396,0.014273882205676935,0.014273882205676935,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,1987,1989,401,0.028739650859262,0.028739650859262,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,1988,1990,363,0.013304084511600367,0.013304084511600367,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,1989,1991,324,0.009920325594411694,0.009920325594411694,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,1990,1992,306,-0.004222063752152949,-0.004222063752152949,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,1991,1993,265,0.0047098757579101536,0.0047098757579101536,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,1992,1994,233,0.02388052744299818,0.02388052744299818,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,1993,1995,234,0.011031449025754925,0.011031449025754925,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,1994,1996,250,0.025324777570632895,0.025324777570632895,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,1995,1997,261,0.018406267253738617,0.018406267253738617,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,1996,1998,297,-0.0021974267573846573,-0.0021974267573846573,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,1997,1999,370,-0.026884936046860597,-0.026884936046860597,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,1998,2000,444,-0.05496359618412061,-0.05496359618412061,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,1999,2001,491,-0.045763102457693106,-0.045763102457693106,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,2000,2002,501,-0.020171013737243393,-0.020171013737243393,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,2001,2003,494,-0.020209411213114703,-0.020209411213114703,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,2002,2004,471,-0.004522063543272226,-0.004522063543272226,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,2003,2005,486,0.009288200591191953,0.009288200591191953,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,2004,2006,661,0.010816379802349396,0.010816379802349396,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,2005,2007,916,0.006404441382492521,0.006404441382492521,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,2006,2008,1109,0.008783736194803216,0.008783736194803216,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,2007,2009,1174,0.005725577142749239,0.005725577142749239,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,2008,2010,1189,0.006208507865464452,0.006208507865464452,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,2009,2011,1230,0.0047630659074339166,0.0047630659074339166,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,2010,2012,1402,0.006064971999671487,0.006064971999671487,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,2011,2013,1842,0.007189600645648997,0.007189600645648997,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,2012,2014,2463,0.008275278950953036,0.008275278950953036,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,2013,2015,3440,0.0038655536849778738,0.0038655536849778738,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,2014,2016,4611,-0.0016437829015994998,-0.0016437829015994998,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,2015,2017,5595,-0.005319023260748179,-0.005319023260748179,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,2016,2018,5751,0.0022825996336860443,0.0022825996336860443,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,2017,2019,5450,0.015002602132186071,0.015002602132186071,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,2018,2020,5147,0.02965244838776404,0.02965244838776404,False,reliable
+Primary 16 − Strict 7,primary,strict,physics,Physics,2019,2021,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,physics,Physics,2020,2022,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1986,1988,125,0.018416514061249556,0.018416514061249556,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1987,1989,136,0.022892327701642956,0.022892327701642956,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1988,1990,148,0.021174530030738326,0.021174530030738326,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1989,1991,138,0.004552490422021327,0.004552490422021327,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1990,1992,131,0.006686361678656105,0.006686361678656105,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1991,1993,127,-0.010038403020289355,-0.010038403020289355,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1992,1994,122,0.010124669467910352,0.010124669467910352,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1993,1995,126,0.01411447377475128,0.01411447377475128,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1994,1996,142,0.03634746889064522,0.03634746889064522,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1995,1997,146,0.02835032347421751,0.02835032347421751,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1996,1998,166,0.018523375775830964,0.018523375775830964,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1997,1999,191,-0.012127285735170301,-0.012127285735170301,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1998,2000,227,-0.01841281135469386,-0.01841281135469386,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1999,2001,255,-0.02234396750724299,-0.02234396750724299,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2000,2002,241,-0.003502354771892091,-0.003502354771892091,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2001,2003,234,0.0013505629130389218,0.0013505629130389218,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2002,2004,224,0.017915293300002078,0.017915293300002078,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2003,2005,210,0.005698741966910781,0.005698741966910781,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2004,2006,199,0.0043213662421032195,0.0043213662421032195,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2005,2007,167,-0.002773880810510221,-0.002773880810510221,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2006,2008,166,-0.000796391385767925,-0.000796391385767925,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2007,2009,164,-0.008342865255801746,-0.008342865255801746,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2008,2010,176,0.0009749273852535101,0.0009749273852535101,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2009,2011,201,0.003851255090279615,0.003851255090279615,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2010,2012,237,0.013761705065774898,0.013761705065774898,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2011,2013,301,0.013725644064137232,0.013725644064137232,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2012,2014,379,0.01905340760407248,0.01905340760407248,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2013,2015,540,0.011371800260448706,0.011371800260448706,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2014,2016,861,0.00713801325889396,0.00713801325889396,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2015,2017,1280,0.00971021915821968,0.00971021915821968,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2016,2018,1512,0.01666943101417362,0.01666943101417362,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2017,2019,1575,0.02658769306303088,0.02658769306303088,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2018,2020,1552,0.0274464627188864,0.0274464627188864,False,reliable
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2019,2021,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2020,2022,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,1986,1988,186,0.033689815880495355,0.033689815880495355,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,1987,1989,177,0.050183377877143776,0.050183377877143776,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,1988,1990,155,0.05393597742887879,0.05393597742887879,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,1989,1991,159,0.04005738288949401,0.04005738288949401,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,1990,1992,163,0.0436923060889115,0.0436923060889115,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,1991,1993,167,0.021147828786444056,0.021147828786444056,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,1992,1994,174,0.013447603979130252,0.013447603979130252,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,1993,1995,177,0.004026798158437761,0.004026798158437761,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,1994,1996,199,0.03982936956348726,0.03982936956348726,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,1995,1997,221,0.06339711332417997,0.06339711332417997,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,1996,1998,251,0.044155920933298454,0.044155920933298454,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,1997,1999,286,0.029271559103785094,0.029271559103785094,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,1998,2000,306,-0.004891471012129278,-0.004891471012129278,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,1999,2001,332,-0.007762932320740212,-0.007762932320740212,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,2000,2002,348,0.005836932319706611,0.005836932319706611,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,2001,2003,379,0.015102803381414343,0.015102803381414343,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,2002,2004,411,0.014219502586731103,0.014219502586731103,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,2003,2005,448,0.0018034083673114099,0.0018034083673114099,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,2004,2006,531,0.004439392031213907,0.004439392031213907,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,2005,2007,682,0.01226502006194019,0.01226502006194019,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,2006,2008,856,0.011040104000672346,0.011040104000672346,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,2007,2009,1001,0.009015663244517635,0.009015663244517635,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,2008,2010,1020,0.010432422107720996,0.010432422107720996,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,2009,2011,1078,0.004519828993189479,0.004519828993189479,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,2010,2012,1232,0.011368556646690786,0.011368556646690786,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,2011,2013,1888,0.024856103868712842,0.024856103868712842,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,2012,2014,2806,0.029981944758322387,0.029981944758322387,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,2013,2015,4245,0.025615165895586767,0.025615165895586767,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,2014,2016,5807,0.020984811233828227,0.020984811233828227,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,2015,2017,6994,0.01775339287209987,0.01775339287209987,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,2016,2018,6894,0.01929540008236641,0.01929540008236641,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,2017,2019,6298,0.023985415077210193,0.023985415077210193,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,2018,2020,5822,0.042909684552471905,0.042909684552471905,False,reliable
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,2019,2021,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,materials_nanoscience,Materials & nanoscience,2020,2022,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,1986,1988,337,0.053439729378277456,0.053439729378277456,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,1987,1989,297,0.03821889092503694,0.03821889092503694,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,1988,1990,275,0.03795876932102271,0.03795876932102271,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,1989,1991,274,0.060974676133979666,0.060974676133979666,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,1990,1992,285,0.037760743034239264,0.037760743034239264,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,1991,1993,380,0.04846834723276228,0.04846834723276228,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,1992,1994,433,0.0416516275875346,0.0416516275875346,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,1993,1995,519,0.012005616277454334,0.012005616277454334,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,1994,1996,569,-0.02115343880543963,-0.02115343880543963,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,1995,1997,649,-0.03019966244271921,-0.03019966244271921,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,1996,1998,778,-0.004321956006162031,-0.004321956006162031,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,1997,1999,938,0.01792202842173085,0.01792202842173085,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,1998,2000,1110,0.016366373523581057,0.016366373523581057,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,1999,2001,1202,0.02182939395502459,0.02182939395502459,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,2000,2002,1213,0.02990361057906965,0.02990361057906965,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,2001,2003,1128,0.02892341298699108,0.02892341298699108,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,2002,2004,1035,0.020467610576837103,0.020467610576837103,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,2003,2005,1027,0.01157361380459243,0.01157361380459243,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,2004,2006,1056,0.014761844461280482,0.014761844461280482,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,2005,2007,1092,0.015545605938095952,0.015545605938095952,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,2006,2008,1054,0.024890201787422406,0.024890201787422406,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,2007,2009,1093,0.014839228550755812,0.014839228550755812,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,2008,2010,1074,0.029688849366262926,0.029688849366262926,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,2009,2011,1139,0.027444448675537747,0.027444448675537747,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,2010,2012,1249,0.03475081047145767,0.03475081047145767,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,2011,2013,1495,0.02044010473680158,0.02044010473680158,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,2012,2014,1699,0.021784314190080756,0.021784314190080756,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,2013,2015,2222,0.0177305205733026,0.0177305205733026,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,2014,2016,3382,0.02411360798175699,0.02411360798175699,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,2015,2017,4872,0.023394513262420258,0.023394513262420258,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,2016,2018,5696,0.02426742667127013,0.02426742667127013,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,2017,2019,5916,0.024818864356477177,0.024818864356477177,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,2018,2020,5809,0.03511128202853253,0.03511128202853253,False,reliable
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,2019,2021,0,,,False,not_mature
+Primary 16 − Strict 7,primary,strict,neuroscience,Neuroscience,2020,2022,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,1986,1988,1768,0.026400496005096974,0.026400496005096974,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,1987,1989,1812,0.033494651583721224,0.033494651583721224,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,1988,1990,1742,0.02151019694611367,0.02151019694611367,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,1989,1991,1700,0.018011074410971606,0.018011074410971606,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,1990,1992,1833,0.00997038938144268,0.00997038938144268,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,1991,1993,1922,-0.0035275617775805124,-0.0035275617775805124,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,1992,1994,2082,0.00291179233985539,0.00291179233985539,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,1993,1995,2370,0.002461825799318529,0.002461825799318529,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,1994,1996,2677,0.010414928465654505,0.010414928465654505,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,1995,1997,2959,0.007216305077970775,0.007216305077970775,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,1996,1998,3080,0.010357915770717874,0.010357915770717874,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,1997,1999,3483,0.004820685932496072,0.004820685932496072,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,1998,2000,3700,0.005796526679938352,0.005796526679938352,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,1999,2001,3704,0.00771588716189775,0.00771588716189775,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,2000,2002,3384,0.014939178287542987,0.014939178287542987,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,2001,2003,3218,0.01033487257883825,0.01033487257883825,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,2002,2004,3267,0.00612423745343571,0.00612423745343571,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,2003,2005,3362,0.009317415963100761,0.009317415963100761,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,2004,2006,3623,0.008962753602190787,0.008962753602190787,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,2005,2007,3604,0.008033917517168199,0.008033917517168199,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,2006,2008,3700,0.0005463100997677994,0.0005463100997677994,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,2007,2009,3666,0.0030084946282533664,0.0030084946282533664,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,2008,2010,3844,0.005962435059889137,0.005962435059889137,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,2009,2011,4069,0.00610118018504624,0.00610118018504624,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,2010,2012,4488,0.003441347756638069,0.003441347756638069,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,2011,2013,5007,0.005433884361596419,0.005433884361596419,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,2012,2014,5705,0.00654847846961204,0.00654847846961204,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,2013,2015,7639,0.0003293870787862696,0.0003293870787862696,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,2014,2016,11929,-0.005988394385818441,-0.005988394385818441,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,2015,2017,17924,-0.0039041309472596097,-0.0039041309472596097,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,2016,2018,21123,-0.036013515027211285,-0.036013515027211285,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,2017,2019,22999,-0.03355821891303101,-0.03355821891303101,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,2018,2020,24458,0.0018670103559440543,0.0018670103559440543,False,reliable
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,2019,2021,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,clinical_health,Clinical health,2020,2022,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,1986,1988,172,0.032327593172805646,0.032327593172805646,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,1987,1989,191,0.028343380792118622,0.028343380792118622,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,1988,1990,192,0.012798074802163995,0.012798074802163995,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,1989,1991,228,0.01604693091673859,0.01604693091673859,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,1990,1992,242,0.01871552172398705,0.01871552172398705,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,1991,1993,252,0.017189845468737253,0.017189845468737253,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,1992,1994,239,0.017705941678791692,0.017705941678791692,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,1993,1995,205,0.010087299771755376,0.010087299771755376,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,1994,1996,190,0.013223366118057744,0.013223366118057744,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,1995,1997,161,0.023371009994050396,0.023371009994050396,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,1996,1998,169,-9.100072960777084e-05,-9.100072960777084e-05,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,1997,1999,179,-0.009509113113168044,-0.009509113113168044,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,1998,2000,202,-0.030823906528268386,-0.030823906528268386,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,1999,2001,216,-0.01888999199567043,-0.01888999199567043,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,2000,2002,220,-0.0029094408456306065,-0.0029094408456306065,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,2001,2003,213,0.0038598559553624234,0.0038598559553624234,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,2002,2004,187,-0.004471837537966761,-0.004471837537966761,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,2003,2005,170,-0.0032343843767586034,-0.0032343843767586034,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,2004,2006,174,-0.007974280363750141,-0.007974280363750141,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,2005,2007,227,-0.005974345152436444,-0.005974345152436444,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,2006,2008,323,0.002569861888839786,0.002569861888839786,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,2007,2009,459,-0.0011511182129649855,-0.0011511182129649855,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,2008,2010,619,0.003163605255592561,0.003163605255592561,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,2009,2011,624,0.0008692172614942484,0.0008692172614942484,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,2010,2012,625,0.0033798019342202723,0.0033798019342202723,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,2011,2013,630,-0.0029575159701140663,-0.0029575159701140663,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,2012,2014,800,-0.0004417713778304133,-0.0004417713778304133,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,2013,2015,1011,-0.003795503389789845,-0.003795503389789845,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,2014,2016,1331,-0.005545700283387411,-0.005545700283387411,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,2015,2017,1689,-0.008603003589896074,-0.008603003589896074,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,2016,2018,1920,-0.019682159263636034,-0.019682159263636034,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,2017,2019,2068,-0.011717415964906275,-0.011717415964906275,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,2018,2020,2133,0.018644363909719686,0.018644363909719686,False,reliable
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,2019,2021,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,chemistry,Chemistry,2020,2022,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,1986,1988,78,0.015245361661879453,0.015245361661879453,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,1987,1989,93,0.008282631423141007,0.008282631423141007,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,1988,1990,86,0.009067431084326505,0.009067431084326505,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,1989,1991,87,0.007640773110316301,0.007640773110316301,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,1990,1992,89,-0.019933252148099823,-0.019933252148099823,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,1991,1993,101,-0.011534979191486716,-0.011534979191486716,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,1992,1994,100,-0.011323769603553191,-0.011323769603553191,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,1993,1995,92,0.010092123162743771,0.010092123162743771,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,1994,1996,73,0.0029187365308156465,0.0029187365308156465,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,1995,1997,75,0.029001308741443244,0.029001308741443244,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,1996,1998,72,0.06915219555723373,0.06915219555723373,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,1997,1999,103,0.07544587251166718,0.07544587251166718,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,1998,2000,97,0.029151901303424987,0.029151901303424987,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,1999,2001,108,-0.0052871095533914,-0.0052871095533914,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,2000,2002,79,-0.009187022925978616,-0.009187022925978616,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,2001,2003,94,-0.013730776717749416,-0.013730776717749416,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,2002,2004,79,-0.020357807731258337,-0.020357807731258337,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,2003,2005,80,-0.025328010631562425,-0.025328010631562425,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,2004,2006,74,-0.058301069485175994,-0.058301069485175994,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,2005,2007,96,0.010061546633778229,0.010061546633778229,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,2006,2008,117,0.023045429198107092,0.023045429198107092,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,2007,2009,128,0.009182743494933365,0.009182743494933365,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,2008,2010,117,0.013500962866626554,0.013500962866626554,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,2009,2011,130,0.001713860642151288,0.001713860642151288,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,2010,2012,149,0.006073673133473179,0.006073673133473179,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,2011,2013,192,-0.0008857769475475452,-0.0008857769475475452,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,2012,2014,215,0.007174136555984312,0.007174136555984312,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,2013,2015,244,0.0020714423951050387,0.0020714423951050387,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,2014,2016,279,-0.005795063884936558,-0.005795063884936558,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,2015,2017,331,-0.019732806309644024,-0.019732806309644024,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,2016,2018,394,-0.01782661670283081,-0.01782661670283081,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,2017,2019,430,-0.016968313849336725,-0.016968313849336725,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,2018,2020,595,-0.02222251120162977,-0.02222251120162977,False,reliable
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,2019,2021,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,mathematics_statistics,Mathematics & statistics,2020,2022,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,1986,1988,192,-0.017734320288804506,-0.017734320288804506,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,1987,1989,192,-0.03860271470613774,-0.03860271470613774,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,1988,1990,200,-0.03798586251682323,-0.03798586251682323,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,1989,1991,183,-0.02844863854270263,-0.02844863854270263,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,1990,1992,187,-0.013292759507615659,-0.013292759507615659,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,1991,1993,178,-0.023083943930601203,-0.023083943930601203,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,1992,1994,187,-0.03355981765081806,-0.03355981765081806,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,1993,1995,169,-0.06086564868805355,-0.06086564868805355,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,1994,1996,157,-0.028373650075870005,-0.028373650075870005,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,1995,1997,147,-0.03335994027734579,-0.03335994027734579,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,1996,1998,167,-0.02671327800566614,-0.02671327800566614,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,1997,1999,205,-0.043294925648923455,-0.043294925648923455,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,1998,2000,234,-0.019226524267555556,-0.019226524267555556,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,1999,2001,252,-0.005083311878219643,-0.005083311878219643,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,2000,2002,241,0.008524670363597275,0.008524670363597275,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,2001,2003,248,0.014097797540774448,0.014097797540774448,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,2002,2004,254,0.009876234534885286,0.009876234534885286,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,2003,2005,278,0.020920611332525096,0.020920611332525096,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,2004,2006,299,0.019588770941361466,0.019588770941361466,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,2005,2007,332,0.015829865337153692,0.015829865337153692,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,2006,2008,362,0.01168520305462506,0.01168520305462506,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,2007,2009,362,0.0066216352618292396,0.0066216352618292396,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,2008,2010,374,-0.0027839599874928123,-0.0027839599874928123,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,2009,2011,391,0.0042910359030612355,0.0042910359030612355,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,2010,2012,473,0.003880280796522362,0.003880280796522362,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,2011,2013,548,0.01576613548004613,0.01576613548004613,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,2012,2014,643,0.006951302869846243,0.006951302869846243,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,2013,2015,790,-0.0014727333360268213,-0.0014727333360268213,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,2014,2016,1059,0.00038325877214173687,0.00038325877214173687,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,2015,2017,1345,0.009083583662119032,0.009083583662119032,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,2016,2018,1512,0.005138158856520247,0.005138158856520247,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,2017,2019,1665,0.00885444248064371,0.00885444248064371,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,2018,2020,1821,0.014878304086267446,0.014878304086267446,False,reliable
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,2019,2021,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,computer_science_ai,Computer science & AI,2020,2022,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,1986,1988,489,0.023151355746595548,0.023151355746595548,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,1987,1989,468,0.03424260733777895,0.03424260733777895,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,1988,1990,464,0.008655832826061083,0.008655832826061083,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,1989,1991,462,-0.011395767864074147,-0.011395767864074147,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,1990,1992,434,-0.012211507342799965,-0.012211507342799965,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,1991,1993,402,-0.010934666712917873,-0.010934666712917873,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,1992,1994,382,-0.005625459564441937,-0.005625459564441937,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,1993,1995,382,-0.016168840836544685,-0.016168840836544685,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,1994,1996,361,-0.004209991866075291,-0.004209991866075291,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,1995,1997,356,0.006370373543690189,0.006370373543690189,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,1996,1998,372,0.01128904439506695,0.01128904439506695,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,1997,1999,453,0.009652321806461472,0.009652321806461472,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,1998,2000,536,0.01592055602922582,0.01592055602922582,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,1999,2001,607,-0.0018080643231300764,-0.0018080643231300764,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,2000,2002,594,0.007940605549501378,0.007940605549501378,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,2001,2003,651,0.008605958006306036,0.008605958006306036,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,2002,2004,677,0.012128437941677728,0.012128437941677728,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,2003,2005,729,0.007816669498628914,0.007816669498628914,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,2004,2006,762,0.0024777689421814353,0.0024777689421814353,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,2005,2007,913,0.0013947960033396933,0.0013947960033396933,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,2006,2008,1079,-0.004798458358118651,-0.004798458358118651,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,2007,2009,1201,-0.0026987656556289874,-0.0026987656556289874,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,2008,2010,1189,0.0031304499799816865,0.0031304499799816865,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,2009,2011,1213,0.007931589255580906,0.007931589255580906,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,2010,2012,1357,0.007644590324264455,0.007644590324264455,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,2011,2013,1962,0.005372220584671128,0.005372220584671128,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,2012,2014,2856,0.005228007508206733,0.005228007508206733,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,2013,2015,4317,-0.00446139580526006,-0.00446139580526006,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,2014,2016,6317,-0.006445651265901797,-0.006445651265901797,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,2015,2017,8169,-0.002877712930807075,-0.002877712930807075,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,2016,2018,8952,-0.021666491957816225,-0.021666491957816225,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,2017,2019,9117,-0.015265714993469959,-0.015265714993469959,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,2018,2020,9156,0.01694102420277621,0.01694102420277621,False,reliable
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,2019,2021,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,engineering_energy,Engineering & energy,2020,2022,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",1986,1988,1399,0.025544030862856615,0.025544030862856615,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",1987,1989,1357,0.023989780988909692,0.023989780988909692,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",1988,1990,1412,0.017485558455504813,0.017485558455504813,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",1989,1991,1327,0.01780328945378984,0.01780328945378984,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",1990,1992,1324,0.009755421617841598,0.009755421617841598,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",1991,1993,1228,0.008900224707536375,0.008900224707536375,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",1992,1994,1158,0.011201416669954889,0.011201416669954889,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",1993,1995,1049,0.01080730736770219,0.01080730736770219,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",1994,1996,1016,0.006150419184984157,0.006150419184984157,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",1995,1997,1061,0.008389160174764876,0.008389160174764876,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",1996,1998,1163,0.007992448980983169,0.007992448980983169,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",1997,1999,1226,0.013368662689584698,0.013368662689584698,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",1998,2000,1291,0.013290297891652925,0.013290297891652925,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",1999,2001,1259,0.01590034731001344,0.01590034731001344,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",2000,2002,1257,0.015201677420413118,0.015201677420413118,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",2001,2003,1268,0.012686581453363655,0.012686581453363655,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",2002,2004,1314,0.013219048146522416,0.013219048146522416,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",2003,2005,1418,0.011861326792375948,0.011861326792375948,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",2004,2006,1406,0.012900936453061007,0.012900936453061007,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",2005,2007,1475,0.008643676161088187,0.008643676161088187,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",2006,2008,1758,0.007481899223539035,0.007481899223539035,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",2007,2009,2136,0.007681107390026809,0.007681107390026809,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",2008,2010,2440,0.012575866970265803,0.012575866970265803,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",2009,2011,2618,0.013982560901744212,0.013982560901744212,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",2010,2012,2947,0.010095210981410307,0.010095210981410307,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",2011,2013,3376,0.00723264456887851,0.00723264456887851,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",2012,2014,3921,0.005685113315268775,0.005685113315268775,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",2013,2015,4770,-0.000531134651558518,-0.000531134651558518,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",2014,2016,6258,-0.013525345471703254,-0.013525345471703254,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",2015,2017,8329,-0.019974189743946713,-0.019974189743946713,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",2016,2018,9463,-0.028399848412322015,-0.028399848412322015,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",2017,2019,10255,-0.018511685743052064,-0.018511685743052064,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",2018,2020,10382,0.002137004793285935,0.002137004793285935,False,reliable
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",2019,2021,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,earth_climate_environment,"Earth, climate & environment",2020,2022,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,1986,1988,887,0.01571865163873387,0.01571865163873387,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,1987,1989,777,0.014590734438850839,0.014590734438850839,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,1988,1990,701,0.010750190559292272,0.010750190559292272,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,1989,1991,639,0.005063209055862994,0.005063209055862994,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,1990,1992,604,0.013394659782769547,0.013394659782769547,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,1991,1993,561,0.02120009816155699,0.02120009816155699,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,1992,1994,545,0.013594135456661438,0.013594135456661438,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,1993,1995,494,0.010099188816952376,0.010099188816952376,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,1994,1996,489,-0.010586366677854953,-0.010586366677854953,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,1995,1997,482,0.008939222785457113,0.008939222785457113,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,1996,1998,531,-0.009626709681482826,-0.009626709681482826,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,1997,1999,526,-0.0013147273861094932,-0.0013147273861094932,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,1998,2000,525,0.004527754627927094,0.004527754627927094,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,1999,2001,508,0.01380943159689585,0.01380943159689585,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,2000,2002,526,-0.000578563364272644,-0.000578563364272644,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,2001,2003,555,0.00861952075662309,0.00861952075662309,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,2002,2004,559,0.012400507581890041,0.012400507581890041,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,2003,2005,670,0.020749522761668193,0.020749522761668193,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,2004,2006,716,0.01437096990398623,0.01437096990398623,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,2005,2007,753,0.010177558298198552,0.010177558298198552,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,2006,2008,755,-0.0006117785976822443,-0.0006117785976822443,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,2007,2009,790,0.00144685740487549,0.00144685740487549,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,2008,2010,823,0.00027784360462734803,0.00027784360462734803,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,2009,2011,780,0.0026807478293543463,0.0026807478293543463,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,2010,2012,778,0.004777750394048819,0.004777750394048819,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,2011,2013,825,0.010750197904812353,0.010750197904812353,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,2012,2014,889,0.01908665333420312,0.01908665333420312,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,2013,2015,974,0.018958252306266465,0.018958252306266465,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,2014,2016,1013,0.021905350626175824,0.021905350626175824,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,2015,2017,1264,0.022969004151478734,0.022969004151478734,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,2016,2018,1476,0.02848035604625787,0.02848035604625787,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,2017,2019,1705,0.03556389944740734,0.03556389944740734,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,2018,2020,1679,0.02452735517441129,0.02452735517441129,False,reliable
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,2019,2021,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,astronomy_space,Astronomy & space,2020,2022,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,1986,1988,2284,0.028547750577877284,0.028547750577877284,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,1987,1989,2381,0.025255618480166997,0.025255618480166997,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,1988,1990,2428,0.010246387002243673,0.010246387002243673,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,1989,1991,2402,0.009112205962728215,0.009112205962728215,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,1990,1992,2487,0.008661244781872912,0.008661244781872912,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,1991,1993,2606,0.00704225619063803,0.00704225619063803,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,1992,1994,2629,0.007937476201690497,0.007937476201690497,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,1993,1995,2661,0.009500103633893975,0.009500103633893975,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,1994,1996,2737,0.007867884007145776,0.007867884007145776,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,1995,1997,2966,0.0047712410597979815,0.0047712410597979815,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,1996,1998,3077,0.0013579222136014257,0.0013579222136014257,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,1997,1999,3771,-0.008966577338121895,-0.008966577338121895,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,1998,2000,4425,0.0018720721425977693,0.0018720721425977693,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,1999,2001,5142,0.008315239993507917,0.008315239993507917,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,2000,2002,5030,0.010217678413212417,0.010217678413212417,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,2001,2003,4858,0.012627409348046514,0.012627409348046514,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,2002,2004,4510,0.013033538012718227,0.013033538012718227,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,2003,2005,4464,0.012351941394282417,0.012351941394282417,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,2004,2006,4566,0.011729851813133685,0.011729851813133685,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,2005,2007,4712,0.009599465341733726,0.009599465341733726,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,2006,2008,4912,0.00622663520739708,0.00622663520739708,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,2007,2009,5116,0.004755919767822303,0.004755919767822303,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,2008,2010,5371,0.007590562464901307,0.007590562464901307,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,2009,2011,5608,0.010902053870756045,0.010902053870756045,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,2010,2012,6146,0.014173969682226506,0.014173969682226506,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,2011,2013,7144,0.013289341976927327,0.013289341976927327,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,2012,2014,8807,0.014306099309151277,0.014306099309151277,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,2013,2015,12527,-0.003993001609586488,-0.003993001609586488,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,2014,2016,19362,-0.017132018770525392,-0.017132018770525392,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,2015,2017,26707,-0.012711358450810173,-0.012711358450810173,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,2016,2018,29481,-0.055838782247538576,-0.055838782247538576,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,2017,2019,29617,-0.05164813537908486,-0.05164813537908486,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,2018,2020,28281,0.009973072655004689,0.009973072655004689,False,reliable
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,2019,2021,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,life_molecular,Life & molecular sciences,2020,2022,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,1986,1988,396,0.009838868247251997,0.009838868247251997,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,1987,1989,401,0.010886533674641097,0.010886533674641097,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,1988,1990,363,-7.152534415488798e-05,-7.152534415488798e-05,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,1989,1991,324,0.010251085084063027,0.010251085084063027,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,1990,1992,306,0.015314664588601312,0.015314664588601312,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,1991,1993,265,0.010273327699254153,0.010273327699254153,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,1992,1994,233,0.004219315939152146,0.004219315939152146,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,1993,1995,234,0.02448186739639202,0.02448186739639202,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,1994,1996,250,0.021536750126678994,0.021536750126678994,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,1995,1997,261,0.019282697250646685,0.019282697250646685,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,1996,1998,297,0.0020996163723535632,0.0020996163723535632,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,1997,1999,370,-0.027409936817196612,-0.027409936817196612,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,1998,2000,444,-0.003830658709158219,-0.003830658709158219,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,1999,2001,491,0.006874710937612272,0.006874710937612272,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,2000,2002,501,0.026168717761642202,0.026168717761642202,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,2001,2003,494,0.03309221859305023,0.03309221859305023,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,2002,2004,471,0.024283424135859044,0.024283424135859044,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,2003,2005,486,0.010894128285280136,0.010894128285280136,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,2004,2006,661,0.008932851231461814,0.008932851231461814,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,2005,2007,916,0.006537873615618861,0.006537873615618861,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,2006,2008,1109,0.00041911354657353517,0.00041911354657353517,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,2007,2009,1174,-0.0029324424331172994,-0.0029324424331172994,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,2008,2010,1189,0.005924831407592812,0.005924831407592812,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,2009,2011,1230,0.014270086888593547,0.014270086888593547,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,2010,2012,1402,0.022792774360007706,0.022792774360007706,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,2011,2013,1842,0.017289095240996644,0.017289095240996644,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,2012,2014,2463,0.012218744493140421,0.012218744493140421,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,2013,2015,3440,0.002160676232478065,0.002160676232478065,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,2014,2016,4611,-0.007419455646582196,-0.007419455646582196,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,2015,2017,5595,-0.007161511524822917,-0.007161511524822917,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,2016,2018,5751,-0.018487973527503643,-0.018487973527503643,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,2017,2019,5450,-0.013763701768594094,-0.013763701768594094,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,2018,2020,5147,-0.002775268221110405,-0.002775268221110405,False,reliable
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,2019,2021,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,physics,Physics,2020,2022,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1986,1988,125,0.017928827961957827,0.017928827961957827,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1987,1989,136,0.0331766813108324,0.0331766813108324,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1988,1990,148,0.019977505872842194,0.019977505872842194,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1989,1991,138,0.022393652677932807,0.022393652677932807,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1990,1992,131,0.016863151396058984,0.016863151396058984,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1991,1993,127,0.014246895955128736,0.014246895955128736,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1992,1994,122,0.031455782645512076,0.031455782645512076,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1993,1995,126,0.03729970928817716,0.03729970928817716,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1994,1996,142,0.03498552981720726,0.03498552981720726,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1995,1997,146,0.01699030178584182,0.01699030178584182,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1996,1998,166,0.009559239463179159,0.009559239463179159,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1997,1999,191,0.004444941239327593,0.004444941239327593,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1998,2000,227,0.00026487142393050167,0.00026487142393050167,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1999,2001,255,0.006498828671817947,0.006498828671817947,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2000,2002,241,-0.00407816949088291,-0.00407816949088291,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2001,2003,234,-0.006641444094377169,-0.006641444094377169,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2002,2004,224,-0.011821102851961474,-0.011821102851961474,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2003,2005,210,-0.0040753792348058315,-0.0040753792348058315,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2004,2006,199,-0.0036019271091799476,-0.0036019271091799476,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2005,2007,167,0.004524530277439487,0.004524530277439487,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2006,2008,166,0.006549561799099157,0.006549561799099157,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2007,2009,164,0.008466461977499673,0.008466461977499673,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2008,2010,176,0.008222905955080795,0.008222905955080795,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2009,2011,201,0.0055633576779305915,0.0055633576779305915,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2010,2012,237,0.0036731103696053813,0.0036731103696053813,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2011,2013,301,0.006820815942517489,0.006820815942517489,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2012,2014,379,0.005497258604191924,0.005497258604191924,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2013,2015,540,-0.01598347508441189,-0.01598347508441189,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2014,2016,861,-0.03190056909751937,-0.03190056909751937,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2015,2017,1280,-0.029789544256963563,-0.029789544256963563,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2016,2018,1512,-0.049218499730579124,-0.049218499730579124,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2017,2019,1575,-0.05241599644856432,-0.05241599644856432,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2018,2020,1552,-0.0018968084008593733,-0.0018968084008593733,False,reliable
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2019,2021,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2020,2022,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,1986,1988,186,0.014125268034158811,0.014125268034158811,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,1987,1989,177,-0.007300250540859143,-0.007300250540859143,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,1988,1990,155,-0.005498789902560142,-0.005498789902560142,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,1989,1991,159,-0.0026424103315151326,-0.0026424103315151326,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,1990,1992,163,0.007272334384462287,0.007272334384462287,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,1991,1993,167,0.008697749162782875,0.008697749162782875,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,1992,1994,174,0.01627079890929717,0.01627079890929717,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,1993,1995,177,0.014000150298022818,0.014000150298022818,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,1994,1996,199,0.015512158619717109,0.015512158619717109,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,1995,1997,221,-0.0062089895870259815,-0.0062089895870259815,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,1996,1998,251,-0.02484637441957782,-0.02484637441957782,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,1997,1999,286,-0.022306918490383798,-0.022306918490383798,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,1998,2000,306,-0.0034056353375478965,-0.0034056353375478965,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,1999,2001,332,0.009147305128953231,0.009147305128953231,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,2000,2002,348,0.006698721902900662,0.006698721902900662,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,2001,2003,379,0.006308720388124134,0.006308720388124134,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,2002,2004,411,0.00937348142426897,0.00937348142426897,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,2003,2005,448,0.008117374172909031,0.008117374172909031,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,2004,2006,531,-0.0007568400266086961,-0.0007568400266086961,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,2005,2007,682,-0.004237795750491435,-0.004237795750491435,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,2006,2008,856,-0.00797770067224679,-0.00797770067224679,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,2007,2009,1001,-0.006736266289425807,-0.006736266289425807,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,2008,2010,1020,-0.0011162535476486601,-0.0011162535476486601,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,2009,2011,1078,0.008114011955689282,0.008114011955689282,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,2010,2012,1232,0.020483601844906607,0.020483601844906607,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,2011,2013,1888,0.01971771933436617,0.01971771933436617,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,2012,2014,2806,0.016284987611217105,0.016284987611217105,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,2013,2015,4245,-0.004860600764078238,-0.004860600764078238,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,2014,2016,5807,-0.00739561725264426,-0.00739561725264426,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,2015,2017,6994,0.004288308499358573,0.004288308499358573,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,2016,2018,6894,-0.028735707317416037,-0.028735707317416037,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,2017,2019,6298,-0.026114878199822833,-0.026114878199822833,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,2018,2020,5822,0.012524693452889757,0.012524693452889757,False,reliable
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,2019,2021,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,materials_nanoscience,Materials & nanoscience,2020,2022,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,1986,1988,337,0.03318956233964565,0.03318956233964565,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,1987,1989,297,0.029454427954965223,0.029454427954965223,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,1988,1990,275,0.006912870379578884,0.006912870379578884,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,1989,1991,274,0.008765867601222999,0.008765867601222999,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,1990,1992,285,0.016843734636108332,0.016843734636108332,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,1991,1993,380,0.038907148691613935,0.038907148691613935,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,1992,1994,433,0.03557911095114097,0.03557911095114097,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,1993,1995,519,0.03025584032350148,0.03025584032350148,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,1994,1996,569,0.0062647789833701895,0.0062647789833701895,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,1995,1997,649,0.019877219876834995,0.019877219876834995,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,1996,1998,778,0.01268911948369611,0.01268911948369611,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,1997,1999,938,0.0030467453108887765,0.0030467453108887765,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,1998,2000,1110,0.010926661197111165,0.010926661197111165,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,1999,2001,1202,0.014051991519837603,0.014051991519837603,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,2000,2002,1213,0.0182548822467975,0.0182548822467975,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,2001,2003,1128,0.01402983805094471,0.01402983805094471,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,2002,2004,1035,0.011091036302412816,0.011091036302412816,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,2003,2005,1027,0.0123108457627219,0.0123108457627219,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,2004,2006,1056,0.019531488659525253,0.019531488659525253,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,2005,2007,1092,0.022653508629317698,0.022653508629317698,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,2006,2008,1054,0.016835620320438394,0.016835620320438394,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,2007,2009,1093,0.019604246708875173,0.019604246708875173,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,2008,2010,1074,0.018013226571479857,0.018013226571479857,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,2009,2011,1139,0.02504663758425929,0.02504663758425929,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,2010,2012,1249,0.021980987476409197,0.021980987476409197,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,2011,2013,1495,0.019626031415399647,0.019626031415399647,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,2012,2014,1699,0.01227406703242917,0.01227406703242917,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,2013,2015,2222,-0.01611183714696207,-0.01611183714696207,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,2014,2016,3382,-0.02446946881987766,-0.02446946881987766,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,2015,2017,4872,-0.021418975397097695,-0.021418975397097695,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,2016,2018,5696,-0.048667818597133095,-0.048667818597133095,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,2017,2019,5916,-0.05373369517505566,-0.05373369517505566,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,2018,2020,5809,-0.012623165120087765,-0.012623165120087765,False,reliable
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,2019,2021,0,,,False,not_mature
+Expanded 153 − Primary 16,expanded,primary,neuroscience,Neuroscience,2020,2022,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,1986,1988,1768,-0.004814029819697252,-0.004814029819697252,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,1987,1989,1812,-0.00929919991683259,-0.00929919991683259,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,1988,1990,1742,-0.00832050681456431,-0.00832050681456431,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,1989,1991,1700,-0.004304741766235742,-0.004304741766235742,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,1990,1992,1833,-0.0009472526302780615,-0.0009472526302780615,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,1991,1993,1922,-0.00014654937588609585,-0.00014654937588609585,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,1992,1994,2082,-0.0019481091247545157,-0.0019481091247545157,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,1993,1995,2370,-0.001042463898700552,-0.001042463898700552,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,1994,1996,2677,0.0004954702955849433,0.0004954702955849433,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,1995,1997,2959,0.0022087150389994425,0.0022087150389994425,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,1996,1998,3080,0.0005775125761364741,0.0005775125761364741,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,1997,1999,3483,0.0026014071930561267,0.0026014071930561267,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,1998,2000,3700,0.0029744400402028637,0.0029744400402028637,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,1999,2001,3704,0.0030316943670271046,0.0030316943670271046,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,2000,2002,3384,1.377679147329669e-05,1.377679147329669e-05,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,2001,2003,3218,-0.0014275435655956015,-0.0014275435655956015,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,2002,2004,3267,-0.0016568057120419644,-0.0016568057120419644,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,2003,2005,3362,-0.002674075673041787,-0.002674075673041787,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,2004,2006,3623,-0.0008992034452202091,-0.0008992034452202091,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,2005,2007,3604,0.0011412256611172955,0.0011412256611172955,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,2006,2008,3700,0.0008719755383106431,0.0008719755383106431,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,2007,2009,3666,-0.0004420614067053297,-0.0004420614067053297,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,2008,2010,3844,-0.0013262042038224564,-0.0013262042038224564,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,2009,2011,4069,-0.0013830297737803532,-0.0013830297737803532,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,2010,2012,4488,-0.0008886382127810677,-0.0008886382127810677,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,2011,2013,5007,-0.00034581321450399827,-0.00034581321450399827,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,2012,2014,5705,4.589879030747479e-05,4.589879030747479e-05,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,2013,2015,7639,0.0025498254547224874,0.0025498254547224874,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,2014,2016,11929,0.004003354139717974,0.004003354139717974,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,2015,2017,17924,0.0062612375782228336,0.0062612375782228336,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,2016,2018,21123,0.012858096796081186,0.012858096796081186,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,2017,2019,22999,0.012202531764195279,0.012202531764195279,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,2018,2020,24458,-0.00045647799630510466,-0.00045647799630510466,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,2019,2021,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,clinical_health,Clinical health,2020,2022,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,1986,1988,172,-0.00681157006524058,-0.00681157006524058,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,1987,1989,191,-0.014380836092355298,-0.014380836092355298,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,1988,1990,192,-0.013718812351748655,-0.013718812351748655,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,1989,1991,228,-0.011155387264060068,-0.011155387264060068,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,1990,1992,242,-0.0031982279717702733,-0.0031982279717702733,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,1991,1993,252,0.004304220712860629,0.004304220712860629,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,1992,1994,239,0.002395978333070037,0.002395978333070037,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,1993,1995,205,0.010480320603943105,0.010480320603943105,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,1994,1996,190,-0.004710484662247771,-0.004710484662247771,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,1995,1997,161,0.0001936003317861701,0.0001936003317861701,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,1996,1998,169,-0.00033259306484623163,-0.00033259306484623163,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,1997,1999,179,-0.006927222999695393,-0.006927222999695393,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,1998,2000,202,-0.002999345925632335,-0.002999345925632335,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,1999,2001,216,-0.009049041997370777,-0.009049041997370777,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,2000,2002,220,-0.012047686443984573,-0.012047686443984573,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,2001,2003,213,-0.007563886452365942,-0.007563886452365942,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,2002,2004,187,0.0029345816320952567,0.0029345816320952567,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,2003,2005,170,0.007392082735496297,0.007392082735496297,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,2004,2006,174,0.000586200261261105,0.000586200261261105,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,2005,2007,227,-0.0023211915226626356,-0.0023211915226626356,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,2006,2008,323,-0.001114670056957201,-0.001114670056957201,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,2007,2009,459,-0.002907881549575886,-0.002907881549575886,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,2008,2010,619,-0.0050178342268671905,-0.0050178342268671905,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,2009,2011,624,-0.00429479721567505,-0.00429479721567505,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,2010,2012,625,-0.0007734395664709126,-0.0007734395664709126,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,2011,2013,630,0.0008241506753434713,0.0008241506753434713,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,2012,2014,800,0.0025230265657952833,0.0025230265657952833,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,2013,2015,1011,0.0011281055239860116,0.0011281055239860116,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,2014,2016,1331,0.0011963990455394757,0.0011963990455394757,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,2015,2017,1689,-0.0018220793339820407,-0.0018220793339820407,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,2016,2018,1920,0.0016524184485944282,0.0016524184485944282,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,2017,2019,2068,0.0021811574416962243,0.0021811574416962243,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,2018,2020,2133,-0.0009970589786731932,-0.0009970589786731932,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,2019,2021,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,chemistry,Chemistry,2020,2022,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,1986,1988,78,0.024168101357049165,0.024168101357049165,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,1987,1989,93,0.003858288639258245,0.003858288639258245,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,1988,1990,86,-0.014687008257960099,-0.014687008257960099,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,1989,1991,87,-0.0478474114857973,-0.0478474114857973,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,1990,1992,89,-0.011434978999558476,-0.011434978999558476,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,1991,1993,101,0.00015849518844202048,0.00015849518844202048,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,1992,1994,100,-0.0019015184475514868,-0.0019015184475514868,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,1993,1995,92,0.003455932955949148,0.003455932955949148,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,1994,1996,73,-0.013061021149700758,-0.013061021149700758,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,1995,1997,75,-0.00844921183394326,-0.00844921183394326,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,1996,1998,72,-0.005201661638375987,-0.005201661638375987,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,1997,1999,103,0.014667036300519631,0.014667036300519631,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,1998,2000,97,0.02890476890130378,0.02890476890130378,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,1999,2001,108,0.0026358569326217496,0.0026358569326217496,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,2000,2002,79,-0.025803819499162217,-0.025803819499162217,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,2001,2003,94,-0.009659478245107045,-0.009659478245107045,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,2002,2004,79,0.012009185098631636,0.012009185098631636,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,2003,2005,80,0.029769080681179616,0.029769080681179616,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,2004,2006,74,0.03283623015829401,0.03283623015829401,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,2005,2007,96,0.004964702463585047,0.004964702463585047,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,2006,2008,117,0.01663270820825491,0.01663270820825491,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,2007,2009,128,0.014420981988811588,0.014420981988811588,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,2008,2010,117,0.023017777677717177,0.023017777677717177,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,2009,2011,130,0.03805484716355628,0.03805484716355628,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,2010,2012,149,0.012527636241260742,0.012527636241260742,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,2011,2013,192,0.004519242892580433,0.004519242892580433,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,2012,2014,215,-0.003120046207558791,-0.003120046207558791,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,2013,2015,244,-0.0006525154679857259,-0.0006525154679857259,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,2014,2016,279,-0.00039851451254069303,-0.00039851451254069303,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,2015,2017,331,0.008864008311189941,0.008864008311189941,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,2016,2018,394,0.009786147348519014,0.009786147348519014,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,2017,2019,430,0.009988165113503644,0.009988165113503644,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,2018,2020,595,0.002955482271235099,0.002955482271235099,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,2019,2021,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,mathematics_statistics,Mathematics & statistics,2020,2022,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,1986,1988,192,-0.01058303415503481,-0.01058303415503481,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,1987,1989,192,-0.001850407304288204,-0.001850407304288204,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,1988,1990,200,0.0009354312838696366,0.0009354312838696366,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,1989,1991,183,-0.00696903705147045,-0.00696903705147045,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,1990,1992,187,-0.009595509943979508,-0.009595509943979508,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,1991,1993,178,0.000365369458243725,0.000365369458243725,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,1992,1994,187,0.00440365861579739,0.00440365861579739,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,1993,1995,169,0.006370372706029581,0.006370372706029581,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,1994,1996,157,8.23958885887155e-06,8.23958885887155e-06,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,1995,1997,147,0.011497259053294018,0.011497259053294018,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,1996,1998,167,0.014853699975047152,0.014853699975047152,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,1997,1999,205,0.02234489387702321,0.02234489387702321,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,1998,2000,234,0.011732693472550348,0.011732693472550348,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,1999,2001,252,0.008353730591407427,0.008353730591407427,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,2000,2002,241,0.0035166346339068344,0.0035166346339068344,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,2001,2003,248,-0.007691334804623695,-0.007691334804623695,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,2002,2004,254,-0.003434457580036132,-0.003434457580036132,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,2003,2005,278,0.0009411412985069756,0.0009411412985069756,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,2004,2006,299,0.00452850770424007,0.00452850770424007,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,2005,2007,332,0.0027865630609550385,0.0027865630609550385,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,2006,2008,362,0.004804352218388819,0.004804352218388819,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,2007,2009,362,0.006326052546367977,0.006326052546367977,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,2008,2010,374,0.003643375889681111,0.003643375889681111,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,2009,2011,391,0.000444051679830193,0.000444051679830193,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,2010,2012,473,0.0005006234396561782,0.0005006234396561782,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,2011,2013,548,7.27454729909649e-05,7.27454729909649e-05,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,2012,2014,643,-0.0003187858558481027,-0.0003187858558481027,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,2013,2015,790,-0.00274377687400551,-0.00274377687400551,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,2014,2016,1059,-0.0002264585947781006,-0.0002264585947781006,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,2015,2017,1345,0.0055079923237608686,0.0055079923237608686,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,2016,2018,1512,0.008191221585560848,0.008191221585560848,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,2017,2019,1665,0.005786257986798993,0.005786257986798993,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,2018,2020,1821,-0.0006171956312962523,-0.0006171956312962523,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,2019,2021,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,computer_science_ai,Computer science & AI,2020,2022,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,1986,1988,489,0.0007446039229412893,0.0007446039229412893,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,1987,1989,468,-0.005535679343934619,-0.005535679343934619,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,1988,1990,464,-0.0023867078901649297,-0.0023867078901649297,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,1989,1991,462,0.009461762586568612,0.009461762586568612,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,1990,1992,434,0.011581534952562755,0.011581534952562755,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,1991,1993,402,0.011830273441998607,0.011830273441998607,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,1992,1994,382,0.005763951726711847,0.005763951726711847,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,1993,1995,382,0.004608846100087938,0.004608846100087938,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,1994,1996,361,0.00014309584187655044,0.00014309584187655044,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,1995,1997,356,-0.007347506590366648,-0.007347506590366648,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,1996,1998,372,-0.0103502246182825,-0.0103502246182825,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,1997,1999,453,-0.0059912720875541225,-0.0059912720875541225,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,1998,2000,536,-0.002235954028423248,-0.002235954028423248,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,1999,2001,607,0.000546686730291901,0.000546686730291901,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,2000,2002,594,-0.0009203450264371194,-0.0009203450264371194,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,2001,2003,651,-0.002508885452262577,-0.002508885452262577,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,2002,2004,677,-0.0033093533235656336,-0.0033093533235656336,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,2003,2005,729,-0.0013480335392092035,-0.0013480335392092035,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,2004,2006,762,0.006488349008281991,0.006488349008281991,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,2005,2007,913,0.0054191794853442055,0.0054191794853442055,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,2006,2008,1079,0.003939083691253842,0.003939083691253842,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,2007,2009,1201,0.00031787667691796084,0.00031787667691796084,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,2008,2010,1189,-0.00023502229932992336,-0.00023502229932992336,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,2009,2011,1213,0.0019090643803603147,0.0019090643803603147,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,2010,2012,1357,-0.0007278014375636799,-0.0007278014375636799,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,2011,2013,1962,-0.0004132027536432048,-0.0004132027536432048,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,2012,2014,2856,-0.0018084433020140178,-0.0018084433020140178,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,2013,2015,4317,0.0019739948939960783,0.0019739948939960783,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,2014,2016,6317,2.6963721895478798e-05,2.6963721895478798e-05,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,2015,2017,8169,-0.0015241558075131945,-0.0015241558075131945,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,2016,2018,8952,0.004817267067499409,0.004817267067499409,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,2017,2019,9117,0.0033703387890111625,0.0033703387890111625,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,2018,2020,9156,-0.0022515234243605242,-0.0022515234243605242,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,2019,2021,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,engineering_energy,Engineering & energy,2020,2022,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",1986,1988,1399,0.0028548053559513953,0.0028548053559513953,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",1987,1989,1357,0.000187557661832094,0.000187557661832094,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",1988,1990,1412,0.0017544727570224516,0.0017544727570224516,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",1989,1991,1327,0.002190109570614829,0.002190109570614829,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",1990,1992,1324,0.004325177835504457,0.004325177835504457,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",1991,1993,1228,0.0015986922971217288,0.0015986922971217288,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",1992,1994,1158,-0.0009720710963024848,-0.0009720710963024848,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",1993,1995,1049,-0.0019106869850950003,-0.0019106869850950003,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",1994,1996,1016,0.0031965119639216777,0.0031965119639216777,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",1995,1997,1061,0.005688856273900034,0.005688856273900034,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",1996,1998,1163,0.0026287256431911654,0.0026287256431911654,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",1997,1999,1226,-0.002056360930057788,-0.002056360930057788,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",1998,2000,1291,-0.0026870447917834994,-0.0026870447917834994,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",1999,2001,1259,-0.00017270225305565656,-0.00017270225305565656,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",2000,2002,1257,-0.00043752654184370243,-0.00043752654184370243,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",2001,2003,1268,-0.003191120833871852,-0.003191120833871852,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",2002,2004,1314,-0.0035111839082061502,-0.0035111839082061502,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",2003,2005,1418,-0.002755068547503292,-0.002755068547503292,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",2004,2006,1406,-0.00018392872278472083,-0.00018392872278472083,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",2005,2007,1475,0.0018660883896534086,0.0018660883896534086,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",2006,2008,1758,0.0017977091375470655,0.0017977091375470655,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",2007,2009,2136,0.00016533501252358196,0.00016533501252358196,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",2008,2010,2440,-0.0010038826027085612,-0.0010038826027085612,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",2009,2011,2618,0.00038749972687734946,0.00038749972687734946,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",2010,2012,2947,0.00025970381051643177,0.00025970381051643177,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",2011,2013,3376,-0.00031060462424603585,-0.00031060462424603585,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",2012,2014,3921,-0.0007732541962992556,-0.0007732541962992556,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",2013,2015,4770,0.0008779800936541404,0.0008779800936541404,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",2014,2016,6258,0.0017151644258897036,0.0017151644258897036,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",2015,2017,8329,-0.0008807997388577959,-0.0008807997388577959,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",2016,2018,9463,0.00015249793820826252,0.00015249793820826252,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",2017,2019,10255,-0.002636781212666306,-0.002636781212666306,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",2018,2020,10382,-0.005905887613813943,-0.005905887613813943,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",2019,2021,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,earth_climate_environment,"Earth, climate & environment",2020,2022,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,1986,1988,887,-0.00631694306642705,-0.00631694306642705,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,1987,1989,777,-0.0033627473664568086,-0.0033627473664568086,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,1988,1990,701,0.0045104424604059945,0.0045104424604059945,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,1989,1991,639,0.007572771364932396,0.007572771364932396,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,1990,1992,604,0.002617810702396306,0.002617810702396306,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,1991,1993,561,-0.0020331297963840367,-0.0020331297963840367,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,1992,1994,545,-0.006322613945778488,-0.006322613945778488,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,1993,1995,494,0.00019212257638290264,0.00019212257638290264,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,1994,1996,489,0.00444695960871877,0.00444695960871877,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,1995,1997,482,0.004243821538210679,0.004243821538210679,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,1996,1998,531,0.0011011664251290298,0.0011011664251290298,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,1997,1999,526,0.0016777694420324618,0.0016777694420324618,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,1998,2000,525,0.009054306251312982,0.009054306251312982,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,1999,2001,508,0.011110589063414555,0.011110589063414555,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,2000,2002,526,0.010587494190332003,0.010587494190332003,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,2001,2003,555,0.0019443670033322258,0.0019443670033322258,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,2002,2004,559,0.005550495983831061,0.005550495983831061,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,2003,2005,670,0.006976181701396578,0.006976181701396578,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,2004,2006,716,0.013029526073273678,0.013029526073273678,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,2005,2007,753,0.006061012004257571,0.006061012004257571,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,2006,2008,755,0.004101154200625512,0.004101154200625512,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,2007,2009,790,-0.0022031685423147263,-0.0022031685423147263,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,2008,2010,823,-0.003127244029955789,-0.003127244029955789,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,2009,2011,780,-0.002033476716885918,-0.002033476716885918,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,2010,2012,778,0.003180209199569184,0.003180209199569184,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,2011,2013,825,0.004172326045551289,0.004172326045551289,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,2012,2014,889,0.0026670392008647514,0.0026670392008647514,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,2013,2015,974,-7.6196036096432e-05,-7.6196036096432e-05,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,2014,2016,1013,0.001458544735965961,0.001458544735965961,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,2015,2017,1264,0.0003695276548756343,0.0003695276548756343,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,2016,2018,1476,0.0021806846207635955,0.0021806846207635955,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,2017,2019,1705,0.0005228026459753732,0.0005228026459753732,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,2018,2020,1679,-0.002328156675730164,-0.002328156675730164,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,2019,2021,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,astronomy_space,Astronomy & space,2020,2022,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,1986,1988,2284,0.001993845442397224,0.001993845442397224,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,1987,1989,2381,0.0022230976552208848,0.0022230976552208848,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,1988,1990,2428,0.0033461956699687434,0.0033461956699687434,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,1989,1991,2402,0.006580545415436623,0.006580545415436623,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,1990,1992,2487,0.0065260722042017605,0.0065260722042017605,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,1991,1993,2606,0.0049802413944425306,0.0049802413944425306,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,1992,1994,2629,0.0017631743146321321,0.0017631743146321321,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,1993,1995,2661,0.0002555375412508498,0.0002555375412508498,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,1994,1996,2737,-0.000733269706530093,-0.000733269706530093,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,1995,1997,2966,-0.0012965331023088167,-0.0012965331023088167,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,1996,1998,3077,-0.0006457604824154917,-0.0006457604824154917,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,1997,1999,3771,-0.0018295689105073398,-0.0018295689105073398,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,1998,2000,4425,-0.0015623429427236157,-0.0015623429427236157,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,1999,2001,5142,-0.0003163364769834809,-0.0003163364769834809,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,2000,2002,5030,0.0016883109220487968,0.0016883109220487968,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,2001,2003,4858,0.0010277162363985237,0.0010277162363985237,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,2002,2004,4510,0.0005306865758177848,0.0005306865758177848,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,2003,2005,4464,0.0006734545208771925,0.0006734545208771925,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,2004,2006,4566,0.0008522133672029808,0.0008522133672029808,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,2005,2007,4712,0.0005292068872605471,0.0005292068872605471,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,2006,2008,4912,0.000304831307739617,0.000304831307739617,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,2007,2009,5116,0.0002092587622828379,0.0002092587622828379,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,2008,2010,5371,0.0008496199376558655,0.0008496199376558655,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,2009,2011,5608,0.0010520191098591924,0.0010520191098591924,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,2010,2012,6146,0.001711140475922579,0.001711140475922579,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,2011,2013,7144,0.0020427263617529556,0.0020427263617529556,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,2012,2014,8807,0.0020942982525681275,0.0020942982525681275,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,2013,2015,12527,0.004741718887283253,0.004741718887283253,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,2014,2016,19362,0.006570872833784991,0.006570872833784991,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,2015,2017,26707,0.007538113939126845,0.007538113939126845,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,2016,2018,29481,0.011122503586903032,0.011122503586903032,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,2017,2019,29617,0.010799222831445299,0.010799222831445299,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,2018,2020,28281,0.0009458993618004508,0.0009458993618004508,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,2019,2021,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,life_molecular,Life & molecular sciences,2020,2022,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,1986,1988,396,-0.0032529688277190827,-0.0032529688277190827,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,1987,1989,401,-0.003484770575954421,-0.003484770575954421,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,1988,1990,363,0.00014792907674643363,0.00014792907674643363,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,1989,1991,324,0.00555974747621979,0.00555974747621979,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,1990,1992,306,0.00770779150611034,0.00770779150611034,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,1991,1993,265,0.007785319946374991,0.007785319946374991,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,1992,1994,233,-0.003431790623311004,-0.003431790623311004,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,1993,1995,234,-0.0036094566074834633,-0.0036094566074834633,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,1994,1996,250,-0.0033433740775428156,-0.0033433740775428156,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,1995,1997,261,-0.009609872989442159,-0.009609872989442159,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,1996,1998,297,-0.006162310292586959,-0.006162310292586959,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,1997,1999,370,-0.00860497084739853,-0.00860497084739853,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,1998,2000,444,0.00044176856520938834,0.00044176856520938834,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,1999,2001,491,0.0047457414413619725,0.0047457414413619725,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,2000,2002,501,0.002300771541849489,0.002300771541849489,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,2001,2003,494,-0.0003435880592227436,-0.0003435880592227436,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,2002,2004,471,-0.0003900131497363013,-0.0003900131497363013,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,2003,2005,486,-0.00013952397499761293,-0.00013952397499761293,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,2004,2006,661,0.0025302196365036833,0.0025302196365036833,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,2005,2007,916,0.003273613461005853,0.003273613461005853,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,2006,2008,1109,0.006107573525653609,0.006107573525653609,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,2007,2009,1174,0.003166998757673567,0.003166998757673567,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,2008,2010,1189,0.0012984138730244288,0.0012984138730244288,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,2009,2011,1230,0.0023514247266356314,0.0023514247266356314,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,2010,2012,1402,0.0009224569846801867,0.0009224569846801867,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,2011,2013,1842,0.0034251779348142275,0.0034251779348142275,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,2012,2014,2463,0.001174888473341018,0.001174888473341018,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,2013,2015,3440,0.0025382196732919304,0.0025382196732919304,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,2014,2016,4611,0.0037586093653795283,0.0037586093653795283,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,2015,2017,5595,-0.00015012731112351574,-0.00015012731112351574,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,2016,2018,5751,0.0002246407894652691,0.0002246407894652691,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,2017,2019,5450,-0.00673882158858663,-0.00673882158858663,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,2018,2020,5147,-0.009952695257706923,-0.009952695257706923,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,2019,2021,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,physics,Physics,2020,2022,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1986,1988,125,0.0073275678609519,0.0073275678609519,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1987,1989,136,0.002132673049606515,0.002132673049606515,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1988,1990,148,-0.0028906652697857638,-0.0028906652697857638,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1989,1991,138,-0.005796784532508759,-0.005796784532508759,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1990,1992,131,-0.019153889891573406,-0.019153889891573406,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1991,1993,127,-0.004832777335724514,-0.004832777335724514,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1992,1994,122,-0.003909848333717991,-0.003909848333717991,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1993,1995,126,-0.0025681636626200266,-0.0025681636626200266,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1994,1996,142,-0.0004117201670482684,-0.0004117201670482684,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1995,1997,146,0.0024152258621183975,0.0024152258621183975,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1996,1998,166,0.007344992915922832,0.007344992915922832,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1997,1999,191,0.006560347866040539,0.006560347866040539,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1998,2000,227,-0.0007147713259996191,-0.0007147713259996191,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",1999,2001,255,-0.0020986011786521264,-0.0020986011786521264,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2000,2002,241,-0.006191178572329981,-0.006191178572329981,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2001,2003,234,-0.0006745253658775319,-0.0006745253658775319,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2002,2004,224,0.0029004742320338783,0.0029004742320338783,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2003,2005,210,0.005738044931912323,0.005738044931912323,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2004,2006,199,0.011969187217966804,0.011969187217966804,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2005,2007,167,0.008140059128331711,0.008140059128331711,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2006,2008,166,0.0033721120299315954,0.0033721120299315954,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2007,2009,164,-0.0011120756223269579,-0.0011120756223269579,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2008,2010,176,-0.00043361734538249763,-0.00043361734538249763,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2009,2011,201,0.002298295446939602,0.002298295446939602,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2010,2012,237,0.00309528802562109,0.00309528802562109,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2011,2013,301,0.002403680417327636,0.002403680417327636,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2012,2014,379,-0.0010679039147500902,-0.0010679039147500902,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2013,2015,540,0.0022778415014387265,0.0022778415014387265,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2014,2016,861,0.0072138011009139635,0.0072138011009139635,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2015,2017,1280,0.006056060328775481,0.006056060328775481,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2016,2018,1512,0.006416302286504472,0.006416302286504472,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2017,2019,1575,0.005866409797411154,0.005866409797411154,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2018,2020,1552,0.0006192101401069072,0.0006192101401069072,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2019,2021,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,ecology_evolution_microbiology,"Ecology, evolution & microbiology",2020,2022,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,1986,1988,186,-0.010768510151791366,-0.010768510151791366,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,1987,1989,177,0.0003393814407141038,0.0003393814407141038,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,1988,1990,155,0.008749101272866766,0.008749101272866766,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,1989,1991,159,0.004145606627187659,0.004145606627187659,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,1990,1992,163,0.005409843153928562,0.005409843153928562,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,1991,1993,167,0.005339734576227717,0.005339734576227717,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,1992,1994,174,0.006426164999146944,0.006426164999146944,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,1993,1995,177,0.009459477645203163,0.009459477645203163,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,1994,1996,199,0.010106248984285693,0.010106248984285693,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,1995,1997,221,0.022171783710343007,0.022171783710343007,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,1996,1998,251,0.007193573613948678,0.007193573613948678,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,1997,1999,286,0.001169874687380279,0.001169874687380279,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,1998,2000,306,0.00475228943902728,0.00475228943902728,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,1999,2001,332,0.003032214064088379,0.003032214064088379,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,2000,2002,348,-0.002659475168358516,-0.002659475168358516,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,2001,2003,379,-0.007461190957765429,-0.007461190957765429,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,2002,2004,411,-0.011000240025202501,-0.011000240025202501,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,2003,2005,448,-0.008870081082769765,-0.008870081082769765,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,2004,2006,531,-0.00449183823305932,-0.00449183823305932,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,2005,2007,682,0.00018550046311505142,0.00018550046311505142,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,2006,2008,856,-0.0013468505517785223,-0.0013468505517785223,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,2007,2009,1001,-0.0009561470080101664,-0.0009561470080101664,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,2008,2010,1020,-0.004167384210680081,-0.004167384210680081,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,2009,2011,1078,-0.003368388497267061,-0.003368388497267061,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,2010,2012,1232,-0.0024033189395304966,-0.0024033189395304966,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,2011,2013,1888,0.0007956222724533335,0.0007956222724533335,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,2012,2014,2806,4.586810651419082e-05,4.586810651419082e-05,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,2013,2015,4245,4.792875272674468e-05,4.792875272674468e-05,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,2014,2016,5807,-0.005569583731262373,-0.005569583731262373,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,2015,2017,6994,-0.009319394544059723,-0.009319394544059723,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,2016,2018,6894,0.002485073605575927,0.002485073605575927,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,2017,2019,6298,0.005883010077284201,0.005883010077284201,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,2018,2020,5822,-0.00234640174330758,-0.00234640174330758,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,2019,2021,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,materials_nanoscience,Materials & nanoscience,2020,2022,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,1986,1988,337,-0.004662606801253966,-0.004662606801253966,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,1987,1989,297,-0.00650189025866077,-0.00650189025866077,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,1988,1990,275,-0.013881542237654365,-0.013881542237654365,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,1989,1991,274,-0.011735178368323274,-0.011735178368323274,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,1990,1992,285,-0.007424637111338006,-0.007424637111338006,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,1991,1993,380,-0.025869392808841596,-0.025869392808841596,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,1992,1994,433,-0.018237315741723825,-0.018237315741723825,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,1993,1995,519,-0.009361207780468561,-0.009361207780468561,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,1994,1996,569,-0.0008029350200196017,-0.0008029350200196017,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,1995,1997,649,-0.007241887278660153,-0.007241887278660153,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,1996,1998,778,-0.017910297288881605,-0.017910297288881605,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,1997,1999,938,-0.012151303685145942,-0.012151303685145942,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,1998,2000,1110,-0.004936818659605047,-0.004936818659605047,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,1999,2001,1202,-0.001547287628303362,-0.001547287628303362,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,2000,2002,1213,-0.001767878834405101,-0.001767878834405101,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,2001,2003,1128,-0.0004520885684887732,-0.0004520885684887732,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,2002,2004,1035,-0.003215660800224729,-0.003215660800224729,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,2003,2005,1027,-0.0020060742185686875,-0.0020060742185686875,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,2004,2006,1056,-0.005032970965407668,-0.005032970965407668,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,2005,2007,1092,-0.003430775131276542,-0.003430775131276542,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,2006,2008,1054,-0.0026664735433626907,-0.0026664735433626907,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,2007,2009,1093,-0.004271317809851238,-0.004271317809851238,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,2008,2010,1074,-0.004937932586835836,-0.004937932586835836,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,2009,2011,1139,-0.008880246867784658,-0.008880246867784658,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,2010,2012,1249,-0.0099664924714028,-0.0099664924714028,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,2011,2013,1495,-0.008089173208776335,-0.008089173208776335,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,2012,2014,1699,-0.0029899752314717087,-0.0029899752314717087,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,2013,2015,2222,0.002667607676751005,0.002667607676751005,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,2014,2016,3382,0.002248809631920645,0.002248809631920645,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,2015,2017,4872,-0.002752627306838451,-0.002752627306838451,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,2016,2018,5696,0.001502195094231551,0.001502195094231551,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,2017,2019,5916,0.003724515612181234,0.003724515612181234,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,2018,2020,5809,-0.0014189746016293192,-0.0014189746016293192,False,reliable
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,2019,2021,0,,,False,not_mature
+Broad T0 219 − Expanded 153,broad_t0,expanded,neuroscience,Neuroscience,2020,2022,0,,,False,not_mature

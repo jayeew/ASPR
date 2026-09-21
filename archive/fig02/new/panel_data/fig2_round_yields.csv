@@ -1,0 +1,13 @@
+iteration,new_nonredundant_english_terms,new_canonical_indicator_families,fully_reviewed,decision,stop_basis,protocol_amendment_id
+1,37,46,1,continue,not_applicable,
+2,28,38,1,continue,not_applicable,
+3,10,22,1,continue,not_applicable,
+4,13,32,1,continue,not_applicable,
+5,51,92,1,continue,not_applicable,
+6,32,64,1,continue,not_applicable,
+7,35,25,1,continue,not_applicable,
+8,47,24,1,continue,not_applicable,
+9,21,8,1,continue,not_applicable,
+10,13,12,1,continue,not_applicable,
+11,15,10,1,continue,not_applicable,
+12,10,9,1,freeze,retrospective_owner_pragmatic_stop,R12_REGISTERED_MARGINAL_YIELD_AMENDMENT

@@ -10,6 +10,7 @@ import json
 import os
 import sys
 import xml.etree.ElementTree as ET
+import zipfile
 from itertools import pairwise
 from pathlib import Path
 from typing import Any
@@ -21,6 +22,7 @@ from PIL import Image
 
 from .data import (
     ASSETS,
+    ROOT,
     bare,
     community_ccdf,
     connect,
@@ -445,7 +447,9 @@ components/ 下每个小图、图例和指标卡独立保存 SVG/PDF/PNG；compo
 
 数据口径：局部图只计算保留邻居的历史骨架诱导图；前后历史节点坐标不变；社区是固定聚类而非学科；图结构不证明科学新颖性。四例路径均基于已有参考 ID 与历史引用索引计算，已保存参考列表不保证完整。297,063 是历史已保存路径注释数量，不是本次重新生成。Paper 原始边 63,984,971 与清洁边 63,966,133 分开。
 
-当前版本：B 为 VSIG10L 食管上皮研究，C 为 Sensight 成像探针设计。Paper Graph 显示 {len(paper_display["nodes"])} 个节点、{len(paper_display["edges"])} 条有向引用边，无孤立节点；较上一版 112 个节点减少约 20%，PA–PD 的原有连接路径保留。选择连通背景属于展示筛选，不是无偏抽样，也不意味着因果或科学承接关系。连接路径仅用于筛选，箭头保留真实引用方向。Claim Graph 标签改为 Semantic relations and citation context；引用背景来自父论文路径，实际显示的是历史骨架。四个 case 左下角灰色注释已移除，日期、邻居数与来源仍保存在源记录和图注中。Panel d 使用经验互补累积分布，分母是全部 2,422 个已分配社区；未做拟合或平滑。逐阈值数据见 data/community_ccdf.csv。前两版保存于 outputs/fig1_reference_versions/v1 和 v2。
+当前图：B 为 VSIG10L 食管上皮研究，C 为 Sensight 成像探针设计。Paper Graph 显示 {len(paper_display["nodes"])} 个节点、{len(paper_display["edges"])} 条有向引用边，无孤立节点，PA–PD 通过真实引用记录连接。选择连通背景属于展示筛选，不是无偏抽样，也不意味着因果或科学承接关系。连接路径仅用于筛选，箭头保留真实引用方向。Claim Graph 标签为 Semantic relations and citation context；引用背景来自父论文路径，实际显示的是历史骨架。四个 case 的日期、邻居数与来源保存在源记录和图注中。Panel d 使用经验互补累积分布，分母是全部 2,422 个已分配社区；未做拟合或平滑。逐阈值数据见 data/community_ccdf.csv。
+
+输出策略：默认直接覆盖 outputs/fig1_reference 中的同名结果，不创建版本目录或历史备份。assemble、validate 和 all 完成时同步覆盖 outputs/Fig1_reference_delivery.zip。全图核对仅依赖当前快照和科学源数据，不依赖旧结果目录。
 
 Paper Graph 边配色：PA–PD 的一跳出边采用对应节点颜色；向外二跳路径的后续边保留原灰色；其余背景引用边向白色混合 18%，略微调淡。数据、坐标和边宽不变，逐边记录见 qa/paper_edge_colors.json。
 
@@ -501,6 +505,27 @@ prepare 只读本地科学资产，另写绘图快照；render 只读取快照�
                 }
             )
     write(out / "file_manifest.json", records)
+    package_delivery(out)
+
+
+def package_delivery(out: Path) -> None:
+    """Replace the current delivery archive without retaining previous archives."""
+    name = "Fig1_reference" if out.name == "fig1_reference" else out.name
+    destination = out.parent / f"{name}_delivery.zip"
+    temporary = destination.with_suffix(".tmp.zip")
+    with zipfile.ZipFile(
+        temporary, "w", zipfile.ZIP_DEFLATED, compresslevel=6
+    ) as archive:
+        for path in sorted(out.rglob("*")):
+            if path.is_file():
+                archive.write(path, Path("Fig1") / path.relative_to(out))
+        for path in sorted(Path(__file__).parent.iterdir()):
+            if path.is_file():
+                archive.write(path, Path("source") / path.relative_to(ROOT))
+        test = ROOT / "tests/figure_pipeline/test_fig1_reference.py"
+        if test.exists():
+            archive.write(test, Path("source") / test.relative_to(ROOT))
+    temporary.replace(destination)
 
 
 def gallery(out: Path) -> None:

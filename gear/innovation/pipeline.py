@@ -103,9 +103,8 @@ def _gear_assess(
                     "historical_pdf_enabled": config.retrieval.openalex_pdf_enabled,
                     "external_fulltext_enabled": config.retrieval.external_fulltext_enabled,
                     "external_fulltext_max_works": config.retrieval.external_fulltext_max_works,
-                    "coverage_protocol": "normal_contrastive_reserved_v2",
+                    "coverage_protocol": "normal_contrastive_reserved",
                     "candidate_budget": config.retrieval.fulltext_max,
-                    "recovery_source": recovery.get("source"),
                 },
             )
             supervisor = EvidenceSupervisor(
@@ -127,6 +126,16 @@ def _gear_assess(
                 supervisor.prior_art._frames[claim.claim_id] = frame
                 log_progress("[检索准备复用] %s", frame_path)
             if recovery:
+                if recovery.get("supplemental_queries"):
+                    from gear.contracts import QuerySpec
+
+                    queries = [
+                        QuerySpec.model_validate(row)
+                        for row in recovery["supplemental_queries"]
+                    ]
+                    if any(q.claim_id != claim.claim_id for q in queries):
+                        raise ValueError("Supplement query claim identity mismatch")
+                    supervisor.prior_art.supplemental_queries[claim.claim_id] = queries
                 card = supervisor.evaluate(
                     claim,
                     paper,
@@ -210,7 +219,6 @@ def _run_branch(
     )
     if mode == "graph":
         policy = {
-            "version": "threshold_parent_path_v2",
             "top_k": config.graph_top_k,
             "min_similarity": config.graph_min_similarity,
         }

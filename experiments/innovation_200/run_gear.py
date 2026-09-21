@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import logging
 import shutil
 import sys
@@ -27,6 +28,7 @@ from experiments.innovation_200.recovery import (
     repair_coverage,
     retry_failed,
     study_gear_lock,
+    supplement_claims,
 )
 from experiments.innovation_200.resource_guard import wait_for_memory
 from gear.contracts import PaperIR
@@ -127,6 +129,11 @@ def _parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--overwrite", action="store_true")
     parser.add_argument(
+        "--supplement-plan",
+        type=Path,
+        help="JSON claim/query allowlist: supplement only these saved coverage-gap claims",
+    )
+    parser.add_argument(
         "--repair-coverage",
         action="store_true",
         help="Supplement missing contrastive searches using archived healthy evidence; retry technical failures",
@@ -184,6 +191,17 @@ def _run(args: argparse.Namespace, rows: list[dict]) -> int:
         args.cli_limit,
         args.overwrite,
     )
+    if args.supplement_plan:
+        manifest = supplement_claims(
+            args.study, json.loads(args.supplement_plan.read_text())
+        )
+        logger.info(
+            "[定向补检索准备] archive=%s，claims=%d",
+            manifest["archive"],
+            len(manifest["claims"]),
+        )
+        if args.cleanup_only:
+            return 0
     if args.clean_limited or args.retry_failed or args.repair_coverage:
         recover = (
             repair_coverage
@@ -250,7 +268,10 @@ def main() -> None:
             "--retry-limited is retired: use --clean-limited --cleanup-only once, then resume without cleanup flags"
         )
     if args.cleanup_only and not (
-        args.clean_limited or args.retry_failed or args.repair_coverage
+        args.clean_limited
+        or args.retry_failed
+        or args.repair_coverage
+        or args.supplement_plan
     ):
         parser.error("--cleanup-only requires a recovery flag")
     if (
@@ -260,6 +281,7 @@ def main() -> None:
                 args.clean_limited,
                 args.retry_failed,
                 args.repair_coverage,
+                bool(args.supplement_plan),
             )
         )
         > 1
@@ -271,6 +293,16 @@ def main() -> None:
         parser.error("--workers must be positive")
     args.study = args.study.resolve()
     try:
+        if args.supplement_plan:
+            plan = json.loads(args.supplement_plan.read_text())
+            planned_papers = sorted(
+                {str(row["claim_id"]).split("::CLAIM::")[0] for row in plan}
+            )
+            if not planned_papers:
+                raise ValueError("Supplement plan is empty")
+            if args.paper_id and set(args.paper_id) != set(planned_papers):
+                raise ValueError("--paper-id must exactly match the supplement plan")
+            args.paper_id = planned_papers
         rows = _selected_rows(args.study, args.paper_id, args.roster)
         with study_gear_lock(args.study):
             exit_code = _run(args, rows)

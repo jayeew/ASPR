@@ -1,0 +1,15 @@
+lane,lane_order,label,count,detail,included_count,excluded_count
+terms,1,Raw English terms,3615,source-linked,,
+terms,2,H2 retained,3170,deduplicated wording,,
+terms,3,Canonical terms,1102,term normalisation,,
+terms,4,Term families,367,same construct family,,
+terms,5,Search domains,42,not model dimensions,,
+search,1,Candidate logical queries,381,before pruning,,
+search,2,Frozen search frame,336,336 logical · 367 physical,,
+search,3,Seed + PRESS validation,62,62/62 indexable · 0 unresolved,,
+search,4,Formal query records,30332,plus citation routes,,
+search,5,Final title/abstract dispositions,9515,363 included English sources · 9152 excluded,363,9152
+measure,1,Indicator mentions,1685,+13 targeted formula completions,,
+measure,2,Canonical indicator families,432,synonyms/variants merged,,
+measure,3,Mapped families,428,4 excluded pre-dimension,,
+measure,4,Candidate dimensions,66,derived after indicators,,

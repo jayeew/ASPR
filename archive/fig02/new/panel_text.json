@@ -1,0 +1,35 @@
+{
+  "a": {
+    "query_blocks": [
+      {
+        "label": "PAPER OBJECT",
+        "terms": "paper | article | publication | scientific work"
+      },
+      {
+        "label": "TARGET CONSTRUCT",
+        "terms": "novelty | innovation | potential impact | citation impact | research quality | scientific influence"
+      },
+      {
+        "label": "EVIDENCE ROLE",
+        "terms": "measure | indicator | metric | feature | predictor | determinant | validation | review"
+      }
+    ],
+    "subtitle": "",
+    "title": "Evidence-derived search and measurement pipeline"
+  },
+  "b": {
+    "mapping_note": "The mapping is literature role → coded construct family → gate-defined eligibility tier. It contains no Spearman, chord or empirical model result.",
+    "subtitle": "",
+    "title": "Indicators precede dimensions"
+  },
+  "c": {
+    "gate_note": "Gate failures can overlap; row failures must not be summed.",
+    "subtitle": "",
+    "title": "Fixed hard-gate audit"
+  },
+  "d": {
+    "set_note": "Membership frozen before outcome evaluation; predictive comparisons belong to Fig. 3.",
+    "subtitle": "",
+    "title": "Nested outcome-blind sets"
+  }
+}

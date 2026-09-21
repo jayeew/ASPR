@@ -38,7 +38,10 @@ def test_local_ranker_is_lazy_and_dual_view_union_is_ranked():
 
     class Recall:
         @staticmethod
-        def encode(texts, return_dense=True):
+        def encode(
+            texts: list[str], return_dense: bool = True, batch_size: int = 8
+        ) -> dict[str, np.ndarray]:
+            assert batch_size in (1, ranker.batch_size)
             vectors = []
             for text in texts:
                 lowered = text.casefold()
@@ -54,7 +57,10 @@ def test_local_ranker_is_lazy_and_dual_view_union_is_ranked():
 
     class Reranker:
         @staticmethod
-        def compute_score(pairs, normalize=True):
+        def compute_score(
+            pairs: list[list[str]], normalize: bool = True, batch_size: int = 8
+        ) -> list[float]:
+            assert batch_size == ranker.batch_size
             return [
                 (
                     0.9

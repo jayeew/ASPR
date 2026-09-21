@@ -1,0 +1,5 @@
+set_order,set_id,display_label,selection_rule,figure_meaning,feature_count,dimension_count,incremental_count,is_primary_scalable,is_strict_core,is_sensitivity_ceiling
+1,strict_7,Strict audited core,All 14 hard gates,strict audited baseline,7,4,7,False,True,False
+2,fulltext_16,Full-text evidence set,T0-safe + source + English full-text formula,intermediate evidence tier,16,10,9,False,False,False
+3,source_154,Expanded evidence-derived set (153),T0-safe + source evidence,expanded evidence-derived modeling set,153,48,137,True,False,False
+4,ultrarelaxed_221,Broad T0 sensitivity set (219),T0-safe base gates,broad sensitivity upper bound,219,55,66,False,False,True

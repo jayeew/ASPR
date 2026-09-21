@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import math
 from pathlib import Path
 from typing import Any
@@ -18,6 +19,43 @@ from figure_pipeline.fig1_reference.data import (
 from figure_pipeline.fig1_reference.export import reassemble_components
 from figure_pipeline.fig1_reference.paper_display import connected_selection
 from figure_pipeline.fig1_reference.svg import Scene
+
+
+def test_observations_follow_current_roster_and_latest_graph_fact(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from figure_pipeline.fig1_reference import data
+
+    monkeypatch.setattr(data, "STUDY", tmp_path)
+    (tmp_path / "papers.jsonl").write_text('{"paper_id": "current"}\n')
+    for pid in ("current", "removed"):
+        folder = tmp_path / "papers" / pid
+        (folder / "shared").mkdir(parents=True)
+        cid = f"{pid}::CLAIM::01"
+        (folder / "shared/claims.json").write_text(
+            json.dumps({"claims": [{"claim_id": cid}]})
+        )
+        directory = folder / "graph/01"
+        directory.mkdir(parents=True)
+        records = [
+            {
+                "kind": "graph_fact", "evidence_id": f"GRAPH:{cid}",
+                "payload": {
+                    "claim": {"claim_id": cid, "claim_type": "FINDING"},
+                    "neighbors": [{"community_id": 1}, {"community_id": None}],
+                    "metrics": [{"name": "nearest_prior_similarity", "value": value}],
+                },
+            }
+            for value in (0.6, 0.8)
+        ]
+        (directory / "evidence_trace.jsonl").write_text(
+            "".join(json.dumps(row) + "\n" for row in records)
+        )
+    rows = data.study_observations()
+    assert [row["claim_id"] for row in rows] == ["current::CLAIM::01"]
+    assert rows[0]["nearest_prior_similarity"] == 0.8
+    assert rows[0]["neighbor_count"] == 2
+    assert rows[0]["community_assignment_coverage"] == 0.5
 
 
 def neighbor(

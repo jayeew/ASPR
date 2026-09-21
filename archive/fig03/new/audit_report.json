@@ -1,0 +1,203 @@
+{
+  "checks": [
+    {
+      "check": "panel_tables_exist",
+      "detail": "missing=[]",
+      "passed": true
+    },
+    {
+      "check": "official_score_count",
+      "detail": "n=317995; source_n=317995",
+      "passed": true
+    },
+    {
+      "check": "official_score_bounded",
+      "detail": "range=[0.002201292473152, 100.0]",
+      "passed": true
+    },
+    {
+      "check": "official_score_monotone",
+      "detail": "aspr_score is monotone in raw_prediction_score",
+      "passed": true
+    },
+    {
+      "check": "formal_model_identity",
+      "detail": "family=hgb; set=primary",
+      "passed": true
+    },
+    {
+      "check": "twelve_combination_fold_local_deciles",
+      "detail": "horizons=[3, 5, 8]; models=['broad_t0', 'expanded', 'primary', 'strict']; combinations=12",
+      "passed": true
+    },
+    {
+      "check": "multi_horizon_oof_n",
+      "detail": "n={3: 395138, 5: 317262, 8: 220293}",
+      "passed": true
+    },
+    {
+      "check": "top_decile_above_baseline",
+      "detail": "share=0.423474533535; baseline=0.100005673544",
+      "passed": true
+    },
+    {
+      "check": "top_decile_enrichment",
+      "detail": "lift=4.234505088830",
+      "passed": true
+    },
+    {
+      "check": "lowest_decile_below_baseline",
+      "detail": "share=0.010904506776; baseline=0.100005673544",
+      "passed": true
+    },
+    {
+      "check": "decile_bootstrap_intervals",
+      "detail": "all observed shares lie within 2,000-draw intervals",
+      "passed": true
+    },
+    {
+      "check": "complete_landscape_grid",
+      "detail": "rows=5040",
+      "passed": true
+    },
+    {
+      "check": "minimum_cell_n_enforced",
+      "detail": "minimum=30",
+      "passed": true
+    },
+    {
+      "check": "white_cell_reasons_exhaustive",
+      "detail": "insufficient_n=0; degenerate=0",
+      "passed": true
+    },
+    {
+      "check": "rolling_reliable_share",
+      "detail": "share=1.000000000000",
+      "passed": true
+    },
+    {
+      "check": "maturity_regions_explicit",
+      "detail": "D5 late=96; D8 late=240",
+      "passed": true
+    },
+    {
+      "check": "formal_oof_spearman",
+      "detail": "rho=0.739569717545",
+      "passed": true
+    },
+    {
+      "check": "formal_model_family",
+      "detail": "only the four final HGB feature sets are rendered",
+      "passed": true
+    },
+    {
+      "check": "domain_display_order_complete",
+      "detail": "domains=['ecology_evolution_microbiology', 'chemistry', 'earth_climate_environment', 'astronomy_space', 'life_molecular', 'engineering_energy', 'materials_nanoscience', 'physics', 'clinical_health', 'neuroscience', 'computer_science_ai', 'mathematics_statistics']",
+      "passed": true
+    },
+    {
+      "check": "domain_display_order_performance_ranked",
+      "detail": "mean reliable D5 Primary 16 annual-window rho descends top-to-bottom",
+      "passed": true
+    },
+    {
+      "check": "three_adjacent_gain_maps",
+      "detail": "comparisons=3",
+      "passed": true
+    },
+    {
+      "check": "gain_summary_1",
+      "detail": "Primary 16 − Strict 7: median=0.011198552972; positive=0.755050505051",
+      "passed": true
+    },
+    {
+      "check": "gain_summary_2",
+      "detail": "Expanded 153 − Primary 16: median=0.007195220817; positive=0.684343434343",
+      "passed": true
+    },
+    {
+      "check": "gain_summary_3",
+      "detail": "Broad T0 219 − Expanded 153: median=0.000282267559; positive=0.550505050505",
+      "passed": true
+    },
+    {
+      "check": "gain_scale_clipping_disclosed",
+      "detail": "out_of_scale_cells=5",
+      "passed": true
+    },
+    {
+      "check": "feature_sets_share_oof_papers_and_labels",
+      "detail": "D3=True; D5=True; D8=True",
+      "passed": true
+    },
+    {
+      "check": "frozen_panel_hashes_unchanged",
+      "detail": "tables=6; mismatches=[]",
+      "passed": true
+    },
+    {
+      "check": "strict_temporal_boundary",
+      "detail": "folds_checked=21",
+      "passed": true
+    },
+    {
+      "check": "claim_boundary_explicit",
+      "detail": "predictive association is separated from causality and novelty judgment",
+      "passed": true
+    },
+    {
+      "check": "render_png_figure_full.png",
+      "detail": "/home/jayee/workspace/ASPR/outputs/fig03/new/figure_full.png",
+      "passed": true
+    },
+    {
+      "check": "render_svg_figure_full.svg",
+      "detail": "/home/jayee/workspace/ASPR/outputs/fig03/new/figure_full.svg",
+      "passed": true
+    },
+    {
+      "check": "render_pdf_figure_full.pdf",
+      "detail": "/home/jayee/workspace/ASPR/outputs/fig03/new/figure_full.pdf",
+      "passed": true
+    },
+    {
+      "check": "render_png_figure_full_grayscale.png",
+      "detail": "/home/jayee/workspace/ASPR/outputs/fig03/new/figure_full_grayscale.png",
+      "passed": true
+    },
+    {
+      "check": "render_png_figure_full_deuteranopia.png",
+      "detail": "/home/jayee/workspace/ASPR/outputs/fig03/new/figure_full_deuteranopia.png",
+      "passed": true
+    },
+    {
+      "check": "png_600dpi_dimensions",
+      "detail": "observed=[5196, 5196]; expected=[5196, 5196]",
+      "passed": true
+    },
+    {
+      "check": "physical_size_matches_config",
+      "detail": "size_mm=[220.0, 220.0]; expected=[220.0, 220.0]",
+      "passed": true
+    },
+    {
+      "check": "minimum_print_font_6_5pt",
+      "detail": "minimum_pt=6.5",
+      "passed": true
+    },
+    {
+      "check": "no_unexpected_text_overlap",
+      "detail": "unexpected_text_overlap_count=0",
+      "passed": true
+    },
+    {
+      "check": "svg_physical_viewbox",
+      "detail": "<svg xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"623.622047pt\" height=\"623.622047pt\"",
+      "passed": true
+    }
+  ],
+  "figure_id": 3,
+  "figure_version": "fig3-evidence-derived-tuned-7-16-153-219-v1",
+  "passed": true,
+  "status": "complete_aspr_performance_landscape"
+}

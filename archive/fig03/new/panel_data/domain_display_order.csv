@@ -1,0 +1,13 @@
+display_order,domain12,domain_label,mean_reliable_spearman
+1,ecology_evolution_microbiology,"Ecology, evolution & microbiology",0.7760275829956038
+2,chemistry,Chemistry,0.7750757298929083
+3,earth_climate_environment,"Earth, climate & environment",0.7424271745024897
+4,astronomy_space,Astronomy & space,0.7393107067907712
+5,life_molecular,Life & molecular sciences,0.7329803184953825
+6,engineering_energy,Engineering & energy,0.727767877210182
+7,materials_nanoscience,Materials & nanoscience,0.7246866881158898
+8,physics,Physics,0.7162782628735185
+9,clinical_health,Clinical health,0.7153100016839911
+10,neuroscience,Neuroscience,0.680769806352238
+11,computer_science_ai,Computer science & AI,0.6598870983259536
+12,mathematics_statistics,Mathematics & statistics,0.5188247553807936

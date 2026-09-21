@@ -386,6 +386,7 @@ def test_coverage_repair_archives_and_reuses_healthy_evidence(tmp_path: Path) ->
             "purpose_semantic",
         ],
         unique_eligible_count=42,
+        compared_work_ids=["selected_without_a_relation"],
         whole_paper_ranking_completed=True,
         purpose_ranking_completed=True,
     )
@@ -415,9 +416,58 @@ def test_coverage_repair_archives_and_reuses_healthy_evidence(tmp_path: Path) ->
         direct_or_partial_found=False,
     )
     assert card.unique_eligible_count == 42
+    assert card.compared_work_ids == []
     assert not card.coverage_sufficient
     assert not repair_coverage(tmp_path, ["paper"])["moved"]
     with pytest.raises(ValueError, match="cutoff"):
         restore_evidence(
             supervisor, source, claim, date(2025, 1, 1), {}, {}, RetrievalBudget()
         )
+
+
+def test_supplement_only_allowlisted_claim_and_replay_is_safe(tmp_path: Path) -> None:
+    from datetime import date
+
+    from experiments.innovation_200.recovery import supplement_claims
+    from gear.contracts import QuerySpec, RetrievalCoverageCard
+
+    root = _paper(tmp_path, "paper")
+    claim = _claim("paper", "01")
+    directory = root / "gear/01"
+    EvidenceStore(directory).add_evidence(
+        f"COVERAGE:{claim.claim_id}",
+        "retrieval_coverage",
+        RetrievalCoverageCard(
+            coverage_id="cov",
+            target_claim_id=claim.claim_id,
+            cutoff_date=date(2026, 1, 1),
+        ),
+    )
+    before = (directory / "evidence_trace.jsonl").read_bytes()
+    other = (root / "gear/02/assessment.json").read_bytes()
+    plan = [
+        {
+            "claim_id": claim.claim_id,
+            "queries": [
+                QuerySpec(
+                    query_id="supplement",
+                    claim_id=claim.claim_id,
+                    family="lexical",
+                    query="grounded broader terms",
+                ).model_dump(mode="json")
+            ],
+        }
+    ]
+    # A bad later entry must fail before the earlier valid entry moves.
+    with pytest.raises(ValueError, match="Duplicate"):
+        supplement_claims(tmp_path, plan + plan)
+    assert (directory / "evidence_trace.jsonl").read_bytes() == before
+    # A completed earlier recovery may receive a new targeted supplement.
+    write_json(directory / "recovery_source.json", {"source": "older-archive"})
+    result = supplement_claims(tmp_path, plan)
+    marker = json.loads((directory / "recovery_source.json").read_text())
+    assert (Path(marker["source"]) / "evidence_trace.jsonl").read_bytes() == before
+    assert (root / "gear/02/assessment.json").read_bytes() == other
+    assert result["claims"] == [claim.claim_id]
+    assert not (root / "gear/analysis.json").exists()
+    assert not supplement_claims(tmp_path, plan)["moved"]

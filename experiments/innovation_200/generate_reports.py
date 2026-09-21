@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Generate supported whole-paper conditions; block confounded ablations."""
+"""Generate all whole-paper conditions with masked ablation interpretations."""
 
 from __future__ import annotations
 
 import argparse
 import logging
 import sys
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -23,9 +24,27 @@ from experiments.innovation_200.common import (
     wait_for_inputs,
     write_json,
 )
-from experiments.innovation_200.contracts import SYSTEMS
+from experiments.innovation_200.contracts import SYSTEMS, ReportBundle
 from experiments.innovation_200.reporting import generate_report, report_markdown
 from experiments.innovation_200.resource_guard import wait_for_memory
+from gear.codex_cli import CodexCLIUnavailableError
+
+
+def generate_with_capacity_retry(
+    paper_id: str, system: str, root: Path, logger: logging.Logger | None
+) -> ReportBundle:
+    """Retry temporary model capacity failures using completed step artifacts."""
+    for attempt in range(3):
+        try:
+            return generate_report(paper_id, system, root)
+        except CodexCLIUnavailableError as exc:
+            if "ERROR: Selected model is at capacity." not in str(exc) or attempt == 2:
+                raise
+            delay = 15 * (attempt + 1)
+            if logger:
+                logger.warning("[模型容量重试] %s__%s，等待=%s秒", paper_id, system, delay)
+            time.sleep(delay)
+    raise AssertionError("Unreachable capacity retry state")
 
 
 def generate(
@@ -62,7 +81,9 @@ def generate(
                 paths, paper_id=paper_id, producer_statuses=producers, logger=logger
             )
         wait_for_memory(logger)
-        report = generate_report(paper_id, system, study / "papers" / paper_id)
+        report = generate_with_capacity_retry(
+            paper_id, system, study / "papers" / paper_id, logger
+        )
         temporary = target.with_suffix(".json.tmp")
         write_json(temporary, report)
         temporary.replace(target)
@@ -95,7 +116,7 @@ def main() -> None:
         len(set(args.systems)),
     )
     configure_limits(args.cli_limit)
-    run_stage(
+    records = run_stage(
         [
             dict(row, system=system, task_id=f"{row['paper_id']}__{system}")
             for row in read_jsonl(args.study / "papers.jsonl")
@@ -109,6 +130,9 @@ def main() -> None:
         usage_dir=args.study / "status/usage/generate_reports",
         logger=logger,
     )
+
+    if any(row["status"] == "failed" for row in records):
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":

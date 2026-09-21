@@ -1,0 +1,2 @@
+scored_papers,paper_year_max,mature_d5_year_max,official_model_family,official_feature_set,raw_prediction_min,raw_prediction_max,aspr_score_min,aspr_score_max,score_monotone
+317995,2022,2020,hgb,primary,0.0059209791060680205,0.9933634338816153,0.0022012924731520936,100.0,True

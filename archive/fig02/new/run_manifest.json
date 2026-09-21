@@ -1,0 +1,845 @@
+{
+  "audit": {
+    "checks": [
+      {
+        "check": "supported_figure",
+        "detail": "figure_id=2",
+        "passed": true
+      },
+      {
+        "check": "chart_contract_tables_exist",
+        "detail": "missing=[]",
+        "passed": true
+      },
+      {
+        "check": "outcome_free_fig2_data_path",
+        "detail": "forbidden_tables=[]",
+        "passed": true
+      },
+      {
+        "check": "feature_set_membership_reads_metadata_not_outcome_results",
+        "detail": [
+          "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived_v3/outputs_recovered_20260819/recovery_manifest_v3.json",
+          "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived/frozen_releases/hgb_nested_tuned_7_16_153_219_20260820_b48936af/run_manifest.json"
+        ],
+        "passed": true
+      },
+      {
+        "check": "evidence_pipeline_counts_exact",
+        "detail": "{'Raw English terms': 3615, 'H2 retained': 3170, 'Canonical terms': 1102, 'Term families': 367, 'Search domains': 42, 'Candidate logical queries': 381, 'Frozen search frame': 336, 'Seed + PRESS validation': 62, 'Formal query records': 30332, 'Final title/abstract dispositions': 9515, 'Indicator mentions': 1685, 'Canonical indicator families': 432, 'Mapped families': 428, 'Candidate dimensions': 66}",
+        "passed": true
+      },
+      {
+        "check": "screening_disposition_conservation",
+        "detail": {
+          "count": 9515,
+          "detail": "363 included English sources · 9152 excluded",
+          "excluded_count": 9152,
+          "included_count": 363
+        },
+        "passed": true
+      },
+      {
+        "check": "twelve_rounds_and_transparent_round12_stop",
+        "detail": {
+          "decision": "freeze",
+          "iteration": 12,
+          "new_canonical_indicator_families": 9,
+          "new_nonredundant_english_terms": 10,
+          "stop_basis": "retrospective_owner_pragmatic_stop"
+        },
+        "passed": true
+      },
+      {
+        "check": "ai_h1_h2_review_coverage",
+        "detail": [
+          {
+            "ai_count": 9515,
+            "h1_count": 9515,
+            "h2_count": 9300,
+            "stage": "Literature screening"
+          },
+          {
+            "ai_count": 3615,
+            "h1_count": 3615,
+            "h2_count": 3589,
+            "stage": "Term coding"
+          },
+          {
+            "ai_count": 1685,
+            "h1_count": 1685,
+            "h2_count": 1685,
+            "stage": "Indicator census"
+          },
+          {
+            "ai_count": 432,
+            "h1_count": 432,
+            "h2_count": 432,
+            "stage": "Dimension coding"
+          }
+        ],
+        "passed": true
+      },
+      {
+        "check": "search_frame_press_and_seed_recall",
+        "detail": {
+          "query": {
+            "active_logical_queries": 336,
+            "archived_queries": 45,
+            "candidate_logical_queries": 381,
+            "physical_openalex_requests": 367,
+            "press_unresolved_active": 0,
+            "press_unsupported_archived": 9,
+            "redundant_archived": 23,
+            "zero_hit_archived": 13
+          },
+          "recall": {
+            "development_seed_count": 53,
+            "hidden_seed_count": 9,
+            "indexable_seed_count": 62,
+            "initial_recalled_seed_count": 51,
+            "initial_seed_denominator": 62,
+            "press_unresolved": 0,
+            "recalled_seed_count": 62,
+            "source_grounded_repairs": 10
+          }
+        },
+        "passed": true
+      },
+      {
+        "check": "indicator_to_dimension_to_tier_conservation",
+        "detail": {
+          "families": 432,
+          "mapped": 428,
+          "tiers": {
+            "broad_t0_only": 66,
+            "excluded": 213,
+            "fulltext_only": 9,
+            "source_only": 137,
+            "strict_core": 7
+          }
+        },
+        "passed": true
+      },
+      {
+        "check": "strict_seven_metrics_four_operational_dimensions",
+        "detail": [
+          {
+            "dimension_id": "CD031",
+            "final_role": "predictive",
+            "independent_team_count": 9,
+            "indicator_count": 2
+          },
+          {
+            "dimension_id": "CD014",
+            "final_role": "opportunity",
+            "independent_team_count": 24,
+            "indicator_count": 2
+          },
+          {
+            "dimension_id": "CD010",
+            "final_role": "control",
+            "independent_team_count": 12,
+            "indicator_count": 1
+          },
+          {
+            "dimension_id": "CD041",
+            "final_role": "control",
+            "independent_team_count": 14,
+            "indicator_count": 2
+          }
+        ],
+        "passed": true
+      },
+      {
+        "check": "fourteen_hard_gate_marginal_counts_exact",
+        "detail": [
+          {
+            "gate_id": "G02_ARTICLE_LEVEL",
+            "pass_count": 432
+          },
+          {
+            "gate_id": "G01_IN_SCOPE_ROLE",
+            "pass_count": 432
+          },
+          {
+            "gate_id": "G05_PUBLICATION_TIME",
+            "pass_count": 221
+          },
+          {
+            "gate_id": "G06_NO_FUTURE_INFORMATION",
+            "pass_count": 432
+          },
+          {
+            "gate_id": "G08_BIAS_GUARDRAIL",
+            "pass_count": 432
+          },
+          {
+            "gate_id": "G09_NO_FATAL_VALIDITY_CONCERN",
+            "pass_count": 432
+          },
+          {
+            "gate_id": "G10_OUTCOME_BLIND_SELECTION",
+            "pass_count": 432
+          },
+          {
+            "gate_id": "G03_PRIMARY_OR_FOUNDATIONAL_EVIDENCE",
+            "pass_count": 167
+          },
+          {
+            "gate_id": "G13_ENGLISH_FULLTEXT_FORMULA_EVIDENCE",
+            "pass_count": 16
+          },
+          {
+            "gate_id": "G04_REPRODUCIBLE_DEFINITION",
+            "pass_count": 7
+          },
+          {
+            "gate_id": "G07_LOCAL_DATA_READY",
+            "pass_count": 12
+          },
+          {
+            "gate_id": "G11_QUALITY_AUDIT",
+            "pass_count": 12
+          },
+          {
+            "gate_id": "G12_NONCONSTANT",
+            "pass_count": 12
+          },
+          {
+            "gate_id": "G14_SECOND_HUMAN_APPROVAL",
+            "pass_count": 16
+          }
+        ],
+        "passed": true
+      },
+      {
+        "check": "four_nested_feature_sets_exact",
+        "detail": [
+          {
+            "dimension_count": 4,
+            "feature_count": 7,
+            "incremental_count": 7,
+            "set_id": "strict_7"
+          },
+          {
+            "dimension_count": 10,
+            "feature_count": 16,
+            "incremental_count": 9,
+            "set_id": "fulltext_16"
+          },
+          {
+            "dimension_count": 48,
+            "feature_count": 153,
+            "incremental_count": 137,
+            "set_id": "source_154"
+          },
+          {
+            "dimension_count": 55,
+            "feature_count": 219,
+            "incremental_count": 66,
+            "set_id": "ultrarelaxed_221"
+          }
+        ],
+        "passed": true
+      },
+      {
+        "check": "source153_operationalisation_range_exact",
+        "detail": [
+          {
+            "feature_count": 12,
+            "tier": "source_formula_existing"
+          },
+          {
+            "feature_count": 4,
+            "tier": "source_formula_local_surrogate"
+          },
+          {
+            "feature_count": 78,
+            "tier": "structured_construct_proxy"
+          },
+          {
+            "feature_count": 59,
+            "tier": "title_taxonomy_lexical_proxy"
+          }
+        ],
+        "passed": true
+      },
+      {
+        "check": "broad219_operationalisation_range_exact",
+        "detail": [
+          {
+            "feature_count": 12,
+            "tier": "source_formula_existing"
+          },
+          {
+            "feature_count": 4,
+            "tier": "source_formula_local_surrogate"
+          },
+          {
+            "feature_count": 88,
+            "tier": "structured_construct_proxy"
+          },
+          {
+            "feature_count": 115,
+            "tier": "title_taxonomy_lexical_proxy"
+          }
+        ],
+        "passed": true
+      },
+      {
+        "check": "exclusive_tiers_sum_to_indicator_universe",
+        "detail": {
+          "broad_t0_only": 66,
+          "excluded": 213,
+          "fulltext_only": 9,
+          "source_only": 137,
+          "strict_core": 7
+        },
+        "passed": true
+      },
+      {
+        "check": "fixed_figure_dependencies",
+        "detail": {
+          "expected": {
+            "Pillow": "12.2.0",
+            "colorspacious": "1.1.2",
+            "matplotlib": "3.11.0",
+            "pandas": "3.0.3"
+          },
+          "observed": {
+            "Pillow": "12.2.0",
+            "colorspacious": "1.1.2",
+            "matplotlib": "3.11.0",
+            "pandas": "3.0.3"
+          }
+        },
+        "passed": true
+      },
+      {
+        "check": "master_canvas_exact",
+        "detail": "expected=(7200, 12000); observed=(7200, 12000)",
+        "passed": true
+      },
+      {
+        "check": "accessibility_previews_complete",
+        "detail": [
+          "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/figure_full_lowres_preview.png",
+          "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/figure_full_grayscale.png",
+          "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/figure_full_deuteranopia.png",
+          "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/figure_full_protanopia.png",
+          "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/figure_183mm_preview.png",
+          "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/visual_accessibility.json",
+          "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/layout_audit.json",
+          "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/vector_text_audit.json"
+        ],
+        "passed": true
+      },
+      {
+        "check": "layout_and_required_emphasis_audit",
+        "detail": {
+          "emphasis_contract": {
+            "broad_t0_dashed_outline": true,
+            "expanded153_blue_emphasis": true,
+            "hard_gate_audit_only": true,
+            "operationalization_palette_separate_from_role_palette": true,
+            "r12_orange_dashed": true
+          },
+          "obvious_text_collision_count": 0,
+          "outside_panel_text_count": 0,
+          "panel_checks": {
+            "a": {
+              "obvious_text_collision_count": 0,
+              "obvious_text_collisions": [],
+              "outside_panel_text": [],
+              "outside_panel_text_count": 0,
+              "visible_text_count": 69
+            },
+            "b": {
+              "obvious_text_collision_count": 0,
+              "obvious_text_collisions": [],
+              "outside_panel_text": [],
+              "outside_panel_text_count": 0,
+              "visible_text_count": 19
+            },
+            "c": {
+              "obvious_text_collision_count": 0,
+              "obvious_text_collisions": [],
+              "outside_panel_text": [],
+              "outside_panel_text_count": 0,
+              "visible_text_count": 32
+            },
+            "d": {
+              "obvious_text_collision_count": 0,
+              "obvious_text_collisions": [],
+              "outside_panel_text": [],
+              "outside_panel_text_count": 0,
+              "visible_text_count": 16
+            }
+          },
+          "passes": true,
+          "required_text_present": {
+            "expanded153": true,
+            "global_title": true,
+            "panel_a": true,
+            "panel_b": true,
+            "panel_c": true,
+            "panel_d": true,
+            "round12": true
+          }
+        },
+        "passed": true
+      },
+      {
+        "check": "vector_text_not_rasterized_master",
+        "detail": {
+          "passes": true,
+          "pdf_extractable_text_characters": 2392,
+          "pdf_pages": 1,
+          "pdf_path": "/home/jayee/workspace/ASPR/outputs/fig02/new/Fig2_evidence_architecture.pdf",
+          "svg_path": "/home/jayee/workspace/ASPR/outputs/fig02/new/Fig2_evidence_architecture.svg",
+          "svg_raster_image_elements": 0,
+          "svg_text_elements": 173,
+          "typography": {
+            "estimated_median_font_pt_at_183mm": 5.5,
+            "estimated_minimum_font_pt_at_183mm": 5.0,
+            "median_svg_font_px": 12.214,
+            "minimum_svg_font_px": 11.104,
+            "source_svg_width_pt": 864.0,
+            "target_print_width_mm": 183.0,
+            "text_below_5pt_at_183mm": 0,
+            "typography_passes": true
+          }
+        },
+        "passed": true
+      },
+      {
+        "check": "actual_size_preview_dimensions",
+        "detail": {
+          "non_color_encodings": [
+            "direct labels and counts",
+            "fixed left-to-right process order",
+            "hatching for title/taxonomy lexical proxies",
+            "strict, scalable and sensitivity borders"
+          ],
+          "packages": {
+            "Pillow": "12.2.0",
+            "colorspacious": "1.1.2",
+            "matplotlib": "3.11.0",
+            "pandas": "3.0.3"
+          },
+          "preview_183mm_at_render_dpi_px": [
+            4323,
+            7205
+          ],
+          "preview_size_px": [
+            1800,
+            3000
+          ],
+          "render_dpi": 600,
+          "requested_physical_width_mm": 183.0,
+          "role_palette_min_rgb_distance": {
+            "deuteranopia": 0.0,
+            "protanopia": 0.0
+          },
+          "source_png": "/home/jayee/workspace/ASPR/outputs/fig02/new/figure_full.png",
+          "source_size_px": [
+            7200,
+            12000
+          ]
+        },
+        "passed": true
+      },
+      {
+        "check": "figure_full_png",
+        "detail": "/home/jayee/workspace/ASPR/outputs/fig02/new/figure_full.png",
+        "passed": true
+      },
+      {
+        "check": "architecture_png",
+        "detail": "/home/jayee/workspace/ASPR/outputs/fig02/new/Fig2_evidence_architecture.png",
+        "passed": true
+      },
+      {
+        "check": "figure_full_svg",
+        "detail": "/home/jayee/workspace/ASPR/outputs/fig02/new/figure_full.svg",
+        "passed": true
+      },
+      {
+        "check": "architecture_svg",
+        "detail": "/home/jayee/workspace/ASPR/outputs/fig02/new/Fig2_evidence_architecture.svg",
+        "passed": true
+      },
+      {
+        "check": "figure_full_pdf",
+        "detail": "/home/jayee/workspace/ASPR/outputs/fig02/new/figure_full.pdf",
+        "passed": true
+      },
+      {
+        "check": "architecture_pdf",
+        "detail": "/home/jayee/workspace/ASPR/outputs/fig02/new/Fig2_evidence_architecture.pdf",
+        "passed": true
+      },
+      {
+        "check": "standalone_panel_exports",
+        "detail": [
+          "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_a.png",
+          "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_a.svg",
+          "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_a.pdf",
+          "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_b.png",
+          "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_b.svg",
+          "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_b.pdf",
+          "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_c.png",
+          "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_c.svg",
+          "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_c.pdf",
+          "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_d.png",
+          "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_d.svg",
+          "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_d.pdf"
+        ],
+        "passed": true
+      }
+    ],
+    "figure_id": 2,
+    "passed": true,
+    "status": "complete_evidence_derived_tuned_recovery"
+  },
+  "base_suite_config": "/home/jayee/workspace/ASPR/configs/aspr_v6_1_nature_figures.json",
+  "fig8_in_code_suite": false,
+  "figure_config": {
+    "path": "/home/jayee/workspace/ASPR/experiments/fig02/new/config.json",
+    "sha256": "9cb99afab693dfc31a6f6a9be6381f7a2ea26b749ba7c11bda05c8193288fca9"
+  },
+  "figure_id": 2,
+  "network_used_for_numeric_evidence": false,
+  "notes": [
+    "This figure documents the provenance, coding order, fixed gates and operationalisation range of the measurement system. It does not establish causal mechanisms, universal literature coverage or predictive superiority.",
+    "English-only evidence may introduce language and geographic coverage bias.",
+    "Deterministic evidence-saturation map; not an exhaustive OpenAlex census.",
+    "R12 frozen by registered marginal-yield amendment; Δterms = 10, Δindicators = 9; not dual-zero.",
+    "H1/H2 are review-role labels; later replacement review used independent Codex AI. Isolated local Qwen outputs were excluded.",
+    "The 7/16/153/219 memberships exclude two constant fields; no OOF score or future outcome selected a feature or dimension.",
+    "Deleted v3 raw retrieval tables were not recreated; this rendering uses the registered recovered definition bundle and frozen published process counts."
+  ],
+  "panel_data": {
+    "fig2_disclosures": {
+      "columns": [
+        "disclosure_id",
+        "text",
+        "result_hash",
+        "round12_stop_basis",
+        "round12_amendment_id"
+      ],
+      "format": "csv",
+      "path": "/home/jayee/workspace/ASPR/outputs/fig02/new/panel_data/fig2_disclosures.csv",
+      "rows": 6,
+      "sha256": "62e30f78109f8d98a091972c78777afbaaaad52b91cc5df162b28f1e0319bc4a",
+      "size_bytes": 1609
+    },
+    "fig2_feature_sets": {
+      "columns": [
+        "set_order",
+        "set_id",
+        "display_label",
+        "selection_rule",
+        "figure_meaning",
+        "feature_count",
+        "dimension_count",
+        "incremental_count",
+        "is_primary_scalable",
+        "is_strict_core",
+        "is_sensitivity_ceiling"
+      ],
+      "format": "csv",
+      "path": "/home/jayee/workspace/ASPR/outputs/fig02/new/panel_data/fig2_feature_sets.csv",
+      "rows": 4,
+      "sha256": "8eadef96ef4835302633fe1221ad7384ab7adc1ca0cc6c22a47b119a54c96790",
+      "size_bytes": 666
+    },
+    "fig2_gate_audit": {
+      "columns": [
+        "gate_order",
+        "gate_id",
+        "group",
+        "label",
+        "short_label",
+        "pass_count",
+        "fail_count",
+        "denominator"
+      ],
+      "format": "csv",
+      "path": "/home/jayee/workspace/ASPR/outputs/fig02/new/panel_data/fig2_gate_audit.csv",
+      "rows": 14,
+      "sha256": "4ae919ffa8df45340e3568479c8624fd009b7743a4276aa6b08a3373be20a818",
+      "size_bytes": 2088
+    },
+    "fig2_indicator_dimension_flows": {
+      "columns": [
+        "scope_role",
+        "dimension_role",
+        "count",
+        "source_order",
+        "dimension_order",
+        "flow_stage",
+        "tier",
+        "tier_order"
+      ],
+      "format": "csv",
+      "path": "/home/jayee/workspace/ASPR/outputs/fig02/new/panel_data/fig2_indicator_dimension_flows.csv",
+      "rows": 40,
+      "sha256": "b5020f402b15d1e20a1cd1bd2a23feec6735fe90cecfb5db6f92ddbc58a5526d",
+      "size_bytes": 2318
+    },
+    "fig2_indicator_dimension_nodes": {
+      "columns": [
+        "node_stage",
+        "node_id",
+        "node_order",
+        "label",
+        "feature_count",
+        "dimension_count",
+        "cumulative_count"
+      ],
+      "format": "csv",
+      "path": "/home/jayee/workspace/ASPR/outputs/fig02/new/panel_data/fig2_indicator_dimension_nodes.csv",
+      "rows": 15,
+      "sha256": "2d9cdee3a28b0982fb7786d3435796f12b9701188e5361bde02a5568f9c5d78e",
+      "size_bytes": 944
+    },
+    "fig2_indicator_family_mapping": {
+      "columns": [
+        "feature_id",
+        "canonical_name_en",
+        "scope_role",
+        "final_role",
+        "dimension_id",
+        "dimension_role",
+        "tier"
+      ],
+      "format": "csv",
+      "path": "/home/jayee/workspace/ASPR/outputs/fig02/new/panel_data/fig2_indicator_family_mapping.csv",
+      "rows": 432,
+      "sha256": "9af0bc3158ccefe2cf0c18bbb79fe18a370b717b6095386871d858060d1a4c1e",
+      "size_bytes": 35271
+    },
+    "fig2_operationalization_tiers": {
+      "columns": [
+        "set_order",
+        "set_id",
+        "tier_order",
+        "tier",
+        "tier_label",
+        "feature_count",
+        "share"
+      ],
+      "format": "csv",
+      "path": "/home/jayee/workspace/ASPR/outputs/fig02/new/panel_data/fig2_operationalization_tiers.csv",
+      "rows": 16,
+      "sha256": "f21ee827c38339eeda1cae9f01d7d0e901997dcabfdf68db00de9d24b9072909",
+      "size_bytes": 1333
+    },
+    "fig2_process_stages": {
+      "columns": [
+        "lane",
+        "lane_order",
+        "label",
+        "count",
+        "detail",
+        "included_count",
+        "excluded_count"
+      ],
+      "format": "csv",
+      "path": "/home/jayee/workspace/ASPR/outputs/fig02/new/panel_data/fig2_process_stages.csv",
+      "rows": 14,
+      "sha256": "52137d072aeaf5b07d090f00d52e1f5d4d3a56f4b39d28e48a6d7ae1f00b0641",
+      "size_bytes": 917
+    },
+    "fig2_query_audit": {
+      "columns": [
+        "candidate_logical_queries",
+        "active_logical_queries",
+        "physical_openalex_requests",
+        "archived_queries",
+        "zero_hit_archived",
+        "press_unsupported_archived",
+        "redundant_archived",
+        "press_unresolved_active"
+      ],
+      "format": "csv",
+      "path": "/home/jayee/workspace/ASPR/outputs/fig02/new/panel_data/fig2_query_audit.csv",
+      "rows": 1,
+      "sha256": "fbce4f303db6c9b6e39e8ffc5165ce07b8b9c701188db740854a90c114046202",
+      "size_bytes": 206
+    },
+    "fig2_recall_audit": {
+      "columns": [
+        "development_seed_count",
+        "hidden_seed_count",
+        "indexable_seed_count",
+        "recalled_seed_count",
+        "initial_recalled_seed_count",
+        "initial_seed_denominator",
+        "source_grounded_repairs",
+        "press_unresolved"
+      ],
+      "format": "csv",
+      "path": "/home/jayee/workspace/ASPR/outputs/fig02/new/panel_data/fig2_recall_audit.csv",
+      "rows": 1,
+      "sha256": "c826efc065c0e13804f9dd277a8c20dc065f61b641c2f9fe5db1fec06de481f5",
+      "size_bytes": 198
+    },
+    "fig2_review_coverage": {
+      "columns": [
+        "stage",
+        "ai_count",
+        "h1_count",
+        "h2_count",
+        "note",
+        "ai_display",
+        "h1_display",
+        "h2_display",
+        "human_attested_worksheet_count",
+        "attestation_hashes_match",
+        "independent_ai_run_count",
+        "independent_ai_item_count",
+        "excluded_local_qwen_artifact_count"
+      ],
+      "format": "csv",
+      "path": "/home/jayee/workspace/ASPR/outputs/fig02/new/panel_data/fig2_review_coverage.csv",
+      "rows": 4,
+      "sha256": "8c6653eef821ad0d4831063beee117a958c573aa82df3ab80348fe925cb6002f",
+      "size_bytes": 699
+    },
+    "fig2_round_yields": {
+      "columns": [
+        "iteration",
+        "new_nonredundant_english_terms",
+        "new_canonical_indicator_families",
+        "fully_reviewed",
+        "decision",
+        "stop_basis",
+        "protocol_amendment_id"
+      ],
+      "format": "csv",
+      "path": "/home/jayee/workspace/ASPR/outputs/fig02/new/panel_data/fig2_round_yields.csv",
+      "rows": 12,
+      "sha256": "bc380ccd208a546d322d755e400ef0afec96740dd591a081ec6fe04975610851",
+      "size_bytes": 609
+    },
+    "fig2_strict_mapping": {
+      "columns": [
+        "display_order",
+        "dimension_id",
+        "dimension_label",
+        "final_role",
+        "construct_role",
+        "indicator_count",
+        "indicator_labels",
+        "independent_team_count"
+      ],
+      "format": "csv",
+      "path": "/home/jayee/workspace/ASPR/outputs/fig02/new/panel_data/fig2_strict_mapping.csv",
+      "rows": 4,
+      "sha256": "c8a79a5d32609340b364b2a2b9c8d8279593853a94ecfb290aafd1bb8d98229f",
+      "size_bytes": 542
+    }
+  },
+  "rendered": {
+    "architecture_pdf": "/home/jayee/workspace/ASPR/outputs/fig02/new/Fig2_evidence_architecture.pdf",
+    "architecture_png": "/home/jayee/workspace/ASPR/outputs/fig02/new/Fig2_evidence_architecture.png",
+    "architecture_svg": "/home/jayee/workspace/ASPR/outputs/fig02/new/Fig2_evidence_architecture.svg",
+    "figure_full_pdf": "/home/jayee/workspace/ASPR/outputs/fig02/new/figure_full.pdf",
+    "figure_full_png": "/home/jayee/workspace/ASPR/outputs/fig02/new/figure_full.png",
+    "figure_full_svg": "/home/jayee/workspace/ASPR/outputs/fig02/new/figure_full.svg",
+    "panel_a_pdf": "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_a.pdf",
+    "panel_a_png": "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_a.png",
+    "panel_a_svg": "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_a.svg",
+    "panel_b_pdf": "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_b.pdf",
+    "panel_b_png": "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_b.png",
+    "panel_b_svg": "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_b.svg",
+    "panel_c_pdf": "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_c.pdf",
+    "panel_c_png": "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_c.png",
+    "panel_c_svg": "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_c.svg",
+    "panel_d_pdf": "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_d.pdf",
+    "panel_d_png": "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_d.png",
+    "panel_d_svg": "/home/jayee/workspace/ASPR/outputs/fig02/new/panels/fig02_d.svg",
+    "qa_183mm_preview": "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/figure_183mm_preview.png",
+    "qa_deuteranopia": "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/figure_full_deuteranopia.png",
+    "qa_grayscale": "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/figure_full_grayscale.png",
+    "qa_layout_audit": "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/layout_audit.json",
+    "qa_lowres_preview": "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/figure_full_lowres_preview.png",
+    "qa_protanopia": "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/figure_full_protanopia.png",
+    "qa_record": "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/visual_accessibility.json",
+    "qa_vector_text_audit": "/home/jayee/workspace/ASPR/outputs/fig02/new/qa/vector_text_audit.json"
+  },
+  "reproduction": "python3 -m experiments.fig02.new.run --stage all",
+  "software": {
+    "created_at_utc": "2026-08-27T07:12:51.256255+00:00",
+    "packages": {
+      "Pillow": "12.2.0",
+      "adjustText": "1.4.0",
+      "biopython": "1.87",
+      "colorspacious": "1.1.2",
+      "matplotlib": "3.11.0",
+      "numpy": "2.5.0",
+      "pandas": "3.0.3",
+      "pycirclize": "1.10.1",
+      "scipy": "1.18.0"
+    },
+    "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "python": "3.12.3 (main, Jun 19 2026, 12:46:00) [GCC 13.3.0]"
+  },
+  "source_policy": "local_frozen_only",
+  "sources": [
+    {
+      "exists": true,
+      "path": "/home/jayee/workspace/ASPR/experiments/fig02/new/frozen_figure_spec.json",
+      "sha256": "628785a9e20bf4e897afadf986a5e05fe25c89991524b2c825b252686fe0e1fd",
+      "size_bytes": 9043
+    },
+    {
+      "exists": true,
+      "path": "/home/jayee/workspace/ASPR/docs/evidence_derived_v3_36h30_complete_process.md",
+      "sha256": "82bfa5e1c92cbd149efff76eae12aa90adec13e52c49a822fe6e07d4a8d75920",
+      "size_bytes": 58996
+    },
+    {
+      "exists": true,
+      "path": "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived_v3/outputs_recovered_20260819/complete_indicator_library_v3.csv",
+      "sha256": "cbfee41d2f148a7f7ff3a0fdc4345a17794946b035802a169698a70643bc96d8",
+      "size_bytes": 84325
+    },
+    {
+      "exists": true,
+      "path": "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived_v3/outputs_recovered_20260819/candidate_dimensions_v3.csv",
+      "sha256": "64bad3d877b27b7df072841ed1017cffd719348603e330caf683c40035a1a71b",
+      "size_bytes": 19687
+    },
+    {
+      "exists": true,
+      "path": "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived_v3/outputs_recovered_20260819/feature_gate_decisions_v3.csv",
+      "sha256": "656b15059b30699ffea4860fa6e6e5b6005ef16c028acdb316042296762b9ee3",
+      "size_bytes": 406700
+    },
+    {
+      "exists": true,
+      "path": "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived_v3/outputs_recovered_20260819/recovery_manifest_v3.json",
+      "sha256": "5773dff985615815e8eaa4ccf752fd8e91a812d45d306d4fbb6866f5bb825950",
+      "size_bytes": 1884
+    },
+    {
+      "exists": true,
+      "path": "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived_v3/outputs_recovered_20260819/README_RECOVERY_V3.md",
+      "sha256": "04940dca857d9ce01e1bf120fd8841a22f0006fc9377928dc9885762387746ec",
+      "size_bytes": 1079
+    },
+    {
+      "exists": true,
+      "path": "/home/jayee/workspace/ASPR/innovation_impact_feature_selection/evidence_derived/frozen_releases/hgb_nested_tuned_7_16_153_219_20260820_b48936af/run_manifest.json",
+      "sha256": "bd9639b89ddf59cee2aa590d1a17581de48cd76ea15bf7f1fb16190f88a228ee",
+      "size_bytes": 20339
+    }
+  ],
+  "stage": "all",
+  "status": "complete_evidence_derived_tuned_recovery",
+  "title": "Evidence-derived dimensions and feature sets for paper innovation and potential impact"
+}

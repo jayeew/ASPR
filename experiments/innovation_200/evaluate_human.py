@@ -322,7 +322,7 @@ def main() -> None:
         args.overwrite,
     )
     configure_limits(args.cli_limit)
-    run_stage(
+    records = run_stage(
         [
             dict(row, system=system, task_id=f"{row['paper_id']}__{system}")
             for row in read_jsonl(args.study / "papers.jsonl")
@@ -336,6 +336,9 @@ def main() -> None:
         usage_dir=evaluation_root(args.study) / "status/usage/evaluate_human",
         logger=logger,
     )
+
+    if any(row["status"] == "failed" for row in records):
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":
