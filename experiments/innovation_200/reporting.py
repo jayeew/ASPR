@@ -8,11 +8,11 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+from experiments.innovation_200.ablation_interpretation import interpreted_context
 from experiments.innovation_200.ablation_protocol import (
     MASKED_GRAPH_VARIANTS,
     require_supported_generation,
 )
-from experiments.innovation_200.ablation_interpretation import interpreted_context
 from experiments.innovation_200.common import experiment_config, read_json, write_json
 from experiments.innovation_200.contracts import ReportBundle, ReportDraft, ReportSource
 from gear.artifacts import read_model
@@ -320,6 +320,7 @@ def build_system_context(
             "claims": claims.model_dump(mode="json")["claims"],
             "gear": gear,
             "graph": graph,
+            "fusion": _load_analysis(root / "fusion/analysis.json"),
             "joint_graph": joint,
         }
     if system == "fusion_no_joint":
@@ -373,6 +374,10 @@ def generate_report(paper_id: str, system: str, root: Path) -> ReportBundle:
         allowed = []
     else:
         prompt = REPORT_PROMPT
+        if system == 'fusion':
+            prompt = REPORT_PROMPT.replace('约1200—2000字的', '内容完整、无字数目标的')
+            prompt += ('\n逐项保留两分支有依据的重要发现，说明具体历史差异与知识关系。'
+                       '按原始证据处理冲突，保留必要范围和来源定位；合并重复表述，不能用泛泛的不确定性替代具体分析。')
         if system == "gear":
             allowed = [
                 source for source in sources if not source.source_id.startswith("G:")

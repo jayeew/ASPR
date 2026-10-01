@@ -1,0 +1,16 @@
+{
+  "dataset": "outputs/fig3_100_dataset",
+  "output": "outputs/fig3_revision",
+  "model": "gpt-5.6-luna",
+  "workers": 64,
+  "cli_limit": 64,
+  "memory_reserve_gib": 4.0,
+  "task_memory_gib": 0.5,
+  "workers_per_cpu": 4,
+  "timeout_seconds": 900,
+  "download_fulltext": true,
+  "figure_width_mm": 420,
+  "figure_height_mm": 760,
+  "cli_initial": 16,
+  "synthesis_timeout_seconds": 900
+}

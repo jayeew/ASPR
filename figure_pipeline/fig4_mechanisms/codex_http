@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+"""Per-process HTTP provider; reuse existing Codex OpenAI authentication."""
+import os
+import sys
+overrides = ['-c', 'model_provider="fig4_http"',
+    '-c', 'model_providers.fig4_http.name="OpenAI HTTP"',
+    '-c', 'model_providers.fig4_http.wire_api="responses"',
+    '-c', 'model_providers.fig4_http.requires_openai_auth=true',
+    '-c', 'model_providers.fig4_http.supports_websockets=false']
+arguments = sys.argv[1:]
+if arguments and arguments[0] == 'exec':
+    arguments = ['exec', *overrides, *arguments[1:]]
+else:
+    arguments = [*overrides, *arguments]
+os.execvp('codex', ['codex', *arguments])
