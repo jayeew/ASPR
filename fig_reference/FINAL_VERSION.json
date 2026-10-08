@@ -1,0 +1,18 @@
+{
+  "status": "user_accepted_final",
+  "canvas_mm": [
+    420,
+    218
+  ],
+  "png_dpi": 600,
+  "renderer": "figure_pipeline/fig5_mechanism_study/render_reference.py",
+  "statistics_archive": "outputs/fig5_mechanism_study/Fig5_formal_statistics.zip",
+  "files": {
+    "Fig5.png": "750ffe8ce8307db10e4c84a2c07191747bddf0e00879fcf372dbd7a31ed330c2",
+    "Fig5.pdf": "2749df10a61900844b20894d88cb3c17eb2909d929e90cfb61cf179df59971d0",
+    "Fig5.svg": "10a075c09d04caae3cfd8d13a2322dec49661927f2f5db8dfa2b32c53c109bcf",
+    "Fig5_preview.png": "8affbc0d388c284845e07e0bba14d81da7a5a5356185481c8323725b24fe2c81",
+    "Fig5_caption.txt": "6e1c54159c66c179b85ecb4e9b8063632861ba9681a598713d492344b4aaf9aa",
+    "Fig5_methods_and_caption.txt": "a417a28f21ce18ed3b5419157702f644f84fd0f28c8fd614b4a7368630373e97"
+  }
+}

@@ -1,0 +1,30 @@
+[
+  {
+    "id": "R01",
+    "title": "What is added?",
+    "source": "本文的核心贡献是把靶RNA识别、蛋白酶切割与gasdermin介导的焦亡串成一个可编程回路。",
+    "english": "A programmable circuit couples RNA recognition, protease activity and gasdermin-mediated cell death.",
+    "links": "Report ¶1 · C01 · M01"
+  },
+  {
+    "id": "R02",
+    "title": "What distinguishes the historical context?",
+    "source": "它们与DAMAGE共享“RNA输入—可编程输出”思想，但输出机制和细胞死亡终点不同。",
+    "english": "Earlier circuits share RNA-input logic; DAMAGE differs in its output mechanism and cell-death endpoint.",
+    "links": "Report ¶6 · C01 / C03 · H01–H03"
+  },
+  {
+    "id": "R03",
+    "title": "How far does selectivity extend?",
+    "source": "这些结果支持“在已测试模型中具有靶RNA依赖的选择性”，不能外推为对所有细胞或所有异常转录组均具同等选择性。",
+    "english": "Target-RNA-dependent selectivity is supported in tested models; equal selectivity across all cells is not established.",
+    "links": "Report ¶3 · C03–C05 · manuscript evidence"
+  },
+  {
+    "id": "R04",
+    "title": "What remains to be demonstrated?",
+    "source": "但论文对体内治疗使用的是潜在性表述，而非体内疗效、安全性或组织选择性的验证。",
+    "english": "In vivo treatment remains a potential application; efficacy, safety and tissue selectivity were not validated.",
+    "links": "Report ¶5 · C06 · manuscript evidence"
+  }
+]

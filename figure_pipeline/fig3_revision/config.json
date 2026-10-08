@@ -1,6 +1,6 @@
 {
-  "dataset": "outputs/fig3_100_dataset",
-  "output": "outputs/fig3_revision",
+  "dataset": "outputs/fig3_reference/dataset",
+  "output": "outputs/fig3_reference/study",
   "model": "gpt-5.6-luna",
   "workers": 64,
   "cli_limit": 64,

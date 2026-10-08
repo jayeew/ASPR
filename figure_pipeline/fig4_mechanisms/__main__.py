@@ -18,11 +18,14 @@ from .evaluation import Evaluation
 from .execution import Engine
 from .fusion import evaluate_fusion
 from .generation import Generation
-from .io import artifact, read, record, recover_calls, write
+from .io import artifact, fusion_tracking_enabled, read, record, recover_calls, write
 from .prepare import prepare
 
 
 async def model_stage(config: Config, papers: list[str], conditions: list[str], stage: str) -> None:
+    track_fusion = fusion_tracking_enabled(config.output)
+    if stage == 'fusion' and not track_fusion:
+        raise ValueError('Fusion tracking was stopped by the user; see analysis_scope.json')
     engine = Engine(config, config.workers)
     loop = asyncio.get_running_loop()
     def stop() -> None:
@@ -81,7 +84,7 @@ async def model_stage(config: Config, papers: list[str], conditions: list[str], 
         lanes = []
         if stage in {'information', 'evaluate', 'complete'}:
             lanes.append(information())
-        if stage in {'fusion', 'evaluate', 'complete'}:
+        if track_fusion and stage in {'fusion', 'evaluate', 'complete'}:
             lanes.append(fusion())
         await asyncio.gather(*lanes)
     try:
@@ -100,8 +103,10 @@ def missing_artifacts(config: Config, papers: list[str]) -> list[str]:
     for paper in papers:
         paths = [config.output/'reports'/c/'papers'/f'{paper}.json' for c in CONDITIONS]
         paths += [store.path(s, paper, c) for s in ('extract', 'support', 'novelty') for c in CONDITIONS]
-        paths += [artifact(config.output, s, paper) for s in ('information_clusters', 'cross_relations',
-                  'fusion_transitions', 'fusion_risks')]
+        stages = ['information_clusters', 'cross_relations']
+        if fusion_tracking_enabled(config.output):
+            stages += ['fusion_transitions', 'fusion_risks']
+        paths += [artifact(config.output, s, paper) for s in stages]
         missing.extend(str(p) for p in paths if not p.exists())
     return missing
 
@@ -147,6 +152,8 @@ def main() -> None:
         config = config.model_copy(update={'executable': str(Path(__file__).with_name('codex_http'))})
     if config.output == config.source:
         parser.error('Fig4 output must be separate from Fig3 source')
+    if args.stage == 'fusion' and not fusion_tracking_enabled(config.output):
+        parser.error('Fusion tracking was stopped by the user; see analysis_scope.json')
     papers = [r['paper_id'] for r in roster(config)]
     if args.paper_id:
         unknown = set(args.paper_id)-set(papers)

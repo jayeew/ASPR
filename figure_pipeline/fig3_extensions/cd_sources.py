@@ -8,8 +8,8 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE = ROOT / 'outputs/fig3_revision'
-OUTPUT = ROOT / 'outputs/fig3_extensions/cd'
+SOURCE = ROOT / 'outputs/fig3_reference/study'
+OUTPUT = ROOT / 'outputs/fig3_reference/extensions/cd'
 METHODS = ('gear', 'graph', 'fusion')
 
 

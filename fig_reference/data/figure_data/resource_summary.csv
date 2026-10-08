@@ -1,0 +1,25 @@
+cohort,condition,metric,planned_n,n,mean,low,high,median
+Model-stage diagnostic,original_analysis_original_writer,processed_token_ratio,20,20,1.0,1.0,1.0,1.0
+Model-stage diagnostic,original_analysis_original_writer,cumulative_call_time_ratio,20,20,1.0,1.0,1.0,1.0
+Model-stage diagnostic,original_analysis_original_writer,coverage_change_percentage_points,20,20,0.0,0.0,0.0,0.0
+Model-stage diagnostic,original_analysis_original_writer,grounded_correct_percent,20,20,94.47922502334266,91.4999824929972,97.1250277194211,94.72222222222223
+Model-stage diagnostic,original_analysis_replacement_writer,processed_token_ratio,20,20,0.812996481113194,0.8086945976861762,0.8179606178427073,0.8107417844567814
+Model-stage diagnostic,original_analysis_replacement_writer,cumulative_call_time_ratio,20,20,0.8075527609917765,0.7923154829130449,0.8216095039811828,0.8203421775389377
+Model-stage diagnostic,original_analysis_replacement_writer,coverage_change_percentage_points,20,20,-28.216844193817877,-33.884307198756694,-22.671090640203445,-26.785714285714285
+Model-stage diagnostic,original_analysis_replacement_writer,grounded_correct_percent,20,20,66.26238082952479,60.3469875669566,71.92316199506118,67.5438596491228
+Model-stage diagnostic,replacement_analysis_original_writer,processed_token_ratio,20,20,0.6092910777731569,0.6005049517136996,0.6189447751703119,0.6058589289626795
+Model-stage diagnostic,replacement_analysis_original_writer,cumulative_call_time_ratio,20,20,0.590490140612742,0.5544243857492863,0.6281232232418963,0.581399333164859
+Model-stage diagnostic,replacement_analysis_original_writer,coverage_change_percentage_points,20,20,-2.4643409995577175,-6.0591982406997875,0.43300653594771255,0.0
+Model-stage diagnostic,replacement_analysis_original_writer,grounded_correct_percent,20,20,92.01488402378494,88.41511890940586,95.05319211017739,93.54166666666666
+Model-stage diagnostic,replacement_analysis_replacement_writer,processed_token_ratio,20,20,0.41509765550603533,0.4022464462695741,0.42923402020874324,0.4107503023419161
+Model-stage diagnostic,replacement_analysis_replacement_writer,cumulative_call_time_ratio,20,20,0.2951755280018339,0.267507836977815,0.3211648023292258,0.29954111449155757
+Model-stage diagnostic,replacement_analysis_replacement_writer,coverage_change_percentage_points,20,20,-69.34851221190232,-75.18328096589514,-63.166253946754146,-73.61111111111111
+Model-stage diagnostic,replacement_analysis_replacement_writer,grounded_correct_percent,20,20,25.13071281144036,19.75987364243943,30.675091604624296,22.87581699346405
+Unified main cohort,original_analysis_original_writer,processed_token_ratio,100,98,1.0,1.0,1.0,1.0
+Unified main cohort,original_analysis_original_writer,cumulative_call_time_ratio,100,98,1.0,1.0,1.0,1.0
+Unified main cohort,original_analysis_original_writer,coverage_change_percentage_points,100,98,0.0,0.0,0.0,0.0
+Unified main cohort,original_analysis_original_writer,grounded_correct_percent,100,98,95.42108833122606,94.29808586848078,96.49742147437347,100.0
+Unified main cohort,replacement_analysis_original_writer,processed_token_ratio,100,98,0.6102367556962828,0.6060815301621795,0.6144959790226275,0.6068870262027246
+Unified main cohort,replacement_analysis_original_writer,cumulative_call_time_ratio,100,98,0.5511332373819721,0.5388633447205977,0.5637487673878804,0.5436795887824655
+Unified main cohort,replacement_analysis_original_writer,coverage_change_percentage_points,100,98,-0.9426143698273605,-1.9489551990065357,0.04668533839215208,0.0
+Unified main cohort,replacement_analysis_original_writer,grounded_correct_percent,100,98,94.47847396139872,93.10145440357557,95.75769620794142,95.0

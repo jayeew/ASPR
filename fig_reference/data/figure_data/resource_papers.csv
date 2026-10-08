@@ -1,0 +1,277 @@
+cohort,paper_id,condition,processed_token_ratio,cumulative_call_time_ratio,coverage_change_percentage_points,grounded_correct_percent
+Model-stage diagnostic,s41467-026-68332-4,original_analysis_original_writer,1.0,1.0,0.0,85.71428571428571
+Model-stage diagnostic,s41467-026-68412-5,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Model-stage diagnostic,s41467-026-68427-y,original_analysis_original_writer,1.0,1.0,0.0,93.33333333333333
+Model-stage diagnostic,s41467-026-68493-2,original_analysis_original_writer,1.0,1.0,0.0,94.44444444444444
+Model-stage diagnostic,s41467-026-68508-y,original_analysis_original_writer,1.0,1.0,0.0,95.0
+Model-stage diagnostic,s41467-026-68592-0,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Model-stage diagnostic,s41467-026-68605-y,original_analysis_original_writer,1.0,1.0,0.0,90.0
+Model-stage diagnostic,s41467-026-68644-5,original_analysis_original_writer,1.0,1.0,0.0,93.75
+Model-stage diagnostic,s41467-026-68809-2,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Model-stage diagnostic,s41467-026-68885-4,original_analysis_original_writer,1.0,1.0,0.0,75.0
+Model-stage diagnostic,s41467-026-68887-2,original_analysis_original_writer,1.0,1.0,0.0,87.5
+Model-stage diagnostic,s41467-026-68963-7,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Model-stage diagnostic,s41467-026-69098-5,original_analysis_original_writer,1.0,1.0,0.0,92.85714285714286
+Model-stage diagnostic,s41467-026-69287-2,original_analysis_original_writer,1.0,1.0,0.0,93.75
+Model-stage diagnostic,s41467-026-69411-2,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Model-stage diagnostic,s42003-026-09591-1,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Model-stage diagnostic,s42004-026-01949-0,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Model-stage diagnostic,s42004-026-01990-z,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Model-stage diagnostic,s42005-026-02554-2,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Model-stage diagnostic,s43246-026-01100-5,original_analysis_original_writer,1.0,1.0,0.0,88.23529411764706
+Model-stage diagnostic,s41467-026-68332-4,original_analysis_replacement_writer,0.8334427776792067,0.8184676314581382,-42.857142857142854,42.857142857142854
+Model-stage diagnostic,s41467-026-68412-5,original_analysis_replacement_writer,0.8177067272906828,0.863149327123505,-18.75,81.25
+Model-stage diagnostic,s41467-026-68427-y,original_analysis_replacement_writer,0.8191492965942767,0.8297904413806527,-6.666666666666665,86.66666666666667
+Model-stage diagnostic,s41467-026-68493-2,original_analysis_replacement_writer,0.8098715276213566,0.7997580485996076,-22.22222222222222,72.22222222222221
+Model-stage diagnostic,s41467-026-68508-y,original_analysis_replacement_writer,0.8116120412922061,0.8313405408871378,-9.999999999999998,85.0
+Model-stage diagnostic,s41467-026-68592-0,original_analysis_replacement_writer,0.8407869210801949,0.7942925822490319,-35.29411764705882,64.70588235294117
+Model-stage diagnostic,s41467-026-68605-y,original_analysis_replacement_writer,0.8138550705029616,0.7431605143384689,-40.0,50.0
+Model-stage diagnostic,s41467-026-68644-5,original_analysis_replacement_writer,0.8094459266456971,0.8238072210976046,-25.0,68.75
+Model-stage diagnostic,s41467-026-68809-2,original_analysis_replacement_writer,0.812899837284505,0.8015262572593748,-57.14285714285714,42.857142857142854
+Model-stage diagnostic,s41467-026-68885-4,original_analysis_replacement_writer,0.8275453127419544,0.8040926116865105,-8.333333333333337,66.66666666666666
+Model-stage diagnostic,s41467-026-68887-2,original_analysis_replacement_writer,0.7999611566586871,0.7794091762907551,-43.75,43.75
+Model-stage diagnostic,s41467-026-68963-7,original_analysis_replacement_writer,0.805371958638759,0.824335524419382,-18.75,81.25
+Model-stage diagnostic,s41467-026-69098-5,original_analysis_replacement_writer,0.8091880584224919,0.841509801960958,-35.71428571428572,57.14285714285714
+Model-stage diagnostic,s41467-026-69287-2,original_analysis_replacement_writer,0.8060415379618249,0.8222167236197373,-25.0,68.75
+Model-stage diagnostic,s41467-026-69411-2,original_analysis_replacement_writer,0.8143372643886705,0.7712090812082651,-31.57894736842105,68.42105263157895
+Model-stage diagnostic,s42003-026-09591-1,original_analysis_replacement_writer,0.8071642226599548,0.7351039049904582,-41.17647058823529,58.82352941176471
+Model-stage diagnostic,s42004-026-01949-0,original_analysis_replacement_writer,0.8040022996256624,0.8344780038500694,-16.666666666666664,83.33333333333334
+Model-stage diagnostic,s42004-026-01990-z,original_analysis_replacement_writer,0.8129873835353026,0.7638143822829887,-33.333333333333336,66.66666666666666
+Model-stage diagnostic,s42005-026-02554-2,original_analysis_replacement_writer,0.7962768309077621,0.8372332701702185,-28.57142857142857,71.42857142857143
+Model-stage diagnostic,s43246-026-01100-5,original_analysis_replacement_writer,0.8082834707317227,0.8323601749626652,-23.529411764705877,64.70588235294117
+Model-stage diagnostic,s41467-026-68332-4,replacement_analysis_original_writer,0.6373081446714017,0.5228313847640025,0.0,85.71428571428571
+Model-stage diagnostic,s41467-026-68412-5,replacement_analysis_original_writer,0.6183548883151643,0.6875480557718032,-12.5,87.5
+Model-stage diagnostic,s41467-026-68427-y,replacement_analysis_original_writer,0.6174644709858841,0.6700472354079878,0.0,93.33333333333333
+Model-stage diagnostic,s41467-026-68493-2,replacement_analysis_original_writer,0.605349807721448,0.5744359332609474,-27.77777777777778,66.66666666666666
+Model-stage diagnostic,s41467-026-68508-y,replacement_analysis_original_writer,0.6098558648828631,0.6017887696411542,0.0,95.0
+Model-stage diagnostic,s41467-026-68592-0,replacement_analysis_original_writer,0.667667926590464,0.7233297955088053,0.0,100.0
+Model-stage diagnostic,s41467-026-68605-y,replacement_analysis_original_writer,0.6125470799020301,0.542674161447834,0.0,90.0
+Model-stage diagnostic,s41467-026-68644-5,replacement_analysis_original_writer,0.5992130139596832,0.4606815844923534,0.0,93.75
+Model-stage diagnostic,s41467-026-68809-2,replacement_analysis_original_writer,0.6087495623159153,0.7023168438993057,-7.14285714285714,92.85714285714286
+Model-stage diagnostic,s41467-026-68885-4,replacement_analysis_original_writer,0.6424570666727096,0.5008474143364217,8.333333333333337,83.33333333333334
+Model-stage diagnostic,s41467-026-68887-2,replacement_analysis_original_writer,0.5911454639487966,0.5794988417334275,0.0,87.5
+Model-stage diagnostic,s41467-026-68963-7,replacement_analysis_original_writer,0.60318264489789,0.6085860571692502,0.0,100.0
+Model-stage diagnostic,s41467-026-69098-5,replacement_analysis_original_writer,0.5965138894139688,0.6364500931843995,0.0,92.85714285714286
+Model-stage diagnostic,s41467-026-69287-2,replacement_analysis_original_writer,0.6063680502039109,0.7519363557853467,0.0,93.75
+Model-stage diagnostic,s41467-026-69411-2,replacement_analysis_original_writer,0.6027920572522931,0.5027588338529799,-10.526315789473683,89.47368421052632
+Model-stage diagnostic,s42003-026-09591-1,replacement_analysis_original_writer,0.5994851431489645,0.48458251247691886,0.0,100.0
+Model-stage diagnostic,s42004-026-01949-0,replacement_analysis_original_writer,0.5866379645719325,0.612143801857598,0.0,100.0
+Model-stage diagnostic,s42004-026-01990-z,replacement_analysis_original_writer,0.6157513919502977,0.5408354982995315,-5.555555555555558,94.44444444444444
+Model-stage diagnostic,s42005-026-02554-2,replacement_analysis_original_writer,0.5650663611018379,0.5232098147684814,0.0,100.0
+Model-stage diagnostic,s43246-026-01100-5,replacement_analysis_original_writer,0.5999107629556825,0.5832998245962907,5.882352941176472,94.11764705882352
+Model-stage diagnostic,s41467-026-68332-4,replacement_analysis_replacement_writer,0.46351662060248655,0.2525721113903393,-64.28571428571428,21.428571428571427
+Model-stage diagnostic,s41467-026-68412-5,replacement_analysis_replacement_writer,0.4240879693171535,0.3666903496035963,-75.0,25.0
+Model-stage diagnostic,s41467-026-68427-y,replacement_analysis_replacement_writer,0.4261189820895106,0.3325046699699693,-80.0,13.333333333333334
+Model-stage diagnostic,s41467-026-68493-2,replacement_analysis_replacement_writer,0.41026181827117214,0.2943076058990943,-72.22222222222221,22.22222222222222
+Model-stage diagnostic,s41467-026-68508-y,replacement_analysis_replacement_writer,0.4152188210650453,0.3390206729273958,-49.99999999999999,45.0
+Model-stage diagnostic,s41467-026-68592-0,replacement_analysis_replacement_writer,0.49467097773122637,0.40320623874510086,-70.58823529411764,29.411764705882355
+Model-stage diagnostic,s41467-026-68605-y,replacement_analysis_replacement_writer,0.42409615541490997,0.30769499663782474,-75.0,15.0
+Model-stage diagnostic,s41467-026-68644-5,replacement_analysis_replacement_writer,0.4100557465896574,0.1387707228999252,-56.25,37.5
+Model-stage diagnostic,s41467-026-68809-2,replacement_analysis_replacement_writer,0.42144754999897016,0.3498696500718732,-71.42857142857143,28.57142857142857
+Model-stage diagnostic,s41467-026-68885-4,replacement_analysis_replacement_writer,0.46503771183399994,0.28912043614350685,-41.66666666666667,33.33333333333333
+Model-stage diagnostic,s41467-026-68887-2,replacement_analysis_replacement_writer,0.38416937442580595,0.3023460014258303,-81.25,6.25
+Model-stage diagnostic,s41467-026-68963-7,replacement_analysis_replacement_writer,0.3999101211245034,0.27590317478263343,-75.0,25.0
+Model-stage diagnostic,s41467-026-69098-5,replacement_analysis_replacement_writer,0.39331006179140465,0.2637490111937487,-78.57142857142858,14.285714285714285
+Model-stage diagnostic,s41467-026-69287-2,replacement_analysis_replacement_writer,0.4005273448695331,0.3777501587085596,-50.0,43.75
+Model-stage diagnostic,s41467-026-69411-2,replacement_analysis_replacement_writer,0.41123878641266004,0.22464594141187935,-78.94736842105263,21.052631578947366
+Model-stage diagnostic,s42003-026-09591-1,replacement_analysis_replacement_writer,0.40038353708741103,0.20146313712274014,-94.11764705882352,5.88235294117647
+Model-stage diagnostic,s42004-026-01949-0,replacement_analysis_replacement_writer,0.3797062357894373,0.2980516772091731,-44.44444444444444,55.55555555555556
+Model-stage diagnostic,s42004-026-01990-z,replacement_analysis_replacement_writer,0.4240972667340456,0.26846901758170294,-77.77777777777779,22.22222222222222
+Model-stage diagnostic,s42005-026-02554-2,replacement_analysis_replacement_writer,0.3547138487634549,0.30103055177394206,-85.71428571428572,14.285714285714285
+Model-stage diagnostic,s43246-026-01100-5,replacement_analysis_replacement_writer,0.399384180208318,0.31634443453784317,-64.70588235294117,23.52941176470588
+Unified main cohort,s41467-026-68290-x,original_analysis_original_writer,1.0,1.0,0.0,92.85714285714286
+Unified main cohort,s41467-026-68305-7,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68311-9,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68318-2,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68328-0,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68332-4,original_analysis_original_writer,1.0,1.0,0.0,85.71428571428571
+Unified main cohort,s41467-026-68339-x,original_analysis_original_writer,1.0,1.0,0.0,84.61538461538461
+Unified main cohort,s41467-026-68346-y,original_analysis_original_writer,1.0,1.0,0.0,80.0
+Unified main cohort,s41467-026-68348-w,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68359-7,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68377-5,original_analysis_original_writer,1.0,1.0,0.0,82.35294117647058
+Unified main cohort,s41467-026-68412-5,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68427-y,original_analysis_original_writer,1.0,1.0,0.0,86.66666666666667
+Unified main cohort,s41467-026-68449-6,original_analysis_original_writer,1.0,1.0,0.0,94.44444444444444
+Unified main cohort,s41467-026-68492-3,original_analysis_original_writer,1.0,1.0,0.0,95.0
+Unified main cohort,s41467-026-68493-2,original_analysis_original_writer,1.0,1.0,0.0,88.88888888888889
+Unified main cohort,s41467-026-68499-w,original_analysis_original_writer,1.0,1.0,0.0,94.11764705882352
+Unified main cohort,s41467-026-68508-y,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68512-2,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68551-9,original_analysis_original_writer,1.0,1.0,0.0,90.0
+Unified main cohort,s41467-026-68571-5,original_analysis_original_writer,1.0,1.0,0.0,93.75
+Unified main cohort,s41467-026-68592-0,original_analysis_original_writer,1.0,1.0,0.0,94.11764705882352
+Unified main cohort,s41467-026-68605-y,original_analysis_original_writer,1.0,1.0,0.0,90.0
+Unified main cohort,s41467-026-68608-9,original_analysis_original_writer,1.0,1.0,0.0,80.0
+Unified main cohort,s41467-026-68612-z,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68614-x,original_analysis_original_writer,1.0,1.0,0.0,93.33333333333333
+Unified main cohort,s41467-026-68633-8,original_analysis_original_writer,1.0,1.0,0.0,95.0
+Unified main cohort,s41467-026-68644-5,original_analysis_original_writer,1.0,1.0,0.0,87.5
+Unified main cohort,s41467-026-68663-2,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68675-y,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68680-1,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68686-9,original_analysis_original_writer,1.0,1.0,0.0,85.71428571428571
+Unified main cohort,s41467-026-68693-w,original_analysis_original_writer,1.0,1.0,0.0,94.44444444444444
+Unified main cohort,s41467-026-68697-6,original_analysis_original_writer,1.0,1.0,0.0,90.0
+Unified main cohort,s41467-026-68701-z,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68705-9,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68729-1,original_analysis_original_writer,1.0,1.0,0.0,87.5
+Unified main cohort,s41467-026-68743-3,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68745-1,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68770-0,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68784-8,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68786-6,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68793-7,original_analysis_original_writer,1.0,1.0,0.0,93.75
+Unified main cohort,s41467-026-68804-7,original_analysis_original_writer,1.0,1.0,0.0,94.73684210526315
+Unified main cohort,s41467-026-68809-2,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68827-0,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68856-9,original_analysis_original_writer,1.0,1.0,0.0,87.5
+Unified main cohort,s41467-026-68859-6,original_analysis_original_writer,1.0,1.0,0.0,93.75
+Unified main cohort,s41467-026-68866-7,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68867-6,original_analysis_original_writer,1.0,1.0,0.0,92.3076923076923
+Unified main cohort,s41467-026-68885-4,original_analysis_original_writer,1.0,1.0,0.0,83.33333333333334
+Unified main cohort,s41467-026-68887-2,original_analysis_original_writer,1.0,1.0,0.0,87.5
+Unified main cohort,s41467-026-68890-7,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68908-0,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68950-y,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68963-7,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68975-3,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-69034-7,original_analysis_original_writer,1.0,1.0,0.0,91.66666666666666
+Unified main cohort,s41467-026-69052-5,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-69098-5,original_analysis_original_writer,1.0,1.0,0.0,92.85714285714286
+Unified main cohort,s41467-026-69111-x,original_analysis_original_writer,1.0,1.0,0.0,93.33333333333333
+Unified main cohort,s41467-026-69115-7,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-69173-x,original_analysis_original_writer,1.0,1.0,0.0,90.0
+Unified main cohort,s41467-026-69192-8,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-69224-3,original_analysis_original_writer,1.0,1.0,0.0,87.5
+Unified main cohort,s41467-026-69243-0,original_analysis_original_writer,1.0,1.0,0.0,94.11764705882352
+Unified main cohort,s41467-026-69270-x,original_analysis_original_writer,1.0,1.0,0.0,93.75
+Unified main cohort,s41467-026-69287-2,original_analysis_original_writer,1.0,1.0,0.0,93.75
+Unified main cohort,s41467-026-69306-2,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-69365-5,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-69371-7,original_analysis_original_writer,1.0,1.0,0.0,94.44444444444444
+Unified main cohort,s41467-026-69374-4,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-69411-2,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s42003-026-09539-5,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s42003-026-09556-4,original_analysis_original_writer,1.0,1.0,0.0,81.25
+Unified main cohort,s42003-026-09587-x,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s42003-026-09591-1,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s42003-026-09613-y,original_analysis_original_writer,1.0,1.0,0.0,93.75
+Unified main cohort,s42004-026-01889-9,original_analysis_original_writer,1.0,1.0,0.0,95.0
+Unified main cohort,s42004-026-01909-8,original_analysis_original_writer,1.0,1.0,0.0,94.44444444444444
+Unified main cohort,s42004-026-01947-2,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s42004-026-01949-0,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s42004-026-01958-z,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s42004-026-01990-z,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s42004-026-01998-5,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s42004-026-02001-x,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s42005-026-02508-8,original_analysis_original_writer,1.0,1.0,0.0,94.73684210526315
+Unified main cohort,s42005-026-02523-9,original_analysis_original_writer,1.0,1.0,0.0,91.66666666666666
+Unified main cohort,s42005-026-02538-2,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s42005-026-02554-2,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s43246-026-01100-5,original_analysis_original_writer,1.0,1.0,0.0,94.11764705882352
+Unified main cohort,s43246-026-01122-z,original_analysis_original_writer,1.0,1.0,0.0,87.5
+Unified main cohort,s43246-026-01143-8,original_analysis_original_writer,1.0,1.0,0.0,93.75
+Unified main cohort,s43246-026-01156-3,original_analysis_original_writer,1.0,1.0,0.0,94.73684210526315
+Unified main cohort,s43246-026-01164-3,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s43247-026-03188-6,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s43247-026-03217-4,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s43247-026-03223-6,original_analysis_original_writer,1.0,1.0,0.0,100.0
+Unified main cohort,s41467-026-68290-x,replacement_analysis_original_writer,0.585187422545784,0.4836302836677291,0.0,92.85714285714286
+Unified main cohort,s41467-026-68305-7,replacement_analysis_original_writer,0.6394642509253847,0.6346290558115517,0.0,100.0
+Unified main cohort,s41467-026-68311-9,replacement_analysis_original_writer,0.624190358491962,0.5405984947559457,0.0,100.0
+Unified main cohort,s41467-026-68318-2,replacement_analysis_original_writer,0.6591837984018782,0.5225485789183332,-5.555555555555558,94.44444444444444
+Unified main cohort,s41467-026-68328-0,replacement_analysis_original_writer,0.6003196120570893,0.5745742060014157,0.0,100.0
+Unified main cohort,s41467-026-68332-4,replacement_analysis_original_writer,0.6373081446714017,0.5228313847640025,0.0,85.71428571428571
+Unified main cohort,s41467-026-68339-x,replacement_analysis_original_writer,0.6209139668404128,0.5620514065826726,7.692307692307699,92.3076923076923
+Unified main cohort,s41467-026-68346-y,replacement_analysis_original_writer,0.6408508214561208,0.5188597044448459,-6.666666666666677,73.33333333333333
+Unified main cohort,s41467-026-68348-w,replacement_analysis_original_writer,0.6017563747687188,0.5000001711680602,0.0,100.0
+Unified main cohort,s41467-026-68359-7,replacement_analysis_original_writer,0.5944262975627342,0.5646526852294076,0.0,100.0
+Unified main cohort,s41467-026-68377-5,replacement_analysis_original_writer,0.6301507479214706,0.5260034702008023,-5.882352941176472,76.47058823529412
+Unified main cohort,s41467-026-68412-5,replacement_analysis_original_writer,0.6183548883151643,0.6875480557718032,-12.5,87.5
+Unified main cohort,s41467-026-68427-y,replacement_analysis_original_writer,0.6174644709858841,0.6700472354079878,0.0,86.66666666666667
+Unified main cohort,s41467-026-68449-6,replacement_analysis_original_writer,0.6580736662078172,0.5882804178135986,-5.555555555555558,88.88888888888889
+Unified main cohort,s41467-026-68492-3,replacement_analysis_original_writer,0.6383829225265357,0.5878016918349885,0.0,95.0
+Unified main cohort,s41467-026-68493-2,replacement_analysis_original_writer,0.605349807721448,0.5744359332609474,-22.22222222222222,66.66666666666666
+Unified main cohort,s41467-026-68499-w,replacement_analysis_original_writer,0.5908624118760913,0.4434080584154523,-5.882352941176472,88.23529411764706
+Unified main cohort,s41467-026-68508-y,replacement_analysis_original_writer,0.6098558648828631,0.6017887696411542,0.0,100.0
+Unified main cohort,s41467-026-68512-2,replacement_analysis_original_writer,0.6356238502751487,0.5888112047667002,0.0,100.0
+Unified main cohort,s41467-026-68551-9,replacement_analysis_original_writer,0.6389761114656044,0.45234168873799735,0.0,90.0
+Unified main cohort,s41467-026-68571-5,replacement_analysis_original_writer,0.6167307865095117,0.4687142090350698,0.0,93.75
+Unified main cohort,s41467-026-68592-0,replacement_analysis_original_writer,0.667667926590464,0.7233297955088053,-11.764705882352944,82.35294117647058
+Unified main cohort,s41467-026-68605-y,replacement_analysis_original_writer,0.6125470799020301,0.542674161447834,0.0,90.0
+Unified main cohort,s41467-026-68608-9,replacement_analysis_original_writer,0.6172438629372744,0.5048818670256553,0.0,80.0
+Unified main cohort,s41467-026-68612-z,replacement_analysis_original_writer,0.6191822356621817,0.5510437179615904,0.0,100.0
+Unified main cohort,s41467-026-68614-x,replacement_analysis_original_writer,0.6009626760518344,0.5072548620685444,6.666666666666665,100.0
+Unified main cohort,s41467-026-68633-8,replacement_analysis_original_writer,0.6124660364110027,0.5365072564227251,0.0,95.0
+Unified main cohort,s41467-026-68644-5,replacement_analysis_original_writer,0.5992130139596832,0.4606815844923534,0.0,87.5
+Unified main cohort,s41467-026-68663-2,replacement_analysis_original_writer,0.5845566388862073,0.5209589142723656,0.0,100.0
+Unified main cohort,s41467-026-68675-y,replacement_analysis_original_writer,0.6622515708782841,0.5464171376986473,0.0,100.0
+Unified main cohort,s41467-026-68680-1,replacement_analysis_original_writer,0.6428419006973288,0.5720580722367087,-6.25,93.75
+Unified main cohort,s41467-026-68686-9,replacement_analysis_original_writer,0.5947895325997423,0.4942239417002897,14.28571428571429,100.0
+Unified main cohort,s41467-026-68693-w,replacement_analysis_original_writer,0.5790951047398964,0.5752718564760128,0.0,94.44444444444444
+Unified main cohort,s41467-026-68697-6,replacement_analysis_original_writer,0.6066956484678003,0.5829227450678721,-5.000000000000004,85.0
+Unified main cohort,s41467-026-68701-z,replacement_analysis_original_writer,0.5986172833181785,0.6027096367083924,0.0,100.0
+Unified main cohort,s41467-026-68705-9,replacement_analysis_original_writer,0.5858791039002854,0.5225347697452976,-5.555555555555558,94.44444444444444
+Unified main cohort,s41467-026-68729-1,replacement_analysis_original_writer,0.6117787516209245,0.5879927282457362,0.0,87.5
+Unified main cohort,s41467-026-68743-3,replacement_analysis_original_writer,0.6435198216881035,0.5843545319755141,-8.333333333333337,91.66666666666666
+Unified main cohort,s41467-026-68745-1,replacement_analysis_original_writer,0.6042845442942725,0.609556879044382,0.0,100.0
+Unified main cohort,s41467-026-68770-0,replacement_analysis_original_writer,0.5972952574461653,0.4464083018339716,0.0,100.0
+Unified main cohort,s41467-026-68784-8,replacement_analysis_original_writer,0.6149864386332768,0.5963047660822993,0.0,100.0
+Unified main cohort,s41467-026-68786-6,replacement_analysis_original_writer,0.635118146399561,0.5153362092953049,0.0,100.0
+Unified main cohort,s41467-026-68793-7,replacement_analysis_original_writer,0.6051718589417517,0.5920139021863225,0.0,93.75
+Unified main cohort,s41467-026-68804-7,replacement_analysis_original_writer,0.5795848625921128,0.5958566916789958,-5.263157894736836,89.47368421052632
+Unified main cohort,s41467-026-68809-2,replacement_analysis_original_writer,0.6087495623159153,0.7023168438993057,0.0,100.0
+Unified main cohort,s41467-026-68827-0,replacement_analysis_original_writer,0.6035475915172883,0.5432623441133886,0.0,100.0
+Unified main cohort,s41467-026-68856-9,replacement_analysis_original_writer,0.5969212033566115,0.5018409678594375,12.5,100.0
+Unified main cohort,s41467-026-68859-6,replacement_analysis_original_writer,0.6240827971324955,0.49490065169712166,-12.5,81.25
+Unified main cohort,s41467-026-68866-7,replacement_analysis_original_writer,0.618655094171969,0.48960915851684095,0.0,100.0
+Unified main cohort,s41467-026-68867-6,replacement_analysis_original_writer,0.6256309460821492,0.5017642580477789,7.692307692307687,100.0
+Unified main cohort,s41467-026-68885-4,replacement_analysis_original_writer,0.6424570666727096,0.5008474143364217,8.333333333333325,91.66666666666666
+Unified main cohort,s41467-026-68887-2,replacement_analysis_original_writer,0.5911454639487966,0.5794988417334275,0.0,87.5
+Unified main cohort,s41467-026-68890-7,replacement_analysis_original_writer,0.6067680374189575,0.5976837035601098,-8.333333333333337,91.66666666666666
+Unified main cohort,s41467-026-68908-0,replacement_analysis_original_writer,0.601464430635751,0.5416776991500828,0.0,100.0
+Unified main cohort,s41467-026-68950-y,replacement_analysis_original_writer,0.6241991133518432,0.592869649896949,-6.25,93.75
+Unified main cohort,s41467-026-68963-7,replacement_analysis_original_writer,0.60318264489789,0.6085860571692502,0.0,100.0
+Unified main cohort,s41467-026-68975-3,replacement_analysis_original_writer,0.6133374698748149,0.5207446188828924,0.0,100.0
+Unified main cohort,s41467-026-69034-7,replacement_analysis_original_writer,0.5870097633990472,0.4944379399868987,8.333333333333337,100.0
+Unified main cohort,s41467-026-69052-5,replacement_analysis_original_writer,0.5956607162787367,0.4860476397148782,0.0,100.0
+Unified main cohort,s41467-026-69098-5,replacement_analysis_original_writer,0.5965138894139688,0.6364500931843995,0.0,92.85714285714286
+Unified main cohort,s41467-026-69111-x,replacement_analysis_original_writer,0.6172982438668128,0.6700024860064858,-6.666666666666665,86.66666666666667
+Unified main cohort,s41467-026-69115-7,replacement_analysis_original_writer,0.5773421096810907,0.5180878714335371,0.0,100.0
+Unified main cohort,s41467-026-69173-x,replacement_analysis_original_writer,0.6304755283703422,0.48227065987574735,0.0,90.0
+Unified main cohort,s41467-026-69192-8,replacement_analysis_original_writer,0.6157613936879841,0.5479667072791714,-5.263157894736848,94.73684210526315
+Unified main cohort,s41467-026-69224-3,replacement_analysis_original_writer,0.6391690011135986,0.5656728480250527,0.0,87.5
+Unified main cohort,s41467-026-69243-0,replacement_analysis_original_writer,0.6497730808769654,0.5475816244325069,-5.882352941176472,88.23529411764706
+Unified main cohort,s41467-026-69270-x,replacement_analysis_original_writer,0.6297289830053474,0.501395541055432,0.0,93.75
+Unified main cohort,s41467-026-69287-2,replacement_analysis_original_writer,0.6063680502039109,0.7519363557853467,0.0,93.75
+Unified main cohort,s41467-026-69306-2,replacement_analysis_original_writer,0.6054734081809535,0.49721787590181266,0.0,100.0
+Unified main cohort,s41467-026-69365-5,replacement_analysis_original_writer,0.5878724564150791,0.5440968334515422,0.0,100.0
+Unified main cohort,s41467-026-69371-7,replacement_analysis_original_writer,0.6185093338706685,0.5308531335612552,0.0,94.44444444444444
+Unified main cohort,s41467-026-69374-4,replacement_analysis_original_writer,0.5949690732028584,0.5490356407706569,0.0,100.0
+Unified main cohort,s41467-026-69411-2,replacement_analysis_original_writer,0.6027920572522931,0.5027588338529799,0.0,100.0
+Unified main cohort,s42003-026-09539-5,replacement_analysis_original_writer,0.603879048275303,0.5416689659438763,-8.333333333333337,91.66666666666666
+Unified main cohort,s42003-026-09556-4,replacement_analysis_original_writer,0.6183728662529121,0.5830590960407055,0.0,81.25
+Unified main cohort,s42003-026-09587-x,replacement_analysis_original_writer,0.6240856839033958,0.5431614570229285,-7.14285714285714,92.85714285714286
+Unified main cohort,s42003-026-09591-1,replacement_analysis_original_writer,0.5994851431489645,0.48458251247691886,0.0,100.0
+Unified main cohort,s42003-026-09613-y,replacement_analysis_original_writer,0.5712318792612696,0.424305929212972,0.0,93.75
+Unified main cohort,s42004-026-01889-9,replacement_analysis_original_writer,0.6087532638818983,0.5612461784121725,0.0,95.0
+Unified main cohort,s42004-026-01909-8,replacement_analysis_original_writer,0.6009574293144717,0.4645155809448628,0.0,94.44444444444444
+Unified main cohort,s42004-026-01947-2,replacement_analysis_original_writer,0.5836459884730038,0.48569977916587437,0.0,100.0
+Unified main cohort,s42004-026-01949-0,replacement_analysis_original_writer,0.5866379645719325,0.612143801857598,0.0,100.0
+Unified main cohort,s42004-026-01958-z,replacement_analysis_original_writer,0.5908634236400326,0.47994194885084857,0.0,100.0
+Unified main cohort,s42004-026-01990-z,replacement_analysis_original_writer,0.6157513919502977,0.5408354982995315,-5.555555555555558,94.44444444444444
+Unified main cohort,s42004-026-01998-5,replacement_analysis_original_writer,0.556982324737653,0.4539226147338348,0.0,100.0
+Unified main cohort,s42004-026-02001-x,replacement_analysis_original_writer,0.6284201009657335,0.6753662277899379,-6.25,93.75
+Unified main cohort,s42005-026-02508-8,replacement_analysis_original_writer,0.6047229791099001,0.6228598454004551,0.0,94.73684210526315
+Unified main cohort,s42005-026-02523-9,replacement_analysis_original_writer,0.6,0.5990343909079006,8.333333333333337,100.0
+Unified main cohort,s42005-026-02538-2,replacement_analysis_original_writer,0.5828386896974239,0.6270660115836418,0.0,100.0
+Unified main cohort,s42005-026-02554-2,replacement_analysis_original_writer,0.5650663611018379,0.5232098147684814,0.0,100.0
+Unified main cohort,s43246-026-01100-5,replacement_analysis_original_writer,0.5999107629556825,0.5832998245962907,5.882352941176472,100.0
+Unified main cohort,s43246-026-01122-z,replacement_analysis_original_writer,0.6070060149864918,0.5761157418542474,0.0,87.5
+Unified main cohort,s43246-026-01143-8,replacement_analysis_original_writer,0.5979214555614744,0.4956818275412507,6.25,100.0
+Unified main cohort,s43246-026-01156-3,replacement_analysis_original_writer,0.576746907055437,0.48336897001929047,5.263157894736848,100.0
+Unified main cohort,s43246-026-01164-3,replacement_analysis_original_writer,0.6194407018234317,0.5708569955524475,0.0,100.0
+Unified main cohort,s43247-026-03188-6,replacement_analysis_original_writer,0.5882820156419142,0.5277414358831746,0.0,100.0
+Unified main cohort,s43247-026-03217-4,replacement_analysis_original_writer,0.6110406903528148,0.5843155338841017,-5.000000000000004,95.0
+Unified main cohort,s43247-026-03223-6,replacement_analysis_original_writer,0.6071245883481929,0.5807919521031293,0.0,100.0

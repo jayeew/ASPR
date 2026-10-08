@@ -12,7 +12,7 @@ from figure_pipeline.fig3_revision.aggregate import PaperBootstrap
 from figure_pipeline.fig3_revision.storage import Store, roster
 
 from .config import COMPONENTS, CONDITIONS, RISK_TYPES, Config
-from .io import artifact, jsonl, read, write, write_csv
+from .io import artifact, fusion_tracking_enabled, jsonl, read, write, write_csv
 
 
 def optional(path: Path) -> dict[str, Any] | None:
@@ -254,12 +254,22 @@ def aggregate(config: Config) -> dict[str, Any]:
     assessed, event_count = risk_exports(papers, config)
     summary = status(config)
     summary.update(e1_assessed_papers=assessed, risk_events=event_count,
-        evaluable_endpoints={m: sum(r[m] is not None for r in metrics.values()) for m in ('H', 'V', 'R')},
+        evaluable_endpoints={m: sum(r[m] is not None for r in metrics.values())
+                            for m in ('H', 'V', 'R', 'V_cross')},
         interpretation='fixed_existing_analysis_information_effect', report_length_target=None,
         scientific_review='gpt-5.6-luna; not new human validation')
+    summary['main_data_complete'] = (summary['main_artifacts_complete']
+        and all(n == summary['expected_reports'] for n in summary['evaluable_endpoints'].values()))
     write(config.output/'summary.json', summary)
-    (config.output/'summary.md').write_text('# Fig4 数据准备状态\n\n'+
-        '\n'.join(f'- {k}: {v}' for k, v in summary.items())+'\n\n空值表示未完成或不适用，不是实验零值。\n', encoding='utf-8')
+    scope_note = ('主交付为 panel a–d。panel e 全量追踪已按用户要求停止；已有融合结果仅为'
+                  '探索性补充，覆盖非随机，不外推100篇总体。缺失不是零。\n\n'
+                  if not fusion_tracking_enabled(config.output) else '')
+    visible = {k: v for k, v in summary.items() if k not in ('failed_objects', 'analysis_scope')}
+    (config.output/'summary.md').write_text('# Fig4 数据准备状态\n\n'+scope_note+
+        '\n'.join(f'- {k}: {v}' for k, v in visible.items())+
+        '\n\n历史技术失败和主动中断记录保留在 summary.json／run_log.jsonl；'
+        '不作为科学负面判断。范围变更见 analysis_scope.json。'
+        '空值表示未完成或不适用，不是实验零值。\n', encoding='utf-8')
     return summary
 
 
@@ -285,7 +295,8 @@ def usage_rows(config: Config) -> list[dict[str, Any]]:
 def status(config: Config) -> dict[str, Any]:
     papers = roster(config)
     counts = {'prepared_papers': 0, 'reports': 0, 'extract': 0, 'support': 0, 'novelty': 0,
-              'information_papers': 0, 'cross_relation_papers': 0, 'fusion_risk_papers': 0}
+              'information_papers': 0, 'cross_relation_papers': 0,
+              'fusion_transition_papers': 0, 'fusion_risk_papers': 0}
     store = Store(config)
     for p in papers:
         ident = p['paper_id']
@@ -295,6 +306,7 @@ def status(config: Config) -> dict[str, Any]:
             for stage in ('extract', 'support', 'novelty'):
                 counts[stage] += store.path(stage, ident, c).is_file()
         for name, stage in [('information_papers', 'information_clusters'), ('cross_relation_papers', 'cross_relations'),
+                            ('fusion_transition_papers', 'fusion_transitions'),
                             ('fusion_risk_papers', 'fusion_risks')]:
             counts[name] += artifact(config.output, stage, ident).is_file()
     calls = [read(p) for p in (config.output/'logs/calls').glob('*/record.json')]
@@ -309,7 +321,13 @@ def status(config: Config) -> dict[str, Any]:
             row = json.loads(line)
             latest[row['stage'], row['paper_id'], row['condition']] = row
     failures = [row for row in latest.values() if row['state'] == 'failed']
-    return {'papers': len(papers), 'expected_reports': len(papers)*len(CONDITIONS), **counts,
+    expected = len(papers)*len(CONDITIONS)
+    core_complete = (counts['prepared_papers'] == len(papers)
+        and all(counts[s] == expected for s in ('reports', 'extract', 'support', 'novelty'))
+        and all(counts[s] == len(papers) for s in ('information_papers', 'cross_relation_papers')))
+    scope = optional(config.output/'analysis_scope.json')
+    return {'papers': len(papers), 'expected_reports': expected, **counts,
+            'main_artifacts_complete': core_complete, 'analysis_scope': scope,
             'pending_reports': len(papers)*len(CONDITIONS)-counts['reports'], 'failed_objects': failures,
             'actual_calls': len(calls), 'call_states': dict(Counter(c['state'] for c in calls)),
             'usage': dict(usage), 'usage_missing_calls': sum(not c.get('usage') for c in calls),

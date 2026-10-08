@@ -1,0 +1,32 @@
+[
+  {
+    "canonical_doi": "10.1371/journal.pgen.1009943",
+    "aliases": ["10.1101/2021.11.15.468586", "10.1371/journal.pgen.1009943"],
+    "basis": "Crossref is-preprint-of relation asserted by preprint metadata",
+    "source": "https://api.crossref.org/works/10.1101/2021.11.15.468586"
+  },
+  {
+    "canonical_doi": "10.1038/s41467-021-24965-1",
+    "aliases": ["10.1101/2021.04.06.438740", "10.1038/s41467-021-24965-1"],
+    "basis": "Crossref has-preprint relation on published article",
+    "source": "https://api.crossref.org/works/10.1038/s41467-021-24965-1"
+  },
+  {
+    "canonical_doi": "10.1002/anie.202511389",
+    "aliases": ["10.1002/ange.202511389", "10.1002/anie.202511389"],
+    "basis": "Wiley German edition page links International Edition; identical Crossref title and all nine authors",
+    "source": "https://onlinelibrary.wiley.com/doi/10.1002/ange.202511389"
+  },
+  {
+    "canonical_doi": "10.1038/s41467-025-62573-5",
+    "aliases": ["10.48550/arxiv.2412.05870", "10.1038/s41467-025-62573-5"],
+    "basis": "arXiv page supplies journal reference Nat Commun 16,7478 and published DOI",
+    "source": "https://arxiv.org/abs/2412.05870"
+  },
+  {
+    "canonical_doi": "10.1186/s12870-021-03088-1",
+    "aliases": ["10.21203/rs.3.rs-48370/v2", "10.21203/rs.3.rs-48370/v3", "10.1186/s12870-021-03088-1"],
+    "basis": "Identity inferred from identical specific title and identical seven-author sequence in Crossref records; v2/v3 share the same Research Square record. No explicit relation field available.",
+    "source": "https://api.crossref.org/works/10.21203/rs.3.rs-48370/v3"
+  }
+]

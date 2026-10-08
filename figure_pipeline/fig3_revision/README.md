@@ -1,6 +1,6 @@
 # Fig.3：100 篇论文的 GEAR、Graph、Full 修复
 
-当前研究使用 `outputs/fig3_100_dataset/papers.jsonl` 的 100 篇论文与原始审稿材料。所有生成式判断使用 `gpt-5.6-luna`。本次只重跑受影响的 GEAR、Graph、Full 分析与报告；Direct-A、EACL、ReviewGrounder 的既有分析和报告保留。共享贡献、目标论文原文、审稿原文和原生 Graph 邻域事实继续使用。共同历史参考与评价按修复后的对象、证据和分母重新计算。
+当前研究使用 `outputs/fig3_reference/dataset/papers.jsonl` 的 100 篇论文与原始审稿材料。所有生成式判断使用 `gpt-5.6-luna`。本次只重跑受影响的 GEAR、Graph、Full 分析与报告；Direct-A、EACL、ReviewGrounder 的既有分析和报告保留。共享贡献、目标论文原文、审稿原文和原生 Graph 邻域事实继续使用。共同历史参考与评价按修复后的对象、证据和分母重新计算。
 
 原 719 条共享对象中，`s42004-026-01998-5::CLAIM::05` 和 `::CLAIM::06` 分别是作者分工与经费获取声明，已从科学贡献对象中移除；现有合法对象共 717 条。其余身份不变，该论文的联合图由保留贡献的既有邻域重新计算，原始提取与证据记录保留。
 
@@ -46,7 +46,7 @@ bash scripts/fig3_revision/03_recheck.sh --resume
 
 ## 当前图件出口
 
-数据从 `outputs/fig3_revision/derived/` 读取。最终排版沿用 Fig1/2 的字体、颜色和蓝色 panel 框，直接覆盖已有 Fig3：
+数据从 `outputs/fig3_reference/study/derived/` 读取。最终排版沿用 Fig1/2 的字体、颜色和蓝色 panel 框，直接覆盖已有 Fig3：
 
 ```bash
 python -m figure_pipeline.fig3_revision aggregate

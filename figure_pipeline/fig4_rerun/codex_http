@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+"""Task-local HTTP provider with request and stream retry counts set to zero."""
+import os
+import sys
+
+overrides = ['-c', 'model_provider="fig4_rerun_http"',
+    '-c', 'model_providers.fig4_rerun_http.name="Fig4 rerun HTTP"',
+    '-c', 'model_providers.fig4_rerun_http.wire_api="responses"',
+    '-c', 'model_providers.fig4_rerun_http.requires_openai_auth=true',
+    '-c', 'model_providers.fig4_rerun_http.supports_websockets=false',
+    '-c', 'model_providers.fig4_rerun_http.request_max_retries=0',
+    '-c', 'model_providers.fig4_rerun_http.stream_max_retries=0']
+arguments = sys.argv[1:]
+if arguments and arguments[0] == 'exec':
+    arguments = ['exec', *overrides, *arguments[1:]]
+else:
+    arguments = [*overrides, *arguments]
+os.execvp('codex', ['codex', *arguments])

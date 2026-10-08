@@ -12,7 +12,7 @@ import subprocess
 
 from .settings import METHODS, OUTPUT, ROOT, STUDY, read, roster
 
-DESTINATION = ROOT / 'outputs/fig3_100_dataset'
+DESTINATION = ROOT / 'outputs/fig3_reference/dataset'
 PATTERN = r'limited access to this content|model_content_rejection|content_policy_violation|content_filter|blocked.{0,35}(safety|policy)|safety.{0,20}(blocked|refusal)'
 
 

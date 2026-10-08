@@ -18,7 +18,7 @@ RISK_TYPES = ('scope_inflation', 'false_antecedence', 'semantic_causal', 'other_
 
 
 class Config(BaseConfig):
-    source: Path = ROOT / 'outputs/fig3_revision'
+    source: Path = ROOT / 'outputs/fig3_reference/study'
     output: Path = ROOT / 'outputs/fig4_mechanisms'
     download_fulltext: bool = False
     material_max_chars: int = 256000

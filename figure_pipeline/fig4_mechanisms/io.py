@@ -9,7 +9,14 @@ from typing import Any
 from figure_pipeline.fig3_revision.aggregate import write_csv
 from figure_pipeline.fig3_revision.storage import read, write
 
-__all__ = ['read', 'write', 'write_csv', 'jsonl', 'record', 'artifact', 'recover_calls']
+__all__ = ['read', 'write', 'write_csv', 'jsonl', 'record', 'artifact', 'recover_calls',
+           'fusion_tracking_enabled']
+
+
+def fusion_tracking_enabled(root: Path) -> bool:
+    """Honor the user's saved scope when resuming this output directory."""
+    path = root / 'analysis_scope.json'
+    return not path.is_file() or read(path).get('fusion_tracking') != 'stopped_exploratory'
 
 
 def jsonl(path: Path, rows: list[dict[str, Any]]) -> None:

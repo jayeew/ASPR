@@ -1,0 +1,1251 @@
+{
+  "final_directory": "fig_reference",
+  "deleted_files": [
+    {
+      "path": "figure_pipeline/fig5_four_panel/__pycache__/__init__.cpython-310.pyc",
+      "bytes": 252,
+      "sha256": "c170c468120221ca35407651504a0a702129beeca3239db3aeff838f0bb09ac4",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_four_panel/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 259,
+      "sha256": "ea5cdab97a0445bfc2f6bf18c737a640a759c677793f63dbcd10246df063fa1d",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_four_panel/__pycache__/aggregate.cpython-310.pyc",
+      "bytes": 15842,
+      "sha256": "755962938c2f5d0ecc6cd90476f7a21f08b508a9d809453e443fa44dc7eb7f6d",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_four_panel/__pycache__/aggregate.cpython-312.pyc",
+      "bytes": 22270,
+      "sha256": "51cc9cdb0a3c6df1223a3b83d9a8f67703be96fa5057cca9502ef4cb64150560",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_four_panel/__pycache__/evaluate.cpython-310.pyc",
+      "bytes": 6899,
+      "sha256": "99dc0934fffd66df6baae7b6580f38643b3fc210f4a055501639210b76a57f38",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_four_panel/__pycache__/evaluate.cpython-312.pyc",
+      "bytes": 8839,
+      "sha256": "a60ec28a8701cb1c2af295afb63153886eda770aac65076636dcad92a97fe1b6",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_four_panel/__pycache__/export.cpython-310.pyc",
+      "bytes": 14608,
+      "sha256": "4f84655a67f21581ee281ee336e7462071866b4c7d613141910bb727e8156861",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_four_panel/__pycache__/export.cpython-312.pyc",
+      "bytes": 15861,
+      "sha256": "241e80dcf67bdfe50dad7ac63b43e35937cd9c9c1a851d067fce9a31af66d4e1",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_four_panel/__pycache__/prepare.cpython-310.pyc",
+      "bytes": 10796,
+      "sha256": "5ec785851dfce50100894110471c6c0397f296e52bad698524c8343050261a24",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_four_panel/__pycache__/prepare.cpython-312.pyc",
+      "bytes": 14586,
+      "sha256": "49cbbb0db4c1f1c26e75eaade9ca6177beaba4677605d879432788180d07d39b",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_four_panel/__pycache__/recover.cpython-310.pyc",
+      "bytes": 3318,
+      "sha256": "c2e1b32f04814d1b64b5493b088bf42bc7f9e54fddbd57a2130aa1b4d35df49c",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_four_panel/__pycache__/render.cpython-310.pyc",
+      "bytes": 19528,
+      "sha256": "500e6e5db13584732602a972d78108e20335a87c18f3026eb132d3179ef98372",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_four_panel/__pycache__/render.cpython-312.pyc",
+      "bytes": 16924,
+      "sha256": "943269426d3ad996a12995e07a9c16e70155a1548e4d323ddc4ffe548ddac8a8",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_four_panel/__pycache__/validate.cpython-310.pyc",
+      "bytes": 4232,
+      "sha256": "b47c6997efa201e5f3def485466563d6f9973bc38f26dffbf2689ebd27db3bee",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_mechanism_study/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 255,
+      "sha256": "4f275ea467de1cc4e8ac103d4b99c4c58fc74674c07a81a67f3d54387487ae6a",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_mechanism_study/__pycache__/adapter.cpython-312.pyc",
+      "bytes": 14310,
+      "sha256": "e342bbdc72a73fbbb6bd0ae226926c0f74ab91c5a5a6c7e809cc7793d10b43cd",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_mechanism_study/__pycache__/analyze.cpython-312.pyc",
+      "bytes": 22103,
+      "sha256": "e65762a8bd8b1c8789e9562d80bc697512b0d8a64260114e16c236633868f93b",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_mechanism_study/__pycache__/audit.cpython-312.pyc",
+      "bytes": 5771,
+      "sha256": "3a3adf6c56b74ea74ee6a88650213c39e351ab98b2c402cbf3c2e8ad464c91ad",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_mechanism_study/__pycache__/cohort100.cpython-312.pyc",
+      "bytes": 10469,
+      "sha256": "0d7e9a7645a05ec5e61752a30e2554feee9cfb569274bc616ebcc13d7c513f9f",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_mechanism_study/__pycache__/costs.cpython-312.pyc",
+      "bytes": 9463,
+      "sha256": "cbaf53358949fe511086d99bdbf8c54cb0f1d0381d04cffbac59fbe5fff76bc1",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_mechanism_study/__pycache__/deliver.cpython-312.pyc",
+      "bytes": 17970,
+      "sha256": "51f29683c82885d550a15bb2630620cc7e22311547f416816476135a0a7cb7bc",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_mechanism_study/__pycache__/diagnostic.cpython-312.pyc",
+      "bytes": 16944,
+      "sha256": "846288f1e99adb80d2496c1d442e87274ef11a6070b3728564108b2311d5743a",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_mechanism_study/__pycache__/human_review.cpython-312.pyc",
+      "bytes": 5449,
+      "sha256": "bf0e9beb78b444a7dc4799088bb3192f4d4e62d25b9073382fd188f347858043",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_mechanism_study/__pycache__/independent.cpython-312.pyc",
+      "bytes": 6151,
+      "sha256": "dc226fd563646a8c49e83a3354804eb3d1c737359ef4c2f92cc32427d928fb88",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_mechanism_study/__pycache__/interventions.cpython-312.pyc",
+      "bytes": 25162,
+      "sha256": "cb99d44142787748e4fed703ccfea2138ac24b96a48ea3cbf7f345191db69c90",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_mechanism_study/__pycache__/render.cpython-312.pyc",
+      "bytes": 22181,
+      "sha256": "d5bc85a36720deb5388dabce6dc99533471fe0b107cf8650aef336cf46435662",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_mechanism_study/__pycache__/render_diagnostic.cpython-312.pyc",
+      "bytes": 7770,
+      "sha256": "2d45b3f71976858f0f7b464ac742d8d6df6c624974467adcc1980d7c22d5cc22",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_mechanism_study/__pycache__/render_reference.cpython-312.pyc",
+      "bytes": 33278,
+      "sha256": "35c4938cb7d9c2e51d723c32e32932f518978ab993dd0ffeadf3eec9e60046a6",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_mechanism_study/__pycache__/render_scenarios.cpython-312.pyc",
+      "bytes": 4987,
+      "sha256": "173788729d26fccd3389712271d707501a3a5ad95bfdf6c5cfecfde82c10f733",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_mechanism_study/__pycache__/summarize.cpython-312.pyc",
+      "bytes": 13337,
+      "sha256": "40afaa6d521e89d0428601bd9bec3765a6463207b832dff54c8244214c925040",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_mechanism_study/__pycache__/transfer.cpython-312.pyc",
+      "bytes": 14963,
+      "sha256": "314ee5ae2930839ba9ee3a0ca20f1e4757912fda71956ca5df944de95bbe3ba5",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_mechanism_study/deliver.py",
+      "bytes": 11118,
+      "sha256": "a9211d215c900327bec6b60f3d68186449fe3408f3c4adb44b67e8d2ee9e8afc",
+      "reason": "obsolete renderer or delivery script; no remaining code imports"
+    },
+    {
+      "path": "figure_pipeline/fig5_mechanism_study/render.py",
+      "bytes": 14172,
+      "sha256": "f933ada3be5c9e418710586a9139c54e37437ed095486092f3998dbdcd993053",
+      "reason": "obsolete renderer or delivery script; no remaining code imports"
+    },
+    {
+      "path": "figure_pipeline/fig5_mechanism_study/render_diagnostic.py",
+      "bytes": 5108,
+      "sha256": "c79f976789cf26694c95121de2e2fad097176cda65f7245d260e5eb627217988",
+      "reason": "obsolete renderer or delivery script; no remaining code imports"
+    },
+    {
+      "path": "figure_pipeline/fig5_mechanism_study/render_scenarios.py",
+      "bytes": 2720,
+      "sha256": "4a0432e74a305cc2609648971982fcc3e6dd69efe2178e82b1204e3f2f618bb9",
+      "reason": "obsolete renderer or delivery script; no remaining code imports"
+    },
+    {
+      "path": "figure_pipeline/fig5_reference/__pycache__/__init__.cpython-310.pyc",
+      "bytes": 241,
+      "sha256": "d710a9311c7ae1cb8f9b29bf913368cb307a52e10e050476768d418f48724a1a",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_reference/__pycache__/__main__.cpython-310.pyc",
+      "bytes": 837,
+      "sha256": "707c65f01ad6bb58ae808329ee2365cb079bb6e3a187b634074f95326544a8e3",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_reference/__pycache__/data.cpython-310.pyc",
+      "bytes": 9065,
+      "sha256": "b315c3786a3bfcbee8eff9ad12c437d8f96d6e65a43d9a8648d89ede81ff14fa",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_reference/__pycache__/export.cpython-310.pyc",
+      "bytes": 12315,
+      "sha256": "86aee41a32d5963262a9e2b300310a778f41f9a56c24857cc3a4d5a9748b852b",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_reference/__pycache__/render.cpython-310.pyc",
+      "bytes": 22177,
+      "sha256": "f6dd99f673fbf1d069bf580ed9ff26d86feb6559ad4c52783bae8b71ca28f57e",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/__init__.cpython-310.pyc",
+      "bytes": 161,
+      "sha256": "b6b339eb01cd92be2388e9520b93290cdc17688bb976bbf24b3d601c1e58f8a9",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 165,
+      "sha256": "ee33a91ca16047f107946eb0e2c7913f37ee9acb6b724a71a3c7a51871eff067",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/__main__.cpython-310.pyc",
+      "bytes": 2852,
+      "sha256": "5a2dcf7110d6a72ae2dda02506eefdd8900d8497622ef240edb49ce8e05e19b8",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/__main__.cpython-312.pyc",
+      "bytes": 4727,
+      "sha256": "649379699c9e9797a29c9664ef631d33626def1137fff1a5bdfaa415afe049af",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/aggregate.cpython-310.pyc",
+      "bytes": 18586,
+      "sha256": "8d7ed7b6d0aa51208b8b7f54de16b9945a0d7a2cf66f7780b8dd84b19d3a25b8",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/aggregate.cpython-312.pyc",
+      "bytes": 31167,
+      "sha256": "3737d3257a1dc88523a8dee870c02b55f04cd070d5d9747125e39413f3b34abe",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/comparisons.cpython-310.pyc",
+      "bytes": 4118,
+      "sha256": "0b7ec2098c43b931aec93574af3604c33656d4a9a53bb7e2d6c1c7362c767437",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/diagnostics.cpython-310.pyc",
+      "bytes": 16833,
+      "sha256": "b6e1318c9f06d60a23f64dbe1746acb2bd49c884220dd2c159e342d665685d63",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/diagnostics.cpython-312.pyc",
+      "bytes": 27196,
+      "sha256": "8e469aff25f0d01809d418ec78717d83e05bb996e05e69070d72f17f46bb8426",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/initial.cpython-310.pyc",
+      "bytes": 6905,
+      "sha256": "84946f0f168b1a02af934b978a955b575c0761716563e38c8e3d0c9f1b03bf46",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/initial.cpython-312.pyc",
+      "bytes": 14994,
+      "sha256": "abbe8bd0bd5da493f064e67e8ade2a29b8a73da7fca1080fa59bc382724cd410",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/materials.cpython-310.pyc",
+      "bytes": 14523,
+      "sha256": "d9a6ecd1196bc542163a0a49b80d89e49f4e3ccf86ec39220b764a88a4ccf113",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/materials.cpython-312.pyc",
+      "bytes": 23165,
+      "sha256": "8fc8fa39a83f1d67ac3aee14e2ee51932835fab09395c9ac8b7552a2c6b3a6e7",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/models.cpython-310.pyc",
+      "bytes": 2425,
+      "sha256": "9b2d26338b3fc109e9c4c1f96b92156e64e769eab7cfe194f8b0d5ce196ab3c8",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/models.cpython-312.pyc",
+      "bytes": 2891,
+      "sha256": "8e9c43e6838f4b2828da20ca5c8c7200531a74379e41feee4f089537109330c3",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/pipeline.cpython-310.pyc",
+      "bytes": 19154,
+      "sha256": "8cc0ecfecae60e4d35363532774778f02f88b08bc748fa196b8fa52bd8ca7a4c",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/pipeline.cpython-312.pyc",
+      "bytes": 30075,
+      "sha256": "15395e1c55d97f4a309d9c001f6fbe499b1a6554ffb967b31631f1fbb8dbd8f8",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/prompts.cpython-310.pyc",
+      "bytes": 6710,
+      "sha256": "46e1801dbc555e016bfb3bc5993ea310d9442180d5fcfea63f1f85b1b464a882",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/prompts.cpython-312.pyc",
+      "bytes": 7004,
+      "sha256": "efcfb4498d278827a63af604744fbdd8c2df70f34f611063ba99420cd1caec61",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/recover_drain.cpython-312.pyc",
+      "bytes": 6466,
+      "sha256": "114c875c16f9e43bf40f46d9a0965c6ad1d655605d08eff234ed22af00da2419",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/reference_audit.cpython-310.pyc",
+      "bytes": 6743,
+      "sha256": "ec6253585e12e7fad45ae9da58b381316bd8b395d94faab78a3569adbee23d15",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/reference_audit.cpython-312.pyc",
+      "bytes": 8472,
+      "sha256": "908b8c4534067f88a87cbf30ac792d09e5b68be59704f6a9da81ab491e1ac68a",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/reference_reuse.cpython-310.pyc",
+      "bytes": 2736,
+      "sha256": "b151bd4bb776e3f279dc26cd8a38c7499d4dfc8a8d0c441640762934d5e687e9",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/reference_reuse.cpython-312.pyc",
+      "bytes": 4136,
+      "sha256": "1852bdde2cd3d325d9dd3b5ca75f3ee789169c7f706897e4f107471e2295b454",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/render_initial.cpython-312.pyc",
+      "bytes": 20805,
+      "sha256": "c264bb645983952ba8b6298da9a120f5b4d50d0d91f9738259ee13348773736c",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/runtime.cpython-310.pyc",
+      "bytes": 2843,
+      "sha256": "35aa52dc15c226f8bf1b025c4ca05d7714c96dc30e2e931d4355795866cae61c",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/runtime.cpython-312.pyc",
+      "bytes": 4306,
+      "sha256": "521c2ffc31a9eae035d6c56e76d421a9c05487e1c67869276afe58cf91b7cdcb",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/six_panel.cpython-310.pyc",
+      "bytes": 6722,
+      "sha256": "8f8ae5d9aff77a0a97f7e6330739c78c5bac4d3140e9a528be1d9ddac2771fa9",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/six_panel.cpython-312.pyc",
+      "bytes": 9610,
+      "sha256": "c9f46d7c2c2fc6fc9f86b8983f6b1653ac2a96998054163320698fa1a89c9897",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_revision/__pycache__/six_panel_export.cpython-312.pyc",
+      "bytes": 18557,
+      "sha256": "fa7eca50da7dcc01e11f467795eb6d61632241c3008c6673d7ead64aea084b05",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_robustness/__pycache__/__init__.cpython-310.pyc",
+      "bytes": 248,
+      "sha256": "7612f06b9163d3843338b47950d9e7253837e77684fe6e592700b444adf18989",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_robustness/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 255,
+      "sha256": "fecedbaac6658e0ab2138c93a9bbdb058d9f99dd417bebc5f332cf5926371667",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_robustness/__pycache__/__main__.cpython-312.pyc",
+      "bytes": 7187,
+      "sha256": "1124f71d3e2b8778a74c8eb74403bf55f69cf7b67762ef534f93ddc361353f15",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_robustness/__pycache__/aggregate.cpython-310.pyc",
+      "bytes": 15774,
+      "sha256": "4f3918911f7c8bde08e340844d99adddc046dcb97a727a77a90164ac4f46ce9a",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_robustness/__pycache__/aggregate.cpython-312.pyc",
+      "bytes": 24423,
+      "sha256": "86502efc40411c5de6077c3cface098e8bb744e943ddcb886e12846fef01132a",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_robustness/__pycache__/materials.cpython-310.pyc",
+      "bytes": 14529,
+      "sha256": "415c1b5fc25548385d7ca448c312481587f9267d47f63bf51349ca6f4adaea2e",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_robustness/__pycache__/materials.cpython-312.pyc",
+      "bytes": 22429,
+      "sha256": "bf5bc93ade120adb7b51b90b3d09c081dc57cb81edd80559093c09b0e079430c",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_robustness/__pycache__/models.cpython-310.pyc",
+      "bytes": 2896,
+      "sha256": "eb59c686d2623509f0ed5b8f0da2739fa7e0d2e79bda12f74d608871b16dbd0a",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_robustness/__pycache__/models.cpython-312.pyc",
+      "bytes": 3381,
+      "sha256": "d1bffa95adbb8fc2f68909c73754297c7d517526cff63a8832570256626bb2ad",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_robustness/__pycache__/pipeline.cpython-310.pyc",
+      "bytes": 17338,
+      "sha256": "b6655d41180ca4b5751883343f7775a87513c2635bbb68a58c1d1ef919f42b44",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_robustness/__pycache__/pipeline.cpython-312.pyc",
+      "bytes": 25981,
+      "sha256": "c7ac9e44ab0573b2367969f685c441e8c7930bc7357e9098d42ffd7b8dc2058f",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_robustness/__pycache__/prompts.cpython-310.pyc",
+      "bytes": 4211,
+      "sha256": "fed8e1fb6dd745272553b114a2a0ec050a3a85072d66c0cd86908ece1e4bb57d",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_robustness/__pycache__/prompts.cpython-312.pyc",
+      "bytes": 4598,
+      "sha256": "820ee48ff308a9e93d8f655deafe5c3e2cf0607ad690600d0825392a6aff8ae5",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_robustness/__pycache__/runtime.cpython-310.pyc",
+      "bytes": 7873,
+      "sha256": "0bfccc8dea8e250a471153849f2d0a82e79c3c32f6a05b234287764f8f0eff26",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "figure_pipeline/fig5_robustness/__pycache__/runtime.cpython-312.pyc",
+      "bytes": 13052,
+      "sha256": "f674b6f0bbf75895fbcd6dfcf10fc0c8c32b91dbe8b0281a65bc8be6ce801ca9",
+      "reason": "regenerable Python bytecode cache"
+    },
+    {
+      "path": "outputs/fig5_four_panel/Fig5.pdf",
+      "bytes": 123315,
+      "sha256": "d463de769a83ddbf27a1ba980a1da6ee5ff098c56893b4bac0cf245dc2cfb6d1",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_four_panel/Fig5.png",
+      "bytes": 1586893,
+      "sha256": "cc8f5d2e04e0a7723cc58dd66bd5a2611ad21e6e5eebd2659499dde6ae2153ab",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_four_panel/Fig5.svg",
+      "bytes": 204394,
+      "sha256": "22f48fded841deb1a8e1b094fc9755e9913bae9746dcbafd52883f885a5215f8",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_four_panel/Fig5_data_and_figure.zip",
+      "bytes": 4681885,
+      "sha256": "600e1b872dac5c6143e868b22a5e01cc20e3d84474fb4b22cd3df39fad9b2ddc",
+      "reason": "superseded delivery or duplicate archive"
+    },
+    {
+      "path": "outputs/fig5_four_panel/Fig5_preview.png",
+      "bytes": 491550,
+      "sha256": "feafcc2319c826dc9d2bf04e2dbd3f78db6d5f5902e635750c49756997227e90",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_four_panel/previous_layout/Fig5.pdf",
+      "bytes": 41672,
+      "sha256": "8b1845cd7ad39358c175043195ce8c94efd9d9e94a5fcf5bdd272413eca61cac",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_four_panel/previous_layout/Fig5.png",
+      "bytes": 934757,
+      "sha256": "a6004d5907c08980250c2204a278a69baa307fea8f032548417e550a66d8e980",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_four_panel/previous_layout/Fig5.svg",
+      "bytes": 104323,
+      "sha256": "01349b9562899a389cd4150f63afabc2efd24c11ad746ea9368ee6d9d204b804",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_four_panel/previous_layout/Fig5_preview.png",
+      "bytes": 295067,
+      "sha256": "cbaff96b95e7f0aa36edd0e74af86e4cc26406e16da345583a2969105921c99a",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_mechanism_study/Fig5.pdf",
+      "bytes": 116000,
+      "sha256": "6655afc390213bbc865dffc4cd7e7ce3245f9621b5be756f5a0ee2708467e75a",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_mechanism_study/Fig5.png",
+      "bytes": 1241183,
+      "sha256": "30cae0e80ecac2925f6868d20f97f6972e9284a7a976db00c83766ce66b583d8",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_mechanism_study/Fig5.svg",
+      "bytes": 135239,
+      "sha256": "88645c5b8de6078ba4097ac8dce9e1a4c207922b4be199c89a723696672a81f8",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_mechanism_study/Fig5_caption.txt",
+      "bytes": 1219,
+      "sha256": "89ee556c7edd733f99366dc0b7cf721f767f4ea8844c9792c47e3f9b584d7105",
+      "reason": "superseded delivery or duplicate archive"
+    },
+    {
+      "path": "outputs/fig5_mechanism_study/Fig5_cross_scenario.pdf",
+      "bytes": 71648,
+      "sha256": "f4191efc7ece765c29a143db53ef658177c9bb18b8dc4889f2c8a12008a4c3d0",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_mechanism_study/Fig5_cross_scenario.png",
+      "bytes": 404095,
+      "sha256": "962302831f0f0bf1f79a62ccb926685852ed2c7f732583867c5a7c41509d80c2",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_mechanism_study/Fig5_cross_scenario.svg",
+      "bytes": 65435,
+      "sha256": "d7bb4e1f0d993dcd590006f9a3af61ef48d5aedaa113769845b1c2392ca68783",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_mechanism_study/Fig5_figures_data_code.zip",
+      "bytes": 19806438,
+      "sha256": "4b54e332bced762d90bf79b877e7436f30196c3286395bcac4caf41a98d394a8",
+      "reason": "superseded delivery or duplicate archive"
+    },
+    {
+      "path": "outputs/fig5_mechanism_study/Fig5_preview.png",
+      "bytes": 385882,
+      "sha256": "278d90ced4fcfbe18479b0dc56c8e969ae4da976f18701d528c2b3cf218723c7",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_mechanism_study/delivery_manifest.json",
+      "bytes": 11872,
+      "sha256": "e15e50ca924fe2549846bc6e5ccf6f77b2c4be135ef544e506e272b26c934f4c",
+      "reason": "superseded delivery or duplicate archive"
+    },
+    {
+      "path": "outputs/fig5_mechanism_study/diagnostic/Model_stage_diagnostic.pdf",
+      "bytes": 61660,
+      "sha256": "5b5d5ca5612c61323764ca23700071eff70fa85950e55232b697be563beca445",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_mechanism_study/diagnostic/Model_stage_diagnostic.png",
+      "bytes": 565022,
+      "sha256": "c3731cb5ca0a72409a0714d658d1e1e29a4d578bfa9290d098499631a3409115",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_mechanism_study/diagnostic/Model_stage_diagnostic.svg",
+      "bytes": 61467,
+      "sha256": "f49a1c8aad721f2575dbdc4242ad0a3aefe1d623f9082f68a79bbc555714e8f1",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_mechanism_study/diagnostic/Model_stage_diagnostic_caption.txt",
+      "bytes": 594,
+      "sha256": "cb31c9084ca266e324774813c688b2ac080107335e0d7602479cc89dcddf9cda",
+      "reason": "superseded delivery or duplicate archive"
+    },
+    {
+      "path": "outputs/fig5_reference/Fig5_final_delivery.zip",
+      "bytes": 12426326,
+      "sha256": "3e3c14b1785e1959c90ec163221b7628c089994abd3747403a34ec932569457c",
+      "reason": "superseded delivery or duplicate archive"
+    },
+    {
+      "path": "outputs/fig5_reference/components/a1.pdf",
+      "bytes": 34488,
+      "sha256": "a345d66ac42738b8b14cb4e8a7b4a7400d75bf55f8e254f8db4172b971759a42",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/a1.png",
+      "bytes": 87885,
+      "sha256": "12f98e76f5df9151620b0091f2f0c14843d34c98b4b346d30056a2d7e66fed78",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/a1.svg",
+      "bytes": 18240,
+      "sha256": "d874c72764bda44d6fac62accd0340885a027e4149613981e63a4b3b2dbe5ed7",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/a1_outlined.svg",
+      "bytes": 40061,
+      "sha256": "509de7b9b90d61e5e17d892b082dff9508dbec05512bd2180158899340ed7317",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/a2.pdf",
+      "bytes": 28217,
+      "sha256": "9cf6c9f61b6d9f3f3da2f68ea8d839b63387df8509f6a914841bd89988f09fd2",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/a2.png",
+      "bytes": 68970,
+      "sha256": "3bf2097b2309342e3b3dc62f67e9c1c18d5a7eb4ad97633f6a065fcb4844b2b6",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/a2.svg",
+      "bytes": 18545,
+      "sha256": "e6456e9b2a736c1c5b178b9076428b863ac2f1bf1f594c541947bbb69ccbfc64",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/a2_outlined.svg",
+      "bytes": 29030,
+      "sha256": "47bb8f6235d72262bcab621785836954c55b9a42df92a636e82253fd799f18e2",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/b1.pdf",
+      "bytes": 35529,
+      "sha256": "84da84d97d1ad3489e098451ed7f7256f0dcd16da5272e8925f829d554c946e0",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/b1.png",
+      "bytes": 48107,
+      "sha256": "acfdad01a9c169dc46ad598bf33ddc0f12c561d4cafe83b44a306f5a0be97e48",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/b1.svg",
+      "bytes": 13074,
+      "sha256": "2e2ddb19f11c22d21598e717c9aa15e2c9079231acecfbfc78c958070e7f6e43",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/b1_outlined.svg",
+      "bytes": 26978,
+      "sha256": "83f8ee3b5cf9f36f3ef7ddbcc00381c15c4f81105e30c3e1d7c9532dc88f7a33",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/b2.pdf",
+      "bytes": 28797,
+      "sha256": "62a025b316a16ca9cdabcc039c5fa548aa5b16daa3b86a8b4440c17e4a62080a",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/b2.png",
+      "bytes": 19236,
+      "sha256": "04c5abc98d9e79a0de4fba4cdf88540c804f11839d508274a465795a4757da7e",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/b2.svg",
+      "bytes": 10918,
+      "sha256": "a996924c3082da1266085c73b1f26a957906519ba42a96ecdfca1d742bd88874",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/b2_outlined.svg",
+      "bytes": 13694,
+      "sha256": "a5a0023c53aec3046ffa7b231cefa382537b140597522669d3948d4966f1df49",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/b3.pdf",
+      "bytes": 31375,
+      "sha256": "7d73af0519f7d30dee0832a41365aef5341747657cb1b755b033e092ce8bd328",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/b3.png",
+      "bytes": 19965,
+      "sha256": "aebab7a53cc52ccbab2da9673cfabfaa2840e8f4787789147a3c679f7b263430",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/b3.svg",
+      "bytes": 10915,
+      "sha256": "f756e162fc5536b386b3c3b7e1632f489afc06be821d660e9eb0e4cab3f77742",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/b3_outlined.svg",
+      "bytes": 14746,
+      "sha256": "df622ba8af410ef3e1106b0d866815af5e5e16d03ddb633e9d2d9c9348b6c542",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/b4.pdf",
+      "bytes": 23713,
+      "sha256": "6d08ffee1787c19cb8b7fe577c9474113e3bdc6207ec6802e6d7e2df16be88aa",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/b4.png",
+      "bytes": 16723,
+      "sha256": "bc5b44250a80b6ca84ca7a3508aad65d41e641a2da6b73042c4debe043baebb7",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/b4.svg",
+      "bytes": 10911,
+      "sha256": "273d2b3868823f2a4c7ad770110df8c90d12614998c13d5a31f9f57a5e29022a",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/b4_outlined.svg",
+      "bytes": 14348,
+      "sha256": "62f270b2963fb7fe0f7bd3068dd3cbf7a1dc8cf13a2e3aa8f99c8d45fb473b82",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/c1.pdf",
+      "bytes": 65094,
+      "sha256": "2595261e41f9c279738a87a93492a7b8f360a5ecd759b958779138ae09c19e26",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/c1.png",
+      "bytes": 92558,
+      "sha256": "307b3caf8fc51d79e4c057a66ebb2a0f3190bd83a5e757d6628aea0857452753",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/c1.svg",
+      "bytes": 31089,
+      "sha256": "df219180ae789e99a595903945fec8d763f24898ae3305d3b599d23fede1c8ac",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/c1_outlined.svg",
+      "bytes": 63463,
+      "sha256": "1a54877bda1bcb49b57b226299ecb5e784beca3c6e4397a20a52be16609b09ac",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/c2.pdf",
+      "bytes": 62068,
+      "sha256": "ba1e4d062c1799981ce45d99cec2a10644b67dea2b753c604ff3bb49ada53bdf",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/c2.png",
+      "bytes": 84716,
+      "sha256": "8500c30a221adc9aa51cf5c1a9b2cd8801b6b01a3e78e20757f255f8d3c0b1f9",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/c2.svg",
+      "bytes": 31963,
+      "sha256": "13e2b158623b9ebe46dd5b4d6511ae75917fc861fcdc35fa070213ff3003089f",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/c2_outlined.svg",
+      "bytes": 49379,
+      "sha256": "2b50fce3b789b773fbb759b95e69fbd82a8b17486e763875f3c3d25d1eb08669",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/c3.pdf",
+      "bytes": 65189,
+      "sha256": "3071a6b913d6f3405c7fc0a4d753d250f2ec9f64203f44b27e7b47b0f40cdddd",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/c3.png",
+      "bytes": 98940,
+      "sha256": "6b0d9fc8ebabcd007e3eea1d0d95783523bf2a63d9096ebd7971c8dff31a2d00",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/c3.svg",
+      "bytes": 32217,
+      "sha256": "9f10a511ddf47041b89615e02e2597178b321b3d144f175951cd558b19873e7a",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/c3_outlined.svg",
+      "bytes": 51253,
+      "sha256": "bb64f185930b8887f6f97b602611d79cad97ef19a350f1c1d2d840e2d836baf2",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/d1.pdf",
+      "bytes": 39485,
+      "sha256": "e9161e134288aa889612a041c4880ecf57c3529d7906eef9b40dc7bd29bfa807",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/d1.png",
+      "bytes": 93069,
+      "sha256": "e7c43cb743b2f7ad46318c39e3cb0071770a9f7234faaff0fe34263a30b0a302",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/d1.svg",
+      "bytes": 28062,
+      "sha256": "8606dd5a7e45a373ba40f79ff21889920c3978bcfc4fe1db9267c456fca82def",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/d1_outlined.svg",
+      "bytes": 46685,
+      "sha256": "56028362524bfa84309504a3683cfcd83fc1b3659bbfee991022b21959ba7b8f",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/d2.pdf",
+      "bytes": 37428,
+      "sha256": "0c7634d575262459a59e362bd270a3a61521ee40ebc281a377d12192dcad9e77",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/d2.png",
+      "bytes": 87636,
+      "sha256": "28ff93ac18e069d9309009dde02d79e3ef851748d0d72861e5432a0356824758",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/d2.svg",
+      "bytes": 18793,
+      "sha256": "52b8487fbfa0ca6f3823539aaa739b38339d3e1e7db06e7afcb46357305ddebd",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/d2_outlined.svg",
+      "bytes": 40138,
+      "sha256": "2201e5421e29733e0872d36dba96e2b147db847525531824de2740bf47498ac1",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/e1.pdf",
+      "bytes": 50316,
+      "sha256": "8d9c2a56efd380a90c6f8f6a2e4d59c028470171037f2f7b624a0c578e68c78d",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/e1.png",
+      "bytes": 60828,
+      "sha256": "7a85cb9927701a2eda8c79beb7f1c7c04947100646d7424f1e06bb5ef2042a61",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/e1.svg",
+      "bytes": 13343,
+      "sha256": "45de6ecbbc259faaf598a1022cc3d83e8b724357c38b457fed6f6c798671b161",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/e1_outlined.svg",
+      "bytes": 36069,
+      "sha256": "0361b3f64fd7a5e90061f95fa7ca362d3da65390908fe2bda612701993ce43d4",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/e2.pdf",
+      "bytes": 35483,
+      "sha256": "00851c7dcd2b8bfa2c484822724e97c8490d17e520fc3919edc0039f6fd10be9",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/e2.png",
+      "bytes": 47142,
+      "sha256": "81f8deeb78298ce4b3f9bcc2aedc77f0790c85da699d27115287d83f9b4d24e6",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/e2.svg",
+      "bytes": 6850,
+      "sha256": "d77ab5e9890430de9089964432c74190412208afd8b72109a3f4ecea6038d022",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/e2_outlined.svg",
+      "bytes": 15910,
+      "sha256": "0df9a559ed24d92d26c1d55050b6b3bb8ed134b045e9f59688db92e1a56c5b74",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/f1.pdf",
+      "bytes": 51491,
+      "sha256": "d204b946b214aee3182b98917fc931d2ecf97f5d3ba546cbe0e8154745db9f4b",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/f1.png",
+      "bytes": 58664,
+      "sha256": "3aefee98069bf10a00c2bdada9f92f8b45d5157e22602fcca130b26febc98b6b",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/f1.svg",
+      "bytes": 25913,
+      "sha256": "78eae41ae5b4b5527976d45a12c688e85204f29bf544fe9fc531dc83fbeeeb97",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/f1_outlined.svg",
+      "bytes": 36771,
+      "sha256": "7174316fb28bfa31006025e08210219b06c3cb645b6606d11e4a20438ee9644e",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/f2.pdf",
+      "bytes": 39890,
+      "sha256": "5c7e35bb3c76084165d6662b8124968bc05a0079eee2ddc7c9b4ff0acf1f5538",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/f2.png",
+      "bytes": 38885,
+      "sha256": "99cc8fe49e9606602bfcc97f70c354a7eab8e36dac31b113a3d87f168375bc0f",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/f2.svg",
+      "bytes": 13968,
+      "sha256": "d7e6e57abdc2c0290c6ba6a4ee2c8d3a59b08cf9e1596dfe648b13077923e648",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/components/f2_outlined.svg",
+      "bytes": 24534,
+      "sha256": "97e49053f293cfb095612e25219b3b52a0c9fdd7f57a8c169b6eef42e2fb265d",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/final/Fig5.pdf",
+      "bytes": 126256,
+      "sha256": "74164eb9c5ddf3d188a4982c475b3b61323a387563db4c8f69ad074738e04509",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/final/Fig5.png",
+      "bytes": 1146566,
+      "sha256": "8b193de21d87f7dd8cbaa7319e7c03c4aeeb942aac969a7f06d9a4b63b77073f",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/final/Fig5.svg",
+      "bytes": 256073,
+      "sha256": "83d5d46df7a29a1a9b7700b83525f762742cc8f141c436fc7c44ac526104da95",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/final/Fig5_600dpi.png",
+      "bytes": 2437675,
+      "sha256": "b5c5eb25134db49b0fd154aae20f6edc9d35f9ef34c2aa9b14ec26f6b95ee891",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/final/Fig5_900dpi.png",
+      "bytes": 3870605,
+      "sha256": "46a3db34411d265de0ad35e91510ab6f5ff4a157cd518a4ca7f88347285aef5f",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/final/Fig5_outlined.svg",
+      "bytes": 547220,
+      "sha256": "e97ea7742223eb2a3303aeaa5785bf84f50d775ff0cd13dcf6e0fbcf6bae5010",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/final/Fig5_pdf_preview.png",
+      "bytes": 307830,
+      "sha256": "ca4be1775a38b31c454bc5414f289953a724b60431a81238a7e9b1192d1ee48a",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/index.html",
+      "bytes": 4076,
+      "sha256": "00877fab93bbf875cf63b67bec01a65d7d285a6a6de42a7bb865b82f76ca572d",
+      "reason": "superseded delivery or duplicate archive"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/a.pdf",
+      "bytes": 41384,
+      "sha256": "a400837965854eb85d4970bc94d899b157a6fd3f71dc0f81ca78597030c593c0",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/a.png",
+      "bytes": 182434,
+      "sha256": "2364e31e45912a9d1bc931162b717acaeac96233fb5d6a26832ed3e0e318c821",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/a.svg",
+      "bytes": 35315,
+      "sha256": "44134808c31d51ff51ff58f60dc91189b37bf938eacd67f1c6a40e734464efca",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/a_outlined.svg",
+      "bytes": 72404,
+      "sha256": "61bfa72775a5cdb488ccb479e45854d458d9e1d28b4978764515a06d06e70484",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/b.pdf",
+      "bytes": 54266,
+      "sha256": "ee4f4c8f6d4578caee993074fd2804618f55c9e57efbcb7bb8434ee0e644ce7d",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/b.png",
+      "bytes": 126377,
+      "sha256": "154fb8e02231f9ef6cc0ba9bc538929fb97e6c4fd26a945243899820a07b62be",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/b.svg",
+      "bytes": 39035,
+      "sha256": "3f56e10d29cffd0b03954cb3969680550ad2c63597aee83f079bbee869b40f54",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/b_outlined.svg",
+      "bytes": 66757,
+      "sha256": "d054a5d481733b54d14e206bc064b3a1187accc48dc9ecd0a49d067b2bcd52ca",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/c.pdf",
+      "bytes": 86552,
+      "sha256": "f79d1e26aab245e1440eadca591fb54eaba1847de9b489802ab444cb69cd081e",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/c.png",
+      "bytes": 275235,
+      "sha256": "5b0956dafba8c89b873f392747ca33cdf53491bbbc85738c24b7ded7b6fbab84",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/c.svg",
+      "bytes": 91136,
+      "sha256": "23852c2128b5ceebda31af678a82faff463656e19f5231418502aa2a46df26e9",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/c_outlined.svg",
+      "bytes": 163368,
+      "sha256": "34c2042d66319374e81aa24dd2fe318411972370cfd663d25f8345349c9fc710",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/d.pdf",
+      "bytes": 46695,
+      "sha256": "a27143af7ef7fb8e75c80ee24d558aee1d44d201926da41d335b50ba092e152e",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/d.png",
+      "bytes": 217314,
+      "sha256": "674b3fff131409b02325f62e60ec981266b435941ca98843e97942a517f13821",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/d.svg",
+      "bytes": 45379,
+      "sha256": "532d6e9cafd0cbb5f8222ed77dd993b4209132f3cc7f51ba5bb3801e4147be7c",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/d_outlined.svg",
+      "bytes": 88858,
+      "sha256": "f8325dcb90fdbb7b59cd099dbc24efbceb0de2e993e92445b6eb9e2103c98e96",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/e.pdf",
+      "bytes": 56558,
+      "sha256": "34bf82c21812f2046be2e4adacf3149344728cf90853d6b32868023bff253c22",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/e.png",
+      "bytes": 125688,
+      "sha256": "00214a0273ad10deef20da8d55bd71be69c27e5dc538a5efea38a06e336817ad",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/e.svg",
+      "bytes": 18748,
+      "sha256": "a2637adaef2310d0079b0819206af24e4e344c7d792f04b42bf7755834cd6bfa",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/e_outlined.svg",
+      "bytes": 54600,
+      "sha256": "634243e7a8c31995c290dba356836c253829803d5ce2bd2d9782c1ec44c60567",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/f.pdf",
+      "bytes": 73144,
+      "sha256": "6e03cf21ff6e7fd1842637c86f078be191a171ce082ded1615939aa566f5bb98",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/f.png",
+      "bytes": 118736,
+      "sha256": "72cfb153e6404c0e4a77b02888358847d4fa6d35385bff113a850fbb6062ffa2",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/f.svg",
+      "bytes": 38401,
+      "sha256": "c3fddf44cc0808bdfc5a71c4380abf3134f79f924ae900f270fcb1d34f6d209e",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_reference/panels/f_outlined.svg",
+      "bytes": 63522,
+      "sha256": "01d702a8993868270c6887307dd871aaadceef5bda22c19d4328f7e5a18562f5",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_robustness/Fig5_data.zip",
+      "bytes": 64182702,
+      "sha256": "e6c1467eb74a2f082e1adbf1decefcc2a5a8b1e0c85a32bb05bff12034f3605e",
+      "reason": "superseded delivery or duplicate archive"
+    },
+    {
+      "path": "outputs/fig5_six_panel/figure/Fig5_initial.pdf",
+      "bytes": 149760,
+      "sha256": "c14ee1c44ad9f67c063a2ff8290c5088116a7923c01dd050ad2231bedfa5748a",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_six_panel/figure/Fig5_initial.png",
+      "bytes": 948480,
+      "sha256": "9cf9fb75f9c70e0cca5d35caa1bb50ee7936b3662d5b46720328dbeb444d39c8",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_six_panel/figure/Fig5_initial.svg",
+      "bytes": 116477,
+      "sha256": "5cfb109c31f626c7f744d583dd019415b0bdd06bd922b853cbbb1179e19cc1c7",
+      "reason": "superseded figure or component export"
+    },
+    {
+      "path": "outputs/fig5_six_panel/figure/Fig5_preview.png",
+      "bytes": 420422,
+      "sha256": "82146fa3a59d3e6fd7d78bbe6c00665699d18ee45a6e7c2bacac26544b388e7b",
+      "reason": "superseded figure or component export"
+    }
+  ],
+  "deleted_count": 206,
+  "bytes_removed": 123805483,
+  "kept": "Formal statistics archive, statistical tables, raw scientific inputs/outputs, audit records, shared dependencies and final renderer.",
+  "final_figure_sha256": {
+    "fig_reference/Fig5.png": "750ffe8ce8307db10e4c84a2c07191747bddf0e00879fcf372dbd7a31ed330c2",
+    "fig_reference/Fig5.pdf": "2749df10a61900844b20894d88cb3c17eb2909d929e90cfb61cf179df59971d0",
+    "fig_reference/Fig5.svg": "10a075c09d04caae3cfd8d13a2322dec49661927f2f5db8dfa2b32c53c109bcf",
+    "fig_reference/Fig5_preview.png": "8affbc0d388c284845e07e0bba14d81da7a5a5356185481c8323725b24fe2c81"
+  },
+  "timestamp_utc": "2026-10-04T14:07:26.213708+00:00"
+}

@@ -18,7 +18,7 @@ from .render_abcd import paired_samples
 from .cd_sources import read
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / 'outputs/fig3_extensions/abcd/fig3_replacements'
+OUT = ROOT / 'outputs/fig3_reference/assets'
 INK, GRID = '#10213B', '#E8EEF3'
 COLORS = {'gear': '#E16C35', 'graph': '#1269DF', 'fusion': '#713BCB'}
 
@@ -104,7 +104,7 @@ def card(ax: plt.Axes, x: float, width: float, color: str, label: str) -> None:
 
 def render_d() -> None:
     width, height = 177., 34.
-    case = read(ROOT / 'outputs/fig3_extensions/abcd/D_case_evidence.json')
+    case = read(ROOT / 'outputs/fig3_reference/extensions/abcd/D_case_evidence.json')
     assessment = case['verification']['assessment']
     if case['verification']['id'] != 's41467-026-68348-w/I0035/R001':
         raise ValueError('Fixed-ID source case changed')

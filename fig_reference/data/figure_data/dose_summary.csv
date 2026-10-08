@@ -1,0 +1,85 @@
+intervention,condition,aspect,nominal_retained_fraction,planned_n,metric,n,mean,low,high
+Historical sources,F,all,1.0,20,grounded_correct_percent,20,93.49112978524742,90.16129639355741,96.56152106676002
+Historical sources,F,all,1.0,20,paired_change_percentage_points,20,0.0,0.0,0.0
+Historical sources,E75,all,0.75,20,grounded_correct_percent,20,87.80374957000345,83.64867100348913,91.8092496867168
+Historical sources,E75,all,0.75,20,paired_change_percentage_points,20,-5.6873802152439925,-9.36544263538749,-1.9790776727357622
+Historical sources,E50,all,0.5,20,grounded_correct_percent,20,79.32876308418103,73.88128463008009,84.94756214985993
+Historical sources,E50,all,0.5,20,paired_change_percentage_points,20,-14.16236670106639,-19.575872278736057,-8.43808694530444
+Historical sources,E25,all,0.25,20,grounded_correct_percent,20,65.35117204776647,59.79012121295886,71.24330019288416
+Historical sources,E25,all,0.25,20,paired_change_percentage_points,20,-28.139957737480948,-33.81437562963783,-22.488609698265275
+Historical parent papers in graph,F,all,1.0,20,grounded_correct_percent,20,93.49112978524742,90.16129639355741,96.56152106676002
+Historical parent papers in graph,F,all,1.0,20,paired_change_percentage_points,20,0.0,0.0,0.0
+Historical parent papers in graph,G50,all,0.5,20,grounded_correct_percent,20,93.90753538257407,91.86298436041082,95.99119835434175
+Historical parent papers in graph,G50,all,0.5,20,paired_change_percentage_points,20,0.41640559732665033,-2.0302287581699345,3.2425982234999267
+Historical parent papers in graph,G25,all,0.25,20,grounded_correct_percent,20,89.6002598407784,84.78673867573346,93.95550027028355
+Historical parent papers in graph,G25,all,0.25,20,paired_change_percentage_points,20,-3.890869944469015,-9.673806452405524,1.9020702798663287
+Historical sources,F,citation_contact,1.0,20,grounded_correct_percent,14,98.21428571428571,94.64285714285714,100.0
+Historical sources,F,citation_contact,1.0,20,paired_change_percentage_points,14,0.0,0.0,0.0
+Historical sources,E75,citation_contact,0.75,20,grounded_correct_percent,14,96.42857142857143,91.07142857142857,100.0
+Historical sources,E75,citation_contact,0.75,20,paired_change_percentage_points,14,-1.7857142857142858,-7.142857142857143,3.5714285714285716
+Historical sources,E50,citation_contact,0.5,20,grounded_correct_percent,14,87.5,76.78571428571429,96.42857142857143
+Historical sources,E50,citation_contact,0.5,20,paired_change_percentage_points,14,-10.714285714285714,-21.428571428571427,-1.7857142857142858
+Historical sources,E25,citation_contact,0.25,20,grounded_correct_percent,14,69.64285714285714,55.357142857142854,83.92857142857143
+Historical sources,E25,citation_contact,0.25,20,paired_change_percentage_points,14,-28.571428571428573,-44.642857142857146,-12.5
+Historical parent papers in graph,F,citation_contact,1.0,20,grounded_correct_percent,14,98.21428571428571,94.64285714285714,100.0
+Historical parent papers in graph,F,citation_contact,1.0,20,paired_change_percentage_points,14,0.0,0.0,0.0
+Historical parent papers in graph,G50,citation_contact,0.5,20,grounded_correct_percent,14,89.28571428571429,80.35714285714286,96.42857142857143
+Historical parent papers in graph,G50,citation_contact,0.5,20,paired_change_percentage_points,14,-8.928571428571429,-17.857142857142858,-1.7857142857142858
+Historical parent papers in graph,G25,citation_contact,0.25,20,grounded_correct_percent,14,82.14285714285714,73.21428571428571,91.07142857142857
+Historical parent papers in graph,G25,citation_contact,0.25,20,paired_change_percentage_points,14,-16.071428571428573,-25.0,-7.142857142857143
+Historical sources,F,historical_verification,1.0,20,grounded_correct_percent,20,92.08333333333333,85.41666666666666,97.5
+Historical sources,F,historical_verification,1.0,20,paired_change_percentage_points,20,0.0,0.0,0.0
+Historical sources,E75,historical_verification,0.75,20,grounded_correct_percent,20,76.25,65.83333333333333,86.66666666666666
+Historical sources,E75,historical_verification,0.75,20,paired_change_percentage_points,20,-15.833333333333332,-25.833333333333336,-6.666666666666667
+Historical sources,E50,historical_verification,0.5,20,grounded_correct_percent,20,51.25,37.08333333333333,65.83333333333334
+Historical sources,E50,historical_verification,0.5,20,paired_change_percentage_points,20,-40.833333333333336,-56.66666666666667,-25.0
+Historical sources,E25,historical_verification,0.25,20,grounded_correct_percent,20,26.249999999999993,13.75,39.99999999999999
+Historical sources,E25,historical_verification,0.25,20,paired_change_percentage_points,20,-65.83333333333334,-81.66666666666666,-48.75000000000001
+Historical parent papers in graph,F,historical_verification,1.0,20,grounded_correct_percent,20,92.08333333333333,85.41666666666666,97.5
+Historical parent papers in graph,F,historical_verification,1.0,20,paired_change_percentage_points,20,0.0,0.0,0.0
+Historical parent papers in graph,G50,historical_verification,0.5,20,grounded_correct_percent,20,92.5,86.25,97.5
+Historical parent papers in graph,G50,historical_verification,0.5,20,paired_change_percentage_points,20,0.4166666666666668,-3.75,5.0
+Historical parent papers in graph,G25,historical_verification,0.25,20,grounded_correct_percent,20,96.25,90.0,100.0
+Historical parent papers in graph,G25,historical_verification,0.25,20,paired_change_percentage_points,20,4.166666666666667,0.0,9.166666666666668
+Historical sources,F,joint_contribution,1.0,20,grounded_correct_percent,20,90.0,81.25,97.5
+Historical sources,F,joint_contribution,1.0,20,paired_change_percentage_points,20,0.0,0.0,0.0
+Historical sources,E75,joint_contribution,0.75,20,grounded_correct_percent,20,85.0,76.25,92.5
+Historical sources,E75,joint_contribution,0.75,20,paired_change_percentage_points,20,-5.0,-13.75,3.75
+Historical sources,E50,joint_contribution,0.5,20,grounded_correct_percent,20,83.75,73.75,92.5
+Historical sources,E50,joint_contribution,0.5,20,paired_change_percentage_points,20,-6.25,-16.25,3.75
+Historical sources,E25,joint_contribution,0.25,20,grounded_correct_percent,20,71.25,62.5,80.0
+Historical sources,E25,joint_contribution,0.25,20,paired_change_percentage_points,20,-18.75,-28.75,-7.5
+Historical parent papers in graph,F,joint_contribution,1.0,20,grounded_correct_percent,20,90.0,81.25,97.5
+Historical parent papers in graph,F,joint_contribution,1.0,20,paired_change_percentage_points,20,0.0,0.0,0.0
+Historical parent papers in graph,G50,joint_contribution,0.5,20,grounded_correct_percent,20,93.75,88.75,98.75
+Historical parent papers in graph,G50,joint_contribution,0.5,20,paired_change_percentage_points,20,3.75,-3.75,11.25
+Historical parent papers in graph,G25,joint_contribution,0.25,20,grounded_correct_percent,20,87.5,80.0,95.0
+Historical parent papers in graph,G25,joint_contribution,0.25,20,paired_change_percentage_points,20,-2.5,-13.75,10.0
+Historical sources,F,knowledge_position,1.0,20,grounded_correct_percent,20,94.58333333333333,89.58333333333333,98.75
+Historical sources,F,knowledge_position,1.0,20,paired_change_percentage_points,20,0.0,0.0,0.0
+Historical sources,E75,knowledge_position,0.75,20,grounded_correct_percent,20,87.5,77.91666666666666,96.25
+Historical sources,E75,knowledge_position,0.75,20,paired_change_percentage_points,20,-7.083333333333333,-14.166666666666666,-1.25
+Historical sources,E50,knowledge_position,0.5,20,grounded_correct_percent,20,77.91666666666666,66.66666666666666,88.33333333333334
+Historical sources,E50,knowledge_position,0.5,20,paired_change_percentage_points,20,-16.666666666666668,-27.5,-6.666666666666666
+Historical sources,E25,knowledge_position,0.25,20,grounded_correct_percent,20,55.0,41.666666666666664,69.16666666666666
+Historical sources,E25,knowledge_position,0.25,20,paired_change_percentage_points,20,-39.583333333333336,-52.5,-26.25
+Historical parent papers in graph,F,knowledge_position,1.0,20,grounded_correct_percent,20,94.58333333333333,89.58333333333333,98.75
+Historical parent papers in graph,F,knowledge_position,1.0,20,paired_change_percentage_points,20,0.0,0.0,0.0
+Historical parent papers in graph,G50,knowledge_position,0.5,20,grounded_correct_percent,20,94.58333333333333,89.58333333333333,98.75
+Historical parent papers in graph,G50,knowledge_position,0.5,20,paired_change_percentage_points,20,0.0,0.0,0.0
+Historical parent papers in graph,G25,knowledge_position,0.25,20,grounded_correct_percent,20,95.0,88.75,100.0
+Historical parent papers in graph,G25,knowledge_position,0.25,20,paired_change_percentage_points,20,0.4166666666666668,-6.25,6.25
+Historical sources,F,structural_resolution,1.0,20,grounded_correct_percent,20,98.75,96.25,100.0
+Historical sources,F,structural_resolution,1.0,20,paired_change_percentage_points,20,0.0,0.0,0.0
+Historical sources,E75,structural_resolution,0.75,20,grounded_correct_percent,20,100.0,100.0,100.0
+Historical sources,E75,structural_resolution,0.75,20,paired_change_percentage_points,20,1.25,0.0,3.75
+Historical sources,E50,structural_resolution,0.5,20,grounded_correct_percent,20,97.5,92.5,100.0
+Historical sources,E50,structural_resolution,0.5,20,paired_change_percentage_points,20,-1.25,-7.5,3.75
+Historical sources,E25,structural_resolution,0.25,20,grounded_correct_percent,20,97.5,92.5,100.0
+Historical sources,E25,structural_resolution,0.25,20,paired_change_percentage_points,20,-1.25,-7.5,3.75
+Historical parent papers in graph,F,structural_resolution,1.0,20,grounded_correct_percent,20,98.75,96.25,100.0
+Historical parent papers in graph,F,structural_resolution,1.0,20,paired_change_percentage_points,20,0.0,0.0,0.0
+Historical parent papers in graph,G50,structural_resolution,0.5,20,grounded_correct_percent,20,100.0,100.0,100.0
+Historical parent papers in graph,G50,structural_resolution,0.5,20,paired_change_percentage_points,20,1.25,0.0,3.75
+Historical parent papers in graph,G25,structural_resolution,0.25,20,grounded_correct_percent,20,88.75,80.0,97.5
+Historical parent papers in graph,G25,structural_resolution,0.25,20,paired_change_percentage_points,20,-10.0,-20.0,-1.25

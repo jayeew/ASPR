@@ -11,7 +11,7 @@ import cairosvg
 
 ROOT = Path(__file__).resolve().parents[2]
 FIG3 = ROOT / 'outputs/fig3_reference'
-ASSETS = ROOT / 'outputs/fig3_extensions/abcd/fig3_replacements'
+ASSETS = ROOT / 'outputs/fig3_reference/assets'
 SVG = 'http://www.w3.org/2000/svg'
 XLINK = 'http://www.w3.org/1999/xlink'
 ET.register_namespace('', SVG)

@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+"""Study-local transport; preserve model inputs while avoiding the long HTTP response path."""
+import os
+import sys
+
+overrides = ['-c', 'model_provider="fig4_explanation"',
+    '-c', 'model_providers.fig4_explanation.name="Fig4 explanation"',
+    '-c', 'model_providers.fig4_explanation.wire_api="responses"',
+    '-c', 'model_providers.fig4_explanation.requires_openai_auth=true',
+    '-c', 'model_providers.fig4_explanation.supports_websockets=true',
+    '-c', 'model_providers.fig4_explanation.stream_idle_timeout_ms=1800000',
+    '-c', 'model_providers.fig4_explanation.request_max_retries=0',
+    '-c', 'model_providers.fig4_explanation.stream_max_retries=0']
+arguments = sys.argv[1:]
+arguments = ['exec', *overrides, *arguments[1:]] if arguments and arguments[0] == 'exec' else [*overrides, *arguments]
+os.execvp('codex', ['codex', *arguments])

@@ -14,8 +14,8 @@ import pandas as pd
 from scipy.stats import gaussian_kde
 
 ROOT = Path(__file__).resolve().parents[2]
-SOURCE = ROOT / 'outputs/fig3_revision'
-OUT = ROOT / 'outputs/fig3_extensions'
+SOURCE = ROOT / 'outputs/fig3_reference/study'
+OUT = ROOT / 'outputs/fig3_reference/extensions'
 COLORS = {'gear': '#E16C35', 'graph': '#1269DF', 'fusion': '#713BCB'}
 NAMES = {'gear': 'GEAR', 'graph': 'Graph', 'fusion': 'Full'}
 KINDS = ['historical_increment', 'cross_work_relation', 'cross_contribution', 'scope_correction']

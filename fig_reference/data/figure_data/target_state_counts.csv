@@ -1,0 +1,21 @@
+condition,state,count,n
+F,Grounded correct answer,34,34
+F,Justified withholding,0,34
+F,Other incomplete or incorrect answer,0,34
+F,Scientific judgment unresolved,0,34
+F,Unsupported assertion,0,34
+NONCRITICAL,Grounded correct answer,33,34
+NONCRITICAL,Justified withholding,0,34
+NONCRITICAL,Other incomplete or incorrect answer,0,34
+NONCRITICAL,Scientific judgment unresolved,0,34
+NONCRITICAL,Unsupported assertion,1,34
+CRITICAL,Grounded correct answer,1,34
+CRITICAL,Justified withholding,19,34
+CRITICAL,Other incomplete or incorrect answer,11,34
+CRITICAL,Scientific judgment unresolved,1,34
+CRITICAL,Unsupported assertion,2,34
+RESTORE,Grounded correct answer,34,34
+RESTORE,Justified withholding,0,34
+RESTORE,Other incomplete or incorrect answer,0,34
+RESTORE,Scientific judgment unresolved,0,34
+RESTORE,Unsupported assertion,0,34

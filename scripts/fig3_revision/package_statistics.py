@@ -10,8 +10,8 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
-RUN = ROOT/'outputs/fig3_revision'
-DEST = ROOT/'outputs/fig3_statistics_package'
+RUN = ROOT/'outputs/fig3_reference/study'
+DEST = ROOT/'outputs/fig3_reference/statistics_package'
 
 
 def rows(name: str) -> list[dict[str, str]]:
@@ -81,7 +81,7 @@ def main() -> None:
         target = DEST/'statistics/components'/path.name
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(path, target)
-    roster_rows = [json.loads(line) for line in (ROOT/'outputs/fig3_100_dataset/papers.jsonl').read_text().splitlines() if line.strip()]
+    roster_rows = [json.loads(line) for line in (ROOT/'outputs/fig3_reference/dataset/papers.jsonl').read_text().splitlines() if line.strip()]
     paper_stats, report_stats, claim_types = [], [], Counter()
     for row in roster_rows:
         ident = row['paper_id']

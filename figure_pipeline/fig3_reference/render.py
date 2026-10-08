@@ -24,7 +24,7 @@ from mpl_toolkits.mplot3d import proj3d
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / 'outputs/fig3_reference'
-DATA = ROOT / 'outputs/fig3_revision/derived'
+DATA = ROOT / 'outputs/fig3_reference/study/derived'
 METHODS = ['direct_a', 'gear', 'graph', 'fusion', 'eacl', 'reviewgrounder']
 OTHERS = [m for m in METHODS if m != 'fusion']
 NAMES = dict(zip(METHODS, ['GPT-5.6', 'GEAR', 'Graph', 'Full', 'EACL', 'ReviewG']))

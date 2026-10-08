@@ -1,0 +1,478 @@
+[
+  {
+    "phrase": "immune checkpoint blockade",
+    "display_label": "Immune checkpoint blockade",
+    "paper_count_at_review": 41,
+    "category": "Method",
+    "category_rationale": "Technical, analytical or intervention route: Immune checkpoint blockade."
+  },
+  {
+    "phrase": "liquid-liquid phase separation",
+    "display_label": "Liquid–liquid phase separation",
+    "paper_count_at_review": 26,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Liquid–liquid phase separation."
+  },
+  {
+    "phrase": "reactive oxygen species production",
+    "display_label": "Reactive oxygen species production",
+    "paper_count_at_review": 21,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Reactive oxygen species production."
+  },
+  {
+    "phrase": "thermally activated delayed fluorescence",
+    "display_label": "Thermally activated delayed fluorescence",
+    "paper_count_at_review": 18,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Thermally activated delayed fluorescence."
+  },
+  {
+    "phrase": "senescence-associated secretory phenotype",
+    "display_label": "Senescence-associated secretory phenotype",
+    "paper_count_at_review": 15,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Senescence-associated secretory phenotype."
+  },
+  {
+    "phrase": "proton-coupled electron transfer",
+    "display_label": "Proton-coupled electron transfer",
+    "paper_count_at_review": 12,
+    "category": "Combination",
+    "category_rationale": "Coupled proton and electron transfer processes."
+  },
+  {
+    "phrase": "all-atom molecular dynamics simulation",
+    "display_label": "All-atom molecular dynamics simulation",
+    "paper_count_at_review": 10,
+    "category": "Method",
+    "category_rationale": "Technical, analytical or intervention route: All-atom molecular dynamics simulation."
+  },
+  {
+    "phrase": "coarse-grained molecular dynamics simulation",
+    "display_label": "Coarse-grained molecular dynamics simulation",
+    "paper_count_at_review": 7,
+    "category": "Method",
+    "category_rationale": "Technical, analytical or intervention route: Coarse-grained molecular dynamics simulation."
+  },
+  {
+    "phrase": "ab initio molecular dynamics simulation",
+    "display_label": "Ab initio molecular dynamics simulation",
+    "paper_count_at_review": 6,
+    "category": "Method",
+    "category_rationale": "Technical, analytical or intervention route: Ab initio molecular dynamics simulation."
+  },
+  {
+    "phrase": "all-perovskite tandem solar cell",
+    "display_label": "All-perovskite tandem solar cells",
+    "paper_count_at_review": 8,
+    "category": "Combination",
+    "category_rationale": "Integration of perovskite subcells in a tandem photovoltaic device."
+  },
+  {
+    "phrase": "wide-bandgap perovskite solar cell",
+    "display_label": "Wide-bandgap perovskite solar cells",
+    "paper_count_at_review": 8,
+    "category": "Method",
+    "category_rationale": "Technical, analytical or intervention route: Wide-bandgap perovskite solar cells."
+  },
+  {
+    "phrase": "covalent organic framework membranes",
+    "display_label": "Covalent organic framework membranes",
+    "paper_count_at_review": 7,
+    "category": "Combination",
+    "category_rationale": "Covalent organic frameworks integrated into membrane separation architectures."
+  },
+  {
+    "phrase": "rna polymerase ii elongation",
+    "display_label": "RNA polymerase II elongation",
+    "paper_count_at_review": 6,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: RNA polymerase II elongation."
+  },
+  {
+    "phrase": "glucose-stimulated insulin secretion",
+    "display_label": "Glucose-stimulated insulin secretion",
+    "paper_count_at_review": 8,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Glucose-stimulated insulin secretion."
+  },
+  {
+    "phrase": "proton exchange membrane water electrolyzer",
+    "display_label": "Proton exchange membrane water electrolysis",
+    "paper_count_at_review": 5,
+    "category": "Combination",
+    "category_rationale": "Integration of proton-exchange membranes with water-electrolysis electrodes and cells."
+  },
+  {
+    "phrase": "four-dimensional scanning transmission electron microscopy",
+    "display_label": "4D scanning transmission electron microscopy",
+    "paper_count_at_review": 6,
+    "category": "Method",
+    "category_rationale": "Technical, analytical or intervention route: 4D scanning transmission electron microscopy."
+  },
+  {
+    "phrase": "high-speed atomic force microscopy",
+    "display_label": "High-speed atomic force microscopy",
+    "paper_count_at_review": 6,
+    "category": "Method",
+    "category_rationale": "Technical, analytical or intervention route: High-speed atomic force microscopy."
+  },
+  {
+    "phrase": "operando x-ray absorption spectroscopy",
+    "display_label": "Operando X-ray absorption spectroscopy",
+    "paper_count_at_review": 5,
+    "category": "Method",
+    "category_rationale": "Technical, analytical or intervention route: Operando X-ray absorption spectroscopy."
+  },
+  {
+    "phrase": "data-independent acquisition mass spectrometry",
+    "display_label": "Data-independent acquisition mass spectrometry",
+    "paper_count_at_review": 5,
+    "category": "Method",
+    "category_rationale": "Technical, analytical or intervention route: Data-independent acquisition mass spectrometry."
+  },
+  {
+    "phrase": "massively parallel reporter assay",
+    "display_label": "Massively parallel reporter assays",
+    "paper_count_at_review": 7,
+    "category": "Method",
+    "category_rationale": "Technical, analytical or intervention route: Massively parallel reporter assays."
+  },
+  {
+    "phrase": "single-nucleus rna sequencing",
+    "display_label": "Single-nucleus RNA sequencing",
+    "paper_count_at_review": 13,
+    "category": "Method",
+    "category_rationale": "Technical, analytical or intervention route: Single-nucleus RNA sequencing."
+  },
+  {
+    "phrase": "single-particle cryo-electron microscopy",
+    "display_label": "Single-particle cryo-electron microscopy",
+    "paper_count_at_review": 11,
+    "category": "Method",
+    "category_rationale": "Technical, analytical or intervention route: Single-particle cryo-electron microscopy."
+  },
+  {
+    "phrase": "resonant inelastic x-ray scattering",
+    "display_label": "Resonant inelastic X-ray scattering",
+    "paper_count_at_review": 13,
+    "category": "Method",
+    "category_rationale": "Technical, analytical or intervention route: Resonant inelastic X-ray scattering."
+  },
+  {
+    "phrase": "two-electron oxygen reduction reaction",
+    "display_label": "Two-electron oxygen reduction",
+    "paper_count_at_review": 6,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Two-electron oxygen reduction."
+  },
+  {
+    "phrase": "laser powder bed fusion",
+    "display_label": "Laser powder bed fusion",
+    "paper_count_at_review": 9,
+    "category": "Method",
+    "category_rationale": "Technical, analytical or intervention route: Laser powder bed fusion."
+  },
+  {
+    "phrase": "neutrophil extracellular trap formation",
+    "display_label": "Neutrophil extracellular trap formation",
+    "paper_count_at_review": 8,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Neutrophil extracellular trap formation."
+  },
+  {
+    "phrase": "dna double-strand breaks",
+    "display_label": "DNA double-strand breaks",
+    "paper_count_at_review": 10,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: DNA double-strand breaks."
+  },
+  {
+    "phrase": "stalled replication forks",
+    "display_label": "Stalled replication forks",
+    "paper_count_at_review": 11,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Stalled replication forks."
+  },
+  {
+    "phrase": "targeted protein degradation",
+    "display_label": "Targeted protein degradation",
+    "paper_count_at_review": 10,
+    "category": "Method",
+    "category_rationale": "Technical, analytical or intervention route: Targeted protein degradation."
+  },
+  {
+    "phrase": "immunogenic cell death",
+    "display_label": "Immunogenic cell death",
+    "paper_count_at_review": 18,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Immunogenic cell death."
+  },
+  {
+    "phrase": "integrated stress response",
+    "display_label": "Integrated stress response",
+    "paper_count_at_review": 16,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Integrated stress response."
+  },
+  {
+    "phrase": "unfolded protein response",
+    "display_label": "Unfolded protein response",
+    "paper_count_at_review": 19,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Unfolded protein response."
+  },
+  {
+    "phrase": "endoplasmic reticulum stress",
+    "display_label": "Endoplasmic reticulum stress",
+    "paper_count_at_review": 23,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Endoplasmic reticulum stress."
+  },
+  {
+    "phrase": "fatty acid oxidation",
+    "display_label": "Fatty acid oxidation",
+    "paper_count_at_review": 21,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Fatty acid oxidation."
+  },
+  {
+    "phrase": "fatty acid synthesis",
+    "display_label": "Fatty acid synthesis",
+    "paper_count_at_review": 14,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Fatty acid synthesis."
+  },
+  {
+    "phrase": "interfacial charge transfer",
+    "display_label": "Interfacial charge transfer",
+    "paper_count_at_review": 13,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Interfacial charge transfer."
+  },
+  {
+    "phrase": "extracellular electron transfer",
+    "display_label": "Extracellular electron transfer",
+    "paper_count_at_review": 10,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Extracellular electron transfer."
+  },
+  {
+    "phrase": "hydrogen atom transfer",
+    "display_label": "Hydrogen atom transfer",
+    "paper_count_at_review": 11,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Hydrogen atom transfer."
+  },
+  {
+    "phrase": "electrochemical co2 reduction",
+    "display_label": "Electrochemical CO2 reduction",
+    "paper_count_at_review": 9,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Electrochemical CO2 reduction."
+  },
+  {
+    "phrase": "alkaline hydrogen evolution",
+    "display_label": "Alkaline hydrogen evolution",
+    "paper_count_at_review": 9,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Alkaline hydrogen evolution."
+  },
+  {
+    "phrase": "hydrogen oxidation reaction",
+    "display_label": "Hydrogen oxidation reaction",
+    "paper_count_at_review": 8,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Hydrogen oxidation reaction."
+  },
+  {
+    "phrase": "reverse water gas shift",
+    "display_label": "Reverse water-gas shift",
+    "paper_count_at_review": 5,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Reverse water-gas shift."
+  },
+  {
+    "phrase": "solid electrolyte interphase",
+    "display_label": "Solid electrolyte interphase",
+    "paper_count_at_review": 10,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Solid electrolyte interphase."
+  },
+  {
+    "phrase": "circularly polarized luminescence",
+    "display_label": "Circularly polarized luminescence",
+    "paper_count_at_review": 31,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Circularly polarized luminescence."
+  },
+  {
+    "phrase": "reverse intersystem crossing",
+    "display_label": "Reverse intersystem crossing",
+    "paper_count_at_review": 12,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Reverse intersystem crossing."
+  },
+  {
+    "phrase": "twisted bilayer graphene",
+    "display_label": "Twisted bilayer graphene",
+    "paper_count_at_review": 12,
+    "category": "Combination",
+    "category_rationale": "Coupling of two graphene layers through a controlled relative twist."
+  },
+  {
+    "phrase": "quantum spin liquid",
+    "display_label": "Quantum spin liquids",
+    "paper_count_at_review": 8,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Quantum spin liquids."
+  },
+  {
+    "phrase": "charge density wave",
+    "display_label": "Charge density waves",
+    "paper_count_at_review": 23,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Charge density waves."
+  },
+  {
+    "phrase": "anomalous hall effect",
+    "display_label": "Anomalous Hall effect",
+    "paper_count_at_review": 24,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Anomalous Hall effect."
+  },
+  {
+    "phrase": "thin-film lithium niobate",
+    "display_label": "Thin-film lithium niobate",
+    "paper_count_at_review": 16,
+    "category": "Method",
+    "category_rationale": "Technical, analytical or intervention route: Thin-film lithium niobate."
+  },
+  {
+    "phrase": "spiking neural network",
+    "display_label": "Spiking neural networks",
+    "paper_count_at_review": 22,
+    "category": "Method",
+    "category_rationale": "Technical, analytical or intervention route: Spiking neural networks."
+  },
+  {
+    "phrase": "generative adversarial network",
+    "display_label": "Generative adversarial networks",
+    "paper_count_at_review": 9,
+    "category": "Method",
+    "category_rationale": "Technical, analytical or intervention route: Generative adversarial networks."
+  },
+  {
+    "phrase": "deep mutational scanning",
+    "display_label": "Deep mutational scanning",
+    "paper_count_at_review": 12,
+    "category": "Method",
+    "category_rationale": "Technical, analytical or intervention route: Deep mutational scanning."
+  },
+  {
+    "phrase": "adenine base editor",
+    "display_label": "Adenine base editing",
+    "paper_count_at_review": 9,
+    "category": "Method",
+    "category_rationale": "Technical, analytical or intervention route: Adenine base editing."
+  },
+  {
+    "phrase": "adaptive laboratory evolution",
+    "display_label": "Adaptive laboratory evolution",
+    "paper_count_at_review": 8,
+    "category": "Method",
+    "category_rationale": "Technical, analytical or intervention route: Adaptive laboratory evolution."
+  },
+  {
+    "phrase": "horizontal gene transfer",
+    "display_label": "Horizontal gene transfer",
+    "paper_count_at_review": 18,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Horizontal gene transfer."
+  },
+  {
+    "phrase": "expression quantitative trait loci",
+    "display_label": "Expression quantitative trait loci",
+    "paper_count_at_review": 7,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Expression quantitative trait loci."
+  },
+  {
+    "phrase": "t cell exhaustion",
+    "display_label": "T-cell exhaustion",
+    "paper_count_at_review": 8,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: T-cell exhaustion."
+  },
+  {
+    "phrase": "t cell activation",
+    "display_label": "T-cell activation",
+    "paper_count_at_review": 28,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: T-cell activation."
+  },
+  {
+    "phrase": "t cell infiltration",
+    "display_label": "T-cell infiltration",
+    "paper_count_at_review": 20,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: T-cell infiltration."
+  },
+  {
+    "phrase": "neutralizing antibody response",
+    "display_label": "Neutralizing antibody responses",
+    "paper_count_at_review": 9,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Neutralizing antibody responses."
+  },
+  {
+    "phrase": "cancer cell proliferation",
+    "display_label": "Cancer-cell proliferation",
+    "paper_count_at_review": 13,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Cancer-cell proliferation."
+  },
+  {
+    "phrase": "stem cell differentiation",
+    "display_label": "Stem-cell differentiation",
+    "paper_count_at_review": 8,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Stem-cell differentiation."
+  },
+  {
+    "phrase": "atlantic meridional overturning circulation",
+    "display_label": "Atlantic meridional overturning circulation",
+    "paper_count_at_review": 9,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Atlantic meridional overturning circulation."
+  },
+  {
+    "phrase": "soil organic carbon",
+    "display_label": "Soil organic carbon",
+    "paper_count_at_review": 17,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Soil organic carbon."
+  },
+  {
+    "phrase": "dissolved organic carbon",
+    "display_label": "Dissolved organic carbon",
+    "paper_count_at_review": 9,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Dissolved organic carbon."
+  },
+  {
+    "phrase": "mitochondrial reactive oxygen species",
+    "display_label": "Mitochondrial reactive oxygen species",
+    "paper_count_at_review": 6,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Mitochondrial reactive oxygen species."
+  },
+  {
+    "phrase": "transcription factor binding site",
+    "display_label": "Transcription-factor binding sites",
+    "paper_count_at_review": 7,
+    "category": "Problem",
+    "category_rationale": "Scientific process, mechanism, phenomenon or research object to understand: Transcription-factor binding sites."
+  }
+]

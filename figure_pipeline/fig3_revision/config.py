@@ -23,8 +23,8 @@ EFFORTS = {
 
 class Config(BaseModel):
     model_config = ConfigDict(extra='forbid')
-    dataset: Path = ROOT/'outputs/fig3_100_dataset'
-    output: Path = ROOT/'outputs/fig3_revision'
+    dataset: Path = ROOT/'outputs/fig3_reference/dataset'
+    output: Path = ROOT/'outputs/fig3_reference/study'
     model: Literal['gpt-5.6-luna'] = 'gpt-5.6-luna'
     efforts: dict[str, str] = EFFORTS
     workers: int = 64

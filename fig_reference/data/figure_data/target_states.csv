@@ -1,0 +1,141 @@
+paper_id,condition,state,paired_complete,question_id,part_id
+s41467-026-68332-4,F,Grounded correct answer,True,H1,H1a
+s41467-026-68332-4,NONCRITICAL,Grounded correct answer,True,H1,H1a
+s41467-026-68332-4,CRITICAL,Justified withholding,True,H1,H1a
+s41467-026-68332-4,RESTORE,Grounded correct answer,True,H1,H1a
+s41467-026-68412-5,F,Grounded correct answer,True,H2,H2a
+s41467-026-68412-5,NONCRITICAL,Grounded correct answer,True,H2,H2a
+s41467-026-68412-5,CRITICAL,Justified withholding,True,H2,H2a
+s41467-026-68412-5,RESTORE,Grounded correct answer,True,H2,H2a
+s41467-026-68427-y,F,Grounded correct answer,True,H1,H1a
+s41467-026-68427-y,NONCRITICAL,Grounded correct answer,True,H1,H1a
+s41467-026-68427-y,CRITICAL,Other incomplete or incorrect answer,True,H1,H1a
+s41467-026-68427-y,RESTORE,Grounded correct answer,True,H1,H1a
+s41467-026-68493-2,F,Grounded correct answer,True,H1,H1a
+s41467-026-68493-2,NONCRITICAL,Grounded correct answer,True,H1,H1a
+s41467-026-68493-2,CRITICAL,Other incomplete or incorrect answer,True,H1,H1a
+s41467-026-68493-2,RESTORE,Grounded correct answer,True,H1,H1a
+s41467-026-68508-y,F,Grounded correct answer,True,H1,H1a
+s41467-026-68508-y,NONCRITICAL,Grounded correct answer,True,H1,H1a
+s41467-026-68508-y,CRITICAL,Other incomplete or incorrect answer,True,H1,H1a
+s41467-026-68508-y,RESTORE,Grounded correct answer,True,H1,H1a
+s41467-026-68592-0,F,Grounded correct answer,True,H2,H2a
+s41467-026-68592-0,NONCRITICAL,Grounded correct answer,True,H2,H2a
+s41467-026-68592-0,CRITICAL,Scientific judgment unresolved,True,H2,H2a
+s41467-026-68592-0,RESTORE,Grounded correct answer,True,H2,H2a
+s41467-026-68605-y,F,Grounded correct answer,True,H1,H1a
+s41467-026-68605-y,NONCRITICAL,Unsupported assertion,True,H1,H1a
+s41467-026-68605-y,CRITICAL,Other incomplete or incorrect answer,True,H1,H1a
+s41467-026-68605-y,RESTORE,Grounded correct answer,True,H1,H1a
+s41467-026-68644-5,F,Grounded correct answer,True,H1,H1a
+s41467-026-68644-5,NONCRITICAL,Grounded correct answer,True,H1,H1a
+s41467-026-68644-5,CRITICAL,Grounded correct answer,True,H1,H1a
+s41467-026-68644-5,RESTORE,Grounded correct answer,True,H1,H1a
+s41467-026-68809-2,F,Grounded correct answer,True,H1,H1a
+s41467-026-68809-2,NONCRITICAL,Grounded correct answer,True,H1,H1a
+s41467-026-68809-2,CRITICAL,Justified withholding,True,H1,H1a
+s41467-026-68809-2,RESTORE,Grounded correct answer,True,H1,H1a
+s41467-026-68885-4,F,Grounded correct answer,True,H2,H2a
+s41467-026-68885-4,NONCRITICAL,Grounded correct answer,True,H2,H2a
+s41467-026-68885-4,CRITICAL,Justified withholding,True,H2,H2a
+s41467-026-68885-4,RESTORE,Grounded correct answer,True,H2,H2a
+s41467-026-68963-7,F,Grounded correct answer,True,H2,H2a
+s41467-026-68963-7,NONCRITICAL,Grounded correct answer,True,H2,H2a
+s41467-026-68963-7,CRITICAL,Justified withholding,True,H2,H2a
+s41467-026-68963-7,RESTORE,Grounded correct answer,True,H2,H2a
+s41467-026-69098-5,F,Grounded correct answer,True,H2,H2a
+s41467-026-69098-5,NONCRITICAL,Grounded correct answer,True,H2,H2a
+s41467-026-69098-5,CRITICAL,Justified withholding,True,H2,H2a
+s41467-026-69098-5,RESTORE,Grounded correct answer,True,H2,H2a
+s41467-026-69287-2,F,Grounded correct answer,True,H1,H1a
+s41467-026-69287-2,NONCRITICAL,Grounded correct answer,True,H1,H1a
+s41467-026-69287-2,CRITICAL,Other incomplete or incorrect answer,True,H1,H1a
+s41467-026-69287-2,RESTORE,Grounded correct answer,True,H1,H1a
+s41467-026-69411-2,F,Grounded correct answer,False,H1,H1a
+s41467-026-69411-2,NONCRITICAL,Evaluation unavailable,False,H1,H1a
+s41467-026-69411-2,CRITICAL,Scientific judgment unresolved,False,H1,H1a
+s41467-026-69411-2,RESTORE,Evaluation unavailable,False,H1,H1a
+s42003-026-09591-1,F,Grounded correct answer,True,H1,H1a
+s42003-026-09591-1,NONCRITICAL,Grounded correct answer,True,H1,H1a
+s42003-026-09591-1,CRITICAL,Justified withholding,True,H1,H1a
+s42003-026-09591-1,RESTORE,Grounded correct answer,True,H1,H1a
+s42004-026-01949-0,F,Grounded correct answer,True,H1,H1a
+s42004-026-01949-0,NONCRITICAL,Grounded correct answer,True,H1,H1a
+s42004-026-01949-0,CRITICAL,Justified withholding,True,H1,H1a
+s42004-026-01949-0,RESTORE,Grounded correct answer,True,H1,H1a
+s42004-026-01990-z,F,Grounded correct answer,True,H1,H1a
+s42004-026-01990-z,NONCRITICAL,Grounded correct answer,True,H1,H1a
+s42004-026-01990-z,CRITICAL,Justified withholding,True,H1,H1a
+s42004-026-01990-z,RESTORE,Grounded correct answer,True,H1,H1a
+s42005-026-02554-2,F,Grounded correct answer,True,H2,H2a
+s42005-026-02554-2,NONCRITICAL,Grounded correct answer,True,H2,H2a
+s42005-026-02554-2,CRITICAL,Justified withholding,True,H2,H2a
+s42005-026-02554-2,RESTORE,Grounded correct answer,True,H2,H2a
+s43246-026-01100-5,F,Grounded correct answer,True,H2,H2a
+s43246-026-01100-5,NONCRITICAL,Grounded correct answer,True,H2,H2a
+s43246-026-01100-5,CRITICAL,Justified withholding,True,H2,H2a
+s43246-026-01100-5,RESTORE,Grounded correct answer,True,H2,H2a
+s41467-026-68305-7,F,Grounded correct answer,True,H2,H2a
+s41467-026-68305-7,NONCRITICAL,Grounded correct answer,True,H2,H2a
+s41467-026-68305-7,CRITICAL,Justified withholding,True,H2,H2a
+s41467-026-68305-7,RESTORE,Grounded correct answer,True,H2,H2a
+s41467-026-68328-0,F,Grounded correct answer,True,H1,H1a
+s41467-026-68328-0,NONCRITICAL,Grounded correct answer,True,H1,H1a
+s41467-026-68328-0,CRITICAL,Justified withholding,True,H1,H1a
+s41467-026-68328-0,RESTORE,Grounded correct answer,True,H1,H1a
+s41467-026-68492-3,F,Grounded correct answer,True,H1,H1a
+s41467-026-68492-3,NONCRITICAL,Grounded correct answer,True,H1,H1a
+s41467-026-68492-3,CRITICAL,Justified withholding,True,H1,H1a
+s41467-026-68492-3,RESTORE,Grounded correct answer,True,H1,H1a
+s41467-026-68612-z,F,Grounded correct answer,True,H1,H1a
+s41467-026-68612-z,NONCRITICAL,Grounded correct answer,True,H1,H1a
+s41467-026-68612-z,CRITICAL,Justified withholding,True,H1,H1a
+s41467-026-68612-z,RESTORE,Grounded correct answer,True,H1,H1a
+s41467-026-68663-2,F,Grounded correct answer,True,H1,H1b
+s41467-026-68663-2,NONCRITICAL,Grounded correct answer,True,H1,H1b
+s41467-026-68663-2,CRITICAL,Other incomplete or incorrect answer,True,H1,H1b
+s41467-026-68663-2,RESTORE,Grounded correct answer,True,H1,H1b
+s41467-026-68686-9,F,Grounded correct answer,True,H1,H1a
+s41467-026-68686-9,NONCRITICAL,Grounded correct answer,True,H1,H1a
+s41467-026-68686-9,CRITICAL,Other incomplete or incorrect answer,True,H1,H1a
+s41467-026-68686-9,RESTORE,Grounded correct answer,True,H1,H1a
+s41467-026-68784-8,F,Grounded correct answer,True,H1,H1a
+s41467-026-68784-8,NONCRITICAL,Grounded correct answer,True,H1,H1a
+s41467-026-68784-8,CRITICAL,Unsupported assertion,True,H1,H1a
+s41467-026-68784-8,RESTORE,Grounded correct answer,True,H1,H1a
+s41467-026-68804-7,F,Grounded correct answer,True,H2,H2a
+s41467-026-68804-7,NONCRITICAL,Grounded correct answer,True,H2,H2a
+s41467-026-68804-7,CRITICAL,Other incomplete or incorrect answer,True,H2,H2a
+s41467-026-68804-7,RESTORE,Grounded correct answer,True,H2,H2a
+s41467-026-68859-6,F,Grounded correct answer,True,H1,H1a
+s41467-026-68859-6,NONCRITICAL,Grounded correct answer,True,H1,H1a
+s41467-026-68859-6,CRITICAL,Other incomplete or incorrect answer,True,H1,H1a
+s41467-026-68859-6,RESTORE,Grounded correct answer,True,H1,H1a
+s41467-026-69111-x,F,Grounded correct answer,True,H2,H2a
+s41467-026-69111-x,NONCRITICAL,Grounded correct answer,True,H2,H2a
+s41467-026-69111-x,CRITICAL,Justified withholding,True,H2,H2a
+s41467-026-69111-x,RESTORE,Grounded correct answer,True,H2,H2a
+s41467-026-69306-2,F,Grounded correct answer,True,H1,H1a
+s41467-026-69306-2,NONCRITICAL,Grounded correct answer,True,H1,H1a
+s41467-026-69306-2,CRITICAL,Unsupported assertion,True,H1,H1a
+s41467-026-69306-2,RESTORE,Grounded correct answer,True,H1,H1a
+s41467-026-69371-7,F,Grounded correct answer,True,H2,H2a
+s41467-026-69371-7,NONCRITICAL,Grounded correct answer,True,H2,H2a
+s41467-026-69371-7,CRITICAL,Other incomplete or incorrect answer,True,H2,H2a
+s41467-026-69371-7,RESTORE,Grounded correct answer,True,H2,H2a
+s41467-026-69374-4,F,Grounded correct answer,True,H1,H1a
+s41467-026-69374-4,NONCRITICAL,Grounded correct answer,True,H1,H1a
+s41467-026-69374-4,CRITICAL,Justified withholding,True,H1,H1a
+s41467-026-69374-4,RESTORE,Grounded correct answer,True,H1,H1a
+s42003-026-09574-2,F,Grounded correct answer,True,H1,H1a
+s42003-026-09574-2,NONCRITICAL,Grounded correct answer,True,H1,H1a
+s42003-026-09574-2,CRITICAL,Other incomplete or incorrect answer,True,H1,H1a
+s42003-026-09574-2,RESTORE,Grounded correct answer,True,H1,H1a
+s42004-026-01958-z,F,Grounded correct answer,True,H1,H1a
+s42004-026-01958-z,NONCRITICAL,Grounded correct answer,True,H1,H1a
+s42004-026-01958-z,CRITICAL,Justified withholding,True,H1,H1a
+s42004-026-01958-z,RESTORE,Grounded correct answer,True,H1,H1a
+s43247-026-03188-6,F,Grounded correct answer,True,H1,H1a
+s43247-026-03188-6,NONCRITICAL,Grounded correct answer,True,H1,H1a
+s43247-026-03188-6,CRITICAL,Justified withholding,True,H1,H1a
+s43247-026-03188-6,RESTORE,Grounded correct answer,True,H1,H1a

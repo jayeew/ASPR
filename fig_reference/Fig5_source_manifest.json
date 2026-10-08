@@ -1,0 +1,53 @@
+{
+  "source_archive": "/home/jayee/workspace/ASPR/outputs/fig5_mechanism_study/Fig5_formal_statistics.zip",
+  "source_sha256": "401da671604c8ac6b473e2ed7c902107f428791a1a6258db4e50fe6aa8e3ba96",
+  "sources": {
+    "figure_data/resource_summary.csv": {
+      "sha256": "768df7f7723ce127430e35a0c7311282701e256465bfab9d8f7a147ff1b2b688",
+      "rows": 24
+    },
+    "transfer_validation/paired_changes.csv": {
+      "sha256": "84a5e73bd612fb4655b835fadcf79034284a1607e9f2e90e3bd56e4f9a1b6bd0",
+      "rows": 1689
+    },
+    "transfer_validation/paired_summary.csv": {
+      "sha256": "b35f8b004226ecc46ca93e510f19e6471592160b06606a8d54e821dfe9ae6169",
+      "rows": 18
+    },
+    "figure_data/dose_summary.csv": {
+      "sha256": "3985ce8de2af34730e6752ae7a7ccf4f6582cf465b086000361ac350d47eeddd",
+      "rows": 84
+    },
+    "interventions/paired_summary.csv": {
+      "sha256": "7f39491d864d95f4543b38a775299a752116ceaa67fd340e8cbaa1fde5510b52",
+      "rows": 234
+    },
+    "figure_data/target_state_counts.csv": {
+      "sha256": "f9d177204e4f955e2bf8f114ac6969fc8e4367290c865126ac9bbe58bc5d8dcf",
+      "rows": 20
+    },
+    "figure_data/target_states.csv": {
+      "sha256": "526e45a9cc8dc3313ea15e4008782c933639dd020d769c59a3a9b91ae24c0550",
+      "rows": 140
+    },
+    "figure_data/resource_papers.csv": {
+      "sha256": "478ae723e434f2632bab3b6015ea6b72fa555e36175ddbc3b779e4085527c4db",
+      "rows": 276
+    }
+  },
+  "canvas_mm": [
+    420.0,
+    218.0
+  ],
+  "png_dpi": 600,
+  "notes": [
+    "No global title, takeaway or gray panel commentary.",
+    "All plotted numbers read from the formal statistics archive.",
+    "All individual points retained: model effects use symmetric-log scale, linear within \u00b15 with linscale 2, limits -55 to 55; resource change axis -100 to 27.",
+    "Two-row layout: C and D side by side, each with vertically stacked component charts.",
+    "Three deletion schemes compared within the same 20-paper subset; scheme 1 from dose_summary.",
+    "Positive matrix changes retain a plus sign and zero-loss shading.",
+    "State transition counts derived by joining the same complete papers.",
+    "Main-cohort and diagnostic absolute scores use their respective evaluation protocols."
+  ]
+}
