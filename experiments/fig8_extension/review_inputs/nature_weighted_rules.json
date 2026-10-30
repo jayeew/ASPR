@@ -1,0 +1,499 @@
+[
+  {
+    "pattern": "Scripps Research,.*La Jolla",
+    "canonical_name": "Scripps Research Institute",
+    "entity_type": "research_institute",
+    "source_url": "https://www.scripps.edu/krishnamurthy/contacts.html",
+    "existing_name": "Scripps Research Institute",
+    "note": "",
+    "countries": null
+  },
+  {
+    "pattern": "Vagelos College of Physicians and Surgeons",
+    "canonical_name": "Columbia University",
+    "entity_type": "university",
+    "source_url": "https://www.biochem.cuimc.columbia.edu/about-us",
+    "existing_name": "Columbia University",
+    "note": "",
+    "countries": null
+  },
+  {
+    "pattern": "^Society of Fellows, Harvard University",
+    "canonical_name": "Harvard University",
+    "entity_type": "university",
+    "source_url": "https://socfell.fas.harvard.edu/about",
+    "existing_name": "Harvard University",
+    "note": "",
+    "countries": null
+  },
+  {
+    "pattern": "Livestrong Cancer Institutes, Dell Medical School",
+    "canonical_name": "University of Texas at Austin",
+    "entity_type": "university",
+    "source_url": "https://www.utexas.edu/offices/view-all",
+    "existing_name": "The University of Texas at Austin",
+    "note": "",
+    "countries": null
+  },
+  {
+    "pattern": "^Beijing Frontier Research Center for Biological Structure",
+    "canonical_name": "Tsinghua University",
+    "entity_type": "university",
+    "source_url": "https://www.tsinghua.edu.cn/en/Research/Facilities1/Centers___Labs.htm",
+    "existing_name": "Tsinghua University",
+    "note": "Both named centers are explicitly listed among Tsinghua research facilities.",
+    "countries": [
+      "CN"
+    ]
+  },
+  {
+    "pattern": "^Fujian Institute of Geological Survey, Fuzhou",
+    "canonical_name": "Fujian Institute of Geological Survey",
+    "entity_type": "government_research_institute",
+    "source_url": "https://rst.fujian.gov.cn/zw/ztzl/zxzt/jygqxxzt/ydwzpxx/201610/t20161010_927883.htm",
+    "existing_name": null,
+    "note": "Preserve publication-era name; 2025 reorganization is not retroactively substituted.",
+    "countries": [
+      "CN"
+    ]
+  },
+  {
+    "pattern": "^Lightelligence Pte\\. Ltd\\., Singapore",
+    "canonical_name": "Lightelligence Pte. Ltd.",
+    "entity_type": "company",
+    "source_url": "https://www.lightelligence.ai/",
+    "existing_name": null,
+    "note": "Publisher supplies exact Singapore legal name/site; no linkage to Chinese parent registry assumed.",
+    "countries": [
+      "SG"
+    ]
+  },
+  {
+    "pattern": "^Profluent Bio, Berkeley",
+    "canonical_name": "Profluent Bio",
+    "entity_type": "company",
+    "source_url": "https://www.profluent.bio/media/profluent-launches-to-design-new-proteins-with-generative-ai",
+    "existing_name": null,
+    "note": "",
+    "countries": [
+      "US"
+    ]
+  },
+  {
+    "pattern": "^Terremoto Biosciences, San Francisco",
+    "canonical_name": "Terremoto Biosciences",
+    "entity_type": "company",
+    "source_url": "https://terremotobio.com/about/",
+    "existing_name": null,
+    "note": "",
+    "countries": [
+      "US"
+    ]
+  },
+  {
+    "pattern": "^Google\\s*DeepMind,",
+    "canonical_name": "Google DeepMind",
+    "entity_type": "company",
+    "source_url": "https://deepmind.google/about/",
+    "existing_name": null,
+    "note": "Corporate research unit. Country remains publication site, not global headquarters.",
+    "countries": null
+  },
+  {
+    "pattern": "^Diraq, Sydney",
+    "canonical_name": "Diraq",
+    "entity_type": "company",
+    "source_url": "https://www.diraq.com/",
+    "existing_name": null,
+    "note": "",
+    "countries": [
+      "AU"
+    ]
+  },
+  {
+    "pattern": "^Pragmatic Semiconductor, Cambridge",
+    "canonical_name": "Pragmatic Semiconductor",
+    "entity_type": "company",
+    "source_url": "https://www.pragmaticsemi.com/terms-and-conditions/",
+    "existing_name": null,
+    "note": "",
+    "countries": [
+      "GB"
+    ]
+  },
+  {
+    "pattern": "^Scenic Biotech,",
+    "canonical_name": "Scenic Biotech",
+    "entity_type": "company",
+    "source_url": "https://scenicbiotech.com/about/",
+    "existing_name": null,
+    "note": "",
+    "countries": [
+      "NL"
+    ]
+  },
+  {
+    "pattern": "^Anello Photonics, Santa Clara",
+    "canonical_name": "ANELLO Photonics",
+    "entity_type": "company",
+    "source_url": "https://www.anellophotonics.com/",
+    "existing_name": null,
+    "note": "",
+    "countries": [
+      "US"
+    ]
+  },
+  {
+    "pattern": "^Inocras, San Diego",
+    "canonical_name": "Inocras",
+    "entity_type": "company",
+    "source_url": "https://inocras.com/",
+    "existing_name": null,
+    "note": "",
+    "countries": [
+      "US"
+    ]
+  },
+  {
+    "pattern": "^Pretzel Therapeutics,",
+    "canonical_name": "Pretzel Therapeutics",
+    "entity_type": "company",
+    "source_url": "https://www.pretzeltx.com/",
+    "existing_name": null,
+    "note": "",
+    "countries": [
+      "SE",
+      "US"
+    ]
+  },
+  {
+    "pattern": "^AWS Center for Quantum Computing, Pasadena",
+    "canonical_name": "AWS Center for Quantum Computing",
+    "entity_type": "company",
+    "source_url": "https://aws.amazon.com/blogs/quantum-computing/announcing-the-opening-of-the-aws-center-for-quantum-computing/",
+    "existing_name": null,
+    "note": "Corporate center on Caltech campus does not constitute Caltech affiliation.",
+    "countries": [
+      "US"
+    ]
+  },
+  {
+    "pattern": "^FluoRok, Oxford",
+    "canonical_name": "FluoRok",
+    "entity_type": "company",
+    "source_url": "https://www.fluorok.com/",
+    "existing_name": null,
+    "note": "University spinout remains company, not Oxford affiliation.",
+    "countries": [
+      "GB"
+    ]
+  },
+  {
+    "pattern": "^Turkana Basin Institute, Nairobi",
+    "canonical_name": "Turkana Basin Institute",
+    "entity_type": "research_institute",
+    "source_url": "https://www.turkanabasin.org/about/",
+    "existing_name": null,
+    "note": "Kenyan institute identity confirmed; association with Stony Brook is retained without automatic university credit.",
+    "countries": [
+      "KE"
+    ]
+  },
+  {
+    "pattern": "^BOTTLE Consortium, Golden",
+    "canonical_name": "BOTTLE Consortium",
+    "entity_type": "research_collaboration",
+    "source_url": "https://www.bottle.org/",
+    "existing_name": null,
+    "note": "Multi-organization consortium; no automatic allocation to participating universities.",
+    "countries": [
+      "US"
+    ]
+  },
+  {
+    "pattern": "^Seattle Hub for Synthetic Biology, Seattle",
+    "canonical_name": "Seattle Hub for Synthetic Biology",
+    "entity_type": "research_collaboration",
+    "source_url": "https://newsroom.uw.edu/news-releases/seattle-hub-for-synthetic-biology-launched/",
+    "existing_name": null,
+    "note": "Joint Allen/CZI/UW collaboration, not automatically UW.",
+    "countries": [
+      "US"
+    ]
+  },
+  {
+    "pattern": "^CAS Center for Excellence in Comparative Planetology, Hefei",
+    "canonical_name": "CAS Center for Excellence in Comparative Planetology",
+    "entity_type": "research_collaboration",
+    "source_url": "https://en.ustc.edu.cn/info/1110/3222.htm",
+    "existing_name": null,
+    "note": "Confirmed named CAS research center; single-parent university rollup remains unresolved.",
+    "countries": [
+      "CN"
+    ]
+  },
+  {
+    "pattern": "^Hefei National Laboratory, Hefei",
+    "canonical_name": "Hefei National Laboratory",
+    "entity_type": "research_institute",
+    "source_url": "https://en.hfnl.cn/index.htm",
+    "existing_name": null,
+    "note": "Distinct from Hefei National Laboratory for Physical Sciences at the Microscale; do not merge into USTC.",
+    "countries": [
+      "CN"
+    ]
+  },
+  {
+    "pattern": "^National Center of Competence in Research 'Molecular Systems Engineering'",
+    "canonical_name": "NCCR Molecular Systems Engineering",
+    "entity_type": "research_collaboration",
+    "source_url": "https://www.unibas.ch/en/Research/Research-in-Basel/National-Networks/NCCR-MSE.html",
+    "existing_name": null,
+    "note": "Joint Basel/ETH and wider network; no single-university allocation.",
+    "countries": [
+      "CH"
+    ]
+  },
+  {
+    "pattern": "^Emory.Children.s Cystic Fibrosis Center",
+    "canonical_name": "Emory-Children’s Cystic Fibrosis Center",
+    "entity_type": "joint_clinical_research_center",
+    "source_url": "https://med.emory.edu/departments/medicine/divisions/pulmonary/research/adult-cystic-fibrosis.html",
+    "existing_name": null,
+    "note": "Joint clinical center; retain separately pending consistent hospital/university rollup.",
+    "countries": [
+      "US"
+    ]
+  },
+  {
+    "pattern": "^Beijing Key Laboratory of Reproductive Endocrinology and Assisted Reproductive Technology",
+    "canonical_name": "Beijing Key Laboratory of Reproductive Endocrinology and Assisted Reproductive Technology",
+    "entity_type": "clinical_research_laboratory",
+    "source_url": "https://research.bjmu.edu.cn/jdpt/jdml/bjskyjd/bjszdsys/3aae31976e5946aabf33c56bbe8ec6ad.htm",
+    "existing_name": null,
+    "note": "PKU health system research platform; do not collapse hospital into Peking University in a selective repair.",
+    "countries": [
+      "CN"
+    ]
+  },
+  {
+    "pattern": "^StemiRNA\\ Therapeutics,",
+    "canonical_name": "StemiRNA Therapeutics",
+    "entity_type": "company",
+    "source_url": "https://www.nature.com/articles/s41586-023-06127-z",
+    "existing_name": null,
+    "note": "Publisher disclosure names corporate employees, patents and vaccine development.",
+    "countries": [
+      "CN"
+    ]
+  },
+  {
+    "pattern": "^Asia\\ Pacific\\ Resources\\ International\\ Ltd\\.,",
+    "canonical_name": "Asia Pacific Resources International Ltd.",
+    "entity_type": "company",
+    "source_url": "https://www.nature.com/articles/s41586-023-05860-9",
+    "existing_name": null,
+    "note": "Publisher explicitly identifies APRIL company funding and employed field staff.",
+    "countries": [
+      "ID"
+    ]
+  },
+  {
+    "pattern": "^Lilly\\ Research\\ Laboratories,",
+    "canonical_name": "Lilly Research Laboratories, Alcobendas",
+    "entity_type": "company",
+    "source_url": "https://www.nature.com/articles/s41586-024-07387-z",
+    "existing_name": null,
+    "note": "Publisher employees/shareholders disclosure; Spanish company research site.",
+    "countries": [
+      "ES"
+    ]
+  },
+  {
+    "pattern": "^FoRx\\ Therapeutics\\ AG,",
+    "canonical_name": "FoRx Therapeutics",
+    "entity_type": "company",
+    "source_url": "https://www.nature.com/articles/s41586-024-07217-2",
+    "existing_name": null,
+    "note": "Publisher founders, stockholders and employees disclosure.",
+    "countries": [
+      "CH"
+    ]
+  },
+  {
+    "pattern": "^TetraMem,",
+    "canonical_name": "TetraMem",
+    "entity_type": "company",
+    "source_url": "https://www.nature.com/articles/s41586-023-05759-5",
+    "existing_name": null,
+    "note": "Publisher declares company co-founders and paid consultants.",
+    "countries": [
+      "US"
+    ]
+  },
+  {
+    "pattern": "^Beijing\\ Jingtai\\ Technology,",
+    "canonical_name": "Beijing Jingtai Technology",
+    "entity_type": "company",
+    "source_url": "https://www.nature.com/articles/s41586-024-07810-5",
+    "existing_name": null,
+    "note": "Publisher author employment disclosure and exact Beijing affiliation; no inferred parent ID.",
+    "countries": [
+      "CN"
+    ]
+  },
+  {
+    "pattern": "^BlueRock\\ Therapeutics,",
+    "canonical_name": "BlueRock Therapeutics",
+    "entity_type": "company",
+    "source_url": "https://www.nature.com/articles/s41586-025-08845-y",
+    "existing_name": null,
+    "note": "Publisher trial sponsor and employee disclosure.",
+    "countries": [
+      "US"
+    ]
+  },
+  {
+    "pattern": "^Avant\\-garde\\ Materials\\ Simulation,",
+    "canonical_name": "Avant-garde Materials Simulation",
+    "entity_type": "company",
+    "source_url": "https://www.nature.com/articles/s41586-023-06587-3",
+    "existing_name": null,
+    "note": "Publisher names owner and employees of AMS.",
+    "countries": [
+      "DE"
+    ]
+  },
+  {
+    "pattern": "^Vedanta\\ Biosciences,",
+    "canonical_name": "Vedanta Biosciences",
+    "entity_type": "company",
+    "source_url": "https://www.nature.com/articles/s41586-024-07960-6",
+    "existing_name": null,
+    "note": "Publisher confirms company employees and commercial advisory roles.",
+    "countries": [
+      "US"
+    ]
+  },
+  {
+    "pattern": "^Milkshake\\ Technology\\ Inc\\.,",
+    "canonical_name": "Milkshake Technology Inc.",
+    "entity_type": "company",
+    "source_url": "https://www.nature.com/articles/s41586-025-09838-7",
+    "existing_name": null,
+    "note": "Publisher legal entity name and development/employment disclosure.",
+    "countries": [
+      "CA"
+    ]
+  },
+  {
+    "pattern": "^Emerald\\ Cloud\\ Lab,",
+    "canonical_name": "Emerald Cloud Lab",
+    "entity_type": "company",
+    "source_url": "https://www.nature.com/articles/s41586-023-06792-0",
+    "existing_name": null,
+    "note": "Publisher employment and company advisory role disclosure.",
+    "countries": [
+      "US"
+    ]
+  },
+  {
+    "pattern": "^Suzhou\\ Maxwell\\ Technologies,",
+    "canonical_name": "Suzhou Maxwell Technologies",
+    "entity_type": "company",
+    "source_url": "https://www.nature.com/articles/s41586-025-09849-4",
+    "existing_name": null,
+    "note": "Publisher employment disclosure in solar technology company.",
+    "countries": [
+      "CN"
+    ]
+  },
+  {
+    "pattern": "^ROME\\ Therapeutics,",
+    "canonical_name": "ROME Therapeutics",
+    "entity_type": "company",
+    "source_url": "https://www.nature.com/articles/s41586-023-06947-z",
+    "existing_name": null,
+    "note": "Publisher corporate equity ownership and contracted research disclosure.",
+    "countries": [
+      "US"
+    ]
+  },
+  {
+    "pattern": "^Allchemy,",
+    "canonical_name": "Allchemy",
+    "entity_type": "company",
+    "source_url": "https://www.nature.com/articles/s41586-023-06854-3",
+    "existing_name": null,
+    "note": "Publisher explicitly identifies Allchemy Inc ownership and software commercialization.",
+    "countries": [
+      "US"
+    ]
+  },
+  {
+    "pattern": "^Key Laboratory of Orogenic Belt and Crustal Evolution, MOE$",
+    "publisher_pattern": "^Key Laboratory of Orogenic Belt and Crustal Evolution, MOE;.*Peking University",
+    "canonical_name": "Peking University",
+    "entity_type": "university",
+    "source_url": "https://www.nature.com/articles/s41586-024-08069-6",
+    "existing_name": "Peking University",
+    "note": "Exact publisher author-address link explicitly names the parent university omitted from the raw fragment.",
+    "countries": null,
+    "source_kind": "publisher_explicit_parent"
+  },
+  {
+    "pattern": "^Àrea de Prehistòria$",
+    "publisher_pattern": "^Àrea de Prehistòria;.*Universitat de València",
+    "canonical_name": "Universitat de València",
+    "entity_type": "university",
+    "source_url": "https://www.nature.com/articles/s41586-024-07467-0",
+    "existing_name": "Universitat de València",
+    "note": "Exact publisher author-address link explicitly names the parent university omitted from the raw fragment.",
+    "countries": null,
+    "source_kind": "publisher_explicit_parent"
+  },
+  {
+    "pattern": "^ATOC - Department of Atmospheric and Oceanic Sciences",
+    "publisher_pattern": "^Department of Atmospheric and Oceanic Sciences, University of Colorado Boulder",
+    "canonical_name": "University of Colorado Boulder",
+    "entity_type": "university",
+    "source_url": "https://www.nature.com/articles/s41586-025-09319-x",
+    "existing_name": "University of Colorado Boulder",
+    "note": "Exact publisher author-address link explicitly names the parent university omitted from the raw fragment.",
+    "countries": null,
+    "source_kind": "publisher_explicit_parent"
+  },
+  {
+    "pattern": "^Department of Earth and Space Sciences \\[Seattle\\]",
+    "publisher_pattern": "^Department of Earth and Space Sciences and Department of Atmospheric Sciences, University of Washington",
+    "canonical_name": "University of Washington",
+    "entity_type": "university",
+    "source_url": "https://www.nature.com/articles/s41586-024-08394-w",
+    "existing_name": "University of Washington",
+    "note": "Exact publisher author-address link explicitly names the parent university omitted from the raw fragment.",
+    "countries": null,
+    "source_kind": "publisher_explicit_parent"
+  },
+  {
+    "pattern": "^QAAFI - Queensland Alliance for Agriculture and Food Innovation",
+    "publisher_pattern": "^Queensland Alliance for Agriculture and Food Innovation, University of Queensland",
+    "canonical_name": "The University of Queensland",
+    "entity_type": "university",
+    "source_url": "https://www.nature.com/articles/s41586-024-07231-4",
+    "existing_name": "The University of Queensland",
+    "note": "Exact publisher author-address link explicitly names the parent university omitted from the raw fragment.",
+    "countries": null,
+    "source_kind": "publisher_explicit_parent"
+  },
+  {
+    "pattern": "^Laboratory of Exercise and Health, Institute of Exercise and Health, Department of Health Sciences and Technology$",
+    "publisher_pattern": "^Laboratory of Exercise and Health,.*ETH Zurich",
+    "canonical_name": "ETH Zurich",
+    "entity_type": "university",
+    "source_url": "https://www.nature.com/articles/s41586-024-07493-y",
+    "existing_name": "ETH Zurich",
+    "note": "Exact publisher author-address link explicitly names the parent university omitted from the raw fragment.",
+    "countries": null,
+    "source_kind": "publisher_explicit_parent"
+  }
+]

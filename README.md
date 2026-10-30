@@ -1,5 +1,26 @@
 # ASPR-GEAR — Claim Graph + GEAR innovation analysis
 
+## Current Fig1–8 delivery and retained work
+
+As of 2026-10-08, the final figure scope is
+[`outputs/fig1-8_reference_final_20261004/`](outputs/fig1-8_reference_final_20261004/).
+Its `文件清单.csv` records the delivered files and source hashes. This fixes the
+figure delivery selection, not the validity of every historical experiment.
+See the [figure entry-point index](figure_pipeline/README.md) before regenerating
+figures: the accepted Fig5 and Fig7 do not use their generic reference entry points.
+
+The [cleanup audit](docs/fig1_8_cleanup_audit_20261008.json) lists protected
+intermediates, historical archive candidates, and the development caches removed.
+Keep completed model responses, claims, evidence, evaluations, predictions and call
+ledgers even when they reside in older directories. Archive candidates have not
+been proven safe to delete. Git-ignored data are not necessarily disposable.
+
+Following explicit cleanup authorization, historical `outputs/fig04`–`fig10`,
+`outputs/FROM_WEB*`, and selected old delivery packages were removed; reusable
+experiment directories and the final delivery remain. The
+[execution manifest](docs/fig1_8_cleanup_execution_20261008.json) supersedes the
+initial audit's candidate status for those paths and records each removed file.
+
 ASPR-GEAR analyzes a paper's concrete contributions, manuscript support,
 historical basis and knowledge relationships. The current research focus is the
 innovation-analysis system. Historical indicator and diffusion-scoring research
@@ -117,7 +138,7 @@ and creates mixed conditions; use a separate directory for uniform comparisons.
 - [Implementation and evaluation scope](docs/innovation_v2_implementation.md).
 - [Single and joint Graph analysis](docs/graph_joint_analysis.md).
 - [Experiment index](experiments/README.md): current studies versus historical
-  Fig.1–Fig.10. New figure allocation is still under discussion.
+  Fig.1–Fig.10. For the selected final Fig1–8 delivery, use the index above.
 - [Data sources](docs/data_sources.md) and [code availability](docs/code_availability.md).
 
 Documents marked historical preserve earlier designs/results, not current CLI

@@ -109,7 +109,7 @@ def render_d() -> None:
     if case['verification']['id'] != 's41467-026-68348-w/I0035/R001':
         raise ValueError('Fixed-ID source case changed')
     fig = plt.figure(figsize=(width/25.4, height/25.4))
-    title(fig, 'c6  Graph relation and manuscript evidence', height)
+    title(fig, 'c5  Graph relation and manuscript evidence', height)
     ax = fig.add_axes([0, .02, 1, .78]); ax.set(xlim=(0,1),ylim=(0,1)); ax.axis('off')
     card(ax,.002,.312,'#657B8B','Manuscript evidence')
     card(ax,.342,.300,COLORS['graph'],'Graph · relation candidate')

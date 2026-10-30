@@ -89,7 +89,8 @@ class Figure:
 
     def title(self, key: str, title: str | None = None) -> None:
         x,y,w,h = self.box(key)
-        value = key+'  '+(title or self.layout['components'][key]['title'])
+        label = self.layout['components'][key].get('display_label', key)
+        value = label+'  '+(title or self.layout['components'][key]['title'])
         size = min(15, 15*(w*72/25.4-2)/measure(value,15,True))
         self.words(x,y,value,size,bold=True,fontfamily='Times New Roman')
 

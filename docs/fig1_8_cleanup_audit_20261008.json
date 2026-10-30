@@ -1,0 +1,3287 @@
+{
+  "date": "2026-10-08",
+  "scope": "Current Fig1-8 final delivery; retain reusable intermediate work",
+  "baseline": "outputs/fig1-8_reference_final_20261004/文件清单.csv",
+  "limitations": [
+    "Targeted static source/readme inspection, not exhaustive dynamic dependency closure",
+    "No scientific jobs, model calls, rendering or data reconstruction run",
+    "No scientific assets, historical results, tracked source files or Git history deleted",
+    "Archive candidates are not an approved deletion list"
+  ],
+  "protected": {
+    "outputs/fig1_reference": "Final figure, snapshots, layout and selected case evidence",
+    "outputs/fig2_reference": "Final figure and case snapshots",
+    "outputs/fig3_reference": "100-paper study, reports, annotations, derived statistics, supplementary completed judgments",
+    "outputs/fig4_reference": "Final figure and experiment inputs, responses, evaluations and ledgers",
+    "fig_reference": "Accepted Fig5 final and source manifest",
+    "outputs/fig5_mechanism_study": "Formal statistics ZIP, interventions, transfer validation, diagnostic and human review records",
+    "outputs/fig5_revision": "Reused baseline, cohort and evaluations; referenced by current mechanism study",
+    "outputs/fig5_robustness": "Reused baseline and evidence perturbation results",
+    "outputs/fig5_four_panel": "Backgrounds and diagnostic comparison materials still referenced",
+    "outputs/fig6_reference": "Accepted final DAMAGE figure and evidence snapshot",
+    "outputs/fig6_damage_study": "Original DAMAGE case shared claims, GEAR/Graph evidence and report provenance",
+    "outputs/fig7_reference": "two_panel final, historical statistics, frontier_2026 full and pilot material, predictions and attempt ledgers; forecast logs referenced by timing estimator",
+    "outputs/fig8_reference": "Final figure, plot_data.json.gz and source provenance",
+    "outputs/innovation_200_20260907": "Fig1/2/6 and Fig7 source study; not superseded as a whole by Fig3 study",
+    "outputs/innovation_candidates_20260910": "Fig7 frontier reuses claims and Graph evidence",
+    "data/claim_graph": "Historical graph, indices, embeddings and extraction chunks; retain to avoid recomputation",
+    "data/models": "Local embedding weights required for graph/retrieval work",
+    "data/nature_2026_testset": "Source manuscripts and reviewer materials",
+    "data/gear_cache": "Retrieval and model result cache; not disposable development cache",
+    "data/cache": "Downloaded source/request cache; retain to avoid repeated retrieval",
+    "outputs/fig1-8_reference_final_20261004": "User-selected final delivery; 156 manifest records verified"
+  },
+  "candidates": [
+    {
+      "paths": [
+        "outputs/fig04",
+        "outputs/fig05",
+        "outputs/fig06",
+        "outputs/fig07",
+        "outputs/fig08",
+        "outputs/fig09",
+        "outputs/fig10",
+        "outputs/FROM_WEB",
+        "outputs/FROM_WEB_v2"
+      ],
+      "classification": "historical_archive_candidate",
+      "action": "Keep until source/reference closure and archival completeness are verified; not established garbage"
+    },
+    {
+      "paths": [
+        "outputs/packages",
+        "outputs/deliveries",
+        "outputs/fig6_computer",
+        "outputs/fig6_damage",
+        "outputs/fig6_rf2_study",
+        "outputs/archive"
+      ],
+      "classification": "superseded_delivery_or_case_candidate",
+      "action": "Compare contents and provenance before deduplication; do not delete associated reusable code by directory name"
+    },
+    {
+      "paths": [
+        "innovation_impact_feature_selection",
+        "data/knowledge_corpus",
+        "outputs/gear",
+        "data/calibration"
+      ],
+      "classification": "legacy_research_assets",
+      "action": "Potential separate archival collection, not safe deletion: runtime compatibility/configuration references remain"
+    },
+    {
+      "paths": [
+        "experiments/fig01",
+        "experiments/fig02",
+        "experiments/fig03",
+        "experiments/fig04",
+        "experiments/fig05",
+        "experiments/fig06",
+        "experiments/fig07",
+        "experiments/fig08",
+        "experiments/fig09",
+        "experiments/fig10",
+        "gear/nature_multihorizon"
+      ],
+      "classification": "historical_code",
+      "action": "Separate documentation/navigation first; moving requires import, tests and CLI reference updates"
+    },
+    {
+      "paths": [
+        ".git"
+      ],
+      "classification": "version_history",
+      "action": "Not garbage. git count-objects reports 0 garbage; no history rewrite, pruning or claimed recoverable size"
+    }
+  ],
+  "known_issues": [
+    {
+      "path": "figure_pipeline/fig1_reference/data.py",
+      "issue": "prepare references missing outputs/GRAPH_STATISTICS.zip; preserve existing snapshot, do not infer full rebuild is available"
+    },
+    {
+      "path": "figure_pipeline/fig5_reference",
+      "issue": "Legacy six-panel renderer; accepted four-panel Fig5 uses figure_pipeline/fig5_mechanism_study/render_reference.py and fig_reference/"
+    },
+    {
+      "path": "figure_pipeline/fig7_reference/__main__.py",
+      "issue": "Default historical forecast entry differs from accepted two_panel entry"
+    }
+  ],
+  "cache_cleanup": {
+    "files": 597,
+    "bytes": 117799921,
+    "deleted": [
+      {
+        "path": ".mypy_cache/CACHEDIR.TAG",
+        "bytes": 190
+      },
+      {
+        "path": ".mypy_cache/.gitignore",
+        "bytes": 34
+      },
+      {
+        "path": ".mypy_cache/3.12/cache.14.db",
+        "bytes": 9076736
+      },
+      {
+        "path": ".mypy_cache/3.12/cache.8.db",
+        "bytes": 6586368
+      },
+      {
+        "path": ".mypy_cache/3.12/cache.2.db",
+        "bytes": 7118848
+      },
+      {
+        "path": ".mypy_cache/3.12/cache.12.db",
+        "bytes": 7561216
+      },
+      {
+        "path": ".mypy_cache/3.12/cache.11.db",
+        "bytes": 6823936
+      },
+      {
+        "path": ".mypy_cache/3.12/cache.5.db",
+        "bytes": 7454720
+      },
+      {
+        "path": ".mypy_cache/3.12/cache.3.db",
+        "bytes": 6414336
+      },
+      {
+        "path": ".mypy_cache/3.12/cache.1.db",
+        "bytes": 7495680
+      },
+      {
+        "path": ".mypy_cache/3.12/cache.13.db",
+        "bytes": 5988352
+      },
+      {
+        "path": ".mypy_cache/3.12/cache.9.db",
+        "bytes": 6627328
+      },
+      {
+        "path": ".mypy_cache/3.12/cache.4.db",
+        "bytes": 6434816
+      },
+      {
+        "path": ".mypy_cache/3.12/cache.0.db",
+        "bytes": 6402048
+      },
+      {
+        "path": ".mypy_cache/3.12/cache.6.db",
+        "bytes": 6488064
+      },
+      {
+        "path": ".mypy_cache/3.12/cache.15.db",
+        "bytes": 6955008
+      },
+      {
+        "path": ".mypy_cache/3.12/cache.10.db",
+        "bytes": 6606848
+      },
+      {
+        "path": ".mypy_cache/3.12/cache.7.db",
+        "bytes": 5840896
+      },
+      {
+        "path": ".pytest_cache/README.md",
+        "bytes": 302
+      },
+      {
+        "path": ".pytest_cache/CACHEDIR.TAG",
+        "bytes": 191
+      },
+      {
+        "path": ".pytest_cache/.gitignore",
+        "bytes": 37
+      },
+      {
+        "path": ".pytest_cache/v/cache/lastfailed",
+        "bytes": 2497
+      },
+      {
+        "path": ".pytest_cache/v/cache/nodeids",
+        "bytes": 45256
+      },
+      {
+        "path": ".ruff_cache/CACHEDIR.TAG",
+        "bytes": 43
+      },
+      {
+        "path": ".ruff_cache/.gitignore",
+        "bytes": 35
+      },
+      {
+        "path": ".ruff_cache/0.16.1/8932761601148715229",
+        "bytes": 4940
+      },
+      {
+        "path": ".ruff_cache/0.16.1/4175841574823673432",
+        "bytes": 236
+      },
+      {
+        "path": ".ruff_cache/0.16.1/11189015507596611456",
+        "bytes": 172
+      },
+      {
+        "path": ".ruff_cache/0.16.1/18340677461901393089",
+        "bytes": 236
+      },
+      {
+        "path": ".ruff_cache/0.16.1/8577736749708079302",
+        "bytes": 172
+      },
+      {
+        "path": ".ruff_cache/0.16.1/2923871583405973166",
+        "bytes": 404
+      },
+      {
+        "path": ".ruff_cache/0.16.1/2783744273859904338",
+        "bytes": 164
+      },
+      {
+        "path": ".ruff_cache/0.16.1/13225376024992875804",
+        "bytes": 892
+      },
+      {
+        "path": ".ruff_cache/0.16.1/12775781961502253540",
+        "bytes": 740
+      },
+      {
+        "path": ".ruff_cache/0.16.1/13623177604066698505",
+        "bytes": 2700
+      },
+      {
+        "path": ".ruff_cache/0.16.1/5922483586132847572",
+        "bytes": 4364
+      },
+      {
+        "path": ".ruff_cache/0.16.1/9344984989573128910",
+        "bytes": 5852
+      },
+      {
+        "path": ".ruff_cache/0.16.1/13274708220735626699",
+        "bytes": 7444
+      },
+      {
+        "path": ".ruff_cache/0.16.1/12966342796243933145",
+        "bytes": 532
+      },
+      {
+        "path": ".ruff_cache/0.16.1/3994771719937776119",
+        "bytes": 668
+      },
+      {
+        "path": ".ruff_cache/0.16.1/18384600361707613466",
+        "bytes": 188
+      },
+      {
+        "path": ".ruff_cache/0.16.1/4751685964427904454",
+        "bytes": 6060
+      },
+      {
+        "path": ".ruff_cache/0.16.1/11950649616616446480",
+        "bytes": 228
+      },
+      {
+        "path": ".ruff_cache/0.16.1/12355241441020656353",
+        "bytes": 8092
+      },
+      {
+        "path": ".ruff_cache/0.16.1/6061436740557377899",
+        "bytes": 756
+      },
+      {
+        "path": ".ruff_cache/0.16.1/12928714797207894256",
+        "bytes": 7788
+      },
+      {
+        "path": ".ruff_cache/0.16.1/12186308339271461682",
+        "bytes": 364
+      },
+      {
+        "path": ".ruff_cache/0.16.1/16868440202727618670",
+        "bytes": 300
+      },
+      {
+        "path": ".ruff_cache/0.16.1/16739008649858164259",
+        "bytes": 188
+      },
+      {
+        "path": ".ruff_cache/0.16.1/11672529717870136469",
+        "bytes": 468
+      },
+      {
+        "path": "gear/__pycache__/__main__.cpython-313.pyc",
+        "bytes": 312
+      },
+      {
+        "path": "gear/__pycache__/cli_limiter.cpython-312.pyc",
+        "bytes": 3231
+      },
+      {
+        "path": "gear/__pycache__/review_contracts.cpython-312.pyc",
+        "bytes": 12133
+      },
+      {
+        "path": "gear/__pycache__/scholar.cpython-312.pyc",
+        "bytes": 44299
+      },
+      {
+        "path": "gear/__pycache__/review_compiler.cpython-313.pyc",
+        "bytes": 4049
+      },
+      {
+        "path": "gear/__pycache__/review_compiler.cpython-312.pyc",
+        "bytes": 4197
+      },
+      {
+        "path": "gear/__pycache__/claim_attribution.cpython-313.pyc",
+        "bytes": 34261
+      },
+      {
+        "path": "gear/__pycache__/claim_attribution.cpython-312.pyc",
+        "bytes": 42283
+      },
+      {
+        "path": "gear/__pycache__/graph_guidance.cpython-312.pyc",
+        "bytes": 29049
+      },
+      {
+        "path": "gear/__pycache__/artifacts.cpython-313.pyc",
+        "bytes": 3030
+      },
+      {
+        "path": "gear/__pycache__/config.cpython-313.pyc",
+        "bytes": 8470
+      },
+      {
+        "path": "gear/__pycache__/config.cpython-310.pyc",
+        "bytes": 7168
+      },
+      {
+        "path": "gear/__pycache__/review_fusion.cpython-312.pyc",
+        "bytes": 18740
+      },
+      {
+        "path": "gear/__pycache__/fulltext.cpython-310.pyc",
+        "bytes": 22930
+      },
+      {
+        "path": "gear/__pycache__/trace.cpython-310.pyc",
+        "bytes": 8028
+      },
+      {
+        "path": "gear/__pycache__/grounding.cpython-312.pyc",
+        "bytes": 10862
+      },
+      {
+        "path": "gear/__pycache__/review_pipeline.cpython-313.pyc",
+        "bytes": 2421
+      },
+      {
+        "path": "gear/__pycache__/__init__.cpython-313.pyc",
+        "bytes": 1036
+      },
+      {
+        "path": "gear/__pycache__/openai_compatible_api.cpython-312.pyc",
+        "bytes": 6479
+      },
+      {
+        "path": "gear/__pycache__/diffusion_forecast.cpython-312.pyc",
+        "bytes": 57608
+      },
+      {
+        "path": "gear/__pycache__/artifacts.cpython-312.pyc",
+        "bytes": 3052
+      },
+      {
+        "path": "gear/__pycache__/review_state.cpython-310.pyc",
+        "bytes": 10414
+      },
+      {
+        "path": "gear/__pycache__/env.cpython-310.pyc",
+        "bytes": 4881
+      },
+      {
+        "path": "gear/__pycache__/codex_cli.cpython-313.pyc",
+        "bytes": 10575
+      },
+      {
+        "path": "gear/__pycache__/review_compiler.cpython-310.pyc",
+        "bytes": 2805
+      },
+      {
+        "path": "gear/__pycache__/prior_art.cpython-313.pyc",
+        "bytes": 114098
+      },
+      {
+        "path": "gear/__pycache__/graph_prior_contracts.cpython-310.pyc",
+        "bytes": 22817
+      },
+      {
+        "path": "gear/__pycache__/prior_art.cpython-312.pyc",
+        "bytes": 126876
+      },
+      {
+        "path": "gear/__pycache__/codex_critic.cpython-312.pyc",
+        "bytes": 13926
+      },
+      {
+        "path": "gear/__pycache__/env.cpython-312.pyc",
+        "bytes": 7417
+      },
+      {
+        "path": "gear/__pycache__/graph_prior_contracts.cpython-313.pyc",
+        "bytes": 30280
+      },
+      {
+        "path": "gear/__pycache__/paper_extraction.cpython-310.pyc",
+        "bytes": 3106
+      },
+      {
+        "path": "gear/__pycache__/review_fusion.cpython-313.pyc",
+        "bytes": 18395
+      },
+      {
+        "path": "gear/__pycache__/__main__.cpython-312.pyc",
+        "bytes": 310
+      },
+      {
+        "path": "gear/__pycache__/work_identity.cpython-312.pyc",
+        "bytes": 2334
+      },
+      {
+        "path": "gear/__pycache__/grounding.cpython-310.pyc",
+        "bytes": 8122
+      },
+      {
+        "path": "gear/__pycache__/paper_extraction.cpython-312.pyc",
+        "bytes": 5159
+      },
+      {
+        "path": "gear/__pycache__/review_contracts.cpython-313.pyc",
+        "bytes": 12193
+      },
+      {
+        "path": "gear/__pycache__/paper_extraction.cpython-313.pyc",
+        "bytes": 4648
+      },
+      {
+        "path": "gear/__pycache__/cli_limiter.cpython-310.pyc",
+        "bytes": 1850
+      },
+      {
+        "path": "gear/__pycache__/codex_cli.cpython-312.pyc",
+        "bytes": 12340
+      },
+      {
+        "path": "gear/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 1113
+      },
+      {
+        "path": "gear/__pycache__/t0_enrichment.cpython-312.pyc",
+        "bytes": 12014
+      },
+      {
+        "path": "gear/__pycache__/claim_attribution.cpython-310.pyc",
+        "bytes": 27129
+      },
+      {
+        "path": "gear/__pycache__/review_pipeline.cpython-312.pyc",
+        "bytes": 2793
+      },
+      {
+        "path": "gear/__pycache__/trace.cpython-313.pyc",
+        "bytes": 13155
+      },
+      {
+        "path": "gear/__pycache__/structural_innovation.cpython-312.pyc",
+        "bytes": 24057
+      },
+      {
+        "path": "gear/__pycache__/contracts.cpython-310.pyc",
+        "bytes": 26841
+      },
+      {
+        "path": "gear/__pycache__/graph_prior_contracts.cpython-312.pyc",
+        "bytes": 30280
+      },
+      {
+        "path": "gear/__pycache__/prior_art.cpython-310.pyc",
+        "bytes": 76134
+      },
+      {
+        "path": "gear/__pycache__/local_ranking.cpython-313.pyc",
+        "bytes": 8804
+      },
+      {
+        "path": "gear/__pycache__/review_contracts.cpython-310.pyc",
+        "bytes": 9882
+      },
+      {
+        "path": "gear/__pycache__/local_ranking.cpython-310.pyc",
+        "bytes": 7277
+      },
+      {
+        "path": "gear/__pycache__/contracts.cpython-312.pyc",
+        "bytes": 35855
+      },
+      {
+        "path": "gear/__pycache__/contracts.cpython-313.pyc",
+        "bytes": 35630
+      },
+      {
+        "path": "gear/__pycache__/evidence_supervisor.cpython-310.pyc",
+        "bytes": 18333
+      },
+      {
+        "path": "gear/__pycache__/paper_compiler.cpython-310.pyc",
+        "bytes": 20663
+      },
+      {
+        "path": "gear/__pycache__/codex_cli.cpython-310.pyc",
+        "bytes": 7750
+      },
+      {
+        "path": "gear/__pycache__/scholar.cpython-310.pyc",
+        "bytes": 25467
+      },
+      {
+        "path": "gear/__pycache__/cli.cpython-312.pyc",
+        "bytes": 8524
+      },
+      {
+        "path": "gear/__pycache__/evidence_supervisor.cpython-313.pyc",
+        "bytes": 18081
+      },
+      {
+        "path": "gear/__pycache__/model_client.cpython-312.pyc",
+        "bytes": 5667
+      },
+      {
+        "path": "gear/__pycache__/paper_compiler.cpython-313.pyc",
+        "bytes": 34581
+      },
+      {
+        "path": "gear/__pycache__/__init__.cpython-310.pyc",
+        "bytes": 1020
+      },
+      {
+        "path": "gear/__pycache__/trace.cpython-312.pyc",
+        "bytes": 12791
+      },
+      {
+        "path": "gear/__pycache__/graph_action_policy.cpython-312.pyc",
+        "bytes": 51403
+      },
+      {
+        "path": "gear/__pycache__/paper_compiler.cpython-312.pyc",
+        "bytes": 34073
+      },
+      {
+        "path": "gear/__pycache__/evidence_supervisor.cpython-312.pyc",
+        "bytes": 29121
+      },
+      {
+        "path": "gear/__pycache__/cli.cpython-313.pyc",
+        "bytes": 6943
+      },
+      {
+        "path": "gear/__pycache__/work_identity.cpython-310.pyc",
+        "bytes": 1633
+      },
+      {
+        "path": "gear/__pycache__/fulltext.cpython-312.pyc",
+        "bytes": 37868
+      },
+      {
+        "path": "gear/__pycache__/artifacts.cpython-310.pyc",
+        "bytes": 2200
+      },
+      {
+        "path": "gear/__pycache__/graph_calibration.cpython-312.pyc",
+        "bytes": 22102
+      },
+      {
+        "path": "gear/__pycache__/env.cpython-313.pyc",
+        "bytes": 7614
+      },
+      {
+        "path": "gear/__pycache__/model_client.cpython-313.pyc",
+        "bytes": 4033
+      },
+      {
+        "path": "gear/__pycache__/__main__.cpython-310.pyc",
+        "bytes": 264
+      },
+      {
+        "path": "gear/__pycache__/config.cpython-312.pyc",
+        "bytes": 10138
+      },
+      {
+        "path": "gear/__pycache__/review_state.cpython-312.pyc",
+        "bytes": 13206
+      },
+      {
+        "path": "gear/__pycache__/review_pipeline.cpython-310.pyc",
+        "bytes": 1892
+      },
+      {
+        "path": "gear/__pycache__/review_verifier.cpython-312.pyc",
+        "bytes": 13941
+      },
+      {
+        "path": "gear/__pycache__/grounding.cpython-313.pyc",
+        "bytes": 10936
+      },
+      {
+        "path": "gear/__pycache__/review_fusion.cpython-310.pyc",
+        "bytes": 12266
+      },
+      {
+        "path": "gear/__pycache__/cli.cpython-310.pyc",
+        "bytes": 4411
+      },
+      {
+        "path": "gear/__pycache__/local_ranking.cpython-312.pyc",
+        "bytes": 11208
+      },
+      {
+        "path": "gear/__pycache__/model_client.cpython-310.pyc",
+        "bytes": 4187
+      },
+      {
+        "path": "gear/__pycache__/review_verifier.cpython-310.pyc",
+        "bytes": 9327
+      },
+      {
+        "path": "gear/innovation/__pycache__/joint_graph.cpython-310.pyc",
+        "bytes": 13640
+      },
+      {
+        "path": "gear/innovation/__pycache__/evaluation.cpython-312.pyc",
+        "bytes": 23088
+      },
+      {
+        "path": "gear/innovation/__pycache__/graph_batch.cpython-310.pyc",
+        "bytes": 8637
+      },
+      {
+        "path": "gear/innovation/__pycache__/shared.cpython-310.pyc",
+        "bytes": 5483
+      },
+      {
+        "path": "gear/innovation/__pycache__/usage.cpython-312.pyc",
+        "bytes": 3998
+      },
+      {
+        "path": "gear/innovation/__pycache__/locking.cpython-312.pyc",
+        "bytes": 1394
+      },
+      {
+        "path": "gear/innovation/__pycache__/pipeline.cpython-312.pyc",
+        "bytes": 24742
+      },
+      {
+        "path": "gear/innovation/__pycache__/gear_resume.cpython-310.pyc",
+        "bytes": 3569
+      },
+      {
+        "path": "gear/innovation/__pycache__/experiments.cpython-312.pyc",
+        "bytes": 11007
+      },
+      {
+        "path": "gear/innovation/__pycache__/analysis.cpython-310.pyc",
+        "bytes": 6520
+      },
+      {
+        "path": "gear/innovation/__pycache__/joint_graph.cpython-312.pyc",
+        "bytes": 19821
+      },
+      {
+        "path": "gear/innovation/__pycache__/gpu.cpython-312.pyc",
+        "bytes": 2165
+      },
+      {
+        "path": "gear/innovation/__pycache__/shared.cpython-312.pyc",
+        "bytes": 7544
+      },
+      {
+        "path": "gear/innovation/__pycache__/references.cpython-312.pyc",
+        "bytes": 17303
+      },
+      {
+        "path": "gear/innovation/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 194
+      },
+      {
+        "path": "gear/innovation/__pycache__/contracts.cpython-310.pyc",
+        "bytes": 3098
+      },
+      {
+        "path": "gear/innovation/__pycache__/contracts.cpython-312.pyc",
+        "bytes": 3588
+      },
+      {
+        "path": "gear/innovation/__pycache__/analysis.cpython-312.pyc",
+        "bytes": 7812
+      },
+      {
+        "path": "gear/innovation/__pycache__/diagnostics.cpython-312.pyc",
+        "bytes": 7224
+      },
+      {
+        "path": "gear/innovation/__pycache__/__init__.cpython-310.pyc",
+        "bytes": 214
+      },
+      {
+        "path": "gear/innovation/__pycache__/references.cpython-310.pyc",
+        "bytes": 12282
+      },
+      {
+        "path": "gear/innovation/__pycache__/gear_resume.cpython-312.pyc",
+        "bytes": 5733
+      },
+      {
+        "path": "gear/innovation/__pycache__/validation.cpython-312.pyc",
+        "bytes": 4720
+      },
+      {
+        "path": "gear/innovation/__pycache__/gpu.cpython-310.pyc",
+        "bytes": 1299
+      },
+      {
+        "path": "gear/innovation/__pycache__/locking.cpython-310.pyc",
+        "bytes": 858
+      },
+      {
+        "path": "gear/innovation/__pycache__/reference_quality.cpython-312.pyc",
+        "bytes": 12604
+      },
+      {
+        "path": "gear/innovation/__pycache__/pipeline.cpython-310.pyc",
+        "bytes": 13961
+      },
+      {
+        "path": "gear/innovation/__pycache__/graph_batch.cpython-312.pyc",
+        "bytes": 15060
+      },
+      {
+        "path": "gear/innovation/__pycache__/usage.cpython-310.pyc",
+        "bytes": 2695
+      },
+      {
+        "path": "gear/nature_multihorizon/__pycache__/targets_v6.cpython-312.pyc",
+        "bytes": 20491
+      },
+      {
+        "path": "gear/nature_multihorizon/__pycache__/features_v6_1.cpython-312.pyc",
+        "bytes": 18226
+      },
+      {
+        "path": "gear/nature_multihorizon/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 366
+      },
+      {
+        "path": "gear/nature_multihorizon/__pycache__/features_v6.cpython-312.pyc",
+        "bytes": 19749
+      },
+      {
+        "path": "gear/nature_multihorizon/__pycache__/t0_runtime_v3.cpython-312.pyc",
+        "bytes": 36800
+      },
+      {
+        "path": "gear/reviewers/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 280
+      },
+      {
+        "path": "gear/reviewers/__pycache__/__init__.cpython-310.pyc",
+        "bytes": 266
+      },
+      {
+        "path": "gear/reviewers/__pycache__/agent.cpython-312.pyc",
+        "bytes": 2498
+      },
+      {
+        "path": "gear/reviewers/__pycache__/agent.cpython-310.pyc",
+        "bytes": 2095
+      },
+      {
+        "path": "gear/claim_graph/__pycache__/__init__.cpython-313.pyc",
+        "bytes": 326
+      },
+      {
+        "path": "gear/claim_graph/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 326
+      },
+      {
+        "path": "gear/claim_graph/__pycache__/contracts.cpython-310.pyc",
+        "bytes": 6583
+      },
+      {
+        "path": "gear/claim_graph/__pycache__/contracts.cpython-312.pyc",
+        "bytes": 8706
+      },
+      {
+        "path": "gear/claim_graph/__pycache__/contracts.cpython-313.pyc",
+        "bytes": 8795
+      },
+      {
+        "path": "gear/claim_graph/__pycache__/__init__.cpython-310.pyc",
+        "bytes": 312
+      },
+      {
+        "path": "figure_pipeline/__pycache__/case_revision.cpython-312.pyc",
+        "bytes": 68410
+      },
+      {
+        "path": "figure_pipeline/__pycache__/graph_revision.cpython-312.pyc",
+        "bytes": 58141
+      },
+      {
+        "path": "figure_pipeline/__pycache__/benchmark_revision.cpython-312.pyc",
+        "bytes": 13047
+      },
+      {
+        "path": "figure_pipeline/__pycache__/build.cpython-312.pyc",
+        "bytes": 5142
+      },
+      {
+        "path": "figure_pipeline/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 219
+      },
+      {
+        "path": "figure_pipeline/__pycache__/__init__.cpython-310.pyc",
+        "bytes": 212
+      },
+      {
+        "path": "figure_pipeline/__pycache__/package_revision.cpython-312.pyc",
+        "bytes": 6834
+      },
+      {
+        "path": "figure_pipeline/__pycache__/handoff.cpython-312.pyc",
+        "bytes": 6923
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_study/__pycache__/evaluation.cpython-312.pyc",
+        "bytes": 12820
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_study/__pycache__/runtime.cpython-312.pyc",
+        "bytes": 5451
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_study/__pycache__/joint_probe.cpython-310.pyc",
+        "bytes": 4676
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_study/__pycache__/reference.cpython-310.pyc",
+        "bytes": 10261
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_study/__pycache__/aggregate.cpython-312.pyc",
+        "bytes": 21120
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_study/__pycache__/generation.cpython-312.pyc",
+        "bytes": 12538
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_study/__pycache__/readout.cpython-310.pyc",
+        "bytes": 6603
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_study/__pycache__/runtime.cpython-310.pyc",
+        "bytes": 3115
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_study/__pycache__/aggregate.cpython-310.pyc",
+        "bytes": 13406
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_study/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 260
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_study/__pycache__/models.cpython-310.pyc",
+        "bytes": 4564
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_study/__pycache__/input_information.cpython-310.pyc",
+        "bytes": 4315
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_study/__pycache__/__init__.cpython-310.pyc",
+        "bytes": 253
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_study/__pycache__/models.cpython-312.pyc",
+        "bytes": 5333
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_study/__pycache__/__main__.cpython-310.pyc",
+        "bytes": 3518
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_study/__pycache__/generation.cpython-310.pyc",
+        "bytes": 10729
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_study/__pycache__/input_information.cpython-312.pyc",
+        "bytes": 5711
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_study/__pycache__/evaluation.cpython-310.pyc",
+        "bytes": 10743
+      },
+      {
+        "path": "figure_pipeline/data/__pycache__/status.cpython-312.pyc",
+        "bytes": 2398
+      },
+      {
+        "path": "figure_pipeline/fig1_reference/__pycache__/audit.cpython-312.pyc",
+        "bytes": 23099
+      },
+      {
+        "path": "figure_pipeline/fig1_reference/__pycache__/export.cpython-312.pyc",
+        "bytes": 41303
+      },
+      {
+        "path": "figure_pipeline/fig1_reference/__pycache__/render.cpython-312.pyc",
+        "bytes": 55011
+      },
+      {
+        "path": "figure_pipeline/fig1_reference/__pycache__/paper_display.cpython-312.pyc",
+        "bytes": 15070
+      },
+      {
+        "path": "figure_pipeline/fig1_reference/__pycache__/__main__.cpython-312.pyc",
+        "bytes": 2229
+      },
+      {
+        "path": "figure_pipeline/fig1_reference/__pycache__/data.cpython-312.pyc",
+        "bytes": 47420
+      },
+      {
+        "path": "figure_pipeline/fig1_reference/__pycache__/svg.cpython-312.pyc",
+        "bytes": 15230
+      },
+      {
+        "path": "figure_pipeline/fig1_reference/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 250
+      },
+      {
+        "path": "figure_pipeline/fig1_reference/__pycache__/export.cpython-310.pyc",
+        "bytes": 28672
+      },
+      {
+        "path": "figure_pipeline/fig1_reference/__pycache__/data.cpython-310.pyc",
+        "bytes": 30290
+      },
+      {
+        "path": "figure_pipeline/fig1_reference/__pycache__/__init__.cpython-310.pyc",
+        "bytes": 243
+      },
+      {
+        "path": "figure_pipeline/fig1_reference/__pycache__/svg.cpython-310.pyc",
+        "bytes": 10103
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/frontier_data.cpython-312.pyc",
+        "bytes": 27818
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/audit.cpython-312.pyc",
+        "bytes": 1494
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/frontier_render.cpython-312.pyc",
+        "bytes": 10205
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/historical_statistics.cpython-312.pyc",
+        "bytes": 16674
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/render.cpython-312.pyc",
+        "bytes": 25593
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/historical_cloud.cpython-312.pyc",
+        "bytes": 9344
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/predict.cpython-310.pyc",
+        "bytes": 18284
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/frontier_finalize.cpython-312.pyc",
+        "bytes": 9481
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/__main__.cpython-312.pyc",
+        "bytes": 1104
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/data.cpython-312.pyc",
+        "bytes": 20207
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/frontier_data.cpython-310.pyc",
+        "bytes": 19365
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/frontier_render.cpython-310.pyc",
+        "bytes": 7093
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/historical_cloud.cpython-310.pyc",
+        "bytes": 6430
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 204
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/data.cpython-310.pyc",
+        "bytes": 11787
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/render.cpython-310.pyc",
+        "bytes": 18036
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/frontier.cpython-312.pyc",
+        "bytes": 10729
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/unified.cpython-310.pyc",
+        "bytes": 12721
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/historical_statistics.cpython-310.pyc",
+        "bytes": 11326
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/unified.cpython-312.pyc",
+        "bytes": 19306
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/frontier.cpython-310.pyc",
+        "bytes": 7335
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/__init__.cpython-310.pyc",
+        "bytes": 197
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/frontier_finalize.cpython-310.pyc",
+        "bytes": 5635
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/frontier_predict.cpython-312.pyc",
+        "bytes": 14397
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/audit.cpython-310.pyc",
+        "bytes": 4424
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/__main__.cpython-310.pyc",
+        "bytes": 850
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/frontier_predict.cpython-310.pyc",
+        "bytes": 11831
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/predict.cpython-312.pyc",
+        "bytes": 23881
+      },
+      {
+        "path": "figure_pipeline/fig7_reference/__pycache__/two_panel.cpython-310.pyc",
+        "bytes": 10966
+      },
+      {
+        "path": "figure_pipeline/qa/__pycache__/checks.cpython-312.pyc",
+        "bytes": 3471
+      },
+      {
+        "path": "figure_pipeline/fig6_damage/__pycache__/build.cpython-310.pyc",
+        "bytes": 19337
+      },
+      {
+        "path": "figure_pipeline/fig6_damage/__pycache__/prepare_report.cpython-310.pyc",
+        "bytes": 2616
+      },
+      {
+        "path": "figure_pipeline/fig3_reference/__pycache__/render.cpython-312.pyc",
+        "bytes": 102054
+      },
+      {
+        "path": "figure_pipeline/fig3_reference/__pycache__/review_stats.cpython-312.pyc",
+        "bytes": 13143
+      },
+      {
+        "path": "figure_pipeline/fig3_reference/__pycache__/aggregate.cpython-312.pyc",
+        "bytes": 21696
+      },
+      {
+        "path": "figure_pipeline/fig3_reference/__pycache__/reviews.cpython-312.pyc",
+        "bytes": 17034
+      },
+      {
+        "path": "figure_pipeline/fig3_reference/__pycache__/select_cohort.cpython-312.pyc",
+        "bytes": 13542
+      },
+      {
+        "path": "figure_pipeline/fig3_reference/__pycache__/evaluate.cpython-312.pyc",
+        "bytes": 27126
+      },
+      {
+        "path": "figure_pipeline/fig3_reference/__pycache__/__main__.cpython-312.pyc",
+        "bytes": 1036
+      },
+      {
+        "path": "figure_pipeline/fig3_reference/__pycache__/stream.cpython-312.pyc",
+        "bytes": 9066
+      },
+      {
+        "path": "figure_pipeline/fig3_reference/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 221
+      },
+      {
+        "path": "figure_pipeline/fig3_reference/__pycache__/compute.cpython-312.pyc",
+        "bytes": 12211
+      },
+      {
+        "path": "figure_pipeline/fig3_reference/__pycache__/drawing.cpython-312.pyc",
+        "bytes": 12012
+      },
+      {
+        "path": "figure_pipeline/fig3_reference/__pycache__/render.cpython-310.pyc",
+        "bytes": 44039
+      },
+      {
+        "path": "figure_pipeline/fig3_reference/__pycache__/examples.cpython-312.pyc",
+        "bytes": 5112
+      },
+      {
+        "path": "figure_pipeline/fig3_reference/__pycache__/settings.cpython-312.pyc",
+        "bytes": 3657
+      },
+      {
+        "path": "figure_pipeline/fig3_reference/__pycache__/__init__.cpython-310.pyc",
+        "bytes": 241
+      },
+      {
+        "path": "figure_pipeline/fig3_reference/__pycache__/models.cpython-312.pyc",
+        "bytes": 4805
+      },
+      {
+        "path": "figure_pipeline/fig3_reference/__pycache__/charts.cpython-312.pyc",
+        "bytes": 45870
+      },
+      {
+        "path": "figure_pipeline/fig3_reference/__pycache__/review_charts.cpython-312.pyc",
+        "bytes": 12391
+      },
+      {
+        "path": "figure_pipeline/fig3_reference/__pycache__/__main__.cpython-310.pyc",
+        "bytes": 774
+      },
+      {
+        "path": "figure_pipeline/fig4_reference/__pycache__/export.cpython-310.pyc",
+        "bytes": 9506
+      },
+      {
+        "path": "figure_pipeline/fig4_reference/__pycache__/data.cpython-310.pyc",
+        "bytes": 10276
+      },
+      {
+        "path": "figure_pipeline/fig4_reference/__pycache__/render.cpython-310.pyc",
+        "bytes": 27591
+      },
+      {
+        "path": "figure_pipeline/fig4_reference/__pycache__/__init__.cpython-310.pyc",
+        "bytes": 240
+      },
+      {
+        "path": "figure_pipeline/fig4_reference/__pycache__/__main__.cpython-310.pyc",
+        "bytes": 385
+      },
+      {
+        "path": "figure_pipeline/analysis/__pycache__/benchmark.cpython-312.pyc",
+        "bytes": 5309
+      },
+      {
+        "path": "figure_pipeline/fig4_rerun/__pycache__/run.cpython-310.pyc",
+        "bytes": 8945
+      },
+      {
+        "path": "figure_pipeline/fig4_rerun/__pycache__/config.cpython-310.pyc",
+        "bytes": 2625
+      },
+      {
+        "path": "figure_pipeline/fig4_rerun/__pycache__/materials.cpython-310.pyc",
+        "bytes": 6809
+      },
+      {
+        "path": "figure_pipeline/fig4_rerun/__pycache__/materials.cpython-312.pyc",
+        "bytes": 9399
+      },
+      {
+        "path": "figure_pipeline/fig4_rerun/__pycache__/engine.cpython-312.pyc",
+        "bytes": 8608
+      },
+      {
+        "path": "figure_pipeline/fig4_rerun/__pycache__/aggregate.cpython-310.pyc",
+        "bytes": 15124
+      },
+      {
+        "path": "figure_pipeline/fig4_rerun/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 259
+      },
+      {
+        "path": "figure_pipeline/fig4_rerun/__pycache__/run.cpython-312.pyc",
+        "bytes": 12065
+      },
+      {
+        "path": "figure_pipeline/fig4_rerun/__pycache__/render.cpython-310.pyc",
+        "bytes": 14550
+      },
+      {
+        "path": "figure_pipeline/fig4_rerun/__pycache__/__init__.cpython-310.pyc",
+        "bytes": 252
+      },
+      {
+        "path": "figure_pipeline/fig4_rerun/__pycache__/__main__.cpython-310.pyc",
+        "bytes": 5503
+      },
+      {
+        "path": "figure_pipeline/fig4_rerun/__pycache__/config.cpython-312.pyc",
+        "bytes": 3036
+      },
+      {
+        "path": "figure_pipeline/fig4_rerun/__pycache__/engine.cpython-310.pyc",
+        "bytes": 5437
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/cd_contracts.cpython-312.pyc",
+        "bytes": 10105
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/run_cd_first.cpython-312.pyc",
+        "bytes": 12587
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/run_abcd_followup.cpython-310.pyc",
+        "bytes": 9376
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/abcd_followup.cpython-312.pyc",
+        "bytes": 18518
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/render_abcd.cpython-310.pyc",
+        "bytes": 22814
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/cd_contracts.cpython-310.pyc",
+        "bytes": 9138
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/render_ab.cpython-312.pyc",
+        "bytes": 22355
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/summarize_cd_first.cpython-310.pyc",
+        "bytes": 15080
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/render_b_comparisons.cpython-310.pyc",
+        "bytes": 5626
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/insert_ad_into_fig3.cpython-310.pyc",
+        "bytes": 3721
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/abcd_followup.cpython-310.pyc",
+        "bytes": 14147
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/cd_sources.cpython-312.pyc",
+        "bytes": 12605
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/run_cd_first.cpython-310.pyc",
+        "bytes": 8877
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/render_ab.cpython-310.pyc",
+        "bytes": 13959
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/cd_sources.cpython-310.pyc",
+        "bytes": 8247
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/render_abcd.cpython-312.pyc",
+        "bytes": 34032
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/prepare_cd.cpython-310.pyc",
+        "bytes": 29812
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/run_d_verify.cpython-310.pyc",
+        "bytes": 6505
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/summarize_abcd_followup.cpython-310.pyc",
+        "bytes": 10866
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/summarize_d_verify.cpython-310.pyc",
+        "bytes": 7241
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/cd_approval.cpython-310.pyc",
+        "bytes": 7596
+      },
+      {
+        "path": "figure_pipeline/fig3_extensions/__pycache__/render_ad_replacements.cpython-310.pyc",
+        "bytes": 9935
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_100/__pycache__/prompts.cpython-310.pyc",
+        "bytes": 15481
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_100/__pycache__/runtime.cpython-312.pyc",
+        "bytes": 14574
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_100/__pycache__/materials.cpython-310.pyc",
+        "bytes": 7928
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_100/__pycache__/materials.cpython-312.pyc",
+        "bytes": 11294
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_100/__pycache__/runtime.cpython-310.pyc",
+        "bytes": 8187
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_100/__pycache__/aggregate.cpython-310.pyc",
+        "bytes": 11353
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_100/__pycache__/prompts.cpython-312.pyc",
+        "bytes": 15709
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_100/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 264
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_100/__pycache__/expansion.cpython-310.pyc",
+        "bytes": 7995
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_100/__pycache__/render.cpython-310.pyc",
+        "bytes": 11153
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_100/__pycache__/models.cpython-310.pyc",
+        "bytes": 2223
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_100/__pycache__/__init__.cpython-310.pyc",
+        "bytes": 257
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_100/__pycache__/models.cpython-312.pyc",
+        "bytes": 2592
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_100/__pycache__/__main__.cpython-310.pyc",
+        "bytes": 2559
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_100/__pycache__/refinement.cpython-310.pyc",
+        "bytes": 10574
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_100/__pycache__/handoff.cpython-310.pyc",
+        "bytes": 5420
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_100/__pycache__/pipeline.cpython-310.pyc",
+        "bytes": 13420
+      },
+      {
+        "path": "figure_pipeline/fig6_rf2/__pycache__/run_case.cpython-310.pyc",
+        "bytes": 4228
+      },
+      {
+        "path": "figure_pipeline/fig4_capabilities/__pycache__/prompts.cpython-310.pyc",
+        "bytes": 7917
+      },
+      {
+        "path": "figure_pipeline/fig4_capabilities/__pycache__/run.cpython-310.pyc",
+        "bytes": 5009
+      },
+      {
+        "path": "figure_pipeline/fig4_capabilities/__pycache__/config.cpython-310.pyc",
+        "bytes": 2021
+      },
+      {
+        "path": "figure_pipeline/fig4_capabilities/__pycache__/materials.cpython-310.pyc",
+        "bytes": 5702
+      },
+      {
+        "path": "figure_pipeline/fig4_capabilities/__pycache__/materials.cpython-312.pyc",
+        "bytes": 8037
+      },
+      {
+        "path": "figure_pipeline/fig4_capabilities/__pycache__/aggregate.cpython-310.pyc",
+        "bytes": 8604
+      },
+      {
+        "path": "figure_pipeline/fig4_capabilities/__pycache__/prompts.cpython-312.pyc",
+        "bytes": 8001
+      },
+      {
+        "path": "figure_pipeline/fig4_capabilities/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 254
+      },
+      {
+        "path": "figure_pipeline/fig4_capabilities/__pycache__/__init__.cpython-310.pyc",
+        "bytes": 247
+      },
+      {
+        "path": "figure_pipeline/fig4_capabilities/__pycache__/__main__.cpython-310.pyc",
+        "bytes": 1905
+      },
+      {
+        "path": "figure_pipeline/fig4_capabilities/__pycache__/config.cpython-312.pyc",
+        "bytes": 2231
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_reference/__pycache__/export.cpython-310.pyc",
+        "bytes": 12198
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_reference/__pycache__/data.cpython-310.pyc",
+        "bytes": 6627
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_reference/__pycache__/render.cpython-310.pyc",
+        "bytes": 21729
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_reference/__pycache__/__init__.cpython-310.pyc",
+        "bytes": 259
+      },
+      {
+        "path": "figure_pipeline/fig4_explanation_reference/__pycache__/__main__.cpython-310.pyc",
+        "bytes": 875
+      },
+      {
+        "path": "figure_pipeline/fig2_reference/__pycache__/export.cpython-312.pyc",
+        "bytes": 53901
+      },
+      {
+        "path": "figure_pipeline/fig2_reference/__pycache__/render.cpython-312.pyc",
+        "bytes": 59168
+      },
+      {
+        "path": "figure_pipeline/fig2_reference/__pycache__/graphics.cpython-312.pyc",
+        "bytes": 18890
+      },
+      {
+        "path": "figure_pipeline/fig2_reference/__pycache__/__main__.cpython-312.pyc",
+        "bytes": 2199
+      },
+      {
+        "path": "figure_pipeline/fig2_reference/__pycache__/data.cpython-312.pyc",
+        "bytes": 15611
+      },
+      {
+        "path": "figure_pipeline/fig2_reference/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 243
+      },
+      {
+        "path": "figure_pipeline/fig2_reference/__pycache__/contrasts.cpython-312.pyc",
+        "bytes": 9196
+      },
+      {
+        "path": "figure_pipeline/fig2_reference/__pycache__/profile.cpython-312.pyc",
+        "bytes": 7233
+      },
+      {
+        "path": "figure_pipeline/fig4_mechanisms/__pycache__/evaluation.cpython-312.pyc",
+        "bytes": 26234
+      },
+      {
+        "path": "figure_pipeline/fig4_mechanisms/__pycache__/prepare.cpython-312.pyc",
+        "bytes": 15014
+      },
+      {
+        "path": "figure_pipeline/fig4_mechanisms/__pycache__/config.cpython-310.pyc",
+        "bytes": 2451
+      },
+      {
+        "path": "figure_pipeline/fig4_mechanisms/__pycache__/aggregate.cpython-312.pyc",
+        "bytes": 31557
+      },
+      {
+        "path": "figure_pipeline/fig4_mechanisms/__pycache__/generation.cpython-312.pyc",
+        "bytes": 25512
+      },
+      {
+        "path": "figure_pipeline/fig4_mechanisms/__pycache__/io.cpython-310.pyc",
+        "bytes": 2800
+      },
+      {
+        "path": "figure_pipeline/fig4_mechanisms/__pycache__/__main__.cpython-312.pyc",
+        "bytes": 16813
+      },
+      {
+        "path": "figure_pipeline/fig4_mechanisms/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 253
+      },
+      {
+        "path": "figure_pipeline/fig4_mechanisms/__pycache__/execution.cpython-312.pyc",
+        "bytes": 4326
+      },
+      {
+        "path": "figure_pipeline/fig4_mechanisms/__pycache__/fusion.cpython-312.pyc",
+        "bytes": 32001
+      },
+      {
+        "path": "figure_pipeline/fig4_mechanisms/__pycache__/tasks.cpython-312.pyc",
+        "bytes": 7884
+      },
+      {
+        "path": "figure_pipeline/fig4_mechanisms/__pycache__/models.cpython-310.pyc",
+        "bytes": 5429
+      },
+      {
+        "path": "figure_pipeline/fig4_mechanisms/__pycache__/io.cpython-312.pyc",
+        "bytes": 3823
+      },
+      {
+        "path": "figure_pipeline/fig4_mechanisms/__pycache__/__init__.cpython-310.pyc",
+        "bytes": 246
+      },
+      {
+        "path": "figure_pipeline/fig4_mechanisms/__pycache__/models.cpython-312.pyc",
+        "bytes": 6483
+      },
+      {
+        "path": "figure_pipeline/fig4_mechanisms/__pycache__/config.cpython-312.pyc",
+        "bytes": 2663
+      },
+      {
+        "path": "figure_pipeline/fig4_mechanisms/__pycache__/generation.cpython-310.pyc",
+        "bytes": 17729
+      },
+      {
+        "path": "figure_pipeline/fig4_mechanisms/__pycache__/execution.cpython-310.pyc",
+        "bytes": 2510
+      },
+      {
+        "path": "figure_pipeline/renderers/__pycache__/theme.cpython-312.pyc",
+        "bytes": 1027
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/stages.cpython-310.pyc",
+        "bytes": 37516
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/prompts.cpython-310.pyc",
+        "bytes": 8377
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/packing.cpython-312.pyc",
+        "bytes": 28435
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/gear_adapter.cpython-310.pyc",
+        "bytes": 4160
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/evidence.cpython-312.pyc",
+        "bytes": 1492
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/resources.cpython-310.pyc",
+        "bytes": 1739
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/config.cpython-310.pyc",
+        "bytes": 3740
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/runner.cpython-312.pyc",
+        "bytes": 18967
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/gear_adapter.cpython-312.pyc",
+        "bytes": 5411
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/render.cpython-312.pyc",
+        "bytes": 32522
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/blinding.cpython-310.pyc",
+        "bytes": 2191
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/aggregate.cpython-312.pyc",
+        "bytes": 68160
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/client.cpython-312.pyc",
+        "bytes": 12535
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/materials.cpython-310.pyc",
+        "bytes": 8471
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/recheck.cpython-312.pyc",
+        "bytes": 21729
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/materials.cpython-312.pyc",
+        "bytes": 11648
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/storage.cpython-310.pyc",
+        "bytes": 3221
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/storage.cpython-312.pyc",
+        "bytes": 4177
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/scientific_tasks.cpython-312.pyc",
+        "bytes": 74496
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/progress.cpython-312.pyc",
+        "bytes": 4482
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/__main__.cpython-312.pyc",
+        "bytes": 6835
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/data.cpython-312.pyc",
+        "bytes": 2892
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/aggregate.cpython-310.pyc",
+        "bytes": 45652
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/prompts.cpython-312.pyc",
+        "bytes": 8658
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/review_origins.cpython-310.pyc",
+        "bytes": 6310
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/review_origins.cpython-312.pyc",
+        "bytes": 8620
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 249
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/runner.cpython-310.pyc",
+        "bytes": 12441
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/retrieval.cpython-312.pyc",
+        "bytes": 45861
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/evidence.cpython-310.pyc",
+        "bytes": 1197
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/execution.cpython-312.pyc",
+        "bytes": 23479
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/data.cpython-310.pyc",
+        "bytes": 2071
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/checkpoints.cpython-310.pyc",
+        "bytes": 3572
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/render.cpython-310.pyc",
+        "bytes": 20218
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/recheck.cpython-310.pyc",
+        "bytes": 15235
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/models.cpython-310.pyc",
+        "bytes": 16918
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/native_graph.cpython-310.pyc",
+        "bytes": 3615
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/baselines.cpython-310.pyc",
+        "bytes": 1530
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/__init__.cpython-310.pyc",
+        "bytes": 242
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/stages.cpython-312.pyc",
+        "bytes": 60007
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/models.cpython-312.pyc",
+        "bytes": 20941
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/native_graph.cpython-312.pyc",
+        "bytes": 4769
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/progress.cpython-310.pyc",
+        "bytes": 3190
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/resources.cpython-312.pyc",
+        "bytes": 3088
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/checkpoints.cpython-312.pyc",
+        "bytes": 5217
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/client.cpython-310.pyc",
+        "bytes": 6791
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/__main__.cpython-310.pyc",
+        "bytes": 3918
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/baselines.cpython-312.pyc",
+        "bytes": 1550
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/config.cpython-312.pyc",
+        "bytes": 4812
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/blinding.cpython-312.pyc",
+        "bytes": 2676
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/execution.cpython-310.pyc",
+        "bytes": 13100
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/packing.cpython-310.pyc",
+        "bytes": 18627
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/retrieval.cpython-310.pyc",
+        "bytes": 26186
+      },
+      {
+        "path": "figure_pipeline/fig3_revision/__pycache__/scientific_tasks.cpython-310.pyc",
+        "bytes": 53860
+      },
+      {
+        "path": "figure_pipeline/specs/__pycache__/contract.cpython-312.pyc",
+        "bytes": 2852
+      },
+      {
+        "path": "figure_pipeline/fig6_computer/__pycache__/__init__.cpython-310.pyc",
+        "bytes": 233
+      },
+      {
+        "path": "figure_pipeline/fig6_computer/__pycache__/build.cpython-310.pyc",
+        "bytes": 27695
+      },
+      {
+        "path": "figure_pipeline/fig6_computer/__pycache__/__main__.cpython-310.pyc",
+        "bytes": 203
+      },
+      {
+        "path": "figure_pipeline/archive/fig6_reference_pre_DAMAGE_20261003_174816/__pycache__/editorial.cpython-310.pyc",
+        "bytes": 2837
+      },
+      {
+        "path": "figure_pipeline/archive/fig6_reference_pre_DAMAGE_20261003_174816/__pycache__/export.cpython-312.pyc",
+        "bytes": 15899
+      },
+      {
+        "path": "figure_pipeline/archive/fig6_reference_pre_DAMAGE_20261003_174816/__pycache__/render.cpython-312.pyc",
+        "bytes": 26062
+      },
+      {
+        "path": "figure_pipeline/archive/fig6_reference_pre_DAMAGE_20261003_174816/__pycache__/__main__.cpython-312.pyc",
+        "bytes": 1155
+      },
+      {
+        "path": "figure_pipeline/archive/fig6_reference_pre_DAMAGE_20261003_174816/__pycache__/data.cpython-312.pyc",
+        "bytes": 12597
+      },
+      {
+        "path": "figure_pipeline/archive/fig6_reference_pre_DAMAGE_20261003_174816/__pycache__/editorial.cpython-312.pyc",
+        "bytes": 2941
+      },
+      {
+        "path": "figure_pipeline/archive/fig6_reference_pre_DAMAGE_20261003_174816/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 206
+      },
+      {
+        "path": "figure_pipeline/archive/fig6_reference_pre_DAMAGE_20261003_174816/__pycache__/export.cpython-310.pyc",
+        "bytes": 12974
+      },
+      {
+        "path": "figure_pipeline/archive/fig6_reference_pre_DAMAGE_20261003_174816/__pycache__/data.cpython-310.pyc",
+        "bytes": 8638
+      },
+      {
+        "path": "figure_pipeline/archive/fig6_reference_pre_DAMAGE_20261003_174816/__pycache__/render.cpython-310.pyc",
+        "bytes": 16973
+      },
+      {
+        "path": "figure_pipeline/archive/fig6_reference_pre_DAMAGE_20261003_174816/__pycache__/__init__.cpython-310.pyc",
+        "bytes": 226
+      },
+      {
+        "path": "figure_pipeline/archive/fig6_reference_pre_DAMAGE_20261003_174816/__pycache__/__main__.cpython-310.pyc",
+        "bytes": 905
+      },
+      {
+        "path": "experiments/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 216
+      },
+      {
+        "path": "experiments/__pycache__/__init__.cpython-310.pyc",
+        "bytes": 209
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/ablation_protocol.cpython-310.pyc",
+        "bytes": 1566
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/prepare_gear_retrieval.cpython-312.pyc",
+        "bytes": 7307
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/generate_reports.cpython-312.pyc",
+        "bytes": 7357
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/blinding.cpython-310.pyc",
+        "bytes": 4751
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/compare_reports.cpython-312.pyc",
+        "bytes": 9612
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/run_graph.cpython-312.pyc",
+        "bytes": 6841
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/resource_guard.cpython-310.pyc",
+        "bytes": 1398
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/reporting.cpython-310.pyc",
+        "bytes": 17055
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/resource_guard.cpython-312.pyc",
+        "bytes": 1956
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/run_all.cpython-312.pyc",
+        "bytes": 7367
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/run_claims_reviews_1000.cpython-312.pyc",
+        "bytes": 17781
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 231
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/ablation_interpretation.cpython-310.pyc",
+        "bytes": 6411
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/contracts.cpython-310.pyc",
+        "bytes": 4758
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/extract_claims.cpython-312.pyc",
+        "bytes": 4800
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/contracts.cpython-312.pyc",
+        "bytes": 5657
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/common.cpython-312.pyc",
+        "bytes": 17751
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/extract_claims.cpython-310.pyc",
+        "bytes": 3056
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/summarize_results.cpython-312.pyc",
+        "bytes": 21861
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/__init__.cpython-310.pyc",
+        "bytes": 224
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/reporting.cpython-312.pyc",
+        "bytes": 24620
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/recovery.cpython-312.pyc",
+        "bytes": 32760
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/sample_papers.cpython-312.pyc",
+        "bytes": 20872
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/ablation_interpretation.cpython-312.pyc",
+        "bytes": 8602
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/evaluate_human.cpython-312.pyc",
+        "bytes": 16810
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/run_gear.cpython-312.pyc",
+        "bytes": 15620
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/recovery.cpython-310.pyc",
+        "bytes": 15372
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/blinding.cpython-312.pyc",
+        "bytes": 6171
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/reconstruct_reviews.cpython-312.pyc",
+        "bytes": 9987
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/ablation_protocol.cpython-312.pyc",
+        "bytes": 1644
+      },
+      {
+        "path": "experiments/innovation_200/__pycache__/common.cpython-310.pyc",
+        "bytes": 11122
+      },
+      {
+        "path": "experiments/gear/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 227
+      },
+      {
+        "path": "experiments/gear/human_alignment/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 522
+      },
+      {
+        "path": "experiments/gear/human_alignment/__pycache__/contracts.cpython-312.pyc",
+        "bytes": 3185
+      },
+      {
+        "path": "experiments/gear/human_alignment/__pycache__/evidence_metrics.cpython-312.pyc",
+        "bytes": 2390
+      },
+      {
+        "path": "experiments/gear/review_reconstruction/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 478
+      },
+      {
+        "path": "experiments/gear/review_reconstruction/__pycache__/contracts.cpython-312.pyc",
+        "bytes": 10015
+      },
+      {
+        "path": "experiments/gear/evaluation/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 455
+      },
+      {
+        "path": "experiments/gear/evaluation/__pycache__/contracts.cpython-312.pyc",
+        "bytes": 15442
+      },
+      {
+        "path": "scripts/__pycache__/build_nature_2026_testset.cpython-312.pyc",
+        "bytes": 38127
+      },
+      {
+        "path": "scripts/__pycache__/shard_pending_gear_benchmark.cpython-312.pyc",
+        "bytes": 9031
+      },
+      {
+        "path": "scripts/__pycache__/run_three_paper_evaluation.cpython-312.pyc",
+        "bytes": 9851
+      },
+      {
+        "path": "scripts/__pycache__/run_claim_graph_batch.cpython-310.pyc",
+        "bytes": 2315
+      },
+      {
+        "path": "scripts/__pycache__/build_human_review_benchmark.cpython-310.pyc",
+        "bytes": 1261
+      },
+      {
+        "path": "scripts/__pycache__/__init__.cpython-312.pyc",
+        "bytes": 217
+      },
+      {
+        "path": "scripts/__pycache__/innovation_experiment.cpython-312.pyc",
+        "bytes": 28373
+      },
+      {
+        "path": "scripts/__pycache__/audit_nature_graph_doi_coverage.cpython-312.pyc",
+        "bytes": 51905
+      },
+      {
+        "path": "scripts/__pycache__/run_gear_evaluation.cpython-310.pyc",
+        "bytes": 3385
+      },
+      {
+        "path": "scripts/reporting/__pycache__/summarize_paper_graph.cpython-312.pyc",
+        "bytes": 19997
+      },
+      {
+        "path": "scripts/reporting/__pycache__/package_local_code.cpython-312.pyc",
+        "bytes": 9499
+      },
+      {
+        "path": "scripts/reporting/__pycache__/summarize_claim_graph.cpython-312.pyc",
+        "bytes": 21246
+      },
+      {
+        "path": "scripts/reporting/__pycache__/summarize_runtime_graph.cpython-312.pyc",
+        "bytes": 34069
+      },
+      {
+        "path": "scripts/reporting/__pycache__/summarize_nature_corpus.cpython-312.pyc",
+        "bytes": 24496
+      },
+      {
+        "path": "scripts/reporting/__pycache__/assemble_graph_statistics.cpython-312.pyc",
+        "bytes": 10966
+      },
+      {
+        "path": "scripts/claim_graph/__pycache__/03_extract_abstracts.cpython-312.pyc",
+        "bytes": 39761
+      },
+      {
+        "path": "scripts/claim_graph/__pycache__/06_build_paper_graph_index.cpython-312.pyc",
+        "bytes": 16248
+      },
+      {
+        "path": "scripts/claim_graph/__pycache__/07_build_claim_graph.cpython-312.pyc",
+        "bytes": 55796
+      },
+      {
+        "path": "scripts/claim_graph/__pycache__/08_build_claim_graph_statistics.cpython-312.pyc",
+        "bytes": 51547
+      },
+      {
+        "path": "scripts/claim_graph/__pycache__/05_encode_claim_embeddings.cpython-312.pyc",
+        "bytes": 20378
+      },
+      {
+        "path": "scripts/claim_graph/__pycache__/00_initialize_claim_graph.cpython-312.pyc",
+        "bytes": 8058
+      },
+      {
+        "path": "scripts/claim_graph/__pycache__/01_prepare_nature_targets.cpython-312.pyc",
+        "bytes": 19913
+      },
+      {
+        "path": "scripts/claim_graph/__pycache__/04_extract_claims.cpython-312.pyc",
+        "bytes": 41269
+      },
+      {
+        "path": "scripts/claim_graph/__pycache__/02_build_paper_graph.cpython-312.pyc",
+        "bytes": 34204
+      },
+      {
+        "path": "scripts/claim_graph/__pycache__/03_rebuild_markdown_abstracts.cpython-312.pyc",
+        "bytes": 9893
+      },
+      {
+        "path": "scripts/claim_graph/__pycache__/01_remove_targets.cpython-312.pyc",
+        "bytes": 4953
+      },
+      {
+        "path": "tests/figure_pipeline/__pycache__/test_graph_revision.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 18553
+      },
+      {
+        "path": "tests/figure_pipeline/__pycache__/test_fig2_reference.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 11833
+      },
+      {
+        "path": "tests/figure_pipeline/__pycache__/test_fig1_reference.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 30685
+      },
+      {
+        "path": "tests/figure_pipeline/__pycache__/test_revision.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 12166
+      },
+      {
+        "path": "tests/figure_pipeline/__pycache__/test_fig3_revision.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 193612
+      },
+      {
+        "path": "tests/innovation_200/__pycache__/test_claims_reviews_1000.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 8527
+      },
+      {
+        "path": "tests/innovation_200/__pycache__/test_identity_blinding.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 26239
+      },
+      {
+        "path": "tests/innovation_200/__pycache__/test_experiment.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 112947
+      },
+      {
+        "path": "tests/innovation_200/__pycache__/test_downstream_repairs.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 23279
+      },
+      {
+        "path": "tests/innovation_200/__pycache__/test_graph_batch.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 30300
+      },
+      {
+        "path": "tests/innovation_200/__pycache__/test_selected_postprocess.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 18718
+      },
+      {
+        "path": "tests/innovation_200/__pycache__/test_postprocess_execution.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 9494
+      },
+      {
+        "path": "tests/innovation_200/__pycache__/test_gear_recovery.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 62277
+      },
+      {
+        "path": "tests/innovation_v2/__pycache__/test_references.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 20174
+      },
+      {
+        "path": "tests/innovation_v2/__pycache__/test_pipeline.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 10897
+      },
+      {
+        "path": "tests/innovation_v2/__pycache__/test_fig7_frontier.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 15254
+      },
+      {
+        "path": "tests/innovation_v2/__pycache__/test_analysis.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 12014
+      },
+      {
+        "path": "tests/innovation_v2/__pycache__/test_fig7_historical_statistics.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 9974
+      },
+      {
+        "path": "tests/innovation_v2/__pycache__/test_concurrency.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 10565
+      },
+      {
+        "path": "tests/innovation_v2/__pycache__/test_fig7_reference.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 17733
+      },
+      {
+        "path": "tests/innovation_v2/__pycache__/test_shared.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 1550
+      },
+      {
+        "path": "tests/innovation_v2/__pycache__/test_planner.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 5840
+      },
+      {
+        "path": "tests/innovation_v2/__pycache__/test_joint_graph.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 21289
+      },
+      {
+        "path": "tests/innovation_v2/__pycache__/test_fig5_robustness.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 26286
+      },
+      {
+        "path": "tests/innovation_v2/__pycache__/test_fig5_revision.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 37614
+      },
+      {
+        "path": "tests/innovation_v2/__pycache__/test_foundations.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 14751
+      },
+      {
+        "path": "tests/innovation_v2/__pycache__/test_gpu.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 3035
+      },
+      {
+        "path": "tests/innovation_v2/__pycache__/test_fig5_four_panel.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 6577
+      },
+      {
+        "path": "tests/innovation_v2/__pycache__/test_fig5_mechanism_study.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 10600
+      },
+      {
+        "path": "tests/gear/__pycache__/test_codex_cli.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 12591
+      },
+      {
+        "path": "tests/gear/__pycache__/test_claim_adoption_labels.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 12518
+      },
+      {
+        "path": "tests/gear/__pycache__/test_t0_runtime.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 21112
+      },
+      {
+        "path": "tests/gear/__pycache__/test_graph_calibration.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 14652
+      },
+      {
+        "path": "tests/gear/__pycache__/test_rescue_finalize_wiring.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 8524
+      },
+      {
+        "path": "tests/gear/__pycache__/test_expert_annotation_pack.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 22683
+      },
+      {
+        "path": "tests/gear/__pycache__/test_fulltext_integration.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 12865
+      },
+      {
+        "path": "tests/gear/__pycache__/test_scholar_cache.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 34910
+      },
+      {
+        "path": "tests/gear/__pycache__/conftest.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 6071
+      },
+      {
+        "path": "tests/gear/__pycache__/test_stage_a_validation.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 14699
+      },
+      {
+        "path": "tests/gear/__pycache__/test_reconstruction.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 15411
+      },
+      {
+        "path": "tests/gear/__pycache__/test_claim_attribution_runtime.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 22232
+      },
+      {
+        "path": "tests/gear/__pycache__/test_t0_enrichment.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 1415
+      },
+      {
+        "path": "tests/gear/__pycache__/test_graph_action_policy_release.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 23537
+      },
+      {
+        "path": "tests/gear/__pycache__/test_prior_art.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 90741
+      },
+      {
+        "path": "tests/gear/__pycache__/test_paper_citation_integrity.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 20230
+      },
+      {
+        "path": "tests/gear/__pycache__/test_human_audit.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 6714
+      },
+      {
+        "path": "tests/gear/__pycache__/test_stability.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 2427
+      },
+      {
+        "path": "tests/gear/__pycache__/test_rescue_source_fingerprint.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 3598
+      },
+      {
+        "path": "tests/gear/__pycache__/test_targets_v6_residualization.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 6460
+      },
+      {
+        "path": "tests/gear/__pycache__/test_gate1_mechanism_dataset.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 14143
+      },
+      {
+        "path": "tests/gear/__pycache__/test_branch_independence.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 862
+      },
+      {
+        "path": "tests/gear/__pycache__/test_shard_pending_benchmark.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 6543
+      },
+      {
+        "path": "tests/gear/__pycache__/test_model_backends.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 13979
+      },
+      {
+        "path": "tests/gear/__pycache__/test_runtime_fingerprint.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 4398
+      },
+      {
+        "path": "tests/gear/__pycache__/test_grounding.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 4140
+      },
+      {
+        "path": "tests/gear/__pycache__/test_hgb_p_prediction_audit.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 4921
+      },
+      {
+        "path": "tests/gear/__pycache__/test_open_scholar_adapter.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 21820
+      },
+      {
+        "path": "tests/gear/__pycache__/test_randomized_action_outcomes.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 29718
+      },
+      {
+        "path": "tests/gear/__pycache__/test_batch_runner.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 14236
+      },
+      {
+        "path": "tests/gear/__pycache__/test_runtime_cohort_audit.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 4320
+      },
+      {
+        "path": "tests/gear/__pycache__/test_diffusion_forecast.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 64554
+      },
+      {
+        "path": "tests/gear/__pycache__/test_structural_innovation.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 25105
+      },
+      {
+        "path": "tests/gear/__pycache__/test_claim_a_report.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 3865
+      },
+      {
+        "path": "tests/gear/__pycache__/test_audit_rescue_completion.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 24509
+      },
+      {
+        "path": "tests/gear/__pycache__/test_local_ranking.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 9931
+      },
+      {
+        "path": "tests/gear/__pycache__/test_external_fulltext.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 63734
+      },
+      {
+        "path": "tests/gear/__pycache__/test_review_fusion.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 22491
+      },
+      {
+        "path": "tests/gear/__pycache__/test_legacy_isolation.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 5636
+      },
+      {
+        "path": "tests/gear/__pycache__/test_runtime.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 55884
+      },
+      {
+        "path": "tests/gear/__pycache__/test_claim_attribution_training.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 7445
+      },
+      {
+        "path": "tests/gear/__pycache__/test_module_artifacts.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 9552
+      },
+      {
+        "path": "tests/gear/__pycache__/test_paper_compiler.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 21523
+      },
+      {
+        "path": "tests/gear/__pycache__/test_historical_pdf_config.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 11230
+      },
+      {
+        "path": "tests/gear/__pycache__/test_review_branches.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 27009
+      },
+      {
+        "path": "tests/gear/__pycache__/test_oof_manuscript_acquisition.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 6664
+      },
+      {
+        "path": "tests/gear/__pycache__/test_graph_routing_v2.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 19248
+      },
+      {
+        "path": "tests/gear/__pycache__/test_prior_art_batching.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 3936
+      },
+      {
+        "path": "tests/gear/__pycache__/test_review_contracts.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 6476
+      },
+      {
+        "path": "tests/gear/__pycache__/test_human_alignment.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 2294
+      },
+      {
+        "path": "tests/gear/__pycache__/test_paper_extraction.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 9086
+      },
+      {
+        "path": "tests/gear/__pycache__/test_process_diagnostic.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 6011
+      },
+      {
+        "path": "tests/gear/__pycache__/test_rescue_postprocess_audit.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 8269
+      },
+      {
+        "path": "tests/gear/__pycache__/test_rescue_stages.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 45842
+      },
+      {
+        "path": "tests/gear/__pycache__/test_evaluation.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 10353
+      },
+      {
+        "path": "tests/gear/__pycache__/test_evidence_supervisor.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 36826
+      },
+      {
+        "path": "tests/gear/__pycache__/test_claim_adoption_contexts.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 10132
+      },
+      {
+        "path": "tests/gear/__pycache__/test_openalex_key_rotation.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 14740
+      },
+      {
+        "path": "tests/gear/__pycache__/test_contracts.cpython-312-pytest-9.1.1.pyc",
+        "bytes": 7401
+      }
+    ]
+  },
+  "final_delivery_verification": [
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/Fig1.pdf",
+      "sha256": "fa7c2d9a3261611c80d5a0fbeeb7bb1594627fce494aac20b2a91ac231aa93be",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/Fig1.svg",
+      "sha256": "47088c04edbb2f566e9ad3ca644419b14b7772cd140f642c1a239d410ed1bfd2",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/Fig1_10x.png",
+      "sha256": "58b8650658883adcc997426ab1ee42e845f0b41234200598877c8ce451ca56ae",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/Fig1_outlined.svg",
+      "sha256": "29dcaae6ed0a2d6d61bddc2c0d7f6031357c3aa00375589d59d4d2ba30f449be",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/a.pdf",
+      "sha256": "4cec8fde656991dde319145cae16c6a0abdd6a27793eb5c10cbcdb371d2886ea",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/a.png",
+      "sha256": "f2a85489260667c4b60290d145ce5ae66d96be53c65bfaa1b84cc4c7cf9f82b8",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/a.svg",
+      "sha256": "709fb56e21f26ed423a82a34ec3223d1b974475c1ec88e0bcff324e1edee2940",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/b.pdf",
+      "sha256": "ff475e12923bffa80bba96e93b508ed7bbd26fb02ceb0c8f7bf9414636de7cac",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/b.png",
+      "sha256": "c349a263dbb6e01b82d44e7914f7838a467c507c7f6e6a7da6b39bbb2a2bfca4",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/b.svg",
+      "sha256": "e747150fc2103767c47d3fe49bae5b410a89a88b2e4e87d3b09908fad4bdfddc",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/c.pdf",
+      "sha256": "3d24b3d22d86db12933bdbcd22e527ee8cd5d82331df175039060568bdc19ad0",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/c.png",
+      "sha256": "54242ceae222efe3e72118c9dc4d2a4c42736410c484fae7534f76791de242e0",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/c.svg",
+      "sha256": "f4e76b96e657722784a4c405b80e04c9bfacc27b848edfbd66916112f10085ae",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/case_A.pdf",
+      "sha256": "40352773d4e9237cddc9955254713ff2cf4afd604e8ae3d33b5fa3e3d6a4fbcb",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/case_A.png",
+      "sha256": "750898ec901894dac381cdb450a97506ea13a93e3ce2364b93043d1733c43968",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/case_A.svg",
+      "sha256": "1568270af3e9532565319f36280eaa6b20914c338af86bc205b5a45486e6ad70",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/case_B.pdf",
+      "sha256": "6d70bb6d5b52b82b1a00d9c21a118fe4e467655d9b7b4493738ff598df416d69",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/case_B.png",
+      "sha256": "46508d5a049fa9a51caeaa252d8a8ea3441a96dbc14127f92a4b0f92f3a31216",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/case_B.svg",
+      "sha256": "e25f505538f7d643011792213e631b656723690a70bc2ab90fa570e870cc5fda",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/case_C.pdf",
+      "sha256": "c62942051a9b32af702e12a459c94ed503c7c10f7385aca91d97bf99f4c2d98c",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/case_C.png",
+      "sha256": "235fbae9e2da33440d09c3e7aab6d2d92c88f428fa072b68e9ae4d72e638da10",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/case_C.svg",
+      "sha256": "127d182a00213123702cbc4625e65ca2f1a283cdad3d976451c03c9b3fe424e9",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/case_D.pdf",
+      "sha256": "ff64373442483639e7c5871a961ccfdbee0851d61adb1c560e31a3fe7bbd58b9",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/case_D.png",
+      "sha256": "58decb8fc6ad88d9b183357c5bef2a04618035429ebda14afda69517170fdf4a",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/case_D.svg",
+      "sha256": "249a63c2e982f20a43d2964c02ffeb12bb42ee3b20e350ee8fe186bb564ec0b7",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/d.pdf",
+      "sha256": "bdefff1262bbb0f4e58cd37ad8744c0c13cce68a63a5e99180350748b4a74f8a",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/d.png",
+      "sha256": "fb644c5ec12392f0ce3664455b4bd6984e5ba5335a4ac50e977867acba912120",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/d.svg",
+      "sha256": "7627d5335cc7f79e9dcc82134648cc0295ca4f060d926147c2ef0e7256d6c353",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/e.pdf",
+      "sha256": "6316c9856b9ade8f448da53d1364ab87f1ad3d109fc9667cf445a8815771459c",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/e.png",
+      "sha256": "3a4730ecd969efa7e6defbd80841e3ed848a28bb55b3bb96cde240cbda4a23c1",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig1/panels/e.svg",
+      "sha256": "b5fba5f00c831e870c6972c2f780876d0a840a8115d6f60816045aeaeaaef98c",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig2/Fig2.pdf",
+      "sha256": "6ed3aad84680b351b8755406819b425ff014c33028cfd40f80b39c8f817fc200",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig2/Fig2.svg",
+      "sha256": "f7c8e9a7f0158586e94d7a60e7d2f868f34b73a0e20d0177c9192a6e0c7f977b",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig2/Fig2_10x.png",
+      "sha256": "222f707d8392f9d5a6fe025fd94c39c348503fafca8824b7ab7dd133fbc1a8c7",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig2/Fig2_outlined.svg",
+      "sha256": "df47e6a939320cdfc44a687ddb7875445af1df37c93d97ca4a3d0e69e6041c1e",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig2/panels/a.pdf",
+      "sha256": "3403cb5201595b3ab1c65c5a5f341d7bdcc866e0cc36cc5fc6d08ef51fad0a30",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig2/panels/a.png",
+      "sha256": "b64e6c651df477cb520a8e7874f8442acc39eaca2ee8b4df5e7d908c8f6c64a4",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig2/panels/a.svg",
+      "sha256": "2626221362577a81c4424cceb99b4c1a19e02d280e04697b2b481917d714a6db",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig2/panels/b.pdf",
+      "sha256": "98e00b4cf65bdcc6f4f7b10da49a91e6d8c11531d93fa051d932b6430fb27b32",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig2/panels/b.png",
+      "sha256": "911d5bd15b6e98757ed962e4d804625e4a50d80bdeaa31eebf8a043e410459e1",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig2/panels/b.svg",
+      "sha256": "e5e87c8f4e58b5c5de66ed732726cb2b9b136840fc845905fb807d87c781181d",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig2/panels/c.pdf",
+      "sha256": "3e61e53ef62a2b0e66e4b37c9de3fe8f26b9ac67ef8cea84d44973808d6bb55d",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig2/panels/c.png",
+      "sha256": "eef728c69b039704799e48a6a3b28080ad4b5bc37eab7e557679915d7d8dff8c",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig2/panels/c.svg",
+      "sha256": "aa260a0b9d03ecf6888a193dabc4418a9052c45b162150f1d10a9f3a33bcc685",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig2/panels/d.pdf",
+      "sha256": "a472d983e70a693cf014661822f70ad2769b153873e3b5a27a22da83599c2e00",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig2/panels/d.png",
+      "sha256": "ac84934dd41cfae556f7715d90b4f086807a34fc646a858afe64741a697b67f8",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig2/panels/d.svg",
+      "sha256": "03558adba5dd3693e1f5953e8fa9a6bbe23e842671d04e8694e7a29bbe301eda",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig2/panels/e.pdf",
+      "sha256": "76f9b9e28fc0bac60d0f7e4a0243474a16fdf529c77da8c4daca9be87935f060",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig2/panels/e.png",
+      "sha256": "53cf3fc2d79527803b6dfae40d5c763a8a78dd7fa31a3878130b085a9acb6590",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig2/panels/e.svg",
+      "sha256": "7cbdee129d46340807f3dac2a677bd800e444d94d9f2ba825269feb585b6bdc5",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/Fig3.pdf",
+      "sha256": "f5e19c50f0a395605d4753561f88ecfff47abd4418ae62e67e62ff4fc5b1e900",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/Fig3.svg",
+      "sha256": "7c438bccef64bf87f1d7918f9296cc8bb95648029386ff77595c3a45d7aa6b34",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/Fig3_600dpi.png",
+      "sha256": "2c2c02b3f0ec5699c1330b663d9d7f7b7a70e601ee02e7ab63eb913170ebed24",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/panels/a.pdf",
+      "sha256": "cd8e639e53958c1bbcd7ce04e5cb9eb5902acfeb228cf0c3419392803b6ee4b2",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/panels/a.png",
+      "sha256": "8cfeb5ac82974a1360e72a2758c458d811f101a45b5422bbfe49c196ad9800fa",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/panels/a.svg",
+      "sha256": "b054eb9ab6f77c929b695d8d4a18ee2a734509ceee21b5077ee75665a095702b",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/panels/b.pdf",
+      "sha256": "951a632ee006411509b463f57c9cd2a84132e091edd4d3f29c342c4d13db5540",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/panels/b.png",
+      "sha256": "a2ddde8fb94fb19a21ef603ab0ce644c9206c78615cdef81fd96a161612a3bbd",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/panels/b.svg",
+      "sha256": "cb774f046067beb789a8a5e62b8227da58b601b50ac639cf0d416cd17a5d948c",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/panels/c.pdf",
+      "sha256": "ab6462b978cd5455478e29e1350eb7f25d87dd79a1572af28e6b9e49715a6b01",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/panels/c.png",
+      "sha256": "fcd714201391abaf1ebbc4ed7b6c8302d4b2a30412f1928ed1577119be6b0341",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/panels/c.svg",
+      "sha256": "46810eeb3813d6dd466db6f5b243799030cec85b30734e76062268552908fc14",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/panels/d.pdf",
+      "sha256": "550c6c2432b25ffad7754d9aa35cd2af9de059f7a2f5daec880855741a0e6260",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/panels/d.png",
+      "sha256": "19ae3804668e6127f75b9b9f1c23808f9b039c2d5a181bda63707393ef780207",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/panels/d.svg",
+      "sha256": "b63d98cc97e0c9a8d82c96103fba99e357fb0c20528c60679d5c07285ec9b32d",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/panels/e.pdf",
+      "sha256": "351b9c42fc0e58adb8ffbd785424ed0f9d67d46fc5192918fa8d476dd4d682ac",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/panels/e.png",
+      "sha256": "27d287635a3ba813abc93545c6f47482ce3e2b225152bd2151221e02ff096be4",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/panels/e.svg",
+      "sha256": "055c8862dd02e54dfc166dfd0802ec563ce5ac61b4116e7e1bf4cef6f2050707",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/panels/f.pdf",
+      "sha256": "a145f4aed53c2de04338b44a8cee8b7f8ae28ce922fe11450b918a80cea7d2b3",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/panels/f.png",
+      "sha256": "111a071a74f408b95e7b6763c51dc819c003e75a0026e75f05b320de25d09a0e",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/panels/f.svg",
+      "sha256": "7014566387cf2b7808f7c9f75e4c2b26f8a8be13dd208c57a32078fde8571b35",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/panels/g.pdf",
+      "sha256": "9593bc4030df01e76fc5822fb802c7922aacdd43abd6fe174ed81bd5d6042509",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/panels/g.png",
+      "sha256": "59146ed9cf51888bc3a057355b2cff11dbcab5fd49b567692ba85148fd14ea83",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig3/panels/g.svg",
+      "sha256": "bcf4c16c3d17e744aa06b1e8474c3b10eb8e765a62c75c92436be7f09a2af2ec",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/Fig4.pdf",
+      "sha256": "21a925f7db297f67452df4dfb8170604597b486d73bcd2af54808b0efe85fe23",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/Fig4.svg",
+      "sha256": "2972e5f587401b3edd12888aadfe3b29f6ee50a829058c7aadf4a993d76ae627",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/Fig4_900dpi.png",
+      "sha256": "70202f1835ed927e01e0b7dbf46c20da77528390ba240318f8bae2f0056c9c2b",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/Fig4_outlined.svg",
+      "sha256": "6cbcfbfdbb3730ebf57f4e12ee677f470e9f52c89f574bae1b034d04979e7394",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/a.pdf",
+      "sha256": "fbb31bc9e6220d67ff6dd032cb4339abfdcec838bbf50c46eca39dcb3ebec8f8",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/a.png",
+      "sha256": "e97046c0c0efcd86d8d697c6906bfacdede94cc731a01a4c2eb72b68ce9e21ea",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/a.svg",
+      "sha256": "9491f9638659ade53d0df18fd3b3fb8023121bef2d4388f559a952adbfd35a67",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/a_outlined.svg",
+      "sha256": "07068ec22e53c2b415617002800ad1667577a4ee22fd1150955cf6b7655acd75",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/b.pdf",
+      "sha256": "93e87ff0600682f9664386f846e6598a36a5b92cebba5ee69ba607b80f55145e",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/b.png",
+      "sha256": "c9c0bd58adb90260e39d818b8707d1001b77f4923e61ca3d767f93e348669fb8",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/b.svg",
+      "sha256": "2aea777ab48839ba9512ed73f43a31a4bbe7033b4e23fb7b7e540fd3c1960c45",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/b_outlined.svg",
+      "sha256": "c4c6c60ab47a9c51a92bea17b1982fc49253796da648df8e93f85b46a2f609f1",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/c.pdf",
+      "sha256": "d20759f7077e2f07bcb3d691b40bc3687b90ea7b654ca616cfd86bd60f59745f",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/c.png",
+      "sha256": "ab1afc88631c4296ab8ac1d276fb39a107fa65637691ef9d0c59b6a4b8e027ec",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/c.svg",
+      "sha256": "f272b2b570c7d4f29db2eacae58ad7e766c875324231595ba2119873ec3de126",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/c_outlined.svg",
+      "sha256": "e5148b1b2b09c8ed29e67fa8f45aa2cf9fb768cfeb6d84375a05fd192dfa83b9",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/d.pdf",
+      "sha256": "d20d19b877d45d9abc27b62924374bc7b0c951bb0201b562b5863ade91b4cb64",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/d.png",
+      "sha256": "ebcb18f7d1d9c9b05800c29e23de7e665ef89bc24dfaf61253d75e0cfc0f252f",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/d.svg",
+      "sha256": "d1a8e2d8e442b66d2d4235234ec8b554d95a24de15db284720a08823ca4f3b38",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/d_outlined.svg",
+      "sha256": "848669bb40d1f4c5fec029ba82d9fc1b6914f06bee35caa476bf892853f25894",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/e.pdf",
+      "sha256": "f0d083fad31bb8d6052594082350e42481968fd0c779bc9e9e7c089cdd5d00c0",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/e.png",
+      "sha256": "b7c276527233ac0b11bcff6577c02c569b1a8338e2d2b8e059b0ef1f662ddb85",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/e.svg",
+      "sha256": "b1e3506f5d066daa0ed7f32d32d4db828a7c573bcf8c90554b800793df7b80ea",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/e_outlined.svg",
+      "sha256": "5fe77682d4556e1e6951e575ef85d8ac0881f749357e26c9e458ecdda91a2e33",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/f.pdf",
+      "sha256": "556ac00a99b1176174bcf878b4b7d6d8780fa040a5f3140f2307a7f7c59289b6",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/f.png",
+      "sha256": "012d046ece3b9d15cfda503b27b63ae70830dbfbf29936ab39e98c7a2e962f4b",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/f.svg",
+      "sha256": "4859097fa108f45bdc828f97d9ca1059b3a5d63282f3b536f7e4fac95f4dfa3a",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig4/panels/f_outlined.svg",
+      "sha256": "4254f733b37cf71c55f4523e70a10335707f6b8ecfa96a30f5c95c49d65091c2",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig5/Fig5.pdf",
+      "sha256": "2749df10a61900844b20894d88cb3c17eb2909d929e90cfb61cf179df59971d0",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig5/Fig5.png",
+      "sha256": "750ffe8ce8307db10e4c84a2c07191747bddf0e00879fcf372dbd7a31ed330c2",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig5/Fig5.svg",
+      "sha256": "10a075c09d04caae3cfd8d13a2322dec49661927f2f5db8dfa2b32c53c109bcf",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/Fig6.pdf",
+      "sha256": "5edb2ba38bcc98aba2b0ea7f4db4a4cbbfcdf230a20ab0fbc85d1ef06699289b",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/Fig6.svg",
+      "sha256": "1af1ebcb4bffb27ead4ff5100317f4bde0347cc95ca38e1e0ec5d27f33c563a8",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/Fig6_600dpi.png",
+      "sha256": "b52c4bda65b4e4df6ca67d3248e330d19805c7348fa02dc6decf5fce34beae20",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/Fig6_outlined.svg",
+      "sha256": "b127234092a69fc1865632aafe60e655a32e75c05b49a1e4b0c762d64d32ca03",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/panels/a.pdf",
+      "sha256": "4eb3d4f36dbf70cfc9d9df56e41692167b6105a3eee92acd2d140b2570b32496",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/panels/a.png",
+      "sha256": "ac687c75083b1096754f775cc9fa331969bb33cf64dfca4e86ad17398e9cb83d",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/panels/a.svg",
+      "sha256": "836f14f8517ba50541fad85dace5a857c4228c5d55f19d35bc2d9bd3ed28a590",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/panels/a_outlined.svg",
+      "sha256": "e816b58e29a37d9c4c7203c2ad8d31fa1f61158a6c5ea5ee9e32e2c2c534e063",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/panels/b.pdf",
+      "sha256": "01478d0b67e8c29b754281386509bb811f64e72583b0c277eb3ea3340993d668",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/panels/b.png",
+      "sha256": "18f37d9d63d61ff45e0de528ca69dc0d8818040ddcdac65bb2bab8b4ec7bf9fc",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/panels/b.svg",
+      "sha256": "c826e0ab93bdcf900f82196ff0bbba0c463c82649d9f8c3b11db094e36e3ba63",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/panels/b_outlined.svg",
+      "sha256": "2df4f9f726ac184c3af7f06ab27662e82f424a6ccbdda386d5e7f92894f84e53",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/panels/c.pdf",
+      "sha256": "34b2c06c92c07284d7ec14499bc29eb24852eb55b88aff9b2f721ccb16f7799b",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/panels/c.png",
+      "sha256": "833691cbcbcce480d69c3c78774a4e46a084eff83b4ae484e6565b022f660e58",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/panels/c.svg",
+      "sha256": "5156ba106af09c96eda1098f1d3a96d86d95b9d2ec1cfbb2f538dea5fbde8ac1",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/panels/c_outlined.svg",
+      "sha256": "db89b2d846fac50384616aa248d17f72b22b4ebccb04e3e61be6f84dc422475a",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/panels/d.pdf",
+      "sha256": "356cbe7514f4e55103de0779707c61ba0b8655b88fdbc993c13c8cbc5a0c9cd4",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/panels/d.png",
+      "sha256": "1970a8cf0204bd409d1f109df53649bcd0988a19286879c53c83e609449d9437",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/panels/d.svg",
+      "sha256": "3e0c033664f91c5e3ece23050fc6f414b609c68d808219b1463b8cfbd185b493",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/panels/d_outlined.svg",
+      "sha256": "422a371605b93df9a13ac0fbaad4ce39e133e3108cbd82f88e51b848449f414e",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/panels/e.pdf",
+      "sha256": "bfe517d300b0029e716658f003fe20ef18dd5d98f5792a44ef74e7770a24a586",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/panels/e.png",
+      "sha256": "2c186c8b964176518c6cd353efc87c930257085c007bc888845adef5f192f08b",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/panels/e.svg",
+      "sha256": "9cbebe894c9b62cd267e144dae74f700ce874f1b1e3ebaefd5ede0b60d54f908",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig6/panels/e_outlined.svg",
+      "sha256": "4212c9ffa4eaf1c7795dafec566c7f255a30cabf71d581c46c375b782b6964bb",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig7/Fig7.pdf",
+      "sha256": "73659967619309c4e7cfd7910b000baec61a0db2788a437f80cf3a842e55b9b9",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig7/Fig7.svg",
+      "sha256": "1dfd1af7ba298b8d286d4153966aee512b6b3911ad0bc8f85517ccbee9a50f49",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig7/Fig7_600dpi.png",
+      "sha256": "d308bb332e6c5d6bc15f0d6e4a357e304053090ecc899b9c6a9fd162d8c26279",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig7/Fig7_outlined.svg",
+      "sha256": "6d525d63d9ea59d66c13f2bb4947f8946aa5f13286d0ccedf85ffedcda93bffe",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig7/panels/a.svg",
+      "sha256": "eb1e0767899e4caa04b4be9ea10a116a2c56d17d7f27457d1d07aae59f97eda8",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig7/panels/b.svg",
+      "sha256": "2b0fc3b890ed4c6875c8d81df46343a4997161c8143ad26beb898fa2e4f207f7",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig8/Fig8.pdf",
+      "sha256": "de0cac3721d4bc2b755d743a1bb24a3c697c10a78f89e4fea8cff3e19cd000d3",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig8/Fig8.svg",
+      "sha256": "04147ab2349cbda3f3bae4c6e9dcf0934b52f80c341132cb7488ca3806ba0d44",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig8/Fig8_600dpi.png",
+      "sha256": "d562d15c679a0d9fd2b7c338afd027fc641b46202e2434d9ce71865fcc900d80",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig8/Fig8_outlined.svg",
+      "sha256": "6237a24d3b8abf9e1ffc64110be28b99a61596e2f9dbea9f13c585b72d7a1e28",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig8/panels/Fig8a.pdf",
+      "sha256": "b3fe8459033cf6f717f69ff0ab4034da7cf0cc43cb430a5937dc133af30680bf",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig8/panels/Fig8a.png",
+      "sha256": "ac47dee5d3ae7b1146124a795f041e203e232cf099beda2a236c74b07fa26484",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig8/panels/Fig8a.svg",
+      "sha256": "305ec7c79cf088f5c31f572d1466529f59e67b7877db84f8e5520897fa42abfa",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig8/panels/Fig8b.pdf",
+      "sha256": "0776e612f55f73ae3cc7f86d64535a726dbe9c7996f5e68e05ffd5c0fbea14d4",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig8/panels/Fig8b.png",
+      "sha256": "8760962c3fc3e41f2eb945748ca4a219f3aab47b90ecba509a0fcbfb18c67a4f",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig8/panels/Fig8b.svg",
+      "sha256": "c54162d883aed2235a2b049388ad667c99e5a196683769a40f47065384d392ce",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig8/panels/Fig8c.pdf",
+      "sha256": "1164b211304f0780b49789ea4b7bc83ea8190499c68a4f142a3e2d09a3782e26",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig8/panels/Fig8c.png",
+      "sha256": "a683f2f69dcdd244be7c4e22ee93d1c0a05303ce744d0803076a20b71723830d",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/Fig8/panels/Fig8c.svg",
+      "sha256": "0af67fe3e82c365ef6b5bab266e495a497e671cca7da139ce71f27553e5dc2fe",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/previews/Fig1.png",
+      "sha256": "df5c4a39797743e0ea3df873826cd2f56e7cf318da815f3f9fa92331af8b32d1",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/previews/Fig2.png",
+      "sha256": "fa8f5ca405079700d574dd6dff870c7fd24e8b204a4cbeab19ec413186733cc7",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/previews/Fig3.png",
+      "sha256": "8dc2ddfb70f55e221bf1a673ea9ac54cbf0634e681bd22abbceea34047296e81",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/previews/Fig4.png",
+      "sha256": "52bcb1a442d7c1a2c2495b401eaec30b7e37c73f70e03ef6548ed6886ef2629e",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/previews/Fig5.png",
+      "sha256": "8affbc0d388c284845e07e0bba14d81da7a5a5356185481c8323725b24fe2c81",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/previews/Fig6.png",
+      "sha256": "d2663a771d698535c487b9faf5c96801c11675ef51a58e6f122c256f450d9d75",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/previews/Fig7.png",
+      "sha256": "b773a6ad301fcd30e8ede60e9d176b2090ba870363ca82514e08d25bee49052b",
+      "matches": true
+    },
+    {
+      "path": "outputs/fig1-8_reference_final_20261004/previews/Fig8.png",
+      "sha256": "1e1b01d6b8f25ba6bddadf55f180f8a3e180c0ae03dcbf4d7b5d634a00249bf7",
+      "matches": true
+    }
+  ]
+}
