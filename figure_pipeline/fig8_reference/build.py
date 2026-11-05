@@ -51,8 +51,13 @@ def load_data() -> dict[str, pd.DataFrame]:
                  'countries': 'panel_c_countries', 'institutions': 'panel_c_institutions',
                  'country_top': 'panel_c_country_top12',
                  'institution_top': 'panel_c_institution_top15'}
-    return {key: pd.read_csv(TABLES / f'{name}.csv', low_memory=False)
+    data = {key: pd.read_csv(TABLES / f'{name}.csv', low_memory=False)
             for key, name in filenames.items()}
+    data['journals'] = data['journals'].merge(pd.read_csv(TABLES/'journal_impact.csv'), on=['source_id','field'], how='left')
+    impact = pd.read_csv(TABLES/'institution_impact.csv')
+    for key in ['institutions','institution_top']:
+        data[key] = data[key].merge(impact, on='entity_id', how='left')
+    return data
 
 
 def text(fig: plt.Figure, x: float, y: float, value: str, size: float = 9,
@@ -205,17 +210,13 @@ def journal_size(n: Any) -> Any:
 
 
 def annotate_journals(ax: plt.Axes, sub: pd.DataFrame, field: str) -> None:
-    positions = {'Nature': (.45, .88), 'Science': (.26, .58), 'Cell': (.57, .72),
-                 'Proceedings of the National Academy of Sciences': (.26, .39),
-                 'Nature Communications': (.20, .15), 'Scientific Reports': (.16, .05)}
+    positions = {'Nature': (-8, 9), 'Science': (-29, -4), 'Cell': (-8, -11),
+                 'Proceedings of the National Academy of Sciences': (-8, 2),
+                 'Nature Communications': (-8, 2), 'Scientific Reports': (-8, 2)}
     if field == 'materials':
-        positions.update({'Nature': (.47, .84), 'Science': (.36, .28),
-                          'Proceedings of the National Academy of Sciences': (.35, .55),
-                          'Nature Communications': (.12, .43), 'Scientific Reports': (.15, .12)})
+        positions.update({'Nature': (-8, -6), 'Science': (-8, -1)})
     if field == 'physics':
-        positions.update({'Nature': (.45, .90), 'Science': (.38, .68),
-                          'Proceedings of the National Academy of Sciences': (.31, .35),
-                          'Nature Communications': (.16, .50), 'Scientific Reports': (.12, .17)})
+        positions.update({'Nature': (-8, 8), 'Science': (-8, -6)})
     short = {'Proceedings of the National Academy of Sciences': 'PNAS',
              'Nature Communications': 'Nat. Commun.', 'Scientific Reports': 'Sci. Rep.'}
     for name, (tx, ty) in positions.items():
@@ -224,17 +225,17 @@ def annotate_journals(ax: plt.Axes, sub: pd.DataFrame, field: str) -> None:
             continue
         row = match.iloc[0]; s = journal_size(row.n)
         nature = name == 'Nature'
-        ax.scatter(row.topic_diversity, row.international_collaboration_rate*100,
+        ax.scatter(row.topic_diversity, row.rate*100,
                    s=max(s, 22)+18, facecolor=RED if nature else (PALE_RED if row.publisher_group == 'Nature Portfolio' else 'white'),
                    edgecolor=RED if nature else INK, lw=1.1, zorder=7)
         if nature:
-            ax.scatter(row.topic_diversity, row.international_collaboration_rate*100,
+            ax.scatter(row.topic_diversity, row.rate*100,
                        s=max(s, 22)+55, facecolor='none', edgecolor=RED, lw=.6, zorder=7)
         name_text = short.get(name, name)
         if row.n < 30:
             name_text += f' (n={row.n})'
-        ax.annotate(name_text, (row.topic_diversity, row.international_collaboration_rate*100),
-                    xytext=(tx, ty), textcoords='axes fraction', fontsize=7.5,
+        ax.annotate(name_text, (row.topic_diversity, row.rate*100),
+                    xytext=(tx, ty), textcoords='offset points', ha='right', va='center', fontsize=7.5,
                     weight='bold' if nature else 'normal', color=RED if nature else INK,
                     arrowprops={'arrowstyle': '-', 'color': '#85909B', 'lw': .55}, zorder=9,
                     bbox={'facecolor': 'white', 'edgecolor': 'none', 'pad': .6, 'alpha': .85})
@@ -245,17 +246,17 @@ def panel_b_journals(fig: plt.Figure, journals: pd.DataFrame) -> None:
     for k, (field, name, col) in enumerate(zip(FIELDS, FIELD_NAMES, COLORS)):
         x = .057+k*.174
         ax = fig.add_axes([x, .407, .151, .161])
-        sub = journals[journals.field.eq(field)].dropna(subset=['topic_diversity'])
+        sub = journals[journals.field.eq(field)].dropna(subset=['topic_diversity', 'rate'])
         small, main = sub[sub.n.lt(30)], sub[sub.n.ge(30)]
-        ax.scatter(small.topic_diversity, small.international_collaboration_rate*100,
+        ax.scatter(small.topic_diversity, small.rate*100,
                    s=3, c='#8A949E', alpha=.12, edgecolors='none', rasterized=True)
         for brand, color in [('non Nature Portfolio', '#A5ADB5'), ('Nature Portfolio', PALE_RED)]:
             s = main[main.publisher_group.eq(brand)]
-            ax.scatter(s.topic_diversity, s.international_collaboration_rate*100,
+            ax.scatter(s.topic_diversity, s.rate*100,
                        s=journal_size(s.n), color=color, alpha=.50 if brand.startswith('non') else .7,
                        edgecolors='white', lw=.25, rasterized=True)
         unknown = main[~main.publisher_group.isin(['non Nature Portfolio', 'Nature Portfolio'])]
-        ax.scatter(unknown.topic_diversity, unknown.international_collaboration_rate*100,
+        ax.scatter(unknown.topic_diversity, unknown.rate*100,
                    s=journal_size(unknown.n), facecolors='none', edgecolors='#8D969F',
                    lw=.5, alpha=.65, rasterized=True)
         annotate_journals(ax, sub, field)
@@ -263,7 +264,7 @@ def panel_b_journals(fig: plt.Figure, journals: pd.DataFrame) -> None:
                xlabel='Topic diversity')
         ax.xaxis.label.set_fontsize(9)
         if k == 0:
-            ax.set_ylabel('International collaboration (%)', fontsize=9)
+            ax.set_ylabel('Highly cited papers (%)', fontsize=9)
         else:
             ax.tick_params(labelleft=False)
         style_axis(ax)
@@ -342,7 +343,7 @@ def panel_b_distributions(fig: plt.Figure, papers: pd.DataFrame) -> None:
 
 
 def panel_b(fig: plt.Figure, data: dict[str, pd.DataFrame]) -> None:
-    card(fig, 'b', 'Across-journal comparison: topic structure, collaboration and graph changes')
+    card(fig, 'b', 'Across-journal comparison: topic diversity, citation impact and graph changes')
     panel_b_journals(fig, data['journals'])
     panel_b_distributions(fig, data['papers'])
 
@@ -361,7 +362,7 @@ def panel_c_countries(fig: plt.Figure, data: dict[str, pd.DataFrame]) -> None:
     subtitle(fig, .024, .283, 'c1', 'Top 12 countries / regions')
     top = data['country_top'].sort_values('full_rank')
     counts = field_counts(data['countries'], top.entity_id.tolist())
-    ax = fig.add_axes([.079, .079, .128, .155]); left = np.zeros(len(top))
+    ax = fig.add_axes([.079, .079, .200, .155]); left = np.zeros(len(top))
     for field, col in zip(FIELDS, COLORS):
         vals = counts[field].to_numpy()/1000
         ax.barh(range(len(top)), vals, left=left, color=col, height=.64, edgecolor='white', lw=.2)
@@ -373,12 +374,6 @@ def panel_c_countries(fig: plt.Figure, data: dict[str, pd.DataFrame]) -> None:
     style_axis(ax, 'x')
     for k, n in enumerate(top.full_count):
         ax.text(n/1000+2, k, f'{n/1000:.1f}', fontsize=7, va='center', color=INK)
-    coop = fig.add_axes([.237, .079, .044, .155])
-    coop.scatter(top.international_collaboration_rate*100, range(len(top)), s=23,
-                 c=COLORS[0], edgecolor='white', lw=.4)
-    coop.set(xlim=(0, 100), xticks=[0, 50, 100], yticks=[], ylim=(11.7, -.7))
-    style_axis(coop, 'x')
-    text(fig, .259, .241, 'International\ncollaboration (%)', 7.3, ha='center', linespacing=1.1)
     fig.legend(handles=[Patch(facecolor=c, label=n) for n, c in zip(FIELD_NAMES, COLORS)],
                loc='center', bbox_to_anchor=(.152, .257), ncol=3, frameon=False,
                fontsize=7.5, handlelength=1, columnspacing=1)
@@ -411,11 +406,11 @@ def panel_c_table(fig: plt.Figure, data: dict[str, pd.DataFrame]) -> None:
     text(fig, .303+.423*.600, .262, 'Field share', 7.8, ha='center')
     coop = fig.add_axes([.303+.423*.753, .060, .423*.143, .175])
     coop.set_facecolor('none')
-    coop.scatter(top.international_collaboration_rate*100, np.arange(15),
+    coop.scatter(top.rate*100, np.arange(15),
                  s=16, c=COLORS[0], edgecolors='white', lw=.3)
     coop.set(xlim=(0, 100), ylim=(15.5, -.5), xticks=[0, 50, 100], yticks=[])
     style_axis(coop, 'x'); coop.tick_params(labelsize=7)
-    text(fig, .303+.423*.825, .244, 'International\ncollaboration (%)', 7.1, ha='center')
+    text(fig, .303+.423*.825, .244, 'Highly cited\npapers (%)', 7.1, ha='center')
     leg = fig.add_axes([.482, .030, .137, .022]); leg.axis('off'); leg.set(xlim=(0, 1), ylim=(0, 1))
     for k, share in enumerate([.1, .5, 1]):
         leg.scatter(.07+k*.32, .45, s=100*share, color='#AAB6C1')
@@ -436,32 +431,32 @@ def panel_c_all(fig: plt.Figure, data: dict[str, pd.DataFrame]) -> None:
     ax = fig.add_axes([.774, .079, .157, .155])
     for name, col in TYPE_COLORS.items():
         sub = inst[inst.type_label.eq(name)]
-        ax.scatter(sub.full_count, sub.international_collaboration_rate*100,
+        ax.scatter(sub.full_count, sub.effective_topics,
                    s=3, color=col, alpha=.13, edgecolors='none', rasterized=True)
         main = sub[sub.full_count.ge(30)]
-        ax.scatter(main.full_count, main.international_collaboration_rate*100,
+        ax.scatter(main.full_count, main.effective_topics,
                    s=5, color=col, alpha=.44, edgecolors='none', rasterized=True)
     top = data['institution_top']
-    ax.scatter(top.full_count, top.international_collaboration_rate*100,
+    ax.scatter(top.full_count, top.effective_topics,
                s=27, facecolors='none', edgecolors=INK, lw=.45, zorder=5)
-    labels = [('Harvard University', 'Harvard', (.54, .89)),
-              ('Massachusetts General Hospital', 'MGH', (.35, .78)),
-              ('Lawrence Berkeley National Laboratory', 'LBNL', (.30, .66)),
-              ('BGI Group (China)', 'BGI', (.13, .46)),
-              ('Chinese Academy of Sciences', 'CAS', (.71, .13)),
-              ('Centre National de la Recherche Scientifique', 'CNRS', (.71, .72))]
+    labels = [('Harvard University', 'Harvard', (-8, -7)),
+              ('Massachusetts General Hospital', 'MGH', (-8, -6)),
+              ('Lawrence Berkeley National Laboratory', 'LBNL', (-8, 7)),
+              ('BGI Group (China)', 'BGI', (-7, 3)),
+              ('Chinese Academy of Sciences', 'CAS', (3, -9)),
+              ('Centre National de la Recherche Scientifique', 'CNRS', (-3, 11))]
     for name, short, pos in labels:
         row = inst[inst.name.eq(name)].iloc[0]
-        ax.annotate(short, (row.full_count, row.international_collaboration_rate*100),
-                    xytext=pos, textcoords='axes fraction', fontsize=7, weight='bold',
+        ax.annotate(short, (row.full_count, row.effective_topics),
+                    xytext=pos, textcoords='offset points', ha='right' if pos[0]<0 else 'left', fontsize=7, weight='bold',
                     arrowprops={'arrowstyle': '-', 'lw': .55, 'color': INK},
                     bbox={'facecolor': 'white', 'edgecolor': 'none', 'alpha': .85, 'pad': .5}, zorder=7)
-    ax.set(xscale='log', xlim=(.8, 25000), ylim=(-2, 102),
-           xticks=[1, 10, 100, 1000, 10000], yticks=[0, 25, 50, 75, 100],
-           xlabel='Sample paper count', ylabel='International collaboration (%)')
+    ax.set(xscale='log', xlim=(.8, 25000), yscale='log', ylim=(.85, inst.effective_topics.max()*1.2),
+           xticks=[1, 10, 100, 1000, 10000], yticks=[1, 10, 100, 1000],
+           xlabel='Sample paper count', ylabel='Effective number of topics')
     ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f'{int(v):,}'))
     ax.set_xlabel('Sample paper count (log scale)', fontsize=8)
-    ax.set_ylabel('International collaboration (%)', fontsize=8)
+    ax.set_ylabel('Effective number of topics', fontsize=8)
     style_axis(ax)
     for k, (name, col) in enumerate(TYPE_COLORS.items()):
         yy = .227-k*.018
@@ -471,7 +466,7 @@ def panel_c_all(fig: plt.Figure, data: dict[str, pd.DataFrame]) -> None:
 
 
 def panel_c(fig: plt.Figure, data: dict[str, pd.DataFrame]) -> None:
-    card(fig, 'c', 'Countries and institutions: research participation and collaboration')
+    card(fig, 'c', 'Countries and institutions: output, citation impact and topic breadth')
     panel_c_countries(fig, data)
     panel_c_table(fig, data)
     panel_c_all(fig, data)
@@ -491,7 +486,7 @@ def save_figure(fig: plt.Figure, dpi: int) -> None:
                                   (x1+.004)*width, (y1+.004)*height)
         for ext in ['png', 'pdf', 'svg']:
             fig.savefig(panels / f'Fig8{panel}.{ext}', dpi=dpi, bbox_inches=bounds)
-    delivery = ROOT / 'outputs/fig1-8_reference_final_20261004/Fig8'
+    delivery = ROOT / 'outputs/fig1-11_final/Fig8'
     if delivery.is_dir():
         for path in final.iterdir():
             target = delivery / path.name

@@ -1,0 +1,169 @@
+{
+  "deleted": [
+    {
+      "path": "outputs/fig6_computer/final/Fig6_600dpi.png",
+      "bytes": 2680928
+    },
+    {
+      "path": "outputs/fig6_computer/final/Fig6.png",
+      "bytes": 1183748
+    },
+    {
+      "path": "outputs/fig6_computer/final/Fig6_outlined.svg",
+      "bytes": 3395161
+    },
+    {
+      "path": "outputs/fig6_computer/final/Fig6.pdf",
+      "bytes": 98665
+    },
+    {
+      "path": "outputs/fig6_computer/final/Fig6_pdf_preview.png",
+      "bytes": 270935
+    },
+    {
+      "path": "outputs/fig6_computer/final/Fig6.svg",
+      "bytes": 63522
+    },
+    {
+      "path": "outputs/fig6_damage/final/Fig6_600dpi.png",
+      "bytes": 1951162
+    },
+    {
+      "path": "outputs/fig6_damage/final/Fig6.png",
+      "bytes": 878249
+    },
+    {
+      "path": "outputs/fig6_damage/final/Fig6_outlined.svg",
+      "bytes": 2602835
+    },
+    {
+      "path": "outputs/fig6_damage/final/Fig6.pdf",
+      "bytes": 85847
+    },
+    {
+      "path": "outputs/fig6_damage/final/Fig6.svg",
+      "bytes": 42974
+    },
+    {
+      "path": "outputs/fig9_reference/previous_v1/Fig9.svg",
+      "bytes": 86995
+    },
+    {
+      "path": "outputs/fig9_reference/previous_v1/Fig9.png",
+      "bytes": 891969
+    },
+    {
+      "path": "outputs/fig9_reference/previous_v1/Fig9.pdf",
+      "bytes": 108498
+    },
+    {
+      "path": "outputs/fig8_data/analysis/preview/Fig8_preview.pdf",
+      "bytes": 120387
+    },
+    {
+      "path": "outputs/fig8_data/analysis/preview/Fig8b_journal_coverage.svg",
+      "bytes": 1866677
+    },
+    {
+      "path": "outputs/fig8_data/analysis/preview/Fig8b_journal_coverage.png",
+      "bytes": 957923
+    },
+    {
+      "path": "outputs/fig8_data/analysis/preview/Fig8_preview.svg",
+      "bytes": 69314
+    },
+    {
+      "path": "outputs/fig8_data/analysis/preview/Fig8_preview.png",
+      "bytes": 557918
+    },
+    {
+      "path": "outputs/fig8_data/analysis/preview/Fig8b_journal_coverage.pdf",
+      "bytes": 213683
+    },
+    {
+      "path": "outputs/fig8_data/analysis/preview/journal_plot_data.csv",
+      "bytes": 26065348
+    },
+    {
+      "path": "outputs/fig8_data/analysis/preview/current_legacy_reuse.csv",
+      "bytes": 1779605
+    },
+    {
+      "path": "outputs/fig8_data/analysis/preview/current_reuse_summary.json",
+      "bytes": 652
+    },
+    {
+      "path": "outputs/fig8_data/analysis/preview/panel_a_composition.csv",
+      "bytes": 222
+    },
+    {
+      "path": "outputs/fig8_data/analysis/preview/panel_b_composition.csv",
+      "bytes": 2114
+    },
+    {
+      "path": "outputs/fig8_data/analysis/preview/cohort_field_year.csv",
+      "bytes": 234
+    },
+    {
+      "path": "outputs/fig8_data/analysis/preview/country_university_metrics.csv",
+      "bytes": 61947
+    },
+    {
+      "path": "outputs/fig8_data/analysis/preview/allocation_weights.csv",
+      "bytes": 90435
+    },
+    {
+      "path": "outputs/fig8_data/analysis/preview/paper_metrics.csv",
+      "bytes": 6937
+    },
+    {
+      "path": ".pytest_cache/README.md",
+      "bytes": 302
+    },
+    {
+      "path": ".pytest_cache/CACHEDIR.TAG",
+      "bytes": 191
+    },
+    {
+      "path": ".pytest_cache/.gitignore",
+      "bytes": 37
+    },
+    {
+      "path": ".pytest_cache/v/cache/lastfailed",
+      "bytes": 2
+    },
+    {
+      "path": ".pytest_cache/v/cache/nodeids",
+      "bytes": 85144
+    },
+    {
+      "path": ".ruff_cache/CACHEDIR.TAG",
+      "bytes": 43
+    },
+    {
+      "path": ".ruff_cache/.gitignore",
+      "bytes": 35
+    },
+    {
+      "path": ".ruff_cache/0.16.1/1143829913479755780",
+      "bytes": 1132
+    },
+    {
+      "path": ".ruff_cache/0.16.1/12775781961502253540",
+      "bytes": 196
+    },
+    {
+      "path": ".ruff_cache/0.16.1/9344984989573128910",
+      "bytes": 916
+    },
+    {
+      "path": ".ruff_cache/0.16.1/17083617688633924222",
+      "bytes": 196
+    },
+    {
+      "path": ".ruff_cache/0.16.1/12355241441020656353",
+      "bytes": 8884
+    }
+  ],
+  "total_bytes": 46231962
+}

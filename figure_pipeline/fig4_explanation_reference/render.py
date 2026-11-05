@@ -55,8 +55,8 @@ class Figure:
         self.eff = {(r['other'], r['aspect']): r for r in self.data['effects']
                     if r['metric'] == 'content_delta'}
         self.metrics = {(r['paper_id'], r['condition'], r['aspect']): r for r in self.data['metrics']}
-        self.text('heading', W / 2, 4, 'Fig. 4 | Complementary branch contributions and graph component effects',
-                  17, bold=True, ha='center')
+        self.text('heading', 5, 4, 'Fig. 4 | Complementary branch contributions and graph component effects',
+                  17, bold=True, ha='left')
         for name, box in PANELS.items():
             x, y, w, h = box
             self.card(name + '_card', box)

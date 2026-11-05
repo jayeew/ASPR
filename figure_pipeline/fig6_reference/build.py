@@ -110,6 +110,19 @@ def focus(d: dict, claim: str | None = None) -> Scene:
     sub['facts']={**d['facts'],'historical_edges':[e for e in d['facts']['historical_edges'] if set(e)<=keep], 'insertion_edges':[e for e in d['facts']['insertion_edges'] if set(e)<=keep]}
     sub['cards']={c:{**v,'neighbors':[n for n in v['neighbors'] if n['claim_id'] in SELECTED]} for c,v in d['cards'].items()}
     scene=base.graph_scene(sub,positions(),claim)
+    for element in scene.root.iter():
+        tag = element.tag.rsplit('}', 1)[-1]
+        if tag == 'line':
+            width = float(element.get('stroke-width', '1'))
+            element.set('stroke-width', str(width * (2.3 if claim else 1.35)))
+            if float(element.get('opacity', '1')) == 1:
+                element.set('stroke', '#667D92')
+            element.set('opacity', '.92')
+        elif tag == 'circle' and element.get('stroke', '').lower() != '#ffffff':
+            element.set('stroke', '#526D86')
+            element.set('stroke-width', '2' if claim else '1.5')
+        elif tag == 'text' and (element.text or '').startswith('H'):
+            element.set('fill', '#304E69')
     if claim is None:
         short=['RNA circuit','RNA detection','Point mutation','RNA cleavage','GSDMD control','Photopyroptosis','Death switch','Pore inhibition','KRAS targeting','mRNA/LNP','Cell pyroptosis','Tumor response']
         for i,name in enumerate(short):

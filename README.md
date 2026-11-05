@@ -1,25 +1,18 @@
 # ASPR-GEAR — Claim Graph + GEAR innovation analysis
 
-## Current Fig1–8 delivery and retained work
+## Figures and project structure
 
-As of 2026-10-08, the final figure scope is
-[`outputs/fig1-8_reference_final_20261004/`](outputs/fig1-8_reference_final_20261004/).
-Its `文件清单.csv` records the delivered files and source hashes. This fixes the
-figure delivery selection, not the validity of every historical experiment.
-See the [figure entry-point index](figure_pipeline/README.md) before regenerating
-figures: the accepted Fig5 and Fig7 do not use their generic reference entry points.
+[Fig1–Fig11 final delivery](outputs/fig1-11_final/) · [All previews](outputs/fig1-11_final/previews/) · [Output and redraw guide](outputs/README.md)
 
-The [cleanup audit](docs/fig1_8_cleanup_audit_20261008.json) lists protected
-intermediates, historical archive candidates, and the development caches removed.
-Keep completed model responses, claims, evidence, evaluations, predictions and call
-ledgers even when they reside in older directories. Archive candidates have not
-been proven safe to delete. Git-ignored data are not necessarily disposable.
-
-Following explicit cleanup authorization, historical `outputs/fig04`–`fig10`,
-`outputs/FROM_WEB*`, and selected old delivery packages were removed; reusable
-experiment directories and the final delivery remain. The
-[execution manifest](docs/fig1_8_cleanup_execution_20261008.json) supersedes the
-initial audit's candidate status for those paths and records each removed file.
+| Directory | Purpose |
+| --- | --- |
+| `gear/`, `configs/` | Runtime and model/graph configuration |
+| `data/`, `artifact_store/` | Historical assets, inputs and stored artifacts |
+| `experiments/`, `scripts/` | Study workflows and offline data preparation |
+| `figure_pipeline/` | Figure preparation and rendering code |
+| `outputs/` | Final figures, working figure assets, experiment results and archives |
+| `fig_reference/` | Active Fig5 working master |
+| `tests/`, `docs/` | Tests, methodology, dependency and cleanup records |
 
 ASPR-GEAR analyzes a paper's concrete contributions, manuscript support,
 historical basis and knowledge relationships. The current research focus is the
