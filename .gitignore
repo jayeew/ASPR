@@ -8,7 +8,9 @@ __pycache__/
 .ruff_cache/
 
 *.txt
+!/requirements.txt
 !requirements-figures.txt
+!/figures/fig*/code/**/requirements.txt
 *.log
 .env
 .env.local
@@ -19,6 +21,31 @@ __pycache__/
 # Generated corpus and experiment artifacts are large local data products.
 data/knowledge_corpus/
 outputs/
+!/outputs/
+/outputs/*
+!outputs/README.md
+!outputs/fig1-11_final/
+outputs/fig1-11_final/*
+
+# Local assets in the migrated layout. Git carries documentation and placeholders.
+/figures/fig*/data/*
+!/figures/fig*/data/.gitkeep
+!/figures/fig*/data/*/
+/figures/fig*/data/*/*
+!/figures/fig*/data/*/.gitkeep
+!/figures/fig3/data/five_dimensions/README.md
+!/figures/fig8/data/corpus/README.md
+/figures/fig*/final/*
+!/figures/fig*/final/.gitkeep
+/figures/fig*/assets/*
+!/figures/fig*/assets/.gitkeep
+/figures/shared/reviewer_coding/*
+!/figures/shared/reviewer_coding/README.md
+/manuscript/nature_innovation/*
+!/manuscript/nature_innovation/README.md
+/docs/hdd_large_files.json
+/docs/hdd_migration.json
+
 data/gear_cache/
 data/cache/
 data/calibration/releases/

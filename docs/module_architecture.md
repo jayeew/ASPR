@@ -4,6 +4,8 @@ Updated against the working-tree implementation on 2026-09-07. The public
 runtime package is `gear`; default mode is `knowledge`. This replaces the
 previous architecture based on five-part reviews and mandatory release exchange.
 
+Fig2 illustrates the shared-claim and branch flow. Fig9 details the GEAR evidence supervisor; Fig11 explains the claim types used by historical and target extraction. See the [figure-by-figure research overview](../项目简介.md).
+
 ## Code boundaries
 
 | Component | Implementation | Responsibility |

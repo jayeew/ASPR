@@ -45,13 +45,6 @@ make them appear current.
 `gear/evaluation/` and `gear/review_reconstruction/` contain earlier evaluation
 and five-part review reconstruction workflows.
 
-## New figure planning status
+## Final figures and results
 
-The confirmed direction prioritizes the current innovation-analysis system and
-retains historical scoring where relevant. New Fig.1–Fig.10 allocation,
-subexperiments and chart designs remain under discussion. Old filenames,
-implemented controls and existing figure numbers are not a frozen new protocol
-or completed scientific conclusions.
-
-See [architecture](../docs/module_architecture.md) and
-[implementation scope](../docs/innovation_v2_implementation.md).
+Use the [Fig1–Fig11 research overview](../项目简介.md) for the questions, populations and findings, and the [redraw guide](../outputs/README.md) for the implementation and inputs of each figure.

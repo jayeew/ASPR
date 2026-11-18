@@ -1,0 +1,889 @@
+{
+  "deleted": [
+    {
+      "path": "figures/fig3/final/Fig3.pdf",
+      "bytes": 1837972,
+      "reason": "Superseded by accepted Fig3"
+    },
+    {
+      "path": "figures/fig3/final/Fig3_600dpi.png",
+      "bytes": 9979060,
+      "reason": "Superseded by accepted Fig3"
+    },
+    {
+      "path": "manuscript/nature_innovation/nature_innovation_source.zip",
+      "bytes": 7997092,
+      "reason": "Archive members exactly match unpacked files"
+    },
+    {
+      "path": "figures/fig7/data/reference/archive/Fig7_selected_topics_superseded.zip",
+      "bytes": 9422904,
+      "reason": "Explicitly superseded selected-topic figure archive; authorised historical removal"
+    },
+    {
+      "path": "figures/fig7/data/reference/country_extension/Fig7_country_extension_bundle.zip",
+      "bytes": 30573650,
+      "reason": "Superseded figure delivery bundle; live working evidence and final figures retained"
+    },
+    {
+      "path": "figures/fig7/data/reference/frontier_2026/full/Fig7_2026_full_bundle.zip",
+      "bytes": 29310333,
+      "reason": "Superseded figure delivery bundle; live working evidence and final figures retained"
+    },
+    {
+      "path": "figures/fig7/data/reference/two_panel/Fig7_two_panel_bundle.zip",
+      "bytes": 12178577,
+      "reason": "Superseded figure delivery bundle; live working evidence and final figures retained"
+    },
+    {
+      "path": "figures/fig4/data/reference/Fig4_final_delivery.zip",
+      "bytes": 9125652,
+      "reason": "Superseded figure delivery bundle; live working evidence and final figures retained"
+    },
+    {
+      "path": "figures/fig6/data/reference/Fig6_reference_delivery.zip",
+      "bytes": 7418311,
+      "reason": "Superseded figure delivery bundle; live working evidence and final figures retained"
+    }
+  ],
+  "template": "figures/fig3/assets/layout_template.svg is required to rebuild unchanged panels",
+  "duplicate_assets_replaced_by_references": [
+    {
+      "path": "figures/fig10/data/reference/Fig10_outlined.png",
+      "target": "figures/fig10/final/Fig10_outlined.png",
+      "bytes": 1917230
+    },
+    {
+      "path": "figures/fig10/data/reference/Fig10_outlined.svg",
+      "target": "figures/fig10/final/Fig10_outlined.svg",
+      "bytes": 921489
+    },
+    {
+      "path": "figures/fig10/data/reference/Fig10.svg",
+      "target": "figures/fig10/final/Fig10.svg",
+      "bytes": 632487
+    },
+    {
+      "path": "figures/fig10/data/reference/Fig10_outlined.pdf",
+      "target": "figures/fig10/final/Fig10_outlined.pdf",
+      "bytes": 487915
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/a.svg",
+      "target": "figures/fig1/final/panels/a.svg",
+      "bytes": 565962
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/e.pdf",
+      "target": "figures/fig1/final/panels/e.pdf",
+      "bytes": 72565
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/d.png",
+      "target": "figures/fig1/final/panels/d.png",
+      "bytes": 256334
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/e.png",
+      "target": "figures/fig1/final/panels/e.png",
+      "bytes": 213307
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/case_A.pdf",
+      "target": "figures/fig1/final/panels/case_A.pdf",
+      "bytes": 66519
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/d.pdf",
+      "target": "figures/fig1/final/panels/d.pdf",
+      "bytes": 71129
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/c.png",
+      "target": "figures/fig1/final/panels/c.png",
+      "bytes": 446936
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/case_A.png",
+      "target": "figures/fig1/final/panels/case_A.png",
+      "bytes": 178837
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/d.svg",
+      "target": "figures/fig1/final/panels/d.svg",
+      "bytes": 36582
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/case_C.png",
+      "target": "figures/fig1/final/panels/case_C.png",
+      "bytes": 172298
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/b.png",
+      "target": "figures/fig1/final/panels/b.png",
+      "bytes": 657714
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/c.pdf",
+      "target": "figures/fig1/final/panels/c.pdf",
+      "bytes": 66896
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/case_C.pdf",
+      "target": "figures/fig1/final/panels/case_C.pdf",
+      "bytes": 61718
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/case_D.svg",
+      "target": "figures/fig1/final/panels/case_D.svg",
+      "bytes": 16219
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/case_B.pdf",
+      "target": "figures/fig1/final/panels/case_B.pdf",
+      "bytes": 61645
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/case_A.svg",
+      "target": "figures/fig1/final/panels/case_A.svg",
+      "bytes": 28898
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/case_D.png",
+      "target": "figures/fig1/final/panels/case_D.png",
+      "bytes": 168220
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/case_B.svg",
+      "target": "figures/fig1/final/panels/case_B.svg",
+      "bytes": 14979
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/case_C.svg",
+      "target": "figures/fig1/final/panels/case_C.svg",
+      "bytes": 16525
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/b.pdf",
+      "target": "figures/fig1/final/panels/b.pdf",
+      "bytes": 105372
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/b.svg",
+      "target": "figures/fig1/final/panels/b.svg",
+      "bytes": 74425
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/a.pdf",
+      "target": "figures/fig1/final/panels/a.pdf",
+      "bytes": 118896
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/case_B.png",
+      "target": "figures/fig1/final/panels/case_B.png",
+      "bytes": 172408
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/e.svg",
+      "target": "figures/fig1/final/panels/e.svg",
+      "bytes": 25863
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/case_D.pdf",
+      "target": "figures/fig1/final/panels/case_D.pdf",
+      "bytes": 63933
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/a.png",
+      "target": "figures/fig1/final/panels/a.png",
+      "bytes": 1476647
+    },
+    {
+      "path": "figures/fig1/data/reference/panels/c.svg",
+      "target": "figures/fig1/final/panels/c.svg",
+      "bytes": 11139
+    },
+    {
+      "path": "figures/fig1/data/reference/final/Fig1_10x.png",
+      "target": "figures/fig1/final/Fig1_10x.png",
+      "bytes": 11743179
+    },
+    {
+      "path": "figures/fig1/data/reference/final/Fig1.svg",
+      "target": "figures/fig1/final/Fig1.svg",
+      "bytes": 710292
+    },
+    {
+      "path": "figures/fig1/data/reference/final/Fig1_outlined.svg",
+      "target": "figures/fig1/final/Fig1_outlined.svg",
+      "bytes": 3706692
+    },
+    {
+      "path": "figures/fig1/data/reference/final/Fig1.pdf",
+      "target": "figures/fig1/final/Fig1.pdf",
+      "bytes": 201352
+    },
+    {
+      "path": "figures/fig7/data/reference/country_extension/panels/d.png",
+      "target": "figures/fig7/final/panels/d.png",
+      "bytes": 184531
+    },
+    {
+      "path": "figures/fig7/data/reference/country_extension/panels/d.pdf",
+      "target": "figures/fig7/final/panels/d.pdf",
+      "bytes": 89486
+    },
+    {
+      "path": "figures/fig7/data/reference/country_extension/panels/c.png",
+      "target": "figures/fig7/final/panels/c.png",
+      "bytes": 228525
+    },
+    {
+      "path": "figures/fig7/data/reference/country_extension/panels/d.svg",
+      "target": "figures/fig7/final/panels/d.svg",
+      "bytes": 162709
+    },
+    {
+      "path": "figures/fig7/data/reference/country_extension/panels/c.pdf",
+      "target": "figures/fig7/final/panels/c.pdf",
+      "bytes": 843461
+    },
+    {
+      "path": "figures/fig7/data/reference/country_extension/panels/c.svg",
+      "target": "figures/fig7/final/panels/c.svg",
+      "bytes": 8087271
+    },
+    {
+      "path": "figures/fig7/data/reference/country_extension/final/Fig7_country_extension_outlined.svg",
+      "target": "figures/fig7/final/Fig7_outlined.svg",
+      "bytes": 5507173
+    },
+    {
+      "path": "figures/fig7/data/reference/country_extension/final/Fig7_country_extension_600dpi.png",
+      "target": "figures/fig7/final/Fig7_600dpi.png",
+      "bytes": 8602087
+    },
+    {
+      "path": "figures/fig7/data/reference/country_extension/final/Fig7_country_extension.png",
+      "target": "figures/fig7/final/Fig7.png",
+      "bytes": 1070543
+    },
+    {
+      "path": "figures/fig7/data/reference/country_extension/final/Fig7_country_extension.svg",
+      "target": "figures/fig7/final/Fig7.svg",
+      "bytes": 8405707
+    },
+    {
+      "path": "figures/fig7/data/reference/country_extension/final/Fig7_country_extension.pdf",
+      "target": "figures/fig7/final/Fig7.pdf",
+      "bytes": 916890
+    },
+    {
+      "path": "figures/fig3/data/reference/panels/a.svg",
+      "target": "figures/fig3/final/panels/a.svg",
+      "bytes": 1595560
+    },
+    {
+      "path": "figures/fig3/data/reference/panels/e.pdf",
+      "target": "figures/fig3/final/panels/e.pdf",
+      "bytes": 336252
+    },
+    {
+      "path": "figures/fig3/data/reference/panels/d.png",
+      "target": "figures/fig3/final/panels/d.png",
+      "bytes": 349356
+    },
+    {
+      "path": "figures/fig3/data/reference/panels/e.png",
+      "target": "figures/fig3/final/panels/e.png",
+      "bytes": 498652
+    },
+    {
+      "path": "figures/fig3/data/reference/panels/d.pdf",
+      "target": "figures/fig3/final/panels/d.pdf",
+      "bytes": 182382
+    },
+    {
+      "path": "figures/fig3/data/reference/panels/d.svg",
+      "target": "figures/fig3/final/panels/d.svg",
+      "bytes": 1595563
+    },
+    {
+      "path": "figures/fig3/data/reference/panels/b.png",
+      "target": "figures/fig3/final/panels/b.png",
+      "bytes": 437924
+    },
+    {
+      "path": "figures/fig3/data/reference/panels/g.pdf",
+      "target": "figures/fig3/final/panels/g.pdf",
+      "bytes": 156168
+    },
+    {
+      "path": "figures/fig3/data/reference/panels/f.png",
+      "target": "figures/fig3/final/panels/f.png",
+      "bytes": 243619
+    },
+    {
+      "path": "figures/fig3/data/reference/panels/b.pdf",
+      "target": "figures/fig3/final/panels/b.pdf",
+      "bytes": 385355
+    },
+    {
+      "path": "figures/fig3/data/reference/panels/b.svg",
+      "target": "figures/fig3/final/panels/b.svg",
+      "bytes": 1595563
+    },
+    {
+      "path": "figures/fig3/data/reference/panels/f.pdf",
+      "target": "figures/fig3/final/panels/f.pdf",
+      "bytes": 195853
+    },
+    {
+      "path": "figures/fig3/data/reference/panels/g.png",
+      "target": "figures/fig3/final/panels/g.png",
+      "bytes": 227836
+    },
+    {
+      "path": "figures/fig3/data/reference/panels/a.pdf",
+      "target": "figures/fig3/final/panels/a.pdf",
+      "bytes": 202240
+    },
+    {
+      "path": "figures/fig3/data/reference/panels/f.svg",
+      "target": "figures/fig3/final/panels/f.svg",
+      "bytes": 1595562
+    },
+    {
+      "path": "figures/fig3/data/reference/panels/e.svg",
+      "target": "figures/fig3/final/panels/e.svg",
+      "bytes": 1595562
+    },
+    {
+      "path": "figures/fig3/data/reference/panels/a.png",
+      "target": "figures/fig3/final/panels/a.png",
+      "bytes": 306835
+    },
+    {
+      "path": "figures/fig3/data/reference/panels/g.svg",
+      "target": "figures/fig3/final/panels/g.svg",
+      "bytes": 1595564
+    },
+    {
+      "path": "figures/fig2/data/reference/panels/a.svg",
+      "target": "figures/fig2/final/panels/a.svg",
+      "bytes": 56790
+    },
+    {
+      "path": "figures/fig2/data/reference/panels/e.pdf",
+      "target": "figures/fig2/final/panels/e.pdf",
+      "bytes": 74771
+    },
+    {
+      "path": "figures/fig2/data/reference/panels/d.png",
+      "target": "figures/fig2/final/panels/d.png",
+      "bytes": 294973
+    },
+    {
+      "path": "figures/fig2/data/reference/panels/e.png",
+      "target": "figures/fig2/final/panels/e.png",
+      "bytes": 281095
+    },
+    {
+      "path": "figures/fig2/data/reference/panels/d.pdf",
+      "target": "figures/fig2/final/panels/d.pdf",
+      "bytes": 75108
+    },
+    {
+      "path": "figures/fig2/data/reference/panels/c.png",
+      "target": "figures/fig2/final/panels/c.png",
+      "bytes": 342070
+    },
+    {
+      "path": "figures/fig2/data/reference/panels/d.svg",
+      "target": "figures/fig2/final/panels/d.svg",
+      "bytes": 31695
+    },
+    {
+      "path": "figures/fig2/data/reference/panels/b.png",
+      "target": "figures/fig2/final/panels/b.png",
+      "bytes": 376037
+    },
+    {
+      "path": "figures/fig2/data/reference/panels/c.pdf",
+      "target": "figures/fig2/final/panels/c.pdf",
+      "bytes": 66010
+    },
+    {
+      "path": "figures/fig2/data/reference/panels/b.pdf",
+      "target": "figures/fig2/final/panels/b.pdf",
+      "bytes": 77038
+    },
+    {
+      "path": "figures/fig2/data/reference/panels/b.svg",
+      "target": "figures/fig2/final/panels/b.svg",
+      "bytes": 18709
+    },
+    {
+      "path": "figures/fig2/data/reference/panels/a.pdf",
+      "target": "figures/fig2/final/panels/a.pdf",
+      "bytes": 97111
+    },
+    {
+      "path": "figures/fig2/data/reference/panels/e.svg",
+      "target": "figures/fig2/final/panels/e.svg",
+      "bytes": 17059
+    },
+    {
+      "path": "figures/fig2/data/reference/panels/a.png",
+      "target": "figures/fig2/final/panels/a.png",
+      "bytes": 828955
+    },
+    {
+      "path": "figures/fig2/data/reference/panels/c.svg",
+      "target": "figures/fig2/final/panels/c.svg",
+      "bytes": 26224
+    },
+    {
+      "path": "figures/fig2/data/reference/final/Fig2.pdf",
+      "target": "figures/fig2/final/Fig2.pdf",
+      "bytes": 125848
+    },
+    {
+      "path": "figures/fig2/data/reference/final/Fig2.svg",
+      "target": "figures/fig2/final/Fig2.svg",
+      "bytes": 146751
+    },
+    {
+      "path": "figures/fig2/data/reference/final/Fig2_outlined.svg",
+      "target": "figures/fig2/final/Fig2_outlined.svg",
+      "bytes": 4979453
+    },
+    {
+      "path": "figures/fig2/data/reference/final/Fig2_10x.png",
+      "target": "figures/fig2/final/Fig2_10x.png",
+      "bytes": 7609703
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/a.svg",
+      "target": "figures/fig4/final/panels/a.svg",
+      "bytes": 56036
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/e.pdf",
+      "target": "figures/fig4/final/panels/e.pdf",
+      "bytes": 42501
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/d.png",
+      "target": "figures/fig4/final/panels/d.png",
+      "bytes": 152963
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/f_outlined.svg",
+      "target": "figures/fig4/final/panels/f_outlined.svg",
+      "bytes": 53497
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/e.png",
+      "target": "figures/fig4/final/panels/e.png",
+      "bytes": 86697
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/e_outlined.svg",
+      "target": "figures/fig4/final/panels/e_outlined.svg",
+      "bytes": 21183
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/a_outlined.svg",
+      "target": "figures/fig4/final/panels/a_outlined.svg",
+      "bytes": 120131
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/d_outlined.svg",
+      "target": "figures/fig4/final/panels/d_outlined.svg",
+      "bytes": 137380
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/d.pdf",
+      "target": "figures/fig4/final/panels/d.pdf",
+      "bytes": 67394
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/b_outlined.svg",
+      "target": "figures/fig4/final/panels/b_outlined.svg",
+      "bytes": 223432
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/c.png",
+      "target": "figures/fig4/final/panels/c.png",
+      "bytes": 216647
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/d.svg",
+      "target": "figures/fig4/final/panels/d.svg",
+      "bytes": 113530
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/b.png",
+      "target": "figures/fig4/final/panels/b.png",
+      "bytes": 444150
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/c.pdf",
+      "target": "figures/fig4/final/panels/c.pdf",
+      "bytes": 38378
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/c_outlined.svg",
+      "target": "figures/fig4/final/panels/c_outlined.svg",
+      "bytes": 43488
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/f.png",
+      "target": "figures/fig4/final/panels/f.png",
+      "bytes": 81550
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/b.pdf",
+      "target": "figures/fig4/final/panels/b.pdf",
+      "bytes": 177840
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/b.svg",
+      "target": "figures/fig4/final/panels/b.svg",
+      "bytes": 173379
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/f.pdf",
+      "target": "figures/fig4/final/panels/f.pdf",
+      "bytes": 41328
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/a.pdf",
+      "target": "figures/fig4/final/panels/a.pdf",
+      "bytes": 56953
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/f.svg",
+      "target": "figures/fig4/final/panels/f.svg",
+      "bytes": 44740
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/e.svg",
+      "target": "figures/fig4/final/panels/e.svg",
+      "bytes": 6687
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/a.png",
+      "target": "figures/fig4/final/panels/a.png",
+      "bytes": 391832
+    },
+    {
+      "path": "figures/fig4/data/reference/panels/c.svg",
+      "target": "figures/fig4/final/panels/c.svg",
+      "bytes": 25770
+    },
+    {
+      "path": "figures/fig4/data/reference/final/Fig4_outlined.svg",
+      "target": "figures/fig4/final/Fig4_outlined.svg",
+      "bytes": 609530
+    },
+    {
+      "path": "figures/fig4/data/reference/final/Fig4_900dpi.png",
+      "target": "figures/fig4/final/Fig4_900dpi.png",
+      "bytes": 3139398
+    },
+    {
+      "path": "figures/fig4/data/reference/final/Fig4.pdf",
+      "target": "figures/fig4/final/Fig4.pdf",
+      "bytes": 128060
+    },
+    {
+      "path": "figures/fig4/data/reference/final/Fig4.svg",
+      "target": "figures/fig4/final/Fig4.svg",
+      "bytes": 404002
+    },
+    {
+      "path": "figures/fig11/data/reference/final/Fig11_outlined.svg",
+      "target": "figures/fig11/final/Fig11_outlined.svg",
+      "bytes": 1345424
+    },
+    {
+      "path": "figures/fig11/data/reference/final/Fig11.png",
+      "target": "figures/fig11/final/Fig11.png",
+      "bytes": 380089
+    },
+    {
+      "path": "figures/fig11/data/reference/final/Fig11.pdf",
+      "target": "figures/fig11/final/Fig11.pdf",
+      "bytes": 54136
+    },
+    {
+      "path": "figures/fig11/data/reference/final/Fig11.svg",
+      "target": "figures/fig11/final/Fig11.svg",
+      "bytes": 9896
+    },
+    {
+      "path": "figures/fig8/data/reference/panels/Fig8b.svg",
+      "target": "figures/fig8/final/panels/Fig8b.svg",
+      "bytes": 2702927
+    },
+    {
+      "path": "figures/fig8/data/reference/panels/Fig8c.png",
+      "target": "figures/fig8/final/panels/Fig8c.png",
+      "bytes": 1596847
+    },
+    {
+      "path": "figures/fig8/data/reference/panels/Fig8b.png",
+      "target": "figures/fig8/final/panels/Fig8b.png",
+      "bytes": 2248866
+    },
+    {
+      "path": "figures/fig8/data/reference/panels/Fig8a.png",
+      "target": "figures/fig8/final/panels/Fig8a.png",
+      "bytes": 2145633
+    },
+    {
+      "path": "figures/fig8/data/reference/panels/Fig8b.pdf",
+      "target": "figures/fig8/final/panels/Fig8b.pdf",
+      "bytes": 1799256
+    },
+    {
+      "path": "figures/fig8/data/reference/panels/Fig8c.svg",
+      "target": "figures/fig8/final/panels/Fig8c.svg",
+      "bytes": 1105766
+    },
+    {
+      "path": "figures/fig8/data/reference/panels/Fig8c.pdf",
+      "target": "figures/fig8/final/panels/Fig8c.pdf",
+      "bytes": 703530
+    },
+    {
+      "path": "figures/fig8/data/reference/panels/Fig8a.svg",
+      "target": "figures/fig8/final/panels/Fig8a.svg",
+      "bytes": 2456749
+    },
+    {
+      "path": "figures/fig8/data/reference/panels/Fig8a.pdf",
+      "target": "figures/fig8/final/panels/Fig8a.pdf",
+      "bytes": 1722570
+    },
+    {
+      "path": "figures/fig8/data/reference/final/Fig8.svg",
+      "target": "figures/fig8/final/Fig8.svg",
+      "bytes": 5608761
+    },
+    {
+      "path": "figures/fig8/data/reference/final/Fig8.pdf",
+      "target": "figures/fig8/final/Fig8.pdf",
+      "bytes": 3886845
+    },
+    {
+      "path": "figures/fig8/data/reference/final/Fig8.png",
+      "target": "figures/fig8/final/Fig8_600dpi.png",
+      "bytes": 6142301
+    },
+    {
+      "path": "figures/fig8/data/reference/final/Fig8_outlined.svg",
+      "target": "figures/fig8/final/Fig8_outlined.svg",
+      "bytes": 5857410
+    },
+    {
+      "path": "figures/fig8/data/reference/final/Fig8_600dpi.png",
+      "target": "figures/fig8/final/Fig8_600dpi.png",
+      "bytes": 6142301
+    },
+    {
+      "path": "figures/fig9/data/reference/final/Fig9_outlined.svg",
+      "target": "figures/fig9/final/Fig9_outlined.svg",
+      "bytes": 3387846
+    },
+    {
+      "path": "figures/fig9/data/reference/final/Fig9_600dpi.png",
+      "target": "figures/fig9/final/Fig9_600dpi.png",
+      "bytes": 3969878
+    },
+    {
+      "path": "figures/fig9/data/reference/final/Fig9.svg",
+      "target": "figures/fig9/final/Fig9.svg",
+      "bytes": 109111
+    },
+    {
+      "path": "figures/fig9/data/reference/final/Fig9.png",
+      "target": "figures/fig9/final/Fig9.png",
+      "bytes": 971309
+    },
+    {
+      "path": "figures/fig9/data/reference/final/Fig9.pdf",
+      "target": "figures/fig9/final/Fig9.pdf",
+      "bytes": 115547
+    },
+    {
+      "path": "figures/fig6/data/reference/panels/a.svg",
+      "target": "figures/fig6/final/panels/a.svg",
+      "bytes": 6628
+    },
+    {
+      "path": "figures/fig6/data/reference/panels/e.pdf",
+      "target": "figures/fig6/final/panels/e.pdf",
+      "bytes": 47682
+    },
+    {
+      "path": "figures/fig6/data/reference/panels/d.png",
+      "target": "figures/fig6/final/panels/d.png",
+      "bytes": 133655
+    },
+    {
+      "path": "figures/fig6/data/reference/panels/e.png",
+      "target": "figures/fig6/final/panels/e.png",
+      "bytes": 155942
+    },
+    {
+      "path": "figures/fig6/data/reference/panels/e_outlined.svg",
+      "target": "figures/fig6/final/panels/e_outlined.svg",
+      "bytes": 544600
+    },
+    {
+      "path": "figures/fig6/data/reference/panels/a_outlined.svg",
+      "target": "figures/fig6/final/panels/a_outlined.svg",
+      "bytes": 520515
+    },
+    {
+      "path": "figures/fig6/data/reference/panels/d_outlined.svg",
+      "target": "figures/fig6/final/panels/d_outlined.svg",
+      "bytes": 433437
+    },
+    {
+      "path": "figures/fig6/data/reference/panels/d.pdf",
+      "target": "figures/fig6/final/panels/d.pdf",
+      "bytes": 54765
+    },
+    {
+      "path": "figures/fig6/data/reference/panels/b_outlined.svg",
+      "target": "figures/fig6/final/panels/b_outlined.svg",
+      "bytes": 499987
+    },
+    {
+      "path": "figures/fig6/data/reference/panels/c.png",
+      "target": "figures/fig6/final/panels/c.png",
+      "bytes": 288135
+    },
+    {
+      "path": "figures/fig6/data/reference/panels/d.svg",
+      "target": "figures/fig6/final/panels/d.svg",
+      "bytes": 4555
+    },
+    {
+      "path": "figures/fig6/data/reference/panels/b.png",
+      "target": "figures/fig6/final/panels/b.png",
+      "bytes": 169320
+    },
+    {
+      "path": "figures/fig6/data/reference/panels/c.pdf",
+      "target": "figures/fig6/final/panels/c.pdf",
+      "bytes": 63783
+    },
+    {
+      "path": "figures/fig6/data/reference/panels/c_outlined.svg",
+      "target": "figures/fig6/final/panels/c_outlined.svg",
+      "bytes": 489272
+    },
+    {
+      "path": "figures/fig6/data/reference/panels/b.pdf",
+      "target": "figures/fig6/final/panels/b.pdf",
+      "bytes": 55041
+    },
+    {
+      "path": "figures/fig6/data/reference/panels/b.svg",
+      "target": "figures/fig6/final/panels/b.svg",
+      "bytes": 11018
+    },
+    {
+      "path": "figures/fig6/data/reference/panels/a.pdf",
+      "target": "figures/fig6/final/panels/a.pdf",
+      "bytes": 53615
+    },
+    {
+      "path": "figures/fig6/data/reference/panels/e.svg",
+      "target": "figures/fig6/final/panels/e.svg",
+      "bytes": 4684
+    },
+    {
+      "path": "figures/fig6/data/reference/panels/a.png",
+      "target": "figures/fig6/final/panels/a.png",
+      "bytes": 193825
+    },
+    {
+      "path": "figures/fig6/data/reference/panels/c.svg",
+      "target": "figures/fig6/final/panels/c.svg",
+      "bytes": 19634
+    },
+    {
+      "path": "figures/fig6/data/reference/final/Fig6_600dpi.png",
+      "target": "figures/fig6/final/Fig6_600dpi.png",
+      "bytes": 1968844
+    },
+    {
+      "path": "figures/fig6/data/reference/final/Fig6.png",
+      "target": "figures/fig6/final/Fig6.png",
+      "bytes": 882337
+    },
+    {
+      "path": "figures/fig6/data/reference/final/Fig6_outlined.svg",
+      "target": "figures/fig6/final/Fig6_outlined.svg",
+      "bytes": 2602718
+    },
+    {
+      "path": "figures/fig6/data/reference/final/Fig6.pdf",
+      "target": "figures/fig6/final/Fig6.pdf",
+      "bytes": 85798
+    },
+    {
+      "path": "figures/fig6/data/reference/final/Fig6.svg",
+      "target": "figures/fig6/final/Fig6.svg",
+      "bytes": 43016
+    },
+    {
+      "path": "manuscript/nature_innovation/figures_v9/Fig01.pdf",
+      "target": "manuscript/nature_innovation/figures/Fig01.pdf",
+      "bytes": 201352
+    },
+    {
+      "path": "manuscript/nature_innovation/figures_v9/ExtendedDataFig02.pdf",
+      "target": "manuscript/nature_innovation/figures/ExtendedDataFig02.pdf",
+      "bytes": 926945
+    },
+    {
+      "path": "manuscript/nature_innovation/figures_v9/Fig05.pdf",
+      "target": "manuscript/nature_innovation/figures/Fig05.pdf",
+      "bytes": 162425
+    },
+    {
+      "path": "manuscript/nature_innovation/figures_v9/ExtendedDataFig03.pdf",
+      "target": "manuscript/nature_innovation/figures/ExtendedDataFig03.pdf",
+      "bytes": 499922
+    },
+    {
+      "path": "manuscript/nature_innovation/figures_v9/Fig04.pdf",
+      "target": "manuscript/nature_innovation/figures/Fig04.pdf",
+      "bytes": 128060
+    },
+    {
+      "path": "manuscript/nature_innovation/figures_v9/Fig06.pdf",
+      "target": "manuscript/nature_innovation/figures/Fig06.pdf",
+      "bytes": 3899795
+    },
+    {
+      "path": "manuscript/nature_innovation/figures_v9/ExtendedDataFig05.pdf",
+      "target": "manuscript/nature_innovation/figures/ExtendedDataFig05.pdf",
+      "bytes": 97049
+    },
+    {
+      "path": "manuscript/nature_innovation/figures_v9/ExtendedDataFig04.pdf",
+      "target": "manuscript/nature_innovation/figures/ExtendedDataFig04.pdf",
+      "bytes": 158273
+    }
+  ],
+  "removed_cache_bytes": 45450391,
+  "removed_cache_directories": 269
+}

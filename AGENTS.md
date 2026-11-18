@@ -64,7 +64,8 @@ code for runtime behavior and the relevant study records for empirical results.
   using the project-relative data paths and check the mount and per-file
   migration status if a linked file is unavailable. Use only verified files
   for analysis and keep `.partial` copies out of the inputs. See the
-  [storage guide](docs/HDD_STORAGE.md) and [migration state](docs/hdd_migration.json).
+  [storage guide](docs/HDD_STORAGE.md). Migration state lives in the local
+  `docs/hdd_migration.json`.
 
 ## Commands
 

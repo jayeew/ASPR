@@ -1,0 +1,4 @@
+# Additional figure export dependencies; runtime/model dependencies remain in root requirements.txt.
+cairosvg
+matplotlib
+PyMuPDF

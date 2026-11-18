@@ -1,0 +1,360 @@
+{
+  "moves": [
+    {
+      "source": "figure_pipeline/fig4_explanation_study",
+      "canonical": "figures/fig4/code/explanation_study",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig10_reference",
+      "canonical": "figures/fig10/code/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig1_reference",
+      "canonical": "figures/fig1/code/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig8_reference",
+      "canonical": "figures/fig8/code/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig7_reference",
+      "canonical": "figures/fig7/code/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig11_reference",
+      "canonical": "figures/fig11/code/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig5_mechanism_study",
+      "canonical": "figures/fig5/code/mechanism_study",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig6_damage",
+      "canonical": "figures/fig6/code/damage",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig3_reference",
+      "canonical": "figures/fig3/code/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig4_reference",
+      "canonical": "figures/fig4/code/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig4_rerun",
+      "canonical": "figures/fig4/code/rerun",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig6_reference",
+      "canonical": "figures/fig6/code/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig3_extensions",
+      "canonical": "figures/fig3/code/extensions",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig5_robustness",
+      "canonical": "figures/fig5/code/robustness",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig5_four_panel",
+      "canonical": "figures/fig5/code/four_panel",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig5_revision",
+      "canonical": "figures/fig5/code/revision",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig4_explanation_100",
+      "canonical": "figures/fig4/code/explanation_100",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig6_rf2",
+      "canonical": "figures/fig6/code/rf2",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig4_capabilities",
+      "canonical": "figures/fig4/code/capabilities",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig4_explanation_reference",
+      "canonical": "figures/fig4/code/explanation_reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig5_reference",
+      "canonical": "figures/fig5/code/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig2_reference",
+      "canonical": "figures/fig2/code/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig9_reference",
+      "canonical": "figures/fig9/code/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig4_mechanisms",
+      "canonical": "figures/fig4/code/mechanisms",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig3_revision",
+      "canonical": "figures/fig3/code/revision",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/fig6_computer",
+      "canonical": "figures/fig6/code/computer",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "figure_pipeline/innovation_five_dimensions",
+      "canonical": "figures/fig3/code/five_dimensions",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig5_initial",
+      "canonical": "figures/fig5/data/initial",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig10_reference",
+      "canonical": "figures/fig10/data/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig1_reference",
+      "canonical": "figures/fig1/data/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig8_reference",
+      "canonical": "figures/fig8/data/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig6_damage_study",
+      "canonical": "figures/fig6/data/damage_study",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig7_reference",
+      "canonical": "figures/fig7/data/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig11_reference",
+      "canonical": "figures/fig11/data/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig5_mechanism_study",
+      "canonical": "figures/fig5/data/mechanism_study",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig6_damage",
+      "canonical": "figures/fig6/data/damage",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig3_reference",
+      "canonical": "figures/fig3/data/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig6_rf2_study",
+      "canonical": "figures/fig6/data/rf2_study",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig4_reference",
+      "canonical": "figures/fig4/data/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig6_reference",
+      "canonical": "figures/fig6/data/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig5_robustness",
+      "canonical": "figures/fig5/data/robustness",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig5_four_panel",
+      "canonical": "figures/fig5/data/four_panel",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig5_revision",
+      "canonical": "figures/fig5/data/revision",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig5_reference",
+      "canonical": "figures/fig5/data/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig2_reference",
+      "canonical": "figures/fig2/data/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig9_reference",
+      "canonical": "figures/fig9/data/reference",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig5_six_panel",
+      "canonical": "figures/fig5/data/six_panel",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig8_data",
+      "canonical": "figures/fig8/data/corpus",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig6_computer",
+      "canonical": "figures/fig6/data/computer",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/innovation_five_dimensions",
+      "canonical": "figures/fig3/data/five_dimensions",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/reviewer_open_coding_pilot_20261116",
+      "canonical": "figures/shared/reviewer_coding",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/classic_claims_position_2025_2026",
+      "canonical": "figures/fig10/data/landmark_cases",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "fig_reference",
+      "canonical": "figures/fig5/assets",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig1-11_final/Fig1",
+      "canonical": "figures/fig1/final",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig1-11_final/Fig2",
+      "canonical": "figures/fig2/final",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig1-11_final/Fig3",
+      "canonical": "figures/fig3/final",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig1-11_final/Fig4",
+      "canonical": "figures/fig4/final",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig1-11_final/Fig5",
+      "canonical": "figures/fig5/final",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig1-11_final/Fig6",
+      "canonical": "figures/fig6/final",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig1-11_final/Fig7",
+      "canonical": "figures/fig7/final",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig1-11_final/Fig8",
+      "canonical": "figures/fig8/final",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig1-11_final/Fig9",
+      "canonical": "figures/fig9/final",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig1-11_final/Fig10",
+      "canonical": "figures/fig10/final",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "outputs/fig1-11_final/Fig11",
+      "canonical": "figures/fig11/final",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "scripts/plot_reviewer_five_dimensions_four_layer.py",
+      "canonical": "figures/fig3/scripts/reviewer_concerns.py",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "scripts/diagnose_fig3_subset_candidates.py",
+      "canonical": "figures/fig3/scripts/diagnose_fig3_subset_candidates.py",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "scripts/analyze_fig4_readiness.py",
+      "canonical": "figures/fig4/scripts/analyze_fig4_readiness.py",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "scripts/fig3_v5_rank_learning.py",
+      "canonical": "figures/fig3/scripts/fig3_v5_rank_learning.py",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "scripts/run_fig3_nature_full_v5.py",
+      "canonical": "figures/fig3/scripts/run_fig3_nature_full_v5.py",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "scripts/fig3_revision",
+      "canonical": "figures/fig3/scripts/fig3_revision",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "scripts/fig3_v6a_reliability_latent_probe.py",
+      "canonical": "figures/fig3/scripts/fig3_v6a_reliability_latent_probe.py",
+      "action": "move_and_reference"
+    }
+  ],
+  "policy": "No model experiments; evidence preserved; aliases are references, not copies."
+}
