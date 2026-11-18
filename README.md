@@ -1,23 +1,10 @@
 # ASPR-GEAR — Claim Graph + GEAR innovation analysis
 
-## Figures and project structure
-
-[Fig1–Fig11 final delivery](outputs/fig1-11_final/) · [All previews](outputs/fig1-11_final/previews/) · [Output and redraw guide](outputs/README.md)
-
-| Directory | Purpose |
-| --- | --- |
-| `gear/`, `configs/` | Runtime and model/graph configuration |
-| `data/`, `artifact_store/` | Historical assets, inputs and stored artifacts |
-| `experiments/`, `scripts/` | Study workflows and offline data preparation |
-| `figure_pipeline/` | Figure preparation and rendering code |
-| `outputs/` | Final figures, working figure assets, experiment results and archives |
-| `fig_reference/` | Active Fig5 working master |
-| `tests/`, `docs/` | Tests, methodology, dependency and cleanup records |
+[中文项目简介与逐图研究结果](项目简介.md)
 
 ASPR-GEAR analyzes a paper's concrete contributions, manuscript support,
-historical basis and knowledge relationships. The current research focus is the
-innovation-analysis system. Historical indicator and diffusion-scoring research
-remains available where relevant; it does not automatically validate this system.
+historical basis and knowledge relationships. It produces qualitative innovation
+analysis, with explicit limitations where evidence is insufficient.
 
 ```text
 Paper full text → PaperIR → shared grounded contribution claims
@@ -28,17 +15,38 @@ GEAR + per-claim Graph analysis → claim-level fusion
 Study report writer → whole-paper report using selected branch/joint evidence
 ```
 
-The runtime is `gear`; `gear/review_pipeline.py` dispatches default `knowledge`
-mode to `gear/innovation/pipeline.py`. Branches share contribution identities
-but analyze evidence independently. The single-paper `all` command runs GEAR
-then Graph before fusion; the study supports separate streaming processes.
+The `gear` CLI starts in `gear/cli.py`. `gear/review_pipeline.py` dispatches
+default `knowledge` mode to `gear/innovation/pipeline.py`. Branches share
+contribution identities and analyze evidence independently. The single-paper
+`all` command runs GEAR then Graph before per-claim fusion. The study supports
+separate streaming processes and includes joint Graph in its full fusion report.
 `passive` and `active` are explicitly selected compatibility modes.
 
-The output is innovation analysis, not an editorial decision or the old
-five-section `StructuredReview`. No numeric novelty score is generated.
-Graph structure alone cannot establish firstness, scientific validity or claim
-derivation. GEAR distinguishes antecedents from related work and explains
-residual increment. Insufficient evidence remains explicit.
+GEAR distinguishes antecedents from related work and explains the residual
+increment. Claim Graph describes historical neighbors and local structure.
+Judgments about firstness, scientific validity or derivation require evidence
+beyond graph structure.
+
+## Project structure
+
+This map describes the reorganized research workspace. The per-figure
+workspace, manuscript files and large research assets require local files
+in addition to a Git checkout. See [AGENTS.md](AGENTS.md) for maintenance rules.
+
+| Directory | Purpose |
+| --- | --- |
+| `gear/`, `gear/innovation/`, `configs/gear/` | CLI, shared claims, GEAR and Claim Graph analyses, fusion, and runtime configuration |
+| `gear/claim_graph/`, `scripts/claim_graph/`, `data/claim_graph/` | Native graph contracts, offline builders and historical graph and embedding assets |
+| `data/knowledge_corpus/`, `data/models/`, `data/nature_2026_testset/` | Literature corpus, local models, and paper/reviewer source pairs |
+| `experiments/innovation_200/`, `outputs/` | Staged study code, whole-paper reporting and evaluation, plus runtime and study results |
+| `experiments/fig8_extension/`, `figures/fig8/data/corpus/` | Fig8 corpus collection, qualification and recomputation, with `outputs/fig8_data/` as a compatibility path |
+| `figures/fig1/` … `figures/fig11/` | Figure-specific `code/`, `scripts/`, `data/`, `final/` and, where present, editable `assets/` |
+| `figures/fig3/code/five_dimensions/`, `figures/fig3/data/five_dimensions/` | Five-dimension report evaluation and Fig3 inputs |
+| `figures/shared/reviewer_coding/` | Shared reviewer coding, original excerpts and aggregation |
+| `figure_pipeline/` | Shared rendering and QA, historical builds, and compatibility imports for relocated figure modules |
+| `manuscript/nature_innovation/` | Versioned LaTeX, manuscript figure sets, reading PDFs and standalone Limitation drafts |
+| `tests/`, `docs/`, `scripts/maintenance/` | Test suites, methods, migration records and repository maintenance |
+| `archive/`, `experiments/fig01/` … `experiments/fig10/`, `experiments/gear/`, `gear/nature_multihorizon/`, `artifact_store/` | Earlier manuscripts, figure workflows, review studies, scoring research and release artifacts |
 
 ## Run one paper
 
@@ -69,20 +77,21 @@ can supply an abstract. The input contract requires `paper_id`, `paper_path`,
 optional fields include DOI, venue, authors, OpenAlex ID and reference work IDs.
 See [`InnovationPaperInput`](gear/review_contracts.py).
 
-Use `--stage shared|gear|graph|fusion|all` to address a stage. Shared claims are
-prepared/reused first; fusion needs saved GEAR and Graph results. `--targets`
-accepts a JSON list of neutral contribution descriptions for specified-target
-tasks, without reviewer judgments or reasons. Use a separate run directory when
+Use `--stage shared` to prepare grounded claims, `--stage gear` or `--stage graph`
+to run each analysis, and `--stage fusion` to combine saved branch results.
+The default `--stage all` runs the full workflow and reuses completed stages
+when available. `--targets` accepts a JSON list of neutral contribution
+descriptions for specified-target tasks. Use a separate run directory when
 changing inputs or experimental conditions.
 
 ## Outputs and checks
 
-A standard knowledge-mode run writes:
+A standard knowledge-mode run writes these artifacts.
 
-- `innovation_input.json`, `shared/paper_ir.json`, `shared/claims.json`;
-- `gear/NN/` evidence, `gear_card.json` and `assessment.json`;
-- `graph/NN/` graph facts and assessments, plus `graph/joint/` joint results;
-- branch `analysis.json` files and `fusion/innovation_report.md`;
+- `innovation_input.json`, `shared/paper_ir.json`, `shared/claims.json`
+- `gear/NN/` evidence, `gear_card.json` and `assessment.json`
+- `graph/NN/` graph facts and assessments, plus `graph/joint/` joint results
+- branch `analysis.json` files and `fusion/innovation_report.md`
 - append-only evidence traces and `model_usage.jsonl`.
 
 ```bash
@@ -90,13 +99,47 @@ python3 -m gear validate-assets
 python3 -m gear validate-run outputs/gear/runs/example
 make gear-test
 make gear-lint
+make gear-validate
 python3 -m pytest -q tests/innovation_200 tests/gear/test_historical_pdf_config.py
 ```
 
-`validate-assets` checks native Claim Graph assets, not historical HGB releases.
-`validate-run` checks standard v2 claim identity, coverage and evidence keys; it
-is not a whole-study or scientific-correctness validator. Study fingerprint
-settings differ; see [architecture and validation limits](docs/module_architecture.md).
+`validate-assets` and `make gear-validate` check native Claim Graph assets.
+`validate-run` checks standard v2 claim-level artifacts, including claim
+identity, coverage and evidence keys. Use each study's own evaluation workflow
+for whole-paper reports and scientific conclusions. See the
+[architecture and validation limits](docs/module_architecture.md).
+
+With the local five-dimension workflow available, run its tests with
+`python3 -m pytest -q tests/innovation_five_dimensions`.
+
+## Figures and manuscript
+
+Start with `figures/README.md` and the relevant figure's README. The editable
+final master is `figures/figN/final/FigN.svg`. The delivery index
+`outputs/fig1-11_final/` links each `FigN/` to the respective `final/` directory
+and includes previews and a file inventory. For Fig3, the accepted
+five-dimension layout is `figures/fig3/final/Fig3.svg` and the retained-panel
+redraw template is `figures/fig3/assets/layout_template.svg`.
+
+```bash
+python3 -m figures fig3 paths
+python3 -m figures fig3 export
+```
+
+`paths` prints the local workspace locations. `export` uses CairoSVG to write
+the PDF and PNG alongside the accepted SVG. To redraw a figure after updating
+statistics or layout inputs, use its own workflow and `outputs/README.md`.
+
+Relocated modules under `figure_pipeline/`, affected paths under `outputs/`
+and `scripts/`, and the Fig5 `fig_reference` path use symbolic links in the
+reorganized workspace. The move manifest is `docs/project_structure_manifest.json`.
+For large files backed by `/mnt/d/ASPR-data/`, see `docs/HDD_STORAGE.md` and
+`docs/hdd_migration.json`.
+
+Use the figure references in the manuscript version you are working on.
+For example, `manuscript/nature_innovation/manuscript_zh_v10.tex` uses
+`figures_v10/`, which includes versioned assets and the accepted Fig3. Use
+the respective study's sample and evidence when interpreting each figure.
 
 ## Models, retrieval and graph assets
 
@@ -123,15 +166,21 @@ and creates mixed conditions; use a separate directory for uniform comparisons.
 
 ## Current experiments and documentation
 
-- [Staged innovation study](experiments/innovation_200/README.md): initially 200
-  papers, with a 1,000-paper claims/reference extension. `papers.jsonl` is the
-  active roster; extension alone does not complete eight-system evaluation.
-- [Module architecture](docs/module_architecture.md): boundaries, artifacts,
-  branch independence and recovery.
+- The staged innovation study uses `experiments/innovation_200/`. Run
+  `python3 -m experiments.innovation_200.run_all --help` for the orchestration
+  entry point. Read `papers.jsonl` in the chosen run directory for the active
+  roster. The 1,000-paper extension covers shared claims and reviewer-reference
+  reconstruction only. [Staged study guide](experiments/innovation_200/README.md)
+- The separate five-dimension report evaluation uses
+  `python3 -m figure_pipeline.innovation_five_dimensions --help` in the local
+  figure workspace. Its data README at `figures/fig3/data/five_dimensions/README.md`
+  describes report scores, retained diagnostics, denominators and reruns.
+- The architecture guide covers module boundaries, artifacts, branch
+  independence and recovery. [Module architecture](docs/module_architecture.md)
 - [Implementation and evaluation scope](docs/innovation_v2_implementation.md).
 - [Single and joint Graph analysis](docs/graph_joint_analysis.md).
-- [Experiment index](experiments/README.md): current studies versus historical
-  Fig.1–Fig.10. For the selected final Fig1–8 delivery, use the index above.
+- The experiment index includes the current study and earlier Fig.1–Fig.10
+  workflows. [Experiment index](experiments/README.md)
 - [Data sources](docs/data_sources.md) and [code availability](docs/code_availability.md).
 
 Documents marked historical preserve earlier designs/results, not current CLI
