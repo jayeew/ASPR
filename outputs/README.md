@@ -4,9 +4,11 @@
 
 # 输出与重绘指南
 
+共享语料、图谱和模型从 `data/` 读取。运行结果、日志和检查点留在各自的运行目录，日志使用该目录下的 `logs/`。 [数据目录指南](../data/README.md)
+
 本地交付从 `fig1-11_final/` 进入。每个 `FigN/` 指向 `../figures/figN/final/` 中的整图和已有 panel。预览在 `fig1-11_final/previews/`，文件和来源见 `fig1-11_final/文件清单.csv`。
 
-研究问题、主要结果及分母见项目简介。各面板的读法见本地 `fig1-11_final/图片讲解.md`。Fig10 的 MOF 事实卡位于 `classic_claims_position_2025_2026/`，同一工作区的 AlphaFold 3 报告属于独立历史案例。 [项目简介](../项目简介.md)
+研究问题、主要结果及分母见项目简介。各面板的读法见本地 `fig1-11_final/图片讲解.md`。Fig10 的 MOF 事实卡位于 `classic_claims_position_2025_2026/`，同一工作区的 AlphaFold 3 报告属于独立历史案例。 [项目简介](../docs/项目简介.md)
 
 ## 直接导出当前正式图
 
@@ -25,7 +27,7 @@ python3 -m figures fig7 export
 | 2 | fig2_reference | fig2_reference/ 和 innovation_200_20260907/ 案例 |
 | 3 | fig3_reference | fig3_reference/ 下 study、dataset、extensions、assets、layouts |
 | 4 | fig4_reference / fig4_explanation_reference | fig4_reference/data、experiment 与布局 |
-| 5 | fig5_mechanism_study/render_reference.py | 根目录 fig_reference/；fig5_mechanism_study/Fig5_formal_statistics.zip 及既有实验 |
+| 5 | fig5_mechanism_study/render_reference.py | `figures/fig5/assets/`（兼容入口 `fig_reference/`）及 `fig5_mechanism_study/Fig5_formal_statistics.zip` 和既有实验 |
 | 6 | fig6_reference | fig6_reference/、fig6_damage_study/、历史案例报告和共享绘图模块 |
 | 7 | fig7_reference.country_extension render | fig7_reference/country_extension/，以及 two_panel/final/Fig7.svg、frontier_2026 和历史主题输入。两面板 SVG 是四面板上半部分的输入 |
 | 8 | fig8_reference --render-only | fig8_data/analysis/tables/，含引用与机构主题指标；fig8_reference/ 存储绘图输出 |
@@ -37,7 +39,7 @@ python3 -m figures fig7 export
 
 - **研究记录**：innovation_200_20260907、innovation_candidates_20260910、innovation_v2_*、gear、Qwen-ASPR 和专项 study 按原路径保留。它们包含案例、响应、证据或独立实验。
 - **历史实现的输入**：fig5_initial、fig5_revision、fig5_robustness、fig5_four_panel、fig5_six_panel、fig6_computer 等常含统计表、评估和来源。旧目录名不足以支持整体删除。
-- **备份与交接**：archive/、packages/、根目录代码 ZIP 保留原位置。历史代码包属于备份，其内容与当前工作树的可替代性尚未确认。
+- **归档与交接**：历史图件归档见 `outputs/archive/`，打包产物见 `outputs/packages/`。历史研究和旧日志从仓库的 `archive/` 查找。 [历史研究档案](../archive/README.md)
 - **批量采集与缓存**：fig8_data 中的 snapshot 回执、身份与年份证据、任务账本、机构映射和新贡献结果用于复算与追溯。仅按“画 PNG 用不到”判断，会误删研究依据。
 
 本次删除的旧导出、预览派生表和开发缓存逐项列于 [清理记录](../docs/figure_cleanup_20261106.json)。以前的保护目录与唯一历史材料见 [历史依赖审计](../docs/fig1_8_cleanup_audit_20261008.json)。

@@ -354,6 +354,39 @@
       "source": "scripts/fig3_v6a_reliability_latent_probe.py",
       "canonical": "figures/fig3/scripts/fig3_v6a_reliability_latent_probe.py",
       "action": "move_and_reference"
+    },
+    {
+      "source": "innovation_impact_feature_selection/evidence_derived",
+      "canonical": "archive/evidence_derived",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "innovation_impact_feature_selection/evidence_derived_v3",
+      "canonical": "archive/evidence_derived_v3",
+      "action": "move_and_reference"
+    },
+    {
+      "source": "innovation_impact_feature_selection/evidence_derived_v4_rebuild",
+      "canonical": "archive/evidence_derived_v4_rebuild",
+      "action": "move_and_reference"
+    }
+  ],
+  "moves_without_aliases": [
+    {
+      "source": "项目简介.md",
+      "canonical": "docs/项目简介.md"
+    },
+    {
+      "source": "paper.md",
+      "canonical": "docs/paper_summary.md"
+    },
+    {
+      "source": "skills/nature_scientific_data_visualization_skill.md",
+      "canonical": "docs/fig_readme/nature_scientific_data_visualization_skill.md"
+    },
+    {
+      "source": "logs/generate_reports.log",
+      "canonical": "archive/logs/generate_reports.log"
     }
   ],
   "policy": "No model experiments; evidence preserved; aliases are references, not copies."

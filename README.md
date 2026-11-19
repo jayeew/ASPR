@@ -1,6 +1,6 @@
 # ASPR-GEAR — Claim Graph + GEAR innovation analysis
 
-[中文项目简介与逐图研究结果](项目简介.md)
+[中文项目简介与逐图研究结果](docs/项目简介.md) · [论文文档](docs/paper_summary.md)
 
 ASPR-GEAR analyzes a paper's concrete contributions, manuscript support,
 historical basis and knowledge relationships. It produces qualitative innovation
@@ -48,7 +48,15 @@ and manuscript files. See [AGENTS.md](AGENTS.md) for maintenance rules.
 | `figure_pipeline/` | Shared rendering and QA, historical builds, and compatibility imports for relocated figure modules |
 | [`manuscript/nature_innovation/`](manuscript/nature_innovation/README.md) | Paths for versioned LaTeX, manuscript figure sets, reading PDFs and standalone Limitation drafts |
 | `tests/`, `docs/`, `scripts/maintenance/` | Test suites, methods, migration records and repository maintenance |
-| `archive/`, `experiments/fig01/` … `experiments/fig10/`, `experiments/gear/`, `gear/nature_multihorizon/`, `artifact_store/` | Earlier manuscripts, figure workflows, review studies, scoring research and release artifacts |
+| [`archive/`](archive/README.md) | Earlier manuscripts, figures and scoring research, including the three `evidence_derived*` workspaces |
+| `experiments/fig01/` … `experiments/fig10/`, `experiments/gear/`, `gear/nature_multihorizon/`, `artifact_store/` | Historical figure workflows, review studies, scoring code and release interfaces |
+
+The data directory guide maps shared inputs, cache paths, figure workspaces and
+study outputs. [Data directory guide](data/README.md)
+
+Historical indicator scripts and imports can still access the archived
+workspaces through `innovation_impact_feature_selection/`. The root
+`fig_reference` link still resolves to `figures/fig5/assets/`.
 
 ## Run one paper
 

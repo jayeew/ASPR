@@ -14,6 +14,8 @@ novelty score.
 Start with [README.md](README.md), [module architecture](docs/module_architecture.md)
 and [implementation scope](docs/innovation_v2_implementation.md). Check current
 code for runtime behavior and the relevant study records for empirical results.
+Use the [data directory guide](data/README.md) to locate shared inputs, caches,
+figure inputs and study outputs.
 
 ## Repository map
 
@@ -32,6 +34,7 @@ code for runtime behavior and the relevant study records for empirical results.
 | `manuscript/nature_innovation/` | Versioned LaTeX, manuscript figure sets, reading PDFs and standalone Limitation drafts |
 | `tests/` | Runtime (`innovation_v2/`), staged study (`innovation_200/`), five-dimension analysis (`innovation_five_dimensions/`) and figure tests |
 | `docs/`, `scripts/maintenance/` | Architecture, methods, migration records and repository maintenance tools |
+| `archive/evidence_derived/`, `archive/evidence_derived_v3/`, `archive/evidence_derived_v4_rebuild/` | Historical indicator research and frozen releases. The old `innovation_impact_feature_selection/` paths are compatibility links. |
 | `archive/`, `experiments/fig01/` … `experiments/fig10/`, `experiments/gear/`, `gear/nature_multihorizon/`, `artifact_store/` | Earlier manuscripts, figure workflows, review interfaces, scoring experiments and release artifacts |
 
 ## Figures, manuscript and storage
@@ -55,7 +58,7 @@ code for runtime behavior and the relevant study records for empirical results.
 - Use each figure's own cohort, denominators, and evidence. Fig3's five-dimension
   scores evaluate report analysis, while the retained diagnostics evaluate the
   original detailed analyses. See the [five-dimension study README](figures/fig3/data/five_dimensions/README.md)
-  and [project overview](项目简介.md) for the respective scopes.
+  and [project overview](docs/项目简介.md) for the respective scopes.
 - For manuscript edits or rebuilds, use the requested manuscript version and
   its figure references. Manuscript figure numbering and assets can differ from
   the project delivery index. For example, `manuscript_zh_v10.tex` uses

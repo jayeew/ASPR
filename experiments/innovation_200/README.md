@@ -162,7 +162,7 @@ CODEX_HOME=/mnt/c/Users/jayee/.codex bash scripts/run_gear_resumable.sh \
 同时改变了信息与中间处理；正式归因前需要控制生成路径和相应资源预算。普通
 RAG 与共享 claim 对照另见 `gear/innovation/experiments.py`，不属于当前八组报告。
 
-正式结果见[Fig1–Fig11 项目简介](../../项目简介.md)。本目录八组报告的比较与 Fig3 百篇六方法评估分别统计，样本、对照和分母按各自产物引用。
+正式结果见[Fig1–Fig11 项目简介](../../docs/项目简介.md)。本目录八组报告的比较与 Fig3 百篇六方法评估分别统计，样本、对照和分母按各自产物引用。
 
 ### 2026-09-08 对照检索覆盖修复与定向恢复
 

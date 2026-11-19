@@ -47,4 +47,4 @@ and five-part review reconstruction workflows.
 
 ## Final figures and results
 
-Use the [Fig1–Fig11 research overview](../项目简介.md) for the questions, populations and findings, and the [redraw guide](../outputs/README.md) for the implementation and inputs of each figure.
+Use the [Fig1–Fig11 research overview](../docs/项目简介.md) for the questions, populations and findings, and the [redraw guide](../outputs/README.md) for the implementation and inputs of each figure.

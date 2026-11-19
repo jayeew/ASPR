@@ -2,7 +2,7 @@
 
 Updated 2026-09-07. This describes implemented behavior, not completed scientific
 validation. The confirmed research focus is Claim Graph + GEAR innovation
-analysis. For observed results and their denominators, see the [Fig1–Fig11 research overview](../项目简介.md).
+analysis. For observed results and their denominators, see the [Fig1–Fig11 research overview](项目简介.md).
 
 ## Default runtime
 
